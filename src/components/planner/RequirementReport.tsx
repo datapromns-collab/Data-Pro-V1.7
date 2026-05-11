@@ -116,7 +116,6 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                 <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
                 <TableHead className="font-bold text-slate-700">Descripción del Material</TableHead>
                 <TableHead className="text-right font-bold text-slate-700">Cantidad Sugerida</TableHead>
-                <TableHead className="text-right font-bold text-slate-700">Firma / Control</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -127,7 +126,6 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                   <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
                     {getCalculatedValue(item.code).toLocaleString('es-ES')}
                   </TableCell>
-                  <TableCell className="text-right border-l w-32"></TableCell>
                 </TableRow>
               ))}
             </TableBody>
