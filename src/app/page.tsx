@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -17,7 +18,8 @@ import {
   Gauge,
   Calculator as CalculatorIcon,
   Keyboard as KeyboardIcon,
-  ClipboardList
+  ClipboardList,
+  FileDown
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -26,6 +28,7 @@ import { TaskDialog } from '@/components/planner/TaskDialog';
 import { Calculator } from '@/components/planner/Calculator';
 import { KeyboardShortcuts } from '@/components/planner/KeyboardShortcuts';
 import { RequirementSection } from '@/components/planner/RequirementSection';
+import { RequirementReport } from '@/components/planner/RequirementReport';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { calculateTotalPlannedMinutes, formatTime } from '@/lib/planner-utils';
 import { Toaster } from '@/components/ui/toaster';
@@ -64,6 +67,7 @@ export default function PlannerPage() {
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
   const [activeTab, setActiveTab] = useState("gantt");
+  const [printMode, setPrintMode] = useState<'plan' | 'requirements'>('plan');
 
   // Keyboard Shortcuts Handler
   useEffect(() => {
@@ -89,7 +93,7 @@ export default function PlannerPage() {
             break;
           case 'p':
             e.preventDefault();
-            window.print();
+            handlePrintPlan();
             break;
           case 'k':
             e.preventDefault();
@@ -131,7 +135,15 @@ export default function PlannerPage() {
     return latestTask.endTime;
   }, [filteredTasks, weekStartDate]);
 
-  const handlePrint = () => window.print();
+  const handlePrintPlan = () => {
+    setPrintMode('plan');
+    setTimeout(() => window.print(), 100);
+  };
+
+  const handlePrintRequirements = () => {
+    setPrintMode('requirements');
+    setTimeout(() => window.print(), 100);
+  };
 
   const handleTaskClick = (task: ScheduledTask) => {
     setEditingTask(task);
@@ -300,7 +312,7 @@ export default function PlannerPage() {
               <span className="font-medium text-slate-900">Línea {selectedLine}</span>
             </div>
             <div className="flex items-center gap-2">
-               <Button variant="ghost" size="icon" onClick={handlePrint}><Printer className="h-5 w-5" /></Button>
+               <Button variant="ghost" size="icon" onClick={handlePrintPlan}><Printer className="h-5 w-5" /></Button>
             </div>
           </header>
 
@@ -315,12 +327,23 @@ export default function PlannerPage() {
                     {pageHeader.subtitle}
                   </p>
                 </div>
-                <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
-                  <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Gantt</TabsTrigger>
-                  <TabsTrigger value="speeds" className="gap-2 px-4 font-bold"><Gauge className="h-4 w-4" /> Velocidades</TabsTrigger>
-                  <TabsTrigger value="calculator" className="gap-2 px-4 font-bold"><CalculatorIcon className="h-4 w-4" /> Calculadora</TabsTrigger>
-                  <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Requerimiento</TabsTrigger>
-                </TabsList>
+                <div className="flex items-center gap-3">
+                  {activeTab === 'requirement' && (
+                    <Button 
+                      onClick={handlePrintRequirements} 
+                      className="gap-2 bg-indigo-600 hover:bg-indigo-700 font-bold rounded-xl"
+                    >
+                      <FileDown className="h-4 w-4" />
+                      Exportar Reporte PDF
+                    </Button>
+                  )}
+                  <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
+                    <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Gantt</TabsTrigger>
+                    <TabsTrigger value="speeds" className="gap-2 px-4 font-bold"><Gauge className="h-4 w-4" /> Velocidades</TabsTrigger>
+                    <TabsTrigger value="calculator" className="gap-2 px-4 font-bold"><CalculatorIcon className="h-4 w-4" /> Calculadora</TabsTrigger>
+                    <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Requerimiento</TabsTrigger>
+                  </TabsList>
+                </div>
               </div>
 
               <div className="flex-1 min-h-0 relative">
@@ -341,58 +364,58 @@ export default function PlannerPage() {
           </div>
         </main>
 
-        {/* Print Only Content: 7 PAGES (One per line) */}
+        {/* Print Only Content: Toggleable between Plan and Requirements */}
         <div className="print-only w-full bg-white">
-          {LINES.map((lineName, i) => {
-            const lineId = (i + 1).toString();
-            const weekEnd = addDays(weekStartDate, 7);
-            const lineTasks = tasks.filter(t => 
-              t.lineId === lineId && 
-              t.endTime > weekStartDate && 
-              t.startTime < weekEnd
-            );
-            return (
-              <div key={lineName} className="page-break">
-                <div className="mb-4 border-b-2 border-primary pb-4 flex justify-between items-center">
-                  <div className="flex-1">
-                    <h1 className="text-2xl font-headline font-bold text-slate-900">Programa de Producción</h1>
-                    <p className="text-primary font-bold text-base uppercase tracking-tight">{lineName}</p>
-                  </div>
+          {printMode === 'plan' ? (
+            LINES.map((lineName, i) => {
+              const lineId = (i + 1).toString();
+              const weekEnd = addDays(weekStartDate, 7);
+              const lineTasks = tasks.filter(t => 
+                t.lineId === lineId && 
+                t.endTime > weekStartDate && 
+                t.startTime < weekEnd
+              );
+              return (
+                <div key={lineName} className="page-break">
+                  <div className="mb-4 border-b-2 border-primary pb-4 flex justify-between items-center">
+                    <div className="flex-1">
+                      <h1 className="text-2xl font-headline font-bold text-slate-900">Programa de Producción</h1>
+                      <p className="text-primary font-bold text-base uppercase tracking-tight">{lineName}</p>
+                    </div>
 
-                  <div className="flex-1 flex justify-center">
-                    {glupLogo && (
-                      <Image 
-                        src={glupLogo.imageUrl} 
-                        alt="Glup Logo" 
-                        width={220} 
-                        height={80} 
-                        className="object-contain"
-                        data-ai-hint={glupLogo.imageHint}
-                      />
-                    )}
-                  </div>
+                    <div className="flex-1 flex justify-center">
+                      {glupLogo && (
+                        <Image 
+                          src={glupLogo.imageUrl} 
+                          alt="Logo" 
+                          width={220} 
+                          height={80} 
+                          className="object-contain"
+                          data-ai-hint="soda logo"
+                        />
+                      )}
+                    </div>
 
-                  <div className="flex-1 text-right">
-                    <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">Confidencial - Uso Interno</p>
-                    <p className="text-[10px] text-slate-400 font-medium">
-                      Semana {weekNumber} - {format(weekStartDate, 'dd MMMM yyyy', { locale: es })}
-                    </p>
-                    <p className="text-[10px] text-slate-300 font-medium">
-                      Emitido: {new Date().toLocaleDateString('es-ES')}
-                    </p>
+                    <div className="flex-1 text-right">
+                      <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">Confidencial - Uso Interno</p>
+                      <p className="text-[10px] text-slate-400 font-medium">
+                        Semana {weekNumber} - {format(weekStartDate, 'dd MMMM yyyy', { locale: es })}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex-1 overflow-hidden">
+                    <ProductionGantt tasks={lineTasks} weekStartDate={weekStartDate} />
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-widest">
+                    <span>Plan Semanal Pro Edition</span>
+                    <span>Página {i + 1} de 7</span>
                   </div>
                 </div>
-                <div className="flex-1 overflow-hidden">
-                  <ProductionGantt tasks={lineTasks} weekStartDate={weekStartDate} />
-                </div>
-                <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-widest">
-                  <span>Plan Semanal Pro Edition</span>
-                  <span>Página {i + 1} de 7</span>
-                  <span>Ref: {lineName.replace(' ', '-').toLowerCase()}</span>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <RequirementReport tasks={tasks} weekStartDate={weekStartDate} />
+          )}
         </div>
       </div>
 
