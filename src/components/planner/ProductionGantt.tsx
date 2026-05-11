@@ -169,10 +169,10 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
             </div>
 
             <div className="flex-1 h-14 bg-slate-50/30 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
-              <div className="absolute inset-y-0 left-0 w-[47.9%] bg-white/60 border-r-2 border-primary/20 z-0">
+              <div className="absolute inset-y-0 left-0 w-[47.917%] bg-white/60 border-r-2 border-primary/20 z-0">
                 <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/30 uppercase tracking-tighter">DÍA</div>
               </div>
-              <div className="absolute inset-y-0 left-[47.9%] right-0 bg-slate-100/40 z-0">
+              <div className="absolute inset-y-0 left-[47.917%] right-0 bg-slate-100/40 z-0">
                 <div className="absolute top-0 right-1 text-[7px] font-bold text-indigo-400/30 uppercase tracking-tighter">NOCHE</div>
               </div>
               
