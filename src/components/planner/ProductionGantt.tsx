@@ -3,7 +3,7 @@
 
 import { useMemo } from 'react';
 import { ScheduledTask, DayOfWeek } from '@/lib/types';
-import { getWeekDays, PRODUCTION_START_HOUR, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, UBB_FACTORS } from '@/lib/planner-utils';
+import { getWeekDays, PRODUCTION_START_HOUR, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, UBB_FACTORS, PRODUCTION_END_SUN_HOUR, PRODUCTION_END_SUN_MINUTE } from '@/lib/planner-utils';
 import { cn } from '@/lib/utils';
 import { differenceInMinutes, startOfDay, addDays, setHours, setMinutes, isAfter, isBefore } from 'date-fns';
 
@@ -15,22 +15,22 @@ interface ProductionGanttProps {
 
 const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
-// Color uniforme para ambos turnos solicitado por el usuario
+// Colores unificados según las últimas instrucciones
 const UNIFIED_SHIFT_COLOR = '#83CCEB';
-const SPECIAL_COLOR = '#FFFF00';
+const SPECIAL_COLOR = '#FFFF00'; // También usado para S.A.M.I
 
 export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: ProductionGanttProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
 
-  // Marca de las 18:30 (11.5 horas desde las 07:00)
+  // Marca de las 18:30 para la línea divisoria
   const SPLIT_PCT = useMemo(() => {
     const totalDayMins = 24 * 60;
     const splitMinsAfterStart = 11.5 * 60; // 18:30 - 07:00 = 11.5 horas
-    return (splitMinsAfterStart / totalDayMins) * 100; // Aprox 47.917%
+    return (splitMinsAfterStart / totalDayMins) * 100;
   }, []);
 
   const isSpecialTask = (name: string) => {
-    const specials = ['CS', 'CP', 'CIP', 'MTTO PROGRAMADO', 'PARADA PROGRAMADA'];
+    const specials = ['CS', 'CP', 'CIP', 'MTTO PROGRAMADO', 'PARADA PROGRAMADA', 'S.A.M.I'];
     return specials.some(s => name.startsWith(s));
   };
 
@@ -56,14 +56,18 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     return Object.entries(summary).sort((a, b) => a[0].localeCompare(b[0]));
   }, [tasks]);
 
-  const getTaskStyle = (task: ScheduledTask, day: Date) => {
+  // Función para obtener el estilo de una barra (tarea o gap)
+  const getBarStyle = (start: Date, end: Date, day: Date, isSpecial: boolean) => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const rowEnd = addDays(rowStart, 1);
 
-    if (task.endTime <= rowStart || task.startTime >= rowEnd) return null;
+    if (end <= rowStart || start >= rowEnd) return null;
 
-    let startMin = differenceInMinutes(task.startTime, rowStart);
-    let endMin = differenceInMinutes(task.endTime, rowStart);
+    let displayStart = start < rowStart ? rowStart : start;
+    let displayEnd = end > rowEnd ? rowEnd : end;
+
+    let startMin = differenceInMinutes(displayStart, rowStart);
+    let endMin = differenceInMinutes(displayEnd, rowStart);
 
     const totalDayMins = 24 * 60;
     const left = Math.max(0, (startMin / totalDayMins) * 100);
@@ -72,21 +76,60 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
     if (width <= 0) return null;
 
-    if (isSpecialTask(task.name)) {
-      return {
-        left: `${left}%`,
-        width: `${width}%`,
-        backgroundColor: SPECIAL_COLOR,
-        borderColor: '#E6E600',
-      };
-    }
-
     return {
       left: `${left}%`,
       width: `${width}%`,
-      backgroundColor: UNIFIED_SHIFT_COLOR,
-      borderColor: '#6DB6D5',
+      backgroundColor: isSpecial ? SPECIAL_COLOR : UNIFIED_SHIFT_COLOR,
+      borderColor: isSpecial ? '#E6E600' : '#6DB6D5',
     };
+  };
+
+  // Lógica para calcular los gaps (S.A.M.I) por día
+  const getDayGaps = (day: Date, dIdx: number) => {
+    const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
+    const isSunday = dIdx === 6;
+    const rowEnd = isSunday 
+      ? setMinutes(setHours(startOfDay(day), PRODUCTION_END_SUN_HOUR), PRODUCTION_END_SUN_MINUTE)
+      : addDays(rowStart, 1);
+
+    // Filtrar tareas que ocurren en este día/fila
+    const dayIntervals = tasks
+      .filter(t => t.startTime < rowEnd && t.endTime > rowStart)
+      .map(t => ({
+        start: t.startTime < rowStart ? rowStart : t.startTime,
+        end: t.endTime > rowEnd ? rowEnd : t.endTime
+      }))
+      .sort((a, b) => a.start.getTime() - b.start.getTime());
+
+    // Fusionar intervalos por si hay solapamientos (aunque el store lo evita)
+    const merged: { start: Date; end: Date }[] = [];
+    if (dayIntervals.length > 0) {
+      let current = dayIntervals[0];
+      for (let i = 1; i < dayIntervals.length; i++) {
+        if (dayIntervals[i].start < current.end) {
+          current.end = isAfter(dayIntervals[i].end, current.end) ? dayIntervals[i].end : current.end;
+        } else {
+          merged.push(current);
+          current = dayIntervals[i];
+        }
+      }
+      merged.push(current);
+    }
+
+    // Calcular huecos
+    const gaps: { start: Date; end: Date }[] = [];
+    let lastEnd = rowStart;
+    for (const interval of merged) {
+      if (interval.start > lastEnd) {
+        gaps.push({ start: lastEnd, end: interval.start });
+      }
+      lastEnd = interval.end;
+    }
+    if (lastEnd < rowEnd) {
+      gaps.push({ start: lastEnd, end: rowEnd });
+    }
+
+    return gaps;
   };
 
   const getShiftData = (task: ScheduledTask, day: Date) => {
@@ -154,76 +197,97 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           </div>
         </div>
 
-        {weekDays.map((day, dIdx) => (
-          <div key={dIdx} className="flex items-center group">
-            <div className="w-14 shrink-0 pr-2">
-              <div className="font-headline text-xs font-bold text-slate-900 group-hover:text-primary transition-colors">{DAYS[dIdx]}</div>
-              <div className="text-[9px] text-muted-foreground font-medium">{day.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div>
-            </div>
-
-            <div className="flex-1 h-14 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
-              <div 
-                className="absolute inset-y-0 left-0 z-0" 
-                style={{ width: `100%`, backgroundColor: `#C0E6F520` }}
-              >
+        {weekDays.map((day, dIdx) => {
+          const gaps = getDayGaps(day, dIdx);
+          return (
+            <div key={dIdx} className="flex items-center group">
+              <div className="w-14 shrink-0 pr-2">
+                <div className="font-headline text-xs font-bold text-slate-900 group-hover:text-primary transition-colors">{DAYS[dIdx]}</div>
+                <div className="text-[9px] text-muted-foreground font-medium">{day.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div>
               </div>
 
-              <div 
-                className="absolute inset-y-0 z-20 border-l-2 border-primary/90 shadow-[0_0_8px_rgba(0,0,0,0.15)]"
-                style={{ left: `${SPLIT_PCT}%` }}
-              >
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-2 w-2 bg-primary rounded-full"></div>
-              </div>
-              
-              {markers.map((m, idx) => (
-                <div key={idx} className={cn("absolute inset-y-0 border-l z-0 transition-opacity", m.isFullHour ? "border-slate-300/40 opacity-100" : "border-slate-200/20 opacity-50")} style={{ left: `${m.percent}%` }}></div>
-              ))}
+              <div className="flex-1 h-14 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
+                {/* Fondo uniforme para la línea */}
+                <div 
+                  className="absolute inset-y-0 left-0 z-0" 
+                  style={{ width: `100%`, backgroundColor: `#C0E6F520` }}
+                >
+                </div>
 
-              {tasks.map((task) => {
-                const style = getTaskStyle(task, day);
-                if (!style) return null;
-                const { dayQty, nightQty, nightLabelOffset } = getShiftData(task, day);
-                const isSpecial = isSpecialTask(task.name);
+                {/* Línea divisoria a las 18:30 */}
+                <div 
+                  className="absolute inset-y-0 z-20 border-l-2 border-primary/90 shadow-[0_0_8px_rgba(0,0,0,0.15)]"
+                  style={{ left: `${SPLIT_PCT}%` }}
+                >
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-2 w-2 bg-primary rounded-full"></div>
+                </div>
+                
+                {markers.map((m, idx) => (
+                  <div key={idx} className={cn("absolute inset-y-0 border-l z-0 transition-opacity", m.isFullHour ? "border-slate-300/40 opacity-100" : "border-slate-200/20 opacity-50")} style={{ left: `${m.percent}%` }}></div>
+                ))}
 
-                return (
-                  <div
-                    key={task.id}
-                    onClick={() => onTaskClick?.(task)}
-                    className="absolute inset-y-2 rounded border shadow-sm z-10 p-1 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
-                    style={style}
-                  >
-                    <div className="relative w-full h-full flex items-center min-w-0">
-                      {isSpecial ? (
-                        <div className="px-1 flex items-center h-full">
-                          <span className={cn(
-                            "font-bold text-slate-900 leading-none",
-                            ['CS', 'CP', 'CIP'].some(s => task.name.startsWith(s)) ? "text-[9px]" : "text-xs"
-                          )}>
-                            {task.name}
-                          </span>
-                        </div>
-                      ) : (
-                        <>
-                          {dayQty > 0 && (
-                            <div className="flex items-center gap-1.5 whitespace-nowrap px-2">
-                              <span className="text-xs font-bold text-slate-800">{task.name} {Math.round(dayQty).toLocaleString()} cajas</span>
-                            </div>
-                          )}
-                          
-                          {nightQty > 0 && nightLabelOffset !== null && (
-                            <div className="absolute flex items-center gap-1.5 whitespace-nowrap px-2" style={{ left: `${nightLabelOffset}%` }}>
-                              <span className="text-xs font-bold text-slate-900">{task.name} {Math.round(nightQty).toLocaleString()} cajas</span>
-                            </div>
-                          )}
-                        </>
-                      )}
+                {/* Renderizar Gaps (S.A.M.I) */}
+                {gaps.map((gap, gIdx) => {
+                  const style = getBarStyle(gap.start, gap.end, day, true);
+                  if (!style) return null;
+                  return (
+                    <div
+                      key={`gap-${gIdx}`}
+                      className="absolute inset-y-2 rounded border shadow-sm z-5 p-1 flex items-center overflow-hidden opacity-60"
+                      style={style}
+                    >
+                      <span className="text-[9px] font-black text-slate-700/60 tracking-tighter uppercase px-1">S.A.M.I</span>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+
+                {/* Renderizar Tareas Reales */}
+                {tasks.map((task) => {
+                  const style = getBarStyle(task.startTime, task.endTime, day, isSpecialTask(task.name));
+                  if (!style) return null;
+                  const { dayQty, nightQty, nightLabelOffset } = getShiftData(task, day);
+                  const isSpecial = isSpecialTask(task.name);
+
+                  return (
+                    <div
+                      key={task.id}
+                      onClick={() => onTaskClick?.(task)}
+                      className="absolute inset-y-2 rounded border shadow-sm z-10 p-1 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
+                      style={style}
+                    >
+                      <div className="relative w-full h-full flex items-center min-w-0">
+                        {isSpecial ? (
+                          <div className="px-1 flex items-center h-full">
+                            <span className={cn(
+                              "font-bold text-slate-900 leading-none",
+                              ['CS', 'CP', 'CIP'].some(s => task.name.startsWith(s)) ? "text-[9px]" : "text-xs"
+                            )}>
+                              {task.name}
+                            </span>
+                          </div>
+                        ) : (
+                          <>
+                            {dayQty > 0 && (
+                              <div className="flex items-center gap-1.5 whitespace-nowrap px-2">
+                                <span className="text-xs font-bold text-slate-800">{task.name} {Math.round(dayQty).toLocaleString()} cajas</span>
+                              </div>
+                            )}
+                            
+                            {nightQty > 0 && nightLabelOffset !== null && (
+                              <div className="absolute flex items-center gap-1.5 whitespace-nowrap px-2" style={{ left: `${nightLabelOffset}%` }}>
+                                <span className="text-xs font-bold text-slate-900">{task.name} {Math.round(nightQty).toLocaleString()} cajas</span>
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         <div className="mt-4 flex items-center justify-between text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-2">
           <div className="flex items-center gap-2">
@@ -236,7 +300,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: SPECIAL_COLOR }}></div>
-              <span>Especial (CS, CP, CIP, MTTO, PARADA)</span>
+              <span>Especial (S.A.M.I, CS, CP, CIP, MTTO)</span>
             </div>
           </div>
         </div>
