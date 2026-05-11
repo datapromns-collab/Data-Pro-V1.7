@@ -23,7 +23,7 @@ const PRODUCT_LIST = [
   "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
   "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA", "JUSTY NARANJA",
   "JUSTY DURAZNO", "JUSTY MANDARINA", "JUSTY SANDIA", "JUSTY LIMON", "JUSTY TAMARINDO",
-  "VITA TEA DURAZNO", "VITA TEA LIMON", "CS", "CIP", "CP"
+  "VITA TEA DURAZNO", "VITA TEA LIMON", "CS", "CIP", "CP", "MTTO PROGRAMADO", "PARADA PROGRAMADA"
 ];
 
 const CIP_OPTIONS = ["CIP 3P ALCALINO", "CIP 3P ACIDO", "CIP 5P"];
@@ -56,7 +56,7 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
 
   const { toast } = useToast();
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
-  const isSpecialTask = name === 'CS' || name === 'CIP' || name === 'CP';
+  const isSpecialTask = name === 'CS' || name === 'CIP' || name === 'CP' || name === 'MTTO PROGRAMADO' || name === 'PARADA PROGRAMADA';
 
   useEffect(() => {
     if (initialTask) {
@@ -99,12 +99,18 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
       setDuration(0.5);
     } else if (name === 'CIP' || name === 'CP') {
       setDuration(2.0);
+    } else if (name === 'MTTO PROGRAMADO') {
+      setDuration(11.5);
+    } else if (name === 'PARADA PROGRAMADA') {
+      // Don't auto-calculate if it's already set (e.g. from initialTask or manual edit)
+      if (!initialTask && duration === 0) setDuration(1);
     } else if (loadPerHour > 0 && quantity > 0) {
       setDuration(quantity / loadPerHour);
     } else {
-      setDuration(0);
+      // Reset only if it's a production task with missing values
+      if (!isSpecialTask) setDuration(0);
     }
-  }, [name, loadPerHour, quantity]);
+  }, [name, loadPerHour, quantity, isSpecialTask, initialTask]);
 
   const handleSave = () => {
     if (!name) return;
@@ -175,9 +181,9 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label>Producto</Label>
+              <Label>Producto / Tarea</Label>
               <Select value={name} onValueChange={setName}>
-                <SelectTrigger><SelectValue placeholder="Producto" /></SelectTrigger>
+                <SelectTrigger><SelectValue placeholder="Seleccionar" /></SelectTrigger>
                 <SelectContent>
                   {PRODUCT_LIST.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                 </SelectContent>
@@ -194,6 +200,20 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
                   {CIP_OPTIONS.map((opt) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
                 </SelectContent>
               </Select>
+            </div>
+          )}
+
+          {name === 'PARADA PROGRAMADA' && (
+            <div className="grid gap-2 animate-in fade-in slide-in-from-top-2">
+              <Label>Duración de Parada (Horas)</Label>
+              <Input 
+                type="number" 
+                step="0.5"
+                min="0.5"
+                value={duration || ''} 
+                onChange={(e) => setDuration(Number(e.target.value))} 
+                placeholder="Ej: 2.5"
+              />
             </div>
           )}
 
@@ -253,9 +273,9 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
           )}
           
           <div className="flex justify-between items-center p-3 bg-primary/5 rounded-lg border border-primary/10">
-            <div className="text-sm font-medium">Duración:</div>
+            <div className="text-sm font-medium">Duración Planificada:</div>
             <div className="text-lg font-bold text-primary">
-              {duration < 1 && duration > 0 ? `${duration * 60} min` : `${duration.toFixed(1)} hrs`}
+              {duration < 1 && duration > 0 ? `${Math.round(duration * 60)} min` : `${duration.toFixed(1)} hrs`}
             </div>
           </div>
         </div>
@@ -267,7 +287,7 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
           )}
           <div className="flex gap-2 w-full sm:w-auto">
             <Button variant="outline" onClick={onClose} className="flex-1 sm:flex-none">Cancelar</Button>
-            <Button onClick={handleSave} className="bg-primary flex-1 sm:flex-none" disabled={!name}>Guardar</Button>
+            <Button onClick={handleSave} className="bg-primary flex-1 sm:flex-none" disabled={!name || duration <= 0}>Guardar</Button>
           </div>
         </DialogFooter>
       </DialogContent>
