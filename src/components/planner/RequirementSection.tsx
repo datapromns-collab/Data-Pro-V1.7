@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo } from 'react';
@@ -55,7 +54,7 @@ export function RequirementSection() {
     );
     
     const totalBoxes = line7Tasks.reduce((acc, t) => acc + (t.quantity || 0), 0);
-    return totalBoxes * 12;
+    return Math.round(totalBoxes * 12);
   }, [tasks, weekStartDate]);
 
   // Cálculo EMP_0068: (L7 Cola/Kolita + Todos L5) * 12
@@ -80,7 +79,7 @@ export function RequirementSection() {
     const totalBoxes = line7Specific.reduce((acc, t) => acc + (t.quantity || 0), 0) + 
                        line5All.reduce((acc, t) => acc + (t.quantity || 0), 0);
                        
-    return totalBoxes * 12;
+    return Math.round(totalBoxes * 12);
   }, [tasks, weekStartDate]);
 
   return (
@@ -145,11 +144,11 @@ export function RequirementSection() {
                                   <TableCell className="text-right">
                                     {item.code === 'EMP_0009' ? (
                                       <div className="h-8 flex items-center justify-end px-3 font-black text-primary bg-primary/5 rounded border border-primary/20">
-                                        {calculatedEMP0009.toLocaleString()}
+                                        {calculatedEMP0009.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
                                       </div>
                                     ) : item.code === 'EMP_0068' ? (
                                       <div className="h-8 flex items-center justify-end px-3 font-black text-amber-600 bg-amber-50 rounded border border-amber-200">
-                                        {calculatedEMP0068.toLocaleString()}
+                                        {calculatedEMP0068.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
                                       </div>
                                     ) : (
                                       <Input 
