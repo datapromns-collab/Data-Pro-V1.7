@@ -66,6 +66,12 @@
     size: landscape;
     margin: 0;
   }
+  
+  * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
   .no-print {
     display: none !important;
   }
