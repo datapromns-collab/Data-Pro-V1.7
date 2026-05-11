@@ -112,7 +112,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
               <TableRow className="bg-slate-50 border-b">
                 <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
                 <TableHead className="font-bold text-slate-700">Descripción del Material</TableHead>
-                <TableHead className="text-right font-bold text-slate-700">Cantidad Sugerida</TableHead>
+                <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
