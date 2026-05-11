@@ -62,6 +62,10 @@
 
 /* Print optimizations */
 @media print {
+  @page {
+    size: landscape;
+    margin: 0;
+  }
   .no-print {
     display: none !important;
   }
@@ -74,22 +78,16 @@
     margin: 0 !important;
   }
   main {
-    padding: 0 !important;
-    height: auto !important;
-    overflow: visible !important;
-    display: block !important;
-  }
-  .container {
-    max-width: none !important;
-    width: 100% !important;
-  }
-  @page {
-    size: landscape;
-    margin: 1cm;
+    display: none !important;
   }
   .page-break {
     page-break-after: always;
     break-after: page;
+    height: 100vh;
+    padding: 1.5cm;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
   }
 }
 

@@ -182,30 +182,32 @@ export default function PlannerPage() {
           </div>
         </main>
 
-        {/* Print Only Content: ALL 7 LINES */}
-        <div className="print-only w-full p-8 bg-white">
-          <div className="mb-12 border-b-2 border-primary pb-6 flex justify-between items-end">
-            <div>
-              <h1 className="text-4xl font-headline font-bold text-slate-900">Reporte Semanal de Producción</h1>
-              <p className="text-slate-500 font-medium">Planificación Maestra - Todas las Líneas (1-7)</p>
-            </div>
-            <div className="text-right">
-              <p className="text-sm font-bold text-primary uppercase tracking-widest">Confidencial</p>
-              <p className="text-xs text-slate-400">{new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
-            </div>
-          </div>
-
+        {/* Print Only Content: 7 PAGES (One per line) */}
+        <div className="print-only w-full bg-white">
           {LINES.map((lineName, i) => {
             const lineTasks = tasks.filter(t => t.lineId === (i + 1).toString());
             return (
-              <div key={lineName} className="page-break mb-12">
-                <div className="flex items-center gap-4 mb-4 border-l-4 border-primary pl-4">
-                  <h2 className="text-2xl font-headline font-bold text-slate-800">{lineName}</h2>
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-                    ({lineTasks.length} tareas programadas)
-                  </span>
+              <div key={lineName} className="page-break">
+                <div className="mb-8 border-b-2 border-primary pb-6 flex justify-between items-end">
+                  <div>
+                    <h1 className="text-3xl font-headline font-bold text-slate-900">Reporte de Producción</h1>
+                    <p className="text-primary font-bold text-lg uppercase tracking-tight">{lineName}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-xs font-bold text-primary uppercase tracking-widest mb-1">Confidencial - Uso Interno</p>
+                    <p className="text-xs text-slate-400 font-medium">
+                      Emitido el: {new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
+                    </p>
+                  </div>
                 </div>
-                <ProductionGantt tasks={lineTasks} />
+                <div className="flex-1">
+                  <ProductionGantt tasks={lineTasks} />
+                </div>
+                <div className="mt-8 pt-6 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                  <span>Plan Semanal Pro Edition</span>
+                  <span>Página {i + 1} de 7</span>
+                  <span>Ref: {lineName.replace(' ', '-').toLowerCase()}</span>
+                </div>
               </div>
             );
           })}
