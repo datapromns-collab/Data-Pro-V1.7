@@ -17,7 +17,8 @@ import {
   Clock,
   Gauge,
   Calculator as CalculatorIcon,
-  Keyboard as KeyboardIcon
+  Keyboard as KeyboardIcon,
+  ClipboardList
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -93,6 +94,10 @@ export default function PlannerPage() {
           case 'k':
             e.preventDefault();
             setIsShortcutsOpen(prev => !prev);
+            break;
+          case 'r':
+            e.preventDefault();
+            setActiveTab('requirement');
             break;
         }
       }
@@ -285,6 +290,7 @@ export default function PlannerPage() {
                   <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Gantt</TabsTrigger>
                   <TabsTrigger value="speeds" className="gap-2 px-4 font-bold"><Gauge className="h-4 w-4" /> Velocidades</TabsTrigger>
                   <TabsTrigger value="calculator" className="gap-2 px-4 font-bold"><CalculatorIcon className="h-4 w-4" /> Calculadora</TabsTrigger>
+                  <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Requerimiento</TabsTrigger>
                 </TabsList>
               </div>
 
@@ -297,6 +303,15 @@ export default function PlannerPage() {
                 </TabsContent>
                 <TabsContent value="calculator" className="m-0 h-full">
                   <Calculator />
+                </TabsContent>
+                <TabsContent value="requirement" className="m-0 h-full">
+                  <Card className="h-full border-dashed border-2 flex flex-col items-center justify-center p-12 text-center bg-white/50">
+                    <div className="bg-slate-100 p-6 rounded-full mb-4">
+                      <ClipboardList className="h-12 w-12 text-slate-400" />
+                    </div>
+                    <h3 className="text-xl font-headline font-bold text-slate-900 mb-2">Sección de Requerimientos</h3>
+                    <p className="text-slate-500 max-w-sm">Esta sección se encuentra en blanco por ahora. Aquí podrás gestionar los requerimientos específicos de producción próximamente.</p>
+                  </Card>
                 </TabsContent>
               </div>
             </Tabs>
