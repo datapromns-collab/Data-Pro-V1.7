@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo } from 'react';
@@ -230,9 +229,9 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   <div key={idx} className={cn("absolute inset-y-0 border-l z-0 transition-opacity", m.isFullHour ? "border-slate-300/40 opacity-100" : "border-slate-200/20 opacity-50")} style={{ left: `${m.percent}%` }}></div>
                 ))}
 
-                {/* Línea divisoria de turno a las 18:30 (z-5 para estar debajo de tareas) */}
+                {/* Línea divisoria de turno a las 18:30 (z-20 para estar por encima de todo) */}
                 <div 
-                  className="absolute inset-y-0 z-[5] border-l-2 border-primary shadow-[0_0_8px_rgba(0,0,0,0.1)]"
+                  className="absolute inset-y-0 z-[20] border-l-2 border-primary pointer-events-none shadow-[0_0_8px_rgba(0,0,0,0.1)]"
                   style={{ left: `${SPLIT_PCT}%` }}
                 />
 
