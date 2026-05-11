@@ -10,12 +10,13 @@ import { differenceInMinutes, startOfDay, addDays, setHours, setMinutes } from '
 interface ProductionGanttProps {
   tasks: ScheduledTask[];
   onTaskClick?: (task: ScheduledTask) => void;
+  weekStartDate: Date;
 }
 
 const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
-export function ProductionGantt({ tasks, onTaskClick }: ProductionGanttProps) {
-  const weekDays = useMemo(() => getWeekDays(new Date()), []);
+export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: ProductionGanttProps) {
+  const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
 
   const getTaskStyle = (task: ScheduledTask, day: Date) => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);

@@ -37,9 +37,10 @@ interface TaskDialogProps {
   onDelete?: (id: string) => void;
   initialTask?: ScheduledTask | null;
   defaultLineId?: string;
+  weekStartDate: Date;
 }
 
-export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, defaultLineId = "1" }: TaskDialogProps) {
+export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, defaultLineId = "1", weekStartDate }: TaskDialogProps) {
   const [name, setName] = useState('');
   const [lineId, setLineId] = useState(defaultLineId);
   const [cipSubOption, setCipSubOption] = useState('');
@@ -51,7 +52,7 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
   const [selectedDayIdx, setSelectedDayIdx] = useState('0');
   const [selectedTime, setSelectedTime] = useState('07:00');
 
-  const weekDays = useMemo(() => getWeekDays(new Date()), []);
+  const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   const isSpecialTask = name === 'CS' || name === 'CIP' || name === 'CP';
 
   useEffect(() => {
@@ -66,7 +67,7 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
       setQuantity(initialTask.quantity || 0);
       setDuration(initialTask.durationHours);
       
-      const dayIdx = weekDays.findIndex(d => d.getDate() === initialTask.startTime.getDate());
+      const dayIdx = weekDays.findIndex(d => d.getDate() === initialTask.startTime.getDate() && d.getMonth() === initialTask.startTime.getMonth());
       setSelectedDayIdx(dayIdx !== -1 ? dayIdx.toString() : '0');
       setSelectedTime(formatTime(initialTask.startTime));
     } else {
@@ -134,7 +135,7 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
           <DialogTitle className="font-headline text-2xl text-primary">
             {initialTask ? 'Editar Tarea' : 'Nueva Tarea'}
           </DialogTitle>
-          <DialogDescription>Configura la producción y programación.</DialogDescription>
+          <DialogDescription>Configura la producción y programación para la semana elegida.</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-2 gap-4">
@@ -194,9 +195,17 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
             <div className="grid gap-2">
               <Label>Día</Label>
               <Select value={selectedDayIdx} onValueChange={setSelectedDayIdx}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectTrigger>
+                  <SelectValue>
+                    {weekDays[parseInt(selectedDayIdx)]?.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
+                  </SelectValue>
+                </SelectTrigger>
                 <SelectContent>
-                  {DAYS.map((day, idx) => <SelectItem key={day} value={idx.toString()}>{day}</SelectItem>)}
+                  {DAYS.map((day, idx) => (
+                    <SelectItem key={day} value={idx.toString()}>
+                      {day} ({weekDays[idx]?.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })})
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>

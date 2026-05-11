@@ -10,22 +10,21 @@ import { Sun, Moon } from 'lucide-react';
 interface WeeklyGridProps {
   tasks: ScheduledTask[];
   onTaskClick?: (task: ScheduledTask) => void;
+  weekStartDate: Date;
 }
 
 const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
-export function WeeklyGrid({ tasks, onTaskClick }: WeeklyGridProps) {
-  const weekDays = useMemo(() => getWeekDays(new Date()), []);
+export function WeeklyGrid({ tasks, onTaskClick, weekStartDate }: WeeklyGridProps) {
+  const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   const timeSlots = useMemo(() => getTimeSlots(), []);
 
   return (
     <div className="w-full bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
       <div className="overflow-x-auto">
-        {/* Aumentamos el min-w para dar espacio a las columnas más anchas */}
         <table className="w-full border-collapse table-fixed min-w-[1600px]">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
-              {/* Reducimos w-24 a w-16 para acercar las columnas al horario (~1cm menos) */}
               <th className="w-16 p-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-r border-slate-200">Horario</th>
               {weekDays.map((day, idx) => (
                 <th key={idx} className="p-4 border-r border-slate-200 last:border-r-0">
@@ -40,7 +39,6 @@ export function WeeklyGrid({ tasks, onTaskClick }: WeeklyGridProps) {
           <tbody>
             {timeSlots.map((slot, sIdx) => {
               const [h, m] = slot.split(':').map(Number);
-              // Día: 07:00 a 18:30
               const timeVal = h + m / 60;
               const isDay = timeVal >= 7 && timeVal < 18.5;
               

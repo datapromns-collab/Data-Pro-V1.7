@@ -1,9 +1,9 @@
+
 "use client";
 
 import { useState, useMemo } from 'react';
 import { 
-  Calendar, 
-  Download, 
+  Calendar as CalendarIcon, 
   Plus, 
   Trash2, 
   Printer, 
@@ -21,17 +21,21 @@ import { usePlannerStore } from '@/hooks/use-planner-store';
 import { calculateTotalPlannedMinutes } from '@/lib/planner-utils';
 import { Toaster } from '@/components/ui/toaster';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { SidebarProvider, Sidebar, SidebarContent, SidebarHeader, SidebarFooter, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
+import { SidebarProvider, Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
 import { ScheduledTask } from '@/lib/types';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7"];
 
 export default function PlannerPage() {
-  const { tasks, addTask, updateTask, removeTask, clearAll, isLoaded } = usePlannerStore();
+  const { tasks, weekStartDate, setWeekStartDate, addTask, updateTask, removeTask, clearAll, isLoaded } = usePlannerStore();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
@@ -77,7 +81,7 @@ export default function PlannerPage() {
           <SidebarHeader className="p-6">
             <div className="flex items-center gap-3">
               <div className="bg-primary p-2 rounded-xl shadow-lg shadow-primary/20">
-                <Calendar className="h-6 w-6 text-white" />
+                <CalendarIcon className="h-6 w-6 text-white" />
               </div>
               <div>
                 <h1 className="text-lg font-headline font-bold text-slate-900 tracking-tight">Plan Semanal</h1>
@@ -87,6 +91,28 @@ export default function PlannerPage() {
           </SidebarHeader>
           <SidebarContent className="px-4 py-2">
             <div className="space-y-6">
+              <section>
+                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Semana de Inicio</p>
+                <div className="px-2">
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="outline" className="w-full justify-start text-left font-normal bg-slate-50 border-slate-200">
+                        <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
+                        {format(weekStartDate, 'dd MMM yyyy', { locale: es })}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={weekStartDate}
+                        onSelect={(date) => date && setWeekStartDate(date)}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </section>
+
               <section>
                 <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Líneas de Producción</p>
                 <div className="px-2 mb-4">
@@ -139,6 +165,8 @@ export default function PlannerPage() {
             <div className="flex items-center gap-2 text-sm text-slate-500">
               <span>Producción</span>
               <ChevronRight className="h-4 w-4" />
+              <span>Semana {format(weekStartDate, 'dd/MM', { locale: es })}</span>
+              <ChevronRight className="h-4 w-4" />
               <span className="font-medium text-slate-900">Línea {selectedLine}</span>
             </div>
             <div className="flex items-center gap-2">
@@ -161,10 +189,10 @@ export default function PlannerPage() {
 
               <div className="flex-1 min-h-0 relative">
                 <TabsContent value="grid" className="m-0 h-full">
-                  <WeeklyGrid tasks={filteredTasks} onTaskClick={handleTaskClick} />
+                  <WeeklyGrid tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
                 </TabsContent>
                 <TabsContent value="gantt" className="m-0 h-full">
-                  <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} />
+                  <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
                 </TabsContent>
 
                 {filteredTasks.length === 0 && (
@@ -196,12 +224,15 @@ export default function PlannerPage() {
                   <div className="text-right">
                     <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">Confidencial - Uso Interno</p>
                     <p className="text-[10px] text-slate-400 font-medium">
-                      Emitido el: {new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
+                      Semana del {format(weekStartDate, 'dd MMMM', { locale: es })}
+                    </p>
+                    <p className="text-[10px] text-slate-300 font-medium">
+                      Emitido: {new Date().toLocaleDateString('es-ES')}
                     </p>
                   </div>
                 </div>
                 <div className="flex-1 overflow-hidden">
-                  <ProductionGantt tasks={lineTasks} />
+                  <ProductionGantt tasks={lineTasks} weekStartDate={weekStartDate} />
                 </div>
                 <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-widest">
                   <span>Plan Semanal Pro Edition</span>
@@ -220,7 +251,8 @@ export default function PlannerPage() {
         onSave={handleSaveTask} 
         onDelete={handleDeleteTask}
         initialTask={editingTask}
-        defaultLineId={selectedLine} 
+        defaultLineId={selectedLine}
+        weekStartDate={weekStartDate}
       />
       <Toaster />
     </SidebarProvider>

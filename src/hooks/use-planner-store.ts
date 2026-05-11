@@ -3,11 +3,13 @@
 
 import { useState, useEffect } from 'react';
 import { ScheduledTask } from '@/lib/types';
+import { startOfWeek } from 'date-fns';
 
-const STORAGE_KEY = 'plan-semanal-pro-data';
+const STORAGE_KEY = 'plan-semanal-pro-data-v2';
 
 export function usePlannerStore() {
   const [tasks, setTasks] = useState<ScheduledTask[]>([]);
+  const [weekStartDate, setWeekStartDate] = useState<Date>(startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -16,14 +18,17 @@ export function usePlannerStore() {
       try {
         const parsed = JSON.parse(saved);
         // Revive dates
-        const revived = parsed.map((t: any) => ({
+        const revivedTasks = (parsed.tasks || []).map((t: any) => ({
           ...t,
           startTime: new Date(t.startTime),
           endTime: new Date(t.endTime)
         }));
-        setTasks(revived);
+        setTasks(revivedTasks);
+        if (parsed.weekStartDate) {
+          setWeekStartDate(new Date(parsed.weekStartDate));
+        }
       } catch (e) {
-        console.error("Error reviving tasks", e);
+        console.error("Error reviving data", e);
       }
     }
     setIsLoaded(true);
@@ -31,9 +36,12 @@ export function usePlannerStore() {
 
   useEffect(() => {
     if (isLoaded) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        tasks,
+        weekStartDate: weekStartDate.toISOString()
+      }));
     }
-  }, [tasks, isLoaded]);
+  }, [tasks, weekStartDate, isLoaded]);
 
   const addTask = (taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
@@ -66,5 +74,18 @@ export function usePlannerStore() {
     setTasks([]);
   };
 
-  return { tasks, addTask, updateTask, removeTask, clearAll, isLoaded };
+  const updateWeekStartDate = (date: Date) => {
+    setWeekStartDate(startOfWeek(date, { weekStartsOn: 1 }));
+  };
+
+  return { 
+    tasks, 
+    weekStartDate, 
+    setWeekStartDate: updateWeekStartDate, 
+    addTask, 
+    updateTask, 
+    removeTask, 
+    clearAll, 
+    isLoaded 
+  };
 }
