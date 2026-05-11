@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -37,7 +38,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { Badge } from '@/components/ui/badge';
 import { ScheduledTask } from '@/lib/types';
-import { format, getISOWeek, setHours, setMinutes } from 'date-fns';
+import { format, getISOWeek, setHours, setMinutes, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -104,21 +105,26 @@ export default function PlannerPage() {
   const weekNumber = getISOWeek(weekStartDate);
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
 
-  const filteredTasks = useMemo(() => 
-    tasks.filter(t => t.lineId === selectedLine),
-    [tasks, selectedLine]
-  );
+  // FILTRADO INDEPENDIENTE POR SEMANA Y LÍNEA
+  const filteredTasks = useMemo(() => {
+    const weekEnd = addDays(weekStartDate, 7);
+    return tasks.filter(t => 
+      t.lineId === selectedLine && 
+      t.endTime > weekStartDate && 
+      t.startTime < weekEnd
+    );
+  }, [tasks, selectedLine, weekStartDate]);
 
   const totalMinutes = calculateTotalPlannedMinutes(filteredTasks);
 
   const nextAvailable = useMemo(() => {
-    const lineTasks = tasks.filter(t => t.lineId === selectedLine);
+    const lineTasks = filteredTasks; // Usamos solo las tareas de esta semana para buscar hueco
     if (lineTasks.length === 0) {
       return setMinutes(setHours(weekStartDate, 7), 0);
     }
     const latestTask = [...lineTasks].sort((a, b) => b.endTime.getTime() - a.endTime.getTime())[0];
     return latestTask.endTime;
-  }, [tasks, selectedLine, weekStartDate]);
+  }, [filteredTasks, weekStartDate]);
 
   const handlePrint = () => window.print();
 
@@ -243,9 +249,9 @@ export default function PlannerPage() {
                     <KeyboardIcon className="h-4 w-4" />
                     Atajos (Alt + K)
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar todo el plan?') && clearAll()} className="w-full justify-start gap-2 text-destructive font-bold">
+                  <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar TODO el historial de todas las semanas?') && clearAll()} className="w-full justify-start gap-2 text-destructive font-bold">
                     <Trash2 className="h-4 w-4" />
-                    Limpiar Plan
+                    Limpiar Base de Datos
                   </Button>
                 </div>
               </section>
@@ -300,7 +306,13 @@ export default function PlannerPage() {
         {/* Print Only Content: 7 PAGES (One per line) */}
         <div className="print-only w-full bg-white">
           {LINES.map((lineName, i) => {
-            const lineTasks = tasks.filter(t => t.lineId === (i + 1).toString());
+            const lineId = (i + 1).toString();
+            const weekEnd = addDays(weekStartDate, 7);
+            const lineTasks = tasks.filter(t => 
+              t.lineId === lineId && 
+              t.endTime > weekStartDate && 
+              t.startTime < weekEnd
+            );
             return (
               <div key={lineName} className="page-break">
                 <div className="mb-4 border-b-2 border-primary pb-4 flex justify-between items-center">
@@ -354,7 +366,7 @@ export default function PlannerPage() {
         initialTask={editingTask}
         defaultLineId={selectedLine}
         weekStartDate={weekStartDate}
-        allTasks={tasks}
+        allTasks={tasks} // Enviamos todas las tareas para validación de conflictos, pero el dialog filtra según necesidad
         lineSpeeds={lineSpeeds}
       />
       
