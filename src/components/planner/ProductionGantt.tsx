@@ -340,7 +340,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           );
         })}
 
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-4 text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-2">
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-4 text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-1">
           <div className="flex items-center gap-2">
             <span className="text-primary font-black">CAJAS TOTALES: {Math.round(totalBoxes).toLocaleString()}</span>
           </div>
@@ -361,12 +361,12 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         </div>
 
         {productSummary.length > 0 && (
-          <div className="mt-2 border-t-2 border-slate-100 pt-3">
-            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Resumen de Producción Total</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+          <div className="mt-1 border-t-2 border-slate-100 pt-2">
+            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Resumen de Producción Total</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1.5">
               {productSummary.map(([name, data]) => (
                 <div key={name} className="flex">
-                  <div className="inline-flex items-center gap-2 py-1 px-3 bg-slate-50/50 rounded-md border border-slate-100 w-full sm:w-auto">
+                  <div className="inline-flex items-center gap-1.5 py-0.5 px-2 bg-slate-50/50 rounded-md border border-slate-100 w-full sm:w-auto">
                     <span className="text-xs font-bold text-slate-700">{name}</span>
                     <span className="text-xs font-bold text-primary whitespace-nowrap">
                       {Math.round(data.qty).toLocaleString()} cajas
