@@ -1,14 +1,17 @@
 
 "use client";
 
+import { useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Package, CircleDot, Tag, Layers, Archive, Wheat } from 'lucide-react';
+import { usePlannerStore } from '@/hooks/use-planner-store';
+import { addDays } from 'date-fns';
 
 const PREFORMS_DATA = [
-  { code: 'EMP_0009', description: 'PREFORMA TRANSPARENTE 29.6GR 1881' },
+  { code: 'EMP_0009', description: 'PREFORMA TRANSPARENTE 29.6GR 1881', isAuto: true },
   { code: 'EMP_0068', description: 'PREFORMA TRANSPARENTE 36 GR-1881' },
   { code: 'EMP_0093', description: 'PREFORMA TRANSPARENTE 42,64 GR-1881' },
   { code: 'EMP_0103', description: 'PREFORMA VERDE 42,64 GR-1881' },
@@ -17,13 +20,38 @@ const PREFORMS_DATA = [
   { code: 'EMP_0135', description: 'PREFORMA VERDE 20,5-1881' },
 ];
 
+const FLAVORS_FOR_EMP0009 = [
+  "GLUP FRESH",
+  "GLUP UVA",
+  "GLUP PIÑA",
+  "GLUP NARANJA",
+  "GLUP MANZANA VERDE",
+  "GLUP PIÑA PARCHITA",
+  "GLUP MANZANA ROJA"
+];
+
 export function RequirementSection() {
+  const { tasks, weekStartDate } = usePlannerStore();
+
   const empaqueSections = [
     { id: 'preforms', label: 'Preformas', icon: CircleDot, description: 'Gestión y stock de preformas para soplado.' },
     { id: 'caps', label: 'Tapas', icon: Package, description: 'Control de inventario de tapas por color y tipo.' },
     { id: 'labels', label: 'Etiquetas', icon: Tag, description: 'Requerimientos de etiquetas por producto y formato.' },
     { id: 'plastics', label: 'Plásticos', icon: Layers, description: 'Inventario de term encogible y plásticos de embalaje.' },
   ];
+
+  const calculatedEMP0009 = useMemo(() => {
+    const weekEnd = addDays(weekStartDate, 7);
+    const line7Tasks = tasks.filter(t => 
+      t.lineId === "7" && 
+      t.endTime > weekStartDate && 
+      t.startTime < weekEnd &&
+      FLAVORS_FOR_EMP0009.includes(t.name)
+    );
+    
+    const totalBoxes = line7Tasks.reduce((acc, t) => acc + (t.quantity || 0), 0);
+    return totalBoxes * 12;
+  }, [tasks, weekStartDate]);
 
   return (
     <div className="h-full flex flex-col space-y-6">
@@ -40,7 +68,6 @@ export function RequirementSection() {
         </TabsList>
 
         <div className="flex-1">
-          {/* SECCIÓN EMPAQUE CON SUB-TABS ANIDADOS */}
           <TabsContent value="empaque" className="m-0 h-full">
             <Tabs defaultValue="preforms" className="w-full h-full flex flex-col">
               <TabsList className="bg-white border p-1 rounded-lg shadow-sm self-start mb-6">
@@ -76,13 +103,24 @@ export function RequirementSection() {
                               {PREFORMS_DATA.map((item) => (
                                 <TableRow key={item.code} className="hover:bg-slate-50/50">
                                   <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                                  <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
+                                  <TableCell className="text-sm font-medium text-slate-700">
+                                    {item.description}
+                                    {item.code === 'EMP_0009' && (
+                                      <span className="ml-2 text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: Línea 7 × 12</span>
+                                    )}
+                                  </TableCell>
                                   <TableCell className="text-right">
-                                    <Input 
-                                      type="number" 
-                                      className="h-8 text-right font-bold border-slate-200 focus:border-primary" 
-                                      placeholder="0" 
-                                    />
+                                    {item.code === 'EMP_0009' ? (
+                                      <div className="h-8 flex items-center justify-end px-3 font-black text-primary bg-primary/5 rounded border border-primary/20">
+                                        {calculatedEMP0009.toLocaleString()}
+                                      </div>
+                                    ) : (
+                                      <Input 
+                                        type="number" 
+                                        className="h-8 text-right font-bold border-slate-200 focus:border-primary" 
+                                        placeholder="0" 
+                                      />
+                                    )}
                                   </TableCell>
                                 </TableRow>
                               ))}
@@ -108,7 +146,6 @@ export function RequirementSection() {
             </Tabs>
           </TabsContent>
 
-          {/* SECCIÓN MATERIA PRIMA */}
           <TabsContent value="materia-prima" className="m-0 h-full">
             <Card className="h-full border-dashed border-2 flex flex-col items-center justify-center p-12 text-center bg-white/50">
               <div className="bg-slate-100 p-6 rounded-full mb-4">
