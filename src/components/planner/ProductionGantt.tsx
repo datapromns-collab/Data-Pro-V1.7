@@ -1,8 +1,9 @@
+
 "use client";
 
 import { useMemo } from 'react';
 import { ScheduledTask, DayOfWeek } from '@/lib/types';
-import { getWeekDays, PRODUCTION_START_HOUR } from '@/lib/planner-utils';
+import { getWeekDays, PRODUCTION_START_HOUR, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE } from '@/lib/planner-utils';
 import { cn } from '@/lib/utils';
 import { differenceInMinutes, startOfDay, addDays, setHours, setMinutes, isAfter, isBefore } from 'date-fns';
 
@@ -45,7 +46,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     if (task.loadPerHour <= 0) return task.name;
 
     const rowStart = setMinutes(setHours(startOfDay(day), 7), 0);
-    const shiftSplit = setMinutes(setHours(startOfDay(day), 18), 30);
+    const shiftSplit = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE);
     const rowEnd = setMinutes(setHours(startOfDay(addDays(day, 1)), 7), 0);
 
     const getOverlapMins = (start1: Date, end1: Date, start2: Date, end2: Date) => {
@@ -120,13 +121,13 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
             <div className="flex-1 h-16 print:h-14 bg-slate-50/30 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
               <div 
-                className="absolute inset-y-0 left-0 w-[47.91%] bg-white/60 border-r-2 border-primary/20 z-0" 
+                className="absolute inset-y-0 left-0 w-[50%] bg-white/60 border-r-2 border-primary/20 z-0" 
                 title="Turno Día"
               >
                 <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/30 uppercase tracking-tighter">DÍA</div>
               </div>
               <div 
-                className="absolute inset-y-0 left-[47.91%] right-0 bg-slate-100/40 z-0" 
+                className="absolute inset-y-0 left-[50%] right-0 bg-slate-100/40 z-0" 
                 title="Turno Noche"
               >
                 <div className="absolute top-0 right-1 text-[7px] font-bold text-indigo-400/30 uppercase tracking-tighter">NOCHE</div>
@@ -173,11 +174,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       <div className="mt-6 flex flex-wrap items-center justify-end gap-6 text-[9px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-4 print:mt-4 print:pt-2">
         <div className="flex items-center gap-2">
           <div className="w-4 h-2.5 rounded bg-white border border-primary/20"></div>
-          <span>Turno Día (07:00 - 18:30)</span>
+          <span>Turno Día (07:00 - 19:00)</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-2.5 rounded bg-slate-100 border border-slate-200"></div>
-          <span>Turno Noche (18:30 - 07:00)</span>
+          <span>Turno Noche (19:00 - 07:00)</span>
         </div>
       </div>
     </div>
