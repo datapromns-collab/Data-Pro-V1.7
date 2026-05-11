@@ -5,7 +5,7 @@ import { useMemo } from 'react';
 import { ScheduledTask, DayOfWeek } from '@/lib/types';
 import { getWeekDays, PRODUCTION_START_HOUR, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, UBB_FACTORS, PRODUCTION_END_SUN_HOUR, PRODUCTION_END_SUN_MINUTE } from '@/lib/planner-utils';
 import { cn } from '@/lib/utils';
-import { differenceInMinutes, startOfDay, addDays, setHours, setMinutes, isAfter, isBefore } from 'date-fns';
+import { differenceInMinutes, startOfDay, addDays, setHours, setMinutes, isAfter, isBefore, addMinutes } from 'date-fns';
 
 interface ProductionGanttProps {
   tasks: ScheduledTask[];
@@ -15,9 +15,10 @@ interface ProductionGanttProps {
 
 const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
-// Colores unificados según las últimas instrucciones
+// Colores unificados
 const UNIFIED_SHIFT_COLOR = '#83CCEB';
-const SPECIAL_COLOR = '#FFFF00'; // También usado para S.A.M.I
+const SPECIAL_COLOR = '#FFFF00'; // S.A.M.I y especiales
+const AUTO_CP_COLOR = '#FFC000'; // CP Automático al final
 
 export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: ProductionGanttProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
@@ -39,6 +40,16 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     [tasks]
   );
 
+  // Calcular el intervalo del CP Automático (2 horas después de la última tarea)
+  const autoCPInterval = useMemo(() => {
+    if (tasks.length === 0) return null;
+    const latestEndTime = new Date(Math.max(...tasks.map(t => t.endTime.getTime())));
+    return {
+      start: latestEndTime,
+      end: addMinutes(latestEndTime, 120)
+    };
+  }, [tasks]);
+
   const productSummary = useMemo(() => {
     const summary: Record<string, { qty: number; ubb: number }> = {};
     tasks.forEach(task => {
@@ -56,7 +67,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     return Object.entries(summary).sort((a, b) => a[0].localeCompare(b[0]));
   }, [tasks]);
 
-  // Función para obtener el estilo de una barra (tarea o gap)
   const getBarStyle = (start: Date, end: Date, day: Date, isSpecial: boolean) => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const rowEnd = addDays(rowStart, 1);
@@ -84,7 +94,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     };
   };
 
-  // Lógica para calcular los gaps (S.A.M.I) por día
   const getDayGaps = (day: Date, dIdx: number) => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const isSunday = dIdx === 6;
@@ -92,31 +101,37 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       ? setMinutes(setHours(startOfDay(day), PRODUCTION_END_SUN_HOUR), PRODUCTION_END_SUN_MINUTE)
       : addDays(rowStart, 1);
 
-    // Filtrar tareas que ocurren en este día/fila
-    const dayIntervals = tasks
+    // Combinar tareas reales y el intervalo de CP Automático para calcular huecos S.A.M.I
+    const intervals = tasks
       .filter(t => t.startTime < rowEnd && t.endTime > rowStart)
       .map(t => ({
         start: t.startTime < rowStart ? rowStart : t.startTime,
         end: t.endTime > rowEnd ? rowEnd : t.endTime
-      }))
-      .sort((a, b) => a.start.getTime() - b.start.getTime());
+      }));
 
-    // Fusionar intervalos por si hay solapamientos (aunque el store lo evita)
+    if (autoCPInterval && autoCPInterval.start < rowEnd && autoCPInterval.end > rowStart) {
+      intervals.push({
+        start: autoCPInterval.start < rowStart ? rowStart : autoCPInterval.start,
+        end: autoCPInterval.end > rowEnd ? rowEnd : autoCPInterval.end
+      });
+    }
+
+    const sorted = intervals.sort((a, b) => a.start.getTime() - b.start.getTime());
+
     const merged: { start: Date; end: Date }[] = [];
-    if (dayIntervals.length > 0) {
-      let current = dayIntervals[0];
-      for (let i = 1; i < dayIntervals.length; i++) {
-        if (dayIntervals[i].start < current.end) {
-          current.end = isAfter(dayIntervals[i].end, current.end) ? dayIntervals[i].end : current.end;
+    if (sorted.length > 0) {
+      let current = sorted[0];
+      for (let i = 1; i < sorted.length; i++) {
+        if (sorted[i].start < current.end) {
+          current.end = isAfter(sorted[i].end, current.end) ? sorted[i].end : current.end;
         } else {
           merged.push(current);
-          current = dayIntervals[i];
+          current = sorted[i];
         }
       }
       merged.push(current);
     }
 
-    // Calcular huecos
     const gaps: { start: Date; end: Date }[] = [];
     let lastEnd = rowStart;
     for (const interval of merged) {
@@ -130,38 +145,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     }
 
     return gaps;
-  };
-
-  const getShiftData = (task: ScheduledTask, day: Date) => {
-    const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
-    const shiftSplit = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE);
-    const rowEnd = setMinutes(setHours(startOfDay(addDays(day, 1)), PRODUCTION_START_HOUR), 0);
-    
-    const getOverlapMins = (start1: Date, end1: Date, start2: Date, end2: Date) => {
-      const s = isAfter(start1, start2) ? start1 : start2;
-      const e = isBefore(end1, end2) ? end1 : end2;
-      return Math.max(0, differenceInMinutes(e, s));
-    };
-
-    const dayMins = getOverlapMins(task.startTime, task.endTime, rowStart, shiftSplit);
-    const nightMins = getOverlapMins(task.startTime, task.endTime, shiftSplit, rowEnd);
-
-    const dayQty = task.loadPerHour > 0 ? (dayMins / 60) * task.loadPerHour : 0;
-    const nightQty = task.loadPerHour > 0 ? (nightMins / 60) * task.loadPerHour : 0;
-
-    let nightLabelOffset = null;
-    if (nightQty > 0) {
-      const taskDurationMins = differenceInMinutes(task.endTime, task.startTime);
-      const minsToThreshold = differenceInMinutes(shiftSplit, task.startTime);
-      
-      if (minsToThreshold > 0 && minsToThreshold < taskDurationMins) {
-        nightLabelOffset = (minsToThreshold / taskDurationMins) * 100;
-      } else if (minsToThreshold <= 0) {
-        nightLabelOffset = 0;
-      }
-    }
-
-    return { dayQty, nightQty, nightLabelOffset };
   };
 
   const markers = useMemo(() => {
@@ -207,14 +190,8 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
               </div>
 
               <div className="flex-1 h-14 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
-                {/* Fondo uniforme para la línea */}
-                <div 
-                  className="absolute inset-y-0 left-0 z-0" 
-                  style={{ width: `100%`, backgroundColor: `#C0E6F520` }}
-                >
-                </div>
+                <div className="absolute inset-y-0 left-0 z-0 w-full bg-[#C0E6F520]"></div>
 
-                {/* Línea divisoria a las 18:30 */}
                 <div 
                   className="absolute inset-y-0 z-20 border-l-2 border-primary/90 shadow-[0_0_8px_rgba(0,0,0,0.15)]"
                   style={{ left: `${SPLIT_PCT}%` }}
@@ -226,7 +203,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   <div key={idx} className={cn("absolute inset-y-0 border-l z-0 transition-opacity", m.isFullHour ? "border-slate-300/40 opacity-100" : "border-slate-200/20 opacity-50")} style={{ left: `${m.percent}%` }}></div>
                 ))}
 
-                {/* Renderizar Gaps (S.A.M.I) */}
+                {/* Gaps (S.A.M.I) */}
                 {gaps.map((gap, gIdx) => {
                   const style = getBarStyle(gap.start, gap.end, day, true);
                   if (!style) return null;
@@ -241,45 +218,42 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   );
                 })}
 
-                {/* Renderizar Tareas Reales */}
+                {/* CP Automático (Solo si hay tareas) */}
+                {autoCPInterval && (
+                  (() => {
+                    const style = getBarStyle(autoCPInterval.start, autoCPInterval.end, day, true);
+                    if (!style) return null;
+                    return (
+                      <div
+                        className="absolute inset-y-2 rounded border shadow-sm z-15 p-1 flex items-center overflow-hidden"
+                        style={{ ...style, backgroundColor: AUTO_CP_COLOR, borderColor: '#E6AC00' }}
+                      >
+                        <span className="text-[9px] font-black text-white tracking-tighter uppercase px-1">CP</span>
+                      </div>
+                    );
+                  })()
+                )}
+
+                {/* Tareas */}
                 {tasks.map((task) => {
                   const style = getBarStyle(task.startTime, task.endTime, day, isSpecialTask(task.name));
                   if (!style) return null;
-                  const { dayQty, nightQty, nightLabelOffset } = getShiftData(task, day);
-                  const isSpecial = isSpecialTask(task.name);
-
                   return (
                     <div
                       key={task.id}
                       onClick={() => onTaskClick?.(task)}
-                      className="absolute inset-y-2 rounded border shadow-sm z-10 p-1 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
+                      className="absolute inset-y-2 rounded border shadow-sm z-25 p-1 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
                       style={style}
                     >
                       <div className="relative w-full h-full flex items-center min-w-0">
-                        {isSpecial ? (
-                          <div className="px-1 flex items-center h-full">
-                            <span className={cn(
-                              "font-bold text-slate-900 leading-none",
-                              ['CS', 'CP', 'CIP'].some(s => task.name.startsWith(s)) ? "text-[9px]" : "text-xs"
-                            )}>
-                              {task.name}
-                            </span>
-                          </div>
-                        ) : (
-                          <>
-                            {dayQty > 0 && (
-                              <div className="flex items-center gap-1.5 whitespace-nowrap px-2">
-                                <span className="text-xs font-bold text-slate-800">{task.name} {Math.round(dayQty).toLocaleString()} cajas</span>
-                              </div>
-                            )}
-                            
-                            {nightQty > 0 && nightLabelOffset !== null && (
-                              <div className="absolute flex items-center gap-1.5 whitespace-nowrap px-2" style={{ left: `${nightLabelOffset}%` }}>
-                                <span className="text-xs font-bold text-slate-900">{task.name} {Math.round(nightQty).toLocaleString()} cajas</span>
-                              </div>
-                            )}
-                          </>
-                        )}
+                        <div className="flex items-center gap-1.5 whitespace-nowrap px-2">
+                          <span className={cn(
+                            "font-bold text-slate-800 leading-none",
+                            isSpecialTask(task.name) ? "text-[10px]" : "text-xs"
+                          )}>
+                            {task.name} {!isSpecialTask(task.name) && `${Math.round(task.quantity).toLocaleString()} cajas`}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   );
@@ -289,18 +263,22 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           );
         })}
 
-        <div className="mt-4 flex items-center justify-between text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-2">
+        <div className="mt-4 flex flex-wrap items-center justify-between gap-4 text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-2">
           <div className="flex items-center gap-2">
             <span className="text-primary font-black">CAJAS TOTALES: {Math.round(totalBoxes).toLocaleString()}</span>
           </div>
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
               <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: UNIFIED_SHIFT_COLOR }}></div>
-              <span>Producción General</span>
+              <span>Producción</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: AUTO_CP_COLOR }}></div>
+              <span>CP Automático</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: SPECIAL_COLOR }}></div>
-              <span>Especial (S.A.M.I, CS, CP, CIP, MTTO)</span>
+              <span>S.A.M.I / Especiales</span>
             </div>
           </div>
         </div>
@@ -308,10 +286,10 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         {productSummary.length > 0 && (
           <div className="mt-2 border-t-2 border-slate-100 pt-3">
             <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Resumen de Producción Total</h3>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
               {productSummary.map(([name, data]) => (
                 <div key={name} className="flex">
-                  <div className="inline-flex items-center gap-2 py-1 px-3 bg-slate-50/50 rounded-md border border-slate-100 w-auto">
+                  <div className="inline-flex items-center gap-2 py-1 px-3 bg-slate-50/50 rounded-md border border-slate-100 w-full sm:w-auto">
                     <span className="text-xs font-bold text-slate-700">{name}</span>
                     <span className="text-xs font-bold text-primary whitespace-nowrap">
                       {Math.round(data.qty).toLocaleString()} cajas
