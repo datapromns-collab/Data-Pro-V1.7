@@ -95,6 +95,11 @@
     flex-direction: column;
     overflow: hidden;
   }
+  /* Evita la página en blanco al final */
+  .page-break:last-child {
+    page-break-after: auto;
+    break-after: auto;
+  }
 }
 
 .print-only {
