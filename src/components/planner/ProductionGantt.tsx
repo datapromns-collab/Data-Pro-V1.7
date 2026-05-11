@@ -40,7 +40,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     return Object.entries(summary).sort((a, b) => a[0].localeCompare(b[0]));
   }, [tasks]);
 
-  // Constantes de colores y cálculo de split para reutilizar
   const DAY_COLOR = '#C0E6F5';
   const NIGHT_COLOR = '#83CCEB';
   const SPECIAL_COLOR = '#FFFF00';
@@ -71,10 +70,9 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       };
     }
 
-    const splitMin = 11.5 * 60; // 18:30 es 11 horas y 30 mins después de las 07:00
+    const splitMin = 11.5 * 60; 
 
     if (startMin >= splitMin) {
-      // Tarea inicia después de las 18:30 -> Turno Noche
       return {
         left: `${left}%`,
         width: `${width}%`,
@@ -82,7 +80,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         borderColor: '#6DB6D5',
       };
     } else if (endMin <= splitMin) {
-      // Tarea termina antes de las 18:30 -> Turno Día
       return {
         left: `${left}%`,
         width: `${width}%`,
@@ -90,7 +87,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         borderColor: '#AACCDA',
       };
     } else {
-      // Tarea cruza el split de las 18:30 -> Gradiente
       const splitPointInTask = ((splitMin - startMin) / (endMin - startMin)) * 100;
       return {
         left: `${left}%`,
@@ -176,18 +172,17 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
             </div>
 
             <div className="flex-1 h-14 bg-slate-50/30 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
-              {/* Indicadores de Turno en el Fondo */}
               <div 
-                className="absolute inset-y-0 left-0 bg-white/60 border-r-2 border-primary/20 z-0" 
-                style={{ width: `${SPLIT_PCT}%` }}
+                className="absolute inset-y-0 left-0 z-0 border-r-2 border-primary/20" 
+                style={{ width: `${SPLIT_PCT}%`, backgroundColor: `${DAY_COLOR}22` }}
               >
-                <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/30 uppercase tracking-tighter">DÍA</div>
+                <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/40 uppercase tracking-tighter">DÍA</div>
               </div>
               <div 
-                className="absolute inset-y-0 bg-slate-100/40 z-0" 
-                style={{ left: `${SPLIT_PCT}%`, right: 0 }}
+                className="absolute inset-y-0 z-0" 
+                style={{ left: `${SPLIT_PCT}%`, right: 0, backgroundColor: `${NIGHT_COLOR}22` }}
               >
-                <div className="absolute top-0 right-1 text-[7px] font-bold text-indigo-400/30 uppercase tracking-tighter">NOCHE</div>
+                <div className="absolute top-0 right-1 text-[7px] font-bold text-indigo-400/40 uppercase tracking-tighter">NOCHE</div>
               </div>
               
               {markers.map((m, idx) => (
