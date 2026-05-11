@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo } from 'react';
@@ -361,19 +360,21 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         </div>
 
         {productSummary.length > 0 && (
-          <div className="mt-1 border-t-2 border-slate-100 pt-2">
-            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1.5">Resumen de Producción Total</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-1.5">
+          <div className="mt-1 border-t-2 border-slate-100 pt-1.5">
+            <h3 className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1 text-center">Resumen de Producción Total</h3>
+            <div className="grid grid-cols-3 gap-1">
               {productSummary.map(([name, data]) => (
                 <div key={name} className="flex">
-                  <div className="inline-flex items-center gap-1.5 py-0.5 px-2 bg-slate-50/50 rounded-md border border-slate-100 w-full sm:w-auto">
-                    <span className="text-xs font-bold text-slate-700">{name}</span>
-                    <span className="text-xs font-bold text-primary whitespace-nowrap">
-                      {Math.round(data.qty).toLocaleString()} cajas
-                    </span>
-                    <span className="text-xs font-bold text-indigo-500 whitespace-nowrap">
-                      {Math.round(data.ubb).toLocaleString()} UBB
-                    </span>
+                  <div className="inline-flex flex-col items-center justify-center py-0.5 px-1 bg-slate-50/50 rounded border border-slate-100 w-full text-center">
+                    <span className="text-[10px] font-bold text-slate-700 leading-tight truncate w-full">{name}</span>
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <span className="text-[9px] font-bold text-primary whitespace-nowrap">
+                        {Math.round(data.qty).toLocaleString()} cjs
+                      </span>
+                      <span className="text-[9px] font-bold text-indigo-500 whitespace-nowrap">
+                        {Math.round(data.ubb).toLocaleString()} UBB
+                      </span>
+                    </div>
                   </div>
                 </div>
               ))}
