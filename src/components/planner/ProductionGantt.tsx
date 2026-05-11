@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo } from 'react';
@@ -22,10 +23,11 @@ const AUTO_CP_COLOR = '#FFC000'; // CP Automático al final
 export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: ProductionGanttProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
 
-  // Marca de las 18:30 para la línea divisoria
+  // Marca de las 19:00 para la línea divisoria
+  // (19:00 - 07:00) = 12 horas. 12/24 = 50%
   const SPLIT_PCT = useMemo(() => {
     const totalDayMins = 24 * 60;
-    const splitMinsAfterStart = 11.5 * 60; // 18:30 - 07:00 = 11.5 horas
+    const splitMinsAfterStart = (SHIFT_SPLIT_HOUR - PRODUCTION_START_HOUR) * 60 + SHIFT_SPLIT_MINUTE;
     return (splitMinsAfterStart / totalDayMins) * 100;
   }, []);
 
@@ -114,14 +116,14 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     let dayQty = 0;
     let nightQty = 0;
 
-    // Cálculo porción diurna (antes de las 18:30)
+    // Cálculo porción diurna (antes del split)
     if (currentStart < splitTime) {
       const dayEnd = currentEnd < splitTime ? currentEnd : splitTime;
       const dayDuration = differenceInMinutes(dayEnd, currentStart);
       dayQty = (dayDuration / totalTaskDuration) * task.quantity;
     }
 
-    // Cálculo porción nocturna (después de las 18:30)
+    // Cálculo porción nocturna (después del split)
     if (currentEnd > splitTime) {
       const nightStart = currentStart > splitTime ? currentStart : splitTime;
       const nightEnd = currentEnd;
@@ -229,6 +231,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
               <div className="flex-1 h-14 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
                 <div className="absolute inset-y-0 left-0 z-0 w-full bg-[#C0E6F520]"></div>
 
+                {/* Línea divisoria de cambio de turno ajustada a las 19:00 */}
                 <div 
                   className="absolute inset-y-0 z-20 border-l-2 border-primary/90 shadow-[0_0_8px_rgba(0,0,0,0.15)]"
                   style={{ left: `${SPLIT_PCT}%` }}

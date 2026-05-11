@@ -4,8 +4,8 @@ import { es } from 'date-fns/locale';
 import { ScheduledTask } from './types';
 
 export const PRODUCTION_START_HOUR = 7;
-export const SHIFT_SPLIT_HOUR = 18;
-export const SHIFT_SPLIT_MINUTE = 30;
+export const SHIFT_SPLIT_HOUR = 19;
+export const SHIFT_SPLIT_MINUTE = 0;
 export const PRODUCTION_END_SUN_HOUR = 18;
 export const PRODUCTION_END_SUN_MINUTE = 30;
 
@@ -59,11 +59,13 @@ export const isDayShift = (date: Date) => {
   const minute = date.getMinutes();
   
   const timeVal = hour + minute / 60;
-  return timeVal >= 7 && timeVal < 18.5;
+  return timeVal >= PRODUCTION_START_HOUR && timeVal < SHIFT_SPLIT_HOUR + SHIFT_SPLIT_MINUTE / 60;
 };
 
 export const getWeeklyLimitMinutes = () => {
-  return (17 + 120 + 18.5) * 60;
+  // De Lunes 07:00 a Domingo 18:30 son 6 días completos (24h) + 11.5h el domingo.
+  // Pero el sistema usa 24h para cada fila. El límite real de visualización es 155.5h.
+  return (24 * 6 + 11.5) * 60;
 };
 
 export const calculateTotalPlannedMinutes = (tasks: ScheduledTask[]) => {
