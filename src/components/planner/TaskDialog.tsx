@@ -8,6 +8,36 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AIButton } from './AIButton';
 import { Task } from '@/lib/types';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
+const PRODUCT_LIST = [
+  "GLUP COLA",
+  "GLUP FRESH",
+  "GLUP UVA",
+  "GLUP PIÑA",
+  "GLUP NARANJA",
+  "GLUP KOLITA",
+  "GLUP MANZANA VERDE",
+  "GLUP PIÑA PARCHITA",
+  "GLUP MANZANA ROJA",
+  "JUSTY NARANJA",
+  "JUSTY DURAZNO",
+  "JUSTY MANDARINA",
+  "JUSTY SANDIA",
+  "JUSTY LIMON",
+  "JUSTY TAMARINDO",
+  "VITA TEA DURAZNO",
+  "VITA TEA LIMON",
+  "CS",
+  "CIP",
+  "CP"
+];
 
 interface TaskDialogProps {
   isOpen: boolean;
@@ -49,18 +79,24 @@ export function TaskDialog({ isOpen, onClose, onSave }: TaskDialogProps) {
         <DialogHeader>
           <DialogTitle className="font-headline text-2xl text-primary">Nueva Tarea</DialogTitle>
           <DialogDescription>
-            Configura los parámetros de producción para calcular la duración automáticamente.
+            Selecciona un producto y configura los parámetros de producción.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <Label htmlFor="name">Nombre del Producto / Tarea</Label>
-            <Input 
-              id="name" 
-              placeholder="Ej. Envasado de Aceite" 
-              value={name} 
-              onChange={(e) => setName(e.target.value)} 
-            />
+            <Label htmlFor="name">Producto</Label>
+            <Select value={name} onValueChange={setName}>
+              <SelectTrigger id="name">
+                <SelectValue placeholder="Selecciona un producto" />
+              </SelectTrigger>
+              <SelectContent>
+                {PRODUCT_LIST.map((product) => (
+                  <SelectItem key={product} value={product}>
+                    {product}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
