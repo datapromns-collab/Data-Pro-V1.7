@@ -240,16 +240,6 @@ export default function PlannerPage() {
               <div className="flex-1 min-h-0 relative">
                 <TabsContent value="gantt" className="m-0 h-full">
                   <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
-                  {filteredTasks.length === 0 && (
-                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-50/50 rounded-2xl pointer-events-none">
-                      <Card className="p-12 text-center max-w-sm border-dashed border-2 pointer-events-auto">
-                        <FileSpreadsheet className="h-10 w-10 text-primary mx-auto mb-6" />
-                        <h3 className="text-xl font-headline font-bold mb-2">Línea sin tareas</h3>
-                        <p className="text-sm text-slate-500 mb-8">No hay tareas programadas para la línea {selectedLine}.</p>
-                        <Button onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full font-bold">Añadir Tarea</Button>
-                      </Card>
-                    </div>
-                  )}
                 </TabsContent>
                 <TabsContent value="speeds" className="m-0 h-full">
                   <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} />
