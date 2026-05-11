@@ -137,7 +137,6 @@ export function TaskDialog({
       if (!initialTask && duration === 0) setDuration(1);
     } else if (loadPerHour > 0 && quantity > 0) {
       const calculatedDuration = quantity / loadPerHour;
-      // Eliminado el redondeo forzado a media hora
       setDuration(calculatedDuration);
     } else {
       if (!isSpecialTask) setDuration(0);
@@ -207,14 +206,9 @@ export function TaskDialog({
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
               <Label>Línea</Label>
-              <Select value={lineId} onValueChange={setLineId}>
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  {LINES.map((l, i) => (
-                    <SelectItem key={l} value={(i + 1).toString()}>{l}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="h-10 w-full rounded-md border border-input bg-slate-100 px-3 py-2 text-sm font-black text-slate-900 flex items-center shadow-sm">
+                Línea {lineId}
+              </div>
             </div>
             <div className="grid gap-2">
               <Label>Producto / Tarea</Label>
