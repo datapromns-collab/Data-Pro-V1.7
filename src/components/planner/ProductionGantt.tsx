@@ -9,14 +9,14 @@ import { differenceInMinutes, startOfDay, addDays, setHours, setMinutes } from '
 
 interface ProductionGanttProps {
   tasks: ScheduledTask[];
+  onTaskClick?: (task: ScheduledTask) => void;
 }
 
 const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
-export function ProductionGantt({ tasks }: ProductionGanttProps) {
+export function ProductionGantt({ tasks, onTaskClick }: ProductionGanttProps) {
   const weekDays = useMemo(() => getWeekDays(new Date()), []);
 
-  // Helper to calculate bar position and width starting from 07:00
   const getTaskStyle = (task: ScheduledTask, day: Date) => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const rowEnd = addDays(rowStart, 1);
@@ -41,7 +41,6 @@ export function ProductionGantt({ tasks }: ProductionGanttProps) {
     };
   };
 
-  // Generate markers starting from 7:00 with 30-minute intervals
   const markers = useMemo(() => {
     const slots = [];
     for (let i = 0; i <= 24; i += 0.5) {
@@ -50,8 +49,6 @@ export function ProductionGantt({ tasks }: ProductionGanttProps) {
       const h = Math.floor((currentTotalMinutes / 60) % 24);
       const m = Math.floor(currentTotalMinutes % 60);
       
-      // We only show labels for full hours to keep the UI clean, 
-      // but markers exist for every 30 mins
       const label = m === 0 ? `${h.toString().padStart(2, '0')}:00` : '';
       
       slots.push({ 
@@ -66,7 +63,6 @@ export function ProductionGantt({ tasks }: ProductionGanttProps) {
   return (
     <div className="w-full bg-white rounded-xl shadow-sm border border-border overflow-hidden p-6">
       <div className="flex flex-col gap-8 min-w-[800px]">
-        {/* Timeline Header */}
         <div className="flex border-b pb-4">
           <div className="w-32 shrink-0 font-headline text-xs font-bold uppercase tracking-wider text-muted-foreground">Día</div>
           <div className="flex-1 relative h-6">
@@ -84,7 +80,6 @@ export function ProductionGantt({ tasks }: ProductionGanttProps) {
           </div>
         </div>
 
-        {/* Day Rows */}
         {weekDays.map((day, dIdx) => (
           <div key={dIdx} className="flex items-center group">
             <div className="w-32 shrink-0">
@@ -93,13 +88,10 @@ export function ProductionGantt({ tasks }: ProductionGanttProps) {
             </div>
 
             <div className="flex-1 h-14 bg-slate-50/50 rounded-xl border border-dashed border-slate-200 relative overflow-hidden shadow-inner">
-              {/* Day Shift Background highlight (07:00 to 18:30) */}
               <div 
                 className="absolute inset-y-0 left-0 w-[47.91%] bg-white/80 border-r border-slate-200/50 z-0" 
-                title="Turno Diurno (07:00 - 18:30)"
               ></div>
               
-              {/* Grid lines every 30 minutes */}
               {markers.map((m, idx) => (
                 <div 
                   key={idx} 
@@ -111,7 +103,6 @@ export function ProductionGantt({ tasks }: ProductionGanttProps) {
                 ></div>
               ))}
 
-              {/* Tasks */}
               {tasks.map((task) => {
                 const style = getTaskStyle(task, day);
                 if (!style) return null;
@@ -119,6 +110,7 @@ export function ProductionGantt({ tasks }: ProductionGanttProps) {
                 return (
                   <div
                     key={task.id}
+                    onClick={() => onTaskClick?.(task)}
                     className="absolute inset-y-2.5 rounded-lg border-l-4 shadow-sm z-10 p-2 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
                     style={{
                       ...style,
@@ -141,7 +133,6 @@ export function ProductionGantt({ tasks }: ProductionGanttProps) {
         ))}
       </div>
       
-      {/* Legend */}
       <div className="mt-8 flex flex-wrap items-center justify-end gap-6 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-6">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded bg-slate-50 border border-dashed border-slate-300"></div>
@@ -150,10 +141,6 @@ export function ProductionGantt({ tasks }: ProductionGanttProps) {
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded bg-white border border-slate-200"></div>
           <span>Turno Día</span>
-        </div>
-        <div className="w-px h-4 bg-slate-200 mx-2"></div>
-        <div className="flex items-center gap-2 italic">
-          <span className="text-[9px] lowercase font-medium">* Grid cada 30 min</span>
         </div>
       </div>
     </div>

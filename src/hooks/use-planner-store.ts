@@ -45,12 +45,17 @@ export function usePlannerStore() {
       color: randomColor
     };
 
-    // Keep tasks sorted by start time
     const updatedTasks = [...tasks, newTask].sort((a, b) => 
       a.startTime.getTime() - b.startTime.getTime()
     );
 
     setTasks(updatedTasks);
+  };
+
+  const updateTask = (id: string, taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, ...taskData } : t).sort((a, b) => 
+      a.startTime.getTime() - b.startTime.getTime()
+    ));
   };
 
   const removeTask = (id: string) => {
@@ -61,5 +66,5 @@ export function usePlannerStore() {
     setTasks([]);
   };
 
-  return { tasks, addTask, removeTask, clearAll, isLoaded };
+  return { tasks, addTask, updateTask, removeTask, clearAll, isLoaded };
 }

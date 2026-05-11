@@ -8,15 +8,10 @@ import {
   Plus, 
   Trash2, 
   Printer, 
-  Settings, 
-  FileSpreadsheet,
   LayoutGrid,
   GanttChartSquare,
   ChevronRight,
-  BarChart3,
-  Clock,
-  Info,
-  Filter
+  FileSpreadsheet
 } from 'lucide-react';
 import { WeeklyGrid } from '@/components/planner/WeeklyGrid';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -25,21 +20,21 @@ import { TaskDialog } from '@/components/planner/TaskDialog';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { calculateTotalPlannedMinutes } from '@/lib/planner-utils';
 import { Toaster } from '@/components/ui/toaster';
-import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SidebarProvider, Sidebar, SidebarContent, SidebarHeader, SidebarFooter, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ScheduledTask } from '@/lib/types';
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7"];
 
 export default function PlannerPage() {
-  const { tasks, addTask, removeTask, clearAll, isLoaded } = usePlannerStore();
+  const { tasks, addTask, updateTask, removeTask, clearAll, isLoaded } = usePlannerStore();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
-  const { toast } = useToast();
 
   const filteredTasks = useMemo(() => 
     tasks.filter(t => t.lineId === selectedLine),
@@ -49,6 +44,28 @@ export default function PlannerPage() {
   const totalMinutes = calculateTotalPlannedMinutes(filteredTasks);
 
   const handlePrint = () => window.print();
+
+  const handleTaskClick = (task: ScheduledTask) => {
+    setEditingTask(task);
+    setIsDialogOpen(true);
+  };
+
+  const handleSaveTask = (taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
+    if (editingTask) {
+      updateTask(editingTask.id, taskData);
+    } else {
+      addTask(taskData);
+    }
+    setEditingTask(null);
+  };
+
+  const handleDeleteTask = (id: string) => {
+    if (confirm('¿Estás seguro de que deseas eliminar esta tarea?')) {
+      removeTask(id);
+      setIsDialogOpen(false);
+      setEditingTask(null);
+    }
+  };
 
   if (!isLoaded) return null;
 
@@ -97,11 +114,11 @@ export default function PlannerPage() {
               <section>
                 <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Acciones</p>
                 <div className="grid gap-2">
-                  <Button size="sm" onClick={() => setIsDialogOpen(true)} className="w-full justify-start gap-2 bg-primary">
+                  <Button size="sm" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full justify-start gap-2 bg-primary">
                     <Plus className="h-4 w-4" />
                     Nueva Tarea
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={clearAll} className="w-full justify-start gap-2 text-destructive">
+                  <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar todo el plan?') && clearAll()} className="w-full justify-start gap-2 text-destructive">
                     <Trash2 className="h-4 w-4" />
                     Limpiar Plan
                   </Button>
@@ -136,10 +153,10 @@ export default function PlannerPage() {
 
               <div className="flex-1 min-h-0 relative">
                 <TabsContent value="grid" className="m-0 h-full">
-                  <WeeklyGrid tasks={filteredTasks} onTaskClick={(t) => confirm(`¿Eliminar "${t.name}"?`) && removeTask(t.id)} />
+                  <WeeklyGrid tasks={filteredTasks} onTaskClick={handleTaskClick} />
                 </TabsContent>
                 <TabsContent value="gantt" className="m-0 h-full">
-                  <ProductionGantt tasks={filteredTasks} />
+                  <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} />
                 </TabsContent>
 
                 {filteredTasks.length === 0 && (
@@ -148,7 +165,7 @@ export default function PlannerPage() {
                       <FileSpreadsheet className="h-10 w-10 text-primary mx-auto mb-6" />
                       <h3 className="text-xl font-headline font-bold mb-2">Línea sin tareas</h3>
                       <p className="text-sm text-slate-500 mb-8">No hay tareas programadas para la línea {selectedLine}.</p>
-                      <Button onClick={() => setIsDialogOpen(true)} className="w-full font-bold">Añadir Tarea</Button>
+                      <Button onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full font-bold">Añadir Tarea</Button>
                     </Card>
                   </div>
                 )}
@@ -158,7 +175,14 @@ export default function PlannerPage() {
         </main>
       </div>
 
-      <TaskDialog isOpen={isDialogOpen} onClose={() => setIsDialogOpen(false)} onSave={addTask} defaultLineId={selectedLine} />
+      <TaskDialog 
+        isOpen={isDialogOpen} 
+        onClose={() => { setIsDialogOpen(false); setEditingTask(null); }} 
+        onSave={handleSaveTask} 
+        onDelete={handleDeleteTask}
+        initialTask={editingTask}
+        defaultLineId={selectedLine} 
+      />
       <Toaster />
     </SidebarProvider>
   );

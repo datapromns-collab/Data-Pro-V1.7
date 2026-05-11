@@ -6,9 +6,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { AIButton } from './AIButton';
-import { Task, ScheduledTask } from '@/lib/types';
-import { getWeekDays, PRODUCT_FACTORS } from '@/lib/planner-utils';
+import { Trash2 } from 'lucide-react';
+import { ScheduledTask } from '@/lib/types';
+import { getWeekDays, PRODUCT_FACTORS, formatTime } from '@/lib/planner-utils';
 import {
   Select,
   SelectContent,
@@ -34,10 +34,12 @@ interface TaskDialogProps {
   isOpen: boolean;
   onClose: () => void;
   onSave: (task: Omit<ScheduledTask, 'id' | 'color'>) => void;
+  onDelete?: (id: string) => void;
+  initialTask?: ScheduledTask | null;
   defaultLineId?: string;
 }
 
-export function TaskDialog({ isOpen, onClose, onSave, defaultLineId = "1" }: TaskDialogProps) {
+export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, defaultLineId = "1" }: TaskDialogProps) {
   const [name, setName] = useState('');
   const [lineId, setLineId] = useState(defaultLineId);
   const [cipSubOption, setCipSubOption] = useState('');
@@ -52,7 +54,35 @@ export function TaskDialog({ isOpen, onClose, onSave, defaultLineId = "1" }: Tas
   const weekDays = useMemo(() => getWeekDays(new Date()), []);
   const isSpecialTask = name === 'CS' || name === 'CIP' || name === 'CP';
 
-  // Calculate quantity based on tanks and presentation
+  useEffect(() => {
+    if (initialTask) {
+      const isCIPOption = CIP_OPTIONS.includes(initialTask.name);
+      setName(isCIPOption ? 'CIP' : initialTask.name);
+      if (isCIPOption) setCipSubOption(initialTask.name);
+      setLineId(initialTask.lineId);
+      setPresentation(initialTask.presentation || '');
+      setTanks(initialTask.tanks || 0);
+      setLoadPerHour(initialTask.loadPerHour || 0);
+      setQuantity(initialTask.quantity || 0);
+      setDuration(initialTask.durationHours);
+      
+      const dayIdx = weekDays.findIndex(d => d.getDate() === initialTask.startTime.getDate());
+      setSelectedDayIdx(dayIdx !== -1 ? dayIdx.toString() : '0');
+      setSelectedTime(formatTime(initialTask.startTime));
+    } else {
+      setName('');
+      setLineId(defaultLineId);
+      setCipSubOption('');
+      setPresentation('');
+      setTanks(0);
+      setLoadPerHour(0);
+      setQuantity(0);
+      setDuration(0);
+      setSelectedDayIdx('0');
+      setSelectedTime('07:00');
+    }
+  }, [initialTask, isOpen, defaultLineId, weekDays]);
+
   useEffect(() => {
     if (!isSpecialTask && name && presentation && tanks > 0) {
       const factor = PRODUCT_FACTORS[name]?.[presentation] || 0;
@@ -60,7 +90,6 @@ export function TaskDialog({ isOpen, onClose, onSave, defaultLineId = "1" }: Tas
     }
   }, [name, presentation, tanks, isSpecialTask]);
 
-  // Calculate duration
   useEffect(() => {
     if (name === 'CS') {
       setDuration(0.5);
@@ -95,11 +124,6 @@ export function TaskDialog({ isOpen, onClose, onSave, defaultLineId = "1" }: Tas
       endTime
     });
     
-    setName('');
-    setCipSubOption('');
-    setPresentation('');
-    setTanks(0);
-    setLoadPerHour(0);
     onClose();
   };
 
@@ -107,7 +131,9 @@ export function TaskDialog({ isOpen, onClose, onSave, defaultLineId = "1" }: Tas
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-[480px]">
         <DialogHeader>
-          <DialogTitle className="font-headline text-2xl text-primary">Nueva Tarea</DialogTitle>
+          <DialogTitle className="font-headline text-2xl text-primary">
+            {initialTask ? 'Editar Tarea' : 'Nueva Tarea'}
+          </DialogTitle>
           <DialogDescription>Configura la producción y programación.</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -200,9 +226,16 @@ export function TaskDialog({ isOpen, onClose, onSave, defaultLineId = "1" }: Tas
             </div>
           </div>
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancelar</Button>
-          <Button onClick={handleSave} className="bg-primary" disabled={!name}>Guardar</Button>
+        <DialogFooter className="flex-col sm:flex-row gap-2">
+          {initialTask && onDelete && (
+            <Button variant="destructive" onClick={() => onDelete(initialTask.id)} className="gap-2 sm:mr-auto">
+              <Trash2 className="h-4 w-4" /> Eliminar
+            </Button>
+          )}
+          <div className="flex gap-2 w-full sm:w-auto">
+            <Button variant="outline" onClick={onClose} className="flex-1 sm:flex-none">Cancelar</Button>
+            <Button onClick={handleSave} className="bg-primary flex-1 sm:flex-none" disabled={!name}>Guardar</Button>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
