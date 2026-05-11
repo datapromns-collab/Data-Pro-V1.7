@@ -155,6 +155,31 @@ export default function PlannerPage() {
     }
   };
 
+  const pageHeader = useMemo(() => {
+    switch (activeTab) {
+      case 'speeds':
+        return {
+          title: "Velocidades de líneas",
+          subtitle: "Configuración de velocidades base para el cálculo de tiempos."
+        };
+      case 'calculator':
+        return {
+          title: "Cálculo de Cajas a Tanques",
+          subtitle: "Conversión de volumen de producción a unidades de preparación."
+        };
+      case 'requirement':
+        return {
+          title: "Requerimiento de Materiales",
+          subtitle: "Gestión de insumos y materiales de empaque."
+        };
+      default:
+        return {
+          title: `Programación Línea ${selectedLine}`,
+          subtitle: "Gestión de turnos y tanques de producción."
+        };
+    }
+  }, [activeTab, selectedLine]);
+
   if (!isLoaded) return null;
 
   return (
@@ -284,12 +309,10 @@ export default function PlannerPage() {
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <h2 className="text-2xl font-headline font-bold text-slate-900">
-                    {activeTab === 'requirement' ? 'Requerimiento de Materiales' : `Programación Línea ${selectedLine}`}
+                    {pageHeader.title}
                   </h2>
                   <p className="text-sm text-slate-500">
-                    {activeTab === 'requirement' 
-                      ? 'Gestión de insumos y materiales de empaque.' 
-                      : 'Gestión de turnos y tanques de producción.'}
+                    {pageHeader.subtitle}
                   </p>
                 </div>
                 <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
