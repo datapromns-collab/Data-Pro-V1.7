@@ -2,9 +2,9 @@
 
 import { useMemo } from 'react';
 import { ScheduledTask, DayOfWeek } from '@/lib/types';
-import { getWeekDays, formatTime, PRODUCTION_START_HOUR } from '@/lib/planner-utils';
+import { getWeekDays, PRODUCTION_START_HOUR } from '@/lib/planner-utils';
 import { cn } from '@/lib/utils';
-import { differenceInMinutes, startOfDay, addDays, setHours, setMinutes } from 'date-fns';
+import { differenceInMinutes, startOfDay, addDays, setHours, setMinutes, isAfter, isBefore } from 'date-fns';
 
 interface ProductionGanttProps {
   tasks: ScheduledTask[];
@@ -39,6 +39,37 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       backgroundColor: task.color,
       borderColor: task.color,
     };
+  };
+
+  const calculateShiftLabel = (task: ScheduledTask, day: Date) => {
+    if (task.loadPerHour <= 0) return task.name;
+
+    const rowStart = setMinutes(setHours(startOfDay(day), 7), 0);
+    const shiftSplit = setMinutes(setHours(startOfDay(day), 18), 30);
+    const rowEnd = setMinutes(setHours(startOfDay(addDays(day, 1)), 7), 0);
+
+    const getOverlapMins = (start1: Date, end1: Date, start2: Date, end2: Date) => {
+      const s = isAfter(start1, start2) ? start1 : start2;
+      const e = isBefore(end1, end2) ? end1 : end2;
+      return Math.max(0, differenceInMinutes(e, s));
+    };
+
+    const dayMins = getOverlapMins(task.startTime, task.endTime, rowStart, shiftSplit);
+    const nightMins = getOverlapMins(task.startTime, task.endTime, shiftSplit, rowEnd);
+
+    const dayQty = (dayMins / 60) * task.loadPerHour;
+    const nightQty = (nightMins / 60) * task.loadPerHour;
+
+    let label = task.name;
+    if (dayQty > 0 && nightQty > 0) {
+      label += ` (D: ${Math.round(dayQty).toLocaleString()} - N: ${Math.round(nightQty).toLocaleString()} cajas)`;
+    } else if (dayQty > 0) {
+      label += ` (${Math.round(dayQty).toLocaleString()} cajas)`;
+    } else if (nightQty > 0) {
+      label += ` (${Math.round(nightQty).toLocaleString()} cajas)`;
+    }
+
+    return label;
   };
 
   const markers = useMemo(() => {
@@ -126,9 +157,9 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                       backgroundColor: `${task.color}20`,
                     }}
                   >
-                    <div className="flex items-center w-full min-w-0 px-1">
-                      <span className="text-[10px] font-bold truncate leading-tight" style={{ color: task.color }}>
-                        {task.name} {task.quantity > 0 ? `- ${Math.round(task.quantity).toLocaleString()} cajas` : ''}
+                    <div className="flex items-center w-full min-w-0 px-2">
+                      <span className="text-xs font-bold truncate leading-tight" style={{ color: task.color }}>
+                        {calculateShiftLabel(task, day)}
                       </span>
                     </div>
                   </div>
@@ -141,11 +172,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       
       <div className="mt-6 flex flex-wrap items-center justify-end gap-6 text-[9px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-4 print:mt-4 print:pt-2">
         <div className="flex items-center gap-2">
-          <div className="width-4 h-2.5 rounded bg-white border border-primary/20"></div>
+          <div className="w-4 h-2.5 rounded bg-white border border-primary/20"></div>
           <span>Turno Día (07:00 - 18:30)</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="width-4 h-2.5 rounded bg-slate-100 border border-slate-200"></div>
+          <div className="w-4 h-2.5 rounded bg-slate-100 border border-slate-200"></div>
           <span>Turno Noche (18:30 - 07:00)</span>
         </div>
       </div>
