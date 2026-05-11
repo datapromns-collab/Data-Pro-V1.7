@@ -3,7 +3,6 @@
 
 import { useState, useEffect } from 'react';
 import { ScheduledTask } from '@/lib/types';
-import { addMinutes } from 'date-fns';
 
 const STORAGE_KEY = 'plan-semanal-pro-data';
 
@@ -36,29 +35,22 @@ export function usePlannerStore() {
     }
   }, [tasks, isLoaded]);
 
-  const addTask = (taskData: any) => {
-    // Logic to find next available slot starting from Monday 07:00
-    const startOfPlan = new Date();
-    startOfPlan.setHours(7, 0, 0, 0);
-    // Find last task end time or start of week
-    const lastTask = tasks.length > 0 ? tasks[tasks.length - 1] : null;
-    const startTime = lastTask ? new Date(lastTask.endTime) : startOfPlan;
-    
-    const durationMinutes = taskData.durationHours * 60;
-    const endTime = addMinutes(startTime, durationMinutes);
-
+  const addTask = (taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
     const newTask: ScheduledTask = {
       ...taskData,
       id: crypto.randomUUID(),
-      startTime,
-      endTime,
       color: randomColor
     };
 
-    setTasks([...tasks, newTask]);
+    // Keep tasks sorted by start time
+    const updatedTasks = [...tasks, newTask].sort((a, b) => 
+      a.startTime.getTime() - b.startTime.getTime()
+    );
+
+    setTasks(updatedTasks);
   };
 
   const removeTask = (id: string) => {

@@ -1,13 +1,14 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AIButton } from './AIButton';
-import { Task } from '@/lib/types';
+import { Task, ScheduledTask } from '@/lib/types';
+import { getWeekDays } from '@/lib/planner-utils';
 import {
   Select,
   SelectContent,
@@ -15,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { setHours, setMinutes } from 'date-fns';
 
 const PRODUCT_LIST = [
   "GLUP COLA",
@@ -45,10 +47,12 @@ const CIP_OPTIONS = [
   "CIP 5P"
 ];
 
+const DAYS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+
 interface TaskDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (task: Omit<Task, 'id' | 'color'>) => void;
+  onSave: (task: Omit<ScheduledTask, 'id' | 'color'>) => void;
 }
 
 export function TaskDialog({ isOpen, onClose, onSave }: TaskDialogProps) {
@@ -57,7 +61,12 @@ export function TaskDialog({ isOpen, onClose, onSave }: TaskDialogProps) {
   const [loadPerHour, setLoadPerHour] = useState<number>(0);
   const [quantity, setQuantity] = useState<number>(0);
   const [duration, setDuration] = useState(0);
+  
+  // New scheduling states
+  const [selectedDayIdx, setSelectedDayIdx] = useState('0');
+  const [selectedTime, setSelectedTime] = useState('07:00');
 
+  const weekDays = useMemo(() => getWeekDays(new Date()), []);
   const isSpecialTask = name === 'CS' || name === 'CIP' || name === 'CP';
 
   useEffect(() => {
@@ -94,27 +103,40 @@ export function TaskDialog({ isOpen, onClose, onSave }: TaskDialogProps) {
 
     if (!isSpecialTask && (loadPerHour <= 0 || quantity <= 0)) return;
 
+    // Calculate startTime
+    const day = weekDays[parseInt(selectedDayIdx)];
+    const [hours, minutes] = selectedTime.split(':').map(Number);
+    const startTime = setMinutes(setHours(day, hours), minutes);
+    
+    // Calculate endTime
+    const endTime = new Date(startTime.getTime() + duration * 60 * 60 * 1000);
+
     onSave({
       name: finalName,
       loadPerHour: isSpecialTask ? 0 : loadPerHour,
       quantity: isSpecialTask ? 0 : quantity,
       durationHours: duration,
+      startTime,
+      endTime
     });
     
+    // Reset fields
     setName('');
     setCipSubOption('');
     setLoadPerHour(0);
     setQuantity(0);
+    setSelectedDayIdx('0');
+    setSelectedTime('07:00');
     onClose();
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[450px]">
         <DialogHeader>
           <DialogTitle className="font-headline text-2xl text-primary">Nueva Tarea</DialogTitle>
           <DialogDescription>
-            Selecciona un producto o tarea técnica para programar.
+            Configura el producto y el horario de inicio.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -151,6 +173,32 @@ export function TaskDialog({ isOpen, onClose, onSave }: TaskDialogProps) {
               </Select>
             </div>
           )}
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label>Día de Inicio</Label>
+              <Select value={selectedDayIdx} onValueChange={setSelectedDayIdx}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {DAYS.map((day, idx) => (
+                    <SelectItem key={day} value={idx.toString()}>
+                      {day}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="grid gap-2">
+              <Label>Hora de Inicio</Label>
+              <Input 
+                type="time" 
+                value={selectedTime} 
+                onChange={(e) => setSelectedTime(e.target.value)} 
+              />
+            </div>
+          </div>
 
           {!isSpecialTask && (
             <>
