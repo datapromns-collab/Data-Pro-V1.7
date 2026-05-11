@@ -84,7 +84,7 @@
     page-break-after: always;
     break-after: page;
     height: 100vh;
-    padding: 1.5cm;
+    padding: 0.8cm 1cm;
     display: flex;
     flex-direction: column;
     overflow: hidden;

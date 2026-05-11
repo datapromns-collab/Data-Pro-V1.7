@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo } from 'react';
@@ -61,16 +60,16 @@ export function ProductionGantt({ tasks, onTaskClick }: ProductionGanttProps) {
   }, []);
 
   return (
-    <div className="w-full bg-white rounded-xl shadow-sm border border-border overflow-hidden p-6">
-      <div className="flex flex-col gap-8 min-w-[800px]">
-        <div className="flex border-b pb-4">
-          <div className="w-32 shrink-0 font-headline text-xs font-bold uppercase tracking-wider text-muted-foreground">Día</div>
-          <div className="flex-1 relative h-6">
+    <div className="w-full bg-white rounded-xl shadow-sm border border-border overflow-hidden p-4 lg:p-6 print:p-0 print:border-none print:shadow-none">
+      <div className="flex flex-col gap-4 print:gap-3 min-w-[800px]">
+        <div className="flex border-b pb-2">
+          <div className="w-24 shrink-0 font-headline text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Día</div>
+          <div className="flex-1 relative h-5">
             {markers.map((marker, idx) => (
               marker.label && (
                 <div 
                   key={idx} 
-                  className="absolute text-[10px] font-mono font-bold text-slate-400 transform -translate-x-1/2"
+                  className="absolute text-[9px] font-mono font-bold text-slate-400 transform -translate-x-1/2"
                   style={{ left: `${marker.percent}%` }}
                 >
                   {marker.label}
@@ -82,12 +81,12 @@ export function ProductionGantt({ tasks, onTaskClick }: ProductionGanttProps) {
 
         {weekDays.map((day, dIdx) => (
           <div key={dIdx} className="flex items-center group">
-            <div className="w-32 shrink-0">
-              <div className="font-headline text-sm font-bold text-slate-900 group-hover:text-primary transition-colors">{DAYS[dIdx]}</div>
-              <div className="text-[10px] text-muted-foreground font-medium">{day.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div>
+            <div className="w-24 shrink-0">
+              <div className="font-headline text-xs font-bold text-slate-900 group-hover:text-primary transition-colors">{DAYS[dIdx]}</div>
+              <div className="text-[9px] text-muted-foreground font-medium">{day.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div>
             </div>
 
-            <div className="flex-1 h-14 bg-slate-50/50 rounded-xl border border-dashed border-slate-200 relative overflow-hidden shadow-inner">
+            <div className="flex-1 h-12 print:h-11 bg-slate-50/50 rounded-lg border border-dashed border-slate-200 relative overflow-hidden shadow-inner">
               <div 
                 className="absolute inset-y-0 left-0 w-[47.91%] bg-white/80 border-r border-slate-200/50 z-0" 
               ></div>
@@ -111,14 +110,14 @@ export function ProductionGantt({ tasks, onTaskClick }: ProductionGanttProps) {
                   <div
                     key={task.id}
                     onClick={() => onTaskClick?.(task)}
-                    className="absolute inset-y-2.5 rounded-lg border-l-4 shadow-sm z-10 p-2 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
+                    className="absolute inset-y-2 rounded-md border-l-4 shadow-sm z-10 p-1.5 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
                     style={{
                       ...style,
                       backgroundColor: `${task.color}15`,
                     }}
                   >
                     <div className="flex flex-col min-w-0">
-                      <span className="text-[10px] font-bold truncate leading-tight mb-0.5" style={{ color: task.color }}>
+                      <span className="text-[9px] font-bold truncate leading-tight mb-0.5" style={{ color: task.color }}>
                         {task.name}
                       </span>
                       <span className="text-[8px] text-slate-500 font-bold truncate leading-tight uppercase tracking-tighter">
@@ -133,13 +132,13 @@ export function ProductionGantt({ tasks, onTaskClick }: ProductionGanttProps) {
         ))}
       </div>
       
-      <div className="mt-8 flex flex-wrap items-center justify-end gap-6 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-6">
+      <div className="mt-6 flex flex-wrap items-center justify-end gap-6 text-[9px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-4 print:mt-4 print:pt-2">
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-slate-50 border border-dashed border-slate-300"></div>
+          <div className="w-2.5 h-2.5 rounded bg-slate-50 border border-dashed border-slate-300"></div>
           <span>Turno Noche</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-3 h-3 rounded bg-white border border-slate-200"></div>
+          <div className="w-2.5 h-2.5 rounded bg-white border border-slate-200"></div>
           <span>Turno Día</span>
         </div>
       </div>

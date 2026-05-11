@@ -188,22 +188,22 @@ export default function PlannerPage() {
             const lineTasks = tasks.filter(t => t.lineId === (i + 1).toString());
             return (
               <div key={lineName} className="page-break">
-                <div className="mb-8 border-b-2 border-primary pb-6 flex justify-between items-end">
+                <div className="mb-4 border-b-2 border-primary pb-4 flex justify-between items-end">
                   <div>
-                    <h1 className="text-3xl font-headline font-bold text-slate-900">Reporte de Producción</h1>
-                    <p className="text-primary font-bold text-lg uppercase tracking-tight">{lineName}</p>
+                    <h1 className="text-2xl font-headline font-bold text-slate-900">Programa de Producción</h1>
+                    <p className="text-primary font-bold text-base uppercase tracking-tight">{lineName}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-xs font-bold text-primary uppercase tracking-widest mb-1">Confidencial - Uso Interno</p>
-                    <p className="text-xs text-slate-400 font-medium">
+                    <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">Confidencial - Uso Interno</p>
+                    <p className="text-[10px] text-slate-400 font-medium">
                       Emitido el: {new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
                     </p>
                   </div>
                 </div>
-                <div className="flex-1">
+                <div className="flex-1 overflow-hidden">
                   <ProductionGantt tasks={lineTasks} />
                 </div>
-                <div className="mt-8 pt-6 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase tracking-widest">
+                <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-widest">
                   <span>Plan Semanal Pro Edition</span>
                   <span>Página {i + 1} de 7</span>
                   <span>Ref: {lineName.replace(' ', '-').toLowerCase()}</span>
