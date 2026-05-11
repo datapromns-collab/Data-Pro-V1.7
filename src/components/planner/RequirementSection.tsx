@@ -252,38 +252,41 @@ export function RequirementSection() {
                                   <TableCell className="text-right">
                                     {item.code === 'EMP_0009' ? (
                                       <div className="h-8 flex items-center justify-end px-3 font-black text-primary bg-primary/5 rounded border border-primary/20">
-                                        {calculatedEMP0009.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
+                                        {calculatedEMP0009.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
                                       </div>
                                     ) : item.code === 'EMP_0068' ? (
                                       <div className="h-8 flex items-center justify-end px-3 font-black text-amber-600 bg-amber-50 rounded border border-amber-200">
-                                        {calculatedEMP0068.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
+                                        {calculatedEMP0068.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
                                       </div>
                                     ) : item.code === 'EMP_0093' ? (
                                       <div className="h-8 flex items-center justify-end px-3 font-black text-indigo-600 bg-indigo-50 rounded border border-indigo-200">
-                                        {calculatedEMP0093.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
+                                        {calculatedEMP0093.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
                                       </div>
                                     ) : item.code === 'EMP_0103' ? (
                                       <div className="h-8 flex items-center justify-end px-3 font-black text-emerald-600 bg-emerald-50 rounded border border-emerald-200">
-                                        {calculatedEMP0103.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
+                                        {calculatedEMP0103.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
                                       </div>
                                     ) : item.code === 'EMP_0120' ? (
                                       <div className="h-8 flex items-center justify-end px-3 font-black text-teal-600 bg-teal-50 rounded border border-teal-200">
-                                        {calculatedEMP0120.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
+                                        {calculatedEMP0120.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
                                       </div>
                                     ) : item.code === 'EMP_0126' ? (
                                       <div className="h-8 flex items-center justify-end px-3 font-black text-sky-600 bg-sky-50 rounded border border-sky-200">
-                                        {calculatedEMP0126.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
+                                        {calculatedEMP0126.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
                                       </div>
                                     ) : item.code === 'EMP_0135' ? (
                                       <div className="h-8 flex items-center justify-end px-3 font-black text-green-600 bg-green-50 rounded border border-green-200">
-                                        {calculatedEMP0135.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
+                                        {calculatedEMP0135.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
                                       </div>
                                     ) : (
-                                      <Input 
-                                        type="number" 
-                                        className="h-8 text-right font-bold border-slate-200 focus:border-primary" 
-                                        placeholder="0" 
-                                      />
+                                      <div className="flex items-center gap-2">
+                                        <Input 
+                                          type="number" 
+                                          className="h-8 text-right font-bold border-slate-200 focus:border-primary" 
+                                          placeholder="0" 
+                                        />
+                                        <span className="text-[10px] font-bold text-slate-400">UND</span>
+                                      </div>
                                     )}
                                   </TableCell>
                                 </TableRow>

@@ -121,7 +121,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                   <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
                   <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
                   <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
-                    {getCalculatedValue(item.code).toLocaleString('es-ES')}
+                    {getCalculatedValue(item.code).toLocaleString('es-ES')} UND
                   </TableCell>
                 </TableRow>
               ))}
