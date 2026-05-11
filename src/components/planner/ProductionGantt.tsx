@@ -70,7 +70,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       };
     }
 
-    const splitMin = 11.5 * 60; 
+    const splitMin = 11.5 * 60; // 18:30 es 11.5 horas después de las 07:00
 
     if (startMin >= splitMin) {
       return {
@@ -174,22 +174,30 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
             <div className="flex-1 h-14 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
               {/* Day background area */}
               <div 
-                className="absolute inset-y-0 left-0 z-0 border-r-2 border-primary/60" 
-                style={{ width: `${SPLIT_PCT}%`, backgroundColor: `${DAY_COLOR}33` }}
+                className="absolute inset-y-0 left-0 z-0 transition-all duration-300" 
+                style={{ width: `${SPLIT_PCT}%`, backgroundColor: `${DAY_COLOR}40` }}
               >
-                <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/40 uppercase tracking-tighter">DÍA</div>
+                <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/60 uppercase tracking-tighter">DÍA</div>
               </div>
               
               {/* Night background area */}
               <div 
-                className="absolute inset-y-0 z-0" 
-                style={{ left: `${SPLIT_PCT}%`, right: 0, backgroundColor: `${NIGHT_COLOR}33` }}
+                className="absolute inset-y-0 z-0 transition-all duration-300" 
+                style={{ left: `${SPLIT_PCT}%`, right: 0, backgroundColor: `${NIGHT_COLOR}40` }}
               >
-                <div className="absolute top-0 right-1 text-[7px] font-bold text-indigo-400/40 uppercase tracking-tighter">NOCHE</div>
+                <div className="absolute top-0 right-1 text-[7px] font-bold text-indigo-600/60 uppercase tracking-tighter">NOCHE</div>
+              </div>
+
+              {/* Enhanced Shift Split Line at 18:30 */}
+              <div 
+                className="absolute inset-y-0 z-20 border-l-2 border-primary/80 shadow-[0_0_8px_rgba(0,0,0,0.1)]"
+                style={{ left: `${SPLIT_PCT}%` }}
+              >
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-1 bg-primary rounded-full"></div>
               </div>
               
               {markers.map((m, idx) => (
-                <div key={idx} className={cn("absolute inset-y-0 border-l z-0 transition-opacity", m.isFullHour ? "border-slate-200 opacity-100" : "border-slate-200/40 opacity-50")} style={{ left: `${m.percent}%` }}></div>
+                <div key={idx} className={cn("absolute inset-y-0 border-l z-0 transition-opacity", m.isFullHour ? "border-slate-300/40 opacity-100" : "border-slate-200/20 opacity-50")} style={{ left: `${m.percent}%` }}></div>
               ))}
 
               {tasks.map((task) => {
@@ -238,6 +246,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           </div>
         ))}
 
+        {/* Legend */}
         <div className="mt-4 flex items-center justify-end gap-6 text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-2">
           <div className="flex items-center gap-2">
             <div className="w-4 h-2 rounded border border-primary/20" style={{ backgroundColor: DAY_COLOR }}></div>
@@ -253,13 +262,14 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           </div>
         </div>
 
+        {/* Vertical Product Summary (Rows of 3) */}
         {productSummary.length > 0 && (
           <div className="mt-2 border-t-2 border-slate-100 pt-3">
             <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Resumen de Producción Total</h3>
             <div className="grid grid-cols-3 gap-2">
               {productSummary.map(([name, data]) => (
                 <div key={name} className="flex">
-                  <div className="inline-flex items-center gap-2 py-1 px-3 bg-slate-50/50 rounded-md border border-slate-100">
+                  <div className="inline-flex items-center gap-2 py-1 px-3 bg-slate-50/50 rounded-md border border-slate-100 w-auto">
                     <span className="text-xs font-bold text-slate-700">{name}</span>
                     <span className="text-xs font-bold text-primary whitespace-nowrap">
                       {Math.round(data.qty).toLocaleString()} cajas
