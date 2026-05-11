@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo } from 'react';
@@ -225,10 +224,10 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                     if (!style) return null;
                     return (
                       <div
-                        className="absolute inset-y-2 rounded border shadow-sm z-15 p-1 flex items-center overflow-hidden"
+                        className="absolute inset-y-2 rounded border shadow-sm z-15 p-1 flex items-center justify-center overflow-hidden"
                         style={{ ...style, backgroundColor: AUTO_CP_COLOR, borderColor: '#E6AC00' }}
                       >
-                        <span className="text-[9px] font-black text-white tracking-tighter uppercase px-1">CP</span>
+                        <span className="text-sm font-black text-white uppercase px-1">CP</span>
                       </div>
                     );
                   })()
