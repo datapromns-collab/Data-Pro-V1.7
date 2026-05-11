@@ -31,6 +31,18 @@ const LABELS_2LTS_DATA = [
   { code: 'EMP_0137', description: 'ETIQUETA PIÑA PARCHITA 2000ML' },
 ];
 
+const LABELS_1LT_DATA = [
+  { code: 'EMP_0111', description: 'ETIQUETA COLA NEGRA 1000ML' },
+  { code: 'EMP_0113', description: 'ETIQUETA UVA 1000ML' },
+  { code: 'EMP_0115', description: 'ETIQUETA KOLITA 1000ML' },
+  { code: 'EMP_0117', description: 'ETIQUETA FRESH 1000ML' },
+  { code: 'EMP_0118', description: 'ETIQUETA MANZANA VERDE 1000ML' },
+  { code: 'EMP_0147', description: 'ETIQUETA PIÑA 1000ML' },
+  { code: 'EMP_0148', description: 'ETIQUETA NARANJA 1000ML' },
+  { code: 'EMP_0149', description: 'ETIQUETA PIÑA PARCHITA 1000ML' },
+  { code: 'EMP_0150', description: 'ETIQUETA MANZANITA 1000ML' },
+];
+
 const FLAVORS_FOR_EMP0009 = [
   "GLUP UVA",
   "GLUP PIÑA",
@@ -334,6 +346,19 @@ export function RequirementSection() {
                                 <TableBody>
                                   {p.id === '2lts' ? (
                                     LABELS_2LTS_DATA.map((item) => (
+                                      <TableRow key={item.code} className="hover:bg-slate-50/50">
+                                        <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
+                                        <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
+                                        <TableCell className="text-right">
+                                          <div className="flex items-center gap-2 justify-end">
+                                            <Input type="number" className="h-8 text-right text-xs" placeholder="0" />
+                                            <span className="text-[10px] font-bold text-slate-400">KG</span>
+                                          </div>
+                                        </TableCell>
+                                      </TableRow>
+                                    ))
+                                  ) : p.id === '1lt' ? (
+                                    LABELS_1LT_DATA.map((item) => (
                                       <TableRow key={item.code} className="hover:bg-slate-50/50">
                                         <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
                                         <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
