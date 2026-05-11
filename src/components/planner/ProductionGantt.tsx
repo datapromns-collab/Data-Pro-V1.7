@@ -230,15 +230,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   <div key={idx} className={cn("absolute inset-y-0 border-l z-0 transition-opacity", m.isFullHour ? "border-slate-300/40 opacity-100" : "border-slate-200/20 opacity-50")} style={{ left: `${m.percent}%` }}></div>
                 ))}
 
-                {/* Línea divisoria de turno a las 18:30 */}
+                {/* Línea divisoria de turno a las 18:30 (etiqueta removida) */}
                 <div 
                   className="absolute inset-y-0 z-30 border-l-2 border-primary shadow-[0_0_8px_rgba(0,0,0,0.1)]"
                   style={{ left: `${SPLIT_PCT}%` }}
-                >
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-primary text-white text-[7px] px-1 font-bold rounded-b">
-                    18:30
-                  </div>
-                </div>
+                />
 
                 {gaps.map((gap, gIdx) => {
                   const style = getBarStyle(gap.start, gap.end, day, true);
