@@ -44,6 +44,13 @@ const FLAVORS_FOR_EMP0093 = [
   "GLUP MANZANA ROJA"
 ];
 
+const LABEL_PRESENTATIONS = [
+  { id: '2lts', label: '2 Lts' },
+  { id: '1.5lts', label: '1.5 Lts' },
+  { id: '1lt', label: '1 Lt' },
+  { id: '0.4lts', label: '0.4 Lts' },
+];
+
 export function RequirementSection() {
   const { tasks, weekStartDate } = usePlannerStore();
 
@@ -284,6 +291,51 @@ export function RequirementSection() {
                             </TableBody>
                           </Table>
                         </div>
+                      </Card>
+                    ) : s.id === 'labels' ? (
+                      <Card className="h-full p-6 bg-white shadow-sm border-slate-200 overflow-auto">
+                        <div className="flex items-center gap-3 mb-6">
+                          <div className="bg-primary/10 p-2 rounded-lg">
+                            <Tag className="h-5 w-5 text-primary" />
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-headline font-bold text-slate-900">{s.label}</h3>
+                            <p className="text-xs text-slate-500">Gestión de etiquetas por presentación.</p>
+                          </div>
+                        </div>
+
+                        <Tabs defaultValue="2lts" className="w-full">
+                          <TabsList className="bg-slate-50 border p-1 rounded-lg mb-6">
+                            {LABEL_PRESENTATIONS.map(p => (
+                              <TabsTrigger key={p.id} value={p.id} className="px-4 font-bold text-xs uppercase tracking-wider">
+                                {p.label}
+                              </TabsTrigger>
+                            ))}
+                          </TabsList>
+
+                          {LABEL_PRESENTATIONS.map(p => (
+                            <TabsContent key={p.id} value={p.id} className="m-0 border rounded-lg overflow-hidden">
+                              <Table>
+                                <TableHeader>
+                                  <TableRow className="bg-slate-50">
+                                    <TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead>
+                                    <TableHead className="font-bold text-slate-600 text-xs">Sabor / Descripción</TableHead>
+                                    <TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Rollos Requeridos</TableHead>
+                                  </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                  <TableRow className="hover:bg-slate-50/50">
+                                    <TableCell className="font-mono text-[10px] font-bold text-slate-400">PENDIENTE</TableCell>
+                                    <TableCell className="text-sm font-medium text-slate-500 italic">No hay etiquetas configuradas para {p.label}</TableCell>
+                                    <TableCell className="text-right">
+                                      <Input type="number" className="h-8 text-right text-xs" placeholder="0" />
+                                    </TableCell>
+                                  </TableRow>
+                                </TableBody>
+                              </Table>
+                            </TabsContent>
+                          ))}
+                        </Tabs>
                       </Card>
                     ) : (
                       <Card className="h-full border-dashed border-2 flex flex-col items-center justify-center p-12 text-center bg-white/50">
