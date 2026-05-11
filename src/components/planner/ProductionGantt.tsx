@@ -91,7 +91,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     const shiftSplit = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE);
     const rowEnd = setMinutes(setHours(startOfDay(addDays(day, 1)), 7), 0);
     
-    const nightLabelThreshold = setMinutes(setHours(startOfDay(day), 21), 0); // Desplazado a las 21:00 (~3cm)
+    const nightLabelThreshold = setMinutes(setHours(startOfDay(day), 21), 0); 
 
     const getOverlapMins = (start1: Date, end1: Date, start2: Date, end2: Date) => {
       const s = isAfter(start1, start2) ? start1 : start2;
@@ -213,6 +213,22 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           </div>
         ))}
 
+        {/* Leyenda de Colores - Ahora antes del resumen */}
+        <div className="mt-4 flex flex-wrap items-center justify-end gap-6 text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-2">
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-2 rounded border border-primary/20" style={{ backgroundColor: '#C0E6F5' }}></div>
+            <span>Día</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: '#83CCEB' }}></div>
+            <span>Noche</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: '#FFFF00' }}></div>
+            <span>Especial</span>
+          </div>
+        </div>
+
         {/* Resumen de Totales Consolidados */}
         {productSummary.length > 0 && (
           <div className="mt-2 border-t-2 border-slate-100 pt-3">
@@ -229,21 +245,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
             </div>
           </div>
         )}
-      </div>
-      
-      <div className="mt-4 flex flex-wrap items-center justify-end gap-6 text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-2">
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-2 rounded border border-primary/20" style={{ backgroundColor: '#C0E6F5' }}></div>
-          <span>Día</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: '#83CCEB' }}></div>
-          <span>Noche</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: '#FFFF00' }}></div>
-          <span>Especial</span>
-        </div>
       </div>
     </div>
   );
