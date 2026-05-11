@@ -21,7 +21,7 @@ export function WeeklyGrid({ tasks, onTaskClick }: WeeklyGridProps) {
   return (
     <div className="w-full bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse table-fixed min-w-[1200px]">
+        <table className="w-full border-collapse table-fixed min-w-[1400px]">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
               <th className="w-24 p-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-r border-slate-200">Horario</th>
@@ -38,16 +38,24 @@ export function WeeklyGrid({ tasks, onTaskClick }: WeeklyGridProps) {
           <tbody>
             {timeSlots.map((slot, sIdx) => {
               const [h, m] = slot.split(':').map(Number);
-              const isDay = h >= 7 && (h < 18 || (h === 18 && m === 0));
+              // Día: 07:00 a 18:30
+              const timeVal = h + m / 60;
+              const isDay = timeVal >= 7 && timeVal < 18.5;
               
               return (
                 <tr key={slot} className={cn(
                   "group transition-colors",
-                  isDay ? "bg-white" : "bg-slate-50/40"
+                  isDay ? "bg-white" : "bg-slate-50/60"
                 )}>
-                  <td className="p-2 border-b border-r border-slate-100 text-center align-middle relative group-hover:bg-slate-100/50">
+                  <td className={cn(
+                    "p-2 border-b border-r border-slate-100 text-center align-middle relative group-hover:bg-slate-100/50",
+                    !isDay && "border-r-indigo-100"
+                  )}>
                     <div className="flex flex-col items-center justify-center gap-1">
-                      <span className="text-[10px] font-bold font-mono text-slate-400">{slot}</span>
+                      <span className={cn(
+                        "text-[10px] font-bold font-mono",
+                        isDay ? "text-slate-400" : "text-indigo-300"
+                      )}>{slot}</span>
                       {m === 0 && (
                         isDay ? <Sun className="h-3 w-3 text-amber-400/50" /> : <Moon className="h-3 w-3 text-indigo-400/50" />
                       )}
@@ -62,7 +70,8 @@ export function WeeklyGrid({ tasks, onTaskClick }: WeeklyGridProps) {
                         key={`${dIdx}-${slot}`} 
                         className={cn(
                           "p-0.5 border-b border-r border-slate-100 last:border-r-0 h-12 relative",
-                          task ? "bg-primary/5" : "hover:bg-slate-50 cursor-pointer"
+                          task ? "bg-primary/5" : "hover:bg-slate-50 cursor-pointer",
+                          !isDay && !task && "bg-indigo-50/20"
                         )}
                         onClick={() => task && onTaskClick?.(task)}
                       >
@@ -80,7 +89,7 @@ export function WeeklyGrid({ tasks, onTaskClick }: WeeklyGridProps) {
                             </div>
                             <div className="flex items-center justify-between">
                               <span className="text-[9px] font-bold text-slate-600">
-                                {task.quantity} u
+                                {task.quantity > 0 ? `${task.quantity} u` : ''}
                               </span>
                               <span className="text-[9px] font-medium text-slate-400">
                                 {task.durationHours.toFixed(1)}h

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo } from 'react';
@@ -61,9 +62,9 @@ export function ProductionGantt({ tasks, onTaskClick }: ProductionGanttProps) {
 
   return (
     <div className="w-full bg-white rounded-xl shadow-sm border border-border overflow-hidden p-4 lg:p-6 print:p-0 print:border-none print:shadow-none">
-      <div className="flex flex-col gap-4 print:gap-3 min-w-[800px]">
+      <div className="flex flex-col gap-4 print:gap-3 min-w-[1000px]">
         <div className="flex border-b pb-2">
-          <div className="w-24 shrink-0 font-headline text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Día</div>
+          <div className="w-28 shrink-0 font-headline text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Día / Horario</div>
           <div className="flex-1 relative h-5">
             {markers.map((marker, idx) => (
               marker.label && (
@@ -81,15 +82,26 @@ export function ProductionGantt({ tasks, onTaskClick }: ProductionGanttProps) {
 
         {weekDays.map((day, dIdx) => (
           <div key={dIdx} className="flex items-center group">
-            <div className="w-24 shrink-0">
+            <div className="w-28 shrink-0">
               <div className="font-headline text-xs font-bold text-slate-900 group-hover:text-primary transition-colors">{DAYS[dIdx]}</div>
               <div className="text-[9px] text-muted-foreground font-medium">{day.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div>
             </div>
 
-            <div className="flex-1 h-12 print:h-11 bg-slate-50/50 rounded-lg border border-dashed border-slate-200 relative overflow-hidden shadow-inner">
+            <div className="flex-1 h-12 print:h-11 bg-slate-50/30 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
+              {/* División de Turnos: Día (7:00 - 18:30) y Noche (18:30 - 7:00) */}
+              {/* El turno día dura 11.5 horas desde el inicio (7:00) */}
               <div 
-                className="absolute inset-y-0 left-0 w-[47.91%] bg-white/80 border-r border-slate-200/50 z-0" 
-              ></div>
+                className="absolute inset-y-0 left-0 w-[47.91%] bg-white/60 border-r-2 border-primary/20 z-0" 
+                title="Turno Día"
+              >
+                <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/30 uppercase tracking-tighter">DÍA</div>
+              </div>
+              <div 
+                className="absolute inset-y-0 left-[47.91%] right-0 bg-slate-100/40 z-0" 
+                title="Turno Noche"
+              >
+                <div className="absolute top-0 right-1 text-[7px] font-bold text-indigo-400/30 uppercase tracking-tighter">NOCHE</div>
+              </div>
               
               {markers.map((m, idx) => (
                 <div 
@@ -113,7 +125,7 @@ export function ProductionGantt({ tasks, onTaskClick }: ProductionGanttProps) {
                     className="absolute inset-y-2 rounded-md border-l-4 shadow-sm z-10 p-1.5 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
                     style={{
                       ...style,
-                      backgroundColor: `${task.color}15`,
+                      backgroundColor: `${task.color}20`,
                     }}
                   >
                     <div className="flex flex-col min-w-0">
@@ -134,12 +146,12 @@ export function ProductionGantt({ tasks, onTaskClick }: ProductionGanttProps) {
       
       <div className="mt-6 flex flex-wrap items-center justify-end gap-6 text-[9px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-4 print:mt-4 print:pt-2">
         <div className="flex items-center gap-2">
-          <div className="w-2.5 h-2.5 rounded bg-slate-50 border border-dashed border-slate-300"></div>
-          <span>Turno Noche</span>
+          <div className="w-4 h-2.5 rounded bg-white border border-primary/20"></div>
+          <span>Turno Día (07:00 - 18:30)</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-2.5 h-2.5 rounded bg-white border border-slate-200"></div>
-          <span>Turno Día</span>
+          <div className="w-4 h-2.5 rounded bg-slate-100 border border-slate-200"></div>
+          <span>Turno Noche (18:30 - 07:00)</span>
         </div>
       </div>
     </div>
