@@ -15,8 +15,23 @@ interface ProductionGanttProps {
 
 const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
+// Colores constantes
+const DAY_COLOR = '#C0E6F5';
+const NIGHT_COLOR = '#83CCEB';
+const SPECIAL_COLOR = '#FFFF00';
+
 export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: ProductionGanttProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
+
+  // Cálculo de porcentaje de división exacto (18:30 desde las 07:00)
+  // 18:30 - 07:00 = 11.5 horas = 690 minutos
+  // 690 / 1440 minutos totales = 47.91666666666667%
+  const SPLIT_PCT = useMemo(() => {
+    const totalDayMins = 24 * 60;
+    const startMins = PRODUCTION_START_HOUR * 60;
+    const splitMins = (SHIFT_SPLIT_HOUR * 60) + SHIFT_SPLIT_MINUTE;
+    return ((splitMins - startMins) / totalDayMins) * 100;
+  }, []);
 
   const isSpecialTask = (name: string) => {
     const specials = ['CS', 'CP', 'CIP', 'MTTO PROGRAMADO', 'PARADA PROGRAMADA'];
@@ -39,11 +54,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     });
     return Object.entries(summary).sort((a, b) => a[0].localeCompare(b[0]));
   }, [tasks]);
-
-  const DAY_COLOR = '#C0E6F5';
-  const NIGHT_COLOR = '#83CCEB';
-  const SPECIAL_COLOR = '#FFFF00';
-  const SPLIT_PCT = (11.5 / 24) * 100; // Exactamente a las 18:30 (11.5 horas desde las 07:00)
 
   const getTaskStyle = (task: ScheduledTask, day: Date) => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
@@ -70,9 +80,10 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       };
     }
 
-    const splitMin = 11.5 * 60; // 18:30 es 11.5 horas después de las 07:00
+    const splitMin = 11.5 * 60; // 690 minutos desde las 07:00
 
     if (startMin >= splitMin) {
+      // Inicia después o justo en 18:30
       return {
         left: `${left}%`,
         width: `${width}%`,
@@ -80,6 +91,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         borderColor: '#6DB6D5',
       };
     } else if (endMin <= splitMin) {
+      // Termina antes o justo en 18:30
       return {
         left: `${left}%`,
         width: `${width}%`,
@@ -87,6 +99,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         borderColor: '#AACCDA',
       };
     } else {
+      // Tarea que cruza las 18:30
       const splitPointInTask = ((splitMin - startMin) / (endMin - startMin)) * 100;
       return {
         left: `${left}%`,
@@ -98,11 +111,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
   };
 
   const getShiftData = (task: ScheduledTask, day: Date) => {
-    const rowStart = setMinutes(setHours(startOfDay(day), 7), 0);
+    const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const shiftSplit = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE);
-    const rowEnd = setMinutes(setHours(startOfDay(addDays(day, 1)), 7), 0);
+    const rowEnd = setMinutes(setHours(startOfDay(addDays(day, 1)), PRODUCTION_START_HOUR), 0);
     
-    const nightLabelThreshold = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE); 
+    const nightLabelThreshold = shiftSplit; 
 
     const getOverlapMins = (start1: Date, end1: Date, start2: Date, end2: Date) => {
       const s = isAfter(start1, start2) ? start1 : start2;
@@ -118,11 +131,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
     let nightLabelOffset = null;
     if (nightQty > 0) {
-      const taskDuration = differenceInMinutes(task.endTime, task.startTime);
+      const taskDurationMins = differenceInMinutes(task.endTime, task.startTime);
       const minsToThreshold = differenceInMinutes(nightLabelThreshold, task.startTime);
       
-      if (minsToThreshold > 0 && minsToThreshold < taskDuration) {
-        nightLabelOffset = (minsToThreshold / taskDuration) * 100;
+      if (minsToThreshold > 0 && minsToThreshold < taskDurationMins) {
+        nightLabelOffset = (minsToThreshold / taskDurationMins) * 100;
       } else if (minsToThreshold <= 0) {
         nightLabelOffset = 0;
       }
@@ -175,25 +188,25 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
               {/* Day background area */}
               <div 
                 className="absolute inset-y-0 left-0 z-0 transition-all duration-300" 
-                style={{ width: `${SPLIT_PCT}%`, backgroundColor: `${DAY_COLOR}40` }}
+                style={{ width: `${SPLIT_PCT}%`, backgroundColor: `${DAY_COLOR}25` }}
               >
                 <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/60 uppercase tracking-tighter">DÍA</div>
               </div>
               
-              {/* Night background area - Corregido para iniciar con NIGHT_COLOR en 18:30 */}
+              {/* Night background area - Exactamente desde 18:30 */}
               <div 
                 className="absolute inset-y-0 z-0 transition-all duration-300" 
                 style={{ left: `${SPLIT_PCT}%`, right: 0, backgroundColor: `${NIGHT_COLOR}40` }}
               >
-                <div className="absolute top-0 left-1 text-[7px] font-bold text-indigo-600/60 uppercase tracking-tighter">NOCHE</div>
+                <div className="absolute top-0 left-1 text-[7px] font-bold text-indigo-700 uppercase tracking-tighter">NOCHE</div>
               </div>
 
               {/* Enhanced Shift Split Line at 18:30 */}
               <div 
-                className="absolute inset-y-0 z-20 border-l-2 border-primary/80 shadow-[0_0_8px_rgba(0,0,0,0.1)]"
+                className="absolute inset-y-0 z-20 border-l-2 border-primary/90 shadow-[0_0_10px_rgba(0,0,0,0.15)]"
                 style={{ left: `${SPLIT_PCT}%` }}
               >
-                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-1 w-1 bg-primary rounded-full"></div>
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-2 w-2 bg-primary rounded-full"></div>
               </div>
               
               {markers.map((m, idx) => (
