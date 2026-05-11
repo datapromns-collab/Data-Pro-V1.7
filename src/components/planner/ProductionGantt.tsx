@@ -217,9 +217,9 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         {productSummary.length > 0 && (
           <div className="mt-2 border-t-2 border-slate-100 pt-3">
             <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Resumen de Producción Total</h3>
-            <div className="flex flex-col gap-1 max-w-sm">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
               {productSummary.map(([name, qty]) => (
-                <div key={name} className="flex justify-between items-center py-1 px-3 bg-slate-50/50 rounded-md border border-slate-100">
+                <div key={name} className="flex items-center gap-2 py-1 px-3 bg-slate-50/50 rounded-md border border-slate-100">
                   <span className="text-xs font-bold text-slate-700">{name}</span>
                   <span className="text-xs font-bold text-primary">
                     {Math.round(qty).toLocaleString()} cajas
