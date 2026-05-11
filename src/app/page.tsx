@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo } from 'react';
@@ -11,7 +10,8 @@ import {
   LayoutGrid,
   GanttChartSquare,
   ChevronRight,
-  FileSpreadsheet
+  FileSpreadsheet,
+  FileText
 } from 'lucide-react';
 import { WeeklyGrid } from '@/components/planner/WeeklyGrid';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -72,6 +72,7 @@ export default function PlannerPage() {
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-[#f8fafc]">
+        {/* UI Sidebar */}
         <Sidebar className="border-r border-slate-200 bg-white no-print">
           <SidebarHeader className="p-6">
             <div className="flex items-center gap-3">
@@ -118,6 +119,10 @@ export default function PlannerPage() {
                     <Plus className="h-4 w-4" />
                     Nueva Tarea
                   </Button>
+                  <Button variant="outline" size="sm" onClick={handlePrint} className="w-full justify-start gap-2 border-slate-200 text-slate-600">
+                    <FileText className="h-4 w-4" />
+                    Exportar Reporte
+                  </Button>
                   <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar todo el plan?') && clearAll()} className="w-full justify-start gap-2 text-destructive">
                     <Trash2 className="h-4 w-4" />
                     Limpiar Plan
@@ -128,19 +133,22 @@ export default function PlannerPage() {
           </SidebarContent>
         </Sidebar>
 
-        <main className="flex-1 flex flex-col h-screen overflow-hidden">
-          <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-between shrink-0 no-print">
+        {/* Main Content Area */}
+        <main className="flex-1 flex flex-col h-screen overflow-hidden no-print">
+          <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2 text-sm text-slate-500">
               <span>Producción</span>
               <ChevronRight className="h-4 w-4" />
               <span className="font-medium text-slate-900">Línea {selectedLine}</span>
             </div>
-            <Button variant="ghost" size="icon" onClick={handlePrint}><Printer className="h-5 w-5" /></Button>
+            <div className="flex items-center gap-2">
+               <Button variant="ghost" size="icon" onClick={handlePrint}><Printer className="h-5 w-5" /></Button>
+            </div>
           </header>
 
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <Tabs defaultValue="grid" className="h-full flex flex-col gap-6">
-              <div className="flex items-center justify-between no-print">
+              <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <h2 className="text-2xl font-headline font-bold text-slate-900">Programación Línea {selectedLine}</h2>
                   <p className="text-sm text-slate-500">Gestión de turnos y tanques de producción.</p>
@@ -173,6 +181,35 @@ export default function PlannerPage() {
             </Tabs>
           </div>
         </main>
+
+        {/* Print Only Content: ALL 7 LINES */}
+        <div className="print-only w-full p-8 bg-white">
+          <div className="mb-12 border-b-2 border-primary pb-6 flex justify-between items-end">
+            <div>
+              <h1 className="text-4xl font-headline font-bold text-slate-900">Reporte Semanal de Producción</h1>
+              <p className="text-slate-500 font-medium">Planificación Maestra - Todas las Líneas (1-7)</p>
+            </div>
+            <div className="text-right">
+              <p className="text-sm font-bold text-primary uppercase tracking-widest">Confidencial</p>
+              <p className="text-xs text-slate-400">{new Date().toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}</p>
+            </div>
+          </div>
+
+          {LINES.map((lineName, i) => {
+            const lineTasks = tasks.filter(t => t.lineId === (i + 1).toString());
+            return (
+              <div key={lineName} className="page-break mb-12">
+                <div className="flex items-center gap-4 mb-4 border-l-4 border-primary pl-4">
+                  <h2 className="text-2xl font-headline font-bold text-slate-800">{lineName}</h2>
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                    ({lineTasks.length} tareas programadas)
+                  </span>
+                </div>
+                <ProductionGantt tasks={lineTasks} />
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       <TaskDialog 
