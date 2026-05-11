@@ -21,10 +21,12 @@ export function WeeklyGrid({ tasks, onTaskClick }: WeeklyGridProps) {
   return (
     <div className="w-full bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse table-fixed min-w-[1400px]">
+        {/* Aumentamos el min-w para dar espacio a las columnas más anchas */}
+        <table className="w-full border-collapse table-fixed min-w-[1600px]">
           <thead>
             <tr className="bg-slate-50 border-b border-slate-200">
-              <th className="w-24 p-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-r border-slate-200">Horario</th>
+              {/* Reducimos w-24 a w-16 para acercar las columnas al horario (~1cm menos) */}
+              <th className="w-16 p-4 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-r border-slate-200">Horario</th>
               {weekDays.map((day, idx) => (
                 <th key={idx} className="p-4 border-r border-slate-200 last:border-r-0">
                   <div className="font-headline text-sm font-bold text-slate-900">{DAYS[idx]}</div>
