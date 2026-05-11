@@ -9,6 +9,26 @@ export const SHIFT_SPLIT_MINUTE = 30;
 export const PRODUCTION_END_SUN_HOUR = 18;
 export const PRODUCTION_END_SUN_MINUTE = 30;
 
+export const PRODUCT_FACTORS: Record<string, Record<string, number>> = {
+  "GLUP COLA": { "2Lts": 8625, "1Lt": 8625, "0.4Lts": 17250 },
+  "GLUP FRESH": { "2Lts": 8625, "1Lt": 8625, "0.4Lts": 17250 },
+  "GLUP UVA": { "2Lts": 7112.5, "1Lt": 7112.5, "0.4Lts": 14225 },
+  "GLUP PIÑA": { "2Lts": 7262.5, "1Lt": 7262.5, "0.4Lts": 14525 },
+  "GLUP NARANJA": { "2Lts": 7112.5, "1Lt": 7112.5, "0.4Lts": 14225 },
+  "GLUP KOLITA": { "2Lts": 8895, "1Lt": 8895, "0.4Lts": 17790 },
+  "GLUP MANZANA VERDE": { "2Lts": 8265, "1Lt": 8265, "0.4Lts": 16530 },
+  "GLUP PIÑA PARCHITA": { "2Lts": 6812.5, "1Lt": 6812.5, "0.4Lts": 13625 },
+  "GLUP MANZANA ROJA": { "2Lts": 8047.5, "1Lt": 8047.5, "0.4Lts": 16095 },
+  "JUSTY NARANJA": { "1.5Lts": 55.55 },
+  "JUSTY DURAZNO": { "1.5Lts": 55.55 },
+  "JUSTY MANDARINA": { "1.5Lts": 55.55 },
+  "JUSTY SANDIA": { "1.5Lts": 55.55 },
+  "JUSTY LIMON": { "1.5Lts": 55.55 },
+  "JUSTY TAMARINDO": { "1.5Lts": 55.55 },
+  "VITA TEA DURAZNO": { "1.5Lts": 55.55 },
+  "VITA TEA LIMON": { "1.5Lts": 55.55 },
+};
+
 export const getWeekDays = (baseDate: Date) => {
   const start = startOfWeek(baseDate, { weekStartsOn: 1 }); // Monday
   return Array.from({ length: 7 }).map((_, i) => addDays(start, i));
@@ -23,11 +43,6 @@ export const isDayShift = (date: Date) => {
 };
 
 export const getWeeklyLimitMinutes = () => {
-  // Monday 07:00 to Sunday 18:30
-  // Mon-Sat: 6 full days starting at 07:00 or adjusted
-  // More simple: 
-  // Mon 07:00 to Sun 18:30
-  // Mon (17h) + Tue-Sat (5*24h) + Sun (18.5h)
   return (17 + 120 + 18.5) * 60;
 };
 

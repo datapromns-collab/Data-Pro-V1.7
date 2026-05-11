@@ -6,6 +6,9 @@ export interface Task {
   quantity: number;
   durationHours: number;
   color: string;
+  lineId: string;
+  presentation?: string;
+  tanks?: number;
 }
 
 export interface ScheduledTask extends Task {
