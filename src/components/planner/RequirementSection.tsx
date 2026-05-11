@@ -19,6 +19,18 @@ const PREFORMS_DATA = [
   { code: 'EMP_0135', description: 'PREFORMA VERDE 20,5-1881' },
 ];
 
+const LABELS_2LTS_DATA = [
+  { code: 'EMP_0022', description: 'ETIQUETA UVA 2000ML' },
+  { code: 'EMP_0026', description: 'ETIQUETA PIÑA 2000ML' },
+  { code: 'EMP_0030', description: 'ETIQUETA NARANJA 2000 ML' },
+  { code: 'EMP_0034', description: 'ETIQUETA KOLITA 2000ML' },
+  { code: 'EMP_0038', description: 'ETIQUETA FRESH 2000ML' },
+  { code: 'EMP_0042', description: 'ETIQUETA COLA NEGRA 2000ML' },
+  { code: 'EMP_0101', description: 'ETIQUETA MANZANA VERDE 2000ML' },
+  { code: 'EMP_0136', description: 'ETIQUETA MANZANITA 2000ML' },
+  { code: 'EMP_0137', description: 'ETIQUETA PIÑA PARCHITA 2000ML' },
+];
+
 const FLAVORS_FOR_EMP0009 = [
   "GLUP UVA",
   "GLUP PIÑA",
@@ -320,16 +332,31 @@ export function RequirementSection() {
                                   </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                  <TableRow className="hover:bg-slate-50/50">
-                                    <TableCell className="font-mono text-[10px] font-bold text-slate-400">PENDIENTE</TableCell>
-                                    <TableCell className="text-sm font-medium text-slate-500 italic">No hay etiquetas configuradas para {p.label}</TableCell>
-                                    <TableCell className="text-right">
-                                      <div className="flex items-center gap-2 justify-end">
-                                        <Input type="number" className="h-8 text-right text-xs" placeholder="0" />
-                                        <span className="text-[10px] font-bold text-slate-400">KG</span>
-                                      </div>
-                                    </TableCell>
-                                  </TableRow>
+                                  {p.id === '2lts' ? (
+                                    LABELS_2LTS_DATA.map((item) => (
+                                      <TableRow key={item.code} className="hover:bg-slate-50/50">
+                                        <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
+                                        <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
+                                        <TableCell className="text-right">
+                                          <div className="flex items-center gap-2 justify-end">
+                                            <Input type="number" className="h-8 text-right text-xs" placeholder="0" />
+                                            <span className="text-[10px] font-bold text-slate-400">KG</span>
+                                          </div>
+                                        </TableCell>
+                                      </TableRow>
+                                    ))
+                                  ) : (
+                                    <TableRow className="hover:bg-slate-50/50">
+                                      <TableCell className="font-mono text-[10px] font-bold text-slate-400">PENDIENTE</TableCell>
+                                      <TableCell className="text-sm font-medium text-slate-500 italic">No hay etiquetas configuradas para {p.label}</TableCell>
+                                      <TableCell className="text-right">
+                                        <div className="flex items-center gap-2 justify-end">
+                                          <Input type="number" className="h-8 text-right text-xs" placeholder="0" />
+                                          <span className="text-[10px] font-bold text-slate-400">KG</span>
+                                        </div>
+                                      </TableCell>
+                                    </TableRow>
+                                  )}
                                 </TableBody>
                               </Table>
                             </TabsContent>
