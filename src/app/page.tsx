@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -8,11 +7,8 @@ import {
   Plus, 
   Trash2, 
   Printer, 
-  LayoutGrid,
   GanttChartSquare,
   ChevronRight,
-  FileSpreadsheet,
-  FileText,
   Hash,
   Clock,
   Gauge,
@@ -30,12 +26,11 @@ import { KeyboardShortcuts } from '@/components/planner/KeyboardShortcuts';
 import { RequirementSection } from '@/components/planner/RequirementSection';
 import { RequirementReport } from '@/components/planner/RequirementReport';
 import { usePlannerStore } from '@/hooks/use-planner-store';
-import { calculateTotalPlannedMinutes, formatTime } from '@/lib/planner-utils';
+import { calculateTotalPlannedMinutes } from '@/lib/planner-utils';
 import { Toaster } from '@/components/ui/toaster';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { SidebarProvider, Sidebar, SidebarContent, SidebarHeader, SidebarHeader as SidebarHeaderUI, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
+import { SidebarProvider, Sidebar, SidebarContent } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -93,7 +88,8 @@ export default function PlannerPage() {
             break;
           case 'p':
             e.preventDefault();
-            handlePrintPlan();
+            if (activeTab === 'requirement') handlePrintRequirements();
+            else handlePrintPlan();
             break;
           case 'k':
             e.preventDefault();
@@ -109,12 +105,11 @@ export default function PlannerPage() {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [activeTab]);
 
   const weekNumber = getISOWeek(weekStartDate);
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
 
-  // FILTRADO INDEPENDIENTE POR SEMANA Y LÍNEA
   const filteredTasks = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
     return tasks.filter(t => 
@@ -137,12 +132,28 @@ export default function PlannerPage() {
 
   const handlePrintPlan = () => {
     setPrintMode('plan');
-    setTimeout(() => window.print(), 100);
+    const style = document.createElement('style');
+    style.innerHTML = `@page { size: landscape; margin: 0; }`;
+    style.id = 'print-orientation-style';
+    document.head.appendChild(style);
+    
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 100);
   };
 
   const handlePrintRequirements = () => {
     setPrintMode('requirements');
-    setTimeout(() => window.print(), 100);
+    const style = document.createElement('style');
+    style.innerHTML = `@page { size: portrait; margin: 0; }`;
+    style.id = 'print-orientation-style';
+    document.head.appendChild(style);
+
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 100);
   };
 
   const handleTaskClick = (task: ScheduledTask) => {

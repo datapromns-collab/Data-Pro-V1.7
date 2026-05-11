@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from 'next/image';
@@ -6,7 +5,6 @@ import { ScheduledTask } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format, getISOWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { useMemo } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
 interface RequirementReportProps {
@@ -28,7 +26,6 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
   const weekNumber = getISOWeek(weekStartDate);
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
 
-  // Replicar lógica de cálculos para el reporte
   const getCalculatedValue = (code: string) => {
     const weekEnd = new Date(weekStartDate.getTime() + 7 * 24 * 60 * 60 * 1000);
     

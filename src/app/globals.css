@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -64,7 +63,6 @@
 /* Print optimizations */
 @media print {
   @page {
-    size: portrait;
     margin: 0;
   }
   
