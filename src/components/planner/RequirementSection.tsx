@@ -12,7 +12,7 @@ import { addDays } from 'date-fns';
 const PREFORMS_DATA = [
   { code: 'EMP_0009', description: 'PREFORMA TRANSPARENTE 29.6GR 1881', isAuto: true },
   { code: 'EMP_0068', description: 'PREFORMA TRANSPARENTE 36 GR-1881', isAuto: true },
-  { code: 'EMP_0093', description: 'PREFORMA TRANSPARENTE 42,64 GR-1881' },
+  { code: 'EMP_0093', description: 'PREFORMA TRANSPARENTE 42,64 GR-1881', isAuto: true },
   { code: 'EMP_0103', description: 'PREFORMA VERDE 42,64 GR-1881' },
   { code: 'EMP_0120', description: 'PREFORMA VERDE 29.6GR 1881' },
   { code: 'EMP_0126', description: 'PREFORMA TRANSPARENTE 20,55GR-1881' },
@@ -31,6 +31,17 @@ const FLAVORS_FOR_EMP0009 = [
 const FLAVORS_FOR_EMP0068_L7 = [
   "GLUP COLA",
   "GLUP KOLITA"
+];
+
+const FLAVORS_FOR_EMP0093 = [
+  "GLUP COLA",
+  "GLUP UVA",
+  "GLUP PIÑA",
+  "GLUP NARANJA",
+  "GLUP KOLITA",
+  "GLUP MANZANA VERDE",
+  "GLUP PIÑA PARCHITA",
+  "GLUP MANZANA ROJA"
 ];
 
 export function RequirementSection() {
@@ -61,7 +72,6 @@ export function RequirementSection() {
   const calculatedEMP0068 = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
     
-    // Linea 7 específicos
     const line7Specific = tasks.filter(t => 
       t.lineId === "7" && 
       t.endTime > weekStartDate && 
@@ -69,7 +79,6 @@ export function RequirementSection() {
       FLAVORS_FOR_EMP0068_L7.includes(t.name)
     );
 
-    // Todos Linea 5
     const line5All = tasks.filter(t => 
       t.lineId === "5" && 
       t.endTime > weekStartDate && 
@@ -80,6 +89,22 @@ export function RequirementSection() {
                        line5All.reduce((acc, t) => acc + (t.quantity || 0), 0);
                        
     return Math.round(totalBoxes * 12);
+  }, [tasks, weekStartDate]);
+
+  // Cálculo EMP_0093: (L1, L2, L3, L4 Sabores específicos) * 6
+  const calculatedEMP0093 = useMemo(() => {
+    const weekEnd = addDays(weekStartDate, 7);
+    const targetLines = ["1", "2", "3", "4"];
+    
+    const relevantTasks = tasks.filter(t => 
+      targetLines.includes(t.lineId) && 
+      t.endTime > weekStartDate && 
+      t.startTime < weekEnd &&
+      FLAVORS_FOR_EMP0093.includes(t.name)
+    );
+    
+    const totalBoxes = relevantTasks.reduce((acc, t) => acc + (t.quantity || 0), 0);
+    return Math.round(totalBoxes * 6);
   }, [tasks, weekStartDate]);
 
   return (
@@ -140,6 +165,9 @@ export function RequirementSection() {
                                     {item.code === 'EMP_0068' && (
                                       <span className="ml-2 text-[10px] bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: (L7+L5) × 12</span>
                                     )}
+                                    {item.code === 'EMP_0093' && (
+                                      <span className="ml-2 text-[10px] bg-indigo-500/10 text-indigo-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: (L1-4) × 6</span>
+                                    )}
                                   </TableCell>
                                   <TableCell className="text-right">
                                     {item.code === 'EMP_0009' ? (
@@ -149,6 +177,10 @@ export function RequirementSection() {
                                     ) : item.code === 'EMP_0068' ? (
                                       <div className="h-8 flex items-center justify-end px-3 font-black text-amber-600 bg-amber-50 rounded border border-amber-200">
                                         {calculatedEMP0068.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
+                                      </div>
+                                    ) : item.code === 'EMP_0093' ? (
+                                      <div className="h-8 flex items-center justify-end px-3 font-black text-indigo-600 bg-indigo-50 rounded border border-indigo-200">
+                                        {calculatedEMP0093.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
                                       </div>
                                     ) : (
                                       <Input 
