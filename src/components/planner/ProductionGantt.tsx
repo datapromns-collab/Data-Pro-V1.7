@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo } from 'react';
@@ -17,7 +18,7 @@ const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes',
 // Colores unificados
 const PRODUCTION_COLOR = '#83CCEB';
 const SPECIAL_COLOR = '#FFFF00'; // S.A.M.I y especiales
-const AUTO_CP_COLOR = '#FFC000'; // CP Automático al final
+const AUTO_CP_COLOR = '#FFC000'; // CULMINACION DE PRODUCCION (Naranja)
 
 export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: ProductionGanttProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);

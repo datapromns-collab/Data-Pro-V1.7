@@ -9,7 +9,8 @@ const STORAGE_KEY = 'plan-semanal-pro-data-v3';
 
 export function usePlannerStore() {
   const [tasks, setTasks] = useState<ScheduledTask[]>([]);
-  const [weekStartDate, setWeekStartDate] = useState<Date>(startOfWeek(new Date(), { weekStartsOn: 1 }));
+  // Usamos una fecha fija inicial para evitar discrepancias de hidratación entre servidor y cliente
+  const [weekStartDate, setWeekStartDate] = useState<Date>(new Date('2024-01-01'));
   const [lineSpeeds, setLineSpeeds] = useState<Record<string, number>>({
     "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0
   });
@@ -20,7 +21,7 @@ export function usePlannerStore() {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        // Revive dates
+        // Revivir fechas
         const revivedTasks = (parsed.tasks || []).map((t: any) => ({
           ...t,
           startTime: new Date(t.startTime),
@@ -29,13 +30,18 @@ export function usePlannerStore() {
         setTasks(revivedTasks);
         if (parsed.weekStartDate) {
           setWeekStartDate(new Date(parsed.weekStartDate));
+        } else {
+          setWeekStartDate(startOfWeek(new Date(), { weekStartsOn: 1 }));
         }
         if (parsed.lineSpeeds) {
           setLineSpeeds(parsed.lineSpeeds);
         }
       } catch (e) {
         console.error("Error reviving data", e);
+        setWeekStartDate(startOfWeek(new Date(), { weekStartsOn: 1 }));
       }
+    } else {
+      setWeekStartDate(startOfWeek(new Date(), { weekStartsOn: 1 }));
     }
     setIsLoaded(true);
   }, []);
