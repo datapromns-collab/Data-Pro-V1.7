@@ -224,7 +224,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                 <div className="text-[9px] text-muted-foreground font-medium">{day.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div>
               </div>
 
-              <div className="flex-1 h-16 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
+              <div className="flex-1 h-12 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
                 {markers.map((m, idx) => (
                   <div key={idx} className={cn("absolute inset-y-0 border-l z-0 transition-opacity", m.isFullHour ? "border-slate-300/40 opacity-100" : "border-slate-200/20 opacity-50")} style={{ left: `${m.percent}%` }}></div>
                 ))}
@@ -241,7 +241,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   return (
                     <div
                       key={`gap-${gIdx}`}
-                      className="absolute inset-y-2 rounded border shadow-sm z-[1] p-1 flex items-center overflow-hidden opacity-60"
+                      className="absolute inset-y-1.5 rounded border shadow-sm z-[1] p-1 flex items-center overflow-hidden opacity-60"
                       style={style}
                     >
                       <span className="text-[9px] font-black text-slate-700/60 tracking-tighter uppercase px-1">S.A.M.I</span>
@@ -255,7 +255,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                     if (!style) return null;
                     return (
                       <div
-                        className="absolute inset-y-2 rounded border shadow-sm z-[2] p-1 flex items-center justify-center overflow-hidden"
+                        className="absolute inset-y-1.5 rounded border shadow-sm z-[2] p-1 flex items-center justify-center overflow-hidden"
                         style={{ ...style, backgroundColor: AUTO_CP_COLOR, borderColor: '#E6AC00' }}
                       >
                         <span className="text-sm font-black text-white uppercase px-1">CP</span>
@@ -274,7 +274,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                     <div
                       key={task.id}
                       onClick={() => onTaskClick?.(task)}
-                      className="absolute inset-y-2 rounded border shadow-sm z-[10] transition-all hover:scale-[1.005] hover:shadow-md cursor-pointer group/task overflow-hidden"
+                      className="absolute inset-y-1.5 rounded border shadow-sm z-[10] transition-all hover:scale-[1.005] hover:shadow-md cursor-pointer group/task overflow-hidden"
                       style={style}
                     >
                       <div className="relative w-full h-full min-w-0">
