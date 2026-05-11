@@ -29,6 +29,26 @@ export const PRODUCT_FACTORS: Record<string, Record<string, number>> = {
   "VITA TEA LIMON": { "1.5Lts": 1111.11 },
 };
 
+export const UBB_FACTORS: Record<string, number> = {
+  "GLUP COLA": 6,
+  "GLUP FRESH": 6,
+  "GLUP UVA": 11,
+  "GLUP PIÑA": 10,
+  "GLUP NARANJA": 11,
+  "GLUP KOLITA": 18,
+  "GLUP MANZANA VERDE": 19,
+  "GLUP PIÑA PARCHITA": 6,
+  "GLUP MANZANA ROJA": 8,
+  "JUSTY NARANJA": 20,
+  "JUSTY DURAZNO": 20,
+  "JUSTY MANDARINA": 20,
+  "JUSTY SANDIA": 20,
+  "JUSTY LIMON": 20,
+  "JUSTY TAMARINDO": 20,
+  "VITA TEA DURAZNO": 20,
+  "VITA TEA LIMON": 20,
+};
+
 export const getWeekDays = (baseDate: Date) => {
   const start = startOfWeek(baseDate, { weekStartsOn: 1 }); // Monday
   return Array.from({ length: 7 }).map((_, i) => addDays(start, i));
