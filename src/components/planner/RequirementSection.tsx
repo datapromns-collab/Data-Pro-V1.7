@@ -123,6 +123,21 @@ export function RequirementSection() {
     return Math.round(totalBoxes * 6);
   }, [tasks, weekStartDate]);
 
+  // Cálculo EMP_0120: (L7 GLUP FRESH) * 12
+  const calculatedEMP0120 = useMemo(() => {
+    const weekEnd = addDays(weekStartDate, 7);
+    
+    const freshLine7Tasks = tasks.filter(t => 
+      t.lineId === "7" && 
+      t.endTime > weekStartDate && 
+      t.startTime < weekEnd &&
+      t.name === "GLUP FRESH"
+    );
+    
+    const totalBoxes = freshLine7Tasks.reduce((acc, t) => acc + (t.quantity || 0), 0);
+    return Math.round(totalBoxes * 12);
+  }, [tasks, weekStartDate]);
+
   return (
     <div className="h-full flex flex-col space-y-6">
       <Tabs defaultValue="empaque" className="w-full h-full flex flex-col">
@@ -187,6 +202,9 @@ export function RequirementSection() {
                                     {item.code === 'EMP_0103' && (
                                       <span className="ml-2 text-[10px] bg-emerald-500/10 text-emerald-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: Fresh (L1-4) × 6</span>
                                     )}
+                                    {item.code === 'EMP_0120' && (
+                                      <span className="ml-2 text-[10px] bg-teal-500/10 text-teal-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: Fresh (L7) × 12</span>
+                                    )}
                                   </TableCell>
                                   <TableCell className="text-right">
                                     {item.code === 'EMP_0009' ? (
@@ -204,6 +222,10 @@ export function RequirementSection() {
                                     ) : item.code === 'EMP_0103' ? (
                                       <div className="h-8 flex items-center justify-end px-3 font-black text-emerald-600 bg-emerald-50 rounded border border-emerald-200">
                                         {calculatedEMP0103.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
+                                      </div>
+                                    ) : item.code === 'EMP_0120' ? (
+                                      <div className="h-8 flex items-center justify-end px-3 font-black text-teal-600 bg-teal-50 rounded border border-teal-200">
+                                        {calculatedEMP0120.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
                                       </div>
                                     ) : (
                                       <Input 
