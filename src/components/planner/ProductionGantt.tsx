@@ -127,15 +127,10 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                       backgroundColor: `${task.color}20`,
                     }}
                   >
-                    <div className="flex items-center justify-between w-full min-w-0 gap-1">
+                    <div className="flex items-center w-full min-w-0 px-1">
                       <span className="text-[8px] font-bold truncate leading-tight" style={{ color: task.color }}>
-                        {task.name}
+                        {task.name} {task.quantity > 0 ? `- ${Math.round(task.quantity).toLocaleString()} u` : ''}
                       </span>
-                      {task.quantity > 0 && (
-                        <span className="text-[7px] text-slate-600 font-black shrink-0">
-                          {Math.round(task.quantity).toLocaleString()}
-                        </span>
-                      )}
                     </div>
                   </div>
                 );
