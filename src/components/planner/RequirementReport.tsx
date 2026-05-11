@@ -110,9 +110,9 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
   };
 
   return (
-    <div className="page-break bg-white p-8">
+    <div className="page-break bg-white p-8 overflow-visible h-auto min-h-screen flex flex-col">
       {/* Header */}
-      <div className="mb-8 border-b-2 border-primary pb-4 flex justify-between items-center">
+      <div className="mb-8 border-b-2 border-primary pb-4 flex justify-between items-center shrink-0">
         <div className="flex-1">
           <h1 className="text-2xl font-headline font-bold text-slate-900">Reporte de Requerimientos</h1>
           <p className="text-primary font-bold text-base uppercase">Gestión de Materiales</p>
@@ -135,173 +135,176 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
         </div>
       </div>
 
-      {/* Sección Empaque */}
-      <div className="mb-10">
-        <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
-          <div className="w-1 h-6 bg-primary rounded-full"></div>
-          <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">I. Sección Empaque - Preformas</h2>
-        </div>
-        
-        <div className="rounded-lg border border-slate-200 overflow-hidden">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-slate-50 border-b">
-                <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
-                <TableHead className="font-bold text-slate-700">Descripción del Material</TableHead>
-                <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {PREFORMS_DATA.map((item) => (
-                <TableRow key={item.code} className="border-b last:border-0">
-                  <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                  <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
-                  <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
-                    {getCalculatedValue(item.code).toLocaleString('es-ES')} UND
-                  </TableCell>
+      {/* Contenido principal que puede fluir entre páginas */}
+      <div className="flex-1">
+        {/* Sección Empaque */}
+        <div className="mb-10">
+          <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
+            <div className="w-1 h-6 bg-primary rounded-full"></div>
+            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">I. Sección Empaque - Preformas</h2>
+          </div>
+          
+          <div className="rounded-lg border border-slate-200 overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-slate-50 border-b">
+                  <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
+                  <TableHead className="font-bold text-slate-700">Descripción del Material</TableHead>
+                  <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {PREFORMS_DATA.map((item) => (
+                  <TableRow key={item.code} className="border-b last:border-0">
+                    <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
+                    <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
+                      {getCalculatedValue(item.code).toLocaleString('es-ES')} UND
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
-      </div>
 
-      {/* Sección Etiquetas 2Lts */}
-      <div className="mb-10">
-        <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
-          <div className="w-1 h-6 bg-amber-500 rounded-full"></div>
-          <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">II. Sección Etiquetas - 2 Lts</h2>
-        </div>
-        
-        <div className="rounded-lg border border-slate-200 overflow-hidden">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-slate-50 border-b">
-                <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
-                <TableHead className="font-bold text-slate-700">Descripción</TableHead>
-                <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {LABELS_2LTS_DATA.map((item) => (
-                <TableRow key={item.code} className="border-b last:border-0">
-                  <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                  <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
-                  <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
-                    _______ KG
-                  </TableCell>
+        {/* Sección Etiquetas 2Lts */}
+        <div className="mb-10">
+          <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
+            <div className="w-1 h-6 bg-amber-500 rounded-full"></div>
+            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">II. Sección Etiquetas - 2 Lts</h2>
+          </div>
+          
+          <div className="rounded-lg border border-slate-200 overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-slate-50 border-b">
+                  <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
+                  <TableHead className="font-bold text-slate-700">Descripción</TableHead>
+                  <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {LABELS_2LTS_DATA.map((item) => (
+                  <TableRow key={item.code} className="border-b last:border-0">
+                    <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
+                    <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
+                      _______ KG
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
-      </div>
 
-      {/* Sección Etiquetas 1 Lt */}
-      <div className="mb-10">
-        <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
-          <div className="w-1 h-6 bg-blue-500 rounded-full"></div>
-          <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">III. Sección Etiquetas - 1 Lt</h2>
-        </div>
-        
-        <div className="rounded-lg border border-slate-200 overflow-hidden">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-slate-50 border-b">
-                <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
-                <TableHead className="font-bold text-slate-700">Descripción</TableHead>
-                <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {LABELS_1LT_DATA.map((item) => (
-                <TableRow key={item.code} className="border-b last:border-0">
-                  <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                  <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
-                  <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
-                    _______ KG
-                  </TableCell>
+        {/* Sección Etiquetas 1 Lt */}
+        <div className="mb-10">
+          <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
+            <div className="w-1 h-6 bg-blue-500 rounded-full"></div>
+            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">III. Sección Etiquetas - 1 Lt</h2>
+          </div>
+          
+          <div className="rounded-lg border border-slate-200 overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-slate-50 border-b">
+                  <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
+                  <TableHead className="font-bold text-slate-700">Descripción</TableHead>
+                  <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {LABELS_1LT_DATA.map((item) => (
+                  <TableRow key={item.code} className="border-b last:border-0">
+                    <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
+                    <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
+                      _______ KG
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
-      </div>
 
-      {/* Sección Etiquetas 0.4 Lt */}
-      <div className="mb-10">
-        <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
-          <div className="w-1 h-6 bg-purple-500 rounded-full"></div>
-          <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">IV. Sección Etiquetas - 0.4 Lts</h2>
-        </div>
-        
-        <div className="rounded-lg border border-slate-200 overflow-hidden">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-slate-50 border-b">
-                <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
-                <TableHead className="font-bold text-slate-700">Descripción</TableHead>
-                <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {LABELS_04LT_DATA.map((item) => (
-                <TableRow key={item.code} className="border-b last:border-0">
-                  <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                  <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
-                  <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
-                    _______ KG
-                  </TableCell>
+        {/* Sección Etiquetas 0.4 Lt */}
+        <div className="mb-10">
+          <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
+            <div className="w-1 h-6 bg-purple-500 rounded-full"></div>
+            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">IV. Sección Etiquetas - 0.4 Lts</h2>
+          </div>
+          
+          <div className="rounded-lg border border-slate-200 overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-slate-50 border-b">
+                  <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
+                  <TableHead className="font-bold text-slate-700">Descripción</TableHead>
+                  <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {LABELS_04LT_DATA.map((item) => (
+                  <TableRow key={item.code} className="border-b last:border-0">
+                    <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
+                    <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
+                      _______ KG
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
-      </div>
 
-      {/* Otros materiales de empaque */}
-      <div className="grid grid-cols-2 gap-8 mb-10">
-        <div className="border rounded-lg p-4 bg-slate-50/30">
-          <h3 className="text-xs font-bold text-slate-500 uppercase mb-4 border-b pb-2">Tapas y Cierres</h3>
-          <div className="space-y-4">
-            <div className="flex justify-between border-b border-dashed pb-2">
-              <span className="text-xs font-medium text-slate-600">Tapa 1881 Blanca</span>
-              <span className="w-20 border-b border-slate-300"></span>
+        {/* Otros materiales de empaque */}
+        <div className="grid grid-cols-2 gap-8 mb-10">
+          <div className="border rounded-lg p-4 bg-slate-50/30">
+            <h3 className="text-xs font-bold text-slate-500 uppercase mb-4 border-b pb-2">Tapas y Cierres</h3>
+            <div className="space-y-4">
+              <div className="flex justify-between border-b border-dashed pb-2">
+                <span className="text-xs font-medium text-slate-600">Tapa 1881 Blanca</span>
+                <span className="w-20 border-b border-slate-300"></span>
+              </div>
+              <div className="flex justify-between border-b border-dashed pb-2">
+                <span className="text-xs font-medium text-slate-600">Tapa 1881 Verde</span>
+                <span className="w-20 border-b border-slate-300"></span>
+              </div>
             </div>
-            <div className="flex justify-between border-b border-dashed pb-2">
-              <span className="text-xs font-medium text-slate-600">Tapa 1881 Verde</span>
-              <span className="w-20 border-b border-slate-300"></span>
+          </div>
+          <div className="border rounded-lg p-4 bg-slate-50/30">
+            <h3 className="text-xs font-bold text-slate-500 uppercase mb-4 border-b pb-2">Plásticos y Embalaje</h3>
+            <div className="space-y-4">
+              <div className="flex justify-between border-b border-dashed pb-2">
+                <span className="text-xs font-medium text-slate-600">Term. Encogible (KG)</span>
+                <span className="w-20 border-b border-slate-300"></span>
+              </div>
+              <div className="flex justify-between border-b border-dashed pb-2">
+                <span className="text-xs font-medium text-slate-600">Stretch Wrap (UND)</span>
+                <span className="w-20 border-b border-slate-300"></span>
+              </div>
             </div>
           </div>
         </div>
-        <div className="border rounded-lg p-4 bg-slate-50/30">
-          <h3 className="text-xs font-bold text-slate-500 uppercase mb-4 border-b pb-2">Plásticos y Embalaje</h3>
-          <div className="space-y-4">
-            <div className="flex justify-between border-b border-dashed pb-2">
-              <span className="text-xs font-medium text-slate-600">Term. Encogible (KG)</span>
-              <span className="w-20 border-b border-slate-300"></span>
-            </div>
-            <div className="flex justify-between border-b border-dashed pb-2">
-              <span className="text-xs font-medium text-slate-600">Stretch Wrap (UND)</span>
-              <span className="w-20 border-b border-slate-300"></span>
-            </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Materia Prima */}
-      <div className="mb-8">
-        <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
-          <div className="w-1 h-6 bg-emerald-500 rounded-full"></div>
-          <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">V. Sección Materia Prima</h2>
-        </div>
-        <div className="p-8 border-2 border-dashed rounded-xl flex items-center justify-center text-slate-400 text-sm italic">
-          Listado de concentrados y jarabes por planificar según tanques programados.
+        {/* Materia Prima */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
+            <div className="w-1 h-6 bg-emerald-500 rounded-full"></div>
+            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">V. Sección Materia Prima</h2>
+          </div>
+          <div className="p-8 border-2 border-dashed rounded-xl flex items-center justify-center text-slate-400 text-sm italic">
+            Listado de concentrados y jarabes por planificar según tanques programados.
+          </div>
         </div>
       </div>
 
       {/* Footer del reporte */}
-      <div className="mt-auto pt-4 border-t border-slate-100 flex justify-between items-center text-[8px] text-slate-400 font-bold uppercase tracking-widest">
+      <div className="mt-8 pt-4 border-t border-slate-100 flex justify-between items-center text-[8px] text-slate-400 font-bold uppercase tracking-widest shrink-0">
         <span>Plan Semanal Pro - Módulo de Requerimientos</span>
         <span>Generado el: {new Date().toLocaleString('es-ES')}</span>
       </div>

@@ -85,19 +85,34 @@
   main {
     display: none !important;
   }
+  
   .page-break {
     page-break-after: always;
     break-after: page;
-    height: 100vh;
+    min-height: 100vh;
     padding: 0.8cm 1cm;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    /* Eliminamos height: 100vh y overflow: hidden para permitir múltiples páginas */
+    height: auto;
+    overflow: visible;
   }
-  /* Evita la página en blanco al final */
+
   .page-break:last-child {
     page-break-after: auto;
     break-after: auto;
+  }
+
+  /* Evitar que las filas de las tablas se corten a la mitad */
+  tr {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Asegurar que las imágenes no se corten */
+  img {
+    page-break-inside: avoid;
+    break-inside: avoid;
   }
 }
 
