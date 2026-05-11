@@ -14,12 +14,14 @@ import {
   FileText,
   Hash,
   Clock,
-  Gauge
+  Gauge,
+  Calculator as CalculatorIcon
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
 import { ProductionMonitor } from '@/components/planner/ProductionMonitor';
 import { TaskDialog } from '@/components/planner/TaskDialog';
+import { Calculator } from '@/components/planner/Calculator';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { calculateTotalPlannedMinutes, formatTime } from '@/lib/planner-utils';
 import { Toaster } from '@/components/ui/toaster';
@@ -233,7 +235,8 @@ export default function PlannerPage() {
                 </div>
                 <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
                   <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Gantt</TabsTrigger>
-                  <TabsTrigger value="speeds" className="gap-2 px-4 font-bold"><Gauge className="h-4 w-4" /> Velocidades Actuales</TabsTrigger>
+                  <TabsTrigger value="speeds" className="gap-2 px-4 font-bold"><Gauge className="h-4 w-4" /> Velocidades</TabsTrigger>
+                  <TabsTrigger value="calculator" className="gap-2 px-4 font-bold"><CalculatorIcon className="h-4 w-4" /> Calculadora</TabsTrigger>
                 </TabsList>
               </div>
 
@@ -243,6 +246,9 @@ export default function PlannerPage() {
                 </TabsContent>
                 <TabsContent value="speeds" className="m-0 h-full">
                   <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} />
+                </TabsContent>
+                <TabsContent value="calculator" className="m-0 h-full">
+                  <Calculator />
                 </TabsContent>
               </div>
             </Tabs>
