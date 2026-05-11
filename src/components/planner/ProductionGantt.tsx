@@ -3,9 +3,9 @@
 
 import { useMemo } from 'react';
 import { ScheduledTask, DayOfWeek } from '@/lib/types';
-import { getWeekDays, formatTime } from '@/lib/planner-utils';
+import { getWeekDays, formatTime, PRODUCTION_START_HOUR } from '@/lib/planner-utils';
 import { cn } from '@/lib/utils';
-import { differenceInMinutes, startOfDay, addDays, isSameDay } from 'date-fns';
+import { differenceInMinutes, startOfDay, addDays, setHours, setMinutes } from 'date-fns';
 
 interface ProductionGanttProps {
   tasks: ScheduledTask[];
@@ -16,22 +16,26 @@ const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes',
 export function ProductionGantt({ tasks }: ProductionGanttProps) {
   const weekDays = useMemo(() => getWeekDays(new Date()), []);
 
-  // Helper to calculate bar position and width
+  // Helper to calculate bar position and width starting from 07:00
   const getTaskStyle = (task: ScheduledTask, day: Date) => {
-    const dayStart = startOfDay(day);
-    const dayEnd = addDays(dayStart, 1);
+    // We define the row start as the current day at 07:00
+    const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
+    const rowEnd = addDays(rowStart, 1);
 
-    // Calculate start offset in minutes from beginning of the day
-    let startMin = differenceInMinutes(task.startTime, dayStart);
-    let endMin = differenceInMinutes(task.endTime, dayStart);
+    // If the task ends before row starts or starts after row ends, don't show it in this row
+    if (task.endTime <= rowStart || task.startTime >= rowEnd) return null;
 
-    // Clamp values to the day boundaries
+    // Calculate start and end minutes relative to rowStart
+    let startMin = differenceInMinutes(task.startTime, rowStart);
+    let endMin = differenceInMinutes(task.endTime, rowStart);
+
+    // Clamp values to the 24h window
     const totalDayMins = 24 * 60;
     const left = Math.max(0, (startMin / totalDayMins) * 100);
     const right = Math.min(100, (endMin / totalDayMins) * 100);
     const width = right - left;
 
-    if (width <= 0 || left >= 100 || right <= 0) return null;
+    if (width <= 0) return null;
 
     return {
       left: `${left}%`,
@@ -41,6 +45,16 @@ export function ProductionGantt({ tasks }: ProductionGanttProps) {
     };
   };
 
+  // Generate markers starting from 7:00
+  const markers = useMemo(() => {
+    const hours = [];
+    for (let i = 0; i <= 24; i += 3) {
+      const h = (PRODUCTION_START_HOUR + i) % 24;
+      hours.push({ label: `${h.toString().padStart(2, '0')}:00`, percent: (i / 24) * 100 });
+    }
+    return hours;
+  }, []);
+
   return (
     <div className="w-full bg-white rounded-xl shadow-sm border border-border overflow-hidden p-6">
       <div className="flex flex-col gap-8">
@@ -48,13 +62,13 @@ export function ProductionGantt({ tasks }: ProductionGanttProps) {
         <div className="flex border-b pb-2">
           <div className="w-32 shrink-0 font-headline text-xs font-bold uppercase tracking-wider text-muted-foreground">Día</div>
           <div className="flex-1 relative h-6">
-            {[0, 6, 12, 18, 24].map((hour) => (
+            {markers.map((marker, idx) => (
               <div 
-                key={hour} 
+                key={idx} 
                 className="absolute text-[10px] font-mono text-muted-foreground transform -translate-x-1/2"
-                style={{ left: `${(hour / 24) * 100}%` }}
+                style={{ left: `${marker.percent}%` }}
               >
-                {hour.toString().padStart(2, '0')}:00
+                {marker.label}
               </div>
             ))}
           </div>
@@ -69,15 +83,19 @@ export function ProductionGantt({ tasks }: ProductionGanttProps) {
             </div>
 
             <div className="flex-1 h-12 bg-slate-50 rounded-lg border border-dashed relative overflow-hidden">
-              {/* Shift backgrounds */}
-              <div className="absolute inset-y-0 left-[29.16%] right-[22.91%] bg-white border-x border-slate-200/50 z-0" title="Turno Diurno (07:00 - 18:30)"></div>
+              {/* Shift backgrounds (since we start at 07:00, the first 11.5 hours are Day Shift) */}
+              {/* Day Shift: 07:00 to 18:30 is 11.5 hours. (11.5 / 24) * 100 = 47.91% */}
+              <div 
+                className="absolute inset-y-0 left-0 w-[47.91%] bg-white border-r border-slate-200/50 z-0" 
+                title="Turno Diurno (07:00 - 18:30)"
+              ></div>
               
-              {/* Grid lines */}
-              {[6, 12, 18].map(h => (
+              {/* Grid lines every 3 hours */}
+              {markers.map((m, idx) => (
                 <div 
-                  key={h} 
+                  key={idx} 
                   className="absolute inset-y-0 border-l border-slate-200/30 z-0" 
-                  style={{ left: `${(h/24)*100}%` }}
+                  style={{ left: `${m.percent}%` }}
                 ></div>
               ))}
 
