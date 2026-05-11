@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo } from 'react';
@@ -58,7 +57,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       };
     }
 
-    const splitMin = 11.5 * 60; // 18:30 (11.5 horas desde las 07:00)
+    const splitMin = (SHIFT_SPLIT_HOUR - PRODUCTION_START_HOUR + (SHIFT_SPLIT_MINUTE / 60)) * 60;
     const dayColor = '#C0E6F5';
     const nightColor = '#83CCEB';
 
@@ -136,7 +135,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
   return (
     <div className="w-full bg-white rounded-xl shadow-sm border border-border overflow-hidden p-4 lg:p-6 print:p-0 print:border-none print:shadow-none">
-      <div className="flex flex-col gap-4 print:gap-3 min-w-[850px]">
+      <div className="flex flex-col gap-2 print:gap-1.5 min-w-[850px]">
         <div className="flex border-b pb-2">
           <div className="w-14 shrink-0 font-headline text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Día / Horario</div>
           <div className="flex-1 relative h-5">
@@ -161,7 +160,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
               <div className="text-[9px] text-muted-foreground font-medium">{day.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div>
             </div>
 
-            <div className="flex-1 h-16 print:h-14 bg-slate-50/30 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
+            <div className="flex-1 h-14 bg-slate-50/30 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
               <div className="absolute inset-y-0 left-0 w-[47.9%] bg-white/60 border-r-2 border-primary/20 z-0">
                 <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/30 uppercase tracking-tighter">DÍA</div>
               </div>
@@ -183,7 +182,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   <div
                     key={task.id}
                     onClick={() => onTaskClick?.(task)}
-                    className="absolute inset-y-3 rounded-md border shadow-sm z-10 p-1 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
+                    className="absolute inset-y-2 rounded border shadow-sm z-10 p-1 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
                     style={style}
                   >
                     <div className="relative w-full h-full flex items-center min-w-0">
@@ -195,15 +194,13 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                         <>
                           {dayQty > 0 && (
                             <div className="flex items-center gap-1.5 whitespace-nowrap px-2">
-                              <span className="text-xs font-bold text-slate-800">{task.name}</span>
-                              <span className="text-xs font-bold text-slate-800">(D: {Math.round(dayQty).toLocaleString()} cajas)</span>
+                              <span className="text-xs font-bold text-slate-800">{task.name} {Math.round(dayQty).toLocaleString()} cajas</span>
                             </div>
                           )}
                           
                           {nightQty > 0 && nightLabelOffset !== null && (
                             <div className="absolute flex items-center gap-1.5 whitespace-nowrap px-2" style={{ left: `${nightLabelOffset}%` }}>
-                              <span className="text-xs font-bold text-slate-900">{task.name}</span>
-                              <span className="text-xs font-bold text-slate-900">(N: {Math.round(nightQty).toLocaleString()} cajas)</span>
+                              <span className="text-xs font-bold text-slate-900">{task.name} {Math.round(nightQty).toLocaleString()} cajas</span>
                             </div>
                           )}
                         </>
@@ -218,13 +215,13 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
         {/* Resumen de Totales Consolidados */}
         {productSummary.length > 0 && (
-          <div className="mt-8 border-t-2 border-slate-100 pt-6">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Resumen de Producción Total</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div className="mt-2 border-t-2 border-slate-100 pt-3">
+            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Resumen de Producción Total</h3>
+            <div className="flex flex-col gap-1 max-w-sm">
               {productSummary.map(([name, qty]) => (
-                <div key={name} className="flex justify-between items-center p-3 bg-slate-50 rounded-lg border border-slate-100">
+                <div key={name} className="flex justify-between items-center py-1 px-3 bg-slate-50/50 rounded-md border border-slate-100">
                   <span className="text-xs font-bold text-slate-700">{name}</span>
-                  <span className="text-xs font-bold text-primary bg-primary/5 px-2 py-1 rounded-md">
+                  <span className="text-xs font-bold text-primary">
                     {Math.round(qty).toLocaleString()} cajas
                   </span>
                 </div>
@@ -234,18 +231,18 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         )}
       </div>
       
-      <div className="mt-6 flex flex-wrap items-center justify-end gap-6 text-[9px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-4 print:mt-4 print:pt-2">
+      <div className="mt-4 flex flex-wrap items-center justify-end gap-6 text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-2">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-2.5 rounded border border-primary/20" style={{ backgroundColor: '#C0E6F5' }}></div>
-          <span>Día (#C0E6F5)</span>
+          <div className="w-4 h-2 rounded border border-primary/20" style={{ backgroundColor: '#C0E6F5' }}></div>
+          <span>Día</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-2.5 rounded border border-slate-200" style={{ backgroundColor: '#83CCEB' }}></div>
-          <span>Noche (#83CCEB)</span>
+          <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: '#83CCEB' }}></div>
+          <span>Noche</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-2.5 rounded border border-slate-200" style={{ backgroundColor: '#FFFF00' }}></div>
-          <span>Especial (#FFFF00)</span>
+          <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: '#FFFF00' }}></div>
+          <span>Especial</span>
         </div>
       </div>
     </div>
