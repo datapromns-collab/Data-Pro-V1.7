@@ -102,7 +102,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     const shiftSplit = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE);
     const rowEnd = setMinutes(setHours(startOfDay(addDays(day, 1)), 7), 0);
     
-    // Cambiado para que el umbral de la etiqueta nocturna sea exactamente a las 18:30
     const nightLabelThreshold = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE); 
 
     const getOverlapMins = (start1: Date, end1: Date, start2: Date, end2: Date) => {
@@ -181,12 +180,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                 <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/60 uppercase tracking-tighter">DÍA</div>
               </div>
               
-              {/* Night background area - Unified color with Day background */}
+              {/* Night background area - Corregido para iniciar con NIGHT_COLOR en 18:30 */}
               <div 
                 className="absolute inset-y-0 z-0 transition-all duration-300" 
-                style={{ left: `${SPLIT_PCT}%`, right: 0, backgroundColor: `${DAY_COLOR}40` }}
+                style={{ left: `${SPLIT_PCT}%`, right: 0, backgroundColor: `${NIGHT_COLOR}40` }}
               >
-                {/* Cambiado de right-1 a left-1 para que inicie en el intervalo 18:30 */}
                 <div className="absolute top-0 left-1 text-[7px] font-bold text-indigo-600/60 uppercase tracking-tighter">NOCHE</div>
               </div>
 
