@@ -62,9 +62,8 @@ export function ProductionGantt({ tasks, onTaskClick }: ProductionGanttProps) {
 
   return (
     <div className="w-full bg-white rounded-xl shadow-sm border border-border overflow-hidden p-4 lg:p-6 print:p-0 print:border-none print:shadow-none">
-      <div className="flex flex-col gap-4 print:gap-3 min-w-[1200px]">
+      <div className="flex flex-col gap-4 print:gap-3 min-w-[1050px]">
         <div className="flex border-b pb-2">
-          {/* Reducimos w-28 a w-16 para acercar las barras al nombre del día (~1cm menos) */}
           <div className="w-16 shrink-0 font-headline text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Día / Horario</div>
           <div className="flex-1 relative h-5">
             {markers.map((marker, idx) => (
@@ -83,13 +82,12 @@ export function ProductionGantt({ tasks, onTaskClick }: ProductionGanttProps) {
 
         {weekDays.map((day, dIdx) => (
           <div key={dIdx} className="flex items-center group">
-            {/* Reducimos w-28 a w-16 para acercar el contenido */}
             <div className="w-16 shrink-0 pr-2">
               <div className="font-headline text-xs font-bold text-slate-900 group-hover:text-primary transition-colors">{DAYS[dIdx]}</div>
               <div className="text-[9px] text-muted-foreground font-medium">{day.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div>
             </div>
 
-            <div className="flex-1 h-12 print:h-11 bg-slate-50/30 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
+            <div className="flex-1 h-16 print:h-14 bg-slate-50/30 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
               {/* División de Turnos: Día (7:00 - 18:30) y Noche (18:30 - 7:00) */}
               <div 
                 className="absolute inset-y-0 left-0 w-[47.91%] bg-white/60 border-r-2 border-primary/20 z-0" 
@@ -123,7 +121,7 @@ export function ProductionGantt({ tasks, onTaskClick }: ProductionGanttProps) {
                   <div
                     key={task.id}
                     onClick={() => onTaskClick?.(task)}
-                    className="absolute inset-y-2 rounded-md border-l-4 shadow-sm z-10 p-1.5 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
+                    className="absolute inset-y-3 rounded-md border-l-4 shadow-sm z-10 p-1.5 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
                     style={{
                       ...style,
                       backgroundColor: `${task.color}20`,
