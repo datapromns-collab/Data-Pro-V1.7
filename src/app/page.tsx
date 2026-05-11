@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -26,6 +25,7 @@ import { ProductionMonitor } from '@/components/planner/ProductionMonitor';
 import { TaskDialog } from '@/components/planner/TaskDialog';
 import { Calculator } from '@/components/planner/Calculator';
 import { KeyboardShortcuts } from '@/components/planner/KeyboardShortcuts';
+import { RequirementSection } from '@/components/planner/RequirementSection';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { calculateTotalPlannedMinutes, formatTime } from '@/lib/planner-utils';
 import { Toaster } from '@/components/ui/toaster';
@@ -123,7 +123,7 @@ export default function PlannerPage() {
   const totalMinutes = calculateTotalPlannedMinutes(filteredTasks);
 
   const nextAvailable = useMemo(() => {
-    const lineTasks = filteredTasks; // Usamos solo las tareas de esta semana para buscar hueco
+    const lineTasks = filteredTasks;
     if (lineTasks.length === 0) {
       return setMinutes(setHours(weekStartDate, 7), 0);
     }
@@ -305,13 +305,7 @@ export default function PlannerPage() {
                   <Calculator />
                 </TabsContent>
                 <TabsContent value="requirement" className="m-0 h-full">
-                  <Card className="h-full border-dashed border-2 flex flex-col items-center justify-center p-12 text-center bg-white/50">
-                    <div className="bg-slate-100 p-6 rounded-full mb-4">
-                      <ClipboardList className="h-12 w-12 text-slate-400" />
-                    </div>
-                    <h3 className="text-xl font-headline font-bold text-slate-900 mb-2">Sección de Requerimientos</h3>
-                    <p className="text-slate-500 max-w-sm">Esta sección se encuentra en blanco por ahora. Aquí podrás gestionar los requerimientos específicos de producción próximamente.</p>
-                  </Card>
+                  <RequirementSection />
                 </TabsContent>
               </div>
             </Tabs>
@@ -381,7 +375,7 @@ export default function PlannerPage() {
         initialTask={editingTask}
         defaultLineId={selectedLine}
         weekStartDate={weekStartDate}
-        allTasks={tasks} // Enviamos todas las tareas para validación de conflictos, pero el dialog filtra según necesidad
+        allTasks={tasks}
         lineSpeeds={lineSpeeds}
       />
       
