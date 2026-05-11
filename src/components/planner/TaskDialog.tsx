@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
@@ -138,8 +137,8 @@ export function TaskDialog({
       if (!initialTask && duration === 0) setDuration(1);
     } else if (loadPerHour > 0 && quantity > 0) {
       const calculatedDuration = quantity / loadPerHour;
-      // Redondeo hacia arriba en intervalos de media hora (0.5)
-      setDuration(Math.ceil(calculatedDuration * 2) / 2);
+      // Eliminado el redondeo forzado a media hora
+      setDuration(calculatedDuration);
     } else {
       if (!isSpecialTask) setDuration(0);
     }
@@ -317,7 +316,7 @@ export function TaskDialog({
           <div className="flex justify-between items-center p-3 bg-primary/5 rounded-lg border border-primary/10">
             <div className="text-sm font-medium">Duración Planificada:</div>
             <div className="text-lg font-bold text-primary">
-              {duration < 1 && duration > 0 ? `${Math.round(duration * 60)} min` : `${duration.toFixed(1)} hrs`}
+              {duration < 1 && duration > 0 ? `${Math.round(duration * 60)} min` : `${duration.toFixed(2)} hrs`}
             </div>
           </div>
         </div>
