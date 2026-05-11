@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Trash2, Clock } from 'lucide-react';
+import { Trash2, Clock, Gauge } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
 import { getWeekDays, PRODUCT_FACTORS, formatTime } from '@/lib/planner-utils';
 import { useToast } from '@/hooks/use-toast';
@@ -41,9 +41,20 @@ interface TaskDialogProps {
   defaultLineId?: string;
   weekStartDate: Date;
   allTasks: ScheduledTask[];
+  lineSpeeds: Record<string, number>;
 }
 
-export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, defaultLineId = "1", weekStartDate, allTasks }: TaskDialogProps) {
+export function TaskDialog({ 
+  isOpen, 
+  onClose, 
+  onSave, 
+  onDelete, 
+  initialTask, 
+  defaultLineId = "1", 
+  weekStartDate, 
+  allTasks,
+  lineSpeeds
+}: TaskDialogProps) {
   const [name, setName] = useState('');
   const [lineId, setLineId] = useState(defaultLineId);
   const [cipSubOption, setCipSubOption] = useState('');
@@ -90,11 +101,11 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
       setCipSubOption('');
       setPresentation('');
       setTanks(0);
-      setLoadPerHour(0);
+      // Aplicar velocidad configurada para la línea por defecto
+      setLoadPerHour(lineSpeeds[defaultLineId] || 0);
       setQuantity(0);
       setDuration(0);
       
-      // Auto-sugerir próxima disponibilidad
       const dayIdx = weekDays.findIndex(d => 
         d.getDate() === nextAvailableTime.getDate() && 
         d.getMonth() === nextAvailableTime.getMonth()
@@ -102,7 +113,14 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
       setSelectedDayIdx(dayIdx !== -1 ? dayIdx.toString() : '0');
       setSelectedTime(formatTime(nextAvailableTime));
     }
-  }, [initialTask, isOpen, defaultLineId, weekDays, nextAvailableTime]);
+  }, [initialTask, isOpen, defaultLineId, weekDays, nextAvailableTime, lineSpeeds]);
+
+  // Actualizar carga/hora cuando cambia la línea (solo para tareas nuevas)
+  useEffect(() => {
+    if (!initialTask && isOpen && !isSpecialTask) {
+      setLoadPerHour(lineSpeeds[lineId] || 0);
+    }
+  }, [lineId, lineSpeeds, initialTask, isOpen, isSpecialTask]);
 
   useEffect(() => {
     if (!isSpecialTask && name && presentation && tanks > 0) {
@@ -281,7 +299,12 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
           {!isSpecialTask && (
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label>Carga/Hora</Label>
+                <div className="flex items-center justify-between">
+                  <Label>Carga/Hora</Label>
+                  <div className="flex items-center gap-1 text-[10px] text-primary font-bold">
+                    <Gauge className="h-3 w-3" /> Auto
+                  </div>
+                </div>
                 <Input type="number" value={loadPerHour || ''} onChange={(e) => setLoadPerHour(Number(e.target.value))} />
               </div>
               <div className="grid gap-2">

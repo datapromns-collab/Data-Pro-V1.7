@@ -5,11 +5,14 @@ import { useState, useEffect } from 'react';
 import { ScheduledTask } from '@/lib/types';
 import { startOfWeek } from 'date-fns';
 
-const STORAGE_KEY = 'plan-semanal-pro-data-v2';
+const STORAGE_KEY = 'plan-semanal-pro-data-v3';
 
 export function usePlannerStore() {
   const [tasks, setTasks] = useState<ScheduledTask[]>([]);
   const [weekStartDate, setWeekStartDate] = useState<Date>(startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const [lineSpeeds, setLineSpeeds] = useState<Record<string, number>>({
+    "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0
+  });
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -27,6 +30,9 @@ export function usePlannerStore() {
         if (parsed.weekStartDate) {
           setWeekStartDate(new Date(parsed.weekStartDate));
         }
+        if (parsed.lineSpeeds) {
+          setLineSpeeds(parsed.lineSpeeds);
+        }
       } catch (e) {
         console.error("Error reviving data", e);
       }
@@ -38,10 +44,11 @@ export function usePlannerStore() {
     if (isLoaded) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         tasks,
-        weekStartDate: weekStartDate.toISOString()
+        weekStartDate: weekStartDate.toISOString(),
+        lineSpeeds
       }));
     }
-  }, [tasks, weekStartDate, isLoaded]);
+  }, [tasks, weekStartDate, lineSpeeds, isLoaded]);
 
   const addTask = (taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
@@ -78,14 +85,20 @@ export function usePlannerStore() {
     setWeekStartDate(startOfWeek(date, { weekStartsOn: 1 }));
   };
 
+  const updateLineSpeed = (lineId: string, speed: number) => {
+    setLineSpeeds(prev => ({ ...prev, [lineId]: speed }));
+  };
+
   return { 
     tasks, 
     weekStartDate, 
+    lineSpeeds,
     setWeekStartDate: updateWeekStartDate, 
     addTask, 
     updateTask, 
     removeTask, 
     clearAll, 
+    updateLineSpeed,
     isLoaded 
   };
 }

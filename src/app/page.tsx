@@ -13,9 +13,10 @@ import {
   FileSpreadsheet,
   FileText,
   Hash,
-  Clock
+  Clock,
+  Gauge
 } from 'lucide-react';
-import { WeeklyGrid } from '@/components/planner/WeeklyGrid';
+import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
 import { ProductionMonitor } from '@/components/planner/ProductionMonitor';
 import { TaskDialog } from '@/components/planner/TaskDialog';
@@ -38,7 +39,19 @@ import { es } from 'date-fns/locale';
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7"];
 
 export default function PlannerPage() {
-  const { tasks, weekStartDate, setWeekStartDate, addTask, updateTask, removeTask, clearAll, isLoaded } = usePlannerStore();
+  const { 
+    tasks, 
+    weekStartDate, 
+    lineSpeeds,
+    setWeekStartDate, 
+    addTask, 
+    updateTask, 
+    removeTask, 
+    clearAll, 
+    updateLineSpeed,
+    isLoaded 
+  } = usePlannerStore();
+  
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
@@ -135,9 +148,6 @@ export default function PlannerPage() {
                       />
                     </PopoverContent>
                   </Popover>
-                  <p className="px-1 text-[9px] text-slate-400 font-medium italic">
-                    Calculado según estándar ISO 8601.
-                  </p>
                 </div>
               </section>
 
@@ -213,36 +223,35 @@ export default function PlannerPage() {
           </header>
 
           <div className="flex-1 overflow-auto p-6 lg:p-8">
-            <Tabs defaultValue="grid" className="h-full flex flex-col gap-6">
+            <Tabs defaultValue="gantt" className="h-full flex flex-col gap-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <h2 className="text-2xl font-headline font-bold text-slate-900">Programación Línea {selectedLine}</h2>
                   <p className="text-sm text-slate-500">Gestión de turnos y tanques de producción.</p>
                 </div>
                 <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
-                  <TabsTrigger value="grid" className="gap-2 px-4 font-bold"><LayoutGrid className="h-4 w-4" /> Cuadrícula</TabsTrigger>
                   <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Gantt</TabsTrigger>
+                  <TabsTrigger value="speeds" className="gap-2 px-4 font-bold"><Gauge className="h-4 w-4" /> Velocidades Actuales</TabsTrigger>
                 </TabsList>
               </div>
 
               <div className="flex-1 min-h-0 relative">
-                <TabsContent value="grid" className="m-0 h-full">
-                  <WeeklyGrid tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
-                </TabsContent>
                 <TabsContent value="gantt" className="m-0 h-full">
                   <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
+                  {filteredTasks.length === 0 && (
+                    <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-50/50 rounded-2xl pointer-events-none">
+                      <Card className="p-12 text-center max-w-sm border-dashed border-2 pointer-events-auto">
+                        <FileSpreadsheet className="h-10 w-10 text-primary mx-auto mb-6" />
+                        <h3 className="text-xl font-headline font-bold mb-2">Línea sin tareas</h3>
+                        <p className="text-sm text-slate-500 mb-8">No hay tareas programadas para la línea {selectedLine}.</p>
+                        <Button onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full font-bold">Añadir Tarea</Button>
+                      </Card>
+                    </div>
+                  )}
                 </TabsContent>
-
-                {filteredTasks.length === 0 && (
-                  <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-50/50 rounded-2xl">
-                    <Card className="p-12 text-center max-w-sm border-dashed border-2">
-                      <FileSpreadsheet className="h-10 w-10 text-primary mx-auto mb-6" />
-                      <h3 className="text-xl font-headline font-bold mb-2">Línea sin tareas</h3>
-                      <p className="text-sm text-slate-500 mb-8">No hay tareas programadas para la línea {selectedLine}.</p>
-                      <Button onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full font-bold">Añadir Tarea</Button>
-                    </Card>
-                  </div>
-                )}
+                <TabsContent value="speeds" className="m-0 h-full">
+                  <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} />
+                </TabsContent>
               </div>
             </Tabs>
           </div>
@@ -292,6 +301,7 @@ export default function PlannerPage() {
         defaultLineId={selectedLine}
         weekStartDate={weekStartDate}
         allTasks={tasks}
+        lineSpeeds={lineSpeeds}
       />
       <Toaster />
     </SidebarProvider>
