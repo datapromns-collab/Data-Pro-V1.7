@@ -46,6 +46,8 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     const rowStart = setMinutes(setHours(startOfDay(day), 7), 0);
     const shiftSplit = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE);
     const rowEnd = setMinutes(setHours(startOfDay(addDays(day, 1)), 7), 0);
+    
+    // El punto visual de la etiqueta nocturna es a las 19:00
     const nightLabelThreshold = setMinutes(setHours(startOfDay(day), 19), 0);
 
     const getOverlapMins = (start1: Date, end1: Date, start2: Date, end2: Date) => {
@@ -54,19 +56,25 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       return Math.max(0, differenceInMinutes(e, s));
     };
 
+    // Cálculos basados en 18:30
     const dayMins = getOverlapMins(task.startTime, task.endTime, rowStart, shiftSplit);
     const nightMins = getOverlapMins(task.startTime, task.endTime, shiftSplit, rowEnd);
 
     const dayQty = task.loadPerHour > 0 ? (dayMins / 60) * task.loadPerHour : 0;
     const nightQty = task.loadPerHour > 0 ? (nightMins / 60) * task.loadPerHour : 0;
 
-    // Calculate percentage offset for the 19:00 night label relative to the bar
+    // Posición visual de la etiqueta nocturna relativa a la barra de la tarea
     let nightLabelOffset = null;
     if (nightQty > 0) {
       const taskDuration = differenceInMinutes(task.endTime, task.startTime);
       const minsTo19 = differenceInMinutes(nightLabelThreshold, task.startTime);
+      
       if (minsTo19 > 0 && minsTo19 < taskDuration) {
+        // La tarea empieza antes de las 19:00 y termina después
         nightLabelOffset = (minsTo19 / taskDuration) * 100;
+      } else if (minsTo19 <= 0) {
+        // La tarea ya empezó después de las 19:00, la etiqueta va al inicio
+        nightLabelOffset = 0;
       }
     }
 
@@ -160,23 +168,32 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                       backgroundColor: `${task.color}20`,
                     }}
                   >
-                    <div className="relative flex items-center w-full h-full px-2 min-w-0">
-                      <span className="text-xs font-bold whitespace-nowrap" style={{ color: task.color }}>
-                        {task.name} {dayQty > 0 ? `(D: ${Math.round(dayQty).toLocaleString()} cajas)` : ''}
-                      </span>
+                    <div className="relative w-full h-full flex items-center min-w-0">
+                      {/* Etiqueta Turno Día (D) */}
+                      {dayQty > 0 && (
+                        <div className="flex items-center gap-1.5 whitespace-nowrap px-2">
+                          <span className="text-xs font-bold" style={{ color: task.color }}>
+                            {task.name}
+                          </span>
+                          <span className="text-xs font-bold" style={{ color: task.color }}>
+                            (D: {Math.round(dayQty).toLocaleString()} cajas)
+                          </span>
+                        </div>
+                      )}
                       
-                      {nightQty > 0 && (
-                        <span 
-                          className="text-xs font-bold whitespace-nowrap" 
-                          style={{ 
-                            color: task.color,
-                            position: nightLabelOffset !== null ? 'absolute' : 'relative',
-                            left: nightLabelOffset !== null ? `${nightLabelOffset}%` : 'auto',
-                            marginLeft: nightLabelOffset !== null ? '0' : '0.5rem'
-                          }}
+                      {/* Etiqueta Turno Noche (N) - Posicionada visualmente a partir de las 19:00 */}
+                      {nightQty > 0 && nightLabelOffset !== null && (
+                        <div 
+                          className="absolute flex items-center gap-1.5 whitespace-nowrap px-2"
+                          style={{ left: `${nightLabelOffset}%` }}
                         >
-                          {nightLabelOffset === null ? '- ' : ''} (N: {Math.round(nightQty).toLocaleString()} cajas)
-                        </span>
+                          <span className="text-xs font-bold" style={{ color: task.color }}>
+                            {task.name}
+                          </span>
+                          <span className="text-xs font-bold" style={{ color: task.color }}>
+                            (N: {Math.round(nightQty).toLocaleString()} cajas)
+                          </span>
+                        </div>
                       )}
                     </div>
                   </div>
