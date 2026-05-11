@@ -180,10 +180,10 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                 <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/60 uppercase tracking-tighter">DÍA</div>
               </div>
               
-              {/* Night background area */}
+              {/* Night background area - Unified color with Day background */}
               <div 
                 className="absolute inset-y-0 z-0 transition-all duration-300" 
-                style={{ left: `${SPLIT_PCT}%`, right: 0, backgroundColor: `${NIGHT_COLOR}40` }}
+                style={{ left: `${SPLIT_PCT}%`, right: 0, backgroundColor: `${DAY_COLOR}40` }}
               >
                 <div className="absolute top-0 right-1 text-[7px] font-bold text-indigo-600/60 uppercase tracking-tighter">NOCHE</div>
               </div>
@@ -262,7 +262,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           </div>
         </div>
 
-        {/* Vertical Product Summary (Rows of 3) */}
+        {/* Vertical Product Summary (Grid of 3) */}
         {productSummary.length > 0 && (
           <div className="mt-2 border-t-2 border-slate-100 pt-3">
             <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Resumen de Producción Total</h3>
