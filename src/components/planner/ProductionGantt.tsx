@@ -40,6 +40,12 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     return Object.entries(summary).sort((a, b) => a[0].localeCompare(b[0]));
   }, [tasks]);
 
+  // Constantes de colores y cálculo de split para reutilizar
+  const DAY_COLOR = '#C0E6F5';
+  const NIGHT_COLOR = '#83CCEB';
+  const SPECIAL_COLOR = '#FFFF00';
+  const SPLIT_PCT = (11.5 / 24) * 100; // Exactamente a las 18:30 (11.5 horas desde las 07:00)
+
   const getTaskStyle = (task: ScheduledTask, day: Date) => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const rowEnd = addDays(rowStart, 1);
@@ -60,35 +66,36 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       return {
         left: `${left}%`,
         width: `${width}%`,
-        backgroundColor: '#FFFF00',
+        backgroundColor: SPECIAL_COLOR,
         borderColor: '#E6E600',
       };
     }
 
-    const splitMin = (SHIFT_SPLIT_HOUR - PRODUCTION_START_HOUR + (SHIFT_SPLIT_MINUTE / 60)) * 60;
-    const dayColor = '#C0E6F5';
-    const nightColor = '#83CCEB';
+    const splitMin = 11.5 * 60; // 18:30 es 11 horas y 30 mins después de las 07:00
 
     if (startMin >= splitMin) {
+      // Tarea inicia después de las 18:30 -> Turno Noche
       return {
         left: `${left}%`,
         width: `${width}%`,
-        backgroundColor: nightColor,
+        backgroundColor: NIGHT_COLOR,
         borderColor: '#6DB6D5',
       };
     } else if (endMin <= splitMin) {
+      // Tarea termina antes de las 18:30 -> Turno Día
       return {
         left: `${left}%`,
         width: `${width}%`,
-        backgroundColor: dayColor,
+        backgroundColor: DAY_COLOR,
         borderColor: '#AACCDA',
       };
     } else {
+      // Tarea cruza el split de las 18:30 -> Gradiente
       const splitPointInTask = ((splitMin - startMin) / (endMin - startMin)) * 100;
       return {
         left: `${left}%`,
         width: `${width}%`,
-        background: `linear-gradient(to right, ${dayColor} 0%, ${dayColor} ${splitPointInTask}%, ${nightColor} ${splitPointInTask}%, ${nightColor} 100%)`,
+        background: `linear-gradient(to right, ${DAY_COLOR} 0%, ${DAY_COLOR} ${splitPointInTask}%, ${NIGHT_COLOR} ${splitPointInTask}%, ${NIGHT_COLOR} 100%)`,
         borderColor: '#98BED0',
       };
     }
@@ -169,10 +176,17 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
             </div>
 
             <div className="flex-1 h-14 bg-slate-50/30 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
-              <div className="absolute inset-y-0 left-0 w-[47.917%] bg-white/60 border-r-2 border-primary/20 z-0">
+              {/* Indicadores de Turno en el Fondo */}
+              <div 
+                className="absolute inset-y-0 left-0 bg-white/60 border-r-2 border-primary/20 z-0" 
+                style={{ width: `${SPLIT_PCT}%` }}
+              >
                 <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/30 uppercase tracking-tighter">DÍA</div>
               </div>
-              <div className="absolute inset-y-0 left-[47.917%] right-0 bg-slate-100/40 z-0">
+              <div 
+                className="absolute inset-y-0 bg-slate-100/40 z-0" 
+                style={{ left: `${SPLIT_PCT}%`, right: 0 }}
+              >
                 <div className="absolute top-0 right-1 text-[7px] font-bold text-indigo-400/30 uppercase tracking-tighter">NOCHE</div>
               </div>
               
@@ -226,18 +240,18 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           </div>
         ))}
 
-        <div className="mt-4 flex flex-wrap items-center justify-end gap-6 text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-2">
+        <div className="mt-4 flex items-center justify-end gap-6 text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-2">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-2 rounded border border-primary/20" style={{ backgroundColor: '#C0E6F5' }}></div>
-            <span>Día</span>
+            <div className="w-4 h-2 rounded border border-primary/20" style={{ backgroundColor: DAY_COLOR }}></div>
+            <span>Día (07:00 - 18:30)</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: '#83CCEB' }}></div>
-            <span>Noche</span>
+            <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: NIGHT_COLOR }}></div>
+            <span>Noche (18:30 - 07:00)</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: '#FFFF00' }}></div>
-            <span>Especial</span>
+            <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: SPECIAL_COLOR }}></div>
+            <span>Especial (CS, CP, CIP, MTTO, PARADA)</span>
           </div>
         </div>
 
