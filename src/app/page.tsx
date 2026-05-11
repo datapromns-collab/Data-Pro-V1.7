@@ -11,15 +11,18 @@ import {
   Printer, 
   Settings, 
   FileSpreadsheet,
-  AlertTriangle
+  LayoutGrid,
+  GanttChartSquare
 } from 'lucide-react';
 import { WeeklyGrid } from '@/components/planner/WeeklyGrid';
+import { ProductionGantt } from '@/components/planner/ProductionGantt';
 import { ProductionMonitor } from '@/components/planner/ProductionMonitor';
 import { TaskDialog } from '@/components/planner/TaskDialog';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { calculateTotalPlannedMinutes } from '@/lib/planner-utils';
 import { Toaster } from '@/components/ui/toaster';
 import { useToast } from '@/hooks/use-toast';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function PlannerPage() {
   const { tasks, addTask, removeTask, clearAll, isLoaded } = usePlannerStore();
@@ -82,7 +85,7 @@ export default function PlannerPage() {
           <ProductionMonitor plannedMinutes={totalMinutes} />
         </section>
 
-        {/* Schedule Controls */}
+        {/* View Controls & Schedule Info */}
         <section className="flex flex-col md:flex-row justify-between items-center gap-4 no-print">
           <div className="flex items-center gap-4 bg-white px-4 py-2 rounded-full border shadow-sm">
             <div className="flex items-center gap-2">
@@ -95,29 +98,52 @@ export default function PlannerPage() {
             </div>
           </div>
           
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" onClick={handlePrint} title="Imprimir Plan">
-              <Printer className="h-5 w-5 text-muted-foreground" />
-            </Button>
-            <Button variant="ghost" size="icon" title="Ajustes">
-              <Settings className="h-5 w-5 text-muted-foreground" />
-            </Button>
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="icon" onClick={handlePrint} title="Imprimir Plan">
+                <Printer className="h-5 w-5 text-muted-foreground" />
+              </Button>
+              <Button variant="ghost" size="icon" title="Ajustes">
+                <Settings className="h-5 w-5 text-muted-foreground" />
+              </Button>
+            </div>
           </div>
         </section>
 
-        {/* The Grid */}
+        {/* Main Planning Area */}
         <section className="relative">
-          <WeeklyGrid 
-            tasks={tasks} 
-            onTaskClick={(task) => {
-              if (confirm(`¿Eliminar tarea "${task.name}"?`)) {
-                removeTask(task.id);
-              }
-            }}
-          />
+          <Tabs defaultValue="grid" className="w-full">
+            <div className="flex justify-between items-center mb-4 no-print">
+              <TabsList className="bg-white border p-1 rounded-lg">
+                <TabsTrigger value="grid" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-white">
+                  <LayoutGrid className="h-4 w-4" />
+                  Rejilla
+                </TabsTrigger>
+                <TabsTrigger value="gantt" className="gap-2 data-[state=active]:bg-primary data-[state=active]:text-white">
+                  <GanttChartSquare className="h-4 w-4" />
+                  Gantt
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
+            <TabsContent value="grid" className="mt-0 outline-none">
+              <WeeklyGrid 
+                tasks={tasks} 
+                onTaskClick={(task) => {
+                  if (confirm(`¿Eliminar tarea "${task.name}"?`)) {
+                    removeTask(task.id);
+                  }
+                }}
+              />
+            </TabsContent>
+
+            <TabsContent value="gantt" className="mt-0 outline-none">
+              <ProductionGantt tasks={tasks} />
+            </TabsContent>
+          </Tabs>
           
           {tasks.length === 0 && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/50 backdrop-blur-[1px] rounded-xl z-20">
+            <div className="absolute inset-0 top-16 flex flex-col items-center justify-center bg-white/50 backdrop-blur-[1px] rounded-xl z-20">
               <div className="bg-white p-8 rounded-2xl shadow-xl border text-center max-w-sm">
                 <FileSpreadsheet className="h-16 w-16 text-primary/20 mx-auto mb-4" />
                 <h3 className="text-xl font-headline font-bold mb-2">Plan Vacío</h3>
