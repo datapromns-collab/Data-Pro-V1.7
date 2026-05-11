@@ -32,7 +32,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         }
         summary[task.name].qty += task.quantity;
         
-        // Calcular UBB: Tanques * Factor UBB del producto
         const factor = UBB_FACTORS[task.name] || 0;
         const taskTanks = task.tanks || 0;
         summary[task.name].ubb += taskTanks * factor;
@@ -100,7 +99,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     const shiftSplit = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE);
     const rowEnd = setMinutes(setHours(startOfDay(addDays(day, 1)), 7), 0);
     
-    // Umbral de etiqueta nocturna a las 21:00 para máxima separación
     const nightLabelThreshold = setMinutes(setHours(startOfDay(day), 21), 0); 
 
     const getOverlapMins = (start1: Date, end1: Date, start2: Date, end2: Date) => {
@@ -223,7 +221,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           </div>
         ))}
 
-        {/* Leyenda de Colores */}
         <div className="mt-4 flex flex-wrap items-center justify-end gap-6 text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-2">
           <div className="flex items-center gap-2">
             <div className="w-4 h-2 rounded border border-primary/20" style={{ backgroundColor: '#C0E6F5' }}></div>
@@ -239,15 +236,14 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           </div>
         </div>
 
-        {/* Resumen de Totales Consolidados */}
         {productSummary.length > 0 && (
           <div className="mt-2 border-t-2 border-slate-100 pt-3">
             <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Resumen de Producción Total</h3>
-            <div className="grid grid-cols-3 gap-x-4 gap-y-1">
+            <div className="grid grid-cols-3 gap-2">
               {productSummary.map(([name, data]) => (
-                <div key={name} className="flex items-center justify-between gap-2 py-1 px-3 bg-slate-50/50 rounded-md border border-slate-100">
-                  <span className="text-xs font-bold text-slate-700 truncate">{name}</span>
-                  <div className="flex items-center gap-2 shrink-0">
+                <div key={name} className="flex">
+                  <div className="inline-flex items-center gap-2 py-1 px-3 bg-slate-50/50 rounded-md border border-slate-100">
+                    <span className="text-xs font-bold text-slate-700">{name}</span>
                     <span className="text-xs font-bold text-primary whitespace-nowrap">
                       {Math.round(data.qty).toLocaleString()} cajas
                     </span>
