@@ -34,6 +34,17 @@ const LABELS_2LTS_DATA = [
   { code: 'EMP_0137', description: 'ETIQUETA PIÑA PARCHITA 2000ML' },
 ];
 
+const LABELS_1_5LTS_DATA = [
+  { code: 'EMP_0048', description: 'ETIQUETA JUSTY NARANJA 1.5 LITROS' },
+  { code: 'EMP_0076', description: 'ETIQUETA VITA TE LIMON 1.5 LTS' },
+  { code: 'EMP_0077', description: 'ETIQUETA VITA TE DURAZNO 1.5 LTS' },
+  { code: 'EMP_0142', description: 'ETIQUETA JUSTY DURAZNO 1.5 LITROS' },
+  { code: 'EMP_0143', description: 'ETIQUETA JUSTY MANDARINA 1.5 LITROS' },
+  { code: 'EMP_0144', description: 'ETIQUETA JUSTY SANDIA 1.5 LITROS' },
+  { code: 'EMP_0145', description: 'ETIQUETA JUSTY TAMARINDO 1.5 LITROS' },
+  { code: 'EMP_0146', description: 'ETIQUETA JUSTY LIMON 1.5 LITROS' },
+];
+
 const LABELS_1LT_DATA = [
   { code: 'EMP_0111', description: 'ETIQUETA COLA NEGRA 1000ML' },
   { code: 'EMP_0113', description: 'ETIQUETA UVA 1000ML' },
@@ -199,11 +210,42 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           </div>
         </div>
 
+        {/* Sección Etiquetas 1.5 Lts */}
+        <div className="mb-10">
+          <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
+            <div className="w-1 h-6 bg-orange-500 rounded-full"></div>
+            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">III. Sección Etiquetas - 1.5 Lts</h2>
+          </div>
+          
+          <div className="rounded-lg border border-slate-200 overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-slate-50 border-b">
+                  <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
+                  <TableHead className="font-bold text-slate-700">Descripción</TableHead>
+                  <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {LABELS_1_5LTS_DATA.map((item) => (
+                  <TableRow key={item.code} className="border-b last:border-0">
+                    <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
+                    <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
+                      _______ KG
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+
         {/* Sección Etiquetas 1 Lt */}
         <div className="mb-10">
           <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
             <div className="w-1 h-6 bg-blue-500 rounded-full"></div>
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">III. Sección Etiquetas - 1 Lt</h2>
+            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">IV. Sección Etiquetas - 1 Lt</h2>
           </div>
           
           <div className="rounded-lg border border-slate-200 overflow-hidden">
@@ -234,7 +276,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
         <div className="mb-10">
           <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
             <div className="w-1 h-6 bg-purple-500 rounded-full"></div>
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">IV. Sección Etiquetas - 0.4 Lts</h2>
+            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">V. Sección Etiquetas - 0.4 Lts</h2>
           </div>
           
           <div className="rounded-lg border border-slate-200 overflow-hidden">
@@ -295,7 +337,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
             <div className="w-1 h-6 bg-emerald-500 rounded-full"></div>
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">V. Sección Materia Prima</h2>
+            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">VI. Sección Materia Prima</h2>
           </div>
           <div className="p-8 border-2 border-dashed rounded-xl flex items-center justify-center text-slate-400 text-sm italic">
             Listado de concentrados y jarabes por planificar según tanques programados.
