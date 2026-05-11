@@ -43,6 +43,18 @@ const LABELS_1LT_DATA = [
   { code: 'EMP_0150', description: 'ETIQUETA MANZANITA 1000ML' },
 ];
 
+const LABELS_04LT_DATA = [
+  { code: 'EMP_0110', description: 'ETIQUETA COLA NEGRA 400ML' },
+  { code: 'EMP_0112', description: 'ETIQUETA UVA 400ML' },
+  { code: 'EMP_0114', description: 'ETIQUETA KOLITA 400ML' },
+  { code: 'EMP_0116', description: 'ETIQUETA FRESH 400ML' },
+  { code: 'EMP_0119', description: 'ETIQUETA MANZANA VERDE 400ML' },
+  { code: 'EMP_0151', description: 'ETIQUETA PIÑA 400ML' },
+  { code: 'EMP_0152', description: 'ETIQUETA NARANJA 400ML' },
+  { code: 'EMP_0154', description: 'ETIQUETA PIÑA PARCHITA 400ML' },
+  { code: 'EMP_0155', description: 'ETIQUETA MANZANITA 400ML' },
+];
+
 const FLAVORS_FOR_EMP0009 = [
   "GLUP UVA",
   "GLUP PIÑA",
@@ -296,10 +308,10 @@ export function RequirementSection() {
                                         {calculatedEMP0135.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
                                       </div>
                                     ) : (
-                                      <div className="flex items-center gap-2">
+                                      <div className="flex items-center gap-2 justify-end">
                                         <Input 
                                           type="number" 
-                                          className="h-8 text-right font-bold border-slate-200 focus:border-primary" 
+                                          className="h-8 text-right font-bold border-slate-200 focus:border-primary w-24" 
                                           placeholder="0" 
                                         />
                                         <span className="text-[10px] font-bold text-slate-400">UND</span>
@@ -359,6 +371,19 @@ export function RequirementSection() {
                                     ))
                                   ) : p.id === '1lt' ? (
                                     LABELS_1LT_DATA.map((item) => (
+                                      <TableRow key={item.code} className="hover:bg-slate-50/50">
+                                        <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
+                                        <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
+                                        <TableCell className="text-right">
+                                          <div className="flex items-center gap-2 justify-end">
+                                            <Input type="number" className="h-8 text-right text-xs" placeholder="0" />
+                                            <span className="text-[10px] font-bold text-slate-400">KG</span>
+                                          </div>
+                                        </TableCell>
+                                      </TableRow>
+                                    ))
+                                  ) : p.id === '0.4lts' ? (
+                                    LABELS_04LT_DATA.map((item) => (
                                       <TableRow key={item.code} className="hover:bg-slate-50/50">
                                         <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
                                         <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>

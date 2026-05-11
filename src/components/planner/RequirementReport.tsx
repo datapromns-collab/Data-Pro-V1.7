@@ -46,6 +46,18 @@ const LABELS_1LT_DATA = [
   { code: 'EMP_0150', description: 'ETIQUETA MANZANITA 1000ML' },
 ];
 
+const LABELS_04LT_DATA = [
+  { code: 'EMP_0110', description: 'ETIQUETA COLA NEGRA 400ML' },
+  { code: 'EMP_0112', description: 'ETIQUETA UVA 400ML' },
+  { code: 'EMP_0114', description: 'ETIQUETA KOLITA 400ML' },
+  { code: 'EMP_0116', description: 'ETIQUETA FRESH 400ML' },
+  { code: 'EMP_0119', description: 'ETIQUETA MANZANA VERDE 400ML' },
+  { code: 'EMP_0151', description: 'ETIQUETA PIÑA 400ML' },
+  { code: 'EMP_0152', description: 'ETIQUETA NARANJA 400ML' },
+  { code: 'EMP_0154', description: 'ETIQUETA PIÑA PARCHITA 400ML' },
+  { code: 'EMP_0155', description: 'ETIQUETA MANZANITA 400ML' },
+];
+
 export function RequirementReport({ tasks, weekStartDate }: RequirementReportProps) {
   const weekNumber = getISOWeek(weekStartDate);
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
@@ -216,6 +228,37 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
         </div>
       </div>
 
+      {/* Sección Etiquetas 0.4 Lt */}
+      <div className="mb-10">
+        <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
+          <div className="w-1 h-6 bg-purple-500 rounded-full"></div>
+          <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">IV. Sección Etiquetas - 0.4 Lts</h2>
+        </div>
+        
+        <div className="rounded-lg border border-slate-200 overflow-hidden">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-slate-50 border-b">
+                <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
+                <TableHead className="font-bold text-slate-700">Descripción</TableHead>
+                <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {LABELS_04LT_DATA.map((item) => (
+                <TableRow key={item.code} className="border-b last:border-0">
+                  <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
+                  <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
+                  <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
+                    _______ KG
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </div>
+
       {/* Otros materiales de empaque */}
       <div className="grid grid-cols-2 gap-8 mb-10">
         <div className="border rounded-lg p-4 bg-slate-50/30">
@@ -250,7 +293,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
       <div className="mb-8">
         <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
           <div className="w-1 h-6 bg-emerald-500 rounded-full"></div>
-          <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">IV. Sección Materia Prima</h2>
+          <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">V. Sección Materia Prima</h2>
         </div>
         <div className="p-8 border-2 border-dashed rounded-xl flex items-center justify-center text-slate-400 text-sm italic">
           Listado de concentrados y jarabes por planificar según tanques programados.
