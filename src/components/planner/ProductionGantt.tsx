@@ -224,7 +224,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                 <div className="text-[9px] text-muted-foreground font-medium">{day.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div>
               </div>
 
-              <div className="flex-1 h-12 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
+              <div className="flex-1 h-[60px] bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
                 {markers.map((m, idx) => (
                   <div key={idx} className={cn("absolute inset-y-0 border-l z-0 transition-opacity", m.isFullHour ? "border-slate-300/40 opacity-100" : "border-slate-200/20 opacity-50")} style={{ left: `${m.percent}%` }}></div>
                 ))}
