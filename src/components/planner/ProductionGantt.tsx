@@ -24,8 +24,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
 
   // Cálculo de porcentaje de división exacto (18:30 desde las 07:00)
-  // 18:30 - 07:00 = 11.5 horas = 690 minutos
-  // 690 / 1440 minutos totales = 47.91666666666667%
   const SPLIT_PCT = useMemo(() => {
     const totalDayMins = 24 * 60;
     const startMins = PRODUCTION_START_HOUR * 60;
@@ -83,7 +81,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     const splitMin = 11.5 * 60; // 690 minutos desde las 07:00
 
     if (startMin >= splitMin) {
-      // Inicia después o justo en 18:30
+      // Inicia después o justo en 18:30 (Todo Nocturno)
       return {
         left: `${left}%`,
         width: `${width}%`,
@@ -91,7 +89,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         borderColor: '#6DB6D5',
       };
     } else if (endMin <= splitMin) {
-      // Termina antes o justo en 18:30
+      // Termina antes o justo en 18:30 (Todo Diurno)
       return {
         left: `${left}%`,
         width: `${width}%`,
@@ -99,7 +97,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         borderColor: '#AACCDA',
       };
     } else {
-      // Tarea que cruza las 18:30
+      // Tarea que cruza las 18:30 (Degradado exacto)
       const splitPointInTask = ((splitMin - startMin) / (endMin - startMin)) * 100;
       return {
         left: `${left}%`,
@@ -115,8 +113,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     const shiftSplit = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE);
     const rowEnd = setMinutes(setHours(startOfDay(addDays(day, 1)), PRODUCTION_START_HOUR), 0);
     
-    const nightLabelThreshold = shiftSplit; 
-
     const getOverlapMins = (start1: Date, end1: Date, start2: Date, end2: Date) => {
       const s = isAfter(start1, start2) ? start1 : start2;
       const e = isBefore(end1, end2) ? end1 : end2;
@@ -132,7 +128,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     let nightLabelOffset = null;
     if (nightQty > 0) {
       const taskDurationMins = differenceInMinutes(task.endTime, task.startTime);
-      const minsToThreshold = differenceInMinutes(nightLabelThreshold, task.startTime);
+      const minsToThreshold = differenceInMinutes(shiftSplit, task.startTime);
       
       if (minsToThreshold > 0 && minsToThreshold < taskDurationMins) {
         nightLabelOffset = (minsToThreshold / taskDurationMins) * 100;
@@ -185,25 +181,18 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
             </div>
 
             <div className="flex-1 h-14 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
-              {/* Day background area */}
+              {/* Unificado: Ambos turnos con el mismo color de fondo #C0E6F5 */}
               <div 
-                className="absolute inset-y-0 left-0 z-0 transition-all duration-300" 
-                style={{ width: `${SPLIT_PCT}%`, backgroundColor: `${DAY_COLOR}25` }}
+                className="absolute inset-0 z-0" 
+                style={{ backgroundColor: `${DAY_COLOR}25` }}
               >
                 <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/60 uppercase tracking-tighter">DÍA</div>
-              </div>
-              
-              {/* Night background area - Exactamente desde 18:30 */}
-              <div 
-                className="absolute inset-y-0 z-0 transition-all duration-300" 
-                style={{ left: `${SPLIT_PCT}%`, right: 0, backgroundColor: `${NIGHT_COLOR}40` }}
-              >
-                <div className="absolute top-0 left-1 text-[7px] font-bold text-indigo-700 uppercase tracking-tighter">NOCHE</div>
+                <div className="absolute top-0 text-[7px] font-bold text-indigo-700 uppercase tracking-tighter" style={{ left: `${SPLIT_PCT}%`, marginLeft: '4px' }}>NOCHE</div>
               </div>
 
-              {/* Enhanced Shift Split Line at 18:30 */}
+              {/* Línea Divisora Resaltada a las 18:30 */}
               <div 
-                className="absolute inset-y-0 z-20 border-l-2 border-primary/90 shadow-[0_0_10px_rgba(0,0,0,0.15)]"
+                className="absolute inset-y-0 z-20 border-l-2 border-primary/90 shadow-[0_0_8px_rgba(0,0,0,0.1)]"
                 style={{ left: `${SPLIT_PCT}%` }}
               >
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-2 w-2 bg-primary rounded-full"></div>
@@ -275,7 +264,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           </div>
         </div>
 
-        {/* Vertical Product Summary (Grid of 3) */}
+        {/* Resumen de Producción */}
         {productSummary.length > 0 && (
           <div className="mt-2 border-t-2 border-slate-100 pt-3">
             <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Resumen de Producción Total</h3>
