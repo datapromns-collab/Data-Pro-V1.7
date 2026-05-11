@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo } from 'react';
@@ -128,8 +127,8 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                     }}
                   >
                     <div className="flex items-center w-full min-w-0 px-1">
-                      <span className="text-[8px] font-bold truncate leading-tight" style={{ color: task.color }}>
-                        {task.name} {task.quantity > 0 ? `- ${Math.round(task.quantity).toLocaleString()} u` : ''}
+                      <span className="text-[10px] font-bold truncate leading-tight" style={{ color: task.color }}>
+                        {task.name} {task.quantity > 0 ? `- ${Math.round(task.quantity).toLocaleString()} cajas` : ''}
                       </span>
                     </div>
                   </div>
@@ -142,11 +141,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       
       <div className="mt-6 flex flex-wrap items-center justify-end gap-6 text-[9px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-4 print:mt-4 print:pt-2">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-2.5 rounded bg-white border border-primary/20"></div>
+          <div className="width-4 h-2.5 rounded bg-white border border-primary/20"></div>
           <span>Turno Día (07:00 - 18:30)</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-2.5 rounded bg-slate-100 border border-slate-200"></div>
+          <div className="width-4 h-2.5 rounded bg-slate-100 border border-slate-200"></div>
           <span>Turno Noche (18:30 - 07:00)</span>
         </div>
       </div>

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo } from 'react';
@@ -84,14 +83,14 @@ export function WeeklyGrid({ tasks, onTaskClick, weekStartDate }: WeeklyGridProp
                               borderColor: task.color
                             }}
                           >
-                            <div className="font-headline text-[10px] font-bold truncate mb-0.5" style={{ color: task.color }}>
+                            <div className="font-headline text-[11px] font-bold truncate mb-0.5" style={{ color: task.color }}>
                               {task.name}
                             </div>
                             <div className="flex items-center justify-between">
-                              <span className="text-[9px] font-bold text-slate-600">
-                                {task.quantity > 0 ? `${task.quantity} u` : ''}
+                              <span className="text-[10px] font-bold text-slate-600">
+                                {task.quantity > 0 ? `${Math.round(task.quantity).toLocaleString()} cajas` : ''}
                               </span>
-                              <span className="text-[9px] font-medium text-slate-400">
+                              <span className="text-[10px] font-medium text-slate-400">
                                 {task.durationHours.toFixed(1)}h
                               </span>
                             </div>
