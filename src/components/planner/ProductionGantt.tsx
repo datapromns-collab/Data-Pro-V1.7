@@ -34,6 +34,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     return specials.some(s => name.startsWith(s));
   };
 
+  const totalBoxes = useMemo(() => 
+    tasks.reduce((acc, task) => acc + (task.quantity || 0), 0),
+    [tasks]
+  );
+
   const productSummary = useMemo(() => {
     const summary: Record<string, { qty: number; ubb: number }> = {};
     tasks.forEach(task => {
@@ -157,18 +162,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
             </div>
 
             <div className="flex-1 h-14 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
-              {/* Fondos de Turnos Unificados al mismo color */}
+              {/* Fondo Uniforme solicitado: #C0E6F5 */}
               <div 
                 className="absolute inset-y-0 left-0 z-0" 
-                style={{ width: `${SPLIT_PCT}%`, backgroundColor: `${UNIFIED_SHIFT_COLOR}20` }}
+                style={{ width: `100%`, backgroundColor: `#C0E6F520` }}
               >
-                <div className="absolute top-0 left-1 text-[7px] font-bold text-slate-400 uppercase tracking-tighter">TURNO DÍA</div>
-              </div>
-              <div 
-                className="absolute inset-y-0 z-0" 
-                style={{ left: `${SPLIT_PCT}%`, right: 0, backgroundColor: `${UNIFIED_SHIFT_COLOR}20` }}
-              >
-                <div className="absolute top-0 left-1 text-[7px] font-bold text-slate-400 uppercase tracking-tighter">TURNO NOCHE (18:30)</div>
               </div>
 
               {/* Línea Divisora Resaltada a las 18:30 */}
@@ -230,14 +228,19 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         ))}
 
         {/* Legend */}
-        <div className="mt-4 flex items-center justify-end gap-6 text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-2">
+        <div className="mt-4 flex items-center justify-between text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-2">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: UNIFIED_SHIFT_COLOR }}></div>
-            <span>Producción General</span>
+            <span className="text-primary font-black">CAJAS TOTALES: {Math.round(totalBoxes).toLocaleString()}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: SPECIAL_COLOR }}></div>
-            <span>Especial (CS, CP, CIP, MTTO, PARADA)</span>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: UNIFIED_SHIFT_COLOR }}></div>
+              <span>Producción General</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: SPECIAL_COLOR }}></div>
+              <span>Especial (CS, CP, CIP, MTTO, PARADA)</span>
+            </div>
           </div>
         </div>
 
