@@ -16,7 +16,7 @@ interface ProductionGanttProps {
 const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
 // Colores unificados
-const UNIFIED_SHIFT_COLOR = '#83CCEB';
+const PRODUCTION_COLOR = '#83CCEB';
 const SPECIAL_COLOR = '#FFFF00'; // S.A.M.I y especiales
 const AUTO_CP_COLOR = '#FFC000'; // CP Automático al final
 
@@ -87,7 +87,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     return {
       left: `${left}%`,
       width: `${width}%`,
-      backgroundColor: isSpecial ? SPECIAL_COLOR : UNIFIED_SHIFT_COLOR,
+      backgroundColor: isSpecial ? SPECIAL_COLOR : PRODUCTION_COLOR,
       borderColor: isSpecial ? '#E6E600' : '#6DB6D5',
     };
   };
@@ -105,7 +105,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     const totalTaskDuration = differenceInMinutes(task.endTime, task.startTime);
     if (totalTaskDuration <= 0) return null;
 
-    // Day portion
     let dayLabel = null;
     if (currentStart < splitTime) {
       const dEnd = currentEnd < splitTime ? currentEnd : splitTime;
@@ -116,7 +115,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       dayLabel = { qty: dQty, left, width };
     }
 
-    // Night portion
     let nightLabel = null;
     if (currentEnd > splitTime) {
       const nStart = currentStart > splitTime ? currentStart : splitTime;
@@ -227,24 +225,20 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                 <div className="text-[9px] text-muted-foreground font-medium">{day.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div>
               </div>
 
-              <div className="flex-1 h-14 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
-                {/* Fondo turno noche suave */}
-                <div 
-                  className="absolute inset-y-0 z-0 bg-[#83CCEB10]"
-                  style={{ left: `${SPLIT_PCT}%`, right: 0 }}
-                ></div>
-
-                {/* Línea divisoria a las 19:00 */}
-                <div 
-                  className="absolute inset-y-0 z-30 border-l-2 border-primary/90 shadow-[0_0_8px_rgba(0,0,0,0.15)]"
-                  style={{ left: `${SPLIT_PCT}%` }}
-                >
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-2 w-2 bg-primary rounded-full"></div>
-                </div>
-                
+              <div className="flex-1 h-16 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
                 {markers.map((m, idx) => (
                   <div key={idx} className={cn("absolute inset-y-0 border-l z-0 transition-opacity", m.isFullHour ? "border-slate-300/40 opacity-100" : "border-slate-200/20 opacity-50")} style={{ left: `${m.percent}%` }}></div>
                 ))}
+
+                {/* Línea divisoria de turno a las 18:30 */}
+                <div 
+                  className="absolute inset-y-0 z-30 border-l-2 border-primary shadow-[0_0_8px_rgba(0,0,0,0.1)]"
+                  style={{ left: `${SPLIT_PCT}%` }}
+                >
+                  <div className="absolute top-0 left-1/2 -translate-x-1/2 bg-primary text-white text-[7px] px-1 font-bold rounded-b">
+                    18:30
+                  </div>
+                </div>
 
                 {gaps.map((gap, gIdx) => {
                   const style = getBarStyle(gap.start, gap.end, day, true);
@@ -298,7 +292,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                               width: `${(shifts.dayLabel.width / parseFloat(style.width)) * 100}%`
                             }}
                           >
-                            <span className="text-[7px] font-bold text-slate-500 uppercase leading-none mb-1 opacity-70">DIA</span>
+                            <span className="text-[7px] font-bold text-slate-500 uppercase leading-none mb-1 opacity-80">DIA</span>
                             <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
                               <span className="font-bold text-slate-800 text-[10px] leading-tight truncate">
                                 {task.name}
@@ -315,19 +309,19 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                         {/* Label NOCHE */}
                         {shifts?.nightLabel && (
                           <div 
-                            className="absolute inset-y-0 flex flex-col justify-start p-1 overflow-hidden"
+                            className="absolute inset-y-0 flex flex-col justify-start p-1 overflow-hidden border-l border-white/20"
                             style={{ 
                               left: `${((shifts.nightLabel.left - parseFloat(style.left)) / parseFloat(style.width)) * 100}%`,
                               width: `${(shifts.nightLabel.width / parseFloat(style.width)) * 100}%`
                             }}
                           >
-                            <span className="text-[7px] font-bold text-slate-600 uppercase leading-none mb-1 opacity-70">NOCHE</span>
+                            <span className="text-[7px] font-bold text-slate-700 uppercase leading-none mb-1 opacity-80">NOCHE</span>
                             <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
-                              <span className="font-bold text-slate-800 text-[10px] leading-tight truncate">
+                              <span className="font-bold text-slate-900 text-[10px] leading-tight truncate">
                                 {task.name}
                               </span>
                               {!isSpecialTask(task.name) && (
-                                <span className="font-bold text-slate-900 text-[10px] leading-tight shrink-0">
+                                <span className="font-bold text-slate-950 text-[10px] leading-tight shrink-0">
                                   {Math.round(shifts.nightLabel.qty).toLocaleString()} cajas
                                 </span>
                               )}
@@ -335,7 +329,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                           </div>
                         )}
 
-                        {/* Fallback para tareas muy cortas o especiales que no entran en el cálculo de shift labels */}
+                        {/* Fallback */}
                         {(!shifts?.dayLabel && !shifts?.nightLabel) && (
                           <div className="flex items-center h-full px-2">
                              <span className="font-bold text-slate-800 text-[10px] truncate">{task.name}</span>
@@ -356,7 +350,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           </div>
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
-              <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: UNIFIED_SHIFT_COLOR }}></div>
+              <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: PRODUCTION_COLOR }}></div>
               <span>Producción</span>
             </div>
             <div className="flex items-center gap-2">

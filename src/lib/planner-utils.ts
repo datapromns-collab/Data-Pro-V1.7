@@ -4,8 +4,8 @@ import { es } from 'date-fns/locale';
 import { ScheduledTask } from './types';
 
 export const PRODUCTION_START_HOUR = 7;
-export const SHIFT_SPLIT_HOUR = 19;
-export const SHIFT_SPLIT_MINUTE = 0;
+export const SHIFT_SPLIT_HOUR = 18;
+export const SHIFT_SPLIT_MINUTE = 30;
 export const PRODUCTION_END_SUN_HOUR = 18;
 export const PRODUCTION_END_SUN_MINUTE = 30;
 
@@ -63,8 +63,6 @@ export const isDayShift = (date: Date) => {
 };
 
 export const getWeeklyLimitMinutes = () => {
-  // De Lunes 07:00 a Domingo 18:30 son 6 días completos (24h) + 11.5h el domingo.
-  // Pero el sistema usa 24h para cada fila. El límite real de visualización es 155.5h.
   return (24 * 6 + 11.5) * 60;
 };
 
