@@ -350,7 +350,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: AUTO_CP_COLOR }}></div>
-              <span>CP Automático</span>
+              <span>CULMINACION DE PRODUCCION</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: SPECIAL_COLOR }}></div>
