@@ -65,7 +65,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     <div className="w-full bg-white rounded-xl shadow-sm border border-border overflow-hidden p-4 lg:p-6 print:p-0 print:border-none print:shadow-none">
       <div className="flex flex-col gap-4 print:gap-3 min-w-[850px]">
         <div className="flex border-b pb-2">
-          <div className="w-16 shrink-0 font-headline text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Día / Horario</div>
+          <div className="w-14 shrink-0 font-headline text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Día / Horario</div>
           <div className="flex-1 relative h-5">
             {markers.map((marker, idx) => (
               marker.label && (
@@ -83,13 +83,12 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
         {weekDays.map((day, dIdx) => (
           <div key={dIdx} className="flex items-center group">
-            <div className="w-16 shrink-0 pr-2">
+            <div className="w-14 shrink-0 pr-2">
               <div className="font-headline text-xs font-bold text-slate-900 group-hover:text-primary transition-colors">{DAYS[dIdx]}</div>
               <div className="text-[9px] text-muted-foreground font-medium">{day.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div>
             </div>
 
             <div className="flex-1 h-16 print:h-14 bg-slate-50/30 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
-              {/* División de Turnos: Día (7:00 - 18:30) y Noche (18:30 - 7:00) */}
               <div 
                 className="absolute inset-y-0 left-0 w-[47.91%] bg-white/60 border-r-2 border-primary/20 z-0" 
                 title="Turno Día"
