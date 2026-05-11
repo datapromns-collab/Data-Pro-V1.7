@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Clock } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
 import { getWeekDays, PRODUCT_FACTORS, formatTime } from '@/lib/planner-utils';
 import { useToast } from '@/hooks/use-toast';
@@ -17,7 +17,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { setHours, setMinutes, isBefore, isAfter } from 'date-fns';
+import { setHours, setMinutes, isBefore, isAfter, format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 const PRODUCT_LIST = [
   "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
@@ -56,6 +57,16 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
 
   const { toast } = useToast();
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
+  
+  const nextAvailableTime = useMemo(() => {
+    const lineTasks = allTasks.filter(t => t.lineId === lineId);
+    if (lineTasks.length === 0) {
+      return setMinutes(setHours(weekDays[0], 7), 0);
+    }
+    const latestTask = [...lineTasks].sort((a, b) => b.endTime.getTime() - a.endTime.getTime())[0];
+    return latestTask.endTime;
+  }, [allTasks, lineId, weekDays]);
+
   const isSpecialTask = name === 'CS' || name === 'CIP' || name === 'CP' || name === 'MTTO PROGRAMADO' || name === 'PARADA PROGRAMADA';
 
   useEffect(() => {
@@ -73,7 +84,7 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
       const dayIdx = weekDays.findIndex(d => d.getDate() === initialTask.startTime.getDate() && d.getMonth() === initialTask.startTime.getMonth());
       setSelectedDayIdx(dayIdx !== -1 ? dayIdx.toString() : '0');
       setSelectedTime(formatTime(initialTask.startTime));
-    } else {
+    } else if (isOpen) {
       setName('');
       setLineId(defaultLineId);
       setCipSubOption('');
@@ -82,10 +93,16 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
       setLoadPerHour(0);
       setQuantity(0);
       setDuration(0);
-      setSelectedDayIdx('0');
-      setSelectedTime('07:00');
+      
+      // Auto-sugerir próxima disponibilidad
+      const dayIdx = weekDays.findIndex(d => 
+        d.getDate() === nextAvailableTime.getDate() && 
+        d.getMonth() === nextAvailableTime.getMonth()
+      );
+      setSelectedDayIdx(dayIdx !== -1 ? dayIdx.toString() : '0');
+      setSelectedTime(formatTime(nextAvailableTime));
     }
-  }, [initialTask, isOpen, defaultLineId, weekDays]);
+  }, [initialTask, isOpen, defaultLineId, weekDays, nextAvailableTime]);
 
   useEffect(() => {
     if (!isSpecialTask && name && presentation && tanks > 0) {
@@ -102,12 +119,10 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
     } else if (name === 'MTTO PROGRAMADO') {
       setDuration(11.5);
     } else if (name === 'PARADA PROGRAMADA') {
-      // Don't auto-calculate if it's already set (e.g. from initialTask or manual edit)
       if (!initialTask && duration === 0) setDuration(1);
     } else if (loadPerHour > 0 && quantity > 0) {
       setDuration(quantity / loadPerHour);
     } else {
-      // Reset only if it's a production task with missing values
       if (!isSpecialTask) setDuration(0);
     }
   }, [name, loadPerHour, quantity, isSpecialTask, initialTask]);
@@ -122,15 +137,9 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
     const startTime = setMinutes(setHours(day, hours), minutes);
     const endTime = new Date(startTime.getTime() + duration * 60 * 60 * 1000);
 
-    // Validación de solapamiento
     const conflict = allTasks.find(existingTask => {
-      // Ignorar la propia tarea si estamos editando
       if (initialTask && existingTask.id === initialTask.id) return false;
-      
-      // Solo validar conflictos en la misma línea
       if (existingTask.lineId !== lineId) return false;
-
-      // Condición de solapamiento: (A_inicio < B_fin) AND (A_fin > B_inicio)
       return isBefore(startTime, existingTask.endTime) && isAfter(endTime, existingTask.startTime);
     });
 
@@ -168,6 +177,16 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
           <DialogDescription>Configura la producción y programación para la semana elegida.</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
+          <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-3">
+            <Clock className="h-5 w-5 text-slate-400" />
+            <div>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Siguiente disponibilidad línea {lineId}</p>
+              <p className="text-xs font-bold text-slate-700">
+                {format(nextAvailableTime, "EEEE dd 'a las' HH:mm", { locale: es })}
+              </p>
+            </div>
+          </div>
+
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
               <Label>Línea</Label>

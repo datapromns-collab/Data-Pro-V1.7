@@ -12,14 +12,15 @@ import {
   ChevronRight,
   FileSpreadsheet,
   FileText,
-  Hash
+  Hash,
+  Clock
 } from 'lucide-react';
 import { WeeklyGrid } from '@/components/planner/WeeklyGrid';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
 import { ProductionMonitor } from '@/components/planner/ProductionMonitor';
 import { TaskDialog } from '@/components/planner/TaskDialog';
 import { usePlannerStore } from '@/hooks/use-planner-store';
-import { calculateTotalPlannedMinutes } from '@/lib/planner-utils';
+import { calculateTotalPlannedMinutes, formatTime } from '@/lib/planner-utils';
 import { Toaster } from '@/components/ui/toaster';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SidebarProvider, Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
@@ -31,7 +32,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { Badge } from '@/components/ui/badge';
 import { ScheduledTask } from '@/lib/types';
-import { format, getISOWeek } from 'date-fns';
+import { format, getISOWeek, setHours, setMinutes } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7"];
@@ -50,6 +51,15 @@ export default function PlannerPage() {
   );
 
   const totalMinutes = calculateTotalPlannedMinutes(filteredTasks);
+
+  const nextAvailable = useMemo(() => {
+    const lineTasks = tasks.filter(t => t.lineId === selectedLine);
+    if (lineTasks.length === 0) {
+      return setMinutes(setHours(weekStartDate, 7), 0);
+    }
+    const latestTask = [...lineTasks].sort((a, b) => b.endTime.getTime() - a.endTime.getTime())[0];
+    return latestTask.endTime;
+  }, [tasks, selectedLine, weekStartDate]);
 
   const handlePrint = () => window.print();
 
@@ -149,8 +159,18 @@ export default function PlannerPage() {
 
               <section>
                 <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Capacidad Línea {selectedLine}</p>
-                <div className="px-2">
+                <div className="px-2 space-y-4">
                   <ProductionMonitor plannedMinutes={totalMinutes} variant="compact" />
+                  
+                  <div className="p-3 bg-primary/5 rounded-xl border border-primary/10">
+                    <div className="flex items-center gap-2 mb-1">
+                      <Clock className="h-3.5 w-3.5 text-primary" />
+                      <span className="text-[10px] font-bold text-primary uppercase">Siguiente Disponibilidad</span>
+                    </div>
+                    <div className="text-xs font-bold text-slate-700">
+                      {format(nextAvailable, "EEEE dd 'a las' HH:mm", { locale: es })}
+                    </div>
+                  </div>
                 </div>
               </section>
 
