@@ -63,7 +63,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
   return (
     <div className="w-full bg-white rounded-xl shadow-sm border border-border overflow-hidden p-4 lg:p-6 print:p-0 print:border-none print:shadow-none">
-      <div className="flex flex-col gap-4 print:gap-3 min-w-[1050px]">
+      <div className="flex flex-col gap-4 print:gap-3 min-w-[850px]">
         <div className="flex border-b pb-2">
           <div className="w-16 shrink-0 font-headline text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Día / Horario</div>
           <div className="flex-1 relative h-5">
@@ -71,7 +71,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
               marker.label && (
                 <div 
                   key={idx} 
-                  className="absolute text-[9px] font-mono font-bold text-slate-400 transform -translate-x-1/2"
+                  className="absolute text-[8px] font-mono font-bold text-slate-400 transform -translate-x-1/2"
                   style={{ left: `${marker.percent}%` }}
                 >
                   {marker.label}
@@ -122,18 +122,18 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   <div
                     key={task.id}
                     onClick={() => onTaskClick?.(task)}
-                    className="absolute inset-y-3 rounded-md border-l-4 shadow-sm z-10 p-1.5 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
+                    className="absolute inset-y-3 rounded-md border-l-4 shadow-sm z-10 p-1 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
                     style={{
                       ...style,
                       backgroundColor: `${task.color}20`,
                     }}
                   >
                     <div className="flex flex-col min-w-0">
-                      <span className="text-[9px] font-bold truncate leading-tight mb-0.5" style={{ color: task.color }}>
+                      <span className="text-[8px] font-bold truncate leading-tight mb-0.5" style={{ color: task.color }}>
                         {task.name}
                       </span>
-                      <span className="text-[8px] text-slate-500 font-bold truncate leading-tight uppercase tracking-tighter">
-                        {formatTime(task.startTime)} - {formatTime(task.endTime)}
+                      <span className="text-[7px] text-slate-500 font-bold truncate leading-tight uppercase tracking-tighter">
+                        {formatTime(task.startTime)}
                       </span>
                     </div>
                   </div>
