@@ -193,7 +193,7 @@ export default function PlannerPage() {
       case 'requirement':
         return {
           title: "Requerimiento de Materiales",
-          subtitle: "Gestión de insumos y materiales de empaque."
+          subtitle: "Gestión de insumos y materiales."
         };
       default:
         return {
@@ -349,7 +349,7 @@ export default function PlannerPage() {
                     </Button>
                   )}
                   <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
-                    <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Gantt</TabsTrigger>
+                    <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Programacion</TabsTrigger>
                     <TabsTrigger value="speeds" className="gap-2 px-4 font-bold"><Gauge className="h-4 w-4" /> Velocidades</TabsTrigger>
                     <TabsTrigger value="calculator" className="gap-2 px-4 font-bold"><CalculatorIcon className="h-4 w-4" /> Calculadora</TabsTrigger>
                     <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Requerimiento</TabsTrigger>
