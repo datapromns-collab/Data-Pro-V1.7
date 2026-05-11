@@ -195,9 +195,9 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   >
                     <div className="relative w-full h-full flex items-center min-w-0">
                       {isSpecial ? (
-                        <div className="px-2">
+                        <div className="px-1 flex items-center h-full">
                           <span className={cn(
-                            "font-bold text-slate-900",
+                            "font-bold text-slate-900 leading-none",
                             ['CS', 'CP', 'CIP'].some(s => task.name.startsWith(s)) ? "text-[9px]" : "text-xs"
                           )}>
                             {task.name}
