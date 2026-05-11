@@ -15,7 +15,7 @@ interface ProductionGanttProps {
 
 const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
-// Colores constantes
+// Colores constantes ajustados
 const DAY_COLOR = '#C0E6F5';
 const NIGHT_COLOR = '#83CCEB';
 const SPECIAL_COLOR = '#FFFF00';
@@ -23,12 +23,11 @@ const SPECIAL_COLOR = '#FFFF00';
 export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: ProductionGanttProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
 
-  // Cálculo de porcentaje de división exacto (18:30 desde las 07:00)
+  // Cálculo de porcentaje de división exacto (18:30 desde las 07:00 es 11.5 horas)
   const SPLIT_PCT = useMemo(() => {
     const totalDayMins = 24 * 60;
-    const startMins = PRODUCTION_START_HOUR * 60;
-    const splitMins = (SHIFT_SPLIT_HOUR * 60) + SHIFT_SPLIT_MINUTE;
-    return ((splitMins - startMins) / totalDayMins) * 100;
+    const splitMinsAfterStart = 11.5 * 60; // 18:30 - 07:00
+    return (splitMinsAfterStart / totalDayMins) * 100;
   }, []);
 
   const isSpecialTask = (name: string) => {
@@ -78,10 +77,10 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       };
     }
 
-    const splitMin = 11.5 * 60; // 690 minutos desde las 07:00
+    const splitMin = 11.5 * 60; // 18:30
 
     if (startMin >= splitMin) {
-      // Inicia después o justo en 18:30 (Todo Nocturno)
+      // Todo Nocturno
       return {
         left: `${left}%`,
         width: `${width}%`,
@@ -89,7 +88,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         borderColor: '#6DB6D5',
       };
     } else if (endMin <= splitMin) {
-      // Termina antes o justo en 18:30 (Todo Diurno)
+      // Todo Diurno
       return {
         left: `${left}%`,
         width: `${width}%`,
@@ -97,7 +96,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         borderColor: '#AACCDA',
       };
     } else {
-      // Tarea que cruza las 18:30 (Degradado exacto)
+      // Cruza 18:30
       const splitPointInTask = ((splitMin - startMin) / (endMin - startMin)) * 100;
       return {
         left: `${left}%`,
@@ -181,18 +180,23 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
             </div>
 
             <div className="flex-1 h-14 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
-              {/* Unificado: Ambos turnos con el mismo color de fondo #C0E6F5 */}
+              {/* Fondos de Turnos Diferenciados */}
               <div 
-                className="absolute inset-0 z-0" 
-                style={{ backgroundColor: `${DAY_COLOR}25` }}
+                className="absolute inset-y-0 left-0 z-0" 
+                style={{ width: `${SPLIT_PCT}%`, backgroundColor: `${DAY_COLOR}30` }}
               >
                 <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/60 uppercase tracking-tighter">DÍA</div>
-                <div className="absolute top-0 text-[7px] font-bold text-indigo-700 uppercase tracking-tighter" style={{ left: `${SPLIT_PCT}%`, marginLeft: '4px' }}>NOCHE</div>
+              </div>
+              <div 
+                className="absolute inset-y-0 z-0" 
+                style={{ left: `${SPLIT_PCT}%`, right: 0, backgroundColor: `${NIGHT_COLOR}30` }}
+              >
+                <div className="absolute top-0 left-1 text-[7px] font-bold text-indigo-700 uppercase tracking-tighter">NOCHE (18:30)</div>
               </div>
 
               {/* Línea Divisora Resaltada a las 18:30 */}
               <div 
-                className="absolute inset-y-0 z-20 border-l-2 border-primary/90 shadow-[0_0_8px_rgba(0,0,0,0.1)]"
+                className="absolute inset-y-0 z-20 border-l-2 border-primary/90 shadow-[0_0_8px_rgba(0,0,0,0.15)]"
                 style={{ left: `${SPLIT_PCT}%` }}
               >
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-2 w-2 bg-primary rounded-full"></div>
