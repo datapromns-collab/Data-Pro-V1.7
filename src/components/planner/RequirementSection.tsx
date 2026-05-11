@@ -61,7 +61,6 @@ export function RequirementSection() {
     { id: 'plastics', label: 'Plásticos', icon: Layers, description: 'Inventario de term encogible y plásticos de embalaje.' },
   ];
 
-  // Cálculo EMP_0009: (L7 Sabores específicos) * 12
   const calculatedEMP0009 = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
     const line7Tasks = tasks.filter(t => 
@@ -75,7 +74,6 @@ export function RequirementSection() {
     return Math.round(totalBoxes * 12);
   }, [tasks, weekStartDate]);
 
-  // Cálculo EMP_0068: (L7 Cola/Kolita + Todos L5) * 12
   const calculatedEMP0068 = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
     
@@ -98,7 +96,6 @@ export function RequirementSection() {
     return Math.round(totalBoxes * 12);
   }, [tasks, weekStartDate]);
 
-  // Cálculo EMP_0093: (L1, L2, L3, L4 Sabores específicos) * 6
   const calculatedEMP0093 = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
     const targetLines = ["1", "2", "3", "4"];
@@ -114,7 +111,6 @@ export function RequirementSection() {
     return Math.round(totalBoxes * 6);
   }, [tasks, weekStartDate]);
 
-  // Cálculo EMP_0103: (L1, L2, L3, L4 GLUP FRESH) * 6
   const calculatedEMP0103 = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
     const targetLines = ["1", "2", "3", "4"];
@@ -130,7 +126,6 @@ export function RequirementSection() {
     return Math.round(totalBoxes * 6);
   }, [tasks, weekStartDate]);
 
-  // Cálculo EMP_0120: (L7 GLUP FRESH) * 12
   const calculatedEMP0120 = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
     
@@ -145,7 +140,6 @@ export function RequirementSection() {
     return Math.round(totalBoxes * 12);
   }, [tasks, weekStartDate]);
 
-  // Cálculo EMP_0126: (L6 todos menos Fresh) * 15
   const calculatedEMP0126 = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
     
@@ -160,7 +154,6 @@ export function RequirementSection() {
     return Math.round(totalBoxes * 15);
   }, [tasks, weekStartDate]);
 
-  // Cálculo EMP_0135: (L6 GLUP FRESH) * 15
   const calculatedEMP0135 = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
     
@@ -323,7 +316,7 @@ export function RequirementSection() {
                                   <TableRow className="bg-slate-50">
                                     <TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead>
                                     <TableHead className="font-bold text-slate-600 text-xs">Sabor / Descripción</TableHead>
-                                    <TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Rollos Requeridos</TableHead>
+                                    <TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead>
                                   </TableRow>
                                 </TableHeader>
                                 <TableBody>
@@ -331,7 +324,10 @@ export function RequirementSection() {
                                     <TableCell className="font-mono text-[10px] font-bold text-slate-400">PENDIENTE</TableCell>
                                     <TableCell className="text-sm font-medium text-slate-500 italic">No hay etiquetas configuradas para {p.label}</TableCell>
                                     <TableCell className="text-right">
-                                      <Input type="number" className="h-8 text-right text-xs" placeholder="0" />
+                                      <div className="flex items-center gap-2 justify-end">
+                                        <Input type="number" className="h-8 text-right text-xs" placeholder="0" />
+                                        <span className="text-[10px] font-bold text-slate-400">KG</span>
+                                      </div>
                                     </TableCell>
                                   </TableRow>
                                 </TableBody>

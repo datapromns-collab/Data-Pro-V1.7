@@ -153,7 +153,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
               <span className="w-20 border-b border-slate-300"></span>
             </div>
             <div className="flex justify-between border-b border-dashed pb-2">
-              <span className="text-xs font-medium text-slate-600">Etiquetas Rollos</span>
+              <span className="text-xs font-medium text-slate-600">Etiquetas (KG)</span>
               <span className="w-20 border-b border-slate-300"></span>
             </div>
           </div>
