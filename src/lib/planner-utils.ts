@@ -4,8 +4,8 @@ import { es } from 'date-fns/locale';
 import { ScheduledTask } from './types';
 
 export const PRODUCTION_START_HOUR = 7;
-export const SHIFT_SPLIT_HOUR = 19;
-export const SHIFT_SPLIT_MINUTE = 0;
+export const SHIFT_SPLIT_HOUR = 18;
+export const SHIFT_SPLIT_MINUTE = 30;
 export const PRODUCTION_END_SUN_HOUR = 18;
 export const PRODUCTION_END_SUN_MINUTE = 30;
 
@@ -39,7 +39,7 @@ export const isDayShift = (date: Date) => {
   const minute = date.getMinutes();
   
   const timeVal = hour + minute / 60;
-  return timeVal >= 7 && timeVal < 19;
+  return timeVal >= 7 && timeVal < 18.5;
 };
 
 export const getWeeklyLimitMinutes = () => {

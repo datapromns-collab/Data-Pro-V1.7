@@ -42,12 +42,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     };
   };
 
-  const calculateShiftLabel = (task: ScheduledTask, day: Date) => {
-    if (task.loadPerHour <= 0) return task.name;
-
+  const getShiftData = (task: ScheduledTask, day: Date) => {
     const rowStart = setMinutes(setHours(startOfDay(day), 7), 0);
     const shiftSplit = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE);
     const rowEnd = setMinutes(setHours(startOfDay(addDays(day, 1)), 7), 0);
+    const nightLabelThreshold = setMinutes(setHours(startOfDay(day), 19), 0);
 
     const getOverlapMins = (start1: Date, end1: Date, start2: Date, end2: Date) => {
       const s = isAfter(start1, start2) ? start1 : start2;
@@ -58,19 +57,20 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     const dayMins = getOverlapMins(task.startTime, task.endTime, rowStart, shiftSplit);
     const nightMins = getOverlapMins(task.startTime, task.endTime, shiftSplit, rowEnd);
 
-    const dayQty = (dayMins / 60) * task.loadPerHour;
-    const nightQty = (nightMins / 60) * task.loadPerHour;
+    const dayQty = task.loadPerHour > 0 ? (dayMins / 60) * task.loadPerHour : 0;
+    const nightQty = task.loadPerHour > 0 ? (nightMins / 60) * task.loadPerHour : 0;
 
-    let label = task.name;
-    if (dayQty > 0 && nightQty > 0) {
-      label += ` (D: ${Math.round(dayQty).toLocaleString()} - N: ${Math.round(nightQty).toLocaleString()} cajas)`;
-    } else if (dayQty > 0) {
-      label += ` (${Math.round(dayQty).toLocaleString()} cajas)`;
-    } else if (nightQty > 0) {
-      label += ` (${Math.round(nightQty).toLocaleString()} cajas)`;
+    // Calculate percentage offset for the 19:00 night label relative to the bar
+    let nightLabelOffset = null;
+    if (nightQty > 0) {
+      const taskDuration = differenceInMinutes(task.endTime, task.startTime);
+      const minsTo19 = differenceInMinutes(nightLabelThreshold, task.startTime);
+      if (minsTo19 > 0 && minsTo19 < taskDuration) {
+        nightLabelOffset = (minsTo19 / taskDuration) * 100;
+      }
     }
 
-    return label;
+    return { dayQty, nightQty, nightLabelOffset };
   };
 
   const markers = useMemo(() => {
@@ -121,13 +121,13 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
             <div className="flex-1 h-16 print:h-14 bg-slate-50/30 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
               <div 
-                className="absolute inset-y-0 left-0 w-[50%] bg-white/60 border-r-2 border-primary/20 z-0" 
+                className="absolute inset-y-0 left-0 w-[47.9%] bg-white/60 border-r-2 border-primary/20 z-0" 
                 title="Turno Día"
               >
                 <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/30 uppercase tracking-tighter">DÍA</div>
               </div>
               <div 
-                className="absolute inset-y-0 left-[50%] right-0 bg-slate-100/40 z-0" 
+                className="absolute inset-y-0 left-[47.9%] right-0 bg-slate-100/40 z-0" 
                 title="Turno Noche"
               >
                 <div className="absolute top-0 right-1 text-[7px] font-bold text-indigo-400/30 uppercase tracking-tighter">NOCHE</div>
@@ -148,6 +148,8 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                 const style = getTaskStyle(task, day);
                 if (!style) return null;
 
+                const { dayQty, nightQty, nightLabelOffset } = getShiftData(task, day);
+
                 return (
                   <div
                     key={task.id}
@@ -158,10 +160,24 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                       backgroundColor: `${task.color}20`,
                     }}
                   >
-                    <div className="flex items-center w-full min-w-0 px-2">
-                      <span className="text-xs font-bold truncate leading-tight" style={{ color: task.color }}>
-                        {calculateShiftLabel(task, day)}
+                    <div className="relative flex items-center w-full h-full px-2 min-w-0">
+                      <span className="text-xs font-bold whitespace-nowrap" style={{ color: task.color }}>
+                        {task.name} {dayQty > 0 ? `(D: ${Math.round(dayQty).toLocaleString()} cajas)` : ''}
                       </span>
+                      
+                      {nightQty > 0 && (
+                        <span 
+                          className="text-xs font-bold whitespace-nowrap" 
+                          style={{ 
+                            color: task.color,
+                            position: nightLabelOffset !== null ? 'absolute' : 'relative',
+                            left: nightLabelOffset !== null ? `${nightLabelOffset}%` : 'auto',
+                            marginLeft: nightLabelOffset !== null ? '0' : '0.5rem'
+                          }}
+                        >
+                          {nightLabelOffset === null ? '- ' : ''} (N: {Math.round(nightQty).toLocaleString()} cajas)
+                        </span>
+                      )}
                     </div>
                   </div>
                 );
@@ -174,11 +190,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       <div className="mt-6 flex flex-wrap items-center justify-end gap-6 text-[9px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-4 print:mt-4 print:pt-2">
         <div className="flex items-center gap-2">
           <div className="w-4 h-2.5 rounded bg-white border border-primary/20"></div>
-          <span>Turno Día (07:00 - 19:00)</span>
+          <span>Turno Día (07:00 - 18:30)</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-4 h-2.5 rounded bg-slate-100 border border-slate-200"></div>
-          <span>Turno Noche (19:00 - 07:00)</span>
+          <span>Turno Noche (18:30 - 07:00)</span>
         </div>
       </div>
     </div>
