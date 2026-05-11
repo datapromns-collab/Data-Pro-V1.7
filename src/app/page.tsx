@@ -11,7 +11,8 @@ import {
   GanttChartSquare,
   ChevronRight,
   FileSpreadsheet,
-  FileText
+  FileText,
+  Hash
 } from 'lucide-react';
 import { WeeklyGrid } from '@/components/planner/WeeklyGrid';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -28,8 +29,9 @@ import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
+import { Badge } from '@/components/ui/badge';
 import { ScheduledTask } from '@/lib/types';
-import { format } from 'date-fns';
+import { format, getISOWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7"];
@@ -39,6 +41,8 @@ export default function PlannerPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
+
+  const weekNumber = getISOWeek(weekStartDate);
 
   const filteredTasks = useMemo(() => 
     tasks.filter(t => t.lineId === selectedLine),
@@ -92,13 +96,23 @@ export default function PlannerPage() {
           <SidebarContent className="px-4 py-2">
             <div className="space-y-6">
               <section>
-                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Establecer Semana</p>
-                <div className="px-2">
+                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Configuración de Semana</p>
+                <div className="px-2 space-y-3">
+                  <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100">
+                    <div className="flex items-center gap-2">
+                      <Hash className="h-4 w-4 text-primary" />
+                      <span className="text-xs font-bold text-slate-600">Semana ISO</span>
+                    </div>
+                    <Badge variant="secondary" className="font-bold text-primary bg-primary/10">
+                      {weekNumber}
+                    </Badge>
+                  </div>
+                  
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full justify-start text-left font-bold bg-slate-50 border-slate-200 hover:border-primary/50 transition-colors">
+                      <Button variant="outline" className="w-full justify-start text-left font-bold bg-white border-slate-200 hover:border-primary/50 transition-colors shadow-sm">
                         <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
-                        {format(weekStartDate, 'dd MMM yyyy', { locale: es })}
+                        {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
@@ -111,8 +125,8 @@ export default function PlannerPage() {
                       />
                     </PopoverContent>
                   </Popover>
-                  <p className="mt-2 px-1 text-[9px] text-slate-400 font-medium italic">
-                    Selecciona cualquier día para iniciar esa semana.
+                  <p className="px-1 text-[9px] text-slate-400 font-medium italic">
+                    Calculado según estándar ISO 8601.
                   </p>
                 </div>
               </section>
@@ -169,7 +183,7 @@ export default function PlannerPage() {
             <div className="flex items-center gap-2 text-sm text-slate-500">
               <span>Producción</span>
               <ChevronRight className="h-4 w-4" />
-              <span>Semana {format(weekStartDate, 'dd/MM', { locale: es })}</span>
+              <span>Semana {weekNumber} ({format(weekStartDate, 'dd/MM', { locale: es })})</span>
               <ChevronRight className="h-4 w-4" />
               <span className="font-medium text-slate-900">Línea {selectedLine}</span>
             </div>
@@ -228,7 +242,7 @@ export default function PlannerPage() {
                   <div className="text-right">
                     <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">Confidencial - Uso Interno</p>
                     <p className="text-[10px] text-slate-400 font-medium">
-                      Semana del {format(weekStartDate, 'dd MMMM', { locale: es })}
+                      Semana {weekNumber} - {format(weekStartDate, 'dd MMMM yyyy', { locale: es })}
                     </p>
                     <p className="text-[10px] text-slate-300 font-medium">
                       Emitido: {new Date().toLocaleDateString('es-ES')}
