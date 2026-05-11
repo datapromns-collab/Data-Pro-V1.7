@@ -15,19 +15,18 @@ interface ProductionGanttProps {
 
 const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
-// Colores constantes ajustados
-const DAY_COLOR = '#C0E6F5';
-const NIGHT_COLOR = '#83CCEB';
+// Color uniforme para ambos turnos solicitado por el usuario
+const UNIFIED_SHIFT_COLOR = '#83CCEB';
 const SPECIAL_COLOR = '#FFFF00';
 
 export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: ProductionGanttProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
 
-  // Cálculo de porcentaje de división exacto (18:30 desde las 07:00 es 11.5 horas)
+  // Marca de las 18:30 (11.5 horas desde las 07:00)
   const SPLIT_PCT = useMemo(() => {
     const totalDayMins = 24 * 60;
-    const splitMinsAfterStart = 11.5 * 60; // 18:30 - 07:00
-    return (splitMinsAfterStart / totalDayMins) * 100;
+    const splitMinsAfterStart = 11.5 * 60; // 18:30 - 07:00 = 11.5 horas
+    return (splitMinsAfterStart / totalDayMins) * 100; // Aprox 47.917%
   }, []);
 
   const isSpecialTask = (name: string) => {
@@ -77,34 +76,12 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       };
     }
 
-    const splitMin = 11.5 * 60; // 18:30
-
-    if (startMin >= splitMin) {
-      // Todo Nocturno
-      return {
-        left: `${left}%`,
-        width: `${width}%`,
-        backgroundColor: NIGHT_COLOR,
-        borderColor: '#6DB6D5',
-      };
-    } else if (endMin <= splitMin) {
-      // Todo Diurno
-      return {
-        left: `${left}%`,
-        width: `${width}%`,
-        backgroundColor: DAY_COLOR,
-        borderColor: '#AACCDA',
-      };
-    } else {
-      // Cruza 18:30
-      const splitPointInTask = ((splitMin - startMin) / (endMin - startMin)) * 100;
-      return {
-        left: `${left}%`,
-        width: `${width}%`,
-        background: `linear-gradient(to right, ${DAY_COLOR} 0%, ${DAY_COLOR} ${splitPointInTask}%, ${NIGHT_COLOR} ${splitPointInTask}%, ${NIGHT_COLOR} 100%)`,
-        borderColor: '#98BED0',
-      };
-    }
+    return {
+      left: `${left}%`,
+      width: `${width}%`,
+      backgroundColor: UNIFIED_SHIFT_COLOR,
+      borderColor: '#6DB6D5',
+    };
   };
 
   const getShiftData = (task: ScheduledTask, day: Date) => {
@@ -180,18 +157,18 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
             </div>
 
             <div className="flex-1 h-14 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
-              {/* Fondos de Turnos Diferenciados */}
+              {/* Fondos de Turnos Unificados al mismo color */}
               <div 
                 className="absolute inset-y-0 left-0 z-0" 
-                style={{ width: `${SPLIT_PCT}%`, backgroundColor: `${DAY_COLOR}30` }}
+                style={{ width: `${SPLIT_PCT}%`, backgroundColor: `${UNIFIED_SHIFT_COLOR}20` }}
               >
-                <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/60 uppercase tracking-tighter">DÍA</div>
+                <div className="absolute top-0 left-1 text-[7px] font-bold text-slate-400 uppercase tracking-tighter">TURNO DÍA</div>
               </div>
               <div 
                 className="absolute inset-y-0 z-0" 
-                style={{ left: `${SPLIT_PCT}%`, right: 0, backgroundColor: `${NIGHT_COLOR}30` }}
+                style={{ left: `${SPLIT_PCT}%`, right: 0, backgroundColor: `${UNIFIED_SHIFT_COLOR}20` }}
               >
-                <div className="absolute top-0 left-1 text-[7px] font-bold text-indigo-700 uppercase tracking-tighter">NOCHE (18:30)</div>
+                <div className="absolute top-0 left-1 text-[7px] font-bold text-slate-400 uppercase tracking-tighter">TURNO NOCHE (18:30)</div>
               </div>
 
               {/* Línea Divisora Resaltada a las 18:30 */}
@@ -255,12 +232,8 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         {/* Legend */}
         <div className="mt-4 flex items-center justify-end gap-6 text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-2">
           <div className="flex items-center gap-2">
-            <div className="w-4 h-2 rounded border border-primary/20" style={{ backgroundColor: DAY_COLOR }}></div>
-            <span>Día (07:00 - 18:30)</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: NIGHT_COLOR }}></div>
-            <span>Noche (18:30 - 07:00)</span>
+            <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: UNIFIED_SHIFT_COLOR }}></div>
+            <span>Producción General</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: SPECIAL_COLOR }}></div>
