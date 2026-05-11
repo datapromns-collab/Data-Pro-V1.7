@@ -39,7 +39,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     [tasks]
   );
 
-  // Calcular el intervalo del CP Automático (2 horas después de la última tarea)
   const autoCPInterval = useMemo(() => {
     if (tasks.length === 0) return null;
     const latestEndTime = new Date(Math.max(...tasks.map(t => t.endTime.getTime())));
@@ -93,6 +92,46 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     };
   };
 
+  const getSplitQuantities = (task: ScheduledTask, day: Date) => {
+    if (isSpecialTask(task.name) || task.quantity <= 0) return null;
+
+    const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
+    const rowEnd = addDays(rowStart, 1);
+    const splitTime = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE);
+
+    const taskStart = task.startTime;
+    const taskEnd = task.endTime;
+
+    // Intervalo de la tarea que cae en este día específico
+    const currentStart = taskStart < rowStart ? rowStart : taskStart;
+    const currentEnd = taskEnd > rowEnd ? rowEnd : taskEnd;
+
+    if (currentStart >= currentEnd) return null;
+
+    const totalTaskDuration = differenceInMinutes(taskEnd, taskStart);
+    if (totalTaskDuration <= 0) return null;
+
+    let dayQty = 0;
+    let nightQty = 0;
+
+    // Cálculo porción diurna (antes de las 18:30)
+    if (currentStart < splitTime) {
+      const dayEnd = currentEnd < splitTime ? currentEnd : splitTime;
+      const dayDuration = differenceInMinutes(dayEnd, currentStart);
+      dayQty = (dayDuration / totalTaskDuration) * task.quantity;
+    }
+
+    // Cálculo porción nocturna (después de las 18:30)
+    if (currentEnd > splitTime) {
+      const nightStart = currentStart > splitTime ? currentStart : splitTime;
+      const nightEnd = currentEnd;
+      const nightDuration = differenceInMinutes(nightEnd, nightStart);
+      nightQty = (nightDuration / totalTaskDuration) * task.quantity;
+    }
+
+    return { dayQty, nightQty };
+  };
+
   const getDayGaps = (day: Date, dIdx: number) => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const isSunday = dIdx === 6;
@@ -100,7 +139,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       ? setMinutes(setHours(startOfDay(day), PRODUCTION_END_SUN_HOUR), PRODUCTION_END_SUN_MINUTE)
       : addDays(rowStart, 1);
 
-    // Combinar tareas reales y el intervalo de CP Automático para calcular huecos S.A.M.I
     const intervals = tasks
       .filter(t => t.startTime < rowEnd && t.endTime > rowStart)
       .map(t => ({
@@ -202,7 +240,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   <div key={idx} className={cn("absolute inset-y-0 border-l z-0 transition-opacity", m.isFullHour ? "border-slate-300/40 opacity-100" : "border-slate-200/20 opacity-50")} style={{ left: `${m.percent}%` }}></div>
                 ))}
 
-                {/* Gaps (S.A.M.I) */}
                 {gaps.map((gap, gIdx) => {
                   const style = getBarStyle(gap.start, gap.end, day, true);
                   if (!style) return null;
@@ -217,7 +254,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   );
                 })}
 
-                {/* CP Automático (Solo si hay tareas) */}
                 {autoCPInterval && (
                   (() => {
                     const style = getBarStyle(autoCPInterval.start, autoCPInterval.end, day, true);
@@ -233,10 +269,12 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   })()
                 )}
 
-                {/* Tareas */}
                 {tasks.map((task) => {
                   const style = getBarStyle(task.startTime, task.endTime, day, isSpecialTask(task.name));
                   if (!style) return null;
+                  
+                  const splitQuantities = getSplitQuantities(task, day);
+
                   return (
                     <div
                       key={task.id}
@@ -245,13 +283,28 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                       style={style}
                     >
                       <div className="relative w-full h-full flex items-center min-w-0">
-                        <div className="flex items-center gap-1.5 whitespace-nowrap px-2">
+                        <div className="flex flex-col justify-center gap-0.5 whitespace-nowrap px-2 overflow-hidden w-full">
                           <span className={cn(
-                            "font-bold text-slate-800 leading-none",
+                            "font-bold text-slate-800 leading-none truncate",
                             isSpecialTask(task.name) ? "text-[10px]" : "text-xs"
                           )}>
-                            {task.name} {!isSpecialTask(task.name) && `${Math.round(task.quantity).toLocaleString()} cajas`}
+                            {task.name}
                           </span>
+                          
+                          {splitQuantities && (
+                            <div className="flex flex-col gap-0.5">
+                              {splitQuantities.dayQty > 0 && (
+                                <span className="text-[8px] font-black text-slate-600 leading-none">
+                                  D: {Math.round(splitQuantities.dayQty).toLocaleString()}
+                                </span>
+                              )}
+                              {splitQuantities.nightQty > 0 && (
+                                <span className="text-[8px] font-black text-slate-900 leading-none">
+                                  N: {Math.round(splitQuantities.nightQty).toLocaleString()}
+                                </span>
+                              )}
+                            </div>
+                          )}
                         </div>
                       </div>
                     </div>
