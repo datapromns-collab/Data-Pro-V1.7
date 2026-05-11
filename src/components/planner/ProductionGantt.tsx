@@ -23,6 +23,16 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     return specials.some(s => name.startsWith(s));
   };
 
+  const productSummary = useMemo(() => {
+    const summary: Record<string, number> = {};
+    tasks.forEach(task => {
+      if (task.quantity > 0 && !isSpecialTask(task.name)) {
+        summary[task.name] = (summary[task.name] || 0) + task.quantity;
+      }
+    });
+    return Object.entries(summary).sort((a, b) => a[0].localeCompare(b[0]));
+  }, [tasks]);
+
   const getTaskStyle = (task: ScheduledTask, day: Date) => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const rowEnd = addDays(rowStart, 1);
@@ -48,14 +58,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       };
     }
 
-    // Lógica de degradado para productos (Día vs Noche)
-    // Punto de corte: 18:30 (11.5 horas desde las 07:00)
-    const splitMin = 11.5 * 60; // 690 minutos
+    const splitMin = 11.5 * 60; // 18:30 (11.5 horas desde las 07:00)
     const dayColor = '#C0E6F5';
     const nightColor = '#83CCEB';
 
     if (startMin >= splitMin) {
-      // Todo en la noche
       return {
         left: `${left}%`,
         width: `${width}%`,
@@ -63,7 +70,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         borderColor: '#6DB6D5',
       };
     } else if (endMin <= splitMin) {
-      // Todo en el día
       return {
         left: `${left}%`,
         width: `${width}%`,
@@ -71,7 +77,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         borderColor: '#AACCDA',
       };
     } else {
-      // Cruzado: Usamos un degradado
       const splitPointInTask = ((splitMin - startMin) / (endMin - startMin)) * 100;
       return {
         left: `${left}%`,
@@ -123,14 +128,8 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       const currentTotalMinutes = (PRODUCTION_START_HOUR * 60) + totalMinutesFromStart;
       const h = Math.floor((currentTotalMinutes / 60) % 24);
       const m = Math.floor(currentTotalMinutes % 60);
-      
       const label = m === 0 ? `${h.toString().padStart(2, '0')}:00` : '';
-      
-      slots.push({ 
-        label, 
-        percent: (i / 24) * 100, 
-        isFullHour: m === 0 
-      });
+      slots.push({ label, percent: (i / 24) * 100, isFullHour: m === 0 });
     }
     return slots;
   }, []);
@@ -163,34 +162,20 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
             </div>
 
             <div className="flex-1 h-16 print:h-14 bg-slate-50/30 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
-              <div 
-                className="absolute inset-y-0 left-0 w-[47.9%] bg-white/60 border-r-2 border-primary/20 z-0" 
-                title="Turno Día"
-              >
+              <div className="absolute inset-y-0 left-0 w-[47.9%] bg-white/60 border-r-2 border-primary/20 z-0">
                 <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/30 uppercase tracking-tighter">DÍA</div>
               </div>
-              <div 
-                className="absolute inset-y-0 left-[47.9%] right-0 bg-slate-100/40 z-0" 
-                title="Turno Noche"
-              >
+              <div className="absolute inset-y-0 left-[47.9%] right-0 bg-slate-100/40 z-0">
                 <div className="absolute top-0 right-1 text-[7px] font-bold text-indigo-400/30 uppercase tracking-tighter">NOCHE</div>
               </div>
               
               {markers.map((m, idx) => (
-                <div 
-                  key={idx} 
-                  className={cn(
-                    "absolute inset-y-0 border-l z-0 transition-opacity",
-                    m.isFullHour ? "border-slate-200 opacity-100" : "border-slate-200/40 opacity-50"
-                  )}
-                  style={{ left: `${m.percent}%` }}
-                ></div>
+                <div key={idx} className={cn("absolute inset-y-0 border-l z-0 transition-opacity", m.isFullHour ? "border-slate-200 opacity-100" : "border-slate-200/40 opacity-50")} style={{ left: `${m.percent}%` }}></div>
               ))}
 
               {tasks.map((task) => {
                 const style = getTaskStyle(task, day);
                 if (!style) return null;
-
                 const { dayQty, nightQty, nightLabelOffset } = getShiftData(task, day);
                 const isSpecial = isSpecialTask(task.name);
 
@@ -204,34 +189,21 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                     <div className="relative w-full h-full flex items-center min-w-0">
                       {isSpecial ? (
                         <div className="px-2">
-                          <span className="text-xs font-bold text-slate-900">
-                            {task.name}
-                          </span>
+                          <span className="text-xs font-bold text-slate-900">{task.name}</span>
                         </div>
                       ) : (
                         <>
                           {dayQty > 0 && (
                             <div className="flex items-center gap-1.5 whitespace-nowrap px-2">
-                              <span className="text-xs font-bold text-slate-800">
-                                {task.name}
-                              </span>
-                              <span className="text-xs font-bold text-slate-800">
-                                (D: {Math.round(dayQty).toLocaleString()} cajas)
-                              </span>
+                              <span className="text-xs font-bold text-slate-800">{task.name}</span>
+                              <span className="text-xs font-bold text-slate-800">(D: {Math.round(dayQty).toLocaleString()} cajas)</span>
                             </div>
                           )}
                           
                           {nightQty > 0 && nightLabelOffset !== null && (
-                            <div 
-                              className="absolute flex items-center gap-1.5 whitespace-nowrap px-2"
-                              style={{ left: `${nightLabelOffset}%` }}
-                            >
-                              <span className="text-xs font-bold text-slate-900">
-                                {task.name}
-                              </span>
-                              <span className="text-xs font-bold text-slate-900">
-                                (N: {Math.round(nightQty).toLocaleString()} cajas)
-                              </span>
+                            <div className="absolute flex items-center gap-1.5 whitespace-nowrap px-2" style={{ left: `${nightLabelOffset}%` }}>
+                              <span className="text-xs font-bold text-slate-900">{task.name}</span>
+                              <span className="text-xs font-bold text-slate-900">(N: {Math.round(nightQty).toLocaleString()} cajas)</span>
                             </div>
                           )}
                         </>
@@ -243,6 +215,23 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
             </div>
           </div>
         ))}
+
+        {/* Resumen de Totales Consolidados */}
+        {productSummary.length > 0 && (
+          <div className="mt-8 border-t-2 border-slate-100 pt-6">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Resumen de Producción Total</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {productSummary.map(([name, qty]) => (
+                <div key={name} className="flex justify-between items-center p-3 bg-slate-50 rounded-lg border border-slate-100">
+                  <span className="text-xs font-bold text-slate-700">{name}</span>
+                  <span className="text-xs font-bold text-primary bg-primary/5 px-2 py-1 rounded-md">
+                    {Math.round(qty).toLocaleString()} cajas
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
       
       <div className="mt-6 flex flex-wrap items-center justify-end gap-6 text-[9px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-4 print:mt-4 print:pt-2">
