@@ -12,7 +12,7 @@ import { addDays } from 'date-fns';
 
 const PREFORMS_DATA = [
   { code: 'EMP_0009', description: 'PREFORMA TRANSPARENTE 29.6GR 1881', isAuto: true },
-  { code: 'EMP_0068', description: 'PREFORMA TRANSPARENTE 36 GR-1881' },
+  { code: 'EMP_0068', description: 'PREFORMA TRANSPARENTE 36 GR-1881', isAuto: true },
   { code: 'EMP_0093', description: 'PREFORMA TRANSPARENTE 42,64 GR-1881' },
   { code: 'EMP_0103', description: 'PREFORMA VERDE 42,64 GR-1881' },
   { code: 'EMP_0120', description: 'PREFORMA VERDE 29.6GR 1881' },
@@ -29,6 +29,11 @@ const FLAVORS_FOR_EMP0009 = [
   "GLUP MANZANA ROJA"
 ];
 
+const FLAVORS_FOR_EMP0068_L7 = [
+  "GLUP COLA",
+  "GLUP KOLITA"
+];
+
 export function RequirementSection() {
   const { tasks, weekStartDate } = usePlannerStore();
 
@@ -39,6 +44,7 @@ export function RequirementSection() {
     { id: 'plastics', label: 'Plásticos', icon: Layers, description: 'Inventario de term encogible y plásticos de embalaje.' },
   ];
 
+  // Cálculo EMP_0009: (L7 Sabores específicos) * 12
   const calculatedEMP0009 = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
     const line7Tasks = tasks.filter(t => 
@@ -49,6 +55,31 @@ export function RequirementSection() {
     );
     
     const totalBoxes = line7Tasks.reduce((acc, t) => acc + (t.quantity || 0), 0);
+    return totalBoxes * 12;
+  }, [tasks, weekStartDate]);
+
+  // Cálculo EMP_0068: (L7 Cola/Kolita + Todos L5) * 12
+  const calculatedEMP0068 = useMemo(() => {
+    const weekEnd = addDays(weekStartDate, 7);
+    
+    // Linea 7 específicos
+    const line7Specific = tasks.filter(t => 
+      t.lineId === "7" && 
+      t.endTime > weekStartDate && 
+      t.startTime < weekEnd &&
+      FLAVORS_FOR_EMP0068_L7.includes(t.name)
+    );
+
+    // Todos Linea 5
+    const line5All = tasks.filter(t => 
+      t.lineId === "5" && 
+      t.endTime > weekStartDate && 
+      t.startTime < weekEnd
+    );
+    
+    const totalBoxes = line7Specific.reduce((acc, t) => acc + (t.quantity || 0), 0) + 
+                       line5All.reduce((acc, t) => acc + (t.quantity || 0), 0);
+                       
     return totalBoxes * 12;
   }, [tasks, weekStartDate]);
 
@@ -105,13 +136,20 @@ export function RequirementSection() {
                                   <TableCell className="text-sm font-medium text-slate-700">
                                     {item.description}
                                     {item.code === 'EMP_0009' && (
-                                      <span className="ml-2 text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: Línea 7 × 12</span>
+                                      <span className="ml-2 text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: L7 × 12</span>
+                                    )}
+                                    {item.code === 'EMP_0068' && (
+                                      <span className="ml-2 text-[10px] bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: (L7+L5) × 12</span>
                                     )}
                                   </TableCell>
                                   <TableCell className="text-right">
                                     {item.code === 'EMP_0009' ? (
                                       <div className="h-8 flex items-center justify-end px-3 font-black text-primary bg-primary/5 rounded border border-primary/20">
                                         {calculatedEMP0009.toLocaleString()}
+                                      </div>
+                                    ) : item.code === 'EMP_0068' ? (
+                                      <div className="h-8 flex items-center justify-end px-3 font-black text-amber-600 bg-amber-50 rounded border border-amber-200">
+                                        {calculatedEMP0068.toLocaleString()}
                                       </div>
                                     ) : (
                                       <Input 
