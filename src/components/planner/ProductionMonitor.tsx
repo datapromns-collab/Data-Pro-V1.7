@@ -3,63 +3,76 @@
 
 import { useMemo } from 'react';
 import { Progress } from '@/components/ui/progress';
-import { AlertCircle, CheckCircle2, Clock } from 'lucide-react';
+import { AlertCircle, Clock, Zap } from 'lucide-react';
 import { getWeeklyLimitMinutes } from '@/lib/planner-utils';
 import { cn } from '@/lib/utils';
 
 interface ProductionMonitorProps {
   plannedMinutes: number;
+  variant?: 'default' | 'compact';
 }
 
-export function ProductionMonitor({ plannedMinutes }: ProductionMonitorProps) {
+export function ProductionMonitor({ plannedMinutes, variant = 'default' }: ProductionMonitorProps) {
   const limitMinutes = useMemo(() => getWeeklyLimitMinutes(), []);
   const percentage = Math.min((plannedMinutes / limitMinutes) * 100, 100);
   const isOverLimit = plannedMinutes > limitMinutes;
 
+  if (variant === 'compact') {
+    return (
+      <div className="space-y-3">
+        <div className="flex justify-between items-end">
+          <div className="flex items-center gap-2">
+            <Zap className={cn("h-4 w-4", isOverLimit ? "text-destructive" : "text-primary")} />
+            <span className="text-xs font-bold text-slate-700">Ocupación</span>
+          </div>
+          <span className={cn("text-xs font-bold", isOverLimit ? "text-destructive" : "text-slate-500")}>
+            {Math.round(percentage)}%
+          </span>
+        </div>
+        <Progress value={percentage} className={cn("h-1.5", isOverLimit && "[&>div]:bg-destructive")} />
+        <p className="text-[10px] text-slate-400 font-medium text-center">
+          {Math.floor(plannedMinutes / 60)}h planificadas de 155.5h
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className={cn(
-      "w-full p-4 rounded-xl border-2 transition-all duration-500",
+      "w-full p-6 rounded-2xl border transition-all duration-500",
       isOverLimit 
-        ? "bg-destructive/5 border-destructive animate-pulse shadow-lg shadow-destructive/10" 
-        : "bg-white border-border"
+        ? "bg-destructive/5 border-destructive shadow-lg shadow-destructive/10" 
+        : "bg-white border-slate-200 shadow-sm"
     )}>
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-        <div className="flex items-center gap-3">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="flex items-center gap-4">
           <div className={cn(
-            "p-2 rounded-full",
-            isOverLimit ? "bg-destructive text-destructive-foreground" : "bg-primary/10 text-primary"
+            "p-3 rounded-xl shadow-sm",
+            isOverLimit ? "bg-destructive text-white" : "bg-primary text-white"
           )}>
-            {isOverLimit ? <AlertCircle className="h-5 w-5" /> : <Clock className="h-5 w-5" />}
+            {isOverLimit ? <AlertCircle className="h-6 w-6" /> : <Clock className="h-6 w-6" />}
           </div>
           <div>
-            <h3 className="text-sm font-headline font-bold text-foreground">Tiempo de Producción Semanal</h3>
-            <p className="text-xs text-muted-foreground">
-              Capacidad: Lunes 07:00 - Domingo 18:30
+            <h3 className="text-base font-headline font-bold text-slate-900">Capacidad Operativa</h3>
+            <p className="text-xs text-slate-500 font-medium">
+              Semana en curso (Lun 07:00 - Dom 18:30)
             </p>
           </div>
         </div>
 
         <div className="flex-1 w-full md:max-w-md">
-          <div className="flex justify-between text-xs font-medium mb-1.5">
-            <span className={isOverLimit ? "text-destructive" : "text-muted-foreground"}>
-              {Math.floor(plannedMinutes / 60)}h {plannedMinutes % 60}m planificados
+          <div className="flex justify-between text-xs font-bold mb-2 uppercase tracking-wider">
+            <span className={isOverLimit ? "text-destructive" : "text-slate-400"}>
+              {Math.floor(plannedMinutes / 60)}h {plannedMinutes % 60}m Programados
             </span>
-            <span className="text-muted-foreground">Límite: {Math.floor(limitMinutes / 60)}h 30m</span>
+            <span className="text-slate-400">Máx: 155h 30m</span>
           </div>
-          <Progress value={percentage} className={cn("h-2.5", isOverLimit && "[&>div]:bg-destructive")} />
+          <Progress value={percentage} className={cn("h-3", isOverLimit && "[&>div]:bg-destructive")} />
         </div>
 
         {isOverLimit && (
-          <div className="flex items-center gap-2 text-destructive font-bold text-sm bg-destructive/10 px-3 py-1.5 rounded-full">
-            <AlertCircle className="h-4 w-4" />
-            ¡TIEMPO EXCEDIDO!
-          </div>
-        )}
-
-        {!isOverLimit && plannedMinutes > 0 && (
-          <div className="flex items-center gap-2 text-accent font-bold text-sm bg-accent/10 px-3 py-1.5 rounded-full">
-            <CheckCircle2 className="h-4 w-4" />
-            Plan Disponible
+          <div className="flex items-center gap-2 text-destructive font-black text-xs bg-destructive/10 px-4 py-2 rounded-full border border-destructive/20">
+            SOBRECAPACIDAD
           </div>
         )}
       </div>
