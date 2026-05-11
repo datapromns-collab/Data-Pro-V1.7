@@ -1,7 +1,7 @@
-
 "use client";
 
 import { useState, useMemo } from 'react';
+import Image from 'next/image';
 import { 
   Calendar as CalendarIcon, 
   Plus, 
@@ -24,7 +24,7 @@ import { usePlannerStore } from '@/hooks/use-planner-store';
 import { calculateTotalPlannedMinutes, formatTime } from '@/lib/planner-utils';
 import { Toaster } from '@/components/ui/toaster';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { SidebarProvider, Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
+import { SidebarProvider, Sidebar, SidebarContent, SidebarHeader, SidebarHeader as SidebarHeaderUI, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -35,6 +35,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScheduledTask } from '@/lib/types';
 import { format, getISOWeek, setHours, setMinutes } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7"];
 
@@ -57,6 +58,7 @@ export default function PlannerPage() {
   const [selectedLine, setSelectedLine] = useState("1");
 
   const weekNumber = getISOWeek(weekStartDate);
+  const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
 
   const filteredTasks = useMemo(() => 
     tasks.filter(t => t.lineId === selectedLine),
@@ -105,7 +107,7 @@ export default function PlannerPage() {
       <div className="flex min-h-screen w-full bg-[#f8fafc]">
         {/* UI Sidebar */}
         <Sidebar className="border-r border-slate-200 bg-white no-print">
-          <SidebarHeader className="p-6">
+          <div className="p-6">
             <div className="flex items-center gap-3">
               <div className="bg-primary p-2 rounded-xl shadow-lg shadow-primary/20">
                 <CalendarIcon className="h-6 w-6 text-white" />
@@ -115,7 +117,7 @@ export default function PlannerPage() {
                 <p className="text-[10px] uppercase tracking-widest text-primary font-bold">Pro Edition</p>
               </div>
             </div>
-          </SidebarHeader>
+          </div>
           <SidebarContent className="px-4 py-2">
             <div className="space-y-6">
               <section>
@@ -263,12 +265,26 @@ export default function PlannerPage() {
             const lineTasks = tasks.filter(t => t.lineId === (i + 1).toString());
             return (
               <div key={lineName} className="page-break">
-                <div className="mb-4 border-b-2 border-primary pb-4 flex justify-between items-end">
-                  <div>
+                <div className="mb-4 border-b-2 border-primary pb-4 flex justify-between items-center">
+                  <div className="flex-1">
                     <h1 className="text-2xl font-headline font-bold text-slate-900">Programa de Producción</h1>
                     <p className="text-primary font-bold text-base uppercase tracking-tight">{lineName}</p>
                   </div>
-                  <div className="text-right">
+
+                  <div className="flex-1 flex justify-center">
+                    {glupLogo && (
+                      <Image 
+                        src={glupLogo.imageUrl} 
+                        alt="Glup Logo" 
+                        width={180} 
+                        height={60} 
+                        className="object-contain"
+                        data-ai-hint={glupLogo.imageHint}
+                      />
+                    )}
+                  </div>
+
+                  <div className="flex-1 text-right">
                     <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">Confidencial - Uso Interno</p>
                     <p className="text-[10px] text-slate-400 font-medium">
                       Semana {weekNumber} - {format(weekStartDate, 'dd MMMM yyyy', { locale: es })}
