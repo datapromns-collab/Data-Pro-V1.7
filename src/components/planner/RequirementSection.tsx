@@ -21,7 +21,6 @@ const PREFORMS_DATA = [
 ];
 
 const FLAVORS_FOR_EMP0009 = [
-  "GLUP FRESH",
   "GLUP UVA",
   "GLUP PIÑA",
   "GLUP NARANJA",
