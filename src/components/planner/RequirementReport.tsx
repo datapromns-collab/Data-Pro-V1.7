@@ -79,7 +79,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
       <div className="mb-8 border-b-2 border-primary pb-4 flex justify-between items-center">
         <div className="flex-1">
           <h1 className="text-2xl font-headline font-bold text-slate-900">Reporte de Requerimientos</h1>
-          <p className="text-primary font-bold text-base uppercase">Gestión de Materiales de Empaque</p>
+          <p className="text-primary font-bold text-base uppercase">Gestión de Materiales</p>
         </div>
         <div className="flex-1 flex justify-center">
           {glupLogo && (
