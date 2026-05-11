@@ -9,6 +9,7 @@ import { Label } from '@/components/ui/label';
 import { Trash2 } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
 import { getWeekDays, PRODUCT_FACTORS, formatTime } from '@/lib/planner-utils';
+import { useToast } from '@/hooks/use-toast';
 import {
   Select,
   SelectContent,
@@ -16,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { setHours, setMinutes } from 'date-fns';
+import { setHours, setMinutes, isBefore, isAfter } from 'date-fns';
 
 const PRODUCT_LIST = [
   "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
@@ -38,9 +39,10 @@ interface TaskDialogProps {
   initialTask?: ScheduledTask | null;
   defaultLineId?: string;
   weekStartDate: Date;
+  allTasks: ScheduledTask[];
 }
 
-export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, defaultLineId = "1", weekStartDate }: TaskDialogProps) {
+export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, defaultLineId = "1", weekStartDate, allTasks }: TaskDialogProps) {
   const [name, setName] = useState('');
   const [lineId, setLineId] = useState(defaultLineId);
   const [cipSubOption, setCipSubOption] = useState('');
@@ -52,6 +54,7 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
   const [selectedDayIdx, setSelectedDayIdx] = useState('0');
   const [selectedTime, setSelectedTime] = useState('07:00');
 
+  const { toast } = useToast();
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   const isSpecialTask = name === 'CS' || name === 'CIP' || name === 'CP';
 
@@ -112,6 +115,27 @@ export function TaskDialog({ isOpen, onClose, onSave, onDelete, initialTask, def
     const [hours, minutes] = selectedTime.split(':').map(Number);
     const startTime = setMinutes(setHours(day, hours), minutes);
     const endTime = new Date(startTime.getTime() + duration * 60 * 60 * 1000);
+
+    // Validación de solapamiento
+    const conflict = allTasks.find(existingTask => {
+      // Ignorar la propia tarea si estamos editando
+      if (initialTask && existingTask.id === initialTask.id) return false;
+      
+      // Solo validar conflictos en la misma línea
+      if (existingTask.lineId !== lineId) return false;
+
+      // Condición de solapamiento: (A_inicio < B_fin) AND (A_fin > B_inicio)
+      return isBefore(startTime, existingTask.endTime) && isAfter(endTime, existingTask.startTime);
+    });
+
+    if (conflict) {
+      toast({
+        variant: "destructive",
+        title: "Conflicto de Programación",
+        description: `No se puede cargar la tarea sobre "${conflict.name}" (${formatTime(conflict.startTime)} - ${formatTime(conflict.endTime)}).`,
+      });
+      return;
+    }
 
     onSave({
       name: finalName,

@@ -271,6 +271,7 @@ export default function PlannerPage() {
         initialTask={editingTask}
         defaultLineId={selectedLine}
         weekStartDate={weekStartDate}
+        allTasks={tasks}
       />
       <Toaster />
     </SidebarProvider>
