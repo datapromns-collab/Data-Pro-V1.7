@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -315,8 +314,8 @@ export default function PlannerPage() {
                       <Image 
                         src={glupLogo.imageUrl} 
                         alt="Glup Logo" 
-                        width={180} 
-                        height={60} 
+                        width={220} 
+                        height={80} 
                         className="object-contain"
                         data-ai-hint={glupLogo.imageHint}
                       />

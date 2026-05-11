@@ -366,11 +366,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
               {productSummary.map(([name, data]) => (
                 <div key={name} className="flex justify-center">
                   <div className="inline-flex items-center gap-2 py-0.5 px-2 bg-slate-50/80 rounded border border-slate-200 shadow-sm transition-all hover:bg-white">
-                    <span className="text-[9px] font-bold text-slate-800 whitespace-nowrap">{name}</span>
-                    <span className="text-[9px] font-black text-primary whitespace-nowrap">
+                    <span className="text-[10px] font-bold text-slate-800 whitespace-nowrap">{name}</span>
+                    <span className="text-[10px] font-black text-primary whitespace-nowrap">
                       {Math.round(data.qty).toLocaleString()} cjs
                     </span>
-                    <span className="text-[8px] font-bold text-indigo-500 whitespace-nowrap">
+                    <span className="text-[9px] font-bold text-indigo-500 whitespace-nowrap">
                       {Math.round(data.ubb).toLocaleString()} UBB
                     </span>
                   </div>
