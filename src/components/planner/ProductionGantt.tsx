@@ -47,8 +47,8 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     const shiftSplit = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE);
     const rowEnd = setMinutes(setHours(startOfDay(addDays(day, 1)), 7), 0);
     
-    // El punto visual de la etiqueta nocturna es a las 19:00
-    const nightLabelThreshold = setMinutes(setHours(startOfDay(day), 19), 0);
+    // El punto visual de la etiqueta nocturna se desplaza a las 21:00 para dar esos ~3cm de separación
+    const nightLabelThreshold = setMinutes(setHours(startOfDay(day), 21), 0);
 
     const getOverlapMins = (start1: Date, end1: Date, start2: Date, end2: Date) => {
       const s = isAfter(start1, start2) ? start1 : start2;
@@ -56,7 +56,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       return Math.max(0, differenceInMinutes(e, s));
     };
 
-    // Cálculos basados en 18:30
+    // Cálculos siguen basados en 18:30 para precisión de producción
     const dayMins = getOverlapMins(task.startTime, task.endTime, rowStart, shiftSplit);
     const nightMins = getOverlapMins(task.startTime, task.endTime, shiftSplit, rowEnd);
 
@@ -67,13 +67,13 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     let nightLabelOffset = null;
     if (nightQty > 0) {
       const taskDuration = differenceInMinutes(task.endTime, task.startTime);
-      const minsTo19 = differenceInMinutes(nightLabelThreshold, task.startTime);
+      const minsToThreshold = differenceInMinutes(nightLabelThreshold, task.startTime);
       
-      if (minsTo19 > 0 && minsTo19 < taskDuration) {
-        // La tarea empieza antes de las 19:00 y termina después
-        nightLabelOffset = (minsTo19 / taskDuration) * 100;
-      } else if (minsTo19 <= 0) {
-        // La tarea ya empezó después de las 19:00, la etiqueta va al inicio
+      if (minsToThreshold > 0 && minsToThreshold < taskDuration) {
+        // La tarea empieza antes del umbral y termina después
+        nightLabelOffset = (minsToThreshold / taskDuration) * 100;
+      } else if (minsToThreshold <= 0) {
+        // La tarea ya empezó después del umbral, la etiqueta va al inicio
         nightLabelOffset = 0;
       }
     }
@@ -181,7 +181,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                         </div>
                       )}
                       
-                      {/* Etiqueta Turno Noche (N) - Posicionada visualmente a partir de las 19:00 */}
+                      {/* Etiqueta Turno Noche (N) - Posicionada visualmente a partir de las 21:00 (separación solicitada) */}
                       {nightQty > 0 && nightLabelOffset !== null && (
                         <div 
                           className="absolute flex items-center gap-1.5 whitespace-nowrap px-2"
