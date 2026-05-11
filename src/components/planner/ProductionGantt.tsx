@@ -171,16 +171,19 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
               <div className="text-[9px] text-muted-foreground font-medium">{day.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div>
             </div>
 
-            <div className="flex-1 h-14 bg-slate-50/30 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
+            <div className="flex-1 h-14 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
+              {/* Day background area */}
               <div 
-                className="absolute inset-y-0 left-0 z-0 border-r-2 border-primary/20" 
-                style={{ width: `${SPLIT_PCT}%`, backgroundColor: `${DAY_COLOR}22` }}
+                className="absolute inset-y-0 left-0 z-0 border-r-2 border-primary/60" 
+                style={{ width: `${SPLIT_PCT}%`, backgroundColor: `${DAY_COLOR}33` }}
               >
                 <div className="absolute top-0 left-1 text-[7px] font-bold text-primary/40 uppercase tracking-tighter">DÍA</div>
               </div>
+              
+              {/* Night background area */}
               <div 
                 className="absolute inset-y-0 z-0" 
-                style={{ left: `${SPLIT_PCT}%`, right: 0, backgroundColor: `${NIGHT_COLOR}22` }}
+                style={{ left: `${SPLIT_PCT}%`, right: 0, backgroundColor: `${NIGHT_COLOR}33` }}
               >
                 <div className="absolute top-0 right-1 text-[7px] font-bold text-indigo-400/40 uppercase tracking-tighter">NOCHE</div>
               </div>
