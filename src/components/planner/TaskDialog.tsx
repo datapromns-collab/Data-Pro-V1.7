@@ -137,7 +137,9 @@ export function TaskDialog({
     } else if (name === 'PARADA PROGRAMADA') {
       if (!initialTask && duration === 0) setDuration(1);
     } else if (loadPerHour > 0 && quantity > 0) {
-      setDuration(quantity / loadPerHour);
+      const calculatedDuration = quantity / loadPerHour;
+      // Redondeo hacia arriba en intervalos de media hora (0.5)
+      setDuration(Math.ceil(calculatedDuration * 2) / 2);
     } else {
       if (!isSpecialTask) setDuration(0);
     }
