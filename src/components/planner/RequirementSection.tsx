@@ -10,9 +10,9 @@ import { usePlannerStore } from '@/hooks/use-planner-store';
 import { addDays } from 'date-fns';
 
 const PREFORMS_DATA = [
-  { code: 'EMP_0009', description: 'PREFORMA TRANSPARENTE 29.6GR 1881', isAuto: true },
-  { code: 'EMP_0068', description: 'PREFORMA TRANSPARENTE 36 GR-1881', isAuto: true },
-  { code: 'EMP_0093', description: 'PREFORMA TRANSPARENTE 42,64 GR-1881', isAuto: true },
+  { code: 'EMP_0009', description: 'PREFORMA TRANSPARENTE 29.6GR 1881' },
+  { code: 'EMP_0068', description: 'PREFORMA TRANSPARENTE 36 GR-1881' },
+  { code: 'EMP_0093', description: 'PREFORMA TRANSPARENTE 42,64 GR-1881' },
   { code: 'EMP_0103', description: 'PREFORMA VERDE 42,64 GR-1881' },
   { code: 'EMP_0120', description: 'PREFORMA VERDE 29.6GR 1881' },
   { code: 'EMP_0126', description: 'PREFORMA TRANSPARENTE 20,55GR-1881' },
@@ -107,6 +107,22 @@ export function RequirementSection() {
     return Math.round(totalBoxes * 6);
   }, [tasks, weekStartDate]);
 
+  // Cálculo EMP_0103: (L1, L2, L3, L4 GLUP FRESH) * 6
+  const calculatedEMP0103 = useMemo(() => {
+    const weekEnd = addDays(weekStartDate, 7);
+    const targetLines = ["1", "2", "3", "4"];
+    
+    const freshTasks = tasks.filter(t => 
+      targetLines.includes(t.lineId) && 
+      t.endTime > weekStartDate && 
+      t.startTime < weekEnd &&
+      t.name === "GLUP FRESH"
+    );
+    
+    const totalBoxes = freshTasks.reduce((acc, t) => acc + (t.quantity || 0), 0);
+    return Math.round(totalBoxes * 6);
+  }, [tasks, weekStartDate]);
+
   return (
     <div className="h-full flex flex-col space-y-6">
       <Tabs defaultValue="empaque" className="w-full h-full flex flex-col">
@@ -168,6 +184,9 @@ export function RequirementSection() {
                                     {item.code === 'EMP_0093' && (
                                       <span className="ml-2 text-[10px] bg-indigo-500/10 text-indigo-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: (L1-4) × 6</span>
                                     )}
+                                    {item.code === 'EMP_0103' && (
+                                      <span className="ml-2 text-[10px] bg-emerald-500/10 text-emerald-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: Fresh (L1-4) × 6</span>
+                                    )}
                                   </TableCell>
                                   <TableCell className="text-right">
                                     {item.code === 'EMP_0009' ? (
@@ -181,6 +200,10 @@ export function RequirementSection() {
                                     ) : item.code === 'EMP_0093' ? (
                                       <div className="h-8 flex items-center justify-end px-3 font-black text-indigo-600 bg-indigo-50 rounded border border-indigo-200">
                                         {calculatedEMP0093.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
+                                      </div>
+                                    ) : item.code === 'EMP_0103' ? (
+                                      <div className="h-8 flex items-center justify-end px-3 font-black text-emerald-600 bg-emerald-50 rounded border border-emerald-200">
+                                        {calculatedEMP0103.toLocaleString('es-ES', { maximumFractionDigits: 0 })}
                                       </div>
                                     ) : (
                                       <Input 
