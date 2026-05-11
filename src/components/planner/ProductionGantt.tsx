@@ -18,6 +18,11 @@ const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes',
 export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: ProductionGanttProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
 
+  const isSpecialTask = (name: string) => {
+    const specials = ['CS', 'CP', 'CIP', 'MTTO PROGRAMADO', 'PARADA PROGRAMADA'];
+    return specials.some(s => name.startsWith(s));
+  };
+
   const getTaskStyle = (task: ScheduledTask, day: Date) => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const rowEnd = addDays(rowStart, 1);
@@ -34,12 +39,47 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
     if (width <= 0) return null;
 
-    return {
-      left: `${left}%`,
-      width: `${width}%`,
-      backgroundColor: task.color,
-      borderColor: task.color,
-    };
+    if (isSpecialTask(task.name)) {
+      return {
+        left: `${left}%`,
+        width: `${width}%`,
+        backgroundColor: '#FFFF00',
+        borderColor: '#E6E600',
+      };
+    }
+
+    // Lógica de degradado para productos (Día vs Noche)
+    // Punto de corte: 18:30 (11.5 horas desde las 07:00)
+    const splitMin = 11.5 * 60; // 690 minutos
+    const dayColor = '#C0E6F5';
+    const nightColor = '#83CCEB';
+
+    if (startMin >= splitMin) {
+      // Todo en la noche
+      return {
+        left: `${left}%`,
+        width: `${width}%`,
+        backgroundColor: nightColor,
+        borderColor: '#6DB6D5',
+      };
+    } else if (endMin <= splitMin) {
+      // Todo en el día
+      return {
+        left: `${left}%`,
+        width: `${width}%`,
+        backgroundColor: dayColor,
+        borderColor: '#AACCDA',
+      };
+    } else {
+      // Cruzado: Usamos un degradado
+      const splitPointInTask = ((splitMin - startMin) / (endMin - startMin)) * 100;
+      return {
+        left: `${left}%`,
+        width: `${width}%`,
+        background: `linear-gradient(to right, ${dayColor} 0%, ${dayColor} ${splitPointInTask}%, ${nightColor} ${splitPointInTask}%, ${nightColor} 100%)`,
+        borderColor: '#98BED0',
+      };
+    }
   };
 
   const getShiftData = (task: ScheduledTask, day: Date) => {
@@ -47,7 +87,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     const shiftSplit = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE);
     const rowEnd = setMinutes(setHours(startOfDay(addDays(day, 1)), 7), 0);
     
-    // El punto visual de la etiqueta nocturna se desplaza a las 21:00 para dar esos ~3cm de separación
     const nightLabelThreshold = setMinutes(setHours(startOfDay(day), 21), 0);
 
     const getOverlapMins = (start1: Date, end1: Date, start2: Date, end2: Date) => {
@@ -56,24 +95,20 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       return Math.max(0, differenceInMinutes(e, s));
     };
 
-    // Cálculos siguen basados en 18:30 para precisión de producción
     const dayMins = getOverlapMins(task.startTime, task.endTime, rowStart, shiftSplit);
     const nightMins = getOverlapMins(task.startTime, task.endTime, shiftSplit, rowEnd);
 
     const dayQty = task.loadPerHour > 0 ? (dayMins / 60) * task.loadPerHour : 0;
     const nightQty = task.loadPerHour > 0 ? (nightMins / 60) * task.loadPerHour : 0;
 
-    // Posición visual de la etiqueta nocturna relativa a la barra de la tarea
     let nightLabelOffset = null;
     if (nightQty > 0) {
       const taskDuration = differenceInMinutes(task.endTime, task.startTime);
       const minsToThreshold = differenceInMinutes(nightLabelThreshold, task.startTime);
       
       if (minsToThreshold > 0 && minsToThreshold < taskDuration) {
-        // La tarea empieza antes del umbral y termina después
         nightLabelOffset = (minsToThreshold / taskDuration) * 100;
       } else if (minsToThreshold <= 0) {
-        // La tarea ya empezó después del umbral, la etiqueta va al inicio
         nightLabelOffset = 0;
       }
     }
@@ -157,43 +192,49 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                 if (!style) return null;
 
                 const { dayQty, nightQty, nightLabelOffset } = getShiftData(task, day);
+                const isSpecial = isSpecialTask(task.name);
 
                 return (
                   <div
                     key={task.id}
                     onClick={() => onTaskClick?.(task)}
-                    className="absolute inset-y-3 rounded-md border-l-4 shadow-sm z-10 p-1 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
-                    style={{
-                      ...style,
-                      backgroundColor: `${task.color}20`,
-                    }}
+                    className="absolute inset-y-3 rounded-md border shadow-sm z-10 p-1 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
+                    style={style}
                   >
                     <div className="relative w-full h-full flex items-center min-w-0">
-                      {/* Etiqueta Turno Día (D) */}
-                      {dayQty > 0 && (
-                        <div className="flex items-center gap-1.5 whitespace-nowrap px-2">
-                          <span className="text-xs font-bold" style={{ color: task.color }}>
+                      {isSpecial ? (
+                        <div className="px-2">
+                          <span className="text-xs font-bold text-slate-900">
                             {task.name}
                           </span>
-                          <span className="text-xs font-bold" style={{ color: task.color }}>
-                            (D: {Math.round(dayQty).toLocaleString()} cajas)
-                          </span>
                         </div>
-                      )}
-                      
-                      {/* Etiqueta Turno Noche (N) - Posicionada visualmente a partir de las 21:00 (separación solicitada) */}
-                      {nightQty > 0 && nightLabelOffset !== null && (
-                        <div 
-                          className="absolute flex items-center gap-1.5 whitespace-nowrap px-2"
-                          style={{ left: `${nightLabelOffset}%` }}
-                        >
-                          <span className="text-xs font-bold" style={{ color: task.color }}>
-                            {task.name}
-                          </span>
-                          <span className="text-xs font-bold" style={{ color: task.color }}>
-                            (N: {Math.round(nightQty).toLocaleString()} cajas)
-                          </span>
-                        </div>
+                      ) : (
+                        <>
+                          {dayQty > 0 && (
+                            <div className="flex items-center gap-1.5 whitespace-nowrap px-2">
+                              <span className="text-xs font-bold text-slate-800">
+                                {task.name}
+                              </span>
+                              <span className="text-xs font-bold text-slate-800">
+                                (D: {Math.round(dayQty).toLocaleString()} cajas)
+                              </span>
+                            </div>
+                          )}
+                          
+                          {nightQty > 0 && nightLabelOffset !== null && (
+                            <div 
+                              className="absolute flex items-center gap-1.5 whitespace-nowrap px-2"
+                              style={{ left: `${nightLabelOffset}%` }}
+                            >
+                              <span className="text-xs font-bold text-slate-900">
+                                {task.name}
+                              </span>
+                              <span className="text-xs font-bold text-slate-900">
+                                (N: {Math.round(nightQty).toLocaleString()} cajas)
+                              </span>
+                            </div>
+                          )}
+                        </>
                       )}
                     </div>
                   </div>
@@ -206,12 +247,16 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       
       <div className="mt-6 flex flex-wrap items-center justify-end gap-6 text-[9px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-4 print:mt-4 print:pt-2">
         <div className="flex items-center gap-2">
-          <div className="w-4 h-2.5 rounded bg-white border border-primary/20"></div>
-          <span>Turno Día (07:00 - 18:30)</span>
+          <div className="w-4 h-2.5 rounded border border-primary/20" style={{ backgroundColor: '#C0E6F5' }}></div>
+          <span>Día (#C0E6F5)</span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="w-4 h-2.5 rounded bg-slate-100 border border-slate-200"></div>
-          <span>Turno Noche (18:30 - 07:00)</span>
+          <div className="w-4 h-2.5 rounded border border-slate-200" style={{ backgroundColor: '#83CCEB' }}></div>
+          <span>Noche (#83CCEB)</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-2.5 rounded border border-slate-200" style={{ backgroundColor: '#FFFF00' }}></div>
+          <span>Especial (#FFFF00)</span>
         </div>
       </div>
     </div>
