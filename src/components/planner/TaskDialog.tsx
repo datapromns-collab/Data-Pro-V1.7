@@ -101,7 +101,6 @@ export function TaskDialog({
       setCipSubOption('');
       setPresentation('');
       setTanks(0);
-      // Aplicar velocidad configurada para la línea por defecto
       setLoadPerHour(lineSpeeds[defaultLineId] || 0);
       setQuantity(0);
       setDuration(0);
@@ -115,7 +114,6 @@ export function TaskDialog({
     }
   }, [initialTask, isOpen, defaultLineId, weekDays, nextAvailableTime, lineSpeeds]);
 
-  // Actualizar carga/hora cuando cambia la línea (solo para tareas nuevas)
   useEffect(() => {
     if (!initialTask && isOpen && !isSpecialTask) {
       setLoadPerHour(lineSpeeds[lineId] || 0);

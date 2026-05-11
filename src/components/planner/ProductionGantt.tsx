@@ -162,14 +162,12 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
             </div>
 
             <div className="flex-1 h-14 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
-              {/* Fondo Uniforme solicitado: #C0E6F5 */}
               <div 
                 className="absolute inset-y-0 left-0 z-0" 
                 style={{ width: `100%`, backgroundColor: `#C0E6F520` }}
               >
               </div>
 
-              {/* Línea Divisora Resaltada a las 18:30 */}
               <div 
                 className="absolute inset-y-0 z-20 border-l-2 border-primary/90 shadow-[0_0_8px_rgba(0,0,0,0.15)]"
                 style={{ left: `${SPLIT_PCT}%` }}
@@ -227,7 +225,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           </div>
         ))}
 
-        {/* Legend */}
         <div className="mt-4 flex items-center justify-between text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-2">
           <div className="flex items-center gap-2">
             <span className="text-primary font-black">CAJAS TOTALES: {Math.round(totalBoxes).toLocaleString()}</span>
@@ -244,7 +241,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           </div>
         </div>
 
-        {/* Resumen de Producción */}
         {productSummary.length > 0 && (
           <div className="mt-2 border-t-2 border-slate-100 pt-3">
             <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Resumen de Producción Total</h3>

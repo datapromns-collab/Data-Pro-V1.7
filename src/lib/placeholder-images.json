@@ -5,6 +5,12 @@
       "description": "Professional factory production line planning",
       "imageUrl": "https://picsum.photos/seed/production/1200/800",
       "imageHint": "production factory"
+    },
+    {
+      "id": "glup-logo",
+      "description": "Glup! Cola logo for production report",
+      "imageUrl": "https://picsum.photos/seed/glup/200/80",
+      "imageHint": "cola logo"
     }
   ]
 }
