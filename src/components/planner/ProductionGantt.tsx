@@ -229,7 +229,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   <div key={idx} className={cn("absolute inset-y-0 border-l z-0 transition-opacity", m.isFullHour ? "border-slate-300/40 opacity-100" : "border-slate-200/20 opacity-50")} style={{ left: `${m.percent}%` }}></div>
                 ))}
 
-                {/* Línea divisoria de turno a las 18:30 (z-20 para estar por encima de todo) */}
+                {/* Línea divisoria de turno a las 18:30 con prioridad visual superior */}
                 <div 
                   className="absolute inset-y-0 z-[20] border-l-2 border-primary pointer-events-none shadow-[0_0_8px_rgba(0,0,0,0.1)]"
                   style={{ left: `${SPLIT_PCT}%` }}
@@ -361,20 +361,18 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
         {productSummary.length > 0 && (
           <div className="mt-1 border-t-2 border-slate-100 pt-1.5">
-            <h3 className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-1 text-center">Resumen de Producción Total</h3>
-            <div className="grid grid-cols-3 gap-1">
+            <h3 className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">Resumen de Producción Total</h3>
+            <div className="grid grid-cols-3 gap-y-1 gap-x-2">
               {productSummary.map(([name, data]) => (
-                <div key={name} className="flex">
-                  <div className="inline-flex flex-col items-center justify-center py-0.5 px-1 bg-slate-50/50 rounded border border-slate-100 w-full text-center">
-                    <span className="text-[10px] font-bold text-slate-700 leading-tight truncate w-full">{name}</span>
-                    <div className="flex items-center gap-1.5 mt-0.5">
-                      <span className="text-[9px] font-bold text-primary whitespace-nowrap">
-                        {Math.round(data.qty).toLocaleString()} cjs
-                      </span>
-                      <span className="text-[9px] font-bold text-indigo-500 whitespace-nowrap">
-                        {Math.round(data.ubb).toLocaleString()} UBB
-                      </span>
-                    </div>
+                <div key={name} className="flex justify-center">
+                  <div className="inline-flex items-center gap-2 py-0.5 px-2 bg-slate-50/80 rounded border border-slate-200 shadow-sm transition-all hover:bg-white">
+                    <span className="text-[9px] font-bold text-slate-800 whitespace-nowrap">{name}</span>
+                    <span className="text-[9px] font-black text-primary whitespace-nowrap">
+                      {Math.round(data.qty).toLocaleString()} cjs
+                    </span>
+                    <span className="text-[8px] font-bold text-indigo-500 whitespace-nowrap">
+                      {Math.round(data.ubb).toLocaleString()} UBB
+                    </span>
                   </div>
                 </div>
               ))}
