@@ -92,11 +92,11 @@ export default function PlannerPage() {
           <SidebarContent className="px-4 py-2">
             <div className="space-y-6">
               <section>
-                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Semana de Inicio</p>
+                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Establecer Semana</p>
                 <div className="px-2">
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full justify-start text-left font-normal bg-slate-50 border-slate-200">
+                      <Button variant="outline" className="w-full justify-start text-left font-bold bg-slate-50 border-slate-200 hover:border-primary/50 transition-colors">
                         <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
                         {format(weekStartDate, 'dd MMM yyyy', { locale: es })}
                       </Button>
@@ -107,9 +107,13 @@ export default function PlannerPage() {
                         selected={weekStartDate}
                         onSelect={(date) => date && setWeekStartDate(date)}
                         initialFocus
+                        locale={es}
                       />
                     </PopoverContent>
                   </Popover>
+                  <p className="mt-2 px-1 text-[9px] text-slate-400 font-medium italic">
+                    Selecciona cualquier día para iniciar esa semana.
+                  </p>
                 </div>
               </section>
 
@@ -117,7 +121,7 @@ export default function PlannerPage() {
                 <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Líneas de Producción</p>
                 <div className="px-2 mb-4">
                   <Select value={selectedLine} onValueChange={setSelectedLine}>
-                    <SelectTrigger className="w-full bg-slate-50 border-slate-200">
+                    <SelectTrigger className="w-full bg-slate-50 border-slate-200 font-bold">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -141,15 +145,15 @@ export default function PlannerPage() {
               <section>
                 <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Acciones</p>
                 <div className="grid gap-2">
-                  <Button size="sm" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full justify-start gap-2 bg-primary">
+                  <Button size="sm" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full justify-start gap-2 bg-primary font-bold">
                     <Plus className="h-4 w-4" />
                     Nueva Tarea
                   </Button>
-                  <Button variant="outline" size="sm" onClick={handlePrint} className="w-full justify-start gap-2 border-slate-200 text-slate-600">
+                  <Button variant="outline" size="sm" onClick={handlePrint} className="w-full justify-start gap-2 border-slate-200 text-slate-600 font-bold">
                     <FileText className="h-4 w-4" />
                     Exportar Reporte
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar todo el plan?') && clearAll()} className="w-full justify-start gap-2 text-destructive">
+                  <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar todo el plan?') && clearAll()} className="w-full justify-start gap-2 text-destructive font-bold">
                     <Trash2 className="h-4 w-4" />
                     Limpiar Plan
                   </Button>
@@ -182,8 +186,8 @@ export default function PlannerPage() {
                   <p className="text-sm text-slate-500">Gestión de turnos y tanques de producción.</p>
                 </div>
                 <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
-                  <TabsTrigger value="grid" className="gap-2 px-4"><LayoutGrid className="h-4 w-4" /> Cuadrícula</TabsTrigger>
-                  <TabsTrigger value="gantt" className="gap-2 px-4"><GanttChartSquare className="h-4 w-4" /> Gantt</TabsTrigger>
+                  <TabsTrigger value="grid" className="gap-2 px-4 font-bold"><LayoutGrid className="h-4 w-4" /> Cuadrícula</TabsTrigger>
+                  <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Gantt</TabsTrigger>
                 </TabsList>
               </div>
 
