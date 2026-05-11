@@ -283,8 +283,14 @@ export default function PlannerPage() {
             <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col gap-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <h2 className="text-2xl font-headline font-bold text-slate-900">Programación Línea {selectedLine}</h2>
-                  <p className="text-sm text-slate-500">Gestión de turnos y tanques de producción.</p>
+                  <h2 className="text-2xl font-headline font-bold text-slate-900">
+                    {activeTab === 'requirement' ? 'Requerimiento de Materiales' : `Programación Línea ${selectedLine}`}
+                  </h2>
+                  <p className="text-sm text-slate-500">
+                    {activeTab === 'requirement' 
+                      ? 'Gestión de insumos y materiales de empaque.' 
+                      : 'Gestión de turnos y tanques de producción.'}
+                  </p>
                 </div>
                 <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
                   <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Gantt</TabsTrigger>
