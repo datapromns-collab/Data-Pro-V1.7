@@ -38,7 +38,7 @@ export function LineSpeedsConfig({ lineSpeeds, onUpdateSpeed }: LineSpeedsConfig
                 placeholder="0"
               />
               <p className="text-[10px] text-slate-400 font-medium italic">
-                Este valor se aplicará automáticamente como Carga/Hora en las tareas de esta línea.
+                Este valor se aplicará automáticamente como Cajas/Hora en las tareas de esta línea.
               </p>
             </div>
           </Card>

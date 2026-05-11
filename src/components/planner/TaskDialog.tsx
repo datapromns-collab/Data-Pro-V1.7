@@ -300,7 +300,7 @@ export function TaskDialog({
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
                 <div className="flex items-center justify-between">
-                  <Label>Carga/Hora</Label>
+                  <Label>Cajas/Hora</Label>
                   <div className="flex items-center gap-1 text-[10px] text-primary font-bold">
                     <Gauge className="h-3 w-3" /> Auto
                   </div>
