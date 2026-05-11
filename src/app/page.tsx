@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import { 
   Calendar as CalendarIcon, 
@@ -15,13 +16,15 @@ import {
   Hash,
   Clock,
   Gauge,
-  Calculator as CalculatorIcon
+  Calculator as CalculatorIcon,
+  Keyboard as KeyboardIcon
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
 import { ProductionMonitor } from '@/components/planner/ProductionMonitor';
 import { TaskDialog } from '@/components/planner/TaskDialog';
 import { Calculator } from '@/components/planner/Calculator';
+import { KeyboardShortcuts } from '@/components/planner/KeyboardShortcuts';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { calculateTotalPlannedMinutes, formatTime } from '@/lib/planner-utils';
 import { Toaster } from '@/components/ui/toaster';
@@ -56,8 +59,48 @@ export default function PlannerPage() {
   } = usePlannerStore();
   
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
+  const [activeTab, setActiveTab] = useState("gantt");
+
+  // Keyboard Shortcuts Handler
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.altKey) {
+        switch (e.key.toLowerCase()) {
+          case 'n':
+            e.preventDefault();
+            setEditingTask(null);
+            setIsDialogOpen(true);
+            break;
+          case 'c':
+            e.preventDefault();
+            setActiveTab('calculator');
+            break;
+          case 'g':
+            e.preventDefault();
+            setActiveTab('gantt');
+            break;
+          case 'v':
+            e.preventDefault();
+            setActiveTab('speeds');
+            break;
+          case 'p':
+            e.preventDefault();
+            window.print();
+            break;
+          case 'k':
+            e.preventDefault();
+            setIsShortcutsOpen(prev => !prev);
+            break;
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const weekNumber = getISOWeek(weekStartDate);
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
@@ -197,9 +240,9 @@ export default function PlannerPage() {
                     <Plus className="h-4 w-4" />
                     Nueva Tarea
                   </Button>
-                  <Button variant="outline" size="sm" onClick={handlePrint} className="w-full justify-start gap-2 border-slate-200 text-slate-600 font-bold">
-                    <FileText className="h-4 w-4" />
-                    Exportar Reporte
+                  <Button variant="outline" size="sm" onClick={() => setIsShortcutsOpen(true)} className="w-full justify-start gap-2 border-slate-200 text-slate-600 font-bold">
+                    <KeyboardIcon className="h-4 w-4" />
+                    Atajos (Alt + K)
                   </Button>
                   <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar todo el plan?') && clearAll()} className="w-full justify-start gap-2 text-destructive font-bold">
                     <Trash2 className="h-4 w-4" />
@@ -227,7 +270,7 @@ export default function PlannerPage() {
           </header>
 
           <div className="flex-1 overflow-auto p-6 lg:p-8">
-            <Tabs defaultValue="gantt" className="h-full flex flex-col gap-6">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col gap-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <h2 className="text-2xl font-headline font-bold text-slate-900">Programación Línea {selectedLine}</h2>
@@ -315,6 +358,12 @@ export default function PlannerPage() {
         allTasks={tasks}
         lineSpeeds={lineSpeeds}
       />
+      
+      <KeyboardShortcuts 
+        isOpen={isShortcutsOpen} 
+        onClose={() => setIsShortcutsOpen(false)} 
+      />
+
       <Toaster />
     </SidebarProvider>
   );
