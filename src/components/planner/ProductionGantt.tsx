@@ -23,8 +23,6 @@ const AUTO_CP_COLOR = '#FFC000'; // CP Automático al final
 export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: ProductionGanttProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
 
-  // Marca de las 19:00 para la línea divisoria
-  // (19:00 - 07:00) = 12 horas. 12/24 = 50%
   const SPLIT_PCT = useMemo(() => {
     const totalDayMins = 24 * 60;
     const splitMinsAfterStart = (SHIFT_SPLIT_HOUR - PRODUCTION_START_HOUR) * 60 + SHIFT_SPLIT_MINUTE;
@@ -94,44 +92,43 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     };
   };
 
-  const getSplitQuantities = (task: ScheduledTask, day: Date) => {
-    if (isSpecialTask(task.name) || task.quantity <= 0) return null;
-
+  const getShiftData = (task: ScheduledTask, day: Date) => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const rowEnd = addDays(rowStart, 1);
     const splitTime = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE);
 
-    const taskStart = task.startTime;
-    const taskEnd = task.endTime;
-
-    // Intervalo de la tarea que cae en este día específico
-    const currentStart = taskStart < rowStart ? rowStart : taskStart;
-    const currentEnd = taskEnd > rowEnd ? rowEnd : taskEnd;
+    const currentStart = task.startTime < rowStart ? rowStart : task.startTime;
+    const currentEnd = task.endTime > rowEnd ? rowEnd : task.endTime;
 
     if (currentStart >= currentEnd) return null;
 
-    const totalTaskDuration = differenceInMinutes(taskEnd, taskStart);
+    const totalTaskDuration = differenceInMinutes(task.endTime, task.startTime);
     if (totalTaskDuration <= 0) return null;
 
-    let dayQty = 0;
-    let nightQty = 0;
-
-    // Cálculo porción diurna (antes del split)
+    // Day portion
+    let dayLabel = null;
     if (currentStart < splitTime) {
-      const dayEnd = currentEnd < splitTime ? currentEnd : splitTime;
-      const dayDuration = differenceInMinutes(dayEnd, currentStart);
-      dayQty = (dayDuration / totalTaskDuration) * task.quantity;
+      const dEnd = currentEnd < splitTime ? currentEnd : splitTime;
+      const dDur = differenceInMinutes(dEnd, currentStart);
+      const dQty = (dDur / totalTaskDuration) * task.quantity;
+      const left = (differenceInMinutes(currentStart, rowStart) / 1440) * 100;
+      const width = (differenceInMinutes(dEnd, currentStart) / 1440) * 100;
+      dayLabel = { qty: dQty, left, width };
     }
 
-    // Cálculo porción nocturna (después del split)
+    // Night portion
+    let nightLabel = null;
     if (currentEnd > splitTime) {
-      const nightStart = currentStart > splitTime ? currentStart : splitTime;
-      const nightEnd = currentEnd;
-      const nightDuration = differenceInMinutes(nightEnd, nightStart);
-      nightQty = (nightDuration / totalTaskDuration) * task.quantity;
+      const nStart = currentStart > splitTime ? currentStart : splitTime;
+      const nEnd = currentEnd;
+      const nDur = differenceInMinutes(nEnd, nStart);
+      const nQty = (nDur / totalTaskDuration) * task.quantity;
+      const left = (differenceInMinutes(nStart, rowStart) / 1440) * 100;
+      const width = (differenceInMinutes(nEnd, nStart) / 1440) * 100;
+      nightLabel = { qty: nQty, left, width };
     }
 
-    return { dayQty, nightQty };
+    return { dayLabel, nightLabel };
   };
 
   const getDayGaps = (day: Date, dIdx: number) => {
@@ -221,6 +218,8 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
         {weekDays.map((day, dIdx) => {
           const gaps = getDayGaps(day, dIdx);
+          const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
+          
           return (
             <div key={dIdx} className="flex items-center group">
               <div className="w-14 shrink-0 pr-2">
@@ -229,11 +228,15 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
               </div>
 
               <div className="flex-1 h-14 bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
-                <div className="absolute inset-y-0 left-0 z-0 w-full bg-[#C0E6F520]"></div>
-
-                {/* Línea divisoria de cambio de turno ajustada a las 19:00 */}
+                {/* Fondo turno noche suave */}
                 <div 
-                  className="absolute inset-y-0 z-20 border-l-2 border-primary/90 shadow-[0_0_8px_rgba(0,0,0,0.15)]"
+                  className="absolute inset-y-0 z-0 bg-[#83CCEB10]"
+                  style={{ left: `${SPLIT_PCT}%`, right: 0 }}
+                ></div>
+
+                {/* Línea divisoria a las 19:00 */}
+                <div 
+                  className="absolute inset-y-0 z-30 border-l-2 border-primary/90 shadow-[0_0_8px_rgba(0,0,0,0.15)]"
                   style={{ left: `${SPLIT_PCT}%` }}
                 >
                   <div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-2 w-2 bg-primary rounded-full"></div>
@@ -276,39 +279,68 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   const style = getBarStyle(task.startTime, task.endTime, day, isSpecialTask(task.name));
                   if (!style) return null;
                   
-                  const splitQuantities = getSplitQuantities(task, day);
+                  const shifts = getShiftData(task, day);
 
                   return (
                     <div
                       key={task.id}
                       onClick={() => onTaskClick?.(task)}
-                      className="absolute inset-y-2 rounded border shadow-sm z-25 p-1 flex items-center overflow-hidden transition-all hover:scale-[1.01] hover:shadow-md cursor-pointer group/task"
+                      className="absolute inset-y-2 rounded border shadow-sm z-25 transition-all hover:scale-[1.005] hover:shadow-md cursor-pointer group/task overflow-hidden"
                       style={style}
                     >
-                      <div className="relative w-full h-full flex items-center min-w-0">
-                        <div className="flex flex-col justify-center gap-0.5 whitespace-nowrap px-2 overflow-hidden w-full">
-                          <span className={cn(
-                            "font-bold text-slate-800 leading-none truncate",
-                            isSpecialTask(task.name) ? "text-[10px]" : "text-xs"
-                          )}>
-                            {task.name}
-                          </span>
-                          
-                          {splitQuantities && (
-                            <div className="flex flex-col gap-0.5">
-                              {splitQuantities.dayQty > 0 && (
-                                <span className="text-[8px] font-black text-slate-600 leading-none">
-                                  D: {Math.round(splitQuantities.dayQty).toLocaleString()}
-                                </span>
-                              )}
-                              {splitQuantities.nightQty > 0 && (
-                                <span className="text-[8px] font-black text-slate-900 leading-none">
-                                  N: {Math.round(splitQuantities.nightQty).toLocaleString()}
+                      <div className="relative w-full h-full min-w-0">
+                        {/* Label DIA */}
+                        {shifts?.dayLabel && (
+                          <div 
+                            className="absolute inset-y-0 flex flex-col justify-start p-1 overflow-hidden"
+                            style={{ 
+                              left: `${((shifts.dayLabel.left - parseFloat(style.left)) / parseFloat(style.width)) * 100}%`,
+                              width: `${(shifts.dayLabel.width / parseFloat(style.width)) * 100}%`
+                            }}
+                          >
+                            <span className="text-[7px] font-bold text-slate-500 uppercase leading-none mb-1 opacity-70">DIA</span>
+                            <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+                              <span className="font-bold text-slate-800 text-[10px] leading-tight truncate">
+                                {task.name}
+                              </span>
+                              {!isSpecialTask(task.name) && (
+                                <span className="font-bold text-slate-700 text-[10px] leading-tight shrink-0">
+                                  {Math.round(shifts.dayLabel.qty).toLocaleString()} cajas
                                 </span>
                               )}
                             </div>
-                          )}
-                        </div>
+                          </div>
+                        )}
+
+                        {/* Label NOCHE */}
+                        {shifts?.nightLabel && (
+                          <div 
+                            className="absolute inset-y-0 flex flex-col justify-start p-1 overflow-hidden"
+                            style={{ 
+                              left: `${((shifts.nightLabel.left - parseFloat(style.left)) / parseFloat(style.width)) * 100}%`,
+                              width: `${(shifts.nightLabel.width / parseFloat(style.width)) * 100}%`
+                            }}
+                          >
+                            <span className="text-[7px] font-bold text-slate-600 uppercase leading-none mb-1 opacity-70">NOCHE</span>
+                            <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+                              <span className="font-bold text-slate-800 text-[10px] leading-tight truncate">
+                                {task.name}
+                              </span>
+                              {!isSpecialTask(task.name) && (
+                                <span className="font-bold text-slate-900 text-[10px] leading-tight shrink-0">
+                                  {Math.round(shifts.nightLabel.qty).toLocaleString()} cajas
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Fallback para tareas muy cortas o especiales que no entran en el cálculo de shift labels */}
+                        {(!shifts?.dayLabel && !shifts?.nightLabel) && (
+                          <div className="flex items-center h-full px-2">
+                             <span className="font-bold text-slate-800 text-[10px] truncate">{task.name}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   );
