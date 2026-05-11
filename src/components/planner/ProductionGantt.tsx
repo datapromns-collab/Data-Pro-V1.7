@@ -91,7 +91,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     const shiftSplit = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE);
     const rowEnd = setMinutes(setHours(startOfDay(addDays(day, 1)), 7), 0);
     
-    const nightLabelThreshold = setMinutes(setHours(startOfDay(day), 21), 0);
+    const nightLabelThreshold = setMinutes(setHours(startOfDay(day), 21), 0); // Desplazado a las 21:00 (~3cm)
 
     const getOverlapMins = (start1: Date, end1: Date, start2: Date, end2: Date) => {
       const s = isAfter(start1, start2) ? start1 : start2;
@@ -217,11 +217,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         {productSummary.length > 0 && (
           <div className="mt-2 border-t-2 border-slate-100 pt-3">
             <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Resumen de Producción Total</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-x-4 gap-y-1">
               {productSummary.map(([name, qty]) => (
                 <div key={name} className="flex items-center gap-2 py-1 px-3 bg-slate-50/50 rounded-md border border-slate-100">
-                  <span className="text-xs font-bold text-slate-700">{name}</span>
-                  <span className="text-xs font-bold text-primary">
+                  <span className="text-xs font-bold text-slate-700 truncate">{name}</span>
+                  <span className="text-xs font-bold text-primary whitespace-nowrap">
                     {Math.round(qty).toLocaleString()} cajas
                   </span>
                 </div>
