@@ -108,6 +108,21 @@ const CONCENTRATES_JUICES = [
   { code: 'MATP_0060', description: 'CONCENTRADO JUGO-MANZANA' },
 ];
 
+const SOLIDS_DATA = [
+  { code: 'MATP_0014', description: 'BENZOATO DE POTASIO' },
+  { code: 'MATP_0015', description: 'ACIDO TARTARICO' },
+  { code: 'MATP_0016', description: 'SUCRALOSA EN POLVO' },
+  { code: 'MATP_0017', description: 'ACIDO CITRICO ANHIDRO GRANULAR (J)' },
+  { code: 'MATP_0018', description: 'GOMA DE XANTHAN 80MESH (J)' },
+  { code: 'MATP_0019', description: 'BENZOATO DE SODIO E211 CRYSTALLINE (J)' },
+  { code: 'MATP_0020', description: 'SORBATO DE POTASIO E202 GRANULATE 2400 (J)' },
+  { code: 'MATP_0021', description: 'TRISODIUM CITRATE DIHYDRATE (J)' },
+  { code: 'MATP_0031', description: 'ACIDO ASCORBICO (T)' },
+  { code: 'MATP_0036', description: 'EDTA IX11413BV DISODIO DE CALCIO' },
+  { code: 'MATP_0040', description: 'ACIDO MALICO AD000009' },
+  { code: 'MATP_0042', description: 'CARBOXIMETILCELULOSA CMC SACO 25KG' },
+];
+
 const FLAVORS_FOR_EMP0009 = [
   "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"
 ];
@@ -417,7 +432,23 @@ export function RequirementSection() {
                         </div>
                       </div>
                     )}
-                    {s.id !== 'sugar' && s.id !== 'concentrates' && renderGenericTable(s.id === 'solids' || s.id === 'additives' ? 'KG' : 'UND/KG')}
+                    {s.id === 'solids' && (
+                      <div className="rounded-md border">
+                        <Table>
+                          <TableHeader><TableRow className="bg-slate-50"><TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead><TableHead className="font-bold text-slate-600 text-xs">Descripción</TableHead><TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
+                          <TableBody>
+                            {SOLIDS_DATA.map((item) => (
+                              <TableRow key={item.code} className="hover:bg-slate-50/50">
+                                <TableCell className="font-mono text-xs font-bold text-emerald-600">{item.code}</TableCell>
+                                <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
+                                <TableCell className="text-right"><div className="flex items-center gap-2 justify-end"><Input type="number" className="h-8 text-right w-24 text-xs" placeholder="0" /><span className="text-[10px] font-bold text-slate-400">KG</span></div></TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    )}
+                    {s.id !== 'sugar' && s.id !== 'concentrates' && s.id !== 'solids' && renderGenericTable(s.id === 'additives' ? 'KG' : 'UND/KG')}
                   </Card>
                 </TabsContent>
               ))}

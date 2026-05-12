@@ -111,6 +111,21 @@ const CONCENTRATES_JUICES = [
   { code: 'MATP_0060', description: 'CONCENTRADO JUGO-MANZANA' },
 ];
 
+const SOLIDS_DATA = [
+  { code: 'MATP_0014', description: 'BENZOATO DE POTASIO' },
+  { code: 'MATP_0015', description: 'ACIDO TARTARICO' },
+  { code: 'MATP_0016', description: 'SUCRALOSA EN POLVO' },
+  { code: 'MATP_0017', description: 'ACIDO CITRICO ANHIDRO GRANULAR (J)' },
+  { code: 'MATP_0018', description: 'GOMA DE XANTHAN 80MESH (J)' },
+  { code: 'MATP_0019', description: 'BENZOATO DE SODIO E211 CRYSTALLINE (J)' },
+  { code: 'MATP_0020', description: 'SORBATO DE POTASIO E202 GRANULATE 2400 (J)' },
+  { code: 'MATP_0021', description: 'TRISODIUM CITRATE DIHYDRATE (J)' },
+  { code: 'MATP_0031', description: 'ACIDO ASCORBICO (T)' },
+  { code: 'MATP_0036', description: 'EDTA IX11413BV DISODIO DE CALCIO' },
+  { code: 'MATP_0040', description: 'ACIDO MALICO AD000009' },
+  { code: 'MATP_0042', description: 'CARBOXIMETILCELULOSA CMC SACO 25KG' },
+];
+
 export function RequirementReport({ tasks, weekStartDate }: RequirementReportProps) {
   const weekNumber = getISOWeek(weekStartDate);
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
@@ -295,16 +310,28 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           </div>
         </section>
 
-        <div className="grid grid-cols-2 gap-3">
-          <section>
-            {renderSectionHeader("VII. Materia Prima - Sólidos", "emerald-700")}
-            <div className="p-3 border rounded text-center text-slate-400 text-[10px] italic bg-slate-50/50">Ingredientes sólidos y polvos industriales.</div>
-          </section>
-          <section>
-            {renderSectionHeader("VIII. Materia Prima - Aditivos", "emerald-800")}
-            <div className="p-3 border rounded text-center text-slate-400 text-[10px] italic bg-slate-50/50">Conservantes y aditivos.</div>
-          </section>
-        </div>
+        <section>
+          {renderSectionHeader("VII. Materia Prima - Sólidos", "emerald-700")}
+          <div className="rounded border border-slate-200 overflow-hidden">
+            <Table>
+              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">Código SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
+              <TableBody>
+                {SOLIDS_DATA.map((item) => (
+                  <TableRow key={item.code} className="border-b last:border-0 h-8">
+                    <TableCell className="py-1 font-mono text-[10px] font-bold text-emerald-600">{item.code}</TableCell>
+                    <TableCell className="py-1 text-xs font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-xs">_______ KG</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </section>
+
+        <section>
+          {renderSectionHeader("VIII. Materia Prima - Aditivos", "emerald-800")}
+          <div className="p-3 border rounded text-center text-slate-400 text-[10px] italic bg-slate-50/50">Conservantes y aditivos.</div>
+        </section>
       </div>
 
       <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[8px] text-slate-400 font-bold uppercase tracking-widest shrink-0">
