@@ -23,10 +23,10 @@ const PREFORMS_DATA = [
 ];
 
 const CAPS_DATA = [
-  { code: 'EMP_0095', description: 'TAPA VERDE  REFRESCOS NACIONALES' },
-  { code: 'EMP_0095', description: 'TAPA VERDE  REFRESCOS IMPORTADAS' },
-  { code: 'EMP_0105', description: 'TAPA AZULES  REFRESCOS NACIONALES' },
-  { code: 'EMP_0105', description: 'TAPA AZULES  REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS NACIONALES' },
+  { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS NACIONALES' },
 ];
 
 const PLASTICS_DATA = [
@@ -82,6 +82,10 @@ const LABELS_04LT_DATA = [
   { code: 'EMP_0152', description: 'ETIQUETA NARANJA 400ML' },
   { code: 'EMP_0154', description: 'ETIQUETA PIÑA PARCHITA 400ML' },
   { code: 'EMP_0155', description: 'ETIQUETA MANZANITA 400ML' },
+];
+
+const SUGAR_DATA = [
+  { code: 'MATP_0001', description: 'AZUCAR REFINADA' },
 ];
 
 export function RequirementReport({ tasks, weekStartDate }: RequirementReportProps) {
@@ -158,11 +162,35 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
         </div>
 
         <div className="mb-10">{renderSectionHeader("IV. Sección Etiquetas", "amber-500")}
-          <div className="space-y-4">
-            {['2 Lts', '1.5 Lts', '1 Lt', '0.4 Lts'].map((label, idx) => (
-              <div key={idx} className="border rounded p-2">
-                <p className="text-[10px] font-bold text-slate-400 uppercase mb-2">Formato {label}</p>
-                <div className="h-20 border-2 border-dashed rounded flex items-center justify-center text-slate-300 text-[10px]">Detalle de etiquetas en reporte anexo o tabla completa...</div>
+          <div className="space-y-6">
+            {[
+              { label: '2 Lts', data: LABELS_2LTS_DATA },
+              { label: '1.5 Lts', data: LABELS_1_5LTS_DATA },
+              { label: '1 Lt', data: LABELS_1LT_DATA },
+              { label: '0.4 Lts', data: LABELS_04LT_DATA }
+            ].map((section, idx) => (
+              <div key={idx} className="border rounded-lg overflow-hidden">
+                <div className="bg-slate-50 px-4 py-2 border-b">
+                  <p className="text-[10px] font-bold text-slate-500 uppercase">Formato {section.label}</p>
+                </div>
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-white">
+                      <TableHead className="text-[10px] font-bold uppercase">SAP</TableHead>
+                      <TableHead className="text-[10px] font-bold uppercase">Descripción</TableHead>
+                      <TableHead className="text-right text-[10px] font-bold uppercase">KG</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {section.data.map((item) => (
+                      <TableRow key={item.code} className="border-b last:border-0">
+                        <TableCell className="font-mono text-[10px] font-bold text-primary py-2">{item.code}</TableCell>
+                        <TableCell className="text-[10px] font-medium text-slate-800 py-2">{item.description}</TableCell>
+                        <TableCell className="text-right font-black text-slate-900 bg-slate-50/50 py-2">_______</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </div>
             ))}
           </div>
@@ -170,19 +198,38 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
 
         <div className="page-break" />
 
-        <div className="mb-10">{renderSectionHeader("VIII. Sección Materia Prima - Azúcar", "emerald-500")}
-          <div className="rounded-lg border border-slate-200 overflow-hidden"><Table><TableHeader><TableRow className="bg-slate-50"><TableHead className="font-bold text-slate-700">Descripción</TableHead><TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead></TableRow></TableHeader><TableBody><TableRow><TableCell className="text-sm font-medium">Azúcar Blanca Refinada</TableCell><TableCell className="text-right font-black">_______ KG</TableCell></TableRow><TableRow><TableCell className="text-sm font-medium">Azúcar Estándar</TableCell><TableCell className="text-right font-black">_______ KG</TableCell></TableRow></TableBody></Table></div>
+        <div className="mb-10">{renderSectionHeader("V. Sección Materia Prima - Azúcar", "emerald-500")}
+          <div className="rounded-lg border border-slate-200 overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-slate-50">
+                  <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
+                  <TableHead className="font-bold text-slate-700">Descripción</TableHead>
+                  <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {SUGAR_DATA.map((item) => (
+                  <TableRow key={item.code} className="border-b last:border-0">
+                    <TableCell className="font-mono text-xs font-bold text-emerald-600">{item.code}</TableCell>
+                    <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">_______ KG</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </div>
 
-        <div className="mb-10">{renderSectionHeader("IX. Sección Materia Prima - Concentrados", "emerald-600")}
+        <div className="mb-10">{renderSectionHeader("VI. Sección Materia Prima - Concentrados", "emerald-600")}
           <div className="p-4 border-2 border-dashed rounded text-center text-slate-400 text-xs italic">Cálculo de concentrados basado en tanques programados.</div>
         </div>
 
-        <div className="mb-10">{renderSectionHeader("X. Sección Materia Prima - Sólidos", "emerald-700")}
+        <div className="mb-10">{renderSectionHeader("VII. Sección Materia Prima - Sólidos", "emerald-700")}
           <div className="p-4 border-2 border-dashed rounded text-center text-slate-400 text-xs italic">Listado de ingredientes sólidos y polvos industriales.</div>
         </div>
 
-        <div className="mb-10">{renderSectionHeader("XI. Sección Materia Prima - Aditivos", "emerald-800")}
+        <div className="mb-10">{renderSectionHeader("VIII. Sección Materia Prima - Aditivos", "emerald-800")}
           <div className="p-4 border-2 border-dashed rounded text-center text-slate-400 text-xs italic">Conservantes, ácidos y mejoradores.</div>
         </div>
       </div>

@@ -20,10 +20,10 @@ const PREFORMS_DATA = [
 ];
 
 const CAPS_DATA = [
-  { code: 'EMP_0095', description: 'TAPA VERDE  REFRESCOS NACIONALES' },
-  { code: 'EMP_0095', description: 'TAPA VERDE  REFRESCOS IMPORTADAS' },
-  { code: 'EMP_0105', description: 'TAPA AZULES  REFRESCOS NACIONALES' },
-  { code: 'EMP_0105', description: 'TAPA AZULES  REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS NACIONALES' },
+  { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS NACIONALES' },
 ];
 
 const PLASTICS_DATA = [
@@ -79,6 +79,10 @@ const LABELS_04LT_DATA = [
   { code: 'EMP_0152', description: 'ETIQUETA NARANJA 400ML' },
   { code: 'EMP_0154', description: 'ETIQUETA PIÑA PARCHITA 400ML' },
   { code: 'EMP_0155', description: 'ETIQUETA MANZANITA 400ML' },
+];
+
+const SUGAR_DATA = [
+  { code: 'MATP_0001', description: 'AZUCAR REFINADA' },
 ];
 
 const FLAVORS_FOR_EMP0009 = [
@@ -324,7 +328,22 @@ export function RequirementSection() {
                       <div className="bg-emerald-500/10 p-2 rounded-lg"><s.icon className="h-5 w-5 text-emerald-600" /></div>
                       <h3 className="text-lg font-headline font-bold text-slate-900">{s.label}</h3>
                     </div>
-                    {renderGenericTable(s.id === 'sugar' || s.id === 'solids' || s.id === 'additives' ? 'KG' : 'UND/KG')}
+                    {s.id === 'sugar' ? (
+                      <div className="rounded-md border">
+                        <Table>
+                          <TableHeader><TableRow className="bg-slate-50"><TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead><TableHead className="font-bold text-slate-600 text-xs">Descripción</TableHead><TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
+                          <TableBody>
+                            {SUGAR_DATA.map((item) => (
+                              <TableRow key={item.code} className="hover:bg-slate-50/50">
+                                <TableCell className="font-mono text-xs font-bold text-emerald-600">{item.code}</TableCell>
+                                <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
+                                <TableCell className="text-right"><div className="flex items-center gap-2 justify-end"><Input type="number" className="h-8 text-right w-24 text-xs" placeholder="0" /><span className="text-[10px] font-bold text-slate-400">KG</span></div></TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    ) : renderGenericTable(s.id === 'solids' || s.id === 'additives' ? 'KG' : 'UND/KG')}
                   </Card>
                 </TabsContent>
               ))}
