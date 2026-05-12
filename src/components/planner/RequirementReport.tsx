@@ -23,10 +23,10 @@ const PREFORMS_DATA = [
 ];
 
 const CAPS_DATA = [
-  { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS NACIONALES' },
   { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS IMPORTADAS' },
-  { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS NACIONALES' },
+  { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS NACIONALES' },
   { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS NACIONALES' },
 ];
 
 const PLASTICS_DATA = [
@@ -125,6 +125,14 @@ const SOLIDS_DATA = [
   { code: 'MATP_0036', description: 'EDTA IX11413BV DISODIO DE CALCIO' },
   { code: 'MATP_0040', description: 'ACIDO MALICO AD000009' },
   { code: 'MATP_0042', description: 'CARBOXIMETILCELULOSA CMC SACO 25KG' },
+];
+
+const ADDITIVES_DATA = [
+  { code: 'MATP_0010', description: 'ADITIVO AD 74M-135', unit: 'LTS' },
+  { code: 'MATP_0027', description: 'CONCENTRADO DE EXTRACTO DE TE (T) LIQUIDO', unit: 'KG' },
+  { code: 'MATP_0028', description: 'CONCENTRADO EXTRACTO DE LIMON (T) SABOR', unit: 'KG' },
+  { code: 'MATP_0029', description: 'CONCENTRADO EXTRACTO DE DURAZNO (T) SABOR', unit: 'KG' },
+  { code: 'MATP_0041', description: 'COLOR CARAMELO BOM AL (SU)', unit: 'KG' },
 ];
 
 export function RequirementReport({ tasks, weekStartDate }: RequirementReportProps) {
@@ -331,7 +339,20 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
 
         <section>
           {renderSectionHeader("VIII. Materia Prima - Aditivos", "emerald-800")}
-          <div className="p-3 border rounded text-center text-slate-400 text-[10px] italic bg-slate-50/50">Conservantes y aditivos.</div>
+          <div className="rounded border border-slate-200 overflow-hidden">
+            <Table>
+              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">Código SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
+              <TableBody>
+                {ADDITIVES_DATA.map((item) => (
+                  <TableRow key={item.code} className="border-b last:border-0 h-8">
+                    <TableCell className="py-1 font-mono text-[10px] font-bold text-emerald-600">{item.code}</TableCell>
+                    <TableCell className="py-1 text-xs font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-xs">_______ {item.unit}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
         </section>
       </div>
 

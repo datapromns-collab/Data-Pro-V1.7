@@ -124,6 +124,14 @@ const SOLIDS_DATA = [
   { code: 'MATP_0042', description: 'CARBOXIMETILCELULOSA CMC SACO 25KG' },
 ];
 
+const ADDITIVES_DATA = [
+  { code: 'MATP_0010', description: 'ADITIVO AD 74M-135', unit: 'LTS' },
+  { code: 'MATP_0027', description: 'CONCENTRADO DE EXTRACTO DE TE (T) LIQUIDO', unit: 'KG' },
+  { code: 'MATP_0028', description: 'CONCENTRADO EXTRACTO DE LIMON (T) SABOR', unit: 'KG' },
+  { code: 'MATP_0029', description: 'CONCENTRADO EXTRACTO DE DURAZNO (T) SABOR', unit: 'KG' },
+  { code: 'MATP_0041', description: 'COLOR CARAMELO BOM AL (SU)', unit: 'KG' },
+];
+
 const FLAVORS_FOR_EMP0009 = [
   "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"
 ];
@@ -212,34 +220,6 @@ export function RequirementSection() {
     const totalBoxes = line6FreshTasks.reduce((acc, t) => acc + (t.quantity || 0), 0);
     return Math.round(totalBoxes * 15);
   }, [tasks, weekStartDate]);
-
-  const renderGenericTable = (unit: string = 'UND') => (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
-          <TableRow className="bg-slate-50">
-            <TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead>
-            <TableHead className="font-bold text-slate-600 text-xs">Descripción del Material</TableHead>
-            <TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {[1, 2, 3, 4, 5].map((i) => (
-            <TableRow key={i} className="hover:bg-slate-50/50">
-              <TableCell className="p-2"><Input className="h-8 text-xs font-mono" placeholder="SAP_XXX" /></TableCell>
-              <TableCell className="p-2"><Input className="h-8 text-xs" placeholder="Nombre del insumo..." /></TableCell>
-              <TableCell className="p-2">
-                <div className="flex items-center gap-2 justify-end">
-                  <Input type="number" className="h-8 text-right font-bold w-24 text-xs" placeholder="0" />
-                  <span className="text-[10px] font-bold text-slate-400">{unit}</span>
-                </div>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
-  );
 
   return (
     <div className="h-full flex flex-col space-y-6">
@@ -449,7 +429,27 @@ export function RequirementSection() {
                         </Table>
                       </div>
                     )}
-                    {s.id !== 'sugar' && s.id !== 'concentrates' && s.id !== 'solids' && renderGenericTable(s.id === 'additives' ? 'KG' : 'UND/KG')}
+                    {s.id === 'additives' && (
+                      <div className="rounded-md border">
+                        <Table>
+                          <TableHeader><TableRow className="bg-slate-50"><TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead><TableHead className="font-bold text-slate-600 text-xs">Descripción</TableHead><TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
+                          <TableBody>
+                            {ADDITIVES_DATA.map((item) => (
+                              <TableRow key={item.code} className="hover:bg-slate-50/50">
+                                <TableCell className="font-mono text-xs font-bold text-emerald-600">{item.code}</TableCell>
+                                <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
+                                <TableCell className="text-right">
+                                  <div className="flex items-center gap-2 justify-end">
+                                    <Input type="number" className="h-8 text-right w-24 text-xs" placeholder="0" />
+                                    <span className="text-[10px] font-bold text-slate-400">{item.unit}</span>
+                                  </div>
+                                </TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    )}
                   </Card>
                 </TabsContent>
               ))}
