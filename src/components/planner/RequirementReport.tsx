@@ -120,6 +120,7 @@ const SOLIDS_DATA = [
   { code: 'MATP_0019', description: 'BENZOATO DE SODIO E211 CRYSTALLINE (J)' },
   { code: 'MATP_0020', description: 'SORBATO DE POTASIO E202 GRANULATE 2400 (J)' },
   { code: 'MATP_0021', description: 'TRISODIUM CITRATE DIHYDRATE (J)' },
+  { code: 'MATP_0026', description: 'EXTRACTO TE EN POLVO (T)' },
   { code: 'MATP_0031', description: 'ACIDO ASCORBICO (T)' },
   { code: 'MATP_0036', description: 'EDTA IX11413BV DISODIO DE CALCIO' },
   { code: 'MATP_0040', description: 'ACIDO MALICO AD000009' },
