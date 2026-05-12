@@ -90,50 +90,31 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
 
   const getCalculatedValue = (code: string) => {
     const weekEnd = new Date(weekStartDate.getTime() + 7 * 24 * 60 * 60 * 1000);
-    
     switch (code) {
       case 'EMP_0009': {
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
-        const total = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && flavors.includes(t.name))
-          .reduce((acc, t) => acc + (t.quantity || 0), 0);
-        return Math.round(total * 12);
+        return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && flavors.includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
       }
       case 'EMP_0068': {
-        const line7 = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && ["GLUP COLA", "GLUP KOLITA"].includes(t.name))
-          .reduce((acc, t) => acc + (t.quantity || 0), 0);
-        const line5 = tasks.filter(t => t.lineId === "5" && t.endTime > weekStartDate && t.startTime < weekEnd)
-          .reduce((acc, t) => acc + (t.quantity || 0), 0);
+        const line7 = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && ["GLUP COLA", "GLUP KOLITA"].includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0);
+        const line5 = tasks.filter(t => t.lineId === "5" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
         return Math.round((line7 + line5) * 12);
       }
-      case 'EMP_0093': {
-        const flavors = ["GLUP COLA", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
-        const total = tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && flavors.includes(t.name))
-          .reduce((acc, t) => acc + (t.quantity || 0), 0);
-        return Math.round(total * 6);
-      }
-      case 'EMP_0103': {
-        const total = tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH")
-          .reduce((acc, t) => acc + (t.quantity || 0), 0);
-        return Math.round(total * 6);
-      }
-      case 'EMP_0120': {
-        const total = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH")
-          .reduce((acc, t) => acc + (t.quantity || 0), 0);
-        return Math.round(total * 12);
-      }
-      case 'EMP_0126': {
-        const total = tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH")
-          .reduce((acc, t) => acc + (t.quantity || 0), 0);
-        return Math.round(total * 15);
-      }
-      case 'EMP_0135': {
-        const total = tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH")
-          .reduce((acc, t) => acc + (t.quantity || 0), 0);
-        return Math.round(total * 15);
-      }
+      case 'EMP_0093': return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && !["GLUP FRESH"].includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
+      case 'EMP_0103': return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
+      case 'EMP_0120': return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
+      case 'EMP_0126': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
+      case 'EMP_0135': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
       default: return 0;
     }
   };
+
+  const renderSectionHeader = (title: string, color: string) => (
+    <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
+      <div className={`w-1 h-6 bg-${color} rounded-full`}></div>
+      <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">{title}</h2>
+    </div>
+  );
 
   return (
     <div className="page-break bg-white p-8 overflow-visible h-auto min-h-screen flex flex-col">
@@ -142,18 +123,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           <h1 className="text-2xl font-headline font-bold text-slate-900">Reporte de Requerimientos</h1>
           <p className="text-primary font-bold text-base uppercase">Gestión de Materiales</p>
         </div>
-        <div className="flex-1 flex justify-center">
-          {glupLogo && (
-            <Image 
-              src={glupLogo.imageUrl} 
-              alt="Logo" 
-              width={200} 
-              height={80} 
-              className="object-contain"
-              data-ai-hint="soda logo"
-            />
-          )}
-        </div>
+        <div className="flex-1 flex justify-center">{glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={200} height={80} className="object-contain" />}</div>
         <div className="flex-1 text-right">
           <p className="text-[10px] font-bold text-primary uppercase mb-1">Confidencial - Planta</p>
           <p className="text-[10px] text-slate-500 font-medium">Semana {weekNumber} - {format(weekStartDate, 'dd MMMM yyyy', { locale: es })}</p>
@@ -162,27 +132,16 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
 
       <div className="flex-1">
         <div className="mb-10">
-          <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
-            <div className="w-1 h-6 bg-primary rounded-full"></div>
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">I. Sección Empaque - Preformas</h2>
-          </div>
+          {renderSectionHeader("I. Sección Empaque - Preformas", "primary")}
           <div className="rounded-lg border border-slate-200 overflow-hidden">
             <Table>
-              <TableHeader>
-                <TableRow className="bg-slate-50 border-b">
-                  <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
-                  <TableHead className="font-bold text-slate-700">Descripción del Material</TableHead>
-                  <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
-                </TableRow>
-              </TableHeader>
+              <TableHeader><TableRow className="bg-slate-50"><TableHead className="font-bold text-slate-700">Código SAP</TableHead><TableHead className="font-bold text-slate-700">Descripción</TableHead><TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead></TableRow></TableHeader>
               <TableBody>
                 {PREFORMS_DATA.map((item) => (
                   <TableRow key={item.code} className="border-b last:border-0">
                     <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
                     <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
-                      {getCalculatedValue(item.code).toLocaleString('es-ES')} UND
-                    </TableCell>
+                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">{getCalculatedValue(item.code).toLocaleString('es-ES')} UND</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -190,196 +149,41 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           </div>
         </div>
 
-        <div className="mb-10">
-          <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
-            <div className="w-1 h-6 bg-slate-500 rounded-full"></div>
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">II. Sección Tapas</h2>
-          </div>
-          <div className="rounded-lg border border-slate-200 overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-slate-50 border-b">
-                  <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
-                  <TableHead className="font-bold text-slate-700">Descripción del Material</TableHead>
-                  <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {CAPS_DATA.map((item, idx) => (
-                  <TableRow key={`${item.code}-${idx}`} className="border-b last:border-0">
-                    <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                    <TableCell className="text-sm font-medium text-slate-800 whitespace-pre-line">{item.description}</TableCell>
-                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
-                      _______ UND
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+        <div className="mb-10">{renderSectionHeader("II. Sección Tapas", "slate-500")}
+          <div className="rounded-lg border border-slate-200 overflow-hidden"><Table><TableHeader><TableRow className="bg-slate-50"><TableHead className="font-bold text-slate-700">SAP</TableHead><TableHead className="font-bold text-slate-700">Descripción</TableHead><TableHead className="text-right font-bold text-slate-700">Cantidad</TableHead></TableRow></TableHeader><TableBody>{CAPS_DATA.map((item, idx) => (<TableRow key={idx} className="border-b last:border-0"><TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell><TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell><TableCell className="text-right font-black text-slate-900 bg-slate-50/50">_______ UND</TableCell></TableRow>))}</TableBody></Table></div>
+        </div>
+
+        <div className="mb-10">{renderSectionHeader("III. Sección Plásticos", "indigo-500")}
+          <div className="rounded-lg border border-slate-200 overflow-hidden"><Table><TableHeader><TableRow className="bg-slate-50"><TableHead className="font-bold text-slate-700">SAP</TableHead><TableHead className="font-bold text-slate-700">Descripción</TableHead><TableHead className="text-right font-bold text-slate-700">Cantidad</TableHead></TableRow></TableHeader><TableBody>{PLASTICS_DATA.map((item, idx) => item.isHeader ? (<TableRow key={idx} className="bg-slate-100/50"><TableCell colSpan={3} className="py-2 text-center font-bold text-slate-500 text-[10px] uppercase">{item.description}</TableCell></TableRow>) : (<TableRow key={item.code} className="border-b last:border-0"><TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell><TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell><TableCell className="text-right font-black text-slate-900 bg-slate-50/50">_______ KG</TableCell></TableRow>))}</TableBody></Table></div>
+        </div>
+
+        <div className="mb-10">{renderSectionHeader("IV. Sección Etiquetas", "amber-500")}
+          <div className="space-y-4">
+            {['2 Lts', '1.5 Lts', '1 Lt', '0.4 Lts'].map((label, idx) => (
+              <div key={idx} className="border rounded p-2">
+                <p className="text-[10px] font-bold text-slate-400 uppercase mb-2">Formato {label}</p>
+                <div className="h-20 border-2 border-dashed rounded flex items-center justify-center text-slate-300 text-[10px]">Detalle de etiquetas en reporte anexo o tabla completa...</div>
+              </div>
+            ))}
           </div>
         </div>
 
-        <div className="mb-10">
-          <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
-            <div className="w-1 h-6 bg-indigo-500 rounded-full"></div>
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">III. Sección Plásticos</h2>
-          </div>
-          <div className="rounded-lg border border-slate-200 overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-slate-50 border-b">
-                  <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
-                  <TableHead className="font-bold text-slate-700">Descripción del Material</TableHead>
-                  <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {PLASTICS_DATA.map((item, idx) => (
-                  item.isHeader ? (
-                    <TableRow key={`header-${idx}`} className="bg-slate-100/50 border-b">
-                      <TableCell colSpan={3} className="py-2 text-center font-bold text-slate-500 text-[10px] uppercase tracking-widest">
-                        {item.description}
-                      </TableCell>
-                    </TableRow>
-                  ) : (
-                    <TableRow key={item.code} className="border-b last:border-0">
-                      <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                      <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
-                      <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
-                        _______ KG
-                      </TableCell>
-                    </TableRow>
-                  )
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+        <div className="page-break" />
+
+        <div className="mb-10">{renderSectionHeader("VIII. Sección Materia Prima - Azúcar", "emerald-500")}
+          <div className="rounded-lg border border-slate-200 overflow-hidden"><Table><TableHeader><TableRow className="bg-slate-50"><TableHead className="font-bold text-slate-700">Descripción</TableHead><TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead></TableRow></TableHeader><TableBody><TableRow><TableCell className="text-sm font-medium">Azúcar Blanca Refinada</TableCell><TableCell className="text-right font-black">_______ KG</TableCell></TableRow><TableRow><TableCell className="text-sm font-medium">Azúcar Estándar</TableCell><TableCell className="text-right font-black">_______ KG</TableCell></TableRow></TableBody></Table></div>
         </div>
 
-        <div className="mb-10">
-          <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
-            <div className="w-1 h-6 bg-amber-500 rounded-full"></div>
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">IV. Sección Etiquetas - 2 Lts</h2>
-          </div>
-          <div className="rounded-lg border border-slate-200 overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-slate-50 border-b">
-                  <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
-                  <TableHead className="font-bold text-slate-700">Descripción</TableHead>
-                  <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {LABELS_2LTS_DATA.map((item) => (
-                  <TableRow key={item.code} className="border-b last:border-0">
-                    <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                    <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
-                      _______ KG
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+        <div className="mb-10">{renderSectionHeader("IX. Sección Materia Prima - Concentrados", "emerald-600")}
+          <div className="p-4 border-2 border-dashed rounded text-center text-slate-400 text-xs italic">Cálculo de concentrados basado en tanques programados.</div>
         </div>
 
-        <div className="mb-10">
-          <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
-            <div className="w-1 h-6 bg-orange-500 rounded-full"></div>
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">V. Sección Etiquetas - 1.5 Lts</h2>
-          </div>
-          <div className="rounded-lg border border-slate-200 overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-slate-50 border-b">
-                  <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
-                  <TableHead className="font-bold text-slate-700">Descripción</TableHead>
-                  <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {LABELS_1_5LTS_DATA.map((item) => (
-                  <TableRow key={item.code} className="border-b last:border-0">
-                    <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                    <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
-                      _______ KG
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
+        <div className="mb-10">{renderSectionHeader("X. Sección Materia Prima - Sólidos", "emerald-700")}
+          <div className="p-4 border-2 border-dashed rounded text-center text-slate-400 text-xs italic">Listado de ingredientes sólidos y polvos industriales.</div>
         </div>
 
-        <div className="mb-10">
-          <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
-            <div className="w-1 h-6 bg-blue-500 rounded-full"></div>
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">VI. Sección Etiquetas - 1 Lt</h2>
-          </div>
-          <div className="rounded-lg border border-slate-200 overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-slate-50 border-b">
-                  <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
-                  <TableHead className="font-bold text-slate-700">Descripción</TableHead>
-                  <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {LABELS_1LT_DATA.map((item) => (
-                  <TableRow key={item.code} className="border-b last:border-0">
-                    <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                    <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
-                      _______ KG
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
-
-        <div className="mb-10">
-          <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
-            <div className="w-1 h-6 bg-purple-500 rounded-full"></div>
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">VII. Sección Etiquetas - 0.4 Lts</h2>
-          </div>
-          <div className="rounded-lg border border-slate-200 overflow-hidden">
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-slate-50 border-b">
-                  <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
-                  <TableHead className="font-bold text-slate-700">Descripción</TableHead>
-                  <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {LABELS_04LT_DATA.map((item) => (
-                  <TableRow key={item.code} className="border-b last:border-0">
-                    <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                    <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
-                      _______ KG
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
-
-        <div className="mb-8">
-          <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
-            <div className="w-1 h-6 bg-emerald-500 rounded-full"></div>
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">VIII. Sección Materia Prima</h2>
-          </div>
-          <div className="p-8 border-2 border-dashed rounded-xl flex items-center justify-center text-slate-400 text-sm italic">
-            Listado de concentrados y jarabes por planificar según tanques programados.
-          </div>
+        <div className="mb-10">{renderSectionHeader("XI. Sección Materia Prima - Aditivos", "emerald-800")}
+          <div className="p-4 border-2 border-dashed rounded text-center text-slate-400 text-xs italic">Conservantes, ácidos y mejoradores.</div>
         </div>
       </div>
 

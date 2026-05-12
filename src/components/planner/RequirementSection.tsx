@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
-import { Package, CircleDot, Tag, Layers, Archive, Wheat } from 'lucide-react';
+import { Package, CircleDot, Tag, Layers, Archive, Wheat, Droplets, Box, Plus } from 'lucide-react';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { addDays } from 'date-fns';
 
@@ -82,28 +82,13 @@ const LABELS_04LT_DATA = [
 ];
 
 const FLAVORS_FOR_EMP0009 = [
-  "GLUP UVA",
-  "GLUP PIÑA",
-  "GLUP NARANJA",
-  "GLUP MANZANA VERDE",
-  "GLUP PIÑA PARCHITA",
-  "GLUP MANZANA ROJA"
+  "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"
 ];
 
-const FLAVORS_FOR_EMP0068_L7 = [
-  "GLUP COLA",
-  "GLUP KOLITA"
-];
+const FLAVORS_FOR_EMP0068_L7 = ["GLUP COLA", "GLUP KOLITA"];
 
 const FLAVORS_FOR_EMP0093 = [
-  "GLUP COLA",
-  "GLUP UVA",
-  "GLUP PIÑA",
-  "GLUP NARANJA",
-  "GLUP KOLITA",
-  "GLUP MANZANA VERDE",
-  "GLUP PIÑA PARCHITA",
-  "GLUP MANZANA ROJA"
+  "GLUP COLA", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"
 ];
 
 const LABEL_PRESENTATIONS = [
@@ -123,6 +108,13 @@ export function RequirementSection() {
     { id: 'plastics', label: 'Plásticos', icon: Layers, description: 'Inventario de term encogible y plásticos de embalaje.' },
   ];
 
+  const materiaPrimaSections = [
+    { id: 'sugar', label: 'Azúcar', icon: Wheat, description: 'Gestión de azúcar blanca y refinada.' },
+    { id: 'concentrates', label: 'Concentrados', icon: Droplets, description: 'Insumos de sabores y bases.' },
+    { id: 'solids', label: 'Sólidos', icon: Box, description: 'Ingredientes sólidos y polvos.' },
+    { id: 'additives', label: 'Aditivos', icon: Plus, description: 'Conservantes y mejoradores.' },
+  ];
+
   const calculatedEMP0009 = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
     const line7Tasks = tasks.filter(t => 
@@ -131,104 +123,80 @@ export function RequirementSection() {
       t.startTime < weekEnd &&
       FLAVORS_FOR_EMP0009.includes(t.name)
     );
-    
     const totalBoxes = line7Tasks.reduce((acc, t) => acc + (t.quantity || 0), 0);
     return Math.round(totalBoxes * 12);
   }, [tasks, weekStartDate]);
 
   const calculatedEMP0068 = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
-    
-    const line7Specific = tasks.filter(t => 
-      t.lineId === "7" && 
-      t.endTime > weekStartDate && 
-      t.startTime < weekEnd &&
-      FLAVORS_FOR_EMP0068_L7.includes(t.name)
-    );
-
-    const line5All = tasks.filter(t => 
-      t.lineId === "5" && 
-      t.endTime > weekStartDate && 
-      t.startTime < weekEnd
-    );
-    
-    const totalBoxes = line7Specific.reduce((acc, t) => acc + (t.quantity || 0), 0) + 
-                       line5All.reduce((acc, t) => acc + (t.quantity || 0), 0);
-                       
+    const line7Specific = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && FLAVORS_FOR_EMP0068_L7.includes(t.name));
+    const line5All = tasks.filter(t => t.lineId === "5" && t.endTime > weekStartDate && t.startTime < weekEnd);
+    const totalBoxes = line7Specific.reduce((acc, t) => acc + (t.quantity || 0), 0) + line5All.reduce((acc, t) => acc + (t.quantity || 0), 0);
     return Math.round(totalBoxes * 12);
   }, [tasks, weekStartDate]);
 
   const calculatedEMP0093 = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
-    const targetLines = ["1", "2", "3", "4"];
-    
-    const relevantTasks = tasks.filter(t => 
-      targetLines.includes(t.lineId) && 
-      t.endTime > weekStartDate && 
-      t.startTime < weekEnd &&
-      FLAVORS_FOR_EMP0093.includes(t.name)
-    );
-    
+    const relevantTasks = tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && FLAVORS_FOR_EMP0093.includes(t.name));
     const totalBoxes = relevantTasks.reduce((acc, t) => acc + (t.quantity || 0), 0);
     return Math.round(totalBoxes * 6);
   }, [tasks, weekStartDate]);
 
   const calculatedEMP0103 = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
-    const targetLines = ["1", "2", "3", "4"];
-    
-    const freshTasks = tasks.filter(t => 
-      targetLines.includes(t.lineId) && 
-      t.endTime > weekStartDate && 
-      t.startTime < weekEnd &&
-      t.name === "GLUP FRESH"
-    );
-    
+    const freshTasks = tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH");
     const totalBoxes = freshTasks.reduce((acc, t) => acc + (t.quantity || 0), 0);
     return Math.round(totalBoxes * 6);
   }, [tasks, weekStartDate]);
 
   const calculatedEMP0120 = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
-    
-    const freshLine7Tasks = tasks.filter(t => 
-      t.lineId === "7" && 
-      t.endTime > weekStartDate && 
-      t.startTime < weekEnd &&
-      t.name === "GLUP FRESH"
-    );
-    
+    const freshLine7Tasks = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH");
     const totalBoxes = freshLine7Tasks.reduce((acc, t) => acc + (t.quantity || 0), 0);
     return Math.round(totalBoxes * 12);
   }, [tasks, weekStartDate]);
 
   const calculatedEMP0126 = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
-    
-    const line6Tasks = tasks.filter(t => 
-      t.lineId === "6" && 
-      t.endTime > weekStartDate && 
-      t.startTime < weekEnd &&
-      t.name !== "GLUP FRESH"
-    );
-    
+    const line6Tasks = tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH");
     const totalBoxes = line6Tasks.reduce((acc, t) => acc + (t.quantity || 0), 0);
     return Math.round(totalBoxes * 15);
   }, [tasks, weekStartDate]);
 
   const calculatedEMP0135 = useMemo(() => {
     const weekEnd = addDays(weekStartDate, 7);
-    
-    const line6FreshTasks = tasks.filter(t => 
-      t.lineId === "6" && 
-      t.endTime > weekStartDate && 
-      t.startTime < weekEnd &&
-      t.name === "GLUP FRESH"
-    );
-    
+    const line6FreshTasks = tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH");
     const totalBoxes = line6FreshTasks.reduce((acc, t) => acc + (t.quantity || 0), 0);
     return Math.round(totalBoxes * 15);
   }, [tasks, weekStartDate]);
+
+  const renderGenericTable = (unit: string = 'UND') => (
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-slate-50">
+            <TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead>
+            <TableHead className="font-bold text-slate-600 text-xs">Descripción del Material</TableHead>
+            <TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {[1, 2, 3, 4, 5].map((i) => (
+            <TableRow key={i} className="hover:bg-slate-50/50">
+              <TableCell className="p-2"><Input className="h-8 text-xs font-mono" placeholder="SAP_XXX" /></TableCell>
+              <TableCell className="p-2"><Input className="h-8 text-xs" placeholder="Nombre del insumo..." /></TableCell>
+              <TableCell className="p-2">
+                <div className="flex items-center gap-2 justify-end">
+                  <Input type="number" className="h-8 text-right font-bold w-24 text-xs" placeholder="0" />
+                  <span className="text-[10px] font-bold text-slate-400">{unit}</span>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
 
   return (
     <div className="h-full flex flex-col space-y-6">
@@ -244,9 +212,9 @@ export function RequirementSection() {
           </TabsTrigger>
         </TabsList>
 
-        <div className="flex-1">
+        <div className="flex-1 overflow-auto">
           <TabsContent value="empaque" className="m-0 h-full">
-            <Tabs defaultValue="preforms" className="w-full h-full flex flex-col">
+            <Tabs defaultValue="preforms" className="w-full">
               <TabsList className="bg-white border p-1 rounded-lg shadow-sm self-start mb-6">
                 {empaqueSections.map((s) => (
                   <TabsTrigger key={s.id} value={s.id} className="gap-2 px-4 font-bold text-xs">
@@ -256,302 +224,111 @@ export function RequirementSection() {
                 ))}
               </TabsList>
               
-              <div className="flex-1">
-                {empaqueSections.map((s) => (
-                  <TabsContent key={s.id} value={s.id} className="m-0 h-full">
-                    {s.id === 'preforms' ? (
-                      <Card className="h-full p-6 bg-white shadow-sm border-slate-200 overflow-auto">
-                        <div className="flex items-center gap-3 mb-6">
-                          <div className="bg-primary/10 p-2 rounded-lg">
-                            <s.icon className="h-5 w-5 text-primary" />
-                          </div>
-                          <h3 className="text-lg font-headline font-bold text-slate-900">{s.label}</h3>
-                        </div>
-                        <div className="rounded-md border">
-                          <Table>
-                            <TableHeader>
-                              <TableRow className="bg-slate-50">
-                                <TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead>
-                                <TableHead className="font-bold text-slate-600 text-xs">Descripción del Material</TableHead>
-                                <TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead>
+              {empaqueSections.map((s) => (
+                <TabsContent key={s.id} value={s.id} className="m-0">
+                  <Card className="p-6 bg-white shadow-sm border-slate-200">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="bg-primary/10 p-2 rounded-lg"><s.icon className="h-5 w-5 text-primary" /></div>
+                      <h3 className="text-lg font-headline font-bold text-slate-900">{s.label}</h3>
+                    </div>
+                    {s.id === 'preforms' && (
+                      <div className="rounded-md border">
+                        <Table>
+                          <TableHeader><TableRow className="bg-slate-50"><TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead><TableHead className="font-bold text-slate-600 text-xs">Descripción</TableHead><TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
+                          <TableBody>
+                            {PREFORMS_DATA.map((item) => (
+                              <TableRow key={item.code} className="hover:bg-slate-50/50">
+                                <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
+                                <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
+                                <TableCell className="text-right">
+                                  <div className="h-8 flex items-center justify-end px-3 font-black text-primary bg-primary/5 rounded border border-primary/20 text-xs">
+                                    { (item.code === 'EMP_0009' ? calculatedEMP0009 : item.code === 'EMP_0068' ? calculatedEMP0068 : item.code === 'EMP_0093' ? calculatedEMP0093 : item.code === 'EMP_0103' ? calculatedEMP0103 : item.code === 'EMP_0120' ? calculatedEMP0120 : item.code === 'EMP_0126' ? calculatedEMP0126 : item.code === 'EMP_0135' ? calculatedEMP0135 : 0).toLocaleString('es-ES') } UND
+                                  </div>
+                                </TableCell>
                               </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {PREFORMS_DATA.map((item) => (
-                                <TableRow key={item.code} className="hover:bg-slate-50/50">
-                                  <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                                  <TableCell className="text-sm font-medium text-slate-700">
-                                    {item.description}
-                                    {item.code === 'EMP_0009' && (
-                                      <span className="ml-2 text-[10px] bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: L7 × 12</span>
-                                    )}
-                                    {item.code === 'EMP_0068' && (
-                                      <span className="ml-2 text-[10px] bg-amber-500/10 text-amber-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: (L7+L5) × 12</span>
-                                    )}
-                                    {item.code === 'EMP_0093' && (
-                                      <span className="ml-2 text-[10px] bg-indigo-500/10 text-indigo-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: (L1-4) × 6</span>
-                                    )}
-                                    {item.code === 'EMP_0103' && (
-                                      <span className="ml-2 text-[10px] bg-emerald-500/10 text-emerald-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: Fresh (L1-4) × 6</span>
-                                    )}
-                                    {item.code === 'EMP_0120' && (
-                                      <span className="ml-2 text-[10px] bg-teal-500/10 text-teal-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: Fresh (L7) × 12</span>
-                                    )}
-                                    {item.code === 'EMP_0126' && (
-                                      <span className="ml-2 text-[10px] bg-sky-500/10 text-sky-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: L6 (No Fresh) × 15</span>
-                                    )}
-                                    {item.code === 'EMP_0135' && (
-                                      <span className="ml-2 text-[10px] bg-green-500/10 text-green-600 px-2 py-0.5 rounded-full font-bold uppercase tracking-tighter">Auto: Fresh (L6) × 15</span>
-                                    )}
-                                  </TableCell>
-                                  <TableCell className="text-right">
-                                    {item.code === 'EMP_0009' ? (
-                                      <div className="h-8 flex items-center justify-end px-3 font-black text-primary bg-primary/5 rounded border border-primary/20 text-xs">
-                                        {calculatedEMP0009.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
-                                      </div>
-                                    ) : item.code === 'EMP_0068' ? (
-                                      <div className="h-8 flex items-center justify-end px-3 font-black text-amber-600 bg-amber-50 rounded border border-amber-200 text-xs">
-                                        {calculatedEMP0068.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
-                                      </div>
-                                    ) : item.code === 'EMP_0093' ? (
-                                      <div className="h-8 flex items-center justify-end px-3 font-black text-indigo-600 bg-indigo-50 rounded border border-indigo-200 text-xs">
-                                        {calculatedEMP0093.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
-                                      </div>
-                                    ) : item.code === 'EMP_0103' ? (
-                                      <div className="h-8 flex items-center justify-end px-3 font-black text-emerald-600 bg-emerald-50 rounded border border-emerald-200 text-xs">
-                                        {calculatedEMP0103.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
-                                      </div>
-                                    ) : item.code === 'EMP_0120' ? (
-                                      <div className="h-8 flex items-center justify-end px-3 font-black text-teal-600 bg-teal-50 rounded border border-teal-200 text-xs">
-                                        {calculatedEMP0120.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
-                                      </div>
-                                    ) : item.code === 'EMP_0126' ? (
-                                      <div className="h-8 flex items-center justify-end px-3 font-black text-sky-600 bg-sky-50 rounded border border-sky-200 text-xs">
-                                        {calculatedEMP0126.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
-                                      </div>
-                                    ) : item.code === 'EMP_0135' ? (
-                                      <div className="h-8 flex items-center justify-end px-3 font-black text-green-600 bg-green-50 rounded border border-green-200 text-xs">
-                                        {calculatedEMP0135.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
-                                      </div>
-                                    ) : (
-                                      <div className="flex items-center gap-2 justify-end">
-                                        <Input 
-                                          type="number" 
-                                          className="h-8 text-right font-bold border-slate-200 focus:border-primary w-24 text-xs" 
-                                          placeholder="0" 
-                                        />
-                                        <span className="text-[10px] font-bold text-slate-400">UND</span>
-                                      </div>
-                                    )}
-                                  </TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </div>
-                      </Card>
-                    ) : s.id === 'caps' ? (
-                      <Card className="h-full p-6 bg-white shadow-sm border-slate-200 overflow-auto">
-                        <div className="flex items-center gap-3 mb-6">
-                          <div className="bg-primary/10 p-2 rounded-lg">
-                            <s.icon className="h-5 w-5 text-primary" />
-                          </div>
-                          <h3 className="text-lg font-headline font-bold text-slate-900">{s.label}</h3>
-                        </div>
-                        <div className="rounded-md border">
-                          <Table>
-                            <TableHeader>
-                              <TableRow className="bg-slate-50">
-                                <TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead>
-                                <TableHead className="font-bold text-slate-600 text-xs">Descripción del Material</TableHead>
-                                <TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {CAPS_DATA.map((item, idx) => (
-                                <TableRow key={`${item.code}-${idx}`} className="hover:bg-slate-50/50">
-                                  <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                                  <TableCell className="text-sm font-medium text-slate-700 whitespace-pre-line">
-                                    {item.description}
-                                  </TableCell>
-                                  <TableCell className="text-right">
-                                    <div className="flex items-center gap-2 justify-end">
-                                      <Input 
-                                        type="number" 
-                                        className="h-8 text-right font-bold border-slate-200 focus:border-primary w-24 text-xs" 
-                                        placeholder="0" 
-                                      />
-                                      <span className="text-[10px] font-bold text-slate-400">UND</span>
-                                    </div>
-                                  </TableCell>
-                                </TableRow>
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </div>
-                      </Card>
-                    ) : s.id === 'labels' ? (
-                      <Card className="h-full p-6 bg-white shadow-sm border-slate-200 overflow-auto">
-                        <div className="flex items-center gap-3 mb-6">
-                          <div className="bg-primary/10 p-2 rounded-lg">
-                            <Tag className="h-5 w-5 text-primary" />
-                          </div>
-                          <div>
-                            <h3 className="text-lg font-headline font-bold text-slate-900">{s.label}</h3>
-                            <p className="text-xs text-slate-500">Gestión de etiquetas por presentación.</p>
-                          </div>
-                        </div>
-
-                        <Tabs defaultValue="2lts" className="w-full">
-                          <TabsList className="bg-slate-50 border p-1 rounded-lg mb-6">
-                            {LABEL_PRESENTATIONS.map(p => (
-                              <TabsTrigger key={p.id} value={p.id} className="px-4 font-bold text-xs uppercase tracking-wider">
-                                {p.label}
-                              </TabsTrigger>
                             ))}
-                          </TabsList>
-
-                          {LABEL_PRESENTATIONS.map(p => (
-                            <TabsContent key={p.id} value={p.id} className="m-0 border rounded-lg overflow-hidden">
-                              <Table>
-                                <TableHeader>
-                                  <TableRow className="bg-slate-50">
-                                    <TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead>
-                                    <TableHead className="font-bold text-slate-600 text-xs">Sabor / Descripción</TableHead>
-                                    <TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead>
-                                  </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                  {p.id === '2lts' ? (
-                                    LABELS_2LTS_DATA.map((item) => (
-                                      <TableRow key={item.code} className="hover:bg-slate-50/50">
-                                        <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                                        <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
-                                        <TableCell className="text-right">
-                                          <div className="flex items-center gap-2 justify-end">
-                                            <Input type="number" className="h-8 text-right text-xs" placeholder="0" />
-                                            <span className="text-[10px] font-bold text-slate-400">KG</span>
-                                          </div>
-                                        </TableCell>
-                                      </TableRow>
-                                    ))
-                                  ) : p.id === '1.5lts' ? (
-                                    LABELS_1_5LTS_DATA.map((item) => (
-                                      <TableRow key={item.code} className="hover:bg-slate-50/50">
-                                        <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                                        <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
-                                        <TableCell className="text-right">
-                                          <div className="flex items-center gap-2 justify-end">
-                                            <Input type="number" className="h-8 text-right text-xs" placeholder="0" />
-                                            <span className="text-[10px] font-bold text-slate-400">KG</span>
-                                          </div>
-                                        </TableCell>
-                                      </TableRow>
-                                    ))
-                                  ) : p.id === '1lt' ? (
-                                    LABELS_1LT_DATA.map((item) => (
-                                      <TableRow key={item.code} className="hover:bg-slate-50/50">
-                                        <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                                        <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
-                                        <TableCell className="text-right">
-                                          <div className="flex items-center gap-2 justify-end">
-                                            <Input type="number" className="h-8 text-right text-xs" placeholder="0" />
-                                            <span className="text-[10px] font-bold text-slate-400">KG</span>
-                                          </div>
-                                        </TableCell>
-                                      </TableRow>
-                                    ))
-                                  ) : p.id === '0.4lts' ? (
-                                    LABELS_04LT_DATA.map((item) => (
-                                      <TableRow key={item.code} className="hover:bg-slate-50/50">
-                                        <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                                        <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
-                                        <TableCell className="text-right">
-                                          <div className="flex items-center gap-2 justify-end">
-                                            <Input type="number" className="h-8 text-right text-xs" placeholder="0" />
-                                            <span className="text-[10px] font-bold text-slate-400">KG</span>
-                                          </div>
-                                        </TableCell>
-                                      </TableRow>
-                                    ))
-                                  ) : null}
-                                </TableBody>
-                              </Table>
-                            </TabsContent>
-                          ))}
-                        </Tabs>
-                      </Card>
-                    ) : s.id === 'plastics' ? (
-                      <Card className="h-full p-6 bg-white shadow-sm border-slate-200 overflow-auto">
-                        <div className="flex items-center gap-3 mb-6">
-                          <div className="bg-primary/10 p-2 rounded-lg">
-                            <Layers className="h-5 w-5 text-primary" />
-                          </div>
-                          <h3 className="text-lg font-headline font-bold text-slate-900">{s.label}</h3>
-                        </div>
-                        <div className="rounded-md border overflow-hidden">
-                          <Table>
-                            <TableHeader>
-                              <TableRow className="bg-slate-50">
-                                <TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead>
-                                <TableHead className="font-bold text-slate-600 text-xs">Descripción del Material</TableHead>
-                                <TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {PLASTICS_DATA.map((item, idx) => (
-                                item.isHeader ? (
-                                  <TableRow key={`header-${idx}`} className="bg-slate-100/50">
-                                    <TableCell colSpan={3} className="py-2 text-center font-bold text-slate-500 text-[10px] uppercase tracking-widest">
-                                      {item.description}
-                                    </TableCell>
-                                  </TableRow>
-                                ) : (
-                                  <TableRow key={item.code} className="hover:bg-slate-50/50">
-                                    <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                                    <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
-                                    <TableCell className="text-right">
-                                      <div className="flex items-center gap-2 justify-end">
-                                        <Input type="number" className="h-8 text-right text-xs w-24" placeholder="0" />
-                                        <span className="text-[10px] font-bold text-slate-400">KG</span>
-                                      </div>
-                                    </TableCell>
-                                  </TableRow>
-                                )
-                              ))}
-                            </TableBody>
-                          </Table>
-                        </div>
-                      </Card>
-                    ) : (
-                      <Card className="h-full border-dashed border-2 flex flex-col items-center justify-center p-12 text-center bg-white/50">
-                        <div className="bg-slate-100 p-6 rounded-full mb-4">
-                          <s.icon className="h-12 w-12 text-slate-400" />
-                        </div>
-                        <h3 className="text-xl font-headline font-bold text-slate-900 mb-2">{s.label}</h3>
-                        <p className="text-slate-500 max-w-sm">{s.description}</p>
-                        <div className="mt-8 px-4 py-2 bg-primary/5 border border-primary/10 rounded-full">
-                          <span className="text-xs font-bold text-primary uppercase tracking-widest italic">Módulo en Desarrollo</span>
-                        </div>
-                      </Card>
+                          </TableBody>
+                        </Table>
+                      </div>
                     )}
-                  </TabsContent>
-                ))}
-              </div>
+                    {s.id === 'caps' && (
+                      <div className="rounded-md border">
+                        <Table>
+                          <TableHeader><TableRow className="bg-slate-50"><TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead><TableHead className="font-bold text-slate-600 text-xs">Descripción</TableHead><TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
+                          <TableBody>
+                            {CAPS_DATA.map((item, idx) => (
+                              <TableRow key={idx} className="hover:bg-slate-50/50">
+                                <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
+                                <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
+                                <TableCell className="text-right"><div className="flex items-center gap-2 justify-end"><Input type="number" className="h-8 text-right w-24 text-xs" placeholder="0" /><span className="text-[10px] font-bold text-slate-400">UND</span></div></TableCell>
+                              </TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    )}
+                    {s.id === 'plastics' && (
+                      <div className="rounded-md border">
+                        <Table>
+                          <TableHeader><TableRow className="bg-slate-50"><TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead><TableHead className="font-bold text-slate-600 text-xs">Descripción</TableHead><TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
+                          <TableBody>
+                            {PLASTICS_DATA.map((item, idx) => item.isHeader ? (
+                              <TableRow key={idx} className="bg-slate-100/50"><TableCell colSpan={3} className="py-2 text-center font-bold text-slate-500 text-[10px] uppercase">{item.description}</TableCell></TableRow>
+                            ) : (
+                              <TableRow key={item.code} className="hover:bg-slate-50/50"><TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell><TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell><TableCell className="text-right"><div className="flex items-center gap-2 justify-end"><Input type="number" className="h-8 text-right w-24 text-xs" placeholder="0" /><span className="text-[10px] font-bold text-slate-400">KG</span></div></TableCell></TableRow>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    )}
+                    {s.id === 'labels' && (
+                      <Tabs defaultValue="2lts">
+                        <TabsList className="bg-slate-50 border p-1 rounded-lg mb-6">
+                          {LABEL_PRESENTATIONS.map(p => <TabsTrigger key={p.id} value={p.id} className="px-4 font-bold text-xs">{p.label}</TabsTrigger>)}
+                        </TabsList>
+                        {LABEL_PRESENTATIONS.map(p => (
+                          <TabsContent key={p.id} value={p.id} className="border rounded-lg overflow-hidden">
+                            <Table>
+                              <TableHeader><TableRow className="bg-slate-50"><TableHead className="w-[150px] font-bold text-slate-600 text-xs">SAP</TableHead><TableHead className="font-bold text-slate-600 text-xs">Descripción</TableHead><TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
+                              <TableBody>
+                                {(p.id === '2lts' ? LABELS_2LTS_DATA : p.id === '1.5lts' ? LABELS_1_5LTS_DATA : p.id === '1lt' ? LABELS_1LT_DATA : LABELS_04LT_DATA).map((item) => (
+                                  <TableRow key={item.code} className="hover:bg-slate-50/50"><TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell><TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell><TableCell className="text-right"><div className="flex items-center gap-2 justify-end"><Input type="number" className="h-8 text-right w-24 text-xs" placeholder="0" /><span className="text-[10px] font-bold text-slate-400">KG</span></div></TableCell></TableRow>
+                                ))}
+                              </TableBody>
+                            </Table>
+                          </TabsContent>
+                        ))}
+                      </Tabs>
+                    )}
+                  </Card>
+                </TabsContent>
+              ))}
             </Tabs>
           </TabsContent>
 
           <TabsContent value="materia-prima" className="m-0 h-full">
-            <Card className="h-full border-dashed border-2 flex flex-col items-center justify-center p-12 text-center bg-white/50">
-              <div className="bg-slate-100 p-6 rounded-full mb-4">
-                <Wheat className="h-12 w-12 text-slate-400" />
-              </div>
-              <h3 className="text-xl font-headline font-bold text-slate-900 mb-2">Materia Prima</h3>
-              <p className="text-slate-500 max-w-sm">Gestión de insumos básicos, concentrados, jarabes y azúcares.</p>
-              <div className="mt-8 px-4 py-2 bg-primary/5 border border-primary/10 rounded-full">
-                <span className="text-xs font-bold text-primary uppercase tracking-widest italic">Módulo en Desarrollo</span>
-              </div>
-            </Card>
+            <Tabs defaultValue="sugar" className="w-full">
+              <TabsList className="bg-white border p-1 rounded-lg shadow-sm self-start mb-6">
+                {materiaPrimaSections.map((s) => (
+                  <TabsTrigger key={s.id} value={s.id} className="gap-2 px-4 font-bold text-xs">
+                    <s.icon className="h-3.5 w-3.5" />
+                    {s.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+              
+              {materiaPrimaSections.map((s) => (
+                <TabsContent key={s.id} value={s.id} className="m-0">
+                  <Card className="p-6 bg-white shadow-sm border-slate-200">
+                    <div className="flex items-center gap-3 mb-6">
+                      <div className="bg-emerald-500/10 p-2 rounded-lg"><s.icon className="h-5 w-5 text-emerald-600" /></div>
+                      <h3 className="text-lg font-headline font-bold text-slate-900">{s.label}</h3>
+                    </div>
+                    {renderGenericTable(s.id === 'sugar' || s.id === 'solids' || s.id === 'additives' ? 'KG' : 'UND/KG')}
+                  </Card>
+                </TabsContent>
+              ))}
+            </Tabs>
           </TabsContent>
         </div>
       </Tabs>
