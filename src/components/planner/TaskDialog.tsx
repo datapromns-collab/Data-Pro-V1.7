@@ -79,6 +79,11 @@ export function TaskDialog({
 
   const isSpecialTask = name === 'CS' || name === 'CIP' || name === 'CP' || name === 'MTTO PROGRAMADO' || name === 'PARADA PROGRAMADA';
 
+  const factor = useMemo(() => {
+    if (!name || !presentation) return 0;
+    return PRODUCT_FACTORS[name]?.[presentation] || 0;
+  }, [name, presentation]);
+
   useEffect(() => {
     if (initialTask) {
       const isCIPOption = CIP_OPTIONS.includes(initialTask.name);
@@ -119,12 +124,27 @@ export function TaskDialog({
     }
   }, [lineId, lineSpeeds, initialTask, isOpen, isSpecialTask]);
 
-  useEffect(() => {
-    if (!isSpecialTask && name && presentation && tanks > 0) {
-      const factor = PRODUCT_FACTORS[name]?.[presentation] || 0;
-      setQuantity(tanks * factor);
+  // Handle Bidirectional Calculation
+  const handleTanksChange = (val: number) => {
+    setTanks(val);
+    if (!isSpecialTask && factor > 0) {
+      setQuantity(Math.round(val * factor));
     }
-  }, [name, presentation, tanks, isSpecialTask]);
+  };
+
+  const handleQuantityChange = (val: number) => {
+    setQuantity(val);
+    if (!isSpecialTask && factor > 0) {
+      setTanks(Number((val / factor).toFixed(2)));
+    }
+  };
+
+  // Recalculate quantity if factor changes (product or presentation change)
+  useEffect(() => {
+    if (!isSpecialTask && factor > 0 && tanks > 0) {
+      setQuantity(Math.round(tanks * factor));
+    }
+  }, [factor, isSpecialTask]);
 
   useEffect(() => {
     if (name === 'CS') {
@@ -260,7 +280,12 @@ export function TaskDialog({
               </div>
               <div className="grid gap-2">
                 <Label>Tanques</Label>
-                <Input type="number" value={tanks || ''} onChange={(e) => setTanks(Number(e.target.value))} />
+                <Input 
+                  type="number" 
+                  step="0.01"
+                  value={tanks || ''} 
+                  onChange={(e) => handleTanksChange(Number(e.target.value))} 
+                />
               </div>
             </div>
           )}
@@ -301,8 +326,13 @@ export function TaskDialog({
                 <Input type="number" value={loadPerHour || ''} onChange={(e) => setLoadPerHour(Number(e.target.value))} />
               </div>
               <div className="grid gap-2">
-                <Label>Cantidad Total</Label>
-                <Input type="number" value={quantity || 0} readOnly className="bg-slate-50 font-bold" />
+                <Label>Cantidad Total (Cajas)</Label>
+                <Input 
+                  type="number" 
+                  value={quantity || ''} 
+                  onChange={(e) => handleQuantityChange(Number(e.target.value))}
+                  className="font-bold" 
+                />
               </div>
             </div>
           )}
