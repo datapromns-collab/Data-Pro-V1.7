@@ -19,6 +19,11 @@ const PREFORMS_DATA = [
   { code: 'EMP_0135', description: 'PREFORMA VERDE 20,5-1881' },
 ];
 
+const CAPS_DATA = [
+  { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS IMPORTADAS / NACIONALES' },
+  { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS IMPORTADAS / NACIONALES' },
+];
+
 const LABELS_2LTS_DATA = [
   { code: 'EMP_0022', description: 'ETIQUETA UVA 2000ML' },
   { code: 'EMP_0026', description: 'ETIQUETA PIÑA 2000ML' },
@@ -328,6 +333,44 @@ export function RequirementSection() {
                                         <span className="text-[10px] font-bold text-slate-400">UND</span>
                                       </div>
                                     )}
+                                  </TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </div>
+                      </Card>
+                    ) : s.id === 'caps' ? (
+                      <Card className="h-full p-6 bg-white shadow-sm border-slate-200 overflow-auto">
+                        <div className="flex items-center gap-3 mb-6">
+                          <div className="bg-primary/10 p-2 rounded-lg">
+                            <s.icon className="h-5 w-5 text-primary" />
+                          </div>
+                          <h3 className="text-lg font-headline font-bold text-slate-900">{s.label}</h3>
+                        </div>
+                        <div className="rounded-md border">
+                          <Table>
+                            <TableHeader>
+                              <TableRow className="bg-slate-50">
+                                <TableHead className="w-[150px] font-bold text-slate-600">Código</TableHead>
+                                <TableHead className="font-bold text-slate-600">Descripción</TableHead>
+                                <TableHead className="w-[200px] text-right font-bold text-slate-600">Cantidad Requerida</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {CAPS_DATA.map((item) => (
+                                <TableRow key={item.code} className="hover:bg-slate-50/50">
+                                  <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
+                                  <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
+                                  <TableCell className="text-right">
+                                    <div className="flex items-center gap-2 justify-end">
+                                      <Input 
+                                        type="number" 
+                                        className="h-8 text-right font-bold border-slate-200 focus:border-primary w-24" 
+                                        placeholder="0" 
+                                      />
+                                      <span className="text-[10px] font-bold text-slate-400">UND</span>
+                                    </div>
                                   </TableCell>
                                 </TableRow>
                               ))}

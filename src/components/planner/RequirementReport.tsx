@@ -22,6 +22,11 @@ const PREFORMS_DATA = [
   { code: 'EMP_0135', description: 'PREFORMA VERDE 20,5-1881' },
 ];
 
+const CAPS_DATA = [
+  { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS IMPORTADAS / NACIONALES' },
+  { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS IMPORTADAS / NACIONALES' },
+];
+
 const LABELS_2LTS_DATA = [
   { code: 'EMP_0022', description: 'ETIQUETA UVA 2000ML' },
   { code: 'EMP_0026', description: 'ETIQUETA PIÑA 2000ML' },
@@ -148,7 +153,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
 
       {/* Contenido principal que puede fluir entre páginas */}
       <div className="flex-1">
-        {/* Sección Empaque */}
+        {/* Sección Empaque - Preformas */}
         <div className="mb-10">
           <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
             <div className="w-1 h-6 bg-primary rounded-full"></div>
@@ -179,11 +184,42 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           </div>
         </div>
 
+        {/* Sección Tapas */}
+        <div className="mb-10">
+          <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
+            <div className="w-1 h-6 bg-slate-500 rounded-full"></div>
+            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">II. Sección Tapas</h2>
+          </div>
+          
+          <div className="rounded-lg border border-slate-200 overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-slate-50 border-b">
+                  <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
+                  <TableHead className="font-bold text-slate-700">Descripción del Material</TableHead>
+                  <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {CAPS_DATA.map((item) => (
+                  <TableRow key={item.code} className="border-b last:border-0">
+                    <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
+                    <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">
+                      _______ UND
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+
         {/* Sección Etiquetas 2Lts */}
         <div className="mb-10">
           <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
             <div className="w-1 h-6 bg-amber-500 rounded-full"></div>
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">II. Sección Etiquetas - 2 Lts</h2>
+            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">III. Sección Etiquetas - 2 Lts</h2>
           </div>
           
           <div className="rounded-lg border border-slate-200 overflow-hidden">
@@ -214,7 +250,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
         <div className="mb-10">
           <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
             <div className="w-1 h-6 bg-orange-500 rounded-full"></div>
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">III. Sección Etiquetas - 1.5 Lts</h2>
+            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">IV. Sección Etiquetas - 1.5 Lts</h2>
           </div>
           
           <div className="rounded-lg border border-slate-200 overflow-hidden">
@@ -245,7 +281,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
         <div className="mb-10">
           <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
             <div className="w-1 h-6 bg-blue-500 rounded-full"></div>
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">IV. Sección Etiquetas - 1 Lt</h2>
+            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">V. Sección Etiquetas - 1 Lt</h2>
           </div>
           
           <div className="rounded-lg border border-slate-200 overflow-hidden">
@@ -276,7 +312,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
         <div className="mb-10">
           <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
             <div className="w-1 h-6 bg-purple-500 rounded-full"></div>
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">V. Sección Etiquetas - 0.4 Lts</h2>
+            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">VI. Sección Etiquetas - 0.4 Lts</h2>
           </div>
           
           <div className="rounded-lg border border-slate-200 overflow-hidden">
@@ -306,20 +342,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
         {/* Otros materiales de empaque */}
         <div className="grid grid-cols-2 gap-8 mb-10">
           <div className="border rounded-lg p-4 bg-slate-50/30">
-            <h3 className="text-xs font-bold text-slate-500 uppercase mb-4 border-b pb-2">Tapas y Cierres</h3>
-            <div className="space-y-4">
-              <div className="flex justify-between border-b border-dashed pb-2">
-                <span className="text-xs font-medium text-slate-600">Tapa 1881 Blanca</span>
-                <span className="w-20 border-b border-slate-300"></span>
-              </div>
-              <div className="flex justify-between border-b border-dashed pb-2">
-                <span className="text-xs font-medium text-slate-600">Tapa 1881 Verde</span>
-                <span className="w-20 border-b border-slate-300"></span>
-              </div>
-            </div>
-          </div>
-          <div className="border rounded-lg p-4 bg-slate-50/30">
-            <h3 className="text-xs font-bold text-slate-500 uppercase mb-4 border-b pb-2">Plásticos y Embalaje</h3>
+            <h3 className="text-xs font-bold text-slate-500 uppercase mb-4 border-b pb-2">Material de Embalaje</h3>
             <div className="space-y-4">
               <div className="flex justify-between border-b border-dashed pb-2">
                 <span className="text-xs font-medium text-slate-600">Term. Encogible (KG)</span>
@@ -337,7 +360,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
             <div className="w-1 h-6 bg-emerald-500 rounded-full"></div>
-            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">VI. Sección Materia Prima</h2>
+            <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">VII. Sección Materia Prima</h2>
           </div>
           <div className="p-8 border-2 border-dashed rounded-xl flex items-center justify-center text-slate-400 text-sm italic">
             Listado de concentrados y jarabes por planificar según tanques programados.
