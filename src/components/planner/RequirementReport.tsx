@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { ScheduledTask } from '@/lib/types';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { format, getISOWeek } from 'date-fns';
+import { format, getISOWeek, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
@@ -116,7 +116,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
 
   const getCalculatedValue = (code: string) => {
-    const weekEnd = new Date(weekStartDate.getTime() + 7 * 24 * 60 * 60 * 1000);
+    const weekEnd = addDays(weekStartDate, 7);
     switch (code) {
       case 'EMP_0009': {
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
@@ -137,79 +137,103 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
   };
 
   const renderSectionHeader = (title: string, color: string) => (
-    <div className="flex items-center gap-2 mb-4 bg-slate-100 p-2 rounded">
-      <div className={`w-1 h-6 bg-${color} rounded-full`}></div>
-      <h2 className="text-lg font-bold text-slate-900 uppercase tracking-tight">{title}</h2>
+    <div className="flex items-center gap-2 mb-2 bg-slate-100 p-1.5 rounded">
+      <div className={`w-1 h-5 bg-${color} rounded-full`}></div>
+      <h2 className="text-base font-bold text-slate-900 uppercase tracking-tight">{title}</h2>
     </div>
   );
 
   return (
-    <div className="page-break bg-white p-8 overflow-visible h-auto min-h-screen flex flex-col">
-      <div className="mb-8 border-b-2 border-primary pb-4 flex justify-between items-center shrink-0">
+    <div className="page-break bg-white p-6 overflow-visible h-auto flex flex-col">
+      <div className="mb-4 border-b-2 border-primary pb-3 flex justify-between items-center shrink-0">
         <div className="flex-1">
-          <h1 className="text-2xl font-headline font-bold text-slate-900">Reporte de Requerimientos</h1>
-          <p className="text-primary font-bold text-base uppercase">Gestión de Materiales</p>
+          <h1 className="text-xl font-headline font-bold text-slate-900">Reporte de Requerimientos</h1>
+          <p className="text-primary font-bold text-sm uppercase">Gestión de Materiales</p>
         </div>
-        <div className="flex-1 flex justify-center">{glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={200} height={80} className="object-contain" />}</div>
+        <div className="flex-1 flex justify-center">{glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={160} height={60} className="object-contain" />}</div>
         <div className="flex-1 text-right">
-          <p className="text-[10px] font-bold text-primary uppercase mb-1">Confidencial - Planta</p>
-          <p className="text-[10px] text-slate-500 font-medium">Semana {weekNumber} - {format(weekStartDate, 'dd MMMM yyyy', { locale: es })}</p>
+          <p className="text-[9px] font-bold text-primary uppercase mb-0.5">Confidencial - Planta</p>
+          <p className="text-[9px] text-slate-500 font-medium">Semana {weekNumber} - {format(weekStartDate, 'dd MMMM yyyy', { locale: es })}</p>
         </div>
       </div>
 
-      <div className="flex-1">
-        <div className="mb-10">
+      <div className="flex-1 space-y-4">
+        <section>
           {renderSectionHeader("I. Sección Empaque - Preformas", "primary")}
-          <div className="rounded-lg border border-slate-200 overflow-hidden">
+          <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
-              <TableHeader><TableRow className="bg-slate-50"><TableHead className="font-bold text-slate-700">Código SAP</TableHead><TableHead className="font-bold text-slate-700">Descripción</TableHead><TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead></TableRow></TableHeader>
+              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">Código SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
               <TableBody>
                 {PREFORMS_DATA.map((item) => (
-                  <TableRow key={item.code} className="border-b last:border-0">
-                    <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
-                    <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">{getCalculatedValue(item.code).toLocaleString('es-ES')} UND</TableCell>
+                  <TableRow key={item.code} className="border-b last:border-0 h-8">
+                    <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{item.code}</TableCell>
+                    <TableCell className="py-1 text-xs font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-xs">{getCalculatedValue(item.code).toLocaleString('es-ES')} UND</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </div>
-        </div>
+        </section>
 
-        <div className="mb-10">{renderSectionHeader("II. Sección Tapas", "slate-500")}
-          <div className="rounded-lg border border-slate-200 overflow-hidden"><Table><TableHeader><TableRow className="bg-slate-50"><TableHead className="font-bold text-slate-700">SAP</TableHead><TableHead className="font-bold text-slate-700">Descripción</TableHead><TableHead className="text-right font-bold text-slate-700">Cantidad</TableHead></TableRow></TableHeader><TableBody>{CAPS_DATA.map((item, idx) => (<TableRow key={idx} className="border-b last:border-0"><TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell><TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell><TableCell className="text-right font-black text-slate-900 bg-slate-50/50">_______ UND</TableCell></TableRow>))}</TableBody></Table></div>
-        </div>
+        <section>
+          {renderSectionHeader("II. Sección Tapas", "slate-500")}
+          <div className="rounded border border-slate-200 overflow-hidden">
+            <Table>
+              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad</TableHead></TableRow></TableHeader>
+              <TableBody>
+                {CAPS_DATA.map((item, idx) => (
+                  <TableRow key={idx} className="border-b last:border-0 h-8">
+                    <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{item.code}</TableCell>
+                    <TableCell className="py-1 text-xs font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-xs">_______ UND</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </section>
 
-        <div className="mb-10">{renderSectionHeader("III. Sección Plásticos", "indigo-500")}
-          <div className="rounded-lg border border-slate-200 overflow-hidden"><Table><TableHeader><TableRow className="bg-slate-50"><TableHead className="font-bold text-slate-700">SAP</TableHead><TableHead className="font-bold text-slate-700">Descripción</TableHead><TableHead className="text-right font-bold text-slate-700">Cantidad</TableHead></TableRow></TableHeader><TableBody>{PLASTICS_DATA.map((item, idx) => item.isHeader ? (<TableRow key={idx} className="bg-slate-100/50"><TableCell colSpan={3} className="py-2 text-center font-bold text-slate-500 text-[10px] uppercase">{item.description}</TableCell></TableRow>) : (<TableRow key={item.code} className="border-b last:border-0"><TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell><TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell><TableCell className="text-right font-black text-slate-900 bg-slate-50/50">_______ KG</TableCell></TableRow>))}</TableBody></Table></div>
-        </div>
+        <section>
+          {renderSectionHeader("III. Sección Plásticos", "indigo-500")}
+          <div className="rounded border border-slate-200 overflow-hidden">
+            <Table>
+              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad</TableHead></TableRow></TableHeader>
+              <TableBody>
+                {PLASTICS_DATA.map((item, idx) => item.isHeader ? (
+                  <TableRow key={idx} className="bg-slate-100/30 h-6"><TableCell colSpan={3} className="py-1 text-center font-bold text-slate-500 text-[9px] uppercase tracking-widest">{item.description}</TableCell></TableRow>
+                ) : (
+                  <TableRow key={item.code} className="border-b last:border-0 h-8">
+                    <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{item.code}</TableCell>
+                    <TableCell className="py-1 text-xs font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-xs">_______ KG</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </section>
 
-        <div className="mb-10">{renderSectionHeader("IV. Sección Etiquetas", "amber-500")}
-          <div className="space-y-6">
+        <section>
+          {renderSectionHeader("IV. Sección Etiquetas", "amber-500")}
+          <div className="grid grid-cols-2 gap-3">
             {[
               { label: '2 Lts', data: LABELS_2LTS_DATA },
               { label: '1.5 Lts', data: LABELS_1_5LTS_DATA },
               { label: '1 Lt', data: LABELS_1LT_DATA },
               { label: '0.4 Lts', data: LABELS_04LT_DATA }
             ].map((section, idx) => (
-              <div key={idx} className="border rounded-lg overflow-hidden">
-                <div className="bg-slate-50 px-4 py-2 border-b">
-                  <p className="text-[10px] font-bold text-slate-500 uppercase">Formato {section.label}</p>
+              <div key={idx} className="border rounded overflow-hidden">
+                <div className="bg-slate-50 px-2 py-1 border-b">
+                  <p className="text-[9px] font-bold text-slate-500 uppercase">Formato {section.label}</p>
                 </div>
                 <Table>
-                  <TableHeader>
-                    <TableRow className="bg-white">
-                      <TableHead className="text-[10px] font-bold uppercase">SAP</TableHead>
-                      <TableHead className="text-[10px] font-bold uppercase">Descripción</TableHead>
-                      <TableHead className="text-right text-[10px] font-bold uppercase">KG</TableHead>
-                    </TableRow>
-                  </TableHeader>
                   <TableBody>
                     {section.data.map((item) => (
-                      <TableRow key={item.code} className="border-b last:border-0">
-                        <TableCell className="font-mono text-[10px] font-bold text-primary py-2">{item.code}</TableCell>
-                        <TableCell className="text-[10px] font-medium text-slate-800 py-2">{item.description}</TableCell>
-                        <TableCell className="text-right font-black text-slate-900 bg-slate-50/50 py-2">_______</TableCell>
+                      <TableRow key={item.code} className="border-b last:border-0 h-7">
+                        <TableCell className="py-1 font-mono text-[9px] font-bold text-primary">{item.code}</TableCell>
+                        <TableCell className="py-1 text-[9px] font-medium text-slate-800 truncate max-w-[140px]">{item.description}</TableCell>
+                        <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[9px]">_______ KG</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -217,96 +241,73 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        <div className="page-break" />
-
-        <div className="mb-10">{renderSectionHeader("V. Sección Materia Prima - Azúcar", "emerald-500")}
-          <div className="rounded-lg border border-slate-200 overflow-hidden">
+        <section className="break-before-page pt-4">
+          {renderSectionHeader("V. Sección Materia Prima - Azúcar", "emerald-500")}
+          <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
-              <TableHeader>
-                <TableRow className="bg-slate-50">
-                  <TableHead className="font-bold text-slate-700">Código SAP</TableHead>
-                  <TableHead className="font-bold text-slate-700">Descripción</TableHead>
-                  <TableHead className="text-right font-bold text-slate-700">Cantidad Requerida</TableHead>
-                </TableRow>
-              </TableHeader>
+              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">Código SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
               <TableBody>
                 {SUGAR_DATA.map((item) => (
-                  <TableRow key={item.code} className="border-b last:border-0">
-                    <TableCell className="font-mono text-xs font-bold text-emerald-600">{item.code}</TableCell>
-                    <TableCell className="text-sm font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">_______ KG</TableCell>
+                  <TableRow key={item.code} className="border-b last:border-0 h-8">
+                    <TableCell className="py-1 font-mono text-[10px] font-bold text-emerald-600">{item.code}</TableCell>
+                    <TableCell className="py-1 text-xs font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-xs">_______ KG</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </div>
-        </div>
+        </section>
 
-        <div className="mb-10">
+        <section>
           {renderSectionHeader("VI. Sección Materia Prima - Concentrados", "emerald-600")}
-          <div className="space-y-6">
-            <div className="border rounded-lg overflow-hidden">
-              <div className="bg-slate-50 px-4 py-1.5 border-b">
-                <p className="text-[10px] font-bold text-slate-500 uppercase">Refrescos</p>
-              </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="border rounded overflow-hidden">
+              <div className="bg-slate-50 px-2 py-1 border-b"><p className="text-[9px] font-bold text-slate-500 uppercase">Refrescos</p></div>
               <Table>
-                <TableHeader>
-                  <TableRow className="bg-white">
-                    <TableHead className="text-[10px] font-bold uppercase">SAP</TableHead>
-                    <TableHead className="text-[10px] font-bold uppercase">Descripción</TableHead>
-                    <TableHead className="text-right text-[10px] font-bold uppercase">LTS</TableHead>
-                  </TableRow>
-                </TableHeader>
                 <TableBody>
                   {CONCENTRATES_SOFT_DRINKS.map((item) => (
-                    <TableRow key={item.code} className="border-b last:border-0">
-                      <TableCell className="font-mono text-[10px] font-bold text-emerald-600 py-1.5">{item.code}</TableCell>
-                      <TableCell className="text-[10px] font-medium text-slate-800 py-1.5">{item.description}</TableCell>
-                      <TableCell className="text-right font-black text-slate-900 bg-slate-50/50 py-1.5">_______</TableCell>
+                    <TableRow key={item.code} className="border-b last:border-0 h-7">
+                      <TableCell className="py-1 font-mono text-[9px] font-bold text-emerald-600">{item.code}</TableCell>
+                      <TableCell className="py-1 text-[9px] font-medium text-slate-800 truncate max-w-[140px]">{item.description}</TableCell>
+                      <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[9px]">_______ LTS</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </div>
-
-            <div className="border rounded-lg overflow-hidden">
-              <div className="bg-slate-50 px-4 py-1.5 border-b">
-                <p className="text-[10px] font-bold text-slate-500 uppercase">Jugos</p>
-              </div>
+            <div className="border rounded overflow-hidden">
+              <div className="bg-slate-50 px-2 py-1 border-b"><p className="text-[9px] font-bold text-slate-500 uppercase">Jugos</p></div>
               <Table>
-                <TableHeader>
-                  <TableRow className="bg-white">
-                    <TableHead className="text-[10px] font-bold uppercase">SAP</TableHead>
-                    <TableHead className="text-[10px] font-bold uppercase">Descripción</TableHead>
-                    <TableHead className="text-right text-[10px] font-bold uppercase">KG</TableHead>
-                  </TableRow>
-                </TableHeader>
                 <TableBody>
                   {CONCENTRATES_JUICES.map((item) => (
-                    <TableRow key={item.code} className="border-b last:border-0">
-                      <TableCell className="font-mono text-[10px] font-bold text-emerald-600 py-1.5">{item.code}</TableCell>
-                      <TableCell className="text-[10px] font-medium text-slate-800 py-1.5">{item.description}</TableCell>
-                      <TableCell className="text-right font-black text-slate-900 bg-slate-50/50 py-1.5">_______</TableCell>
+                    <TableRow key={item.code} className="border-b last:border-0 h-7">
+                      <TableCell className="py-1 font-mono text-[9px] font-bold text-emerald-600">{item.code}</TableCell>
+                      <TableCell className="py-1 text-[9px] font-medium text-slate-800 truncate max-w-[140px]">{item.description}</TableCell>
+                      <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[9px]">_______ KG</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </div>
           </div>
-        </div>
+        </section>
 
-        <div className="mb-10">{renderSectionHeader("VII. Sección Materia Prima - Sólidos", "emerald-700")}
-          <div className="p-4 border-2 border-dashed rounded text-center text-slate-400 text-xs italic">Listado de ingredientes sólidos y polvos industriales.</div>
-        </div>
-
-        <div className="mb-10">{renderSectionHeader("VIII. Sección Materia Prima - Aditivos", "emerald-800")}
-          <div className="p-4 border-2 border-dashed rounded text-center text-slate-400 text-xs italic">Conservantes, ácidos y mejoradores.</div>
+        <div className="grid grid-cols-2 gap-3">
+          <section>
+            {renderSectionHeader("VII. Materia Prima - Sólidos", "emerald-700")}
+            <div className="p-3 border rounded text-center text-slate-400 text-[10px] italic bg-slate-50/50">Ingredientes sólidos y polvos industriales.</div>
+          </section>
+          <section>
+            {renderSectionHeader("VIII. Materia Prima - Aditivos", "emerald-800")}
+            <div className="p-3 border rounded text-center text-slate-400 text-[10px] italic bg-slate-50/50">Conservantes y aditivos.</div>
+          </section>
         </div>
       </div>
 
-      <div className="mt-8 pt-4 border-t border-slate-100 flex justify-between items-center text-[8px] text-slate-400 font-bold uppercase tracking-widest shrink-0">
+      <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[8px] text-slate-400 font-bold uppercase tracking-widest shrink-0">
         <span>Plan Semanal Pro - Módulo de Requerimientos</span>
         <span>Generado el: {new Date().toLocaleString('es-ES')}</span>
       </div>

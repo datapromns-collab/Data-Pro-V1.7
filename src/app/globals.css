@@ -63,7 +63,7 @@
 /* Print optimizations */
 @media print {
   @page {
-    margin: 0;
+    margin: 0.5cm;
   }
   
   * {
@@ -87,20 +87,19 @@
   }
   
   .page-break {
-    page-break-after: always;
-    break-after: page;
-    min-height: 100vh;
-    padding: 0.8cm 1cm;
+    page-break-after: auto;
+    break-after: auto;
+    min-height: auto;
+    padding: 0;
     display: flex;
     flex-direction: column;
-    /* Eliminamos height: 100vh y overflow: hidden para permitir múltiples páginas */
     height: auto;
     overflow: visible;
   }
 
-  .page-break:last-child {
-    page-break-after: auto;
-    break-after: auto;
+  .break-before-page {
+    page-break-before: always;
+    break-before: page;
   }
 
   /* Evitar que las filas de las tablas se corten a la mitad */
@@ -113,6 +112,12 @@
   img {
     page-break-inside: avoid;
     break-inside: avoid;
+  }
+
+  section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 0.5rem;
   }
 }
 
