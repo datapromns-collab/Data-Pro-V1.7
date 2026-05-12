@@ -20,10 +20,18 @@ const PREFORMS_DATA = [
 ];
 
 const CAPS_DATA = [
-  { code: 'EMP_0095', description: 'TAPA VERDE  REFRESCOS IMPORTADAS' },
   { code: 'EMP_0095', description: 'TAPA VERDE  REFRESCOS NACIONALES' },
-  { code: 'EMP_0105', description: 'TAPA AZULES  REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0095', description: 'TAPA VERDE  REFRESCOS IMPORTADAS' },
   { code: 'EMP_0105', description: 'TAPA AZULES  REFRESCOS NACIONALES' },
+  { code: 'EMP_0105', description: 'TAPA AZULES  REFRESCOS IMPORTADAS' },
+];
+
+const PLASTICS_DATA = [
+  { code: 'EMP_0019', description: 'FILM POLIESTRECH 23 MIC' },
+  { isHeader: true, description: 'Termo Encogible' },
+  { code: 'EMP_0017', description: 'POLIETILENO TERMOENCOGIBLE 55 X 0.07' },
+  { code: 'EMP_0080', description: 'POLIETILENO TERMOENCOGIBLE 48x0.06' },
+  { code: 'EMP_0130', description: 'POLIETILENO TERMOENCOGIBLE 43 x 0.06' },
 ];
 
 const LABELS_2LTS_DATA = [
@@ -263,9 +271,9 @@ export function RequirementSection() {
                           <Table>
                             <TableHeader>
                               <TableRow className="bg-slate-50">
-                                <TableHead className="w-[150px] font-bold text-slate-600">Código</TableHead>
-                                <TableHead className="font-bold text-slate-600">Descripción</TableHead>
-                                <TableHead className="w-[200px] text-right font-bold text-slate-600">Cantidad Requerida</TableHead>
+                                <TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead>
+                                <TableHead className="font-bold text-slate-600 text-xs">Descripción del Material</TableHead>
+                                <TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead>
                               </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -298,38 +306,38 @@ export function RequirementSection() {
                                   </TableCell>
                                   <TableCell className="text-right">
                                     {item.code === 'EMP_0009' ? (
-                                      <div className="h-8 flex items-center justify-end px-3 font-black text-primary bg-primary/5 rounded border border-primary/20">
+                                      <div className="h-8 flex items-center justify-end px-3 font-black text-primary bg-primary/5 rounded border border-primary/20 text-xs">
                                         {calculatedEMP0009.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
                                       </div>
                                     ) : item.code === 'EMP_0068' ? (
-                                      <div className="h-8 flex items-center justify-end px-3 font-black text-amber-600 bg-amber-50 rounded border border-amber-200">
+                                      <div className="h-8 flex items-center justify-end px-3 font-black text-amber-600 bg-amber-50 rounded border border-amber-200 text-xs">
                                         {calculatedEMP0068.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
                                       </div>
                                     ) : item.code === 'EMP_0093' ? (
-                                      <div className="h-8 flex items-center justify-end px-3 font-black text-indigo-600 bg-indigo-50 rounded border border-indigo-200">
+                                      <div className="h-8 flex items-center justify-end px-3 font-black text-indigo-600 bg-indigo-50 rounded border border-indigo-200 text-xs">
                                         {calculatedEMP0093.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
                                       </div>
                                     ) : item.code === 'EMP_0103' ? (
-                                      <div className="h-8 flex items-center justify-end px-3 font-black text-emerald-600 bg-emerald-50 rounded border border-emerald-200">
+                                      <div className="h-8 flex items-center justify-end px-3 font-black text-emerald-600 bg-emerald-50 rounded border border-emerald-200 text-xs">
                                         {calculatedEMP0103.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
                                       </div>
                                     ) : item.code === 'EMP_0120' ? (
-                                      <div className="h-8 flex items-center justify-end px-3 font-black text-teal-600 bg-teal-50 rounded border border-teal-200">
+                                      <div className="h-8 flex items-center justify-end px-3 font-black text-teal-600 bg-teal-50 rounded border border-teal-200 text-xs">
                                         {calculatedEMP0120.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
                                       </div>
                                     ) : item.code === 'EMP_0126' ? (
-                                      <div className="h-8 flex items-center justify-end px-3 font-black text-sky-600 bg-sky-50 rounded border border-sky-200">
+                                      <div className="h-8 flex items-center justify-end px-3 font-black text-sky-600 bg-sky-50 rounded border border-sky-200 text-xs">
                                         {calculatedEMP0126.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
                                       </div>
                                     ) : item.code === 'EMP_0135' ? (
-                                      <div className="h-8 flex items-center justify-end px-3 font-black text-green-600 bg-green-50 rounded border border-green-200">
+                                      <div className="h-8 flex items-center justify-end px-3 font-black text-green-600 bg-green-50 rounded border border-green-200 text-xs">
                                         {calculatedEMP0135.toLocaleString('es-ES', { maximumFractionDigits: 0 })} UND
                                       </div>
                                     ) : (
                                       <div className="flex items-center gap-2 justify-end">
                                         <Input 
                                           type="number" 
-                                          className="h-8 text-right font-bold border-slate-200 focus:border-primary w-24" 
+                                          className="h-8 text-right font-bold border-slate-200 focus:border-primary w-24 text-xs" 
                                           placeholder="0" 
                                         />
                                         <span className="text-[10px] font-bold text-slate-400">UND</span>
@@ -354,9 +362,9 @@ export function RequirementSection() {
                           <Table>
                             <TableHeader>
                               <TableRow className="bg-slate-50">
-                                <TableHead className="w-[150px] font-bold text-slate-600">Código</TableHead>
-                                <TableHead className="font-bold text-slate-600">Descripción</TableHead>
-                                <TableHead className="w-[200px] text-right font-bold text-slate-600">Cantidad Requerida</TableHead>
+                                <TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead>
+                                <TableHead className="font-bold text-slate-600 text-xs">Descripción del Material</TableHead>
+                                <TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead>
                               </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -370,7 +378,7 @@ export function RequirementSection() {
                                     <div className="flex items-center gap-2 justify-end">
                                       <Input 
                                         type="number" 
-                                        className="h-8 text-right font-bold border-slate-200 focus:border-primary w-24" 
+                                        className="h-8 text-right font-bold border-slate-200 focus:border-primary w-24 text-xs" 
                                         placeholder="0" 
                                       />
                                       <span className="text-[10px] font-bold text-slate-400">UND</span>
@@ -466,23 +474,54 @@ export function RequirementSection() {
                                         </TableCell>
                                       </TableRow>
                                     ))
-                                  ) : (
-                                    <TableRow className="hover:bg-slate-50/50">
-                                      <TableCell className="font-mono text-[10px] font-bold text-slate-400">PENDIENTE</TableCell>
-                                      <TableCell className="text-sm font-medium text-slate-500 italic">No hay etiquetas configuradas para {p.label}</TableCell>
-                                      <TableCell className="text-right">
-                                        <div className="flex items-center gap-2 justify-end">
-                                          <Input type="number" className="h-8 text-right text-xs" placeholder="0" />
-                                          <span className="text-[10px] font-bold text-slate-400">KG</span>
-                                        </div>
-                                      </TableCell>
-                                    </TableRow>
-                                  )}
+                                  ) : null}
                                 </TableBody>
                               </Table>
                             </TabsContent>
                           ))}
                         </Tabs>
+                      </Card>
+                    ) : s.id === 'plastics' ? (
+                      <Card className="h-full p-6 bg-white shadow-sm border-slate-200 overflow-auto">
+                        <div className="flex items-center gap-3 mb-6">
+                          <div className="bg-primary/10 p-2 rounded-lg">
+                            <Layers className="h-5 w-5 text-primary" />
+                          </div>
+                          <h3 className="text-lg font-headline font-bold text-slate-900">{s.label}</h3>
+                        </div>
+                        <div className="rounded-md border overflow-hidden">
+                          <Table>
+                            <TableHeader>
+                              <TableRow className="bg-slate-50">
+                                <TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead>
+                                <TableHead className="font-bold text-slate-600 text-xs">Descripción del Material</TableHead>
+                                <TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {PLASTICS_DATA.map((item, idx) => (
+                                item.isHeader ? (
+                                  <TableRow key={`header-${idx}`} className="bg-slate-100/50">
+                                    <TableCell colSpan={3} className="py-2 text-center font-bold text-slate-500 text-[10px] uppercase tracking-widest">
+                                      {item.description}
+                                    </TableCell>
+                                  </TableRow>
+                                ) : (
+                                  <TableRow key={item.code} className="hover:bg-slate-50/50">
+                                    <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
+                                    <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
+                                    <TableCell className="text-right">
+                                      <div className="flex items-center gap-2 justify-end">
+                                        <Input type="number" className="h-8 text-right text-xs w-24" placeholder="0" />
+                                        <span className="text-[10px] font-bold text-slate-400">KG</span>
+                                      </div>
+                                    </TableCell>
+                                  </TableRow>
+                                )
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </div>
                       </Card>
                     ) : (
                       <Card className="h-full border-dashed border-2 flex flex-col items-center justify-center p-12 text-center bg-white/50">
