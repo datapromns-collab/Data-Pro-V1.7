@@ -23,8 +23,10 @@ const PREFORMS_DATA = [
 ];
 
 const CAPS_DATA = [
-  { code: 'EMP_0095', description: 'TAPA VERDE  REFRESCOS IMPORTADAS\nTAPA VERDE  REFRESCOS NACIONALES' },
-  { code: 'EMP_0105', description: 'TAPA AZULES  REFRESCOS IMPORTADAS\nTAPA AZULES  REFRESCOS NACIONALES' },
+  { code: 'EMP_0095', description: 'TAPA VERDE  REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0095', description: 'TAPA VERDE  REFRESCOS NACIONALES' },
+  { code: 'EMP_0105', description: 'TAPA AZULES  REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0105', description: 'TAPA AZULES  REFRESCOS NACIONALES' },
 ];
 
 const LABELS_2LTS_DATA = [
@@ -201,8 +203,8 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {CAPS_DATA.map((item) => (
-                  <TableRow key={item.code} className="border-b last:border-0">
+                {CAPS_DATA.map((item, idx) => (
+                  <TableRow key={`${item.code}-${idx}`} className="border-b last:border-0">
                     <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
                     <TableCell className="text-sm font-medium text-slate-800 whitespace-pre-line">{item.description}</TableCell>
                     <TableCell className="text-right font-black text-slate-900 bg-slate-50/50">

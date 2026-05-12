@@ -20,8 +20,10 @@ const PREFORMS_DATA = [
 ];
 
 const CAPS_DATA = [
-  { code: 'EMP_0095', description: 'TAPA VERDE  REFRESCOS IMPORTADAS / NACIONALES' },
-  { code: 'EMP_0105', description: 'TAPA AZULES  REFRESCOS IMPORTADAS / NACIONALES' },
+  { code: 'EMP_0095', description: 'TAPA VERDE  REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0095', description: 'TAPA VERDE  REFRESCOS NACIONALES' },
+  { code: 'EMP_0105', description: 'TAPA AZULES  REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0105', description: 'TAPA AZULES  REFRESCOS NACIONALES' },
 ];
 
 const LABELS_2LTS_DATA = [
@@ -358,8 +360,8 @@ export function RequirementSection() {
                               </TableRow>
                             </TableHeader>
                             <TableBody>
-                              {CAPS_DATA.map((item) => (
-                                <TableRow key={item.code} className="hover:bg-slate-50/50">
+                              {CAPS_DATA.map((item, idx) => (
+                                <TableRow key={`${item.code}-${idx}`} className="hover:bg-slate-50/50">
                                   <TableCell className="font-mono text-xs font-bold text-primary">{item.code}</TableCell>
                                   <TableCell className="text-sm font-medium text-slate-700 whitespace-pre-line">
                                     {item.description}
