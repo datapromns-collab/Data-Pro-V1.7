@@ -85,6 +85,29 @@ const SUGAR_DATA = [
   { code: 'MATP_0001', description: 'AZUCAR REFINADA' },
 ];
 
+const CONCENTRATES_SOFT_DRINKS = [
+  { code: 'MATP_0002', description: 'CONCENTRADO COLA NEGRA A' },
+  { code: 'MATP_0003', description: 'CONCENTRADO FRESH' },
+  { code: 'MATP_0004', description: 'CONCENTRADO NARANJA' },
+  { code: 'MATP_0005', description: 'CONCENTRADO UVA' },
+  { code: 'MATP_0006', description: 'CONCENTRADO PIÑA' },
+  { code: 'MATP_0007', description: 'CONCENTRADO KOLITA' },
+  { code: 'MATP_0009', description: 'CONCENTRADO COLA NEGRA B' },
+  { code: 'MATP_0032', description: 'CONCENTRADO MANZANA VERDE' },
+  { code: 'MATP_0038', description: 'CONCENTRADO PIÑA PARCHITA' },
+  { code: 'MATP_0039', description: 'CONCENTRADO MANZANA ROJA' },
+];
+
+const CONCENTRATES_JUICES = [
+  { code: 'MATP_0022', description: 'CONCENTRADO JUGO-NARANJA' },
+  { code: 'MATP_0043', description: 'CONCENTRADO JUGO-DURAZNO' },
+  { code: 'MATP_0044', description: 'CONCENTRADO JUGO-TAMARINDO' },
+  { code: 'MATP_0045', description: 'CONCENTRADO JUGO-MANDARINA' },
+  { code: 'MATP_0046', description: 'CONCENTRADO JUGO-SANDIA' },
+  { code: 'MATP_0059', description: 'CONCENTRADO JUGO-PERA' },
+  { code: 'MATP_0060', description: 'CONCENTRADO JUGO-MANZANA' },
+];
+
 const FLAVORS_FOR_EMP0009 = [
   "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"
 ];
@@ -328,7 +351,7 @@ export function RequirementSection() {
                       <div className="bg-emerald-500/10 p-2 rounded-lg"><s.icon className="h-5 w-5 text-emerald-600" /></div>
                       <h3 className="text-lg font-headline font-bold text-slate-900">{s.label}</h3>
                     </div>
-                    {s.id === 'sugar' ? (
+                    {s.id === 'sugar' && (
                       <div className="rounded-md border">
                         <Table>
                           <TableHeader><TableRow className="bg-slate-50"><TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead><TableHead className="font-bold text-slate-600 text-xs">Descripción</TableHead><TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
@@ -343,7 +366,58 @@ export function RequirementSection() {
                           </TableBody>
                         </Table>
                       </div>
-                    ) : renderGenericTable(s.id === 'solids' || s.id === 'additives' ? 'KG' : 'UND/KG')}
+                    )}
+                    {s.id === 'concentrates' && (
+                      <div className="space-y-6">
+                        <div className="rounded-md border">
+                          <Table>
+                            <TableHeader>
+                              <TableRow className="bg-slate-50">
+                                <TableHead colSpan={3} className="text-center font-bold text-slate-500 text-[10px] uppercase">Refrescos</TableHead>
+                              </TableRow>
+                              <TableRow className="bg-slate-50/50">
+                                <TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead>
+                                <TableHead className="font-bold text-slate-600 text-xs">Descripción</TableHead>
+                                <TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {CONCENTRATES_SOFT_DRINKS.map((item) => (
+                                <TableRow key={item.code} className="hover:bg-slate-50/50">
+                                  <TableCell className="font-mono text-xs font-bold text-emerald-600">{item.code}</TableCell>
+                                  <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
+                                  <TableCell className="text-right"><div className="flex items-center gap-2 justify-end"><Input type="number" className="h-8 text-right w-24 text-xs" placeholder="0" /><span className="text-[10px] font-bold text-slate-400">LTS</span></div></TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </div>
+                        <div className="rounded-md border">
+                          <Table>
+                            <TableHeader>
+                              <TableRow className="bg-slate-50">
+                                <TableHead colSpan={3} className="text-center font-bold text-slate-500 text-[10px] uppercase">Jugos</TableHead>
+                              </TableRow>
+                              <TableRow className="bg-slate-50/50">
+                                <TableHead className="w-[150px] font-bold text-slate-600 text-xs">Código SAP</TableHead>
+                                <TableHead className="font-bold text-slate-600 text-xs">Descripción</TableHead>
+                                <TableHead className="w-[200px] text-right font-bold text-slate-600 text-xs">Cantidad Requerida</TableHead>
+                              </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                              {CONCENTRATES_JUICES.map((item) => (
+                                <TableRow key={item.code} className="hover:bg-slate-50/50">
+                                  <TableCell className="font-mono text-xs font-bold text-emerald-600">{item.code}</TableCell>
+                                  <TableCell className="text-sm font-medium text-slate-700">{item.description}</TableCell>
+                                  <TableCell className="text-right"><div className="flex items-center gap-2 justify-end"><Input type="number" className="h-8 text-right w-24 text-xs" placeholder="0" /><span className="text-[10px] font-bold text-slate-400">KG</span></div></TableCell>
+                                </TableRow>
+                              ))}
+                            </TableBody>
+                          </Table>
+                        </div>
+                      </div>
+                    )}
+                    {s.id !== 'sugar' && s.id !== 'concentrates' && renderGenericTable(s.id === 'solids' || s.id === 'additives' ? 'KG' : 'UND/KG')}
                   </Card>
                 </TabsContent>
               ))}

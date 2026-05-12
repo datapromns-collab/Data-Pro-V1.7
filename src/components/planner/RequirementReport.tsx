@@ -23,10 +23,10 @@ const PREFORMS_DATA = [
 ];
 
 const CAPS_DATA = [
-  { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS IMPORTADAS' },
   { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS NACIONALES' },
-  { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS IMPORTADAS' },
   { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS NACIONALES' },
+  { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS IMPORTADAS' },
 ];
 
 const PLASTICS_DATA = [
@@ -86,6 +86,29 @@ const LABELS_04LT_DATA = [
 
 const SUGAR_DATA = [
   { code: 'MATP_0001', description: 'AZUCAR REFINADA' },
+];
+
+const CONCENTRATES_SOFT_DRINKS = [
+  { code: 'MATP_0002', description: 'CONCENTRADO COLA NEGRA A' },
+  { code: 'MATP_0003', description: 'CONCENTRADO FRESH' },
+  { code: 'MATP_0004', description: 'CONCENTRADO NARANJA' },
+  { code: 'MATP_0005', description: 'CONCENTRADO UVA' },
+  { code: 'MATP_0006', description: 'CONCENTRADO PIÑA' },
+  { code: 'MATP_0007', description: 'CONCENTRADO KOLITA' },
+  { code: 'MATP_0009', description: 'CONCENTRADO COLA NEGRA B' },
+  { code: 'MATP_0032', description: 'CONCENTRADO MANZANA VERDE' },
+  { code: 'MATP_0038', description: 'CONCENTRADO PIÑA PARCHITA' },
+  { code: 'MATP_0039', description: 'CONCENTRADO MANZANA ROJA' },
+];
+
+const CONCENTRATES_JUICES = [
+  { code: 'MATP_0022', description: 'CONCENTRADO JUGO-NARANJA' },
+  { code: 'MATP_0043', description: 'CONCENTRADO JUGO-DURAZNO' },
+  { code: 'MATP_0044', description: 'CONCENTRADO JUGO-TAMARINDO' },
+  { code: 'MATP_0045', description: 'CONCENTRADO JUGO-MANDARINA' },
+  { code: 'MATP_0046', description: 'CONCENTRADO JUGO-SANDIA' },
+  { code: 'MATP_0059', description: 'CONCENTRADO JUGO-PERA' },
+  { code: 'MATP_0060', description: 'CONCENTRADO JUGO-MANZANA' },
 ];
 
 export function RequirementReport({ tasks, weekStartDate }: RequirementReportProps) {
@@ -221,8 +244,57 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           </div>
         </div>
 
-        <div className="mb-10">{renderSectionHeader("VI. Sección Materia Prima - Concentrados", "emerald-600")}
-          <div className="p-4 border-2 border-dashed rounded text-center text-slate-400 text-xs italic">Cálculo de concentrados basado en tanques programados.</div>
+        <div className="mb-10">
+          {renderSectionHeader("VI. Sección Materia Prima - Concentrados", "emerald-600")}
+          <div className="space-y-6">
+            <div className="border rounded-lg overflow-hidden">
+              <div className="bg-slate-50 px-4 py-1.5 border-b">
+                <p className="text-[10px] font-bold text-slate-500 uppercase">Refrescos</p>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-white">
+                    <TableHead className="text-[10px] font-bold uppercase">SAP</TableHead>
+                    <TableHead className="text-[10px] font-bold uppercase">Descripción</TableHead>
+                    <TableHead className="text-right text-[10px] font-bold uppercase">LTS</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {CONCENTRATES_SOFT_DRINKS.map((item) => (
+                    <TableRow key={item.code} className="border-b last:border-0">
+                      <TableCell className="font-mono text-[10px] font-bold text-emerald-600 py-1.5">{item.code}</TableCell>
+                      <TableCell className="text-[10px] font-medium text-slate-800 py-1.5">{item.description}</TableCell>
+                      <TableCell className="text-right font-black text-slate-900 bg-slate-50/50 py-1.5">_______</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+
+            <div className="border rounded-lg overflow-hidden">
+              <div className="bg-slate-50 px-4 py-1.5 border-b">
+                <p className="text-[10px] font-bold text-slate-500 uppercase">Jugos</p>
+              </div>
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-white">
+                    <TableHead className="text-[10px] font-bold uppercase">SAP</TableHead>
+                    <TableHead className="text-[10px] font-bold uppercase">Descripción</TableHead>
+                    <TableHead className="text-right text-[10px] font-bold uppercase">KG</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {CONCENTRATES_JUICES.map((item) => (
+                    <TableRow key={item.code} className="border-b last:border-0">
+                      <TableCell className="font-mono text-[10px] font-bold text-emerald-600 py-1.5">{item.code}</TableCell>
+                      <TableCell className="text-[10px] font-medium text-slate-800 py-1.5">{item.description}</TableCell>
+                      <TableCell className="text-right font-black text-slate-900 bg-slate-50/50 py-1.5">_______</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+          </div>
         </div>
 
         <div className="mb-10">{renderSectionHeader("VII. Sección Materia Prima - Sólidos", "emerald-700")}
