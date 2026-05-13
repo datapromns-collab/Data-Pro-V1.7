@@ -121,8 +121,6 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
   const getCalculatedValue = (code: string) => {
-    // Para simplificar esta vista de pantalla, los valores de etiquetas y MP se muestran inicialmente en 0 
-    // a menos que se implementen fórmulas específicas de consumo por caja.
     switch (code) {
       case 'EMP_0009': {
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
@@ -153,8 +151,8 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((item) => (
-            <TableRow key={item.code} className="hover:bg-slate-50/50 transition-colors">
+          {data.map((item, index) => (
+            <TableRow key={`${item.code}-${index}`} className="hover:bg-slate-50/50 transition-colors">
               <TableCell className="font-mono text-[11px] font-bold text-primary py-4">{item.code}</TableCell>
               <TableCell className="text-sm font-bold text-slate-700 py-4">{item.description}</TableCell>
               <TableCell className="text-right py-4">
