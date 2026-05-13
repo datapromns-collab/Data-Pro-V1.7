@@ -94,7 +94,6 @@ export default function PlannerPage() {
   const handlePrintPlan = () => {
     setPrintMode('plan');
     
-    // Inyectar estilo para orientación horizontal
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: landscape; margin: 0; }';
@@ -109,7 +108,6 @@ export default function PlannerPage() {
   const handlePrintRequirements = () => {
     setPrintMode('requirements');
     
-    // Inyectar estilo para orientación vertical
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: portrait; margin: 0; }';
@@ -255,7 +253,7 @@ export default function PlannerPage() {
                 </TabsContent>
                 <TabsContent value="calculator" className="m-0 h-full"><Calculator /></TabsContent>
                 <TabsContent value="requirement" className="m-0 h-full">
-                  <RequirementSection onPrint={handlePrintRequirements} />
+                  <RequirementSection onPrint={handlePrintRequirements} tasks={tasks} weekStartDate={weekStartDate} />
                 </TabsContent>
               </div>
             </Tabs>
