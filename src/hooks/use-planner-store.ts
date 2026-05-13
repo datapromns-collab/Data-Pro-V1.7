@@ -1,11 +1,11 @@
 
 "use client";
 
-import { useMemo, useEffect } from 'react';
+import { useMemo } from 'react';
 import { ScheduledTask } from '@/lib/types';
 import { startOfWeek } from 'date-fns';
 import { useCollection, useDoc, useFirestore } from '@/firebase';
-import { collection, doc, setDoc, deleteDoc, query, writeBatch, Timestamp } from 'firebase/firestore';
+import { collection, doc, setDoc, deleteDoc, writeBatch, Timestamp } from 'firebase/firestore';
 
 export function usePlannerStore() {
   const firestore = useFirestore();
@@ -54,16 +54,25 @@ export function usePlannerStore() {
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     const id = crypto.randomUUID();
 
-    setDoc(doc(firestore, 'tasks', id), {
+    // Limpiar campos undefined ya que Firestore no los permite
+    const docData: any = {
       ...taskData,
       id,
       color: randomColor
-    });
+    };
+    
+    Object.keys(docData).forEach(key => docData[key] === undefined && delete docData[key]);
+
+    setDoc(doc(firestore, 'tasks', id), docData);
   };
 
   const updateTask = (id: string, taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     if (!firestore) return;
-    setDoc(doc(firestore, 'tasks', id), { ...taskData, id }, { merge: true });
+    
+    const docData: any = { ...taskData, id };
+    Object.keys(docData).forEach(key => docData[key] === undefined && delete docData[key]);
+
+    setDoc(doc(firestore, 'tasks', id), docData, { merge: true });
   };
 
   const removeTask = (id: string) => {
