@@ -196,6 +196,14 @@ export const RECIPES: Record<string, Record<string, number>> = {
     "MATP_0038": 18.93,        // Concentrado Piña Parchita
     "MATP_0017": 39.58,        // Ácido Cítrico
     "MATP_0019": 2.12,         // Benzoato de Sodio
+  },
+  "GLUP MANZANA ROJA": {
+    "MATP_0001": 1352.053203,  // Azúcar
+    "MATP_0039": 18.93,        // Concentrado Manzana Roja
+    "MATP_0041": 2.29,         // Color Caramelo
+    "MATP_0019": 3.12,         // Benzoato de Sodio
+    "MATP_0017": 10.33,        // Ácido Cítrico
+    "MATP_0040": 20.69,        // Ácido Málico
   }
 };
 
