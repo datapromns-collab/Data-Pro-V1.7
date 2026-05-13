@@ -7,7 +7,8 @@ import { startOfWeek } from 'date-fns';
 import { 
   useFirestore, 
   useCollection, 
-  useDoc 
+  useDoc,
+  useUser
 } from '@/firebase';
 import { 
   collection, 
@@ -23,22 +24,23 @@ import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
 /**
- * Hook para gestionar el estado del planificador sincronizado con Firestore.
+ * Hook para gestionar el estado del planificador sincronizado con Firestore y segmentado por usuario.
  */
 export function usePlannerStore() {
   const db = useFirestore();
+  const { user } = useUser();
 
-  // Referencias protegidas a colecciones y documentos
-  const tasksRef = useMemo(() => db ? collection(db, 'tasks') : null, [db]);
-  const configRef = useMemo(() => db ? doc(db, 'configs', 'global') : null, [db]);
+  // Referencias protegidas a colecciones y documentos específicos del usuario
+  const tasksRef = useMemo(() => (db && user) ? collection(db, 'users', user.uid, 'tasks') : null, [db, user]);
+  const configRef = useMemo(() => (db && user) ? doc(db, 'users', user.uid, 'configs', 'global') : null, [db, user]);
 
-  // Suscripción a tareas (maneja null internamente)
+  // Suscripción a tareas
   const { data: rawTasks, loading: tasksLoading } = useCollection<any>(tasksRef);
   
-  // Suscripción a configuración global (maneja null internamente)
+  // Suscripción a configuración global
   const { data: rawConfig, loading: configLoading } = useDoc<any>(configRef);
 
-  // Mapeo de datos de Firestore (Timestamps) a objetos Date de JS
+  // Mapeo de datos de Firestore
   const tasks = useMemo(() => {
     if (!rawTasks) return [];
     return rawTasks.map(t => ({
@@ -65,8 +67,7 @@ export function usePlannerStore() {
     };
   }, [rawConfig]);
 
-  // Se considera cargado solo si las referencias existen y los datos han llegado
-  const isLoaded = !!db && !tasksLoading && !configLoading;
+  const isLoaded = !!db && !!user && !tasksLoading && !configLoading;
 
   const addTask = useCallback((taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     if (!tasksRef) return;
@@ -81,7 +82,7 @@ export function usePlannerStore() {
       endTime: Timestamp.fromDate(taskData.endTime)
     }).catch(err => {
       errorEmitter.emit('permission-error', new FirestorePermissionError({
-        path: 'tasks',
+        path: tasksRef.path,
         operation: 'create',
         requestResourceData: taskData
       }));
@@ -89,51 +90,51 @@ export function usePlannerStore() {
   }, [tasksRef]);
 
   const updateTask = useCallback((id: string, taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
-    if (!db) return;
-    const docRef = doc(db, 'tasks', id);
+    if (!db || !user) return;
+    const docRef = doc(db, 'users', user.uid, 'tasks', id);
     updateDoc(docRef, {
       ...taskData,
       startTime: Timestamp.fromDate(taskData.startTime),
       endTime: Timestamp.fromDate(taskData.endTime)
     }).catch(err => {
       errorEmitter.emit('permission-error', new FirestorePermissionError({
-        path: `tasks/${id}`,
+        path: docRef.path,
         operation: 'update',
         requestResourceData: taskData
       }));
     });
-  }, [db]);
+  }, [db, user]);
 
   const removeTask = useCallback((id: string) => {
-    if (!db) return;
-    const docRef = doc(db, 'tasks', id);
+    if (!db || !user) return;
+    const docRef = doc(db, 'users', user.uid, 'tasks', id);
     deleteDoc(docRef).catch(err => {
       errorEmitter.emit('permission-error', new FirestorePermissionError({
-        path: `tasks/${id}`,
+        path: docRef.path,
         operation: 'delete'
       }));
     });
-  }, [db]);
+  }, [db, user]);
 
   const clearAll = useCallback(async () => {
-    if (!db || tasks.length === 0) return;
+    if (!db || tasks.length === 0 || !user) return;
     const batch = writeBatch(db);
     tasks.forEach(t => {
-      batch.delete(doc(db, 'tasks', t.id));
+      batch.delete(doc(db, 'users', user.uid, 'tasks', t.id));
     });
     batch.commit().catch(err => {
       errorEmitter.emit('permission-error', new FirestorePermissionError({
-        path: 'tasks',
+        path: `users/${user.uid}/tasks`,
         operation: 'delete'
       }));
     });
-  }, [db, tasks]);
+  }, [db, tasks, user]);
 
   const updateWeekStartDate = useCallback((date: Date) => {
     if (!configRef) return;
     setDoc(configRef, { weekStartDate: Timestamp.fromDate(date) }, { merge: true }).catch(err => {
       errorEmitter.emit('permission-error', new FirestorePermissionError({
-        path: 'configs/global',
+        path: configRef.path,
         operation: 'update',
         requestResourceData: { weekStartDate: date }
       }));
@@ -149,7 +150,7 @@ export function usePlannerStore() {
       } 
     }, { merge: true }).catch(err => {
       errorEmitter.emit('permission-error', new FirestorePermissionError({
-        path: 'configs/global',
+        path: configRef.path,
         operation: 'update',
         requestResourceData: { lineSpeeds: { [lineId]: speed } }
       }));

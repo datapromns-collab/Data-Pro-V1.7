@@ -1,7 +1,7 @@
+
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
-import Image from 'next/image';
 import { 
   Calendar as CalendarIcon, 
   Plus, 
@@ -15,7 +15,8 @@ import {
   Calculator as CalculatorIcon,
   Keyboard as KeyboardIcon,
   ClipboardList,
-  FileDown
+  FileDown,
+  Cloud
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -24,6 +25,7 @@ import { Calculator } from '@/components/planner/Calculator';
 import { KeyboardShortcuts } from '@/components/planner/KeyboardShortcuts';
 import { RequirementSection } from '@/components/planner/RequirementSection';
 import { RequirementReport } from '@/components/planner/RequirementReport';
+import { AuthButton } from '@/components/planner/AuthButton';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { Toaster } from '@/components/ui/toaster';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -192,7 +194,7 @@ export default function PlannerPage() {
     <div className="min-h-screen flex items-center justify-center bg-[#f8fafc]">
        <div className="animate-pulse flex flex-col items-center gap-4">
           <CalendarIcon className="h-12 w-12 text-primary" />
-          <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Cargando Planificador Local...</p>
+          <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Sincronizando con la Nube...</p>
        </div>
     </div>
   );
@@ -208,13 +210,23 @@ export default function PlannerPage() {
                 <CalendarIcon className="h-6 w-6 text-white" />
               </div>
               <div>
-                <h1 className="text-lg font-headline font-bold text-slate-900 tracking-tight">Plan Semanal</h1>
-                <p className="text-[10px] uppercase tracking-widest text-primary font-bold">Local Edition</p>
+                <h1 className="text-lg font-headline font-bold text-slate-900 tracking-tight leading-none mb-1">Plan Semanal</h1>
+                <div className="flex items-center gap-1">
+                  <Cloud className="h-2.5 w-2.5 text-emerald-500" />
+                  <p className="text-[9px] uppercase tracking-widest text-emerald-600 font-black">Cloud Edition</p>
+                </div>
               </div>
             </div>
           </div>
           <SidebarContent className="px-4 py-2">
             <div className="space-y-6">
+              <section>
+                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Tu Cuenta</p>
+                <div className="px-2">
+                  <AuthButton />
+                </div>
+              </section>
+
               <section>
                 <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Configuración de Semana</p>
                 <div className="px-2 space-y-3">
@@ -275,9 +287,9 @@ export default function PlannerPage() {
                     <KeyboardIcon className="h-4 w-4" />
                     Atajos (Alt + K)
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar TODO el historial local?') && clearAll()} className="w-full justify-start gap-2 text-destructive font-bold">
+                  <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar TODO el historial de la nube?') && clearAll()} className="w-full justify-start gap-2 text-destructive font-bold">
                     <Trash2 className="h-4 w-4" />
-                    Limpiar Datos Locales
+                    Limpiar Nube
                   </Button>
                 </div>
               </section>
@@ -289,9 +301,12 @@ export default function PlannerPage() {
         <main className="flex-1 flex flex-col h-screen overflow-hidden no-print">
           <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2 text-sm text-slate-500">
-              <span>Producción Local</span>
+              <div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-50 rounded-full border border-emerald-100">
+                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                <span className="text-[10px] font-black text-emerald-600 uppercase">Sincronizado</span>
+              </div>
               <ChevronRight className="h-4 w-4" />
-              <span>Semana {weekNumber} ({format(weekStartDate, 'dd/MM', { locale: es })})</span>
+              <span>Semana {weekNumber}</span>
               <ChevronRight className="h-4 w-4" />
               <span className="font-medium text-slate-900">Línea {selectedLine}</span>
             </div>
@@ -380,7 +395,7 @@ export default function PlannerPage() {
                   </div>
 
                   <div className="mt-4 pt-2 border-t border-slate-200 flex justify-between items-center text-[8px] text-slate-400 font-bold uppercase tracking-[0.2em]">
-                    <span>PLAN SEMANAL LOCAL EDITION</span>
+                    <span>PLAN SEMANAL CLOUD EDITION</span>
                     <span className="text-slate-900 font-black">PÁGINA {i + 1} DE {LINES.length}</span>
                     <span>REF: LÍNEA-{(i + 1)}</span>
                   </div>

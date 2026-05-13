@@ -33,16 +33,16 @@
     }
   },
   "auth": {
-    "providers": ["anonymous"]
+    "providers": ["anonymous", "google"]
   },
   "firestore": {
-    "/tasks/{taskId}": {
+    "/users/{userId}/tasks/{taskId}": {
       "schema": "#/entities/ScheduledTask",
-      "description": "Colección de todas las tareas de producción."
+      "description": "Colección de tareas privadas del usuario."
     },
-    "/configs/global": {
+    "/users/{userId}/configs/global": {
       "schema": "#/entities/PlannerConfig",
-      "description": "Configuración global de la herramienta compartida."
+      "description": "Configuración personalizada del usuario."
     }
   }
 }
