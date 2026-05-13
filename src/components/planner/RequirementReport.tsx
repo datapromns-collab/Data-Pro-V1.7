@@ -25,9 +25,9 @@ const PREFORMS_DATA = [
 
 const CAPS_DATA = [
   { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS IMPORTADAS' },
-  { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS NACIONALES' },
+  { code: 'EMP_0095_N', description: 'TAPA VERDE REFRESCOS NACIONALES' },
   { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS IMPORTADAS' },
-  { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS NACIONALES' },
+  { code: 'EMP_0105_N', description: 'TAPA AZULES REFRESCOS NACIONALES' },
 ];
 
 const PLASTICS_DATA = [
@@ -168,7 +168,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
   );
 
   return (
-    <div className="bg-white p-8 max-w-[210mm] mx-auto print:p-8 print:max-w-none">
+    <div className="bg-white p-8 max-w-[210mm] mx-auto print:pt-[4mm] print:px-8 print:pb-8 print:max-w-none">
       <div className="mb-6 border-b-2 border-primary pb-4 flex justify-between items-center">
         <div className="flex-1">
           <h1 className="text-2xl font-headline font-bold text-slate-900 leading-tight">Reporte de Requerimiento</h1>
@@ -227,7 +227,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
             <Table>
               <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad</TableHead></TableRow></TableHeader>
               <TableBody>
-                {PLASTICS_DATA.map((item, idx) => item.isHeader ? (
+                {PLASTICS_DATA.map((item, idx) => ('isHeader' in item && item.isHeader) ? (
                   <TableRow key={`header-${idx}`} className="bg-slate-100/30 h-6"><TableCell colSpan={3} className="py-1 text-center font-bold text-slate-500 text-[10px] uppercase tracking-widest">{item.description}</TableCell></TableRow>
                 ) : (
                   <TableRow key={`${item.code}-${idx}`} className="border-b last:border-0 h-8">
