@@ -21,7 +21,7 @@ import { ScheduledTask } from '@/lib/types';
 import { addDays } from 'date-fns';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS } from '@/lib/planner-utils';
+import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS, TERMO_0080_FACTORS } from '@/lib/planner-utils';
 
 interface RequirementSectionProps {
   onPrint?: () => void;
@@ -85,7 +85,7 @@ const LABELS_1LT_DATA = [
   { code: 'EMP_0147', description: 'ETIQUETA PIÑA 1000ML' },
   { code: 'EMP_0148', description: 'ETIQUETA NARANJA 1000ML' },
   { code: 'EMP_0149', description: 'ETIQUETA PIÑA PARCHITA 1000ML' },
-  { code: 'EMP_0150', description: 'ETIQUETA MANZANITA 1000ML' },
+  { code: 'EMP_0150', description: 'ETIQUETA MANZANA ROJA 1000ML' },
 ];
 
 const LABELS_04LT_DATA = [
@@ -97,7 +97,7 @@ const LABELS_04LT_DATA = [
   { code: 'EMP_0151', description: 'ETIQUETA PIÑA 400ML' },
   { code: 'EMP_0152', description: 'ETIQUETA NARANJA 400ML' },
   { code: 'EMP_0154', description: 'ETIQUETA PIÑA PARCHITA 400ML' },
-  { code: 'EMP_0155', description: 'ETIQUETA MANZANITA 400ML' },
+  { code: 'EMP_0155', description: 'ETIQUETA MANZANA ROJA 400ML' },
 ];
 
 const SUGAR_DATA = [
@@ -167,6 +167,17 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
       const formats: (keyof typeof PLASTIC_FACTORS)[] = ["2Lts", "1Lt", "0.4Lts", "1.5Lts"];
       return formats.reduce((acc, fmt) => {
         const factor = PLASTIC_FACTORS[fmt];
+        const totalBoxes = tasks
+          .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
+          .reduce((sum, t) => sum + (t.quantity || 0), 0);
+        return acc + (totalBoxes * factor);
+      }, 0).toFixed(2);
+    }
+
+    if (code === 'EMP_0080') {
+      const formats: (keyof typeof TERMO_0080_FACTORS)[] = ["2Lts", "1Lt"];
+      return formats.reduce((acc, fmt) => {
+        const factor = TERMO_0080_FACTORS[fmt];
         const totalBoxes = tasks
           .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);

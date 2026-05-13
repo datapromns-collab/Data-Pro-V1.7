@@ -1,4 +1,3 @@
-
 import { addMinutes, format, isBefore, isAfter, startOfWeek, addDays, setHours, setMinutes } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { ScheduledTask } from './types';
@@ -73,6 +72,11 @@ export const PLASTIC_FACTORS = {
   "1Lt": 0.00716,
   "0.4Lts": 0.0034905,
   "1.5Lts": 0.0111696
+};
+
+export const TERMO_0080_FACTORS = {
+  "2Lts": 0.03221,
+  "1Lt": 0.03338
 };
 
 export const LABEL_MAPPING: Record<string, { product: string, presentation: string }> = {
