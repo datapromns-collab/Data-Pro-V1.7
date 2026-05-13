@@ -258,6 +258,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
                 {tasks.map((task) => {
                   const isSpecial = isSpecialTask(task.name);
+                  const isCS = task.name === 'CS';
                   const style = getBarStyle(task.startTime, task.endTime, day, isSpecial ? 'special' : 'production');
                   if (!style) return null;
                   const shifts = getShiftData(task, day);
@@ -274,17 +275,20 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                       <div className="relative w-full h-full min-w-0">
                         {shifts?.dayLabel && (
                           <div 
-                            className="absolute inset-y-0 flex flex-col justify-center p-1.5 overflow-hidden"
+                            className={cn(
+                              "absolute inset-y-0 flex flex-col justify-center overflow-hidden",
+                              isCS ? "p-0 items-center" : "p-1.5"
+                            )}
                             style={{ 
                               left: `${((shifts.dayLabel.left - parseFloat(style.left)) / parseFloat(style.width)) * 100}%`,
                               width: `${(shifts.dayLabel.width / parseFloat(style.width)) * 100}%`
                             }}
                           >
-                            <span className="text-[8px] font-bold text-slate-500 uppercase leading-none mb-1 print:hidden">DIA</span>
-                            <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+                            {!isCS && <span className="text-[8px] font-bold text-slate-500 uppercase leading-none mb-1 print:hidden">DIA</span>}
+                            <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden justify-center">
                               <span className={cn(
                                 "font-black text-slate-900 uppercase leading-tight truncate",
-                                task.name === 'CS' ? "text-[9px] rotate-90 inline-block origin-center" : "text-[11px]"
+                                isCS ? "text-[9px] rotate-90 inline-block origin-center whitespace-nowrap" : "text-[11px]"
                               )}>
                                 {task.name}
                               </span>
@@ -298,17 +302,20 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                         )}
                         {shifts?.nightLabel && (
                           <div 
-                            className="absolute inset-y-0 flex flex-col justify-center p-1.5 overflow-hidden border-l border-white/30"
+                            className={cn(
+                              "absolute inset-y-0 flex flex-col justify-center border-l border-white/30 overflow-hidden",
+                              isCS ? "p-0 items-center" : "p-1.5"
+                            )}
                             style={{ 
                               left: `${((shifts.nightLabel.left - parseFloat(style.left)) / parseFloat(style.width)) * 100}%`,
                               width: `${(shifts.nightLabel.width / parseFloat(style.width)) * 100}%`
                             }}
                           >
-                            <span className="text-[8px] font-bold text-slate-600 uppercase leading-none mb-1 print:hidden">NOCHE</span>
-                            <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
+                            {!isCS && <span className="text-[8px] font-bold text-slate-600 uppercase leading-none mb-1 print:hidden">NOCHE</span>}
+                            <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden justify-center">
                               <span className={cn(
                                 "font-black text-slate-900 uppercase leading-tight truncate",
-                                task.name === 'CS' ? "text-[9px] rotate-90 inline-block origin-center" : "text-[11px]"
+                                isCS ? "text-[9px] rotate-90 inline-block origin-center whitespace-nowrap" : "text-[11px]"
                               )}>
                                 {task.name}
                               </span>
@@ -324,7 +331,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                           <div className="flex flex-col justify-center items-center h-full px-2">
                              <span className={cn(
                                 "font-black text-slate-900 uppercase truncate",
-                                task.name === 'CS' ? "text-[9px] rotate-90 inline-block origin-center" : "text-[11px]"
+                                isCS ? "text-[9px] rotate-90 inline-block origin-center whitespace-nowrap" : "text-[11px]"
                               )}>
                                 {task.name}
                               </span>
