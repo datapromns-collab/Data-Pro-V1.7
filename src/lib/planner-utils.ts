@@ -153,11 +153,11 @@ export const RECIPES: Record<string, Record<string, number>> = {
     "MATP_0010": 0.95,         // Aditivo AD-74M
   },
   "GLUP FRESH": {
-    "MATP_0001": 16568.38656, // Azúcar
-    "MATP_0003": 164.691,     // Concentrado Fresh
-    "MATP_0017": 223.155,     // Ácido Cítrico
-    "MATP_0021": 39.585,      // Citrato de Sodio (Trisodium Citrate)
-    "MATP_0019": 39.585,      // Benzoato de Sodio
+    "MATP_0001": 1904.412248, // Azúcar
+    "MATP_0003": 18.93,       // Concentrado Fresh
+    "MATP_0017": 25.65,       // Ácido Cítrico
+    "MATP_0021": 4.55,        // Citrato de Sodio
+    "MATP_0019": 4.55,        // Benzoato de Sodio
   }
 };
 
