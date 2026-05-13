@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from 'next/image';
@@ -168,7 +167,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
   );
 
   return (
-    <div className="bg-white p-8 max-w-[210mm] mx-auto print:pt-[4mm] print:px-8 print:pb-8 print:max-w-none">
+    <div className="bg-white p-8 max-w-[210mm] mx-auto print:pt-[5mm] print:px-8 print:pb-8 print:max-w-none">
       <div className="mb-6 border-b-2 border-primary pb-4 flex justify-between items-center">
         <div className="flex-1">
           <h1 className="text-2xl font-headline font-bold text-slate-900 leading-tight">Reporte de Requerimiento</h1>
