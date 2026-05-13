@@ -66,48 +66,23 @@ export default function PlannerPage() {
 
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
-  // Keyboard Shortcuts Handler
+  // Keyboard Shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.altKey) {
         switch (e.key.toLowerCase()) {
-          case 'n':
-            e.preventDefault();
-            setEditingTask(null);
-            setIsDialogOpen(true);
-            break;
-          case 'c':
-            e.preventDefault();
-            setActiveTab('calculator');
-            break;
-          case 'g':
-            e.preventDefault();
-            setActiveTab('gantt');
-            break;
-          case 'v':
-            e.preventDefault();
-            setActiveTab('speeds');
-            break;
-          case 'p':
-            e.preventDefault();
-            if (activeTab === 'requirement') handlePrintRequirements();
-            else handlePrintPlan();
-            break;
-          case 'k':
-            e.preventDefault();
-            setIsShortcutsOpen(prev => !prev);
-            break;
-          case 'r':
-            e.preventDefault();
-            setActiveTab('requirement');
-            break;
+          case 'n': e.preventDefault(); setEditingTask(null); setIsDialogOpen(true); break;
+          case 'c': e.preventDefault(); setActiveTab('calculator'); break;
+          case 'g': e.preventDefault(); setActiveTab('gantt'); break;
+          case 'v': e.preventDefault(); setActiveTab('speeds'); break;
+          case 'k': e.preventDefault(); setIsShortcutsOpen(prev => !prev); break;
+          case 'r': e.preventDefault(); setActiveTab('requirement'); break;
         }
       }
     };
-
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [activeTab]);
+  }, []);
 
   const weekNumber = getISOWeek(weekStartDate);
 
@@ -121,28 +96,12 @@ export default function PlannerPage() {
 
   const handlePrintPlan = () => {
     setPrintMode('plan');
-    const style = document.createElement('style');
-    style.innerHTML = `@page { size: landscape; margin: 0; }`;
-    style.id = 'print-orientation-style';
-    document.head.appendChild(style);
-    
-    setTimeout(() => {
-      window.print();
-      document.getElementById('print-orientation-style')?.remove();
-    }, 100);
+    setTimeout(() => window.print(), 100);
   };
 
   const handlePrintRequirements = () => {
     setPrintMode('requirements');
-    const style = document.createElement('style');
-    style.innerHTML = `@page { size: portrait; margin: 0; }`;
-    style.id = 'print-orientation-style';
-    document.head.appendChild(style);
-
-    setTimeout(() => {
-      window.print();
-      document.getElementById('print-orientation-style')?.remove();
-    }, 100);
+    setTimeout(() => window.print(), 100);
   };
 
   const handleTaskClick = (task: ScheduledTask) => {
@@ -151,16 +110,13 @@ export default function PlannerPage() {
   };
 
   const handleSaveTask = (taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
-    if (editingTask) {
-      updateTask(editingTask.id, taskData);
-    } else {
-      addTask(taskData);
-    }
+    if (editingTask) updateTask(editingTask.id, taskData);
+    else addTask(taskData);
     setEditingTask(null);
   };
 
   const handleDeleteTask = (id: string) => {
-    if (confirm('¿Estás seguro de que deseas eliminar esta tarea?')) {
+    if (confirm('¿Eliminar esta tarea?')) {
       removeTask(id);
       setIsDialogOpen(false);
       setEditingTask(null);
@@ -169,120 +125,62 @@ export default function PlannerPage() {
 
   const pageHeader = useMemo(() => {
     switch (activeTab) {
-      case 'speeds':
-        return {
-          title: "Velocidades de líneas",
-          subtitle: "Configuración de velocidades base para el cálculo de tiempos."
-        };
-      case 'calculator':
-        return {
-          title: "Cálculo de Cajas a Tanques",
-          subtitle: "Conversión de volumen de producción a unidades de preparación."
-        };
-      case 'requirement':
-        return {
-          title: "Requerimiento de Materiales",
-          subtitle: "Gestión de insumos y materiales."
-        };
-      default:
-        return {
-          title: `Programación Línea ${selectedLine}`,
-          subtitle: "Gestión de turnos y tanques de producción."
-        };
+      case 'speeds': return { title: "Velocidades", subtitle: "Configuración base." };
+      case 'calculator': return { title: "Calculadora", subtitle: "Conversión cajas/tanques." };
+      case 'requirement': return { title: "Requerimientos", subtitle: "Gestión de insumos." };
+      default: return { title: `Programación Línea ${selectedLine}`, subtitle: "Gestión de turnos." };
     }
   }, [activeTab, selectedLine]);
 
-  // Si no está cargado el estado de autenticación, mostramos una carga mínima.
-  if (!isLoaded) return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f8fafc]">
-       <div className="animate-pulse flex flex-col items-center gap-4">
-          <CalendarIcon className="h-12 w-12 text-primary" />
-          <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Iniciando Sesión...</p>
-       </div>
-    </div>
-  );
+  if (!isLoaded) return null;
 
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-[#f8fafc]">
-        {/* UI Sidebar */}
         <Sidebar className="border-r border-slate-200 bg-white no-print">
           <div className="p-6">
             <div className="flex items-center gap-3">
               <div className="bg-primary p-2 rounded-xl shadow-lg shadow-primary/20">
                 <CalendarIcon className="h-6 w-6 text-white" />
               </div>
-              <div>
-                <h1 className="text-lg font-headline font-bold text-slate-900 tracking-tight leading-none mb-1">Plan Semanal</h1>
-                <div className="flex items-center gap-1">
-                  <Cloud className="h-2.5 w-2.5 text-emerald-500" />
-                  <p className="text-[9px] uppercase tracking-widest text-emerald-600 font-black">Cloud Edition</p>
-                </div>
-              </div>
+              <h1 className="text-lg font-headline font-bold text-slate-900 tracking-tight">Plan Semanal</h1>
             </div>
           </div>
           <SidebarContent className="px-4 py-2">
             <div className="space-y-6">
               <section>
-                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Tu Cuenta</p>
-                <div className="px-2">
-                  <AuthButton />
-                </div>
+                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Cuenta</p>
+                <AuthButton />
               </section>
 
-              {isSyncing && (
-                <section className="px-2">
-                  <div className="flex items-center gap-2 p-2 bg-blue-50 rounded-lg border border-blue-100 animate-pulse">
-                    <Loader2 className="h-3 w-3 text-blue-500 animate-spin" />
-                    <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Sincronizando datos...</span>
-                  </div>
-                </section>
-              )}
-
               <section>
-                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Configuración de Semana</p>
+                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Semana</p>
                 <div className="px-2 space-y-3">
-                  <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100">
-                    <div className="flex items-center gap-2">
-                      <Hash className="h-4 w-4 text-primary" />
-                      <span className="text-xs font-bold text-slate-600">Semana ISO</span>
-                    </div>
-                    <Badge variant="secondary" className="font-bold text-primary bg-primary/10">
-                      {weekNumber}
-                    </Badge>
+                   <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100">
+                    <span className="text-xs font-bold text-slate-600">Semana ISO</span>
+                    <Badge variant="secondary" className="font-bold text-primary bg-primary/10">{weekNumber}</Badge>
                   </div>
-                  
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full justify-start text-left font-bold bg-white border-slate-200 hover:border-primary/50 transition-colors shadow-sm">
+                      <Button variant="outline" className="w-full justify-start text-left font-bold bg-white border-slate-200 shadow-sm">
                         <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
                         {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
                       </Button>
                     </PopoverTrigger>
                     <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={weekStartDate}
-                        onSelect={(date) => date && setWeekStartDate(date)}
-                        initialFocus
-                        locale={es}
-                      />
+                      <Calendar mode="single" selected={weekStartDate} onSelect={(date) => date && setWeekStartDate(date)} locale={es} />
                     </PopoverContent>
                   </Popover>
                 </div>
               </section>
 
               <section>
-                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Líneas de Producción</p>
-                <div className="px-2 mb-4">
+                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Líneas</p>
+                <div className="px-2">
                   <Select value={selectedLine} onValueChange={setSelectedLine}>
-                    <SelectTrigger className="w-full bg-slate-50 border-slate-200 font-bold">
-                      <SelectValue />
-                    </SelectTrigger>
+                    <SelectTrigger className="w-full bg-slate-50 border-slate-200 font-bold"><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      {LINES.map((l, i) => (
-                        <SelectItem key={l} value={(i + 1).toString()}>{l}</SelectItem>
-                      ))}
+                      {LINES.map((l, i) => <SelectItem key={l} value={(i + 1).toString()}>{l}</SelectItem>)}
                     </SelectContent>
                   </Select>
                 </div>
@@ -290,18 +188,12 @@ export default function PlannerPage() {
 
               <section>
                 <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Acciones</p>
-                <div className="grid gap-2">
-                  <Button size="sm" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full justify-start gap-2 bg-primary font-bold">
-                    <Plus className="h-4 w-4" />
-                    Nueva Tarea
+                <div className="grid gap-2 px-2">
+                  <Button size="sm" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-bold">
+                    <Plus className="h-4 w-4" /> Nueva Tarea
                   </Button>
-                  <Button variant="outline" size="sm" onClick={() => setIsShortcutsOpen(true)} className="w-full justify-start gap-2 border-slate-200 text-slate-600 font-bold">
-                    <KeyboardIcon className="h-4 w-4" />
-                    Atajos (Alt + K)
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar TODO el historial de la nube?') && clearAll()} className="w-full justify-start gap-2 text-destructive font-bold">
-                    <Trash2 className="h-4 w-4" />
-                    Limpiar Nube
+                  <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar historial?') && clearAll()} className="w-full gap-2 text-destructive font-bold">
+                    <Trash2 className="h-4 w-4" /> Limpiar Todo
                   </Button>
                 </div>
               </section>
@@ -309,138 +201,69 @@ export default function PlannerPage() {
           </SidebarContent>
         </Sidebar>
 
-        {/* Main Content Area */}
         <main className="flex-1 flex flex-col h-screen overflow-hidden no-print">
           <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2 text-sm text-slate-500">
               <div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-50 rounded-full border border-emerald-100">
-                <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                <div className={cn("w-1.5 h-1.5 rounded-full", isSyncing ? "bg-amber-500 animate-pulse" : "bg-emerald-500")} />
                 <span className="text-[10px] font-black text-emerald-600 uppercase">
-                  {isSyncing ? "Actualizando..." : "Sincronizado"}
+                  {isSyncing ? "Sincronizando..." : "Sincronizado"}
                 </span>
               </div>
               <ChevronRight className="h-4 w-4" />
-              <span>Semana {weekNumber}</span>
-              <ChevronRight className="h-4 w-4" />
               <span className="font-medium text-slate-900">Línea {selectedLine}</span>
             </div>
-            <div className="flex items-center gap-2">
-               <Button variant="ghost" size="icon" onClick={handlePrintPlan} title="Imprimir Plan de Producción"><Printer className="h-5 w-5" /></Button>
-            </div>
+            <Button variant="ghost" size="icon" onClick={handlePrintPlan}><Printer className="h-5 w-5" /></Button>
           </header>
 
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col gap-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <h2 className="text-2xl font-headline font-bold text-slate-900">
-                    {pageHeader.title}
-                  </h2>
-                  <p className="text-sm text-slate-500">
-                    {pageHeader.subtitle}
-                  </p>
+                  <h2 className="text-2xl font-headline font-bold text-slate-900">{pageHeader.title}</h2>
+                  <p className="text-sm text-slate-500">{pageHeader.subtitle}</p>
                 </div>
-                <div className="flex items-center gap-3">
-                  {activeTab === 'requirement' && (
-                    <Button 
-                      onClick={handlePrintRequirements} 
-                      className="gap-2 bg-indigo-600 hover:bg-indigo-700 font-bold rounded-xl"
-                    >
-                      <FileDown className="h-4 w-4" />
-                      Exportar Requerimientos
-                    </Button>
-                  )}
-                  <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
-                    <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Programación</TabsTrigger>
-                    <TabsTrigger value="speeds" className="gap-2 px-4 font-bold"><Gauge className="h-4 w-4" /> Velocidades</TabsTrigger>
-                    <TabsTrigger value="calculator" className="gap-2 px-4 font-bold"><CalculatorIcon className="h-4 w-4" /> Calculadora</TabsTrigger>
-                    <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Requerimientos</TabsTrigger>
-                  </TabsList>
-                </div>
+                <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
+                  <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Programación</TabsTrigger>
+                  <TabsTrigger value="speeds" className="gap-2 px-4 font-bold"><Gauge className="h-4 w-4" /> Velocidades</TabsTrigger>
+                  <TabsTrigger value="calculator" className="gap-2 px-4 font-bold"><CalculatorIcon className="h-4 w-4" /> Calculadora</TabsTrigger>
+                  <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Insumos</TabsTrigger>
+                </TabsList>
               </div>
 
-              <div className="flex-1 min-h-0 relative">
+              <div className="flex-1 min-h-0">
                 <TabsContent value="gantt" className="m-0 h-full">
                   <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
                 </TabsContent>
                 <TabsContent value="speeds" className="m-0 h-full">
                   <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} />
                 </TabsContent>
-                <TabsContent value="calculator" className="m-0 h-full">
-                  <Calculator />
-                </TabsContent>
-                <TabsContent value="requirement" className="m-0 h-full">
-                  <RequirementSection />
-                </TabsContent>
+                <TabsContent value="calculator" className="m-0 h-full"><Calculator /></TabsContent>
+                <TabsContent value="requirement" className="m-0 h-full"><RequirementSection /></TabsContent>
               </div>
             </Tabs>
           </div>
         </main>
 
-        {/* Print Only Content */}
         <div className="print-only w-full bg-white">
           {printMode === 'plan' ? (
-            LINES.map((lineName, i) => {
-              const lineId = (i + 1).toString();
-              const lineTasks = tasks.filter(t => 
-                t.lineId === lineId && 
-                t.endTime >= weekStartDate && 
-                t.startTime <= weekEnd
-              );
-              return (
-                <div key={lineName} className="page-break-section">
-                  <div className="mb-4 flex justify-between items-start">
-                    <div className="space-y-1">
-                      <h1 className="text-2xl font-headline font-bold text-slate-900">Programa de Producción</h1>
-                      <h2 className="text-xl font-headline font-bold text-primary uppercase">{lineName}</h2>
-                    </div>
-
-                    <div className="text-right">
-                      <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-1">CONFIDENCIAL - USO INTERNO</p>
-                      <div className="space-y-0.5 text-[10px] text-slate-500 font-bold">
-                        <p>Semana {weekNumber} - {format(weekStartDate, 'dd', { locale: es })} al {format(weekEnd, 'dd MMMM yyyy', { locale: es })}</p>
-                        <p>Emitido: {format(new Date(), 'dd/MM/yyyy')}</p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="flex-1 w-full overflow-hidden">
-                    <ProductionGantt tasks={lineTasks} weekStartDate={weekStartDate} />
-                  </div>
-
-                  <div className="mt-4 pt-2 border-t border-slate-200 flex justify-between items-center text-[8px] text-slate-400 font-bold uppercase tracking-[0.2em]">
-                    <span>PLAN SEMANAL CLOUD EDITION</span>
-                    <span className="text-slate-900 font-black">PÁGINA {i + 1} DE {LINES.length}</span>
-                    <span>REF: LÍNEA-{(i + 1)}</span>
-                  </div>
+            LINES.map((lineName, i) => (
+              <div key={lineName} className="page-break-section">
+                <div className="mb-4 flex justify-between items-start">
+                  <h1 className="text-2xl font-headline font-bold text-slate-900">Programa: {lineName}</h1>
+                  <p className="text-[10px] text-slate-500 font-bold uppercase">Semana {weekNumber}</p>
                 </div>
-              );
-            })
+                <ProductionGantt tasks={tasks.filter(t => t.lineId === (i + 1).toString() && t.endTime >= weekStartDate && t.startTime <= weekEnd)} weekStartDate={weekStartDate} />
+              </div>
+            ))
           ) : (
-            <div className="p-[1cm]">
-              <RequirementReport tasks={tasks} weekStartDate={weekStartDate} />
-            </div>
+            <div className="p-[1cm]"><RequirementReport tasks={tasks} weekStartDate={weekStartDate} /></div>
           )}
         </div>
       </div>
 
-      <TaskDialog 
-        isOpen={isDialogOpen} 
-        onClose={() => { setIsDialogOpen(false); setEditingTask(null); }} 
-        onSave={handleSaveTask} 
-        onDelete={handleDeleteTask}
-        initialTask={editingTask}
-        defaultLineId={selectedLine}
-        weekStartDate={weekStartDate}
-        allTasks={tasks}
-        lineSpeeds={lineSpeeds}
-      />
-      
-      <KeyboardShortcuts 
-        isOpen={isShortcutsOpen} 
-        onClose={() => setIsShortcutsOpen(false)} 
-      />
-
+      <TaskDialog isOpen={isDialogOpen} onClose={() => { setIsDialogOpen(false); setEditingTask(null); }} onSave={handleSaveTask} onDelete={handleDeleteTask} initialTask={editingTask} defaultLineId={selectedLine} weekStartDate={weekStartDate} allTasks={tasks} lineSpeeds={lineSpeeds} />
+      <KeyboardShortcuts isOpen={isShortcutsOpen} onClose={() => setIsShortcutsOpen(false)} />
       <Toaster />
     </SidebarProvider>
   );

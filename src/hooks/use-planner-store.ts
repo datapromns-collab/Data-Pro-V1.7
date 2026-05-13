@@ -24,21 +24,21 @@ import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
 /**
- * Hook para gestionar el estado del planificador optimizado para velocidad.
+ * Hook para gestionar el estado del planificador optimizado para velocidad y transparencia.
  */
 export function usePlannerStore() {
   const db = useFirestore();
   const { user, loading: authLoading } = useUser();
 
-  // Referencias memoizadas para evitar re-suscripciones innecesarias
+  // Referencias a Firestore
   const tasksRef = useMemo(() => (db && user) ? collection(db, 'users', user.uid, 'tasks') : null, [db, user]);
   const configRef = useMemo(() => (db && user) ? doc(db, 'users', user.uid, 'configs', 'global') : null, [db, user]);
 
-  // Suscripciones en tiempo real
+  // Suscripciones en tiempo real (no bloqueantes)
   const { data: rawTasks, loading: tasksLoading } = useCollection<any>(tasksRef);
   const { data: rawConfig, loading: configLoading } = useDoc<any>(configRef);
 
-  // Mapeo eficiente de datos
+  // Mapeo de datos para el programa actual
   const tasks = useMemo(() => {
     if (!rawTasks) return [];
     return rawTasks.map(t => ({
@@ -65,9 +65,8 @@ export function usePlannerStore() {
     };
   }, [rawConfig]);
 
-  // Solo bloqueamos si aún no sabemos quién es el usuario. 
-  // Los datos de tareas y configuración fluyen de forma asíncrona sin bloquear la UI.
-  const isLoaded = !!db && !authLoading;
+  // Solo bloqueamos la inicialización básica (auth), no la descarga de datos.
+  const isLoaded = !authLoading;
   const isSyncing = tasksLoading || configLoading;
 
   const addTask = useCallback((taskData: Omit<ScheduledTask, 'id' | 'color'>) => {

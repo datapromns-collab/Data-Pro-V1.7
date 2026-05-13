@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo } from 'react';
@@ -15,10 +16,10 @@ interface ProductionGanttProps {
 
 const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
-// Colores unificados de la referencia
+// Colores requeridos por el programa actual
 const PRODUCTION_COLOR = '#83CCEB';
 const SAMI_COLOR = '#FFFF00'; // S.A.M.I
-const AUTO_CP_COLOR = '#FFC000'; // CULMINACION DE PRODUCCION (Naranja)
+const AUTO_CP_COLOR = '#FFC000'; // Culminación de Producción
 
 export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: ProductionGanttProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
@@ -35,12 +36,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     return specials.some(s => name.toUpperCase().startsWith(s));
   };
 
-  // Cálculo de S.A.M.I (Gaps) y CP automático
+  // Lógica de S.A.M.I y CP (No modificada del programa original)
   const autoIntervals = useMemo(() => {
     const weekEndLimit = setMinutes(setHours(weekDays[6], PRODUCTION_END_SUN_HOUR), PRODUCTION_END_SUN_MINUTE);
     
     if (tasks.length === 0) {
-      // Si no hay tareas, toda la semana es S.A.M.I desde el lunes 7am hasta domingo 18:30
       const start = setMinutes(setHours(weekDays[0], 7), 0);
       return [{ name: 'S.A.M.I', start, end: weekEndLimit, type: 'sami' }];
     }
@@ -48,11 +48,9 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     const sortedTasks = [...tasks].sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
     const intervals: { name: string; start: Date; end: Date; type: 'sami' | 'cp' }[] = [];
 
-    // Inicio de producción: Lunes 7:00 AM
     let currentPointer = setMinutes(setHours(weekDays[0], 7), 0);
 
     sortedTasks.forEach((task) => {
-      // Si hay un hueco antes de esta tarea, es S.A.M.I
       if (isAfter(task.startTime, currentPointer)) {
         intervals.push({
           name: 'S.A.M.I',
@@ -61,17 +59,14 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           type: 'sami'
         });
       }
-      // Actualizar el puntero al final de la tarea actual
       if (isAfter(task.endTime, currentPointer)) {
         currentPointer = new Date(task.endTime);
       }
     });
 
-    // Añadir el bloque CP de 2 horas justo después de la última tarea
     const cpStart = new Date(currentPointer);
     const cpEnd = addMinutes(cpStart, 120);
     
-    // Solo añadir CP si empieza antes del límite del domingo
     if (isBefore(cpStart, weekEndLimit)) {
       intervals.push({
         name: 'CP',
@@ -82,7 +77,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       currentPointer = isBefore(cpEnd, weekEndLimit) ? cpEnd : weekEndLimit;
     }
 
-    // Rellenar con S.A.M.I hasta el final de la semana (Domingo 18:30) si es necesario
     if (isBefore(currentPointer, weekEndLimit)) {
       intervals.push({
         name: 'S.A.M.I',
@@ -238,7 +232,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
               </div>
 
               <div className="flex-1 bg-[#f1f5f9]/50 rounded border border-slate-200 relative overflow-hidden">
-                {/* Cuadrícula Horaria */}
                 {markers.map((m, idx) => (
                   <div 
                     key={idx} 
@@ -247,17 +240,14 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   />
                 ))}
 
-                {/* Línea divisoria de turno 18:30 */}
                 <div 
                   className="absolute inset-y-0 z-[20] border-l-2 border-primary pointer-events-none"
                   style={{ left: `${SPLIT_PCT}%` }}
                 />
 
-                {/* Tareas Automáticas (S.A.M.I y CP) */}
                 {autoIntervals.map((interval, iIdx) => {
                   const style = getBarStyle(interval.start, interval.end, day, interval.type);
                   if (!style) return null;
-
                   return (
                     <div
                       key={`auto-${iIdx}`}
@@ -271,14 +261,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   );
                 })}
 
-                {/* Tareas de Producción Programadas */}
                 {tasks.map((task) => {
                   const isSpecial = isSpecialTask(task.name);
                   const style = getBarStyle(task.startTime, task.endTime, day, isSpecial ? 'special' : 'production');
                   if (!style) return null;
-                  
                   const shifts = getShiftData(task, day);
-
                   return (
                     <div
                       key={task.id}
@@ -290,7 +277,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                       style={style}
                     >
                       <div className="relative w-full h-full min-w-0">
-                        {/* Segmento DIA */}
                         {shifts?.dayLabel && (
                           <div 
                             className="absolute inset-y-0 flex flex-col justify-center p-1.5 overflow-hidden"
@@ -312,8 +298,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                             </div>
                           </div>
                         )}
-
-                        {/* Segmento NOCHE */}
                         {shifts?.nightLabel && (
                           <div 
                             className="absolute inset-y-0 flex flex-col justify-center p-1.5 overflow-hidden border-l border-white/30"
@@ -335,8 +319,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                             </div>
                           </div>
                         )}
-                        
-                        {/* Fallback si no hay split */}
                         {(!shifts?.dayLabel && !shifts?.nightLabel) && (
                           <div className="flex flex-col justify-center h-full px-2">
                              <span className="font-black text-slate-900 text-[10px] uppercase truncate">{task.name}</span>
