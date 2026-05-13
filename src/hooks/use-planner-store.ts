@@ -1,98 +1,100 @@
 
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useMemo, useEffect } from 'react';
 import { ScheduledTask } from '@/lib/types';
 import { startOfWeek } from 'date-fns';
-
-const STORAGE_KEY = 'plan-semanal-pro-data-v3';
+import { useCollection, useDoc, useFirestore } from '@/firebase';
+import { collection, doc, setDoc, deleteDoc, query, writeBatch, Timestamp } from 'firebase/firestore';
 
 export function usePlannerStore() {
-  const [tasks, setTasks] = useState<ScheduledTask[]>([]);
-  // Usamos una fecha fija inicial para evitar discrepancias de hidratación entre servidor y cliente
-  const [weekStartDate, setWeekStartDate] = useState<Date>(new Date('2024-01-01'));
-  const [lineSpeeds, setLineSpeeds] = useState<Record<string, number>>({
-    "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0
-  });
-  const [isLoaded, setIsLoaded] = useState(false);
+  const firestore = useFirestore();
 
-  useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
-      try {
-        const parsed = JSON.parse(saved);
-        // Revivir fechas
-        const revivedTasks = (parsed.tasks || []).map((t: any) => ({
-          ...t,
-          startTime: new Date(t.startTime),
-          endTime: new Date(t.endTime)
-        }));
-        setTasks(revivedTasks);
-        if (parsed.weekStartDate) {
-          setWeekStartDate(new Date(parsed.weekStartDate));
-        } else {
-          setWeekStartDate(startOfWeek(new Date(), { weekStartsOn: 1 }));
-        }
-        if (parsed.lineSpeeds) {
-          setLineSpeeds(parsed.lineSpeeds);
-        }
-      } catch (e) {
-        console.error("Error reviving data", e);
-        setWeekStartDate(startOfWeek(new Date(), { weekStartsOn: 1 }));
-      }
-    } else {
-      setWeekStartDate(startOfWeek(new Date(), { weekStartsOn: 1 }));
-    }
-    setIsLoaded(true);
-  }, []);
+  // Suscripción en tiempo real a las tareas
+  const tasksQuery = useMemo(() => {
+    if (!firestore) return null;
+    return collection(firestore, 'tasks');
+  }, [firestore]);
 
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        tasks,
-        weekStartDate: weekStartDate.toISOString(),
-        lineSpeeds
-      }));
+  const { data: rawTasks, loading: tasksLoading } = useCollection(tasksQuery);
+
+  // Suscripción en tiempo real a la configuración global
+  const configDocRef = useMemo(() => {
+    if (!firestore) return null;
+    return doc(firestore, 'configs', 'global');
+  }, [firestore]);
+
+  const { data: config, loading: configLoading } = useDoc(configDocRef);
+
+  const tasks = useMemo(() => {
+    if (!rawTasks) return [];
+    return rawTasks.map(t => ({
+      ...t,
+      startTime: t.startTime instanceof Timestamp ? t.startTime.toDate() : new Date(t.startTime),
+      endTime: t.endTime instanceof Timestamp ? t.endTime.toDate() : new Date(t.endTime)
+    })) as ScheduledTask[];
+  }, [rawTasks]);
+
+  const weekStartDate = useMemo(() => {
+    if (config?.weekStartDate) {
+      return config.weekStartDate instanceof Timestamp ? config.weekStartDate.toDate() : new Date(config.weekStartDate);
     }
-  }, [tasks, weekStartDate, lineSpeeds, isLoaded]);
+    return startOfWeek(new Date(), { weekStartsOn: 1 });
+  }, [config]);
+
+  const lineSpeeds = useMemo(() => {
+    return config?.lineSpeeds || {
+      "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0
+    };
+  }, [config]);
 
   const addTask = (taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
+    if (!firestore) return;
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
+    const id = crypto.randomUUID();
 
-    const newTask: ScheduledTask = {
+    setDoc(doc(firestore, 'tasks', id), {
       ...taskData,
-      id: crypto.randomUUID(),
+      id,
       color: randomColor
-    };
-
-    const updatedTasks = [...tasks, newTask].sort((a, b) => 
-      a.startTime.getTime() - b.startTime.getTime()
-    );
-
-    setTasks(updatedTasks);
+    });
   };
 
   const updateTask = (id: string, taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
-    setTasks(prev => prev.map(t => t.id === id ? { ...t, ...taskData } : t).sort((a, b) => 
-      a.startTime.getTime() - b.startTime.getTime()
-    ));
+    if (!firestore) return;
+    setDoc(doc(firestore, 'tasks', id), { ...taskData, id }, { merge: true });
   };
 
   const removeTask = (id: string) => {
-    setTasks(tasks.filter(t => t.id !== id));
+    if (!firestore) return;
+    deleteDoc(doc(firestore, 'tasks', id));
   };
 
-  const clearAll = () => {
-    setTasks([]);
+  const clearAll = async () => {
+    if (!firestore || !tasks.length) return;
+    const batch = writeBatch(firestore);
+    tasks.forEach(task => {
+      batch.delete(doc(firestore, 'tasks', task.id));
+    });
+    await batch.commit();
   };
 
   const updateWeekStartDate = (date: Date) => {
-    setWeekStartDate(startOfWeek(date, { weekStartsOn: 1 }));
+    if (!firestore) return;
+    setDoc(doc(firestore, 'configs', 'global'), {
+      weekStartDate: date
+    }, { merge: true });
   };
 
   const updateLineSpeed = (lineId: string, speed: number) => {
-    setLineSpeeds(prev => ({ ...prev, [lineId]: speed }));
+    if (!firestore) return;
+    setDoc(doc(firestore, 'configs', 'global'), {
+      lineSpeeds: {
+        ...lineSpeeds,
+        [lineId]: speed
+      }
+    }, { merge: true });
   };
 
   return { 
@@ -105,6 +107,6 @@ export function usePlannerStore() {
     removeTask, 
     clearAll, 
     updateLineSpeed,
-    isLoaded 
+    isLoaded: !tasksLoading && !configLoading 
   };
 }

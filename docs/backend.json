@@ -1,0 +1,48 @@
+
+{
+  "entities": {
+    "ScheduledTask": {
+      "title": "Scheduled Task",
+      "description": "Una tarea de producción programada en el planificador.",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "lineId": { "type": "string" },
+        "loadPerHour": { "type": "number" },
+        "quantity": { "type": "number" },
+        "durationHours": { "type": "number" },
+        "color": { "type": "string" },
+        "presentation": { "type": "string" },
+        "tanks": { "type": "number" },
+        "startTime": { "type": "string", "format": "date-time" },
+        "endTime": { "type": "string", "format": "date-time" }
+      },
+      "required": ["name", "lineId", "startTime", "endTime"]
+    },
+    "PlannerConfig": {
+      "title": "Configuración del Planificador",
+      "description": "Configuración global como la fecha de inicio y velocidades de línea.",
+      "type": "object",
+      "properties": {
+        "weekStartDate": { "type": "string", "format": "date-time" },
+        "lineSpeeds": {
+          "type": "object",
+          "additionalProperties": { "type": "number" }
+        }
+      }
+    }
+  },
+  "auth": {
+    "providers": ["anonymous"]
+  },
+  "firestore": {
+    "/tasks/{taskId}": {
+      "schema": "#/entities/ScheduledTask",
+      "description": "Colección de todas las tareas de producción."
+    },
+    "/configs/global": {
+      "schema": "#/entities/PlannerConfig",
+      "description": "Configuración global de la herramienta compartida."
+    }
+  }
+}
