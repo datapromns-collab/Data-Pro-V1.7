@@ -226,6 +226,10 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
       case 'EMP_0135': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
       
       // Lógica de Tapas
+      case 'EMP_0095_N': {
+        const line5 = tasks.filter(t => t.lineId === "5" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
+        return Math.round(line5 * 12);
+      }
       case 'EMP_0105': {
         const line1_3 = tasks.filter(t => (t.lineId === "1" || t.lineId === "3") && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
         return Math.round(line1_3 * 6);
