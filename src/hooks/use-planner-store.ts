@@ -1,15 +1,16 @@
-
 'use client';
 
 import { useMemo } from 'react';
 import { ScheduledTask } from '@/lib/types';
 import { startOfWeek } from 'date-fns';
-import { useCollection, useDoc, useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase';
+import { useCollection, useDoc, useFirestore, useUser, errorEmitter, FirestorePermissionError } from '@/firebase';
 import { collection, doc, setDoc, deleteDoc, writeBatch, Timestamp } from 'firebase/firestore';
 
 export function usePlannerStore() {
   const firestore = useFirestore();
+  const { user, loading: authLoading } = useUser();
 
+  // Consultar tareas de la colección global
   const tasksQuery = useMemo(() => {
     if (!firestore) return null;
     return collection(firestore, 'tasks');
@@ -17,6 +18,7 @@ export function usePlannerStore() {
 
   const { data: rawTasks, loading: tasksLoading } = useCollection(tasksQuery);
 
+  // Consultar configuración global
   const configDocRef = useMemo(() => {
     if (!firestore) return null;
     return doc(firestore, 'configs', 'global');
@@ -24,6 +26,7 @@ export function usePlannerStore() {
 
   const { data: config, loading: configLoading } = useDoc(configDocRef);
 
+  // Formatear tareas de Firestore a objetos Date
   const tasks = useMemo(() => {
     if (!rawTasks) return [];
     return rawTasks.map(t => ({
@@ -33,6 +36,7 @@ export function usePlannerStore() {
     })) as ScheduledTask[];
   }, [rawTasks]);
 
+  // Obtener fecha de inicio de semana (desde DB o default)
   const weekStartDate = useMemo(() => {
     if (config?.weekStartDate) {
       return config.weekStartDate instanceof Timestamp ? config.weekStartDate.toDate() : new Date(config.weekStartDate);
@@ -40,12 +44,14 @@ export function usePlannerStore() {
     return startOfWeek(new Date(), { weekStartsOn: 1 });
   }, [config]);
 
+  // Obtener velocidades de línea
   const lineSpeeds = useMemo(() => {
     return config?.lineSpeeds || {
       "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0
     };
   }, [config]);
 
+  // Limpiar datos para evitar errores de Firestore (undefined no permitido)
   const cleanData = (data: any) => {
     const cleaned = { ...data };
     Object.keys(cleaned).forEach(key => {
@@ -57,7 +63,7 @@ export function usePlannerStore() {
   };
 
   const addTask = (taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
-    if (!firestore) return;
+    if (!firestore || !user) return;
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     const id = crypto.randomUUID();
@@ -65,7 +71,9 @@ export function usePlannerStore() {
     const docData = cleanData({
       ...taskData,
       id,
-      color: randomColor
+      color: randomColor,
+      createdBy: user.uid,
+      createdAt: Timestamp.now()
     });
 
     const docRef = doc(firestore, 'tasks', id);
@@ -79,9 +87,14 @@ export function usePlannerStore() {
   };
 
   const updateTask = (id: string, taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
-    if (!firestore) return;
+    if (!firestore || !user) return;
     
-    const docData = cleanData({ ...taskData, id });
+    const docData = cleanData({ 
+      ...taskData, 
+      id,
+      updatedBy: user.uid,
+      updatedAt: Timestamp.now()
+    });
     const docRef = doc(firestore, 'tasks', id);
     
     setDoc(docRef, docData, { merge: true }).catch(async (err) => {
@@ -154,6 +167,6 @@ export function usePlannerStore() {
     removeTask, 
     clearAll, 
     updateLineSpeed,
-    isLoaded: !tasksLoading && !configLoading 
+    isLoaded: !tasksLoading && !configLoading && !authLoading 
   };
 }
