@@ -20,7 +20,7 @@ import { ScheduledTask } from '@/lib/types';
 import { addDays } from 'date-fns';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS, TERMO_0080_FACTORS, TERMO_0130_FACTORS } from '@/lib/planner-utils';
+import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS, TERMO_0080_FACTORS, TERMO_0130_FACTORS, TERMO_0017_FACTORS } from '@/lib/planner-utils';
 
 interface RequirementSectionProps {
   onPrint?: () => void;
@@ -166,6 +166,17 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
       const formats: (keyof typeof PLASTIC_FACTORS)[] = ["2Lts", "1Lt", "0.4Lts", "1.5Lts"];
       return formats.reduce((acc, fmt) => {
         const factor = PLASTIC_FACTORS[fmt];
+        const totalBoxes = tasks
+          .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
+          .reduce((sum, t) => sum + (t.quantity || 0), 0);
+        return acc + (totalBoxes * factor);
+      }, 0).toFixed(2);
+    }
+
+    if (code === 'EMP_0017') {
+      const formats: (keyof typeof TERMO_0017_FACTORS)[] = ["1.5Lts"];
+      return formats.reduce((acc, fmt) => {
+        const factor = TERMO_0017_FACTORS[fmt];
         const totalBoxes = tasks
           .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);

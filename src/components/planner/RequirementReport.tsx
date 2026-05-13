@@ -6,7 +6,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format, getISOWeek, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS, TERMO_0080_FACTORS, TERMO_0130_FACTORS } from '@/lib/planner-utils';
+import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS, TERMO_0080_FACTORS, TERMO_0130_FACTORS, TERMO_0017_FACTORS } from '@/lib/planner-utils';
 
 interface RequirementReportProps {
   tasks: ScheduledTask[];
@@ -171,6 +171,17 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
       }, 0).toFixed(2));
     }
 
+    if (code === 'EMP_0017') {
+      const formats: (keyof typeof TERMO_0017_FACTORS)[] = ["1.5Lts"];
+      return Number(formats.reduce((acc, fmt) => {
+        const factor = TERMO_0017_FACTORS[fmt];
+        const totalBoxes = tasks
+          .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
+          .reduce((sum, t) => sum + (t.quantity || 0), 0);
+        return acc + (totalBoxes * factor);
+      }, 0).toFixed(2));
+    }
+
     if (code === 'EMP_0080') {
       const formats: (keyof typeof TERMO_0080_FACTORS)[] = ["2Lts", "1Lt"];
       return Number(formats.reduce((acc, fmt) => {
@@ -204,7 +215,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
         return Math.round((line7 + line5) * 12);
       }
       case 'EMP_0093': return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && !["GLUP FRESH"].includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
-      case 'EMP_0103': return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
+      case 'EMP_00103': return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
       case 'EMP_0120': return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
       case 'EMP_0126': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
       case 'EMP_0135': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);

@@ -83,6 +83,10 @@ export const TERMO_0130_FACTORS = {
   "0.4Lts": 0.02283
 };
 
+export const TERMO_0017_FACTORS = {
+  "1.5Lts": 0.03929
+};
+
 export const LABEL_MAPPING: Record<string, { product: string, presentation: string }> = {
   'EMP_0022': { product: 'GLUP UVA', presentation: '2Lts' },
   'EMP_0026': { product: 'GLUP PIÑA', presentation: '2Lts' },
