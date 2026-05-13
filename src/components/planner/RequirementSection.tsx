@@ -239,7 +239,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
         <TableBody>
           {data.map((item, idx) => (
             <TableRow key={`${item.code}-${idx}`} className="hover:bg-slate-50/50 transition-colors">
-              <TableCell className="font-mono text-[11px] font-bold text-primary py-4">{item.code.replace('_N', '').replace('_S', '')}</TableCell>
+              <TableCell className="font-mono text-[11px] font-bold text-primary py-4">{item.code.replace(/_N$/g, '').replace(/_S$/g, '')}</TableCell>
               <TableCell className="text-sm font-bold text-slate-700 py-4">{item.description}</TableCell>
               <TableCell className="text-right py-4">
                 <Badge variant="secondary" className="bg-slate-50 text-slate-400 border-slate-200 px-4 py-1.5 font-bold text-[12px] min-w-[100px] justify-center">
