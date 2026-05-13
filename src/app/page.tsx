@@ -170,7 +170,7 @@ export default function PlannerPage() {
                 <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Semana</p>
                 <div className="px-2 space-y-3">
                    <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100">
-                    <span className="text-xs font-bold text-slate-600">Semana ISO</span>
+                    <span className="text-xs font-bold text-slate-600">Semana</span>
                     <Badge variant="secondary" className="font-bold text-primary bg-primary/10">{weekNumber}</Badge>
                   </div>
                   <Popover>
@@ -217,7 +217,6 @@ export default function PlannerPage() {
         <main className="flex-1 flex flex-col h-screen overflow-hidden no-print">
           <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2 text-sm text-slate-500">
-              {/* Se elimina el texto de Línea X que aparecía aquí */}
             </div>
             <div className="flex items-center gap-2">
               <Button 
