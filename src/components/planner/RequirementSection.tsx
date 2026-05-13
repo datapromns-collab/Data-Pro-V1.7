@@ -166,7 +166,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
   };
 
   const renderTable = (data: any[], unit: string = 'UND') => (
-    <div className="border border-slate-200 rounded-xl overflow-hidden bg-white">
+    <div className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
       <Table>
         <TableHeader>
           <TableRow className="bg-slate-50/50">
@@ -194,7 +194,6 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
 
   return (
     <div className="space-y-6">
-      {/* Header Panel */}
       <Card className="flex justify-between items-center p-6 border-slate-200 shadow-sm bg-white/50 backdrop-blur-sm">
         <div className="flex items-center gap-4">
           <div className="bg-primary/10 p-3 rounded-2xl">
@@ -228,45 +227,32 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
 
         <TabsContent value="empaque" className="space-y-6 m-0 animate-in fade-in-50 duration-500">
           <Tabs defaultValue="preformas" className="space-y-6">
-            <TabsList className="bg-transparent gap-4 h-auto p-0 border-0">
-              <TabsTrigger value="preformas" className="gap-2 px-4 py-2 rounded-full border border-slate-200 font-bold text-xs bg-white data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:border-primary/20 shadow-sm">
+            <TabsList className="bg-slate-100/50 p-1 rounded-full h-auto border border-slate-200 w-fit">
+              <TabsTrigger value="preformas" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
                 <Target className="h-4 w-4" /> Preformas
               </TabsTrigger>
-              <TabsTrigger value="tapas" className="gap-2 px-4 py-2 rounded-full border border-slate-200 font-bold text-xs bg-white data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:border-primary/20 shadow-sm">
+              <TabsTrigger value="tapas" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
                 <Disc className="h-4 w-4" /> Tapas
               </TabsTrigger>
-              <TabsTrigger value="etiquetas" className="gap-2 px-4 py-2 rounded-full border border-slate-200 font-bold text-xs bg-white data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:border-primary/20 shadow-sm">
+              <TabsTrigger value="etiquetas" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
                 <Tag className="h-4 w-4" /> Etiquetas
               </TabsTrigger>
-              <TabsTrigger value="plasticos" className="gap-2 px-4 py-2 rounded-full border border-slate-200 font-bold text-xs bg-white data-[state=active]:bg-primary/10 data-[state=active]:text-primary data-[state=active]:border-primary/20 shadow-sm">
+              <TabsTrigger value="plasticos" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
                 <Layers className="h-4 w-4" /> Plásticos
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="preformas" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              <div className="flex items-center gap-3 mb-6 p-4 bg-primary/5 rounded-xl border border-primary/10">
-                <Target className="h-5 w-5 text-primary" />
-                <h4 className="font-headline font-bold text-slate-800">Preformas</h4>
-              </div>
               {renderTable(PREFORMS_DATA, 'UND')}
             </TabsContent>
 
             <TabsContent value="tapas" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              <div className="flex items-center gap-3 mb-6 p-4 bg-slate-100 rounded-xl border border-slate-200">
-                <Disc className="h-5 w-5 text-slate-500" />
-                <h4 className="font-headline font-bold text-slate-800">Tapas</h4>
-              </div>
               {renderTable(CAPS_DATA, 'UND')}
             </TabsContent>
 
             <TabsContent value="etiquetas" className="m-0 animate-in slide-in-from-left-2 duration-300">
-               <div className="flex items-center gap-3 mb-4 p-4 bg-amber-50 rounded-xl border border-amber-200">
-                <Tag className="h-5 w-5 text-amber-500" />
-                <h4 className="font-headline font-bold text-slate-800">Etiquetas</h4>
-              </div>
-              
               <Tabs defaultValue="2lts" className="space-y-4">
-                <TabsList className="bg-slate-50 border p-1 rounded-lg">
+                <TabsList className="bg-slate-100/30 border p-1 rounded-lg">
                   <TabsTrigger value="2lts" className="text-[10px] font-bold px-4">2 Lts</TabsTrigger>
                   <TabsTrigger value="1.5lts" className="text-[10px] font-bold px-4">1.5 Lts</TabsTrigger>
                   <TabsTrigger value="1lt" className="text-[10px] font-bold px-4">1 Lt</TabsTrigger>
@@ -281,10 +267,6 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
             </TabsContent>
 
             <TabsContent value="plasticos" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              <div className="flex items-center gap-3 mb-6 p-4 bg-indigo-50 rounded-xl border border-indigo-200">
-                <Layers className="h-5 w-5 text-indigo-500" />
-                <h4 className="font-headline font-bold text-slate-800">Plásticos</h4>
-              </div>
               {renderTable(PLASTICS_DATA, 'KG')}
             </TabsContent>
           </Tabs>
@@ -292,50 +274,34 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
 
         <TabsContent value="materia" className="space-y-6 m-0 animate-in fade-in-50 duration-500">
           <Tabs defaultValue="azucar" className="space-y-6">
-            <TabsList className="bg-transparent gap-4 h-auto p-0 border-0">
-              <TabsTrigger value="azucar" className="gap-2 px-4 py-2 rounded-full border border-slate-200 font-bold text-xs bg-white data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-600 data-[state=active]:border-emerald-200 shadow-sm">
+            <TabsList className="bg-slate-100/50 p-1 rounded-full h-auto border border-slate-200 w-fit">
+              <TabsTrigger value="azucar" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
                 <Zap className="h-4 w-4" /> Azúcar
               </TabsTrigger>
-              <TabsTrigger value="concentrados" className="gap-2 px-4 py-2 rounded-full border border-slate-200 font-bold text-xs bg-white data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-600 data-[state=active]:border-emerald-200 shadow-sm">
+              <TabsTrigger value="concentrados" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
                 <Beaker className="h-4 w-4" /> Concentrados
               </TabsTrigger>
-              <TabsTrigger value="solidos" className="gap-2 px-4 py-2 rounded-full border border-slate-200 font-bold text-xs bg-white data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-600 data-[state=active]:border-emerald-200 shadow-sm">
+              <TabsTrigger value="solidos" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
                 <Box className="h-4 w-4" /> Sólidos
               </TabsTrigger>
-              <TabsTrigger value="aditivos" className="gap-2 px-4 py-2 rounded-full border border-slate-200 font-bold text-xs bg-white data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-600 data-[state=active]:border-emerald-200 shadow-sm">
+              <TabsTrigger value="aditivos" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
                 <Plus className="h-4 w-4" /> Aditivos
               </TabsTrigger>
             </TabsList>
             
             <TabsContent value="azucar" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              <div className="flex items-center gap-3 mb-6 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
-                <Zap className="h-5 w-5 text-emerald-600" />
-                <h4 className="font-headline font-bold text-slate-800">Azúcar</h4>
-              </div>
               {renderTable(SUGAR_DATA, 'KG')}
             </TabsContent>
 
             <TabsContent value="concentrados" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              <div className="flex items-center gap-3 mb-6 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
-                <Beaker className="h-5 w-5 text-emerald-600" />
-                <h4 className="font-headline font-bold text-slate-800">Concentrados</h4>
-              </div>
               {renderTable(CONCENTRATES_SOFT_DRINKS, 'LTS')}
             </TabsContent>
 
             <TabsContent value="solidos" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              <div className="flex items-center gap-3 mb-6 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
-                <Box className="h-5 w-5 text-emerald-600" />
-                <h4 className="font-headline font-bold text-slate-800">Sólidos</h4>
-              </div>
               {renderTable(SOLIDS_DATA, 'KG')}
             </TabsContent>
 
             <TabsContent value="aditivos" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              <div className="flex items-center gap-3 mb-6 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
-                <Plus className="h-5 w-5 text-emerald-600" />
-                <h4 className="font-headline font-bold text-slate-800">Aditivos</h4>
-              </div>
               {renderTable(ADDITIVES_DATA, 'LTS')}
             </TabsContent>
           </Tabs>
