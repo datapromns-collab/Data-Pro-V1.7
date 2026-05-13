@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -19,7 +20,6 @@ import {
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
-import { ProductionMonitor } from '@/components/planner/ProductionMonitor';
 import { TaskDialog } from '@/components/planner/TaskDialog';
 import { Calculator } from '@/components/planner/Calculator';
 import { KeyboardShortcuts } from '@/components/planner/KeyboardShortcuts';
@@ -37,7 +37,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { Badge } from '@/components/ui/badge';
 import { ScheduledTask } from '@/lib/types';
-import { format, getISOWeek, setHours, setMinutes, addDays } from 'date-fns';
+import { format, getISOWeek, setHours, setMinutes, addDays, startOfDay, endOfDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 
@@ -63,6 +63,8 @@ export default function PlannerPage() {
   const [selectedLine, setSelectedLine] = useState("1");
   const [activeTab, setActiveTab] = useState("gantt");
   const [printMode, setPrintMode] = useState<'plan' | 'requirements'>('plan');
+
+  const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
   // Keyboard Shortcuts Handler
   useEffect(() => {
@@ -111,29 +113,27 @@ export default function PlannerPage() {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
 
   const filteredTasks = useMemo(() => {
-    const weekEnd = addDays(weekStartDate, 7);
     return tasks.filter(t => 
       t.lineId === selectedLine && 
-      t.endTime > weekStartDate && 
-      t.startTime < weekEnd
+      t.endTime >= weekStartDate && 
+      t.startTime <= weekEnd
     );
-  }, [tasks, selectedLine, weekStartDate]);
+  }, [tasks, selectedLine, weekStartDate, weekEnd]);
 
   const totalMinutes = calculateTotalPlannedMinutes(filteredTasks);
 
   const nextAvailable = useMemo(() => {
-    const lineTasks = filteredTasks;
-    if (lineTasks.length === 0) {
+    if (filteredTasks.length === 0) {
       return setMinutes(setHours(weekStartDate, 7), 0);
     }
-    const latestTask = [...lineTasks].sort((a, b) => b.endTime.getTime() - a.endTime.getTime())[0];
+    const latestTask = [...filteredTasks].sort((a, b) => b.endTime.getTime() - a.endTime.getTime())[0];
     return latestTask.endTime;
   }, [filteredTasks, weekStartDate]);
 
   const handlePrintPlan = () => {
     setPrintMode('plan');
     const style = document.createElement('style');
-    style.innerHTML = `@page { size: landscape; margin: 0; }`;
+    style.innerHTML = `@page { size: landscape; margin: 1cm; }`;
     style.id = 'print-orientation-style';
     document.head.appendChild(style);
     
@@ -146,7 +146,7 @@ export default function PlannerPage() {
   const handlePrintRequirements = () => {
     setPrintMode('requirements');
     const style = document.createElement('style');
-    style.innerHTML = `@page { size: portrait; margin: 0; }`;
+    style.innerHTML = `@page { size: portrait; margin: 1cm; }`;
     style.id = 'print-orientation-style';
     document.head.appendChild(style);
 
@@ -273,25 +273,6 @@ export default function PlannerPage() {
               </section>
 
               <section>
-                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Capacidad Línea {selectedLine}</p>
-                <div className="px-2 space-y-4">
-                  <ProductionMonitor plannedMinutes={totalMinutes} variant="compact" />
-                  
-                  <div className="p-3 bg-primary/5 rounded-xl border border-primary/10">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Clock className="h-3.5 w-3.5 text-primary" />
-                      <span className="text-[10px] font-bold text-primary uppercase">Siguiente Disponibilidad</span>
-                    </div>
-                    <div className="text-xs font-bold text-slate-700">
-                      {format(nextAvailable, "EEEE dd 'a las' HH:mm", { locale: es })}
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <Separator className="bg-slate-100" />
-
-              <section>
                 <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Acciones</p>
                 <div className="grid gap-2">
                   <Button size="sm" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full justify-start gap-2 bg-primary font-bold">
@@ -375,23 +356,26 @@ export default function PlannerPage() {
           </div>
         </main>
 
-        {/* Print Only Content: Toggleable between Plan and Requirements */}
+        {/* Print Only Content */}
         <div className="print-only w-full bg-white">
           {printMode === 'plan' ? (
             LINES.map((lineName, i) => {
               const lineId = (i + 1).toString();
-              const weekEnd = addDays(weekStartDate, 7);
               const lineTasks = tasks.filter(t => 
                 t.lineId === lineId && 
-                t.endTime > weekStartDate && 
-                t.startTime < weekEnd
+                t.endTime >= weekStartDate && 
+                t.startTime <= weekEnd
               );
               return (
-                <div key={lineName} className="page-break">
-                  <div className="mb-4 border-b-2 border-primary pb-4 flex justify-between items-center">
+                <div key={lineName} className="page-break-section">
+                  <div className="mb-6 border-b-2 border-primary pb-4 flex justify-between items-center">
                     <div className="flex-1">
-                      <h1 className="text-2xl font-headline font-bold text-slate-900">Programa de Producción</h1>
-                      <p className="text-primary font-bold text-base uppercase tracking-tight">{lineName}</p>
+                      <h1 className="text-3xl font-headline font-bold text-slate-900">Programa Semanal de Producción</h1>
+                      <div className="flex items-center gap-2 mt-1">
+                        <Badge className="bg-primary text-white text-sm px-4 py-1">{lineName}</Badge>
+                        <span className="text-slate-400 font-bold">|</span>
+                        <span className="text-slate-500 font-bold">Semana {weekNumber}</span>
+                      </div>
                     </div>
 
                     <div className="flex-1 flex justify-center">
@@ -399,27 +383,33 @@ export default function PlannerPage() {
                         <Image 
                           src={glupLogo.imageUrl} 
                           alt="Logo" 
-                          width={220} 
-                          height={80} 
+                          width={240} 
+                          height={90} 
                           className="object-contain"
-                          data-ai-hint="soda logo"
+                          priority
                         />
                       )}
                     </div>
 
                     <div className="flex-1 text-right">
-                      <p className="text-[10px] font-bold text-primary uppercase tracking-widest mb-1">Confidencial - Uso Interno</p>
-                      <p className="text-[10px] text-slate-400 font-medium">
-                        Semana {weekNumber} - {format(weekStartDate, 'dd MMMM yyyy', { locale: es })}
+                      <p className="text-xs font-bold text-primary uppercase tracking-widest mb-1">Confidencial - Uso Interno</p>
+                      <p className="text-xs text-slate-400 font-medium">
+                        Fecha: {format(weekStartDate, "dd 'de' MMMM, yyyy", { locale: es })}
                       </p>
                     </div>
                   </div>
-                  <div className="flex-1 overflow-hidden">
+                  
+                  <div className="flex-1 w-full">
                     <ProductionGantt tasks={lineTasks} weekStartDate={weekStartDate} />
                   </div>
-                  <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-widest">
-                    <span>Plan Semanal Pro Edition</span>
-                    <span>Página {i + 1} de 7</span>
+
+                  <div className="mt-6 pt-4 border-t-2 border-slate-100 flex justify-between items-center text-xs text-slate-400 font-bold uppercase tracking-widest">
+                    <span>Plan Semanal Pro Edition v2.0</span>
+                    <div className="flex items-center gap-4">
+                      <span>Línea {i + 1} de {LINES.length}</span>
+                      <span>|</span>
+                      <span>Generado: {format(new Date(), "dd/MM/yyyy HH:mm")}</span>
+                    </div>
                   </div>
                 </div>
               );

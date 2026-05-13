@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useMemo } from 'react';
@@ -11,15 +12,18 @@ import { collection, doc, setDoc, deleteDoc, writeBatch, Timestamp } from 'fireb
  */
 const toDate = (val: any): Date => {
   if (!val) return new Date();
+  
   // Manejo de Firestore Timestamp
   if (typeof val.toDate === 'function') {
     return val.toDate();
   }
-  // Manejo de segundos/nanosegundos (estructura interna de Timestamp)
-  if (typeof val.seconds === 'number') {
+  
+  // Manejo de estructura interna de Timestamp (seconds/nanoseconds)
+  if (val && typeof val.seconds === 'number') {
     return new Date(val.seconds * 1000);
   }
-  // Fallback a constructor Date estándar
+
+  // Fallback a constructor Date estándar si es string o number
   const date = new Date(val);
   return isNaN(date.getTime()) ? new Date() : date;
 };
@@ -59,8 +63,10 @@ export function usePlannerStore() {
     if (config?.weekStartDate) {
       return toDate(config.weekStartDate);
     }
-    // Por defecto, lunes de la semana actual
-    return startOfWeek(new Date(), { weekStartsOn: 1 });
+    // Por defecto, lunes de la semana actual a las 00:00
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    return startOfWeek(d, { weekStartsOn: 1 });
   }, [config]);
 
   // Obtener velocidades de línea
@@ -77,10 +83,6 @@ export function usePlannerStore() {
       if (cleaned[key] === undefined) {
         delete cleaned[key];
       }
-      // Asegurar que las fechas se guarden como objetos Date para que Firestore las convierta a Timestamp
-      if (cleaned[key] instanceof Date) {
-        // No modificar, Firestore lo maneja bien
-      }
     });
     return cleaned;
   };
@@ -96,7 +98,10 @@ export function usePlannerStore() {
       id,
       color: randomColor,
       createdBy: user.uid,
-      createdAt: Timestamp.now()
+      createdAt: Timestamp.now(),
+      // Guardar fechas como objetos Date para que Firestore las maneje como Timestamps
+      startTime: taskData.startTime,
+      endTime: taskData.endTime
     });
 
     const docRef = doc(firestore, 'tasks', id);
@@ -116,7 +121,9 @@ export function usePlannerStore() {
       ...taskData, 
       id,
       updatedBy: user.uid,
-      updatedAt: Timestamp.now()
+      updatedAt: Timestamp.now(),
+      startTime: taskData.startTime,
+      endTime: taskData.endTime
     });
     const docRef = doc(firestore, 'tasks', id);
     
