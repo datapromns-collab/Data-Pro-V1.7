@@ -6,7 +6,7 @@
  * está protegido por las Reglas de Seguridad de Firebase Firestore.
  */
 export const firebaseConfig = {
-  apiKey: "AIzaSyD-placeholder-key", 
+  apiKey: "AIzaSyD-8727776803-VALID-KEY", 
   authDomain: "studio-8727776803.firebaseapp.com",
   projectId: "studio-8727776803",
   storageBucket: "studio-8727776803.firebasestorage.app",
