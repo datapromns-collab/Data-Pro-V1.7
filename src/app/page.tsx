@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -92,22 +93,32 @@ export default function PlannerPage() {
 
   const handlePrintPlan = () => {
     setPrintMode('plan');
-    document.body.classList.add('print-landscape');
-    document.body.classList.remove('print-portrait');
+    
+    // Inyectar estilo para orientación horizontal
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: landscape; margin: 0; }';
+    document.head.appendChild(style);
+    
     setTimeout(() => {
       window.print();
-      document.body.classList.remove('print-landscape');
-    }, 100);
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
   };
 
   const handlePrintRequirements = () => {
     setPrintMode('requirements');
-    document.body.classList.add('print-portrait');
-    document.body.classList.remove('print-landscape');
+    
+    // Inyectar estilo para orientación vertical
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 0; }';
+    document.head.appendChild(style);
+
     setTimeout(() => {
       window.print();
-      document.body.classList.remove('print-portrait');
-    }, 100);
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
   };
 
   const handleTaskClick = (task: ScheduledTask) => {

@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -99,14 +100,6 @@
     margin: 0 !important;
   }
 
-  body.print-landscape {
-    @page { size: landscape; margin: 0; }
-  }
-
-  body.print-portrait {
-    @page { size: portrait; margin: 0; }
-  }
-  
   main {
     display: none !important;
   }
