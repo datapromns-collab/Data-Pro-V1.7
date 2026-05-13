@@ -1,8 +1,8 @@
+
 'use client';
 
 /**
- * Punto de entrada del módulo Firebase.
- * Centraliza las exportaciones para facilitar el uso en la aplicación.
+ * Punto de entrada centralizado para Firebase.
  */
 
 export * from './init';

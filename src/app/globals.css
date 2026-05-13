@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -46,6 +47,19 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-headline font-bold tracking-tight;
   }
+}
+
+:root {
+  --font-inter: 'Inter', sans-serif;
+  --font-space-grotesk: 'Space Grotesk', sans-serif;
+}
+
+.font-body {
+  font-family: var(--font-inter);
+}
+
+.font-headline {
+  font-family: var(--font-space-grotesk);
 }
 
 /* Custom Scrollbars */
@@ -102,13 +116,11 @@
     break-before: page;
   }
 
-  /* Evitar que las filas de las tablas se corten a la mitad */
   tr {
     page-break-inside: avoid;
     break-inside: avoid;
   }
 
-  /* Asegurar que las imágenes no se corten */
   img {
     page-break-inside: avoid;
     break-inside: avoid;
