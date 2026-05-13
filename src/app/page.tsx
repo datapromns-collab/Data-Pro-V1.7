@@ -118,7 +118,6 @@ export default function PlannerPage() {
   const handlePrintPlan = () => {
     setPrintMode('plan');
     const style = document.createElement('style');
-    // Using margin: 0 to remove browser headers/footers
     style.innerHTML = `@page { size: landscape; margin: 0; }`;
     style.id = 'print-orientation-style';
     document.head.appendChild(style);
@@ -132,7 +131,6 @@ export default function PlannerPage() {
   const handlePrintRequirements = () => {
     setPrintMode('requirements');
     const style = document.createElement('style');
-    // Using margin: 0 to remove browser headers/footers
     style.innerHTML = `@page { size: portrait; margin: 0; }`;
     style.id = 'print-orientation-style';
     document.head.appendChild(style);
@@ -362,10 +360,10 @@ export default function PlannerPage() {
               );
               return (
                 <div key={lineName} className="page-break-section">
-                  <div className="mb-8 flex justify-between items-start">
+                  <div className="mb-4 flex justify-between items-start">
                     <div className="space-y-1">
-                      <h1 className="text-3xl font-headline font-bold text-slate-900">Programa de Producción</h1>
-                      <h2 className="text-2xl font-headline font-bold text-primary uppercase">{lineName}</h2>
+                      <h1 className="text-2xl font-headline font-bold text-slate-900">Programa de Producción</h1>
+                      <h2 className="text-xl font-headline font-bold text-primary uppercase">{lineName}</h2>
                     </div>
 
                     <div className="text-right">
@@ -377,11 +375,11 @@ export default function PlannerPage() {
                     </div>
                   </div>
                   
-                  <div className="flex-1 w-full">
+                  <div className="flex-1 w-full overflow-hidden">
                     <ProductionGantt tasks={lineTasks} weekStartDate={weekStartDate} />
                   </div>
 
-                  <div className="mt-8 pt-4 border-t border-slate-200 flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-[0.2em]">
+                  <div className="mt-4 pt-2 border-t border-slate-200 flex justify-between items-center text-[8px] text-slate-400 font-bold uppercase tracking-[0.2em]">
                     <span>PLAN SEMANAL LOCAL EDITION</span>
                     <span className="text-slate-900 font-black">PÁGINA {i + 1} DE {LINES.length}</span>
                     <span>REF: LÍNEA-{(i + 1)}</span>
@@ -390,7 +388,7 @@ export default function PlannerPage() {
               );
             })
           ) : (
-            <div className="p-[1.5cm]">
+            <div className="p-[1cm]">
               <RequirementReport tasks={tasks} weekStartDate={weekStartDate} />
             </div>
           )}

@@ -99,14 +99,14 @@
     display: none !important;
   }
   
-  /* Salto de página para el reporte */
   .page-break-section {
     page-break-after: always;
     break-after: page;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    padding: 1.5cm; /* Re-adding margin internally */
+    padding: 0.8cm 1cm; /* Margen interno optimizado */
+    overflow: hidden;
   }
 
   .page-break-section:last-child {
@@ -114,20 +114,9 @@
     break-after: auto;
   }
 
-  tr {
+  tr, .task-bar {
     page-break-inside: avoid;
     break-inside: avoid;
-  }
-
-  img {
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-
-  section {
-    page-break-inside: avoid;
-    break-inside: avoid;
-    margin-bottom: 1rem;
   }
 }
 
