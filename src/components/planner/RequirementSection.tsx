@@ -5,7 +5,8 @@ import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
-import { Package, CircleDot, Tag, Layers, Archive, Wheat, Droplets, Box, Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Package, CircleDot, Tag, Layers, Archive, Wheat, Droplets, Box, Plus, Printer } from 'lucide-react';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { addDays } from 'date-fns';
 
@@ -149,7 +150,11 @@ const LABEL_PRESENTATIONS = [
   { id: '0.4lts', label: '0.4 Lts' },
 ];
 
-export function RequirementSection() {
+interface RequirementSectionProps {
+  onPrint?: () => void;
+}
+
+export function RequirementSection({ onPrint }: RequirementSectionProps) {
   const { tasks, weekStartDate } = usePlannerStore();
 
   const empaqueSections = [
@@ -223,6 +228,22 @@ export function RequirementSection() {
 
   return (
     <div className="h-full flex flex-col space-y-6">
+      <div className="flex justify-between items-center bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="bg-primary/10 p-2 rounded-lg">
+            <ClipboardList className="h-5 w-5 text-primary" />
+          </div>
+          <div>
+            <h3 className="text-lg font-headline font-bold text-slate-900">Módulo de Requerimiento</h3>
+            <p className="text-xs text-slate-500 font-medium">Calcula y gestiona los materiales necesarios para la producción.</p>
+          </div>
+        </div>
+        <Button onClick={onPrint} variant="outline" className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5">
+          <Printer className="h-4 w-4" />
+          Imprimir Reporte
+        </Button>
+      </div>
+
       <Tabs defaultValue="empaque" className="w-full h-full flex flex-col">
         <TabsList className="bg-slate-100/50 border p-1 rounded-xl shadow-sm self-start mb-6">
           <TabsTrigger value="empaque" className="gap-2 px-6 font-bold py-2">

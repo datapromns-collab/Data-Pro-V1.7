@@ -59,7 +59,6 @@ export default function PlannerPage() {
 
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
-  // Keyboard Shortcuts y Fecha de Emisión
   useEffect(() => {
     if (isLoaded) {
       setEmitDate(format(new Date(), 'd/M/yyyy'));
@@ -93,7 +92,22 @@ export default function PlannerPage() {
 
   const handlePrintPlan = () => {
     setPrintMode('plan');
-    setTimeout(() => window.print(), 100);
+    document.body.classList.add('print-landscape');
+    document.body.classList.remove('print-portrait');
+    setTimeout(() => {
+      window.print();
+      document.body.classList.remove('print-landscape');
+    }, 100);
+  };
+
+  const handlePrintRequirements = () => {
+    setPrintMode('requirements');
+    document.body.classList.add('print-portrait');
+    document.body.classList.remove('print-landscape');
+    setTimeout(() => {
+      window.print();
+      document.body.classList.remove('print-portrait');
+    }, 100);
   };
 
   const handleTaskClick = (task: ScheduledTask) => {
@@ -119,7 +133,7 @@ export default function PlannerPage() {
     switch (activeTab) {
       case 'speeds': return { title: "Velocidades", subtitle: "Configuración base." };
       case 'calculator': return { title: "Calculadora", subtitle: "Conversión cajas/tanques." };
-      case 'requirement': return { title: "Requerimientos", subtitle: "Gestión de insumos." };
+      case 'requirement': return { title: "Requerimiento", subtitle: "Gestión de insumos y materiales." };
       default: return { title: `Programación Línea ${selectedLine}`, subtitle: "Gestión de turnos." };
     }
   }, [activeTab, selectedLine]);
@@ -193,7 +207,17 @@ export default function PlannerPage() {
             <div className="flex items-center gap-2 text-sm text-slate-500">
               <span className="font-medium text-slate-900">Línea {selectedLine}</span>
             </div>
-            <Button variant="ghost" size="icon" onClick={handlePrintPlan}><Printer className="h-5 w-5" /></Button>
+            <div className="flex items-center gap-2">
+              <Button 
+                variant="ghost" 
+                size="sm" 
+                onClick={handlePrintPlan}
+                className="gap-2 font-bold text-slate-600 hover:text-primary"
+              >
+                <Printer className="h-4 w-4" /> 
+                <span className="hidden sm:inline">Programa</span>
+              </Button>
+            </div>
           </header>
 
           <div className="flex-1 overflow-auto p-6 lg:p-8">
@@ -207,7 +231,7 @@ export default function PlannerPage() {
                   <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Programación</TabsTrigger>
                   <TabsTrigger value="speeds" className="gap-2 px-4 font-bold"><Gauge className="h-4 w-4" /> Velocidades</TabsTrigger>
                   <TabsTrigger value="calculator" className="gap-2 px-4 font-bold"><CalculatorIcon className="h-4 w-4" /> Calculadora</TabsTrigger>
-                  <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Insumos</TabsTrigger>
+                  <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Requerimiento</TabsTrigger>
                 </TabsList>
               </div>
 
@@ -219,7 +243,9 @@ export default function PlannerPage() {
                   <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} />
                 </TabsContent>
                 <TabsContent value="calculator" className="m-0 h-full"><Calculator /></TabsContent>
-                <TabsContent value="requirement" className="m-0 h-full"><RequirementSection /></TabsContent>
+                <TabsContent value="requirement" className="m-0 h-full">
+                  <RequirementSection onPrint={handlePrintRequirements} />
+                </TabsContent>
               </div>
             </Tabs>
           </div>
@@ -246,7 +272,9 @@ export default function PlannerPage() {
               </div>
             ))
           ) : (
-            <div className="p-[1cm]"><RequirementReport tasks={tasks} weekStartDate={weekStartDate} /></div>
+            <div className="p-0">
+              <RequirementReport tasks={tasks} weekStartDate={weekStartDate} />
+            </div>
           )}
         </div>
       </div>

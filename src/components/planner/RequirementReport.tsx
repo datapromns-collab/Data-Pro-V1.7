@@ -160,39 +160,41 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
     }
   };
 
-  const renderSectionHeader = (title: string, color: string) => (
-    <div className="flex items-center gap-2 mb-2 bg-slate-100 p-1.5 rounded">
-      <div className={`w-1 h-5 bg-${color} rounded-full`}></div>
-      <h2 className="text-base font-bold text-slate-900 uppercase tracking-tight">{title}</h2>
+  const renderSectionHeader = (title: string, colorClass: string) => (
+    <div className={`flex items-center gap-2 mb-2 bg-slate-50 p-2 rounded border-l-4 border-${colorClass}`}>
+      <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight">{title}</h2>
     </div>
   );
 
   return (
-    <div className="bg-white p-6 overflow-visible h-auto flex flex-col">
-      <div className="mb-4 border-b-2 border-primary pb-3 flex justify-between items-center shrink-0">
+    <div className="bg-white p-8 max-w-[210mm] mx-auto print:p-8 print:max-w-none">
+      <div className="mb-6 border-b-2 border-primary pb-4 flex justify-between items-center">
         <div className="flex-1">
-          <h1 className="text-xl font-headline font-bold text-slate-900">Reporte de Requerimientos</h1>
-          <p className="text-primary font-bold text-sm uppercase">Gestión de Materiales</p>
+          <h1 className="text-2xl font-headline font-bold text-slate-900 leading-tight">Reporte de Requerimiento</h1>
+          <p className="text-primary font-black text-sm uppercase tracking-widest">Gestión de Materiales e Insumos</p>
         </div>
-        <div className="flex-1 flex justify-center">{glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={160} height={60} className="object-contain" />}</div>
+        <div className="flex-1 flex justify-center">
+          {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={140} height={50} className="object-contain" />}
+        </div>
         <div className="flex-1 text-right">
-          <p className="text-[9px] font-bold text-primary uppercase mb-0.5">Confidencial - Planta</p>
-          <p className="text-[9px] text-slate-500 font-medium">Semana {weekNumber} - {format(weekStartDate, 'dd MMMM yyyy', { locale: es })}</p>
+          <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-1">CONFIDENCIAL - PLANTA</p>
+          <p className="text-[11px] text-slate-500 font-bold uppercase">Semana {weekNumber}</p>
+          <p className="text-[10px] text-slate-400 font-medium italic">{format(weekStartDate, "dd 'de' MMMM yyyy", { locale: es })}</p>
         </div>
       </div>
 
-      <div className="flex-1 space-y-4">
-        <section>
+      <div className="space-y-8">
+        <section className="break-inside-avoid">
           {renderSectionHeader("I. Sección Empaque - Preformas", "primary")}
           <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
-              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">Código SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
+              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">Código SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Requerido</TableHead></TableRow></TableHeader>
               <TableBody>
                 {PREFORMS_DATA.map((item) => (
                   <TableRow key={item.code} className="border-b last:border-0 h-8">
                     <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{item.code}</TableCell>
-                    <TableCell className="py-1 text-xs font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-xs">{getCalculatedValue(item.code).toLocaleString('es-ES')} UND</TableCell>
+                    <TableCell className="py-1 text-[11px] font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{getCalculatedValue(item.code).toLocaleString('es-ES')} UND</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -200,7 +202,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           </div>
         </section>
 
-        <section>
+        <section className="break-inside-avoid">
           {renderSectionHeader("II. Sección Tapas", "slate-500")}
           <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
@@ -209,8 +211,8 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                 {CAPS_DATA.map((item, idx) => (
                   <TableRow key={idx} className="border-b last:border-0 h-8">
                     <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{item.code}</TableCell>
-                    <TableCell className="py-1 text-xs font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-xs">_______ UND</TableCell>
+                    <TableCell className="py-1 text-[11px] font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">_______ UND</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -218,19 +220,19 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           </div>
         </section>
 
-        <section>
+        <section className="break-inside-avoid">
           {renderSectionHeader("III. Sección Plásticos", "indigo-500")}
           <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
               <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad</TableHead></TableRow></TableHeader>
               <TableBody>
                 {PLASTICS_DATA.map((item, idx) => item.isHeader ? (
-                  <TableRow key={idx} className="bg-slate-100/30 h-6"><TableCell colSpan={3} className="py-1 text-center font-bold text-slate-500 text-[9px] uppercase tracking-widest">{item.description}</TableCell></TableRow>
+                  <TableRow key={idx} className="bg-slate-100/30 h-6"><TableCell colSpan={3} className="py-1 text-center font-bold text-slate-500 text-[10px] uppercase tracking-widest">{item.description}</TableCell></TableRow>
                 ) : (
                   <TableRow key={item.code} className="border-b last:border-0 h-8">
                     <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{item.code}</TableCell>
-                    <TableCell className="py-1 text-xs font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-xs">_______ KG</TableCell>
+                    <TableCell className="py-1 text-[11px] font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">_______ KG</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -238,26 +240,26 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           </div>
         </section>
 
-        <section>
+        <section className="break-inside-avoid">
           {renderSectionHeader("IV. Sección Etiquetas", "amber-500")}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-4">
             {[
-              { label: '2 Lts', data: LABELS_2LTS_DATA },
-              { label: '1.5 Lts', data: LABELS_1_5LTS_DATA },
-              { label: '1 Lt', data: LABELS_1LT_DATA },
-              { label: '0.4 Lts', data: LABELS_04LT_DATA }
+              { label: 'Formato 2 Lts', data: LABELS_2LTS_DATA },
+              { label: 'Formato 1.5 Lts', data: LABELS_1_5LTS_DATA },
+              { label: 'Formato 1 Lt', data: LABELS_1LT_DATA },
+              { label: 'Formato 0.4 Lts', data: LABELS_04LT_DATA }
             ].map((section, idx) => (
               <div key={idx} className="border rounded overflow-hidden">
-                <div className="bg-slate-50 px-2 py-1 border-b">
-                  <p className="text-[9px] font-bold text-slate-500 uppercase">Formato {section.label}</p>
+                <div className="bg-slate-50 px-3 py-1.5 border-b">
+                  <p className="text-[10px] font-black text-slate-500 uppercase">{section.label}</p>
                 </div>
                 <Table>
                   <TableBody>
                     {section.data.map((item) => (
-                      <TableRow key={item.code} className="border-b last:border-0 h-7">
-                        <TableCell className="py-1 font-mono text-[9px] font-bold text-primary">{item.code}</TableCell>
-                        <TableCell className="py-1 text-[9px] font-medium text-slate-800 truncate max-w-[140px]">{item.description}</TableCell>
-                        <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[9px]">_______ KG</TableCell>
+                      <TableRow key={item.code} className="border-b last:border-0 h-8">
+                        <TableCell className="py-1 px-3 font-mono text-[9px] font-bold text-primary">{item.code}</TableCell>
+                        <TableCell className="py-1 px-3 text-[10px] font-medium text-slate-800 truncate max-w-[150px]">{item.description}</TableCell>
+                        <TableCell className="py-1 px-3 text-right font-black text-slate-900 bg-slate-50/30 text-[10px]">_______ KG</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -267,17 +269,16 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           </div>
         </section>
 
-        <section className="pt-4">
-          {renderSectionHeader("V. Sección Materia Prima - Azúcar", "emerald-500")}
+        <section className="break-inside-avoid">
+          {renderSectionHeader("V. Materia Prima - Azúcar", "emerald-500")}
           <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
-              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">Código SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
               <TableBody>
                 {SUGAR_DATA.map((item) => (
-                  <TableRow key={item.code} className="border-b last:border-0 h-8">
-                    <TableCell className="py-1 font-mono text-[10px] font-bold text-emerald-600">{item.code}</TableCell>
-                    <TableCell className="py-1 text-xs font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-xs">_______ KG</TableCell>
+                  <TableRow key={item.code} className="h-10">
+                    <TableCell className="font-mono text-[11px] font-bold text-emerald-600 w-[150px]">{item.code}</TableCell>
+                    <TableCell className="text-[12px] font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/30 text-[12px] w-[200px]">_______ KG</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -285,32 +286,32 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           </div>
         </section>
 
-        <section>
-          {renderSectionHeader("VI. Sección Materia Prima - Concentrados", "emerald-600")}
-          <div className="grid grid-cols-2 gap-3">
+        <section className="break-inside-avoid">
+          {renderSectionHeader("VI. Materia Prima - Concentrados", "emerald-600")}
+          <div className="grid grid-cols-2 gap-4">
             <div className="border rounded overflow-hidden">
-              <div className="bg-slate-50 px-2 py-1 border-b"><p className="text-[9px] font-bold text-slate-500 uppercase">Refrescos</p></div>
+              <div className="bg-slate-50 px-3 py-1.5 border-b"><p className="text-[10px] font-black text-slate-500 uppercase">Refrescos</p></div>
               <Table>
                 <TableBody>
                   {CONCENTRATES_SOFT_DRINKS.map((item) => (
-                    <TableRow key={item.code} className="border-b last:border-0 h-7">
-                      <TableCell className="py-1 font-mono text-[9px] font-bold text-emerald-600">{item.code}</TableCell>
-                      <TableCell className="py-1 text-[9px] font-medium text-slate-800 truncate max-w-[140px]">{item.description}</TableCell>
-                      <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[9px]">_______ LTS</TableCell>
+                    <TableRow key={item.code} className="border-b last:border-0 h-8">
+                      <TableCell className="py-1 px-3 font-mono text-[10px] font-bold text-emerald-600">{item.code}</TableCell>
+                      <TableCell className="py-1 px-3 text-[10px] font-medium text-slate-800 truncate max-w-[150px]">{item.description}</TableCell>
+                      <TableCell className="py-1 px-3 text-right font-black text-slate-900 bg-slate-50/30 text-[10px]">_______ LTS</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </div>
             <div className="border rounded overflow-hidden">
-              <div className="bg-slate-50 px-2 py-1 border-b"><p className="text-[9px] font-bold text-slate-500 uppercase">Jugos</p></div>
+              <div className="bg-slate-50 px-3 py-1.5 border-b"><p className="text-[10px] font-black text-slate-500 uppercase">Jugos</p></div>
               <Table>
                 <TableBody>
                   {CONCENTRATES_JUICES.map((item) => (
-                    <TableRow key={item.code} className="border-b last:border-0 h-7">
-                      <TableCell className="py-1 font-mono text-[9px] font-bold text-emerald-600">{item.code}</TableCell>
-                      <TableCell className="py-1 text-[9px] font-medium text-slate-800 truncate max-w-[140px]">{item.description}</TableCell>
-                      <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[9px]">_______ KG</TableCell>
+                    <TableRow key={item.code} className="border-b last:border-0 h-8">
+                      <TableCell className="py-1 px-3 font-mono text-[10px] font-bold text-emerald-600">{item.code}</TableCell>
+                      <TableCell className="py-1 px-3 text-[10px] font-medium text-slate-800 truncate max-w-[150px]">{item.description}</TableCell>
+                      <TableCell className="py-1 px-3 text-right font-black text-slate-900 bg-slate-50/30 text-[10px]">_______ KG</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -319,17 +320,17 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           </div>
         </section>
 
-        <section>
+        <section className="break-inside-avoid">
           {renderSectionHeader("VII. Materia Prima - Sólidos", "emerald-700")}
           <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
-              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">Código SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
+              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">Código SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Requerido</TableHead></TableRow></TableHeader>
               <TableBody>
                 {SOLIDS_DATA.map((item) => (
                   <TableRow key={item.code} className="border-b last:border-0 h-8">
                     <TableCell className="py-1 font-mono text-[10px] font-bold text-emerald-600">{item.code}</TableCell>
-                    <TableCell className="py-1 text-xs font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-xs">_______ KG</TableCell>
+                    <TableCell className="py-1 text-[11px] font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">_______ KG</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -337,17 +338,16 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           </div>
         </section>
 
-        <section>
+        <section className="break-inside-avoid">
           {renderSectionHeader("VIII. Materia Prima - Aditivos", "emerald-800")}
           <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
-              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">Código SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
               <TableBody>
                 {ADDITIVES_DATA.map((item) => (
-                  <TableRow key={item.code} className="border-b last:border-0 h-8">
-                    <TableCell className="py-1 font-mono text-[10px] font-bold text-emerald-600">{item.code}</TableCell>
-                    <TableCell className="py-1 text-xs font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-xs">_______ {item.unit}</TableCell>
+                  <TableRow key={item.code} className="border-b last:border-0 h-10">
+                    <TableCell className="font-mono text-[11px] font-bold text-emerald-600 w-[150px]">{item.code}</TableCell>
+                    <TableCell className="text-[12px] font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/30 text-[12px] w-[200px]">_______ {item.unit}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -356,9 +356,9 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
         </section>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-slate-100 flex justify-between items-center text-[8px] text-slate-400 font-bold uppercase tracking-widest shrink-0">
-        <span>Plan Semanal Pro - Módulo de Requerimientos</span>
-        <span>Generado el: {new Date().toLocaleString('es-ES')}</span>
+      <div className="mt-12 pt-4 border-t border-slate-200 flex justify-between items-center text-[9px] text-slate-400 font-black uppercase tracking-widest">
+        <span>Plan Semanal Pro - Sistema de Requerimiento de Producción</span>
+        <span>Generado: {format(new Date(), "dd/MM/yyyy HH:mm:ss")}</span>
       </div>
     </div>
   );
