@@ -165,6 +165,12 @@ export const RECIPES: Record<string, Record<string, number>> = {
     "MATP_0017": 5.35,         // Ácido Cítrico
     "MATP_0015": 6.4,          // Ácido Tartárico
     "MATP_0019": 2.25,         // Benzoato de Sodio
+  },
+  "GLUP PIÑA": {
+    "MATP_0001": 1175.847343, // Azúcar
+    "MATP_0006": 18.93,        // Concentrado PIÑA
+    "MATP_0017": 11.95,        // Ácido Cítrico
+    "MATP_0019": 1.95,         // Benzoato de Sodio
   }
 };
 
