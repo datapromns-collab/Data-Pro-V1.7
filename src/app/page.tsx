@@ -306,7 +306,7 @@ export default function PlannerPage() {
           )}
           {printMode === 'summary' && (
             <div className="p-0">
-              <SummaryReport />
+              <SummaryReport tasks={tasks} weekStartDate={weekStartDate} />
             </div>
           )}
         </div>
