@@ -282,7 +282,10 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                           >
                             <span className="text-[8px] font-bold text-slate-500 uppercase leading-none mb-1 print:hidden">DIA</span>
                             <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
-                              <span className="font-black text-slate-900 text-[11px] uppercase leading-tight truncate">
+                              <span className={cn(
+                                "font-black text-slate-900 text-[11px] uppercase leading-tight truncate",
+                                task.name === 'CS' && "rotate-90 inline-block origin-center"
+                              )}>
                                 {task.name}
                               </span>
                               {!isSpecial && (
@@ -303,7 +306,10 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                           >
                             <span className="text-[8px] font-bold text-slate-600 uppercase leading-none mb-1 print:hidden">NOCHE</span>
                             <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
-                              <span className="font-black text-slate-900 text-[11px] uppercase leading-tight truncate">
+                              <span className={cn(
+                                "font-black text-slate-900 text-[11px] uppercase leading-tight truncate",
+                                task.name === 'CS' && "rotate-90 inline-block origin-center"
+                              )}>
                                 {task.name}
                               </span>
                               {!isSpecial && (
@@ -315,8 +321,13 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                           </div>
                         )}
                         {(!shifts?.dayLabel && !shifts?.nightLabel) && (
-                          <div className="flex flex-col justify-center h-full px-2">
-                             <span className="font-black text-slate-900 text-[11px] uppercase truncate">{task.name}</span>
+                          <div className="flex flex-col justify-center items-center h-full px-2">
+                             <span className={cn(
+                                "font-black text-slate-900 text-[11px] uppercase truncate",
+                                task.name === 'CS' && "rotate-90 inline-block origin-center"
+                              )}>
+                                {task.name}
+                              </span>
                           </div>
                         )}
                       </div>
