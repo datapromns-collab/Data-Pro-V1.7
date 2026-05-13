@@ -168,7 +168,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
   );
 
   return (
-    <div className="page-break bg-white p-6 overflow-visible h-auto flex flex-col">
+    <div className="bg-white p-6 overflow-visible h-auto flex flex-col">
       <div className="mb-4 border-b-2 border-primary pb-3 flex justify-between items-center shrink-0">
         <div className="flex-1">
           <h1 className="text-xl font-headline font-bold text-slate-900">Reporte de Requerimientos</h1>
@@ -267,7 +267,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           </div>
         </section>
 
-        <section className="break-before-page pt-4">
+        <section className="pt-4">
           {renderSectionHeader("V. Sección Materia Prima - Azúcar", "emerald-500")}
           <div className="rounded border border-slate-200 overflow-hidden">
             <Table>

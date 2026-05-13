@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -119,7 +118,8 @@ export default function PlannerPage() {
   const handlePrintPlan = () => {
     setPrintMode('plan');
     const style = document.createElement('style');
-    style.innerHTML = `@page { size: landscape; margin: 1cm; }`;
+    // Using margin: 0 to remove browser headers/footers
+    style.innerHTML = `@page { size: landscape; margin: 0; }`;
     style.id = 'print-orientation-style';
     document.head.appendChild(style);
     
@@ -132,7 +132,8 @@ export default function PlannerPage() {
   const handlePrintRequirements = () => {
     setPrintMode('requirements');
     const style = document.createElement('style');
-    style.innerHTML = `@page { size: portrait; margin: 1cm; }`;
+    // Using margin: 0 to remove browser headers/footers
+    style.innerHTML = `@page { size: portrait; margin: 0; }`;
     style.id = 'print-orientation-style';
     document.head.appendChild(style);
 
@@ -389,7 +390,9 @@ export default function PlannerPage() {
               );
             })
           ) : (
-            <RequirementReport tasks={tasks} weekStartDate={weekStartDate} />
+            <div className="p-[1.5cm]">
+              <RequirementReport tasks={tasks} weekStartDate={weekStartDate} />
+            </div>
           )}
         </div>
       </div>

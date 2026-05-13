@@ -76,7 +76,7 @@
 /* Print optimizations */
 @media print {
   @page {
-    margin: 1cm;
+    margin: 0; /* Important: Removes browser headers and footers */
   }
   
   * {
@@ -106,7 +106,7 @@
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    padding-bottom: 2rem;
+    padding: 1.5cm; /* Re-adding margin internally */
   }
 
   .page-break-section:last-child {
