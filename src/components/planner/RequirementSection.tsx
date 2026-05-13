@@ -11,11 +11,11 @@ import {
   Package, 
   Droplet, 
   Target, 
-  Disc, 
+  CircleDot, 
   Tag, 
   Layers,
-  Beaker,
-  Zap,
+  FlaskConical,
+  Wheat,
   Box,
   Plus
 } from 'lucide-react';
@@ -176,8 +176,8 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map((item, index) => (
-            <TableRow key={`${item.code}-${index}`} className="hover:bg-slate-50/50 transition-colors">
+          {data.map((item, idx) => (
+            <TableRow key={`${item.code}-${idx}`} className="hover:bg-slate-50/50 transition-colors">
               <TableCell className="font-mono text-[11px] font-bold text-primary py-4">{item.code.replace('_N', '').replace('_S', '')}</TableCell>
               <TableCell className="text-sm font-bold text-slate-700 py-4">{item.description}</TableCell>
               <TableCell className="text-right py-4">
@@ -232,7 +232,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
                 <Target className="h-4 w-4" /> Preformas
               </TabsTrigger>
               <TabsTrigger value="tapas" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
-                <Disc className="h-4 w-4" /> Tapas
+                <CircleDot className="h-4 w-4" /> Tapas
               </TabsTrigger>
               <TabsTrigger value="etiquetas" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
                 <Tag className="h-4 w-4" /> Etiquetas
@@ -276,10 +276,10 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
           <Tabs defaultValue="azucar" className="space-y-6">
             <TabsList className="bg-slate-100/50 p-1 rounded-full h-auto border border-slate-200 w-fit">
               <TabsTrigger value="azucar" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
-                <Zap className="h-4 w-4" /> Azúcar
+                <Wheat className="h-4 w-4" /> Azúcar
               </TabsTrigger>
               <TabsTrigger value="concentrados" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
-                <Beaker className="h-4 w-4" /> Concentrados
+                <FlaskConical className="h-4 w-4" /> Concentrados
               </TabsTrigger>
               <TabsTrigger value="solidos" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
                 <Box className="h-4 w-4" /> Sólidos
