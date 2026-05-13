@@ -1,103 +1,160 @@
 
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useMemo, useCallback } from 'react';
 import { ScheduledTask } from '@/lib/types';
 import { startOfWeek } from 'date-fns';
+import { 
+  useFirestore, 
+  useCollection, 
+  useDoc 
+} from '@/firebase';
+import { 
+  collection, 
+  doc, 
+  setDoc, 
+  addDoc, 
+  updateDoc, 
+  deleteDoc, 
+  writeBatch,
+  Timestamp,
+} from 'firebase/firestore';
+import { errorEmitter } from '@/firebase/error-emitter';
+import { FirestorePermissionError } from '@/firebase/errors';
 
 /**
- * Hook para gestionar el estado del planificador de forma local.
- * Elimina la dependencia de Firestore para un inicio instantáneo.
+ * Hook para gestionar el estado del planificador sincronizado con Firestore.
  */
 export function usePlannerStore() {
-  const [tasks, setTasks] = useState<ScheduledTask[]>([]);
-  const [weekStartDate, setWeekStartDateState] = useState<Date>(() => {
+  const db = useFirestore();
+
+  // Referencias protegidas a colecciones y documentos
+  const tasksRef = useMemo(() => db ? collection(db, 'tasks') : null, [db]);
+  const configRef = useMemo(() => db ? doc(db, 'configs', 'global') : null, [db]);
+
+  // Suscripción a tareas (maneja null internamente)
+  const { data: rawTasks, loading: tasksLoading } = useCollection<any>(tasksRef);
+  
+  // Suscripción a configuración global (maneja null internamente)
+  const { data: rawConfig, loading: configLoading } = useDoc<any>(configRef);
+
+  // Mapeo de datos de Firestore (Timestamps) a objetos Date de JS
+  const tasks = useMemo(() => {
+    if (!rawTasks) return [];
+    return rawTasks.map(t => ({
+      ...t,
+      startTime: t.startTime instanceof Timestamp ? t.startTime.toDate() : new Date(t.startTime),
+      endTime: t.endTime instanceof Timestamp ? t.endTime.toDate() : new Date(t.endTime),
+    })) as ScheduledTask[];
+  }, [rawTasks]);
+
+  const weekStartDate = useMemo(() => {
+    if (rawConfig?.weekStartDate) {
+      return rawConfig.weekStartDate instanceof Timestamp 
+        ? rawConfig.weekStartDate.toDate() 
+        : new Date(rawConfig.weekStartDate);
+    }
     const d = new Date();
     d.setHours(0, 0, 0, 0);
     return startOfWeek(d, { weekStartsOn: 1 });
-  });
-  const [lineSpeeds, setLineSpeeds] = useState<Record<string, number>>({
-    "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0
-  });
-  const [isLoaded, setIsLoaded] = useState(false);
+  }, [rawConfig]);
 
-  // Cargar datos iniciales de localStorage si existen
-  useEffect(() => {
-    const savedTasks = localStorage.getItem('planner_tasks');
-    const savedConfig = localStorage.getItem('planner_config');
+  const lineSpeeds = useMemo(() => {
+    return rawConfig?.lineSpeeds || {
+      "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0
+    };
+  }, [rawConfig]);
 
-    if (savedTasks) {
-      try {
-        const parsedTasks = JSON.parse(savedTasks);
-        setTasks(parsedTasks.map((t: any) => ({
-          ...t,
-          startTime: new Date(t.startTime),
-          endTime: new Date(t.endTime)
-        })));
-      } catch (e) {
-        console.error("Error loading tasks from local storage", e);
-      }
-    }
+  // Se considera cargado solo si las referencias existen y los datos han llegado
+  const isLoaded = !!db && !tasksLoading && !configLoading;
 
-    if (savedConfig) {
-      try {
-        const config = JSON.parse(savedConfig);
-        if (config.weekStartDate) setWeekStartDateState(new Date(config.weekStartDate));
-        if (config.lineSpeeds) setLineSpeeds(config.lineSpeeds);
-      } catch (e) {
-        console.error("Error loading config from local storage", e);
-      }
-    }
-    
-    setIsLoaded(true);
-  }, []);
+  const addTask = useCallback((taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
+    if (!tasksRef) return;
 
-  // Guardar en localStorage cuando cambian los datos
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem('planner_tasks', JSON.stringify(tasks));
-    }
-  }, [tasks, isLoaded]);
-
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem('planner_config', JSON.stringify({ weekStartDate, lineSpeeds }));
-    }
-  }, [weekStartDate, lineSpeeds, isLoaded]);
-
-  const addTask = (taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    const newTask: ScheduledTask = {
+    
+    addDoc(tasksRef, {
       ...taskData,
-      id: crypto.randomUUID(),
-      color: randomColor
-    };
-    setTasks(prev => [...prev, newTask]);
-  };
+      color: randomColor,
+      startTime: Timestamp.fromDate(taskData.startTime),
+      endTime: Timestamp.fromDate(taskData.endTime)
+    }).catch(err => {
+      errorEmitter.emit('permission-error', new FirestorePermissionError({
+        path: 'tasks',
+        operation: 'create',
+        requestResourceData: taskData
+      }));
+    });
+  }, [tasksRef]);
 
-  const updateTask = (id: string, taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
-    setTasks(prev => prev.map(t => t.id === id ? { ...t, ...taskData } : t));
-  };
+  const updateTask = useCallback((id: string, taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
+    if (!db) return;
+    const docRef = doc(db, 'tasks', id);
+    updateDoc(docRef, {
+      ...taskData,
+      startTime: Timestamp.fromDate(taskData.startTime),
+      endTime: Timestamp.fromDate(taskData.endTime)
+    }).catch(err => {
+      errorEmitter.emit('permission-error', new FirestorePermissionError({
+        path: `tasks/${id}`,
+        operation: 'update',
+        requestResourceData: taskData
+      }));
+    });
+  }, [db]);
 
-  const removeTask = (id: string) => {
-    setTasks(prev => prev.filter(t => t.id !== id));
-  };
+  const removeTask = useCallback((id: string) => {
+    if (!db) return;
+    const docRef = doc(db, 'tasks', id);
+    deleteDoc(docRef).catch(err => {
+      errorEmitter.emit('permission-error', new FirestorePermissionError({
+        path: `tasks/${id}`,
+        operation: 'delete'
+      }));
+    });
+  }, [db]);
 
-  const clearAll = () => {
-    setTasks([]);
-  };
+  const clearAll = useCallback(async () => {
+    if (!db || tasks.length === 0) return;
+    const batch = writeBatch(db);
+    tasks.forEach(t => {
+      batch.delete(doc(db, 'tasks', t.id));
+    });
+    batch.commit().catch(err => {
+      errorEmitter.emit('permission-error', new FirestorePermissionError({
+        path: 'tasks',
+        operation: 'delete'
+      }));
+    });
+  }, [db, tasks]);
 
-  const updateWeekStartDate = (date: Date) => {
-    setWeekStartDateState(date);
-  };
+  const updateWeekStartDate = useCallback((date: Date) => {
+    if (!configRef) return;
+    setDoc(configRef, { weekStartDate: Timestamp.fromDate(date) }, { merge: true }).catch(err => {
+      errorEmitter.emit('permission-error', new FirestorePermissionError({
+        path: 'configs/global',
+        operation: 'update',
+        requestResourceData: { weekStartDate: date }
+      }));
+    });
+  }, [configRef]);
 
-  const updateLineSpeed = (lineId: string, speed: number) => {
-    setLineSpeeds(prev => ({
-      ...prev,
-      [lineId]: speed
-    }));
-  };
+  const updateLineSpeed = useCallback((lineId: string, speed: number) => {
+    if (!configRef) return;
+    setDoc(configRef, { 
+      lineSpeeds: { 
+        ...lineSpeeds,
+        [lineId]: speed 
+      } 
+    }, { merge: true }).catch(err => {
+      errorEmitter.emit('permission-error', new FirestorePermissionError({
+        path: 'configs/global',
+        operation: 'update',
+        requestResourceData: { lineSpeeds: { [lineId]: speed } }
+      }));
+    });
+  }, [configRef, lineSpeeds]);
 
   return { 
     tasks, 
