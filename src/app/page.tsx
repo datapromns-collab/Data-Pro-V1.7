@@ -9,15 +9,10 @@ import {
   Printer, 
   GanttChartSquare,
   ChevronRight,
-  Hash,
   Clock,
   Gauge,
   Calculator as CalculatorIcon,
-  Keyboard as KeyboardIcon,
-  ClipboardList,
-  FileDown,
-  Cloud,
-  Loader2
+  ClipboardList
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -26,7 +21,6 @@ import { Calculator } from '@/components/planner/Calculator';
 import { KeyboardShortcuts } from '@/components/planner/KeyboardShortcuts';
 import { RequirementSection } from '@/components/planner/RequirementSection';
 import { RequirementReport } from '@/components/planner/RequirementReport';
-import { AuthButton } from '@/components/planner/AuthButton';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { Toaster } from '@/components/ui/toaster';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -39,7 +33,6 @@ import { Badge } from '@/components/ui/badge';
 import { ScheduledTask } from '@/lib/types';
 import { format, getISOWeek, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { cn } from '@/lib/utils';
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7"];
 
@@ -54,8 +47,7 @@ export default function PlannerPage() {
     removeTask, 
     clearAll, 
     updateLineSpeed,
-    isLoaded,
-    isSyncing
+    isLoaded
   } = usePlannerStore();
   
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -97,11 +89,6 @@ export default function PlannerPage() {
 
   const handlePrintPlan = () => {
     setPrintMode('plan');
-    setTimeout(() => window.print(), 100);
-  };
-
-  const handlePrintRequirements = () => {
-    setPrintMode('requirements');
     setTimeout(() => window.print(), 100);
   };
 
@@ -149,11 +136,6 @@ export default function PlannerPage() {
           </div>
           <SidebarContent className="px-4 py-2">
             <div className="space-y-6">
-              <section>
-                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Cuenta</p>
-                <AuthButton />
-              </section>
-
               <section>
                 <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Semana</p>
                 <div className="px-2 space-y-3">
@@ -205,13 +187,6 @@ export default function PlannerPage() {
         <main className="flex-1 flex flex-col h-screen overflow-hidden no-print">
           <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2 text-sm text-slate-500">
-              <div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-50 rounded-full border border-emerald-100">
-                <div className={cn("w-1.5 h-1.5 rounded-full", isSyncing ? "bg-amber-500 animate-pulse" : "bg-emerald-500")} />
-                <span className="text-[10px] font-black text-emerald-600 uppercase">
-                  {isSyncing ? "Sincronizando..." : "Sincronizado"}
-                </span>
-              </div>
-              <ChevronRight className="h-4 w-4" />
               <span className="font-medium text-slate-900">Línea {selectedLine}</span>
             </div>
             <Button variant="ghost" size="icon" onClick={handlePrintPlan}><Printer className="h-5 w-5" /></Button>
