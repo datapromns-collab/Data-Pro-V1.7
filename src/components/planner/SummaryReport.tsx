@@ -29,7 +29,7 @@ export function SummaryReport({ tasks, weekStartDate }: SummaryReportProps) {
         const taskStart = task.startTime;
         const taskEnd = task.endTime;
 
-        // Si la tarea no tiene cantidad o es especial (CS, CP, etc en algunos contextos), no sumamos
+        // Si la tarea no tiene cantidad o es especial, no sumamos
         if (!task.quantity) return acc;
 
         // Calcular la intersección del tiempo de la tarea con el día actual
@@ -100,12 +100,6 @@ export function SummaryReport({ tasks, weekStartDate }: SummaryReportProps) {
             </Table>
           </div>
         ))}
-      </div>
-
-      <div className="mt-8 pt-6 border-t border-slate-100 text-[8px] text-slate-400 font-bold uppercase tracking-widest flex justify-between items-center">
-        <span>Plan Semanal Pro Edition - Sistema de Gestión de Producción</span>
-        <span>Generado: {format(new Date(), "dd/MM/yyyy HH:mm:ss")}</span>
-        <span>Página 1 de 1</span>
       </div>
     </div>
   );

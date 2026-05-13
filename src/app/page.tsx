@@ -234,7 +234,7 @@ export default function PlannerPage() {
               className="gap-2 font-bold text-slate-600 hover:text-primary"
             >
               <LayoutDashboard className="h-4 w-4" /> 
-              <span className="hidden sm:inline">Resumen PDF</span>
+              <span className="hidden sm:inline">Resumen</span>
             </Button>
             <Button 
               variant="ghost" 
