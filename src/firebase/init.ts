@@ -1,4 +1,3 @@
-
 'use client';
 
 import { initializeApp, getApps, getApp, FirebaseApp } from 'firebase/app';
@@ -12,7 +11,7 @@ let auth: Auth;
 
 /**
  * Inicializa las instancias de Firebase asegurando que solo ocurra una vez
- * en el cliente para evitar problemas de re-inicialización.
+ * en el cliente para evitar problemas de re-inicialización y dependencias circulares.
  */
 export function initializeFirebase() {
   if (typeof window !== 'undefined') {

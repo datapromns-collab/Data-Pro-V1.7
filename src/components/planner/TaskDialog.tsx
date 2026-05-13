@@ -65,7 +65,6 @@ export function TaskDialog({
   const [selectedDayIdx, setSelectedDayIdx] = useState('0');
   const [selectedTime, setSelectedTime] = useState('07:00');
   
-  // Track which field was last edited to maintain calculation priority
   const [lastEdited, setLastEdited] = useState<'tanks' | 'quantity' | null>(null);
 
   const { toast } = useToast();
@@ -124,7 +123,7 @@ export function TaskDialog({
     }
   }, [initialTask, isOpen, defaultLineId, weekDays, nextAvailableTime, lineSpeeds]);
 
-  // Recalculate based on factor changes (when product or presentation changes)
+  // Sincronizar Tanques y Cajas basado en el factor
   useEffect(() => {
     if (isSpecialTask || factor === 0) return;
 
@@ -133,7 +132,7 @@ export function TaskDialog({
     } else if (lastEdited === 'quantity' && quantity > 0) {
       setTanks(Number((quantity / factor).toFixed(2)));
     }
-  }, [factor, isSpecialTask]);
+  }, [factor, isSpecialTask, lastEdited]);
 
   const handleTanksChange = (val: string) => {
     const num = val === '' ? 0 : parseFloat(val);
@@ -153,6 +152,7 @@ export function TaskDialog({
     }
   };
 
+  // Calcular duración automática o manual según el tipo de tarea
   useEffect(() => {
     if (name === 'CS') {
       setDuration(0.5);
@@ -162,13 +162,11 @@ export function TaskDialog({
       setDuration(11.5);
     } else if (name === 'PARADA PROGRAMADA') {
       if (!initialTask && duration === 0) setDuration(1);
-    } else if (loadPerHour > 0 && quantity > 0) {
+    } else if (!isSpecialTask && loadPerHour > 0 && quantity > 0) {
       const calculatedDuration = quantity / loadPerHour;
       setDuration(calculatedDuration);
-    } else {
-      if (!isSpecialTask) setDuration(0);
     }
-  }, [name, loadPerHour, quantity, isSpecialTask, initialTask]);
+  }, [name, loadPerHour, quantity, isSpecialTask, initialTask, duration]);
 
   const handleSave = () => {
     if (!name) return;
