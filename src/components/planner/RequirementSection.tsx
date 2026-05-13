@@ -21,6 +21,7 @@ import { ScheduledTask } from '@/lib/types';
 import { addDays } from 'date-fns';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
+import { LABEL_FACTORS, LABEL_MAPPING } from '@/lib/planner-utils';
 
 interface RequirementSectionProps {
   onPrint?: () => void;
@@ -144,6 +145,24 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
   const getCalculatedValue = (code: string) => {
+    // Primero revisamos si es una etiqueta
+    if (LABEL_MAPPING[code]) {
+      const mapping = LABEL_MAPPING[code];
+      const factor = LABEL_FACTORS[mapping.product]?.[mapping.presentation] || 0;
+      
+      const totalBoxes = tasks
+        .filter(t => 
+          t.name === mapping.product && 
+          t.presentation === mapping.presentation &&
+          t.endTime > weekStartDate && 
+          t.startTime < weekEnd
+        )
+        .reduce((acc, t) => acc + (t.quantity || 0), 0);
+      
+      return Number((totalBoxes * factor).toFixed(2));
+    }
+
+    // Cálculos existentes para preformas
     switch (code) {
       case 'EMP_0009': {
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];

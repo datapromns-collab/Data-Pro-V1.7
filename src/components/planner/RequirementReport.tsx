@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from 'next/image';
@@ -6,6 +7,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format, getISOWeek, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { LABEL_FACTORS, LABEL_MAPPING } from '@/lib/planner-utils';
 
 interface RequirementReportProps {
   tasks: ScheduledTask[];
@@ -137,10 +139,27 @@ const ADDITIVES_DATA = [
 
 export function RequirementReport({ tasks, weekStartDate }: RequirementReportProps) {
   const weekNumber = getISOWeek(weekStartDate);
+  const weekEnd = addDays(weekStartDate, 7);
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
 
   const getCalculatedValue = (code: string) => {
-    const weekEnd = addDays(weekStartDate, 7);
+    // Requerimientos de Etiquetas
+    if (LABEL_MAPPING[code]) {
+      const mapping = LABEL_MAPPING[code];
+      const factor = LABEL_FACTORS[mapping.product]?.[mapping.presentation] || 0;
+      
+      const totalBoxes = tasks
+        .filter(t => 
+          t.name === mapping.product && 
+          t.presentation === mapping.presentation &&
+          t.endTime > weekStartDate && 
+          t.startTime < weekEnd
+        )
+        .reduce((acc, t) => acc + (t.quantity || 0), 0);
+      
+      return Number((totalBoxes * factor).toFixed(2));
+    }
+
     switch (code) {
       case 'EMP_0009': {
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
@@ -259,7 +278,9 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                       <TableRow key={`${item.code}-${sIdx}`} className="border-b last:border-0 h-8">
                         <TableCell className="py-1 px-3 font-mono text-[9px] font-bold text-primary">{item.code}</TableCell>
                         <TableCell className="py-1 px-3 text-[10px] font-medium text-slate-800 truncate max-w-[150px]">{item.description}</TableCell>
-                        <TableCell className="py-1 px-3 text-right font-black text-slate-900 bg-slate-50/30 text-[10px]">_______ KG</TableCell>
+                        <TableCell className="py-1 px-3 text-right font-black text-slate-900 bg-slate-50/30 text-[10px]">
+                          {getCalculatedValue(item.code).toLocaleString('es-ES')} KG
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
