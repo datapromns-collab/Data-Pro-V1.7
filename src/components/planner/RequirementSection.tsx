@@ -228,8 +228,11 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
       // Lógica de Tapas
       case 'EMP_0105': {
         const line1_3 = tasks.filter(t => (t.lineId === "1" || t.lineId === "3") && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
+        return Math.round(line1_3 * 6);
+      }
+      case 'EMP_0105_2': {
         const line7 = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
-        return Math.round((line1_3 * 6) + (line7 * 12));
+        return Math.round(line7 * 12);
       }
       case 'EMP_0105_N': {
         const line2_4 = tasks.filter(t => (t.lineId === "2" || t.lineId === "4") && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
