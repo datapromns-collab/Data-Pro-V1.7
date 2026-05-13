@@ -6,7 +6,19 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Package, CircleDot, Tag, Layers, Archive, Wheat, Droplets, Box, Plus, Printer } from 'lucide-react';
+import { 
+  Package, 
+  CircleDot, 
+  Tag, 
+  Layers, 
+  Archive, 
+  Wheat, 
+  Droplets, 
+  Box, 
+  Plus, 
+  Printer,
+  ClipboardList 
+} from 'lucide-react';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { addDays } from 'date-fns';
 
