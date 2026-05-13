@@ -177,6 +177,13 @@ export const RECIPES: Record<string, Record<string, number>> = {
     "MATP_0004": 18.93,        // Concentrado NARANJA
     "MATP_0017": 13.05,        // Ácido Cítrico
     "MATP_0014": 2.25,         // Benzoato de Potasio
+  },
+  "GLUP KOLITA": {
+    "MATP_0001": 666.4654676,  // Azúcar
+    "MATP_0007": 18.93,        // Concentrado KOLITA
+    "MATP_0017": 1.45,         // Ácido Cítrico
+    "MATP_0016": 0.23,         // Sucralosa
+    "MATP_0019": 0.85,         // Benzoato de Sodio
   }
 };
 
