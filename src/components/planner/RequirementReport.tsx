@@ -207,7 +207,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
     }
 
     // Cálculos para Preformas y Tapas
-    switch (code.replace(/(_N|_2)$/, '')) {
+    switch (code) {
       case 'EMP_0009': {
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
         return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && flavors.includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
@@ -222,10 +222,16 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
       case 'EMP_0120': return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
       case 'EMP_0126': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
       case 'EMP_0135': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
+      
+      // Lógica de Tapas
       case 'EMP_0105': {
         const line1_3 = tasks.filter(t => (t.lineId === "1" || t.lineId === "3") && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
         const line7 = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
         return Math.round((line1_3 * 6) + (line7 * 12));
+      }
+      case 'EMP_0105_N': {
+        const line2_4 = tasks.filter(t => (t.lineId === "2" || t.lineId === "4") && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
+        return Math.round(line2_4 * 6);
       }
       default: return 0;
     }
