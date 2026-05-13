@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo } from 'react';
@@ -145,7 +146,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
   const getCalculatedValue = (code: string) => {
-    // Primero revisamos si es una etiqueta
+    // Requerimientos de Etiquetas
     if (LABEL_MAPPING[code]) {
       const mapping = LABEL_MAPPING[code];
       const factor = LABEL_FACTORS[mapping.product]?.[mapping.presentation] || 0;
@@ -162,7 +163,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
       return Number((totalBoxes * factor).toFixed(2));
     }
 
-    // Cálculos específicos para plásticos
+    // Cálculos de Plásticos
     if (code === 'EMP_0019') {
       const formats: (keyof typeof PLASTIC_FACTORS)[] = ["2Lts", "1Lt", "0.4Lts", "1.5Lts"];
       return Number(formats.reduce((acc, fmt) => {
@@ -207,7 +208,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
       }, 0).toFixed(2));
     }
 
-    // Cálculos existentes para preformas
+    // Cálculos de Preformas y Tapas
     switch (code.replace(/(_N|_2)$/, '')) {
       case 'EMP_0009': {
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
@@ -223,6 +224,11 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
       case 'EMP_0120': return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
       case 'EMP_0126': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
       case 'EMP_0135': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
+      case 'EMP_0105': {
+        const line1_3 = tasks.filter(t => (t.lineId === "1" || t.lineId === "3") && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
+        const line7 = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
+        return Math.round((line1_3 * 6) + (line7 * 12));
+      }
       default: return 0;
     }
   };

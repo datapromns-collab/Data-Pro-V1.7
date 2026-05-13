@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from 'next/image';
@@ -205,6 +206,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
       }, 0).toFixed(2));
     }
 
+    // Cálculos para Preformas y Tapas
     switch (code.replace(/(_N|_2)$/, '')) {
       case 'EMP_0009': {
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
@@ -220,6 +222,11 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
       case 'EMP_0120': return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
       case 'EMP_0126': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
       case 'EMP_0135': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
+      case 'EMP_0105': {
+        const line1_3 = tasks.filter(t => (t.lineId === "1" || t.lineId === "3") && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
+        const line7 = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
+        return Math.round((line1_3 * 6) + (line7 * 12));
+      }
       default: return 0;
     }
   };
@@ -276,7 +283,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                   <TableRow key={`${item.code}-${idx}`} className="border-b last:border-0 h-8">
                     <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
                     <TableCell className="py-1 text-[11px] font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">_______ UND</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{getCalculatedValue(item.code).toLocaleString('es-ES')} UND</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
