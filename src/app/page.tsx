@@ -158,7 +158,10 @@ export default function PlannerPage() {
               <div className="bg-primary p-2 rounded-xl shadow-lg shadow-primary/20">
                 <CalendarIcon className="h-6 w-6 text-white" />
               </div>
-              <h1 className="text-lg font-headline font-bold text-slate-900 tracking-tight">Plan Semanal</h1>
+              <div className="flex flex-col">
+                <h1 className="text-lg font-headline font-bold text-slate-900 tracking-tight leading-none">Plan Semanal</h1>
+                <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest mt-1">Pro Edition</span>
+              </div>
             </div>
           </div>
           <SidebarContent className="px-4 py-2">
