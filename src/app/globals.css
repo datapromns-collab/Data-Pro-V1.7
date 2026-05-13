@@ -76,7 +76,8 @@
 /* Print optimizations */
 @media print {
   @page {
-    margin: 0; /* Important: Removes browser headers and footers */
+    margin: 0;
+    size: landscape; /* Optimizado para Gantt */
   }
   
   * {
@@ -87,14 +88,18 @@
   .no-print {
     display: none !important;
   }
+  
   .print-only {
     display: block !important;
+    width: 100% !important;
   }
+  
   body {
     background: white !important;
     padding: 0 !important;
     margin: 0 !important;
   }
+  
   main {
     display: none !important;
   }
@@ -104,8 +109,11 @@
     break-after: page;
     display: flex;
     flex-direction: column;
+    width: 100%;
     min-height: 100vh;
-    padding: 0.8cm 1cm; /* Margen interno optimizado */
+    padding: 1.5cm; /* Margen interno para evitar cortes */
+    margin: 0;
+    box-sizing: border-box;
     overflow: hidden;
   }
 

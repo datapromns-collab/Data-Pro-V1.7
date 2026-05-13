@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo } from 'react';
@@ -16,10 +15,9 @@ interface ProductionGanttProps {
 
 const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
-// Colores requeridos por el programa actual
 const PRODUCTION_COLOR = '#83CCEB';
-const SAMI_COLOR = '#FFFF00'; // S.A.M.I
-const AUTO_CP_COLOR = '#FFC000'; // Culminación de Producción
+const SAMI_COLOR = '#FFFF00'; 
+const AUTO_CP_COLOR = '#FFC000';
 
 export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: ProductionGanttProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
@@ -36,13 +34,12 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     return specials.some(s => name.toUpperCase().startsWith(s));
   };
 
-  // Lógica de S.A.M.I y CP (No modificada del programa original)
   const autoIntervals = useMemo(() => {
     const weekEndLimit = setMinutes(setHours(weekDays[6], PRODUCTION_END_SUN_HOUR), PRODUCTION_END_SUN_MINUTE);
     
     if (tasks.length === 0) {
       const start = setMinutes(setHours(weekDays[0], 7), 0);
-      return [{ name: 'S.A.M.I', start, end: weekEndLimit, type: 'sami' }];
+      return [{ name: 'S.A.M.I', start, end: weekEndLimit, type: 'sami' as const }];
     }
 
     const sortedTasks = [...tasks].sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
@@ -201,9 +198,8 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
   }, []);
 
   return (
-    <div className="w-full bg-white print:p-0">
-      <div className="flex flex-col gap-1 min-w-[850px]">
-        {/* Header Horario */}
+    <div className="w-full bg-white print:p-0 print:m-0">
+      <div className="flex flex-col gap-1 min-w-[850px] print:min-w-0">
         <div className="flex border-b border-slate-300 pb-1 mb-2">
           <div className="w-20 shrink-0 flex flex-col justify-end">
             <span className="font-headline text-[9px] font-bold uppercase text-slate-400 leading-none">DÍA /</span>
@@ -222,10 +218,9 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           </div>
         </div>
 
-        {/* Filas de Días */}
         <div className="space-y-1">
           {weekDays.map((day, dIdx) => (
-            <div key={dIdx} className="flex items-stretch group h-14">
+            <div key={dIdx} className="flex items-stretch group h-14 print:h-12">
               <div className="w-20 shrink-0 flex flex-col justify-center">
                 <div className="font-headline text-[13px] font-bold text-slate-900">{DAYS[dIdx]}</div>
                 <div className="text-[10px] text-slate-400 font-medium lowercase">{format(day, 'd MMM', { locale: es })}</div>
@@ -285,14 +280,14 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                               width: `${(shifts.dayLabel.width / parseFloat(style.width)) * 100}%`
                             }}
                           >
-                            <span className="text-[7px] font-bold text-slate-500 uppercase leading-none mb-1">DIA</span>
+                            <span className="text-[7px] font-bold text-slate-500 uppercase leading-none mb-1 print:hidden">DIA</span>
                             <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
                               <span className="font-black text-slate-900 text-[10px] uppercase leading-tight truncate">
                                 {task.name}
                               </span>
                               {!isSpecial && (
                                 <span className="font-bold text-slate-700 text-[10px] leading-tight shrink-0">
-                                  {Math.round(shifts.dayLabel.qty).toLocaleString('es-ES')} cajas
+                                  {Math.round(shifts.dayLabel.qty).toLocaleString('es-ES')}
                                 </span>
                               )}
                             </div>
@@ -306,14 +301,14 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                               width: `${(shifts.nightLabel.width / parseFloat(style.width)) * 100}%`
                             }}
                           >
-                            <span className="text-[7px] font-bold text-slate-600 uppercase leading-none mb-1">NOCHE</span>
+                            <span className="text-[7px] font-bold text-slate-600 uppercase leading-none mb-1 print:hidden">NOCHE</span>
                             <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
                               <span className="font-black text-slate-900 text-[10px] uppercase leading-tight truncate">
                                 {task.name}
                               </span>
                               {!isSpecial && (
                                 <span className="font-bold text-slate-800 text-[10px] leading-tight shrink-0">
-                                  {Math.round(shifts.nightLabel.qty).toLocaleString('es-ES')} cajas
+                                  {Math.round(shifts.nightLabel.qty).toLocaleString('es-ES')}
                                 </span>
                               )}
                             </div>
@@ -333,39 +328,37 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
           ))}
         </div>
 
-        {/* Leyenda y Totales */}
-        <div className="mt-4 flex items-center justify-between border-t-2 border-slate-100 pt-3">
+        <div className="mt-4 flex items-center justify-between border-t-2 border-slate-100 pt-3 print:pt-2">
           <div className="text-[11px] font-black uppercase text-primary tracking-tight">
             CAJAS TOTALES: {Math.round(totalBoxes).toLocaleString('es-ES')}
           </div>
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-6 print:gap-4">
             <div className="flex items-center gap-2">
               <div className="w-5 h-2 rounded-sm" style={{ backgroundColor: PRODUCTION_COLOR }}></div>
               <span className="text-[9px] font-bold text-slate-400 uppercase">PRODUCCIÓN</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-5 h-2 rounded-sm" style={{ backgroundColor: AUTO_CP_COLOR }}></div>
-              <span className="text-[9px] font-bold text-slate-400 uppercase">CULMINACION DE PRODUCCION</span>
+              <span className="text-[9px] font-bold text-slate-400 uppercase">CP</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-5 h-2 rounded-sm" style={{ backgroundColor: SAMI_COLOR }}></div>
-              <span className="text-[9px] font-bold text-slate-400 uppercase">S.A.M.I / ESPECIALES</span>
+              <span className="text-[9px] font-bold text-slate-400 uppercase">S.A.M.I</span>
             </div>
           </div>
         </div>
 
-        {/* Resumen de Producción */}
         {productSummary.length > 0 && (
-          <div className="mt-6">
-            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 text-center">RESUMEN DE PRODUCCIÓN TOTAL</h3>
-            <div className="flex flex-wrap justify-center gap-3">
+          <div className="mt-4 print:mt-2">
+            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 text-center print:hidden">RESUMEN DE PRODUCCIÓN</h3>
+            <div className="flex flex-wrap justify-center gap-2">
               {productSummary.map(([name, data]) => (
-                <div key={name} className="flex items-center gap-2 py-1.5 px-4 bg-white rounded-full border border-slate-200 shadow-sm">
-                  <span className="text-[10px] font-black text-slate-800 uppercase">{name}</span>
-                  <span className="text-[10px] font-black text-primary">
+                <div key={name} className="flex items-center gap-2 py-1 px-3 bg-white rounded-full border border-slate-200 shadow-sm print:shadow-none print:py-0.5">
+                  <span className="text-[9px] font-black text-slate-800 uppercase">{name}</span>
+                  <span className="text-[9px] font-black text-primary">
                     {Math.round(data.qty).toLocaleString('es-ES')} cjs
                   </span>
-                  <span className="text-[10px] font-bold text-indigo-400">
+                  <span className="text-[9px] font-bold text-indigo-400">
                     {Math.round(data.ubb).toLocaleString('es-ES')} UBB
                   </span>
                 </div>
