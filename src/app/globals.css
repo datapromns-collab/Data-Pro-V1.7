@@ -77,7 +77,7 @@
 @media print {
   @page {
     margin: 0;
-    size: landscape; /* Optimizado para Gantt */
+    size: landscape;
   }
   
   * {
@@ -111,7 +111,7 @@
     flex-direction: column;
     width: 100%;
     min-height: 100vh;
-    padding: 1.5cm; /* Margen interno para evitar cortes */
+    padding: 0.8cm; /* Márgenes reducidos */
     margin: 0;
     box-sizing: border-box;
     overflow: hidden;

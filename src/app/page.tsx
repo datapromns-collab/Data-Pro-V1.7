@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -56,11 +55,16 @@ export default function PlannerPage() {
   const [selectedLine, setSelectedLine] = useState("1");
   const [activeTab, setActiveTab] = useState("gantt");
   const [printMode, setPrintMode] = useState<'plan' | 'requirements'>('plan');
+  const [emitDate, setEmitDate] = useState('');
 
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
-  // Keyboard Shortcuts
+  // Keyboard Shortcuts y Fecha de Emisión
   useEffect(() => {
+    if (isLoaded) {
+      setEmitDate(format(new Date(), 'd/M/yyyy'));
+    }
+
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.altKey) {
         switch (e.key.toLowerCase()) {
@@ -75,7 +79,7 @@ export default function PlannerPage() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [isLoaded]);
 
   const weekNumber = getISOWeek(weekStartDate);
 
@@ -225,9 +229,18 @@ export default function PlannerPage() {
           {printMode === 'plan' ? (
             LINES.map((lineName, i) => (
               <div key={lineName} className="page-break-section">
-                <div className="mb-4 flex justify-between items-start">
-                  <h1 className="text-2xl font-headline font-bold text-slate-900">Programa: {lineName}</h1>
-                  <p className="text-[10px] text-slate-500 font-bold uppercase">Semana {weekNumber}</p>
+                <div className="mb-6 flex justify-between items-start border-b border-slate-100 pb-4">
+                  <div>
+                    <h1 className="text-3xl font-headline font-bold text-slate-900 leading-tight">Programa de Producción</h1>
+                    <p className="text-lg font-bold text-primary uppercase tracking-tight">{lineName.toUpperCase()}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-1">CONFIDENCIAL - USO INTERNO</p>
+                    <p className="text-[11px] text-slate-500 font-bold uppercase">
+                      Semana {weekNumber} - {format(weekStartDate, "dd MMMM yyyy", { locale: es })}
+                    </p>
+                    <p className="text-[10px] text-slate-400 font-medium italic">Emitido: {emitDate}</p>
+                  </div>
                 </div>
                 <ProductionGantt tasks={tasks.filter(t => t.lineId === (i + 1).toString() && t.endTime >= weekStartDate && t.startTime <= weekEnd)} weekStartDate={weekStartDate} />
               </div>
