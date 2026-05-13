@@ -4,10 +4,8 @@
 import { useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Card } from '@/components/ui/card';
 import { 
   Printer, 
-  ClipboardList, 
   Package, 
   Droplet, 
   Target, 
@@ -194,36 +192,27 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
 
   return (
     <div className="space-y-6">
-      <Card className="flex justify-between items-center p-6 border-slate-200 shadow-sm bg-white/50 backdrop-blur-sm">
-        <div className="flex items-center gap-4">
-          <div className="bg-primary/10 p-3 rounded-2xl">
-            <ClipboardList className="h-6 w-6 text-primary" />
-          </div>
-          <div className="space-y-0.5">
-            <h3 className="text-xl font-headline font-bold text-slate-900">Módulo de Requerimiento</h3>
-            <p className="text-sm text-slate-500 font-medium">Calcula y gestiona los materiales necesarios para la producción.</p>
-          </div>
-        </div>
-        <Button 
-          onClick={onPrint} 
-          variant="outline" 
-          size="lg"
-          className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 rounded-xl h-11 px-6 shadow-sm"
-        >
-          <Printer className="h-4 w-4" />
-          Imprimir Reporte
-        </Button>
-      </Card>
-
       <Tabs defaultValue="empaque" className="space-y-6">
-        <TabsList className="bg-slate-100/50 p-1.5 rounded-2xl h-14 border border-slate-200">
-          <TabsTrigger value="empaque" className="gap-2 px-6 h-full font-black text-xs uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900">
-            <Package className="h-4 w-4" /> Empaque
-          </TabsTrigger>
-          <TabsTrigger value="materia" className="gap-2 px-6 h-full font-black text-xs uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900">
-            <Droplet className="h-4 w-4" /> Materia Prima
-          </TabsTrigger>
-        </TabsList>
+        <div className="flex items-center justify-between">
+          <TabsList className="bg-slate-100/50 p-1.5 rounded-2xl h-14 border border-slate-200">
+            <TabsTrigger value="empaque" className="gap-2 px-6 h-full font-black text-xs uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900">
+              <Package className="h-4 w-4" /> Empaque
+            </TabsTrigger>
+            <TabsTrigger value="materia" className="gap-2 px-6 h-full font-black text-xs uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900">
+              <Droplet className="h-4 w-4" /> Materia Prima
+            </TabsTrigger>
+          </TabsList>
+
+          <Button 
+            onClick={onPrint} 
+            variant="outline" 
+            size="lg"
+            className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 rounded-xl h-11 px-6 shadow-sm"
+          >
+            <Printer className="h-4 w-4" />
+            Imprimir Reporte
+          </Button>
+        </div>
 
         <TabsContent value="empaque" className="space-y-6 m-0 animate-in fade-in-50 duration-500">
           <Tabs defaultValue="preformas" className="space-y-6">
@@ -307,18 +296,6 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
           </Tabs>
         </TabsContent>
       </Tabs>
-
-      <div className="p-8 border-2 border-dashed border-slate-200 rounded-3xl flex flex-col items-center justify-center text-center space-y-4 bg-slate-50/50">
-        <div className="bg-white p-4 rounded-full shadow-sm border border-slate-100">
-          <ClipboardList className="h-8 w-8 text-slate-200" />
-        </div>
-        <div className="max-w-xs">
-          <p className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Cálculo Automático</p>
-          <p className="text-xs text-slate-400 font-medium leading-relaxed">
-            Los valores mostrados se sincronizan en tiempo real basándose en la carga de las 7 líneas de producción.
-          </p>
-        </div>
-      </div>
     </div>
   );
 }
