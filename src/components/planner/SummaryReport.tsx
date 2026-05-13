@@ -50,7 +50,7 @@ export function SummaryReport({ tasks, weekStartDate }: SummaryReportProps) {
   };
 
   return (
-    <div className="bg-white p-8 max-w-[210mm] mx-auto min-h-screen print:p-4">
+    <div className="bg-white p-8 max-w-[210mm] mx-auto min-h-screen print:p-8">
       <div className="mb-8 border-b-2 border-slate-900 pb-4 flex justify-between items-end">
         <div>
           <h1 className="text-2xl font-headline font-bold text-slate-900 uppercase">Resumen de Planificación</h1>

@@ -120,7 +120,7 @@ export default function PlannerPage() {
     setPrintMode('summary');
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
-    style.innerHTML = '@page { size: portrait; margin: 1cm; }';
+    style.innerHTML = '@page { size: portrait; margin: 0; }';
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
