@@ -65,7 +65,7 @@ export function SummaryReport({ tasks, weekStartDate }: SummaryReportProps) {
       <div className="grid grid-cols-2 gap-x-8 gap-y-6">
         {LINES.map((lineId) => (
           <div key={lineId} className="break-inside-avoid border rounded-xl overflow-hidden shadow-sm">
-            <div className="bg-[#0f172a] text-white px-4 py-2.5 flex justify-between items-center">
+            <div className="bg-[#0c1a3d] text-white px-4 py-2.5 flex justify-between items-center">
               <span className="font-headline font-bold text-[12px] uppercase">LÍNEA {lineId}</span>
               <span className="text-[10px] font-bold opacity-60 uppercase tracking-widest">CAJAS TOTALES</span>
             </div>
