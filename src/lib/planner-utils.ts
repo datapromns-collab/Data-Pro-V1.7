@@ -215,6 +215,16 @@ export const RECIPES: Record<string, Record<string, number>> = {
     "MATP_0020": 0.25,
     "MATP_0036": 0.1,
     "MATP_0031": 0.1,
+  },
+  "JUSTY DURAZNO": {
+    "MATP_0001": 137.5005076,
+    "MATP_0043": 7,
+    "MATP_0017": 2.8,
+    "MATP_0021": 0.6,
+    "MATP_0018": 0.75,
+    "MATP_0019": 0.3,
+    "MATP_0020": 0.3,
+    "MATP_0042": 1.05,
   }
 };
 
