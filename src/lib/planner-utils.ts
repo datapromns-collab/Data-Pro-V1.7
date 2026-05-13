@@ -184,6 +184,12 @@ export const RECIPES: Record<string, Record<string, number>> = {
     "MATP_0017": 1.45,         // Ácido Cítrico
     "MATP_0016": 0.23,         // Sucralosa
     "MATP_0019": 0.85,         // Benzoato de Sodio
+  },
+  "GLUP MANZANA VERDE": {
+    "MATP_0001": 624.6972684,  // Azúcar
+    "MATP_0032": 18.93,        // Concentrado Manzana Verde
+    "MATP_0017": 15.1,         // Ácido Cítrico
+    "MATP_0019": 3.27,         // Benzoato de Sodio
   }
 };
 
