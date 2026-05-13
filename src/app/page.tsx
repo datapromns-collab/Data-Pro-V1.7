@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -7,7 +8,6 @@ import {
   Trash2, 
   Printer, 
   GanttChartSquare,
-  ChevronRight,
   Clock,
   Gauge,
   Calculator as CalculatorIcon,
@@ -21,7 +21,7 @@ import { Calculator } from '@/components/planner/Calculator';
 import { KeyboardShortcuts } from '@/components/planner/KeyboardShortcuts';
 import { RequirementSection } from '@/components/planner/RequirementSection';
 import { RequirementReport } from '@/components/planner/RequirementReport';
-import { PlanningSummary } from '@/components/planner/PlanningSummary';
+import { SummaryReport } from '@/components/planner/SummaryReport';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { Toaster } from '@/components/ui/toaster';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -56,7 +56,7 @@ export default function PlannerPage() {
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
   const [activeTab, setActiveTab] = useState("gantt");
-  const [printMode, setPrintMode] = useState<'plan' | 'requirements'>('plan');
+  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary'>('plan');
   const [emitDate, setEmitDate] = useState('');
 
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
@@ -75,7 +75,6 @@ export default function PlannerPage() {
           case 'v': e.preventDefault(); setActiveTab('speeds'); break;
           case 'k': e.preventDefault(); setIsShortcutsOpen(prev => !prev); break;
           case 'r': e.preventDefault(); setActiveTab('requirement'); break;
-          case 's': e.preventDefault(); setActiveTab('summary'); break;
         }
       }
     };
@@ -95,12 +94,10 @@ export default function PlannerPage() {
 
   const handlePrintPlan = () => {
     setPrintMode('plan');
-    
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: landscape; margin: 0; }';
     document.head.appendChild(style);
-    
     setTimeout(() => {
       window.print();
       document.getElementById('print-orientation-style')?.remove();
@@ -109,12 +106,22 @@ export default function PlannerPage() {
 
   const handlePrintRequirements = () => {
     setPrintMode('requirements');
-    
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
-    style.innerHTML = '@page { size: portrait; margin: 0; }';
+    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
     document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
 
+  const handlePrintSummary = () => {
+    setPrintMode('summary');
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 1cm; }';
+    document.head.appendChild(style);
     setTimeout(() => {
       window.print();
       document.getElementById('print-orientation-style')?.remove();
@@ -144,9 +151,8 @@ export default function PlannerPage() {
     switch (activeTab) {
       case 'speeds': return { title: "Velocidades", subtitle: "Configuración base." };
       case 'calculator': return { title: "Calculadora", subtitle: "Conversión cajas/tanques." };
-      case 'requirement': return { title: "Requerimiento", subtitle: "Gestión de insumos y materiales." };
-      case 'summary': return { title: "Resumen de Planificación", subtitle: "Métricas y estadísticas de producción." };
-      default: return { title: `Programación Línea ${selectedLine}`, subtitle: "Gestión de turnos." };
+      case 'requirement': return { title: "Requerimiento", subtitle: "" };
+      default: return { title: `Programación Línea ${selectedLine}`, subtitle: "" };
     }
   }, [activeTab, selectedLine]);
 
@@ -163,7 +169,7 @@ export default function PlannerPage() {
               </div>
               <div className="flex flex-col">
                 <h1 className="text-xl font-headline font-bold text-slate-900 tracking-tight leading-none">Plan Semanal</h1>
-                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mt-1">Pro Edition</span>
+                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mt-1">Pro Edition</span>
               </div>
             </div>
           </div>
@@ -220,18 +226,25 @@ export default function PlannerPage() {
         </Sidebar>
 
         <main className="flex-1 flex flex-col h-screen overflow-hidden no-print">
-          <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-end shrink-0">
-            <div className="flex items-center gap-2">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={handlePrintPlan}
-                className="gap-2 font-bold text-slate-600 hover:text-primary"
-              >
-                <Printer className="h-4 w-4" /> 
-                <span className="hidden sm:inline">Programa</span>
-              </Button>
-            </div>
+          <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-end shrink-0 gap-2">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={handlePrintSummary}
+              className="gap-2 font-bold text-slate-600 hover:text-primary"
+            >
+              <LayoutDashboard className="h-4 w-4" /> 
+              <span className="hidden sm:inline">Resumen PDF</span>
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              onClick={handlePrintPlan}
+              className="gap-2 font-bold text-slate-600 hover:text-primary"
+            >
+              <Printer className="h-4 w-4" /> 
+              <span className="hidden sm:inline">Programa</span>
+            </Button>
           </header>
 
           <div className="flex-1 overflow-auto p-6 lg:p-8">
@@ -239,11 +252,10 @@ export default function PlannerPage() {
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <h2 className="text-2xl font-headline font-bold text-slate-900">{pageHeader.title}</h2>
-                  <p className="text-sm text-slate-500">{pageHeader.subtitle}</p>
+                  {pageHeader.subtitle && <p className="text-sm text-slate-500">{pageHeader.subtitle}</p>}
                 </div>
                 <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
                   <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Programación</TabsTrigger>
-                  <TabsTrigger value="summary" className="gap-2 px-4 font-bold"><LayoutDashboard className="h-4 w-4" /> Resumen Plan</TabsTrigger>
                   <TabsTrigger value="speeds" className="gap-2 px-4 font-bold"><Gauge className="h-4 w-4" /> Velocidades</TabsTrigger>
                   <TabsTrigger value="calculator" className="gap-2 px-4 font-bold"><CalculatorIcon className="h-4 w-4" /> Calculadora</TabsTrigger>
                   <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Requerimiento</TabsTrigger>
@@ -253,9 +265,6 @@ export default function PlannerPage() {
               <div className="flex-1 min-h-0">
                 <TabsContent value="gantt" className="m-0 h-full">
                   <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
-                </TabsContent>
-                <TabsContent value="summary" className="m-0 h-full">
-                  <PlanningSummary />
                 </TabsContent>
                 <TabsContent value="speeds" className="m-0 h-full">
                   <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} />
@@ -270,7 +279,7 @@ export default function PlannerPage() {
         </main>
 
         <div className="print-only w-full bg-white">
-          {printMode === 'plan' ? (
+          {printMode === 'plan' && (
             LINES.map((lineName, i) => (
               <div key={lineName} className="page-break-section">
                 <div className="mb-6 flex justify-between items-start border-b border-slate-100 pb-4">
@@ -289,9 +298,15 @@ export default function PlannerPage() {
                 <ProductionGantt tasks={tasks.filter(t => t.lineId === (i + 1).toString() && t.endTime >= weekStartDate && t.startTime <= weekEnd)} weekStartDate={weekStartDate} />
               </div>
             ))
-          ) : (
+          )}
+          {printMode === 'requirements' && (
             <div className="p-0">
               <RequirementReport tasks={tasks} weekStartDate={weekStartDate} />
+            </div>
+          )}
+          {printMode === 'summary' && (
+            <div className="p-0">
+              <SummaryReport />
             </div>
           )}
         </div>
