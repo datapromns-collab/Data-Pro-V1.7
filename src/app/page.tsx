@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -25,20 +26,17 @@ import { KeyboardShortcuts } from '@/components/planner/KeyboardShortcuts';
 import { RequirementSection } from '@/components/planner/RequirementSection';
 import { RequirementReport } from '@/components/planner/RequirementReport';
 import { usePlannerStore } from '@/hooks/use-planner-store';
-import { calculateTotalPlannedMinutes } from '@/lib/planner-utils';
 import { Toaster } from '@/components/ui/toaster';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SidebarProvider, Sidebar, SidebarContent } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
-import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { Badge } from '@/components/ui/badge';
 import { ScheduledTask } from '@/lib/types';
-import { format, getISOWeek, setHours, setMinutes, addDays, startOfDay, endOfDay } from 'date-fns';
+import { format, getISOWeek, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7"];
 
@@ -109,7 +107,6 @@ export default function PlannerPage() {
   }, [activeTab]);
 
   const weekNumber = getISOWeek(weekStartDate);
-  const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
 
   const filteredTasks = useMemo(() => {
     return tasks.filter(t => 
@@ -192,7 +189,14 @@ export default function PlannerPage() {
     }
   }, [activeTab, selectedLine]);
 
-  if (!isLoaded) return null;
+  if (!isLoaded) return (
+    <div className="min-h-screen flex items-center justify-center bg-[#f8fafc]">
+       <div className="animate-pulse flex flex-col items-center gap-4">
+          <CalendarIcon className="h-12 w-12 text-primary" />
+          <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Cargando Planificador Local...</p>
+       </div>
+    </div>
+  );
 
   return (
     <SidebarProvider>
@@ -206,7 +210,7 @@ export default function PlannerPage() {
               </div>
               <div>
                 <h1 className="text-lg font-headline font-bold text-slate-900 tracking-tight">Plan Semanal</h1>
-                <p className="text-[10px] uppercase tracking-widest text-primary font-bold">Pro Edition</p>
+                <p className="text-[10px] uppercase tracking-widest text-primary font-bold">Local Edition</p>
               </div>
             </div>
           </div>
@@ -272,9 +276,9 @@ export default function PlannerPage() {
                     <KeyboardIcon className="h-4 w-4" />
                     Atajos (Alt + K)
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar TODO el historial de todas las semanas?') && clearAll()} className="w-full justify-start gap-2 text-destructive font-bold">
+                  <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar TODO el historial local?') && clearAll()} className="w-full justify-start gap-2 text-destructive font-bold">
                     <Trash2 className="h-4 w-4" />
-                    Limpiar Base de Datos
+                    Limpiar Datos Locales
                   </Button>
                 </div>
               </section>
@@ -286,14 +290,14 @@ export default function PlannerPage() {
         <main className="flex-1 flex flex-col h-screen overflow-hidden no-print">
           <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-2 text-sm text-slate-500">
-              <span>Producción</span>
+              <span>Producción Local</span>
               <ChevronRight className="h-4 w-4" />
               <span>Semana {weekNumber} ({format(weekStartDate, 'dd/MM', { locale: es })})</span>
               <ChevronRight className="h-4 w-4" />
               <span className="font-medium text-slate-900">Línea {selectedLine}</span>
             </div>
             <div className="flex items-center gap-2">
-               <Button variant="ghost" size="icon" onClick={handlePrintPlan}><Printer className="h-5 w-5" /></Button>
+               <Button variant="ghost" size="icon" onClick={handlePrintPlan} title="Imprimir Plan de Producción"><Printer className="h-5 w-5" /></Button>
             </div>
           </header>
 
@@ -315,14 +319,14 @@ export default function PlannerPage() {
                       className="gap-2 bg-indigo-600 hover:bg-indigo-700 font-bold rounded-xl"
                     >
                       <FileDown className="h-4 w-4" />
-                      Exportar Reporte PDF
+                      Exportar Requerimientos
                     </Button>
                   )}
                   <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
-                    <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Programacion</TabsTrigger>
+                    <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Programación</TabsTrigger>
                     <TabsTrigger value="speeds" className="gap-2 px-4 font-bold"><Gauge className="h-4 w-4" /> Velocidades</TabsTrigger>
                     <TabsTrigger value="calculator" className="gap-2 px-4 font-bold"><CalculatorIcon className="h-4 w-4" /> Calculadora</TabsTrigger>
-                    <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Requerimiento</TabsTrigger>
+                    <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Requerimientos</TabsTrigger>
                   </TabsList>
                 </div>
               </div>
@@ -377,7 +381,7 @@ export default function PlannerPage() {
                   </div>
 
                   <div className="mt-8 pt-4 border-t border-slate-200 flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-[0.2em]">
-                    <span>PLAN SEMANAL PRO EDITION</span>
+                    <span>PLAN SEMANAL LOCAL EDITION</span>
                     <span className="text-slate-900 font-black">PÁGINA {i + 1} DE {LINES.length}</span>
                     <span>REF: LÍNEA-{(i + 1)}</span>
                   </div>

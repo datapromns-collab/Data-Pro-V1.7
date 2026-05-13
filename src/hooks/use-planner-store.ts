@@ -1,189 +1,102 @@
+
 'use client';
 
-import { useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { ScheduledTask } from '@/lib/types';
 import { startOfWeek } from 'date-fns';
-import { useCollection, useDoc, useFirestore, useUser, errorEmitter, FirestorePermissionError } from '@/firebase';
-import { collection, doc, setDoc, deleteDoc, writeBatch, Timestamp } from 'firebase/firestore';
 
 /**
- * Utilidad segura para convertir valores de fecha de Firestore (Timestamp o ISO) a Date.
+ * Hook para gestionar el estado del planificador de forma local.
+ * Elimina la dependencia de Firestore para un inicio instantáneo.
  */
-const toDate = (val: any): Date => {
-  if (!val) return new Date();
-  
-  // Manejo de Firestore Timestamp
-  if (typeof val.toDate === 'function') {
-    return val.toDate();
-  }
-  
-  // Manejo de estructura interna de Timestamp (seconds/nanoseconds)
-  if (val && typeof val.seconds === 'number') {
-    return new Date(val.seconds * 1000);
-  }
-
-  // Fallback a constructor Date estándar si es string o number
-  const date = new Date(val);
-  return isNaN(date.getTime()) ? new Date() : date;
-};
-
 export function usePlannerStore() {
-  const firestore = useFirestore();
-  const { user, loading: authLoading } = useUser();
-
-  // Consultar tareas de la colección global con query estable
-  const tasksQuery = useMemo(() => {
-    if (!firestore) return null;
-    return collection(firestore, 'tasks');
-  }, [firestore]);
-
-  const { data: rawTasks, loading: tasksLoading } = useCollection(tasksQuery);
-
-  // Consultar configuración global
-  const configDocRef = useMemo(() => {
-    if (!firestore) return null;
-    return doc(firestore, 'configs', 'global');
-  }, [firestore]);
-
-  const { data: config, loading: configLoading } = useDoc(configDocRef);
-
-  // Formatear tareas de Firestore asegurando tipos Date correctos
-  const tasks = useMemo(() => {
-    if (!rawTasks) return [];
-    return rawTasks.map(t => ({
-      ...t,
-      startTime: toDate(t.startTime),
-      endTime: toDate(t.endTime)
-    })) as ScheduledTask[];
-  }, [rawTasks]);
-
-  // Obtener fecha de inicio de semana (desde DB o default)
-  const weekStartDate = useMemo(() => {
-    if (config?.weekStartDate) {
-      return toDate(config.weekStartDate);
-    }
-    // Por defecto, lunes de la semana actual a las 00:00
+  const [tasks, setTasks] = useState<ScheduledTask[]>([]);
+  const [weekStartDate, setWeekStartDateState] = useState<Date>(() => {
     const d = new Date();
     d.setHours(0, 0, 0, 0);
     return startOfWeek(d, { weekStartsOn: 1 });
-  }, [config]);
+  });
+  const [lineSpeeds, setLineSpeeds] = useState<Record<string, number>>({
+    "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0
+  });
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  // Obtener velocidades de línea
-  const lineSpeeds = useMemo(() => {
-    return config?.lineSpeeds || {
-      "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0
-    };
-  }, [config]);
+  // Cargar datos iniciales de localStorage si existen
+  useEffect(() => {
+    const savedTasks = localStorage.getItem('planner_tasks');
+    const savedConfig = localStorage.getItem('planner_config');
 
-  // Limpiar datos para evitar errores de Firestore (undefined no permitido)
-  const cleanData = (data: any) => {
-    const cleaned = { ...data };
-    Object.keys(cleaned).forEach(key => {
-      if (cleaned[key] === undefined) {
-        delete cleaned[key];
+    if (savedTasks) {
+      try {
+        const parsedTasks = JSON.parse(savedTasks);
+        setTasks(parsedTasks.map((t: any) => ({
+          ...t,
+          startTime: new Date(t.startTime),
+          endTime: new Date(t.endTime)
+        })));
+      } catch (e) {
+        console.error("Error loading tasks from local storage", e);
       }
-    });
-    return cleaned;
-  };
+    }
+
+    if (savedConfig) {
+      try {
+        const config = JSON.parse(savedConfig);
+        if (config.weekStartDate) setWeekStartDateState(new Date(config.weekStartDate));
+        if (config.lineSpeeds) setLineSpeeds(config.lineSpeeds);
+      } catch (e) {
+        console.error("Error loading config from local storage", e);
+      }
+    }
+    
+    setIsLoaded(true);
+  }, []);
+
+  // Guardar en localStorage cuando cambian los datos
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem('planner_tasks', JSON.stringify(tasks));
+    }
+  }, [tasks, isLoaded]);
+
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem('planner_config', JSON.stringify({ weekStartDate, lineSpeeds }));
+    }
+  }, [weekStartDate, lineSpeeds, isLoaded]);
 
   const addTask = (taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
-    if (!firestore || !user) return;
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
-    const id = crypto.randomUUID();
-
-    const docData = cleanData({
+    const newTask: ScheduledTask = {
       ...taskData,
-      id,
-      color: randomColor,
-      createdBy: user.uid,
-      createdAt: Timestamp.now(),
-      // Guardar fechas como objetos Date para que Firestore las maneje como Timestamps
-      startTime: taskData.startTime,
-      endTime: taskData.endTime
-    });
-
-    const docRef = doc(firestore, 'tasks', id);
-    setDoc(docRef, docData).catch(async (err) => {
-      errorEmitter.emit('permission-error', new FirestorePermissionError({
-        path: docRef.path,
-        operation: 'create',
-        requestResourceData: docData,
-      }));
-    });
+      id: crypto.randomUUID(),
+      color: randomColor
+    };
+    setTasks(prev => [...prev, newTask]);
   };
 
   const updateTask = (id: string, taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
-    if (!firestore || !user) return;
-    
-    const docData = cleanData({ 
-      ...taskData, 
-      id,
-      updatedBy: user.uid,
-      updatedAt: Timestamp.now(),
-      startTime: taskData.startTime,
-      endTime: taskData.endTime
-    });
-    const docRef = doc(firestore, 'tasks', id);
-    
-    setDoc(docRef, docData, { merge: true }).catch(async (err) => {
-      errorEmitter.emit('permission-error', new FirestorePermissionError({
-        path: docRef.path,
-        operation: 'update',
-        requestResourceData: docData,
-      }));
-    });
+    setTasks(prev => prev.map(t => t.id === id ? { ...t, ...taskData } : t));
   };
 
   const removeTask = (id: string) => {
-    if (!firestore) return;
-    const docRef = doc(firestore, 'tasks', id);
-    deleteDoc(docRef).catch(async (err) => {
-      errorEmitter.emit('permission-error', new FirestorePermissionError({
-        path: docRef.path,
-        operation: 'delete',
-      }));
-    });
+    setTasks(prev => prev.filter(t => t.id !== id));
   };
 
-  const clearAll = async () => {
-    if (!firestore || !tasks.length) return;
-    const batch = writeBatch(firestore);
-    tasks.forEach(task => {
-      batch.delete(doc(firestore, 'tasks', task.id));
-    });
-    await batch.commit();
+  const clearAll = () => {
+    setTasks([]);
   };
 
   const updateWeekStartDate = (date: Date) => {
-    if (!firestore) return;
-    const docRef = doc(firestore, 'configs', 'global');
-    const data = { weekStartDate: date };
-    setDoc(docRef, data, { merge: true }).catch(async (err) => {
-      errorEmitter.emit('permission-error', new FirestorePermissionError({
-        path: docRef.path,
-        operation: 'update',
-        requestResourceData: data,
-      }));
-    });
+    setWeekStartDateState(date);
   };
 
   const updateLineSpeed = (lineId: string, speed: number) => {
-    if (!firestore) return;
-    const docRef = doc(firestore, 'configs', 'global');
-    const data = {
-      lineSpeeds: {
-        ...lineSpeeds,
-        [lineId]: speed
-      }
-    };
-    setDoc(docRef, data, { merge: true }).catch(async (err) => {
-      errorEmitter.emit('permission-error', new FirestorePermissionError({
-        path: docRef.path,
-        operation: 'update',
-        requestResourceData: data,
-      }));
-    });
+    setLineSpeeds(prev => ({
+      ...prev,
+      [lineId]: speed
+    }));
   };
 
   return { 
@@ -196,6 +109,6 @@ export function usePlannerStore() {
     removeTask, 
     clearAll, 
     updateLineSpeed,
-    isLoaded: !tasksLoading && !configLoading && !authLoading 
+    isLoaded 
   };
 }
