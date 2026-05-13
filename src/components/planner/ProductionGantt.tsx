@@ -347,7 +347,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         </div>
 
         <div className="mt-4 flex items-center justify-between border-t-2 border-slate-100 pt-3 print:pt-2">
-          <div className="text-[11px] font-black uppercase text-primary tracking-tight">
+          <div className="text-xs font-black uppercase text-primary tracking-tight">
             CAJAS TOTALES: {Math.round(totalBoxes).toLocaleString('es-ES')}
           </div>
           <div className="flex items-center gap-6 print:gap-4">
@@ -367,16 +367,16 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
         </div>
 
         {productSummary.length > 0 && (
-          <div className="mt-4 print:mt-2">
-            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 text-center print:hidden">RESUMEN DE PRODUCCIÓN</h3>
-            <div className="flex flex-wrap justify-center gap-2">
+          <div className="mt-5 print:mt-3">
+            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 text-center print:hidden">RESUMEN DE PRODUCCIÓN</h3>
+            <div className="flex flex-wrap justify-center gap-2.5">
               {productSummary.map(([name, data]) => (
-                <div key={name} className="flex items-center gap-2 py-1 px-3 bg-white rounded-full border border-slate-200 shadow-sm print:shadow-none print:py-0.5">
-                  <span className="text-[9px] font-black text-slate-800 uppercase">{name}</span>
-                  <span className="text-[9px] font-black text-primary">
+                <div key={name} className="flex items-center gap-2.5 py-1.5 px-4 bg-white rounded-full border border-slate-200 shadow-sm print:shadow-none print:py-0.5">
+                  <span className="text-[11px] font-black text-slate-800 uppercase">{name}</span>
+                  <span className="text-[11px] font-black text-primary">
                     {Math.round(data.qty).toLocaleString('es-ES')} cjs
                   </span>
-                  <span className="text-[9px] font-bold text-indigo-400">
+                  <span className="text-[11px] font-bold text-indigo-400">
                     {Math.round(data.ubb).toLocaleString('es-ES')} UBB
                   </span>
                 </div>
