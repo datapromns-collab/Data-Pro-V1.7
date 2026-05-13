@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
@@ -23,7 +24,7 @@ const PRODUCT_LIST = [
   "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
   "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA", "JUSTY NARANJA",
   "JUSTY DURAZNO", "JUSTY MANDARINA", "JUSTY SANDIA", "JUSTY LIMON", "JUSTY TAMARINDO",
-  "VITA TEA DURAZNO", "VITA TEA LIMON", "CS", "CIP", "CP", "MTTO PROGRAMADO", "PARADA PROGRAMADA"
+  "VITA TEA DURAZNO", "VITA TEA LIMON", "CS", "CIP", "CP", "PASIVACIÓN", "MTTO PROGRAMADO", "PARADA PROGRAMADA"
 ];
 
 const CIP_OPTIONS = ["CIP 3P ALCALINO", "CIP 3P ACIDO", "CIP 5P"];
@@ -79,7 +80,7 @@ export function TaskDialog({
     return latestTask.endTime;
   }, [allTasks, lineId, weekDays]);
 
-  const isSpecialTask = name === 'CS' || name === 'CIP' || name === 'CP' || name === 'MTTO PROGRAMADO' || name === 'PARADA PROGRAMADA' || CIP_OPTIONS.includes(name);
+  const isSpecialTask = name === 'CS' || name === 'CIP' || name === 'CP' || name === 'PASIVACIÓN' || name === 'MTTO PROGRAMADO' || name === 'PARADA PROGRAMADA' || CIP_OPTIONS.includes(name);
 
   const factor = useMemo(() => {
     if (!name || !presentation) return 0;
@@ -123,7 +124,6 @@ export function TaskDialog({
     }
   }, [initialTask, isOpen, defaultLineId, weekDays, nextAvailableTime, lineSpeeds]);
 
-  // Sincronizar Tanques y Cajas basado en el factor
   useEffect(() => {
     if (isSpecialTask || factor === 0) return;
 
@@ -152,15 +152,16 @@ export function TaskDialog({
     }
   };
 
-  // Calcular duración automática o manual según el tipo de tarea
   useEffect(() => {
     if (name === 'CS') {
       setDuration(0.5);
     } else if (name === 'CIP' || name === 'CP') {
       setDuration(2.0);
-    } else if (name === 'MTTO PROGRAMADO' || name === 'PARADA PROGRAMADA') {
+    } else if (name === 'MTTO PROGRAMADO' || name === 'PARADA PROGRAMADA' || name === 'PASIVACIÓN') {
       if (!initialTask && duration === 0) {
-        setDuration(name === 'MTTO PROGRAMADO' ? 11.5 : 1);
+        if (name === 'MTTO PROGRAMADO') setDuration(1);
+        else if (name === 'PASIVACIÓN') setDuration(1);
+        else setDuration(1);
       }
     } else if (!isSpecialTask && loadPerHour > 0 && quantity > 0) {
       const calculatedDuration = quantity / loadPerHour;
@@ -258,9 +259,9 @@ export function TaskDialog({
             </div>
           )}
 
-          {(name === 'PARADA PROGRAMADA' || name === 'MTTO PROGRAMADO') && (
+          {(name === 'PARADA PROGRAMADA' || name === 'MTTO PROGRAMADO' || name === 'PASIVACIÓN') && (
             <div className="grid gap-2 animate-in fade-in slide-in-from-top-2">
-              <Label>Duración de {name === 'MTTO PROGRAMADO' ? 'Mantenimiento' : 'Parada'} (Horas)</Label>
+              <Label>Duración de {name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()} (Horas)</Label>
               <Input 
                 type="number" 
                 step="0.5"

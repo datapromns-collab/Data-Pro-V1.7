@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo } from 'react';
@@ -30,7 +31,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
   const isSpecialTask = (name: string) => {
     if (!name) return false;
-    const specials = ['CS', 'CP', 'CIP', 'MTTO PROGRAMADO', 'PARADA PROGRAMADA', 'S.A.M.I'];
+    const specials = ['CS', 'CP', 'CIP', 'MTTO PROGRAMADO', 'PARADA PROGRAMADA', 'S.A.M.I', 'PASIVACIÓN'];
     return specials.some(s => name.toUpperCase().startsWith(s));
   };
 
