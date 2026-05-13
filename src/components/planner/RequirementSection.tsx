@@ -53,10 +53,76 @@ const PLASTICS_DATA = [
   { code: 'EMP_0130', description: 'POLIETILENO TERMOENCOGIBLE 43 x 0.06' },
 ];
 
+const LABELS_2LTS_DATA = [
+  { code: 'EMP_0022', description: 'ETIQUETA UVA 2000ML' },
+  { code: 'EMP_0026', description: 'ETIQUETA PIÑA 2000ML' },
+  { code: 'EMP_0030', description: 'ETIQUETA NARANJA 2000 ML' },
+  { code: 'EMP_0034', description: 'ETIQUETA KOLITA 2000ML' },
+  { code: 'EMP_0038', description: 'ETIQUETA FRESH 2000ML' },
+  { code: 'EMP_0042', description: 'ETIQUETA COLA NEGRA 2000ML' },
+  { code: 'EMP_0101', description: 'ETIQUETA MANZANA VERDE 2000ML' },
+  { code: 'EMP_0136', description: 'ETIQUETA MANZANITA 2000ML' },
+  { code: 'EMP_0137', description: 'ETIQUETA PIÑA PARCHITA 2000ML' },
+];
+
+const LABELS_1_5LTS_DATA = [
+  { code: 'EMP_0048', description: 'ETIQUETA JUSTY NARANJA 1.5 LITROS' },
+  { code: 'EMP_0076', description: 'ETIQUETA VITA TE LIMON 1.5 LTS' },
+  { code: 'EMP_0077', description: 'ETIQUETA VITA TE DURAZNO 1.5 LTS' },
+  { code: 'EMP_0142', description: 'ETIQUETA JUSTY DURAZNO 1.5 LITROS' },
+  { code: 'EMP_0143', description: 'ETIQUETA JUSTY MANDARINA 1.5 LITROS' },
+  { code: 'EMP_0144', description: 'ETIQUETA JUSTY SANDIA 1.5 LITROS' },
+  { code: 'EMP_0145', description: 'ETIQUETA JUSTY TAMARINDO 1.5 LITROS' },
+  { code: 'EMP_0146', description: 'ETIQUETA JUSTY LIMON 1.5 LITROS' },
+];
+
+const LABELS_1LT_DATA = [
+  { code: 'EMP_0111', description: 'ETIQUETA COLA NEGRA 1000ML' },
+  { code: 'EMP_0113', description: 'ETIQUETA UVA 1000ML' },
+  { code: 'EMP_0115', description: 'ETIQUETA KOLITA 1000ML' },
+  { code: 'EMP_0117', description: 'ETIQUETA FRESH 1000ML' },
+  { code: 'EMP_0118', description: 'ETIQUETA MANZANA VERDE 1000ML' },
+  { code: 'EMP_0147', description: 'ETIQUETA PIÑA 1000ML' },
+  { code: 'EMP_0148', description: 'ETIQUETA NARANJA 1000ML' },
+  { code: 'EMP_0149', description: 'ETIQUETA PIÑA PARCHITA 1000ML' },
+  { code: 'EMP_0150', description: 'ETIQUETA MANZANITA 1000ML' },
+];
+
+const LABELS_04LT_DATA = [
+  { code: 'EMP_0110', description: 'ETIQUETA COLA NEGRA 400ML' },
+  { code: 'EMP_0112', description: 'ETIQUETA UVA 400ML' },
+  { code: 'EMP_0114', description: 'ETIQUETA KOLITA 400ML' },
+  { code: 'EMP_0116', description: 'ETIQUETA FRESH 400ML' },
+  { code: 'EMP_0119', description: 'ETIQUETA MANZANA VERDE 400ML' },
+  { code: 'EMP_0151', description: 'ETIQUETA PIÑA 400ML' },
+  { code: 'EMP_0152', description: 'ETIQUETA NARANJA 400ML' },
+  { code: 'EMP_0154', description: 'ETIQUETA PIÑA PARCHITA 400ML' },
+  { code: 'EMP_0155', description: 'ETIQUETA MANZANITA 400ML' },
+];
+
+const SUGAR_DATA = [
+  { code: 'MATP_0001', description: 'AZUCAR REFINADA' },
+];
+
+const CONCENTRATES_SOFT_DRINKS = [
+  { code: 'MATP_0002', description: 'CONCENTRADO COLA NEGRA A' },
+  { code: 'MATP_0003', description: 'CONCENTRADO FRESH' },
+  { code: 'MATP_0004', description: 'CONCENTRADO NARANJA' },
+  { code: 'MATP_0005', description: 'CONCENTRADO UVA' },
+  { code: 'MATP_0006', description: 'CONCENTRADO PIÑA' },
+  { code: 'MATP_0007', description: 'CONCENTRADO KOLITA' },
+  { code: 'MATP_0009', description: 'CONCENTRADO COLA NEGRA B' },
+  { code: 'MATP_0032', description: 'CONCENTRADO MANZANA VERDE' },
+  { code: 'MATP_0038', description: 'CONCENTRADO PIÑA PARCHITA' },
+  { code: 'MATP_0039', description: 'CONCENTRADO MANZANA ROJA' },
+];
+
 export function RequirementSection({ onPrint, tasks, weekStartDate }: RequirementSectionProps) {
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
   const getCalculatedValue = (code: string) => {
+    // Para simplificar esta vista de pantalla, los valores de etiquetas y MP se muestran inicialmente en 0 
+    // a menos que se implementen fórmulas específicas de consumo por caja.
     switch (code) {
       case 'EMP_0009': {
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
@@ -81,7 +147,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
       <Table>
         <TableHeader>
           <TableRow className="bg-slate-50/50">
-            <TableHead className="font-bold text-slate-500 py-4">Código SAP</TableHead>
+            <TableHead className="font-bold text-slate-500 py-4">SAP</TableHead>
             <TableHead className="font-bold text-slate-500 py-4">Descripción</TableHead>
             <TableHead className="text-right font-bold text-slate-500 py-4">Cantidad Requerida</TableHead>
           </TableRow>
@@ -92,7 +158,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
               <TableCell className="font-mono text-[11px] font-bold text-primary py-4">{item.code}</TableCell>
               <TableCell className="text-sm font-bold text-slate-700 py-4">{item.description}</TableCell>
               <TableCell className="text-right py-4">
-                <Badge variant="secondary" className="bg-primary/5 text-primary border-primary/10 px-4 py-1.5 font-black text-[12px] min-w-[100px] justify-center">
+                <Badge variant="secondary" className="bg-slate-50 text-slate-400 border-slate-200 px-4 py-1.5 font-bold text-[12px] min-w-[100px] justify-center">
                   {getCalculatedValue(item.code).toLocaleString('es-ES')} {unit}
                 </Badge>
               </TableCell>
@@ -171,11 +237,32 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
             </TabsContent>
 
             <TabsContent value="etiquetas" className="m-0 animate-in slide-in-from-left-2 duration-300">
-               <div className="flex items-center gap-3 mb-6 p-4 bg-amber-50 rounded-xl border border-amber-200">
+               <div className="flex items-center gap-3 mb-4 p-4 bg-amber-50 rounded-xl border border-amber-200">
                 <Tag className="h-5 w-5 text-amber-500" />
                 <h4 className="font-headline font-bold text-slate-800">Etiquetas</h4>
               </div>
-              <p className="text-sm text-slate-500 italic p-8 text-center bg-white border border-dashed rounded-xl">Selecciona una sub-sección de etiquetas para ver los detalles.</p>
+              
+              <Tabs defaultValue="2lts" className="space-y-4">
+                <TabsList className="bg-slate-50 border p-1 rounded-lg">
+                  <TabsTrigger value="2lts" className="text-[10px] font-bold px-4">2 Lts</TabsTrigger>
+                  <TabsTrigger value="1.5lts" className="text-[10px] font-bold px-4">1.5 Lts</TabsTrigger>
+                  <TabsTrigger value="1lt" className="text-[10px] font-bold px-4">1 Lt</TabsTrigger>
+                  <TabsTrigger value="0.4lts" className="text-[10px] font-bold px-4">0.4 Lts</TabsTrigger>
+                </TabsList>
+                
+                <TabsContent value="2lts" className="m-0">
+                  {renderTable(LABELS_2LTS_DATA, 'KG')}
+                </TabsContent>
+                <TabsContent value="1.5lts" className="m-0">
+                  {renderTable(LABELS_1_5LTS_DATA, 'KG')}
+                </TabsContent>
+                <TabsContent value="1lt" className="m-0">
+                  {renderTable(LABELS_1LT_DATA, 'KG')}
+                </TabsContent>
+                <TabsContent value="0.4lts" className="m-0">
+                  {renderTable(LABELS_04LT_DATA, 'KG')}
+                </TabsContent>
+              </Tabs>
             </TabsContent>
 
             <TabsContent value="plasticos" className="m-0 animate-in slide-in-from-left-2 duration-300">
@@ -204,9 +291,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
                 <Zap className="h-5 w-5 text-emerald-600" />
                 <h4 className="font-headline font-bold text-slate-800">Materia Prima - Azúcar</h4>
               </div>
-              <div className="bg-white border border-slate-200 rounded-xl p-12 text-center text-slate-400 font-medium">
-                Resumen de azúcar calculado por formula de producto...
-              </div>
+              {renderTable(SUGAR_DATA, 'KG')}
             </TabsContent>
 
             <TabsContent value="concentrados" className="m-0 animate-in slide-in-from-left-2 duration-300">
@@ -214,9 +299,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
                 <Beaker className="h-5 w-5 text-emerald-600" />
                 <h4 className="font-headline font-bold text-slate-800">Materia Prima - Concentrados</h4>
               </div>
-              <div className="bg-white border border-slate-200 rounded-xl p-12 text-center text-slate-400 font-medium">
-                Detalle de concentrados por línea de producción...
-              </div>
+              {renderTable(CONCENTRATES_SOFT_DRINKS, 'LTS')}
             </TabsContent>
           </Tabs>
         </TabsContent>
@@ -236,4 +319,3 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
     </div>
   );
 }
-
