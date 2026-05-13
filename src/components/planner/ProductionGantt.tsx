@@ -220,7 +220,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
         <div className="space-y-1">
           {weekDays.map((day, dIdx) => (
-            <div key={dIdx} className="flex items-stretch group h-28 print:h-16">
+            <div key={dIdx} className="flex items-stretch group h-24 print:h-16">
               <div className="w-20 shrink-0 flex flex-col justify-center">
                 <div className="font-headline text-[13px] font-bold text-slate-900">{DAYS[dIdx]}</div>
                 <div className="text-[10px] text-slate-400 font-medium lowercase">{format(day, 'd MMM', { locale: es })}</div>
