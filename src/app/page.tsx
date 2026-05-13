@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -12,7 +11,8 @@ import {
   Clock,
   Gauge,
   Calculator as CalculatorIcon,
-  ClipboardList
+  ClipboardList,
+  LayoutDashboard
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -21,6 +21,7 @@ import { Calculator } from '@/components/planner/Calculator';
 import { KeyboardShortcuts } from '@/components/planner/KeyboardShortcuts';
 import { RequirementSection } from '@/components/planner/RequirementSection';
 import { RequirementReport } from '@/components/planner/RequirementReport';
+import { PlanningSummary } from '@/components/planner/PlanningSummary';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { Toaster } from '@/components/ui/toaster';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -74,6 +75,7 @@ export default function PlannerPage() {
           case 'v': e.preventDefault(); setActiveTab('speeds'); break;
           case 'k': e.preventDefault(); setIsShortcutsOpen(prev => !prev); break;
           case 'r': e.preventDefault(); setActiveTab('requirement'); break;
+          case 's': e.preventDefault(); setActiveTab('summary'); break;
         }
       }
     };
@@ -143,6 +145,7 @@ export default function PlannerPage() {
       case 'speeds': return { title: "Velocidades", subtitle: "Configuración base." };
       case 'calculator': return { title: "Calculadora", subtitle: "Conversión cajas/tanques." };
       case 'requirement': return { title: "Requerimiento", subtitle: "Gestión de insumos y materiales." };
+      case 'summary': return { title: "Resumen de Planificación", subtitle: "Métricas y estadísticas de producción." };
       default: return { title: `Programación Línea ${selectedLine}`, subtitle: "Gestión de turnos." };
     }
   }, [activeTab, selectedLine]);
@@ -155,28 +158,28 @@ export default function PlannerPage() {
         <Sidebar className="border-r border-slate-200 bg-white no-print">
           <div className="p-6">
             <div className="flex items-center gap-3">
-              <div className="bg-primary p-2 rounded-xl shadow-lg shadow-primary/20">
+              <div className="bg-primary p-2.5 rounded-2xl shadow-lg shadow-primary/20">
                 <CalendarIcon className="h-6 w-6 text-white" />
               </div>
               <div className="flex flex-col">
-                <h1 className="text-lg font-headline font-bold text-slate-900 tracking-tight leading-none">Plan Semanal</h1>
-                <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest mt-1">Pro Edition</span>
+                <h1 className="text-xl font-headline font-bold text-slate-900 tracking-tight leading-none">Plan Semanal</h1>
+                <span className="text-[10px] font-black text-emerald-500 uppercase tracking-[0.2em] mt-1">Pro Edition</span>
               </div>
             </div>
           </div>
           <SidebarContent className="px-4 py-2">
-            <div className="space-y-6">
+            <div className="space-y-8">
               <section>
-                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Semana</p>
+                <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Semana</p>
                 <div className="px-2 space-y-3">
-                   <div className="flex items-center justify-between p-3 bg-slate-50 rounded-lg border border-slate-100">
-                    <span className="text-xs font-bold text-slate-600">Semana</span>
-                    <Badge variant="secondary" className="font-bold text-primary bg-primary/10">{weekNumber}</Badge>
+                   <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100/80 shadow-sm">
+                    <span className="text-sm font-bold text-slate-600">Semana</span>
+                    <Badge variant="secondary" className="font-black text-[13px] text-primary bg-primary/10 px-3 py-0.5 rounded-lg border-primary/5">{weekNumber}</Badge>
                   </div>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full justify-start text-left font-bold bg-white border-slate-200 shadow-sm">
-                        <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
+                      <Button variant="outline" className="w-full h-12 justify-start text-left font-bold bg-white border-slate-200 shadow-sm hover:bg-slate-50 transition-all rounded-2xl">
+                        <CalendarIcon className="mr-3 h-4 w-4 text-primary" />
                         {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
                       </Button>
                     </PopoverTrigger>
@@ -188,10 +191,12 @@ export default function PlannerPage() {
               </section>
 
               <section>
-                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Líneas</p>
+                <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas</p>
                 <div className="px-2">
                   <Select value={selectedLine} onValueChange={setSelectedLine}>
-                    <SelectTrigger className="w-full bg-slate-50 border-slate-200 font-bold"><SelectValue /></SelectTrigger>
+                    <SelectTrigger className="w-full h-12 bg-slate-50 border-slate-100 font-bold rounded-2xl hover:bg-slate-100/50 transition-all">
+                      <SelectValue />
+                    </SelectTrigger>
                     <SelectContent>
                       {LINES.map((l, i) => <SelectItem key={l} value={(i + 1).toString()}>{l}</SelectItem>)}
                     </SelectContent>
@@ -200,12 +205,12 @@ export default function PlannerPage() {
               </section>
 
               <section>
-                <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Acciones</p>
-                <div className="grid gap-2 px-2">
-                  <Button size="sm" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-bold">
+                <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Acciones</p>
+                <div className="grid gap-3 px-2">
+                  <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 hover:translate-y-[-1px] transition-all">
                     <Plus className="h-4 w-4" /> Nueva Tarea
                   </Button>
-                  <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar historial?') && clearAll()} className="w-full gap-2 text-destructive font-bold">
+                  <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar historial?') && clearAll()} className="w-full gap-2 text-destructive font-black uppercase text-xs tracking-widest hover:bg-destructive/5 py-6">
                     <Trash2 className="h-4 w-4" /> Limpiar Todo
                   </Button>
                 </div>
@@ -215,9 +220,7 @@ export default function PlannerPage() {
         </Sidebar>
 
         <main className="flex-1 flex flex-col h-screen overflow-hidden no-print">
-          <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-2 text-sm text-slate-500">
-            </div>
+          <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-end shrink-0">
             <div className="flex items-center gap-2">
               <Button 
                 variant="ghost" 
@@ -240,6 +243,7 @@ export default function PlannerPage() {
                 </div>
                 <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
                   <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Programación</TabsTrigger>
+                  <TabsTrigger value="summary" className="gap-2 px-4 font-bold"><LayoutDashboard className="h-4 w-4" /> Resumen Plan</TabsTrigger>
                   <TabsTrigger value="speeds" className="gap-2 px-4 font-bold"><Gauge className="h-4 w-4" /> Velocidades</TabsTrigger>
                   <TabsTrigger value="calculator" className="gap-2 px-4 font-bold"><CalculatorIcon className="h-4 w-4" /> Calculadora</TabsTrigger>
                   <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Requerimiento</TabsTrigger>
@@ -249,6 +253,9 @@ export default function PlannerPage() {
               <div className="flex-1 min-h-0">
                 <TabsContent value="gantt" className="m-0 h-full">
                   <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
+                </TabsContent>
+                <TabsContent value="summary" className="m-0 h-full">
+                  <PlanningSummary />
                 </TabsContent>
                 <TabsContent value="speeds" className="m-0 h-full">
                   <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} />
