@@ -21,7 +21,7 @@ import { ScheduledTask } from '@/lib/types';
 import { addDays } from 'date-fns';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { LABEL_FACTORS, LABEL_MAPPING } from '@/lib/planner-utils';
+import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS } from '@/lib/planner-utils';
 
 interface RequirementSectionProps {
   onPrint?: () => void;
@@ -162,6 +162,18 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
       return Number((totalBoxes * factor).toFixed(2));
     }
 
+    // Cálculos específicos para plásticos
+    if (code === 'EMP_0019') {
+      const formats: (keyof typeof PLASTIC_FACTORS)[] = ["2Lts", "1Lt", "0.4Lts", "1.5Lts"];
+      return formats.reduce((acc, fmt) => {
+        const factor = PLASTIC_FACTORS[fmt];
+        const totalBoxes = tasks
+          .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
+          .reduce((sum, t) => sum + (t.quantity || 0), 0);
+        return acc + (totalBoxes * factor);
+      }, 0).toFixed(2);
+    }
+
     // Cálculos existentes para preformas
     switch (code) {
       case 'EMP_0009': {
@@ -199,7 +211,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
               <TableCell className="text-sm font-bold text-slate-700 py-4">{item.description}</TableCell>
               <TableCell className="text-right py-4">
                 <Badge variant="secondary" className="bg-slate-50 text-slate-400 border-slate-200 px-4 py-1.5 font-bold text-[12px] min-w-[100px] justify-center">
-                  {getCalculatedValue(item.code).toLocaleString('es-ES')} {item.unit || unit}
+                  {Number(getCalculatedValue(item.code)).toLocaleString('es-ES')} {item.unit || unit}
                 </Badge>
               </TableCell>
             </TableRow>

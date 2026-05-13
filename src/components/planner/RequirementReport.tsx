@@ -7,7 +7,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format, getISOWeek, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { LABEL_FACTORS, LABEL_MAPPING } from '@/lib/planner-utils';
+import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS } from '@/lib/planner-utils';
 
 interface RequirementReportProps {
   tasks: ScheduledTask[];
@@ -160,6 +160,18 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
       return Number((totalBoxes * factor).toFixed(2));
     }
 
+    // Cálculos específicos para plásticos
+    if (code === 'EMP_0019') {
+      const formats: (keyof typeof PLASTIC_FACTORS)[] = ["2Lts", "1Lt", "0.4Lts", "1.5Lts"];
+      return Number(formats.reduce((acc, fmt) => {
+        const factor = PLASTIC_FACTORS[fmt];
+        const totalBoxes = tasks
+          .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
+          .reduce((sum, t) => sum + (t.quantity || 0), 0);
+        return acc + (totalBoxes * factor);
+      }, 0).toFixed(2));
+    }
+
     switch (code) {
       case 'EMP_0009': {
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
@@ -251,7 +263,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                   <TableRow key={`${item.code}-${idx}`} className="border-b last:border-0 h-8">
                     <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{item.code}</TableCell>
                     <TableCell className="py-1 text-[11px] font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">_______ KG</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{getCalculatedValue(item.code).toLocaleString('es-ES')} KG</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
