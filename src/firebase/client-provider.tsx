@@ -9,7 +9,6 @@ export function FirebaseClientProvider({
 }: {
   children: React.ReactNode;
 }) {
-  // Inicializamos Firebase solo una vez en el cliente
   const { firebaseApp, firestore, auth } = useMemo(() => initializeFirebase(), []);
 
   return (
