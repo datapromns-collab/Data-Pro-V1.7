@@ -6,11 +6,29 @@ import { startOfWeek } from 'date-fns';
 import { useCollection, useDoc, useFirestore, useUser, errorEmitter, FirestorePermissionError } from '@/firebase';
 import { collection, doc, setDoc, deleteDoc, writeBatch, Timestamp } from 'firebase/firestore';
 
+/**
+ * Utilidad segura para convertir valores de fecha de Firestore (Timestamp o ISO) a Date.
+ */
+const toDate = (val: any): Date => {
+  if (!val) return new Date();
+  // Manejo de Firestore Timestamp
+  if (typeof val.toDate === 'function') {
+    return val.toDate();
+  }
+  // Manejo de segundos/nanosegundos (estructura interna de Timestamp)
+  if (typeof val.seconds === 'number') {
+    return new Date(val.seconds * 1000);
+  }
+  // Fallback a constructor Date estándar
+  const date = new Date(val);
+  return isNaN(date.getTime()) ? new Date() : date;
+};
+
 export function usePlannerStore() {
   const firestore = useFirestore();
   const { user, loading: authLoading } = useUser();
 
-  // Consultar tareas de la colección global
+  // Consultar tareas de la colección global con query estable
   const tasksQuery = useMemo(() => {
     if (!firestore) return null;
     return collection(firestore, 'tasks');
@@ -26,21 +44,22 @@ export function usePlannerStore() {
 
   const { data: config, loading: configLoading } = useDoc(configDocRef);
 
-  // Formatear tareas de Firestore a objetos Date
+  // Formatear tareas de Firestore asegurando tipos Date correctos
   const tasks = useMemo(() => {
     if (!rawTasks) return [];
     return rawTasks.map(t => ({
       ...t,
-      startTime: t.startTime instanceof Timestamp ? t.startTime.toDate() : new Date(t.startTime),
-      endTime: t.endTime instanceof Timestamp ? t.endTime.toDate() : new Date(t.endTime)
+      startTime: toDate(t.startTime),
+      endTime: toDate(t.endTime)
     })) as ScheduledTask[];
   }, [rawTasks]);
 
   // Obtener fecha de inicio de semana (desde DB o default)
   const weekStartDate = useMemo(() => {
     if (config?.weekStartDate) {
-      return config.weekStartDate instanceof Timestamp ? config.weekStartDate.toDate() : new Date(config.weekStartDate);
+      return toDate(config.weekStartDate);
     }
+    // Por defecto, lunes de la semana actual
     return startOfWeek(new Date(), { weekStartsOn: 1 });
   }, [config]);
 
@@ -57,6 +76,10 @@ export function usePlannerStore() {
     Object.keys(cleaned).forEach(key => {
       if (cleaned[key] === undefined) {
         delete cleaned[key];
+      }
+      // Asegurar que las fechas se guarden como objetos Date para que Firestore las convierta a Timestamp
+      if (cleaned[key] instanceof Date) {
+        // No modificar, Firestore lo maneja bien
       }
     });
     return cleaned;

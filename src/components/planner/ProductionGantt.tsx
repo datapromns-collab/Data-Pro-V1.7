@@ -29,8 +29,9 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
   }, []);
 
   const isSpecialTask = (name: string) => {
+    if (!name) return false;
     const specials = ['CS', 'CP', 'CIP', 'MTTO PROGRAMADO', 'PARADA PROGRAMADA', 'S.A.M.I'];
-    return specials.some(s => name.startsWith(s));
+    return specials.some(s => name.toUpperCase().startsWith(s));
   };
 
   const totalBoxes = useMemo(() => 
@@ -65,11 +66,14 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
   }, [tasks]);
 
   const getBarStyle = (start: Date, end: Date, day: Date, isSpecial: boolean) => {
+    // Definimos el inicio de la fila visual (e.g. 07:00 AM)
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const rowEnd = addDays(rowStart, 1);
 
+    // Si la tarea termina antes de que empiece la fila o empieza después de que termine, no se dibuja aquí
     if (end <= rowStart || start >= rowEnd) return null;
 
+    // Ajustamos el dibujo a los límites de la fila
     let displayStart = start < rowStart ? rowStart : start;
     let displayEnd = end > rowEnd ? rowEnd : end;
 
