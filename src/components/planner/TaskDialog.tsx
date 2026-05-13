@@ -64,6 +64,9 @@ export function TaskDialog({
   const [duration, setDuration] = useState(0);
   const [selectedDayIdx, setSelectedDayIdx] = useState('0');
   const [selectedTime, setSelectedTime] = useState('07:00');
+  
+  // Track which field was last edited to maintain calculation priority
+  const [lastEdited, setLastEdited] = useState<'tanks' | 'quantity' | null>(null);
 
   const { toast } = useToast();
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
@@ -77,12 +80,13 @@ export function TaskDialog({
     return latestTask.endTime;
   }, [allTasks, lineId, weekDays]);
 
-  const isSpecialTask = name === 'CS' || name === 'CIP' || name === 'CP' || name === 'MTTO PROGRAMADO' || name === 'PARADA PROGRAMADA';
+  const isSpecialTask = name === 'CS' || name === 'CIP' || name === 'CP' || name === 'MTTO PROGRAMADO' || name === 'PARADA PROGRAMADA' || CIP_OPTIONS.includes(name);
 
   const factor = useMemo(() => {
     if (!name || !presentation) return 0;
-    return PRODUCT_FACTORS[name]?.[presentation] || 0;
-  }, [name, presentation]);
+    const prodName = name === 'CIP' ? cipSubOption : name;
+    return PRODUCT_FACTORS[prodName]?.[presentation] || 0;
+  }, [name, cipSubOption, presentation]);
 
   useEffect(() => {
     if (initialTask) {
@@ -95,6 +99,7 @@ export function TaskDialog({
       setLoadPerHour(initialTask.loadPerHour || 0);
       setQuantity(initialTask.quantity || 0);
       setDuration(initialTask.durationHours);
+      setLastEdited(null);
       
       const dayIdx = weekDays.findIndex(d => d.getDate() === initialTask.startTime.getDate() && d.getMonth() === initialTask.startTime.getMonth());
       setSelectedDayIdx(dayIdx !== -1 ? dayIdx.toString() : '0');
@@ -108,6 +113,7 @@ export function TaskDialog({
       setLoadPerHour(lineSpeeds[defaultLineId] || 0);
       setQuantity(0);
       setDuration(0);
+      setLastEdited(null);
       
       const dayIdx = weekDays.findIndex(d => 
         d.getDate() === nextAvailableTime.getDate() && 
@@ -118,33 +124,34 @@ export function TaskDialog({
     }
   }, [initialTask, isOpen, defaultLineId, weekDays, nextAvailableTime, lineSpeeds]);
 
+  // Recalculate based on factor changes (when product or presentation changes)
   useEffect(() => {
-    if (!initialTask && isOpen && !isSpecialTask) {
-      setLoadPerHour(lineSpeeds[lineId] || 0);
-    }
-  }, [lineId, lineSpeeds, initialTask, isOpen, isSpecialTask]);
+    if (isSpecialTask || factor === 0) return;
 
-  // Handle Bidirectional Calculation
-  const handleTanksChange = (val: number) => {
-    setTanks(val);
-    if (!isSpecialTask && factor > 0) {
-      setQuantity(Math.round(val * factor));
-    }
-  };
-
-  const handleQuantityChange = (val: number) => {
-    setQuantity(val);
-    if (!isSpecialTask && factor > 0) {
-      setTanks(Number((val / factor).toFixed(2)));
-    }
-  };
-
-  // Recalculate quantity if factor changes (product or presentation change)
-  useEffect(() => {
-    if (!isSpecialTask && factor > 0 && tanks > 0) {
+    if (lastEdited === 'tanks' && tanks > 0) {
       setQuantity(Math.round(tanks * factor));
+    } else if (lastEdited === 'quantity' && quantity > 0) {
+      setTanks(Number((quantity / factor).toFixed(2)));
     }
   }, [factor, isSpecialTask]);
+
+  const handleTanksChange = (val: string) => {
+    const num = val === '' ? 0 : parseFloat(val);
+    setTanks(num);
+    setLastEdited('tanks');
+    if (!isSpecialTask && factor > 0) {
+      setQuantity(Math.round(num * factor));
+    }
+  };
+
+  const handleQuantityChange = (val: string) => {
+    const num = val === '' ? 0 : parseInt(val);
+    setQuantity(num);
+    setLastEdited('quantity');
+    if (!isSpecialTask && factor > 0) {
+      setTanks(Number((num / factor).toFixed(2)));
+    }
+  };
 
   useEffect(() => {
     if (name === 'CS') {
@@ -283,8 +290,9 @@ export function TaskDialog({
                 <Input 
                   type="number" 
                   step="0.01"
-                  value={tanks || ''} 
-                  onChange={(e) => handleTanksChange(Number(e.target.value))} 
+                  value={tanks === 0 ? '' : tanks} 
+                  onChange={(e) => handleTanksChange(e.target.value)} 
+                  placeholder="0.00"
                 />
               </div>
             </div>
@@ -329,9 +337,10 @@ export function TaskDialog({
                 <Label>Cantidad Total (Cajas)</Label>
                 <Input 
                   type="number" 
-                  value={quantity || ''} 
-                  onChange={(e) => handleQuantityChange(Number(e.target.value))}
+                  value={quantity === 0 ? '' : quantity} 
+                  onChange={(e) => handleQuantityChange(e.target.value)}
                   className="font-bold" 
+                  placeholder="0"
                 />
               </div>
             </div>
