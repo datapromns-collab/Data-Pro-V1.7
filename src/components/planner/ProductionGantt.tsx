@@ -283,8 +283,8 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                             <span className="text-[8px] font-bold text-slate-500 uppercase leading-none mb-1 print:hidden">DIA</span>
                             <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
                               <span className={cn(
-                                "font-black text-slate-900 text-[11px] uppercase leading-tight truncate",
-                                task.name === 'CS' && "rotate-90 inline-block origin-center"
+                                "font-black text-slate-900 uppercase leading-tight truncate",
+                                task.name === 'CS' ? "text-[9px] rotate-90 inline-block origin-center" : "text-[11px]"
                               )}>
                                 {task.name}
                               </span>
@@ -307,8 +307,8 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                             <span className="text-[8px] font-bold text-slate-600 uppercase leading-none mb-1 print:hidden">NOCHE</span>
                             <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
                               <span className={cn(
-                                "font-black text-slate-900 text-[11px] uppercase leading-tight truncate",
-                                task.name === 'CS' && "rotate-90 inline-block origin-center"
+                                "font-black text-slate-900 uppercase leading-tight truncate",
+                                task.name === 'CS' ? "text-[9px] rotate-90 inline-block origin-center" : "text-[11px]"
                               )}>
                                 {task.name}
                               </span>
@@ -323,8 +323,8 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                         {(!shifts?.dayLabel && !shifts?.nightLabel) && (
                           <div className="flex flex-col justify-center items-center h-full px-2">
                              <span className={cn(
-                                "font-black text-slate-900 text-[11px] uppercase truncate",
-                                task.name === 'CS' && "rotate-90 inline-block origin-center"
+                                "font-black text-slate-900 uppercase truncate",
+                                task.name === 'CS' ? "text-[9px] rotate-90 inline-block origin-center" : "text-[11px]"
                               )}>
                                 {task.name}
                               </span>
