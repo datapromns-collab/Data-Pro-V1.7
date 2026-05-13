@@ -39,6 +39,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScheduledTask } from '@/lib/types';
 import { format, getISOWeek, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { cn } from '@/lib/utils';
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7"];
 
