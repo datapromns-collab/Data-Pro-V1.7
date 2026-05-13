@@ -16,7 +16,8 @@ import {
   Keyboard as KeyboardIcon,
   ClipboardList,
   FileDown,
-  Cloud
+  Cloud,
+  Loader2
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -52,7 +53,8 @@ export default function PlannerPage() {
     removeTask, 
     clearAll, 
     updateLineSpeed,
-    isLoaded 
+    isLoaded,
+    isSyncing
   } = usePlannerStore();
   
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -190,11 +192,12 @@ export default function PlannerPage() {
     }
   }, [activeTab, selectedLine]);
 
+  // Si no está cargado el estado de autenticación, mostramos una carga mínima.
   if (!isLoaded) return (
     <div className="min-h-screen flex items-center justify-center bg-[#f8fafc]">
        <div className="animate-pulse flex flex-col items-center gap-4">
           <CalendarIcon className="h-12 w-12 text-primary" />
-          <p className="text-slate-400 font-bold uppercase tracking-widest text-xs">Sincronizando con la Nube...</p>
+          <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Iniciando Sesión...</p>
        </div>
     </div>
   );
@@ -226,6 +229,15 @@ export default function PlannerPage() {
                   <AuthButton />
                 </div>
               </section>
+
+              {isSyncing && (
+                <section className="px-2">
+                  <div className="flex items-center gap-2 p-2 bg-blue-50 rounded-lg border border-blue-100 animate-pulse">
+                    <Loader2 className="h-3 w-3 text-blue-500 animate-spin" />
+                    <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider">Sincronizando datos...</span>
+                  </div>
+                </section>
+              )}
 
               <section>
                 <p className="px-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3">Configuración de Semana</p>
@@ -303,7 +315,9 @@ export default function PlannerPage() {
             <div className="flex items-center gap-2 text-sm text-slate-500">
               <div className="flex items-center gap-1.5 px-2 py-1 bg-emerald-50 rounded-full border border-emerald-100">
                 <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                <span className="text-[10px] font-black text-emerald-600 uppercase">Sincronizado</span>
+                <span className="text-[10px] font-black text-emerald-600 uppercase">
+                  {isSyncing ? "Actualizando..." : "Sincronizado"}
+                </span>
               </div>
               <ChevronRight className="h-4 w-4" />
               <span>Semana {weekNumber}</span>

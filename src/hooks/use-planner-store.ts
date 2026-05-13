@@ -24,23 +24,21 @@ import { errorEmitter } from '@/firebase/error-emitter';
 import { FirestorePermissionError } from '@/firebase/errors';
 
 /**
- * Hook para gestionar el estado del planificador sincronizado con Firestore y segmentado por usuario.
+ * Hook para gestionar el estado del planificador optimizado para velocidad.
  */
 export function usePlannerStore() {
   const db = useFirestore();
-  const { user } = useUser();
+  const { user, loading: authLoading } = useUser();
 
-  // Referencias protegidas a colecciones y documentos específicos del usuario
+  // Referencias memoizadas para evitar re-suscripciones innecesarias
   const tasksRef = useMemo(() => (db && user) ? collection(db, 'users', user.uid, 'tasks') : null, [db, user]);
   const configRef = useMemo(() => (db && user) ? doc(db, 'users', user.uid, 'configs', 'global') : null, [db, user]);
 
-  // Suscripción a tareas
+  // Suscripciones en tiempo real
   const { data: rawTasks, loading: tasksLoading } = useCollection<any>(tasksRef);
-  
-  // Suscripción a configuración global
   const { data: rawConfig, loading: configLoading } = useDoc<any>(configRef);
 
-  // Mapeo de datos de Firestore
+  // Mapeo eficiente de datos
   const tasks = useMemo(() => {
     if (!rawTasks) return [];
     return rawTasks.map(t => ({
@@ -67,11 +65,13 @@ export function usePlannerStore() {
     };
   }, [rawConfig]);
 
-  const isLoaded = !!db && !!user && !tasksLoading && !configLoading;
+  // Solo bloqueamos si aún no sabemos quién es el usuario. 
+  // Los datos de tareas y configuración fluyen de forma asíncrona sin bloquear la UI.
+  const isLoaded = !!db && !authLoading;
+  const isSyncing = tasksLoading || configLoading;
 
   const addTask = useCallback((taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     if (!tasksRef) return;
-
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     
@@ -167,6 +167,7 @@ export function usePlannerStore() {
     removeTask, 
     clearAll, 
     updateLineSpeed,
-    isLoaded 
+    isLoaded,
+    isSyncing
   };
 }
