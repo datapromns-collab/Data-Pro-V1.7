@@ -1,16 +1,15 @@
 
-"use client";
+'use client';
 
 import { useMemo } from 'react';
 import { ScheduledTask } from '@/lib/types';
 import { startOfWeek } from 'date-fns';
-import { useCollection, useDoc, useFirestore } from '@/firebase';
+import { useCollection, useDoc, useFirestore, errorEmitter, FirestorePermissionError } from '@/firebase';
 import { collection, doc, setDoc, deleteDoc, writeBatch, Timestamp } from 'firebase/firestore';
 
 export function usePlannerStore() {
   const firestore = useFirestore();
 
-  // Suscripción en tiempo real a las tareas
   const tasksQuery = useMemo(() => {
     if (!firestore) return null;
     return collection(firestore, 'tasks');
@@ -18,7 +17,6 @@ export function usePlannerStore() {
 
   const { data: rawTasks, loading: tasksLoading } = useCollection(tasksQuery);
 
-  // Suscripción en tiempo real a la configuración global
   const configDocRef = useMemo(() => {
     if (!firestore) return null;
     return doc(firestore, 'configs', 'global');
@@ -48,36 +46,62 @@ export function usePlannerStore() {
     };
   }, [config]);
 
+  const cleanData = (data: any) => {
+    const cleaned = { ...data };
+    Object.keys(cleaned).forEach(key => {
+      if (cleaned[key] === undefined) {
+        delete cleaned[key];
+      }
+    });
+    return cleaned;
+  };
+
   const addTask = (taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     if (!firestore) return;
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     const id = crypto.randomUUID();
 
-    // Limpiar campos undefined ya que Firestore no los permite
-    const docData: any = {
+    const docData = cleanData({
       ...taskData,
       id,
       color: randomColor
-    };
-    
-    Object.keys(docData).forEach(key => docData[key] === undefined && delete docData[key]);
+    });
 
-    setDoc(doc(firestore, 'tasks', id), docData);
+    const docRef = doc(firestore, 'tasks', id);
+    setDoc(docRef, docData).catch(async (err) => {
+      errorEmitter.emit('permission-error', new FirestorePermissionError({
+        path: docRef.path,
+        operation: 'create',
+        requestResourceData: docData,
+      }));
+    });
   };
 
   const updateTask = (id: string, taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     if (!firestore) return;
     
-    const docData: any = { ...taskData, id };
-    Object.keys(docData).forEach(key => docData[key] === undefined && delete docData[key]);
-
-    setDoc(doc(firestore, 'tasks', id), docData, { merge: true });
+    const docData = cleanData({ ...taskData, id });
+    const docRef = doc(firestore, 'tasks', id);
+    
+    setDoc(docRef, docData, { merge: true }).catch(async (err) => {
+      errorEmitter.emit('permission-error', new FirestorePermissionError({
+        path: docRef.path,
+        operation: 'update',
+        requestResourceData: docData,
+      }));
+    });
   };
 
   const removeTask = (id: string) => {
     if (!firestore) return;
-    deleteDoc(doc(firestore, 'tasks', id));
+    const docRef = doc(firestore, 'tasks', id);
+    deleteDoc(docRef).catch(async (err) => {
+      errorEmitter.emit('permission-error', new FirestorePermissionError({
+        path: docRef.path,
+        operation: 'delete',
+      }));
+    });
   };
 
   const clearAll = async () => {
@@ -91,19 +115,33 @@ export function usePlannerStore() {
 
   const updateWeekStartDate = (date: Date) => {
     if (!firestore) return;
-    setDoc(doc(firestore, 'configs', 'global'), {
-      weekStartDate: date
-    }, { merge: true });
+    const docRef = doc(firestore, 'configs', 'global');
+    const data = { weekStartDate: date };
+    setDoc(docRef, data, { merge: true }).catch(async (err) => {
+      errorEmitter.emit('permission-error', new FirestorePermissionError({
+        path: docRef.path,
+        operation: 'update',
+        requestResourceData: data,
+      }));
+    });
   };
 
   const updateLineSpeed = (lineId: string, speed: number) => {
     if (!firestore) return;
-    setDoc(doc(firestore, 'configs', 'global'), {
+    const docRef = doc(firestore, 'configs', 'global');
+    const data = {
       lineSpeeds: {
         ...lineSpeeds,
         [lineId]: speed
       }
-    }, { merge: true });
+    };
+    setDoc(docRef, data, { merge: true }).catch(async (err) => {
+      errorEmitter.emit('permission-error', new FirestorePermissionError({
+        path: docRef.path,
+        operation: 'update',
+        requestResourceData: data,
+      }));
+    });
   };
 
   return { 
