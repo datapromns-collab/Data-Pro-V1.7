@@ -250,7 +250,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                       style={style}
                     >
                       <div className="flex flex-col justify-center h-full px-2">
-                        <span className="font-black text-slate-900 text-[10px] uppercase truncate">{interval.name}</span>
+                        <span className="font-black text-slate-900 text-[11px] uppercase truncate">{interval.name}</span>
                       </div>
                     </div>
                   );
@@ -280,13 +280,13 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                               width: `${(shifts.dayLabel.width / parseFloat(style.width)) * 100}%`
                             }}
                           >
-                            <span className="text-[7px] font-bold text-slate-500 uppercase leading-none mb-1 print:hidden">DIA</span>
+                            <span className="text-[8px] font-bold text-slate-500 uppercase leading-none mb-1 print:hidden">DIA</span>
                             <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
-                              <span className="font-black text-slate-900 text-[10px] uppercase leading-tight truncate">
+                              <span className="font-black text-slate-900 text-[11px] uppercase leading-tight truncate">
                                 {task.name}
                               </span>
                               {!isSpecial && (
-                                <span className="font-bold text-slate-700 text-[10px] leading-tight shrink-0">
+                                <span className="font-bold text-slate-700 text-[11px] leading-tight shrink-0">
                                   {Math.round(shifts.dayLabel.qty).toLocaleString('es-ES')}
                                 </span>
                               )}
@@ -301,13 +301,13 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                               width: `${(shifts.nightLabel.width / parseFloat(style.width)) * 100}%`
                             }}
                           >
-                            <span className="text-[7px] font-bold text-slate-600 uppercase leading-none mb-1 print:hidden">NOCHE</span>
+                            <span className="text-[8px] font-bold text-slate-600 uppercase leading-none mb-1 print:hidden">NOCHE</span>
                             <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
-                              <span className="font-black text-slate-900 text-[10px] uppercase leading-tight truncate">
+                              <span className="font-black text-slate-900 text-[11px] uppercase leading-tight truncate">
                                 {task.name}
                               </span>
                               {!isSpecial && (
-                                <span className="font-bold text-slate-800 text-[10px] leading-tight shrink-0">
+                                <span className="font-bold text-slate-800 text-[11px] leading-tight shrink-0">
                                   {Math.round(shifts.nightLabel.qty).toLocaleString('es-ES')}
                                 </span>
                               )}
@@ -316,7 +316,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                         )}
                         {(!shifts?.dayLabel && !shifts?.nightLabel) && (
                           <div className="flex flex-col justify-center h-full px-2">
-                             <span className="font-black text-slate-900 text-[10px] uppercase truncate">{task.name}</span>
+                             <span className="font-black text-slate-900 text-[11px] uppercase truncate">{task.name}</span>
                           </div>
                         )}
                       </div>
