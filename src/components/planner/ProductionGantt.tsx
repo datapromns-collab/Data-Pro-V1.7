@@ -17,7 +17,8 @@ interface ProductionGanttProps {
 const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
 const PRODUCTION_COLOR = '#83CCEB';
-const SAMI_COLOR = '#FFFF00'; 
+const SAMI_COLOR = '#FEF9C3'; // Amarillo muy clarito
+const SPECIAL_TASK_COLOR = '#FFFF00'; // Amarillo estándar para tareas especiales manuales
 const AUTO_CP_COLOR = '#FFC000';
 
 export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: ProductionGanttProps) {
@@ -131,8 +132,11 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     let bgColor = PRODUCTION_COLOR;
     let borderColor = '#6DB6D5';
 
-    if (type === 'special' || type === 'sami') {
+    if (type === 'sami') {
       bgColor = SAMI_COLOR;
+      borderColor = '#FEF08A'; // Yellow 200 para el borde de sami
+    } else if (type === 'special') {
+      bgColor = SPECIAL_TASK_COLOR;
       borderColor = '#E6E600';
     } else if (type === 'cp') {
       bgColor = AUTO_CP_COLOR;
@@ -369,7 +373,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
         {productSummary.length > 0 && (
           <div className="mt-5 print:mt-3">
-            <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-3 text-center print:hidden">RESUMEN DE PRODUCCIÓN</h3>
+            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-3 text-center print:hidden">RESUMEN DE PRODUCCIÓN</h3>
             <div className="flex flex-wrap justify-center gap-2.5">
               {productSummary.map(([name, data]) => (
                 <div key={name} className="flex items-center gap-2.5 py-1.5 px-4 bg-white rounded-full border border-slate-200 shadow-sm print:shadow-none print:py-0.5">
