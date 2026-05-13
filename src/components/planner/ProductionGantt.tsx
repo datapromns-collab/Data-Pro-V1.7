@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react';
 import { ScheduledTask, DayOfWeek } from '@/lib/types';
-import { getWeekDays, PRODUCTION_START_HOUR, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, UBB_FACTORS } from '@/lib/planner-utils';
+import { getWeekDays, PRODUCTION_START_HOUR, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, UBB_FACTORS, PRODUCTION_END_SUN_HOUR, PRODUCTION_END_SUN_MINUTE } from '@/lib/planner-utils';
 import { cn } from '@/lib/utils';
 import { differenceInMinutes, startOfDay, addDays, setHours, setMinutes, addMinutes, format, isBefore, isAfter } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -37,11 +37,12 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
   // Cálculo de S.A.M.I (Gaps) y CP automático
   const autoIntervals = useMemo(() => {
+    const weekEndLimit = setMinutes(setHours(weekDays[6], PRODUCTION_END_SUN_HOUR), PRODUCTION_END_SUN_MINUTE);
+    
     if (tasks.length === 0) {
-      // Si no hay tareas, toda la semana es S.A.M.I desde el lunes 7am
+      // Si no hay tareas, toda la semana es S.A.M.I desde el lunes 7am hasta domingo 18:30
       const start = setMinutes(setHours(weekDays[0], 7), 0);
-      const end = setMinutes(setHours(weekDays[6], 23), 59);
-      return [{ name: 'S.A.M.I', start, end, type: 'sami' }];
+      return [{ name: 'S.A.M.I', start, end: weekEndLimit, type: 'sami' }];
     }
 
     const sortedTasks = [...tasks].sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
@@ -69,23 +70,24 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     // Añadir el bloque CP de 2 horas justo después de la última tarea
     const cpStart = new Date(currentPointer);
     const cpEnd = addMinutes(cpStart, 120);
-    intervals.push({
-      name: 'CP',
-      start: cpStart,
-      end: cpEnd,
-      type: 'cp'
-    });
+    
+    // Solo añadir CP si empieza antes del límite del domingo
+    if (isBefore(cpStart, weekEndLimit)) {
+      intervals.push({
+        name: 'CP',
+        start: cpStart,
+        end: isBefore(cpEnd, weekEndLimit) ? cpEnd : weekEndLimit,
+        type: 'cp'
+      });
+      currentPointer = isBefore(cpEnd, weekEndLimit) ? cpEnd : weekEndLimit;
+    }
 
-    // Actualizar puntero después del CP
-    currentPointer = cpEnd;
-
-    // Rellenar con S.A.M.I hasta el final de la semana (Domingo noche) si es necesario
-    const weekEnd = setMinutes(setHours(weekDays[6], 23), 59);
-    if (isBefore(currentPointer, weekEnd)) {
+    // Rellenar con S.A.M.I hasta el final de la semana (Domingo 18:30) si es necesario
+    if (isBefore(currentPointer, weekEndLimit)) {
       intervals.push({
         name: 'S.A.M.I',
         start: currentPointer,
-        end: weekEnd,
+        end: weekEndLimit,
         type: 'sami'
       });
     }
@@ -255,7 +257,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                 {autoIntervals.map((interval, iIdx) => {
                   const style = getBarStyle(interval.start, interval.end, day, interval.type);
                   if (!style) return null;
-                  const shifts = getShiftData({ ...interval, name: interval.name }, day);
 
                   return (
                     <div
