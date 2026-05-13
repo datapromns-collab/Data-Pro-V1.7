@@ -4,7 +4,8 @@ import { useMemo } from 'react';
 import { ScheduledTask, DayOfWeek } from '@/lib/types';
 import { getWeekDays, PRODUCTION_START_HOUR, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, UBB_FACTORS, PRODUCTION_END_SUN_HOUR, PRODUCTION_END_SUN_MINUTE } from '@/lib/planner-utils';
 import { cn } from '@/lib/utils';
-import { differenceInMinutes, startOfDay, addDays, setHours, setMinutes, isAfter, isBefore, addMinutes } from 'date-fns';
+import { differenceInMinutes, startOfDay, addDays, setHours, setMinutes, isAfter, isBefore, addMinutes, format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 interface ProductionGanttProps {
   tasks: ScheduledTask[];
@@ -14,7 +15,7 @@ interface ProductionGanttProps {
 
 const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
-// Colores unificados
+// Colores unificados de la referencia
 const PRODUCTION_COLOR = '#83CCEB';
 const SPECIAL_COLOR = '#FFFF00'; // S.A.M.I y especiales
 const AUTO_CP_COLOR = '#FFC000'; // CULMINACION DE PRODUCCION (Naranja)
@@ -65,15 +66,12 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     return Object.entries(summary).sort((a, b) => a[0].localeCompare(b[0]));
   }, [tasks]);
 
-  const getBarStyle = (start: Date, end: Date, day: Date, isSpecial: boolean) => {
-    // Definimos el inicio de la fila visual (e.g. 07:00 AM)
+  const getBarStyle = (start: Date, end: Date, day: Date, type: 'production' | 'special' | 'gap') => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const rowEnd = addDays(rowStart, 1);
 
-    // Si la tarea termina antes de que empiece la fila o empieza después de que termine, no se dibuja aquí
     if (end <= rowStart || start >= rowEnd) return null;
 
-    // Ajustamos el dibujo a los límites de la fila
     let displayStart = start < rowStart ? rowStart : start;
     let displayEnd = end > rowEnd ? rowEnd : end;
 
@@ -87,11 +85,22 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
     if (width <= 0) return null;
 
+    let bgColor = PRODUCTION_COLOR;
+    let borderColor = '#6DB6D5';
+
+    if (type === 'special') {
+      bgColor = SPECIAL_COLOR;
+      borderColor = '#E6E600';
+    } else if (type === 'gap') {
+      bgColor = 'transparent';
+      borderColor = 'transparent';
+    }
+
     return {
       left: `${left}%`,
       width: `${width}%`,
-      backgroundColor: isSpecial ? SPECIAL_COLOR : PRODUCTION_COLOR,
-      borderColor: isSpecial ? '#E6E600' : '#6DB6D5',
+      backgroundColor: bgColor,
+      borderColor: borderColor,
     };
   };
 
@@ -132,144 +141,69 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     return { dayLabel, nightLabel };
   };
 
-  const getDayGaps = (day: Date, dIdx: number) => {
-    const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
-    const isSunday = dIdx === 6;
-    const rowEnd = isSunday 
-      ? setMinutes(setHours(startOfDay(day), PRODUCTION_END_SUN_HOUR), PRODUCTION_END_SUN_MINUTE)
-      : addDays(rowStart, 1);
-
-    const intervals = tasks
-      .filter(t => t.startTime < rowEnd && t.endTime > rowStart)
-      .map(t => ({
-        start: t.startTime < rowStart ? rowStart : t.startTime,
-        end: t.endTime > rowEnd ? rowEnd : t.endTime
-      }));
-
-    if (autoCPInterval && autoCPInterval.start < rowEnd && autoCPInterval.end > rowStart) {
-      intervals.push({
-        start: autoCPInterval.start < rowStart ? rowStart : autoCPInterval.start,
-        end: autoCPInterval.end > rowEnd ? rowEnd : autoCPInterval.end
-      });
-    }
-
-    const sorted = intervals.sort((a, b) => a.start.getTime() - b.start.getTime());
-
-    const merged: { start: Date; end: Date }[] = [];
-    if (sorted.length > 0) {
-      let current = sorted[0];
-      for (let i = 1; i < sorted.length; i++) {
-        if (sorted[i].start < current.end) {
-          current.end = isAfter(sorted[i].end, current.end) ? sorted[i].end : current.end;
-        } else {
-          merged.push(current);
-          current = sorted[i];
-        }
-      }
-      merged.push(current);
-    }
-
-    const gaps: { start: Date; end: Date }[] = [];
-    let lastEnd = rowStart;
-    for (const interval of merged) {
-      if (interval.start > lastEnd) {
-        gaps.push({ start: lastEnd, end: interval.start });
-      }
-      lastEnd = interval.end;
-    }
-    if (lastEnd < rowEnd) {
-      gaps.push({ start: lastEnd, end: rowEnd });
-    }
-
-    return gaps;
-  };
-
   const markers = useMemo(() => {
     const slots = [];
-    for (let i = 0; i <= 24; i += 0.5) {
+    for (let i = 0; i <= 24; i += 1) {
       const totalMinutesFromStart = i * 60;
       const currentTotalMinutes = (PRODUCTION_START_HOUR * 60) + totalMinutesFromStart;
       const h = Math.floor((currentTotalMinutes / 60) % 24);
-      const m = Math.floor(currentTotalMinutes % 60);
-      const label = m === 0 ? `${h.toString().padStart(2, '0')}:00` : '';
-      slots.push({ label, percent: (i / 24) * 100, isFullHour: m === 0 });
+      const label = `${h.toString().padStart(2, '0')}:00`;
+      slots.push({ label, percent: (i / 24) * 100 });
     }
     return slots;
   }, []);
 
   return (
-    <div className="w-full bg-white rounded-xl shadow-sm border border-border overflow-hidden p-4 lg:p-6 print:p-0 print:border-none print:shadow-none">
-      <div className="flex flex-col gap-2 print:gap-1.5 min-w-[850px]">
-        <div className="flex border-b pb-2">
-          <div className="w-14 shrink-0 font-headline text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Día / Horario</div>
-          <div className="flex-1 relative h-5">
+    <div className="w-full bg-white print:p-0">
+      <div className="flex flex-col gap-1 min-w-[850px]">
+        {/* Header Horario */}
+        <div className="flex border-b border-slate-300 pb-1 mb-2">
+          <div className="w-20 shrink-0 flex flex-col justify-end">
+            <span className="font-headline text-[9px] font-bold uppercase text-slate-400 leading-none">DÍA /</span>
+            <span className="font-headline text-[9px] font-bold uppercase text-slate-400 leading-none">HORARIO</span>
+          </div>
+          <div className="flex-1 relative h-6">
             {markers.map((marker, idx) => (
-              marker.label && (
-                <div 
-                  key={idx} 
-                  className="absolute text-[8px] font-mono font-bold text-slate-400 transform -translate-x-1/2"
-                  style={{ left: `${marker.percent}%` }}
-                >
-                  {marker.label}
-                </div>
-              )
+              <div 
+                key={idx} 
+                className="absolute text-[8px] font-bold text-slate-500 transform -translate-x-1/2"
+                style={{ left: `${marker.percent}%` }}
+              >
+                {marker.label}
+              </div>
             ))}
           </div>
         </div>
 
-        {weekDays.map((day, dIdx) => {
-          const gaps = getDayGaps(day, dIdx);
-          const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
-          
-          return (
-            <div key={dIdx} className="flex items-center group">
-              <div className="w-14 shrink-0 pr-2">
-                <div className="font-headline text-xs font-bold text-slate-900 group-hover:text-primary transition-colors">{DAYS[dIdx]}</div>
-                <div className="text-[9px] text-muted-foreground font-medium">{day.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}</div>
+        {/* Filas de Días */}
+        <div className="space-y-1">
+          {weekDays.map((day, dIdx) => (
+            <div key={dIdx} className="flex items-stretch group h-14">
+              <div className="w-20 shrink-0 flex flex-col justify-center">
+                <div className="font-headline text-[13px] font-bold text-slate-900">{DAYS[dIdx]}</div>
+                <div className="text-[10px] text-slate-400 font-medium lowercase">{format(day, 'd MMM', { locale: es })}</div>
               </div>
 
-              <div className="flex-1 h-[60px] bg-slate-50 rounded-lg border border-slate-200 relative overflow-hidden shadow-inner">
+              <div className="flex-1 bg-[#f1f5f9]/50 rounded border border-slate-200 relative overflow-hidden">
+                {/* Cuadrícula Horaria */}
                 {markers.map((m, idx) => (
-                  <div key={idx} className={cn("absolute inset-y-0 border-l z-0 transition-opacity", m.isFullHour ? "border-slate-300/40 opacity-100" : "border-slate-200/20 opacity-50")} style={{ left: `${m.percent}%` }}></div>
+                  <div 
+                    key={idx} 
+                    className="absolute inset-y-0 border-l border-slate-200/50" 
+                    style={{ left: `${m.percent}%` }}
+                  />
                 ))}
 
-                {/* Línea divisoria de turno a las 18:30 con prioridad visual superior */}
+                {/* Línea divisoria de turno 18:30 */}
                 <div 
-                  className="absolute inset-y-0 z-[20] border-l-2 border-primary pointer-events-none shadow-[0_0_8px_rgba(0,0,0,0.1)]"
+                  className="absolute inset-y-0 z-[20] border-l-2 border-primary pointer-events-none"
                   style={{ left: `${SPLIT_PCT}%` }}
                 />
 
-                {gaps.map((gap, gIdx) => {
-                  const style = getBarStyle(gap.start, gap.end, day, true);
-                  if (!style) return null;
-                  return (
-                    <div
-                      key={`gap-${gIdx}`}
-                      className="absolute inset-y-1.5 rounded border shadow-sm z-[1] p-1 flex items-center overflow-hidden opacity-60"
-                      style={style}
-                    >
-                      <span className="text-[9px] font-black text-slate-700/60 tracking-tighter uppercase px-1">S.A.M.I</span>
-                    </div>
-                  );
-                })}
-
-                {autoCPInterval && (
-                  (() => {
-                    const style = getBarStyle(autoCPInterval.start, autoCPInterval.end, day, true);
-                    if (!style) return null;
-                    return (
-                      <div
-                        className="absolute inset-y-1.5 rounded border shadow-sm z-[2] p-1 flex items-center justify-center overflow-hidden"
-                        style={{ ...style, backgroundColor: AUTO_CP_COLOR, borderColor: '#E6AC00' }}
-                      >
-                        <span className="text-sm font-black text-white uppercase px-1">CP</span>
-                      </div>
-                    );
-                  })()
-                )}
-
+                {/* Tareas de Producción */}
                 {tasks.map((task) => {
-                  const style = getBarStyle(task.startTime, task.endTime, day, isSpecialTask(task.name));
+                  const isSpecial = isSpecialTask(task.name);
+                  const style = getBarStyle(task.startTime, task.endTime, day, isSpecial ? 'special' : 'production');
                   if (!style) return null;
                   
                   const shifts = getShiftData(task, day);
@@ -278,106 +212,125 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                     <div
                       key={task.id}
                       onClick={() => onTaskClick?.(task)}
-                      className="absolute inset-y-1.5 rounded border shadow-sm z-[10] transition-all hover:scale-[1.005] hover:shadow-md cursor-pointer group/task overflow-hidden"
+                      className={cn(
+                        "absolute inset-y-1 rounded border shadow-[0_1px_2px_rgba(0,0,0,0.05)] z-[10] cursor-pointer group/task overflow-hidden",
+                        isSpecial ? "z-[11]" : ""
+                      )}
                       style={style}
                     >
                       <div className="relative w-full h-full min-w-0">
-                        {/* Label DIA */}
+                        {/* Segmento DIA */}
                         {shifts?.dayLabel && (
                           <div 
-                            className="absolute inset-y-0 flex flex-col justify-start p-1 overflow-hidden"
+                            className="absolute inset-y-0 flex flex-col justify-center p-1.5 overflow-hidden"
                             style={{ 
                               left: `${((shifts.dayLabel.left - parseFloat(style.left)) / parseFloat(style.width)) * 100}%`,
                               width: `${(shifts.dayLabel.width / parseFloat(style.width)) * 100}%`
                             }}
                           >
-                            <span className="text-[7px] font-bold text-slate-500 uppercase leading-none mb-1 opacity-80">DIA</span>
+                            <span className="text-[7px] font-bold text-slate-500 uppercase leading-none mb-1">DIA</span>
                             <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
-                              <span className="font-bold text-slate-800 text-[10px] leading-tight truncate">
+                              <span className="font-black text-slate-900 text-[10px] uppercase leading-tight truncate">
                                 {task.name}
                               </span>
-                              {!isSpecialTask(task.name) && (
+                              {!isSpecial && (
                                 <span className="font-bold text-slate-700 text-[10px] leading-tight shrink-0">
-                                  {Math.round(shifts.dayLabel.qty).toLocaleString()} cajas
+                                  {Math.round(shifts.dayLabel.qty).toLocaleString('es-ES')} cajas
                                 </span>
                               )}
                             </div>
                           </div>
                         )}
 
-                        {/* Label NOCHE */}
+                        {/* Segmento NOCHE */}
                         {shifts?.nightLabel && (
                           <div 
-                            className="absolute inset-y-0 flex flex-col justify-start p-1 overflow-hidden border-l border-white/20"
+                            className="absolute inset-y-0 flex flex-col justify-center p-1.5 overflow-hidden border-l border-white/30"
                             style={{ 
                               left: `${((shifts.nightLabel.left - parseFloat(style.left)) / parseFloat(style.width)) * 100}%`,
                               width: `${(shifts.nightLabel.width / parseFloat(style.width)) * 100}%`
                             }}
                           >
-                            <span className="text-[7px] font-bold text-slate-700 uppercase leading-none mb-1 opacity-80">NOCHE</span>
+                            <span className="text-[7px] font-bold text-slate-600 uppercase leading-none mb-1">NOCHE</span>
                             <div className="flex items-center gap-1.5 whitespace-nowrap overflow-hidden">
-                              <span className="font-bold text-slate-900 text-[10px] leading-tight truncate">
+                              <span className="font-black text-slate-900 text-[10px] uppercase leading-tight truncate">
                                 {task.name}
                               </span>
-                              {!isSpecialTask(task.name) && (
-                                <span className="font-bold text-slate-950 text-[10px] leading-tight shrink-0">
-                                  {Math.round(shifts.nightLabel.qty).toLocaleString()} cajas
+                              {!isSpecial && (
+                                <span className="font-bold text-slate-800 text-[10px] leading-tight shrink-0">
+                                  {Math.round(shifts.nightLabel.qty).toLocaleString('es-ES')} cajas
                                 </span>
                               )}
                             </div>
                           </div>
                         )}
-
-                        {/* Fallback */}
+                        
+                        {/* Fallback si no hay split */}
                         {(!shifts?.dayLabel && !shifts?.nightLabel) && (
-                          <div className="flex items-center h-full px-2">
-                             <span className="font-bold text-slate-800 text-[10px] truncate">{task.name}</span>
+                          <div className="flex flex-col justify-center h-full px-2">
+                             <span className="font-black text-slate-900 text-[10px] uppercase truncate">{task.name}</span>
                           </div>
                         )}
                       </div>
                     </div>
                   );
                 })}
+
+                {/* Bloque CP automático el domingo */}
+                {dIdx === 6 && autoCPInterval && (
+                  (() => {
+                    const style = getBarStyle(autoCPInterval.start, autoCPInterval.end, day, 'gap');
+                    if (!style) return null;
+                    return (
+                      <div
+                        className="absolute inset-y-1 rounded border z-[12] flex items-center justify-center overflow-hidden"
+                        style={{ ...style, backgroundColor: AUTO_CP_COLOR, borderColor: '#D97706' }}
+                      >
+                        <span className="text-sm font-black text-white uppercase px-1">CP</span>
+                      </div>
+                    );
+                  })()
+                )}
               </div>
             </div>
-          );
-        })}
+          ))}
+        </div>
 
-        <div className="mt-2 flex flex-wrap items-center justify-between gap-4 text-[8px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-100 pt-2 print:mt-1">
-          <div className="flex items-center gap-2">
-            <span className="text-primary font-black">CAJAS TOTALES: {Math.round(totalBoxes).toLocaleString()}</span>
+        {/* Leyenda y Totales */}
+        <div className="mt-4 flex items-center justify-between border-t-2 border-slate-100 pt-3">
+          <div className="text-[11px] font-black uppercase text-primary tracking-tight">
+            CAJAS TOTALES: {Math.round(totalBoxes).toLocaleString('es-ES')}
           </div>
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-2">
-              <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: PRODUCTION_COLOR }}></div>
-              <span>Producción</span>
+              <div className="w-5 h-2 rounded-sm" style={{ backgroundColor: PRODUCTION_COLOR }}></div>
+              <span className="text-[9px] font-bold text-slate-400 uppercase">PRODUCCIÓN</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: AUTO_CP_COLOR }}></div>
-              <span>CULMINACION DE PRODUCCION</span>
+              <div className="w-5 h-2 rounded-sm" style={{ backgroundColor: AUTO_CP_COLOR }}></div>
+              <span className="text-[9px] font-bold text-slate-400 uppercase">CULMINACION DE PRODUCCION</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-2 rounded border border-slate-200" style={{ backgroundColor: SPECIAL_COLOR }}></div>
-              <span>S.A.M.I / Especiales</span>
+              <div className="w-5 h-2 rounded-sm" style={{ backgroundColor: SPECIAL_COLOR }}></div>
+              <span className="text-[9px] font-bold text-slate-400 uppercase">S.A.M.I / ESPECIALES</span>
             </div>
           </div>
         </div>
 
+        {/* Resumen de Producción */}
         {productSummary.length > 0 && (
-          <div className="mt-1 border-t-2 border-slate-100 pt-1.5">
-            <h3 className="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-2 text-center">Resumen de Producción Total</h3>
-            <div className="grid grid-cols-3 gap-y-1 gap-x-2">
+          <div className="mt-6">
+            <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-3 text-center">RESUMEN DE PRODUCCIÓN TOTAL</h3>
+            <div className="flex flex-wrap justify-center gap-3">
               {productSummary.map(([name, data]) => (
-                <div key={name} className="flex justify-center">
-                  <div className="inline-flex items-center gap-2 py-0.5 px-2 bg-slate-50/80 rounded border border-slate-200 shadow-sm transition-all hover:bg-white">
-                    <span className="text-[10px] font-bold text-slate-800 whitespace-nowrap">{name}</span>
-                    <span className="text-[10px] font-black text-primary whitespace-nowrap">
-                      {Math.round(data.qty).toLocaleString()} cjs
-                    </span>
-                    <span className="text-[9px] font-bold text-indigo-500 whitespace-nowrap">
-                      {Math.round(data.ubb).toLocaleString()} UBB
-                    </span>
-                  </div>
+                <div key={name} className="flex items-center gap-2 py-1.5 px-4 bg-white rounded-full border border-slate-200 shadow-sm">
+                  <span className="text-[10px] font-black text-slate-800 uppercase">{name}</span>
+                  <span className="text-[10px] font-black text-primary">
+                    {Math.round(data.qty).toLocaleString('es-ES')} cjs
+                  </span>
+                  <span className="text-[10px] font-bold text-indigo-400">
+                    {Math.round(data.ubb).toLocaleString('es-ES')} UBB
+                  </span>
                 </div>
               ))}
             </div>

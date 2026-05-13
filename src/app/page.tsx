@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -119,16 +118,6 @@ export default function PlannerPage() {
       t.startTime <= weekEnd
     );
   }, [tasks, selectedLine, weekStartDate, weekEnd]);
-
-  const totalMinutes = calculateTotalPlannedMinutes(filteredTasks);
-
-  const nextAvailable = useMemo(() => {
-    if (filteredTasks.length === 0) {
-      return setMinutes(setHours(weekStartDate, 7), 0);
-    }
-    const latestTask = [...filteredTasks].sort((a, b) => b.endTime.getTime() - a.endTime.getTime())[0];
-    return latestTask.endTime;
-  }, [filteredTasks, weekStartDate]);
 
   const handlePrintPlan = () => {
     setPrintMode('plan');
@@ -368,34 +357,18 @@ export default function PlannerPage() {
               );
               return (
                 <div key={lineName} className="page-break-section">
-                  <div className="mb-6 border-b-2 border-primary pb-4 flex justify-between items-center">
-                    <div className="flex-1">
-                      <h1 className="text-3xl font-headline font-bold text-slate-900">Programa Semanal de Producción</h1>
-                      <div className="flex items-center gap-2 mt-1">
-                        <Badge className="bg-primary text-white text-sm px-4 py-1">{lineName}</Badge>
-                        <span className="text-slate-400 font-bold">|</span>
-                        <span className="text-slate-500 font-bold">Semana {weekNumber}</span>
+                  <div className="mb-8 flex justify-between items-start">
+                    <div className="space-y-1">
+                      <h1 className="text-3xl font-headline font-bold text-slate-900">Programa de Producción</h1>
+                      <h2 className="text-2xl font-headline font-bold text-primary uppercase">{lineName}</h2>
+                    </div>
+
+                    <div className="text-right">
+                      <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-1">CONFIDENCIAL - USO INTERNO</p>
+                      <div className="space-y-0.5 text-[10px] text-slate-500 font-bold">
+                        <p>Semana {weekNumber} - {format(weekStartDate, 'dd', { locale: es })} al {format(weekEnd, 'dd MMMM yyyy', { locale: es })}</p>
+                        <p>Emitido: {format(new Date(), 'dd/MM/yyyy')}</p>
                       </div>
-                    </div>
-
-                    <div className="flex-1 flex justify-center">
-                      {glupLogo && (
-                        <Image 
-                          src={glupLogo.imageUrl} 
-                          alt="Logo" 
-                          width={240} 
-                          height={90} 
-                          className="object-contain"
-                          priority
-                        />
-                      )}
-                    </div>
-
-                    <div className="flex-1 text-right">
-                      <p className="text-xs font-bold text-primary uppercase tracking-widest mb-1">Confidencial - Uso Interno</p>
-                      <p className="text-xs text-slate-400 font-medium">
-                        Fecha: {format(weekStartDate, "dd 'de' MMMM, yyyy", { locale: es })}
-                      </p>
                     </div>
                   </div>
                   
@@ -403,13 +376,10 @@ export default function PlannerPage() {
                     <ProductionGantt tasks={lineTasks} weekStartDate={weekStartDate} />
                   </div>
 
-                  <div className="mt-6 pt-4 border-t-2 border-slate-100 flex justify-between items-center text-xs text-slate-400 font-bold uppercase tracking-widest">
-                    <span>Plan Semanal Pro Edition v2.0</span>
-                    <div className="flex items-center gap-4">
-                      <span>Línea {i + 1} de {LINES.length}</span>
-                      <span>|</span>
-                      <span>Generado: {format(new Date(), "dd/MM/yyyy HH:mm")}</span>
-                    </div>
+                  <div className="mt-8 pt-4 border-t border-slate-200 flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-[0.2em]">
+                    <span>PLAN SEMANAL PRO EDITION</span>
+                    <span className="text-slate-900 font-black">PÁGINA {i + 1} DE {LINES.length}</span>
+                    <span>REF: LÍNEA-{(i + 1)}</span>
                   </div>
                 </div>
               );
