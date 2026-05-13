@@ -27,6 +27,7 @@ const CAPS_DATA = [
   { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS IMPORTADAS' },
   { code: 'EMP_0095_N', description: 'TAPA VERDE REFRESCOS NACIONALES' },
   { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0105_2', description: 'TAPA AZULES REFRESCOS IMPORTADAS #2' },
   { code: 'EMP_0105_N', description: 'TAPA AZULES REFRESCOS NACIONALES' },
 ];
 
@@ -204,7 +205,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
       }, 0).toFixed(2));
     }
 
-    switch (code) {
+    switch (code.replace(/(_N|_2)$/, '')) {
       case 'EMP_0009': {
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
         return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && flavors.includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
@@ -255,7 +256,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
               <TableBody>
                 {PREFORMS_DATA.map((item, index) => (
                   <TableRow key={`${item.code}-${index}`} className="border-b last:border-0 h-8">
-                    <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{item.code.replace(/_N$/g, '')}</TableCell>
+                    <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
                     <TableCell className="py-1 text-[11px] font-medium text-slate-800">{item.description}</TableCell>
                     <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{getCalculatedValue(item.code).toLocaleString('es-ES')} UND</TableCell>
                   </TableRow>
@@ -269,11 +270,11 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           {renderSectionHeader("II. Sección Tapas", "slate-500")}
           <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
-              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad</TableHead></TableRow></TableHeader>
+              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">Código SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
               <TableBody>
                 {CAPS_DATA.map((item, idx) => (
                   <TableRow key={`${item.code}-${idx}`} className="border-b last:border-0 h-8">
-                    <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{item.code.replace(/_N$/g, '')}</TableCell>
+                    <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
                     <TableCell className="py-1 text-[11px] font-medium text-slate-800">{item.description}</TableCell>
                     <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">_______ UND</TableCell>
                   </TableRow>
@@ -287,15 +288,15 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           {renderSectionHeader("III. Sección Plásticos", "indigo-500")}
           <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
-              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad</TableHead></TableRow></TableHeader>
+              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">Código SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad Requerida</TableHead></TableRow></TableHeader>
               <TableBody>
                 {PLASTICS_DATA.map((item, idx) => ('isHeader' in item && item.isHeader) ? (
                   <TableRow key={`header-${idx}`} className="bg-slate-100/30 h-6"><TableCell colSpan={3} className="py-1 text-center font-bold text-slate-500 text-[10px] uppercase tracking-widest">{item.description}</TableCell></TableRow>
                 ) : (
-                  <TableRow key={`${item.code}-${idx}`} className="border-b last:border-0 h-8">
-                    <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{item.code.replace(/_N$/g, '')}</TableCell>
-                    <TableCell className="py-1 text-[11px] font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{getCalculatedValue(item.code as string).toLocaleString('es-ES')} KG</TableCell>
+                  <TableRow key={`${(item as any).code}-${idx}`} className="border-b last:border-0 h-8">
+                    <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{(item as any).code.replace(/(_N|_2)$/, '')}</TableCell>
+                    <TableCell className="py-1 text-[11px] font-medium text-slate-800">{(item as any).description}</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{getCalculatedValue((item as any).code).toLocaleString('es-ES')} KG</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -320,7 +321,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                   <TableBody>
                     {section.data.map((item, sIdx) => (
                       <TableRow key={`${item.code}-${sIdx}`} className="border-b last:border-0 h-8">
-                        <TableCell className="py-1 px-3 font-mono text-[9px] font-bold text-primary">{item.code.replace(/_N$/g, '')}</TableCell>
+                        <TableCell className="py-1 px-3 font-mono text-[9px] font-bold text-primary">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
                         <TableCell className="py-1 px-3 text-[10px] font-medium text-slate-800 truncate max-w-[150px]">{item.description}</TableCell>
                         <TableCell className="py-1 px-3 text-right font-black text-slate-900 bg-slate-50/30 text-[10px]">
                           {getCalculatedValue(item.code).toLocaleString('es-ES')} KG
@@ -341,7 +342,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
               <TableBody>
                 {SUGAR_DATA.map((item, index) => (
                   <TableRow key={`${item.code}-${index}`} className="h-10">
-                    <TableCell className="font-mono text-[11px] font-bold text-emerald-600 w-[150px]">{item.code.replace(/_N$/g, '')}</TableCell>
+                    <TableCell className="font-mono text-[11px] font-bold text-emerald-600 w-[150px]">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
                     <TableCell className="text-[12px] font-medium text-slate-800">{item.description}</TableCell>
                     <TableCell className="text-right font-black text-slate-900 bg-slate-50/30 text-[12px] w-[200px]">_______ KG</TableCell>
                   </TableRow>
@@ -360,7 +361,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                 <TableBody>
                   {CONCENTRATES_SOFT_DRINKS.map((item, index) => (
                     <TableRow key={`${item.code}-${index}`} className="border-b last:border-0 h-8">
-                      <TableCell className="py-1 px-3 font-mono text-[10px] font-bold text-emerald-600">{item.code.replace(/_N$/g, '')}</TableCell>
+                      <TableCell className="py-1 px-3 font-mono text-[10px] font-bold text-emerald-600">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
                       <TableCell className="py-1 px-3 text-[10px] font-medium text-slate-800 truncate max-w-[150px]">{item.description}</TableCell>
                       <TableCell className="py-1 px-3 text-right font-black text-slate-900 bg-slate-50/30 text-[10px]">_______ LTS</TableCell>
                     </TableRow>
@@ -374,7 +375,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                 <TableBody>
                   {CONCENTRATES_JUICES.map((item, index) => (
                     <TableRow key={`${item.code}-${index}`} className="border-b last:border-0 h-8">
-                      <TableCell className="py-1 px-3 font-mono text-[10px] font-bold text-emerald-600">{item.code.replace(/_N$/g, '')}</TableCell>
+                      <TableCell className="py-1 px-3 font-mono text-[10px] font-bold text-emerald-600">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
                       <TableCell className="py-1 px-3 text-[10px] font-medium text-slate-800 truncate max-w-[150px]">{item.description}</TableCell>
                       <TableCell className="py-1 px-3 text-right font-black text-slate-900 bg-slate-50/30 text-[10px]">_______ KG</TableCell>
                     </TableRow>
@@ -393,7 +394,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
               <TableBody>
                 {SOLIDS_DATA.map((item, index) => (
                   <TableRow key={`${item.code}-${index}`} className="border-b last:border-0 h-8">
-                    <TableCell className="py-1 font-mono text-[10px] font-bold text-emerald-600">{item.code.replace(/_N$/g, '')}</TableCell>
+                    <TableCell className="py-1 font-mono text-[10px] font-bold text-emerald-600">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
                     <TableCell className="py-1 text-[11px] font-medium text-slate-800">{item.description}</TableCell>
                     <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">_______ KG</TableCell>
                   </TableRow>
@@ -410,7 +411,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
               <TableBody>
                 {ADDITIVES_DATA.map((item, index) => (
                   <TableRow key={`${item.code}-${index}`} className="border-b last:border-0 h-10">
-                    <TableCell className="font-mono text-[11px] font-bold text-emerald-600 w-[150px]">{item.code.replace(/_N$/g, '')}</TableCell>
+                    <TableCell className="font-mono text-[11px] font-bold text-emerald-600 w-[150px]">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
                     <TableCell className="text-[12px] font-medium text-slate-800">{item.description}</TableCell>
                     <TableCell className="text-right font-black text-slate-900 bg-slate-50/30 text-[12px] w-[200px]">_______ {item.unit}</TableCell>
                   </TableRow>

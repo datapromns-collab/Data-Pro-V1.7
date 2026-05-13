@@ -42,6 +42,7 @@ const CAPS_DATA = [
   { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS IMPORTADAS' },
   { code: 'EMP_0095_N', description: 'TAPA VERDE REFRESCOS NACIONALES' },
   { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0105_2', description: 'TAPA AZULES REFRESCOS IMPORTADAS #2' },
   { code: 'EMP_0105_N', description: 'TAPA AZULES REFRESCOS NACIONALES' },
 ];
 
@@ -164,50 +165,50 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
     // Cálculos específicos para plásticos
     if (code === 'EMP_0019') {
       const formats: (keyof typeof PLASTIC_FACTORS)[] = ["2Lts", "1Lt", "0.4Lts", "1.5Lts"];
-      return formats.reduce((acc, fmt) => {
+      return Number(formats.reduce((acc, fmt) => {
         const factor = PLASTIC_FACTORS[fmt];
         const totalBoxes = tasks
           .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);
         return acc + (totalBoxes * factor);
-      }, 0).toFixed(2);
+      }, 0).toFixed(2));
     }
 
     if (code === 'EMP_0017') {
       const formats: (keyof typeof TERMO_0017_FACTORS)[] = ["1.5Lts"];
-      return formats.reduce((acc, fmt) => {
+      return Number(formats.reduce((acc, fmt) => {
         const factor = TERMO_0017_FACTORS[fmt];
         const totalBoxes = tasks
           .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);
         return acc + (totalBoxes * factor);
-      }, 0).toFixed(2);
+      }, 0).toFixed(2));
     }
 
     if (code === 'EMP_0080') {
       const formats: (keyof typeof TERMO_0080_FACTORS)[] = ["2Lts", "1Lt"];
-      return formats.reduce((acc, fmt) => {
+      return Number(formats.reduce((acc, fmt) => {
         const factor = TERMO_0080_FACTORS[fmt];
         const totalBoxes = tasks
           .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);
         return acc + (totalBoxes * factor);
-      }, 0).toFixed(2);
+      }, 0).toFixed(2));
     }
 
     if (code === 'EMP_0130') {
       const formats: (keyof typeof TERMO_0130_FACTORS)[] = ["0.4Lts"];
-      return formats.reduce((acc, fmt) => {
+      return Number(formats.reduce((acc, fmt) => {
         const factor = TERMO_0130_FACTORS[fmt];
         const totalBoxes = tasks
           .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);
         return acc + (totalBoxes * factor);
-      }, 0).toFixed(2);
+      }, 0).toFixed(2));
     }
 
     // Cálculos existentes para preformas
-    switch (code) {
+    switch (code.replace(/(_N|_2)$/, '')) {
       case 'EMP_0009': {
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
         return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && flavors.includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
@@ -239,7 +240,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
         <TableBody>
           {data.map((item, idx) => (
             <TableRow key={`${item.code}-${idx}`} className="hover:bg-slate-50/50 transition-colors">
-              <TableCell className="font-mono text-[11px] font-bold text-primary py-4">{item.code.replace(/_N$/g, '').replace(/_S$/g, '')}</TableCell>
+              <TableCell className="font-mono text-[11px] font-bold text-primary py-4">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
               <TableCell className="text-sm font-bold text-slate-700 py-4">{item.description}</TableCell>
               <TableCell className="text-right py-4">
                 <Badge variant="secondary" className="bg-slate-50 text-slate-400 border-slate-200 px-4 py-1.5 font-bold text-[12px] min-w-[100px] justify-center">
