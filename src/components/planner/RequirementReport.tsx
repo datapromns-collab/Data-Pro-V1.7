@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from 'next/image';
@@ -7,7 +6,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format, getISOWeek, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS, TERMO_0080_FACTORS } from '@/lib/planner-utils';
+import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS, TERMO_0080_FACTORS, TERMO_0130_FACTORS } from '@/lib/planner-utils';
 
 interface RequirementReportProps {
   tasks: ScheduledTask[];
@@ -176,6 +175,17 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
       const formats: (keyof typeof TERMO_0080_FACTORS)[] = ["2Lts", "1Lt"];
       return Number(formats.reduce((acc, fmt) => {
         const factor = TERMO_0080_FACTORS[fmt];
+        const totalBoxes = tasks
+          .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
+          .reduce((sum, t) => sum + (t.quantity || 0), 0);
+        return acc + (totalBoxes * factor);
+      }, 0).toFixed(2));
+    }
+
+    if (code === 'EMP_0130') {
+      const formats: (keyof typeof TERMO_0130_FACTORS)[] = ["0.4Lts"];
+      return Number(formats.reduce((acc, fmt) => {
+        const factor = TERMO_0130_FACTORS[fmt];
         const totalBoxes = tasks
           .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);

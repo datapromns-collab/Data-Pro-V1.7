@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo } from 'react';
@@ -21,7 +20,7 @@ import { ScheduledTask } from '@/lib/types';
 import { addDays } from 'date-fns';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS, TERMO_0080_FACTORS } from '@/lib/planner-utils';
+import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS, TERMO_0080_FACTORS, TERMO_0130_FACTORS } from '@/lib/planner-utils';
 
 interface RequirementSectionProps {
   onPrint?: () => void;
@@ -61,7 +60,7 @@ const LABELS_2LTS_DATA = [
   { code: 'EMP_0038', description: 'ETIQUETA FRESH 2000ML' },
   { code: 'EMP_0042', description: 'ETIQUETA COLA NEGRA 2000ML' },
   { code: 'EMP_0101', description: 'ETIQUETA MANZANA VERDE 2000ML' },
-  { code: 'EMP_0136', description: 'ETIQUETA MANZANITA 2000ML' },
+  { code: 'EMP_0136', description: 'ETIQUETA MANZANA ROJA 2000ML' },
   { code: 'EMP_0137', description: 'ETIQUETA PIÑA PARCHITA 2000ML' },
 ];
 
@@ -178,6 +177,17 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
       const formats: (keyof typeof TERMO_0080_FACTORS)[] = ["2Lts", "1Lt"];
       return formats.reduce((acc, fmt) => {
         const factor = TERMO_0080_FACTORS[fmt];
+        const totalBoxes = tasks
+          .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
+          .reduce((sum, t) => sum + (t.quantity || 0), 0);
+        return acc + (totalBoxes * factor);
+      }, 0).toFixed(2);
+    }
+
+    if (code === 'EMP_0130') {
+      const formats: (keyof typeof TERMO_0130_FACTORS)[] = ["0.4Lts"];
+      return formats.reduce((acc, fmt) => {
+        const factor = TERMO_0130_FACTORS[fmt];
         const totalBoxes = tasks
           .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);
