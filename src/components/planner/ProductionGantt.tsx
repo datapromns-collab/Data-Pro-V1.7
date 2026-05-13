@@ -2,9 +2,9 @@
 
 import { useMemo } from 'react';
 import { ScheduledTask, DayOfWeek } from '@/lib/types';
-import { getWeekDays, PRODUCTION_START_HOUR, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, UBB_FACTORS, PRODUCTION_END_SUN_HOUR, PRODUCTION_END_SUN_MINUTE } from '@/lib/planner-utils';
+import { getWeekDays, PRODUCTION_START_HOUR, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, UBB_FACTORS } from '@/lib/planner-utils';
 import { cn } from '@/lib/utils';
-import { differenceInMinutes, startOfDay, addDays, setHours, setMinutes, isAfter, isBefore, addMinutes, format } from 'date-fns';
+import { differenceInMinutes, startOfDay, addDays, setHours, setMinutes, addMinutes, format, isBefore, isAfter } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 interface ProductionGanttProps {
@@ -17,7 +17,7 @@ const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes',
 
 // Colores unificados de la referencia
 const PRODUCTION_COLOR = '#83CCEB';
-const SPECIAL_COLOR = '#FFFF00'; // S.A.M.I y especiales
+const SAMI_COLOR = '#FFFF00'; // S.A.M.I
 const AUTO_CP_COLOR = '#FFC000'; // CULMINACION DE PRODUCCION (Naranja)
 
 export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: ProductionGanttProps) {
@@ -35,19 +35,68 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     return specials.some(s => name.toUpperCase().startsWith(s));
   };
 
+  // Cálculo de S.A.M.I (Gaps) y CP automático
+  const autoIntervals = useMemo(() => {
+    if (tasks.length === 0) {
+      // Si no hay tareas, toda la semana es S.A.M.I desde el lunes 7am
+      const start = setMinutes(setHours(weekDays[0], 7), 0);
+      const end = setMinutes(setHours(weekDays[6], 23), 59);
+      return [{ name: 'S.A.M.I', start, end, type: 'sami' }];
+    }
+
+    const sortedTasks = [...tasks].sort((a, b) => a.startTime.getTime() - b.startTime.getTime());
+    const intervals: { name: string; start: Date; end: Date; type: 'sami' | 'cp' }[] = [];
+
+    // Inicio de producción: Lunes 7:00 AM
+    let currentPointer = setMinutes(setHours(weekDays[0], 7), 0);
+
+    sortedTasks.forEach((task) => {
+      // Si hay un hueco antes de esta tarea, es S.A.M.I
+      if (isAfter(task.startTime, currentPointer)) {
+        intervals.push({
+          name: 'S.A.M.I',
+          start: new Date(currentPointer),
+          end: new Date(task.startTime),
+          type: 'sami'
+        });
+      }
+      // Actualizar el puntero al final de la tarea actual
+      if (isAfter(task.endTime, currentPointer)) {
+        currentPointer = new Date(task.endTime);
+      }
+    });
+
+    // Añadir el bloque CP de 2 horas justo después de la última tarea
+    const cpStart = new Date(currentPointer);
+    const cpEnd = addMinutes(cpStart, 120);
+    intervals.push({
+      name: 'CP',
+      start: cpStart,
+      end: cpEnd,
+      type: 'cp'
+    });
+
+    // Actualizar puntero después del CP
+    currentPointer = cpEnd;
+
+    // Rellenar con S.A.M.I hasta el final de la semana (Domingo noche) si es necesario
+    const weekEnd = setMinutes(setHours(weekDays[6], 23), 59);
+    if (isBefore(currentPointer, weekEnd)) {
+      intervals.push({
+        name: 'S.A.M.I',
+        start: currentPointer,
+        end: weekEnd,
+        type: 'sami'
+      });
+    }
+
+    return intervals;
+  }, [tasks, weekDays]);
+
   const totalBoxes = useMemo(() => 
     tasks.reduce((acc, task) => acc + (task.quantity || 0), 0),
     [tasks]
   );
-
-  const autoCPInterval = useMemo(() => {
-    if (tasks.length === 0) return null;
-    const latestEndTime = new Date(Math.max(...tasks.map(t => t.endTime.getTime())));
-    return {
-      start: latestEndTime,
-      end: addMinutes(latestEndTime, 120)
-    };
-  }, [tasks]);
 
   const productSummary = useMemo(() => {
     const summary: Record<string, { qty: number; ubb: number }> = {};
@@ -66,7 +115,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     return Object.entries(summary).sort((a, b) => a[0].localeCompare(b[0]));
   }, [tasks]);
 
-  const getBarStyle = (start: Date, end: Date, day: Date, type: 'production' | 'special' | 'gap') => {
+  const getBarStyle = (start: Date, end: Date, day: Date, type: 'production' | 'special' | 'sami' | 'cp') => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const rowEnd = addDays(rowStart, 1);
 
@@ -88,12 +137,12 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     let bgColor = PRODUCTION_COLOR;
     let borderColor = '#6DB6D5';
 
-    if (type === 'special') {
-      bgColor = SPECIAL_COLOR;
+    if (type === 'special' || type === 'sami') {
+      bgColor = SAMI_COLOR;
       borderColor = '#E6E600';
-    } else if (type === 'gap') {
-      bgColor = 'transparent';
-      borderColor = 'transparent';
+    } else if (type === 'cp') {
+      bgColor = AUTO_CP_COLOR;
+      borderColor = '#D97706';
     }
 
     return {
@@ -104,7 +153,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     };
   };
 
-  const getShiftData = (task: ScheduledTask, day: Date) => {
+  const getShiftData = (task: { startTime: Date, endTime: Date, quantity?: number, name: string }, day: Date) => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const rowEnd = addDays(rowStart, 1);
     const splitTime = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE);
@@ -121,7 +170,8 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     if (currentStart < splitTime) {
       const dEnd = currentEnd < splitTime ? currentEnd : splitTime;
       const dDur = differenceInMinutes(dEnd, currentStart);
-      const dQty = (dDur / totalTaskDuration) * task.quantity;
+      const qty = task.quantity || 0;
+      const dQty = (dDur / totalTaskDuration) * qty;
       const left = (differenceInMinutes(currentStart, rowStart) / 1440) * 100;
       const width = (differenceInMinutes(dEnd, currentStart) / 1440) * 100;
       dayLabel = { qty: dQty, left, width };
@@ -132,7 +182,8 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       const nStart = currentStart > splitTime ? currentStart : splitTime;
       const nEnd = currentEnd;
       const nDur = differenceInMinutes(nEnd, nStart);
-      const nQty = (nDur / totalTaskDuration) * task.quantity;
+      const qty = task.quantity || 0;
+      const nQty = (nDur / totalTaskDuration) * qty;
       const left = (differenceInMinutes(nStart, rowStart) / 1440) * 100;
       const width = (differenceInMinutes(nEnd, nStart) / 1440) * 100;
       nightLabel = { qty: nQty, left, width };
@@ -200,7 +251,26 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   style={{ left: `${SPLIT_PCT}%` }}
                 />
 
-                {/* Tareas de Producción */}
+                {/* Tareas Automáticas (S.A.M.I y CP) */}
+                {autoIntervals.map((interval, iIdx) => {
+                  const style = getBarStyle(interval.start, interval.end, day, interval.type);
+                  if (!style) return null;
+                  const shifts = getShiftData({ ...interval, name: interval.name }, day);
+
+                  return (
+                    <div
+                      key={`auto-${iIdx}`}
+                      className="absolute inset-y-1 rounded border shadow-[0_1px_2px_rgba(0,0,0,0.05)] z-[5] overflow-hidden"
+                      style={style}
+                    >
+                      <div className="flex flex-col justify-center h-full px-2">
+                        <span className="font-black text-slate-900 text-[10px] uppercase truncate">{interval.name}</span>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                {/* Tareas de Producción Programadas */}
                 {tasks.map((task) => {
                   const isSpecial = isSpecialTask(task.name);
                   const style = getBarStyle(task.startTime, task.endTime, day, isSpecial ? 'special' : 'production');
@@ -275,22 +345,6 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                     </div>
                   );
                 })}
-
-                {/* Bloque CP automático el domingo */}
-                {dIdx === 6 && autoCPInterval && (
-                  (() => {
-                    const style = getBarStyle(autoCPInterval.start, autoCPInterval.end, day, 'gap');
-                    if (!style) return null;
-                    return (
-                      <div
-                        className="absolute inset-y-1 rounded border z-[12] flex items-center justify-center overflow-hidden"
-                        style={{ ...style, backgroundColor: AUTO_CP_COLOR, borderColor: '#D97706' }}
-                      >
-                        <span className="text-sm font-black text-white uppercase px-1">CP</span>
-                      </div>
-                    );
-                  })()
-                )}
               </div>
             </div>
           ))}
@@ -311,7 +365,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
               <span className="text-[9px] font-bold text-slate-400 uppercase">CULMINACION DE PRODUCCION</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-5 h-2 rounded-sm" style={{ backgroundColor: SPECIAL_COLOR }}></div>
+              <div className="w-5 h-2 rounded-sm" style={{ backgroundColor: SAMI_COLOR }}></div>
               <span className="text-[9px] font-bold text-slate-400 uppercase">S.A.M.I / ESPECIALES</span>
             </div>
           </div>
