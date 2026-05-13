@@ -1,7 +1,8 @@
-
 import type { Metadata, Viewport } from 'next';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
+import { FirebaseClientProvider } from '@/firebase';
+import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -38,7 +39,10 @@ export default function RootLayout({
         <meta name="mobile-web-app-capable" content="yes" />
       </head>
       <body className="font-body antialiased">
-        {children}
+        <FirebaseClientProvider>
+          <FirebaseErrorListener />
+          {children}
+        </FirebaseClientProvider>
       </body>
     </html>
   );

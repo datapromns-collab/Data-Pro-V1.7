@@ -10,8 +10,7 @@ let db: Firestore;
 let auth: Auth;
 
 /**
- * Inicializa las instancias de Firebase asegurando que solo ocurra una vez
- * en el cliente para evitar problemas de re-inicialización y dependencias circulares.
+ * Inicializa las instancias de Firebase asegurando que solo ocurra una vez en el cliente.
  */
 export function initializeFirebase() {
   if (typeof window !== 'undefined') {

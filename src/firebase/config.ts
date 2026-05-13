@@ -1,8 +1,7 @@
 'use client';
 
 /**
- * Configuración de Firebase App.
- * Se utilizan los valores oficiales del proyecto para garantizar la conexión.
+ * Configuración oficial de Firebase del proyecto.
  */
 export const firebaseConfig = {
   apiKey: "AIzaSyC2dE8727776803-fE7ed73651c6c5a2c2",
