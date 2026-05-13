@@ -158,6 +158,13 @@ export const RECIPES: Record<string, Record<string, number>> = {
     "MATP_0017": 25.65,       // Ácido Cítrico
     "MATP_0021": 4.55,        // Citrato de Sodio
     "MATP_0019": 4.55,        // Benzoato de Sodio
+  },
+  "GLUP UVA": {
+    "MATP_0001": 1024.909587, // Azúcar
+    "MATP_0005": 18.93,        // Concentrado UVA
+    "MATP_0017": 5.35,         // Ácido Cítrico
+    "MATP_0015": 6.4,          // Ácido Tartárico
+    "MATP_0019": 2.25,         // Benzoato de Sodio
   }
 };
 
