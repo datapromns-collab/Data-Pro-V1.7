@@ -2,8 +2,7 @@
 
 /**
  * Configuración de Firebase App.
- * Este objeto es público y seguro de compartir, ya que el acceso a los datos
- * está protegido por las Reglas de Seguridad de Firebase Firestore.
+ * Se utilizan los valores oficiales del proyecto para garantizar la conexión.
  */
 export const firebaseConfig = {
   apiKey: "AIzaSyC2dE8727776803-fE7ed73651c6c5a2c2",

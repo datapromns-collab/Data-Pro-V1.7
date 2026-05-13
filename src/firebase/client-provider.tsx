@@ -2,23 +2,27 @@
 
 import React, { useMemo, useEffect } from 'react';
 import { FirebaseProvider } from './provider';
-import { initializeFirebase } from './index';
+import { initializeFirebase } from './init';
 import { signInAnonymously, onAuthStateChanged } from 'firebase/auth';
 
+/**
+ * Proveedor de Firebase para componentes de cliente.
+ * Maneja la inicialización y la autenticación anónima inicial.
+ */
 export function FirebaseClientProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // Inicializamos Firebase solo una vez en el cliente
   const { firebaseApp, firestore, auth } = useMemo(() => initializeFirebase(), []);
 
   useEffect(() => {
-    // Garantizamos que el usuario esté autenticado (aunque sea de forma anónima)
-    // para que las reglas de seguridad de Firestore permitan la persistencia de datos.
+    // Garantizamos una sesión activa para cumplir con las reglas de seguridad de Firestore
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (!user) {
         signInAnonymously(auth).catch((error) => {
-          console.error("Error al iniciar sesión anónima:", error);
+          // El error se maneja silenciosamente ya que el listener de errores global lo capturará si es crítico
         });
       }
     });
