@@ -158,10 +158,10 @@ export function TaskDialog({
       setDuration(0.5);
     } else if (name === 'CIP' || name === 'CP') {
       setDuration(2.0);
-    } else if (name === 'MTTO PROGRAMADO') {
-      setDuration(11.5);
-    } else if (name === 'PARADA PROGRAMADA') {
-      if (!initialTask && duration === 0) setDuration(1);
+    } else if (name === 'MTTO PROGRAMADO' || name === 'PARADA PROGRAMADA') {
+      if (!initialTask && duration === 0) {
+        setDuration(name === 'MTTO PROGRAMADO' ? 11.5 : 1);
+      }
     } else if (!isSpecialTask && loadPerHour > 0 && quantity > 0) {
       const calculatedDuration = quantity / loadPerHour;
       setDuration(calculatedDuration);
@@ -258,9 +258,9 @@ export function TaskDialog({
             </div>
           )}
 
-          {name === 'PARADA PROGRAMADA' && (
+          {(name === 'PARADA PROGRAMADA' || name === 'MTTO PROGRAMADO') && (
             <div className="grid gap-2 animate-in fade-in slide-in-from-top-2">
-              <Label>Duración de Parada (Horas)</Label>
+              <Label>Duración de {name === 'MTTO PROGRAMADO' ? 'Mantenimiento' : 'Parada'} (Horas)</Label>
               <Input 
                 type="number" 
                 step="0.5"
