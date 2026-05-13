@@ -14,7 +14,7 @@ interface SummaryReportProps {
 }
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7"];
-const DAYS_NAMES = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+const DAYS_NAMES = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
 
 export function SummaryReport({ tasks, weekStartDate }: SummaryReportProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
@@ -29,10 +29,8 @@ export function SummaryReport({ tasks, weekStartDate }: SummaryReportProps) {
         const taskStart = task.startTime;
         const taskEnd = task.endTime;
 
-        // Si la tarea no tiene cantidad o es especial, no sumamos
         if (!task.quantity) return acc;
 
-        // Calcular la intersección del tiempo de la tarea con el día actual
         const intersectionStart = taskStart > dayStart ? taskStart : dayStart;
         const intersectionEnd = taskEnd < dayEnd ? taskEnd : dayEnd;
 
@@ -67,30 +65,30 @@ export function SummaryReport({ tasks, weekStartDate }: SummaryReportProps) {
       <div className="grid grid-cols-2 gap-x-8 gap-y-6">
         {LINES.map((lineId) => (
           <div key={lineId} className="break-inside-avoid border rounded-xl overflow-hidden shadow-sm">
-            <div className="bg-slate-900 text-white px-4 py-2 flex justify-between items-center">
-              <span className="font-headline font-bold text-sm uppercase">Línea {lineId}</span>
-              <span className="text-[10px] font-bold opacity-70 uppercase tracking-wider">Cajas Totales</span>
+            <div className="bg-[#0f172a] text-white px-4 py-2.5 flex justify-between items-center">
+              <span className="font-headline font-bold text-[12px] uppercase">LÍNEA {lineId}</span>
+              <span className="text-[10px] font-bold opacity-60 uppercase tracking-widest">CAJAS TOTALES</span>
             </div>
             <Table>
               <TableBody>
                 {weekDays.map((day, idx) => {
                   const total = calculateDailyTotal(lineId, day);
                   return (
-                    <TableRow key={idx} className="h-8 border-b last:border-0 hover:bg-transparent">
-                      <TableCell className="py-1 px-4 text-xs font-bold text-slate-600 uppercase w-1/2">
+                    <TableRow key={idx} className="h-9 border-b last:border-0 hover:bg-transparent">
+                      <TableCell className="py-2 px-4 text-[11px] font-bold text-slate-600 uppercase w-1/2">
                         {DAYS_NAMES[idx]}
                       </TableCell>
-                      <TableCell className="py-1 px-4 text-right font-black text-slate-900 tabular-nums">
+                      <TableCell className="py-2 px-4 text-right font-black text-slate-900 tabular-nums text-[13px]">
                         {total > 0 ? Math.round(total).toLocaleString('es-ES') : '—'}
                       </TableCell>
                     </TableRow>
                   );
                 })}
               </TableBody>
-              <tfoot className="bg-slate-50 border-t">
-                <TableRow className="h-10">
-                  <TableCell className="px-4 py-2 text-xs font-black uppercase text-slate-900">Total Semana</TableCell>
-                  <TableCell className="px-4 py-2 text-right font-black text-primary text-sm">
+              <tfoot className="bg-slate-50/50 border-t-2 border-slate-100">
+                <TableRow className="h-12 hover:bg-transparent">
+                  <TableCell className="px-4 py-2 text-[12px] font-black uppercase text-slate-900">TOTAL SEMANA</TableCell>
+                  <TableCell className="px-4 py-2 text-right font-black text-primary text-[15px] tabular-nums">
                     {Math.round(
                       weekDays.reduce((acc, day) => acc + calculateDailyTotal(lineId, day), 0)
                     ).toLocaleString('es-ES')}
