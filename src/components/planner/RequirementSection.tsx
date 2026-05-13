@@ -15,7 +15,9 @@ import {
   Tag, 
   Layers,
   Beaker,
-  Zap
+  Zap,
+  Box,
+  Plus
 } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
 import { addDays } from 'date-fns';
@@ -28,7 +30,6 @@ interface RequirementSectionProps {
   weekStartDate: Date;
 }
 
-// Datos constantes para las tablas
 const PREFORMS_DATA = [
   { code: 'EMP_0009', description: 'PREFORMA TRANSPARENTE 29.6GR 1881' },
   { code: 'EMP_0068', description: 'PREFORMA TRANSPARENTE 36 GR-1881' },
@@ -41,9 +42,9 @@ const PREFORMS_DATA = [
 
 const CAPS_DATA = [
   { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS IMPORTADAS' },
-  { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS NACIONALES' },
+  { code: 'EMP_0095_N', description: 'TAPA VERDE REFRESCOS NACIONALES' },
   { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS IMPORTADAS' },
-  { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS NACIONALES' },
+  { code: 'EMP_0105_N', description: 'TAPA AZULES REFRESCOS NACIONALES' },
 ];
 
 const PLASTICS_DATA = [
@@ -117,6 +118,30 @@ const CONCENTRATES_SOFT_DRINKS = [
   { code: 'MATP_0039', description: 'CONCENTRADO MANZANA ROJA' },
 ];
 
+const SOLIDS_DATA = [
+  { code: 'MATP_0014', description: 'BENZOATO DE POTASIO' },
+  { code: 'MATP_0015', description: 'ACIDO TARTARICO' },
+  { code: 'MATP_0016', description: 'SUCRALOSA EN POLVO' },
+  { code: 'MATP_0017', description: 'ACIDO CITRICO ANHIDRO GRANULAR (J)' },
+  { code: 'MATP_0018', description: 'GOMA DE XANTHAN 80MESH (J)' },
+  { code: 'MATP_0019', description: 'BENZOATO DE SODIO E211 CRYSTALLINE (J)' },
+  { code: 'MATP_0020', description: 'SORBATO DE POTASIO E202 GRANULATE 2400 (J)' },
+  { code: 'MATP_0021', description: 'TRISODIUM CITRATE DIHYDRATE (J)' },
+  { code: 'MATP_0026', description: 'EXTRACTO TE EN POLVO (T)' },
+  { code: 'MATP_0031', description: 'ACIDO ASCORBICO (T)' },
+  { code: 'MATP_0036', description: 'EDTA IX11413BV DISODIO DE CALCIO' },
+  { code: 'MATP_0040', description: 'ACIDO MALICO AD000009' },
+  { code: 'MATP_0042', description: 'CARBOXIMETILCELULOSA CMC SACO 25KG' },
+];
+
+const ADDITIVES_DATA = [
+  { code: 'MATP_0010', description: 'ADITIVO AD 74M-135', unit: 'LTS' },
+  { code: 'MATP_0027', description: 'CONCENTRADO DE EXTRACTO DE TE (T) LIQUIDO', unit: 'KG' },
+  { code: 'MATP_0028', description: 'CONCENTRADO EXTRACTO DE LIMON (T) SABOR', unit: 'KG' },
+  { code: 'MATP_0029', description: 'CONCENTRADO EXTRACTO DE DURAZNO (T) SABOR', unit: 'KG' },
+  { code: 'MATP_0041', description: 'COLOR CARAMELO BOM AL (SU)', unit: 'KG' },
+];
+
 export function RequirementSection({ onPrint, tasks, weekStartDate }: RequirementSectionProps) {
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
@@ -145,7 +170,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
       <Table>
         <TableHeader>
           <TableRow className="bg-slate-50/50">
-            <TableHead className="font-bold text-slate-500 py-4">SAP</TableHead>
+            <TableHead className="font-bold text-slate-500 py-4">Código SAP</TableHead>
             <TableHead className="font-bold text-slate-500 py-4">Descripción</TableHead>
             <TableHead className="text-right font-bold text-slate-500 py-4">Cantidad Requerida</TableHead>
           </TableRow>
@@ -153,11 +178,11 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
         <TableBody>
           {data.map((item, index) => (
             <TableRow key={`${item.code}-${index}`} className="hover:bg-slate-50/50 transition-colors">
-              <TableCell className="font-mono text-[11px] font-bold text-primary py-4">{item.code}</TableCell>
+              <TableCell className="font-mono text-[11px] font-bold text-primary py-4">{item.code.replace('_N', '').replace('_S', '')}</TableCell>
               <TableCell className="text-sm font-bold text-slate-700 py-4">{item.description}</TableCell>
               <TableCell className="text-right py-4">
                 <Badge variant="secondary" className="bg-slate-50 text-slate-400 border-slate-200 px-4 py-1.5 font-bold text-[12px] min-w-[100px] justify-center">
-                  {getCalculatedValue(item.code).toLocaleString('es-ES')} {unit}
+                  {getCalculatedValue(item.code).toLocaleString('es-ES')} {item.unit || unit}
                 </Badge>
               </TableCell>
             </TableRow>
@@ -248,18 +273,10 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
                   <TabsTrigger value="0.4lts" className="text-[10px] font-bold px-4">0.4 Lts</TabsTrigger>
                 </TabsList>
                 
-                <TabsContent value="2lts" className="m-0">
-                  {renderTable(LABELS_2LTS_DATA, 'KG')}
-                </TabsContent>
-                <TabsContent value="1.5lts" className="m-0">
-                  {renderTable(LABELS_1_5LTS_DATA, 'KG')}
-                </TabsContent>
-                <TabsContent value="1lt" className="m-0">
-                  {renderTable(LABELS_1LT_DATA, 'KG')}
-                </TabsContent>
-                <TabsContent value="0.4lts" className="m-0">
-                  {renderTable(LABELS_04LT_DATA, 'KG')}
-                </TabsContent>
+                <TabsContent value="2lts" className="m-0">{renderTable(LABELS_2LTS_DATA, 'KG')}</TabsContent>
+                <TabsContent value="1.5lts" className="m-0">{renderTable(LABELS_1_5LTS_DATA, 'KG')}</TabsContent>
+                <TabsContent value="1lt" className="m-0">{renderTable(LABELS_1LT_DATA, 'KG')}</TabsContent>
+                <TabsContent value="0.4lts" className="m-0">{renderTable(LABELS_04LT_DATA, 'KG')}</TabsContent>
               </Tabs>
             </TabsContent>
 
@@ -282,12 +299,18 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
               <TabsTrigger value="concentrados" className="gap-2 px-4 py-2 rounded-full border border-slate-200 font-bold text-xs bg-white data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-600 data-[state=active]:border-emerald-200 shadow-sm">
                 <Beaker className="h-4 w-4" /> Concentrados
               </TabsTrigger>
+              <TabsTrigger value="solidos" className="gap-2 px-4 py-2 rounded-full border border-slate-200 font-bold text-xs bg-white data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-600 data-[state=active]:border-emerald-200 shadow-sm">
+                <Box className="h-4 w-4" /> Sólidos
+              </TabsTrigger>
+              <TabsTrigger value="aditivos" className="gap-2 px-4 py-2 rounded-full border border-slate-200 font-bold text-xs bg-white data-[state=active]:bg-emerald-50 data-[state=active]:text-emerald-600 data-[state=active]:border-emerald-200 shadow-sm">
+                <Plus className="h-4 w-4" /> Aditivos
+              </TabsTrigger>
             </TabsList>
             
             <TabsContent value="azucar" className="m-0 animate-in slide-in-from-left-2 duration-300">
               <div className="flex items-center gap-3 mb-6 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
                 <Zap className="h-5 w-5 text-emerald-600" />
-                <h4 className="font-headline font-bold text-slate-800">Materia Prima - Azúcar</h4>
+                <h4 className="font-headline font-bold text-slate-800">Azúcar</h4>
               </div>
               {renderTable(SUGAR_DATA, 'KG')}
             </TabsContent>
@@ -295,9 +318,25 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
             <TabsContent value="concentrados" className="m-0 animate-in slide-in-from-left-2 duration-300">
               <div className="flex items-center gap-3 mb-6 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
                 <Beaker className="h-5 w-5 text-emerald-600" />
-                <h4 className="font-headline font-bold text-slate-800">Materia Prima - Concentrados</h4>
+                <h4 className="font-headline font-bold text-slate-800">Concentrados</h4>
               </div>
               {renderTable(CONCENTRATES_SOFT_DRINKS, 'LTS')}
+            </TabsContent>
+
+            <TabsContent value="solidos" className="m-0 animate-in slide-in-from-left-2 duration-300">
+              <div className="flex items-center gap-3 mb-6 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
+                <Box className="h-5 w-5 text-emerald-600" />
+                <h4 className="font-headline font-bold text-slate-800">Sólidos</h4>
+              </div>
+              {renderTable(SOLIDS_DATA, 'KG')}
+            </TabsContent>
+
+            <TabsContent value="aditivos" className="m-0 animate-in slide-in-from-left-2 duration-300">
+              <div className="flex items-center gap-3 mb-6 p-4 bg-emerald-50 rounded-xl border border-emerald-200">
+                <Plus className="h-5 w-5 text-emerald-600" />
+                <h4 className="font-headline font-bold text-slate-800">Aditivos</h4>
+              </div>
+              {renderTable(ADDITIVES_DATA, 'LTS')}
             </TabsContent>
           </Tabs>
         </TabsContent>
