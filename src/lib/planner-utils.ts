@@ -147,63 +147,74 @@ export const UBB_FACTORS: Record<string, number> = {
 
 export const RECIPES: Record<string, Record<string, number>> = {
   "GLUP COLA": {
-    "MATP_0001": 1925.033645, // Azúcar
-    "MATP_0002": 18.93,        // Concentrado A
-    "MATP_0009": 18.93,        // Concentrado B
-    "MATP_0010": 0.95,         // Aditivo AD-74M
+    "MATP_0001": 1925.033645,
+    "MATP_0002": 18.93,
+    "MATP_0009": 18.93,
+    "MATP_0010": 0.95,
   },
   "GLUP FRESH": {
-    "MATP_0001": 1904.412248, // Azúcar
-    "MATP_0003": 18.93,       // Concentrado Fresh
-    "MATP_0017": 25.65,       // Ácido Cítrico
-    "MATP_0021": 4.55,        // Citrato de Sodio
-    "MATP_0019": 4.55,        // Benzoato de Sodio
+    "MATP_0001": 1904.412248,
+    "MATP_0003": 18.93,
+    "MATP_0017": 25.65,
+    "MATP_0021": 4.55,
+    "MATP_0019": 4.55,
   },
   "GLUP UVA": {
-    "MATP_0001": 1024.909587, // Azúcar
-    "MATP_0005": 18.93,        // Concentrado UVA
-    "MATP_0017": 5.35,         // Ácido Cítrico
-    "MATP_0015": 6.4,          // Ácido Tartárico
-    "MATP_0019": 2.25,         // Benzoato de Sodio
+    "MATP_0001": 1024.909587,
+    "MATP_0005": 18.93,
+    "MATP_0017": 5.35,
+    "MATP_0015": 6.4,
+    "MATP_0019": 2.25,
   },
   "GLUP PIÑA": {
-    "MATP_0001": 1175.847343, // Azúcar
-    "MATP_0006": 18.93,        // Concentrado PIÑA
-    "MATP_0017": 11.95,        // Ácido Cítrico
-    "MATP_0019": 1.95,         // Benzoato de Sodio
+    "MATP_0001": 1175.847343,
+    "MATP_0006": 18.93,
+    "MATP_0017": 11.95,
+    "MATP_0019": 1.95,
   },
   "GLUP NARANJA": {
-    "MATP_0001": 1030.977235, // Azúcar
-    "MATP_0004": 18.93,        // Concentrado NARANJA
-    "MATP_0017": 13.05,        // Ácido Cítrico
-    "MATP_0014": 2.25,         // Benzoato de Potasio
+    "MATP_0001": 1030.977235,
+    "MATP_0004": 18.93,
+    "MATP_0017": 13.05,
+    "MATP_0014": 2.25,
   },
   "GLUP KOLITA": {
-    "MATP_0001": 666.4654676,  // Azúcar
-    "MATP_0007": 18.93,        // Concentrado KOLITA
-    "MATP_0017": 1.45,         // Ácido Cítrico
-    "MATP_0016": 0.23,         // Sucralosa
-    "MATP_0019": 0.85,         // Benzoato de Sodio
+    "MATP_0001": 666.4654676,
+    "MATP_0007": 18.93,
+    "MATP_0017": 1.45,
+    "MATP_0016": 0.23,
+    "MATP_0019": 0.85,
   },
   "GLUP MANZANA VERDE": {
-    "MATP_0001": 624.6972684,  // Azúcar
-    "MATP_0032": 18.93,        // Concentrado Manzana Verde
-    "MATP_0017": 15.1,         // Ácido Cítrico
-    "MATP_0019": 3.27,         // Benzoato de Sodio
+    "MATP_0001": 624.6972684,
+    "MATP_0032": 18.93,
+    "MATP_0017": 15.1,
+    "MATP_0019": 3.27,
   },
   "GLUP PIÑA PARCHITA": {
-    "MATP_0001": 1799.167579,  // Azúcar
-    "MATP_0038": 18.93,        // Concentrado Piña Parchita
-    "MATP_0017": 39.58,        // Ácido Cítrico
-    "MATP_0019": 2.12,         // Benzoato de Sodio
+    "MATP_0001": 1799.167579,
+    "MATP_0038": 18.93,
+    "MATP_0017": 39.58,
+    "MATP_0019": 2.12,
   },
   "GLUP MANZANA ROJA": {
-    "MATP_0001": 1352.053203,  // Azúcar
-    "MATP_0039": 18.93,        // Concentrado Manzana Roja
-    "MATP_0041": 2.29,         // Color Caramelo
-    "MATP_0019": 3.12,         // Benzoato de Sodio
-    "MATP_0017": 10.33,        // Ácido Cítrico
-    "MATP_0040": 20.69,        // Ácido Málico
+    "MATP_0001": 1352.053203,
+    "MATP_0039": 18.93,
+    "MATP_0041": 2.29,
+    "MATP_0019": 3.12,
+    "MATP_0017": 10.33,
+    "MATP_0040": 20.69,
+  },
+  "JUSTY NARANJA": {
+    "MATP_0001": 110.0000844,
+    "MATP_0022": 5,
+    "MATP_0017": 3.515,
+    "MATP_0021": 0.85,
+    "MATP_0018": 0.4,
+    "MATP_0019": 0.2,
+    "MATP_0020": 0.25,
+    "MATP_0036": 0.1,
+    "MATP_0031": 0.1,
   }
 };
 
