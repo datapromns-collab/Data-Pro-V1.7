@@ -29,6 +29,26 @@ export const PRODUCT_FACTORS: Record<string, Record<string, number>> = {
   "VITA TEA LIMON": { "1.5Lts": 1111.11 },
 };
 
+export const SYRUP_FACTORS: Record<string, Record<string, number>> = {
+  "GLUP COLA": { "2Lts": 2, "1Lt": 2, "0.4Lts": 1.0 },
+  "GLUP FRESH": { "2Lts": 2, "1Lt": 2, "0.4Lts": 1.0 },
+  "GLUP UVA": { "2Lts": 2.4, "1Lt": 2.4, "0.4Lts": 1.2 },
+  "GLUP PIÑA": { "2Lts": 2.4, "1Lt": 2.4, "0.4Lts": 1.2 },
+  "GLUP NARANJA": { "2Lts": 2.4, "1Lt": 2.4, "0.4Lts": 1.2 },
+  "GLUP KOLITA": { "2Lts": 2, "1Lt": 2, "0.4Lts": 1.0 },
+  "GLUP MANZANA VERDE": { "2Lts": 2, "1Lt": 2, "0.4Lts": 1.0 },
+  "GLUP PIÑA PARCHITA": { "2Lts": 2.4, "1Lt": 2.4, "0.4Lts": 1.2 },
+  "GLUP MANZANA ROJA": { "2Lts": 2.07, "1Lt": 2.07, "0.4Lts": 1.03 },
+  "JUSTY NARANJA": { "1.5Lts": 18 },
+  "JUSTY DURAZNO": { "1.5Lts": 18 },
+  "JUSTY MANDARINA": { "1.5Lts": 18 },
+  "JUSTY SANDIA": { "1.5Lts": 18 },
+  "JUSTY LIMON": { "1.5Lts": 18 },
+  "JUSTY TAMARINDO": { "1.5Lts": 18 },
+  "VITA TEA DURAZNO": { "1.5Lts": 18 },
+  "VITA TEA LIMON": { "1.5Lts": 18 },
+};
+
 export const UBB_FACTORS: Record<string, number> = {
   "GLUP COLA": 6,
   "GLUP FRESH": 6,
