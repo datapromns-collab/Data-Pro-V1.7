@@ -7,7 +7,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format, getISOWeek, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS, TERMO_0080_FACTORS, TERMO_0130_FACTORS, TERMO_0017_FACTORS } from '@/lib/planner-utils';
+import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS, TERMO_0080_FACTORS, TERMO_0130_FACTORS, TERMO_0017_FACTORS, UBB_FACTORS, RECIPES } from '@/lib/planner-utils';
 
 interface RequirementReportProps {
   tasks: ScheduledTask[];
@@ -144,6 +144,20 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
 
   const getCalculatedValue = (code: string) => {
+    // Requerimientos de Recetas de Materia Prima
+    let materialTotal = 0;
+    tasks.forEach(task => {
+      if (task.endTime > weekStartDate && task.startTime < weekEnd) {
+        const recipe = RECIPES[task.name];
+        if (recipe && recipe[code]) {
+          const productUbbFactor = UBB_FACTORS[task.name] || 0;
+          const taskUbb = (task.tanks || 0) * productUbbFactor;
+          materialTotal += taskUbb * recipe[code];
+        }
+      }
+    });
+    if (materialTotal > 0) return Number(materialTotal.toFixed(2));
+
     // Requerimientos de Etiquetas
     if (LABEL_MAPPING[code]) {
       const mapping = LABEL_MAPPING[code];
@@ -364,7 +378,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                   <TableRow key={`${item.code}-${index}`} className="h-10">
                     <TableCell className="font-mono text-[11px] font-bold text-emerald-600 w-[150px]">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
                     <TableCell className="text-[12px] font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/30 text-[12px] w-[200px]">_______ KG</TableCell>
+                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/30 text-[12px] w-[200px]">{getCalculatedValue(item.code).toLocaleString('es-ES')} KG</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -383,7 +397,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                     <TableRow key={`${item.code}-${index}`} className="border-b last:border-0 h-8">
                       <TableCell className="py-1 px-3 font-mono text-[10px] font-bold text-emerald-600">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
                       <TableCell className="py-1 px-3 text-[10px] font-medium text-slate-800 truncate max-w-[150px]">{item.description}</TableCell>
-                      <TableCell className="py-1 px-3 text-right font-black text-slate-900 bg-slate-50/30 text-[10px]">_______ LTS</TableCell>
+                      <TableCell className="py-1 px-3 text-right font-black text-slate-900 bg-slate-50/30 text-[10px]">{getCalculatedValue(item.code).toLocaleString('es-ES')} LTS</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -397,7 +411,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                     <TableRow key={`${item.code}-${index}`} className="border-b last:border-0 h-8">
                       <TableCell className="py-1 px-3 font-mono text-[10px] font-bold text-emerald-600">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
                       <TableCell className="py-1 px-3 text-[10px] font-medium text-slate-800 truncate max-w-[150px]">{item.description}</TableCell>
-                      <TableCell className="py-1 px-3 text-right font-black text-slate-900 bg-slate-50/30 text-[10px]">_______ KG</TableCell>
+                      <TableCell className="py-1 px-3 text-right font-black text-slate-900 bg-slate-50/30 text-[10px]">{getCalculatedValue(item.code).toLocaleString('es-ES')} KG</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -416,7 +430,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                   <TableRow key={`${item.code}-${index}`} className="border-b last:border-0 h-8">
                     <TableCell className="py-1 font-mono text-[10px] font-bold text-emerald-600">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
                     <TableCell className="py-1 text-[11px] font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">_______ KG</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{getCalculatedValue(item.code).toLocaleString('es-ES')} KG</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -433,7 +447,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                   <TableRow key={`${item.code}-${index}`} className="border-b last:border-0 h-10">
                     <TableCell className="font-mono text-[11px] font-bold text-emerald-600 w-[150px]">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
                     <TableCell className="text-[12px] font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/30 text-[12px] w-[200px]">_______ {item.unit}</TableCell>
+                    <TableCell className="text-right font-black text-slate-900 bg-slate-50/30 text-[12px] w-[200px]">{getCalculatedValue(item.code).toLocaleString('es-ES')} {item.unit}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

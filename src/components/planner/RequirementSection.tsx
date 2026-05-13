@@ -21,7 +21,7 @@ import { ScheduledTask } from '@/lib/types';
 import { addDays } from 'date-fns';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS, TERMO_0080_FACTORS, TERMO_0130_FACTORS, TERMO_0017_FACTORS } from '@/lib/planner-utils';
+import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS, TERMO_0080_FACTORS, TERMO_0130_FACTORS, TERMO_0017_FACTORS, UBB_FACTORS, RECIPES } from '@/lib/planner-utils';
 
 interface RequirementSectionProps {
   onPrint?: () => void;
@@ -146,6 +146,20 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
   const getCalculatedValue = (code: string) => {
+    // Requerimientos de Recetas de Materia Prima
+    let materialTotal = 0;
+    tasks.forEach(task => {
+      if (task.endTime > weekStartDate && task.startTime < weekEnd) {
+        const recipe = RECIPES[task.name];
+        if (recipe && recipe[code]) {
+          const productUbbFactor = UBB_FACTORS[task.name] || 0;
+          const taskUbb = (task.tanks || 0) * productUbbFactor;
+          materialTotal += taskUbb * recipe[code];
+        }
+      }
+    });
+    if (materialTotal > 0) return Number(materialTotal.toFixed(2));
+
     // Requerimientos de Etiquetas
     if (LABEL_MAPPING[code]) {
       const mapping = LABEL_MAPPING[code];

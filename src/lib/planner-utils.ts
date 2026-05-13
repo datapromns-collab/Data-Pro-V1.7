@@ -145,6 +145,15 @@ export const UBB_FACTORS: Record<string, number> = {
   "VITA TEA LIMON": 20,
 };
 
+export const RECIPES: Record<string, Record<string, number>> = {
+  "GLUP COLA": {
+    "MATP_0001": 1925.033645, // Azúcar
+    "MATP_0002": 18.93,        // Concentrado A
+    "MATP_0009": 18.93,        // Concentrado B
+    "MATP_0010": 0.95,         // Aditivo AD-74M
+  }
+};
+
 export const getWeekDays = (baseDate: Date) => {
   const start = startOfWeek(baseDate, { weekStartsOn: 1 }); // Monday
   return Array.from({ length: 7 }).map((_, i) => addDays(start, i));
