@@ -465,11 +465,11 @@ export const CONSUMABLES_RECIPES: Record<string, Record<string, Record<string, n
   },
   "JUSTY NARANJA": {
     "1.5Lts": {
-      "AGUA-00005": 0.994097546,
-      "AGUA-00004": 0.397639018,
-      "AGUA-00003": 0.149114632,
-      "AGUA-00002": 0.447343896,
-      "JARA-00001": 0.067987325
+      "AGUA-00005": 36.985338,
+      "AGUA-00004": 15.385338,
+      "AGUA-00003": 5.4,
+      "AGUA-00002": 16.2,
+      "JARA-00001": 2.462076
     }
   }
 };
