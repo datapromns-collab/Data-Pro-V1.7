@@ -332,6 +332,32 @@ export const CONSUMABLES_RECIPES: Record<string, Record<string, Record<string, n
       "JARA-00001": 1.006632,
       "MATP_0008": 0.036195
     }
+  },
+  "GLUP NARANJA": {
+    "2Lts": {
+      "AGUA-00005": 22.8,
+      "AGUA-00004": 9.6,
+      "AGUA-00003": 2.4,
+      "AGUA-00002": 10.8,
+      "JARA-00001": 1.9826904,
+      "MATP_0008": 0.079632
+    },
+    "1Lt": {
+      "AGUA-00005": 22.8,
+      "AGUA-00004": 9.6,
+      "AGUA-00003": 2.4,
+      "AGUA-00002": 10.8,
+      "JARA-00001": 1.9826904,
+      "MATP_0008": 0.079632
+    },
+    "0.4Lts": {
+      "AGUA-00005": 11.4,
+      "AGUA-00004": 4.8,
+      "AGUA-00003": 1.2,
+      "AGUA-00002": 5.4,
+      "JARA-00001": 0.9913452,
+      "MATP_0008": 0.039816
+    }
   }
 };
 
