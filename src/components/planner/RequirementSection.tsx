@@ -23,7 +23,7 @@ import { ScheduledTask } from '@/lib/types';
 import { addDays } from 'date-fns';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS, TERMO_0080_FACTORS, TERMO_0130_FACTORS, TERMO_0017_FACTORS, UBB_FACTORS, RECIPES } from '@/lib/planner-utils';
+import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS, TERMO_0080_FACTORS, TERMO_0130_FACTORS, TERMO_0017_FACTORS, UBB_FACTORS, RECIPES, CONSUMABLES_RECIPES } from '@/lib/planner-utils';
 
 interface RequirementSectionProps {
   onPrint?: () => void;
@@ -157,6 +157,18 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
   const getCalculatedValue = (code: string) => {
+    // Requerimientos de Consumibles
+    let consumablesTotal = 0;
+    tasks.forEach(task => {
+      if (task.endTime > weekStartDate && task.startTime < weekEnd) {
+        const recipe = CONSUMABLES_RECIPES[task.name];
+        if (recipe && task.presentation && recipe[task.presentation] && recipe[task.presentation][code]) {
+          consumablesTotal += (task.quantity || 0) * recipe[task.presentation][code];
+        }
+      }
+    });
+    if (consumablesTotal > 0) return Number(consumablesTotal.toFixed(2));
+
     // Requerimientos de Recetas de Materia Prima
     let materialTotal = 0;
     tasks.forEach(task => {
