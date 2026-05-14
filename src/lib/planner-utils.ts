@@ -366,7 +366,7 @@ export const CONSUMABLES_RECIPES: Record<string, Record<string, Record<string, n
       "AGUA-00003": 3.6,
       "AGUA-00002": 10.8,
       "JARA-00001": 1.677016,
-      "MATP_0008": 0.013826158
+      "MATP_0008": 0.098934
     },
     "1Lt": {
       "AGUA-00005": 18.114288,
@@ -374,7 +374,7 @@ export const CONSUMABLES_RECIPES: Record<string, Record<string, Record<string, n
       "AGUA-00003": 3.6,
       "AGUA-00002": 10.8,
       "JARA-00001": 1.677016,
-      "MATP_0008": 0.01382616
+      "MATP_0008": 0.098934
     },
     "0.4Lts": {
       "AGUA-00005": 9.057144,
@@ -382,7 +382,7 @@ export const CONSUMABLES_RECIPES: Record<string, Record<string, Record<string, n
       "AGUA-00003": 1.8,
       "AGUA-00002": 5.4,
       "JARA-00001": 0.838508,
-      "MATP_0008": 0.00691308
+      "MATP_0008": 0.049467
     }
   }
 };
