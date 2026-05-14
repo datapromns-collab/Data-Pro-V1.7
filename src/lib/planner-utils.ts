@@ -471,6 +471,15 @@ export const CONSUMABLES_RECIPES: Record<string, Record<string, Record<string, n
       "AGUA-00002": 16.2,
       "JARA-00001": 2.462076
     }
+  },
+  "JUSTY DURAZNO": {
+    "1.5Lts": {
+      "AGUA-00005": 36.985338,
+      "AGUA-00004": 15.385338,
+      "AGUA-00003": 5.4,
+      "AGUA-00002": 16.2,
+      "JARA-00001": 3.077604
+    }
   }
 };
 
