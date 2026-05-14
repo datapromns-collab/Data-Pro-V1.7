@@ -410,6 +410,32 @@ export const CONSUMABLES_RECIPES: Record<string, Record<string, Record<string, n
       "JARA-00001": 0.892866,
       "MATP_0008": 0.03861
     }
+  },
+  "GLUP PIÑA PARCHITA": {
+    "2Lts": {
+      "AGUA-00005": 24,
+      "AGUA-00004": 9.6,
+      "AGUA-00003": 3.6,
+      "AGUA-00002": 10.8,
+      "JARA-00001": 1.9703904,
+      "MATP_0008": 0.106176
+    },
+    "1Lt": {
+      "AGUA-00005": 24,
+      "AGUA-00004": 9.6,
+      "AGUA-00003": 3.6,
+      "AGUA-00002": 10.8,
+      "JARA-00001": 1.9703904,
+      "MATP_0008": 0.106176
+    },
+    "0.4Lts": {
+      "AGUA-00005": 12,
+      "AGUA-00004": 4.8,
+      "AGUA-00003": 1.8,
+      "AGUA-00002": 5.4,
+      "JARA-00001": 0.9851952,
+      "MATP_0008": 0.053088
+    }
   }
 };
 
