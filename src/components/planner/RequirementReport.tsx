@@ -254,15 +254,6 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
       }
       case 'EMP_0093': return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && !["GLUP FRESH"].includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
       case 'EMP_0103': return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
-      case 'EMP_0120': return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
-      case 'EMP_0126': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
-      case 'EMP_0135': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
-      
-      // Lógica de Tapas
-      case 'EMP_0095_N': {
-        const line5 = tasks.filter(t => t.lineId === "5" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
-        return Math.round(line5 * 12);
-      }
       case 'EMP_0105': {
         const line1_3 = tasks.filter(t => (t.lineId === "1" || t.lineId === "3") && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
         return Math.round(line1_3 * 6);
@@ -480,10 +471,17 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
           {renderSectionHeader("IX. Consumibles", "indigo-600")}
           <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
-              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad</TableHead></TableRow></TableHeader>
+              <TableHeader>
+                <TableRow className="bg-slate-50 h-8">
+                  <TableHead className="py-1 font-bold text-slate-700 text-xs">Código SAP</TableHead>
+                  <TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead>
+                  <TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad</TableHead>
+                </TableRow>
+              </TableHeader>
               <TableBody>
                 {CONSUMABLES_DATA.map((item, index) => (
                   <TableRow key={`${item.code}-${index}`} className="border-b last:border-0 h-8">
+                    <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{item.code}</TableCell>
                     <TableCell className="py-1 text-[11px] font-medium text-slate-800">{item.description}</TableCell>
                     <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{getCalculatedValue(item.code).toLocaleString('es-ES')} {item.unit}</TableCell>
                   </TableRow>
