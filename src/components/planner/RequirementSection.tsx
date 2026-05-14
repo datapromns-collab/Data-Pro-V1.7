@@ -145,12 +145,12 @@ const ADDITIVES_DATA = [
 ];
 
 const CONSUMABLES_DATA = [
-  { code: 'CONS_0001', description: 'Agua Filtrada', unit: 'LTS' },
-  { code: 'CONS_0002', description: 'Agua Procesos', unit: 'LTS' },
-  { code: 'CONS_0003', description: 'Agua Suave', unit: 'LTS' },
-  { code: 'CONS_0004', description: 'Agua Servicio', unit: 'LTS' },
-  { code: 'CONS_0005', description: 'Jarabe Simple', unit: 'LTS' },
-  { code: 'CONS_0006', description: 'CO2', unit: 'KG' },
+  { code: 'AGUA-00005', description: 'Agua Filtrada', unit: 'LTS' },
+  { code: 'AGUA-00004', description: 'Agua Procesos', unit: 'LTS' },
+  { code: 'AGUA-00003', description: 'Agua Suave', unit: 'LTS' },
+  { code: 'AGUA-00002', description: 'Agua Servicio', unit: 'LTS' },
+  { code: 'JARA-00001', description: 'Jarabe Simple', unit: 'LTS' },
+  { code: 'MATP_0008', description: 'CO2', unit: 'KG' },
 ];
 
 export function RequirementSection({ onPrint, tasks, weekStartDate }: RequirementSectionProps) {
@@ -284,7 +284,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
         <TableBody>
           {data.map((item, idx) => (
             <TableRow key={`${item.code}-${idx}`} className="hover:bg-slate-50/50 transition-colors">
-              <TableCell className="font-mono text-[11px] font-bold text-primary py-4">{item.code.replace(/(_N|_2|CONS_)/, '')}</TableCell>
+              <TableCell className="font-mono text-[11px] font-bold text-primary py-4">{item.code.replace(/(_N|_2)/, '')}</TableCell>
               <TableCell className="text-sm font-bold text-slate-700 py-4">{item.description}</TableCell>
               <TableCell className="text-right py-4">
                 <Badge variant="secondary" className="bg-slate-50 text-slate-400 border-slate-200 px-4 py-1.5 font-bold text-[12px] min-w-[100px] justify-center">

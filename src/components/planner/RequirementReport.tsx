@@ -139,12 +139,12 @@ const ADDITIVES_DATA = [
 ];
 
 const CONSUMABLES_DATA = [
-  { code: 'CONS_0001', description: 'Agua Filtrada', unit: 'LTS' },
-  { code: 'CONS_0002', description: 'Agua Procesos', unit: 'LTS' },
-  { code: 'CONS_0003', description: 'Agua Suave', unit: 'LTS' },
-  { code: 'CONS_0004', description: 'Agua Servicio', unit: 'LTS' },
-  { code: 'CONS_0005', description: 'Jarabe Simple', unit: 'LTS' },
-  { code: 'CONS_0006', description: 'CO2', unit: 'KG' },
+  { code: 'AGUA-00005', description: 'Agua Filtrada', unit: 'LTS' },
+  { code: 'AGUA-00004', description: 'Agua Procesos', unit: 'LTS' },
+  { code: 'AGUA-00003', description: 'Agua Suave', unit: 'LTS' },
+  { code: 'AGUA-00002', description: 'Agua Servicio', unit: 'LTS' },
+  { code: 'JARA-00001', description: 'Jarabe Simple', unit: 'LTS' },
+  { code: 'MATP_0008', description: 'CO2', unit: 'KG' },
 ];
 
 export function RequirementReport({ tasks, weekStartDate }: RequirementReportProps) {
