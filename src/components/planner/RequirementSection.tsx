@@ -15,7 +15,9 @@ import {
   FlaskConical,
   Wheat,
   Box,
-  Plus
+  Plus,
+  Waves,
+  Zap
 } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
 import { addDays } from 'date-fns';
@@ -140,6 +142,15 @@ const ADDITIVES_DATA = [
   { code: 'MATP_0028', description: 'CONCENTRADO EXTRACTO DE LIMON (T) SABOR', unit: 'KG' },
   { code: 'MATP_0029', description: 'CONCENTRADO EXTRACTO DE DURAZNO (T) SABOR', unit: 'KG' },
   { code: 'MATP_0041', description: 'COLOR CARAMELO BOM AL (SU)', unit: 'KG' },
+];
+
+const CONSUMABLES_DATA = [
+  { code: 'CONS_0001', description: 'Agua Filtrada', unit: 'LTS' },
+  { code: 'CONS_0002', description: 'Agua Procesos', unit: 'LTS' },
+  { code: 'CONS_0003', description: 'Agua Suave', unit: 'LTS' },
+  { code: 'CONS_0004', description: 'Agua Servicio', unit: 'LTS' },
+  { code: 'CONS_0005', description: 'Jarabe Simple', unit: 'LTS' },
+  { code: 'CONS_0006', description: 'CO2', unit: 'KG' },
 ];
 
 export function RequirementSection({ onPrint, tasks, weekStartDate }: RequirementSectionProps) {
@@ -273,7 +284,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
         <TableBody>
           {data.map((item, idx) => (
             <TableRow key={`${item.code}-${idx}`} className="hover:bg-slate-50/50 transition-colors">
-              <TableCell className="font-mono text-[11px] font-bold text-primary py-4">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
+              <TableCell className="font-mono text-[11px] font-bold text-primary py-4">{item.code.replace(/(_N|_2|CONS_)/, '')}</TableCell>
               <TableCell className="text-sm font-bold text-slate-700 py-4">{item.description}</TableCell>
               <TableCell className="text-right py-4">
                 <Badge variant="secondary" className="bg-slate-50 text-slate-400 border-slate-200 px-4 py-1.5 font-bold text-[12px] min-w-[100px] justify-center">
@@ -297,6 +308,9 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
             </TabsTrigger>
             <TabsTrigger value="materia" className="gap-2 px-6 h-full font-black text-xs uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900">
               <Droplet className="h-4 w-4" /> Materia Prima
+            </TabsTrigger>
+            <TabsTrigger value="consumibles" className="gap-2 px-6 h-full font-black text-xs uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900">
+              <Waves className="h-4 w-4" /> Consumibles
             </TabsTrigger>
           </TabsList>
 
@@ -391,6 +405,10 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
               {renderTable(ADDITIVES_DATA, 'LTS')}
             </TabsContent>
           </Tabs>
+        </TabsContent>
+
+        <TabsContent value="consumibles" className="m-0 animate-in fade-in-50 duration-500">
+          {renderTable(CONSUMABLES_DATA)}
         </TabsContent>
       </Tabs>
     </div>

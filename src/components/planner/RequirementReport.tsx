@@ -138,6 +138,15 @@ const ADDITIVES_DATA = [
   { code: 'MATP_0041', description: 'COLOR CARAMELO BOM AL (SU)', unit: 'KG' },
 ];
 
+const CONSUMABLES_DATA = [
+  { code: 'CONS_0001', description: 'Agua Filtrada', unit: 'LTS' },
+  { code: 'CONS_0002', description: 'Agua Procesos', unit: 'LTS' },
+  { code: 'CONS_0003', description: 'Agua Suave', unit: 'LTS' },
+  { code: 'CONS_0004', description: 'Agua Servicio', unit: 'LTS' },
+  { code: 'CONS_0005', description: 'Jarabe Simple', unit: 'LTS' },
+  { code: 'CONS_0006', description: 'CO2', unit: 'KG' },
+];
+
 export function RequirementReport({ tasks, weekStartDate }: RequirementReportProps) {
   const weekNumber = getISOWeek(weekStartDate);
   const weekEnd = addDays(weekStartDate, 7);
@@ -448,6 +457,23 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
                     <TableCell className="font-mono text-[11px] font-bold text-emerald-600 w-[150px]">{item.code.replace(/(_N|_2)$/, '')}</TableCell>
                     <TableCell className="text-[12px] font-medium text-slate-800">{item.description}</TableCell>
                     <TableCell className="text-right font-black text-slate-900 bg-slate-50/30 text-[12px] w-[200px]">{getCalculatedValue(item.code).toLocaleString('es-ES')} {item.unit}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </section>
+
+        <section className="break-inside-avoid">
+          {renderSectionHeader("IX. Consumibles", "indigo-600")}
+          <div className="rounded border border-slate-200 overflow-hidden">
+            <Table>
+              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad</TableHead></TableRow></TableHeader>
+              <TableBody>
+                {CONSUMABLES_DATA.map((item, index) => (
+                  <TableRow key={`${item.code}-${index}`} className="border-b last:border-0 h-8">
+                    <TableCell className="py-1 text-[11px] font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{getCalculatedValue(item.code).toLocaleString('es-ES')} {item.unit}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
