@@ -37,7 +37,7 @@ export const SYRUP_FACTORS: Record<string, Record<string, number>> = {
   "GLUP KOLITA": { "2Lts": 2, "1Lt": 2, "0.4Lts": 1.0 },
   "GLUP MANZANA VERDE": { "2Lts": 2, "1Lt": 2, "0.4Lts": 1.0 },
   "GLUP PIÑA PARCHITA": { "2Lts": 2.4, "1Lt": 2.4, "0.4Lts": 1.2 },
-  "GLUP MANZANA ROJA": { "2Lts": 2.07, "1Lt": 2.07, "0.4Lts": 1.03 },
+  "GLUP MANZANA ROJA": { "2.07": 2.07, "1Lt": 2.07, "0.4Lts": 1.03 },
   "JUSTY NARANJA": { "1.5Lts": 18 },
   "JUSTY DURAZNO": { "1.5Lts": 18 },
   "JUSTY MANDARINA": { "1.5Lts": 18 },
@@ -383,6 +383,32 @@ export const CONSUMABLES_RECIPES: Record<string, Record<string, Record<string, n
       "AGUA-00002": 5.4,
       "JARA-00001": 0.838508,
       "MATP_0008": 0.049467
+    }
+  },
+  "GLUP MANZANA VERDE": {
+    "2Lts": {
+      "AGUA-00005": 24.399996,
+      "AGUA-00004": 9.999996,
+      "AGUA-00003": 3.6,
+      "AGUA-00002": 10.8,
+      "JARA-00001": 1.785732,
+      "MATP_0008": 0.07722
+    },
+    "1Lt": {
+      "AGUA-00005": 24.399996,
+      "AGUA-00004": 9.999996,
+      "AGUA-00003": 3.6,
+      "AGUA-00002": 10.8,
+      "JARA-00001": 1.785732,
+      "MATP_0008": 0.07722
+    },
+    "0.4Lts": {
+      "AGUA-00005": 12.199998,
+      "AGUA-00004": 4.999998,
+      "AGUA-00003": 1.8,
+      "AGUA-00002": 5.4,
+      "JARA-00001": 0.892866,
+      "MATP_0008": 0.03861
     }
   }
 };
