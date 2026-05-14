@@ -6,9 +6,9 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Trash2, Clock, Gauge } from 'lucide-react';
+import { Trash2, Clock, Gauge, Info } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
-import { getWeekDays, PRODUCT_FACTORS, formatTime } from '@/lib/planner-utils';
+import { getWeekDays, PRODUCT_FACTORS, formatTime, PRODUCTION_END_SUN_HOUR, PRODUCTION_END_SUN_MINUTE } from '@/lib/planner-utils';
 import { useToast } from '@/hooks/use-toast';
 import {
   Select,
@@ -81,6 +81,29 @@ export function TaskDialog({
   }, [allTasks, lineId, weekDays]);
 
   const isSpecialTask = name === 'CS' || name === 'CIP' || name === 'CP' || name === 'PASIVACIÓN' || name === 'MTTO PROGRAMADO' || name === 'PARADA PROGRAMADA' || CIP_OPTIONS.includes(name);
+
+  const availableGap = useMemo(() => {
+    const day = weekDays[parseInt(selectedDayIdx)];
+    if (!day) return { hours: 0, boxes: 0 };
+    const [h, m] = selectedTime.split(':').map(Number);
+    const start = setMinutes(setHours(day, h), m);
+
+    const weekEndLimit = setMinutes(setHours(weekDays[6], PRODUCTION_END_SUN_HOUR), PRODUCTION_END_SUN_MINUTE);
+
+    const lineTasks = allTasks.filter(t => t.lineId === lineId && (initialTask ? t.id !== initialTask.id : true));
+    const nextTask = lineTasks
+      .filter(t => t.startTime > start)
+      .sort((a, b) => a.startTime.getTime() - b.startTime.getTime())[0];
+
+    const limit = nextTask ? nextTask.startTime : weekEndLimit;
+    const diffMs = limit.getTime() - start.getTime();
+    const diffHrs = Math.max(0, diffMs / (1000 * 60 * 60));
+    
+    return {
+      hours: diffHrs,
+      boxes: loadPerHour > 0 ? Math.floor(diffHrs * loadPerHour) : 0
+    };
+  }, [selectedDayIdx, selectedTime, weekDays, allTasks, lineId, loadPerHour, initialTask]);
 
   const factor = useMemo(() => {
     if (!name || !presentation) return 0;
@@ -345,10 +368,27 @@ export function TaskDialog({
             </div>
           )}
           
-          <div className="flex justify-between items-center p-3 bg-primary/5 rounded-lg border border-primary/10">
-            <div className="text-sm font-medium">Duración Planificada:</div>
-            <div className="text-lg font-bold text-primary">
-              {duration < 1 && duration > 0 ? `${Math.round(duration * 60)} min` : `${duration.toFixed(2)} hrs`}
+          <div className="space-y-2 p-3 bg-primary/5 rounded-lg border border-primary/10">
+            <div className="flex justify-between items-center">
+              <div className="text-sm font-medium">Duración Planificada:</div>
+              <div className="text-lg font-bold text-primary">
+                {duration < 1 && duration > 0 ? `${Math.round(duration * 60)} min` : `${duration.toFixed(2)} hrs`}
+              </div>
+            </div>
+            
+            <div className="pt-2 mt-2 border-t border-primary/10 space-y-1">
+              <div className="flex justify-between items-center text-[11px]">
+                <div className="flex items-center gap-1.5 text-slate-500 font-bold uppercase tracking-wider">
+                  <Info className="h-3 w-3" /> Espacio Disponible:
+                </div>
+                <span className="text-slate-700 font-black">{availableGap.hours.toFixed(2)} hrs</span>
+              </div>
+              {!isSpecialTask && loadPerHour > 0 && (
+                <div className="flex justify-between items-center text-[11px]">
+                  <span className="text-slate-500 font-bold uppercase tracking-wider">Capacidad Máxima:</span>
+                  <span className="text-slate-700 font-black">{availableGap.boxes.toLocaleString('es-ES')} cajas</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
