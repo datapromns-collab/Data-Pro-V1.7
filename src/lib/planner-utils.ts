@@ -462,6 +462,15 @@ export const CONSUMABLES_RECIPES: Record<string, Record<string, Record<string, n
       "JARA-00001": 0.83565828,
       "MATP_0008": 0.039816
     }
+  },
+  "JUSTY NARANJA": {
+    "1.5Lts": {
+      "AGUA-00005": 0.994097546,
+      "AGUA-00004": 0.397639018,
+      "AGUA-00003": 0.149114632,
+      "AGUA-00002": 0.447343896,
+      "JARA-00001": 0.067987325
+    }
   }
 };
 
