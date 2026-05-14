@@ -436,6 +436,32 @@ export const CONSUMABLES_RECIPES: Record<string, Record<string, Record<string, n
       "JARA-00001": 0.9851952,
       "MATP_0008": 0.053088
     }
+  },
+  "GLUP MANZANA ROJA": {
+    "2Lts": {
+      "AGUA-00005": 24,
+      "AGUA-00004": 9.6,
+      "AGUA-00003": 3.6,
+      "AGUA-00002": 10.8,
+      "JARA-00001": 1.671316552,
+      "MATP_0008": 0.079632
+    },
+    "1Lt": {
+      "AGUA-00005": 24,
+      "AGUA-00004": 9.6,
+      "AGUA-00003": 3.6,
+      "AGUA-00002": 10.8,
+      "JARA-00001": 1.67131655,
+      "MATP_0008": 0.079632
+    },
+    "0.4Lts": {
+      "AGUA-00005": 12,
+      "AGUA-00004": 4.8,
+      "AGUA-00003": 1.8,
+      "AGUA-00002": 5.4,
+      "JARA-00001": 0.83565828,
+      "MATP_0008": 0.039816
+    }
   }
 };
 
