@@ -136,63 +136,63 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
         });
 
         return (
-          <section key={dIdx} className="space-y-6 page-break-section print:p-8 print:m-0 print:min-h-screen print:bg-white">
-            <div className="flex items-center justify-between mb-4 border-b border-slate-200 pb-4 print:border-slate-300">
+          <section key={dIdx} className="space-y-4 page-break-section print:p-6 print:m-0 print:min-h-screen print:bg-white print:w-full">
+            <div className="flex items-center justify-between mb-2 border-b border-slate-200 pb-2 print:border-slate-300">
               <div className="flex items-center gap-4">
-                <div className="bg-primary/10 px-6 py-3 rounded-2xl border border-primary/20 flex items-center gap-3 print:bg-slate-50">
-                  <h3 className="text-2xl font-headline font-bold text-slate-900 uppercase tracking-tight">
+                <div className="bg-primary/5 px-4 py-2 rounded-xl border border-primary/10 flex items-center gap-3 print:bg-slate-50">
+                  <h3 className="text-xl font-headline font-bold text-slate-900 uppercase tracking-tight">
                     {format(day, 'EEEE dd MMMM', { locale: es })}
                   </h3>
                 </div>
               </div>
               <div className="text-right flex flex-col items-end">
-                <p className="text-[10px] font-black text-primary uppercase tracking-[0.3em] mb-1">PLAN DIARIO OPERATIVO</p>
-                <Badge variant="outline" className="text-[10px] font-black uppercase text-slate-500 border-slate-300 px-3 py-1">
+                <p className="text-[9px] font-black text-primary uppercase tracking-[0.2em] mb-0.5">PLAN DIARIO OPERATIVO</p>
+                <Badge variant="outline" className="text-[9px] font-black uppercase text-slate-400 border-slate-200 px-2 py-0.5">
                   Semana {format(weekStartDate, 'I')} - {dayTasks.length} Tareas
                 </Badge>
               </div>
             </div>
 
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-8 print:border-slate-300 print:shadow-none print:p-0 print:rounded-none">
-              <div className="flex flex-col gap-2 min-w-[1150px] print:min-w-[1250px]">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-6 print:border-slate-300 print:shadow-none print:p-2 print:rounded-none">
+              <div className="flex flex-col gap-1.5 min-w-[1000px] print:min-w-0 print:w-full">
                 {/* Header Horarios */}
-                <div className="flex mb-4">
-                  <div className="w-24 shrink-0"></div>
-                  <div className="flex-1 relative h-8">
+                <div className="flex mb-2">
+                  <div className="w-20 shrink-0"></div>
+                  <div className="flex-1 relative h-6">
                     {markers.map((marker, idx) => (
                       <div 
                         key={idx} 
-                        className="absolute text-[10px] font-black text-slate-500 transform -translate-x-1/2 flex flex-col items-center"
+                        className="absolute text-[9px] font-black text-slate-400 transform -translate-x-1/2 flex flex-col items-center"
                         style={{ left: `${marker.percent}%` }}
                       >
-                        <div className="w-px h-2 bg-slate-300 mb-1"></div>
+                        <div className="w-px h-1.5 bg-slate-200 mb-0.5"></div>
                         {marker.label}
                       </div>
                     ))}
                   </div>
-                  <div className="w-28 shrink-0"></div>
+                  <div className="w-24 shrink-0"></div>
                 </div>
 
                 {/* Filas de Líneas */}
-                <div className="space-y-2">
+                <div className="space-y-1.5">
                   {LINES.map((lineId) => {
                     const lineTasks = dayTasks.filter(t => t.lineId === lineId);
                     const lineDailyTotal = calculateLineDailyTotal(lineId, day);
                     
                     return (
-                      <div key={lineId} className="flex items-stretch h-16 group print:h-14">
-                        <div className="w-24 shrink-0 flex items-center pr-4">
-                          <div className="bg-emerald-50 w-full py-2 rounded-xl border border-emerald-100 flex flex-col items-center justify-center shadow-sm print:bg-white print:border-slate-300">
-                            <span className="text-[9px] font-black text-emerald-600 leading-none mb-1 print:text-slate-500">LÍNEA</span>
-                            <span className="text-lg font-black text-emerald-900 leading-none print:text-slate-900">{lineId}</span>
+                      <div key={lineId} className="flex items-stretch h-14 group print:h-12">
+                        <div className="w-20 shrink-0 flex items-center pr-3">
+                          <div className="bg-emerald-50 w-full py-1.5 rounded-xl border border-emerald-100 flex flex-col items-center justify-center shadow-sm print:bg-white print:border-slate-300">
+                            <span className="text-[8px] font-black text-emerald-600 leading-none mb-0.5 print:text-slate-500">LÍNEA</span>
+                            <span className="text-base font-black text-emerald-900 leading-none print:text-slate-900">{lineId}</span>
                           </div>
                         </div>
 
-                        <div className="flex-1 bg-slate-50/80 rounded-2xl border border-slate-200 relative overflow-hidden print:rounded-lg print:border-slate-400 print:bg-white">
+                        <div className="flex-1 bg-slate-50/50 rounded-xl border border-slate-100 relative overflow-hidden print:rounded-md print:border-slate-300 print:bg-white">
                           {markers.map((m, idx) => (
                             <div 
                               key={idx} 
-                              className="absolute inset-y-0 border-l border-slate-300/50 print:border-slate-300/80" 
+                              className="absolute inset-y-0 border-l border-slate-200/50 print:border-slate-200/80" 
                               style={{ left: `${m.percent}%` }}
                             />
                           ))}
@@ -202,7 +202,6 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                             const style = getBarStyle(task.startTime, task.endTime, day, isSpecial ? 'special' : 'production');
                             if (!style) return null;
 
-                            // Calcular porción diaria proporcional para mostrar en la barra
                             const dayStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
                             const dayEnd = addDays(dayStart, 1);
                             const intersectionStart = task.startTime > dayStart ? task.startTime : dayStart;
@@ -215,21 +214,21 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                               <div
                                 key={task.id}
                                 className={cn(
-                                  "absolute inset-y-2 rounded-xl border-2 shadow-sm z-10 flex flex-col justify-center px-3 overflow-hidden print:inset-y-1.5 print:rounded-lg print:border-2",
+                                  "absolute inset-y-1.5 rounded-lg border-2 shadow-sm z-10 flex flex-col justify-center px-2 overflow-hidden print:inset-y-1 print:rounded-md print:border-2",
                                   isSpecial ? "z-20" : ""
                                 )}
                                 style={style}
                               >
-                                <span className="text-[11px] font-black text-slate-900 uppercase truncate leading-none mb-0.5">
+                                <span className="text-[10px] font-black text-slate-900 uppercase truncate leading-none mb-0.5">
                                   {task.name}
                                 </span>
                                 {!isSpecial && task.quantity > 0 && (
-                                  <div className="flex items-center gap-1.5 opacity-80">
-                                    <span className="text-[10px] font-bold text-slate-700 leading-none tabular-nums">
-                                      {Math.round(dailyPortion).toLocaleString('es-ES')} cjs
+                                  <div className="flex items-center gap-1 opacity-80">
+                                    <span className="text-[9px] font-bold text-slate-700 leading-none tabular-nums">
+                                      {Math.round(dailyPortion).toLocaleString('es-ES')}
                                     </span>
                                     {task.presentation && (
-                                      <span className="text-[9px] font-black text-slate-500 bg-white/40 px-1 rounded">
+                                      <span className="text-[8px] font-black text-slate-500 bg-white/40 px-0.5 rounded">
                                         {task.presentation}
                                       </span>
                                     )}
@@ -240,10 +239,10 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                           })}
                         </div>
 
-                        {/* Nueva columna para el Total Día del Diagrama */}
-                        <div className="w-28 shrink-0 flex items-center pl-4">
-                          <div className="bg-slate-100 w-full py-2 rounded-xl border border-slate-200 flex flex-col items-center justify-center shadow-sm print:bg-white print:border-slate-300">
-                            <span className="text-[9px] font-black text-slate-400 leading-none mb-1 uppercase">Total Día</span>
+                        {/* Columna de Total Día */}
+                        <div className="w-24 shrink-0 flex items-center pl-3">
+                          <div className="bg-slate-50 w-full py-1.5 rounded-xl border border-slate-200 flex flex-col items-center justify-center shadow-sm print:bg-white print:border-slate-300">
+                            <span className="text-[8px] font-black text-slate-400 leading-none mb-0.5 uppercase">Cajas Día</span>
                             <span className="text-sm font-black text-emerald-600 leading-none tabular-nums">
                               {Math.round(lineDailyTotal).toLocaleString('es-ES')}
                             </span>
@@ -256,7 +255,7 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
               </div>
             </div>
             
-            <div className="hidden print:flex justify-between items-center mt-6 text-[9px] font-black text-slate-400 uppercase tracking-widest">
+            <div className="hidden print:flex justify-between items-center mt-4 text-[8px] font-black text-slate-400 uppercase tracking-widest border-t border-slate-100 pt-2">
               <span>Plan Semanal Pro - Sistema de Gestión de Planta</span>
               <span>Página {dIdx + 1} de {weekDays.length}</span>
               <span>Generado: {format(new Date(), 'dd/MM/yyyy HH:mm')}</span>
