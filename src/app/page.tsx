@@ -12,7 +12,8 @@ import {
   Gauge,
   Calculator as CalculatorIcon,
   ClipboardList,
-  LayoutDashboard
+  LayoutDashboard,
+  ListTodo
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -22,6 +23,7 @@ import { KeyboardShortcuts } from '@/components/planner/KeyboardShortcuts';
 import { RequirementSection } from '@/components/planner/RequirementSection';
 import { RequirementReport } from '@/components/planner/RequirementReport';
 import { SummaryReport } from '@/components/planner/SummaryReport';
+import { DailyPlanSection } from '@/components/planner/DailyPlanSection';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { Toaster } from '@/components/ui/toaster';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -75,6 +77,7 @@ export default function PlannerPage() {
           case 'v': e.preventDefault(); setActiveTab('speeds'); break;
           case 'k': e.preventDefault(); setIsShortcutsOpen(prev => !prev); break;
           case 'r': e.preventDefault(); setActiveTab('requirement'); break;
+          case 'd': e.preventDefault(); setActiveTab('daily'); break;
         }
       }
     };
@@ -152,6 +155,7 @@ export default function PlannerPage() {
       case 'speeds': return { title: "Velocidades", subtitle: "Configuración base." };
       case 'calculator': return { title: "Calculadora", subtitle: "Conversión cajas/tanques." };
       case 'requirement': return { title: "Requerimiento", subtitle: "" };
+      case 'daily': return { title: "Plan Día a Día", subtitle: "Detalle operativo semanal." };
       default: return { title: `Programación Línea ${selectedLine}`, subtitle: "" };
     }
   }, [activeTab, selectedLine]);
@@ -256,6 +260,7 @@ export default function PlannerPage() {
                 </div>
                 <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
                   <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Programación</TabsTrigger>
+                  <TabsTrigger value="daily" className="gap-2 px-4 font-bold"><ListTodo className="h-4 w-4" /> Plan Día a Día</TabsTrigger>
                   <TabsTrigger value="speeds" className="gap-2 px-4 font-bold"><Gauge className="h-4 w-4" /> Velocidades</TabsTrigger>
                   <TabsTrigger value="calculator" className="gap-2 px-4 font-bold"><CalculatorIcon className="h-4 w-4" /> Calculadora</TabsTrigger>
                   <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Requerimiento</TabsTrigger>
@@ -265,6 +270,9 @@ export default function PlannerPage() {
               <div className="flex-1 min-h-0">
                 <TabsContent value="gantt" className="m-0 h-full">
                   <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
+                </TabsContent>
+                <TabsContent value="daily" className="m-0 h-full">
+                  <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} />
                 </TabsContent>
                 <TabsContent value="speeds" className="m-0 h-full">
                   <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} />
