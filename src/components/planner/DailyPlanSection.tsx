@@ -33,7 +33,7 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
 
   const markers = useMemo(() => {
     const slots = [];
-    for (let i = 0; i <= 24; i += 2) { // Cada 2 horas para que no se amontone en el PDF
+    for (let i = 0; i <= 24; i += 2) {
       const totalMinutesFromStart = i * 60;
       const currentTotalMinutes = (PRODUCTION_START_HOUR * 60) + totalMinutesFromStart;
       const h = Math.floor((currentTotalMinutes / 60) % 24);
@@ -85,7 +85,7 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
   };
 
   return (
-    <div className="space-y-12 pb-10 animate-in fade-in duration-500 print:space-y-0 print:pb-0">
+    <div className="space-y-12 pb-10 print:space-y-0 print:pb-0">
       <div className="flex justify-end no-print mb-6">
         {onPrint && (
           <Button 
@@ -108,10 +108,10 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
         });
 
         return (
-          <section key={dIdx} className="space-y-6 page-break-section print:p-10 print:m-0 print:min-h-screen">
+          <section key={dIdx} className="space-y-6 page-break-section print:p-8 print:m-0 print:min-h-screen print:bg-white">
             <div className="flex items-center justify-between mb-4 border-b border-slate-200 pb-4 print:border-slate-300">
               <div className="flex items-center gap-4">
-                <div className="bg-primary/10 px-6 py-3 rounded-2xl border border-primary/20 flex items-center gap-3">
+                <div className="bg-primary/10 px-6 py-3 rounded-2xl border border-primary/20 flex items-center gap-3 print:bg-slate-50">
                   <h3 className="text-2xl font-headline font-bold text-slate-900 uppercase tracking-tight">
                     {format(day, 'EEEE dd MMMM', { locale: es })}
                   </h3>
@@ -125,8 +125,8 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
               </div>
             </div>
 
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-8 print:border-slate-300 print:shadow-none print:p-4 print:rounded-none">
-              <div className="flex flex-col gap-2 min-w-[1000px] print:min-w-0">
+            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-8 print:border-slate-300 print:shadow-none print:p-0 print:rounded-none">
+              <div className="flex flex-col gap-2 min-w-[1000px] print:min-w-[1100px]">
                 {/* Header Horarios */}
                 <div className="flex mb-4">
                   <div className="w-28 shrink-0"></div>
@@ -152,7 +152,7 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                     return (
                       <div key={lineId} className="flex items-stretch h-16 group print:h-14">
                         <div className="w-28 shrink-0 flex items-center pr-6">
-                          <div className="bg-emerald-50 w-full py-3 rounded-xl border border-emerald-100 flex flex-col items-center justify-center shadow-sm print:bg-slate-100 print:border-slate-300">
+                          <div className="bg-emerald-50 w-full py-3 rounded-xl border border-emerald-100 flex flex-col items-center justify-center shadow-sm print:bg-white print:border-slate-300">
                             <span className="text-[9px] font-black text-emerald-600 leading-none mb-1 print:text-slate-500">LÍNEA</span>
                             <span className="text-lg font-black text-emerald-900 leading-none print:text-slate-900">{lineId}</span>
                           </div>
@@ -176,7 +176,7 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                               <div
                                 key={task.id}
                                 className={cn(
-                                  "absolute inset-y-2 rounded-xl border-2 shadow-sm z-10 flex flex-col justify-center px-3 overflow-hidden transition-all print:inset-y-1.5 print:rounded-lg print:border-2",
+                                  "absolute inset-y-2 rounded-xl border-2 shadow-sm z-10 flex flex-col justify-center px-3 overflow-hidden print:inset-y-1.5 print:rounded-lg print:border-2",
                                   isSpecial ? "z-20" : ""
                                 )}
                                 style={style}
@@ -207,7 +207,6 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
               </div>
             </div>
             
-            {/* Footer de página para impresión */}
             <div className="hidden print:flex justify-between items-center mt-6 text-[9px] font-black text-slate-400 uppercase tracking-widest">
               <span>Plan Semanal Pro - Sistema de Gestión de Planta</span>
               <span>Página {dIdx + 1} de {weekDays.length}</span>
