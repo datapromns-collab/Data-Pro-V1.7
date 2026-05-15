@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
@@ -6,7 +5,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Trash2, Clock, Gauge, Info, ShieldAlert } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Trash2, Clock, Info, ShieldAlert } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
 import { getWeekDays, PRODUCT_FACTORS, formatTime, PRODUCTION_END_SUN_HOUR, PRODUCTION_END_SUN_MINUTE } from '@/lib/planner-utils';
 import { useToast } from '@/hooks/use-toast';
@@ -17,8 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { setHours, setMinutes, isBefore, isAfter, format } from 'date-fns';
-import { es } from 'date-fns/locale';
+import { setHours, setMinutes, isBefore, isAfter } from 'date-fns';
 
 const PRODUCT_LIST = [
   "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
@@ -183,9 +182,7 @@ export function TaskDialog({
       setDuration(2.0);
     } else if (name === 'MTTO PROGRAMADO' || name === 'PARADA PROGRAMADA' || name === 'PASIVACIÓN') {
       if (!initialTask && duration === 0) {
-        if (name === 'MTTO PROGRAMADO') setDuration(1);
-        else if (name === 'PASIVACIÓN') setDuration(1);
-        else setDuration(1);
+        setDuration(1);
       }
     } else if (!isSpecialTask && loadPerHour > 0 && quantity > 0) {
       const calculatedDuration = quantity / loadPerHour;
@@ -242,11 +239,15 @@ export function TaskDialog({
             <div className="bg-primary/10 p-2 rounded-xl">
               <Clock className="h-5 w-5 text-primary" />
             </div>
-            <div>
+            <div className="flex flex-col">
               <DialogTitle className="font-headline text-2xl text-slate-900">
                 {initialTask ? 'Detalles de Tarea' : 'Nueva Tarea'}
               </DialogTitle>
-              {readOnly && <Badge variant="secondary" className="bg-amber-50 text-amber-600 border-amber-100 uppercase text-[8px] font-black tracking-widest mt-1">Solo Lectura</Badge>}
+              {readOnly && (
+                <Badge variant="secondary" className="bg-amber-50 text-amber-600 border-amber-100 uppercase text-[8px] font-black tracking-widest mt-1 w-fit">
+                  Solo Lectura
+                </Badge>
+              )}
             </div>
           </div>
           <DialogDescription>
