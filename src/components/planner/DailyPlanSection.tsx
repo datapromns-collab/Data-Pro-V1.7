@@ -152,9 +152,9 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                     return (
                       <div key={lineId} className="flex items-stretch h-16 group print:h-14">
                         <div className="w-28 shrink-0 flex items-center pr-6">
-                          <div className="bg-slate-900 w-full py-3 rounded-xl border border-slate-800 flex flex-col items-center justify-center shadow-sm print:bg-slate-100 print:border-slate-300">
-                            <span className="text-[9px] font-black text-slate-400 leading-none mb-1 print:text-slate-500">LÍNEA</span>
-                            <span className="text-lg font-black text-white leading-none print:text-slate-900">{lineId}</span>
+                          <div className="bg-emerald-50 w-full py-3 rounded-xl border border-emerald-100 flex flex-col items-center justify-center shadow-sm print:bg-slate-100 print:border-slate-300">
+                            <span className="text-[9px] font-black text-emerald-600 leading-none mb-1 print:text-slate-500">LÍNEA</span>
+                            <span className="text-lg font-black text-emerald-900 leading-none print:text-slate-900">{lineId}</span>
                           </div>
                         </div>
 
