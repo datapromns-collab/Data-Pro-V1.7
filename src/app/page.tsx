@@ -8,13 +8,14 @@ import {
   Trash2, 
   Printer, 
   GanttChartSquare,
-  Clock,
   Gauge,
   Calculator as CalculatorIcon,
   ClipboardList,
   LayoutDashboard,
   ListTodo,
-  FileText
+  LogOut,
+  ShieldCheck,
+  User as UserIcon
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -25,7 +26,9 @@ import { RequirementSection } from '@/components/planner/RequirementSection';
 import { RequirementReport } from '@/components/planner/RequirementReport';
 import { SummaryReport } from '@/components/planner/SummaryReport';
 import { DailyPlanSection } from '@/components/planner/DailyPlanSection';
+import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
+import { useAuthStore } from '@/hooks/use-auth-store';
 import { Toaster } from '@/components/ui/toaster';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SidebarProvider, Sidebar, SidebarContent } from '@/components/ui/sidebar';
@@ -51,8 +54,16 @@ export default function PlannerPage() {
     removeTask, 
     clearAll, 
     updateLineSpeed,
-    isLoaded
+    isLoaded: plannerLoaded
   } = usePlannerStore();
+
+  const {
+    user,
+    isLoaded: authLoaded,
+    isAdmin,
+    login,
+    logout
+  } = useAuthStore();
   
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
@@ -65,12 +76,12 @@ export default function PlannerPage() {
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
   useEffect(() => {
-    if (isLoaded) {
+    if (plannerLoaded) {
       setEmitDate(format(new Date(), 'd/M/yyyy'));
     }
 
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.altKey) {
+      if (e.altKey && isAdmin) {
         switch (e.key.toLowerCase()) {
           case 'n': e.preventDefault(); setEditingTask(null); setIsDialogOpen(true); break;
           case 'c': e.preventDefault(); setActiveTab('calculator'); break;
@@ -84,7 +95,7 @@ export default function PlannerPage() {
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isLoaded]);
+  }, [plannerLoaded, isAdmin]);
 
   const weekNumber = getISOWeek(weekStartDate);
 
@@ -150,12 +161,14 @@ export default function PlannerPage() {
   };
 
   const handleSaveTask = (taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
+    if (!isAdmin) return;
     if (editingTask) updateTask(editingTask.id, taskData);
     else addTask(taskData);
     setEditingTask(null);
   };
 
   const handleDeleteTask = (id: string) => {
+    if (!isAdmin) return;
     if (confirm('¿Eliminar esta tarea?')) {
       removeTask(id);
       setIsDialogOpen(false);
@@ -165,15 +178,19 @@ export default function PlannerPage() {
 
   const pageHeader = useMemo(() => {
     switch (activeTab) {
-      case 'speeds': return { title: "Velocidades", subtitle: "Configuración base." };
+      case 'speeds': return { title: "Velocidades", subtitle: "Configuración base de líneas." };
       case 'calculator': return { title: "Calculadora", subtitle: "Conversión cajas/tanques." };
-      case 'requirement': return { title: "Requerimiento", subtitle: "" };
+      case 'requirement': return { title: "Requerimiento", subtitle: "Materiales e insumos semanales." };
       case 'daily': return { title: "Plan Día a Día", subtitle: "Detalle operativo semanal." };
       default: return { title: `Programación Línea ${selectedLine}`, subtitle: "" };
     }
   }, [activeTab, selectedLine]);
 
-  if (!isLoaded) return null;
+  if (!plannerLoaded || !authLoaded) return null;
+
+  if (!user) {
+    return <LoginForm onLogin={login} />;
+  }
 
   return (
     <SidebarProvider>
@@ -190,8 +207,8 @@ export default function PlannerPage() {
               </div>
             </div>
           </div>
-          <SidebarContent className="px-4 py-2">
-            <div className="space-y-8">
+          <SidebarContent className="px-4 py-2 flex flex-col h-full">
+            <div className="space-y-8 flex-1">
               <section>
                 <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Semana</p>
                 <div className="px-2 space-y-3">
@@ -200,8 +217,8 @@ export default function PlannerPage() {
                     <Badge variant="secondary" className="font-black text-[13px] text-primary bg-primary/10 px-3 py-0.5 rounded-lg border-primary/5">{weekNumber}</Badge>
                   </div>
                   <Popover>
-                    <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full h-12 justify-start text-left font-bold bg-white border-slate-200 shadow-sm hover:bg-slate-50 transition-all rounded-2xl">
+                    <PopoverTrigger asChild disabled={!isAdmin}>
+                      <Button variant="outline" className="w-full h-12 justify-start text-left font-bold bg-white border-slate-200 shadow-sm hover:bg-slate-50 transition-all rounded-2xl disabled:opacity-80">
                         <CalendarIcon className="mr-3 h-4 w-4 text-primary" />
                         {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
                       </Button>
@@ -227,17 +244,43 @@ export default function PlannerPage() {
                 </div>
               </section>
 
-              <section>
-                <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Acciones</p>
-                <div className="grid gap-3 px-2">
-                  <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 hover:translate-y-[-1px] transition-all">
-                    <Plus className="h-4 w-4" /> Nueva Tarea
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar historial?') && clearAll()} className="w-full gap-2 text-destructive font-black uppercase text-xs tracking-widest hover:bg-destructive/5 py-6">
-                    <Trash2 className="h-4 w-4" /> Limpiar Todo
-                  </Button>
+              {isAdmin && (
+                <section className="animate-in fade-in slide-in-from-top-2">
+                  <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Acciones</p>
+                  <div className="grid gap-3 px-2">
+                    <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 hover:translate-y-[-1px] transition-all">
+                      <Plus className="h-4 w-4" /> Nueva Tarea
+                    </Button>
+                    <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar historial?') && clearAll()} className="w-full gap-2 text-destructive font-black uppercase text-xs tracking-widest hover:bg-destructive/5 py-6">
+                      <Trash2 className="h-4 w-4" /> Limpiar Todo
+                    </Button>
+                  </div>
+                </section>
+              )}
+            </div>
+
+            <div className="mt-auto pt-6 border-t border-slate-100 space-y-4 pb-6">
+              <div className="flex items-center gap-3 px-2">
+                <div className="h-10 w-10 rounded-xl bg-slate-100 flex items-center justify-center text-primary border border-slate-200">
+                  <UserIcon className="h-5 w-5" />
                 </div>
-              </section>
+                <div className="flex-1 min-w-0">
+                  <p className="text-xs font-black text-slate-900 truncate leading-none mb-1">{user.name}</p>
+                  <div className="flex items-center gap-1">
+                    <ShieldCheck className={`h-3 w-3 ${isAdmin ? 'text-primary' : 'text-slate-400'}`} />
+                    <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">
+                      {isAdmin ? 'ADMINISTRADOR' : 'ESTÁNDAR'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <Button 
+                variant="ghost" 
+                onClick={logout} 
+                className="w-full gap-2 text-slate-500 font-bold uppercase text-[10px] tracking-widest hover:bg-slate-100 hover:text-slate-900 transition-all rounded-xl h-12"
+              >
+                <LogOut className="h-4 w-4" /> Cerrar Sesión
+              </Button>
             </div>
           </SidebarContent>
         </Sidebar>
@@ -288,7 +331,7 @@ export default function PlannerPage() {
                   <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintDaily} />
                 </TabsContent>
                 <TabsContent value="speeds" className="m-0 h-full">
-                  <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} />
+                  <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} readOnly={!isAdmin} />
                 </TabsContent>
                 <TabsContent value="calculator" className="m-0 h-full"><Calculator /></TabsContent>
                 <TabsContent value="requirement" className="m-0 h-full">
@@ -338,7 +381,18 @@ export default function PlannerPage() {
         </div>
       </div>
 
-      <TaskDialog isOpen={isDialogOpen} onClose={() => { setIsDialogOpen(false); setEditingTask(null); }} onSave={handleSaveTask} onDelete={handleDeleteTask} initialTask={editingTask} defaultLineId={selectedLine} weekStartDate={weekStartDate} allTasks={tasks} lineSpeeds={lineSpeeds} />
+      <TaskDialog 
+        isOpen={isDialogOpen} 
+        onClose={() => { setIsDialogOpen(false); setEditingTask(null); }} 
+        onSave={handleSaveTask} 
+        onDelete={handleDeleteTask} 
+        initialTask={editingTask} 
+        defaultLineId={selectedLine} 
+        weekStartDate={weekStartDate} 
+        allTasks={tasks} 
+        lineSpeeds={lineSpeeds} 
+        readOnly={!isAdmin}
+      />
       <KeyboardShortcuts isOpen={isShortcutsOpen} onClose={() => setIsShortcutsOpen(false)} />
       <Toaster />
     </SidebarProvider>

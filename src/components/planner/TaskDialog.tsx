@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Trash2, Clock, Gauge, Info } from 'lucide-react';
+import { Trash2, Clock, Gauge, Info, ShieldAlert } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
 import { getWeekDays, PRODUCT_FACTORS, formatTime, PRODUCTION_END_SUN_HOUR, PRODUCTION_END_SUN_MINUTE } from '@/lib/planner-utils';
 import { useToast } from '@/hooks/use-toast';
@@ -29,7 +29,6 @@ const PRODUCT_LIST = [
 
 const CIP_OPTIONS = ["CIP 3P ALCALINO", "CIP 3P ACIDO", "CIP 5P"];
 const PRESENTATIONS = ["2Lts", "1Lt", "1.5Lts", "0.4Lts"];
-const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7"];
 const DAYS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
 interface TaskDialogProps {
@@ -42,6 +41,7 @@ interface TaskDialogProps {
   weekStartDate: Date;
   allTasks: ScheduledTask[];
   lineSpeeds: Record<string, number>;
+  readOnly?: boolean;
 }
 
 export function TaskDialog({ 
@@ -53,7 +53,8 @@ export function TaskDialog({
   defaultLineId = "1", 
   weekStartDate, 
   allTasks,
-  lineSpeeds
+  lineSpeeds,
+  readOnly = false
 }: TaskDialogProps) {
   const [name, setName] = useState('');
   const [lineId, setLineId] = useState(defaultLineId);
@@ -193,6 +194,7 @@ export function TaskDialog({
   }, [name, loadPerHour, quantity, isSpecialTask, initialTask, duration]);
 
   const handleSave = () => {
+    if (readOnly) return;
     if (!name) return;
     let finalName = name === 'CIP' ? cipSubOption : name;
     if (name === 'CIP' && !cipSubOption) return;
@@ -234,35 +236,45 @@ export function TaskDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[480px]">
+      <DialogContent className="sm:max-w-[480px] rounded-3xl">
         <DialogHeader>
-          <DialogTitle className="font-headline text-2xl text-primary">
-            {initialTask ? 'Editar Tarea' : 'Nueva Tarea'}
-          </DialogTitle>
-          <DialogDescription>Configura la producción y programación para la semana elegida.</DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="p-3 bg-slate-50 rounded-lg border border-slate-200 flex items-center gap-3">
-            <Clock className="h-5 w-5 text-slate-400" />
+          <div className="flex items-center gap-3 mb-2">
+            <div className="bg-primary/10 p-2 rounded-xl">
+              <Clock className="h-5 w-5 text-primary" />
+            </div>
             <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Siguiente disponibilidad línea {lineId}</p>
-              <p className="text-xs font-bold text-slate-700">
-                {format(nextAvailableTime, "EEEE dd 'a las' HH:mm", { locale: es })}
-              </p>
+              <DialogTitle className="font-headline text-2xl text-slate-900">
+                {initialTask ? 'Detalles de Tarea' : 'Nueva Tarea'}
+              </DialogTitle>
+              {readOnly && <Badge variant="secondary" className="bg-amber-50 text-amber-600 border-amber-100 uppercase text-[8px] font-black tracking-widest mt-1">Solo Lectura</Badge>}
             </div>
           </div>
+          <DialogDescription>
+            {readOnly ? 'Información técnica de la tarea programada.' : 'Configura la producción y programación para la semana elegida.'}
+          </DialogDescription>
+        </DialogHeader>
 
+        {readOnly && (
+           <div className="p-3 bg-amber-50/50 rounded-2xl border border-amber-100 flex items-center gap-3 mb-2">
+            <ShieldAlert className="h-4 w-4 text-amber-500" />
+            <span className="text-[10px] font-bold text-amber-700 uppercase tracking-widest">No tienes permisos para modificar datos</span>
+          </div>
+        )}
+
+        <div className="grid gap-4 py-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label>Línea</Label>
-              <div className="h-10 w-full rounded-md border border-input bg-slate-100 px-3 py-2 text-sm font-black text-slate-900 flex items-center shadow-sm">
+              <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Línea</Label>
+              <div className="h-12 w-full rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm font-black text-slate-900 flex items-center shadow-sm">
                 Línea {lineId}
               </div>
             </div>
             <div className="grid gap-2">
-              <Label>Producto / Tarea</Label>
-              <Select value={name} onValueChange={setName}>
-                <SelectTrigger><SelectValue placeholder="Seleccionar" /></SelectTrigger>
+              <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Producto / Tarea</Label>
+              <Select value={name} onValueChange={setName} disabled={readOnly}>
+                <SelectTrigger className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80">
+                  <SelectValue placeholder="Seleccionar" />
+                </SelectTrigger>
                 <SelectContent>
                   {PRODUCT_LIST.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                 </SelectContent>
@@ -270,50 +282,28 @@ export function TaskDialog({
             </div>
           </div>
 
-          {name === 'CIP' && (
-            <div className="grid gap-2 animate-in fade-in slide-in-from-top-2">
-              <Label>Tipo de CIP</Label>
-              <Select value={cipSubOption} onValueChange={setCipSubOption}>
-                <SelectTrigger><SelectValue placeholder="Tipo de CIP" /></SelectTrigger>
-                <SelectContent>
-                  {CIP_OPTIONS.map((opt) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-
-          {(name === 'PARADA PROGRAMADA' || name === 'MTTO PROGRAMADO' || name === 'PASIVACIÓN') && (
-            <div className="grid gap-2 animate-in fade-in slide-in-from-top-2">
-              <Label>Duración de {name.charAt(0).toUpperCase() + name.slice(1).toLowerCase()} (Horas)</Label>
-              <Input 
-                type="number" 
-                step="0.5"
-                min="0.5"
-                value={duration || ''} 
-                onChange={(e) => setDuration(Number(e.target.value))} 
-                placeholder="Ej: 2.5"
-              />
-            </div>
-          )}
-
           {!isSpecialTask && (
             <div className="grid grid-cols-2 gap-4 animate-in fade-in">
               <div className="grid gap-2">
-                <Label>Presentación</Label>
-                <Select value={presentation} onValueChange={setPresentation}>
-                  <SelectTrigger><SelectValue placeholder="Tamaño" /></SelectTrigger>
+                <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Presentación</Label>
+                <Select value={presentation} onValueChange={setPresentation} disabled={readOnly}>
+                  <SelectTrigger className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80">
+                    <SelectValue placeholder="Tamaño" />
+                  </SelectTrigger>
                   <SelectContent>
                     {PRESENTATIONS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
               <div className="grid gap-2">
-                <Label>Tanques</Label>
+                <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Tanques</Label>
                 <Input 
                   type="number" 
                   step="0.01"
                   value={tanks === 0 ? '' : tanks} 
                   onChange={(e) => handleTanksChange(e.target.value)} 
+                  disabled={readOnly}
+                  className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80"
                   placeholder="0.00"
                 />
               </div>
@@ -322,9 +312,9 @@ export function TaskDialog({
 
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label>Día</Label>
-              <Select value={selectedDayIdx} onValueChange={setSelectedDayIdx}>
-                <SelectTrigger>
+              <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Día</Label>
+              <Select value={selectedDayIdx} onValueChange={setSelectedDayIdx} disabled={readOnly}>
+                <SelectTrigger className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80">
                   <SelectValue>
                     {weekDays[parseInt(selectedDayIdx)]?.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
                   </SelectValue>
@@ -339,68 +329,82 @@ export function TaskDialog({
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label>Hora Inicio</Label>
-              <Input type="time" value={selectedTime} onChange={(e) => setSelectedTime(e.target.value)} />
+              <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Hora Inicio</Label>
+              <Input 
+                type="time" 
+                value={selectedTime} 
+                onChange={(e) => setSelectedTime(e.target.value)} 
+                disabled={readOnly}
+                className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80"
+              />
             </div>
           </div>
 
           {!isSpecialTask && (
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <div className="flex items-center justify-between">
-                  <Label>Cajas/Hora</Label>
-                  <div className="flex items-center gap-1 text-[10px] text-primary font-bold">
-                    <Gauge className="h-3 w-3" /> Auto
-                  </div>
-                </div>
-                <Input type="number" value={loadPerHour || ''} onChange={(e) => setLoadPerHour(Number(e.target.value))} />
+                <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Cajas/Hora</Label>
+                <Input 
+                  type="number" 
+                  value={loadPerHour || ''} 
+                  onChange={(e) => setLoadPerHour(Number(e.target.value))} 
+                  disabled={readOnly}
+                  className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80"
+                />
               </div>
               <div className="grid gap-2">
-                <Label>Cantidad Total (Cajas)</Label>
+                <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Cantidad (Cajas)</Label>
                 <Input 
                   type="number" 
                   value={quantity === 0 ? '' : quantity} 
                   onChange={(e) => handleQuantityChange(e.target.value)}
-                  className="font-bold" 
+                  disabled={readOnly}
+                  className="h-12 rounded-xl border-slate-100 bg-slate-50 font-bold disabled:opacity-80" 
                   placeholder="0"
                 />
               </div>
             </div>
           )}
           
-          <div className="space-y-2 p-3 bg-primary/5 rounded-lg border border-primary/10">
-            <div className="flex justify-between items-center">
-              <div className="text-sm font-medium">Duración Planificada:</div>
-              <div className="text-lg font-bold text-primary">
+          <div className="space-y-2 p-5 bg-primary/5 rounded-3xl border border-primary/10 mt-2">
+            <div className="flex justify-between items-center mb-1">
+              <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Duración Planificada</div>
+              <div className="text-xl font-black text-primary tabular-nums">
                 {duration < 1 && duration > 0 ? `${Math.round(duration * 60)} min` : `${duration.toFixed(2)} hrs`}
               </div>
             </div>
             
-            <div className="pt-2 mt-2 border-t border-primary/10 space-y-1">
-              <div className="flex justify-between items-center text-[11px]">
+            <div className="pt-3 mt-3 border-t border-primary/10 space-y-2">
+              <div className="flex justify-between items-center text-[10px]">
                 <div className="flex items-center gap-1.5 text-slate-500 font-bold uppercase tracking-wider">
                   <Info className="h-3 w-3" /> Espacio Disponible:
                 </div>
-                <span className="text-slate-700 font-black">{availableGap.hours.toFixed(2)} hrs</span>
+                <span className="text-slate-900 font-black">{availableGap.hours.toFixed(2)} hrs</span>
               </div>
               {!isSpecialTask && loadPerHour > 0 && (
-                <div className="flex justify-between items-center text-[11px]">
+                <div className="flex justify-between items-center text-[10px]">
                   <span className="text-slate-500 font-bold uppercase tracking-wider">Capacidad Máxima:</span>
-                  <span className="text-slate-700 font-black">{availableGap.boxes.toLocaleString('es-ES')} cajas</span>
+                  <span className="text-slate-900 font-black">{availableGap.boxes.toLocaleString('es-ES')} cajas</span>
                 </div>
               )}
             </div>
           </div>
         </div>
-        <DialogFooter className="flex-col sm:flex-row gap-2">
-          {initialTask && onDelete && (
-            <Button variant="destructive" onClick={() => onDelete(initialTask.id)} className="gap-2 sm:mr-auto">
+        <DialogFooter className="flex-col sm:flex-row gap-3">
+          {!readOnly && initialTask && onDelete && (
+            <Button variant="destructive" onClick={() => onDelete(initialTask.id)} className="gap-2 sm:mr-auto rounded-xl h-12 font-bold px-6">
               <Trash2 className="h-4 w-4" /> Eliminar
             </Button>
           )}
           <div className="flex gap-2 w-full sm:w-auto">
-            <Button variant="outline" onClick={onClose} className="flex-1 sm:flex-none">Cancelar</Button>
-            <Button onClick={handleSave} className="bg-primary flex-1 sm:flex-none" disabled={!name || duration <= 0}>Guardar</Button>
+            <Button variant="outline" onClick={onClose} className="flex-1 sm:flex-none rounded-xl h-12 font-bold px-8">
+              {readOnly ? 'Cerrar' : 'Cancelar'}
+            </Button>
+            {!readOnly && (
+              <Button onClick={handleSave} className="bg-primary flex-1 sm:flex-none rounded-xl h-12 font-black uppercase text-[10px] tracking-widest px-10 shadow-lg shadow-primary/20" disabled={!name || duration <= 0}>
+                Guardar Tarea
+              </Button>
+            )}
           </div>
         </DialogFooter>
       </DialogContent>
