@@ -154,10 +154,10 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
             </div>
 
             <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-8 print:border-slate-300 print:shadow-none print:p-0 print:rounded-none">
-              <div className="flex flex-col gap-2 min-w-[1000px] print:min-w-[1100px]">
+              <div className="flex flex-col gap-2 min-w-[1150px] print:min-w-[1250px]">
                 {/* Header Horarios */}
                 <div className="flex mb-4">
-                  <div className="w-28 shrink-0"></div>
+                  <div className="w-24 shrink-0"></div>
                   <div className="flex-1 relative h-8">
                     {markers.map((marker, idx) => (
                       <div 
@@ -170,6 +170,7 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                       </div>
                     ))}
                   </div>
+                  <div className="w-28 shrink-0"></div>
                 </div>
 
                 {/* Filas de Líneas */}
@@ -180,13 +181,10 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                     
                     return (
                       <div key={lineId} className="flex items-stretch h-16 group print:h-14">
-                        <div className="w-28 shrink-0 flex items-center pr-6">
+                        <div className="w-24 shrink-0 flex items-center pr-4">
                           <div className="bg-emerald-50 w-full py-2 rounded-xl border border-emerald-100 flex flex-col items-center justify-center shadow-sm print:bg-white print:border-slate-300">
                             <span className="text-[9px] font-black text-emerald-600 leading-none mb-1 print:text-slate-500">LÍNEA</span>
                             <span className="text-lg font-black text-emerald-900 leading-none print:text-slate-900">{lineId}</span>
-                            <span className="text-[10px] font-bold text-emerald-700 mt-1 leading-none tabular-nums">
-                              {Math.round(lineDailyTotal).toLocaleString('es-ES')}
-                            </span>
                           </div>
                         </div>
 
@@ -204,6 +202,15 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                             const style = getBarStyle(task.startTime, task.endTime, day, isSpecial ? 'special' : 'production');
                             if (!style) return null;
 
+                            // Calcular porción diaria proporcional para mostrar en la barra
+                            const dayStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
+                            const dayEnd = addDays(dayStart, 1);
+                            const intersectionStart = task.startTime > dayStart ? task.startTime : dayStart;
+                            const intersectionEnd = task.endTime < dayEnd ? task.endTime : dayEnd;
+                            const intersectionMinutes = (intersectionEnd.getTime() - intersectionStart.getTime()) / (1000 * 60);
+                            const totalTaskMinutes = (task.endTime.getTime() - task.startTime.getTime()) / (1000 * 60);
+                            const dailyPortion = totalTaskMinutes > 0 ? (intersectionMinutes / totalTaskMinutes) * (task.quantity || 0) : 0;
+
                             return (
                               <div
                                 key={task.id}
@@ -218,8 +225,8 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                                 </span>
                                 {!isSpecial && task.quantity > 0 && (
                                   <div className="flex items-center gap-1.5 opacity-80">
-                                    <span className="text-[10px] font-bold text-slate-700 leading-none">
-                                      {Math.round(task.quantity).toLocaleString('es-ES')} cjs
+                                    <span className="text-[10px] font-bold text-slate-700 leading-none tabular-nums">
+                                      {Math.round(dailyPortion).toLocaleString('es-ES')} cjs
                                     </span>
                                     {task.presentation && (
                                       <span className="text-[9px] font-black text-slate-500 bg-white/40 px-1 rounded">
@@ -231,6 +238,16 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                               </div>
                             );
                           })}
+                        </div>
+
+                        {/* Nueva columna para el Total Día del Diagrama */}
+                        <div className="w-28 shrink-0 flex items-center pl-4">
+                          <div className="bg-slate-100 w-full py-2 rounded-xl border border-slate-200 flex flex-col items-center justify-center shadow-sm print:bg-white print:border-slate-300">
+                            <span className="text-[9px] font-black text-slate-400 leading-none mb-1 uppercase">Total Día</span>
+                            <span className="text-sm font-black text-emerald-600 leading-none tabular-nums">
+                              {Math.round(lineDailyTotal).toLocaleString('es-ES')}
+                            </span>
+                          </div>
                         </div>
                       </div>
                     );
