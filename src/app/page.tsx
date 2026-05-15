@@ -13,7 +13,8 @@ import {
   Calculator as CalculatorIcon,
   ClipboardList,
   LayoutDashboard,
-  ListTodo
+  ListTodo,
+  FileText
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -58,7 +59,7 @@ export default function PlannerPage() {
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
   const [activeTab, setActiveTab] = useState("gantt");
-  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary'>('plan');
+  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily'>('plan');
   const [emitDate, setEmitDate] = useState('');
 
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
@@ -124,6 +125,18 @@ export default function PlannerPage() {
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: portrait; margin: 0; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
+
+  const handlePrintDaily = () => {
+    setPrintMode('daily');
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: landscape; margin: 5mm; }';
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
@@ -272,7 +285,7 @@ export default function PlannerPage() {
                   <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
                 </TabsContent>
                 <TabsContent value="daily" className="m-0 h-full">
-                  <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} />
+                  <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintDaily} />
                 </TabsContent>
                 <TabsContent value="speeds" className="m-0 h-full">
                   <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} />
@@ -315,6 +328,11 @@ export default function PlannerPage() {
           {printMode === 'summary' && (
             <div className="p-0">
               <SummaryReport tasks={tasks} weekStartDate={weekStartDate} />
+            </div>
+          )}
+          {printMode === 'daily' && (
+            <div className="p-0">
+              <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} />
             </div>
           )}
         </div>

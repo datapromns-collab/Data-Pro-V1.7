@@ -7,11 +7,14 @@ import { es } from 'date-fns/locale';
 import { ScheduledTask } from '@/lib/types';
 import { getWeekDays, PRODUCTION_START_HOUR } from '@/lib/planner-utils';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Printer } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface DailyPlanSectionProps {
   tasks: ScheduledTask[];
   weekStartDate: Date;
+  onPrint?: () => void;
 }
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7"];
@@ -20,7 +23,7 @@ const SPECIAL_TASK_COLOR = '#FFFF00';
 const AUTO_CP_COLOR = '#FFC000';
 const SAMI_COLOR = '#FEF9C3';
 
-export function DailyPlanSection({ tasks, weekStartDate }: DailyPlanSectionProps) {
+export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSectionProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
 
   const isSpecialTask = (name: string) => {
@@ -84,6 +87,19 @@ export function DailyPlanSection({ tasks, weekStartDate }: DailyPlanSectionProps
 
   return (
     <div className="space-y-12 pb-10 animate-in fade-in duration-500">
+      <div className="flex justify-end no-print">
+        {onPrint && (
+          <Button 
+            onClick={onPrint} 
+            variant="outline" 
+            className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 shadow-sm"
+          >
+            <Printer className="h-4 w-4" />
+            Imprimir Plan Diario
+          </Button>
+        )}
+      </div>
+
       {weekDays.map((day, dIdx) => {
         const dayTasks = tasks.filter(t => {
           const dayStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
@@ -92,22 +108,22 @@ export function DailyPlanSection({ tasks, weekStartDate }: DailyPlanSectionProps
         });
 
         return (
-          <section key={dIdx} className="space-y-6">
+          <section key={dIdx} className="space-y-6 page-break-section print:p-0 print:mb-8">
             <div className="flex items-center gap-4">
               <div className="bg-white px-6 py-2.5 rounded-2xl border border-slate-200 shadow-sm flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-primary animate-pulse"></div>
+                <div className="w-3 h-3 rounded-full bg-primary animate-pulse print:hidden"></div>
                 <h3 className="text-xl font-headline font-bold text-slate-900 uppercase tracking-tight">
                   {format(day, 'EEEE dd MMMM', { locale: es })}
                 </h3>
               </div>
-              <div className="h-px flex-1 bg-slate-200/60"></div>
-              <Badge variant="outline" className="text-[10px] font-black uppercase text-slate-400 border-slate-200 px-3 py-1">
+              <div className="h-px flex-1 bg-slate-200/60 print:bg-slate-300"></div>
+              <Badge variant="outline" className="text-[10px] font-black uppercase text-slate-400 border-slate-200 px-3 py-1 print:border-slate-300">
                 {dayTasks.length} Tareas Totales
               </Badge>
             </div>
 
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-6">
-              <div className="flex flex-col gap-1.5 min-w-[900px]">
+            <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden p-6 print:border-slate-300 print:shadow-none print:p-2">
+              <div className="flex flex-col gap-1.5 min-w-[900px] print:min-w-0">
                 {/* Header Horarios */}
                 <div className="flex mb-2">
                   <div className="w-24 shrink-0"></div>
@@ -130,19 +146,19 @@ export function DailyPlanSection({ tasks, weekStartDate }: DailyPlanSectionProps
                     const lineTasks = dayTasks.filter(t => t.lineId === lineId);
                     
                     return (
-                      <div key={lineId} className="flex items-stretch h-14 group">
+                      <div key={lineId} className="flex items-stretch h-14 group print:h-12">
                         <div className="w-24 shrink-0 flex items-center pr-4">
-                          <div className="bg-slate-50 w-full py-1.5 rounded-xl border border-slate-100 flex flex-col items-center justify-center group-hover:bg-primary/5 group-hover:border-primary/20 transition-all">
+                          <div className="bg-slate-50 w-full py-1.5 rounded-xl border border-slate-100 flex flex-col items-center justify-center group-hover:bg-primary/5 group-hover:border-primary/20 transition-all print:rounded-lg print:border-slate-200">
                             <span className="text-[10px] font-black text-slate-400 leading-none mb-0.5">LÍNEA</span>
                             <span className="text-sm font-black text-slate-900">{lineId}</span>
                           </div>
                         </div>
 
-                        <div className="flex-1 bg-slate-50/50 rounded-xl border border-slate-100 relative overflow-hidden">
+                        <div className="flex-1 bg-slate-50/50 rounded-xl border border-slate-100 relative overflow-hidden print:rounded-lg print:border-slate-200">
                           {markers.map((m, idx) => (
                             <div 
                               key={idx} 
-                              className="absolute inset-y-0 border-l border-slate-200/40" 
+                              className="absolute inset-y-0 border-l border-slate-200/40 print:border-slate-300/30" 
                               style={{ left: `${m.percent}%` }}
                             />
                           ))}
@@ -155,7 +171,7 @@ export function DailyPlanSection({ tasks, weekStartDate }: DailyPlanSectionProps
                             return (
                               <div
                                 key={task.id}
-                                className="absolute inset-y-1.5 rounded-lg border shadow-sm z-10 flex flex-col justify-center px-2 overflow-hidden"
+                                className="absolute inset-y-1.5 rounded-lg border shadow-sm z-10 flex flex-col justify-center px-2 overflow-hidden print:inset-y-1 print:rounded-md"
                                 style={style}
                               >
                                 <span className="text-[10px] font-black text-slate-900 uppercase truncate leading-none">
