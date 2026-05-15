@@ -95,7 +95,7 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
             className="gap-2 font-black text-xs uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 shadow-md rounded-2xl"
           >
             <Printer className="h-4 w-4" />
-            Exportar PDF / Imprimir
+            Imprimir
           </Button>
         )}
       </div>
