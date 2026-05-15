@@ -43,6 +43,34 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
     return slots;
   }, []);
 
+  const calculateLineDailyTotal = (lineId: string, day: Date) => {
+    const dayStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
+    const dayEnd = addDays(dayStart, 1);
+
+    return tasks
+      .filter(t => t.lineId === lineId)
+      .reduce((acc, task) => {
+        const taskStart = task.startTime;
+        const taskEnd = task.endTime;
+
+        if (!task.quantity) return acc;
+
+        const intersectionStart = taskStart > dayStart ? taskStart : dayStart;
+        const intersectionEnd = taskEnd < dayEnd ? taskEnd : dayEnd;
+
+        if (intersectionStart < intersectionEnd) {
+          const intersectionMinutes = (intersectionEnd.getTime() - intersectionStart.getTime()) / (1000 * 60);
+          const totalTaskMinutes = (taskEnd.getTime() - taskStart.getTime()) / (1000 * 60);
+          
+          if (totalTaskMinutes > 0) {
+            const proportionalQty = (intersectionMinutes / totalTaskMinutes) * task.quantity;
+            return acc + proportionalQty;
+          }
+        }
+        return acc;
+      }, 0);
+  };
+
   const getBarStyle = (start: Date, end: Date, day: Date, type: 'production' | 'special' | 'sami' | 'cp') => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const rowEnd = addDays(rowStart, 1);
@@ -148,13 +176,17 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                 <div className="space-y-2">
                   {LINES.map((lineId) => {
                     const lineTasks = dayTasks.filter(t => t.lineId === lineId);
+                    const lineDailyTotal = calculateLineDailyTotal(lineId, day);
                     
                     return (
                       <div key={lineId} className="flex items-stretch h-16 group print:h-14">
                         <div className="w-28 shrink-0 flex items-center pr-6">
-                          <div className="bg-emerald-50 w-full py-3 rounded-xl border border-emerald-100 flex flex-col items-center justify-center shadow-sm print:bg-white print:border-slate-300">
+                          <div className="bg-emerald-50 w-full py-2 rounded-xl border border-emerald-100 flex flex-col items-center justify-center shadow-sm print:bg-white print:border-slate-300">
                             <span className="text-[9px] font-black text-emerald-600 leading-none mb-1 print:text-slate-500">LÍNEA</span>
                             <span className="text-lg font-black text-emerald-900 leading-none print:text-slate-900">{lineId}</span>
+                            <span className="text-[10px] font-bold text-emerald-700 mt-1 leading-none tabular-nums">
+                              {Math.round(lineDailyTotal).toLocaleString('es-ES')}
+                            </span>
                           </div>
                         </div>
 
