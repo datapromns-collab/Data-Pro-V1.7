@@ -23,7 +23,7 @@ const PRODUCT_LIST = [
   "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
   "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA", "JUSTY NARANJA",
   "JUSTY DURAZNO", "JUSTY MANDARINA", "JUSTY SANDIA", "JUSTY LIMON", "JUSTY TAMARINDO",
-  "VITA TEA DURAZNO", "VITA TEA LIMON", "CS", "CIP", "CP", "PASIVACIÓN", "MTTO PROGRAMADO", "PARADA PROGRAMADA"
+  "VITA TEA DURAZNO", "VITA TEA LIMON", "CS", "CIP", "CP", "PASIVACIÓN", "MTTO", "PARADA"
 ];
 
 const CIP_OPTIONS = ["CIP 3P ALCALINO", "CIP 3P ACIDO", "CIP 5P"];
@@ -80,7 +80,7 @@ export function TaskDialog({
     return latestTask.endTime;
   }, [allTasks, lineId, weekDays]);
 
-  const isSpecialTask = name === 'CS' || name === 'CIP' || name === 'CP' || name === 'PASIVACIÓN' || name === 'MTTO PROGRAMADO' || name === 'PARADA PROGRAMADA' || CIP_OPTIONS.includes(name);
+  const isSpecialTask = name === 'CS' || name === 'CIP' || name === 'CP' || name === 'PASIVACIÓN' || name === 'MTTO' || name === 'PARADA' || CIP_OPTIONS.includes(name);
 
   const availableGap = useMemo(() => {
     const day = weekDays[parseInt(selectedDayIdx)];
@@ -157,38 +157,37 @@ export function TaskDialog({
     }
   }, [factor, isSpecialTask, lastEdited]);
 
+  // Manejo de duraciones por defecto para tareas especiales
+  useEffect(() => {
+    if (initialTask) return; // No sobreescribir si estamos editando
+    
+    if (name === 'CS') {
+      setDuration(0.5);
+    } else if (name === 'CIP' || name === 'CP') {
+      setDuration(2.0);
+    } else if (name === 'MTTO' || name === 'PARADA' || name === 'PASIVACIÓN') {
+      setDuration(1.0);
+    }
+  }, [name, initialTask]);
+
+  // Cálculo de duración para producción
+  useEffect(() => {
+    if (isSpecialTask || loadPerHour <= 0 || quantity <= 0) return;
+    const calculatedDuration = quantity / loadPerHour;
+    setDuration(calculatedDuration);
+  }, [loadPerHour, quantity, isSpecialTask]);
+
   const handleTanksChange = (val: string) => {
     const num = val === '' ? 0 : parseFloat(val);
     setTanks(num);
     setLastEdited('tanks');
-    if (!isSpecialTask && factor > 0) {
-      setQuantity(Math.round(num * factor));
-    }
   };
 
   const handleQuantityChange = (val: string) => {
     const num = val === '' ? 0 : parseInt(val);
     setQuantity(num);
     setLastEdited('quantity');
-    if (!isSpecialTask && factor > 0) {
-      setTanks(Number((num / factor).toFixed(2)));
-    }
   };
-
-  useEffect(() => {
-    if (name === 'CS') {
-      setDuration(0.5);
-    } else if (name === 'CIP' || name === 'CP') {
-      setDuration(2.0);
-    } else if (name === 'MTTO PROGRAMADO' || name === 'PARADA PROGRAMADA' || name === 'PASIVACIÓN') {
-      if (!initialTask && duration === 0) {
-        setDuration(1);
-      }
-    } else if (!isSpecialTask && loadPerHour > 0 && quantity > 0) {
-      const calculatedDuration = quantity / loadPerHour;
-      setDuration(calculatedDuration);
-    }
-  }, [name, loadPerHour, quantity, isSpecialTask, initialTask, duration]);
 
   const handleSave = () => {
     if (readOnly) return;
@@ -385,6 +384,22 @@ export function TaskDialog({
                   placeholder="0"
                 />
               </div>
+            </div>
+          )}
+
+          {isSpecialTask && (
+            <div className="grid gap-2 animate-in fade-in slide-in-from-top-2">
+              <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Duración (Horas)</Label>
+              <Input 
+                type="number" 
+                step="0.1"
+                min="0.1"
+                value={duration || ''} 
+                onChange={(e) => setDuration(Number(e.target.value))} 
+                disabled={readOnly}
+                className="h-12 rounded-xl border-slate-100 bg-slate-50 font-bold disabled:opacity-80"
+                placeholder="Ej: 1.5"
+              />
             </div>
           )}
           

@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo } from 'react';
@@ -17,8 +16,8 @@ interface ProductionGanttProps {
 const DAYS: DayOfWeek[] = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
 
 const PRODUCTION_COLOR = '#83CCEB';
-const SAMI_COLOR = '#FEF9C3'; // Amarillo muy clarito
-const SPECIAL_TASK_COLOR = '#FFFF00'; // Amarillo estándar para tareas especiales manuales
+const SAMI_COLOR = '#FEF9C3'; 
+const SPECIAL_TASK_COLOR = '#FFFF00'; 
 const AUTO_CP_COLOR = '#FFC000';
 
 export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: ProductionGanttProps) {
@@ -32,8 +31,8 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
   const isSpecialTask = (name: string) => {
     if (!name) return false;
-    const specials = ['CS', 'CP', 'CIP', 'MTTO PROGRAMADO', 'PARADA PROGRAMADA', 'S.A.M.I', 'PASIVACIÓN'];
-    return specials.some(s => name.toUpperCase().startsWith(s));
+    const specials = ['CS', 'CP', 'CIP', 'MTTO', 'PARADA', 'S.A.M.I', 'PASIVACIÓN'];
+    return specials.some(s => name.toUpperCase().includes(s));
   };
 
   const autoIntervals = useMemo(() => {
@@ -134,7 +133,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
     if (type === 'sami') {
       bgColor = SAMI_COLOR;
-      borderColor = '#FEF08A'; // Yellow 200 para el borde de sami
+      borderColor = '#FEF08A'; 
     } else if (type === 'special') {
       bgColor = SPECIAL_TASK_COLOR;
       borderColor = '#E6E600';

@@ -27,8 +27,8 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
 
   const isSpecialTask = (name: string) => {
     if (!name) return false;
-    const specials = ['CS', 'CP', 'CIP', 'MTTO PROGRAMADO', 'PARADA PROGRAMADA', 'S.A.M.I', 'PASIVACIÓN'];
-    return specials.some(s => name.toUpperCase().startsWith(s));
+    const specials = ['CS', 'CP', 'CIP', 'MTTO', 'PARADA', 'S.A.M.I', 'PASIVACIÓN'];
+    return specials.some(s => name.toUpperCase().includes(s));
   };
 
   const markers = useMemo(() => {
