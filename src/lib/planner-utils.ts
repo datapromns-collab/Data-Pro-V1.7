@@ -225,6 +225,41 @@ export const RECIPES: Record<string, Record<string, number>> = {
     "MATP_0019": 0.3,
     "MATP_0020": 0.3,
     "MATP_0042": 1.05,
+  },
+  "JUSTY MANDARINA": {
+    "MATP_0001": 110.0,
+    "MATP_0045": 5,
+    "MATP_0017": 3.5,
+    "MATP_0019": 0.2,
+    "MATP_0020": 0.25,
+  },
+  "JUSTY SANDIA": {
+    "MATP_0001": 110.0,
+    "MATP_0046": 5,
+    "MATP_0017": 3.5,
+    "MATP_0019": 0.2,
+    "MATP_0020": 0.25,
+  },
+  "JUSTY TAMARINDO": {
+    "MATP_0001": 125.0,
+    "MATP_0044": 6,
+    "MATP_0017": 3.2,
+    "MATP_0019": 0.25,
+    "MATP_0020": 0.25,
+  },
+  "VITA TEA DURAZNO": {
+    "MATP_0001": 105.0,
+    "MATP_0029": 4,
+    "MATP_0027": 1,
+    "MATP_0017": 2.5,
+    "MATP_0019": 0.15,
+  },
+  "VITA TEA LIMON": {
+    "MATP_0001": 105.0,
+    "MATP_0028": 4,
+    "MATP_0027": 1,
+    "MATP_0017": 2.5,
+    "MATP_0019": 0.15,
   }
 };
 
