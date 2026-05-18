@@ -225,8 +225,6 @@ export const RECIPES: Record<string, Record<string, number>> = {
     "MATP_0019": 0.3,
     "MATP_0020": 0.3,
     "MATP_0042": 1.05,
-    "MATP_0036": 0.1,
-    "MATP_0031": 0.1,
   },
   "JUSTY MANDARINA": {
     "MATP_0001": 110.0000844,
