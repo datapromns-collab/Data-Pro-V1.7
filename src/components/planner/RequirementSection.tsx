@@ -119,6 +119,16 @@ const CONCENTRATES_SOFT_DRINKS = [
   { code: 'MATP_0039', description: 'CONCENTRADO MANZANA ROJA' },
 ];
 
+const CONCENTRATES_JUICES = [
+  { code: 'MATP_0022', description: 'CONCENTRADO JUGO-NARANJA' },
+  { code: 'MATP_0043', description: 'CONCENTRADO JUGO-DURAZNO' },
+  { code: 'MATP_0044', description: 'CONCENTRADO JUGO-TAMARINDO' },
+  { code: 'MATP_0045', description: 'CONCENTRADO JUGO-MANDARINA' },
+  { code: 'MATP_0046', description: 'CONCENTRADO JUGO-SANDIA' },
+  { code: 'MATP_0059', description: 'CONCENTRADO JUGO-PERA' },
+  { code: 'MATP_0060', description: 'CONCENTRADO JUGO-MANZANA' },
+];
+
 const SOLIDS_DATA = [
   { code: 'MATP_0014', description: 'BENZOATO DE POTASIO' },
   { code: 'MATP_0015', description: 'ACIDO TARTARICO' },
@@ -413,8 +423,19 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
               {renderTable(SUGAR_DATA, 'KG')}
             </TabsContent>
 
-            <TabsContent value="concentrados" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              {renderTable(CONCENTRATES_SOFT_DRINKS, 'LTS')}
+            <TabsContent value="concentrados" className="m-0 animate-in slide-in-from-left-2 duration-300 space-y-8">
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 border-l-4 border-emerald-600 rounded-lg">
+                  <span className="text-xs font-black text-slate-700 uppercase tracking-widest">Refrescos</span>
+                </div>
+                {renderTable(CONCENTRATES_SOFT_DRINKS, 'LTS')}
+              </div>
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 border-l-4 border-emerald-600 rounded-lg">
+                  <span className="text-xs font-black text-slate-700 uppercase tracking-widest">Jugos</span>
+                </div>
+                {renderTable(CONCENTRATES_JUICES, 'KG')}
+              </div>
             </TabsContent>
 
             <TabsContent value="solidos" className="m-0 animate-in slide-in-from-left-2 duration-300">
