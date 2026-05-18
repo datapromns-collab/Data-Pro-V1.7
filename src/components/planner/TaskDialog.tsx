@@ -194,7 +194,14 @@ export function TaskDialog({
     if (readOnly) return;
     if (!name) return;
     let finalName = name === 'CIP' ? cipSubOption : name;
-    if (name === 'CIP' && !cipSubOption) return;
+    if (name === 'CIP' && !cipSubOption) {
+      toast({
+        variant: "destructive",
+        title: "Selección requerida",
+        description: "Por favor selecciona el tipo de CIP.",
+      });
+      return;
+    }
 
     const day = weekDays[parseInt(selectedDayIdx)];
     const [hours, minutes] = selectedTime.split(':').map(Number);
@@ -272,7 +279,7 @@ export function TaskDialog({
             </div>
             <div className="grid gap-2">
               <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Producto / Tarea</Label>
-              <Select value={name} onValueChange={setName} disabled={readOnly}>
+              <Select value={name} onValueChange={(val) => { setName(val); if (val !== 'CIP') setCipSubOption(''); }} disabled={readOnly}>
                 <SelectTrigger className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80">
                   <SelectValue placeholder="Seleccionar" />
                 </SelectTrigger>
@@ -282,6 +289,20 @@ export function TaskDialog({
               </Select>
             </div>
           </div>
+
+          {name === 'CIP' && (
+            <div className="grid gap-2 animate-in fade-in slide-in-from-top-2">
+              <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Tipo de CIP</Label>
+              <Select value={cipSubOption} onValueChange={setCipSubOption} disabled={readOnly}>
+                <SelectTrigger className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80">
+                  <SelectValue placeholder="Seleccionar tipo de CIP" />
+                </SelectTrigger>
+                <SelectContent>
+                  {CIP_OPTIONS.map((opt) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
           {!isSpecialTask && (
             <div className="grid grid-cols-2 gap-4 animate-in fade-in">
