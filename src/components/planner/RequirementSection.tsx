@@ -16,8 +16,7 @@ import {
   Wheat,
   Box,
   Plus,
-  Waves,
-  Zap
+  Waves
 } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
 import { addDays } from 'date-fns';
@@ -245,37 +244,46 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
       }, 0).toFixed(2));
     }
 
-    // Cálculos de Preformas y Tapas
+    // Cálculos de Preformas y Tapas según Línea
     switch (code) {
-      case 'EMP_0009': {
+      case 'EMP_0009': { // Transp 29.6 - Línea 7 Sabores
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
         return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && flavors.includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
       }
-      case 'EMP_0068': {
-        const line7 = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && ["GLUP COLA", "GLUP KOLITA"].includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0);
-        const line5 = tasks.filter(t => t.lineId === "5" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
-        return Math.round((line7 + line5) * 12);
+      case 'EMP_0068': { // Transp 36 - Línea 7 Cola/Kolia + Línea 5
+        const line7 = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && ["GLUP COLA", "GLUP KOLITA"].includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 12;
+        const line5 = tasks.filter(t => t.lineId === "5" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0) * 12;
+        return Math.round(line7 + line5);
       }
-      case 'EMP_0093': return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && !["GLUP FRESH"].includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
-      case 'EMP_0103': return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
-      case 'EMP_0120': return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
-      case 'EMP_0126': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
-      case 'EMP_0135': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
+      case 'EMP_0093': // Transp 42.64 - Líneas 1-4 No Fresh
+        return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
+      case 'EMP_0103': // Verde 42.64 - Líneas 1-4 Fresh
+        return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
+      case 'EMP_0120': // Verde 29.6 - Línea 7 Fresh
+        return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
+      case 'EMP_0126': // Transp 20.55 - Línea 6 No Fresh
+        return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
+      case 'EMP_0135': // Verde 20.5 - Línea 6 Fresh
+        return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
       
       // Lógica de Tapas
-      case 'EMP_0095_N': {
+      case 'EMP_0095': { // Verde Imp - Línea 1-3 Fresh
+        const line1_3 = tasks.filter(t => (t.lineId === "1" || t.lineId === "3") && t.name === "GLUP FRESH" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
+        return Math.round(line1_3 * 6);
+      }
+      case 'EMP_0095_N': { // Verde Nac - Línea 5
         const line5 = tasks.filter(t => t.lineId === "5" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
         return Math.round(line5 * 12);
       }
-      case 'EMP_0105': {
-        const line1_3 = tasks.filter(t => (t.lineId === "1" || t.lineId === "3") && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
+      case 'EMP_0105': { // Azul Imp - Línea 1-3 No Fresh
+        const line1_3 = tasks.filter(t => (t.lineId === "1" || t.lineId === "3") && t.name !== "GLUP FRESH" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
         return Math.round(line1_3 * 6);
       }
-      case 'EMP_0105_2': {
+      case 'EMP_0105_2': { // Azul Imp #2 - Línea 7
         const line7 = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
         return Math.round(line7 * 12);
       }
-      case 'EMP_0105_N': {
+      case 'EMP_0105_N': { // Azul Nac - Línea 2-4
         const line2_4 = tasks.filter(t => (t.lineId === "2" || t.lineId === "4") && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
         return Math.round(line2_4 * 6);
       }
@@ -296,7 +304,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
         <TableBody>
           {data.map((item, idx) => (
             <TableRow key={`${item.code}-${idx}`} className="hover:bg-slate-50/50 transition-colors">
-              <TableCell className="font-mono text-[11px] font-bold text-primary py-4">{item.code.replace(/(_N|_2)/, '')}</TableCell>
+              <TableCell className="font-mono text-[11px] font-bold text-primary py-4">{item.code}</TableCell>
               <TableCell className="text-sm font-bold text-slate-700 py-4">{item.description}</TableCell>
               <TableCell className="text-right py-4">
                 <Badge variant="secondary" className="bg-slate-50 text-slate-400 border-slate-200 px-4 py-1.5 font-bold text-[12px] min-w-[100px] justify-center">
