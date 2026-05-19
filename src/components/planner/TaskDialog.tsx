@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
@@ -29,6 +30,7 @@ const PRODUCT_LIST = [
 const CIP_OPTIONS = ["CIP 3P ALCALINO", "CIP 3P ACIDO", "CIP 5P"];
 const PRESENTATIONS = ["2Lts", "1Lt", "1.5Lts", "0.4Lts"];
 const DAYS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+const LINES = ["1", "2", "3", "4", "5", "6", "7"];
 
 interface TaskDialogProps {
   isOpen: boolean;
@@ -66,21 +68,94 @@ export function TaskDialog({
   const [selectedDayIdx, setSelectedDayIdx] = useState('0');
   const [selectedTime, setSelectedTime] = useState('07:00');
   
-  const [lastEdited, setLastEdited] = useState<'tanks' | 'quantity' | null>(null);
+  const [lastEdited, setLastEdited] = useState<'tanks' | 'quantity' | 'duration' | null>(null);
 
   const { toast } = useToast();
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   
-  const nextAvailableTime = useMemo(() => {
-    const lineTasks = allTasks.filter(t => t.lineId === lineId);
-    if (lineTasks.length === 0) {
-      return setMinutes(setHours(weekDays[0], 7), 0);
-    }
-    const latestTask = [...lineTasks].sort((a, b) => b.endTime.getTime() - a.endTime.getTime())[0];
-    return latestTask.endTime;
-  }, [allTasks, lineId, weekDays]);
+  const isSpecialTask = useMemo(() => {
+    return name === 'CS' || name === 'CIP' || name === 'CP' || name === 'PASIVACIÓN' || name === 'MTTO' || name === 'PARADA' || CIP_OPTIONS.includes(name);
+  }, [name]);
 
-  const isSpecialTask = name === 'CS' || name === 'CIP' || name === 'CP' || name === 'PASIVACIÓN' || name === 'MTTO' || name === 'PARADA' || CIP_OPTIONS.includes(name);
+  const factor = useMemo(() => {
+    if (!name || !presentation) return 0;
+    const prodName = name === 'CIP' ? cipSubOption : name;
+    return PRODUCT_FACTORS[prodName]?.[presentation] || 0;
+  }, [name, cipSubOption, presentation]);
+
+  // Inicialización del formulario
+  useEffect(() => {
+    if (isOpen) {
+      if (initialTask) {
+        const isCIPOption = CIP_OPTIONS.includes(initialTask.name);
+        setName(isCIPOption ? 'CIP' : initialTask.name);
+        if (isCIPOption) setCipSubOption(initialTask.name);
+        setLineId(initialTask.lineId);
+        setPresentation(initialTask.presentation || '');
+        setTanks(initialTask.tanks || 0);
+        setLoadPerHour(initialTask.loadPerHour || 0);
+        setQuantity(initialTask.quantity || 0);
+        setDuration(initialTask.durationHours);
+        
+        const dayIdx = weekDays.findIndex(d => 
+          d.getDate() === initialTask.startTime.getDate() && 
+          d.getMonth() === initialTask.startTime.getMonth()
+        );
+        setSelectedDayIdx(dayIdx !== -1 ? dayIdx.toString() : '0');
+        setSelectedTime(formatTime(initialTask.startTime));
+      } else {
+        setName('');
+        setLineId(defaultLineId);
+        setCipSubOption('');
+        setPresentation('');
+        setTanks(0);
+        setLoadPerHour(lineSpeeds[defaultLineId] || 0);
+        setQuantity(0);
+        setDuration(0);
+        
+        // Buscar siguiente hueco libre o usar el default
+        const lineTasks = allTasks.filter(t => t.lineId === defaultLineId);
+        const nextTime = lineTasks.length > 0 
+          ? [...lineTasks].sort((a, b) => b.endTime.getTime() - a.endTime.getTime())[0].endTime 
+          : setMinutes(setHours(weekDays[0], 7), 0);
+
+        const dayIdx = weekDays.findIndex(d => 
+          d.getDate() === nextTime.getDate() && 
+          d.getMonth() === nextTime.getMonth()
+        );
+        setSelectedDayIdx(dayIdx !== -1 ? dayIdx.toString() : '0');
+        setSelectedTime(formatTime(nextTime));
+      }
+      setLastEdited(null);
+    }
+  }, [isOpen, initialTask, defaultLineId, weekDays, lineSpeeds]);
+
+  // Sincronización Tanques <-> Cantidad
+  useEffect(() => {
+    if (isSpecialTask || factor === 0) return;
+
+    if (lastEdited === 'tanks' && tanks > 0) {
+      setQuantity(Math.round(tanks * factor));
+    } else if (lastEdited === 'quantity' && quantity > 0) {
+      setTanks(Number((quantity / factor).toFixed(2)));
+    }
+  }, [factor, isSpecialTask, lastEdited, tanks, quantity]);
+
+  // Cálculo de duración para producción
+  useEffect(() => {
+    if (isSpecialTask || loadPerHour <= 0 || quantity <= 0 || lastEdited === 'duration') return;
+    const calculatedDuration = quantity / loadPerHour;
+    setDuration(calculatedDuration);
+  }, [loadPerHour, quantity, isSpecialTask, lastEdited]);
+
+  // Duraciones por defecto para tareas especiales (solo nuevas)
+  useEffect(() => {
+    if (initialTask || !name) return;
+    
+    if (name === 'CS') setDuration(0.5);
+    else if (name === 'CIP' || name === 'CP') setDuration(2.0);
+    else if (['MTTO', 'PARADA', 'PASIVACIÓN'].includes(name)) setDuration(1.0);
+  }, [name, initialTask]);
 
   const availableGap = useMemo(() => {
     const day = weekDays[parseInt(selectedDayIdx)];
@@ -105,93 +180,9 @@ export function TaskDialog({
     };
   }, [selectedDayIdx, selectedTime, weekDays, allTasks, lineId, loadPerHour, initialTask]);
 
-  const factor = useMemo(() => {
-    if (!name || !presentation) return 0;
-    const prodName = name === 'CIP' ? cipSubOption : name;
-    return PRODUCT_FACTORS[prodName]?.[presentation] || 0;
-  }, [name, cipSubOption, presentation]);
-
-  useEffect(() => {
-    if (initialTask) {
-      const isCIPOption = CIP_OPTIONS.includes(initialTask.name);
-      setName(isCIPOption ? 'CIP' : initialTask.name);
-      if (isCIPOption) setCipSubOption(initialTask.name);
-      setLineId(initialTask.lineId);
-      setPresentation(initialTask.presentation || '');
-      setTanks(initialTask.tanks || 0);
-      setLoadPerHour(initialTask.loadPerHour || 0);
-      setQuantity(initialTask.quantity || 0);
-      setDuration(initialTask.durationHours);
-      setLastEdited(null);
-      
-      const dayIdx = weekDays.findIndex(d => d.getDate() === initialTask.startTime.getDate() && d.getMonth() === initialTask.startTime.getMonth());
-      setSelectedDayIdx(dayIdx !== -1 ? dayIdx.toString() : '0');
-      setSelectedTime(formatTime(initialTask.startTime));
-    } else if (isOpen) {
-      setName('');
-      setLineId(defaultLineId);
-      setCipSubOption('');
-      setPresentation('');
-      setTanks(0);
-      setLoadPerHour(lineSpeeds[defaultLineId] || 0);
-      setQuantity(0);
-      setDuration(0);
-      setLastEdited(null);
-      
-      const dayIdx = weekDays.findIndex(d => 
-        d.getDate() === nextAvailableTime.getDate() && 
-        d.getMonth() === nextAvailableTime.getMonth()
-      );
-      setSelectedDayIdx(dayIdx !== -1 ? dayIdx.toString() : '0');
-      setSelectedTime(formatTime(nextAvailableTime));
-    }
-  }, [initialTask, isOpen, defaultLineId, weekDays, nextAvailableTime, lineSpeeds]);
-
-  useEffect(() => {
-    if (isSpecialTask || factor === 0) return;
-
-    if (lastEdited === 'tanks' && tanks > 0) {
-      setQuantity(Math.round(tanks * factor));
-    } else if (lastEdited === 'quantity' && quantity > 0) {
-      setTanks(Number((quantity / factor).toFixed(2)));
-    }
-  }, [factor, isSpecialTask, lastEdited]);
-
-  // Manejo de duraciones por defecto para tareas especiales
-  useEffect(() => {
-    if (initialTask) return; // No sobreescribir si estamos editando
-    
-    if (name === 'CS') {
-      setDuration(0.5);
-    } else if (name === 'CIP' || name === 'CP') {
-      setDuration(2.0);
-    } else if (name === 'MTTO' || name === 'PARADA' || name === 'PASIVACIÓN') {
-      setDuration(1.0);
-    }
-  }, [name, initialTask]);
-
-  // Cálculo de duración para producción
-  useEffect(() => {
-    if (isSpecialTask || loadPerHour <= 0 || quantity <= 0) return;
-    const calculatedDuration = quantity / loadPerHour;
-    setDuration(calculatedDuration);
-  }, [loadPerHour, quantity, isSpecialTask]);
-
-  const handleTanksChange = (val: string) => {
-    const num = val === '' ? 0 : parseFloat(val);
-    setTanks(num);
-    setLastEdited('tanks');
-  };
-
-  const handleQuantityChange = (val: string) => {
-    const num = val === '' ? 0 : parseInt(val);
-    setQuantity(num);
-    setLastEdited('quantity');
-  };
-
   const handleSave = () => {
-    if (readOnly) return;
-    if (!name) return;
+    if (readOnly || !name) return;
+    
     let finalName = name === 'CIP' ? cipSubOption : name;
     if (name === 'CIP' && !cipSubOption) {
       toast({
@@ -247,7 +238,7 @@ export function TaskDialog({
             </div>
             <div className="flex flex-col">
               <DialogTitle className="font-headline text-2xl text-slate-900">
-                {initialTask ? 'Detalles de Tarea' : 'Nueva Tarea'}
+                {initialTask ? 'Editar Tarea' : 'Nueva Tarea'}
               </DialogTitle>
               {readOnly && (
                 <Badge variant="secondary" className="bg-amber-50 text-amber-600 border-amber-100 uppercase text-[8px] font-black tracking-widest mt-1 w-fit">
@@ -257,7 +248,7 @@ export function TaskDialog({
             </div>
           </div>
           <DialogDescription>
-            {readOnly ? 'Información técnica de la tarea programada.' : 'Configura la producción y programación para la semana elegida.'}
+            Configura la producción y programación para la línea de producción.
           </DialogDescription>
         </DialogHeader>
 
@@ -272,9 +263,14 @@ export function TaskDialog({
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
               <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Línea</Label>
-              <div className="h-12 w-full rounded-xl border border-slate-100 bg-slate-50 px-4 py-2 text-sm font-black text-slate-900 flex items-center shadow-sm">
-                Línea {lineId}
-              </div>
+              <Select value={lineId} onValueChange={setLineId} disabled={readOnly}>
+                <SelectTrigger className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80 font-black">
+                  <SelectValue placeholder="Línea" />
+                </SelectTrigger>
+                <SelectContent>
+                  {LINES.map(l => <SelectItem key={l} value={l} className="font-bold">Línea {l}</SelectItem>)}
+                </SelectContent>
+              </Select>
             </div>
             <div className="grid gap-2">
               <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Producto / Tarea</Label>
@@ -322,7 +318,7 @@ export function TaskDialog({
                   type="number" 
                   step="0.01"
                   value={tanks === 0 ? '' : tanks} 
-                  onChange={(e) => handleTanksChange(e.target.value)} 
+                  onChange={(e) => { setTanks(parseFloat(e.target.value) || 0); setLastEdited('tanks'); }} 
                   disabled={readOnly}
                   className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80"
                   placeholder="0.00"
@@ -378,7 +374,7 @@ export function TaskDialog({
                 <Input 
                   type="number" 
                   value={quantity === 0 ? '' : quantity} 
-                  onChange={(e) => handleQuantityChange(e.target.value)}
+                  onChange={(e) => { setQuantity(parseInt(e.target.value) || 0); setLastEdited('quantity'); }}
                   disabled={readOnly}
                   className="h-12 rounded-xl border-slate-100 bg-slate-50 font-bold disabled:opacity-80" 
                   placeholder="0"
@@ -387,7 +383,7 @@ export function TaskDialog({
             </div>
           )}
 
-          {isSpecialTask && (
+          {(isSpecialTask || true) && (
             <div className="grid gap-2 animate-in fade-in slide-in-from-top-2">
               <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Duración (Horas)</Label>
               <Input 
@@ -395,7 +391,7 @@ export function TaskDialog({
                 step="0.1"
                 min="0.1"
                 value={duration || ''} 
-                onChange={(e) => setDuration(Number(e.target.value))} 
+                onChange={(e) => { setDuration(Number(e.target.value)); setLastEdited('duration'); }} 
                 disabled={readOnly}
                 className="h-12 rounded-xl border-slate-100 bg-slate-50 font-bold disabled:opacity-80"
                 placeholder="Ej: 1.5"
@@ -405,7 +401,7 @@ export function TaskDialog({
           
           <div className="space-y-2 p-5 bg-primary/5 rounded-3xl border border-primary/10 mt-2">
             <div className="flex justify-between items-center mb-1">
-              <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Duración Planificada</div>
+              <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tiempo Programado</div>
               <div className="text-xl font-black text-primary tabular-nums">
                 {duration < 1 && duration > 0 ? `${Math.round(duration * 60)} min` : `${duration.toFixed(2)} hrs`}
               </div>
@@ -414,14 +410,14 @@ export function TaskDialog({
             <div className="pt-3 mt-3 border-t border-primary/10 space-y-2">
               <div className="flex justify-between items-center text-[10px]">
                 <div className="flex items-center gap-1.5 text-slate-500 font-bold uppercase tracking-wider">
-                  <Info className="h-3 w-3" /> Espacio Disponible:
+                  <Info className="h-3 w-3" /> Hueco Disponible:
                 </div>
                 <span className="text-slate-900 font-black">{availableGap.hours.toFixed(2)} hrs</span>
               </div>
               {!isSpecialTask && loadPerHour > 0 && (
                 <div className="flex justify-between items-center text-[10px]">
-                  <span className="text-slate-500 font-bold uppercase tracking-wider">Capacidad Máxima:</span>
-                  <span className="text-slate-900 font-black">{availableGap.boxes.toLocaleString('es-ES')} cajas</span>
+                  <span className="text-slate-500 font-bold uppercase tracking-wider">Límite Cajas:</span>
+                  <span className="text-slate-900 font-black">{availableGap.boxes.toLocaleString('es-ES')}</span>
                 </div>
               )}
             </div>
@@ -439,7 +435,7 @@ export function TaskDialog({
             </Button>
             {!readOnly && (
               <Button onClick={handleSave} className="bg-primary flex-1 sm:flex-none rounded-xl h-12 font-black uppercase text-[10px] tracking-widest px-10 shadow-lg shadow-primary/20" disabled={!name || duration <= 0}>
-                Guardar Tarea
+                Guardar Cambios
               </Button>
             )}
           </div>
