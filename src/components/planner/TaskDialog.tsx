@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Trash2, Clock, Info, ShieldAlert, Beaker, Package } from 'lucide-react';
+import { Trash2, Clock, Info, ShieldAlert } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
 import { getWeekDays, PRODUCT_FACTORS, formatTime, PRODUCTION_END_SUN_HOUR, PRODUCTION_END_SUN_MINUTE } from '@/lib/planner-utils';
 import { useToast } from '@/hooks/use-toast';
@@ -25,7 +25,7 @@ const PRODUCT_LIST = [
   "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
   "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA", "JUSTY NARANJA",
   "JUSTY DURAZNO", "JUSTY MANDARINA", "JUSTY SANDIA", "JUSTY LIMON", "JUSTY TAMARINDO",
-  "VITA TEA DURAZNO", "VITA TEA LIMON", "CS", "CIP", "CP", "PASIVACIÓN", "MTTO", "PARADA"
+  "VITA TEA DURAZNO", "VITA TEA LIMON", "CS", "CIP", "PASIVACIÓN", "MTTO", "PARADA"
 ];
 
 const CIP_OPTIONS = ["CIP 3P ALCALINO", "CIP 3P ACIDO", "CIP 5P"];
@@ -75,7 +75,7 @@ export function TaskDialog({
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   
   const isSpecialTask = useMemo(() => {
-    return name === 'CS' || name === 'CIP' || name === 'CP' || name === 'PASIVACIÓN' || name === 'MTTO' || name === 'PARADA' || CIP_OPTIONS.includes(name);
+    return name === 'CS' || name === 'CIP' || name === 'PASIVACIÓN' || name === 'MTTO' || name === 'PARADA' || CIP_OPTIONS.includes(name);
   }, [name]);
 
   const factor = useMemo(() => {
@@ -149,7 +149,7 @@ export function TaskDialog({
     if (initialTask || !name) return;
     
     if (name === 'CS') setDuration(0.5);
-    else if (name === 'CIP' || name === 'CP') setDuration(2.0);
+    else if (name === 'CIP') setDuration(2.0);
     else if (['MTTO', 'PARADA', 'PASIVACIÓN'].includes(name)) setDuration(1.0);
   }, [name, initialTask]);
 
@@ -236,15 +236,10 @@ export function TaskDialog({
               <DialogTitle className="font-headline text-2xl text-slate-900">
                 {initialTask ? 'Editar Tarea' : 'Nueva Tarea'}
               </DialogTitle>
-              {readOnly && (
-                <Badge variant="secondary" className="bg-amber-50 text-amber-600 border-amber-100 uppercase text-[8px] font-black tracking-widest mt-1 w-fit">
-                  Solo Lectura
-                </Badge>
-              )}
             </div>
           </div>
           <DialogDescription className="text-slate-500">
-            Administra los tiempos y volúmenes de producción para la línea seleccionada.
+            Configura la producción y programación para la línea de producción.
           </DialogDescription>
         </DialogHeader>
 
@@ -256,12 +251,12 @@ export function TaskDialog({
         )}
 
         <div className="grid gap-5 py-2">
-          {/* Fila 1: Línea y Producto */}
+          {/* FILA 1: LÍNEA | PRODUCTO */}
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Línea de Producción</Label>
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">LÍNEA</Label>
               <Select value={lineId} onValueChange={setLineId} disabled={readOnly}>
-                <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80 font-black text-slate-700">
+                <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80 font-bold">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="rounded-xl">
@@ -270,7 +265,7 @@ export function TaskDialog({
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Producto / Servicio</Label>
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">PRODUCTO / TAREA</Label>
               <Select value={name} onValueChange={(val) => { setName(val); if (val !== 'CIP') setCipSubOption(''); }} disabled={readOnly}>
                 <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80 font-bold">
                   <SelectValue placeholder="Seleccionar" />
@@ -284,7 +279,7 @@ export function TaskDialog({
 
           {name === 'CIP' && (
             <div className="grid gap-2 animate-in fade-in slide-in-from-top-2">
-              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tipo de CIP</Label>
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">TIPO DE CIP</Label>
               <Select value={cipSubOption} onValueChange={setCipSubOption} disabled={readOnly}>
                 <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80">
                   <SelectValue placeholder="Seleccionar tipo de CIP" />
@@ -296,10 +291,39 @@ export function TaskDialog({
             </div>
           )}
 
-          {/* Fila 2: Programación de Tiempo */}
+          {/* FILA 2: PRESENTACIÓN | TANQUES */}
+          {!isSpecialTask && (
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">PRESENTACIÓN</Label>
+                <Select value={presentation} onValueChange={setPresentation} disabled={readOnly}>
+                  <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80 font-bold">
+                    <SelectValue placeholder="Tamaño" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-xl">
+                    {PRESENTATIONS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid gap-2">
+                <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 text-primary">TANQUES</Label>
+                <Input 
+                  type="number" 
+                  step="0.01"
+                  value={tanks === 0 ? '' : tanks} 
+                  onChange={(e) => { setTanks(parseFloat(e.target.value) || 0); setLastEdited('tanks'); }} 
+                  disabled={readOnly}
+                  className="h-12 rounded-2xl border-primary/20 bg-indigo-50/30 disabled:opacity-80 font-black text-lg text-primary"
+                  placeholder="0.00"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* FILA 3: DÍA | HORA INICIO */}
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Día de Inicio</Label>
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">DÍA</Label>
               <Select value={selectedDayIdx} onValueChange={setSelectedDayIdx} disabled={readOnly}>
                 <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80 font-bold">
                   <SelectValue>
@@ -316,7 +340,7 @@ export function TaskDialog({
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Hora de Inicio</Label>
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">HORA INICIO</Label>
               <div className="relative">
                 <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                 <Input 
@@ -330,69 +354,34 @@ export function TaskDialog({
             </div>
           </div>
 
-          {/* Sección de Producción (Solo si no es especial) */}
+          {/* FILA 4: CAJAS/HORA | CANTIDAD (CAJAS) */}
           {!isSpecialTask && (
-            <div className="space-y-4 animate-in fade-in">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Presentación</Label>
-                  <Select value={presentation} onValueChange={setPresentation} disabled={readOnly}>
-                    <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80 font-bold">
-                      <SelectValue placeholder="Tamaño" />
-                    </SelectTrigger>
-                    <SelectContent className="rounded-xl">
-                      {PRESENTATIONS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="grid gap-2">
-                  <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Cajas/Hora</Label>
-                  <Input 
-                    type="number" 
-                    value={loadPerHour || ''} 
-                    onChange={(e) => setLoadPerHour(Number(e.target.value))} 
-                    disabled={readOnly}
-                    className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80 font-black text-slate-700"
-                  />
-                </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="grid gap-2">
+                <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">CAJAS/HORA</Label>
+                <Input 
+                  type="number" 
+                  value={loadPerHour || ''} 
+                  onChange={(e) => setLoadPerHour(Number(e.target.value))} 
+                  disabled={readOnly}
+                  className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80 font-black text-slate-700"
+                />
               </div>
-
-              {/* Tanques y Cajas en círculos/cápsulas sincronizadas */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-indigo-50/50 p-4 rounded-3xl border border-indigo-100 flex flex-col gap-2">
-                  <div className="flex items-center gap-2">
-                    <Beaker className="h-3 w-3 text-indigo-500" />
-                    <Label className="text-[9px] font-black text-indigo-500 uppercase tracking-widest">Eq. Tanques</Label>
-                  </div>
-                  <Input 
-                    type="number" 
-                    step="0.01"
-                    value={tanks === 0 ? '' : tanks} 
-                    onChange={(e) => { setTanks(parseFloat(e.target.value) || 0); setLastEdited('tanks'); }} 
-                    disabled={readOnly}
-                    className="h-10 bg-transparent border-0 shadow-none font-black text-2xl p-0 focus-visible:ring-0 text-indigo-900"
-                    placeholder="0.00"
-                  />
-                </div>
-                <div className="bg-emerald-50/50 p-4 rounded-3xl border border-emerald-100 flex flex-col gap-2">
-                  <div className="flex items-center gap-2">
-                    <Package className="h-3 w-3 text-emerald-500" />
-                    <Label className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Total Cajas</Label>
-                  </div>
-                  <Input 
-                    type="number" 
-                    value={quantity === 0 ? '' : quantity} 
-                    onChange={(e) => { setQuantity(parseInt(e.target.value) || 0); setLastEdited('quantity'); }}
-                    disabled={readOnly}
-                    className="h-10 bg-transparent border-0 shadow-none font-black text-2xl p-0 focus-visible:ring-0 text-emerald-900" 
-                    placeholder="0"
-                  />
-                </div>
+              <div className="grid gap-2">
+                <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 text-emerald-600">CANTIDAD (CAJAS)</Label>
+                <Input 
+                  type="number" 
+                  value={quantity === 0 ? '' : quantity} 
+                  onChange={(e) => { setQuantity(parseInt(e.target.value) || 0); setLastEdited('quantity'); }}
+                  disabled={readOnly}
+                  className="h-12 rounded-2xl border-emerald-100 bg-emerald-50/50 disabled:opacity-80 font-black text-lg text-emerald-700" 
+                  placeholder="0"
+                />
               </div>
             </div>
           )}
 
-          {/* Tiempo Programado Centralizado */}
+          {/* TIEMPO PROGRAMADO (SECCIÓN INFERIOR) */}
           <div className="p-6 bg-slate-50 rounded-[32px] border border-slate-100 mt-2 relative overflow-hidden group">
             <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
               <Clock className="h-16 w-16" />
@@ -401,9 +390,9 @@ export function TaskDialog({
             <div className="flex flex-col gap-4">
               <div className="flex justify-between items-center">
                 <div className="flex flex-col">
-                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Tiempo Programado</span>
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">TIEMPO PROGRAMADO</span>
                   <span className="text-[9px] font-bold text-slate-400 italic">
-                    {isSpecialTask ? 'Ajuste manual de duración' : 'Calculado según carga por hora'}
+                    {isSpecialTask ? 'Ajuste manual de duración' : 'Calculado automáticamente'}
                   </span>
                 </div>
                 
@@ -430,7 +419,7 @@ export function TaskDialog({
               <div className="pt-4 border-t border-slate-200/50 space-y-2">
                 <div className="flex justify-between items-center text-[10px]">
                   <div className="flex items-center gap-1.5 text-slate-500 font-bold uppercase tracking-wider">
-                    <Info className="h-3 w-3" /> Espacio Libre en Línea:
+                    <Info className="h-3 w-3" /> ESPACIO LIBRE EN LÍNEA:
                   </div>
                   <span className={cn(
                     "font-black px-2 py-0.5 rounded-lg",
@@ -439,12 +428,6 @@ export function TaskDialog({
                     {availableGap.hours.toFixed(2)} hrs
                   </span>
                 </div>
-                {!isSpecialTask && loadPerHour > 0 && (
-                  <div className="flex justify-between items-center text-[10px]">
-                    <span className="text-slate-500 font-bold uppercase tracking-wider">Cajas Máximas posibles:</span>
-                    <span className="text-slate-900 font-black tabular-nums">{availableGap.boxes.toLocaleString('es-ES')}</span>
-                  </div>
-                )}
               </div>
             </div>
           </div>
