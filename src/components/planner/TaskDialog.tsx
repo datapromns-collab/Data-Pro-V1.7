@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Trash2, Clock, Info, ShieldAlert } from 'lucide-react';
+import { Trash2, Clock, Info, ShieldAlert, Beaker, Package } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
 import { getWeekDays, PRODUCT_FACTORS, formatTime, PRODUCTION_END_SUN_HOUR, PRODUCTION_END_SUN_MINUTE } from '@/lib/planner-utils';
 import { useToast } from '@/hooks/use-toast';
@@ -19,6 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { setHours, setMinutes, isBefore, isAfter } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 const PRODUCT_LIST = [
   "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
@@ -83,7 +84,6 @@ export function TaskDialog({
     return PRODUCT_FACTORS[prodName]?.[presentation] || 0;
   }, [name, cipSubOption, presentation]);
 
-  // Inicialización del formulario
   useEffect(() => {
     if (isOpen) {
       if (initialTask) {
@@ -113,7 +113,6 @@ export function TaskDialog({
         setQuantity(0);
         setDuration(0);
         
-        // Buscar siguiente hueco libre o usar el default
         const lineTasks = allTasks.filter(t => t.lineId === defaultLineId);
         const nextTime = lineTasks.length > 0 
           ? [...lineTasks].sort((a, b) => b.endTime.getTime() - a.endTime.getTime())[0].endTime 
@@ -128,9 +127,8 @@ export function TaskDialog({
       }
       setLastEdited(null);
     }
-  }, [isOpen, initialTask, defaultLineId, weekDays, lineSpeeds]);
+  }, [isOpen, initialTask, defaultLineId, weekDays, lineSpeeds, allTasks]);
 
-  // Sincronización Tanques <-> Cantidad
   useEffect(() => {
     if (isSpecialTask || factor === 0) return;
 
@@ -141,14 +139,12 @@ export function TaskDialog({
     }
   }, [factor, isSpecialTask, lastEdited, tanks, quantity]);
 
-  // Cálculo de duración para producción
   useEffect(() => {
     if (isSpecialTask || loadPerHour <= 0 || quantity <= 0 || lastEdited === 'duration') return;
     const calculatedDuration = quantity / loadPerHour;
     setDuration(calculatedDuration);
   }, [loadPerHour, quantity, isSpecialTask, lastEdited]);
 
-  // Duraciones por defecto para tareas especiales (solo nuevas)
   useEffect(() => {
     if (initialTask || !name) return;
     
@@ -230,11 +226,11 @@ export function TaskDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[480px] rounded-3xl">
-        <DialogHeader>
+      <DialogContent className="sm:max-w-[500px] rounded-3xl overflow-hidden">
+        <DialogHeader className="px-1">
           <div className="flex items-center gap-3 mb-2">
-            <div className="bg-primary/10 p-2 rounded-xl">
-              <Clock className="h-5 w-5 text-primary" />
+            <div className="bg-primary/10 p-2.5 rounded-2xl">
+              <Clock className="h-6 w-6 text-primary" />
             </div>
             <div className="flex flex-col">
               <DialogTitle className="font-headline text-2xl text-slate-900">
@@ -247,38 +243,39 @@ export function TaskDialog({
               )}
             </div>
           </div>
-          <DialogDescription>
-            Configura la producción y programación para la línea de producción.
+          <DialogDescription className="text-slate-500">
+            Administra los tiempos y volúmenes de producción para la línea seleccionada.
           </DialogDescription>
         </DialogHeader>
 
         {readOnly && (
-           <div className="p-3 bg-amber-50/50 rounded-2xl border border-amber-100 flex items-center gap-3 mb-2">
+           <div className="mx-1 p-3 bg-amber-50/50 rounded-2xl border border-amber-100 flex items-center gap-3 mb-2">
             <ShieldAlert className="h-4 w-4 text-amber-500" />
-            <span className="text-[10px] font-bold text-amber-700 uppercase tracking-widest">No tienes permisos para modificar datos</span>
+            <span className="text-[10px] font-bold text-amber-700 uppercase tracking-widest leading-none">Modo de consulta: Edición deshabilitada</span>
           </div>
         )}
 
-        <div className="grid gap-4 py-4">
+        <div className="grid gap-5 py-2">
+          {/* Fila 1: Línea y Producto */}
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Línea</Label>
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Línea de Producción</Label>
               <Select value={lineId} onValueChange={setLineId} disabled={readOnly}>
-                <SelectTrigger className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80 font-black">
-                  <SelectValue placeholder="Línea" />
+                <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80 font-black text-slate-700">
+                  <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-xl">
                   {LINES.map(l => <SelectItem key={l} value={l} className="font-bold">Línea {l}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Producto / Tarea</Label>
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Producto / Servicio</Label>
               <Select value={name} onValueChange={(val) => { setName(val); if (val !== 'CIP') setCipSubOption(''); }} disabled={readOnly}>
-                <SelectTrigger className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80">
+                <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80 font-bold">
                   <SelectValue placeholder="Seleccionar" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-xl">
                   {PRODUCT_LIST.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
                 </SelectContent>
               </Select>
@@ -287,56 +284,29 @@ export function TaskDialog({
 
           {name === 'CIP' && (
             <div className="grid gap-2 animate-in fade-in slide-in-from-top-2">
-              <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Tipo de CIP</Label>
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Tipo de CIP</Label>
               <Select value={cipSubOption} onValueChange={setCipSubOption} disabled={readOnly}>
-                <SelectTrigger className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80">
+                <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80">
                   <SelectValue placeholder="Seleccionar tipo de CIP" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-xl">
                   {CIP_OPTIONS.map((opt) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
           )}
 
-          {!isSpecialTask && (
-            <div className="grid grid-cols-2 gap-4 animate-in fade-in">
-              <div className="grid gap-2">
-                <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Presentación</Label>
-                <Select value={presentation} onValueChange={setPresentation} disabled={readOnly}>
-                  <SelectTrigger className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80">
-                    <SelectValue placeholder="Tamaño" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {PRESENTATIONS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="grid gap-2">
-                <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Tanques</Label>
-                <Input 
-                  type="number" 
-                  step="0.01"
-                  value={tanks === 0 ? '' : tanks} 
-                  onChange={(e) => { setTanks(parseFloat(e.target.value) || 0); setLastEdited('tanks'); }} 
-                  disabled={readOnly}
-                  className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80"
-                  placeholder="0.00"
-                />
-              </div>
-            </div>
-          )}
-
+          {/* Fila 2: Programación de Tiempo */}
           <div className="grid grid-cols-2 gap-4">
             <div className="grid gap-2">
-              <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Día</Label>
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Día de Inicio</Label>
               <Select value={selectedDayIdx} onValueChange={setSelectedDayIdx} disabled={readOnly}>
-                <SelectTrigger className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80">
+                <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80 font-bold">
                   <SelectValue>
                     {weekDays[parseInt(selectedDayIdx)]?.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}
                   </SelectValue>
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="rounded-xl">
                   {DAYS.map((day, idx) => (
                     <SelectItem key={day} value={idx.toString()}>
                       {day} ({weekDays[idx]?.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })})
@@ -346,96 +316,153 @@ export function TaskDialog({
               </Select>
             </div>
             <div className="grid gap-2">
-              <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Hora Inicio</Label>
-              <Input 
-                type="time" 
-                value={selectedTime} 
-                onChange={(e) => setSelectedTime(e.target.value)} 
-                disabled={readOnly}
-                className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80"
-              />
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Hora de Inicio</Label>
+              <div className="relative">
+                <Clock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+                <Input 
+                  type="time" 
+                  value={selectedTime} 
+                  onChange={(e) => setSelectedTime(e.target.value)} 
+                  disabled={readOnly}
+                  className="h-12 rounded-2xl border-slate-100 bg-slate-50 pl-10 disabled:opacity-80 font-bold"
+                />
+              </div>
             </div>
           </div>
 
+          {/* Sección de Producción (Solo si no es especial) */}
           {!isSpecialTask && (
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Cajas/Hora</Label>
-                <Input 
-                  type="number" 
-                  value={loadPerHour || ''} 
-                  onChange={(e) => setLoadPerHour(Number(e.target.value))} 
-                  disabled={readOnly}
-                  className="h-12 rounded-xl border-slate-100 bg-slate-50 disabled:opacity-80"
-                />
+            <div className="space-y-4 animate-in fade-in">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Presentación</Label>
+                  <Select value={presentation} onValueChange={setPresentation} disabled={readOnly}>
+                    <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80 font-bold">
+                      <SelectValue placeholder="Tamaño" />
+                    </SelectTrigger>
+                    <SelectContent className="rounded-xl">
+                      {PRESENTATIONS.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="grid gap-2">
+                  <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Cajas/Hora</Label>
+                  <Input 
+                    type="number" 
+                    value={loadPerHour || ''} 
+                    onChange={(e) => setLoadPerHour(Number(e.target.value))} 
+                    disabled={readOnly}
+                    className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80 font-black text-slate-700"
+                  />
+                </div>
               </div>
-              <div className="grid gap-2">
-                <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Cantidad (Cajas)</Label>
-                <Input 
-                  type="number" 
-                  value={quantity === 0 ? '' : quantity} 
-                  onChange={(e) => { setQuantity(parseInt(e.target.value) || 0); setLastEdited('quantity'); }}
-                  disabled={readOnly}
-                  className="h-12 rounded-xl border-slate-100 bg-slate-50 font-bold disabled:opacity-80" 
-                  placeholder="0"
-                />
+
+              {/* Tanques y Cajas en círculos/cápsulas sincronizadas */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="bg-indigo-50/50 p-4 rounded-3xl border border-indigo-100 flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <Beaker className="h-3 w-3 text-indigo-500" />
+                    <Label className="text-[9px] font-black text-indigo-500 uppercase tracking-widest">Eq. Tanques</Label>
+                  </div>
+                  <Input 
+                    type="number" 
+                    step="0.01"
+                    value={tanks === 0 ? '' : tanks} 
+                    onChange={(e) => { setTanks(parseFloat(e.target.value) || 0); setLastEdited('tanks'); }} 
+                    disabled={readOnly}
+                    className="h-10 bg-transparent border-0 shadow-none font-black text-2xl p-0 focus-visible:ring-0 text-indigo-900"
+                    placeholder="0.00"
+                  />
+                </div>
+                <div className="bg-emerald-50/50 p-4 rounded-3xl border border-emerald-100 flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <Package className="h-3 w-3 text-emerald-500" />
+                    <Label className="text-[9px] font-black text-emerald-500 uppercase tracking-widest">Total Cajas</Label>
+                  </div>
+                  <Input 
+                    type="number" 
+                    value={quantity === 0 ? '' : quantity} 
+                    onChange={(e) => { setQuantity(parseInt(e.target.value) || 0); setLastEdited('quantity'); }}
+                    disabled={readOnly}
+                    className="h-10 bg-transparent border-0 shadow-none font-black text-2xl p-0 focus-visible:ring-0 text-emerald-900" 
+                    placeholder="0"
+                  />
+                </div>
               </div>
             </div>
           )}
 
-          {(isSpecialTask || true) && (
-            <div className="grid gap-2 animate-in fade-in slide-in-from-top-2">
-              <Label className="text-xs font-black text-slate-400 uppercase tracking-widest ml-1">Duración (Horas)</Label>
-              <Input 
-                type="number" 
-                step="0.1"
-                min="0.1"
-                value={duration || ''} 
-                onChange={(e) => { setDuration(Number(e.target.value)); setLastEdited('duration'); }} 
-                disabled={readOnly}
-                className="h-12 rounded-xl border-slate-100 bg-slate-50 font-bold disabled:opacity-80"
-                placeholder="Ej: 1.5"
-              />
-            </div>
-          )}
-          
-          <div className="space-y-2 p-5 bg-primary/5 rounded-3xl border border-primary/10 mt-2">
-            <div className="flex justify-between items-center mb-1">
-              <div className="text-[10px] font-black text-slate-400 uppercase tracking-widest">Tiempo Programado</div>
-              <div className="text-xl font-black text-primary tabular-nums">
-                {duration < 1 && duration > 0 ? `${Math.round(duration * 60)} min` : `${duration.toFixed(2)} hrs`}
-              </div>
+          {/* Tiempo Programado Centralizado */}
+          <div className="p-6 bg-slate-50 rounded-[32px] border border-slate-100 mt-2 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+              <Clock className="h-16 w-16" />
             </div>
             
-            <div className="pt-3 mt-3 border-t border-primary/10 space-y-2">
-              <div className="flex justify-between items-center text-[10px]">
-                <div className="flex items-center gap-1.5 text-slate-500 font-bold uppercase tracking-wider">
-                  <Info className="h-3 w-3" /> Hueco Disponible:
+            <div className="flex flex-col gap-4">
+              <div className="flex justify-between items-center">
+                <div className="flex flex-col">
+                  <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Tiempo Programado</span>
+                  <span className="text-[9px] font-bold text-slate-400 italic">
+                    {isSpecialTask ? 'Ajuste manual de duración' : 'Calculado según carga por hora'}
+                  </span>
                 </div>
-                <span className="text-slate-900 font-black">{availableGap.hours.toFixed(2)} hrs</span>
+                
+                {isSpecialTask ? (
+                  <div className="flex items-center gap-2">
+                    <Input 
+                      type="number" 
+                      step="0.1"
+                      min="0.1"
+                      value={duration || ''} 
+                      onChange={(e) => { setDuration(Number(e.target.value)); setLastEdited('duration'); }} 
+                      disabled={readOnly}
+                      className="w-24 h-12 bg-white rounded-xl border-primary/20 font-black text-xl text-center text-primary focus:ring-primary/20"
+                    />
+                    <span className="text-sm font-black text-primary">hrs</span>
+                  </div>
+                ) : (
+                  <div className="text-3xl font-black text-primary tabular-nums">
+                    {duration < 1 && duration > 0 ? `${Math.round(duration * 60)}m` : `${duration.toFixed(2)}h`}
+                  </div>
+                )}
               </div>
-              {!isSpecialTask && loadPerHour > 0 && (
+              
+              <div className="pt-4 border-t border-slate-200/50 space-y-2">
                 <div className="flex justify-between items-center text-[10px]">
-                  <span className="text-slate-500 font-bold uppercase tracking-wider">Límite Cajas:</span>
-                  <span className="text-slate-900 font-black">{availableGap.boxes.toLocaleString('es-ES')}</span>
+                  <div className="flex items-center gap-1.5 text-slate-500 font-bold uppercase tracking-wider">
+                    <Info className="h-3 w-3" /> Espacio Libre en Línea:
+                  </div>
+                  <span className={cn(
+                    "font-black px-2 py-0.5 rounded-lg",
+                    availableGap.hours < duration ? "bg-destructive/10 text-destructive" : "bg-emerald-50 text-emerald-600"
+                  )}>
+                    {availableGap.hours.toFixed(2)} hrs
+                  </span>
                 </div>
-              )}
+                {!isSpecialTask && loadPerHour > 0 && (
+                  <div className="flex justify-between items-center text-[10px]">
+                    <span className="text-slate-500 font-bold uppercase tracking-wider">Cajas Máximas posibles:</span>
+                    <span className="text-slate-900 font-black tabular-nums">{availableGap.boxes.toLocaleString('es-ES')}</span>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
-        <DialogFooter className="flex-col sm:flex-row gap-3">
+
+        <DialogFooter className="flex-col sm:flex-row gap-3 px-1 pt-4">
           {!readOnly && initialTask && onDelete && (
-            <Button variant="destructive" onClick={() => onDelete(initialTask.id)} className="gap-2 sm:mr-auto rounded-xl h-12 font-bold px-6">
+            <Button variant="ghost" onClick={() => onDelete(initialTask.id)} className="gap-2 sm:mr-auto rounded-2xl h-12 font-bold text-destructive hover:bg-destructive/5 px-6">
               <Trash2 className="h-4 w-4" /> Eliminar
             </Button>
           )}
           <div className="flex gap-2 w-full sm:w-auto">
-            <Button variant="outline" onClick={onClose} className="flex-1 sm:flex-none rounded-xl h-12 font-bold px-8">
+            <Button variant="outline" onClick={onClose} className="flex-1 sm:flex-none rounded-2xl h-12 font-bold px-8 border-slate-200">
               {readOnly ? 'Cerrar' : 'Cancelar'}
             </Button>
             {!readOnly && (
-              <Button onClick={handleSave} className="bg-primary flex-1 sm:flex-none rounded-xl h-12 font-black uppercase text-[10px] tracking-widest px-10 shadow-lg shadow-primary/20" disabled={!name || duration <= 0}>
-                Guardar Cambios
+              <Button onClick={handleSave} className="bg-primary flex-1 sm:flex-none rounded-2xl h-12 font-black uppercase text-[10px] tracking-widest px-10 shadow-lg shadow-primary/20 hover:translate-y-[-1px] transition-all" disabled={!name || duration <= 0}>
+                {initialTask ? 'Actualizar' : 'Programar'}
               </Button>
             )}
           </div>
