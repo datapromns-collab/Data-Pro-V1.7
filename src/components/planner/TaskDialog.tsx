@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
@@ -224,9 +223,16 @@ export function TaskDialog({
     onClose();
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !readOnly && name && duration > 0) {
+      e.preventDefault();
+      handleSave();
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px] rounded-3xl overflow-hidden">
+      <DialogContent className="sm:max-w-[500px] rounded-3xl overflow-hidden" onKeyDown={handleKeyDown}>
         <DialogHeader className="px-1">
           <div className="flex items-center gap-3 mb-2">
             <div className="bg-primary/10 p-2.5 rounded-2xl">
@@ -236,6 +242,7 @@ export function TaskDialog({
               <DialogTitle className="font-headline text-2xl text-slate-900">
                 {initialTask ? 'Editar Tarea' : 'Nueva Tarea'}
               </DialogTitle>
+              {readOnly && <Badge variant="secondary" className="bg-amber-50 text-amber-600 border-amber-100 uppercase text-[8px] font-black tracking-widest mt-1 w-fit">Solo Lectura</Badge>}
             </div>
           </div>
           <DialogDescription className="text-slate-500">
