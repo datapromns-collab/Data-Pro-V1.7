@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -176,6 +175,13 @@ export default function PlannerPage() {
     }
   };
 
+  const handleClearContext = () => {
+    if (!isAdmin) return;
+    if (confirm(`¿Borrar planificación de la Línea ${selectedLine} para esta semana?`)) {
+      clearAll(selectedLine, weekStartDate, weekEnd);
+    }
+  };
+
   const pageHeader = useMemo(() => {
     switch (activeTab) {
       case 'speeds': return { title: "Velocidades", subtitle: "Configuración base de líneas." };
@@ -251,7 +257,7 @@ export default function PlannerPage() {
                     <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 hover:translate-y-[-1px] transition-all">
                       <Plus className="h-4 w-4" /> Nueva Tarea
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => confirm('¿Borrar historial?') && clearAll()} className="w-full gap-2 text-destructive font-black uppercase text-xs tracking-widest hover:bg-destructive/5 py-6">
+                    <Button variant="ghost" size="sm" onClick={handleClearContext} className="w-full gap-2 text-destructive font-black uppercase text-xs tracking-widest hover:bg-destructive/5 py-6">
                       <Trash2 className="h-4 w-4" /> Limpiar Todo
                     </Button>
                   </div>

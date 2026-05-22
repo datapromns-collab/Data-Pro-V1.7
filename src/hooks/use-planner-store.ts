@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
@@ -86,8 +85,13 @@ export function usePlannerStore() {
     setTasks(prev => prev.filter(t => t.id !== id));
   }, []);
 
-  const clearAll = useCallback(() => {
-    setTasks([]);
+  const clearAll = useCallback((lineId?: string, startDate?: Date, endDate?: Date) => {
+    setTasks(prev => prev.filter(t => {
+      const matchLine = lineId ? t.lineId === lineId : true;
+      const matchTime = (startDate && endDate) ? (t.endTime >= startDate && t.startTime <= endDate) : true;
+      // Mantenemos las tareas que NO coinciden con el contexto actual de borrado
+      return !(matchLine && matchTime);
+    }));
   }, []);
 
   const updateLineSpeed = useCallback((lineId: string, speed: number) => {
