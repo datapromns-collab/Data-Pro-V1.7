@@ -27,7 +27,7 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
 
   const isSpecialTask = (name: string) => {
     if (!name) return false;
-    const specials = ['CS', 'CP', 'CIP', 'MTTO', 'PARADA', 'S.A.M.I', 'PASIVACIÓN'];
+    const specials = ['CS', 'CP', 'CIP', 'MTTO', 'PARADA', 'S.A.M.I', 'PASIVACIÓN', 'PRUEBA DE MATERIAL'];
     return specials.some(s => name.toUpperCase().includes(s));
   };
 

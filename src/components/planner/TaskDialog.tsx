@@ -24,7 +24,7 @@ const PRODUCT_LIST = [
   "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
   "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA", "JUSTY NARANJA",
   "JUSTY DURAZNO", "JUSTY MANDARINA", "JUSTY SANDIA", "JUSTY LIMON", "JUSTY TAMARINDO",
-  "VITA TEA DURAZNO", "VITA TEA LIMON", "CS", "CIP", "PASIVACIÓN", "MTTO", "PARADA", "CP"
+  "VITA TEA DURAZNO", "VITA TEA LIMON", "CS", "CIP", "PASIVACIÓN", "MTTO", "PARADA", "CP", "PRUEBA DE MATERIAL"
 ];
 
 const CIP_OPTIONS = ["CIP 3P ALCALINO", "CIP 3P ACIDO", "CIP 5P"];
@@ -74,7 +74,7 @@ export function TaskDialog({
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   
   const isSpecialTask = useMemo(() => {
-    return name === 'CS' || name === 'CIP' || name === 'PASIVACIÓN' || name === 'MTTO' || name === 'PARADA' || name === 'CP' || CIP_OPTIONS.includes(name);
+    return name === 'CS' || name === 'CIP' || name === 'PASIVACIÓN' || name === 'MTTO' || name === 'PARADA' || name === 'CP' || name === 'PRUEBA DE MATERIAL' || CIP_OPTIONS.includes(name);
   }, [name]);
 
   const factor = useMemo(() => {
@@ -150,7 +150,7 @@ export function TaskDialog({
     if (name === 'CS') setDuration(0.5);
     else if (name === 'CIP') setDuration(2.0);
     else if (name === 'CP') setDuration(2.0);
-    else if (['MTTO', 'PARADA', 'PASIVACIÓN'].includes(name)) setDuration(1.0);
+    else if (['MTTO', 'PARADA', 'PASIVACIÓN', 'PRUEBA DE MATERIAL'].includes(name)) setDuration(1.0);
   }, [name, initialTask]);
 
   const availableGap = useMemo(() => {
