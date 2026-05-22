@@ -21,6 +21,7 @@ const PRODUCTION_COLOR = '#83CCEB';
 const SPECIAL_TASK_COLOR = '#FFFF00';
 const AUTO_CP_COLOR = '#FFC000';
 const SAMI_COLOR = '#FEF9C3';
+const MATERIAL_TEST_COLOR = '#BBF7D0';
 
 export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSectionProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
@@ -71,7 +72,7 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
       }, 0);
   };
 
-  const getBarStyle = (start: Date, end: Date, day: Date, type: 'production' | 'special' | 'sami' | 'cp') => {
+  const getBarStyle = (start: Date, end: Date, day: Date, type: 'production' | 'special' | 'sami' | 'cp' | 'test') => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const rowEnd = addDays(rowStart, 1);
 
@@ -102,6 +103,9 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
     } else if (type === 'cp') {
       bgColor = AUTO_CP_COLOR;
       borderColor = '#D97706';
+    } else if (type === 'test') {
+      bgColor = MATERIAL_TEST_COLOR;
+      borderColor = '#86EFAC';
     }
 
     return {
@@ -199,7 +203,13 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
 
                           {lineTasks.map((task) => {
                             const isSpecial = isSpecialTask(task.name);
-                            const style = getBarStyle(task.startTime, task.endTime, day, isSpecial ? 'special' : 'production');
+                            const isMaterialTest = task.name.toUpperCase().includes('PRUEBA DE MATERIAL');
+                            
+                            let type: 'production' | 'special' | 'sami' | 'cp' | 'test' = 'production';
+                            if (isMaterialTest) type = 'test';
+                            else if (isSpecial) type = 'special';
+
+                            const style = getBarStyle(task.startTime, task.endTime, day, type);
                             if (!style) return null;
 
                             const dayStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
@@ -215,14 +225,14 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                                 key={task.id}
                                 className={cn(
                                   "absolute inset-y-1.5 rounded-lg border-2 shadow-sm z-10 flex flex-col justify-center px-2 overflow-hidden print:inset-y-1 print:rounded-md print:border-2",
-                                  isSpecial ? "z-20" : ""
+                                  (isSpecial || isMaterialTest) ? "z-20" : ""
                                 )}
                                 style={style}
                               >
                                 <span className="text-[10px] font-black text-slate-900 uppercase truncate leading-none mb-0.5">
                                   {task.name}
                                 </span>
-                                {!isSpecial && task.quantity > 0 && (
+                                {!isSpecial && !isMaterialTest && task.quantity > 0 && (
                                   <div className="flex items-center gap-1 opacity-80">
                                     <span className="text-[9px] font-bold text-slate-700 leading-none tabular-nums">
                                       {Math.round(dailyPortion).toLocaleString('es-ES')}
