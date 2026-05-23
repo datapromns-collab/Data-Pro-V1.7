@@ -38,6 +38,7 @@ import { ProductionEntryDialog } from '@/components/planner/ProductionEntryDialo
 import { MonthlyReport } from '@/components/planner/MonthlyReport';
 import { WeeklyControlReport } from '@/components/planner/WeeklyControlReport';
 import { ComplianceReport } from '@/components/planner/ComplianceReport';
+import { MonthlyComplianceReport } from '@/components/planner/MonthlyComplianceReport';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
@@ -89,7 +90,7 @@ export default function PlannerPage() {
   const [selectedLine, setSelectedLine] = useState("1");
   const [activeTab, setActiveTab] = useState("gantt");
   const [hasRedirectedAdmin, setHasRedirectedAdmin] = useState(false);
-  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance'>('plan');
+  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance'>('plan');
   const [emitDate, setEmitDate] = useState('');
   
   // State for monthly report print parameters
@@ -178,6 +179,20 @@ export default function PlannerPage() {
 
   const handlePrintCompliance = () => {
     setPrintMode('compliance');
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: landscape; margin: 0; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
+
+  const handlePrintMonthlyCompliance = (month: string, year: string) => {
+    setSelectedMonth(month);
+    setSelectedYear(year);
+    setPrintMode('monthly-compliance');
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: landscape; margin: 0; }';
@@ -475,7 +490,7 @@ export default function PlannerPage() {
                 </TabsList>
               </div>
 
-              <div className="flex-1 min-h-0">
+              <div className="flex-1 min-0">
                 <TabsContent value="gantt" className="m-0 h-full">
                   <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
                 </TabsContent>
@@ -508,6 +523,7 @@ export default function PlannerPage() {
                     realProduction={realProduction}
                     updateRealProduction={updateRealProduction}
                     onPrintCompliance={handlePrintCompliance}
+                    onPrintMonthlyCompliance={handlePrintMonthlyCompliance}
                   />
                 </TabsContent>
               </div>
@@ -574,6 +590,16 @@ export default function PlannerPage() {
                 tasks={tasks}
                 realProduction={realProduction} 
                 weekStartDate={weekStartDate} 
+              />
+            </div>
+          )}
+          {printMode === 'monthly-compliance' && (
+            <div className="p-0">
+              <MonthlyComplianceReport 
+                tasks={tasks}
+                realProduction={realProduction} 
+                selectedMonth={selectedMonth} 
+                selectedYear={selectedYear}
               />
             </div>
           )}

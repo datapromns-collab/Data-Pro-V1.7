@@ -26,6 +26,7 @@ interface AdminReportToolProps {
   onPrintMonthly?: (month: string, year: string) => void;
   onPrintWeeklyControl?: () => void;
   onPrintCompliance?: () => void;
+  onPrintMonthlyCompliance?: (month: string, year: string) => void;
 }
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
@@ -46,7 +47,17 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function AdminReportTool({ view, tasks, weekStartDate, realProduction, updateRealProduction, onPrintMonthly, onPrintWeeklyControl, onPrintCompliance }: AdminReportToolProps) {
+export function AdminReportTool({ 
+  view, 
+  tasks, 
+  weekStartDate, 
+  realProduction, 
+  updateRealProduction, 
+  onPrintMonthly, 
+  onPrintWeeklyControl, 
+  onPrintCompliance,
+  onPrintMonthlyCompliance
+}: AdminReportToolProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
@@ -518,6 +529,15 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
                     className="w-24 bg-white border-slate-200 font-black text-center rounded-xl h-10 text-[10px] focus:ring-primary/20"
                     placeholder="Año"
                   />
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => onPrintMonthlyCompliance?.(selectedMonth, selectedYear)}
+                    className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs"
+                  >
+                    <FileDown className="h-4 w-4" />
+                    Exportar Reporte Mensual
+                  </Button>
                 </div>
               )}
             </div>
@@ -712,4 +732,3 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
     </div>
   );
 }
-
