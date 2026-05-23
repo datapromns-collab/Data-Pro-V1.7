@@ -375,7 +375,7 @@ export default function PlannerPage() {
                 <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
                   {isReportView ? (
                     <TabsTrigger value="admin-report" className="gap-2 px-4 font-bold">
-                      <BarChart3 className="h-4 w-4" /> Reporte
+                      <BarChart3 className="h-4 w-4" /> Producción
                     </TabsTrigger>
                   ) : (
                     <>
@@ -389,7 +389,7 @@ export default function PlannerPage() {
                       )}
                       <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Requerimiento</TabsTrigger>
                       {isAdmin && (
-                        <TabsTrigger value="admin-report" className="gap-2 px-4 font-bold"><BarChart3 className="h-4 w-4" /> Reporte</TabsTrigger>
+                        <TabsTrigger value="admin-report" className="gap-2 px-4 font-bold"><BarChart3 className="h-4 w-4" /> Producción</TabsTrigger>
                       )}
                     </>
                   )}

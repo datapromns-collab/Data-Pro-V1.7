@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Card } from '@/components/ui/card';
@@ -15,7 +16,7 @@ export function AdminReportTool({ tasks, weekStartDate }: AdminReportToolProps) 
         <div className="bg-primary/5 p-6 rounded-full mb-6">
           <BarChart3 className="h-12 w-12 text-primary/20" />
         </div>
-        <h2 className="text-xl font-headline font-bold text-slate-400 mb-2 uppercase tracking-tight">Sección de Reporte</h2>
+        <h2 className="text-xl font-headline font-bold text-slate-400 mb-2 uppercase tracking-tight">Sección de Producción</h2>
         <p className="text-slate-400 text-sm font-medium">
           Esta herramienta se encuentra actualmente en blanco. Próximamente se integrarán métricas de gestión y análisis de producción.
         </p>
