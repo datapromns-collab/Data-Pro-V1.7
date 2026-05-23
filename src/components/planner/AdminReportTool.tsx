@@ -352,10 +352,13 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
                 <thead>
                   <tr className="bg-[#4a7ebb] text-white text-[11px] font-black uppercase tracking-wider">
                     <th className="px-4 py-3 border border-white/20 text-left min-w-[200px]">SABOR</th>
-                    {ALL_LINES_SUMMARY.map(l => (
+                    {ALL_LINES_SUMMARY.slice(0, 4).map(l => (
                       <th key={l} className="px-2 py-3 border border-white/20 text-center">LÍNEA {l}</th>
                     ))}
                     <th className="px-4 py-3 border border-white/20 text-center bg-[#2f5597]">TOTAL 2L</th>
+                    {ALL_LINES_SUMMARY.slice(4).map(l => (
+                      <th key={l} className="px-2 py-3 border border-white/20 text-center">LÍNEA {l}</th>
+                    ))}
                     <th className="px-4 py-3 border border-white/20 text-center bg-[#2f5597]">TOTAL</th>
                   </tr>
                 </thead>
@@ -368,7 +371,7 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
                     return (
                       <tr key={idx} className="hover:bg-slate-50 transition-colors text-[12px] font-bold text-slate-700">
                         <td className="px-4 py-2.5 border border-slate-200 uppercase bg-slate-50/50">{flavor}</td>
-                        {lineVals.map((val, lIdx) => (
+                        {lineVals.slice(0, 4).map((val, lIdx) => (
                           <td key={lIdx} className="px-2 py-2.5 border border-slate-200 text-center tabular-nums">
                             {val > 0 ? val.toLocaleString('es-ES') : '0'}
                           </td>
@@ -376,6 +379,11 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
                         <td className="px-4 py-2.5 border border-slate-200 text-center tabular-nums bg-[#dce6f1] font-black">
                           {total2L > 0 ? total2L.toLocaleString('es-ES') : '0'}
                         </td>
+                        {lineVals.slice(4).map((val, lIdx) => (
+                          <td key={lIdx + 4} className="px-2 py-2.5 border border-slate-200 text-center tabular-nums">
+                            {val > 0 ? val.toLocaleString('es-ES') : '0'}
+                          </td>
+                        ))}
                         <td className="px-4 py-2.5 border border-slate-200 text-center tabular-nums bg-[#dce6f1] font-black">
                           {totalSabor > 0 ? totalSabor.toLocaleString('es-ES') : '0'}
                         </td>
@@ -386,7 +394,7 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
                 <tfoot className="bg-[#dce6f1] text-slate-900 font-black text-[13px]">
                   <tr>
                     <td className="px-4 py-4 border border-slate-300 uppercase">TOTAL POR LINEA</td>
-                    {ALL_LINES_SUMMARY.map(l => {
+                    {ALL_LINES_SUMMARY.slice(0, 4).map(l => {
                       const colTotal = PRODUCT_LIST.reduce((acc, flavor) => acc + (monthlyData[flavor]?.[l] || 0), 0);
                       return (
                         <td key={l} className="px-2 py-4 border border-slate-300 text-center tabular-nums">
@@ -400,6 +408,14 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
                         return acc + lineVals.reduce((a, b) => a + b, 0);
                       }, 0).toLocaleString('es-ES')}
                     </td>
+                    {ALL_LINES_SUMMARY.slice(4).map(l => {
+                      const colTotal = PRODUCT_LIST.reduce((acc, flavor) => acc + (monthlyData[flavor]?.[l] || 0), 0);
+                      return (
+                        <td key={l} className="px-2 py-4 border border-slate-300 text-center tabular-nums">
+                          {colTotal.toLocaleString('es-ES')}
+                        </td>
+                      );
+                    })}
                     <td className="px-4 py-4 border border-slate-300 text-center tabular-nums bg-[#b8cce4]">
                       {PRODUCT_LIST.reduce((acc, flavor) => {
                         const lineVals = ALL_LINES_SUMMARY.map(l => monthlyData[flavor]?.[l] || 0);
