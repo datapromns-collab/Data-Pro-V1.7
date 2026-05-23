@@ -61,49 +61,65 @@ export function ComplianceReport({ tasks, realProduction, weekStartDate }: Compl
     });
   }, [tasks, realProduction, weekDays]);
 
+  const renderHeader = (subtitle: string, lineLabel?: string) => (
+    <div className="mb-4 border-b-2 border-slate-900 pb-2 flex justify-between items-center shrink-0">
+      <div className="flex-1">
+        <h1 className="text-xl font-headline font-black text-slate-900 leading-none uppercase tracking-tight">Reporte de Cumplimiento</h1>
+        <p className="text-primary font-black text-[10px] uppercase tracking-widest mt-1">{subtitle}</p>
+      </div>
+      <div className="flex-1 flex justify-center">
+        {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={120} height={45} className="object-contain" />}
+      </div>
+      <div className="flex-1 text-right">
+        <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Confidencial - Planta</p>
+        <p className="text-xl font-black text-slate-900 uppercase leading-none">{lineLabel || 'VISTA GENERAL'}</p>
+      </div>
+    </div>
+  );
+
+  const renderFooter = (pageInfo: string) => (
+    <div className="mt-4 flex justify-between items-end border-t border-slate-200 pt-2 text-[7px] font-black text-slate-400 uppercase tracking-widest shrink-0">
+      <div className="space-y-0.5">
+        <p>SISTEMA DE GESTIÓN DE PLANTA - {pageInfo}</p>
+        <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es })}</p>
+      </div>
+      <div className="text-right">
+        <p>MULTINACIONAL DE SABORES</p>
+      </div>
+    </div>
+  );
+
   return (
     <div className="bg-white w-full print:p-0 h-full">
       {/* PÁGINA 1: RESUMEN DE CUMPLIMIENTO SEMANAL */}
-      <div className="page-break-section h-screen flex flex-col p-1" style={{ pageBreakInside: 'avoid' }}>
-        <div className="mb-2 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
-          <div className="flex-1">
-            <h1 className="text-xl font-headline font-black text-slate-900 leading-none uppercase">Reporte de Cumplimiento</h1>
-            <p className="text-primary font-black text-[10px] uppercase tracking-widest mt-0.5">Resumen Ejecutivo Semanal</p>
-          </div>
-          <div className="flex-1 flex justify-center">
-            {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={110} height={40} className="object-contain" />}
-          </div>
-          <div className="flex-1 text-right">
-            <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Confidencial - Planta</p>
-            <p className="text-lg font-black text-slate-900 uppercase leading-none">VISTA GENERAL</p>
-          </div>
-        </div>
+      <div className="page-break-section h-screen flex flex-col p-4" style={{ pageBreakInside: 'avoid' }}>
+        {renderHeader('Resumen Ejecutivo Semanal')}
 
-        <div className="flex-1 flex flex-col items-center justify-start pt-10">
-          <h2 className="text-sm font-bold text-slate-900 mb-2 uppercase">Cumplimiento de Lineas</h2>
-          <div className="w-full max-w-2xl border border-slate-900 overflow-hidden rounded-sm shadow-sm">
+        <div className="flex-1 flex flex-col items-center justify-start pt-12">
+          <h2 className="text-xs font-black text-slate-900 mb-4 uppercase tracking-widest border-b border-slate-200 pb-1">Cumplimiento de Líneas</h2>
+          <div className="w-full max-w-3xl border border-slate-900 overflow-hidden rounded-sm shadow-sm">
             <table className="w-full border-collapse text-[10pt]">
               <thead>
-                <tr className="bg-[#4a7ebb] text-white font-black uppercase h-10">
-                  <th className="px-4 py-0 border border-slate-900 text-left">DIAS</th>
-                  <th className="px-4 py-0 border border-slate-900 text-right">PLANIFICADO</th>
-                  <th className="px-4 py-0 border border-slate-900 text-right">PRODUCCION</th>
-                  <th className="px-4 py-0 border border-slate-900 text-right">CUMPLIMIENTO</th>
+                <tr className="bg-[#4a7ebb] text-white font-black uppercase h-11">
+                  <th className="px-6 py-0 border border-slate-900 text-left">LÍNEAS</th>
+                  <th className="px-6 py-0 border border-slate-900 text-right">PLANIFICADO</th>
+                  <th className="px-6 py-0 border border-slate-900 text-right">PRODUCCIÓN</th>
+                  <th className="px-6 py-0 border border-slate-900 text-right">CUMPLIMIENTO</th>
                 </tr>
               </thead>
               <tbody className="bg-[#dce6f1]">
                 {summaryData.map((data, idx) => (
-                  <tr key={idx} className="font-bold text-slate-900 h-10">
-                    <td className="px-4 py-0 border border-slate-900">
-                      Linea {data.lineId}
+                  <tr key={idx} className="font-bold text-slate-900 h-11 border-b border-slate-900/10 last:border-b-0">
+                    <td className="px-6 py-0 border-r border-slate-900 font-black">
+                      Línea {data.lineId}
                     </td>
-                    <td className="px-4 py-0 border border-slate-900 text-right tabular-nums">
-                      {Math.round(data.planned).toLocaleString('es-ES')}
+                    <td className="px-6 py-0 border-r border-slate-900 text-right tabular-nums">
+                      {data.planned > 0 ? Math.round(data.planned).toLocaleString('es-ES') : '—'}
                     </td>
-                    <td className="px-4 py-0 border border-slate-900 text-right tabular-nums">
-                      {Math.round(data.real).toLocaleString('es-ES')}
+                    <td className="px-6 py-0 border-r border-slate-900 text-right tabular-nums">
+                      {data.real > 0 ? Math.round(data.real).toLocaleString('es-ES') : '0'}
                     </td>
-                    <td className="px-4 py-0 border border-slate-900 text-right tabular-nums">
+                    <td className="px-6 py-0 text-right tabular-nums font-black text-primary">
                       {data.compliance.toFixed(2).replace('.', ',')}%
                     </td>
                   </tr>
@@ -113,15 +129,7 @@ export function ComplianceReport({ tasks, realProduction, weekStartDate }: Compl
           </div>
         </div>
 
-        <div className="mt-2 flex justify-between items-end border-t border-slate-200 pt-1 text-[7px] font-black text-slate-400 uppercase tracking-widest shrink-0">
-          <div className="space-y-0.5">
-            <p>SISTEMA DE GESTIÓN DE PLANTA - RESUMEN DE CUMPLIMIENTO</p>
-            <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es })}</p>
-          </div>
-          <div className="text-right">
-            <p>MULTINACIONAL DE SABORES</p>
-          </div>
-        </div>
+        {renderFooter('RESUMEN DE CUMPLIMIENTO')}
       </div>
 
       {/* PÁGINAS SIGUIENTES: DETALLE POR LÍNEA */}
@@ -136,65 +144,62 @@ export function ComplianceReport({ tasks, realProduction, weekStartDate }: Compl
         });
 
         return (
-          <div key={lineId} className="page-break-section h-screen flex flex-col p-1" style={{ pageBreakInside: 'avoid' }}>
-            <div className="mb-2 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
-              <div className="flex-1">
-                <h1 className="text-xl font-headline font-black text-slate-900 leading-none uppercase">Reporte de Cumplimiento</h1>
-                <p className="text-primary font-black text-[10px] uppercase tracking-widest mt-0.5">Planificado vs Producción Real</p>
-              </div>
-              <div className="flex-1 flex justify-center">
-                {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={110} height={40} className="object-contain" />}
-              </div>
-              <div className="flex-1 text-right">
-                <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Confidencial - Planta</p>
-                <p className="text-lg font-black text-slate-900 uppercase leading-none">LINEA {lineId}</p>
-              </div>
-            </div>
+          <div key={lineId} className="page-break-section h-screen flex flex-col p-4" style={{ pageBreakInside: 'avoid' }}>
+            {renderHeader('Planificado vs Producción Real', `LÍNEA ${lineId}`)}
 
-            <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm w-full">
-              <table className="w-full border-collapse text-[10pt] h-full">
-                <thead>
-                  <tr className="bg-[#4a7ebb] text-white font-black uppercase h-10">
-                    <th className="px-4 py-0 border border-slate-900 text-left">FECHA</th>
-                    <th className="px-4 py-0 border border-slate-900 text-left">DIAS</th>
-                    <th className="px-4 py-0 border border-slate-900 text-right">PLANIFICADO</th>
-                    <th className="px-4 py-0 border border-slate-900 text-right">PRODUCCION</th>
-                    <th className="px-4 py-0 border border-slate-900 text-right">CUMPLIMIENTO</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-[#dce6f1]">
-                  {dailyStats.map((stat, idx) => (
-                    <tr key={idx} className="font-bold text-slate-900 h-12">
-                      <td className="px-4 py-0 border border-slate-900 tabular-nums">
-                        {format(stat.day, 'd/M/yyyy')}
+            <div className="flex-1 flex flex-col items-center justify-start pt-12">
+              <h2 className="text-xs font-black text-slate-900 mb-4 uppercase tracking-widest border-b border-slate-200 pb-1">Detalle Diario de Operación</h2>
+              <div className="w-full max-w-4xl border border-slate-900 overflow-hidden rounded-sm shadow-sm">
+                <table className="w-full border-collapse text-[10pt]">
+                  <thead>
+                    <tr className="bg-[#4a7ebb] text-white font-black uppercase h-11">
+                      <th className="px-6 py-0 border border-slate-900 text-left">FECHA</th>
+                      <th className="px-6 py-0 border border-slate-900 text-left">DÍAS</th>
+                      <th className="px-6 py-0 border border-slate-900 text-right">PLANIFICADO</th>
+                      <th className="px-6 py-0 border border-slate-900 text-right">PRODUCCIÓN</th>
+                      <th className="px-6 py-0 border border-slate-900 text-right">CUMPLIMIENTO</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-[#dce6f1]">
+                    {dailyStats.map((stat, idx) => (
+                      <tr key={idx} className="font-bold text-slate-900 h-11 border-b border-slate-900/10 last:border-b-0">
+                        <td className="px-6 py-0 border-r border-slate-900 tabular-nums font-black">
+                          {format(stat.day, 'dd/MM/yyyy')}
+                        </td>
+                        <td className="px-6 py-0 border-r border-slate-900 uppercase text-[9pt]">
+                          {format(stat.day, 'EEEE', { locale: es })}
+                        </td>
+                        <td className="px-6 py-0 border-r border-slate-900 text-right tabular-nums bg-white/10">
+                          {stat.planned > 0 ? Math.round(stat.planned).toLocaleString('es-ES') : '—'}
+                        </td>
+                        <td className="px-6 py-0 border-r border-slate-900 text-right tabular-nums">
+                          {stat.real > 0 ? Math.round(stat.real).toLocaleString('es-ES') : '0'}
+                        </td>
+                        <td className="px-6 py-0 text-right tabular-nums font-black text-primary">
+                          {stat.compliance.toFixed(2).replace('.', ',')}%
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                  <tfoot className="bg-[#b8cce4] font-black text-slate-900 border-t border-slate-900">
+                    <tr className="h-11">
+                      <td colSpan={2} className="px-6 py-0 border-r border-slate-900 uppercase">TOTAL SEMANA</td>
+                      <td className="px-6 py-0 border-r border-slate-900 text-right tabular-nums">
+                        {Math.round(dailyStats.reduce((a, b) => a + b.planned, 0)).toLocaleString('es-ES')}
                       </td>
-                      <td className="px-4 py-0 border border-slate-900 uppercase">
-                        {format(stat.day, 'EEEE', { locale: es })}
+                      <td className="px-6 py-0 border-r border-slate-900 text-right tabular-nums">
+                        {Math.round(dailyStats.reduce((a, b) => a + b.real, 0)).toLocaleString('es-ES')}
                       </td>
-                      <td className="px-4 py-0 border border-slate-900 text-right tabular-nums bg-white/30">
-                        {stat.planned > 0 ? Math.round(stat.planned).toLocaleString('es-ES') : '—'}
-                      </td>
-                      <td className="px-4 py-0 border border-slate-900 text-right tabular-nums">
-                        {stat.real > 0 ? Math.round(stat.real).toLocaleString('es-ES') : '0'}
-                      </td>
-                      <td className="px-4 py-0 border border-slate-900 text-right tabular-nums font-black text-primary">
-                        {stat.compliance.toFixed(2).replace('.', ',')}%
+                      <td className="px-6 py-0 text-right tabular-nums text-primary text-[11pt]">
+                        {(dailyStats.reduce((a, b) => a + b.real, 0) / (dailyStats.reduce((a, b) => a + b.planned, 0) || 1) * 100).toFixed(2).replace('.', ',')}%
                       </td>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </tfoot>
+                </table>
+              </div>
             </div>
 
-            <div className="mt-2 flex justify-between items-end border-t border-slate-200 pt-1 text-[7px] font-black text-slate-400 uppercase tracking-widest shrink-0">
-              <div className="space-y-0.5">
-                <p>SISTEMA DE GESTIÓN DE PLANTA - REPORTE DE CUMPLIMIENTO</p>
-                <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es })}</p>
-              </div>
-              <div className="text-right">
-                <p>MULTINACIONAL DE SABORES</p>
-              </div>
-            </div>
+            {renderFooter(`REPORTE DE CUMPLIMIENTO - LÍNEA ${lineId}`)}
           </div>
         );
       })}
