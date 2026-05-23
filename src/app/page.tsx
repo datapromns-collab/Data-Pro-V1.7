@@ -14,7 +14,9 @@ import {
   ListTodo,
   LogOut,
   ShieldCheck,
-  User as UserIcon
+  User as UserIcon,
+  BarChart3,
+  FileText
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -25,6 +27,7 @@ import { RequirementSection } from '@/components/planner/RequirementSection';
 import { RequirementReport } from '@/components/planner/RequirementReport';
 import { SummaryReport } from '@/components/planner/SummaryReport';
 import { DailyPlanSection } from '@/components/planner/DailyPlanSection';
+import { AdminReportTool } from '@/components/planner/AdminReportTool';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
@@ -188,6 +191,7 @@ export default function PlannerPage() {
       case 'calculator': return { title: "Calculadora", subtitle: "Conversión cajas/tanques." };
       case 'requirement': return { title: "Requerimiento", subtitle: "Materiales e insumos semanales." };
       case 'daily': return { title: "Plan Día a Día", subtitle: "Detalle operativo semanal." };
+      case 'admin-report': return { title: "Reporte de Gestión", subtitle: "Métricas globales de producción." };
       default: return { title: `Programación Línea ${selectedLine}`, subtitle: "" };
     }
   }, [activeTab, selectedLine]);
@@ -257,8 +261,16 @@ export default function PlannerPage() {
                     <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 hover:translate-y-[-1px] transition-all">
                       <Plus className="h-4 w-4" /> Nueva Tarea
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={handleClearContext} className="w-full gap-2 text-destructive font-black uppercase text-xs tracking-widest hover:bg-destructive/5 py-6">
+                    <Button variant="ghost" size="sm" onClick={handleClearContext} className="w-full gap-2 text-destructive font-black uppercase text-xs tracking-widest hover:bg-destructive/5 py-4">
                       <Trash2 className="h-4 w-4" /> Limpiar Todo
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => setActiveTab('admin-report')} 
+                      className="w-full gap-2 text-primary font-black uppercase text-xs tracking-widest border-primary/20 hover:bg-primary/5 rounded-2xl py-6"
+                    >
+                      <BarChart3 className="h-4 w-4" /> Reporte de Gestión
                     </Button>
                   </div>
                 </section>
@@ -330,6 +342,9 @@ export default function PlannerPage() {
                     </>
                   )}
                   <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Requerimiento</TabsTrigger>
+                  {isAdmin && (
+                    <TabsTrigger value="admin-report" className="gap-2 px-4 font-bold"><BarChart3 className="h-4 w-4" /> Reporte</TabsTrigger>
+                  )}
                 </TabsList>
               </div>
 
@@ -346,6 +361,9 @@ export default function PlannerPage() {
                 <TabsContent value="calculator" className="m-0 h-full"><Calculator /></TabsContent>
                 <TabsContent value="requirement" className="m-0 h-full">
                   <RequirementSection onPrint={handlePrintRequirements} tasks={tasks} weekStartDate={weekStartDate} />
+                </TabsContent>
+                <TabsContent value="admin-report" className="m-0 h-full">
+                  <AdminReportTool tasks={tasks} weekStartDate={weekStartDate} />
                 </TabsContent>
               </div>
             </Tabs>
