@@ -117,6 +117,15 @@
     overflow: hidden;
   }
 
+  .monthly-report-print {
+    width: 100% !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    overflow: hidden !important;
+    page-break-inside: avoid !important;
+    padding: 5mm !important;
+  }
+
   .page-break-section:last-child {
     page-break-after: auto;
     break-after: auto;

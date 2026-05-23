@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo, useState } from 'react';
@@ -5,10 +6,11 @@ import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { getWeekDays, PRODUCT_LIST, ALL_LINES_SUMMARY } from '@/lib/planner-utils';
 import { format, startOfDay, addDays, setHours, setMinutes, parseISO, startOfMonth, endOfMonth, isWithinInterval } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { BarChart3, Package, Layers, CalendarDays, FileSpreadsheet } from 'lucide-react';
+import { BarChart3, Package, Layers, CalendarDays, FileSpreadsheet, FileDown } from 'lucide-react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -18,12 +20,13 @@ interface AdminReportToolProps {
   weekStartDate: Date;
   realProduction: Record<string, Record<string, Record<string, number>>>;
   updateRealProduction: (lineId: string, flavor: string, dateKey: string, quantity: number) => void;
+  onPrintMonthly?: (month: string, year: string) => void;
 }
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7"];
 const DAYS_NAMES = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
 
-export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRealProduction }: AdminReportToolProps) {
+export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRealProduction, onPrintMonthly }: AdminReportToolProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   
   const [activeView, setActiveTab] = useState("weekly");
@@ -122,6 +125,15 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
 
           {activeView === 'monthly' && (
             <div className="flex items-center gap-3">
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => onPrintMonthly?.(selectedMonth, selectedYear)}
+                className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-11 px-4 rounded-xl"
+              >
+                <FileDown className="h-4 w-4" />
+                Exportar PDF
+              </Button>
               <Select value={selectedMonth} onValueChange={setSelectedMonth}>
                 <SelectTrigger className="w-40 bg-white border-slate-200 font-black uppercase text-xs tracking-widest rounded-xl h-11">
                   <SelectValue />
