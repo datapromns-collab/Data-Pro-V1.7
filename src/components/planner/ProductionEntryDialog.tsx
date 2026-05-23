@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -6,15 +7,15 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { format, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 import { Package, BarChart3, Loader2, Calendar } from 'lucide-react';
 
-const LINES = ["1", "2", "3", "4", "5", "6", "7"];
+const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const PRODUCT_LIST = [
   "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
-  "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA", "JUSTY NARANJA",
-  "JUSTY DURAZNO", "JUSTY MANDARINA", "JUSTY SANDIA", "JUSTY LIMON", "JUSTY TAMARINDO",
-  "VITA TEA DURAZNO", "VITA TEA LIMON"
+  "GLUP MANZANA VERDE", "GLUP PONCHE", "GLUP CHICLE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA", 
+  "JUSTY NARANJA", "JUSTY DURAZNO", "JUSTY MANDARINA", "JUSTY SANDIA", "JUSTY LIMON", 
+  "JUSTY TAMARINDO", "VITA TEA DURAZNO", "VITA TEA LIMON"
 ];
 
 interface ProductionEntryDialogProps {
@@ -24,7 +25,6 @@ interface ProductionEntryDialogProps {
 }
 
 export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEntryDialogProps) {
-  // Inicializamos con la fecha actual en formato YYYY-MM-DD para el input type="date"
   const [dateStr, setDateStr] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
   const [lineId, setLineId] = useState<string>("");
   const [flavor, setFlavor] = useState<string>("");
@@ -36,7 +36,6 @@ export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEnt
     
     setIsSaving(true);
     
-    // Simular un pequeño delay para feedback visual
     setTimeout(() => {
       onSave(lineId, flavor, dateStr, Number(quantity));
       setIsSaving(false);
@@ -53,9 +52,7 @@ export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEnt
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent 
-        className="sm:max-w-[450px] rounded-3xl"
-      >
+      <DialogContent className="sm:max-w-[450px] rounded-3xl" onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader>
           <div className="flex items-center gap-3 mb-2">
             <div className="bg-emerald-500/10 p-2.5 rounded-2xl">
@@ -69,9 +66,8 @@ export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEnt
         </DialogHeader>
 
         <div className="grid gap-6 py-4">
-          {/* Fecha Manual */}
           <div className="grid gap-2">
-            <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Fecha de Producción (Día/Mes/Año)</Label>
+            <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Fecha de Producción</Label>
             <div className="relative">
               <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-500 z-10" />
               <Input
@@ -84,7 +80,6 @@ export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEnt
           </div>
 
           <div className="grid grid-cols-2 gap-4">
-            {/* Línea */}
             <div className="grid gap-2">
               <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Línea</Label>
               <Select value={lineId} onValueChange={setLineId}>
@@ -97,7 +92,6 @@ export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEnt
               </Select>
             </div>
 
-            {/* Sabor / Producto */}
             <div className="grid gap-2">
               <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Producto</Label>
               <Select value={flavor} onValueChange={setFlavor}>
@@ -111,7 +105,6 @@ export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEnt
             </div>
           </div>
 
-          {/* Cantidad */}
           <div className="grid gap-2">
             <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 text-emerald-600">Producción Real (Cajas)</Label>
             <div className="relative">
