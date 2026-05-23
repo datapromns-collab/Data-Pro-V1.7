@@ -100,6 +100,7 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
 
   return (
     <div className="space-y-8 animate-in fade-in duration-700 pb-10">
+      {/* KPI Summary Header */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="p-6 bg-white border-slate-200 shadow-sm rounded-3xl flex items-center gap-4">
           <div className="bg-primary/10 p-4 rounded-2xl">
@@ -138,10 +139,12 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
         </Card>
       </div>
 
+      {/* Line Tables Section */}
       <div className="space-y-10">
         <TooltipProvider>
           {lineData.map((line) => (
             <Card key={line.lineId} className="overflow-hidden border-slate-200 shadow-sm rounded-3xl bg-white">
+              {/* Header Dark de la Línea */}
               <div className="bg-slate-900 px-6 py-4 flex justify-between items-center">
                 <div className="flex items-center gap-3">
                   <div className="bg-primary h-8 w-8 rounded-lg flex items-center justify-center font-black text-white text-sm">
@@ -232,6 +235,7 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
                                       className="w-20 h-9 text-center font-black text-[13px] border-slate-200 bg-white focus:border-primary focus:ring-1 focus:ring-primary/20 rounded-lg placeholder:text-slate-300"
                                       placeholder={dayEntry.scheduled > 0 ? Math.round(dayEntry.scheduled).toString() : '0'}
                                     />
+                                    {/* Indicador de meta pendiente si el programado > 0 y real es 0 */}
                                     {dayEntry.scheduled > 0 && !dayEntry.real && (
                                       <div className="absolute -top-1 -right-1">
                                         <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" title="Falta producción real" />
