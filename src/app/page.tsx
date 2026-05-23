@@ -18,7 +18,8 @@ import {
   User as UserIcon,
   BarChart3,
   FileText,
-  ChevronLeft
+  ChevronLeft,
+  PackageCheck
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -30,6 +31,7 @@ import { RequirementReport } from '@/components/planner/RequirementReport';
 import { SummaryReport } from '@/components/planner/SummaryReport';
 import { DailyPlanSection } from '@/components/planner/DailyPlanSection';
 import { AdminReportTool } from '@/components/planner/AdminReportTool';
+import { ProductionEntryDialog } from '@/components/planner/ProductionEntryDialog';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
@@ -44,6 +46,7 @@ import { Badge } from '@/components/ui/badge';
 import { ScheduledTask } from '@/lib/types';
 import { format, getISOWeek, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { useToast } from '@/hooks/use-toast';
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7"];
 
@@ -58,6 +61,7 @@ export default function PlannerPage() {
     removeTask, 
     clearAll, 
     updateLineSpeed,
+    updateRealProduction,
     isLoaded: plannerLoaded
   } = usePlannerStore();
 
@@ -68,8 +72,11 @@ export default function PlannerPage() {
     login,
     logout
   } = useAuthStore();
+
+  const { toast } = useToast();
   
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isEntryDialogOpen, setIsEntryDialogOpen] = useState(false);
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
@@ -79,7 +86,6 @@ export default function PlannerPage() {
 
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
-  // Redirigir administradores al reporte al iniciar sesión o cargar
   useEffect(() => {
     if (authLoaded && user && isAdmin) {
       setActiveTab('admin-report');
@@ -194,6 +200,14 @@ export default function PlannerPage() {
     }
   };
 
+  const handleSaveRealProduction = (lineId: string, flavor: string, dateKey: string, qty: number) => {
+    updateRealProduction(lineId, flavor, dateKey, qty);
+    toast({
+      title: "Producción Guardada",
+      description: `${qty.toLocaleString()} cajas registradas en Línea ${lineId}.`,
+    });
+  };
+
   const pageHeader = useMemo(() => {
     switch (activeTab) {
       case 'speeds': return { title: "Velocidades", subtitle: "Configuración base de líneas." };
@@ -299,14 +313,24 @@ export default function PlannerPage() {
                         </Button>
                       </>
                     ) : (
-                      <Button 
-                        variant="default" 
-                        size="lg" 
-                        onClick={() => setActiveTab('gantt')} 
-                        className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 hover:translate-y-[-1px] transition-all"
-                      >
-                        <ChevronLeft className="h-4 w-4" /> Volver al Plan
-                      </Button>
+                      <>
+                        <Button 
+                          variant="default" 
+                          size="lg" 
+                          onClick={() => setIsEntryDialogOpen(true)} 
+                          className="w-full gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-emerald-200 hover:translate-y-[-1px] transition-all"
+                        >
+                          <PackageCheck className="h-4 w-4" /> Cargar Producción
+                        </Button>
+                        <Button 
+                          variant="ghost" 
+                          size="lg" 
+                          onClick={() => setActiveTab('gantt')} 
+                          className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl border border-slate-100 hover:bg-slate-50 transition-all"
+                        >
+                          <ChevronLeft className="h-4 w-4" /> Volver al Plan
+                        </Button>
+                      </>
                     )}
                   </div>
                 </section>
@@ -469,6 +493,13 @@ export default function PlannerPage() {
         lineSpeeds={lineSpeeds} 
         readOnly={!isAdmin}
       />
+
+      <ProductionEntryDialog
+        isOpen={isEntryDialogOpen}
+        onClose={() => setIsEntryDialogOpen(false)}
+        onSave={handleSaveRealProduction}
+      />
+
       <KeyboardShortcuts isOpen={isShortcutsOpen} onClose={() => setIsShortcutsOpen(false)} />
       <Toaster />
     </SidebarProvider>
