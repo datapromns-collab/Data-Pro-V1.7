@@ -93,11 +93,11 @@ export default function PlannerPage() {
   const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance'>('plan');
   const [emitDate, setEmitDate] = useState('');
   
-  // State for monthly report print parameters
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
 
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
+  const isReportView = ['admin-report', 'compliance-report'].includes(activeTab);
 
   // Redirección inicial para administradores
   useEffect(() => {
@@ -106,6 +106,13 @@ export default function PlannerPage() {
       setHasRedirectedAdmin(true);
     }
   }, [authLoaded, user, isAdmin, hasRedirectedAdmin]);
+
+  // Seguridad: Redirigir si un usuario estándar termina en una vista de reporte
+  useEffect(() => {
+    if (authLoaded && user && !isAdmin && isReportView) {
+      setActiveTab('gantt');
+    }
+  }, [authLoaded, user, isAdmin, isReportView]);
 
   useEffect(() => {
     if (plannerLoaded) {
@@ -292,8 +299,6 @@ export default function PlannerPage() {
   if (!user) {
     return <LoginForm onLogin={login} />;
   }
-
-  const isReportView = ['admin-report', 'compliance-report'].includes(activeTab);
 
   return (
     <SidebarProvider>
@@ -497,35 +502,43 @@ export default function PlannerPage() {
                 <TabsContent value="daily" className="m-0 h-full">
                   <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintDaily} />
                 </TabsContent>
-                <TabsContent value="speeds" className="m-0 h-full">
-                  <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} readOnly={!isAdmin} />
-                </TabsContent>
-                <TabsContent value="calculator" className="m-0 h-full"><Calculator /></TabsContent>
+                {isAdmin && (
+                  <>
+                    <TabsContent value="speeds" className="m-0 h-full">
+                      <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} readOnly={!isAdmin} />
+                    </TabsContent>
+                    <TabsContent value="calculator" className="m-0 h-full"><Calculator /></TabsContent>
+                  </>
+                )}
                 <TabsContent value="requirement" className="m-0 h-full">
                   <RequirementSection onPrint={handlePrintRequirements} tasks={tasks} weekStartDate={weekStartDate} />
                 </TabsContent>
-                <TabsContent value="admin-report" className="m-0 h-full">
-                  <AdminReportTool 
-                    view="production"
-                    tasks={tasks} 
-                    weekStartDate={weekStartDate} 
-                    realProduction={realProduction}
-                    updateRealProduction={updateRealProduction}
-                    onPrintWeeklyControl={handlePrintWeeklyControl}
-                    onPrintMonthly={handlePrintMonthly}
-                  />
-                </TabsContent>
-                <TabsContent value="compliance-report" className="m-0 h-full">
-                  <AdminReportTool 
-                    view="compliance"
-                    tasks={tasks} 
-                    weekStartDate={weekStartDate} 
-                    realProduction={realProduction}
-                    updateRealProduction={updateRealProduction}
-                    onPrintCompliance={handlePrintCompliance}
-                    onPrintMonthlyCompliance={handlePrintMonthlyCompliance}
-                  />
-                </TabsContent>
+                {isAdmin && (
+                  <>
+                    <TabsContent value="admin-report" className="m-0 h-full">
+                      <AdminReportTool 
+                        view="production"
+                        tasks={tasks} 
+                        weekStartDate={weekStartDate} 
+                        realProduction={realProduction}
+                        updateRealProduction={updateRealProduction}
+                        onPrintWeeklyControl={handlePrintWeeklyControl}
+                        onPrintMonthly={handlePrintMonthly}
+                      />
+                    </TabsContent>
+                    <TabsContent value="compliance-report" className="m-0 h-full">
+                      <AdminReportTool 
+                        view="compliance"
+                        tasks={tasks} 
+                        weekStartDate={weekStartDate} 
+                        realProduction={realProduction}
+                        updateRealProduction={updateRealProduction}
+                        onPrintCompliance={handlePrintCompliance}
+                        onPrintMonthlyCompliance={handlePrintMonthlyCompliance}
+                      />
+                    </TabsContent>
+                  </>
+                )}
               </div>
             </Tabs>
           </div>
@@ -567,41 +580,45 @@ export default function PlannerPage() {
               <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} />
             </div>
           )}
-          {printMode === 'monthly' && (
-            <div className="p-0">
-              <MonthlyReport 
-                realProduction={realProduction} 
-                selectedMonth={selectedMonth} 
-                selectedYear={selectedYear} 
-              />
-            </div>
-          )}
-          {printMode === 'weekly-control' && (
-            <div className="p-0">
-              <WeeklyControlReport 
-                realProduction={realProduction} 
-                weekStartDate={weekStartDate} 
-              />
-            </div>
-          )}
-          {printMode === 'compliance' && (
-            <div className="p-0">
-              <ComplianceReport 
-                tasks={tasks}
-                realProduction={realProduction} 
-                weekStartDate={weekStartDate} 
-              />
-            </div>
-          )}
-          {printMode === 'monthly-compliance' && (
-            <div className="p-0">
-              <MonthlyComplianceReport 
-                tasks={tasks}
-                realProduction={realProduction} 
-                selectedMonth={selectedMonth} 
-                selectedYear={selectedYear}
-              />
-            </div>
+          {isAdmin && (
+            <>
+              {printMode === 'monthly' && (
+                <div className="p-0">
+                  <MonthlyReport 
+                    realProduction={realProduction} 
+                    selectedMonth={selectedMonth} 
+                    selectedYear={selectedYear} 
+                  />
+                </div>
+              )}
+              {printMode === 'weekly-control' && (
+                <div className="p-0">
+                  <WeeklyControlReport 
+                    realProduction={realProduction} 
+                    weekStartDate={weekStartDate} 
+                  />
+                </div>
+              )}
+              {printMode === 'compliance' && (
+                <div className="p-0">
+                  <ComplianceReport 
+                    tasks={tasks}
+                    realProduction={realProduction} 
+                    weekStartDate={weekStartDate} 
+                  />
+                </div>
+              )}
+              {printMode === 'monthly-compliance' && (
+                <div className="p-0">
+                  <MonthlyComplianceReport 
+                    tasks={tasks}
+                    realProduction={realProduction} 
+                    selectedMonth={selectedMonth} 
+                    selectedYear={selectedYear}
+                  />
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>
@@ -619,11 +636,13 @@ export default function PlannerPage() {
         readOnly={!isAdmin}
       />
 
-      <ProductionEntryDialog
-        isOpen={isEntryDialogOpen}
-        onClose={() => setIsEntryDialogOpen(false)}
-        onSave={handleSaveRealProduction}
-      />
+      {isAdmin && (
+        <ProductionEntryDialog
+          isOpen={isEntryDialogOpen}
+          onClose={() => setIsEntryDialogOpen(false)}
+          onSave={handleSaveRealProduction}
+        />
+      )}
 
       <KeyboardShortcuts isOpen={isShortcutsOpen} onClose={() => setIsShortcutsOpen(false)} />
       <Toaster />
