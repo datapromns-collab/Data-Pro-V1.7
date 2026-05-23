@@ -1,18 +1,19 @@
-
 "use client";
 
 import { useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { ScheduledTask } from '@/lib/types';
+import { Input } from '@/components/ui/input';
+import { usePlannerStore } from '@/hooks/use-planner-store';
 import { getWeekDays } from '@/lib/planner-utils';
-import { format, startOfDay, addDays, isBefore, isAfter, setHours, setMinutes } from 'date-fns';
+import { format, startOfDay, addDays, setHours, setMinutes } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { BarChart3, Package, Layers } from 'lucide-react';
+import { BarChart3, Package, Layers, Info } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 interface AdminReportToolProps {
-  tasks: ScheduledTask[];
+  tasks: any[];
   weekStartDate: Date;
 }
 
@@ -20,11 +21,12 @@ const LINES = ["1", "2", "3", "4", "5", "6", "7"];
 const DAYS_NAMES = ['LUN', 'MAR', 'MIÉ', 'JUE', 'VIE', 'SÁB', 'DOM'];
 
 export function AdminReportTool({ tasks, weekStartDate }: AdminReportToolProps) {
+  const { realProduction, updateRealProduction } = usePlannerStore();
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
 
-  // Función para calcular la cantidad de un sabor en un día específico para una línea
-  const getFlavorDailyQty = (lineId: string, flavor: string, day: Date) => {
-    const dayStart = setMinutes(setHours(startOfDay(day), 7), 0); // Inicio jornada 07:00
+  // Función para calcular la cantidad programada de un sabor en un día específico para una línea
+  const getFlavorScheduledQty = (lineId: string, flavor: string, day: Date) => {
+    const dayStart = setMinutes(setHours(startOfDay(day), 7), 0);
     const dayEnd = addDays(dayStart, 1);
 
     return tasks
@@ -46,23 +48,28 @@ export function AdminReportTool({ tasks, weekStartDate }: AdminReportToolProps) 
       }, 0);
   };
 
-  // Obtener todos los sabores únicos por línea que tienen producción esta semana
   const lineData = useMemo(() => {
     return LINES.map(lineId => {
       const lineTasks = tasks.filter(t => t.lineId === lineId && t.quantity > 0);
       const uniqueFlavors = Array.from(new Set(lineTasks.map(t => t.name))).sort();
       
       const flavors = uniqueFlavors.map(flavor => {
-        const dailyQtys = weekDays.map(day => getFlavorDailyQty(lineId, flavor, day));
-        const weeklyTotal = dailyQtys.reduce((a, b) => a + b, 0);
-        return { flavor, dailyQtys, weeklyTotal };
+        const dailyData = weekDays.map(day => {
+          const dateKey = format(day, 'yyyy-MM-dd');
+          const scheduled = getFlavorScheduledQty(lineId, flavor, day);
+          const real = realProduction[lineId]?.[flavor]?.[dateKey] || 0;
+          return { day, dateKey, scheduled, real };
+        });
+        
+        const weeklyTotalReal = dailyData.reduce((a, b) => a + (b.real || b.scheduled), 0);
+        return { flavor, dailyData, weeklyTotalReal };
       });
 
-      const lineWeeklyTotal = flavors.reduce((acc, f) => acc + f.weeklyTotal, 0);
+      const lineWeeklyTotal = flavors.reduce((acc, f) => acc + f.weeklyTotalReal, 0);
 
       return { lineId, flavors, lineWeeklyTotal };
     }).filter(l => l.flavors.length > 0);
-  }, [tasks, weekDays]);
+  }, [tasks, weekDays, realProduction]);
 
   const totalCratesWeek = useMemo(() => 
     lineData.reduce((acc, l) => acc + l.lineWeeklyTotal, 0),
@@ -76,9 +83,9 @@ export function AdminReportTool({ tasks, weekStartDate }: AdminReportToolProps) 
           <div className="bg-primary/5 p-6 rounded-full mb-6">
             <Package className="h-12 w-12 text-primary/20" />
           </div>
-          <h2 className="text-xl font-headline font-bold text-slate-400 mb-2 uppercase tracking-tight">Sin Producción</h2>
+          <h2 className="text-xl font-headline font-bold text-slate-400 mb-2 uppercase tracking-tight">Sin Programación</h2>
           <p className="text-slate-400 text-sm font-medium">
-            No hay tareas de producción programadas para esta semana. Agrega tareas en el planificador para ver el resumen aquí.
+            No hay tareas programadas para esta semana. Agrega tareas en el planificador para habilitar el registro de producción real.
           </p>
         </Card>
       </div>
@@ -94,7 +101,7 @@ export function AdminReportTool({ tasks, weekStartDate }: AdminReportToolProps) 
             <BarChart3 className="h-6 w-6 text-primary" />
           </div>
           <div>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Total Semanal</p>
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Total Real Semanal</p>
             <h3 className="text-2xl font-black text-slate-900 leading-none">
               {Math.round(totalCratesWeek).toLocaleString('es-ES')} <span className="text-sm font-bold text-slate-400">cjs</span>
             </h3>
@@ -106,9 +113,9 @@ export function AdminReportTool({ tasks, weekStartDate }: AdminReportToolProps) 
             <Layers className="h-6 w-6 text-emerald-500" />
           </div>
           <div>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Líneas Activas</p>
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Líneas en Proceso</p>
             <h3 className="text-2xl font-black text-slate-900 leading-none">
-              {lineData.length} <span className="text-sm font-bold text-slate-400">unidades</span>
+              {lineData.length} <span className="text-sm font-bold text-slate-400">activas</span>
             </h3>
           </div>
         </Card>
@@ -117,64 +124,88 @@ export function AdminReportTool({ tasks, weekStartDate }: AdminReportToolProps) 
           <div className="bg-amber-50 p-4 rounded-2xl">
             <Package className="h-6 w-6 text-amber-500" />
           </div>
-          <div>
-            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Promedio Diario</p>
-            <h3 className="text-2xl font-black text-slate-900 leading-none">
-              {Math.round(totalCratesWeek / 7).toLocaleString('es-ES')} <span className="text-sm font-bold text-slate-400">cjs</span>
-            </h3>
+          <div className="flex-1">
+            <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Instrucciones</p>
+            <p className="text-[11px] font-bold text-slate-600 leading-tight">
+              Ingresa la producción real en cada celda. El sistema calcula totales automáticamente.
+            </p>
           </div>
         </Card>
       </div>
 
-      {/* Tabla Maestra de Producción */}
-      <div className="space-y-6">
-        {lineData.map((line) => (
-          <Card key={line.lineId} className="overflow-hidden border-slate-200 shadow-sm rounded-3xl bg-white">
-            <div className="bg-slate-900 px-6 py-4 flex justify-between items-center">
-              <div className="flex items-center gap-3">
-                <div className="bg-primary h-8 w-8 rounded-lg flex items-center justify-center font-black text-white text-sm">
-                  {line.lineId}
+      {/* Tablas por Línea */}
+      <div className="space-y-10">
+        <TooltipProvider>
+          {lineData.map((line) => (
+            <Card key={line.lineId} className="overflow-hidden border-slate-200 shadow-sm rounded-3xl bg-white">
+              <div className="bg-slate-900 px-6 py-4 flex justify-between items-center">
+                <div className="flex items-center gap-3">
+                  <div className="bg-primary h-8 w-8 rounded-lg flex items-center justify-center font-black text-white text-sm">
+                    {line.lineId}
+                  </div>
+                  <h3 className="text-sm font-black text-white uppercase tracking-widest">Control de Producción - Línea {line.lineId}</h3>
                 </div>
-                <h3 className="text-sm font-black text-white uppercase tracking-widest">Producción Línea {line.lineId}</h3>
+                <Badge className="bg-white/10 text-white border-none font-bold uppercase text-[10px] px-3">
+                  Total Real: {Math.round(line.lineWeeklyTotal).toLocaleString('es-ES')} cjs
+                </Badge>
               </div>
-              <Badge className="bg-white/10 text-white border-none font-bold uppercase text-[10px] px-3">
-                Total: {Math.round(line.lineWeeklyTotal).toLocaleString('es-ES')} cajas
-              </Badge>
-            </div>
-            
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-slate-50/50 hover:bg-slate-50/50 border-b">
-                  <TableHead className="w-[200px] font-black text-[10px] text-slate-400 uppercase tracking-widest py-4 pl-6">Sabor / Producto</TableHead>
-                  {DAYS_NAMES.map((day, idx) => (
-                    <TableHead key={idx} className="text-center font-black text-[10px] text-slate-400 uppercase tracking-widest py-4">
-                      {day}
-                      <span className="block text-[8px] font-bold opacity-60 normal-case mt-0.5">
-                        {format(weekDays[idx], 'dd MMM', { locale: es })}
-                      </span>
-                    </TableHead>
-                  ))}
-                  <TableHead className="text-right font-black text-[10px] text-primary uppercase tracking-widest py-4 pr-6">Total</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {line.flavors.map((row, fIdx) => (
-                  <TableRow key={fIdx} className="hover:bg-slate-50/30 transition-colors h-14">
-                    <TableCell className="font-black text-[12px] text-slate-700 uppercase pl-6">{row.flavor}</TableCell>
-                    {row.dailyQtys.map((qty, qIdx) => (
-                      <TableCell key={qIdx} className="text-center font-bold text-[12px] text-slate-600 tabular-nums">
-                        {qty > 0 ? Math.round(qty).toLocaleString('es-ES') : <span className="text-slate-200">—</span>}
-                      </TableCell>
+              
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-slate-50/50 hover:bg-slate-50/50 border-b">
+                    <TableHead className="w-[200px] font-black text-[10px] text-slate-400 uppercase tracking-widest py-4 pl-6">Sabor / Producto</TableHead>
+                    {DAYS_NAMES.map((day, idx) => (
+                      <TableHead key={idx} className="text-center font-black text-[10px] text-slate-400 uppercase tracking-widest py-4">
+                        {day}
+                        <span className="block text-[8px] font-bold opacity-60 normal-case mt-0.5">
+                          {format(weekDays[idx], 'dd MMM', { locale: es })}
+                        </span>
+                      </TableHead>
                     ))}
-                    <TableCell className="text-right font-black text-[13px] text-primary tabular-nums pr-6 bg-primary/5">
-                      {Math.round(row.weeklyTotal).toLocaleString('es-ES')}
-                    </TableCell>
+                    <TableHead className="text-right font-black text-[10px] text-primary uppercase tracking-widest py-4 pr-6">Total</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Card>
-        ))}
+                </TableHeader>
+                <TableBody>
+                  {line.flavors.map((row, fIdx) => (
+                    <TableRow key={fIdx} className="hover:bg-slate-50/30 transition-colors h-16">
+                      <TableCell className="font-black text-[12px] text-slate-700 uppercase pl-6">{row.flavor}</TableCell>
+                      {row.dailyData.map((dayEntry, qIdx) => (
+                        <TableCell key={qIdx} className="p-2 text-center">
+                          <div className="flex flex-col items-center gap-1">
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <div className="relative group">
+                                  <Input 
+                                    type="number"
+                                    value={dayEntry.real || ''}
+                                    onChange={(e) => updateRealProduction(line.lineId, row.flavor, dayEntry.dateKey, Number(e.target.value))}
+                                    className="w-20 h-9 text-center font-black text-[13px] border-slate-200 bg-white focus:border-primary focus:ring-1 focus:ring-primary/20 rounded-lg"
+                                    placeholder={dayEntry.scheduled > 0 ? Math.round(dayEntry.scheduled).toString() : '—'}
+                                  />
+                                  {dayEntry.scheduled > 0 && !dayEntry.real && (
+                                    <div className="absolute -top-1 -right-1">
+                                      <div className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
+                                    </div>
+                                  )}
+                                </div>
+                              </TooltipTrigger>
+                              <TooltipContent className="text-[10px] font-bold">
+                                Programado: {Math.round(dayEntry.scheduled).toLocaleString('es-ES')} cajas
+                              </TooltipContent>
+                            </Tooltip>
+                          </div>
+                        </TableCell>
+                      ))}
+                      <TableCell className="text-right font-black text-[14px] text-primary tabular-nums pr-6 bg-primary/5">
+                        {Math.round(row.weeklyTotalReal).toLocaleString('es-ES')}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Card>
+          ))}
+        </TooltipProvider>
       </div>
     </div>
   );

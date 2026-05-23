@@ -1,11 +1,12 @@
 'use client';
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { ScheduledTask } from '@/lib/types';
 import { startOfWeek } from 'date-fns';
 
 const STORAGE_KEY_TASKS = 'planner_tasks_v2';
 const STORAGE_KEY_CONFIG = 'planner_config_v2';
+const STORAGE_KEY_REAL_PROD = 'planner_real_production_v1';
 
 export function usePlannerStore() {
   const [tasks, setTasks] = useState<ScheduledTask[]>([]);
@@ -17,12 +18,15 @@ export function usePlannerStore() {
   const [lineSpeeds, setLineSpeeds] = useState<Record<string, number>>({
     "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0
   });
+  // Estructura: realProduction[lineId][flavorName][dateKey] = quantity
+  const [realProduction, setRealProduction] = useState<Record<string, Record<string, Record<string, number>>>>({});
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Cargar datos iniciales
   useEffect(() => {
     const savedTasks = localStorage.getItem(STORAGE_KEY_TASKS);
     const savedConfig = localStorage.getItem(STORAGE_KEY_CONFIG);
+    const savedRealProd = localStorage.getItem(STORAGE_KEY_REAL_PROD);
 
     if (savedTasks) {
       try {
@@ -46,6 +50,14 @@ export function usePlannerStore() {
         console.error("Error loading config", e);
       }
     }
+
+    if (savedRealProd) {
+      try {
+        setRealProduction(JSON.parse(savedRealProd));
+      } catch (e) {
+        console.error("Error loading real production", e);
+      }
+    }
     
     setIsLoaded(true);
   }, []);
@@ -65,6 +77,12 @@ export function usePlannerStore() {
       }));
     }
   }, [weekStartDate, lineSpeeds, isLoaded]);
+
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem(STORAGE_KEY_REAL_PROD, JSON.stringify(realProduction));
+    }
+  }, [realProduction, isLoaded]);
 
   const addTask = useCallback((taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
@@ -89,7 +107,6 @@ export function usePlannerStore() {
     setTasks(prev => prev.filter(t => {
       const matchLine = lineId ? t.lineId === lineId : true;
       const matchTime = (startDate && endDate) ? (t.endTime >= startDate && t.startTime <= endDate) : true;
-      // Mantenemos las tareas que NO coinciden con el contexto actual de borrado
       return !(matchLine && matchTime);
     }));
   }, []);
@@ -98,16 +115,34 @@ export function usePlannerStore() {
     setLineSpeeds(prev => ({ ...prev, [lineId]: speed }));
   }, []);
 
+  const updateRealProduction = useCallback((lineId: string, flavor: string, dateKey: string, quantity: number) => {
+    setRealProduction(prev => {
+      const newLineData = { ...(prev[lineId] || {}) };
+      const newFlavorData = { ...(newLineData[flavor] || {}) };
+      
+      if (quantity <= 0) {
+        delete newFlavorData[dateKey];
+      } else {
+        newFlavorData[dateKey] = quantity;
+      }
+      
+      newLineData[flavor] = newFlavorData;
+      return { ...prev, [lineId]: newLineData };
+    });
+  }, []);
+
   return { 
     tasks, 
     weekStartDate, 
     lineSpeeds,
+    realProduction,
     setWeekStartDate, 
     addTask, 
     updateTask, 
     removeTask, 
     clearAll, 
     updateLineSpeed,
+    updateRealProduction,
     isLoaded,
     isSyncing: false
   };
