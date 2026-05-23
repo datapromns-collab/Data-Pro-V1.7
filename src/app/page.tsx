@@ -270,43 +270,41 @@ export default function PlannerPage() {
           </div>
           <SidebarContent className="px-4 py-2 flex flex-col h-full">
             <div className="space-y-8 flex-1">
-              {!isReportView && (
-                <>
-                  <section>
-                    <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Semana</p>
-                    <div className="px-2 space-y-3">
-                       <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100/80 shadow-sm">
-                        <span className="text-sm font-bold text-slate-600">Semana</span>
-                        <Badge variant="secondary" className="font-black text-[13px] text-primary bg-primary/10 px-3 py-0.5 rounded-lg border-primary/5">{weekNumber}</Badge>
-                      </div>
-                      <Popover>
-                        <PopoverTrigger asChild disabled={!isAdmin}>
-                          <Button variant="outline" className="w-full h-12 justify-start text-left font-bold bg-white border-slate-200 shadow-sm hover:bg-slate-50 transition-all rounded-2xl disabled:opacity-80">
-                            <CalendarIcon className="mr-3 h-4 w-4 text-primary" />
-                            {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar mode="single" selected={weekStartDate} onSelect={(date) => date && setWeekStartDate(date)} locale={es} />
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-                  </section>
+              <section>
+                <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Semana</p>
+                <div className="px-2 space-y-3">
+                    <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100/80 shadow-sm">
+                    <span className="text-sm font-bold text-slate-600">Semana</span>
+                    <Badge variant="secondary" className="font-black text-[13px] text-primary bg-primary/10 px-3 py-0.5 rounded-lg border-primary/5">{weekNumber}</Badge>
+                  </div>
+                  <Popover>
+                    <PopoverTrigger asChild disabled={!isAdmin}>
+                      <Button variant="outline" className="w-full h-12 justify-start text-left font-bold bg-white border-slate-200 shadow-sm hover:bg-slate-50 transition-all rounded-2xl disabled:opacity-80">
+                        <CalendarIcon className="mr-3 h-4 w-4 text-primary" />
+                        {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar mode="single" selected={weekStartDate} onSelect={(date) => date && setWeekStartDate(date)} locale={es} />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </section>
 
-                  <section>
-                    <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas</p>
-                    <div className="px-2">
-                      <Select value={selectedLine} onValueChange={setSelectedLine}>
-                        <SelectTrigger className="w-full h-12 bg-slate-50 border-slate-100 font-bold rounded-2xl hover:bg-slate-100/50 transition-all">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {LINES.map((l, i) => <SelectItem key={l} value={(i + 1).toString()}>{l}</SelectItem>)}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </section>
-                </>
+              {!isReportView && (
+                <section>
+                  <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas</p>
+                  <div className="px-2">
+                    <Select value={selectedLine} onValueChange={setSelectedLine}>
+                      <SelectTrigger className="w-full h-12 bg-slate-50 border-slate-100 font-bold rounded-2xl hover:bg-slate-100/50 transition-all">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {LINES.map((l, i) => <SelectItem key={l} value={(i + 1).toString()}>{l}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </section>
               )}
 
               {isAdmin && (
@@ -413,8 +411,14 @@ export default function PlannerPage() {
             <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col gap-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
-                  <h2 className="text-2xl font-headline font-bold text-slate-900">{pageHeader.title}</h2>
-                  {pageHeader.subtitle && <p className="text-sm text-slate-500">{pageHeader.subtitle}</p>}
+                  <h2 className="text-2xl font-headline font-black text-slate-900 uppercase">
+                    {isReportView ? 'Reporte de Gestion' : pageHeader.title}
+                  </h2>
+                  {isReportView ? (
+                    <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mt-1 block">Pro Edition</span>
+                  ) : (
+                    pageHeader.subtitle && <p className="text-sm text-slate-500">{pageHeader.subtitle}</p>
+                  )}
                 </div>
                 <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
                   {isReportView ? (
@@ -537,3 +541,4 @@ export default function PlannerPage() {
     </SidebarProvider>
   );
 }
+
