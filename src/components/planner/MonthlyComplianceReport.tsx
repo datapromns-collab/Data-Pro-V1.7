@@ -85,13 +85,15 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
 
   const maxVal = useMemo(() => {
     const vals = monthlyData.flatMap(d => [d.planned, d.real]);
-    return Math.max(...vals, 1);
+    const max = Math.max(...vals, 1);
+    // Añadimos un 15% de margen superior para las etiquetas
+    return max * 1.15;
   }, [monthlyData]);
 
   return (
-    <div className="bg-white w-full print:p-0 h-full flex flex-col p-1" style={{ pageBreakInside: 'avoid' }}>
-      {/* ENCABEZADO */}
-      <div className="mb-1 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
+    <div className="bg-white w-full print:p-0 h-screen flex flex-col p-2" style={{ pageBreakInside: 'avoid' }}>
+      {/* ENCABEZADO - Compactado */}
+      <div className="mb-2 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
         <div className="flex-1">
           <h1 className="text-xl font-headline font-black text-slate-900 leading-none uppercase tracking-tight">Cumplimiento Mensual de Planta</h1>
           <p className="text-primary font-black text-[9px] uppercase tracking-widest mt-0.5">RESUMEN COMPARATIVO MENSUAL</p>
@@ -105,14 +107,14 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col gap-2 py-1 overflow-hidden">
-        {/* TABLA EJECUTIVA */}
+      <div className="flex-1 flex flex-col gap-2 overflow-hidden">
+        {/* TABLA EJECUTIVA - Altura mínima necesaria */}
         <div className="w-full flex flex-col items-center shrink-0">
           <h2 className="text-[10px] font-black text-slate-900 mb-1 uppercase tracking-widest border-b border-slate-200 pb-0.5 w-full text-center">Cumplimiento de Líneas</h2>
           <div className="w-full border border-slate-900 overflow-hidden rounded-sm shadow-sm">
             <table className="w-full border-collapse text-[8.5pt]">
               <thead>
-                <tr className="bg-[#4a7ebb] text-white font-black uppercase h-8">
+                <tr className="bg-[#4a7ebb] text-white font-black uppercase h-7">
                   <th className="px-3 py-0 border border-slate-900 text-left">LINEAS</th>
                   <th className="px-3 py-0 border border-slate-900 text-right">PLANIFICADO</th>
                   <th className="px-3 py-0 border border-slate-900 text-right">PRODUCCIÓN</th>
@@ -121,7 +123,7 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
               </thead>
               <tbody className="bg-[#dce6f1]">
                 {monthlyData.map((data, idx) => (
-                  <tr key={idx} className="font-bold text-slate-900 h-8 border-b border-slate-900/10 last:border-b-0">
+                  <tr key={idx} className="font-bold text-slate-900 h-7 border-b border-slate-900/10 last:border-b-0">
                     <td className="px-3 py-0 border-r border-slate-900 font-black uppercase">{data.lineLabel}</td>
                     <td className="px-3 py-0 border-r border-slate-900 text-right tabular-nums">{data.planned.toLocaleString('es-ES')}</td>
                     <td className="px-3 py-0 border-r border-slate-900 text-right tabular-nums">{data.real.toLocaleString('es-ES')}</td>
@@ -132,7 +134,7 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
                 ))}
               </tbody>
               <tfoot className="bg-[#b8cce4] font-black text-slate-900 border-t border-slate-900">
-                <tr className="h-9">
+                <tr className="h-8">
                   <td className="px-3 py-0 border-r border-slate-900 uppercase">TOTAL PLANTA</td>
                   <td className="px-3 py-0 border-r border-slate-900 text-right tabular-nums">
                     {monthlyData.reduce((a, b) => a + b.planned, 0).toLocaleString('es-ES')}
@@ -149,56 +151,56 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
           </div>
         </div>
 
-        {/* GRÁFICO VISUAL REACONDICIONADO - SE AGRANDA VERTICALMENTE */}
-        <div className="w-full flex-1 flex flex-col min-h-0 mt-1">
+        {/* GRÁFICO VISUAL - EXPANDIDO AL MÁXIMO HACIA ABAJO */}
+        <div className="w-full flex-1 flex flex-col min-h-0 mt-2">
           <h2 className="text-[10px] font-black text-slate-900 mb-1 uppercase tracking-widest border-b border-slate-200 pb-0.5 w-full text-center">Planificado vs Real (Mensual)</h2>
-          <div className="flex-1 border border-slate-200 rounded-lg p-4 bg-slate-50/40 flex flex-col justify-between">
-             <div className="flex-1 flex items-end justify-between gap-4 px-12 pb-4">
+          <div className="flex-1 border border-slate-200 rounded-lg p-6 bg-slate-50/40 flex flex-col">
+             <div className="flex-1 flex items-end justify-between gap-6 px-16 pb-6">
                 {monthlyData.map((data, idx) => (
                   <div key={idx} className="flex-1 flex flex-col items-center group h-full justify-end">
-                    <div className="w-full flex items-end justify-center gap-2 h-full relative group">
-                      {/* Porcentaje sobre las barras */}
-                      <span className="absolute -top-7 text-[8.5pt] font-black text-slate-800 bg-white/90 px-1.5 py-0.5 rounded border border-slate-200 shadow-sm whitespace-nowrap z-10">
+                    <div className="w-full flex items-end justify-center gap-3 h-full relative">
+                      {/* Porcentaje sobre las barras - Posición relativa al contenedor flex-1 */}
+                      <span className="absolute -top-8 text-[9pt] font-black text-slate-800 bg-white/95 px-2 py-0.5 rounded-md border border-slate-200 shadow-sm whitespace-nowrap z-10">
                         {data.compliance.toFixed(1)}%
                       </span>
                       
                       {/* Barra Planificado */}
                       <div 
-                        className="bg-primary/90 w-1/3 rounded-t-md shadow-md border-x border-t border-primary/20 transition-all hover:brightness-110" 
+                        className="bg-primary/90 w-1/3 rounded-t-lg shadow-md border-x border-t border-primary/20 transition-all" 
                         style={{ height: `${(data.planned / maxVal) * 100}%` }}
                       />
                       
                       {/* Barra Real */}
                       <div 
-                        className="bg-emerald-500 w-1/3 rounded-t-md shadow-md border-x border-t border-emerald-600/20 transition-all hover:brightness-110" 
+                        className="bg-emerald-500 w-1/3 rounded-t-lg shadow-md border-x border-t border-emerald-600/20 transition-all" 
                         style={{ height: `${(data.real / maxVal) * 100}%` }}
                       />
                     </div>
                     {/* Etiqueta de Línea */}
-                    <div className="mt-3 pt-1 border-t border-slate-200 w-full text-center">
-                      <span className="text-[9pt] font-black text-slate-600 uppercase tracking-tighter">LÍNEA {idx + 1}</span>
+                    <div className="mt-4 pt-2 border-t-2 border-slate-200 w-full text-center">
+                      <span className="text-[10pt] font-black text-slate-600 uppercase tracking-tighter">LÍNEA {idx + 1}</span>
                     </div>
                   </div>
                 ))}
              </div>
 
-             {/* LEYENDA DEL GRÁFICO */}
-             <div className="mt-2 flex justify-center gap-12 py-2 border border-slate-200 bg-white shadow-sm rounded-full mx-auto px-10">
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-primary rounded shadow-sm border border-primary/20" />
-                  <span className="text-[8.5pt] font-black text-slate-700 uppercase tracking-widest">Planificado</span>
+             {/* LEYENDA DEL GRÁFICO - Centrada al final */}
+             <div className="mt-4 flex justify-center gap-16 py-3 border border-slate-200 bg-white shadow-sm rounded-full mx-auto px-12 shrink-0">
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 bg-primary rounded shadow-sm border border-primary/20" />
+                  <span className="text-[9pt] font-black text-slate-700 uppercase tracking-widest">Planificado</span>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 bg-emerald-500 rounded shadow-sm border border-emerald-600/20" />
-                  <span className="text-[8.5pt] font-black text-slate-700 uppercase tracking-widest">Producción Real</span>
+                <div className="flex items-center gap-3">
+                  <div className="w-5 h-5 bg-emerald-500 rounded shadow-sm border border-emerald-600/20" />
+                  <span className="text-[9pt] font-black text-slate-700 uppercase tracking-widest">Producción Real</span>
                 </div>
              </div>
           </div>
         </div>
       </div>
 
-      {/* PIE DE PÁGINA */}
-      <div className="mt-0.5 flex justify-between items-end border-t border-slate-200 pt-1 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
+      {/* PIE DE PÁGINA - Mantener al final de la hoja */}
+      <div className="mt-2 flex justify-between items-end border-t border-slate-200 pt-1 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
         <div className="space-y-0.5">
           <p>SISTEMA DE GESTIÓN DE PLANTA - RESUMEN MENSUAL DE CUMPLIMIENTO</p>
           <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es })}</p>
