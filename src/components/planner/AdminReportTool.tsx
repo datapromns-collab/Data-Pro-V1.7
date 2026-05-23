@@ -96,7 +96,10 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
 
   // Aggregate monthly data
   const monthlyData = useMemo(() => {
-    const monthStart = startOfMonth(new Date(parseInt(selectedYear), parseInt(selectedMonth) - 1));
+    const yearNum = parseInt(selectedYear);
+    if (isNaN(yearNum)) return {};
+
+    const monthStart = startOfMonth(new Date(yearNum, parseInt(selectedMonth) - 1));
     const monthEnd = endOfMonth(monthStart);
 
     const totals: Record<string, Record<string, number>> = {};
@@ -148,25 +151,26 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
           {activeView === 'monthly' && (
             <div className="flex items-center gap-3">
               <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-                <SelectTrigger className="w-32 bg-white border-slate-200 font-bold rounded-xl h-11">
+                <SelectTrigger className="w-40 bg-white border-slate-200 font-black uppercase text-xs tracking-widest rounded-xl h-11">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                   {Array.from({ length: 12 }).map((_, i) => (
-                    <SelectItem key={i} value={(i + 1).toString().padStart(2, '0')}>
+                    <SelectItem key={i} value={(i + 1).toString().padStart(2, '0')} className="font-bold uppercase text-[10px]">
                       {format(new Date(2024, i, 1), 'MMMM', { locale: es }).toUpperCase()}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
-              <Select value={selectedYear} onValueChange={setSelectedYear}>
-                <SelectTrigger className="w-24 bg-white border-slate-200 font-bold rounded-xl h-11">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {["2024", "2025"].map(y => <SelectItem key={y} value={y}>{y}</SelectItem>)}
-                </SelectContent>
-              </Select>
+              <div className="relative">
+                <Input 
+                  type="number"
+                  value={selectedYear}
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                  className="w-24 bg-white border-slate-200 font-black text-center rounded-xl h-11 text-xs focus:ring-primary/20 transition-all"
+                  placeholder="Año"
+                />
+              </div>
             </div>
           )}
         </div>
@@ -343,7 +347,7 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
                 <p className="text-sm text-slate-500 font-bold uppercase tracking-widest mt-1">Cajas Reales Producidas por Línea</p>
               </div>
               <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 px-4 py-1.5 font-black uppercase tracking-widest">
-                {format(new Date(parseInt(selectedYear), parseInt(selectedMonth) - 1), 'MMMM yyyy', { locale: es })}
+                {format(new Date(parseInt(selectedYear) || 2024, (parseInt(selectedMonth) || 1) - 1), 'MMMM yyyy', { locale: es })}
               </Badge>
             </div>
 
