@@ -79,6 +79,13 @@ export default function PlannerPage() {
 
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
+  // Redirigir administradores al reporte al iniciar sesión o cargar
+  useEffect(() => {
+    if (authLoaded && user && isAdmin) {
+      setActiveTab('admin-report');
+    }
+  }, [authLoaded, !!user, isAdmin]);
+
   useEffect(() => {
     if (plannerLoaded) {
       setEmitDate(format(new Date(), 'd/M/yyyy'));
