@@ -214,7 +214,7 @@ export default function PlannerPage() {
       case 'calculator': return { title: "Calculadora", subtitle: "Conversión cajas/tanques." };
       case 'requirement': return { title: "Requerimiento", subtitle: "Materiales e insumos semanales." };
       case 'daily': return { title: "Plan Día a Día", subtitle: "Detalle operativo semanal." };
-      case 'admin-report': return { title: "Producción", subtitle: "Control de producción real vs programada." };
+      case 'admin-report': return { title: "Reporte de Gestion", subtitle: "Control de producción real vs programada." };
       default: return { title: `Programación Línea ${selectedLine}`, subtitle: "" };
     }
   }, [activeTab, selectedLine]);
@@ -242,7 +242,7 @@ export default function PlannerPage() {
               </div>
               <div className="flex flex-col">
                 <h1 className="text-xl font-headline font-bold text-slate-900 tracking-tight leading-none">
-                  {isReportView ? 'Producción' : 'Plan Semanal'}
+                  {isReportView ? 'Reporte de Gestion' : 'Plan Semanal'}
                 </h1>
                 <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mt-1">Pro Edition</span>
               </div>
