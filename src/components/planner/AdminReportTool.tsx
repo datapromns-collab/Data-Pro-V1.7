@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo, useState } from 'react';
@@ -6,12 +5,11 @@ import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
 import { getWeekDays, PRODUCT_LIST, ALL_LINES_SUMMARY } from '@/lib/planner-utils';
 import { format, startOfDay, addDays, setHours, setMinutes, parseISO, startOfMonth, endOfMonth, isWithinInterval } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { BarChart3, Package, Layers, CalendarDays, FileSpreadsheet, FileDown, Plus } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { BarChart3, Package, Layers, CalendarDays, FileSpreadsheet } from 'lucide-react';
+import { TooltipProvider } from '@/components/ui/tooltip';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
@@ -20,18 +18,16 @@ interface AdminReportToolProps {
   weekStartDate: Date;
   realProduction: Record<string, Record<string, Record<string, number>>>;
   updateRealProduction: (lineId: string, flavor: string, dateKey: string, quantity: number) => void;
-  onPrintMonthly?: (month: string, year: string) => void;
 }
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7"];
 const DAYS_NAMES = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
 
-export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRealProduction, onPrintMonthly }: AdminReportToolProps) {
+export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRealProduction }: AdminReportToolProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   
   const [activeView, setActiveTab] = useState("weekly");
   
-  // States for Monthly Summary
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
 
@@ -78,7 +74,6 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
     });
   }, [tasks, weekDays, realProduction]);
 
-  // Aggregate monthly data
   const monthlyData = useMemo(() => {
     const yearNum = parseInt(selectedYear);
     if (isNaN(yearNum)) return {};
@@ -112,10 +107,6 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
     [lineData]
   );
 
-  const handlePrint = () => {
-    if (onPrintMonthly) onPrintMonthly(selectedMonth, selectedYear);
-  };
-
   return (
     <div className="space-y-6 animate-in fade-in duration-700 pb-10">
       <Tabs value={activeView} onValueChange={setActiveTab} className="w-full">
@@ -131,13 +122,6 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
 
           {activeView === 'monthly' && (
             <div className="flex items-center gap-3">
-              <Button 
-                onClick={handlePrint}
-                variant="outline"
-                className="gap-2 bg-white border-primary/20 text-primary hover:bg-primary/5 rounded-xl h-11 px-6 font-bold"
-              >
-                <FileDown className="h-4 w-4" /> Exportar PDF
-              </Button>
               <Select value={selectedMonth} onValueChange={setSelectedMonth}>
                 <SelectTrigger className="w-40 bg-white border-slate-200 font-black uppercase text-xs tracking-widest rounded-xl h-11">
                   <SelectValue />
@@ -164,7 +148,6 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
         </div>
 
         <TabsContent value="weekly" className="m-0 space-y-8">
-          {/* KPI Summary Header */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <Card className="p-6 bg-white border-slate-200 shadow-sm rounded-3xl flex items-center gap-4">
               <div className="bg-primary/10 p-4 rounded-2xl">
@@ -203,7 +186,6 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
             </Card>
           </div>
 
-          {/* Line Tables Section - New Style */}
           <div className="space-y-12">
             <TooltipProvider>
               {lineData.map((line) => (
