@@ -309,7 +309,7 @@ export default function PlannerPage() {
                           onClick={() => setActiveTab('admin-report')} 
                           className="w-full gap-2 text-primary font-black uppercase text-xs tracking-widest border-primary/20 hover:bg-primary/5 rounded-2xl py-6"
                         >
-                          <BarChart3 className="h-4 w-4" /> Producción Real
+                          <BarChart3 className="h-4 w-4" /> Reporte De Gestión
                         </Button>
                       </>
                     ) : (
