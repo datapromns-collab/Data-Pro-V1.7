@@ -43,8 +43,88 @@ export function ComplianceReport({ tasks, realProduction, weekStartDate }: Compl
       }, 0);
   };
 
+  const summaryData = useMemo(() => {
+    return LINES.map(lineId => {
+      let weeklyPlanned = 0;
+      let weeklyReal = 0;
+
+      weekDays.forEach(day => {
+        const dateKey = format(day, 'yyyy-MM-dd');
+        weeklyPlanned += getLineDailyPlanned(lineId, day);
+        weeklyReal += PRODUCT_LIST.reduce((acc, flavor) => 
+          acc + (realProduction[lineId]?.[flavor]?.[dateKey] || 0), 0);
+      });
+
+      const compliance = weeklyPlanned > 0 ? (weeklyReal / weeklyPlanned) * 100 : (weeklyReal > 0 ? 100 : 0);
+
+      return { lineId, planned: weeklyPlanned, real: weeklyReal, compliance };
+    });
+  }, [tasks, realProduction, weekDays]);
+
   return (
     <div className="bg-white w-full print:p-0 h-full">
+      {/* PÁGINA 1: RESUMEN DE CUMPLIMIENTO SEMANAL */}
+      <div className="page-break-section h-screen flex flex-col p-1" style={{ pageBreakInside: 'avoid' }}>
+        <div className="mb-2 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
+          <div className="flex-1">
+            <h1 className="text-xl font-headline font-black text-slate-900 leading-none uppercase">Reporte de Cumplimiento</h1>
+            <p className="text-primary font-black text-[10px] uppercase tracking-widest mt-0.5">Resumen Ejecutivo Semanal</p>
+          </div>
+          <div className="flex-1 flex justify-center">
+            {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={110} height={40} className="object-contain" />}
+          </div>
+          <div className="flex-1 text-right">
+            <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Confidencial - Planta</p>
+            <p className="text-lg font-black text-slate-900 uppercase leading-none">VISTA GENERAL</p>
+          </div>
+        </div>
+
+        <div className="flex-1 flex flex-col items-center justify-start pt-10">
+          <h2 className="text-sm font-bold text-slate-900 mb-2 uppercase">Cumplimiento de Lineas</h2>
+          <div className="w-full max-w-2xl border border-slate-900 overflow-hidden rounded-sm shadow-sm">
+            <table className="w-full border-collapse text-[10pt]">
+              <thead>
+                <tr className="bg-[#4a7ebb] text-white font-black uppercase h-10">
+                  <th className="px-4 py-0 border border-slate-900 text-left">DIAS</th>
+                  <th className="px-4 py-0 border border-slate-900 text-right">PLANIFICADO</th>
+                  <th className="px-4 py-0 border border-slate-900 text-right">PRODUCCION</th>
+                  <th className="px-4 py-0 border border-slate-900 text-right">CUMPLIMIENTO</th>
+                </tr>
+              </thead>
+              <tbody className="bg-[#dce6f1]">
+                {summaryData.map((data, idx) => (
+                  <tr key={idx} className="font-bold text-slate-900 h-10">
+                    <td className="px-4 py-0 border border-slate-900">
+                      Linea {data.lineId}
+                    </td>
+                    <td className="px-4 py-0 border border-slate-900 text-right tabular-nums">
+                      {Math.round(data.planned).toLocaleString('es-ES')}
+                    </td>
+                    <td className="px-4 py-0 border border-slate-900 text-right tabular-nums">
+                      {Math.round(data.real).toLocaleString('es-ES')}
+                    </td>
+                    <td className="px-4 py-0 border border-slate-900 text-right tabular-nums">
+                      {data.compliance.toFixed(2).replace('.', ',')}%
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div className="mt-2 flex justify-between items-end border-t border-slate-200 pt-1 text-[7px] font-black text-slate-400 uppercase tracking-widest shrink-0">
+          <div className="space-y-0.5">
+            <p>SISTEMA DE GESTIÓN DE PLANTA - RESUMEN DE CUMPLIMIENTO</p>
+            <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es })}</p>
+          </div>
+          <div className="text-right">
+            <p>MULTINACIONAL DE SABORES</p>
+          </div>
+        </div>
+      </div>
+
+      {/* PÁGINAS SIGUIENTES: DETALLE POR LÍNEA */}
       {LINES.map((lineId) => {
         const dailyStats = weekDays.map(day => {
           const dateKey = format(day, 'yyyy-MM-dd');
@@ -98,7 +178,7 @@ export function ComplianceReport({ tasks, realProduction, weekStartDate }: Compl
                         {stat.real > 0 ? Math.round(stat.real).toLocaleString('es-ES') : '0'}
                       </td>
                       <td className="px-4 py-0 border border-slate-900 text-right tabular-nums font-black text-primary">
-                        {stat.compliance.toFixed(2)}%
+                        {stat.compliance.toFixed(2).replace('.', ',')}%
                       </td>
                     </tr>
                   ))}
