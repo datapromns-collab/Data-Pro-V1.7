@@ -46,29 +46,33 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
 
   return (
     <div className="bg-white w-full print:p-0 h-full">
-      {/* PÁGINA 1: RESUMEN SEMANAL */}
-      <div className="page-break-section h-full flex flex-col">
+      {/* PÁGINA 1: RESUMEN SEMANAL (Estilo Imagen) */}
+      <div className="page-break-section h-full flex flex-col p-1">
         <div className="mb-1 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
           <div className="flex-1">
-            <h1 className="text-lg font-headline font-black text-slate-900 leading-none uppercase">Control Semanal de Producción</h1>
+            <h1 className="text-xl font-headline font-black text-slate-900 leading-none uppercase">Control Semanal de Producción</h1>
             <p className="text-primary font-black text-[10px] uppercase tracking-widest mt-0.5">Resumen Ejecutivo de Cajas Reales</p>
           </div>
           <div className="flex-1 flex justify-center">
-            {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={100} height={35} className="object-contain" />}
+            {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={110} height={40} className="object-contain" />}
           </div>
           <div className="flex-1 text-right">
-            <p className="text-[7px] font-black text-primary uppercase tracking-[0.2em] mb-0.5">Confidencial - Planta</p>
-            <p className="text-base font-black text-slate-900 uppercase leading-none">SEMANA {weekNumber}</p>
+            <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Confidencial - Planta</p>
+            <p className="text-xl font-black text-slate-900 uppercase leading-none">SEMANA {weekNumber}</p>
           </div>
         </div>
 
         <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm w-full">
           <table className="w-full border-collapse text-[8pt] h-full">
             <thead>
-              <tr className="bg-[#4a7ebb] text-white font-black uppercase h-6">
-                <th className="px-2 py-0 border border-slate-900 text-left min-w-[140px]">SABOR</th>
-                {ALL_LINES_SUMMARY.map(l => (
-                  <th key={l} className="px-0.5 py-0 border border-slate-900 text-center w-12">L{l}</th>
+              <tr className="bg-[#4a7ebb] text-white font-black uppercase h-7">
+                <th className="px-2 py-0 border border-slate-900 text-left min-w-[140px]">SABOR / PRODUCTO</th>
+                {ALL_LINES_SUMMARY.slice(0, 4).map(l => (
+                  <th key={l} className="px-0.5 py-0 border border-slate-900 text-center w-12">LÍNEA {l}</th>
+                ))}
+                <th className="px-2 py-0 border border-slate-900 text-center bg-[#2f5597] w-16 text-[7pt]">TOTAL 2L</th>
+                {ALL_LINES_SUMMARY.slice(4).map(l => (
+                  <th key={l} className="px-0.5 py-0 border border-slate-900 text-center w-12">LÍNEA {l}</th>
                 ))}
                 <th className="px-2 py-0 border border-slate-900 text-center bg-[#2f5597] w-16">TOTAL</th>
               </tr>
@@ -76,13 +80,22 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
             <tbody>
               {PRODUCT_LIST.map((flavor, idx) => {
                 const lineVals = ALL_LINES_SUMMARY.map(l => summaryData[flavor]?.[l] || 0);
+                const total2L = lineVals.slice(0, 4).reduce((a, b) => a + b, 0);
                 const totalSabor = lineVals.reduce((a, b) => a + b, 0);
 
                 return (
-                  <tr key={idx} className={`font-bold text-slate-800 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
+                  <tr key={idx} className={`font-bold text-slate-800 h-6 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
                     <td className="px-2 py-0 border border-slate-300 uppercase">{flavor}</td>
-                    {lineVals.map((val, lIdx) => (
+                    {lineVals.slice(0, 4).map((val, lIdx) => (
                       <td key={lIdx} className="px-0.5 py-0 border border-slate-300 text-center tabular-nums">
+                        {val > 0 ? val.toLocaleString('es-ES') : '0'}
+                      </td>
+                    ))}
+                    <td className="px-2 py-0 border border-slate-300 text-center tabular-nums bg-[#dce6f1] font-black">
+                      {total2L > 0 ? total2L.toLocaleString('es-ES') : '0'}
+                    </td>
+                    {lineVals.slice(4).map((val, lIdx) => (
+                      <td key={lIdx + 4} className="px-0.5 py-0 border border-slate-300 text-center tabular-nums">
                         {val > 0 ? val.toLocaleString('es-ES') : '0'}
                       </td>
                     ))}
@@ -94,17 +107,31 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
               })}
             </tbody>
             <tfoot className="bg-[#dce6f1] text-slate-900 font-black">
-              <tr className="h-6">
-                <td className="px-2 py-0 border border-slate-900 uppercase">TOTALES SEMANA</td>
-                {ALL_LINES_SUMMARY.map(l => {
+              <tr className="h-8">
+                <td className="px-2 py-0 border border-slate-900 uppercase">TOTALES</td>
+                {ALL_LINES_SUMMARY.slice(0, 4).map(l => {
                   const colTotal = PRODUCT_LIST.reduce((acc, flavor) => acc + (summaryData[flavor]?.[l] || 0), 0);
                   return (
-                    <td key={l} className="px-0.5 py-0 border border-slate-900 text-center tabular-nums text-[8pt]">
+                    <td key={l} className="px-0.5 py-0 border border-slate-900 text-center tabular-nums text-[9pt]">
                       {colTotal.toLocaleString('es-ES')}
                     </td>
                   );
                 })}
                 <td className="px-2 py-0 border border-slate-900 text-center tabular-nums bg-[#b8cce4] text-[9pt]">
+                  {PRODUCT_LIST.reduce((acc, flavor) => {
+                    const lineVals = ALL_LINES_SUMMARY.slice(0, 4).map(l => summaryData[flavor]?.[l] || 0);
+                    return acc + lineVals.reduce((a, b) => a + b, 0);
+                  }, 0).toLocaleString('es-ES')}
+                </td>
+                {ALL_LINES_SUMMARY.slice(4).map(l => {
+                  const colTotal = PRODUCT_LIST.reduce((acc, flavor) => acc + (summaryData[flavor]?.[l] || 0), 0);
+                  return (
+                    <td key={l} className="px-0.5 py-0 border border-slate-900 text-center tabular-nums text-[9pt]">
+                      {colTotal.toLocaleString('es-ES')}
+                    </td>
+                  );
+                })}
+                <td className="px-2 py-0 border border-slate-900 text-center tabular-nums bg-[#b8cce4] text-[10pt]">
                   {totalSemanaGeneral.toLocaleString('es-ES')}
                 </td>
               </tr>
@@ -112,15 +139,10 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
           </table>
         </div>
 
-        <div className="mt-1 flex flex-col items-start shrink-0">
-          <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest leading-none">TOTAL SEMANA ACUMULADO</p>
-          <p className="text-xl font-black text-slate-900 tabular-nums leading-none mt-0.5">{totalSemanaGeneral.toLocaleString('es-ES')}</p>
-        </div>
-
-        <div className="mt-1 pt-1 flex justify-between items-end border-t border-slate-200 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
+        <div className="mt-1 flex justify-between items-end border-t border-slate-200 pt-1 text-[7px] font-black text-slate-400 uppercase tracking-widest shrink-0">
           <div className="space-y-0.5">
             <p>SISTEMA DE GESTIÓN DE PLANTA</p>
-            <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm')}</p>
+            <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es })}</p>
           </div>
           <div className="text-right">
             <p>MULTINACIONAL DE SABORES</p>
@@ -138,14 +160,14 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
         }, 0);
 
         return (
-          <div key={lineId} className="page-break-section h-full flex flex-col">
+          <div key={lineId} className="page-break-section h-full flex flex-col p-1">
             <div className="mb-1 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
               <div>
                 <h1 className="text-lg font-headline font-black text-slate-900 leading-none uppercase">Producción Real Detallada</h1>
                 <p className="text-primary font-black text-[10px] uppercase tracking-widest mt-0.5">Línea de Producción {lineId}</p>
               </div>
               <div className="text-right">
-                <p className="text-[7px] font-black text-primary uppercase tracking-[0.2em] mb-0.5">Confidencial - Planta</p>
+                <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Confidencial - Planta</p>
                 <p className="text-base font-black text-slate-900 uppercase leading-none">Semana {weekNumber}</p>
                 <p className="text-[8px] text-slate-400 font-bold uppercase mt-0.5">{format(weekStartDate, "dd 'de' MMMM yyyy", { locale: es })}</p>
               </div>
@@ -204,7 +226,7 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
               </table>
             </div>
 
-            <div className="mt-1 pt-1 flex justify-between items-end border-t border-slate-200 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
+            <div className="mt-1 pt-1 flex justify-between items-end border-t border-slate-200 text-[7px] font-black text-slate-400 uppercase tracking-widest shrink-0">
               <div className="space-y-0.5">
                 <p>SISTEMA DE GESTIÓN DE PLANTA - DETALLE DE LÍNEA</p>
                 <p>PÁGINA {parseInt(lineId) + 1} DE 9</p>
