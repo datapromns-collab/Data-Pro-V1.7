@@ -20,7 +20,8 @@ import {
   PackageCheck,
   FileDown,
   FileStack,
-  CheckCircle2
+  CheckCircle2,
+  FileSpreadsheet
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -264,7 +265,9 @@ export default function PlannerPage() {
       case 'calculator': return { title: "Calculadora", subtitle: "Conversión cajas/tanques." };
       case 'requirement': return { title: "Requerimiento", subtitle: "Materiales e insumos semanales." };
       case 'daily': return { title: "Plan Día a Día", subtitle: "Detalle operativo semanal." };
-      case 'admin-report': return { title: "Reporte de Gestion", subtitle: "Control de producción real vs programada." };
+      case 'admin-report': return { title: "Control de Producción", subtitle: "Seguimiento de producción real semanal." };
+      case 'compliance-report': return { title: "Reporte de Cumplimiento", subtitle: "Planificado vs Producción Real." };
+      case 'monthly-report': return { title: "Resumen Mensual", subtitle: "Producción consolidada del mes." };
       default: return { title: `Programación Línea ${selectedLine}`, subtitle: "" };
     }
   }, [activeTab, selectedLine]);
@@ -275,7 +278,7 @@ export default function PlannerPage() {
     return <LoginForm onLogin={login} />;
   }
 
-  const isReportView = activeTab === 'admin-report';
+  const isReportView = ['admin-report', 'compliance-report', 'monthly-report'].includes(activeTab);
 
   return (
     <SidebarProvider>
@@ -442,19 +445,23 @@ export default function PlannerPage() {
               <div className="flex items-center justify-between">
                 <div className="space-y-1">
                   <h2 className="text-2xl font-headline font-black text-slate-900 uppercase">
-                    {isReportView ? 'Reporte de Gestion' : pageHeader.title}
+                    {pageHeader.title}
                   </h2>
-                  {isReportView ? (
-                    <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mt-1 block">Pro Edition</span>
-                  ) : (
-                    pageHeader.subtitle && <p className="text-sm text-slate-500">{pageHeader.subtitle}</p>
-                  )}
+                  <p className="text-sm text-slate-500">{pageHeader.subtitle}</p>
                 </div>
                 <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
                   {isReportView ? (
-                    <TabsTrigger value="admin-report" className="gap-2 px-4 font-bold">
-                      <BarChart3 className="h-4 w-4" /> Producción
-                    </TabsTrigger>
+                    <>
+                      <TabsTrigger value="admin-report" className="gap-2 px-4 font-bold">
+                        <BarChart3 className="h-4 w-4" /> Producción
+                      </TabsTrigger>
+                      <TabsTrigger value="compliance-report" className="gap-2 px-4 font-bold">
+                        <CheckCircle2 className="h-4 w-4" /> Cumplimiento
+                      </TabsTrigger>
+                      <TabsTrigger value="monthly-report" className="gap-2 px-4 font-bold">
+                        <FileSpreadsheet className="h-4 w-4" /> Mensual
+                      </TabsTrigger>
+                    </>
                   ) : (
                     <>
                       <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Programación</TabsTrigger>
@@ -487,13 +494,32 @@ export default function PlannerPage() {
                 </TabsContent>
                 <TabsContent value="admin-report" className="m-0 h-full">
                   <AdminReportTool 
+                    view="weekly"
+                    tasks={tasks} 
+                    weekStartDate={weekStartDate} 
+                    realProduction={realProduction}
+                    updateRealProduction={updateRealProduction}
+                    onPrintWeeklyControl={handlePrintWeeklyControl}
+                  />
+                </TabsContent>
+                <TabsContent value="compliance-report" className="m-0 h-full">
+                  <AdminReportTool 
+                    view="compliance"
+                    tasks={tasks} 
+                    weekStartDate={weekStartDate} 
+                    realProduction={realProduction}
+                    updateRealProduction={updateRealProduction}
+                    onPrintCompliance={handlePrintCompliance}
+                  />
+                </TabsContent>
+                <TabsContent value="monthly-report" className="m-0 h-full">
+                  <AdminReportTool 
+                    view="monthly"
                     tasks={tasks} 
                     weekStartDate={weekStartDate} 
                     realProduction={realProduction}
                     updateRealProduction={updateRealProduction}
                     onPrintMonthly={handlePrintMonthly}
-                    onPrintWeeklyControl={handlePrintWeeklyControl}
-                    onPrintCompliance={handlePrintCompliance}
                   />
                 </TabsContent>
               </div>

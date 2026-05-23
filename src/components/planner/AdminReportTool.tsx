@@ -12,10 +12,9 @@ import { es } from 'date-fns/locale';
 import { BarChart3, Package, Layers, CalendarDays, FileSpreadsheet, FileDown, FileStack, CheckCircle2 } from 'lucide-react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { cn } from '@/lib/utils';
 
 interface AdminReportToolProps {
+  view: 'weekly' | 'compliance' | 'monthly';
   tasks: any[];
   weekStartDate: Date;
   realProduction: Record<string, Record<string, Record<string, number>>>;
@@ -28,10 +27,8 @@ interface AdminReportToolProps {
 const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const DAYS_NAMES = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
 
-export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRealProduction, onPrintMonthly, onPrintWeeklyControl, onPrintCompliance }: AdminReportToolProps) {
+export function AdminReportTool({ view, tasks, weekStartDate, realProduction, updateRealProduction, onPrintMonthly, onPrintWeeklyControl, onPrintCompliance }: AdminReportToolProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
-  
-  const [activeView, setActiveTab] = useState("weekly");
   
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
@@ -137,79 +134,65 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
 
   return (
     <div className="space-y-4 animate-in fade-in duration-700 pb-4">
-      <Tabs value={activeView} onValueChange={setActiveTab} className="w-full">
-        <div className="flex items-center justify-between mb-4">
-          <TabsList className="bg-slate-100 p-1 rounded-xl h-10">
-            <TabsTrigger value="weekly" className="gap-2 px-4 font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm text-xs">
-              <CalendarDays className="h-3.5 w-3.5" /> Control Semanal
-            </TabsTrigger>
-            <TabsTrigger value="compliance" className="gap-2 px-4 font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm text-xs">
-              <CheckCircle2 className="h-3.5 w-3.5" /> Cumplimiento
-            </TabsTrigger>
-            <TabsTrigger value="monthly" className="gap-2 px-4 font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm text-xs">
-              <FileSpreadsheet className="h-3.5 w-3.5" /> Resumen Mensual
-            </TabsTrigger>
-          </TabsList>
+      <div className="flex items-center justify-end mb-4 gap-2">
+        {view === 'weekly' && (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={onPrintWeeklyControl}
+            className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-9 px-3 rounded-xl text-xs"
+          >
+            <FileStack className="h-3.5 w-3.5" />
+            Reporte Semanal
+          </Button>
+        )}
+        {view === 'compliance' && (
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={onPrintCompliance}
+            className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-9 px-3 rounded-xl text-xs"
+          >
+            <CheckCircle2 className="h-3.5 w-3.5" />
+            Reporte Cumplimiento
+          </Button>
+        )}
+        {view === 'monthly' && (
+          <>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => onPrintMonthly?.(selectedMonth, selectedYear)}
+              className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-9 px-3 rounded-xl text-xs"
+            >
+              <FileDown className="h-3.5 w-3.5" />
+              PDF Mensual
+            </Button>
+            <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+              <SelectTrigger className="w-32 bg-white border-slate-200 font-black uppercase text-[10px] tracking-widest rounded-xl h-9">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {Array.from({ length: 12 }).map((_, i) => (
+                  <SelectItem key={i} value={(i + 1).toString().padStart(2, '0')} className="font-bold uppercase text-[9px]">
+                    {format(new Date(2024, i, 1), 'MMMM', { locale: es }).toUpperCase()}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Input 
+              type="number"
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value)}
+              className="w-20 bg-white border-slate-200 font-black text-center rounded-xl h-9 text-[10px] focus:ring-primary/20"
+              placeholder="Año"
+            />
+          </>
+        )}
+      </div>
 
-          <div className="flex items-center gap-2">
-            {activeView === 'weekly' && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={onPrintWeeklyControl}
-                className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-9 px-3 rounded-xl text-xs"
-              >
-                <FileStack className="h-3.5 w-3.5" />
-                Reporte Semanal
-              </Button>
-            )}
-            {activeView === 'compliance' && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={onPrintCompliance}
-                className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-9 px-3 rounded-xl text-xs"
-              >
-                <CheckCircle2 className="h-3.5 w-3.5" />
-                Reporte Cumplimiento
-              </Button>
-            )}
-            {activeView === 'monthly' && (
-              <>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={() => onPrintMonthly?.(selectedMonth, selectedYear)}
-                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-9 px-3 rounded-xl text-xs"
-                >
-                  <FileDown className="h-3.5 w-3.5" />
-                  PDF Mensual
-                </Button>
-                <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-                  <SelectTrigger className="w-32 bg-white border-slate-200 font-black uppercase text-[10px] tracking-widest rounded-xl h-9">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Array.from({ length: 12 }).map((_, i) => (
-                      <SelectItem key={i} value={(i + 1).toString().padStart(2, '0')} className="font-bold uppercase text-[9px]">
-                        {format(new Date(2024, i, 1), 'MMMM', { locale: es }).toUpperCase()}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Input 
-                  type="number"
-                  value={selectedYear}
-                  onChange={(e) => setSelectedYear(e.target.value)}
-                  className="w-20 bg-white border-slate-200 font-black text-center rounded-xl h-9 text-[10px] focus:ring-primary/20"
-                  placeholder="Año"
-                />
-              </>
-            )}
-          </div>
-        </div>
-
-        <TabsContent value="weekly" className="m-0 space-y-4">
+      {view === 'weekly' && (
+        <div className="space-y-4">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <Card className="p-3 bg-white border-slate-200 shadow-sm rounded-2xl flex items-center gap-3">
               <div className="bg-primary/10 p-2 rounded-xl">
@@ -319,9 +302,11 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
               ))}
             </TooltipProvider>
           </div>
-        </TabsContent>
+        </div>
+      )}
 
-        <TabsContent value="compliance" className="m-0 space-y-8">
+      {view === 'compliance' && (
+        <div className="space-y-8">
           {LINES.map(lineId => {
             const dailyStats = weekDays.map(day => {
               const dateKey = format(day, 'yyyy-MM-dd');
@@ -378,102 +363,102 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
               </div>
             );
           })}
-        </TabsContent>
+        </div>
+      )}
 
-        <TabsContent value="monthly" className="m-0">
-          <Card className="rounded-2xl border-slate-200 overflow-hidden bg-white shadow-sm">
-            <div className="p-4 bg-slate-50 border-b flex justify-between items-center">
-              <div>
-                <h2 className="text-sm font-headline font-black text-slate-900 uppercase">Resumen Mensual de Producción Real</h2>
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">Visión ejecutiva de Planta</p>
-              </div>
-              <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 px-3 py-1 font-black uppercase text-[9px]">
-                {format(new Date(parseInt(selectedYear) || 2024, (parseInt(selectedMonth) || 1) - 1), 'MMMM yyyy', { locale: es })}
-              </Badge>
+      {view === 'monthly' && (
+        <Card className="rounded-2xl border-slate-200 overflow-hidden bg-white shadow-sm">
+          <div className="p-4 bg-slate-50 border-b flex justify-between items-center">
+            <div>
+              <h2 className="text-sm font-headline font-black text-slate-900 uppercase">Resumen Mensual de Producción Real</h2>
+              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">Visión ejecutiva de Planta</p>
             </div>
+            <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 px-3 py-1 font-black uppercase text-[9px]">
+              {format(new Date(parseInt(selectedYear) || 2024, (parseInt(selectedMonth) || 1) - 1), 'MMMM yyyy', { locale: es })}
+            </Badge>
+          </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-[#4a7ebb] text-white text-[9px] font-black uppercase tracking-wider">
-                    <th className="px-3 py-2 border border-white/10 text-left min-w-[150px]">SABOR</th>
-                    {ALL_LINES_SUMMARY.slice(0, 4).map(l => (
-                      <th key={l} className="px-1 py-2 border border-white/10 text-center">L{l}</th>
-                    ))}
-                    <th className="px-2 py-2 border border-white/10 text-center bg-[#2f5597]">TOTAL 2L</th>
-                    {ALL_LINES_SUMMARY.slice(4).map(l => (
-                      <th key={l} className="px-1 py-2 border border-white/10 text-center">L{l}</th>
-                    ))}
-                    <th className="px-2 py-2 border border-white/10 text-center bg-[#2f5597]">TOTAL</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {PRODUCT_LIST.map((flavor, idx) => {
-                    const lineVals = ALL_LINES_SUMMARY.map(l => monthlyData[flavor]?.[l] || 0);
-                    const total2L = lineVals.slice(0, 4).reduce((a, b) => a + b, 0);
-                    const totalSabor = lineVals.reduce((a, b) => a + b, 0);
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-[#4a7ebb] text-white text-[9px] font-black uppercase tracking-wider">
+                  <th className="px-3 py-2 border border-white/10 text-left min-w-[150px]">SABOR</th>
+                  {ALL_LINES_SUMMARY.slice(0, 4).map(l => (
+                    <th key={l} className="px-1 py-2 border border-white/10 text-center">L{l}</th>
+                  ))}
+                  <th className="px-2 py-2 border border-white/10 text-center bg-[#2f5597]">TOTAL 2L</th>
+                  {ALL_LINES_SUMMARY.slice(4).map(l => (
+                    <th key={l} className="px-1 py-2 border border-white/10 text-center">L{l}</th>
+                  ))}
+                  <th className="px-2 py-2 border border-white/10 text-center bg-[#2f5597]">TOTAL</th>
+                </tr>
+              </thead>
+              <tbody>
+                {PRODUCT_LIST.map((flavor, idx) => {
+                  const lineVals = ALL_LINES_SUMMARY.map(l => monthlyData[flavor]?.[l] || 0);
+                  const total2L = lineVals.slice(0, 4).reduce((a, b) => a + b, 0);
+                  const totalSabor = lineVals.reduce((a, b) => a + b, 0);
 
+                  return (
+                    <tr key={idx} className="hover:bg-slate-50 transition-colors text-[10px] font-bold text-slate-700 h-7">
+                      <td className="px-3 py-0 border border-slate-100 uppercase bg-slate-50/30">{flavor}</td>
+                      {lineVals.slice(0, 4).map((val, lIdx) => (
+                        <td key={lIdx} className="px-1 py-0 border border-slate-100 text-center tabular-nums">
+                          {val > 0 ? val.toLocaleString('es-ES') : '0'}
+                        </td>
+                      ))}
+                      <td className="px-2 py-0 border border-slate-100 text-center tabular-nums bg-[#dce6f1] font-black">
+                        {total2L > 0 ? total2L.toLocaleString('es-ES') : '0'}
+                      </td>
+                      {lineVals.slice(4).map((val, lIdx) => (
+                        <td key={lIdx + 4} className="px-1 py-0 border border-slate-100 text-center tabular-nums">
+                          {val > 0 ? val.toLocaleString('es-ES') : '0'}
+                        </td>
+                      ))}
+                      <td className="px-2 py-0 border border-slate-100 text-center tabular-nums bg-[#dce6f1] font-black">
+                        {totalSabor > 0 ? totalSabor.toLocaleString('es-ES') : '0'}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+              <tfoot className="bg-[#dce6f1] text-slate-900 font-black text-[11px]">
+                <tr className="h-9">
+                  <td className="px-3 py-0 border border-slate-200 uppercase">TOTALES</td>
+                  {ALL_LINES_SUMMARY.slice(0, 4).map(l => {
+                    const colTotal = PRODUCT_LIST.reduce((acc, flavor) => acc + (monthlyData[flavor]?.[l] || 0), 0);
                     return (
-                      <tr key={idx} className="hover:bg-slate-50 transition-colors text-[10px] font-bold text-slate-700 h-7">
-                        <td className="px-3 py-0 border border-slate-100 uppercase bg-slate-50/30">{flavor}</td>
-                        {lineVals.slice(0, 4).map((val, lIdx) => (
-                          <td key={lIdx} className="px-1 py-0 border border-slate-100 text-center tabular-nums">
-                            {val > 0 ? val.toLocaleString('es-ES') : '0'}
-                          </td>
-                        ))}
-                        <td className="px-2 py-0 border border-slate-100 text-center tabular-nums bg-[#dce6f1] font-black">
-                          {total2L > 0 ? total2L.toLocaleString('es-ES') : '0'}
-                        </td>
-                        {lineVals.slice(4).map((val, lIdx) => (
-                          <td key={lIdx + 4} className="px-1 py-0 border border-slate-100 text-center tabular-nums">
-                            {val > 0 ? val.toLocaleString('es-ES') : '0'}
-                          </td>
-                        ))}
-                        <td className="px-2 py-0 border border-slate-100 text-center tabular-nums bg-[#dce6f1] font-black">
-                          {totalSabor > 0 ? totalSabor.toLocaleString('es-ES') : '0'}
-                        </td>
-                      </tr>
+                      <td key={l} className="px-1 py-0 border border-slate-200 text-center tabular-nums">
+                        {colTotal.toLocaleString('es-ES')}
+                      </td>
                     );
                   })}
-                </tbody>
-                <tfoot className="bg-[#dce6f1] text-slate-900 font-black text-[11px]">
-                  <tr className="h-9">
-                    <td className="px-3 py-0 border border-slate-200 uppercase">TOTALES</td>
-                    {ALL_LINES_SUMMARY.slice(0, 4).map(l => {
-                      const colTotal = PRODUCT_LIST.reduce((acc, flavor) => acc + (monthlyData[flavor]?.[l] || 0), 0);
-                      return (
-                        <td key={l} className="px-1 py-0 border border-slate-200 text-center tabular-nums">
-                          {colTotal.toLocaleString('es-ES')}
-                        </td>
-                      );
-                    })}
-                    <td className="px-2 py-0 border border-slate-200 text-center tabular-nums bg-[#b8cce4]">
-                      {PRODUCT_LIST.reduce((acc, flavor) => {
-                        const lineVals = ALL_LINES_SUMMARY.slice(0, 4).map(l => monthlyData[flavor]?.[l] || 0);
-                        return acc + lineVals.reduce((a, b) => a + b, 0);
-                      }, 0).toLocaleString('es-ES')}
-                    </td>
-                    {ALL_LINES_SUMMARY.slice(4).map(l => {
-                      const colTotal = PRODUCT_LIST.reduce((acc, flavor) => acc + (monthlyData[flavor]?.[l] || 0), 0);
-                      return (
-                        <td key={l} className="px-1 py-0 border border-slate-200 text-center tabular-nums">
-                          {colTotal.toLocaleString('es-ES')}
-                        </td>
-                      );
-                    })}
-                    <td className="px-2 py-0 border border-slate-200 text-center tabular-nums bg-[#b8cce4]">
-                      {PRODUCT_LIST.reduce((acc, flavor) => {
-                        const lineVals = ALL_LINES_SUMMARY.map(l => monthlyData[flavor]?.[l] || 0);
-                        return acc + lineVals.reduce((a, b) => a + b, 0);
-                      }, 0).toLocaleString('es-ES')}
-                    </td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          </Card>
-        </TabsContent>
-      </Tabs>
+                  <td className="px-2 py-0 border border-slate-200 text-center tabular-nums bg-[#b8cce4]">
+                    {PRODUCT_LIST.reduce((acc, flavor) => {
+                      const lineVals = ALL_LINES_SUMMARY.slice(0, 4).map(l => monthlyData[flavor]?.[l] || 0);
+                      return acc + lineVals.reduce((a, b) => a + b, 0);
+                    }, 0).toLocaleString('es-ES')}
+                  </td>
+                  {ALL_LINES_SUMMARY.slice(4).map(l => {
+                    const colTotal = PRODUCT_LIST.reduce((acc, flavor) => acc + (monthlyData[flavor]?.[l] || 0), 0);
+                    return (
+                      <td key={l} className="px-1 py-0 border border-slate-200 text-center tabular-nums">
+                        {colTotal.toLocaleString('es-ES')}
+                      </td>
+                    );
+                  })}
+                  <td className="px-2 py-0 border border-slate-200 text-center tabular-nums bg-[#b8cce4]">
+                    {PRODUCT_LIST.reduce((acc, flavor) => {
+                      const lineVals = ALL_LINES_SUMMARY.map(l => monthlyData[flavor]?.[l] || 0);
+                      return acc + lineVals.reduce((a, b) => a + b, 0);
+                    }, 0).toLocaleString('es-ES')}
+                  </td>
+                </tr>
+              </tfoot>
+            </table>
+          </div>
+        </Card>
+      )}
     </div>
   );
 }
