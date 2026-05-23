@@ -59,7 +59,10 @@ export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEnt
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[450px] rounded-3xl">
+      <DialogContent 
+        className="sm:max-w-[450px] rounded-3xl"
+        onOpenAutoFocus={(e) => e.preventDefault()} // Evita que el dialog atrape el foco inicial
+      >
         <DialogHeader>
           <div className="flex items-center gap-3 mb-2">
             <div className="bg-emerald-500/10 p-2.5 rounded-2xl">
@@ -89,7 +92,11 @@ export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEnt
                   {date ? format(date, "PPP", { locale: es }) : <span>Seleccionar fecha</span>}
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
+              <PopoverContent 
+                className="w-auto p-0 z-[100]" 
+                align="start"
+                onOpenAutoFocus={(e) => e.preventDefault()} // Permite interactuar con el calendario sin que el dialog robe el foco
+              >
                 <Calendar
                   mode="single"
                   selected={date}
@@ -114,7 +121,7 @@ export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEnt
                 <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 font-bold">
                   <SelectValue placeholder="Línea" />
                 </SelectTrigger>
-                <SelectContent className="rounded-xl">
+                <SelectContent className="rounded-xl z-[100]">
                   {LINES.map(l => <SelectItem key={l} value={l} className="font-bold">Línea {l}</SelectItem>)}
                 </SelectContent>
               </Select>
@@ -127,7 +134,7 @@ export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEnt
                 <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 font-bold">
                   <SelectValue placeholder="Sabor" />
                 </SelectTrigger>
-                <SelectContent className="rounded-xl">
+                <SelectContent className="rounded-xl z-[100]">
                   {PRODUCT_LIST.map(p => <SelectItem key={p} value={p} className="font-bold">{p}</SelectItem>)}
                 </SelectContent>
               </Select>
