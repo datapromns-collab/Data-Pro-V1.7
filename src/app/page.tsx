@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -29,6 +30,7 @@ import { RequirementSection } from '@/components/planner/RequirementSection';
 import { RequirementReport } from '@/components/planner/RequirementReport';
 import { SummaryReport } from '@/components/planner/SummaryReport';
 import { DailyPlanSection } from '@/components/planner/DailyPlanSection';
+import { MonthlyReport } from '@/components/planner/MonthlyReport';
 import { AdminReportTool } from '@/components/planner/AdminReportTool';
 import { ProductionEntryDialog } from '@/components/planner/ProductionEntryDialog';
 import { LoginForm } from '@/components/auth/LoginForm';
@@ -81,8 +83,9 @@ export default function PlannerPage() {
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
   const [activeTab, setActiveTab] = useState("gantt");
-  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily'>('plan');
+  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly'>('plan');
   const [emitDate, setEmitDate] = useState('');
+  const [reportDate, setReportDate] = useState({ month: '', year: '' });
 
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
@@ -165,6 +168,19 @@ export default function PlannerPage() {
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: landscape; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
+
+  const handlePrintMonthly = (month: string, year: string) => {
+    setReportDate({ month, year });
+    setPrintMode('monthly');
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: landscape; margin: 10mm; }';
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
@@ -440,6 +456,7 @@ export default function PlannerPage() {
                     weekStartDate={weekStartDate} 
                     realProduction={realProduction}
                     updateRealProduction={updateRealProduction}
+                    onPrintMonthly={handlePrintMonthly}
                   />
                 </TabsContent>
               </div>
@@ -481,6 +498,11 @@ export default function PlannerPage() {
           {printMode === 'daily' && (
             <div className="p-0">
               <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} />
+            </div>
+          )}
+          {printMode === 'monthly' && (
+            <div className="p-0">
+              <MonthlyReport realProduction={realProduction} selectedMonth={reportDate.month} selectedYear={reportDate.year} />
             </div>
           )}
         </div>

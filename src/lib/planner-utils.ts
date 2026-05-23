@@ -8,6 +8,15 @@ export const SHIFT_SPLIT_MINUTE = 30;
 export const PRODUCTION_END_SUN_HOUR = 18;
 export const PRODUCTION_END_SUN_MINUTE = 30;
 
+export const PRODUCT_LIST = [
+  "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
+  "GLUP MANZANA VERDE", "GLUP PONCHE", "GLUP CHICLE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA", 
+  "JUSTY NARANJA", "JUSTY DURAZNO", "JUSTY MANDARINA", "JUSTY SANDIA", "JUSTY LIMON", 
+  "JUSTY TAMARINDO", "VITA TEA DURAZNO", "VITA TEA LIMON"
+];
+
+export const ALL_LINES_SUMMARY = ["1", "2", "3", "4", "5", "6", "7", "8"];
+
 export const PRODUCT_FACTORS: Record<string, Record<string, number>> = {
   "GLUP COLA": { "2Lts": 8625, "1Lt": 8625, "0.4Lts": 17250 },
   "GLUP FRESH": { "2Lts": 8625, "1Lt": 8625, "0.4Lts": 17250 },
