@@ -51,7 +51,7 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
         <div className="mb-1 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
           <div className="flex-1">
             <h1 className="text-xl font-headline font-black text-slate-900 leading-none uppercase">Control Semanal de Producción</h1>
-            <p className="text-primary font-black text-[10px] uppercase tracking-widest mt-0.5">Resumen Ejecutivo de Cajas Reales</p>
+            <p className="text-primary font-black text-[10px] uppercase tracking-widest mt-0.5">RESUMEN DE LA SEMANA</p>
           </div>
           <div className="flex-1 flex justify-center">
             {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={110} height={40} className="object-contain" />}
