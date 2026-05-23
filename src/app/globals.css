@@ -110,7 +110,7 @@
     flex-direction: column;
     width: 100%;
     min-height: 100vh;
-    padding: 0.5cm; /* Reducido para eliminar espacios en blanco */
+    padding: 2mm; 
     margin: 0;
     box-sizing: border-box;
     overflow: hidden;
@@ -122,7 +122,7 @@
     max-height: 100vh !important;
     overflow: hidden !important;
     page-break-inside: avoid !important;
-    padding: 2mm !important; /* Reducido */
+    padding: 1mm !important;
   }
 
   .page-break-section:last-child {

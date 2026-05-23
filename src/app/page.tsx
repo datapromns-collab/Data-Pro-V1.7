@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -153,7 +152,7 @@ export default function PlannerPage() {
     setPrintMode('monthly');
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
-    style.innerHTML = '@page { size: landscape; margin: 5mm; }';
+    style.innerHTML = '@page { size: landscape; margin: 0; }';
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
@@ -165,7 +164,7 @@ export default function PlannerPage() {
     setPrintMode('weekly-control');
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
-    style.innerHTML = '@page { size: landscape; margin: 5mm; }';
+    style.innerHTML = '@page { size: landscape; margin: 0; }';
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();

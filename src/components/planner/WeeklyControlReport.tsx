@@ -45,10 +45,10 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
   }, [summaryData]);
 
   return (
-    <div className="bg-white w-full print:p-0">
+    <div className="bg-white w-full print:p-0 h-full">
       {/* PÁGINA 1: RESUMEN SEMANAL */}
-      <div className="page-break-section">
-        <div className="mb-2 border-b-2 border-slate-900 pb-1 flex justify-between items-center">
+      <div className="page-break-section h-full flex flex-col">
+        <div className="mb-1 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
           <div className="flex-1">
             <h1 className="text-lg font-headline font-black text-slate-900 leading-none uppercase">Control Semanal de Producción</h1>
             <p className="text-primary font-black text-[10px] uppercase tracking-widest mt-0.5">Resumen Ejecutivo de Cajas Reales</p>
@@ -62,8 +62,8 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
           </div>
         </div>
 
-        <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm">
-          <table className="w-full border-collapse text-[8pt]">
+        <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm w-full">
+          <table className="w-full border-collapse text-[8pt] h-full">
             <thead>
               <tr className="bg-[#4a7ebb] text-white font-black uppercase h-6">
                 <th className="px-2 py-0 border border-slate-900 text-left min-w-[140px]">SABOR</th>
@@ -79,7 +79,7 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
                 const totalSabor = lineVals.reduce((a, b) => a + b, 0);
 
                 return (
-                  <tr key={idx} className={`font-bold text-slate-800 h-5 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
+                  <tr key={idx} className={`font-bold text-slate-800 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
                     <td className="px-2 py-0 border border-slate-300 uppercase">{flavor}</td>
                     {lineVals.map((val, lIdx) => (
                       <td key={lIdx} className="px-0.5 py-0 border border-slate-300 text-center tabular-nums">
@@ -112,12 +112,12 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
           </table>
         </div>
 
-        <div className="mt-2 flex flex-col items-start">
-          <p className="text-[9px] font-bold text-slate-500 uppercase tracking-widest leading-none">TOTAL SEMANA ACUMULADO</p>
-          <p className="text-2xl font-black text-slate-900 tabular-nums leading-none mt-1">{totalSemanaGeneral.toLocaleString('es-ES')}</p>
+        <div className="mt-1 flex flex-col items-start shrink-0">
+          <p className="text-[8px] font-bold text-slate-500 uppercase tracking-widest leading-none">TOTAL SEMANA ACUMULADO</p>
+          <p className="text-xl font-black text-slate-900 tabular-nums leading-none mt-0.5">{totalSemanaGeneral.toLocaleString('es-ES')}</p>
         </div>
 
-        <div className="mt-auto pt-1 flex justify-between items-end border-t border-slate-200 text-[6.5px] font-black text-slate-400 uppercase tracking-widest">
+        <div className="mt-1 pt-1 flex justify-between items-end border-t border-slate-200 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
           <div className="space-y-0.5">
             <p>SISTEMA DE GESTIÓN DE PLANTA</p>
             <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm')}</p>
@@ -138,8 +138,8 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
         }, 0);
 
         return (
-          <div key={lineId} className="page-break-section">
-            <div className="mb-2 border-b-2 border-slate-900 pb-1 flex justify-between items-center">
+          <div key={lineId} className="page-break-section h-full flex flex-col">
+            <div className="mb-1 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
               <div>
                 <h1 className="text-lg font-headline font-black text-slate-900 leading-none uppercase">Producción Real Detallada</h1>
                 <p className="text-primary font-black text-[10px] uppercase tracking-widest mt-0.5">Línea de Producción {lineId}</p>
@@ -151,8 +151,8 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
               </div>
             </div>
 
-            <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm">
-              <table className="w-full border-collapse text-[9pt]">
+            <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm w-full">
+              <table className="w-full border-collapse text-[9pt] h-full">
                 <thead>
                   <tr className="bg-[#4a7ebb] text-white font-black uppercase h-8">
                     <th className="px-2 py-0 border border-slate-900 text-left min-w-[180px]">SABOR</th>
@@ -171,7 +171,7 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
                     const flavorTotal = dailyVals.reduce((a, b) => a + b, 0);
 
                     return (
-                      <tr key={fIdx} className={`font-bold text-slate-800 h-6 ${fIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
+                      <tr key={fIdx} className={`font-bold text-slate-800 ${fIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
                         <td className="px-2 py-0 border border-slate-300 uppercase">{flavor}</td>
                         {dailyVals.map((val, dIdx) => (
                           <td key={dIdx} className="px-1 py-0 border border-slate-300 text-center tabular-nums">
@@ -204,7 +204,7 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
               </table>
             </div>
 
-            <div className="mt-3 pt-1 flex justify-between items-end border-t border-slate-200 text-[6.5px] font-black text-slate-400 uppercase tracking-widest">
+            <div className="mt-1 pt-1 flex justify-between items-end border-t border-slate-200 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
               <div className="space-y-0.5">
                 <p>SISTEMA DE GESTIÓN DE PLANTA - DETALLE DE LÍNEA</p>
                 <p>PÁGINA {parseInt(lineId) + 1} DE 9</p>

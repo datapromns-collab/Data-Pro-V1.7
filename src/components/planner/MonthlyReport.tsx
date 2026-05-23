@@ -54,8 +54,8 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear }: M
   }, [selectedMonth, selectedYear]);
 
   return (
-    <div className="bg-white p-2 w-full h-full monthly-report-print overflow-hidden" style={{ pageBreakInside: 'avoid' }}>
-      <div className="mb-2 border-b-2 border-slate-900 pb-1 flex justify-between items-center">
+    <div className="bg-white w-full h-full monthly-report-print overflow-hidden flex flex-col" style={{ pageBreakInside: 'avoid' }}>
+      <div className="mb-1 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
         <div className="flex-1">
           <h1 className="text-lg font-headline font-black text-slate-900 leading-none">RESUMEN MENSUAL DE PRODUCCIÓN</h1>
           <p className="text-primary font-black text-[10px] uppercase tracking-widest mt-0.5">Reporte Ejecutivo de Cajas Reales</p>
@@ -69,8 +69,8 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear }: M
         </div>
       </div>
 
-      <div className="overflow-hidden border border-slate-900 rounded-sm">
-        <table className="w-full border-collapse text-[8pt]">
+      <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm w-full">
+        <table className="w-full border-collapse text-[8pt] h-full">
           <thead>
             <tr className="bg-[#4a7ebb] text-white font-black uppercase h-6">
               <th className="px-2 py-0 border border-slate-900 text-left min-w-[140px]">SABOR / PRODUCTO</th>
@@ -91,8 +91,8 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear }: M
               const totalSabor = lineVals.reduce((a, b) => a + b, 0);
 
               return (
-                <tr key={idx} className="font-bold text-slate-800 h-5">
-                  <td className="px-2 py-0 border border-slate-300 uppercase bg-slate-50">{flavor}</td>
+                <tr key={idx} className={`font-bold text-slate-800 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
+                  <td className="px-2 py-0 border border-slate-300 uppercase">{flavor}</td>
                   {lineVals.slice(0, 4).map((val, lIdx) => (
                     <td key={lIdx} className="px-1 py-0 border border-slate-300 text-center tabular-nums">
                       {val > 0 ? val.toLocaleString('es-ES') : '0'}
@@ -114,7 +114,7 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear }: M
             })}
           </tbody>
           <tfoot className="bg-[#dce6f1] text-slate-900 font-black">
-            <tr className="h-6">
+            <tr className="h-7">
               <td className="px-2 py-0 border border-slate-900 uppercase">TOTALES</td>
               {ALL_LINES_SUMMARY.slice(0, 4).map(l => {
                 const colTotal = PRODUCT_LIST.reduce((acc, flavor) => acc + (monthlyData[flavor]?.[l] || 0), 0);
@@ -149,7 +149,7 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear }: M
         </table>
       </div>
 
-      <div className="mt-2 flex justify-between items-end border-t border-slate-200 pt-1 text-[6.5px] font-black text-slate-400 uppercase tracking-widest">
+      <div className="mt-1 flex justify-between items-end border-t border-slate-200 pt-1 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
         <div className="space-y-0.5">
           <p>SISTEMA DE GESTIÓN DE PLANTA</p>
           <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm')}</p>
