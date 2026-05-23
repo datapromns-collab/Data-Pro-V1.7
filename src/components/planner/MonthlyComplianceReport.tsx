@@ -105,7 +105,7 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col gap-3 py-2 overflow-hidden">
+      <div className="flex-1 flex flex-col gap-2 py-1 overflow-hidden">
         {/* TABLA EJECUTIVA */}
         <div className="w-full flex flex-col items-center shrink-0">
           <h2 className="text-[10px] font-black text-slate-900 mb-1 uppercase tracking-widest border-b border-slate-200 pb-0.5 w-full text-center">Cumplimiento de Líneas</h2>
@@ -149,48 +149,48 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
           </div>
         </div>
 
-        {/* GRÁFICO VISUAL REACONDICIONADO */}
-        <div className="w-full flex-1 flex flex-col min-h-0">
+        {/* GRÁFICO VISUAL REACONDICIONADO - SE AGRANDA VERTICALMENTE */}
+        <div className="w-full flex-1 flex flex-col min-h-0 mt-1">
           <h2 className="text-[10px] font-black text-slate-900 mb-1 uppercase tracking-widest border-b border-slate-200 pb-0.5 w-full text-center">Planificado vs Real (Mensual)</h2>
-          <div className="flex-1 border border-slate-200 rounded-lg p-6 bg-slate-50/40 flex flex-col justify-between">
-             <div className="flex-1 flex items-end justify-between gap-4 px-12 pb-2">
+          <div className="flex-1 border border-slate-200 rounded-lg p-4 bg-slate-50/40 flex flex-col justify-between">
+             <div className="flex-1 flex items-end justify-between gap-4 px-12 pb-4">
                 {monthlyData.map((data, idx) => (
                   <div key={idx} className="flex-1 flex flex-col items-center group h-full justify-end">
-                    <div className="w-full flex items-end justify-center gap-1.5 h-full relative group">
+                    <div className="w-full flex items-end justify-center gap-2 h-full relative group">
                       {/* Porcentaje sobre las barras */}
-                      <span className="absolute -top-6 text-[8pt] font-black text-slate-800 bg-white/80 px-1 rounded border border-slate-100 shadow-sm whitespace-nowrap z-10">
+                      <span className="absolute -top-7 text-[8.5pt] font-black text-slate-800 bg-white/90 px-1.5 py-0.5 rounded border border-slate-200 shadow-sm whitespace-nowrap z-10">
                         {data.compliance.toFixed(1)}%
                       </span>
                       
                       {/* Barra Planificado */}
                       <div 
-                        className="bg-primary/90 w-1/3 rounded-t-md shadow-md border-x border-t border-primary/20 transition-all" 
+                        className="bg-primary/90 w-1/3 rounded-t-md shadow-md border-x border-t border-primary/20 transition-all hover:brightness-110" 
                         style={{ height: `${(data.planned / maxVal) * 100}%` }}
                       />
                       
                       {/* Barra Real */}
                       <div 
-                        className="bg-emerald-500 w-1/3 rounded-t-md shadow-md border-x border-t border-emerald-600/20 transition-all" 
+                        className="bg-emerald-500 w-1/3 rounded-t-md shadow-md border-x border-t border-emerald-600/20 transition-all hover:brightness-110" 
                         style={{ height: `${(data.real / maxVal) * 100}%` }}
                       />
                     </div>
                     {/* Etiqueta de Línea */}
-                    <div className="mt-2 pt-1 border-t border-slate-200 w-full text-center">
-                      <span className="text-[8pt] font-black text-slate-600 uppercase tracking-tighter">LÍNEA {idx + 1}</span>
+                    <div className="mt-3 pt-1 border-t border-slate-200 w-full text-center">
+                      <span className="text-[9pt] font-black text-slate-600 uppercase tracking-tighter">LÍNEA {idx + 1}</span>
                     </div>
                   </div>
                 ))}
              </div>
 
              {/* LEYENDA DEL GRÁFICO */}
-             <div className="mt-4 flex justify-center gap-12 py-2 border-t border-slate-100 bg-white/50 rounded-full mx-auto px-10">
+             <div className="mt-2 flex justify-center gap-12 py-2 border border-slate-200 bg-white shadow-sm rounded-full mx-auto px-10">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-primary rounded shadow-sm border border-primary/20" />
-                  <span className="text-[8pt] font-black text-slate-700 uppercase tracking-widest">Planificado</span>
+                  <span className="text-[8.5pt] font-black text-slate-700 uppercase tracking-widest">Planificado</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-4 bg-emerald-500 rounded shadow-sm border border-emerald-600/20" />
-                  <span className="text-[8pt] font-black text-slate-700 uppercase tracking-widest">Producción Real</span>
+                  <span className="text-[8.5pt] font-black text-slate-700 uppercase tracking-widest">Producción Real</span>
                 </div>
              </div>
           </div>
@@ -198,7 +198,7 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
       </div>
 
       {/* PIE DE PÁGINA */}
-      <div className="mt-1 flex justify-between items-end border-t border-slate-200 pt-1 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
+      <div className="mt-0.5 flex justify-between items-end border-t border-slate-200 pt-1 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
         <div className="space-y-0.5">
           <p>SISTEMA DE GESTIÓN DE PLANTA - RESUMEN MENSUAL DE CUMPLIMIENTO</p>
           <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es })}</p>
