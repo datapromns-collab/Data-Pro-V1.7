@@ -9,10 +9,11 @@ import { Button } from '@/components/ui/button';
 import { getWeekDays, PRODUCT_LIST, ALL_LINES_SUMMARY } from '@/lib/planner-utils';
 import { format, startOfDay, addDays, setHours, setMinutes, parseISO, startOfMonth, endOfMonth, isWithinInterval } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { BarChart3, Package, Layers, CalendarDays, FileSpreadsheet, FileDown, FileStack } from 'lucide-react';
+import { BarChart3, Package, Layers, CalendarDays, FileSpreadsheet, FileDown, FileStack, CheckCircle2 } from 'lucide-react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { cn } from '@/lib/utils';
 
 interface AdminReportToolProps {
   tasks: any[];
@@ -21,12 +22,13 @@ interface AdminReportToolProps {
   updateRealProduction: (lineId: string, flavor: string, dateKey: string, quantity: number) => void;
   onPrintMonthly?: (month: string, year: string) => void;
   onPrintWeeklyControl?: () => void;
+  onPrintCompliance?: () => void;
 }
 
-const LINES = ["1", "2", "3", "4", "5", "6", "7"];
+const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const DAYS_NAMES = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
 
-export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRealProduction, onPrintMonthly, onPrintWeeklyControl }: AdminReportToolProps) {
+export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRealProduction, onPrintMonthly, onPrintWeeklyControl, onPrintCompliance }: AdminReportToolProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   
   const [activeView, setActiveTab] = useState("weekly");
@@ -40,6 +42,29 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
 
     return tasks
       .filter(t => t.lineId === lineId && t.name === flavor)
+      .reduce((acc, task) => {
+        const intersectionStart = task.startTime > dayStart ? task.startTime : dayStart;
+        const intersectionEnd = task.endTime < dayEnd ? task.endTime : dayEnd;
+
+        if (intersectionStart < intersectionEnd) {
+          const intersectionMinutes = (intersectionEnd.getTime() - intersectionStart.getTime()) / (1000 * 60);
+          const totalTaskMinutes = (task.endTime.getTime() - task.startTime.getTime()) / (1000 * 60);
+          
+          if (totalTaskMinutes > 0) {
+            const proportionalQty = (intersectionMinutes / totalTaskMinutes) * (task.quantity || 0);
+            return acc + proportionalQty;
+          }
+        }
+        return acc;
+      }, 0);
+  };
+
+  const getLineDailyPlanned = (lineId: string, day: Date) => {
+    const dayStart = setMinutes(setHours(startOfDay(day), 7), 0);
+    const dayEnd = addDays(dayStart, 1);
+
+    return tasks
+      .filter(t => t.lineId === lineId && t.quantity > 0)
       .reduce((acc, task) => {
         const intersectionStart = task.startTime > dayStart ? task.startTime : dayStart;
         const intersectionEnd = task.endTime < dayEnd ? task.endTime : dayEnd;
@@ -118,13 +143,16 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
             <TabsTrigger value="weekly" className="gap-2 px-4 font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm text-xs">
               <CalendarDays className="h-3.5 w-3.5" /> Control Semanal
             </TabsTrigger>
+            <TabsTrigger value="compliance" className="gap-2 px-4 font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm text-xs">
+              <CheckCircle2 className="h-3.5 w-3.5" /> Cumplimiento
+            </TabsTrigger>
             <TabsTrigger value="monthly" className="gap-2 px-4 font-bold rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm text-xs">
               <FileSpreadsheet className="h-3.5 w-3.5" /> Resumen Mensual
             </TabsTrigger>
           </TabsList>
 
           <div className="flex items-center gap-2">
-            {activeView === 'weekly' ? (
+            {activeView === 'weekly' && (
               <Button 
                 variant="outline" 
                 size="sm" 
@@ -134,7 +162,19 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
                 <FileStack className="h-3.5 w-3.5" />
                 Reporte Semanal
               </Button>
-            ) : (
+            )}
+            {activeView === 'compliance' && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={onPrintCompliance}
+                className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-9 px-3 rounded-xl text-xs"
+              >
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                Reporte Cumplimiento
+              </Button>
+            )}
+            {activeView === 'monthly' && (
               <>
                 <Button 
                   variant="outline" 
@@ -189,7 +229,7 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
               <div>
                 <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest leading-none mb-1">Líneas Activas</p>
                 <h3 className="text-lg font-black text-slate-900 leading-none">
-                  7 <span className="text-[10px] font-bold text-slate-400">unidades</span>
+                  8 <span className="text-[10px] font-bold text-slate-400">unidades</span>
                 </h3>
               </div>
             </Card>
@@ -279,6 +319,65 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
               ))}
             </TooltipProvider>
           </div>
+        </TabsContent>
+
+        <TabsContent value="compliance" className="m-0 space-y-8">
+          {LINES.map(lineId => {
+            const dailyStats = weekDays.map(day => {
+              const dateKey = format(day, 'yyyy-MM-dd');
+              const planned = getLineDailyPlanned(lineId, day);
+              
+              // Real sum of all flavors for this line/day
+              const real = PRODUCT_LIST.reduce((acc, flavor) => 
+                acc + (realProduction[lineId]?.[flavor]?.[dateKey] || 0), 0);
+              
+              const compliance = planned > 0 ? (real / planned) * 100 : (real > 0 ? 100 : 0);
+
+              return { day, planned, real, compliance };
+            });
+
+            return (
+              <div key={lineId} className="space-y-2">
+                <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-widest text-center border-b border-slate-200 pb-1">
+                  LINEA DE PRODUCCION N°{lineId}
+                </h3>
+                <div className="overflow-hidden border border-slate-900 rounded shadow-sm">
+                  <table className="w-full border-collapse text-[10px]">
+                    <thead>
+                      <tr className="bg-[#4a7ebb] text-white font-black uppercase">
+                        <th className="px-3 py-1.5 border border-slate-900 text-left">FECHA</th>
+                        <th className="px-3 py-1.5 border border-slate-900 text-left">DIAS</th>
+                        <th className="px-3 py-1.5 border border-slate-900 text-right">PLANIFICADO</th>
+                        <th className="px-3 py-1.5 border border-slate-900 text-right">PRODUCCION</th>
+                        <th className="px-3 py-1.5 border border-slate-900 text-right">CUMPLIMIENTO</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-[#dce6f1]">
+                      {dailyStats.map((stat, idx) => (
+                        <tr key={idx} className="font-bold text-slate-800 hover:bg-slate-200/50 transition-colors">
+                          <td className="px-3 py-1 border border-slate-900 tabular-nums">
+                            {format(stat.day, 'd/M/yyyy')}
+                          </td>
+                          <td className="px-3 py-1 border border-slate-900 uppercase">
+                            {format(stat.day, 'EEEE', { locale: es })}
+                          </td>
+                          <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                            {stat.planned > 0 ? Math.round(stat.planned).toLocaleString('es-ES') : ''}
+                          </td>
+                          <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                            {stat.real > 0 ? Math.round(stat.real).toLocaleString('es-ES') : '0'}
+                          </td>
+                          <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                            {stat.compliance.toFixed(2)}%
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            );
+          })}
         </TabsContent>
 
         <TabsContent value="monthly" className="m-0">

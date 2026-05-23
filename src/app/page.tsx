@@ -19,7 +19,8 @@ import {
   ChevronLeft,
   PackageCheck,
   FileDown,
-  FileStack
+  FileStack,
+  CheckCircle2
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -34,6 +35,7 @@ import { AdminReportTool } from '@/components/planner/AdminReportTool';
 import { ProductionEntryDialog } from '@/components/planner/ProductionEntryDialog';
 import { MonthlyReport } from '@/components/planner/MonthlyReport';
 import { WeeklyControlReport } from '@/components/planner/WeeklyControlReport';
+import { ComplianceReport } from '@/components/planner/ComplianceReport';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
@@ -50,7 +52,7 @@ import { format, getISOWeek, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useToast } from '@/hooks/use-toast';
 
-const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7"];
+const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7", "Línea 8"];
 
 export default function PlannerPage() {
   const { 
@@ -85,7 +87,7 @@ export default function PlannerPage() {
   const [selectedLine, setSelectedLine] = useState("1");
   const [activeTab, setActiveTab] = useState("gantt");
   const [hasRedirectedAdmin, setHasRedirectedAdmin] = useState(false);
-  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control'>('plan');
+  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance'>('plan');
   const [emitDate, setEmitDate] = useState('');
   
   // State for monthly report print parameters
@@ -162,6 +164,18 @@ export default function PlannerPage() {
 
   const handlePrintWeeklyControl = () => {
     setPrintMode('weekly-control');
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: landscape; margin: 0; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
+
+  const handlePrintCompliance = () => {
+    setPrintMode('compliance');
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: landscape; margin: 0; }';
@@ -479,6 +493,7 @@ export default function PlannerPage() {
                     updateRealProduction={updateRealProduction}
                     onPrintMonthly={handlePrintMonthly}
                     onPrintWeeklyControl={handlePrintWeeklyControl}
+                    onPrintCompliance={handlePrintCompliance}
                   />
                 </TabsContent>
               </div>
@@ -534,6 +549,15 @@ export default function PlannerPage() {
           {printMode === 'weekly-control' && (
             <div className="p-0">
               <WeeklyControlReport 
+                realProduction={realProduction} 
+                weekStartDate={weekStartDate} 
+              />
+            </div>
+          )}
+          {printMode === 'compliance' && (
+            <div className="p-0">
+              <ComplianceReport 
+                tasks={tasks}
                 realProduction={realProduction} 
                 weekStartDate={weekStartDate} 
               />
