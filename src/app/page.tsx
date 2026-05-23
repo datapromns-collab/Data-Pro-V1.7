@@ -16,7 +16,8 @@ import {
   ShieldCheck,
   User as UserIcon,
   BarChart3,
-  FileText
+  FileText,
+  ChevronLeft
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -258,20 +259,33 @@ export default function PlannerPage() {
                 <section className="animate-in fade-in slide-in-from-top-2">
                   <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Acciones</p>
                   <div className="grid gap-3 px-2">
-                    <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 hover:translate-y-[-1px] transition-all">
-                      <Plus className="h-4 w-4" /> Nueva Tarea
-                    </Button>
-                    <Button variant="ghost" size="sm" onClick={handleClearContext} className="w-full gap-2 text-destructive font-black uppercase text-xs tracking-widest hover:bg-destructive/5 py-4">
-                      <Trash2 className="h-4 w-4" /> Limpiar Todo
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => setActiveTab('admin-report')} 
-                      className="w-full gap-2 text-primary font-black uppercase text-xs tracking-widest border-primary/20 hover:bg-primary/5 rounded-2xl py-6"
-                    >
-                      <BarChart3 className="h-4 w-4" /> Reporte de Gestión
-                    </Button>
+                    {activeTab !== 'admin-report' ? (
+                      <>
+                        <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 hover:translate-y-[-1px] transition-all">
+                          <Plus className="h-4 w-4" /> Nueva Tarea
+                        </Button>
+                        <Button variant="ghost" size="sm" onClick={handleClearContext} className="w-full gap-2 text-destructive font-black uppercase text-xs tracking-widest hover:bg-destructive/5 py-4">
+                          <Trash2 className="h-4 w-4" /> Limpiar Todo
+                        </Button>
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => setActiveTab('admin-report')} 
+                          className="w-full gap-2 text-primary font-black uppercase text-xs tracking-widest border-primary/20 hover:bg-primary/5 rounded-2xl py-6"
+                        >
+                          <BarChart3 className="h-4 w-4" /> Reporte de Gestión
+                        </Button>
+                      </>
+                    ) : (
+                      <Button 
+                        variant="default" 
+                        size="lg" 
+                        onClick={() => setActiveTab('gantt')} 
+                        className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 hover:translate-y-[-1px] transition-all"
+                      >
+                        <ChevronLeft className="h-4 w-4" /> Volver al Plan
+                      </Button>
+                    )}
                   </div>
                 </section>
               )}
