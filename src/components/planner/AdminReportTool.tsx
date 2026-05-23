@@ -8,12 +8,14 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { getWeekDays, PRODUCT_LIST, ALL_LINES_SUMMARY } from '@/lib/planner-utils';
-import { format, startOfDay, addDays, setHours, setMinutes, parseISO, startOfMonth, endOfMonth, isWithinInterval } from 'date-fns';
+import { format, startOfDay, addDays, setHours, setMinutes, parseISO, startOfMonth, endOfMonth, isWithinInterval, eachDayOfInterval } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { BarChart3, Package, Layers, FileDown, FileStack, CheckCircle2, FileSpreadsheet, CalendarDays } from 'lucide-react';
+import { BarChart3, Package, Layers, FileDown, FileStack, CheckCircle2, FileSpreadsheet, CalendarDays, BarChart, LineChart, TrendingUp } from 'lucide-react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { Bar, BarChart as RechartsBarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Line, ComposedChart, Legend, Cell, LabelList } from 'recharts';
 
 interface AdminReportToolProps {
   view: 'production' | 'compliance';
@@ -35,6 +37,7 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
   const [productionSubTab, setProductionTab] = useState('weekly');
+  const [complianceSubTab, setComplianceTab] = useState('weekly');
 
   const getFlavorScheduledQty = (lineId: string, flavor: string, day: Date) => {
     const dayStart = setMinutes(setHours(startOfDay(day), 7), 0);
@@ -102,33 +105,41 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
     });
   }, [tasks, weekDays, realProduction]);
 
-  const monthlyData = useMemo(() => {
+  const monthlyComplianceData = useMemo(() => {
     const yearNum = parseInt(selectedYear);
-    if (isNaN(yearNum)) return {};
+    const monthNum = parseInt(selectedMonth);
+    if (isNaN(yearNum) || isNaN(monthNum)) return [];
 
-    const monthStart = startOfMonth(new Date(yearNum, parseInt(selectedMonth) - 1));
+    const monthStart = startOfMonth(new Date(yearNum, monthNum - 1));
     const monthEnd = endOfMonth(monthStart);
+    const daysInMonth = eachDayOfInterval({ start: monthStart, end: monthEnd });
 
-    const totals: Record<string, Record<string, number>> = {};
-    
-    PRODUCT_LIST.forEach(product => {
-      totals[product] = {};
-      ALL_LINES_SUMMARY.forEach(lineId => {
-        let lineProductTotal = 0;
-        const lineRealData = realProduction[lineId]?.[product] || {};
+    return LINES.map(lineId => {
+      let totalPlanned = 0;
+      let totalReal = 0;
+
+      // Calculamos planificado para todo el mes sumando cada día
+      daysInMonth.forEach(day => {
+        totalPlanned += getLineDailyPlanned(lineId, day);
         
-        Object.entries(lineRealData).forEach(([dateKey, qty]) => {
-          const date = parseISO(dateKey);
-          if (isWithinInterval(date, { start: monthStart, end: monthEnd })) {
-            lineProductTotal += qty;
-          }
+        // Sumamos real para este día
+        PRODUCT_LIST.forEach(product => {
+          const dateKey = format(day, 'yyyy-MM-dd');
+          totalReal += realProduction[lineId]?.[product]?.[dateKey] || 0;
         });
-        totals[product][lineId] = lineProductTotal;
       });
-    });
 
-    return totals;
-  }, [realProduction, selectedMonth, selectedYear]);
+      const compliance = totalPlanned > 0 ? (totalReal / totalPlanned) * 100 : (totalReal > 0 ? 100 : 0);
+
+      return {
+        lineLabel: `Línea ${lineId}`,
+        lineShort: `L${lineId}`,
+        planned: Math.round(totalPlanned),
+        real: Math.round(totalReal),
+        compliance: parseFloat(compliance.toFixed(2))
+      };
+    });
+  }, [tasks, realProduction, selectedMonth, selectedYear]);
 
   const totalCratesWeek = useMemo(() => 
     lineData.reduce((acc, l) => acc + l.lineWeeklyTotal, 0),
@@ -336,14 +347,30 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
                   </thead>
                   <tbody>
                     {PRODUCT_LIST.map((flavor, idx) => {
-                      const lineVals = ALL_LINES_SUMMARY.map(l => monthlyData[flavor]?.[l] || 0);
-                      const total2L = lineVals.slice(0, 4).reduce((a, b) => a + b, 0);
-                      const totalSabor = lineVals.reduce((a, b) => a + b, 0);
+                      const lineVals = ALL_LINES_SUMMARY.map(l => (realProduction[l]?.[flavor] ? Object.values(realProduction[l][flavor]).reduce((a, b) => a + b, 0) : 0));
+                      // Nota: Esta lógica mensual de planillas asume la producción histórica guardada
+                      // Para el reporte mensual real, necesitamos filtrar por el mes seleccionado
+                      
+                      const monthStart = startOfMonth(new Date(parseInt(selectedYear), parseInt(selectedMonth) - 1));
+                      const monthEnd = endOfMonth(monthStart);
+                      
+                      const lineValsFiltered = ALL_LINES_SUMMARY.map(l => {
+                        let lineProd = 0;
+                        const data = realProduction[l]?.[flavor] || {};
+                        Object.entries(data).forEach(([dateKey, qty]) => {
+                          const date = parseISO(dateKey);
+                          if (isWithinInterval(date, { start: monthStart, end: monthEnd })) lineProd += qty;
+                        });
+                        return lineProd;
+                      });
+
+                      const total2L = lineValsFiltered.slice(0, 4).reduce((a, b) => a + b, 0);
+                      const totalSabor = lineValsFiltered.reduce((a, b) => a + b, 0);
 
                       return (
                         <tr key={idx} className="hover:bg-slate-50 transition-colors text-[10px] font-bold text-slate-700 h-7">
                           <td className="px-3 py-0 border border-slate-100 uppercase bg-slate-50/30">{flavor}</td>
-                          {lineVals.slice(0, 4).map((val, lIdx) => (
+                          {lineValsFiltered.slice(0, 4).map((val, lIdx) => (
                             <td key={lIdx} className="px-1 py-0 border border-slate-100 text-center tabular-nums">
                               {val > 0 ? val.toLocaleString('es-ES') : '0'}
                             </td>
@@ -351,7 +378,7 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
                           <td className="px-2 py-0 border border-slate-100 text-center tabular-nums bg-[#dce6f1] font-black">
                             {total2L > 0 ? total2L.toLocaleString('es-ES') : '0'}
                           </td>
-                          {lineVals.slice(4).map((val, lIdx) => (
+                          {lineValsFiltered.slice(4).map((val, lIdx) => (
                             <td key={lIdx + 4} className="px-1 py-0 border border-slate-100 text-center tabular-nums">
                               {val > 0 ? val.toLocaleString('es-ES') : '0'}
                             </td>
@@ -367,7 +394,16 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
                     <tr className="h-9">
                       <td className="px-3 py-0 border border-slate-200 uppercase">TOTALES</td>
                       {ALL_LINES_SUMMARY.slice(0, 4).map(l => {
-                        const colTotal = PRODUCT_LIST.reduce((acc, flavor) => acc + (monthlyData[flavor]?.[l] || 0), 0);
+                        const monthStart = startOfMonth(new Date(parseInt(selectedYear), parseInt(selectedMonth) - 1));
+                        const monthEnd = endOfMonth(monthStart);
+                        let colTotal = 0;
+                        PRODUCT_LIST.forEach(f => {
+                          const data = realProduction[l]?.[f] || {};
+                          Object.entries(data).forEach(([dateKey, qty]) => {
+                            const date = parseISO(dateKey);
+                            if (isWithinInterval(date, { start: monthStart, end: monthEnd })) colTotal += qty;
+                          });
+                        });
                         return (
                           <td key={l} className="px-1 py-0 border border-slate-200 text-center tabular-nums">
                             {colTotal.toLocaleString('es-ES')}
@@ -375,13 +411,31 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
                         );
                       })}
                       <td className="px-2 py-0 border border-slate-200 text-center tabular-nums bg-[#b8cce4]">
-                        {PRODUCT_LIST.reduce((acc, flavor) => {
-                          const lineVals = ALL_LINES_SUMMARY.slice(0, 4).map(l => monthlyData[flavor]?.[l] || 0);
-                          return acc + lineVals.reduce((a, b) => a + b, 0);
+                        {LINES.slice(0, 4).reduce((acc, l) => {
+                          let lineTotal = 0;
+                          const monthStart = startOfMonth(new Date(parseInt(selectedYear), parseInt(selectedMonth) - 1));
+                          const monthEnd = endOfMonth(monthStart);
+                          PRODUCT_LIST.forEach(f => {
+                            const data = realProduction[l]?.[f] || {};
+                            Object.entries(data).forEach(([dateKey, qty]) => {
+                              const date = parseISO(dateKey);
+                              if (isWithinInterval(date, { start: monthStart, end: monthEnd })) lineTotal += qty;
+                            });
+                          });
+                          return acc + lineTotal;
                         }, 0).toLocaleString('es-ES')}
                       </td>
                       {ALL_LINES_SUMMARY.slice(4).map(l => {
-                        const colTotal = PRODUCT_LIST.reduce((acc, flavor) => acc + (monthlyData[flavor]?.[l] || 0), 0);
+                        const monthStart = startOfMonth(new Date(parseInt(selectedYear), parseInt(selectedMonth) - 1));
+                        const monthEnd = endOfMonth(monthStart);
+                        let colTotal = 0;
+                        PRODUCT_LIST.forEach(f => {
+                          const data = realProduction[l]?.[f] || {};
+                          Object.entries(data).forEach(([dateKey, qty]) => {
+                            const date = parseISO(dateKey);
+                            if (isWithinInterval(date, { start: monthStart, end: monthEnd })) colTotal += qty;
+                          });
+                        });
                         return (
                           <td key={l} className="px-1 py-0 border border-slate-200 text-center tabular-nums">
                             {colTotal.toLocaleString('es-ES')}
@@ -389,9 +443,18 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
                         );
                       })}
                       <td className="px-2 py-0 border border-slate-200 text-center tabular-nums bg-[#b8cce4]">
-                        {PRODUCT_LIST.reduce((acc, flavor) => {
-                          const lineVals = ALL_LINES_SUMMARY.map(l => monthlyData[flavor]?.[l] || 0);
-                          return acc + lineVals.reduce((a, b) => a + b, 0);
+                        {LINES.reduce((acc, l) => {
+                          let lineTotal = 0;
+                          const monthStart = startOfMonth(new Date(parseInt(selectedYear), parseInt(selectedMonth) - 1));
+                          const monthEnd = endOfMonth(monthStart);
+                          PRODUCT_LIST.forEach(f => {
+                            const data = realProduction[l]?.[f] || {};
+                            Object.entries(data).forEach(([dateKey, qty]) => {
+                              const date = parseISO(dateKey);
+                              if (isWithinInterval(date, { start: monthStart, end: monthEnd })) lineTotal += qty;
+                            });
+                          });
+                          return acc + lineTotal;
                         }, 0).toLocaleString('es-ES')}
                       </td>
                     </tr>
@@ -404,75 +467,239 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
       )}
 
       {view === 'compliance' && (
-        <div className="space-y-8">
-          <div className="flex justify-end mb-4">
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={onPrintCompliance}
-              className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs"
-            >
-              <CheckCircle2 className="h-4 w-4" />
-              Exportar Reporte Cumplimiento
-            </Button>
+        <Tabs value={complianceSubTab} onValueChange={setComplianceTab} className="w-full">
+           <div className="flex items-center justify-between mb-6">
+            <TabsList className="bg-slate-100/50 p-1 rounded-full h-auto border border-slate-200">
+              <TabsTrigger value="weekly" className="gap-2 px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all">
+                <CalendarDays className="h-3.5 w-3.5" /> Detalle Semanal
+              </TabsTrigger>
+              <TabsTrigger value="monthly" className="gap-2 px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all">
+                <BarChart3 className="h-3.5 w-3.5" /> Resumen Mensual
+              </TabsTrigger>
+            </TabsList>
+
+            <div className="flex items-center gap-2">
+              {complianceSubTab === 'weekly' ? (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={onPrintCompliance}
+                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs"
+                >
+                  <CheckCircle2 className="h-4 w-4" />
+                  Exportar Reporte Cumplimiento
+                </Button>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+                    <SelectTrigger className="w-36 bg-white border-slate-200 font-black uppercase text-[10px] tracking-widest rounded-xl h-10">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array.from({ length: 12 }).map((_, i) => (
+                        <SelectItem key={i} value={(i + 1).toString().padStart(2, '0')} className="font-bold uppercase text-[9px]">
+                          {format(new Date(2024, i, 1), 'MMMM', { locale: es }).toUpperCase()}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Input 
+                    type="number"
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                    className="w-24 bg-white border-slate-200 font-black text-center rounded-xl h-10 text-[10px] focus:ring-primary/20"
+                    placeholder="Año"
+                  />
+                </div>
+              )}
+            </div>
           </div>
-          {LINES.map(lineId => {
-            const dailyStats = weekDays.map(day => {
-              const dateKey = format(day, 'yyyy-MM-dd');
-              const planned = getLineDailyPlanned(lineId, day);
-              
-              // Real sum of all flavors for this line/day
-              const real = PRODUCT_LIST.reduce((acc, flavor) => 
-                acc + (realProduction[lineId]?.[flavor]?.[dateKey] || 0), 0);
-              
-              const compliance = planned > 0 ? (real / planned) * 100 : (real > 0 ? 100 : 0);
 
-              return { day, planned, real, compliance };
-            });
+          <TabsContent value="weekly" className="space-y-8 m-0 animate-in fade-in-50 duration-500">
+            {LINES.map(lineId => {
+              const dailyStats = weekDays.map(day => {
+                const dateKey = format(day, 'yyyy-MM-dd');
+                const planned = getLineDailyPlanned(lineId, day);
+                const real = PRODUCT_LIST.reduce((acc, flavor) => 
+                  acc + (realProduction[lineId]?.[flavor]?.[dateKey] || 0), 0);
+                const compliance = planned > 0 ? (real / planned) * 100 : (real > 0 ? 100 : 0);
+                return { day, planned, real, compliance };
+              });
 
-            return (
-              <div key={lineId} className="space-y-2">
-                <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-widest text-center border-b border-slate-200 pb-1">
-                  LINEA DE PRODUCCION N°{lineId}
-                </h3>
-                <div className="overflow-hidden border border-slate-900 rounded shadow-sm">
+              return (
+                <div key={lineId} className="space-y-2">
+                  <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-widest text-center border-b border-slate-200 pb-1">
+                    LINEA DE PRODUCCION N°{lineId}
+                  </h3>
+                  <div className="overflow-hidden border border-slate-900 rounded shadow-sm">
+                    <table className="w-full border-collapse text-[10px]">
+                      <thead>
+                        <tr className="bg-[#4a7ebb] text-white font-black uppercase">
+                          <th className="px-3 py-1.5 border border-slate-900 text-left">FECHA</th>
+                          <th className="px-3 py-1.5 border border-slate-900 text-left">DIAS</th>
+                          <th className="px-3 py-1.5 border border-slate-900 text-right">PLANIFICADO</th>
+                          <th className="px-3 py-1.5 border border-slate-900 text-right">PRODUCCION</th>
+                          <th className="px-3 py-1.5 border border-slate-900 text-right">CUMPLIMIENTO</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-[#dce6f1]">
+                        {dailyStats.map((stat, idx) => (
+                          <tr key={idx} className="font-bold text-slate-800 hover:bg-slate-200/50 transition-colors">
+                            <td className="px-3 py-1 border border-slate-900 tabular-nums">
+                              {format(stat.day, 'd/M/yyyy')}
+                            </td>
+                            <td className="px-3 py-1 border border-slate-900 uppercase">
+                              {format(stat.day, 'EEEE', { locale: es })}
+                            </td>
+                            <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                              {stat.planned > 0 ? Math.round(stat.planned).toLocaleString('es-ES') : ''}
+                            </td>
+                            <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                              {stat.real > 0 ? Math.round(stat.real).toLocaleString('es-ES') : '0'}
+                            </td>
+                            <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                              {stat.compliance.toFixed(2)}%
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              );
+            })}
+          </TabsContent>
+
+          <TabsContent value="monthly" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
+              <div className="space-y-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <TrendingUp className="h-5 w-5 text-primary" />
+                  <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Resumen Comparativo Mensual</h3>
+                </div>
+                
+                <div className="overflow-hidden border border-slate-900 rounded shadow-md">
                   <table className="w-full border-collapse text-[10px]">
                     <thead>
-                      <tr className="bg-[#4a7ebb] text-white font-black uppercase">
-                        <th className="px-3 py-1.5 border border-slate-900 text-left">FECHA</th>
-                        <th className="px-3 py-1.5 border border-slate-900 text-left">DIAS</th>
-                        <th className="px-3 py-1.5 border border-slate-900 text-right">PLANIFICADO</th>
-                        <th className="px-3 py-1.5 border border-slate-900 text-right">PRODUCCION</th>
-                        <th className="px-3 py-1.5 border border-slate-900 text-right">CUMPLIMIENTO</th>
+                      <tr className="bg-[#4a7ebb] text-white font-black uppercase text-center">
+                        <th className="px-3 py-2 border border-slate-900 text-left">LINEAS</th>
+                        <th className="px-3 py-2 border border-slate-900 text-right">PLANIFICADO</th>
+                        <th className="px-3 py-2 border border-slate-900 text-right">PRODUCCION</th>
+                        <th className="px-3 py-2 border border-slate-900 text-right">CUMPLIMIENTO</th>
                       </tr>
                     </thead>
                     <tbody className="bg-[#dce6f1]">
-                      {dailyStats.map((stat, idx) => (
-                        <tr key={idx} className="font-bold text-slate-800 hover:bg-slate-200/50 transition-colors">
-                          <td className="px-3 py-1 border border-slate-900 tabular-nums">
-                            {format(stat.day, 'd/M/yyyy')}
-                          </td>
-                          <td className="px-3 py-1 border border-slate-900 uppercase">
-                            {format(stat.day, 'EEEE', { locale: es })}
+                      {monthlyComplianceData.map((data, idx) => (
+                        <tr key={idx} className="font-bold text-slate-800 hover:bg-white/40 transition-colors h-10">
+                          <td className="px-3 py-1 border border-slate-900 uppercase">{data.lineLabel}</td>
+                          <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                            {data.planned.toLocaleString('es-ES')}
                           </td>
                           <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
-                            {stat.planned > 0 ? Math.round(stat.planned).toLocaleString('es-ES') : ''}
+                            {data.real.toLocaleString('es-ES')}
                           </td>
-                          <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
-                            {stat.real > 0 ? Math.round(stat.real).toLocaleString('es-ES') : '0'}
-                          </td>
-                          <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
-                            {stat.compliance.toFixed(2)}%
+                          <td className={`px-3 py-1 border border-slate-900 text-right tabular-nums font-black ${data.compliance >= 80 ? 'text-emerald-600' : 'text-primary'}`}>
+                            {data.compliance.toFixed(2)}%
                           </td>
                         </tr>
                       ))}
                     </tbody>
+                    <tfoot className="bg-[#b8cce4] font-black text-slate-900 border-t-2 border-slate-900">
+                      <tr className="h-10">
+                        <td className="px-3 py-1 border border-slate-900 uppercase">TOTAL PLANTA</td>
+                        <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                          {monthlyComplianceData.reduce((a, b) => a + b.planned, 0).toLocaleString('es-ES')}
+                        </td>
+                        <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                          {monthlyComplianceData.reduce((a, b) => a + b.real, 0).toLocaleString('es-ES')}
+                        </td>
+                        <td className="px-3 py-1 border border-slate-900 text-right tabular-nums text-primary text-xs">
+                          {(monthlyComplianceData.reduce((a, b) => a + b.real, 0) / (monthlyComplianceData.reduce((a, b) => a + b.planned, 0) || 1) * 100).toFixed(2)}%
+                        </td>
+                      </tr>
+                    </tfoot>
                   </table>
                 </div>
               </div>
-            );
-          })}
-        </div>
+
+              <Card className="p-6 bg-white border-slate-200 shadow-sm rounded-2xl h-[450px] flex flex-col">
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Planificado vs Real (Mensual)</h3>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-3 h-3 bg-primary rounded-sm"></div>
+                      <span className="text-[9px] font-black text-slate-400 uppercase">Plan</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-3 h-3 bg-emerald-500 rounded-sm"></div>
+                      <span className="text-[9px] font-black text-slate-400 uppercase">Real</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <div className="flex-1 w-full">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <ComposedChart data={monthlyComplianceData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                      <XAxis 
+                        dataKey="lineShort" 
+                        axisLine={false} 
+                        tickLine={false} 
+                        tick={{ fontSize: 10, fontWeight: 900, fill: '#64748b' }}
+                        dy={10}
+                      />
+                      <YAxis 
+                        yAxisId="left"
+                        axisLine={false} 
+                        tickLine={false} 
+                        tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }}
+                        tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(0)}k` : val}
+                      />
+                      <YAxis 
+                        yAxisId="right" 
+                        orientation="right" 
+                        domain={[0, 120]}
+                        axisLine={false} 
+                        tickLine={false}
+                        tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }}
+                        tickFormatter={(val) => `${val}%`}
+                      />
+                      <Tooltip 
+                        content={<ChartTooltipContent />} 
+                        cursor={{ fill: '#f8fafc' }}
+                      />
+                      <Bar 
+                        yAxisId="left" 
+                        dataKey="planned" 
+                        fill="hsl(var(--primary))" 
+                        radius={[4, 4, 0, 0]} 
+                        barSize={30} 
+                        name="Planificado"
+                      />
+                      <Bar 
+                        yAxisId="left" 
+                        dataKey="real" 
+                        fill="#10b981" 
+                        radius={[4, 4, 0, 0]} 
+                        barSize={30} 
+                        name="Producción"
+                      />
+                      <Line 
+                        yAxisId="right" 
+                        type="monotone" 
+                        dataKey="compliance" 
+                        stroke="#f59e0b" 
+                        strokeWidth={3} 
+                        dot={{ r: 4, fill: '#f59e0b', strokeWidth: 2, stroke: '#fff' }}
+                        name="Cumplimiento %"
+                      />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                </div>
+              </Card>
+            </div>
+          </TabsContent>
+        </Tabs>
       )}
     </div>
   );
