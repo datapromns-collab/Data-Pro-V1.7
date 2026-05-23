@@ -89,6 +89,17 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
     return max * 1.15;
   }, [monthlyData]);
 
+  // Genera el path para la línea de cumplimiento (normalizada a 120% de altura para el eje Y)
+  const linePath = useMemo(() => {
+    if (monthlyData.length === 0) return "";
+    const points = monthlyData.map((data, idx) => {
+      const x = (idx + 0.5) * (100 / monthlyData.length);
+      const y = 100 - (Math.min(data.compliance, 120) / 120) * 100;
+      return `${x},${y}`;
+    });
+    return points.join(" ");
+  }, [monthlyData]);
+
   const renderHeader = (subtitle: string) => (
     <div className="mb-4 border-b-2 border-slate-900 pb-2 flex justify-between items-center shrink-0">
       <div className="flex-1">
@@ -168,31 +179,69 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
         {renderFooter('RESUMEN DE DATOS MENSUAL')}
       </div>
 
-      {/* PÁGINA 2: GRÁFICO VISUAL */}
+      {/* PÁGINA 2: GRÁFICO VISUAL CON LÍNEA DE CUMPLIMIENTO */}
       <div className="page-break-section h-screen flex flex-col p-6">
         {renderHeader('RESUMEN COMPARATIVO VISUAL')}
 
         <div className="flex-1 flex flex-col min-h-0 mt-4">
           <h2 className="text-[12px] font-black text-slate-900 mb-4 uppercase tracking-widest border-b border-slate-200 pb-1 w-full text-center">Planificado vs Real (Análisis Gráfico)</h2>
-          <div className="flex-1 border-2 border-slate-200 rounded-2xl p-10 bg-slate-50/40 flex flex-col">
-             <div className="flex-1 flex items-end justify-between gap-10 px-10 pb-10">
+          <div className="flex-1 border-2 border-slate-200 rounded-2xl p-10 bg-slate-50/40 flex flex-col relative">
+             
+             {/* ÁREA DE GRÁFICO (BARRAS + LÍNEA) */}
+             <div className="flex-1 flex items-end justify-between gap-10 px-10 pb-10 relative">
+                
+                {/* SVG PARA LA LÍNEA AMARILLA DE CUMPLIMIENTO */}
+                <svg 
+                  className="absolute inset-x-10 top-0 bottom-10 w-[calc(100%-80px)] h-[calc(100%-40px)] z-20 pointer-events-none" 
+                  viewBox="0 0 100 100" 
+                  preserveAspectRatio="none"
+                >
+                  {/* Línea Amarilla */}
+                  <polyline
+                    points={linePath}
+                    fill="none"
+                    stroke="#f59e0b"
+                    strokeWidth="1.5"
+                    strokeLinejoin="round"
+                    strokeLinecap="round"
+                    vectorEffect="non-scaling-stroke"
+                  />
+                  {/* Puntos en la línea */}
+                  {monthlyData.map((data, idx) => {
+                    const x = (idx + 0.5) * (100 / monthlyData.length);
+                    const y = 100 - (Math.min(data.compliance, 120) / 120) * 100;
+                    return (
+                      <circle 
+                        key={idx} 
+                        cx={x} 
+                        cy={y} 
+                        r="0.8" 
+                        fill="#f59e0b" 
+                        stroke="white" 
+                        strokeWidth="0.2" 
+                        vectorEffect="non-scaling-stroke" 
+                      />
+                    );
+                  })}
+                </svg>
+
                 {monthlyData.map((data, idx) => (
-                  <div key={idx} className="flex-1 flex flex-col items-center group h-full justify-end">
+                  <div key={idx} className="flex-1 flex flex-col items-center group h-full justify-end relative z-10">
                     <div className="w-full flex items-end justify-center gap-4 h-full relative">
                       {/* Porcentaje sobre las barras */}
-                      <span className="absolute -top-10 text-[11pt] font-black text-slate-800 bg-white px-3 py-1 rounded-lg border-2 border-slate-200 shadow-md whitespace-nowrap z-10">
+                      <span className="absolute -top-10 text-[11pt] font-black text-slate-800 bg-white px-3 py-1 rounded-lg border-2 border-slate-200 shadow-md whitespace-nowrap z-30">
                         {data.compliance.toFixed(1)}%
                       </span>
                       
                       {/* Barra Planificado */}
                       <div 
-                        className="bg-primary/90 w-1/3 rounded-t-xl shadow-lg border-x-2 border-t-2 border-primary/20 transition-all hover:scale-105" 
+                        className="bg-primary/90 w-1/3 rounded-t-xl shadow-lg border-x-2 border-t-2 border-primary/20 transition-all" 
                         style={{ height: `${(data.planned / maxVal) * 100}%` }}
                       />
                       
                       {/* Barra Real */}
                       <div 
-                        className="bg-emerald-500 w-1/3 rounded-t-xl shadow-lg border-x-2 border-t-2 border-emerald-600/20 transition-all hover:scale-105" 
+                        className="bg-emerald-500 w-1/3 rounded-t-xl shadow-lg border-x-2 border-t-2 border-emerald-600/20 transition-all" 
                         style={{ height: `${(data.real / maxVal) * 100}%` }}
                       />
                     </div>
@@ -205,7 +254,7 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
              </div>
 
              {/* LEYENDA DEL GRÁFICO */}
-             <div className="mt-8 flex justify-center gap-20 py-5 border-2 border-slate-200 bg-white shadow-lg rounded-full mx-auto px-16 shrink-0">
+             <div className="mt-8 flex justify-center gap-14 py-5 border-2 border-slate-200 bg-white shadow-lg rounded-full mx-auto px-16 shrink-0">
                 <div className="flex items-center gap-4">
                   <div className="w-8 h-8 bg-primary rounded-lg shadow-md border-2 border-primary/20" />
                   <span className="text-[12pt] font-black text-slate-700 uppercase tracking-widest">Planificado</span>
@@ -213,6 +262,10 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
                 <div className="flex items-center gap-4">
                   <div className="w-8 h-8 bg-emerald-500 rounded-lg shadow-md border-2 border-emerald-600/20" />
                   <span className="text-[12pt] font-black text-slate-700 uppercase tracking-widest">Producción Real</span>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-1 bg-[#f59e0b] rounded-full shadow-sm" />
+                  <span className="text-[12pt] font-black text-slate-700 uppercase tracking-widest">Cumplimiento %</span>
                 </div>
              </div>
           </div>
