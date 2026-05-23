@@ -6,17 +6,18 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { usePlannerStore } from '@/hooks/use-planner-store';
 import { getWeekDays } from '@/lib/planner-utils';
 import { format, startOfDay, addDays, setHours, setMinutes } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { BarChart3, Package, Layers, Plus, Trash2 } from 'lucide-react';
+import { BarChart3, Package, Layers, Plus } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 interface AdminReportToolProps {
   tasks: any[];
   weekStartDate: Date;
+  realProduction: Record<string, Record<string, Record<string, number>>>;
+  updateRealProduction: (lineId: string, flavor: string, dateKey: string, quantity: number) => void;
 }
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7"];
@@ -29,8 +30,7 @@ const PRODUCT_LIST = [
   "VITA TEA DURAZNO", "VITA TEA LIMON"
 ];
 
-export function AdminReportTool({ tasks, weekStartDate }: AdminReportToolProps) {
-  const { realProduction, updateRealProduction } = usePlannerStore();
+export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRealProduction }: AdminReportToolProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   
   const [addingFlavorToLine, setAddingFlavorToLine] = useState<string | null>(null);
@@ -93,7 +93,6 @@ export function AdminReportTool({ tasks, weekStartDate }: AdminReportToolProps) 
 
   const handleAddFlavor = (lineId: string) => {
     if (!selectedNewFlavor) return;
-    // Inicializar el sabor en el estado real si no existe
     updateRealProduction(lineId, selectedNewFlavor, format(weekDays[0], 'yyyy-MM-dd'), 0);
     setAddingFlavorToLine(null);
     setSelectedNewFlavor('');
@@ -133,7 +132,7 @@ export function AdminReportTool({ tasks, weekStartDate }: AdminReportToolProps) 
           <div className="flex-1">
             <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Instrucciones</p>
             <p className="text-[11px] font-bold text-slate-600 leading-tight">
-              Ingresa la producción real manualmente. Usa el botón "+" para agregar sabores no programados.
+              Ingresa la producción real manualmente o usa el botón "Cargar Producción" en el panel lateral.
             </p>
           </div>
         </Card>

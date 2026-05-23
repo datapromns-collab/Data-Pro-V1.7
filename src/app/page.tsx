@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -55,6 +54,7 @@ export default function PlannerPage() {
     tasks, 
     weekStartDate, 
     lineSpeeds,
+    realProduction,
     setWeekStartDate, 
     addTask, 
     updateTask, 
@@ -214,7 +214,7 @@ export default function PlannerPage() {
       case 'calculator': return { title: "Calculadora", subtitle: "Conversión cajas/tanques." };
       case 'requirement': return { title: "Requerimiento", subtitle: "Materiales e insumos semanales." };
       case 'daily': return { title: "Plan Día a Día", subtitle: "Detalle operativo semanal." };
-      case 'admin-report': return { title: "Reporte de Gestión", subtitle: "Métricas globales de producción." };
+      case 'admin-report': return { title: "Producción", subtitle: "Control de producción real vs programada." };
       default: return { title: `Programación Línea ${selectedLine}`, subtitle: "" };
     }
   }, [activeTab, selectedLine]);
@@ -242,7 +242,7 @@ export default function PlannerPage() {
               </div>
               <div className="flex flex-col">
                 <h1 className="text-xl font-headline font-bold text-slate-900 tracking-tight leading-none">
-                  {isReportView ? 'Reporte de Gestión' : 'Plan Semanal'}
+                  {isReportView ? 'Producción' : 'Plan Semanal'}
                 </h1>
                 <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mt-1">Pro Edition</span>
               </div>
@@ -309,7 +309,7 @@ export default function PlannerPage() {
                           onClick={() => setActiveTab('admin-report')} 
                           className="w-full gap-2 text-primary font-black uppercase text-xs tracking-widest border-primary/20 hover:bg-primary/5 rounded-2xl py-6"
                         >
-                          <BarChart3 className="h-4 w-4" /> Reporte de Gestión
+                          <BarChart3 className="h-4 w-4" /> Producción Real
                         </Button>
                       </>
                     ) : (
@@ -435,7 +435,12 @@ export default function PlannerPage() {
                   <RequirementSection onPrint={handlePrintRequirements} tasks={tasks} weekStartDate={weekStartDate} />
                 </TabsContent>
                 <TabsContent value="admin-report" className="m-0 h-full">
-                  <AdminReportTool tasks={tasks} weekStartDate={weekStartDate} />
+                  <AdminReportTool 
+                    tasks={tasks} 
+                    weekStartDate={weekStartDate} 
+                    realProduction={realProduction}
+                    updateRealProduction={updateRealProduction}
+                  />
                 </TabsContent>
               </div>
             </Tabs>
