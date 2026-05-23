@@ -46,8 +46,8 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
 
   return (
     <div className="bg-white w-full print:p-0 h-full">
-      {/* PÁGINA 1: RESUMEN SEMANAL (Estilo Imagen) */}
-      <div className="page-break-section h-full flex flex-col p-1">
+      {/* PÁGINA 1: RESUMEN SEMANAL */}
+      <div className="page-break-section h-screen flex flex-col p-1" style={{ pageBreakInside: 'avoid' }}>
         <div className="mb-1 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
           <div className="flex-1">
             <h1 className="text-xl font-headline font-black text-slate-900 leading-none uppercase">Control Semanal de Producción</h1>
@@ -160,13 +160,16 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
         }, 0);
 
         return (
-          <div key={lineId} className="page-break-section h-full flex flex-col p-1">
+          <div key={lineId} className="page-break-section h-screen flex flex-col p-1" style={{ pageBreakInside: 'avoid' }}>
             <div className="mb-1 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
-              <div>
+              <div className="flex-1">
                 <h1 className="text-lg font-headline font-black text-slate-900 leading-none uppercase">Producción Real Detallada</h1>
                 <p className="text-primary font-black text-[10px] uppercase tracking-widest mt-0.5">Línea de Producción {lineId}</p>
               </div>
-              <div className="text-right">
+              <div className="flex-1 flex justify-center">
+                {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={110} height={40} className="object-contain" />}
+              </div>
+              <div className="flex-1 text-right">
                 <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Confidencial - Planta</p>
                 <p className="text-base font-black text-slate-900 uppercase leading-none">Semana {weekNumber}</p>
                 <p className="text-[8px] text-slate-400 font-bold uppercase mt-0.5">{format(weekStartDate, "dd 'de' MMMM yyyy", { locale: es })}</p>
@@ -174,14 +177,14 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
             </div>
 
             <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm w-full">
-              <table className="w-full border-collapse text-[9pt] h-full">
+              <table className="w-full border-collapse text-[8.5pt] h-full">
                 <thead>
                   <tr className="bg-[#4a7ebb] text-white font-black uppercase h-8">
                     <th className="px-2 py-0 border border-slate-900 text-left min-w-[180px]">SABOR</th>
                     {weekDays.map((day, idx) => (
                       <th key={idx} className="px-1 py-0 border border-slate-900 text-center w-[85px]">
-                        <div className="text-[6.5px] opacity-80 leading-none">{format(day, 'dd/MM/yyyy')}</div>
-                        <div className="leading-none">{format(day, 'EEE', { locale: es }).toUpperCase()}</div>
+                        <div className="text-[6.5px] opacity-80 leading-none font-bold">{format(day, 'dd/MM/yyyy')}</div>
+                        <div className="leading-none text-[8pt]">{format(day, 'EEE', { locale: es }).toUpperCase()}</div>
                       </th>
                     ))}
                     <th className="px-2 py-0 border border-slate-900 text-center bg-[#2f5597] w-20">TOTAL</th>
@@ -194,7 +197,7 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
 
                     return (
                       <tr key={fIdx} className={`font-bold text-slate-800 ${fIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
-                        <td className="px-2 py-0 border border-slate-300 uppercase">{flavor}</td>
+                        <td className="px-2 py-0 border border-slate-300 uppercase leading-none">{flavor}</td>
                         {dailyVals.map((val, dIdx) => (
                           <td key={dIdx} className="px-1 py-0 border border-slate-300 text-center tabular-nums">
                             {val > 0 ? val.toLocaleString('es-ES') : '0'}
@@ -229,7 +232,7 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
             <div className="mt-1 pt-1 flex justify-between items-end border-t border-slate-200 text-[7px] font-black text-slate-400 uppercase tracking-widest shrink-0">
               <div className="space-y-0.5">
                 <p>SISTEMA DE GESTIÓN DE PLANTA - DETALLE DE LÍNEA</p>
-                <p>PÁGINA {parseInt(lineId) + 1} DE 9</p>
+                <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es })}</p>
               </div>
               <div className="text-right">
                 <p>MULTINACIONAL DE SABORES</p>
