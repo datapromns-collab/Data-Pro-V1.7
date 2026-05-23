@@ -341,24 +341,28 @@ export default function PlannerPage() {
 
         <main className="flex-1 flex flex-col h-screen overflow-hidden no-print">
           <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-end shrink-0 gap-2">
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={handlePrintSummary}
-              className="gap-2 font-bold text-slate-600 hover:text-primary"
-            >
-              <LayoutDashboard className="h-4 w-4" /> 
-              <span className="hidden sm:inline">Resumen</span>
-            </Button>
-            <Button 
-              variant="ghost" 
-              size="sm" 
-              onClick={handlePrintPlan}
-              className="gap-2 font-bold text-slate-600 hover:text-primary"
-            >
-              <Printer className="h-4 w-4" /> 
-              <span className="hidden sm:inline">Programa</span>
-            </Button>
+            {!isReportView && (
+              <>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={handlePrintSummary}
+                  className="gap-2 font-bold text-slate-600 hover:text-primary"
+                >
+                  <LayoutDashboard className="h-4 w-4" /> 
+                  <span className="hidden sm:inline">Resumen</span>
+                </Button>
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={handlePrintPlan}
+                  className="gap-2 font-bold text-slate-600 hover:text-primary"
+                >
+                  <Printer className="h-4 w-4" /> 
+                  <span className="hidden sm:inline">Programa</span>
+                </Button>
+              </>
+            )}
           </header>
 
           <div className="flex-1 overflow-auto p-6 lg:p-8">
