@@ -210,10 +210,16 @@ export default function PlannerPage() {
           <div className="p-6">
             <div className="flex items-center gap-3">
               <div className="bg-primary p-2.5 rounded-2xl shadow-lg shadow-primary/20">
-                <CalendarIcon className="h-6 w-6 text-white" />
+                {activeTab === 'admin-report' ? (
+                  <BarChart3 className="h-6 w-6 text-white" />
+                ) : (
+                  <CalendarIcon className="h-6 w-6 text-white" />
+                )}
               </div>
               <div className="flex flex-col">
-                <h1 className="text-xl font-headline font-bold text-slate-900 tracking-tight leading-none">Plan Semanal</h1>
+                <h1 className="text-xl font-headline font-bold text-slate-900 tracking-tight leading-none">
+                  {activeTab === 'admin-report' ? 'Reporte de Gestión' : 'Plan Semanal'}
+                </h1>
                 <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mt-1">Pro Edition</span>
               </div>
             </div>
