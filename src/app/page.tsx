@@ -268,7 +268,6 @@ export default function PlannerPage() {
       case 'daily': return { title: "Plan Día a Día", subtitle: "Detalle operativo semanal." };
       case 'admin-report': return { title: "Control de Producción", subtitle: "Seguimiento de producción real semanal." };
       case 'compliance-report': return { title: "Reporte de Cumplimiento", subtitle: "Planificado vs Producción Real." };
-      case 'monthly-report': return { title: "Resumen Mensual", subtitle: "Producción consolidada del mes." };
       default: return { title: `Programación Línea ${selectedLine}`, subtitle: "" };
     }
   }, [activeTab, selectedLine]);
@@ -279,7 +278,7 @@ export default function PlannerPage() {
     return <LoginForm onLogin={login} />;
   }
 
-  const isReportView = ['admin-report', 'compliance-report', 'monthly-report'].includes(activeTab);
+  const isReportView = ['admin-report', 'compliance-report'].includes(activeTab);
 
   return (
     <SidebarProvider>
@@ -459,9 +458,6 @@ export default function PlannerPage() {
                       <TabsTrigger value="compliance-report" className="gap-2 px-4 font-bold">
                         <CheckCircle2 className="h-4 w-4" /> Cumplimiento
                       </TabsTrigger>
-                      <TabsTrigger value="monthly-report" className="gap-2 px-4 font-bold">
-                        <FileSpreadsheet className="h-4 w-4" /> Mensual
-                      </TabsTrigger>
                     </>
                   ) : (
                     <>
@@ -495,12 +491,13 @@ export default function PlannerPage() {
                 </TabsContent>
                 <TabsContent value="admin-report" className="m-0 h-full">
                   <AdminReportTool 
-                    view="weekly"
+                    view="production"
                     tasks={tasks} 
                     weekStartDate={weekStartDate} 
                     realProduction={realProduction}
                     updateRealProduction={updateRealProduction}
                     onPrintWeeklyControl={handlePrintWeeklyControl}
+                    onPrintMonthly={handlePrintMonthly}
                   />
                 </TabsContent>
                 <TabsContent value="compliance-report" className="m-0 h-full">
@@ -511,16 +508,6 @@ export default function PlannerPage() {
                     realProduction={realProduction}
                     updateRealProduction={updateRealProduction}
                     onPrintCompliance={handlePrintCompliance}
-                  />
-                </TabsContent>
-                <TabsContent value="monthly-report" className="m-0 h-full">
-                  <AdminReportTool 
-                    view="monthly"
-                    tasks={tasks} 
-                    weekStartDate={weekStartDate} 
-                    realProduction={realProduction}
-                    updateRealProduction={updateRealProduction}
-                    onPrintMonthly={handlePrintMonthly}
                   />
                 </TabsContent>
               </div>
