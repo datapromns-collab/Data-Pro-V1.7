@@ -83,6 +83,7 @@ export default function PlannerPage() {
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
   const [activeTab, setActiveTab] = useState("gantt");
+  const [hasRedirectedAdmin, setHasRedirectedAdmin] = useState(false);
   const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly'>('plan');
   const [emitDate, setEmitDate] = useState('');
   
@@ -92,11 +93,13 @@ export default function PlannerPage() {
 
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
+  // Redirección inicial para administradores
   useEffect(() => {
-    if (authLoaded && user && isAdmin && activeTab === 'admin-report') {
-      // Keep it as is if already on admin-report
+    if (authLoaded && user && isAdmin && !hasRedirectedAdmin) {
+      setActiveTab('admin-report');
+      setHasRedirectedAdmin(true);
     }
-  }, [authLoaded, !!user, isAdmin, activeTab]);
+  }, [authLoaded, user, isAdmin, hasRedirectedAdmin]);
 
   useEffect(() => {
     if (plannerLoaded) {
@@ -541,4 +544,3 @@ export default function PlannerPage() {
     </SidebarProvider>
   );
 }
-
