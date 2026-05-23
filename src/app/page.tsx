@@ -93,10 +93,10 @@ export default function PlannerPage() {
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
   useEffect(() => {
-    if (authLoaded && user && isAdmin) {
-      setActiveTab('admin-report');
+    if (authLoaded && user && isAdmin && activeTab === 'admin-report') {
+      // Keep it as is if already on admin-report
     }
-  }, [authLoaded, !!user, isAdmin]);
+  }, [authLoaded, !!user, isAdmin, activeTab]);
 
   useEffect(() => {
     if (plannerLoaded) {
@@ -326,7 +326,7 @@ export default function PlannerPage() {
                         <Button 
                           variant="outline" 
                           size="sm" 
-                          onClick={() => setActiveTab('admin-report')} 
+                          onClick={() => { setActiveTab('admin-report'); }} 
                           className="w-full gap-2 text-primary font-black uppercase text-xs tracking-widest border-primary/20 hover:bg-primary/5 rounded-2xl py-6"
                         >
                           <BarChart3 className="h-4 w-4" /> Reporte De Gestión
@@ -432,9 +432,6 @@ export default function PlannerPage() {
                         </>
                       )}
                       <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Requerimiento</TabsTrigger>
-                      {isAdmin && (
-                        <TabsTrigger value="admin-report" className="gap-2 px-4 font-bold"><BarChart3 className="h-4 w-4" /> Producción</TabsTrigger>
-                      )}
                     </>
                   )}
                 </TabsList>
