@@ -14,7 +14,7 @@ import { BarChart3, Package, Layers, FileDown, FileStack, CheckCircle2, FileSpre
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, BarChart as RechartsBarChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Line, ComposedChart, Legend, Cell, LabelList } from 'recharts';
 
 interface AdminReportToolProps {
@@ -30,6 +30,21 @@ interface AdminReportToolProps {
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const DAYS_NAMES = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
+
+const chartConfig = {
+  planned: {
+    label: "Planificado",
+    color: "hsl(var(--primary))",
+  },
+  real: {
+    label: "Producción",
+    color: "#10b981",
+  },
+  compliance: {
+    label: "Cumplimiento %",
+    color: "#f59e0b",
+  },
+} satisfies ChartConfig;
 
 export function AdminReportTool({ view, tasks, weekStartDate, realProduction, updateRealProduction, onPrintMonthly, onPrintWeeklyControl, onPrintCompliance }: AdminReportToolProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
@@ -118,11 +133,8 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
       let totalPlanned = 0;
       let totalReal = 0;
 
-      // Calculamos planificado para todo el mes sumando cada día
       daysInMonth.forEach(day => {
         totalPlanned += getLineDailyPlanned(lineId, day);
-        
-        // Sumamos real para este día
         PRODUCT_LIST.forEach(product => {
           const dateKey = format(day, 'yyyy-MM-dd');
           totalReal += realProduction[lineId]?.[product]?.[dateKey] || 0;
@@ -347,10 +359,6 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
                   </thead>
                   <tbody>
                     {PRODUCT_LIST.map((flavor, idx) => {
-                      const lineVals = ALL_LINES_SUMMARY.map(l => (realProduction[l]?.[flavor] ? Object.values(realProduction[l][flavor]).reduce((a, b) => a + b, 0) : 0));
-                      // Nota: Esta lógica mensual de planillas asume la producción histórica guardada
-                      // Para el reporte mensual real, necesitamos filtrar por el mes seleccionado
-                      
                       const monthStart = startOfMonth(new Date(parseInt(selectedYear), parseInt(selectedMonth) - 1));
                       const monthEnd = endOfMonth(monthStart);
                       
@@ -637,7 +645,7 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
                   </div>
                 </div>
                 
-                <div className="flex-1 w-full">
+                <ChartContainer config={chartConfig} className="flex-1 w-full">
                   <ResponsiveContainer width="100%" height="100%">
                     <ComposedChart data={monthlyComplianceData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
@@ -660,7 +668,7 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
                         orientation="right" 
                         domain={[0, 120]}
                         axisLine={false} 
-                        tickLine={false}
+                        tickLine={false} 
                         tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }}
                         tickFormatter={(val) => `${val}%`}
                       />
@@ -671,7 +679,7 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
                       <Bar 
                         yAxisId="left" 
                         dataKey="planned" 
-                        fill="hsl(var(--primary))" 
+                        fill="var(--color-planned)" 
                         radius={[4, 4, 0, 0]} 
                         barSize={30} 
                         name="Planificado"
@@ -679,7 +687,7 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
                       <Bar 
                         yAxisId="left" 
                         dataKey="real" 
-                        fill="#10b981" 
+                        fill="var(--color-real)" 
                         radius={[4, 4, 0, 0]} 
                         barSize={30} 
                         name="Producción"
@@ -688,14 +696,14 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
                         yAxisId="right" 
                         type="monotone" 
                         dataKey="compliance" 
-                        stroke="#f59e0b" 
+                        stroke="var(--color-compliance)" 
                         strokeWidth={3} 
-                        dot={{ r: 4, fill: '#f59e0b', strokeWidth: 2, stroke: '#fff' }}
+                        dot={{ r: 4, fill: 'var(--color-compliance)', strokeWidth: 2, stroke: '#fff' }}
                         name="Cumplimiento %"
                       />
                     </ComposedChart>
                   </ResponsiveContainer>
-                </div>
+                </ChartContainer>
               </Card>
             </div>
           </TabsContent>
@@ -704,3 +712,4 @@ export function AdminReportTool({ view, tasks, weekStartDate, realProduction, up
     </div>
   );
 }
+
