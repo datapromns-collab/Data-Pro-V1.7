@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -7,12 +6,8 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Calendar } from '@/components/ui/calendar';
-import { format } from 'date-fns';
-import { es } from 'date-fns/locale';
-import { CalendarIcon, Package, BarChart3, Loader2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { format, parseISO } from 'date-fns';
+import { Package, BarChart3, Loader2, Calendar } from 'lucide-react';
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7"];
 const PRODUCT_LIST = [
@@ -29,22 +24,21 @@ interface ProductionEntryDialogProps {
 }
 
 export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEntryDialogProps) {
-  const [date, setDate] = useState<Date>(new Date());
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  // Inicializamos con la fecha actual en formato YYYY-MM-DD para el input type="date"
+  const [dateStr, setDateStr] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
   const [lineId, setLineId] = useState<string>("");
   const [flavor, setFlavor] = useState<string>("");
   const [quantity, setQuantity] = useState<string>("");
   const [isSaving, setIsSaving] = useState(false);
 
   const handleSave = () => {
-    if (!date || !lineId || !flavor || !quantity) return;
+    if (!dateStr || !lineId || !flavor || !quantity) return;
     
     setIsSaving(true);
-    const dateKey = format(date, 'yyyy-MM-dd');
     
     // Simular un pequeño delay para feedback visual
     setTimeout(() => {
-      onSave(lineId, flavor, dateKey, Number(quantity));
+      onSave(lineId, flavor, dateStr, Number(quantity));
       setIsSaving(false);
       resetAndClose();
     }, 400);
@@ -61,7 +55,6 @@ export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEnt
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
         className="sm:max-w-[450px] rounded-3xl"
-        onOpenAutoFocus={(e) => e.preventDefault()} // Evita que el dialog atrape el foco inicial
       >
         <DialogHeader>
           <div className="flex items-center gap-3 mb-2">
@@ -76,41 +69,18 @@ export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEnt
         </DialogHeader>
 
         <div className="grid gap-6 py-4">
-          {/* Fecha */}
+          {/* Fecha Manual */}
           <div className="grid gap-2">
-            <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Fecha de Producción</Label>
-            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-full h-12 justify-start text-left font-bold rounded-2xl border-slate-100 bg-slate-50",
-                    !date && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon className="mr-3 h-4 w-4 text-emerald-500" />
-                  {date ? format(date, "PPP", { locale: es }) : <span>Seleccionar fecha</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent 
-                className="w-auto p-0 z-[100]" 
-                align="start"
-                onOpenAutoFocus={(e) => e.preventDefault()} // Permite interactuar con el calendario sin que el dialog robe el foco
-              >
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={(d) => {
-                    if (d) {
-                      setDate(d);
-                      setIsCalendarOpen(false);
-                    }
-                  }}
-                  initialFocus
-                  locale={es}
-                />
-              </PopoverContent>
-            </Popover>
+            <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Fecha de Producción (Día/Mes/Año)</Label>
+            <div className="relative">
+              <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-emerald-500 z-10" />
+              <Input
+                type="date"
+                value={dateStr}
+                onChange={(e) => setDateStr(e.target.value)}
+                className="h-12 pl-10 rounded-2xl border-slate-100 bg-slate-50 font-bold focus:bg-white transition-all"
+              />
+            </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -121,7 +91,7 @@ export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEnt
                 <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 font-bold">
                   <SelectValue placeholder="Línea" />
                 </SelectTrigger>
-                <SelectContent className="rounded-xl z-[100]">
+                <SelectContent className="rounded-xl">
                   {LINES.map(l => <SelectItem key={l} value={l} className="font-bold">Línea {l}</SelectItem>)}
                 </SelectContent>
               </Select>
@@ -134,7 +104,7 @@ export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEnt
                 <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 font-bold">
                   <SelectValue placeholder="Sabor" />
                 </SelectTrigger>
-                <SelectContent className="rounded-xl z-[100]">
+                <SelectContent className="rounded-xl">
                   {PRODUCT_LIST.map(p => <SelectItem key={p} value={p} className="font-bold">{p}</SelectItem>)}
                 </SelectContent>
               </Select>
