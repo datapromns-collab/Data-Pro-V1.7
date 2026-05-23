@@ -152,7 +152,7 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear }: M
 
       <div className="mt-4 flex justify-between items-end border-t border-slate-200 pt-2 text-[7px] font-black text-slate-400 uppercase tracking-widest">
         <div className="space-y-0.5">
-          <p>SISTEMA DE GESTIÓN DE PLANTA - PLAN SEMANAL PRO</p>
+          <p>SISTEMA DE GESTIÓN DE PLANTA</p>
           <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm')}</p>
         </div>
         <div className="text-right">
