@@ -30,6 +30,7 @@ interface ProductionEntryDialogProps {
 
 export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEntryDialogProps) {
   const [date, setDate] = useState<Date>(new Date());
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
   const [lineId, setLineId] = useState<string>("");
   const [flavor, setFlavor] = useState<string>("");
   const [quantity, setQuantity] = useState<string>("");
@@ -75,7 +76,7 @@ export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEnt
           {/* Fecha */}
           <div className="grid gap-2">
             <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Fecha de Producción</Label>
-            <Popover>
+            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant={"outline"}
@@ -92,7 +93,12 @@ export function ProductionEntryDialog({ isOpen, onClose, onSave }: ProductionEnt
                 <Calendar
                   mode="single"
                   selected={date}
-                  onSelect={(d) => d && setDate(d)}
+                  onSelect={(d) => {
+                    if (d) {
+                      setDate(d);
+                      setIsCalendarOpen(false);
+                    }
+                  }}
                   initialFocus
                   locale={es}
                 />
