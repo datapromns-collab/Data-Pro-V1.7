@@ -19,7 +19,8 @@ import {
   BarChart3,
   ChevronLeft,
   PackageCheck,
-  FileDown
+  FileDown,
+  FileStack
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -33,6 +34,7 @@ import { DailyPlanSection } from '@/components/planner/DailyPlanSection';
 import { AdminReportTool } from '@/components/planner/AdminReportTool';
 import { ProductionEntryDialog } from '@/components/planner/ProductionEntryDialog';
 import { MonthlyReport } from '@/components/planner/MonthlyReport';
+import { WeeklyControlReport } from '@/components/planner/WeeklyControlReport';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
@@ -84,7 +86,7 @@ export default function PlannerPage() {
   const [selectedLine, setSelectedLine] = useState("1");
   const [activeTab, setActiveTab] = useState("gantt");
   const [hasRedirectedAdmin, setHasRedirectedAdmin] = useState(false);
-  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly'>('plan');
+  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control'>('plan');
   const [emitDate, setEmitDate] = useState('');
   
   // State for monthly report print parameters
@@ -149,6 +151,18 @@ export default function PlannerPage() {
     setSelectedMonth(month);
     setSelectedYear(year);
     setPrintMode('monthly');
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: landscape; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
+
+  const handlePrintWeeklyControl = () => {
+    setPrintMode('weekly-control');
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: landscape; margin: 5mm; }';
@@ -465,6 +479,7 @@ export default function PlannerPage() {
                     realProduction={realProduction}
                     updateRealProduction={updateRealProduction}
                     onPrintMonthly={handlePrintMonthly}
+                    onPrintWeeklyControl={handlePrintWeeklyControl}
                   />
                 </TabsContent>
               </div>
@@ -514,6 +529,14 @@ export default function PlannerPage() {
                 realProduction={realProduction} 
                 selectedMonth={selectedMonth} 
                 selectedYear={selectedYear} 
+              />
+            </div>
+          )}
+          {printMode === 'weekly-control' && (
+            <div className="p-0">
+              <WeeklyControlReport 
+                realProduction={realProduction} 
+                weekStartDate={weekStartDate} 
               />
             </div>
           )}

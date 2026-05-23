@@ -10,7 +10,7 @@ import { Button } from '@/components/ui/button';
 import { getWeekDays, PRODUCT_LIST, ALL_LINES_SUMMARY } from '@/lib/planner-utils';
 import { format, startOfDay, addDays, setHours, setMinutes, parseISO, startOfMonth, endOfMonth, isWithinInterval } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { BarChart3, Package, Layers, CalendarDays, FileSpreadsheet, FileDown } from 'lucide-react';
+import { BarChart3, Package, Layers, CalendarDays, FileSpreadsheet, FileDown, FileStack } from 'lucide-react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -21,12 +21,13 @@ interface AdminReportToolProps {
   realProduction: Record<string, Record<string, Record<string, number>>>;
   updateRealProduction: (lineId: string, flavor: string, dateKey: string, quantity: number) => void;
   onPrintMonthly?: (month: string, year: string) => void;
+  onPrintWeeklyControl?: () => void;
 }
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7"];
 const DAYS_NAMES = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
 
-export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRealProduction, onPrintMonthly }: AdminReportToolProps) {
+export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRealProduction, onPrintMonthly, onPrintWeeklyControl }: AdminReportToolProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   
   const [activeView, setActiveTab] = useState("weekly");
@@ -123,40 +124,52 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
             </TabsTrigger>
           </TabsList>
 
-          {activeView === 'monthly' && (
-            <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3">
+            {activeView === 'weekly' ? (
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={() => onPrintMonthly?.(selectedMonth, selectedYear)}
+                onClick={onPrintWeeklyControl}
                 className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-11 px-4 rounded-xl"
               >
-                <FileDown className="h-4 w-4" />
-                Exportar PDF
+                <FileStack className="h-4 w-4" />
+                Exportar Reporte Semanal
               </Button>
-              <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-                <SelectTrigger className="w-40 bg-white border-slate-200 font-black uppercase text-xs tracking-widest rounded-xl h-11">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {Array.from({ length: 12 }).map((_, i) => (
-                    <SelectItem key={i} value={(i + 1).toString().padStart(2, '0')} className="font-bold uppercase text-[10px]">
-                      {format(new Date(2024, i, 1), 'MMMM', { locale: es }).toUpperCase()}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <div className="relative">
-                <Input 
-                  type="number"
-                  value={selectedYear}
-                  onChange={(e) => setSelectedYear(e.target.value)}
-                  className="w-24 bg-white border-slate-200 font-black text-center rounded-xl h-11 text-xs focus:ring-primary/20 transition-all"
-                  placeholder="Año"
-                />
-              </div>
-            </div>
-          )}
+            ) : (
+              <>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => onPrintMonthly?.(selectedMonth, selectedYear)}
+                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-11 px-4 rounded-xl"
+                >
+                  <FileDown className="h-4 w-4" />
+                  Exportar PDF
+                </Button>
+                <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+                  <SelectTrigger className="w-40 bg-white border-slate-200 font-black uppercase text-xs tracking-widest rounded-xl h-11">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Array.from({ length: 12 }).map((_, i) => (
+                      <SelectItem key={i} value={(i + 1).toString().padStart(2, '0')} className="font-bold uppercase text-[10px]">
+                        {format(new Date(2024, i, 1), 'MMMM', { locale: es }).toUpperCase()}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <div className="relative">
+                  <Input 
+                    type="number"
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                    className="w-24 bg-white border-slate-200 font-black text-center rounded-xl h-11 text-xs focus:ring-primary/20 transition-all"
+                    placeholder="Año"
+                  />
+                </div>
+              </>
+            )}
+          </div>
         </div>
 
         <TabsContent value="weekly" className="m-0 space-y-8">
@@ -190,7 +203,7 @@ export function AdminReportTool({ tasks, weekStartDate, realProduction, updateRe
                 <Package className="h-6 w-6 text-amber-500" />
               </div>
               <div className="flex-1">
-                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">Instrucciones</p>
+                <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Instrucciones</p>
                 <p className="text-[11px] font-bold text-slate-600 leading-tight">
                   Ingresa la producción real en las celdas de la tabla. Los cambios se guardan automáticamente.
                 </p>
