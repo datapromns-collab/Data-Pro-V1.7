@@ -21,6 +21,7 @@ const SAMI_COLOR = '#FEF9C3';
 const SPECIAL_TASK_COLOR = '#FFFF00'; 
 const AUTO_CP_COLOR = '#FFC000';
 const MATERIAL_TEST_COLOR = '#BBF7D0';
+const OTHER_TASK_COLOR = '#D1FAE5';
 
 export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: ProductionGanttProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
@@ -111,7 +112,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     return Object.entries(summary).sort((a, b) => a[0].localeCompare(b[0]));
   }, [tasks]);
 
-  const getBarStyle = (start: Date, end: Date, day: Date, type: 'production' | 'special' | 'sami' | 'cp' | 'test') => {
+  const getBarStyle = (start: Date, end: Date, day: Date, type: 'production' | 'special' | 'sami' | 'cp' | 'test' | 'other') => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const rowEnd = addDays(rowStart, 1);
 
@@ -144,6 +145,9 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
       borderColor = '#D97706';
     } else if (type === 'test') {
       bgColor = MATERIAL_TEST_COLOR;
+      borderColor = '#86EFAC';
+    } else if (type === 'other') {
+      bgColor = OTHER_TASK_COLOR;
       borderColor = '#86EFAC';
     }
 
@@ -268,11 +272,13 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                 {tasks.map((task) => {
                   const isSpecial = isSpecialTask(task.name);
                   const isMaterialTest = task.name.toUpperCase().includes('PRUEBA DE MATERIAL');
+                  const isOther = task.name.toUpperCase() === 'OTROS';
                   const isCS = task.name === 'CS';
                   const taskDisplayName = (task.name === 'OTROS' && task.description) ? task.description : task.name;
                   
-                  let type: 'production' | 'special' | 'sami' | 'cp' | 'test' = 'production';
-                  if (isMaterialTest) type = 'test';
+                  let type: 'production' | 'special' | 'sami' | 'cp' | 'test' | 'other' = 'production';
+                  if (isOther) type = 'other';
+                  else if (isMaterialTest) type = 'test';
                   else if (isSpecial) type = 'special';
 
                   const style = getBarStyle(task.startTime, task.endTime, day, type);
@@ -284,7 +290,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                       onClick={() => onTaskClick?.(task)}
                       className={cn(
                         "absolute inset-y-1 rounded border shadow-[0_1px_2px_rgba(0,0,0,0.05)] z-[10] cursor-pointer group/task overflow-hidden",
-                        (isSpecial || isMaterialTest) ? "z-[11]" : ""
+                        (isSpecial || isMaterialTest || isOther) ? "z-[11]" : ""
                       )}
                       style={style}
                     >
@@ -308,7 +314,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                               )}>
                                 {taskDisplayName}
                               </span>
-                              {!isSpecial && !isMaterialTest && (
+                              {!isSpecial && !isMaterialTest && !isOther && (
                                 <span className="font-bold text-slate-700 text-[11px] leading-tight shrink-0">
                                   {Math.round(shifts.dayLabel.qty).toLocaleString('es-ES')}
                                 </span>
@@ -335,8 +341,8 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                               )}>
                                 {taskDisplayName}
                               </span>
-                              {!isSpecial && !isMaterialTest && (
-                                <span className="font-bold text-slate-800 text-[11px] leading-tight shrink-0">
+                              {!isSpecial && !isMaterialTest && !isOther && (
+                                <span className="font-bold text-slate-800 text-[11px] conical shrink-0">
                                   {Math.round(shifts.nightLabel.qty).toLocaleString('es-ES')}
                                 </span>
                               )}
@@ -374,6 +380,10 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
             <div className="flex items-center gap-2">
               <div className="w-5 h-2 rounded-sm" style={{ backgroundColor: MATERIAL_TEST_COLOR }}></div>
               <span className="text-[9px] font-bold text-slate-400 uppercase">PRUEBA MAT.</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-5 h-2 rounded-sm" style={{ backgroundColor: OTHER_TASK_COLOR }}></div>
+              <span className="text-[9px] font-bold text-slate-400 uppercase">OTROS</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-5 h-2 rounded-sm" style={{ backgroundColor: AUTO_CP_COLOR }}></div>

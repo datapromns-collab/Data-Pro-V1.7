@@ -23,6 +23,7 @@ const SPECIAL_TASK_COLOR = '#FFFF00';
 const AUTO_CP_COLOR = '#FFC000';
 const SAMI_COLOR = '#FEF9C3';
 const MATERIAL_TEST_COLOR = '#BBF7D0';
+const OTHER_TASK_COLOR = '#D1FAE5';
 
 export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSectionProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
@@ -73,7 +74,7 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
       }, 0);
   };
 
-  const getBarStyle = (start: Date, end: Date, day: Date, type: 'production' | 'special' | 'sami' | 'cp' | 'test') => {
+  const getBarStyle = (start: Date, end: Date, day: Date, type: 'production' | 'special' | 'sami' | 'cp' | 'test' | 'other') => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const rowEnd = addDays(rowStart, 1);
 
@@ -106,6 +107,9 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
       borderColor = '#D97706';
     } else if (type === 'test') {
       bgColor = MATERIAL_TEST_COLOR;
+      borderColor = '#86EFAC';
+    } else if (type === 'other') {
+      bgColor = OTHER_TASK_COLOR;
       borderColor = '#86EFAC';
     }
 
@@ -205,10 +209,12 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                           {lineTasks.map((task) => {
                             const isSpecial = isSpecialTask(task.name);
                             const isMaterialTest = task.name.toUpperCase().includes('PRUEBA DE MATERIAL');
+                            const isOther = task.name.toUpperCase() === 'OTROS';
                             const taskDisplayName = (task.name === 'OTROS' && task.description) ? task.description : task.name;
                             
-                            let type: 'production' | 'special' | 'sami' | 'cp' | 'test' = 'production';
-                            if (isMaterialTest) type = 'test';
+                            let type: 'production' | 'special' | 'sami' | 'cp' | 'test' | 'other' = 'production';
+                            if (isOther) type = 'other';
+                            else if (isMaterialTest) type = 'test';
                             else if (isSpecial) type = 'special';
 
                             const style = getBarStyle(task.startTime, task.endTime, day, type);
@@ -227,14 +233,14 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                                 key={task.id}
                                 className={cn(
                                   "absolute inset-y-1.5 rounded-lg border-2 shadow-sm z-10 flex flex-col justify-center px-2 overflow-hidden print:inset-y-1 print:rounded-md print:border-2",
-                                  (isSpecial || isMaterialTest) ? "z-20" : ""
+                                  (isSpecial || isMaterialTest || isOther) ? "z-20" : ""
                                 )}
                                 style={style}
                               >
                                 <span className="text-[10px] font-black text-slate-900 uppercase truncate leading-none mb-0.5">
                                   {taskDisplayName}
                                 </span>
-                                {!isSpecial && !isMaterialTest && task.quantity > 0 && (
+                                {!isSpecial && !isMaterialTest && !isOther && task.quantity > 0 && (
                                   <div className="flex items-center gap-1 opacity-80">
                                     <span className="text-[9px] font-bold text-slate-700 leading-none tabular-nums">
                                       {Math.round(dailyPortion).toLocaleString('es-ES')}
