@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useMemo } from 'react';
@@ -16,7 +17,7 @@ interface DailyPlanSectionProps {
   onPrint?: () => void;
 }
 
-const LINES = ["1", "2", "3", "4", "5", "6", "7"];
+const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const PRODUCTION_COLOR = '#83CCEB';
 const SPECIAL_TASK_COLOR = '#FFFF00';
 const AUTO_CP_COLOR = '#FFC000';
@@ -28,7 +29,7 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
 
   const isSpecialTask = (name: string) => {
     if (!name) return false;
-    const specials = ['CS', 'CP', 'CIP', 'MTTO', 'PARADA', 'S.A.M.I', 'PASIVACIÓN', 'PRUEBA DE MATERIAL'];
+    const specials = ['CS', 'CP', 'CIP', 'MTTO', 'PARADA', 'S.A.M.I', 'PASIVACIÓN', 'PRUEBA DE MATERIAL', 'OTROS'];
     return specials.some(s => name.toUpperCase().includes(s));
   };
 
@@ -204,6 +205,7 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                           {lineTasks.map((task) => {
                             const isSpecial = isSpecialTask(task.name);
                             const isMaterialTest = task.name.toUpperCase().includes('PRUEBA DE MATERIAL');
+                            const taskDisplayName = (task.name === 'OTROS' && task.description) ? task.description : task.name;
                             
                             let type: 'production' | 'special' | 'sami' | 'cp' | 'test' = 'production';
                             if (isMaterialTest) type = 'test';
@@ -230,7 +232,7 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
                                 style={style}
                               >
                                 <span className="text-[10px] font-black text-slate-900 uppercase truncate leading-none mb-0.5">
-                                  {task.name}
+                                  {taskDisplayName}
                                 </span>
                                 {!isSpecial && !isMaterialTest && task.quantity > 0 && (
                                   <div className="flex items-center gap-1 opacity-80">

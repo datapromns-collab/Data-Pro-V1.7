@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo } from 'react';
@@ -32,7 +33,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
 
   const isSpecialTask = (name: string) => {
     if (!name) return false;
-    const specials = ['CS', 'CP', 'CIP', 'MTTO', 'PARADA', 'S.A.M.I', 'PASIVACIÓN', 'PRUEBA DE MATERIAL'];
+    const specials = ['CS', 'CP', 'CIP', 'MTTO', 'PARADA', 'S.A.M.I', 'PASIVACIÓN', 'PRUEBA DE MATERIAL', 'OTROS'];
     return specials.some(s => name.toUpperCase().includes(s));
   };
 
@@ -154,7 +155,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
     };
   };
 
-  const getShiftData = (task: { startTime: Date, endTime: Date, quantity?: number, name: string }, day: Date) => {
+  const getShiftData = (task: { startTime: Date, endTime: Date, quantity?: number, name: string, description?: string }, day: Date) => {
     const rowStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const rowEnd = addDays(rowStart, 1);
     const splitTime = setMinutes(setHours(startOfDay(day), SHIFT_SPLIT_HOUR), SHIFT_SPLIT_MINUTE);
@@ -268,6 +269,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                   const isSpecial = isSpecialTask(task.name);
                   const isMaterialTest = task.name.toUpperCase().includes('PRUEBA DE MATERIAL');
                   const isCS = task.name === 'CS';
+                  const taskDisplayName = (task.name === 'OTROS' && task.description) ? task.description : task.name;
                   
                   let type: 'production' | 'special' | 'sami' | 'cp' | 'test' = 'production';
                   if (isMaterialTest) type = 'test';
@@ -304,7 +306,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                                 "font-black text-slate-900 uppercase leading-tight truncate",
                                 isCS ? "text-[9px] rotate-90 inline-block origin-center whitespace-nowrap" : "text-[11px]"
                               )}>
-                                {task.name}
+                                {taskDisplayName}
                               </span>
                               {!isSpecial && !isMaterialTest && (
                                 <span className="font-bold text-slate-700 text-[11px] leading-tight shrink-0">
@@ -331,7 +333,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                                 "font-black text-slate-900 uppercase leading-tight truncate",
                                 isCS ? "text-[9px] rotate-90 inline-block origin-center whitespace-nowrap" : "text-[11px]"
                               )}>
-                                {task.name}
+                                {taskDisplayName}
                               </span>
                               {!isSpecial && !isMaterialTest && (
                                 <span className="font-bold text-slate-800 text-[11px] leading-tight shrink-0">
@@ -347,7 +349,7 @@ export function ProductionGantt({ tasks, onTaskClick, weekStartDate }: Productio
                                 "font-black text-slate-900 uppercase truncate",
                                 isCS ? "text-[9px] rotate-90 inline-block origin-center whitespace-nowrap" : "text-[11px]"
                               )}>
-                                {task.name}
+                                {taskDisplayName}
                               </span>
                           </div>
                         )}

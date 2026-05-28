@@ -9,6 +9,7 @@ export interface Task {
   lineId: string;
   presentation?: string;
   tanks?: number;
+  description?: string;
 }
 
 export interface ScheduledTask extends Task {

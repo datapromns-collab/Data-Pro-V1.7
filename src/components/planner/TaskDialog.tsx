@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect, useMemo } from 'react';
@@ -6,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Trash2, Clock, Info, ShieldAlert } from 'lucide-react';
+import { Trash2, Clock, Info, ShieldAlert, AlignLeft } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
 import { getWeekDays, PRODUCT_FACTORS, formatTime, PRODUCTION_END_SUN_HOUR, PRODUCTION_END_SUN_MINUTE } from '@/lib/planner-utils';
 import { useToast } from '@/hooks/use-toast';
@@ -19,18 +20,19 @@ import {
 } from "@/components/ui/select";
 import { setHours, setMinutes, isBefore, isAfter } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { Textarea } from '@/components/ui/textarea';
 
 const PRODUCT_LIST = [
   "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
   "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA", "JUSTY NARANJA",
   "JUSTY DURAZNO", "JUSTY MANDARINA", "JUSTY SANDIA", "JUSTY LIMON", "JUSTY TAMARINDO",
-  "VITA TEA DURAZNO", "VITA TEA LIMON", "CS", "CIP", "PASIVACIÓN", "MTTO", "PARADA", "CP", "PRUEBA DE MATERIAL"
+  "VITA TEA DURAZNO", "VITA TEA LIMON", "CS", "CIP", "PASIVACIÓN", "MTTO", "PARADA", "CP", "PRUEBA DE MATERIAL", "OTROS"
 ];
 
 const CIP_OPTIONS = ["CIP 3P ALCALINO", "CIP 3P ACIDO", "CIP 5P"];
 const PRESENTATIONS = ["2Lts", "1Lt", "1.5Lts", "0.4Lts"];
 const DAYS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-const LINES = ["1", "2", "3", "4", "5", "6", "7"];
+const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
 interface TaskDialogProps {
   isOpen: boolean;
@@ -58,6 +60,7 @@ export function TaskDialog({
   readOnly = false
 }: TaskDialogProps) {
   const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
   const [lineId, setLineId] = useState(defaultLineId);
   const [cipSubOption, setCipSubOption] = useState('');
   const [presentation, setPresentation] = useState('');
@@ -74,7 +77,8 @@ export function TaskDialog({
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   
   const isSpecialTask = useMemo(() => {
-    return name === 'CS' || name === 'CIP' || name === 'PASIVACIÓN' || name === 'MTTO' || name === 'PARADA' || name === 'CP' || name === 'PRUEBA DE MATERIAL' || CIP_OPTIONS.includes(name);
+    const specials = ['CS', 'CIP', 'PASIVACIÓN', 'MTTO', 'PARADA', 'CP', 'PRUEBA DE MATERIAL', 'OTROS'];
+    return specials.includes(name) || CIP_OPTIONS.includes(name);
   }, [name]);
 
   const factor = useMemo(() => {
@@ -89,6 +93,7 @@ export function TaskDialog({
         const isCIPOption = CIP_OPTIONS.includes(initialTask.name);
         setName(isCIPOption ? 'CIP' : initialTask.name);
         if (isCIPOption) setCipSubOption(initialTask.name);
+        setDescription(initialTask.description || '');
         setLineId(initialTask.lineId);
         setPresentation(initialTask.presentation || '');
         setTanks(initialTask.tanks || 0);
@@ -104,6 +109,7 @@ export function TaskDialog({
         setSelectedTime(formatTime(initialTask.startTime));
       } else {
         setName('');
+        setDescription('');
         setLineId(defaultLineId);
         setCipSubOption('');
         setPresentation('');
@@ -150,7 +156,7 @@ export function TaskDialog({
     if (name === 'CS') setDuration(0.5);
     else if (name === 'CIP') setDuration(2.0);
     else if (name === 'CP') setDuration(2.0);
-    else if (['MTTO', 'PARADA', 'PASIVACIÓN', 'PRUEBA DE MATERIAL'].includes(name)) setDuration(1.0);
+    else if (['MTTO', 'PARADA', 'PASIVACIÓN', 'PRUEBA DE MATERIAL', 'OTROS'].includes(name)) setDuration(1.0);
   }, [name, initialTask]);
 
   const availableGap = useMemo(() => {
@@ -189,6 +195,15 @@ export function TaskDialog({
       return;
     }
 
+    if (name === 'OTROS' && !description) {
+      toast({
+        variant: "destructive",
+        title: "Descripción requerida",
+        description: "Por favor añade una descripción para la tarea Otros.",
+      });
+      return;
+    }
+
     const day = weekDays[parseInt(selectedDayIdx)];
     const [hours, minutes] = selectedTime.split(':').map(Number);
     const startTime = setMinutes(setHours(day, hours), minutes);
@@ -211,6 +226,7 @@ export function TaskDialog({
 
     onSave({
       name: finalName,
+      description: name === 'OTROS' ? description : undefined,
       lineId,
       loadPerHour: isSpecialTask ? 0 : loadPerHour,
       quantity: isSpecialTask ? 0 : quantity,
@@ -225,7 +241,7 @@ export function TaskDialog({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !readOnly && name && duration > 0) {
+    if (e.key === 'Enter' && e.target instanceof HTMLInputElement && !readOnly && name && duration > 0) {
       e.preventDefault();
       handleSave();
     }
@@ -274,7 +290,7 @@ export function TaskDialog({
             </div>
             <div className="grid gap-2">
               <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">PRODUCTO / TAREA</Label>
-              <Select value={name} onValueChange={(val) => { setName(val); if (val !== 'CIP') setCipSubOption(''); }} disabled={readOnly}>
+              <Select value={name} onValueChange={(val) => { setName(val); if (val !== 'CIP') setCipSubOption(''); if (val !== 'OTROS') setDescription(''); }} disabled={readOnly}>
                 <SelectTrigger className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80 font-bold">
                   <SelectValue placeholder="Seleccionar" />
                 </SelectTrigger>
@@ -296,6 +312,22 @@ export function TaskDialog({
                   {CIP_OPTIONS.map((opt) => <SelectItem key={opt} value={opt}>{opt}</SelectItem>)}
                 </SelectContent>
               </Select>
+            </div>
+          )}
+
+          {name === 'OTROS' && (
+            <div className="grid gap-2 animate-in fade-in slide-in-from-top-2">
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">DESCRIPCIÓN DE LA TAREA</Label>
+              <div className="relative">
+                <AlignLeft className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
+                <Textarea 
+                  value={description} 
+                  onChange={(e) => setDescription(e.target.value)} 
+                  disabled={readOnly}
+                  className="min-h-[80px] rounded-2xl border-slate-100 bg-slate-50 pl-10 pt-2 disabled:opacity-80 font-bold resize-none"
+                  placeholder="Escribe aquí la descripción de la tarea..."
+                />
+              </div>
             </div>
           )}
 
