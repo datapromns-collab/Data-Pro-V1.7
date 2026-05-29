@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
-import { Trash2, Clock, Info, ShieldAlert, AlignLeft } from 'lucide-react';
+import { Trash2, Clock, Info, ShieldAlert, AlignLeft, Copy } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
 import { getWeekDays, PRODUCT_FACTORS, formatTime, PRODUCTION_END_SUN_HOUR, PRODUCTION_END_SUN_MINUTE } from '@/lib/planner-utils';
 import { useToast } from '@/hooks/use-toast';
@@ -25,7 +25,7 @@ import { Textarea } from '@/components/ui/textarea';
 const PRODUCT_LIST = [
   "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
   "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA", "JUSTY NARANJA",
-  "JUSTY DURAZNO", "JUSTY MANDARINA", "JUSTY SANDIA", "JUSTY LIMON", "JUSTY TAMARINDO",
+  "JUSTY DURAZNO", "JUSTY MANDARINA", "JUSTY SANDIA", "JUSTY LIMON", "JUSTY TAMARINDO", "JUSTY MANZANA",
   "VITA TEA DURAZNO", "VITA TEA LIMON", "CS", "CIP", "PASIVACIÓN", "MTTO", "PARADA", "CP", "PRUEBA DE MATERIAL", "OTROS"
 ];
 
@@ -37,7 +37,7 @@ const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
 interface TaskDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (task: Omit<ScheduledTask, 'id' | 'color'>) => void;
+  onSave: (task: Omit<ScheduledTask, 'id' | 'color'>, asNew?: boolean) => void;
   onDelete?: (id: string) => void;
   initialTask?: ScheduledTask | null;
   defaultLineId?: string;
@@ -182,7 +182,7 @@ export function TaskDialog({
     };
   }, [selectedDayIdx, selectedTime, weekDays, allTasks, lineId, loadPerHour, initialTask]);
 
-  const handleSave = () => {
+  const handleSave = (asNew: boolean = false) => {
     if (readOnly || !name) return;
     
     let finalName = name === 'CIP' ? cipSubOption : name;
@@ -210,7 +210,7 @@ export function TaskDialog({
     const endTime = new Date(startTime.getTime() + duration * 60 * 60 * 1000);
 
     const conflict = allTasks.find(existingTask => {
-      if (initialTask && existingTask.id === initialTask.id) return false;
+      if (initialTask && existingTask.id === initialTask.id && !asNew) return false;
       if (existingTask.lineId !== lineId) return false;
       return isBefore(startTime, existingTask.endTime) && isAfter(endTime, existingTask.startTime);
     });
@@ -235,7 +235,7 @@ export function TaskDialog({
       tanks: isSpecialTask ? undefined : tanks,
       startTime,
       endTime
-    });
+    }, asNew);
     
     onClose();
   };
@@ -263,7 +263,7 @@ export function TaskDialog({
             </div>
           </div>
           <DialogDescription className="text-slate-500">
-            Configura la producción y programación para la línea de producción.
+            {initialTask ? 'Modifica los parámetros o duplica esta tarea en otra línea.' : 'Configura la producción y programación para la línea de producción.'}
           </DialogDescription>
         </DialogHeader>
 
@@ -483,8 +483,20 @@ export function TaskDialog({
             <Button variant="outline" onClick={onClose} className="flex-1 sm:flex-none rounded-2xl h-12 font-bold px-8 border-slate-200">
               {readOnly ? 'Cerrar' : 'Cancelar'}
             </Button>
+            
+            {!readOnly && initialTask && (
+              <Button 
+                variant="outline" 
+                onClick={() => handleSave(true)} 
+                className="flex-1 sm:flex-none rounded-2xl h-12 font-black uppercase text-[10px] tracking-widest px-6 border-indigo-200 text-indigo-600 hover:bg-indigo-50"
+                title="Copia esta tarea a otra línea o día sin borrar la actual"
+              >
+                <Copy className="h-4 w-4 mr-2" /> Duplicar
+              </Button>
+            )}
+
             {!readOnly && (
-              <Button onClick={handleSave} className="bg-primary flex-1 sm:flex-none rounded-2xl h-12 font-black uppercase text-[10px] tracking-widest px-10 shadow-lg shadow-primary/20 hover:translate-y-[-1px] transition-all" disabled={!name || duration <= 0}>
+              <Button onClick={() => handleSave(false)} className="bg-primary flex-1 sm:flex-none rounded-2xl h-12 font-black uppercase text-[10px] tracking-widest px-10 shadow-lg shadow-primary/20 hover:translate-y-[-1px] transition-all" disabled={!name || duration <= 0}>
                 {initialTask ? 'Actualizar' : 'Programar'}
               </Button>
             )}

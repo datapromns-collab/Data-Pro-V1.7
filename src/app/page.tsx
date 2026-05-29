@@ -251,10 +251,15 @@ export default function PlannerPage() {
     setIsDialogOpen(true);
   };
 
-  const handleSaveTask = (taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
+  const handleSaveTask = (taskData: Omit<ScheduledTask, 'id' | 'color'>, asNew: boolean = false) => {
     if (!isAdmin) return;
-    if (editingTask) updateTask(editingTask.id, taskData);
-    else addTask(taskData);
+    if (editingTask && !asNew) {
+      updateTask(editingTask.id, taskData);
+      toast({ title: "Tarea Actualizada" });
+    } else {
+      addTask(taskData);
+      toast({ title: asNew ? "Tarea Copiada" : "Tarea Creada" });
+    }
     setEditingTask(null);
   };
 
@@ -315,7 +320,7 @@ export default function PlannerPage() {
               </div>
               <div className="flex flex-col">
                 <h1 className="text-xl font-headline font-bold text-slate-900 tracking-tight leading-none">
-                  {isReportView ? 'Reporte de Gestion' : 'Plan Semanal'}
+                  {isReportView ? 'Reporte de Gestión' : 'Plan Semanal'}
                 </h1>
                 <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mt-1">Pro Edition</span>
               </div>
@@ -495,7 +500,7 @@ export default function PlannerPage() {
                 </TabsList>
               </div>
 
-              <div className="flex-1 min-0">
+              <div className="flex-1 min-w-0">
                 <TabsContent value="gantt" className="m-0 h-full">
                   <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
                 </TabsContent>
@@ -508,13 +513,6 @@ export default function PlannerPage() {
                       <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} readOnly={!isAdmin} />
                     </TabsContent>
                     <TabsContent value="calculator" className="m-0 h-full"><Calculator /></TabsContent>
-                  </>
-                )}
-                <TabsContent value="requirement" className="m-0 h-full">
-                  <RequirementSection onPrint={handlePrintRequirements} tasks={tasks} weekStartDate={weekStartDate} />
-                </TabsContent>
-                {isAdmin && (
-                  <>
                     <TabsContent value="admin-report" className="m-0 h-full">
                       <AdminReportTool 
                         view="production"
@@ -539,6 +537,9 @@ export default function PlannerPage() {
                     </TabsContent>
                   </>
                 )}
+                <TabsContent value="requirement" className="m-0 h-full">
+                  <RequirementSection onPrint={handlePrintRequirements} tasks={tasks} weekStartDate={weekStartDate} />
+                </TabsContent>
               </div>
             </Tabs>
           </div>
@@ -621,31 +622,31 @@ export default function PlannerPage() {
             </>
           )}
         </div>
-      </div>
 
-      <TaskDialog 
-        isOpen={isDialogOpen} 
-        onClose={() => { setIsDialogOpen(false); setEditingTask(null); }} 
-        onSave={handleSaveTask} 
-        onDelete={handleDeleteTask} 
-        initialTask={editingTask} 
-        defaultLineId={selectedLine} 
-        weekStartDate={weekStartDate} 
-        allTasks={tasks} 
-        lineSpeeds={lineSpeeds} 
-        readOnly={!isAdmin}
-      />
-
-      {isAdmin && (
-        <ProductionEntryDialog
-          isOpen={isEntryDialogOpen}
-          onClose={() => setIsEntryDialogOpen(false)}
-          onSave={handleSaveRealProduction}
+        <TaskDialog 
+          isOpen={isDialogOpen} 
+          onClose={() => { setIsDialogOpen(false); setEditingTask(null); }} 
+          onSave={handleSaveTask} 
+          onDelete={handleDeleteTask} 
+          initialTask={editingTask} 
+          defaultLineId={selectedLine} 
+          weekStartDate={weekStartDate} 
+          allTasks={tasks} 
+          lineSpeeds={lineSpeeds} 
+          readOnly={!isAdmin}
         />
-      )}
 
-      <KeyboardShortcuts isOpen={isShortcutsOpen} onClose={() => setIsShortcutsOpen(false)} />
-      <Toaster />
+        {isAdmin && (
+          <ProductionEntryDialog
+            isOpen={isEntryDialogOpen}
+            onClose={() => setIsEntryDialogOpen(false)}
+            onSave={handleSaveRealProduction}
+          />
+        )}
+
+        <KeyboardShortcuts isOpen={isShortcutsOpen} onClose={() => setIsShortcutsOpen(false)} />
+        <Toaster />
+      </div>
     </SidebarProvider>
   );
 }

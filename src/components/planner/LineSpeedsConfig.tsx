@@ -12,7 +12,7 @@ interface LineSpeedsConfigProps {
   readOnly?: boolean;
 }
 
-const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7"];
+const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7", "Línea 8"];
 
 export function LineSpeedsConfig({ lineSpeeds, onUpdateSpeed, readOnly = false }: LineSpeedsConfigProps) {
   return (
