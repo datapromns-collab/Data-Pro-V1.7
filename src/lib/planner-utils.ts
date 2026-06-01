@@ -12,7 +12,7 @@ export const PRODUCT_LIST = [
   "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
   "GLUP MANZANA VERDE", "GLUP PONCHE", "GLUP CHICLE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA", 
   "JUSTY NARANJA", "JUSTY DURAZNO", "JUSTY MANDARINA", "JUSTY SANDIA", "JUSTY LIMON", 
-  "JUSTY TAMARINDO", "JUSTY MANZANA", "VITA TEA DURAZNO", "VITA TEA LIMON"
+  "JUSTY TAMARINDO", "JUSTY MANZANA", "JUSTY PERA", "VITA TEA DURAZNO", "VITA TEA LIMON"
 ];
 
 export const ALL_LINES_SUMMARY = ["1", "2", "3", "4", "5", "6", "7", "8"];
@@ -34,6 +34,7 @@ export const PRODUCT_FACTORS: Record<string, Record<string, number>> = {
   "JUSTY LIMON": { "1.5Lts": 1111.11 },
   "JUSTY TAMARINDO": { "1.5Lts": 1111.11 },
   "JUSTY MANZANA": { "1.5Lts": 1111.11 },
+  "JUSTY PERA": { "1.5Lts": 1111.11 },
   "VITA TEA DURAZNO": { "1.5Lts": 1111.11 },
   "VITA TEA LIMON": { "1.5Lts": 1111.11 },
 };
@@ -55,6 +56,7 @@ export const SYRUP_FACTORS: Record<string, Record<string, number>> = {
   "JUSTY LIMON": { "1.5Lts": 18 },
   "JUSTY TAMARINDO": { "1.5Lts": 18 },
   "JUSTY MANZANA": { "1.5Lts": 18 },
+  "JUSTY PERA": { "1.5Lts": 18 },
   "VITA TEA DURAZNO": { "1.5Lts": 18 },
   "VITA TEA LIMON": { "1.5Lts": 18 },
 };
@@ -75,6 +77,7 @@ export const LABEL_FACTORS: Record<string, Record<string, number>> = {
   "JUSTY SANDIA": { "1.5Lts": 0.00888 },
   "JUSTY TAMARINDO": { "1.5Lts": 0.00906 },
   "JUSTY MANZANA": { "1.5Lts": 0.0100 },
+  "JUSTY PERA": { "1.5Lts": 0.0100 },
   "VITA TEA DURAZNO": { "1.5Lts": 0.006912 },
   "VITA TEA LIMON": { "1.5Lts": 0.006672 },
 };
@@ -154,6 +157,7 @@ export const UBB_FACTORS: Record<string, number> = {
   "JUSTY LIMON": 20,
   "JUSTY TAMARINDO": 20,
   "JUSTY MANZANA": 20,
+  "JUSTY PERA": 20,
   "VITA TEA DURAZNO": 20,
   "VITA TEA LIMON": 20,
 };
@@ -285,6 +289,17 @@ export const RECIPES: Record<string, Record<string, number>> = {
   "JUSTY MANZANA": {
     "MATP_0001": 110.0,
     "MATP_0060": 5,
+    "MATP_0017": 3.5,
+    "MATP_0021": 0.85,
+    "MATP_0018": 0.4,
+    "MATP_0019": 0.2,
+    "MATP_0020": 0.25,
+    "MATP_0036": 0.1,
+    "MATP_0031": 0.1,
+  },
+  "JUSTY PERA": {
+    "MATP_0001": 110.0,
+    "MATP_0059": 5,
     "MATP_0017": 3.5,
     "MATP_0021": 0.85,
     "MATP_0018": 0.4,
@@ -565,6 +580,15 @@ export const CONSUMABLES_RECIPES: Record<string, Record<string, Record<string, n
     }
   },
   "JUSTY MANZANA": {
+    "1.5Lts": {
+      "AGUA-00005": 36.985,
+      "AGUA-00004": 15.385,
+      "AGUA-00003": 5.4,
+      "AGUA-00002": 16.2,
+      "JARA-00001": 2.462
+    }
+  },
+  "JUSTY PERA": {
     "1.5Lts": {
       "AGUA-00005": 36.985,
       "AGUA-00004": 15.385,
