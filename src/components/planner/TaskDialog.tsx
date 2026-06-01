@@ -249,7 +249,7 @@ export function TaskDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[500px] rounded-3xl overflow-hidden shadow-2xl" onKeyDown={handleKeyDown}>
+      <DialogContent className="sm:max-w-[580px] rounded-3xl overflow-hidden shadow-2xl" onKeyDown={handleKeyDown}>
         <DialogHeader className="px-1">
           <div className="flex items-center gap-3 mb-2">
             <div className="bg-primary/10 p-2.5 rounded-2xl">
@@ -468,23 +468,23 @@ export function TaskDialog({
           </div>
         </div>
 
-        <DialogFooter className="flex-col sm:flex-row gap-4 px-1 pt-6 border-t border-slate-100 mt-4">
+        <DialogFooter className="flex-col sm:flex-row flex-wrap items-center gap-3 px-1 pt-6 border-t border-slate-100 mt-4">
           {!readOnly && initialTask && onDelete && (
             <Button 
               variant="ghost" 
               onClick={() => onDelete(initialTask.id)} 
-              className="gap-2 sm:mr-auto rounded-xl h-12 font-bold text-destructive hover:bg-destructive/5 hover:text-destructive px-6 transition-all"
+              className="gap-2 sm:mr-auto rounded-xl h-12 font-bold text-destructive hover:bg-destructive/5 px-4 transition-all"
             >
               <Trash2 className="h-4 w-4" /> 
-              <span className="hidden sm:inline">Eliminar</span>
+              <span>Eliminar</span>
             </Button>
           )}
           
-          <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto">
+          <div className="flex flex-row flex-wrap gap-2 w-full sm:w-auto justify-end flex-1">
             <Button 
               variant="outline" 
               onClick={onClose} 
-              className="rounded-xl h-12 font-bold px-8 border-slate-200 hover:bg-slate-50 text-slate-600 transition-all"
+              className="rounded-xl h-12 font-bold px-5 border-slate-200 hover:bg-slate-50 text-slate-600 transition-all flex-1 sm:flex-none"
             >
               {readOnly ? 'Cerrar' : 'Cancelar'}
             </Button>
@@ -493,8 +493,8 @@ export function TaskDialog({
               <Button 
                 variant="outline" 
                 onClick={() => handleSave(true)} 
-                className="rounded-xl h-12 font-bold px-6 border-emerald-200 text-emerald-600 hover:bg-emerald-50 hover:border-emerald-300 transition-all flex items-center justify-center gap-2"
-                title="Copia esta tarea a otra línea o día sin borrar la actual"
+                className="rounded-xl h-12 font-bold px-4 border-emerald-200 text-emerald-600 hover:bg-emerald-50 hover:border-emerald-300 transition-all flex items-center justify-center gap-2 flex-1 sm:flex-none"
+                title="Copia esta tarea a otra línea o día"
               >
                 <Copy className="h-4 w-4" /> 
                 <span>Duplicar</span>
@@ -504,10 +504,10 @@ export function TaskDialog({
             {!readOnly && (
               <Button 
                 onClick={() => handleSave(false)} 
-                className="bg-primary hover:bg-primary/90 text-white rounded-xl h-12 font-black uppercase text-xs tracking-widest px-10 shadow-lg shadow-primary/20 hover:translate-y-[-1px] transition-all flex items-center justify-center gap-2"
+                className="bg-primary hover:bg-primary/90 text-white rounded-xl h-12 font-black uppercase text-[10px] tracking-widest px-6 shadow-lg shadow-primary/20 hover:translate-y-[-1px] transition-all flex items-center justify-center gap-2 flex-1 sm:flex-none"
                 disabled={!name || duration <= 0}
               >
-                {initialTask ? 'Actualizar Tarea' : 'Programar Tarea'}
+                {initialTask ? 'Actualizar' : 'Programar'}
               </Button>
             )}
           </div>
