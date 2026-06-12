@@ -71,7 +71,7 @@ export function TaskDialog({
   const [selectedDayIdx, setSelectedDayIdx] = useState('0');
   const [selectedTime, setSelectedTime] = useState('07:00');
   
-  const [lastEdited, setLastEdited] = useState<'tanks' | 'quantity' | 'duration' | null>(null);
+  const [lastEdited, setLastEdited] = useState<'tanks' | 'quantity' | 'duration' | 'load' | null>(null);
 
   const { toast } = useToast();
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
@@ -134,6 +134,7 @@ export function TaskDialog({
     }
   }, [isOpen, initialTask, defaultLineId, weekDays, lineSpeeds, allTasks]);
 
+  // Efecto 1: Tanques <-> Cantidad
   useEffect(() => {
     if (isSpecialTask || factor === 0) return;
 
@@ -144,11 +145,19 @@ export function TaskDialog({
     }
   }, [factor, isSpecialTask, lastEdited, tanks, quantity]);
 
+  // Efecto 2: Cantidad/Velocidad -> Duración
   useEffect(() => {
     if (isSpecialTask || loadPerHour <= 0 || quantity <= 0 || lastEdited === 'duration') return;
     const calculatedDuration = quantity / loadPerHour;
     setDuration(calculatedDuration);
   }, [loadPerHour, quantity, isSpecialTask, lastEdited]);
+
+  // Efecto 3: Duración -> Cantidad (Solo si el usuario editó la duración manualmente)
+  useEffect(() => {
+    if (isSpecialTask || loadPerHour <= 0 || duration <= 0 || lastEdited !== 'duration') return;
+    const calculatedQuantity = Math.round(duration * loadPerHour);
+    setQuantity(calculatedQuantity);
+  }, [duration, loadPerHour, isSpecialTask, lastEdited]);
 
   useEffect(() => {
     if (initialTask || !name) return;
@@ -398,7 +407,7 @@ export function TaskDialog({
                 <Input 
                   type="number" 
                   value={loadPerHour || ''} 
-                  onChange={(e) => setLoadPerHour(Number(e.target.value))} 
+                  onChange={(e) => { setLoadPerHour(Number(e.target.value)); setLastEdited('load'); }} 
                   disabled={readOnly}
                   className="h-12 rounded-2xl border-slate-100 bg-slate-50 disabled:opacity-80 font-black text-slate-700"
                 />
@@ -427,28 +436,23 @@ export function TaskDialog({
                 <div className="flex flex-col">
                   <span className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] leading-none mb-1">TIEMPO PROGRAMADO</span>
                   <span className="text-[9px] font-bold text-slate-400 italic">
-                    {isSpecialTask ? 'Ajuste manual de duración' : 'Calculado automáticamente'}
+                    {isSpecialTask ? 'Ajuste manual de duración' : 'Sincronizado con cantidad/velocidad'}
                   </span>
                 </div>
                 
-                {isSpecialTask ? (
-                  <div className="flex items-center gap-2">
-                    <Input 
-                      type="number" 
-                      step="0.1"
-                      min="0.1"
-                      value={duration || ''} 
-                      onChange={(e) => { setDuration(Number(e.target.value)); setLastEdited('duration'); }} 
-                      disabled={readOnly}
-                      className="w-24 h-12 bg-white rounded-xl border-primary/20 font-black text-xl text-center text-primary focus:ring-primary/20"
-                    />
-                    <span className="text-sm font-black text-primary">hrs</span>
-                  </div>
-                ) : (
-                  <div className="text-3xl font-black text-primary tabular-nums">
-                    {duration < 1 && duration > 0 ? `${Math.round(duration * 60)}m` : `${duration.toFixed(2)}h`}
-                  </div>
-                )}
+                <div className="flex items-center gap-2">
+                  <Input 
+                    type="number" 
+                    step="0.1"
+                    min="0.1"
+                    value={duration === 0 ? '' : Number(duration.toFixed(2))} 
+                    onChange={(e) => { setDuration(Number(e.target.value)); setLastEdited('duration'); }} 
+                    disabled={readOnly}
+                    className="w-28 h-12 bg-white rounded-xl border-primary/20 font-black text-xl text-center text-primary focus:ring-primary/20"
+                    placeholder="0.00"
+                  />
+                  <span className="text-sm font-black text-primary">hrs</span>
+                </div>
               </div>
               
               <div className="pt-4 border-t border-slate-200/50 space-y-2">
