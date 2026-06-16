@@ -17,11 +17,9 @@ import {
   ShieldCheck,
   User as UserIcon,
   BarChart3,
-  ChevronLeft,
   PackageCheck,
   CheckCircle2,
   Calendar as CalendarIcon,
-  TrendingUp,
   Settings2
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
@@ -43,7 +41,6 @@ import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
 import { Toaster } from '@/components/ui/toaster';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { SidebarProvider, Sidebar, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
