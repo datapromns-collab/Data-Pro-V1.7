@@ -418,7 +418,7 @@ export default function PlannerPage() {
                       <div className={cn("p-1.5 rounded-lg", activeModule === 'purchasing' ? "bg-white/20" : "bg-slate-100")}>
                         <ShoppingCart className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[10px] font-black tracking-tight text-left">Proyección de Compras</span>
+                      <span className="uppercase text-[9px] font-black tracking-tighter text-left">Proyección de Compras</span>
                     </Button>
                   )}
                 </div>
@@ -735,7 +735,7 @@ export default function PlannerPage() {
                     <p className="text-lg font-bold text-primary uppercase tracking-tight">{lineName.toUpperCase()}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-1">CONFIDENCIAL - USO INTERNO</p>
+                    <p className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-1">CONFIDENCIAL - USO INTERNO</p>
                     <p className="text-[11px] text-slate-500 font-bold uppercase">
                       Semana {weekNumber} - {format(weekStartDate, "dd MMMM yyyy", { locale: es })}
                     </p>

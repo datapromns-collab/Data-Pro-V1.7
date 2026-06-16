@@ -1,7 +1,7 @@
 'use client';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ShoppingCart, Layout } from 'lucide-react';
+import { Layout } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function PurchasingModule() {
@@ -9,16 +9,6 @@ export function PurchasingModule() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
-      <div className="flex items-center gap-4">
-        <div className="bg-blue-600 p-3 rounded-2xl shadow-lg shadow-blue-100">
-          <ShoppingCart className="h-6 w-6 text-white" />
-        </div>
-        <div>
-          <h2 className="text-2xl font-headline font-black text-slate-900 uppercase">Proyección de Compras</h2>
-          <p className="text-sm text-slate-500 font-bold uppercase tracking-widest mt-0.5">Gestión de Abastecimiento y Órdenes</p>
-        </div>
-      </div>
-
       <Tabs defaultValue="mds" className="w-full">
         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6">
           <TabsList className="bg-transparent h-auto p-0">
