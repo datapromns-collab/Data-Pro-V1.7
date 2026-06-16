@@ -527,7 +527,7 @@ export default function PlannerPage() {
                 {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' : 
                  activeModule === 'recipes' ? 'MÓDULO DE RECETAS' : 
                  activeModule === 'raw-materials' ? 'MÓDULO DE MATERIA PRIMA' : 
-                 activeModule === 'purchasing' ? 'MÓDULO DE COMPRAS' : 'MÓDULO DE PLANIFICACIÓN'}
+                 activeModule === 'purchasing' ? 'MÓDULO DE PROYECCIÓN' : 'MÓDULO DE PLANIFICACIÓN'}
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -559,94 +559,86 @@ export default function PlannerPage() {
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <div className="flex flex-col gap-6 h-full">
               
-              <div className="flex items-center bg-white border border-slate-200 rounded-full p-1 shadow-sm self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print">
-                {activeModule === 'planning' ? (
-                  <>
-                    <button 
-                      onClick={() => setActiveTab('gantt')}
-                      className={cn(navTabClass(activeTab === 'gantt'), "w-[170px] px-0")}
-                    >
-                      <GanttChartSquare className="h-3.5 w-3.5" />
-                      Programación
-                    </button>
-                    <button 
-                      onClick={() => setActiveTab('daily')}
-                      className={cn(navTabClass(activeTab === 'daily'), "w-[170px] px-0")}
-                    >
-                      <ListTodo className="h-3.5 w-3.5" />
-                      Plan Día a Día
-                    </button>
-                    <button 
-                      onClick={() => setActiveTab('requirement')}
-                      className={cn(navTabClass(activeTab === 'requirement'), "w-[170px] px-0")}
-                    >
-                      <ClipboardList className="h-3.5 w-3.5" />
-                      Requerimiento
-                    </button>
-                    <button 
-                      onClick={() => setActiveTab('speeds')}
-                      className={cn(navTabClass(activeTab === 'speeds'), "w-[170px] px-0")}
-                    >
-                      <Gauge className="h-3.5 w-3.5" />
-                      Velocidades
-                    </button>
-                    <button 
-                      onClick={() => setActiveTab('calculator')}
-                      className={cn(navTabClass(activeTab === 'calculator'), "w-[170px] px-0")}
-                    >
-                      <CalculatorIcon className="h-3.5 w-3.5" />
-                      Calculadora
-                    </button>
-                  </>
-                ) : activeModule === 'management' ? (
-                  <>
-                    <button 
-                      onClick={() => setActiveTab('admin-report')}
-                      className={navTabClass(activeTab === 'admin-report')}
-                    >
-                      <BarChart3 className="h-3.5 w-3.5" />
-                      Control Producción
-                    </button>
-                    <button 
-                      onClick={() => setActiveTab('compliance-report')}
-                      className={navTabClass(activeTab === 'compliance-report')}
-                    >
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                      Cumplimiento
-                    </button>
-                  </>
-                ) : activeModule === 'raw-materials' ? (
-                  <>
-                    <button 
-                      onClick={() => setActiveTab('raw-material-view')}
-                      className={cn(navTabClass(activeTab === 'raw-material-view'), "bg-amber-50 text-amber-700", activeTab !== 'raw-material-view' && "bg-transparent text-slate-500 hover:bg-slate-50")}
-                    >
-                      <Box className="h-3.5 w-3.5" />
-                      Control de Inventarios
-                    </button>
-                  </>
-                ) : activeModule === 'recipes' ? (
-                  <>
-                    <button 
-                      onClick={() => setActiveTab('recipes-editor')}
-                      className={cn(navTabClass(activeTab === 'recipes-editor'), "bg-emerald-50 text-emerald-700", activeTab !== 'recipes-editor' && "bg-transparent text-slate-500 hover:bg-slate-50")}
-                    >
-                      <FlaskConical className="h-3.5 w-3.5" />
-                      Edición de Recetas
-                    </button>
-                  </>
-                ) : (
-                  <>
-                    <button 
-                      onClick={() => setActiveTab('purchasing-view')}
-                      className={cn(navTabClass(activeTab === 'purchasing-view'), "bg-blue-50 text-blue-700", activeTab !== 'purchasing-view' && "bg-transparent text-slate-500 hover:bg-slate-50")}
-                    >
-                      <ShoppingCart className="h-3.5 w-3.5" />
-                      Gestión de Compras
-                    </button>
-                  </>
-                )}
-              </div>
+              {activeModule !== 'purchasing' && (
+                <div className="flex items-center bg-white border border-slate-200 rounded-full p-1 shadow-sm self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print">
+                  {activeModule === 'planning' ? (
+                    <>
+                      <button 
+                        onClick={() => setActiveTab('gantt')}
+                        className={cn(navTabClass(activeTab === 'gantt'), "w-[170px] px-0")}
+                      >
+                        <GanttChartSquare className="h-3.5 w-3.5" />
+                        Programación
+                      </button>
+                      <button 
+                        onClick={() => setActiveTab('daily')}
+                        className={cn(navTabClass(activeTab === 'daily'), "w-[170px] px-0")}
+                      >
+                        <ListTodo className="h-3.5 w-3.5" />
+                        Plan Día a Día
+                      </button>
+                      <button 
+                        onClick={() => setActiveTab('requirement')}
+                        className={cn(navTabClass(activeTab === 'requirement'), "w-[170px] px-0")}
+                      >
+                        <ClipboardList className="h-3.5 w-3.5" />
+                        Requerimiento
+                      </button>
+                      <button 
+                        onClick={() => setActiveTab('speeds')}
+                        className={cn(navTabClass(activeTab === 'speeds'), "w-[170px] px-0")}
+                      >
+                        <Gauge className="h-3.5 w-3.5" />
+                        Velocidades
+                      </button>
+                      <button 
+                        onClick={() => setActiveTab('calculator')}
+                        className={cn(navTabClass(activeTab === 'calculator'), "w-[170px] px-0")}
+                      >
+                        <CalculatorIcon className="h-3.5 w-3.5" />
+                        Calculadora
+                      </button>
+                    </>
+                  ) : activeModule === 'management' ? (
+                    <>
+                      <button 
+                        onClick={() => setActiveTab('admin-report')}
+                        className={navTabClass(activeTab === 'admin-report')}
+                      >
+                        <BarChart3 className="h-3.5 w-3.5" />
+                        Control Producción
+                      </button>
+                      <button 
+                        onClick={() => setActiveTab('compliance-report')}
+                        className={navTabClass(activeTab === 'compliance-report')}
+                      >
+                        <CheckCircle2 className="h-3.5 w-3.5" />
+                        Cumplimiento
+                      </button>
+                    </>
+                  ) : activeModule === 'raw-materials' ? (
+                    <>
+                      <button 
+                        onClick={() => setActiveTab('raw-material-view')}
+                        className={cn(navTabClass(activeTab === 'raw-material-view'), "bg-amber-50 text-amber-700", activeTab !== 'raw-material-view' && "bg-transparent text-slate-500 hover:bg-slate-50")}
+                      >
+                        <Box className="h-3.5 w-3.5" />
+                        Control de Inventarios
+                      </button>
+                    </>
+                  ) : activeModule === 'recipes' ? (
+                    <>
+                      <button 
+                        onClick={() => setActiveTab('recipes-editor')}
+                        className={cn(navTabClass(activeTab === 'recipes-editor'), "bg-emerald-50 text-emerald-700", activeTab !== 'recipes-editor' && "bg-transparent text-slate-500 hover:bg-slate-50")}
+                      >
+                        <FlaskConical className="h-3.5 w-3.5" />
+                        Edición de Recetas
+                      </button>
+                    </>
+                  ) : null}
+                </div>
+              )}
 
               <div className="flex-1 min-w-0">
                 {activeModule === 'planning' && !isInventory && (
