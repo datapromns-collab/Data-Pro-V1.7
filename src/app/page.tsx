@@ -564,35 +564,35 @@ export default function PlannerPage() {
                   <>
                     <button 
                       onClick={() => setActiveTab('gantt')}
-                      className={navTabClass(activeTab === 'gantt')}
+                      className={cn(navTabClass(activeTab === 'gantt'), "w-[170px] px-0")}
                     >
                       <GanttChartSquare className="h-3.5 w-3.5" />
                       Programación
                     </button>
                     <button 
                       onClick={() => setActiveTab('daily')}
-                      className={navTabClass(activeTab === 'daily')}
+                      className={cn(navTabClass(activeTab === 'daily'), "w-[170px] px-0")}
                     >
                       <ListTodo className="h-3.5 w-3.5" />
                       Plan Día a Día
                     </button>
                     <button 
                       onClick={() => setActiveTab('requirement')}
-                      className={navTabClass(activeTab === 'requirement')}
+                      className={cn(navTabClass(activeTab === 'requirement'), "w-[170px] px-0")}
                     >
                       <ClipboardList className="h-3.5 w-3.5" />
                       Requerimiento
                     </button>
                     <button 
                       onClick={() => setActiveTab('speeds')}
-                      className={navTabClass(activeTab === 'speeds')}
+                      className={cn(navTabClass(activeTab === 'speeds'), "w-[170px] px-0")}
                     >
                       <Gauge className="h-3.5 w-3.5" />
                       Velocidades
                     </button>
                     <button 
                       onClick={() => setActiveTab('calculator')}
-                      className={navTabClass(activeTab === 'calculator')}
+                      className={cn(navTabClass(activeTab === 'calculator'), "w-[170px] px-0")}
                     >
                       <CalculatorIcon className="h-3.5 w-3.5" />
                       Calculadora
