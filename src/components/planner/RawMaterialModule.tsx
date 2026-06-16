@@ -124,7 +124,7 @@ export function RawMaterialModule({
     return inTanks;
   }, [finalUBBTanks, recipes]);
 
-  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 transition-colors flex-shrink-0 outline-none focus:ring-0 active:scale-100 border-0 select-none";
+  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 transition-colors flex-shrink-0 outline-none focus:ring-0 active:scale-100 active:transform-none border-0 select-none";
 
   const renderSimpleStockTable = (type: 'initial' | 'final') => (
     <Card className="border-slate-200 rounded-3xl overflow-hidden bg-white shadow-sm">
