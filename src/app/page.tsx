@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -18,7 +19,10 @@ import {
   BarChart3,
   ChevronLeft,
   PackageCheck,
-  CheckCircle2
+  CheckCircle2,
+  Calendar as CalendarIcon,
+  TrendingUp,
+  Settings2
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -40,7 +44,7 @@ import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
 import { Toaster } from '@/components/ui/toaster';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { SidebarProvider, Sidebar, SidebarContent } from '@/components/ui/sidebar';
+import { SidebarProvider, Sidebar, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -50,7 +54,7 @@ import { ScheduledTask } from '@/lib/types';
 import { format, getISOWeek, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useToast } from '@/hooks/use-toast';
-import { Calendar as CalendarIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7", "Línea 8"];
 
@@ -86,7 +90,6 @@ export default function PlannerPage() {
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
   const [activeTab, setActiveTab] = useState("gantt");
-  const [hasRedirectedAdmin, setHasRedirectedAdmin] = useState(false);
   const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance'>('plan');
   const [emitDate, setEmitDate] = useState('');
   
@@ -94,20 +97,13 @@ export default function PlannerPage() {
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
 
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
-  const isReportView = ['admin-report', 'compliance-report'].includes(activeTab);
+  const isManagementView = ['admin-report', 'compliance-report', 'speeds', 'calculator'].includes(activeTab);
 
   useEffect(() => {
-    if (authLoaded && user && isAdmin && !hasRedirectedAdmin) {
-      setActiveTab('admin-report');
-      setHasRedirectedAdmin(true);
-    }
-  }, [authLoaded, user, isAdmin, hasRedirectedAdmin]);
-
-  useEffect(() => {
-    if (authLoaded && user && !isAdmin && isReportView) {
+    if (authLoaded && user && !isAdmin && isManagementView) {
       setActiveTab('gantt');
     }
-  }, [authLoaded, user, isAdmin, isReportView]);
+  }, [authLoaded, user, isAdmin, isManagementView]);
 
   useEffect(() => {
     if (plannerLoaded) {
@@ -284,13 +280,13 @@ export default function PlannerPage() {
 
   const pageHeader = useMemo(() => {
     switch (activeTab) {
-      case 'speeds': return { title: "Velocidades", subtitle: "Configuración base de líneas." };
-      case 'calculator': return { title: "Calculadora", subtitle: "Conversión cajas/tanques." };
-      case 'requirement': return { title: "Requerimiento", subtitle: "Materiales e insumos semanales." };
-      case 'daily': return { title: "Plan Día a Día", subtitle: "Detalle operativo semanal." };
-      case 'admin-report': return { title: "Control de Producción", subtitle: "Seguimiento de producción real semanal." };
-      case 'compliance-report': return { title: "Reporte de Cumplimiento", subtitle: "Planificado vs Producción Real." };
-      default: return { title: `Programación Línea ${selectedLine}`, subtitle: "" };
+      case 'speeds': return { title: "Velocidades", subtitle: "Configuración base de líneas.", module: "GESTIÓN" };
+      case 'calculator': return { title: "Calculadora", subtitle: "Conversión cajas/tanques.", module: "GESTIÓN" };
+      case 'requirement': return { title: "Requerimiento", subtitle: "Materiales e insumos semanales.", module: "PLANIFICACIÓN" };
+      case 'daily': return { title: "Plan Día a Día", subtitle: "Detalle operativo semanal.", module: "PLANIFICACIÓN" };
+      case 'admin-report': return { title: "Producción Real", subtitle: "Seguimiento de producción capturada.", module: "GESTIÓN" };
+      case 'compliance-report': return { title: "Cumplimiento", subtitle: "Planificado vs Real.", module: "GESTIÓN" };
+      default: return { title: `Programación Línea ${selectedLine}`, subtitle: "Diagrama de Gantt semanal.", module: "PLANIFICACIÓN" };
     }
   }, [activeTab, selectedLine]);
 
@@ -319,31 +315,98 @@ export default function PlannerPage() {
             </div>
           </div>
           <SidebarContent className="px-4 py-2 flex flex-col h-full">
-            <div className="space-y-8 flex-1">
+            <div className="space-y-8 flex-1 overflow-y-auto">
+              {/* Sección de Módulo de Planificación */}
               <section>
-                <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Semana</p>
-                <div className="px-2 space-y-3">
-                    <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100/80 shadow-sm">
-                    <span className="text-sm font-bold text-slate-600">Semana</span>
-                    <Badge variant="secondary" className="font-black text-[13px] text-primary bg-primary/10 px-3 py-0.5 rounded-lg border-primary/5">{weekNumber}</Badge>
-                  </div>
-                  <Popover>
-                    <PopoverTrigger asChild disabled={!isAdmin}>
-                      <Button variant="outline" className="w-full h-12 justify-start text-left font-bold bg-white border-slate-200 shadow-sm hover:bg-slate-50 transition-all rounded-2xl disabled:opacity-80">
-                        <CalendarIcon className="mr-3 h-4 w-4 text-primary" />
-                        {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar mode="single" selected={weekStartDate} onSelect={(date) => date && setWeekStartDate(date)} locale={es} />
-                    </PopoverContent>
-                  </Popover>
+                <div className="px-2 mb-4 flex items-center gap-2">
+                  <Badge variant="outline" className="bg-emerald-50 text-emerald-600 border-emerald-100 px-2 py-0.5 font-black text-[9px] uppercase tracking-widest">
+                    Módulo de Planificación
+                  </Badge>
                 </div>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton isActive={activeTab === 'gantt'} onClick={() => setActiveTab('gantt')} className="h-11 rounded-xl">
+                      <GanttChartSquare className="h-4 w-4" />
+                      <span className="font-bold">Programación</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton isActive={activeTab === 'daily'} onClick={() => setActiveTab('daily')} className="h-11 rounded-xl">
+                      <ListTodo className="h-4 w-4" />
+                      <span className="font-bold">Plan Día a Día</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton isActive={activeTab === 'requirement'} onClick={() => setActiveTab('requirement')} className="h-11 rounded-xl">
+                      <ClipboardList className="h-4 w-4" />
+                      <span className="font-bold">Requerimientos</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                </SidebarMenu>
               </section>
 
-              {!isReportView && (
+              {/* Sección de Módulo de Gestión (Admin Only) */}
+              {isAdmin && (
                 <section>
-                  <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas</p>
+                  <div className="px-2 mb-4 flex items-center gap-2">
+                    <Badge variant="outline" className="bg-primary/5 text-primary border-primary/10 px-2 py-0.5 font-black text-[9px] uppercase tracking-widest">
+                      Módulo de Gestión
+                    </Badge>
+                  </div>
+                  <SidebarMenu>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton isActive={activeTab === 'admin-report'} onClick={() => setActiveTab('admin-report')} className="h-11 rounded-xl">
+                        <BarChart3 className="h-4 w-4" />
+                        <span className="font-bold">Control Producción</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton isActive={activeTab === 'compliance-report'} onClick={() => setActiveTab('compliance-report')} className="h-11 rounded-xl">
+                        <CheckCircle2 className="h-4 w-4" />
+                        <span className="font-bold">Cumplimiento</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton isActive={activeTab === 'speeds'} onClick={() => setActiveTab('speeds')} className="h-11 rounded-xl">
+                        <Gauge className="h-4 w-4" />
+                        <span className="font-bold">Velocidades</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                    <SidebarMenuItem>
+                      <SidebarMenuButton isActive={activeTab === 'calculator'} onClick={() => setActiveTab('calculator')} className="h-11 rounded-xl">
+                        <CalculatorIcon className="h-4 w-4" />
+                        <span className="font-bold">Calculadora</span>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  </SidebarMenu>
+                </section>
+              )}
+
+              {/* Contexto Semanal y Líneas */}
+              <section className="pt-4 border-t border-slate-100">
+                 <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Configuración Semana</p>
+                 <div className="px-2 space-y-3">
+                    <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100/80 shadow-sm">
+                      <span className="text-sm font-bold text-slate-600">Semana</span>
+                      <Badge variant="secondary" className="font-black text-[13px] text-primary bg-primary/10 px-3 py-0.5 rounded-lg border-primary/5">{weekNumber}</Badge>
+                    </div>
+                    <Popover>
+                      <PopoverTrigger asChild disabled={!isAdmin}>
+                        <Button variant="outline" className="w-full h-12 justify-start text-left font-bold bg-white border-slate-200 shadow-sm hover:bg-slate-50 transition-all rounded-2xl disabled:opacity-80">
+                          <CalendarIcon className="mr-3 h-4 w-4 text-primary" />
+                          {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <Calendar mode="single" selected={weekStartDate} onSelect={(date) => date && setWeekStartDate(date)} locale={es} />
+                      </PopoverContent>
+                    </Popover>
+                 </div>
+              </section>
+
+              {!isManagementView && (
+                <section>
+                  <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas de Producción</p>
                   <div className="px-2">
                     <Select value={selectedLine} onValueChange={setSelectedLine}>
                       <SelectTrigger className="w-full h-12 bg-slate-50 border-slate-100 font-bold rounded-2xl hover:bg-slate-100/50 transition-all">
@@ -357,50 +420,27 @@ export default function PlannerPage() {
                 </section>
               )}
 
-              {isAdmin && (
-                <section className="animate-in fade-in slide-in-from-top-2">
-                  <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">
-                    {isReportView ? 'Navegación' : 'Acciones'}
-                  </p>
-                  <div className="grid gap-3 px-2">
-                    {!isReportView ? (
-                      <>
-                        <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 hover:translate-y-[-1px] transition-all">
-                          <Plus className="h-4 w-4" /> Nueva Tarea
-                        </Button>
-                        <Button variant="ghost" size="sm" onClick={handleClearContext} className="w-full gap-2 text-destructive font-black uppercase text-xs tracking-widest hover:bg-destructive/5 py-4">
-                          <Trash2 className="h-4 w-4" /> Limpiar Todo
-                        </Button>
-                        <Button 
-                          variant="outline" 
-                          size="sm" 
-                          onClick={() => { setActiveTab('admin-report'); }} 
-                          className="w-full gap-2 text-primary font-black uppercase text-xs tracking-widest border-primary/20 hover:bg-primary/5 rounded-2xl py-6"
-                        >
-                          <BarChart3 className="h-4 w-4" /> Reporte De Gestión
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <Button 
-                          variant="default" 
-                          size="lg" 
-                          onClick={() => setIsEntryDialogOpen(true)} 
-                          className="w-full gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-emerald-200 hover:translate-y-[-1px] transition-all"
-                        >
-                          <PackageCheck className="h-4 w-4" /> Cargar Producción
-                        </Button>
-                        <Button 
-                          variant="ghost" 
-                          size="lg" 
-                          onClick={() => setActiveTab('gantt')} 
-                          className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl border border-slate-100 hover:bg-slate-50 transition-all"
-                        >
-                          <ChevronLeft className="h-4 w-4" /> Volver al Plan
-                        </Button>
-                      </>
-                    )}
-                  </div>
+              {isAdmin && !isManagementView && (
+                <section className="px-2 space-y-3">
+                  <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 hover:translate-y-[-1px] transition-all">
+                    <Plus className="h-4 w-4" /> Nueva Tarea
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={handleClearContext} className="w-full gap-2 text-destructive font-black uppercase text-xs tracking-widest hover:bg-destructive/5 py-4">
+                    <Trash2 className="h-4 w-4" /> Limpiar Plan
+                  </Button>
+                </section>
+              )}
+
+              {isAdmin && isManagementView && (
+                <section className="px-2">
+                  <Button 
+                    variant="default" 
+                    size="lg" 
+                    onClick={() => setIsEntryDialogOpen(true)} 
+                    className="w-full gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-emerald-200 hover:translate-y-[-1px] transition-all"
+                  >
+                    <PackageCheck className="h-4 w-4" /> Cargar Producción
+                  </Button>
                 </section>
               )}
             </div>
@@ -432,80 +472,67 @@ export default function PlannerPage() {
         </Sidebar>
 
         <main className="flex-1 flex flex-col h-screen overflow-hidden no-print">
-          <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-end shrink-0 gap-2">
-            {!isReportView && (
-              <>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={handlePrintSummary}
-                  className="gap-2 font-bold text-slate-600 hover:text-primary"
-                >
-                  <LayoutDashboard className="h-4 w-4" /> 
-                  <span className="hidden sm:inline">Resumen</span>
-                </Button>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={handlePrintPlan}
-                  className="gap-2 font-bold text-slate-600 hover:text-primary"
-                >
-                  <Printer className="h-4 w-4" /> 
-                  <span className="hidden sm:inline">Programa</span>
-                </Button>
-              </>
-            )}
+          <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-4">
+              <div className={cn(
+                "px-3 py-1 rounded-lg font-black text-[10px] uppercase tracking-[0.2em]",
+                pageHeader.module === "GESTIÓN" ? "bg-primary/10 text-primary" : "bg-emerald-50 text-emerald-600"
+              )}>
+                {pageHeader.module}
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              {!isManagementView && (
+                <>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={handlePrintSummary}
+                    className="gap-2 font-bold text-slate-600 hover:text-primary"
+                  >
+                    <LayoutDashboard className="h-4 w-4" /> 
+                    <span className="hidden sm:inline">Resumen</span>
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={handlePrintPlan}
+                    className="gap-2 font-bold text-slate-600 hover:text-primary"
+                  >
+                    <Printer className="h-4 w-4" /> 
+                    <span className="hidden sm:inline">Programa</span>
+                  </Button>
+                </>
+              )}
+            </div>
           </header>
 
           <div className="flex-1 overflow-auto p-6 lg:p-8">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="h-full flex flex-col gap-6">
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <h2 className="text-2xl font-headline font-black text-slate-900 uppercase">
-                    {pageHeader.title}
-                  </h2>
-                  <p className="text-sm text-slate-500">{pageHeader.subtitle}</p>
-                </div>
-                <TabsList className="bg-white border p-1 rounded-xl shadow-sm">
-                  {isReportView ? (
-                    <>
-                      <TabsTrigger value="admin-report" className="gap-2 px-4 font-bold">
-                        <BarChart3 className="h-4 w-4" /> Producción
-                      </TabsTrigger>
-                      <TabsTrigger value="compliance-report" className="gap-2 px-4 font-bold">
-                        <CheckCircle2 className="h-4 w-4" /> Cumplimiento
-                      </TabsTrigger>
-                    </>
-                  ) : (
-                    <>
-                      <TabsTrigger value="gantt" className="gap-2 px-4 font-bold"><GanttChartSquare className="h-4 w-4" /> Programación</TabsTrigger>
-                      <TabsTrigger value="daily" className="gap-2 px-4 font-bold"><ListTodo className="h-4 w-4" /> Plan Día a Día</TabsTrigger>
-                      {isAdmin && (
-                        <>
-                          <TabsTrigger value="speeds" className="gap-2 px-4 font-bold"><Gauge className="h-4 w-4" /> Velocidades</TabsTrigger>
-                          <TabsTrigger value="calculator" className="gap-2 px-4 font-bold"><CalculatorIcon className="h-4 w-4" /> Calculadora</TabsTrigger>
-                        </>
-                      )}
-                      <TabsTrigger value="requirement" className="gap-2 px-4 font-bold"><ClipboardList className="h-4 w-4" /> Requerimiento</TabsTrigger>
-                    </>
-                  )}
-                </TabsList>
+            <div className="flex flex-col gap-8 h-full">
+              <div className="space-y-1">
+                <h2 className="text-3xl font-headline font-black text-slate-900 uppercase tracking-tight">
+                  {pageHeader.title}
+                </h2>
+                <p className="text-sm text-slate-500 font-medium">{pageHeader.subtitle}</p>
               </div>
 
               <div className="flex-1 min-w-0">
-                <TabsContent value="gantt" className="m-0 h-full">
+                {activeTab === 'gantt' && (
                   <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
-                </TabsContent>
-                <TabsContent value="daily" className="m-0 h-full">
+                )}
+                {activeTab === 'daily' && (
                   <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintDaily} />
-                </TabsContent>
+                )}
+                {activeTab === 'requirement' && (
+                  <RequirementSection onPrint={handlePrintRequirements} tasks={tasks} weekStartDate={weekStartDate} />
+                )}
                 {isAdmin && (
                   <>
-                    <TabsContent value="speeds" className="m-0 h-full">
+                    {activeTab === 'speeds' && (
                       <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} readOnly={!isAdmin} />
-                    </TabsContent>
-                    <TabsContent value="calculator" className="m-0 h-full"><Calculator /></TabsContent>
-                    <TabsContent value="admin-report" className="m-0 h-full">
+                    )}
+                    {activeTab === 'calculator' && <Calculator />}
+                    {activeTab === 'admin-report' && (
                       <AdminReportTool 
                         view="production"
                         tasks={tasks} 
@@ -515,25 +542,22 @@ export default function PlannerPage() {
                         onPrintWeeklyControl={handlePrintWeeklyControl}
                         onPrintMonthly={handlePrintMonthly}
                       />
-                    </TabsContent>
-                    <TabsContent value="compliance-report" className="m-0 h-full">
+                    )}
+                    {activeTab === 'compliance-report' && (
                       <AdminReportTool 
                         view="compliance"
                         tasks={tasks} 
                         weekStartDate={weekStartDate} 
-                        realProduction={realProduction}
+                        realProduction={realProduction} 
                         updateRealProduction={updateRealProduction}
                         onPrintCompliance={handlePrintCompliance}
                         onPrintMonthlyCompliance={handlePrintMonthlyCompliance}
                       />
-                    </TabsContent>
+                    )}
                   </>
                 )}
-                <TabsContent value="requirement" className="m-0 h-full">
-                  <RequirementSection onPrint={handlePrintRequirements} tasks={tasks} weekStartDate={weekStartDate} />
-                </TabsContent>
               </div>
-            </Tabs>
+            </div>
           </div>
         </main>
 
