@@ -21,7 +21,7 @@ export const ALL_LINES_SUMMARY = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
 export const PREFORMS_DATA = [
   { code: 'EMP_0009', description: 'PREFORMA TRANSPARENTE 29.6GR 1881' },
-  { code: 'EMP_0068', description: 'PREFORMA TRANSPARENTE 36 GR-1881' },
+  { code: 'EMP_068', description: 'PREFORMA TRANSPARENTE 36 GR-1881' },
   { code: 'EMP_0093', description: 'PREFORMA TRANSPARENTE 42,64 GR-1881' },
   { code: 'EMP_0103', description: 'PREFORMA VERDE 42,64 GR-1881' },
   { code: 'EMP_0120', description: 'PREFORMA VERDE 29.6GR 1881' },
@@ -184,8 +184,8 @@ export const SYRUP_FACTORS: Record<string, Record<string, number>> = {
   "GLUP NARANJA": { "2Lts": 2.4, "1Lt": 2.4, "0.4Lts": 1.2 },
   "GLUP KOLITA": { "2Lts": 2, "1Lt": 2, "0.4Lts": 1.0 },
   "GLUP MANZANA VERDE": { "2Lts": 2, "1Lt": 2, "0.4Lts": 1.0 },
-  "GLUP PIÑA PARCHITA": { "2.4": 2.4, "1Lt": 2.4, "0.4Lts": 1.2 },
-  "GLUP MANZANA ROJA": { "2.07": 2.07, "1Lt": 2.07, "0.4Lts": 1.03 },
+  "GLUP PIÑA PARCHITA": { "2Lts": 2.4, "1Lt": 2.4, "0.4Lts": 1.2 },
+  "GLUP MANZANA ROJA": { "2Lts": 2.07, "1Lt": 2.07, "0.4Lts": 1.03 },
   "JUSTY NARANJA": { "1.5Lts": 18 },
   "JUSTY DURAZNO": { "1.5Lts": 18 },
   "JUSTY MANDARINA": { "1.5Lts": 18 },

@@ -13,7 +13,8 @@ import {
   CONCENTRATES_JUICES, 
   SOLIDS_DATA, 
   ADDITIVES_DATA, 
-  SUGAR_DATA
+  SUGAR_DATA,
+  RECIPES
 } from '@/lib/planner-utils';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -39,7 +40,10 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: {
   const { resetRecipesToDefaults } = usePlannerStore();
 
   const currentRecipe = useMemo(() => {
-    return recipes[selectedProduct] || {};
+    // Merge master recipes with custom ones, favoring custom values if they exist
+    const master = RECIPES[selectedProduct] || {};
+    const custom = recipes[selectedProduct] || {};
+    return { ...master, ...custom };
   }, [recipes, selectedProduct]);
 
   const materialsInRecipe = useMemo(() => {
