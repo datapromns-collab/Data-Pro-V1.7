@@ -3,7 +3,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 
-export type UserRole = 'ADMIN' | 'STANDARD';
+export type UserRole = 'ADMIN' | 'STANDARD' | 'INVENTORY';
 
 export interface UserSession {
   id: string;
@@ -17,6 +17,7 @@ const VALID_USERS = [
   { id: 'user', password: 'user', name: 'Multinacional de Sabores', role: 'STANDARD' as UserRole },
   { id: 'admin', password: '123.*', name: 'Gerencia de Planta', role: 'ADMIN' as UserRole },
   { id: 'demon', password: '2005', name: 'Yonny Hernández', role: 'ADMIN' as UserRole },
+  { id: 'AG.1', password: '12345', name: 'Maria Reinoso', role: 'INVENTORY' as UserRole },
 ];
 
 export function useAuthStore() {
@@ -56,6 +57,7 @@ export function useAuthStore() {
     isLoaded,
     isAdmin: user?.role === 'ADMIN',
     isDemon: user?.id === 'demon',
+    isInventory: user?.role === 'INVENTORY',
     login,
     logout
   };

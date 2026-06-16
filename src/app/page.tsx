@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -93,6 +94,7 @@ export default function PlannerPage() {
     isLoaded: authLoaded,
     isAdmin,
     isDemon,
+    isInventory,
     login,
     logout
   } = useAuthStore();
@@ -117,19 +119,25 @@ export default function PlannerPage() {
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
   useEffect(() => {
-    if (authLoaded && user && !isAdmin && activeModule === 'management') {
-      setActiveModule('planning');
-      setActiveTab('gantt');
+    if (authLoaded && user) {
+      if (isInventory && activeModule !== 'raw-materials') {
+        setActiveModule('raw-materials');
+        setActiveTab('raw-material-view');
+      }
+      if (!isAdmin && activeModule === 'management') {
+        setActiveModule('planning');
+        setActiveTab('gantt');
+      }
+      if (!isDemon && activeModule === 'recipes') {
+        setActiveModule('planning');
+        setActiveTab('gantt');
+      }
+      if (user.role === 'STANDARD' && activeModule === 'raw-materials') {
+        setActiveModule('planning');
+        setActiveTab('gantt');
+      }
     }
-    if (authLoaded && user && !isDemon && activeModule === 'recipes') {
-      setActiveModule('planning');
-      setActiveTab('gantt');
-    }
-    if (authLoaded && user && user.role === 'STANDARD' && activeModule === 'raw-materials') {
-      setActiveModule('planning');
-      setActiveTab('gantt');
-    }
-  }, [authLoaded, user, isAdmin, isDemon, activeModule]);
+  }, [authLoaded, user, isAdmin, isDemon, isInventory, activeModule]);
 
   useEffect(() => {
     if (plannerLoaded) {
@@ -329,19 +337,21 @@ export default function PlannerPage() {
               <section className="space-y-2">
                 <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Módulos</p>
                 <div className="flex flex-col gap-2">
-                  <Button 
-                    variant={activeModule === 'planning' ? 'default' : 'ghost'} 
-                    onClick={() => { setActiveModule('planning'); setActiveTab('gantt'); }}
-                    className={cn(
-                      "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-all",
-                      activeModule === 'planning' ? "shadow-md shadow-primary/20" : "text-slate-500"
-                    )}
-                  >
-                    <div className={cn("p-1.5 rounded-lg", activeModule === 'planning' ? "bg-white/20" : "bg-slate-100")}>
-                      <GanttChartSquare className="h-4 w-4" />
-                    </div>
-                    <span className="uppercase text-[11px] tracking-widest text-left">Planificación</span>
-                  </Button>
+                  {!isInventory && (
+                    <Button 
+                      variant={activeModule === 'planning' ? 'default' : 'ghost'} 
+                      onClick={() => { setActiveModule('planning'); setActiveTab('gantt'); }}
+                      className={cn(
+                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-all",
+                        activeModule === 'planning' ? "shadow-md shadow-primary/20" : "text-slate-500"
+                      )}
+                    >
+                      <div className={cn("p-1.5 rounded-lg", activeModule === 'planning' ? "bg-white/20" : "bg-slate-100")}>
+                        <GanttChartSquare className="h-4 w-4" />
+                      </div>
+                      <span className="uppercase text-[11px] tracking-widest text-left">Planificación</span>
+                    </Button>
+                  )}
 
                   {isAdmin && (
                     <Button 
@@ -401,7 +411,7 @@ export default function PlannerPage() {
                       <Badge variant="secondary" className="font-black text-[13px] text-primary bg-primary/10 px-3 py-0.5 rounded-lg border-primary/5">{weekNumber}</Badge>
                     </div>
                     <Popover>
-                      <PopoverTrigger asChild disabled={!isAdmin}>
+                      <PopoverTrigger asChild disabled={!isAdmin && !isInventory}>
                         <Button variant="outline" className="w-full h-12 justify-start text-left font-bold bg-white border-slate-200 shadow-sm hover:bg-slate-50 transition-all rounded-2xl disabled:opacity-80">
                           <CalendarIcon className="mr-3 h-4 w-4 text-primary" />
                           {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
@@ -414,7 +424,7 @@ export default function PlannerPage() {
                  </div>
               </section>
 
-              {activeModule !== 'raw-materials' && (
+              {activeModule !== 'raw-materials' && !isInventory && (
                 <section>
                   <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas de Producción</p>
                   <div className="px-2">
@@ -610,7 +620,7 @@ export default function PlannerPage() {
               </div>
 
               <div className="flex-1 min-w-0">
-                {activeModule === 'planning' && (
+                {activeModule === 'planning' && !isInventory && (
                   <>
                     {activeTab === 'gantt' && (
                       <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
