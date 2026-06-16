@@ -419,7 +419,7 @@ export default function PlannerPage() {
                       <div className={cn("p-1.5 rounded-lg", activeModule === 'purchasing' ? "bg-white/20" : "bg-slate-100")}>
                         <ShoppingCart className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[11px] tracking-widest text-left">Protección de Compras</span>
+                      <span className="uppercase text-[11px] tracking-widest text-left">Proyección de Compras</span>
                     </Button>
                   )}
                 </div>

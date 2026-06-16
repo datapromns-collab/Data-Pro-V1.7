@@ -9,7 +9,7 @@ export function PurchasingModule() {
       <div className="bg-blue-50 p-8 rounded-[2.5rem] mb-6 shadow-sm border border-blue-100/50">
         <ShoppingCart className="h-16 w-16 text-blue-500/40" />
       </div>
-      <h2 className="text-2xl font-headline font-black text-slate-900 uppercase tracking-tight mb-3">Protección de Compras</h2>
+      <h2 className="text-2xl font-headline font-black text-slate-900 uppercase tracking-tight mb-3">Proyección de Compras</h2>
       <p className="text-slate-500 max-w-md font-medium leading-relaxed">
         Este módulo se encuentra en fase de desarrollo. Próximamente podrás gestionar la seguridad, validaciones y auditoría de los requerimientos de compra generados por el sistema.
       </p>
