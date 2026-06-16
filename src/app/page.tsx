@@ -40,6 +40,7 @@ import { ComplianceReport } from '@/components/planner/ComplianceReport';
 import { MonthlyComplianceReport } from '@/components/planner/MonthlyComplianceReport';
 import { RecipeEditor } from '@/components/planner/RecipeEditor';
 import { RawMaterialModule } from '@/components/planner/RawMaterialModule';
+import { RawMaterialReport } from '@/components/planner/RawMaterialReport';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
@@ -107,7 +108,7 @@ export default function PlannerPage() {
   const [activeModule, setActiveModule] = useState<'planning' | 'management' | 'recipes' | 'raw-materials'>('planning');
   const [activeTab, setActiveTab] = useState("gantt");
   
-  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance'>('plan');
+  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance' | 'raw-material'>('plan');
   const [emitDate, setEmitDate] = useState('');
   
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
@@ -239,6 +240,18 @@ export default function PlannerPage() {
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: landscape; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
+
+  const handlePrintRawMaterial = () => {
+    setPrintMode('raw-material');
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: landscape; margin: 0; }';
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
@@ -657,6 +670,7 @@ export default function PlannerPage() {
                         onUpdateManualUBB={updateManualUBB}
                         onUpdateInitialUBB={updateInitialUBBTanks}
                         onUpdateFinalUBB={updateFinalUBBTanks}
+                        onPrintReport={handlePrintRawMaterial}
                       />
                     )}
                   </>
@@ -711,6 +725,18 @@ export default function PlannerPage() {
           {printMode === 'daily' && (
             <div className="p-0">
               <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} />
+            </div>
+          )}
+          {printMode === 'raw-material' && (
+            <div className="p-0">
+              <RawMaterialReport 
+                weekStartDate={weekStartDate}
+                rawMaterialStock={rawMaterialStock}
+                manualUBB={manualUBB}
+                initialUBBTanks={initialUBBTanks}
+                finalUBBTanks={finalUBBTanks}
+                recipes={customRecipes}
+              />
             </div>
           )}
           {isAdmin && (

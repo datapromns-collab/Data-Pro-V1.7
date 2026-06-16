@@ -7,19 +7,19 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { 
   Package, 
-  ArrowRightLeft, 
   Warehouse, 
   TrendingUp, 
-  CalendarDays, 
   BarChart3, 
   Box,
   Truck,
   ClipboardCheck,
   AlertTriangle,
   FlaskConical,
-  Beaker
+  Beaker,
+  FileDown
 } from 'lucide-react';
 import { 
   SUGAR_DATA, 
@@ -48,6 +48,7 @@ interface RawMaterialModuleProps {
   onUpdateManualUBB: (flavor: string, dateKey: string, value: number) => void;
   onUpdateInitialUBB: (flavor: string, value: number) => void;
   onUpdateFinalUBB: (flavor: string, value: number) => void;
+  onPrintReport?: () => void;
 }
 
 const ALL_MATERIALS = [
@@ -73,66 +74,53 @@ export function RawMaterialModule({
   onUpdateDailyPhysical,
   onUpdateManualUBB,
   onUpdateInitialUBB,
-  onUpdateFinalUBB
+  onUpdateFinalUBB,
+  onPrintReport
 }: RawMaterialModuleProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   const dateKeys = useMemo(() => weekDays.map(d => format(d, 'yyyy-MM-dd')), [weekDays]);
 
-  // Consumo Teórico basado en UBB manuales
   const theoreticalConsumption = useMemo(() => {
     const consumption: Record<string, number> = {};
-    
     PRODUCT_LIST.forEach(flavor => {
       const recipe = recipes[flavor];
       if (!recipe) return;
-
       const flavorUbbData = manualUBB[flavor] || {};
       const totalUbbForFlavor = Object.values(flavorUbbData).reduce((a, b) => a + (Number(b) || 0), 0);
-
       if (totalUbbForFlavor > 0) {
         Object.entries(recipe).forEach(([matCode, factor]) => {
-          const matUsage = totalUbbForFlavor * factor;
-          consumption[matCode] = (consumption[matCode] || 0) + matUsage;
+          consumption[matCode] = (consumption[matCode] || 0) + (totalUbbForFlavor * factor);
         });
       }
     });
-    
     return consumption;
   }, [manualUBB, recipes]);
 
-  // Cálculo de Materiales en Tanques Iniciales
   const materialsInTanks = useMemo(() => {
     const inTanks: Record<string, number> = {};
-    
     PRODUCT_LIST.forEach(flavor => {
       const recipe = recipes[flavor];
       const ubbInTanks = initialUBBTanks[flavor] || 0;
-      
       if (recipe && ubbInTanks > 0) {
         Object.entries(recipe).forEach(([matCode, factor]) => {
           inTanks[matCode] = (inTanks[matCode] || 0) + (ubbInTanks * factor);
         });
       }
     });
-    
     return inTanks;
   }, [initialUBBTanks, recipes]);
 
-  // Cálculo de Materiales en Tanques Finales
   const materialsInFinalTanks = useMemo(() => {
     const inTanks: Record<string, number> = {};
-    
     PRODUCT_LIST.forEach(flavor => {
       const recipe = recipes[flavor];
       const ubbInTanks = finalUBBTanks[flavor] || 0;
-      
       if (recipe && ubbInTanks > 0) {
         Object.entries(recipe).forEach(([matCode, factor]) => {
           inTanks[matCode] = (inTanks[matCode] || 0) + (ubbInTanks * factor);
         });
       }
     });
-    
     return inTanks;
   }, [finalUBBTanks, recipes]);
 
@@ -372,6 +360,16 @@ export function RawMaterialModule({
         </TabsContent>
 
         <TabsContent value="summary" className="m-0 animate-in slide-in-from-left-2 duration-300 space-y-6">
+          <div className="flex justify-end">
+            <Button 
+              onClick={onPrintReport}
+              variant="outline" 
+              className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm"
+            >
+              <FileDown className="h-4 w-4" /> Exportar Reporte PDF
+            </Button>
+          </div>
+
           <Card className="border-slate-200 rounded-3xl overflow-hidden bg-white shadow-xl shadow-slate-100/50">
             <div className="bg-[#0c1a3d] p-4 flex items-center justify-between">
               <div className="flex items-center gap-2 text-white">
@@ -407,7 +405,6 @@ export function RawMaterialModule({
                     const final = stock.final || 0;
                     const finalInTanks = materialsInFinalTanks[mat.code] || 0;
                     
-                    // Consumo Físico = (I. Inicial + I. en Tanques + Recepción) - (I. Final + F. en Tanques)
                     const physical = (initial + initialInTanks + receptions) - (final + finalInTanks);
                     const theoretical = theoreticalConsumption[mat.code] || 0;
                     const variance = physical - theoretical;
