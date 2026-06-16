@@ -398,19 +398,21 @@ export default function PlannerPage() {
                  </div>
               </section>
 
-              <section>
-                <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas de Producción</p>
-                <div className="px-2">
-                  <Select value={selectedLine} onValueChange={setSelectedLine}>
-                    <SelectTrigger className="w-full h-12 bg-slate-50 border-slate-100 font-bold rounded-2xl hover:bg-slate-100/50 transition-all">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {LINES.map((l, i) => <SelectItem key={l} value={(i + 1).toString()}>{l}</SelectItem>)}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </section>
+              {activeModule !== 'raw-materials' && (
+                <section>
+                  <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas de Producción</p>
+                  <div className="px-2">
+                    <Select value={selectedLine} onValueChange={setSelectedLine}>
+                      <SelectTrigger className="w-full h-12 bg-slate-50 border-slate-100 font-bold rounded-2xl hover:bg-slate-100/50 transition-all">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {LINES.map((l, i) => <SelectItem key={l} value={(i + 1).toString()}>{l}</SelectItem>)}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </section>
+              )}
 
               {isAdmin && activeModule === 'planning' && (
                 <section className="px-2 space-y-3">
