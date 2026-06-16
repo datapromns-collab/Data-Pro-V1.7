@@ -113,7 +113,7 @@ export function RawMaterialReport({
           <table className="w-full border-collapse text-[7pt]">
             <thead>
               <tr className="bg-[#4a7ebb] text-white font-black uppercase h-7">
-                <th style={{ width: '3cm' }} className="px-2 py-0 border border-slate-900 text-left">MATERIAL</th>
+                <th style={{ width: '1cm' }} className="px-2 py-0 border border-slate-900 text-left">MATERIAL</th>
                 <th className="px-1 py-0 border border-slate-900 text-right">INICIAL</th>
                 <th className="px-1 py-0 border border-slate-900 text-right bg-[#2f5597]">I. TANQUES</th>
                 <th className="px-1 py-0 border border-slate-900 text-right">RECEPCIÓN</th>
@@ -140,7 +140,7 @@ export function RawMaterialReport({
 
                 return (
                   <tr key={mat.code} className={`h-5 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
-                    <td style={{ width: '3cm' }} className="px-2 py-0 border border-slate-300 uppercase truncate leading-none">{mat.description}</td>
+                    <td style={{ width: '1cm' }} className="px-2 py-0 border border-slate-300 uppercase truncate leading-none">{mat.description}</td>
                     <td className="px-1 py-0 border border-slate-300 text-right tabular-nums">{initial.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
                     <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-indigo-50/50">{initialInTanks.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
                     <td className="px-1 py-0 border border-slate-300 text-right tabular-nums">{receptions.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
@@ -190,7 +190,7 @@ export function RawMaterialReport({
           <table className="w-full border-collapse text-[7.5pt] h-full">
             <thead>
               <tr className="bg-[#10b981] text-white font-black uppercase h-7">
-                <th style={{ width: '3cm' }} className="px-2 py-0 border border-slate-900 text-left">PRODUCTO (SABOR)</th>
+                <th style={{ width: '1cm' }} className="px-2 py-0 border border-slate-900 text-left">PRODUCTO (SABOR)</th>
                 {DAYS_NAMES.map((day, i) => (
                   <th key={i} className="px-1 py-0 border border-slate-900 text-center w-[85px]">
                     <div className="text-[6px] opacity-80 leading-none">{format(weekDays[i], 'dd/MM')}</div>
@@ -207,7 +207,7 @@ export function RawMaterialReport({
                 
                 return (
                   <tr key={flavor} className={`h-5 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
-                    <td style={{ width: '3cm' }} className="px-2 py-0 border border-slate-300 uppercase leading-none">{flavor}</td>
+                    <td style={{ width: '1cm' }} className="px-2 py-0 border border-slate-300 uppercase leading-none">{flavor}</td>
                     {dailyData.map((val, dIdx) => (
                       <td key={dIdx} className="px-1 py-0 border border-slate-300 text-center tabular-nums">
                         {val > 0 ? val.toLocaleString('es-ES', { minimumFractionDigits: 1 }) : '-'}
@@ -222,7 +222,7 @@ export function RawMaterialReport({
             </tbody>
             <tfoot className="bg-emerald-100 text-slate-900 font-black">
               <tr className="h-7">
-                <td style={{ width: '3cm' }} className="px-2 py-0 border border-slate-900 uppercase">TOTALES DIARIOS</td>
+                <td style={{ width: '1cm' }} className="px-2 py-0 border border-slate-900 uppercase">TOTALES DIARIOS</td>
                 {dateKeys.map((key, i) => {
                   const dayTotal = PRODUCT_LIST.reduce((acc, flavor) => acc + (Number(manualUBB[flavor]?.[key]) || 0), 0);
                   return (
