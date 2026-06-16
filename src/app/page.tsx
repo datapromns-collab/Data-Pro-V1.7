@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -321,7 +320,7 @@ export default function PlannerPage() {
   }
 
   const navTabClass = (isActive: boolean) => cn(
-    "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 active:scale-100 border-0 select-none",
+    "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none",
     isActive ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
   );
 
@@ -348,7 +347,7 @@ export default function PlannerPage() {
                       variant={activeModule === 'planning' ? 'default' : 'ghost'} 
                       onClick={() => { setActiveModule('planning'); setActiveTab('gantt'); }}
                       className={cn(
-                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-all",
+                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-colors",
                         activeModule === 'planning' ? "shadow-md shadow-primary/20" : "text-slate-500"
                       )}
                     >
@@ -364,7 +363,7 @@ export default function PlannerPage() {
                       variant={activeModule === 'management' ? 'default' : 'ghost'} 
                       onClick={() => { setActiveModule('management'); setActiveTab('admin-report'); }}
                       className={cn(
-                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-all",
+                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-colors",
                         activeModule === 'management' ? "shadow-md shadow-primary/20" : "text-slate-500"
                       )}
                     >
@@ -380,7 +379,7 @@ export default function PlannerPage() {
                       variant={activeModule === 'raw-materials' ? 'default' : 'ghost'} 
                       onClick={() => { setActiveModule('raw-materials'); setActiveTab('raw-material-view'); }}
                       className={cn(
-                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-all",
+                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-colors",
                         activeModule === 'raw-materials' ? "shadow-md shadow-amber-200 bg-amber-600 hover:bg-amber-700 text-white" : "text-slate-500"
                       )}
                     >
@@ -396,7 +395,7 @@ export default function PlannerPage() {
                       variant={activeModule === 'recipes' ? 'default' : 'ghost'} 
                       onClick={() => { setActiveModule('recipes'); setActiveTab('recipes-editor'); }}
                       className={cn(
-                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-all",
+                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-colors",
                         activeModule === 'recipes' ? "shadow-md shadow-emerald-200 bg-emerald-600 hover:bg-emerald-700 text-white" : "text-slate-500"
                       )}
                     >
@@ -412,7 +411,7 @@ export default function PlannerPage() {
                       variant={activeModule === 'purchasing' ? 'default' : 'ghost'} 
                       onClick={() => { setActiveModule('purchasing'); setActiveTab('purchasing-view'); }}
                       className={cn(
-                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-all",
+                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-colors",
                         activeModule === 'purchasing' ? "shadow-md shadow-blue-200 bg-blue-600 hover:bg-blue-700 text-white" : "text-slate-500"
                       )}
                     >
@@ -466,7 +465,7 @@ export default function PlannerPage() {
 
               {isAdmin && activeModule === 'planning' && (
                 <section className="px-2 space-y-3">
-                  <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 hover:translate-y-[-1px] transition-all">
+                  <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 transition-all">
                     <Plus className="h-4 w-4" /> Nueva Tarea
                   </Button>
                   <Button variant="ghost" size="sm" onClick={handleClearContext} className="w-full gap-2 text-destructive font-black uppercase text-xs tracking-widest hover:bg-destructive/5 py-4">
@@ -481,7 +480,7 @@ export default function PlannerPage() {
                     variant="default" 
                     size="lg" 
                     onClick={() => setIsEntryDialogOpen(true)} 
-                    className="w-full gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-emerald-200 hover:translate-y-[-1px] transition-all"
+                    className="w-full gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-emerald-200 transition-all"
                   >
                     <PackageCheck className="h-4 w-4" /> Cargar Producción
                   </Button>
