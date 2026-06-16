@@ -18,7 +18,8 @@ import {
   Box,
   Truck,
   ClipboardCheck,
-  AlertTriangle
+  AlertTriangle,
+  FlaskConical
 } from 'lucide-react';
 import { 
   SUGAR_DATA, 
@@ -27,6 +28,7 @@ import {
   SOLIDS_DATA, 
   ADDITIVES_DATA,
   UBB_FACTORS,
+  PRODUCT_LIST,
   getWeekDays
 } from '@/lib/planner-utils';
 import { format } from 'date-fns';
@@ -35,11 +37,13 @@ import { es } from 'date-fns/locale';
 interface RawMaterialModuleProps {
   weekStartDate: Date;
   rawMaterialStock: any;
+  manualUBB: Record<string, Record<string, number>>;
   tasks: any[];
   recipes: Record<string, Record<string, number>>;
   onUpdateStock: (code: string, type: 'initial' | 'final', value: number) => void;
   onUpdateReception: (code: string, dateKey: string, value: number) => void;
   onUpdateDailyPhysical: (code: string, dateKey: string, value: number) => void;
+  onUpdateManualUBB: (flavor: string, dateKey: string, value: number) => void;
 }
 
 const ALL_MATERIALS = [
@@ -55,35 +59,39 @@ const DAYS_NAMES = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBA
 export function RawMaterialModule({
   weekStartDate,
   rawMaterialStock,
+  manualUBB,
   tasks,
   recipes,
   onUpdateStock,
   onUpdateReception,
-  onUpdateDailyPhysical
+  onUpdateDailyPhysical,
+  onUpdateManualUBB
 }: RawMaterialModuleProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   const dateKeys = useMemo(() => weekDays.map(d => format(d, 'yyyy-MM-dd')), [weekDays]);
 
+  // Consumo Teórico basado en UBB manuales
   const theoreticalConsumption = useMemo(() => {
     const consumption: Record<string, number> = {};
-    const weekEnd = new Date(weekStartDate);
-    weekEnd.setDate(weekEnd.getDate() + 7);
+    
+    PRODUCT_LIST.forEach(flavor => {
+      const recipe = recipes[flavor];
+      if (!recipe) return;
 
-    tasks.forEach(task => {
-      if (task.endTime > weekStartDate && task.startTime < weekEnd) {
-        const recipe = recipes[task.name];
-        if (recipe) {
-          Object.entries(recipe).forEach(([matCode, factor]) => {
-            const productUbbFactor = UBB_FACTORS[task.name] || 0;
-            const taskUbb = (task.tanks || 0) * productUbbFactor;
-            const matUsage = taskUbb * factor;
-            consumption[matCode] = (consumption[matCode] || 0) + matUsage;
-          });
-        }
+      const flavorUbbData = manualUBB[flavor] || {};
+      const totalUbbForFlavor = Object.values(flavorUbbData).reduce((a, b) => a + (Number(b) || 0), 0);
+
+      if (totalUbbForFlavor > 0) {
+        Object.entries(recipe).forEach(([matCode, factor]) => {
+          // El factor de receta es por UBB
+          const matUsage = totalUbbForFlavor * factor;
+          consumption[matCode] = (consumption[matCode] || 0) + matUsage;
+        });
       }
     });
+    
     return consumption;
-  }, [tasks, recipes, weekStartDate]);
+  }, [manualUBB, recipes]);
 
   const tabsTriggerClass = "gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 transition-colors flex-shrink-0 outline-none focus:ring-0 active:scale-100";
 
@@ -121,7 +129,7 @@ export function RawMaterialModule({
     </Card>
   );
 
-  const renderDailyTable = (type: 'receptions' | 'dailyPhysical') => (
+  const renderReceptionTable = () => (
     <Card className="border-slate-200 rounded-3xl overflow-hidden bg-white shadow-sm overflow-x-auto">
       <Table>
         <TableHeader>
@@ -137,7 +145,7 @@ export function RawMaterialModule({
         </TableHeader>
         <TableBody>
           {ALL_MATERIALS.map((mat) => {
-            const dailyData = dateKeys.map(key => rawMaterialStock[mat.code]?.[type]?.[key] || 0);
+            const dailyData = dateKeys.map(key => rawMaterialStock[mat.code]?.receptions?.[key] || 0);
             const total = dailyData.reduce((a, b) => a + b, 0);
             return (
               <TableRow key={mat.code} className="hover:bg-slate-50 transition-colors h-12">
@@ -151,12 +159,8 @@ export function RawMaterialModule({
                   <TableCell key={i} className="p-1">
                     <Input 
                       type="number"
-                      value={rawMaterialStock[mat.code]?.[type]?.[key] || ''}
-                      onChange={(e) => {
-                        const val = parseFloat(e.target.value) || 0;
-                        if (type === 'receptions') onUpdateReception(mat.code, key, val);
-                        else onUpdateDailyPhysical(mat.code, key, val);
-                      }}
+                      value={rawMaterialStock[mat.code]?.receptions?.[key] || ''}
+                      onChange={(e) => onUpdateReception(mat.code, key, parseFloat(e.target.value) || 0)}
                       className="w-full h-8 text-center font-bold text-[10px] rounded-lg border-transparent bg-slate-50 focus:border-primary/20 focus:bg-white"
                       placeholder="0"
                     />
@@ -164,6 +168,52 @@ export function RawMaterialModule({
                 ))}
                 <TableCell className="pr-6 text-center font-black text-[11px] text-primary tabular-nums">
                   {total > 0 ? total.toLocaleString('es-ES') : '-'}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </Card>
+  );
+
+  const renderDailyUBBTable = () => (
+    <Card className="border-slate-200 rounded-3xl overflow-hidden bg-white shadow-sm overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-[#10b981] hover:bg-[#10b981] border-none h-10">
+            <TableHead className="text-white font-black text-[10px] uppercase pl-6 min-w-[200px]">Producto (Sabor)</TableHead>
+            {weekDays.map((day, i) => (
+              <TableHead key={i} className="text-white font-black text-[10px] uppercase text-center min-w-[100px]">
+                {DAYS_NAMES[i]} <br/> <span className="opacity-70 text-[8px]">{format(day, 'dd/MM')}</span>
+              </TableHead>
+            ))}
+            <TableHead className="text-white font-black text-[10px] uppercase text-center pr-6">Total UBB</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {PRODUCT_LIST.map((flavor) => {
+            const dailyData = dateKeys.map(key => manualUBB[flavor]?.[key] || 0);
+            const total = dailyData.reduce((a, b) => a + (Number(b) || 0), 0);
+            return (
+              <TableRow key={flavor} className="hover:bg-emerald-50/30 transition-colors h-12">
+                <TableCell className="pl-6">
+                  <span className="text-[10px] font-black text-slate-700 uppercase">{flavor}</span>
+                </TableCell>
+                {dateKeys.map((key, i) => (
+                  <TableCell key={i} className="p-1">
+                    <Input 
+                      type="number"
+                      step="0.01"
+                      value={manualUBB[flavor]?.[key] || ''}
+                      onChange={(e) => onUpdateManualUBB(flavor, key, parseFloat(e.target.value) || 0)}
+                      className="w-full h-8 text-center font-bold text-[10px] rounded-lg border-transparent bg-emerald-50/50 focus:border-emerald-500/20 focus:bg-white"
+                      placeholder="0.00"
+                    />
+                  </TableCell>
+                ))}
+                <TableCell className="pr-6 text-center font-black text-[11px] text-emerald-600 tabular-nums">
+                  {total > 0 ? total.toLocaleString('es-ES', { minimumFractionDigits: 2 }) : '-'}
                 </TableCell>
               </TableRow>
             );
@@ -203,7 +253,7 @@ export function RawMaterialModule({
               <ClipboardCheck className="h-3.5 w-3.5" /> Inventario Final
             </TabsTrigger>
             <TabsTrigger value="daily" className={tabsTriggerClass}>
-              <CalendarDays className="h-3.5 w-3.5" /> Consumo Diario
+              <FlaskConical className="h-3.5 w-3.5" /> Registro Producción (UBB)
             </TabsTrigger>
             <TabsTrigger value="summary" className={tabsTriggerClass}>
               <BarChart3 className="h-3.5 w-3.5" /> Resumen Comparativo
@@ -216,7 +266,7 @@ export function RawMaterialModule({
         </TabsContent>
 
         <TabsContent value="reception" className="m-0 animate-in slide-in-from-left-2 duration-300">
-          {renderDailyTable('receptions')}
+          {renderReceptionTable()}
         </TabsContent>
 
         <TabsContent value="final" className="m-0 animate-in slide-in-from-left-2 duration-300">
@@ -224,7 +274,7 @@ export function RawMaterialModule({
         </TabsContent>
 
         <TabsContent value="daily" className="m-0 animate-in slide-in-from-left-2 duration-300">
-          {renderDailyTable('dailyPhysical')}
+          {renderDailyUBBTable()}
         </TabsContent>
 
         <TabsContent value="summary" className="m-0 animate-in slide-in-from-left-2 duration-300 space-y-6">
@@ -232,7 +282,7 @@ export function RawMaterialModule({
             <div className="bg-[#0c1a3d] p-4 flex items-center justify-between">
               <div className="flex items-center gap-2 text-white">
                 <TrendingUp className="h-5 w-5" />
-                <h3 className="font-black text-sm uppercase tracking-widest">Balance de Materia Prima: Físico vs Teórico</h3>
+                <h3 className="font-black text-sm uppercase tracking-widest">Balance de Materia Prima: Físico vs Teórico (basado en UBB manuales)</h3>
               </div>
               <Badge className="bg-white/10 text-white border-none uppercase text-[9px] font-black px-3 py-1">
                 Totales Semanales
@@ -297,12 +347,10 @@ export function RawMaterialModule({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="p-6 border-slate-200 rounded-3xl bg-slate-50/50 border-dashed border-2">
               <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-                <clipboardCheck className="h-4 w-4 text-emerald-600" /> Nota sobre Consumo Físico
+                <ClipboardCheck className="h-4 w-4 text-emerald-600" /> Nota sobre Cálculo Teórico
               </h4>
               <p className="text-[11px] font-bold text-slate-600 leading-relaxed uppercase">
-                El consumo físico mostrado en este resumen se calcula automáticamente mediante la fórmula: <br/>
-                <span className="text-emerald-700 font-black">Inventario Inicial + Recepciones - Inventario Final</span>. <br/>
-                Utiliza la pestaña "Consumo Diario" solo para llevar un registro manual y compararlo con este balance.
+                El consumo teórico se calcula multiplicando las <span className="text-primary font-black">UBB ingresadas manualmente</span> en la pestaña "Registro Producción" por las proporciones definidas en el <span className="text-emerald-700 font-black">Gestor de Recetas</span>.
               </p>
             </Card>
 

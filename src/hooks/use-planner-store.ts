@@ -11,6 +11,7 @@ const STORAGE_KEY_CONFIG = 'planner_config_v2';
 const STORAGE_KEY_REAL_PROD = 'planner_real_production_v1';
 const STORAGE_KEY_RECIPES = 'planner_custom_recipes_v1';
 const STORAGE_KEY_RAW_MAT = 'planner_raw_material_v1';
+const STORAGE_KEY_UBB = 'planner_manual_ubb_v1';
 
 export interface RawMaterialStock {
   initial: number;
@@ -32,6 +33,7 @@ export function usePlannerStore() {
   const [realProduction, setRealProduction] = useState<Record<string, Record<string, Record<string, number>>>>({});
   const [customRecipes, setCustomRecipes] = useState<Record<string, Record<string, number>>>(RECIPES);
   const [rawMaterialStock, setRawMaterialStock] = useState<Record<string, RawMaterialStock>>({});
+  const [manualUBB, setManualUBB] = useState<Record<string, Record<string, number>>>({});
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Cargar datos iniciales
@@ -41,6 +43,7 @@ export function usePlannerStore() {
     const savedRealProd = localStorage.getItem(STORAGE_KEY_REAL_PROD);
     const savedRecipes = localStorage.getItem(STORAGE_KEY_RECIPES);
     const savedRawMat = localStorage.getItem(STORAGE_KEY_RAW_MAT);
+    const savedUBB = localStorage.getItem(STORAGE_KEY_UBB);
 
     if (savedTasks) {
       try {
@@ -88,6 +91,14 @@ export function usePlannerStore() {
         console.error("Error loading raw material stock", e);
       }
     }
+
+    if (savedUBB) {
+      try {
+        setManualUBB(JSON.parse(savedUBB));
+      } catch (e) {
+        console.error("Error loading manual UBB", e);
+      }
+    }
     
     setIsLoaded(true);
   }, []);
@@ -125,6 +136,12 @@ export function usePlannerStore() {
       localStorage.setItem(STORAGE_KEY_RAW_MAT, JSON.stringify(rawMaterialStock));
     }
   }, [rawMaterialStock, isLoaded]);
+
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem(STORAGE_KEY_UBB, JSON.stringify(manualUBB));
+    }
+  }, [manualUBB, isLoaded]);
 
   const addTask = useCallback((taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
@@ -221,6 +238,15 @@ export function usePlannerStore() {
     });
   }, []);
 
+  const updateManualUBB = useCallback((flavor: string, dateKey: string, value: number) => {
+    setManualUBB(prev => {
+      const current = prev[flavor] || {};
+      const next = { ...current, [dateKey]: value };
+      if (value <= 0) delete next[dateKey];
+      return { ...prev, [flavor]: next };
+    });
+  }, []);
+
   return { 
     tasks, 
     weekStartDate, 
@@ -228,6 +254,7 @@ export function usePlannerStore() {
     realProduction,
     customRecipes,
     rawMaterialStock,
+    manualUBB,
     setWeekStartDate, 
     addTask, 
     updateTask, 
@@ -240,6 +267,7 @@ export function usePlannerStore() {
     updateRawMaterialStock,
     updateRawMaterialReception,
     updateRawMaterialDailyPhysical,
+    updateManualUBB,
     isLoaded,
     isSyncing: false
   };
