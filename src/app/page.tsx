@@ -354,7 +354,7 @@ export default function PlannerPage() {
                       <div className={cn("p-1.5 rounded-lg", activeModule === 'planning' ? "bg-white/20" : "bg-slate-100")}>
                         <GanttChartSquare className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[11px] tracking-widest text-left">Planificación</span>
+                      <span className="uppercase text-[10px] font-black tracking-tight text-left">Planificación</span>
                     </Button>
                   )}
 
@@ -370,7 +370,7 @@ export default function PlannerPage() {
                       <div className={cn("p-1.5 rounded-lg", activeModule === 'management' ? "bg-white/20" : "bg-slate-100")}>
                         <BarChart3 className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[11px] tracking-widest text-left">Gestión</span>
+                      <span className="uppercase text-[10px] font-black tracking-tight text-left">Gestión</span>
                     </Button>
                   )}
 
@@ -386,7 +386,7 @@ export default function PlannerPage() {
                       <div className={cn("p-1.5 rounded-lg", activeModule === 'raw-materials' ? "bg-white/20" : "bg-slate-100")}>
                         <Box className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[11px] tracking-widest text-left">Materia Prima</span>
+                      <span className="uppercase text-[10px] font-black tracking-tight text-left">Materia Prima</span>
                     </Button>
                   )}
 
@@ -402,7 +402,7 @@ export default function PlannerPage() {
                       <div className={cn("p-1.5 rounded-lg", activeModule === 'recipes' ? "bg-white/20" : "bg-slate-100")}>
                         <FlaskConical className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[11px] tracking-widest text-left">Recetas</span>
+                      <span className="uppercase text-[10px] font-black tracking-tight text-left">Recetas</span>
                     </Button>
                   )}
 
@@ -418,7 +418,7 @@ export default function PlannerPage() {
                       <div className={cn("p-1.5 rounded-lg", activeModule === 'purchasing' ? "bg-white/20" : "bg-slate-100")}>
                         <ShoppingCart className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[11px] tracking-widest text-left">Proyección de Compras</span>
+                      <span className="uppercase text-[10px] font-black tracking-tight text-left">Proyección de Compras</span>
                     </Button>
                   )}
                 </div>
