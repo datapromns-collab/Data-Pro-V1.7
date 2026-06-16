@@ -88,9 +88,9 @@ export default function PlannerPage() {
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
   
-  // Modulos: planning | management
+  // Modulos principales: planning | management
   const [activeModule, setActiveModule] = useState<'planning' | 'management'>('planning');
-  // Tabs internas de cada modulo
+  // Pestañas horizontales
   const [activeTab, setActiveTab] = useState("gantt");
   
   const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance'>('plan');
@@ -100,7 +100,6 @@ export default function PlannerPage() {
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
 
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
-  const isManagementView = activeModule === 'management';
 
   useEffect(() => {
     if (authLoaded && user && !isAdmin && activeModule === 'management') {
@@ -293,7 +292,7 @@ export default function PlannerPage() {
           <SidebarContent className="px-4 py-2 flex flex-col h-full">
             <div className="space-y-6 flex-1 overflow-y-auto">
               
-              {/* Navegación de Módulos (Sidebar Principal) */}
+              {/* Botones de Módulo (Sidebar) */}
               <section className="space-y-2">
                 <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Módulos</p>
                 <div className="flex flex-col gap-2">
@@ -331,7 +330,7 @@ export default function PlannerPage() {
                 </div>
               </section>
 
-              {/* Contexto Semanal */}
+              {/* Utilidades de Barra Lateral */}
               <section className="pt-4 border-t border-slate-100">
                  <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Configuración Semana</p>
                  <div className="px-2 space-y-3">
@@ -353,7 +352,7 @@ export default function PlannerPage() {
                  </div>
               </section>
 
-              {/* Líneas solo si estamos en planificación o en vistas específicas */}
+              {/* Selector de Líneas */}
               {activeModule === 'planning' && (
                 <section>
                   <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas de Producción</p>
@@ -370,6 +369,7 @@ export default function PlannerPage() {
                 </section>
               )}
 
+              {/* Botones de Acción */}
               {isAdmin && activeModule === 'planning' && (
                 <section className="px-2 space-y-3">
                   <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 hover:translate-y-[-1px] transition-all">
@@ -395,6 +395,7 @@ export default function PlannerPage() {
               )}
             </div>
 
+            {/* Perfil de Usuario */}
             <div className="mt-auto pt-6 border-t border-slate-100 space-y-4 pb-6">
               <div className="flex items-center gap-3 px-2">
                 <div className="h-10 w-10 rounded-xl bg-slate-100 flex items-center justify-center text-primary border border-slate-200">
@@ -460,7 +461,7 @@ export default function PlannerPage() {
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <div className="flex flex-col gap-6 h-full">
               
-              {/* Barra de Navegación Horizontal (Igual a la imagen) */}
+              {/* Barra de Navegación Horizontal Superior */}
               <div className="flex items-center bg-white border border-slate-200 rounded-2xl p-1.5 shadow-sm self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full">
                 {activeModule === 'planning' ? (
                   <>
@@ -541,6 +542,7 @@ export default function PlannerPage() {
                 )}
               </div>
 
+              {/* Área de Contenido Principal */}
               <div className="flex-1 min-w-0">
                 {activeModule === 'planning' && (
                   <>
@@ -590,7 +592,7 @@ export default function PlannerPage() {
           </div>
         </main>
 
-        {/* Vistas de Impresión */}
+        {/* Vistas de Impresión (Ocultas en pantalla) */}
         <div className="print-only w-full bg-white">
           {printMode === 'plan' && (
             LINES.map((lineName, i) => (
