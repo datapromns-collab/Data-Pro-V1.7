@@ -22,7 +22,8 @@ import {
   Calendar as CalendarIcon,
   FlaskConical,
   ChevronRight,
-  Box
+  Box,
+  ShoppingCart
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -42,6 +43,7 @@ import { MonthlyComplianceReport } from '@/components/planner/MonthlyComplianceR
 import { RecipeEditor } from '@/components/planner/RecipeEditor';
 import { RawMaterialModule } from '@/components/planner/RawMaterialModule';
 import { RawMaterialReport } from '@/components/planner/RawMaterialReport';
+import { PurchasingModule } from '@/components/planner/PurchasingModule';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
@@ -107,7 +109,7 @@ export default function PlannerPage() {
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
   
-  const [activeModule, setActiveModule] = useState<'planning' | 'management' | 'recipes' | 'raw-materials'>('planning');
+  const [activeModule, setActiveModule] = useState<'planning' | 'management' | 'recipes' | 'raw-materials' | 'purchasing'>('planning');
   const [activeTab, setActiveTab] = useState("gantt");
   
   const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance' | 'raw-material'>('plan');
@@ -133,6 +135,10 @@ export default function PlannerPage() {
         setActiveTab('gantt');
       }
       if (user.role === 'STANDARD' && activeModule === 'raw-materials') {
+        setActiveModule('planning');
+        setActiveTab('gantt');
+      }
+      if (!isAdmin && activeModule === 'purchasing') {
         setActiveModule('planning');
         setActiveTab('gantt');
       }
@@ -400,10 +406,26 @@ export default function PlannerPage() {
                       <span className="uppercase text-[11px] tracking-widest text-left">Recetas</span>
                     </Button>
                   )}
+
+                  {isAdmin && (
+                    <Button 
+                      variant={activeModule === 'purchasing' ? 'default' : 'ghost'} 
+                      onClick={() => { setActiveModule('purchasing'); setActiveTab('purchasing-view'); }}
+                      className={cn(
+                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-all",
+                        activeModule === 'purchasing' ? "shadow-md shadow-blue-200 bg-blue-600 hover:bg-blue-700 text-white" : "text-slate-500"
+                      )}
+                    >
+                      <div className={cn("p-1.5 rounded-lg", activeModule === 'purchasing' ? "bg-white/20" : "bg-slate-100")}>
+                        <ShoppingCart className="h-4 w-4" />
+                      </div>
+                      <span className="uppercase text-[11px] tracking-widest text-left">Protección de Compras</span>
+                    </Button>
+                  )}
                 </div>
               </section>
 
-              {activeModule !== 'recipes' && (
+              {activeModule !== 'recipes' && activeModule !== 'purchasing' && (
                 <section className="pt-4 border-t border-slate-100">
                    <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Configuración Semana</p>
                    <div className="px-2 space-y-3">
@@ -426,7 +448,7 @@ export default function PlannerPage() {
                 </section>
               )}
 
-              {activeModule !== 'raw-materials' && activeModule !== 'recipes' && !isInventory && (
+              {activeModule !== 'raw-materials' && activeModule !== 'recipes' && activeModule !== 'purchasing' && !isInventory && (
                 <section>
                   <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas de Producción</p>
                   <div className="px-2">
@@ -500,11 +522,13 @@ export default function PlannerPage() {
                 "px-3 py-1 rounded-lg font-black text-[10px] uppercase tracking-[0.2em]",
                 activeModule === 'management' ? "bg-primary/10 text-primary" : 
                 activeModule === 'recipes' ? "bg-emerald-100 text-emerald-700" : 
-                activeModule === 'raw-materials' ? "bg-amber-100 text-amber-700" : "bg-emerald-50 text-emerald-600"
+                activeModule === 'raw-materials' ? "bg-amber-100 text-amber-700" : 
+                activeModule === 'purchasing' ? "bg-blue-100 text-blue-700" : "bg-emerald-50 text-emerald-600"
               )}>
                 {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' : 
                  activeModule === 'recipes' ? 'MÓDULO DE RECETAS' : 
-                 activeModule === 'raw-materials' ? 'MÓDULO DE MATERIA PRIMA' : 'MÓDULO DE PLANIFICACIÓN'}
+                 activeModule === 'raw-materials' ? 'MÓDULO DE MATERIA PRIMA' : 
+                 activeModule === 'purchasing' ? 'MÓDULO DE COMPRAS' : 'MÓDULO DE PLANIFICACIÓN'}
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -605,7 +629,7 @@ export default function PlannerPage() {
                       Control de Inventarios
                     </button>
                   </>
-                ) : (
+                ) : activeModule === 'recipes' ? (
                   <>
                     <button 
                       onClick={() => setActiveTab('recipes-editor')}
@@ -616,6 +640,19 @@ export default function PlannerPage() {
                     >
                       <FlaskConical className="h-3.5 w-3.5" />
                       Edición de Recetas
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button 
+                      onClick={() => setActiveTab('purchasing-view')}
+                      className={cn(
+                        "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 active:scale-100 border-0 select-none",
+                        activeTab === 'purchasing-view' ? "bg-blue-50 text-blue-700" : "text-slate-500 hover:bg-slate-50"
+                      )}
+                    >
+                      <ShoppingCart className="h-3.5 w-3.5" />
+                      Gestión de Compras
                     </button>
                   </>
                 )}
@@ -697,6 +734,9 @@ export default function PlannerPage() {
                       />
                     )}
                   </>
+                )}
+                {activeModule === 'purchasing' && (
+                  <PurchasingModule />
                 )}
               </div>
             </div>
