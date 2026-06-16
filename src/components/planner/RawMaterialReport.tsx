@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo } from 'react';
@@ -114,7 +113,7 @@ export function RawMaterialReport({
           <table className="w-full border-collapse text-[7pt]">
             <thead>
               <tr className="bg-[#4a7ebb] text-white font-black uppercase h-7">
-                <th style={{ width: '1cm' }} className="px-2 py-0 border border-slate-900 text-left">MATERIAL</th>
+                <th style={{ width: '1cm' }} className="px-1 py-0 border border-slate-900 text-left">MATERIAL</th>
                 <th className="px-1 py-0 border border-slate-900 text-right">INICIAL</th>
                 <th className="px-1 py-0 border border-slate-900 text-right bg-[#2f5597]">I. TANQUES</th>
                 <th className="px-1 py-0 border border-slate-900 text-right">RECEPCIÓN</th>
@@ -122,6 +121,7 @@ export function RawMaterialReport({
                 <th className="px-1 py-0 border border-slate-900 text-right bg-[#2f5597]">F. TANQUES</th>
                 <th className="px-1 py-0 border border-slate-900 text-right text-yellow-300">C. FÍSICO</th>
                 <th className="px-1 py-0 border border-slate-900 text-right text-emerald-300">C. TEÓRICO</th>
+                <th className="px-1 py-0 border border-slate-900 text-right">DIF</th>
                 <th className="px-1 py-0 border border-slate-900 text-right">VAR %</th>
               </tr>
             </thead>
@@ -141,7 +141,7 @@ export function RawMaterialReport({
 
                 return (
                   <tr key={mat.code} className={`h-5 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
-                    <td style={{ width: '1cm' }} className="px-2 py-0 border border-slate-300 uppercase truncate leading-none">{mat.description}</td>
+                    <td style={{ width: '1cm' }} className="px-1 py-0 border border-slate-300 uppercase truncate leading-none">{mat.description}</td>
                     <td className="px-1 py-0 border border-slate-300 text-right tabular-nums">{initial.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
                     <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-indigo-50/50">{initialInTanks.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
                     <td className="px-1 py-0 border border-slate-300 text-right tabular-nums">{receptions.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
@@ -149,6 +149,9 @@ export function RawMaterialReport({
                     <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-purple-50/50">{finalInTanks.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
                     <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-amber-50/20">{physical.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
                     <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-emerald-50/20">{theoretical.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
+                    <td className="px-1 py-0 border border-slate-300 text-right tabular-nums text-slate-700">
+                      {variance.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
+                    </td>
                     <td className={`px-1 py-0 border border-slate-300 text-right tabular-nums ${Math.abs(variancePct) > 10 ? 'text-red-600' : 'text-slate-600'}`}>
                       {variancePct > 0 ? '+' : ''}{variancePct.toFixed(1)}%
                     </td>

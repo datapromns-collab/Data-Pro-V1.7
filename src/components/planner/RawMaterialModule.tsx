@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -394,7 +393,8 @@ export function RawMaterialModule({
                     <TableHead className="text-right text-[10px] font-black text-purple-600 uppercase bg-purple-50/30">F. en Tanques</TableHead>
                     <TableHead className="text-right text-[10px] font-black text-emerald-600 uppercase bg-emerald-50/30">Consumo Físico</TableHead>
                     <TableHead className="text-right text-[10px] font-black text-primary uppercase bg-primary/5">Consumo Teórico</TableHead>
-                    <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase pr-6">Variación</TableHead>
+                    <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">Diferencia</TableHead>
+                    <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase pr-6">Variación %</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -426,15 +426,13 @@ export function RawMaterialModule({
                         <TableCell className="text-right font-black text-purple-600 tabular-nums text-xs bg-purple-50/20">{finalInTanks.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
                         <TableCell className="text-right font-black text-emerald-600 tabular-nums text-[13px] bg-emerald-50/20">{physical.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
                         <TableCell className="text-right font-black text-primary tabular-nums text-[13px] bg-primary/5">{theoretical.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
-                        <TableCell className="pr-6 text-right">
-                          <div className="flex flex-col items-end">
-                            <span className={`text-[12px] font-black tabular-nums ${Math.abs(variancePct) > 10 ? 'text-destructive' : 'text-slate-700'}`}>
-                              {variance.toLocaleString('es-ES', { maximumFractionDigits: 2 })}
-                            </span>
-                            <span className="text-[9px] font-bold text-slate-400">
-                              {variancePct > 0 ? '+' : ''}{variancePct.toFixed(1)}%
-                            </span>
-                          </div>
+                        <TableCell className="text-right font-black text-slate-700 tabular-nums text-xs">
+                          {variance.toLocaleString('es-ES', { maximumFractionDigits: 2 })}
+                        </TableCell>
+                        <TableCell className="pr-6 text-right font-bold tabular-nums text-xs">
+                          <span className={Math.abs(variancePct) > 10 ? 'text-destructive' : 'text-slate-500'}>
+                            {variancePct > 0 ? '+' : ''}{variancePct.toFixed(1)}%
+                          </span>
                         </TableCell>
                       </TableRow>
                     );
