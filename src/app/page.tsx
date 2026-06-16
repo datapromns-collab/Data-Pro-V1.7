@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
-import Image from 'next/image';
+import Image from "next/image";
 import { 
   Plus, 
   Trash2, 
@@ -425,7 +425,7 @@ export default function PlannerPage() {
                       <div className={cn("p-1.5 rounded-lg", activeModule === 'purchasing' ? "bg-white/20" : "bg-slate-100")}>
                         <ShoppingCart className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[10px] font-black tracking-tighter text-left">Proyección de Compras</span>
+                      <span className="uppercase text-[9.5px] font-black tracking-tighter text-left">Proyección de Compras</span>
                     </Button>
                   )}
                 </div>
@@ -505,7 +505,9 @@ export default function PlannerPage() {
                   <div className="flex items-center gap-1">
                     <ShieldCheck className={`h-3 w-3 ${isAdmin ? 'text-primary' : 'text-slate-400'}`} />
                     <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">
-                      {user.role}
+                      {user.role === 'PURCHASING' ? 'COMPRAS' : 
+                       user.role === 'INVENTORY' ? 'INVENTARIO' : 
+                       user.role === 'STANDARD' ? 'ESTÁNDAR' : user.role}
                     </span>
                   </div>
                 </div>
