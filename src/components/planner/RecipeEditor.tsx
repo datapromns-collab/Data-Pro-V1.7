@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -86,7 +86,7 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
       resetRecipesToDefaults();
       toast({
         title: "Recetas Restablecidas",
-        description: "Se han cargado los valores maestros del sistema.",
+        description: "Se han cargado los valores maestros del sistema con las fórmulas de JUSTY actualizadas.",
       });
     }
   };
@@ -238,7 +238,7 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
               <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100 flex gap-3">
                 <AlertCircle className="h-5 w-5 text-amber-500 shrink-0" />
                 <span className="text-[10px] font-bold text-amber-900 leading-tight uppercase">
-                  Al eliminar un componente, este dejará de sumarse al reporte de requerimientos de este producto.
+                  IMPORTANTE: Si no ves los últimos cambios maestros en JUSTY PERA o MANZANA, pulsa el botón "Restablecer a Valores Maestros" arriba.
                 </span>
               </div>
             </div>

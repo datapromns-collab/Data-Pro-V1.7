@@ -246,6 +246,7 @@ export function usePlannerStore() {
 
   const resetRecipesToDefaults = useCallback(() => {
     setCustomRecipes(RECIPES);
+    localStorage.removeItem(STORAGE_KEY_RECIPES);
   }, []);
 
   const updateRawMaterialStock = useCallback((code: string, type: 'initial' | 'final', value: number) => {
