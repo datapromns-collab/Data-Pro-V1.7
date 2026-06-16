@@ -20,7 +20,8 @@ import {
   PackageCheck,
   CheckCircle2,
   Calendar as CalendarIcon,
-  Settings2
+  Settings2,
+  ChevronRight
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -86,7 +87,12 @@ export default function PlannerPage() {
   const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
+  
+  // Modulos: planning | management
+  const [activeModule, setActiveModule] = useState<'planning' | 'management'>('planning');
+  // Tabs internas de cada modulo
   const [activeTab, setActiveTab] = useState("gantt");
+  
   const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance'>('plan');
   const [emitDate, setEmitDate] = useState('');
   
@@ -94,35 +100,20 @@ export default function PlannerPage() {
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
 
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
-  const isManagementView = ['admin-report', 'compliance-report', 'speeds', 'calculator'].includes(activeTab);
+  const isManagementView = activeModule === 'management';
 
   useEffect(() => {
-    if (authLoaded && user && !isAdmin && isManagementView) {
+    if (authLoaded && user && !isAdmin && activeModule === 'management') {
+      setActiveModule('planning');
       setActiveTab('gantt');
     }
-  }, [authLoaded, user, isAdmin, isManagementView]);
+  }, [authLoaded, user, isAdmin, activeModule]);
 
   useEffect(() => {
     if (plannerLoaded) {
       setEmitDate(format(new Date(), 'd/M/yyyy'));
     }
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.altKey && isAdmin) {
-        switch (e.key.toLowerCase()) {
-          case 'n': e.preventDefault(); setEditingTask(null); setIsDialogOpen(true); break;
-          case 'c': e.preventDefault(); setActiveTab('calculator'); break;
-          case 'g': e.preventDefault(); setActiveTab('gantt'); break;
-          case 'v': e.preventDefault(); setActiveTab('speeds'); break;
-          case 'k': e.preventDefault(); setIsShortcutsOpen(prev => !prev); break;
-          case 'r': e.preventDefault(); setActiveTab('requirement'); break;
-          case 'd': e.preventDefault(); setActiveTab('daily'); break;
-        }
-      }
-    };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [plannerLoaded, isAdmin]);
+  }, [plannerLoaded]);
 
   const weekNumber = getISOWeek(weekStartDate);
 
@@ -275,18 +266,6 @@ export default function PlannerPage() {
     });
   };
 
-  const pageHeader = useMemo(() => {
-    switch (activeTab) {
-      case 'speeds': return { title: "Velocidades", subtitle: "Configuración base de líneas.", module: "GESTIÓN" };
-      case 'calculator': return { title: "Calculadora", subtitle: "Conversión cajas/tanques.", module: "GESTIÓN" };
-      case 'requirement': return { title: "Requerimiento", subtitle: "Materiales e insumos semanales.", module: "PLANIFICACIÓN" };
-      case 'daily': return { title: "Plan Día a Día", subtitle: "Detalle operativo semanal.", module: "PLANIFICACIÓN" };
-      case 'admin-report': return { title: "Producción Real", subtitle: "Seguimiento de producción capturada.", module: "GESTIÓN" };
-      case 'compliance-report': return { title: "Cumplimiento", subtitle: "Planificado vs Real.", module: "GESTIÓN" };
-      default: return { title: `Programación Línea ${selectedLine}`, subtitle: "Diagrama de Gantt semanal.", module: "PLANIFICACIÓN" };
-    }
-  }, [activeTab, selectedLine]);
-
   if (!plannerLoaded || !authLoaded) return null;
 
   if (!user) {
@@ -312,74 +291,47 @@ export default function PlannerPage() {
             </div>
           </div>
           <SidebarContent className="px-4 py-2 flex flex-col h-full">
-            <div className="space-y-8 flex-1 overflow-y-auto">
-              {/* Sección de Módulo de Planificación */}
-              <section>
-                <div className="px-2 mb-4 flex items-center gap-2">
-                  <Badge variant="outline" className="bg-emerald-50 text-emerald-600 border-emerald-100 px-2 py-0.5 font-black text-[9px] uppercase tracking-widest">
-                    Módulo de Planificación
-                  </Badge>
-                </div>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton isActive={activeTab === 'gantt'} onClick={() => setActiveTab('gantt')} className="h-11 rounded-xl">
+            <div className="space-y-6 flex-1 overflow-y-auto">
+              
+              {/* Navegación de Módulos (Sidebar Principal) */}
+              <section className="space-y-2">
+                <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Módulos</p>
+                <div className="flex flex-col gap-2">
+                  <Button 
+                    variant={activeModule === 'planning' ? 'default' : 'ghost'} 
+                    onClick={() => { setActiveModule('planning'); setActiveTab('gantt'); }}
+                    className={cn(
+                      "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-all",
+                      activeModule === 'planning' ? "shadow-md shadow-primary/20" : "text-slate-500"
+                    )}
+                  >
+                    <div className={cn("p-1.5 rounded-lg", activeModule === 'planning' ? "bg-white/20" : "bg-slate-100")}>
                       <GanttChartSquare className="h-4 w-4" />
-                      <span className="font-bold">Programación</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton isActive={activeTab === 'daily'} onClick={() => setActiveTab('daily')} className="h-11 rounded-xl">
-                      <ListTodo className="h-4 w-4" />
-                      <span className="font-bold">Plan Día a Día</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton isActive={activeTab === 'requirement'} onClick={() => setActiveTab('requirement')} className="h-11 rounded-xl">
-                      <ClipboardList className="h-4 w-4" />
-                      <span className="font-bold">Requerimientos</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                </SidebarMenu>
+                    </div>
+                    <span className="uppercase text-[11px] tracking-widest">Planificación</span>
+                    {activeModule === 'planning' && <ChevronRight className="ml-auto h-3 w-3 opacity-50" />}
+                  </Button>
+
+                  {isAdmin && (
+                    <Button 
+                      variant={activeModule === 'management' ? 'default' : 'ghost'} 
+                      onClick={() => { setActiveModule('management'); setActiveTab('admin-report'); }}
+                      className={cn(
+                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-all",
+                        activeModule === 'management' ? "shadow-md shadow-primary/20" : "text-slate-500"
+                      )}
+                    >
+                      <div className={cn("p-1.5 rounded-lg", activeModule === 'management' ? "bg-white/20" : "bg-slate-100")}>
+                        <BarChart3 className="h-4 w-4" />
+                      </div>
+                      <span className="uppercase text-[11px] tracking-widest">Gestión</span>
+                      {activeModule === 'management' && <ChevronRight className="ml-auto h-3 w-3 opacity-50" />}
+                    </Button>
+                  )}
+                </div>
               </section>
 
-              {/* Sección de Módulo de Gestión (Admin Only) */}
-              {isAdmin && (
-                <section>
-                  <div className="px-2 mb-4 flex items-center gap-2">
-                    <Badge variant="outline" className="bg-primary/5 text-primary border-primary/10 px-2 py-0.5 font-black text-[9px] uppercase tracking-widest">
-                      Módulo de Gestión
-                    </Badge>
-                  </div>
-                  <SidebarMenu>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton isActive={activeTab === 'admin-report'} onClick={() => setActiveTab('admin-report')} className="h-11 rounded-xl">
-                        <BarChart3 className="h-4 w-4" />
-                        <span className="font-bold">Control Producción</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton isActive={activeTab === 'compliance-report'} onClick={() => setActiveTab('compliance-report')} className="h-11 rounded-xl">
-                        <CheckCircle2 className="h-4 w-4" />
-                        <span className="font-bold">Cumplimiento</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton isActive={activeTab === 'speeds'} onClick={() => setActiveTab('speeds')} className="h-11 rounded-xl">
-                        <Gauge className="h-4 w-4" />
-                        <span className="font-bold">Velocidades</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                    <SidebarMenuItem>
-                      <SidebarMenuButton isActive={activeTab === 'calculator'} onClick={() => setActiveTab('calculator')} className="h-11 rounded-xl">
-                        <CalculatorIcon className="h-4 w-4" />
-                        <span className="font-bold">Calculadora</span>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  </SidebarMenu>
-                </section>
-              )}
-
-              {/* Contexto Semanal y Líneas */}
+              {/* Contexto Semanal */}
               <section className="pt-4 border-t border-slate-100">
                  <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Configuración Semana</p>
                  <div className="px-2 space-y-3">
@@ -401,7 +353,8 @@ export default function PlannerPage() {
                  </div>
               </section>
 
-              {!isManagementView && (
+              {/* Líneas solo si estamos en planificación o en vistas específicas */}
+              {activeModule === 'planning' && (
                 <section>
                   <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas de Producción</p>
                   <div className="px-2">
@@ -417,7 +370,7 @@ export default function PlannerPage() {
                 </section>
               )}
 
-              {isAdmin && !isManagementView && (
+              {isAdmin && activeModule === 'planning' && (
                 <section className="px-2 space-y-3">
                   <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 hover:translate-y-[-1px] transition-all">
                     <Plus className="h-4 w-4" /> Nueva Tarea
@@ -428,7 +381,7 @@ export default function PlannerPage() {
                 </section>
               )}
 
-              {isAdmin && isManagementView && (
+              {isAdmin && activeModule === 'management' && (
                 <section className="px-2">
                   <Button 
                     variant="default" 
@@ -473,13 +426,13 @@ export default function PlannerPage() {
             <div className="flex items-center gap-4">
               <div className={cn(
                 "px-3 py-1 rounded-lg font-black text-[10px] uppercase tracking-[0.2em]",
-                pageHeader.module === "GESTIÓN" ? "bg-primary/10 text-primary" : "bg-emerald-50 text-emerald-600"
+                activeModule === 'management' ? "bg-primary/10 text-primary" : "bg-emerald-50 text-emerald-600"
               )}>
-                {pageHeader.module}
+                {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' : 'MÓDULO DE PLANIFICACIÓN'}
               </div>
             </div>
             <div className="flex items-center gap-2">
-              {!isManagementView && (
+              {activeModule === 'planning' && (
                 <>
                   <Button 
                     variant="ghost" 
@@ -505,25 +458,104 @@ export default function PlannerPage() {
           </header>
 
           <div className="flex-1 overflow-auto p-6 lg:p-8">
-            <div className="flex flex-col gap-8 h-full">
-              <div className="space-y-1">
-                <h2 className="text-3xl font-headline font-black text-slate-900 uppercase tracking-tight">
-                  {pageHeader.title}
-                </h2>
-                <p className="text-sm text-slate-500 font-medium">{pageHeader.subtitle}</p>
+            <div className="flex flex-col gap-6 h-full">
+              
+              {/* Barra de Navegación Horizontal (Igual a la imagen) */}
+              <div className="flex items-center bg-white border border-slate-200 rounded-2xl p-1.5 shadow-sm self-start animate-in fade-in slide-in-from-top-2">
+                {activeModule === 'planning' ? (
+                  <>
+                    <button 
+                      onClick={() => setActiveTab('gantt')}
+                      className={cn(
+                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
+                        activeTab === 'gantt' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
+                      )}
+                    >
+                      <GanttChartSquare className="h-3.5 w-3.5" />
+                      Programación
+                    </button>
+                    <button 
+                      onClick={() => setActiveTab('daily')}
+                      className={cn(
+                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
+                        activeTab === 'daily' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
+                      )}
+                    >
+                      <ListTodo className="h-3.5 w-3.5" />
+                      Plan Día a Día
+                    </button>
+                    <button 
+                      onClick={() => setActiveTab('requirement')}
+                      className={cn(
+                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
+                        activeTab === 'requirement' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
+                      )}
+                    >
+                      <ClipboardList className="h-3.5 w-3.5" />
+                      Requerimiento
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button 
+                      onClick={() => setActiveTab('admin-report')}
+                      className={cn(
+                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
+                        activeTab === 'admin-report' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
+                      )}
+                    >
+                      <BarChart3 className="h-3.5 w-3.5" />
+                      Control Producción
+                    </button>
+                    <button 
+                      onClick={() => setActiveTab('compliance-report')}
+                      className={cn(
+                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
+                        activeTab === 'compliance-report' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
+                      )}
+                    >
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                      Cumplimiento
+                    </button>
+                    <button 
+                      onClick={() => setActiveTab('speeds')}
+                      className={cn(
+                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
+                        activeTab === 'speeds' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
+                      )}
+                    >
+                      <Gauge className="h-3.5 w-3.5" />
+                      Velocidades
+                    </button>
+                    <button 
+                      onClick={() => setActiveTab('calculator')}
+                      className={cn(
+                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
+                        activeTab === 'calculator' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
+                      )}
+                    >
+                      <CalculatorIcon className="h-3.5 w-3.5" />
+                      Calculadora
+                    </button>
+                  </>
+                )}
               </div>
 
               <div className="flex-1 min-w-0">
-                {activeTab === 'gantt' && (
-                  <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
+                {activeModule === 'planning' && (
+                  <>
+                    {activeTab === 'gantt' && (
+                      <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
+                    )}
+                    {activeTab === 'daily' && (
+                      <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintDaily} />
+                    )}
+                    {activeTab === 'requirement' && (
+                      <RequirementSection onPrint={handlePrintRequirements} tasks={tasks} weekStartDate={weekStartDate} />
+                    )}
+                  </>
                 )}
-                {activeTab === 'daily' && (
-                  <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintDaily} />
-                )}
-                {activeTab === 'requirement' && (
-                  <RequirementSection onPrint={handlePrintRequirements} tasks={tasks} weekStartDate={weekStartDate} />
-                )}
-                {isAdmin && (
+                {isAdmin && activeModule === 'management' && (
                   <>
                     {activeTab === 'speeds' && (
                       <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} readOnly={!isAdmin} />
@@ -558,6 +590,7 @@ export default function PlannerPage() {
           </div>
         </main>
 
+        {/* Vistas de Impresión */}
         <div className="print-only w-full bg-white">
           {printMode === 'plan' && (
             LINES.map((lineName, i) => (
