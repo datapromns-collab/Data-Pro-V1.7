@@ -1,19 +1,20 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { FlaskConical, Beaker, Save, Search, Wheat, Droplet, Box, Plus, Trash2, AlertCircle, RotateCcw } from 'lucide-react';
+import { FlaskConical, Beaker, Save, Search, Wheat, Droplet, Box, Plus, Trash2, AlertCircle, RotateCcw, Info } from 'lucide-react';
 import { 
   PRODUCT_LIST, 
   CONCENTRATES_SOFT_DRINKS, 
   CONCENTRATES_JUICES, 
   SOLIDS_DATA, 
   ADDITIVES_DATA, 
-  SUGAR_DATA 
+  SUGAR_DATA,
+  RECIPES
 } from '@/lib/planner-utils';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -44,17 +45,25 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
     return recipes[selectedProduct] || {};
   }, [recipes, selectedProduct]);
 
+  const masterRecipe = useMemo(() => {
+    return RECIPES[selectedProduct] || {};
+  }, [selectedProduct]);
+
   const materialsInRecipe = useMemo(() => {
-    return Object.entries(currentRecipe).map(([code, value]) => {
+    // Unimos los códigos que están en la receta actual y los que están en la maestra para asegurar visibilidad
+    const allCodes = Array.from(new Set([...Object.keys(currentRecipe), ...Object.keys(masterRecipe)]));
+    
+    return allCodes.map((code) => {
       const material = ALL_MATERIALS.find(m => m.code === code);
       return {
         code,
-        value,
+        currentValue: currentRecipe[code] || 0,
+        masterValue: masterRecipe[code] || 0,
         description: material?.description || 'Desconocido',
         unit: (material as any)?.unit || 'KG'
       };
     });
-  }, [currentRecipe]);
+  }, [currentRecipe, masterRecipe]);
 
   const availableMaterials = useMemo(() => {
     return ALL_MATERIALS.filter(m => !currentRecipe[m.code]);
@@ -82,11 +91,11 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
   };
 
   const handleResetToDefaults = () => {
-    if (confirm('¿Restablecer todas las recetas a los valores maestros definidos en el sistema? Se perderán las personalizaciones manuales.')) {
+    if (confirm('¿Restablecer todas las recetas a los valores maestros predeterminados? Se perderán las personalizaciones actuales.')) {
       resetRecipesToDefaults();
       toast({
         title: "Recetas Restablecidas",
-        description: "Se han cargado los valores maestros del sistema con las fórmulas de JUSTY actualizadas.",
+        description: "Se han cargado los valores maestros definidos en el sistema.",
       });
     }
   };
@@ -130,7 +139,6 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Panel de Edición */}
         <div className="lg:col-span-2 space-y-6">
           <Card className="border-slate-200 rounded-3xl overflow-hidden bg-white shadow-xl shadow-slate-100/50">
             <div className="bg-[#4a7ebb] p-4 flex items-center justify-between">
@@ -139,7 +147,7 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
                 <h3 className="font-black text-sm uppercase tracking-widest">Receta: {selectedProduct}</h3>
               </div>
               <Badge className="bg-white/10 text-white border-none uppercase text-[9px] font-black px-3 py-1">
-                Proporciones por UBB
+                Fórmulas Activas
               </Badge>
             </div>
             
@@ -148,7 +156,8 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
                 <TableHeader>
                   <TableRow className="hover:bg-transparent border-b border-slate-100">
                     <TableHead className="text-[10px] font-black text-slate-400 uppercase pl-6">Material</TableHead>
-                    <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase w-[180px]">Proporción (Cdad/UBB)</TableHead>
+                    <TableHead className="text-right text-[10px] font-black text-amber-600 uppercase bg-amber-50/20">Valor Maestro</TableHead>
+                    <TableHead className="text-right text-[10px] font-black text-primary uppercase w-[150px]">Valor Actual</TableHead>
                     <TableHead className="w-[60px]"></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -161,32 +170,39 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
                           <span className="text-sm font-bold text-slate-700 uppercase leading-tight">{item.description}</span>
                         </div>
                       </TableCell>
+                      <TableCell className="py-4 text-right bg-amber-50/10">
+                        <div className="flex flex-col items-end">
+                           <span className="text-xs font-black text-amber-600 tabular-nums">{item.masterValue.toLocaleString('es-ES', { maximumFractionDigits: 6 })}</span>
+                           <span className="text-[9px] font-bold text-slate-400 uppercase">{item.unit} / UBB</span>
+                        </div>
+                      </TableCell>
                       <TableCell className="py-4">
-                        <div className="flex items-center justify-end gap-3">
+                        <div className="flex items-center justify-end gap-2">
                           <Input 
                             type="number"
                             step="0.000001"
-                            value={item.value}
+                            value={item.currentValue === 0 ? '' : item.currentValue}
                             onChange={(e) => onUpdateRecipe(selectedProduct, item.code, parseFloat(e.target.value) || 0)}
                             className="h-10 text-right font-black text-sm rounded-xl bg-slate-50 border-slate-100 focus:bg-white transition-all w-28"
+                            placeholder="0.00"
                           />
-                          <span className="text-[10px] font-black text-slate-400 uppercase w-8">{item.unit}</span>
                         </div>
                       </TableCell>
                       <TableCell className="py-4 pr-4">
-                        <Button 
-                          variant="ghost" 
-                          size="icon" 
-                          onClick={() => handleRemoveMaterial(item.code, item.description)}
-                          className="h-8 w-8 text-slate-300 hover:text-destructive hover:bg-destructive/5 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
+                        {item.currentValue > 0 && (
+                          <Button 
+                            variant="ghost" 
+                            size="icon" 
+                            onClick={() => handleRemoveMaterial(item.code, item.description)}
+                            className="h-8 w-8 text-slate-300 hover:text-destructive hover:bg-destructive/5 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        )}
                       </TableCell>
                     </TableRow>
                   ))}
                   
-                  {/* Fila para agregar nuevo componente */}
                   <TableRow className="bg-slate-50/30">
                     <TableCell className="py-6 pl-6">
                       <div className="space-y-1">
@@ -205,13 +221,13 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
                         </Select>
                       </div>
                     </TableCell>
-                    <TableCell className="py-6 text-right">
+                    <TableCell colSpan={2} className="py-6 text-right">
                       <Button 
                         onClick={handleAddMaterial}
                         disabled={!newMaterialCode}
                         className="h-10 gap-2 bg-primary hover:bg-primary/90 text-white rounded-xl font-black uppercase text-[10px] tracking-widest px-4 shadow-lg shadow-primary/10 transition-all disabled:opacity-50"
                       >
-                        <Plus className="h-3.5 w-3.5" /> Agregar
+                        <Plus className="h-3.5 w-3.5" /> Agregar a Receta
                       </Button>
                     </TableCell>
                     <TableCell className="py-6"></TableCell>
@@ -222,23 +238,19 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
           </Card>
         </div>
 
-        {/* Panel de Ayuda y Referencia */}
         <div className="space-y-6">
           <Card className="p-6 border-slate-200 rounded-3xl bg-slate-50/50 border-dashed border-2">
             <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-              <Box className="h-4 w-4 text-primary" /> Gestión de Recetas
+              <Info className="h-4 w-4 text-amber-600" /> Referencia Maestra
             </h4>
             <div className="space-y-4">
-              <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
-                <p className="text-[11px] font-bold text-slate-600 leading-relaxed uppercase">
-                  Puedes personalizar cada sabor añadiendo o quitando materiales del catálogo. Los requerimientos semanales se actualizarán automáticamente.
-                </p>
-              </div>
-              
-              <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100 flex gap-3">
-                <AlertCircle className="h-5 w-5 text-amber-500 shrink-0" />
-                <span className="text-[10px] font-bold text-amber-900 leading-tight uppercase">
-                  IMPORTANTE: Si no ves los últimos cambios maestros en JUSTY PERA o MANZANA, pulsa el botón "Restablecer a Valores Maestros" arriba.
+              <p className="text-[11px] font-bold text-slate-600 leading-relaxed uppercase">
+                Los <span className="text-amber-600 font-black">Valores Maestros</span> son los predeterminados en el código. Si realizas cambios en el "Valor Actual", el sistema priorizará tu entrada manual para los cálculos de consumo.
+              </p>
+              <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
+                <span className="text-[10px] font-black text-slate-400 uppercase block mb-1">Dato Clave:</span>
+                <span className="text-[11px] font-black text-slate-800 uppercase">
+                  Las recetas de JUSTY ahora incluyen los factores actualizados de azúcar (130.00) y concentrados (6.0).
                 </span>
               </div>
             </div>
@@ -247,7 +259,7 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
           <Card className="p-6 border-slate-200 rounded-3xl bg-white shadow-lg">
              <div className="flex items-center gap-2 mb-6">
                 <Search className="h-4 w-4 text-slate-400" />
-                <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest">Catálogo Maestro</h4>
+                <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest">Catálogo de Materiales</h4>
              </div>
              <div className="space-y-3">
                <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
@@ -260,15 +272,8 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
                <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
                   <Droplet className="h-4 w-4 text-blue-600" />
                   <div className="flex-1">
-                    <span className="text-[10px] font-black text-slate-900 block uppercase">Concentrados</span>
-                    <span className="text-[9px] font-bold text-slate-400 uppercase">Lts / KG según sabor</span>
-                  </div>
-               </div>
-               <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
-                  <Plus className="h-4 w-4 text-indigo-600" />
-                  <div className="flex-1">
-                    <span className="text-[10px] font-black text-slate-900 block uppercase">Aditivos y Sólidos</span>
-                    <span className="text-[9px] font-bold text-slate-400 uppercase">Benzoatos, Ácidos, etc.</span>
+                    <span className="text-[10px] font-black text-slate-900 block uppercase">Concentrados Lts/KG</span>
+                    <span className="text-[9px] font-bold text-slate-400 uppercase">Según Sabor</span>
                   </div>
                </div>
              </div>
