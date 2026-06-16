@@ -244,6 +244,10 @@ export function usePlannerStore() {
     });
   }, []);
 
+  const resetRecipesToDefaults = useCallback(() => {
+    setCustomRecipes(RECIPES);
+  }, []);
+
   const updateRawMaterialStock = useCallback((code: string, type: 'initial' | 'final', value: number) => {
     setRawMaterialStock(prev => {
       const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {} };
@@ -315,6 +319,7 @@ export function usePlannerStore() {
     updateRealProduction, 
     updateRecipe,
     removeMaterialFromRecipe,
+    resetRecipesToDefaults,
     updateRawMaterialStock,
     updateRawMaterialReception,
     updateRawMaterialDailyPhysical,

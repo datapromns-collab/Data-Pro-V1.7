@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -7,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { FlaskConical, Beaker, Save, Search, Wheat, Droplet, Box, Plus, Trash2, AlertCircle } from 'lucide-react';
+import { FlaskConical, Beaker, Save, Search, Wheat, Droplet, Box, Plus, Trash2, AlertCircle, RotateCcw } from 'lucide-react';
 import { 
   PRODUCT_LIST, 
   CONCENTRATES_SOFT_DRINKS, 
@@ -19,6 +18,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
+import { usePlannerStore } from '@/hooks/use-planner-store';
 
 interface RecipeEditorProps {
   recipes: Record<string, Record<string, number>>;
@@ -38,6 +38,7 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
   const [selectedProduct, setSelectedProduct] = useState(PRODUCT_LIST[0]);
   const [newMaterialCode, setNewMaterialCode] = useState('');
   const { toast } = useToast();
+  const { resetRecipesToDefaults } = usePlannerStore();
 
   const currentRecipe = useMemo(() => {
     return recipes[selectedProduct] || {};
@@ -80,6 +81,16 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
     }
   };
 
+  const handleResetToDefaults = () => {
+    if (confirm('¿Restablecer todas las recetas a los valores maestros definidos en el sistema? Se perderán las personalizaciones manuales.')) {
+      resetRecipesToDefaults();
+      toast({
+        title: "Recetas Restablecidas",
+        description: "Se han cargado los valores maestros del sistema.",
+      });
+    }
+  };
+
   return (
     <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in duration-700">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
@@ -93,16 +104,28 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
           </div>
         </div>
 
-        <div className="w-full md:w-80">
-          <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Producto a Editar</Label>
-          <Select value={selectedProduct} onValueChange={setSelectedProduct}>
-            <SelectTrigger className="h-12 bg-white border-slate-200 rounded-2xl font-bold shadow-sm">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent className="rounded-xl">
-              {PRODUCT_LIST.map(p => <SelectItem key={p} value={p} className="font-bold">{p}</SelectItem>)}
-            </SelectContent>
-          </Select>
+        <div className="flex flex-col sm:flex-row items-end gap-4 w-full md:w-auto">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={handleResetToDefaults}
+            className="h-12 gap-2 border-amber-200 text-amber-600 hover:bg-amber-50 rounded-2xl font-bold px-4"
+          >
+            <RotateCcw className="h-4 w-4" />
+            Restablecer a Valores Maestros
+          </Button>
+          
+          <div className="w-full sm:w-80">
+            <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Producto a Editar</Label>
+            <Select value={selectedProduct} onValueChange={setSelectedProduct}>
+              <SelectTrigger className="h-12 bg-white border-slate-200 rounded-2xl font-bold shadow-sm">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent className="rounded-xl">
+                {PRODUCT_LIST.map(p => <SelectItem key={p} value={p} className="font-bold">{p}</SelectItem>)}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
       </div>
 
@@ -115,7 +138,7 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
                 <Beaker className="h-5 w-5" />
                 <h3 className="font-black text-sm uppercase tracking-widest">Receta: {selectedProduct}</h3>
               </div>
-              <Badge className="bg-white/20 text-white border-none uppercase text-[9px] font-black px-3 py-1">
+              <Badge className="bg-white/10 text-white border-none uppercase text-[9px] font-black px-3 py-1">
                 Proporciones por UBB
               </Badge>
             </div>
