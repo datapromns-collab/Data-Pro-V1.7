@@ -1,6 +1,7 @@
+
 "use client";
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect } from "react";
 import Image from 'next/image';
 import { 
   Plus, 
@@ -22,7 +23,8 @@ import {
   FlaskConical,
   ChevronRight,
   Box,
-  ShoppingCart
+  ShoppingCart,
+  Copy
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -96,6 +98,7 @@ export default function PlannerPage() {
     isAdmin,
     isDemon,
     isInventory,
+    isPurchasing,
     login,
     logout
   } = useAuthStore();
@@ -125,6 +128,10 @@ export default function PlannerPage() {
         setActiveModule('raw-materials');
         setActiveTab('raw-material-view');
       }
+      if (isPurchasing && activeModule !== 'purchasing') {
+        setActiveModule('purchasing');
+        setActiveTab('purchasing-view');
+      }
       if (!isAdmin && activeModule === 'management') {
         setActiveModule('planning');
         setActiveTab('gantt');
@@ -137,12 +144,12 @@ export default function PlannerPage() {
         setActiveModule('planning');
         setActiveTab('gantt');
       }
-      if (!isAdmin && activeModule === 'purchasing') {
+      if (!isAdmin && !isPurchasing && activeModule === 'purchasing') {
         setActiveModule('planning');
         setActiveTab('gantt');
       }
     }
-  }, [authLoaded, user, isAdmin, isDemon, isInventory, activeModule]);
+  }, [authLoaded, user, isAdmin, isDemon, isInventory, isPurchasing, activeModule]);
 
   useEffect(() => {
     if (plannerLoaded) {
@@ -320,7 +327,7 @@ export default function PlannerPage() {
   }
 
   const navTabClass = (isActive: boolean) => cn(
-    "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none active:scale-100 active:transform-none transform-none transition-none",
+    "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-colors",
     isActive ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
   );
 
@@ -342,7 +349,7 @@ export default function PlannerPage() {
               <section className="space-y-2">
                 <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Módulos</p>
                 <div className="flex flex-col gap-2">
-                  {!isInventory && (
+                  {!isInventory && !isPurchasing && (
                     <Button 
                       variant={activeModule === 'planning' ? 'default' : 'ghost'} 
                       onClick={() => { setActiveModule('planning'); setActiveTab('gantt'); }}
@@ -374,7 +381,7 @@ export default function PlannerPage() {
                     </Button>
                   )}
 
-                  {user.role !== 'STANDARD' && (
+                  {user.role !== 'STANDARD' && !isPurchasing && (
                     <Button 
                       variant={activeModule === 'raw-materials' ? 'default' : 'ghost'} 
                       onClick={() => { setActiveModule('raw-materials'); setActiveTab('raw-material-view'); }}
@@ -406,7 +413,7 @@ export default function PlannerPage() {
                     </Button>
                   )}
 
-                  {isAdmin && (
+                  {(isAdmin || isPurchasing) && (
                     <Button 
                       variant={activeModule === 'purchasing' ? 'default' : 'ghost'} 
                       onClick={() => { setActiveModule('purchasing'); setActiveTab('purchasing-view'); }}
@@ -418,7 +425,7 @@ export default function PlannerPage() {
                       <div className={cn("p-1.5 rounded-lg", activeModule === 'purchasing' ? "bg-white/20" : "bg-slate-100")}>
                         <ShoppingCart className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[9px] font-black tracking-tighter text-left">Proyección de Compras</span>
+                      <span className="uppercase text-[10px] font-black tracking-tighter text-left">Proyección de Compras</span>
                     </Button>
                   )}
                 </div>
@@ -565,35 +572,35 @@ export default function PlannerPage() {
                     <>
                       <button 
                         onClick={() => setActiveTab('gantt')}
-                        className={cn(navTabClass(activeTab === 'gantt'), "w-[170px] px-0")}
+                        className={cn(navTabClass(activeTab === 'gantt'), "w-[170px] px-0 active:scale-100 active:transform-none transform-none")}
                       >
                         <GanttChartSquare className="h-3.5 w-3.5" />
                         Programación
                       </button>
                       <button 
                         onClick={() => setActiveTab('daily')}
-                        className={cn(navTabClass(activeTab === 'daily'), "w-[170px] px-0")}
+                        className={cn(navTabClass(activeTab === 'daily'), "w-[170px] px-0 active:scale-100 active:transform-none transform-none")}
                       >
                         <ListTodo className="h-3.5 w-3.5" />
                         Plan Día a Día
                       </button>
                       <button 
                         onClick={() => setActiveTab('requirement')}
-                        className={cn(navTabClass(activeTab === 'requirement'), "w-[170px] px-0")}
+                        className={cn(navTabClass(activeTab === 'requirement'), "w-[170px] px-0 active:scale-100 active:transform-none transform-none")}
                       >
                         <ClipboardList className="h-3.5 w-3.5" />
                         Requerimiento
                       </button>
                       <button 
                         onClick={() => setActiveTab('speeds')}
-                        className={cn(navTabClass(activeTab === 'speeds'), "w-[170px] px-0")}
+                        className={cn(navTabClass(activeTab === 'speeds'), "w-[170px] px-0 active:scale-100 active:transform-none transform-none")}
                       >
                         <Gauge className="h-3.5 w-3.5" />
                         Velocidades
                       </button>
                       <button 
                         onClick={() => setActiveTab('calculator')}
-                        className={cn(navTabClass(activeTab === 'calculator'), "w-[170px] px-0")}
+                        className={cn(navTabClass(activeTab === 'calculator'), "w-[170px] px-0 active:scale-100 active:transform-none transform-none")}
                       >
                         <CalculatorIcon className="h-3.5 w-3.5" />
                         Calculadora
@@ -603,14 +610,14 @@ export default function PlannerPage() {
                     <>
                       <button 
                         onClick={() => setActiveTab('admin-report')}
-                        className={navTabClass(activeTab === 'admin-report')}
+                        className={cn(navTabClass(activeTab === 'admin-report'), "active:scale-100 active:transform-none transform-none")}
                       >
                         <BarChart3 className="h-3.5 w-3.5" />
                         Control Producción
                       </button>
                       <button 
                         onClick={() => setActiveTab('compliance-report')}
-                        className={navTabClass(activeTab === 'compliance-report')}
+                        className={cn(navTabClass(activeTab === 'compliance-report'), "active:scale-100 active:transform-none transform-none")}
                       >
                         <CheckCircle2 className="h-3.5 w-3.5" />
                         Cumplimiento
@@ -620,7 +627,7 @@ export default function PlannerPage() {
                     <>
                       <button 
                         onClick={() => setActiveTab('raw-material-view')}
-                        className={cn(navTabClass(activeTab === 'raw-material-view'), "bg-amber-50 text-amber-700", activeTab !== 'raw-material-view' && "bg-transparent text-slate-500 hover:bg-slate-50")}
+                        className={cn(navTabClass(activeTab === 'raw-material-view'), "bg-amber-50 text-amber-700 active:scale-100 active:transform-none transform-none", activeTab !== 'raw-material-view' && "bg-transparent text-slate-500 hover:bg-slate-50")}
                       >
                         <Box className="h-3.5 w-3.5" />
                         Control de Inventarios
@@ -630,7 +637,7 @@ export default function PlannerPage() {
                     <>
                       <button 
                         onClick={() => setActiveTab('recipes-editor')}
-                        className={cn(navTabClass(activeTab === 'recipes-editor'), "bg-emerald-50 text-emerald-700", activeTab !== 'recipes-editor' && "bg-transparent text-slate-500 hover:bg-slate-50")}
+                        className={cn(navTabClass(activeTab === 'recipes-editor'), "bg-emerald-50 text-emerald-700 active:scale-100 active:transform-none transform-none", activeTab !== 'recipes-editor' && "bg-transparent text-slate-500 hover:bg-slate-50")}
                       >
                         <FlaskConical className="h-3.5 w-3.5" />
                         Edición de Recetas
@@ -641,7 +648,7 @@ export default function PlannerPage() {
               )}
 
               <div className="flex-1 min-w-0">
-                {activeModule === 'planning' && !isInventory && (
+                {activeModule === 'planning' && !isInventory && !isPurchasing && (
                   <>
                     {activeTab === 'gantt' && (
                       <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
@@ -684,7 +691,7 @@ export default function PlannerPage() {
                     )}
                   </>
                 )}
-                {activeModule === 'raw-materials' && (
+                {activeModule === 'raw-materials' && !isPurchasing && (
                   <>
                     {activeTab === 'raw-material-view' && (
                       <RawMaterialModule 
