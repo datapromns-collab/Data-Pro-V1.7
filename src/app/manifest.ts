@@ -1,10 +1,9 @@
-
 import { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Plan Semanal Pro',
-    short_name: 'PlannerPro',
+    name: 'Data Pro',
+    short_name: 'DataPro',
     description: 'Sistema de planificación semanal profesional para gestión de producción.',
     start_url: '/',
     display: 'standalone',

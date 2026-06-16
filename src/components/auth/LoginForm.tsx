@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from 'react';
@@ -34,7 +33,7 @@ export function LoginForm({ onLogin }: LoginFormProps) {
           <div className="bg-primary p-4 rounded-2xl shadow-xl shadow-primary/20 mb-4">
             <Calendar className="h-8 w-8 text-white" />
           </div>
-          <h1 className="text-2xl font-headline font-bold text-slate-900">Plan Semanal Pro</h1>
+          <h1 className="text-2xl font-headline font-bold text-slate-900">Data Pro</h1>
           <p className="text-sm text-slate-500 mt-1">Ingresa tus credenciales para continuar</p>
         </div>
 

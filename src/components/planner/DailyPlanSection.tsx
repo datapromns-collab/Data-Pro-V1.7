@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useMemo } from 'react';
@@ -274,7 +273,7 @@ export function DailyPlanSection({ tasks, weekStartDate, onPrint }: DailyPlanSec
             </div>
             
             <div className="hidden print:flex justify-between items-center mt-4 text-[8px] font-black text-slate-400 uppercase tracking-widest border-t border-slate-100 pt-2">
-              <span>Plan Semanal Pro - Sistema de Gestión de Planta</span>
+              <span>Data Pro - Sistema de Gestión de Planta</span>
               <span>Página {dIdx + 1} de {weekDays.length}</span>
               <span>Generado: {format(new Date(), 'dd/MM/yyyy HH:mm')}</span>
             </div>

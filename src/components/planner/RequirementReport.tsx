@@ -1,4 +1,3 @@
-
 "use client";
 
 import Image from 'next/image';
@@ -511,7 +510,7 @@ export function RequirementReport({ tasks, weekStartDate }: RequirementReportPro
       </div>
 
       <div className="mt-12 pt-4 border-t border-slate-200 flex justify-between items-center text-[9px] text-slate-400 font-black uppercase tracking-widest">
-        <span>Plan Semanal Pro - Sistema de Requerimiento de Producción</span>
+        <span>Data Pro - Sistema de Requerimiento de Producción</span>
         <span>Generado: {format(new Date(), "dd/MM/yyyy HH:mm:ss")}</span>
       </div>
     </div>

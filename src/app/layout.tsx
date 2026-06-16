@@ -17,7 +17,7 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: 'Plan Semanal Pro - Planificación Eficiente',
+  title: 'Data Pro - Planificación Eficiente',
   description: 'Sistema de planificación semanal profesional con monitoreo de turnos e IA.',
 };
 

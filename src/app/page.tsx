@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -320,7 +319,7 @@ export default function PlannerPage() {
               </div>
               <div className="flex flex-col">
                 <h1 className="text-xl font-headline font-bold text-slate-900 tracking-tight leading-none">
-                  {isReportView ? 'Reporte de Gestión' : 'Plan Semanal'}
+                  {isReportView ? 'Reporte de Gestión' : 'Data Pro'}
                 </h1>
                 <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mt-1">Pro Edition</span>
               </div>
