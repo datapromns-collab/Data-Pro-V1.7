@@ -1,12 +1,15 @@
+
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
 import { ScheduledTask } from '@/lib/types';
 import { startOfWeek } from 'date-fns';
+import { RECIPES } from '@/lib/planner-utils';
 
 const STORAGE_KEY_TASKS = 'planner_tasks_v2';
 const STORAGE_KEY_CONFIG = 'planner_config_v2';
 const STORAGE_KEY_REAL_PROD = 'planner_real_production_v1';
+const STORAGE_KEY_RECIPES = 'planner_custom_recipes_v1';
 
 export function usePlannerStore() {
   const [tasks, setTasks] = useState<ScheduledTask[]>([]);
@@ -16,10 +19,10 @@ export function usePlannerStore() {
     return startOfWeek(d, { weekStartsOn: 1 });
   });
   const [lineSpeeds, setLineSpeeds] = useState<Record<string, number>>({
-    "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0
+    "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0
   });
-  // Estructura: realProduction[lineId][flavorName][dateKey] = quantity
   const [realProduction, setRealProduction] = useState<Record<string, Record<string, Record<string, number>>>>({});
+  const [customRecipes, setCustomRecipes] = useState<Record<string, Record<string, number>>>(RECIPES);
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Cargar datos iniciales
@@ -27,6 +30,7 @@ export function usePlannerStore() {
     const savedTasks = localStorage.getItem(STORAGE_KEY_TASKS);
     const savedConfig = localStorage.getItem(STORAGE_KEY_CONFIG);
     const savedRealProd = localStorage.getItem(STORAGE_KEY_REAL_PROD);
+    const savedRecipes = localStorage.getItem(STORAGE_KEY_RECIPES);
 
     if (savedTasks) {
       try {
@@ -58,6 +62,14 @@ export function usePlannerStore() {
         console.error("Error loading real production", e);
       }
     }
+
+    if (savedRecipes) {
+      try {
+        setCustomRecipes(JSON.parse(savedRecipes));
+      } catch (e) {
+        console.error("Error loading custom recipes", e);
+      }
+    }
     
     setIsLoaded(true);
   }, []);
@@ -83,6 +95,12 @@ export function usePlannerStore() {
       localStorage.setItem(STORAGE_KEY_REAL_PROD, JSON.stringify(realProduction));
     }
   }, [realProduction, isLoaded]);
+
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem(STORAGE_KEY_RECIPES, JSON.stringify(customRecipes));
+    }
+  }, [customRecipes, isLoaded]);
 
   const addTask = useCallback((taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
@@ -131,11 +149,21 @@ export function usePlannerStore() {
     });
   }, []);
 
+  const updateRecipe = useCallback((product: string, materialCode: string, value: number) => {
+    setCustomRecipes(prev => {
+      const newRecipes = { ...prev };
+      if (!newRecipes[product]) newRecipes[product] = {};
+      newRecipes[product][materialCode] = value;
+      return newRecipes;
+    });
+  }, []);
+
   return { 
     tasks, 
     weekStartDate, 
     lineSpeeds,
     realProduction,
+    customRecipes,
     setWeekStartDate, 
     addTask, 
     updateTask, 
@@ -143,6 +171,7 @@ export function usePlannerStore() {
     clearAll, 
     updateLineSpeed,
     updateRealProduction,
+    updateRecipe,
     isLoaded,
     isSyncing: false
   };

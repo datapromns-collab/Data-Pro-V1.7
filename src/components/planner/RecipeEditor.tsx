@@ -1,0 +1,197 @@
+
+'use client';
+
+import { useState, useMemo } from 'react';
+import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { FlaskConical, Beaker, Save, Search, Wheat, Droplet, Box, Plus } from 'lucide-react';
+import { 
+  PRODUCT_LIST, 
+  CONCENTRATES_SOFT_DRINKS, 
+  CONCENTRATES_JUICES, 
+  SOLIDS_DATA, 
+  ADDITIVES_DATA, 
+  SUGAR_DATA 
+} from '@/lib/planner-utils';
+import { Badge } from '@/components/ui/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+
+interface RecipeEditorProps {
+  recipes: Record<string, Record<string, number>>;
+  onUpdateRecipe: (product: string, materialCode: string, value: number) => void;
+}
+
+const ALL_MATERIALS = [
+  ...SUGAR_DATA,
+  ...CONCENTRATES_SOFT_DRINKS,
+  ...CONCENTRATES_JUICES,
+  ...SOLIDS_DATA,
+  ...ADDITIVES_DATA
+];
+
+export function RecipeEditor({ recipes, onUpdateRecipe }: RecipeEditorProps) {
+  const [selectedProduct, setSelectedProduct] = useState(PRODUCT_LIST[0]);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const currentRecipe = useMemo(() => {
+    return recipes[selectedProduct] || {};
+  }, [recipes, selectedProduct]);
+
+  const materialsInRecipe = useMemo(() => {
+    return Object.entries(currentRecipe).map(([code, value]) => {
+      const material = ALL_MATERIALS.find(m => m.code === code);
+      return {
+        code,
+        value,
+        description: material?.description || 'Desconocido',
+        unit: (material as any)?.unit || 'KG'
+      };
+    });
+  }, [currentRecipe]);
+
+  return (
+    <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in duration-700">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+        <div className="flex items-center gap-4">
+          <div className="bg-emerald-600 p-3 rounded-2xl shadow-lg shadow-emerald-200">
+            <FlaskConical className="h-6 w-6 text-white" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-headline font-black text-slate-900 uppercase">Gestor de Recetas</h2>
+            <p className="text-sm text-slate-500 font-bold uppercase tracking-widest mt-0.5">Control Maestro de Materia Prima</p>
+          </div>
+        </div>
+
+        <div className="w-full md:w-80">
+          <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Producto a Editar</Label>
+          <Select value={selectedProduct} onValueChange={setSelectedProduct}>
+            <SelectTrigger className="h-12 bg-white border-slate-200 rounded-2xl font-bold shadow-sm">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="rounded-xl">
+              {PRODUCT_LIST.map(p => <SelectItem key={p} value={p} className="font-bold">{p}</SelectItem>)}
+            </SelectContent>
+          </Select>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Panel de Edición */}
+        <div className="lg:col-span-2 space-y-6">
+          <Card className="border-slate-200 rounded-3xl overflow-hidden bg-white shadow-xl shadow-slate-100/50">
+            <div className="bg-[#4a7ebb] p-4 flex items-center justify-between">
+              <div className="flex items-center gap-2 text-white">
+                <Beaker className="h-5 w-5" />
+                <h3 className="font-black text-sm uppercase tracking-widest">Receta: {selectedProduct}</h3>
+              </div>
+              <Badge className="bg-white/20 text-white border-none uppercase text-[9px] font-black px-3 py-1">
+                Proporciones por UBB
+              </Badge>
+            </div>
+            
+            <div className="p-6">
+              <Table>
+                <TableHeader>
+                  <TableRow className="hover:bg-transparent">
+                    <TableHead className="text-[10px] font-black text-slate-400 uppercase">Material</TableHead>
+                    <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase w-[200px]">Proporción (Cdad/UBB)</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {materialsInRecipe.map((item) => (
+                    <TableRow key={item.code} className="hover:bg-slate-50/50 group transition-colors">
+                      <TableCell className="py-4">
+                        <div className="flex flex-col">
+                          <span className="text-xs font-black text-primary font-mono">{item.code}</span>
+                          <span className="text-sm font-bold text-slate-700 uppercase leading-tight">{item.description}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="py-4">
+                        <div className="flex items-center justify-end gap-3">
+                          <Input 
+                            type="number"
+                            step="0.000001"
+                            value={item.value}
+                            onChange={(e) => onUpdateRecipe(selectedProduct, item.code, parseFloat(e.target.value) || 0)}
+                            className="h-10 text-right font-black text-sm rounded-xl bg-slate-50 border-slate-100 focus:bg-white transition-all w-32"
+                          />
+                          <span className="text-[10px] font-black text-slate-400 uppercase w-8">{item.unit}</span>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                  {materialsInRecipe.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={2} className="h-32 text-center">
+                        <p className="text-slate-400 font-bold uppercase text-xs">No hay materiales definidos para esta receta</p>
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+            </div>
+          </Card>
+        </div>
+
+        {/* Panel de Ayuda y Referencia */}
+        <div className="space-y-6">
+          <Card className="p-6 border-slate-200 rounded-3xl bg-slate-50/50 border-dashed border-2">
+            <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+              <Box className="h-4 w-4 text-primary" /> Info de Edición
+            </h4>
+            <div className="space-y-4">
+              <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
+                <p className="text-[11px] font-bold text-slate-600 leading-relaxed uppercase">
+                  Los valores editados afectan directamente al cálculo de requerimientos semanales. Las proporciones se calculan en base a la **UBB (Unidad de Base de Bebida)** de cada producto.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-amber-50 p-3 rounded-2xl border border-amber-100">
+                  <span className="text-[8px] font-black text-amber-600 uppercase block mb-1">Nota Crítica</span>
+                  <span className="text-[10px] font-bold text-amber-900 leading-tight block">Cambios permanentes en esta sesión.</span>
+                </div>
+                <div className="bg-emerald-50 p-3 rounded-2xl border border-emerald-100">
+                  <span className="text-[8px] font-black text-emerald-600 uppercase block mb-1">Efecto</span>
+                  <span className="text-[10px] font-bold text-emerald-900 leading-tight block">Sincronización con Reporte PDF.</span>
+                </div>
+              </div>
+            </div>
+          </Card>
+
+          <Card className="p-6 border-slate-200 rounded-3xl bg-white shadow-lg">
+             <div className="flex items-center gap-2 mb-6">
+                <Search className="h-4 w-4 text-slate-400" />
+                <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest">Catálogo Maestro</h4>
+             </div>
+             <div className="space-y-3">
+               <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                  <Wheat className="h-4 w-4 text-emerald-600" />
+                  <div className="flex-1">
+                    <span className="text-[10px] font-black text-slate-900 block uppercase">Azúcar Refinada</span>
+                    <span className="text-[9px] font-bold text-slate-400 uppercase">MATP_0001</span>
+                  </div>
+               </div>
+               <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                  <Droplet className="h-4 w-4 text-blue-600" />
+                  <div className="flex-1">
+                    <span className="text-[10px] font-black text-slate-900 block uppercase">Concentrados</span>
+                    <span className="text-[9px] font-bold text-slate-400 uppercase">Lts / KG según sabor</span>
+                  </div>
+               </div>
+               <div className="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 border border-slate-100">
+                  <Plus className="h-4 w-4 text-indigo-600" />
+                  <div className="flex-1">
+                    <span className="text-[10px] font-black text-slate-900 block uppercase">Aditivos y Sólidos</span>
+                    <span className="text-[9px] font-bold text-slate-400 uppercase">Benzoatos, Ácidos, etc.</span>
+                  </div>
+               </div>
+             </div>
+          </Card>
+        </div>
+      </div>
+    </div>
+  );
+}

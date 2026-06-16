@@ -17,6 +17,143 @@ export const PRODUCT_LIST = [
 
 export const ALL_LINES_SUMMARY = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
+// --- DATOS MAESTROS DE MATERIALES ---
+
+export const PREFORMS_DATA = [
+  { code: 'EMP_0009', description: 'PREFORMA TRANSPARENTE 29.6GR 1881' },
+  { code: 'EMP_0068', description: 'PREFORMA TRANSPARENTE 36 GR-1881' },
+  { code: 'EMP_0093', description: 'PREFORMA TRANSPARENTE 42,64 GR-1881' },
+  { code: 'EMP_0103', description: 'PREFORMA VERDE 42,64 GR-1881' },
+  { code: 'EMP_0120', description: 'PREFORMA VERDE 29.6GR 1881' },
+  { code: 'EMP_0126', description: 'PREFORMA TRANSPARENTE 20,55GR-1881' },
+  { code: 'EMP_0135', description: 'PREFORMA VERDE 20,5-1881' },
+];
+
+export const CAPS_DATA = [
+  { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0095_N', description: 'TAPA VERDE REFRESCOS NACIONALES' },
+  { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS IMPORTADAS' },
+  { code: 'EMP_0105_2', description: 'TAPA AZULES REFRESCOS IMPORTADAS #2' },
+  { code: 'EMP_0105_N', description: 'TAPA AZULES REFRESCOS NACIONALES' },
+];
+
+export const PLASTICS_DATA = [
+  { code: 'EMP_0019', description: 'FILM POLIESTRECH 23 MIC' },
+  { isHeader: true, description: 'Termo Encogible' },
+  { code: 'EMP_0017', description: 'POLIETILENO TERMOENCOGIBLE 55 X 0.07' },
+  { code: 'EMP_0080', description: 'POLIETILENO TERMOENCOGIBLE 48x0.06' },
+  { code: 'EMP_0130', description: 'POLIETILENO TERMOENCOGIBLE 43 x 0.06' },
+];
+
+export const LABELS_2LTS_DATA = [
+  { code: 'EMP_0022', description: 'ETIQUETA UVA 2000ML' },
+  { code: 'EMP_0026', description: 'ETIQUETA PIÑA 2000ML' },
+  { code: 'EMP_0030', description: 'ETIQUETA NARANJA 2000 ML' },
+  { code: 'EMP_0034', description: 'ETIQUETA KOLITA 2000ML' },
+  { code: 'EMP_0038', description: 'ETIQUETA FRESH 2000ML' },
+  { code: 'EMP_0042', description: 'ETIQUETA COLA NEGRA 2000ML' },
+  { code: 'EMP_0101', description: 'ETIQUETA MANZANA VERDE 2000ML' },
+  { code: 'EMP_0136', description: 'ETIQUETA MANZANA ROJA 2000ML' },
+  { code: 'EMP_0137', description: 'ETIQUETA PIÑA PARCHITA 2000ML' },
+];
+
+export const LABELS_1_5LTS_DATA = [
+  { code: 'EMP_0048', description: 'ETIQUETA JUSTY NARANJA 1.5 LITROS' },
+  { code: 'EMP_0076', description: 'ETIQUETA VITA TE LIMON 1.5 LTS' },
+  { code: 'EMP_0077', description: 'ETIQUETA VITA TE DURAZNO 1.5 LTS' },
+  { code: 'EMP_0142', description: 'ETIQUETA JUSTY DURAZNO 1.5 LITROS' },
+  { code: 'EMP_0143', description: 'ETIQUETA JUSTY MANDARINA 1.5 LITROS' },
+  { code: 'EMP_0144', description: 'ETIQUETA JUSTY SANDIA 1.5 LITROS' },
+  { code: 'EMP_0145', description: 'ETIQUETA JUSTY TAMARINDO 1.5 LITROS' },
+  { code: 'EMP_0146', description: 'ETIQUETA JUSTY LIMON 1.5 LITROS' },
+];
+
+export const LABELS_1LT_DATA = [
+  { code: 'EMP_0111', description: 'ETIQUETA COLA NEGRA 1000ML' },
+  { code: 'EMP_0113', description: 'ETIQUETA UVA 1000ML' },
+  { code: 'EMP_0115', description: 'ETIQUETA KOLITA 1000ML' },
+  { code: 'EMP_0117', description: 'ETIQUETA FRESH 1000ML' },
+  { code: 'EMP_0118', description: 'ETIQUETA MANZANA VERDE 1000ML' },
+  { code: 'EMP_0147', description: 'ETIQUETA PIÑA 1000ML' },
+  { code: 'EMP_0148', description: 'ETIQUETA NARANJA 1000ML' },
+  { code: 'EMP_0149', description: 'ETIQUETA PIÑA PARCHITA 1000ML' },
+  { code: 'EMP_0150', description: 'ETIQUETA MANZANA ROJA 1000ML' },
+];
+
+export const LABELS_04LT_DATA = [
+  { code: 'EMP_0110', description: 'ETIQUETA COLA NEGRA 400ML' },
+  { code: 'EMP_0112', description: 'ETIQUETA UVA 400ML' },
+  { code: 'EMP_0114', description: 'ETIQUETA KOLITA 400ML' },
+  { code: 'EMP_0116', description: 'ETIQUETA FRESH 400ML' },
+  { code: 'EMP_0119', description: 'ETIQUETA MANZANA VERDE 400ML' },
+  { code: 'EMP_0151', description: 'ETIQUETA PIÑA 400ML' },
+  { code: 'EMP_0152', description: 'ETIQUETA NARANJA 400ML' },
+  { code: 'EMP_0154', description: 'ETIQUETA PIÑA PARCHITA 400ML' },
+  { code: 'EMP_0155', description: 'ETIQUETA MANZANA ROJA 400ML' },
+];
+
+export const SUGAR_DATA = [
+  { code: 'MATP_0001', description: 'AZUCAR REFINADA', unit: 'KG' },
+];
+
+export const CONCENTRATES_SOFT_DRINKS = [
+  { code: 'MATP_0002', description: 'CONCENTRADO COLA NEGRA A', unit: 'LTS' },
+  { code: 'MATP_0003', description: 'CONCENTRADO FRESH', unit: 'LTS' },
+  { code: 'MATP_0004', description: 'CONCENTRADO NARANJA', unit: 'LTS' },
+  { code: 'MATP_0005', description: 'CONCENTRADO UVA', unit: 'LTS' },
+  { code: 'MATP_0006', description: 'CONCENTRADO PIÑA', unit: 'LTS' },
+  { code: 'MATP_0007', description: 'CONCENTRADO KOLITA', unit: 'LTS' },
+  { code: 'MATP_0009', description: 'CONCENTRADO COLA NEGRA B', unit: 'LTS' },
+  { code: 'MATP_0032', description: 'CONCENTRADO MANZANA VERDE', unit: 'LTS' },
+  { code: 'MATP_0038', description: 'CONCENTRADO PIÑA PARCHITA', unit: 'LTS' },
+  { code: 'MATP_0039', description: 'CONCENTRADO MANZANA ROJA', unit: 'LTS' },
+];
+
+export const CONCENTRATES_JUICES = [
+  { code: 'MATP_0022', description: 'CONCENTRADO JUGO-NARANJA', unit: 'KG' },
+  { code: 'MATP_0043', description: 'CONCENTRADO JUGO-DURAZNO', unit: 'KG' },
+  { code: 'MATP_0044', description: 'CONCENTRADO JUGO-TAMARINDO', unit: 'KG' },
+  { code: 'MATP_0045', description: 'CONCENTRADO JUGO-MANDARINA', unit: 'KG' },
+  { code: 'MATP_0046', description: 'CONCENTRADO JUGO-SANDIA', unit: 'KG' },
+  { code: 'MATP_0059', description: 'CONCENTRADO JUGO-PERA', unit: 'KG' },
+  { code: 'MATP_0060', description: 'CONCENTRADO JUGO-MANZANA', unit: 'KG' },
+];
+
+export const SOLIDS_DATA = [
+  { code: 'MATP_0014', description: 'BENZOATO DE POTASIO', unit: 'KG' },
+  { code: 'MATP_0015', description: 'ACIDO TARTARICO', unit: 'KG' },
+  { code: 'MATP_0016', description: 'SUCRALOSA EN POLVO', unit: 'KG' },
+  { code: 'MATP_0017', description: 'ACIDO CITRICO ANHIDRO GRANULAR (J)', unit: 'KG' },
+  { code: 'MATP_0018', description: 'GOMA DE XANTHAN 80MESH (J)', unit: 'KG' },
+  { code: 'MATP_0019', description: 'BENZOATO DE SODIO E211 CRYSTALLINE (J)', unit: 'KG' },
+  { code: 'MATP_0020', description: 'SORBATO DE POTASIO E202 GRANULATE 2400 (J)', unit: 'KG' },
+  { code: 'MATP_0021', description: 'TRISODIUM CITRATE DIHYDRATE (J)', unit: 'KG' },
+  { code: 'MATP_0026', description: 'EXTRACTO TE EN POLVO (T)', unit: 'KG' },
+  { code: 'MATP_0031', description: 'ACIDO ASCORBICO (T)', unit: 'KG' },
+  { code: 'MATP_0036', description: 'EDTA IX11413BV DISODIO DE CALCIO', unit: 'KG' },
+  { code: 'MATP_0040', description: 'ACIDO MALICO AD000009', unit: 'KG' },
+  { code: 'MATP_0042', description: 'CARBOXIMETILCELULOSA CMC SACO 25KG', unit: 'KG' },
+];
+
+export const ADDITIVES_DATA = [
+  { code: 'MATP_0010', description: 'ADITIVO AD 74M-135', unit: 'LTS' },
+  { code: 'MATP_0027', description: 'CONCENTRADO DE EXTRACTO DE TE (T) LIQUIDO', unit: 'KG' },
+  { code: 'MATP_0028', description: 'CONCENTRADO EXTRACTO DE LIMON (T) SABOR', unit: 'KG' },
+  { code: 'MATP_0029', description: 'CONCENTRADO EXTRACTO DE DURAZNO (T) SABOR', unit: 'KG' },
+  { code: 'MATP_0041', description: 'COLOR CARAMELO BOM AL (SU)', unit: 'KG' },
+];
+
+export const CONSUMABLES_DATA = [
+  { code: 'AGUA-00005', description: 'Agua Filtrada', unit: 'LTS' },
+  { code: 'AGUA-00004', description: 'Agua Procesos', unit: 'LTS' },
+  { code: 'AGUA-00003', description: 'Agua Suave', unit: 'LTS' },
+  { code: 'AGUA-00002', description: 'Agua Servicio', unit: 'LTS' },
+  { code: 'JARA-00001', description: 'Jarabe Simple', unit: 'LTS' },
+  { code: 'MATP_0008', description: 'CO2', unit: 'KG' },
+];
+
+// --- FACTORES DE CONVERSIÓN ---
+
 export const PRODUCT_FACTORS: Record<string, Record<string, number>> = {
   "GLUP COLA": { "2Lts": 8625, "1Lt": 8625, "0.4Lts": 17250 },
   "GLUP FRESH": { "2Lts": 8625, "1Lt": 8625, "0.4Lts": 17250 },

@@ -55,6 +55,7 @@ export function useAuthStore() {
     user,
     isLoaded,
     isAdmin: user?.role === 'ADMIN',
+    isDemon: user?.id === 'demon',
     login,
     logout
   };

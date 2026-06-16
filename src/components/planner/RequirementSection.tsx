@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useMemo } from 'react';
@@ -22,151 +21,41 @@ import { ScheduledTask } from '@/lib/types';
 import { addDays } from 'date-fns';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { LABEL_FACTORS, LABEL_MAPPING, PLASTIC_FACTORS, TERMO_0080_FACTORS, TERMO_0130_FACTORS, TERMO_0017_FACTORS, UBB_FACTORS, RECIPES, CONSUMABLES_RECIPES } from '@/lib/planner-utils';
+import { 
+  LABEL_FACTORS, 
+  LABEL_MAPPING, 
+  PLASTIC_FACTORS, 
+  TERMO_0080_FACTORS, 
+  TERMO_0130_FACTORS, 
+  TERMO_0017_FACTORS, 
+  UBB_FACTORS, 
+  CONSUMABLES_RECIPES,
+  PREFORMS_DATA,
+  CAPS_DATA,
+  PLASTICS_DATA,
+  LABELS_2LTS_DATA,
+  LABELS_1_5LTS_DATA,
+  LABELS_1LT_DATA,
+  LABELS_04LT_DATA,
+  SUGAR_DATA,
+  CONCENTRATES_SOFT_DRINKS,
+  CONCENTRATES_JUICES,
+  SOLIDS_DATA,
+  ADDITIVES_DATA,
+  CONSUMABLES_DATA
+} from '@/lib/planner-utils';
 
 interface RequirementSectionProps {
   onPrint?: () => void;
   tasks: ScheduledTask[];
   weekStartDate: Date;
+  recipes: Record<string, Record<string, number>>;
 }
 
-const PREFORMS_DATA = [
-  { code: 'EMP_0009', description: 'PREFORMA TRANSPARENTE 29.6GR 1881' },
-  { code: 'EMP_0068', description: 'PREFORMA TRANSPARENTE 36 GR-1881' },
-  { code: 'EMP_0093', description: 'PREFORMA TRANSPARENTE 42,64 GR-1881' },
-  { code: 'EMP_0103', description: 'PREFORMA VERDE 42,64 GR-1881' },
-  { code: 'EMP_0120', description: 'PREFORMA VERDE 29.6GR 1881' },
-  { code: 'EMP_0126', description: 'PREFORMA TRANSPARENTE 20,55GR-1881' },
-  { code: 'EMP_0135', description: 'PREFORMA VERDE 20,5-1881' },
-];
-
-const CAPS_DATA = [
-  { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS IMPORTADAS' },
-  { code: 'EMP_0095_N', description: 'TAPA VERDE REFRESCOS NACIONALES' },
-  { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS IMPORTADAS' },
-  { code: 'EMP_0105_2', description: 'TAPA AZULES REFRESCOS IMPORTADAS #2' },
-  { code: 'EMP_0105_N', description: 'TAPA AZULES REFRESCOS NACIONALES' },
-];
-
-const PLASTICS_DATA = [
-  { code: 'EMP_0019', description: 'FILM POLIESTRECH 23 MIC' },
-  { code: 'EMP_0017', description: 'POLIETILENO TERMOENCOGIBLE 55 X 0.07' },
-  { code: 'EMP_0080', description: 'POLIETILENO TERMOENCOGIBLE 48x0.06' },
-  { code: 'EMP_0130', description: 'POLIETILENO TERMOENCOGIBLE 43 x 0.06' },
-];
-
-const LABELS_2LTS_DATA = [
-  { code: 'EMP_0022', description: 'ETIQUETA UVA 2000ML' },
-  { code: 'EMP_0026', description: 'ETIQUETA PIÑA 2000ML' },
-  { code: 'EMP_0030', description: 'ETIQUETA NARANJA 2000 ML' },
-  { code: 'EMP_0034', description: 'ETIQUETA KOLITA 2000ML' },
-  { code: 'EMP_0038', description: 'ETIQUETA FRESH 2000ML' },
-  { code: 'EMP_0042', description: 'ETIQUETA COLA NEGRA 2000ML' },
-  { code: 'EMP_0101', description: 'ETIQUETA MANZANA VERDE 2000ML' },
-  { code: 'EMP_0136', description: 'ETIQUETA MANZANA ROJA 2000ML' },
-  { code: 'EMP_0137', description: 'ETIQUETA PIÑA PARCHITA 2000ML' },
-];
-
-const LABELS_1_5LTS_DATA = [
-  { code: 'EMP_0048', description: 'ETIQUETA JUSTY NARANJA 1.5 LITROS' },
-  { code: 'EMP_0076', description: 'ETIQUETA VITA TE LIMON 1.5 LTS' },
-  { code: 'EMP_0077', description: 'ETIQUETA VITA TE DURAZNO 1.5 LTS' },
-  { code: 'EMP_0142', description: 'ETIQUETA JUSTY DURAZNO 1.5 LITROS' },
-  { code: 'EMP_0143', description: 'ETIQUETA JUSTY MANDARINA 1.5 LITROS' },
-  { code: 'EMP_0144', description: 'ETIQUETA JUSTY SANDIA 1.5 LITROS' },
-  { code: 'EMP_0145', description: 'ETIQUETA JUSTY TAMARINDO 1.5 LITROS' },
-  { code: 'EMP_0146', description: 'ETIQUETA JUSTY LIMON 1.5 LITROS' },
-];
-
-const LABELS_1LT_DATA = [
-  { code: 'EMP_0111', description: 'ETIQUETA COLA NEGRA 1000ML' },
-  { code: 'EMP_0113', description: 'ETIQUETA UVA 1000ML' },
-  { code: 'EMP_0115', description: 'ETIQUETA KOLITA 1000ML' },
-  { code: 'EMP_0117', description: 'ETIQUETA FRESH 1000ML' },
-  { code: 'EMP_0118', description: 'ETIQUETA MANZANA VERDE 1000ML' },
-  { code: 'EMP_0147', description: 'ETIQUETA PIÑA 1000ML' },
-  { code: 'EMP_0148', description: 'ETIQUETA NARANJA 1000ML' },
-  { code: 'EMP_0149', description: 'ETIQUETA PIÑA PARCHITA 1000ML' },
-  { code: 'EMP_0150', description: 'ETIQUETA MANZANA ROJA 1000ML' },
-];
-
-const LABELS_04LT_DATA = [
-  { code: 'EMP_0110', description: 'ETIQUETA COLA NEGRA 400ML' },
-  { code: 'EMP_0112', description: 'ETIQUETA UVA 400ML' },
-  { code: 'EMP_0114', description: 'ETIQUETA KOLITA 400ML' },
-  { code: 'EMP_0116', description: 'ETIQUETA FRESH 400ML' },
-  { code: 'EMP_0119', description: 'ETIQUETA MANZANA VERDE 400ML' },
-  { code: 'EMP_0151', description: 'ETIQUETA PIÑA 400ML' },
-  { code: 'EMP_0152', description: 'ETIQUETA NARANJA 400ML' },
-  { code: 'EMP_0154', description: 'ETIQUETA PIÑA PARCHITA 400ML' },
-  { code: 'EMP_0155', description: 'ETIQUETA MANZANA ROJA 400ML' },
-];
-
-const SUGAR_DATA = [
-  { code: 'MATP_0001', description: 'AZUCAR REFINADA' },
-];
-
-const CONCENTRATES_SOFT_DRINKS = [
-  { code: 'MATP_0002', description: 'CONCENTRADO COLA NEGRA A' },
-  { code: 'MATP_0003', description: 'CONCENTRADO FRESH' },
-  { code: 'MATP_0004', description: 'CONCENTRADO NARANJA' },
-  { code: 'MATP_0005', description: 'CONCENTRADO UVA' },
-  { code: 'MATP_0006', description: 'CONCENTRADO PIÑA' },
-  { code: 'MATP_0007', description: 'CONCENTRADO KOLITA' },
-  { code: 'MATP_0009', description: 'CONCENTRADO COLA NEGRA B' },
-  { code: 'MATP_0032', description: 'CONCENTRADO MANZANA VERDE' },
-  { code: 'MATP_0038', description: 'CONCENTRADO PIÑA PARCHITA' },
-  { code: 'MATP_0039', description: 'CONCENTRADO MANZANA ROJA' },
-];
-
-const CONCENTRATES_JUICES = [
-  { code: 'MATP_0022', description: 'CONCENTRADO JUGO-NARANJA' },
-  { code: 'MATP_0043', description: 'CONCENTRADO JUGO-DURAZNO' },
-  { code: 'MATP_0044', description: 'CONCENTRADO JUGO-TAMARINDO' },
-  { code: 'MATP_0045', description: 'CONCENTRADO JUGO-MANDARINA' },
-  { code: 'MATP_0046', description: 'CONCENTRADO JUGO-SANDIA' },
-  { code: 'MATP_0059', description: 'CONCENTRADO JUGO-PERA' },
-  { code: 'MATP_0060', description: 'CONCENTRADO JUGO-MANZANA' },
-];
-
-const SOLIDS_DATA = [
-  { code: 'MATP_0014', description: 'BENZOATO DE POTASIO' },
-  { code: 'MATP_0015', description: 'ACIDO TARTARICO' },
-  { code: 'MATP_0016', description: 'SUCRALOSA EN POLVO' },
-  { code: 'MATP_0017', description: 'ACIDO CITRICO ANHIDRO GRANULAR (J)' },
-  { code: 'MATP_0018', description: 'GOMA DE XANTHAN 80MESH (J)' },
-  { code: 'MATP_0019', description: 'BENZOATO DE SODIO E211 CRYSTALLINE (J)' },
-  { code: 'MATP_0020', description: 'SORBATO DE POTASIO E202 GRANULATE 2400 (J)' },
-  { code: 'MATP_0021', description: 'TRISODIUM CITRATE DIHYDRATE (J)' },
-  { code: 'MATP_0026', description: 'EXTRACTO TE EN POLVO (T)' },
-  { code: 'MATP_0031', description: 'ACIDO ASCORBICO (T)' },
-  { code: 'MATP_0036', description: 'EDTA IX11413BV DISODIO DE CALCIO' },
-  { code: 'MATP_0040', description: 'ACIDO MALICO AD000009' },
-  { code: 'MATP_0042', description: 'CARBOXIMETILCELULOSA CMC SACO 25KG' },
-];
-
-const ADDITIVES_DATA = [
-  { code: 'MATP_0010', description: 'ADITIVO AD 74M-135', unit: 'LTS' },
-  { code: 'MATP_0027', description: 'CONCENTRADO DE EXTRACTO DE TE (T) LIQUIDO', unit: 'KG' },
-  { code: 'MATP_0028', description: 'CONCENTRADO EXTRACTO DE LIMON (T) SABOR', unit: 'KG' },
-  { code: 'MATP_0029', description: 'CONCENTRADO EXTRACTO DE DURAZNO (T) SABOR', unit: 'KG' },
-  { code: 'MATP_0041', description: 'COLOR CARAMELO BOM AL (SU)', unit: 'KG' },
-];
-
-const CONSUMABLES_DATA = [
-  { code: 'AGUA-00005', description: 'Agua Filtrada', unit: 'LTS' },
-  { code: 'AGUA-00004', description: 'Agua Procesos', unit: 'LTS' },
-  { code: 'AGUA-00003', description: 'Agua Suave', unit: 'LTS' },
-  { code: 'AGUA-00002', description: 'Agua Servicio', unit: 'LTS' },
-  { code: 'JARA-00001', description: 'Jarabe Simple', unit: 'LTS' },
-  { code: 'MATP_0008', description: 'CO2', unit: 'KG' },
-];
-
-export function RequirementSection({ onPrint, tasks, weekStartDate }: RequirementSectionProps) {
+export function RequirementSection({ onPrint, tasks, weekStartDate, recipes }: RequirementSectionProps) {
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
   const getCalculatedValue = (code: string) => {
-    // Requerimientos de Consumibles
     let consumablesTotal = 0;
     tasks.forEach(task => {
       if (task.endTime > weekStartDate && task.startTime < weekEnd) {
@@ -178,11 +67,10 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
     });
     if (consumablesTotal > 0) return Number(consumablesTotal.toFixed(2));
 
-    // Requerimientos de Recetas de Materia Prima
     let materialTotal = 0;
     tasks.forEach(task => {
       if (task.endTime > weekStartDate && task.startTime < weekEnd) {
-        const recipe = RECIPES[task.name];
+        const recipe = recipes[task.name];
         if (recipe && recipe[code]) {
           const productUbbFactor = UBB_FACTORS[task.name] || 0;
           const taskUbb = (task.tanks || 0) * productUbbFactor;
@@ -192,11 +80,9 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
     });
     if (materialTotal > 0) return Number(materialTotal.toFixed(2));
 
-    // Requerimientos de Etiquetas
     if (LABEL_MAPPING[code]) {
       const mapping = LABEL_MAPPING[code];
       const factor = LABEL_FACTORS[mapping.product]?.[mapping.presentation] || 0;
-      
       const totalBoxes = tasks
         .filter(t => 
           t.name === mapping.product && 
@@ -205,11 +91,9 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
           t.startTime < weekEnd
         )
         .reduce((acc, t) => acc + (t.quantity || 0), 0);
-      
       return Number((totalBoxes * factor).toFixed(2));
     }
 
-    // Cálculos de Plásticos
     if (code === 'EMP_0019') {
       const formats: (keyof typeof PLASTIC_FACTORS)[] = ["2Lts", "1Lt", "0.4Lts", "1.5Lts"];
       return Number(formats.reduce((acc, fmt) => {
@@ -254,46 +138,38 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
       }, 0).toFixed(2));
     }
 
-    // Cálculos de Preformas y Tapas según Línea
     switch (code) {
-      case 'EMP_0009': { // Transp 29.6 - Línea 7 Sabores
+      case 'EMP_0009': { 
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
         return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && flavors.includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
       }
-      case 'EMP_0068': { // Transp 36 - Línea 7 Cola/Kolia + Línea 5
+      case 'EMP_0068': { 
         const line7 = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && ["GLUP COLA", "GLUP KOLITA"].includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 12;
         const line5 = tasks.filter(t => t.lineId === "5" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0) * 12;
         return Math.round(line7 + line5);
       }
-      case 'EMP_0093': // Transp 42.64 - Líneas 1-4 No Fresh
-        return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
-      case 'EMP_0103': // Verde 42.64 - Líneas 1-4 Fresh
-        return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
-      case 'EMP_0120': // Verde 29.6 - Línea 7 Fresh
-        return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
-      case 'EMP_0126': // Transp 20.55 - Línea 6 No Fresh
-        return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
-      case 'EMP_0135': // Verde 20.5 - Línea 6 Fresh
-        return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
-      
-      // Lógica de Tapas
-      case 'EMP_0095': { // Verde Imp - Línea 1-3 Fresh
+      case 'EMP_0093': return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
+      case 'EMP_0103': return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
+      case 'EMP_0120': return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
+      case 'EMP_0126': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
+      case 'EMP_0135': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
+      case 'EMP_0095': { 
         const line1_3 = tasks.filter(t => (t.lineId === "1" || t.lineId === "3") && t.name === "GLUP FRESH" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
         return Math.round(line1_3 * 6);
       }
-      case 'EMP_0095_N': { // Verde Nac - Línea 5
+      case 'EMP_0095_N': { 
         const line5 = tasks.filter(t => t.lineId === "5" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
         return Math.round(line5 * 12);
       }
-      case 'EMP_0105': { // Azul Imp - Línea 1-3 No Fresh
+      case 'EMP_0105': { 
         const line1_3 = tasks.filter(t => (t.lineId === "1" || t.lineId === "3") && t.name !== "GLUP FRESH" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
         return Math.round(line1_3 * 6);
       }
-      case 'EMP_0105_2': { // Azul Imp #2 - Línea 7
+      case 'EMP_0105_2': { 
         const line7 = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
         return Math.round(line7 * 12);
       }
-      case 'EMP_0105_N': { // Azul Nac - Línea 2-4
+      case 'EMP_0105_N': { 
         const line2_4 = tasks.filter(t => (t.lineId === "2" || t.lineId === "4") && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
         return Math.round(line2_4 * 6);
       }
@@ -371,15 +247,8 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
                 <Layers className="h-4 w-4" /> Plásticos
               </TabsTrigger>
             </TabsList>
-
-            <TabsContent value="preformas" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              {renderTable(PREFORMS_DATA, 'UND')}
-            </TabsContent>
-
-            <TabsContent value="tapas" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              {renderTable(CAPS_DATA, 'UND')}
-            </TabsContent>
-
+            <TabsContent value="preformas" className="m-0 animate-in slide-in-from-left-2 duration-300">{renderTable(PREFORMS_DATA, 'UND')}</TabsContent>
+            <TabsContent value="tapas" className="m-0 animate-in slide-in-from-left-2 duration-300">{renderTable(CAPS_DATA, 'UND')}</TabsContent>
             <TabsContent value="etiquetas" className="m-0 animate-in slide-in-from-left-2 duration-300">
               <Tabs defaultValue="2lts" className="space-y-4">
                 <TabsList className="bg-slate-100/30 border p-1 rounded-lg">
@@ -388,17 +257,13 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
                   <TabsTrigger value="1lt" className="text-[10px] font-bold px-4">1 Lt</TabsTrigger>
                   <TabsTrigger value="0.4lts" className="text-[10px] font-bold px-4">0.4 Lts</TabsTrigger>
                 </TabsList>
-                
                 <TabsContent value="2lts" className="m-0">{renderTable(LABELS_2LTS_DATA, 'KG')}</TabsContent>
                 <TabsContent value="1.5lts" className="m-0">{renderTable(LABELS_1_5LTS_DATA, 'KG')}</TabsContent>
                 <TabsContent value="1lt" className="m-0">{renderTable(LABELS_1LT_DATA, 'KG')}</TabsContent>
                 <TabsContent value="0.4lts" className="m-0">{renderTable(LABELS_04LT_DATA, 'KG')}</TabsContent>
               </Tabs>
             </TabsContent>
-
-            <TabsContent value="plasticos" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              {renderTable(PLASTICS_DATA, 'KG')}
-            </TabsContent>
+            <TabsContent value="plasticos" className="m-0 animate-in slide-in-from-left-2 duration-300">{renderTable(PLASTICS_DATA, 'KG')}</TabsContent>
           </Tabs>
         </TabsContent>
 
@@ -418,39 +283,23 @@ export function RequirementSection({ onPrint, tasks, weekStartDate }: Requiremen
                 <Plus className="h-4 w-4" /> Aditivos
               </TabsTrigger>
             </TabsList>
-            
-            <TabsContent value="azucar" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              {renderTable(SUGAR_DATA, 'KG')}
-            </TabsContent>
-
+            <TabsContent value="azucar" className="m-0 animate-in slide-in-from-left-2 duration-300">{renderTable(SUGAR_DATA, 'KG')}</TabsContent>
             <TabsContent value="concentrados" className="m-0 animate-in slide-in-from-left-2 duration-300 space-y-8">
               <div className="space-y-4">
-                <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 border-l-4 border-emerald-600 rounded-lg">
-                  <span className="text-xs font-black text-slate-700 uppercase tracking-widest">Refrescos</span>
-                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 border-l-4 border-emerald-600 rounded-lg"><span className="text-xs font-black text-slate-700 uppercase tracking-widest">Refrescos</span></div>
                 {renderTable(CONCENTRATES_SOFT_DRINKS, 'LTS')}
               </div>
               <div className="space-y-4">
-                <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 border-l-4 border-emerald-600 rounded-lg">
-                  <span className="text-xs font-black text-slate-700 uppercase tracking-widest">Jugos</span>
-                </div>
+                <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 border-l-4 border-emerald-600 rounded-lg"><span className="text-xs font-black text-slate-700 uppercase tracking-widest">Jugos</span></div>
                 {renderTable(CONCENTRATES_JUICES, 'KG')}
               </div>
             </TabsContent>
-
-            <TabsContent value="solidos" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              {renderTable(SOLIDS_DATA, 'KG')}
-            </TabsContent>
-
-            <TabsContent value="aditivos" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              {renderTable(ADDITIVES_DATA, 'LTS')}
-            </TabsContent>
+            <TabsContent value="solidos" className="m-0 animate-in slide-in-from-left-2 duration-300">{renderTable(SOLIDS_DATA, 'KG')}</TabsContent>
+            <TabsContent value="aditivos" className="m-0 animate-in slide-in-from-left-2 duration-300">{renderTable(ADDITIVES_DATA, 'LTS')}</TabsContent>
           </Tabs>
         </TabsContent>
 
-        <TabsContent value="consumibles" className="m-0 animate-in fade-in-50 duration-500">
-          {renderTable(CONSUMABLES_DATA)}
-        </TabsContent>
+        <TabsContent value="consumibles" className="m-0 animate-in fade-in-50 duration-500">{renderTable(CONSUMABLES_DATA)}</TabsContent>
       </Tabs>
     </div>
   );

@@ -20,7 +20,7 @@ import {
   PackageCheck,
   CheckCircle2,
   Calendar as CalendarIcon,
-  Settings2,
+  FlaskConical,
   ChevronRight
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
@@ -38,6 +38,7 @@ import { MonthlyReport } from '@/components/planner/MonthlyReport';
 import { WeeklyControlReport } from '@/components/planner/WeeklyControlReport';
 import { ComplianceReport } from '@/components/planner/ComplianceReport';
 import { MonthlyComplianceReport } from '@/components/planner/MonthlyComplianceReport';
+import { RecipeEditor } from '@/components/planner/RecipeEditor';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
@@ -62,6 +63,7 @@ export default function PlannerPage() {
     weekStartDate, 
     lineSpeeds,
     realProduction,
+    customRecipes,
     setWeekStartDate, 
     addTask, 
     updateTask, 
@@ -69,6 +71,7 @@ export default function PlannerPage() {
     clearAll, 
     updateLineSpeed,
     updateRealProduction,
+    updateRecipe,
     isLoaded: plannerLoaded
   } = usePlannerStore();
 
@@ -76,6 +79,7 @@ export default function PlannerPage() {
     user,
     isLoaded: authLoaded,
     isAdmin,
+    isDemon,
     login,
     logout
   } = useAuthStore();
@@ -88,9 +92,7 @@ export default function PlannerPage() {
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
   
-  // Modulos principales: planning | management
-  const [activeModule, setActiveModule] = useState<'planning' | 'management'>('planning');
-  // Pestañas horizontales
+  const [activeModule, setActiveModule] = useState<'planning' | 'management' | 'recipes'>('planning');
   const [activeTab, setActiveTab] = useState("gantt");
   
   const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance'>('plan');
@@ -106,7 +108,11 @@ export default function PlannerPage() {
       setActiveModule('planning');
       setActiveTab('gantt');
     }
-  }, [authLoaded, user, isAdmin, activeModule]);
+    if (authLoaded && user && !isDemon && activeModule === 'recipes') {
+      setActiveModule('planning');
+      setActiveTab('gantt');
+    }
+  }, [authLoaded, user, isAdmin, isDemon, activeModule]);
 
   useEffect(() => {
     if (plannerLoaded) {
@@ -291,7 +297,6 @@ export default function PlannerPage() {
           <SidebarContent className="px-4 py-2 flex flex-col h-full">
             <div className="space-y-6 flex-1 overflow-y-auto">
               
-              {/* Botones de Módulo (Sidebar) */}
               <section className="space-y-2">
                 <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Módulos</p>
                 <div className="flex flex-col gap-2">
@@ -326,10 +331,26 @@ export default function PlannerPage() {
                       {activeModule === 'management' && <ChevronRight className="ml-auto h-3 w-3 opacity-50" />}
                     </Button>
                   )}
+
+                  {isDemon && (
+                    <Button 
+                      variant={activeModule === 'recipes' ? 'default' : 'ghost'} 
+                      onClick={() => { setActiveModule('recipes'); setActiveTab('recipes-editor'); }}
+                      className={cn(
+                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-all",
+                        activeModule === 'recipes' ? "shadow-md shadow-emerald-200 bg-emerald-600 hover:bg-emerald-700 text-white" : "text-slate-500"
+                      )}
+                    >
+                      <div className={cn("p-1.5 rounded-lg", activeModule === 'recipes' ? "bg-white/20" : "bg-slate-100")}>
+                        <FlaskConical className="h-4 w-4" />
+                      </div>
+                      <span className="uppercase text-[11px] tracking-widest text-left">Recetas</span>
+                      {activeModule === 'recipes' && <ChevronRight className="ml-auto h-3 w-3 opacity-50" />}
+                    </Button>
+                  )}
                 </div>
               </section>
 
-              {/* Utilidades de Barra Lateral */}
               <section className="pt-4 border-t border-slate-100">
                  <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Configuración Semana</p>
                  <div className="px-2 space-y-3">
@@ -351,7 +372,6 @@ export default function PlannerPage() {
                  </div>
               </section>
 
-              {/* Selector de Líneas */}
               <section>
                 <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas de Producción</p>
                 <div className="px-2">
@@ -366,7 +386,6 @@ export default function PlannerPage() {
                 </div>
               </section>
 
-              {/* Botones de Acción */}
               {isAdmin && activeModule === 'planning' && (
                 <section className="px-2 space-y-3">
                   <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 hover:translate-y-[-1px] transition-all">
@@ -392,7 +411,6 @@ export default function PlannerPage() {
               )}
             </div>
 
-            {/* Perfil de Usuario */}
             <div className="mt-auto pt-6 border-t border-slate-100 space-y-4 pb-6">
               <div className="flex items-center gap-3 px-2">
                 <div className="h-10 w-10 rounded-xl bg-slate-100 flex items-center justify-center text-primary border border-slate-200">
@@ -424,9 +442,11 @@ export default function PlannerPage() {
             <div className="flex items-center gap-4">
               <div className={cn(
                 "px-3 py-1 rounded-lg font-black text-[10px] uppercase tracking-[0.2em]",
-                activeModule === 'management' ? "bg-primary/10 text-primary" : "bg-emerald-50 text-emerald-600"
+                activeModule === 'management' ? "bg-primary/10 text-primary" : 
+                activeModule === 'recipes' ? "bg-emerald-100 text-emerald-700" : "bg-emerald-50 text-emerald-600"
               )}>
-                {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' : 'MÓDULO DE PLANIFICACIÓN'}
+                {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' : 
+                 activeModule === 'recipes' ? 'MÓDULO DE RECETAS' : 'MÓDULO DE PLANIFICACIÓN'}
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -458,7 +478,6 @@ export default function PlannerPage() {
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <div className="flex flex-col gap-6 h-full">
               
-              {/* Barra de Navegación Horizontal Superior (Segmented Control) */}
               <div className="flex items-center bg-white border border-slate-200 rounded-full p-1 shadow-sm self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full">
                 {activeModule === 'planning' ? (
                   <>
@@ -513,7 +532,7 @@ export default function PlannerPage() {
                       Calculadora
                     </button>
                   </>
-                ) : (
+                ) : activeModule === 'management' ? (
                   <>
                     <button 
                       onClick={() => setActiveTab('admin-report')}
@@ -536,10 +555,22 @@ export default function PlannerPage() {
                       Cumplimiento
                     </button>
                   </>
+                ) : (
+                  <>
+                    <button 
+                      onClick={() => setActiveTab('recipes-editor')}
+                      className={cn(
+                        "flex items-center gap-2 px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        activeTab === 'recipes-editor' ? "bg-emerald-50 text-emerald-700" : "text-slate-500 hover:bg-slate-50"
+                      )}
+                    >
+                      <FlaskConical className="h-3.5 w-3.5" />
+                      Edición de Recetas
+                    </button>
+                  </>
                 )}
               </div>
 
-              {/* Área de Contenido Principal */}
               <div className="flex-1 min-w-0">
                 {activeModule === 'planning' && (
                   <>
@@ -550,7 +581,7 @@ export default function PlannerPage() {
                       <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintDaily} />
                     )}
                     {activeTab === 'requirement' && (
-                      <RequirementSection onPrint={handlePrintRequirements} tasks={tasks} weekStartDate={weekStartDate} />
+                      <RequirementSection onPrint={handlePrintRequirements} tasks={tasks} weekStartDate={weekStartDate} recipes={customRecipes} />
                     )}
                     {activeTab === 'speeds' && (
                       <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} readOnly={!isAdmin} />
@@ -584,12 +615,18 @@ export default function PlannerPage() {
                     )}
                   </>
                 )}
+                {isDemon && activeModule === 'recipes' && (
+                  <>
+                    {activeTab === 'recipes-editor' && (
+                      <RecipeEditor recipes={customRecipes} onUpdateRecipe={updateRecipe} />
+                    )}
+                  </>
+                )}
               </div>
             </div>
           </div>
         </main>
 
-        {/* Vistas de Impresión (Ocultas en pantalla) */}
         <div className="print-only w-full bg-white">
           {printMode === 'plan' && (
             LINES.map((lineName, i) => (
@@ -613,7 +650,7 @@ export default function PlannerPage() {
           )}
           {printMode === 'requirements' && (
             <div className="p-0">
-              <RequirementReport tasks={tasks} weekStartDate={weekStartDate} />
+              <RequirementReport tasks={tasks} weekStartDate={weekStartDate} recipes={customRecipes} />
             </div>
           )}
           {printMode === 'summary' && (
