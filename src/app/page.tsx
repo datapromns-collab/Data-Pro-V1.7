@@ -314,6 +314,7 @@ export default function PlannerPage() {
                   Data Pro
                 </h1>
                 <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mt-1">Planificación</span>
+                <span className="text-[7px] font-black text-slate-300 uppercase tracking-[0.3em] mt-1">Pro Edition</span>
               </div>
             </div>
           </div>
