@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo } from 'react';
@@ -93,7 +94,7 @@ export function RawMaterialReport({
   return (
     <div className="bg-white w-full print:p-0">
       {/* PÁGINA 1: BALANCE DE MATERIA PRIMA */}
-      <div className="page-break-section p-2 flex flex-col h-screen" style={{ pageBreakInside: 'avoid', pageBreakAfter: 'always' }}>
+      <div className="page-break-section p-0 flex flex-col h-screen" style={{ pageBreakInside: 'avoid', pageBreakAfter: 'always' }}>
         <div className="mb-2 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
           <div className="flex-1">
             <h1 className="text-xl font-headline font-black text-slate-900 uppercase leading-none">Balance de Materia Prima</h1>
@@ -170,7 +171,7 @@ export function RawMaterialReport({
       </div>
 
       {/* PÁGINA 2: REGISTRO DE PRODUCCIÓN UBB */}
-      <div className="page-break-section p-2 flex flex-col h-screen" style={{ pageBreakInside: 'avoid' }}>
+      <div className="page-break-section p-0 flex flex-col h-screen" style={{ pageBreakInside: 'avoid' }}>
         <div className="mb-2 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
           <div className="flex-1">
             <h1 className="text-xl font-headline font-black text-slate-900 uppercase leading-none">Registro de Producción</h1>

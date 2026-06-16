@@ -265,7 +265,7 @@ export default function PlannerPage() {
     setPrintMode('raw-material');
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
-    style.innerHTML = '@page { size: landscape; margin: 0; }';
+    style.innerHTML = '@page { size: landscape; margin: 0.5cm; }';
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
@@ -425,7 +425,7 @@ export default function PlannerPage() {
                 </div>
               </section>
 
-              {activeModule !== 'recipes' && activeModule !== 'purchasing' && (
+              {activeModule !== 'recipes' && activeModule !== 'purchasing' && activeModule !== 'raw-materials' && (
                 <section className="pt-4 border-t border-slate-100">
                    <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Configuración Semana</p>
                    <div className="px-2 space-y-3">
