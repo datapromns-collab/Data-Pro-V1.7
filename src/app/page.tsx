@@ -403,28 +403,30 @@ export default function PlannerPage() {
                 </div>
               </section>
 
-              <section className="pt-4 border-t border-slate-100">
-                 <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Configuración Semana</p>
-                 <div className="px-2 space-y-3">
-                    <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100/80 shadow-sm">
-                      <span className="text-sm font-bold text-slate-600">Semana</span>
-                      <Badge variant="secondary" className="font-black text-[13px] text-primary bg-primary/10 px-3 py-0.5 rounded-lg border-primary/5">{weekNumber}</Badge>
-                    </div>
-                    <Popover>
-                      <PopoverTrigger asChild disabled={!isAdmin && !isInventory}>
-                        <Button variant="outline" className="w-full h-12 justify-start text-left font-bold bg-white border-slate-200 shadow-sm hover:bg-slate-50 transition-all rounded-2xl disabled:opacity-80">
-                          <CalendarIcon className="mr-3 h-4 w-4 text-primary" />
-                          {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar mode="single" selected={weekStartDate} onSelect={(date) => date && setWeekStartDate(date)} locale={es} />
-                      </PopoverContent>
-                    </Popover>
-                 </div>
-              </section>
+              {activeModule !== 'recipes' && (
+                <section className="pt-4 border-t border-slate-100">
+                   <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Configuración Semana</p>
+                   <div className="px-2 space-y-3">
+                      <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100/80 shadow-sm">
+                        <span className="text-sm font-bold text-slate-600">Semana</span>
+                        <Badge variant="secondary" className="font-black text-[13px] text-primary bg-primary/10 px-3 py-0.5 rounded-lg border-primary/5">{weekNumber}</Badge>
+                      </div>
+                      <Popover>
+                        <PopoverTrigger asChild disabled={!isAdmin && !isInventory}>
+                          <Button variant="outline" className="w-full h-12 justify-start text-left font-bold bg-white border-slate-200 shadow-sm hover:bg-slate-50 transition-all rounded-2xl disabled:opacity-80">
+                            <CalendarIcon className="mr-3 h-4 w-4 text-primary" />
+                            {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar mode="single" selected={weekStartDate} onSelect={(date) => date && setWeekStartDate(date)} locale={es} />
+                        </PopoverContent>
+                      </Popover>
+                   </div>
+                </section>
+              )}
 
-              {activeModule !== 'raw-materials' && !isInventory && (
+              {activeModule !== 'raw-materials' && activeModule !== 'recipes' && !isInventory && (
                 <section>
                   <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas de Producción</p>
                   <div className="px-2">
