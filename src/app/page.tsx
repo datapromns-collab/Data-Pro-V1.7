@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
+import Image from 'next/image';
 import { 
-  Calendar as CalendarIcon, 
   Plus, 
   Trash2, 
   Printer, 
@@ -18,10 +18,7 @@ import {
   BarChart3,
   ChevronLeft,
   PackageCheck,
-  FileDown,
-  FileStack,
-  CheckCircle2,
-  FileSpreadsheet
+  CheckCircle2
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -53,6 +50,7 @@ import { ScheduledTask } from '@/lib/types';
 import { format, getISOWeek, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useToast } from '@/hooks/use-toast';
+import { Calendar as CalendarIcon } from 'lucide-react';
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7", "Línea 8"];
 
@@ -98,7 +96,6 @@ export default function PlannerPage() {
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
   const isReportView = ['admin-report', 'compliance-report'].includes(activeTab);
 
-  // Redirección inicial para administradores
   useEffect(() => {
     if (authLoaded && user && isAdmin && !hasRedirectedAdmin) {
       setActiveTab('admin-report');
@@ -106,7 +103,6 @@ export default function PlannerPage() {
     }
   }, [authLoaded, user, isAdmin, hasRedirectedAdmin]);
 
-  // Seguridad: Redirigir si un usuario estándar termina en una vista de reporte
   useEffect(() => {
     if (authLoaded && user && !isAdmin && isReportView) {
       setActiveTab('gantt');
@@ -310,16 +306,12 @@ export default function PlannerPage() {
         <Sidebar className="border-r border-slate-200 bg-white no-print">
           <div className="p-6">
             <div className="flex items-center gap-3">
-              <div className="bg-primary p-2.5 rounded-2xl shadow-lg shadow-primary/20">
-                {isReportView ? (
-                  <BarChart3 className="h-6 w-6 text-white" />
-                ) : (
-                  <CalendarIcon className="h-6 w-6 text-white" />
-                )}
+              <div className="bg-white p-1 rounded-2xl shadow-lg border border-slate-100 overflow-hidden w-12 h-12 flex items-center justify-center">
+                <Image src="/logo.svg" alt="Data Pro Logo" width={40} height={40} className="object-contain" />
               </div>
               <div className="flex flex-col">
                 <h1 className="text-xl font-headline font-bold text-slate-900 tracking-tight leading-none">
-                  {isReportView ? 'Reporte de Gestión' : 'Data Pro'}
+                  Data Pro
                 </h1>
                 <span className="text-[10px] font-black text-emerald-500 uppercase tracking-widest mt-1">Pro Edition</span>
               </div>
