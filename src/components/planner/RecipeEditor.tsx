@@ -45,25 +45,17 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
     return recipes[selectedProduct] || {};
   }, [recipes, selectedProduct]);
 
-  const masterRecipe = useMemo(() => {
-    return RECIPES[selectedProduct] || {};
-  }, [selectedProduct]);
-
   const materialsInRecipe = useMemo(() => {
-    // Unimos los códigos que están en la receta actual y los que están en la maestra para asegurar visibilidad
-    const allCodes = Array.from(new Set([...Object.keys(currentRecipe), ...Object.keys(masterRecipe)]));
-    
-    return allCodes.map((code) => {
+    return Object.entries(currentRecipe).map(([code, value]) => {
       const material = ALL_MATERIALS.find(m => m.code === code);
       return {
         code,
-        currentValue: currentRecipe[code] || 0,
-        masterValue: masterRecipe[code] || 0,
+        value,
         description: material?.description || 'Desconocido',
         unit: (material as any)?.unit || 'KG'
       };
     });
-  }, [currentRecipe, masterRecipe]);
+  }, [currentRecipe]);
 
   const availableMaterials = useMemo(() => {
     return ALL_MATERIALS.filter(m => !currentRecipe[m.code]);
@@ -147,7 +139,7 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
                 <h3 className="font-black text-sm uppercase tracking-widest">Receta: {selectedProduct}</h3>
               </div>
               <Badge className="bg-white/10 text-white border-none uppercase text-[9px] font-black px-3 py-1">
-                Fórmulas Activas
+                Configuración de Fábrica
               </Badge>
             </div>
             
@@ -155,9 +147,8 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
               <Table>
                 <TableHeader>
                   <TableRow className="hover:bg-transparent border-b border-slate-100">
-                    <TableHead className="text-[10px] font-black text-slate-400 uppercase pl-6">Material</TableHead>
-                    <TableHead className="text-right text-[10px] font-black text-amber-600 uppercase bg-amber-50/20">Valor Maestro</TableHead>
-                    <TableHead className="text-right text-[10px] font-black text-primary uppercase w-[150px]">Valor Actual</TableHead>
+                    <TableHead className="text-[10px] font-black text-slate-400 uppercase pl-6">Material / Ingrediente</TableHead>
+                    <TableHead className="text-right text-[10px] font-black text-primary uppercase w-[200px] pr-10">Valor de Receta</TableHead>
                     <TableHead className="w-[60px]"></TableHead>
                   </TableRow>
                 </TableHeader>
@@ -170,35 +161,31 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
                           <span className="text-sm font-bold text-slate-700 uppercase leading-tight">{item.description}</span>
                         </div>
                       </TableCell>
-                      <TableCell className="py-4 text-right bg-amber-50/10">
-                        <div className="flex flex-col items-end">
-                           <span className="text-xs font-black text-amber-600 tabular-nums">{item.masterValue.toLocaleString('es-ES', { maximumFractionDigits: 6 })}</span>
-                           <span className="text-[9px] font-bold text-slate-400 uppercase">{item.unit} / UBB</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="py-4">
-                        <div className="flex items-center justify-end gap-2">
+                      <TableCell className="py-4 pr-10">
+                        <div className="flex items-center justify-end gap-3">
+                          <div className="flex flex-col items-end mr-2">
+                             <span className="text-[9px] font-black text-slate-400 uppercase leading-none">Cantidad por UBB</span>
+                             <span className="text-[9px] font-bold text-slate-400 uppercase">{item.unit}</span>
+                          </div>
                           <Input 
                             type="number"
                             step="0.000001"
-                            value={item.currentValue === 0 ? '' : item.currentValue}
+                            value={item.value === 0 ? '' : item.value}
                             onChange={(e) => onUpdateRecipe(selectedProduct, item.code, parseFloat(e.target.value) || 0)}
-                            className="h-10 text-right font-black text-sm rounded-xl bg-slate-50 border-slate-100 focus:bg-white transition-all w-28"
+                            className="h-12 text-right font-black text-lg rounded-xl bg-slate-50 border-slate-100 focus:bg-white focus:ring-primary/20 transition-all w-36"
                             placeholder="0.00"
                           />
                         </div>
                       </TableCell>
                       <TableCell className="py-4 pr-4">
-                        {item.currentValue > 0 && (
-                          <Button 
-                            variant="ghost" 
-                            size="icon" 
-                            onClick={() => handleRemoveMaterial(item.code, item.description)}
-                            className="h-8 w-8 text-slate-300 hover:text-destructive hover:bg-destructive/5 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                          </Button>
-                        )}
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          onClick={() => handleRemoveMaterial(item.code, item.description)}
+                          className="h-8 w-8 text-slate-300 hover:text-destructive hover:bg-destructive/5 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -221,11 +208,11 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
                         </Select>
                       </div>
                     </TableCell>
-                    <TableCell colSpan={2} className="py-6 text-right">
+                    <TableCell className="py-6 text-right pr-10">
                       <Button 
                         onClick={handleAddMaterial}
                         disabled={!newMaterialCode}
-                        className="h-10 gap-2 bg-primary hover:bg-primary/90 text-white rounded-xl font-black uppercase text-[10px] tracking-widest px-4 shadow-lg shadow-primary/10 transition-all disabled:opacity-50"
+                        className="h-10 gap-2 bg-primary hover:bg-primary/90 text-white rounded-xl font-black uppercase text-[10px] tracking-widest px-6 shadow-lg shadow-primary/10 transition-all disabled:opacity-50"
                       >
                         <Plus className="h-3.5 w-3.5" /> Agregar a Receta
                       </Button>
@@ -241,16 +228,16 @@ export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: Reci
         <div className="space-y-6">
           <Card className="p-6 border-slate-200 rounded-3xl bg-slate-50/50 border-dashed border-2">
             <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-              <Info className="h-4 w-4 text-amber-600" /> Referencia Maestra
+              <Info className="h-4 w-4 text-amber-600" /> Notas de Formulación
             </h4>
             <div className="space-y-4">
               <p className="text-[11px] font-bold text-slate-600 leading-relaxed uppercase">
-                Los <span className="text-amber-600 font-black">Valores Maestros</span> son los predeterminados en el código. Si realizas cambios en el "Valor Actual", el sistema priorizará tu entrada manual para los cálculos de consumo.
+                Los valores mostrados son los utilizados para calcular el <span className="text-primary font-black">Consumo Teórico</span> en el Módulo de Materia Prima.
               </p>
               <div className="p-4 bg-white rounded-2xl border border-slate-100 shadow-sm">
-                <span className="text-[10px] font-black text-slate-400 uppercase block mb-1">Dato Clave:</span>
+                <span className="text-[10px] font-black text-slate-400 uppercase block mb-1">Dato de Interés:</span>
                 <span className="text-[11px] font-black text-slate-800 uppercase">
-                  Las recetas de JUSTY ahora incluyen los factores actualizados de azúcar (130.00) y concentrados (6.0).
+                  Cada cambio aquí impacta instantáneamente en el balance de inventarios de la semana actual.
                 </span>
               </div>
             </div>
