@@ -158,6 +158,18 @@ export function usePlannerStore() {
     });
   }, []);
 
+  const removeMaterialFromRecipe = useCallback((product: string, materialCode: string) => {
+    setCustomRecipes(prev => {
+      const newRecipes = { ...prev };
+      if (newRecipes[product]) {
+        const updatedRecipe = { ...newRecipes[product] };
+        delete updatedRecipe[materialCode];
+        newRecipes[product] = updatedRecipe;
+      }
+      return newRecipes;
+    });
+  }, []);
+
   return { 
     tasks, 
     weekStartDate, 
@@ -169,9 +181,10 @@ export function usePlannerStore() {
     updateTask, 
     removeTask, 
     clearAll, 
-    updateLineSpeed,
+    updateLineSpeed, 
     updateRealProduction,
     updateRecipe,
+    removeMaterialFromRecipe,
     isLoaded,
     isSyncing: false
   };

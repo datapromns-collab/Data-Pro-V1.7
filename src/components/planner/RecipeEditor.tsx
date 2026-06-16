@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { FlaskConical, Beaker, Save, Search, Wheat, Droplet, Box, Plus } from 'lucide-react';
+import { FlaskConical, Beaker, Save, Search, Wheat, Droplet, Box, Plus, Trash2, AlertCircle } from 'lucide-react';
 import { 
   PRODUCT_LIST, 
   CONCENTRATES_SOFT_DRINKS, 
@@ -18,10 +18,12 @@ import {
 } from '@/lib/planner-utils';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { useToast } from '@/hooks/use-toast';
 
 interface RecipeEditorProps {
   recipes: Record<string, Record<string, number>>;
   onUpdateRecipe: (product: string, materialCode: string, value: number) => void;
+  onRemoveMaterial: (product: string, materialCode: string) => void;
 }
 
 const ALL_MATERIALS = [
@@ -32,9 +34,10 @@ const ALL_MATERIALS = [
   ...ADDITIVES_DATA
 ];
 
-export function RecipeEditor({ recipes, onUpdateRecipe }: RecipeEditorProps) {
+export function RecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: RecipeEditorProps) {
   const [selectedProduct, setSelectedProduct] = useState(PRODUCT_LIST[0]);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [newMaterialCode, setNewMaterialCode] = useState('');
+  const { toast } = useToast();
 
   const currentRecipe = useMemo(() => {
     return recipes[selectedProduct] || {};
@@ -51,6 +54,31 @@ export function RecipeEditor({ recipes, onUpdateRecipe }: RecipeEditorProps) {
       };
     });
   }, [currentRecipe]);
+
+  const availableMaterials = useMemo(() => {
+    return ALL_MATERIALS.filter(m => !currentRecipe[m.code]);
+  }, [currentRecipe]);
+
+  const handleAddMaterial = () => {
+    if (!newMaterialCode) return;
+    onUpdateRecipe(selectedProduct, newMaterialCode, 0);
+    setNewMaterialCode('');
+    toast({
+      title: "Material Agregado",
+      description: "El material se ha añadido a la receta. Define su proporción.",
+    });
+  };
+
+  const handleRemoveMaterial = (code: string, desc: string) => {
+    if (confirm(`¿Estás seguro de eliminar "${desc}" de la receta de ${selectedProduct}?`)) {
+      onRemoveMaterial(selectedProduct, code);
+      toast({
+        variant: "destructive",
+        title: "Material Eliminado",
+        description: "Se ha removido el componente de la receta.",
+      });
+    }
+  };
 
   return (
     <div className="max-w-6xl mx-auto space-y-8 animate-in fade-in duration-700">
@@ -92,20 +120,21 @@ export function RecipeEditor({ recipes, onUpdateRecipe }: RecipeEditorProps) {
               </Badge>
             </div>
             
-            <div className="p-6">
+            <div className="p-0">
               <Table>
                 <TableHeader>
-                  <TableRow className="hover:bg-transparent">
-                    <TableHead className="text-[10px] font-black text-slate-400 uppercase">Material</TableHead>
-                    <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase w-[200px]">Proporción (Cdad/UBB)</TableHead>
+                  <TableRow className="hover:bg-transparent border-b border-slate-100">
+                    <TableHead className="text-[10px] font-black text-slate-400 uppercase pl-6">Material</TableHead>
+                    <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase w-[180px]">Proporción (Cdad/UBB)</TableHead>
+                    <TableHead className="w-[60px]"></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {materialsInRecipe.map((item) => (
-                    <TableRow key={item.code} className="hover:bg-slate-50/50 group transition-colors">
-                      <TableCell className="py-4">
+                    <TableRow key={item.code} className="hover:bg-slate-50/50 group transition-colors border-b border-slate-50">
+                      <TableCell className="py-4 pl-6">
                         <div className="flex flex-col">
-                          <span className="text-xs font-black text-primary font-mono">{item.code}</span>
+                          <span className="text-[10px] font-black text-primary font-mono tracking-wider">{item.code}</span>
                           <span className="text-sm font-bold text-slate-700 uppercase leading-tight">{item.description}</span>
                         </div>
                       </TableCell>
@@ -116,20 +145,54 @@ export function RecipeEditor({ recipes, onUpdateRecipe }: RecipeEditorProps) {
                             step="0.000001"
                             value={item.value}
                             onChange={(e) => onUpdateRecipe(selectedProduct, item.code, parseFloat(e.target.value) || 0)}
-                            className="h-10 text-right font-black text-sm rounded-xl bg-slate-50 border-slate-100 focus:bg-white transition-all w-32"
+                            className="h-10 text-right font-black text-sm rounded-xl bg-slate-50 border-slate-100 focus:bg-white transition-all w-28"
                           />
                           <span className="text-[10px] font-black text-slate-400 uppercase w-8">{item.unit}</span>
                         </div>
                       </TableCell>
-                    </TableRow>
-                  ))}
-                  {materialsInRecipe.length === 0 && (
-                    <TableRow>
-                      <TableCell colSpan={2} className="h-32 text-center">
-                        <p className="text-slate-400 font-bold uppercase text-xs">No hay materiales definidos para esta receta</p>
+                      <TableCell className="py-4 pr-4">
+                        <Button 
+                          variant="ghost" 
+                          size="icon" 
+                          onClick={() => handleRemoveMaterial(item.code, item.description)}
+                          className="h-8 w-8 text-slate-300 hover:text-destructive hover:bg-destructive/5 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
                       </TableCell>
                     </TableRow>
-                  )}
+                  ))}
+                  
+                  {/* Fila para agregar nuevo componente */}
+                  <TableRow className="bg-slate-50/30">
+                    <TableCell className="py-6 pl-6">
+                      <div className="space-y-1">
+                        <Label className="text-[9px] font-black text-slate-400 uppercase tracking-widest ml-1">Nuevo Componente</Label>
+                        <Select value={newMaterialCode} onValueChange={setNewMaterialCode}>
+                          <SelectTrigger className="h-10 bg-white border-slate-200 rounded-xl font-bold shadow-sm w-full max-w-[280px]">
+                            <SelectValue placeholder="Seleccionar material..." />
+                          </SelectTrigger>
+                          <SelectContent className="rounded-xl max-h-[300px]">
+                            {availableMaterials.map(m => (
+                              <SelectItem key={m.code} value={m.code} className="text-xs font-bold uppercase">
+                                {m.description} ({m.code})
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </TableCell>
+                    <TableCell className="py-6 text-right">
+                      <Button 
+                        onClick={handleAddMaterial}
+                        disabled={!newMaterialCode}
+                        className="h-10 gap-2 bg-primary hover:bg-primary/90 text-white rounded-xl font-black uppercase text-[10px] tracking-widest px-4 shadow-lg shadow-primary/10 transition-all disabled:opacity-50"
+                      >
+                        <Plus className="h-3.5 w-3.5" /> Agregar
+                      </Button>
+                    </TableCell>
+                    <TableCell className="py-6"></TableCell>
+                  </TableRow>
                 </TableBody>
               </Table>
             </div>
@@ -140,23 +203,20 @@ export function RecipeEditor({ recipes, onUpdateRecipe }: RecipeEditorProps) {
         <div className="space-y-6">
           <Card className="p-6 border-slate-200 rounded-3xl bg-slate-50/50 border-dashed border-2">
             <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-              <Box className="h-4 w-4 text-primary" /> Info de Edición
+              <Box className="h-4 w-4 text-primary" /> Gestión de Recetas
             </h4>
             <div className="space-y-4">
               <div className="bg-white p-4 rounded-2xl border border-slate-100 shadow-sm">
                 <p className="text-[11px] font-bold text-slate-600 leading-relaxed uppercase">
-                  Los valores editados afectan directamente al cálculo de requerimientos semanales. Las proporciones se calculan en base a la **UBB (Unidad de Base de Bebida)** de cada producto.
+                  Puedes personalizar cada sabor añadiendo o quitando materiales del catálogo. Los requerimientos semanales se actualizarán automáticamente.
                 </p>
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="bg-amber-50 p-3 rounded-2xl border border-amber-100">
-                  <span className="text-[8px] font-black text-amber-600 uppercase block mb-1">Nota Crítica</span>
-                  <span className="text-[10px] font-bold text-amber-900 leading-tight block">Cambios permanentes en esta sesión.</span>
-                </div>
-                <div className="bg-emerald-50 p-3 rounded-2xl border border-emerald-100">
-                  <span className="text-[8px] font-black text-emerald-600 uppercase block mb-1">Efecto</span>
-                  <span className="text-[10px] font-bold text-emerald-900 leading-tight block">Sincronización con Reporte PDF.</span>
-                </div>
+              
+              <div className="p-4 bg-amber-50 rounded-2xl border border-amber-100 flex gap-3">
+                <AlertCircle className="h-5 w-5 text-amber-500 shrink-0" />
+                <span className="text-[10px] font-bold text-amber-900 leading-tight uppercase">
+                  Al eliminar un componente, este dejará de sumarse al reporte de requerimientos de este producto.
+                </span>
               </div>
             </div>
           </Card>

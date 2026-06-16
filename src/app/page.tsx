@@ -72,6 +72,7 @@ export default function PlannerPage() {
     updateLineSpeed,
     updateRealProduction,
     updateRecipe,
+    removeMaterialFromRecipe,
     isLoaded: plannerLoaded
   } = usePlannerStore();
 
@@ -618,7 +619,11 @@ export default function PlannerPage() {
                 {isDemon && activeModule === 'recipes' && (
                   <>
                     {activeTab === 'recipes-editor' && (
-                      <RecipeEditor recipes={customRecipes} onUpdateRecipe={updateRecipe} />
+                      <RecipeEditor 
+                        recipes={customRecipes} 
+                        onUpdateRecipe={updateRecipe} 
+                        onRemoveMaterial={removeMaterialFromRecipe}
+                      />
                     )}
                   </>
                 )}
