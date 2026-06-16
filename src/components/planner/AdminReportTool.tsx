@@ -169,7 +169,7 @@ export function AdminReportTool({
     [lineData]
   );
 
-  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 transition-colors flex-shrink-0 outline-none focus:ring-0 active:scale-100 active:transform-none border-0 select-none";
+  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 transition-colors flex-shrink-0 outline-none focus:ring-0 active:scale-100 active:transform-none transform-none border-0 select-none";
 
   return (
     <div className="space-y-4 animate-in fade-in duration-700 pb-4">
@@ -191,7 +191,7 @@ export function AdminReportTool({
                   variant="outline" 
                   size="sm" 
                   onClick={onPrintWeeklyControl}
-                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs"
+                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none"
                 >
                   <FileStack className="h-4 w-4" />
                   Exportar Reporte Semanal
@@ -221,7 +221,7 @@ export function AdminReportTool({
                     variant="outline" 
                     size="sm" 
                     onClick={() => onPrintMonthly?.(selectedMonth, selectedYear)}
-                    className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs"
+                    className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none"
                   >
                     <FileDown className="h-4 w-4" />
                     Exportar Resumen Mensual
@@ -505,7 +505,7 @@ export function AdminReportTool({
                   variant="outline" 
                   size="sm" 
                   onClick={onPrintCompliance}
-                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs"
+                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none"
                 >
                   <CheckCircle2 className="h-4 w-4" />
                   Exportar Reporte Cumplimiento
@@ -535,7 +535,7 @@ export function AdminReportTool({
                     variant="outline" 
                     size="sm" 
                     onClick={() => onPrintMonthlyCompliance?.(selectedMonth, selectedYear)}
-                    className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs"
+                    className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none"
                   >
                     <FileDown className="h-4 w-4" />
                     Exportar Reporte Mensual
