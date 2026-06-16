@@ -306,7 +306,7 @@ export default function PlannerPage() {
                     <div className={cn("p-1.5 rounded-lg", activeModule === 'planning' ? "bg-white/20" : "bg-slate-100")}>
                       <GanttChartSquare className="h-4 w-4" />
                     </div>
-                    <span className="uppercase text-[11px] tracking-widest">Planificación</span>
+                    <span className="uppercase text-[11px] tracking-widest text-left">Planificación</span>
                     {activeModule === 'planning' && <ChevronRight className="ml-auto h-3 w-3 opacity-50" />}
                   </Button>
 
@@ -322,7 +322,7 @@ export default function PlannerPage() {
                       <div className={cn("p-1.5 rounded-lg", activeModule === 'management' ? "bg-white/20" : "bg-slate-100")}>
                         <BarChart3 className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[11px] tracking-widest">Gestión</span>
+                      <span className="uppercase text-[11px] tracking-widest text-left">Gestión</span>
                       {activeModule === 'management' && <ChevronRight className="ml-auto h-3 w-3 opacity-50" />}
                     </Button>
                   )}
@@ -352,21 +352,19 @@ export default function PlannerPage() {
               </section>
 
               {/* Selector de Líneas */}
-              {activeModule === 'planning' && (
-                <section>
-                  <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas de Producción</p>
-                  <div className="px-2">
-                    <Select value={selectedLine} onValueChange={setSelectedLine}>
-                      <SelectTrigger className="w-full h-12 bg-slate-50 border-slate-100 font-bold rounded-2xl hover:bg-slate-100/50 transition-all">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {LINES.map((l, i) => <SelectItem key={l} value={(i + 1).toString()}>{l}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </section>
-              )}
+              <section>
+                <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas de Producción</p>
+                <div className="px-2">
+                  <Select value={selectedLine} onValueChange={setSelectedLine}>
+                    <SelectTrigger className="w-full h-12 bg-slate-50 border-slate-100 font-bold rounded-2xl hover:bg-slate-100/50 transition-all">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {LINES.map((l, i) => <SelectItem key={l} value={(i + 1).toString()}>{l}</SelectItem>)}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </section>
 
               {/* Botones de Acción */}
               {isAdmin && activeModule === 'planning' && (
@@ -460,15 +458,15 @@ export default function PlannerPage() {
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <div className="flex flex-col gap-6 h-full">
               
-              {/* Barra de Navegación Horizontal Superior */}
-              <div className="flex items-center bg-white border border-slate-200 rounded-2xl p-1.5 shadow-sm self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full">
+              {/* Barra de Navegación Horizontal Superior (Segmented Control) */}
+              <div className="flex items-center bg-white border border-slate-200 rounded-full p-1 shadow-sm self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full">
                 {activeModule === 'planning' ? (
                   <>
                     <button 
                       onClick={() => setActiveTab('gantt')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all whitespace-nowrap",
-                        activeTab === 'gantt' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
+                        "flex items-center gap-2 px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        activeTab === 'gantt' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <GanttChartSquare className="h-3.5 w-3.5" />
@@ -477,8 +475,8 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('daily')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all whitespace-nowrap",
-                        activeTab === 'daily' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
+                        "flex items-center gap-2 px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        activeTab === 'daily' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <ListTodo className="h-3.5 w-3.5" />
@@ -487,8 +485,8 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('requirement')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all whitespace-nowrap",
-                        activeTab === 'requirement' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
+                        "flex items-center gap-2 px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        activeTab === 'requirement' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <ClipboardList className="h-3.5 w-3.5" />
@@ -497,8 +495,8 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('speeds')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all whitespace-nowrap",
-                        activeTab === 'speeds' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
+                        "flex items-center gap-2 px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        activeTab === 'speeds' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <Gauge className="h-3.5 w-3.5" />
@@ -507,8 +505,8 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('calculator')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all whitespace-nowrap",
-                        activeTab === 'calculator' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
+                        "flex items-center gap-2 px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        activeTab === 'calculator' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <CalculatorIcon className="h-3.5 w-3.5" />
@@ -520,8 +518,8 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('admin-report')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all whitespace-nowrap",
-                        activeTab === 'admin-report' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
+                        "flex items-center gap-2 px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        activeTab === 'admin-report' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <BarChart3 className="h-3.5 w-3.5" />
@@ -530,8 +528,8 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('compliance-report')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all whitespace-nowrap",
-                        activeTab === 'compliance-report' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
+                        "flex items-center gap-2 px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        activeTab === 'compliance-report' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <CheckCircle2 className="h-3.5 w-3.5" />
