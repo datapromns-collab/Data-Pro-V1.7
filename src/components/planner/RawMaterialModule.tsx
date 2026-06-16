@@ -124,7 +124,7 @@ export function RawMaterialModule({
     return inTanks;
   }, [finalUBBTanks, recipes]);
 
-  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 transition-colors flex-shrink-0 outline-none focus:ring-0 active:scale-100 active:transform-none transform-none border-0 select-none";
+  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-100 active:transform-none transform-none border-0 select-none";
 
   const renderSimpleStockTable = (type: 'initial' | 'final') => (
     <Card className="border-slate-200 rounded-3xl overflow-hidden bg-white shadow-sm">
@@ -138,7 +138,7 @@ export function RawMaterialModule({
         </TableHeader>
         <TableBody>
           {ALL_MATERIALS.map((mat) => (
-            <TableRow key={mat.code} className="hover:bg-slate-50 transition-colors h-12">
+            <TableRow key={mat.code} className="hover:bg-slate-50 transition-none h-12">
               <TableCell className="pl-6 font-mono text-[10px] font-bold text-primary">{mat.code}</TableCell>
               <TableCell className="text-xs font-bold text-slate-700 uppercase">{mat.description}</TableCell>
               <TableCell className="pr-6 text-right">
@@ -171,7 +171,7 @@ export function RawMaterialModule({
         </TableHeader>
         <TableBody>
           {PRODUCT_LIST.map((flavor) => (
-            <TableRow key={flavor} className={cn("transition-colors h-12", type === 'initial' ? "hover:bg-indigo-50/30" : "hover:bg-purple-50/30")}>
+            <TableRow key={flavor} className={cn("transition-none h-12", type === 'initial' ? "hover:bg-indigo-50/30" : "hover:bg-purple-50/30")}>
               <TableCell className="pl-6 font-bold text-slate-700 uppercase text-xs">{flavor}</TableCell>
               <TableCell className="pr-6 text-right">
                 <div className="flex items-center justify-end gap-3">
@@ -216,7 +216,7 @@ export function RawMaterialModule({
             const dailyData = dateKeys.map(key => rawMaterialStock[mat.code]?.receptions?.[key] || 0);
             const total = dailyData.reduce((a, b) => a + b, 0);
             return (
-              <TableRow key={mat.code} className="hover:bg-slate-50 transition-colors h-12">
+              <TableRow key={mat.code} className="hover:bg-slate-50 transition-none h-12">
                 <TableCell className="pl-6">
                   <div className="flex flex-col">
                     <span className="text-[9px] font-bold text-slate-400 leading-none">{mat.code}</span>
@@ -264,7 +264,7 @@ export function RawMaterialModule({
             const dailyData = dateKeys.map(key => manualUBB[flavor]?.[key] || 0);
             const total = dailyData.reduce((a, b) => a + (Number(b) || 0), 0);
             return (
-              <TableRow key={flavor} className="hover:bg-emerald-50/30 transition-colors h-12">
+              <TableRow key={flavor} className="hover:bg-emerald-50/30 transition-none h-12">
                 <TableCell className="pl-6">
                   <span className="text-[10px] font-black text-slate-700 uppercase">{flavor}</span>
                 </TableCell>
@@ -364,7 +364,7 @@ export function RawMaterialModule({
             <Button 
               onClick={onPrintReport}
               variant="outline" 
-              className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-100 active:transform-none"
+              className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-100 active:transform-none transition-none"
             >
               <FileDown className="h-4 w-4" /> Exportar Reporte PDF
             </Button>
@@ -412,7 +412,7 @@ export function RawMaterialModule({
                     const variancePct = theoretical > 0 ? (variance / theoretical) * 100 : 0;
 
                     return (
-                      <TableRow key={mat.code} className="hover:bg-slate-50 transition-colors h-14 group">
+                      <TableRow key={mat.code} className="hover:bg-slate-50 transition-none h-14 group">
                         <TableCell className="pl-6">
                           <div className="flex flex-col">
                             <span className="text-[9px] font-bold text-primary font-mono">{mat.code}</span>

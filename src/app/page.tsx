@@ -320,7 +320,7 @@ export default function PlannerPage() {
   }
 
   const navTabClass = (isActive: boolean) => cn(
-    "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none active:scale-100 active:transform-none transform-none",
+    "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none active:scale-100 active:transform-none transform-none transition-none",
     isActive ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
   );
 
@@ -347,7 +347,7 @@ export default function PlannerPage() {
                       variant={activeModule === 'planning' ? 'default' : 'ghost'} 
                       onClick={() => { setActiveModule('planning'); setActiveTab('gantt'); }}
                       className={cn(
-                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-colors active:scale-100 active:transform-none",
+                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
                         activeModule === 'planning' ? "shadow-md shadow-primary/20" : "text-slate-500"
                       )}
                     >
@@ -363,7 +363,7 @@ export default function PlannerPage() {
                       variant={activeModule === 'management' ? 'default' : 'ghost'} 
                       onClick={() => { setActiveModule('management'); setActiveTab('admin-report'); }}
                       className={cn(
-                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-colors active:scale-100 active:transform-none",
+                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
                         activeModule === 'management' ? "shadow-md shadow-primary/20" : "text-slate-500"
                       )}
                     >
@@ -379,7 +379,7 @@ export default function PlannerPage() {
                       variant={activeModule === 'raw-materials' ? 'default' : 'ghost'} 
                       onClick={() => { setActiveModule('raw-materials'); setActiveTab('raw-material-view'); }}
                       className={cn(
-                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-colors active:scale-100 active:transform-none",
+                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
                         activeModule === 'raw-materials' ? "shadow-md shadow-amber-200 bg-amber-600 hover:bg-amber-700 text-white" : "text-slate-500"
                       )}
                     >
@@ -395,7 +395,7 @@ export default function PlannerPage() {
                       variant={activeModule === 'recipes' ? 'default' : 'ghost'} 
                       onClick={() => { setActiveModule('recipes'); setActiveTab('recipes-editor'); }}
                       className={cn(
-                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-colors active:scale-100 active:transform-none",
+                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
                         activeModule === 'recipes' ? "shadow-md shadow-emerald-200 bg-emerald-600 hover:bg-emerald-700 text-white" : "text-slate-500"
                       )}
                     >
@@ -411,7 +411,7 @@ export default function PlannerPage() {
                       variant={activeModule === 'purchasing' ? 'default' : 'ghost'} 
                       onClick={() => { setActiveModule('purchasing'); setActiveTab('purchasing-view'); }}
                       className={cn(
-                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-colors active:scale-100 active:transform-none",
+                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
                         activeModule === 'purchasing' ? "shadow-md shadow-blue-200 bg-blue-600 hover:bg-blue-700 text-white" : "text-slate-500"
                       )}
                     >
@@ -434,7 +434,7 @@ export default function PlannerPage() {
                       </div>
                       <Popover>
                         <PopoverTrigger asChild disabled={!isAdmin && !isInventory}>
-                          <Button variant="outline" className="w-full h-12 justify-start text-left font-bold bg-white border-slate-200 shadow-sm hover:bg-slate-50 transition-all rounded-2xl disabled:opacity-80 active:scale-100 active:transform-none">
+                          <Button variant="outline" className="w-full h-12 justify-start text-left font-bold bg-white border-slate-200 shadow-sm hover:bg-slate-50 transition-none rounded-2xl disabled:opacity-80 active:scale-100 active:transform-none">
                             <CalendarIcon className="mr-3 h-4 w-4 text-primary" />
                             {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
                           </Button>
@@ -452,7 +452,7 @@ export default function PlannerPage() {
                   <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas de Producción</p>
                   <div className="px-2">
                     <Select value={selectedLine} onValueChange={setSelectedLine}>
-                      <SelectTrigger className="w-full h-12 bg-slate-50 border-slate-100 font-bold rounded-2xl hover:bg-slate-100/50 transition-all">
+                      <SelectTrigger className="w-full h-12 bg-slate-50 border-slate-100 font-bold rounded-2xl hover:bg-slate-100/50 transition-none">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -465,7 +465,7 @@ export default function PlannerPage() {
 
               {isAdmin && activeModule === 'planning' && (
                 <section className="px-2 space-y-3">
-                  <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 transition-all active:scale-100 active:transform-none">
+                  <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 transition-none active:scale-100 active:transform-none">
                     <Plus className="h-4 w-4" /> Nueva Tarea
                   </Button>
                   <Button variant="ghost" size="sm" onClick={handleClearContext} className="w-full gap-2 text-destructive font-black uppercase text-xs tracking-widest hover:bg-destructive/5 py-4 active:scale-100 active:transform-none">
@@ -480,7 +480,7 @@ export default function PlannerPage() {
                     variant="default" 
                     size="lg" 
                     onClick={() => setIsEntryDialogOpen(true)} 
-                    className="w-full gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-emerald-200 transition-all active:scale-100 active:transform-none"
+                    className="w-full gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-emerald-200 transition-none active:scale-100 active:transform-none"
                   >
                     <PackageCheck className="h-4 w-4" /> Cargar Producción
                   </Button>
@@ -506,7 +506,7 @@ export default function PlannerPage() {
               <Button 
                 variant="ghost" 
                 onClick={logout} 
-                className="w-full gap-2 text-slate-500 font-bold uppercase text-[10px] tracking-widest hover:bg-slate-100 hover:text-slate-900 transition-all rounded-xl h-12 active:scale-100 active:transform-none"
+                className="w-full gap-2 text-slate-500 font-bold uppercase text-[10px] tracking-widest hover:bg-slate-100 hover:text-slate-900 transition-none rounded-xl h-12 active:scale-100 active:transform-none"
               >
                 <LogOut className="h-4 w-4" /> Cerrar Sesión
               </Button>
@@ -537,7 +537,7 @@ export default function PlannerPage() {
                     variant="ghost" 
                     size="sm" 
                     onClick={handlePrintSummary}
-                    className="gap-2 font-bold text-slate-600 hover:text-primary active:scale-100 active:transform-none"
+                    className="gap-2 font-bold text-slate-600 hover:text-primary active:scale-100 active:transform-none transition-none"
                   >
                     <LayoutDashboard className="h-4 w-4" /> 
                     <span className="hidden sm:inline">Resumen</span>
@@ -546,7 +546,7 @@ export default function PlannerPage() {
                     variant="ghost" 
                     size="sm" 
                     onClick={handlePrintPlan}
-                    className="gap-2 font-bold text-slate-600 hover:text-primary active:scale-100 active:transform-none"
+                    className="gap-2 font-bold text-slate-600 hover:text-primary active:scale-100 active:transform-none transition-none"
                   >
                     <Printer className="h-4 w-4" /> 
                     <span className="hidden sm:inline">Programa</span>
@@ -619,10 +619,7 @@ export default function PlannerPage() {
                   <>
                     <button 
                       onClick={() => setActiveTab('raw-material-view')}
-                      className={cn(
-                        "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 active:scale-100 active:transform-none border-0 select-none transform-none",
-                        activeTab === 'raw-material-view' ? "bg-amber-50 text-amber-700" : "text-slate-500 hover:bg-slate-50"
-                      )}
+                      className={cn(navTabClass(activeTab === 'raw-material-view'), "bg-amber-50 text-amber-700", activeTab !== 'raw-material-view' && "bg-transparent text-slate-500 hover:bg-slate-50")}
                     >
                       <Box className="h-3.5 w-3.5" />
                       Control de Inventarios
@@ -632,10 +629,7 @@ export default function PlannerPage() {
                   <>
                     <button 
                       onClick={() => setActiveTab('recipes-editor')}
-                      className={cn(
-                        "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 active:scale-100 active:transform-none border-0 select-none transform-none",
-                        activeTab === 'recipes-editor' ? "bg-emerald-50 text-emerald-700" : "text-slate-500 hover:bg-slate-50"
-                      )}
+                      className={cn(navTabClass(activeTab === 'recipes-editor'), "bg-emerald-50 text-emerald-700", activeTab !== 'recipes-editor' && "bg-transparent text-slate-500 hover:bg-slate-50")}
                     >
                       <FlaskConical className="h-3.5 w-3.5" />
                       Edición de Recetas
@@ -645,10 +639,7 @@ export default function PlannerPage() {
                   <>
                     <button 
                       onClick={() => setActiveTab('purchasing-view')}
-                      className={cn(
-                        "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 active:scale-100 active:transform-none border-0 select-none transform-none",
-                        activeTab === 'purchasing-view' ? "bg-blue-50 text-blue-700" : "text-slate-500 hover:bg-slate-50"
-                      )}
+                      className={cn(navTabClass(activeTab === 'purchasing-view'), "bg-blue-50 text-blue-700", activeTab !== 'purchasing-view' && "bg-transparent text-slate-500 hover:bg-slate-50")}
                     >
                       <ShoppingCart className="h-3.5 w-3.5" />
                       Gestión de Compras

@@ -169,7 +169,7 @@ export function AdminReportTool({
     [lineData]
   );
 
-  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 transition-colors flex-shrink-0 outline-none focus:ring-0 active:scale-100 active:transform-none transform-none border-0 select-none";
+  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-100 active:transform-none transform-none border-0 select-none";
 
   return (
     <div className="space-y-4 animate-in fade-in duration-700 pb-4">
@@ -191,7 +191,7 @@ export function AdminReportTool({
                   variant="outline" 
                   size="sm" 
                   onClick={onPrintWeeklyControl}
-                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none"
+                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
                 >
                   <FileStack className="h-4 w-4" />
                   Exportar Reporte Semanal
@@ -221,7 +221,7 @@ export function AdminReportTool({
                     variant="outline" 
                     size="sm" 
                     onClick={() => onPrintMonthly?.(selectedMonth, selectedYear)}
-                    className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none"
+                    className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
                   >
                     <FileDown className="h-4 w-4" />
                     Exportar Resumen Mensual
@@ -389,7 +389,7 @@ export function AdminReportTool({
                       const totalSabor = lineValsFiltered.reduce((a, b) => a + b, 0);
 
                       return (
-                        <tr key={idx} className="hover:bg-slate-50 transition-colors text-[10px] font-bold text-slate-700 h-7">
+                        <tr key={idx} className="hover:bg-slate-50 transition-none text-[10px] font-bold text-slate-700 h-7">
                           <td className="px-3 py-0 border border-slate-100 uppercase bg-slate-50/30">{flavor}</td>
                           {lineValsFiltered.slice(0, 4).map((val, lIdx) => (
                             <td key={lIdx} className="px-1 py-0 border border-slate-100 text-center tabular-nums">
@@ -505,7 +505,7 @@ export function AdminReportTool({
                   variant="outline" 
                   size="sm" 
                   onClick={onPrintCompliance}
-                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none"
+                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
                 >
                   <CheckCircle2 className="h-4 w-4" />
                   Exportar Reporte Cumplimiento
@@ -535,7 +535,7 @@ export function AdminReportTool({
                     variant="outline" 
                     size="sm" 
                     onClick={() => onPrintMonthlyCompliance?.(selectedMonth, selectedYear)}
-                    className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none"
+                    className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
                   >
                     <FileDown className="h-4 w-4" />
                     Exportar Reporte Mensual
@@ -574,7 +574,7 @@ export function AdminReportTool({
                       </thead>
                       <tbody className="bg-[#dce6f1]">
                         {dailyStats.map((stat, idx) => (
-                          <tr key={idx} className="font-bold text-slate-800 hover:bg-slate-200/50 transition-colors">
+                          <tr key={idx} className="font-bold text-slate-800 hover:bg-slate-200/50 transition-none">
                             <td className="px-3 py-1 border border-slate-900 tabular-nums">
                               {format(stat.day, 'd/M/yyyy')}
                             </td>
@@ -620,7 +620,7 @@ export function AdminReportTool({
                     </thead>
                     <tbody className="bg-[#dce6f1]">
                       {monthlyComplianceData.map((data, idx) => (
-                        <tr key={idx} className="font-bold text-slate-800 hover:bg-white/40 transition-colors h-10">
+                        <tr key={idx} className="font-bold text-slate-800 hover:bg-white/40 transition-none h-10">
                           <td className="px-3 py-1 border border-slate-900 uppercase">{data.lineLabel}</td>
                           <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
                             {data.planned.toLocaleString('es-ES')}
