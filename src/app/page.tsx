@@ -68,6 +68,7 @@ export default function PlannerPage() {
     customRecipes,
     rawMaterialStock,
     manualUBB,
+    initialUBBTanks,
     setWeekStartDate, 
     addTask, 
     updateTask, 
@@ -81,6 +82,7 @@ export default function PlannerPage() {
     updateRawMaterialReception,
     updateRawMaterialDailyPhysical,
     updateManualUBB,
+    updateInitialUBBTanks,
     isLoaded: plannerLoaded
   } = usePlannerStore();
 
@@ -644,12 +646,14 @@ export default function PlannerPage() {
                         weekStartDate={weekStartDate}
                         rawMaterialStock={rawMaterialStock}
                         manualUBB={manualUBB}
+                        initialUBBTanks={initialUBBTanks}
                         tasks={tasks}
                         recipes={customRecipes}
                         onUpdateStock={updateRawMaterialStock}
                         onUpdateReception={updateRawMaterialReception}
                         onUpdateDailyPhysical={updateRawMaterialDailyPhysical}
                         onUpdateManualUBB={updateManualUBB}
+                        onUpdateInitialUBB={updateInitialUBBTanks}
                       />
                     )}
                   </>

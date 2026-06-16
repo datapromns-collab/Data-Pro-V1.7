@@ -19,7 +19,8 @@ import {
   Truck,
   ClipboardCheck,
   AlertTriangle,
-  FlaskConical
+  FlaskConical,
+  Beaker
 } from 'lucide-react';
 import { 
   SUGAR_DATA, 
@@ -27,7 +28,6 @@ import {
   CONCENTRATES_JUICES, 
   SOLIDS_DATA, 
   ADDITIVES_DATA,
-  UBB_FACTORS,
   PRODUCT_LIST,
   getWeekDays
 } from '@/lib/planner-utils';
@@ -38,12 +38,14 @@ interface RawMaterialModuleProps {
   weekStartDate: Date;
   rawMaterialStock: any;
   manualUBB: Record<string, Record<string, number>>;
+  initialUBBTanks: Record<string, number>;
   tasks: any[];
   recipes: Record<string, Record<string, number>>;
   onUpdateStock: (code: string, type: 'initial' | 'final', value: number) => void;
   onUpdateReception: (code: string, dateKey: string, value: number) => void;
   onUpdateDailyPhysical: (code: string, dateKey: string, value: number) => void;
   onUpdateManualUBB: (flavor: string, dateKey: string, value: number) => void;
+  onUpdateInitialUBB: (flavor: string, value: number) => void;
 }
 
 const ALL_MATERIALS = [
@@ -60,12 +62,14 @@ export function RawMaterialModule({
   weekStartDate,
   rawMaterialStock,
   manualUBB,
+  initialUBBTanks,
   tasks,
   recipes,
   onUpdateStock,
   onUpdateReception,
   onUpdateDailyPhysical,
-  onUpdateManualUBB
+  onUpdateManualUBB,
+  onUpdateInitialUBB
 }: RawMaterialModuleProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   const dateKeys = useMemo(() => weekDays.map(d => format(d, 'yyyy-MM-dd')), [weekDays]);
@@ -83,7 +87,6 @@ export function RawMaterialModule({
 
       if (totalUbbForFlavor > 0) {
         Object.entries(recipe).forEach(([matCode, factor]) => {
-          // El factor de receta es por UBB
           const matUsage = totalUbbForFlavor * factor;
           consumption[matCode] = (consumption[matCode] || 0) + matUsage;
         });
@@ -92,6 +95,24 @@ export function RawMaterialModule({
     
     return consumption;
   }, [manualUBB, recipes]);
+
+  // Cálculo de Materiales en Tanques Iniciales
+  const materialsInTanks = useMemo(() => {
+    const inTanks: Record<string, number> = {};
+    
+    PRODUCT_LIST.forEach(flavor => {
+      const recipe = recipes[flavor];
+      const ubbInTanks = initialUBBTanks[flavor] || 0;
+      
+      if (recipe && ubbInTanks > 0) {
+        Object.entries(recipe).forEach(([matCode, factor]) => {
+          inTanks[matCode] = (inTanks[matCode] || 0) + (ubbInTanks * factor);
+        });
+      }
+    });
+    
+    return inTanks;
+  }, [initialUBBTanks, recipes]);
 
   const tabsTriggerClass = "gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 transition-colors flex-shrink-0 outline-none focus:ring-0 active:scale-100";
 
@@ -120,6 +141,39 @@ export function RawMaterialModule({
                     placeholder="0.00"
                   />
                   <span className="text-[9px] font-black text-slate-400 uppercase w-6">{(mat as any).unit || 'KG'}</span>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </Card>
+  );
+
+  const renderInitialUBBTanksTable = () => (
+    <Card className="border-slate-200 rounded-3xl overflow-hidden bg-white shadow-sm">
+      <Table>
+        <TableHeader>
+          <TableRow className="bg-indigo-600 hover:bg-indigo-600 border-none h-10">
+            <TableHead className="text-white font-black text-[10px] uppercase pl-6">Sabor / Producto</TableHead>
+            <TableHead className="text-white font-black text-[10px] uppercase text-right pr-6">UBB Inicial en Tanques</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {PRODUCT_LIST.map((flavor) => (
+            <TableRow key={flavor} className="hover:bg-indigo-50/30 transition-colors h-12">
+              <TableCell className="pl-6 font-bold text-slate-700 uppercase text-xs">{flavor}</TableCell>
+              <TableCell className="pr-6 text-right">
+                <div className="flex items-center justify-end gap-3">
+                  <Input 
+                    type="number"
+                    step="0.01"
+                    value={initialUBBTanks[flavor] || ''}
+                    onChange={(e) => onUpdateInitialUBB(flavor, parseFloat(e.target.value) || 0)}
+                    className="w-32 h-9 text-right font-black text-sm rounded-xl border-indigo-100 bg-indigo-50/30 focus:bg-white"
+                    placeholder="0.00"
+                  />
+                  <span className="text-[9px] font-black text-indigo-400 uppercase w-8">UBB</span>
                 </div>
               </TableCell>
             </TableRow>
@@ -246,6 +300,9 @@ export function RawMaterialModule({
             <TabsTrigger value="initial" className={tabsTriggerClass}>
               <Warehouse className="h-3.5 w-3.5" /> Inventario Inicial
             </TabsTrigger>
+            <TabsTrigger value="initial-tanks" className={cn(tabsTriggerClass, "data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700")}>
+              <Beaker className="h-3.5 w-3.5" /> UBB Inicial
+            </TabsTrigger>
             <TabsTrigger value="reception" className={tabsTriggerClass}>
               <Truck className="h-3.5 w-3.5" /> Recepción
             </TabsTrigger>
@@ -265,6 +322,10 @@ export function RawMaterialModule({
           {renderSimpleStockTable('initial')}
         </TabsContent>
 
+        <TabsContent value="initial-tanks" className="m-0 animate-in slide-in-from-left-2 duration-300">
+          {renderInitialUBBTanksTable()}
+        </TabsContent>
+
         <TabsContent value="reception" className="m-0 animate-in slide-in-from-left-2 duration-300">
           {renderReceptionTable()}
         </TabsContent>
@@ -282,75 +343,80 @@ export function RawMaterialModule({
             <div className="bg-[#0c1a3d] p-4 flex items-center justify-between">
               <div className="flex items-center gap-2 text-white">
                 <TrendingUp className="h-5 w-5" />
-                <h3 className="font-black text-sm uppercase tracking-widest">Balance de Materia Prima: Físico vs Teórico (basado en UBB manuales)</h3>
+                <h3 className="font-black text-sm uppercase tracking-widest">Balance de Materia Prima: Físico vs Teórico</h3>
               </div>
               <Badge className="bg-white/10 text-white border-none uppercase text-[9px] font-black px-3 py-1">
                 Totales Semanales
               </Badge>
             </div>
             
-            <Table>
-              <TableHeader>
-                <TableRow className="bg-slate-50 border-b border-slate-100 hover:bg-slate-50">
-                  <TableHead className="text-[10px] font-black text-slate-400 uppercase pl-6">Material</TableHead>
-                  <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">I. Inicial</TableHead>
-                  <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">Recepciones</TableHead>
-                  <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">I. Final</TableHead>
-                  <TableHead className="text-right text-[10px] font-black text-emerald-600 uppercase bg-emerald-50/30">Consumo Físico</TableHead>
-                  <TableHead className="text-right text-[10px] font-black text-primary uppercase bg-primary/5">Consumo Teórico</TableHead>
-                  <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase pr-6">Variación</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {ALL_MATERIALS.map((mat) => {
-                  const stock = rawMaterialStock[mat.code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {} };
-                  const initial = stock.initial || 0;
-                  const receptions = Object.values(stock.receptions as Record<string, number>).reduce((a, b) => a + b, 0);
-                  const final = stock.final || 0;
-                  
-                  // Consumo Físico = Inicial + Recepción - Final
-                  const physical = (initial + receptions) - final;
-                  const theoretical = theoreticalConsumption[mat.code] || 0;
-                  const variance = physical - theoretical;
-                  const variancePct = theoretical > 0 ? (variance / theoretical) * 100 : 0;
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-slate-50 border-b border-slate-100 hover:bg-slate-50">
+                    <TableHead className="text-[10px] font-black text-slate-400 uppercase pl-6 min-w-[180px]">Material</TableHead>
+                    <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">I. Inicial</TableHead>
+                    <TableHead className="text-right text-[10px] font-black text-indigo-600 uppercase bg-indigo-50/30">I. en Tanques</TableHead>
+                    <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">Recepciones</TableHead>
+                    <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">I. Final</TableHead>
+                    <TableHead className="text-right text-[10px] font-black text-emerald-600 uppercase bg-emerald-50/30">Consumo Físico</TableHead>
+                    <TableHead className="text-right text-[10px] font-black text-primary uppercase bg-primary/5">Consumo Teórico</TableHead>
+                    <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase pr-6">Variación</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {ALL_MATERIALS.map((mat) => {
+                    const stock = rawMaterialStock[mat.code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {} };
+                    const initial = stock.initial || 0;
+                    const initialInTanks = materialsInTanks[mat.code] || 0;
+                    const receptions = Object.values(stock.receptions as Record<string, number>).reduce((a, b) => a + b, 0);
+                    const final = stock.final || 0;
+                    
+                    // Consumo Físico = (I. Inicial + I. en Tanques + Recepción) - Final
+                    const physical = (initial + initialInTanks + receptions) - final;
+                    const theoretical = theoreticalConsumption[mat.code] || 0;
+                    const variance = physical - theoretical;
+                    const variancePct = theoretical > 0 ? (variance / theoretical) * 100 : 0;
 
-                  return (
-                    <TableRow key={mat.code} className="hover:bg-slate-50 transition-colors h-14 group">
-                      <TableCell className="pl-6">
-                        <div className="flex flex-col">
-                          <span className="text-[9px] font-bold text-primary font-mono">{mat.code}</span>
-                          <span className="text-[10px] font-black text-slate-700 uppercase leading-none">{mat.description}</span>
-                        </div>
-                      </TableCell>
-                      <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{initial.toLocaleString('es-ES')}</TableCell>
-                      <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{receptions.toLocaleString('es-ES')}</TableCell>
-                      <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{final.toLocaleString('es-ES')}</TableCell>
-                      <TableCell className="text-right font-black text-emerald-600 tabular-nums text-[13px] bg-emerald-50/20">{physical.toLocaleString('es-ES')}</TableCell>
-                      <TableCell className="text-right font-black text-primary tabular-nums text-[13px] bg-primary/5">{theoretical.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
-                      <TableCell className="pr-6 text-right">
-                        <div className="flex flex-col items-end">
-                          <span className={`text-[12px] font-black tabular-nums ${Math.abs(variancePct) > 10 ? 'text-destructive' : 'text-slate-700'}`}>
-                            {variance.toLocaleString('es-ES', { maximumFractionDigits: 2 })}
-                          </span>
-                          <span className="text-[9px] font-bold text-slate-400">
-                            {variancePct > 0 ? '+' : ''}{variancePct.toFixed(1)}%
-                          </span>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
+                    return (
+                      <TableRow key={mat.code} className="hover:bg-slate-50 transition-colors h-14 group">
+                        <TableCell className="pl-6">
+                          <div className="flex flex-col">
+                            <span className="text-[9px] font-bold text-primary font-mono">{mat.code}</span>
+                            <span className="text-[10px] font-black text-slate-700 uppercase leading-none">{mat.description}</span>
+                          </div>
+                        </TableCell>
+                        <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{initial.toLocaleString('es-ES')}</TableCell>
+                        <TableCell className="text-right font-black text-indigo-600 tabular-nums text-xs bg-indigo-50/20">{initialInTanks.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
+                        <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{receptions.toLocaleString('es-ES')}</TableCell>
+                        <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{final.toLocaleString('es-ES')}</TableCell>
+                        <TableCell className="text-right font-black text-emerald-600 tabular-nums text-[13px] bg-emerald-50/20">{physical.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
+                        <TableCell className="text-right font-black text-primary tabular-nums text-[13px] bg-primary/5">{theoretical.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
+                        <TableCell className="pr-6 text-right">
+                          <div className="flex flex-col items-end">
+                            <span className={`text-[12px] font-black tabular-nums ${Math.abs(variancePct) > 10 ? 'text-destructive' : 'text-slate-700'}`}>
+                              {variance.toLocaleString('es-ES', { maximumFractionDigits: 2 })}
+                            </span>
+                            <span className="text-[9px] font-bold text-slate-400">
+                              {variancePct > 0 ? '+' : ''}{variancePct.toFixed(1)}%
+                            </span>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
           </Card>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="p-6 border-slate-200 rounded-3xl bg-slate-50/50 border-dashed border-2">
               <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-                <ClipboardCheck className="h-4 w-4 text-emerald-600" /> Nota sobre Cálculo Teórico
+                <ClipboardCheck className="h-4 w-4 text-emerald-600" /> Nota sobre Balance de Apertura
               </h4>
               <p className="text-[11px] font-bold text-slate-600 leading-relaxed uppercase">
-                El consumo teórico se calcula multiplicando las <span className="text-primary font-black">UBB ingresadas manualmente</span> en la pestaña "Registro Producción" por las proporciones definidas en el <span className="text-emerald-700 font-black">Gestor de Recetas</span>.
+                La columna <span className="text-indigo-600 font-black">I. en Tanques</span> representa la materia prima contenida en la bebida ya preparada al inicio de la semana. Este valor se suma a las existencias de bodega para determinar el inventario total disponible para consumo físico.
               </p>
             </Card>
 
