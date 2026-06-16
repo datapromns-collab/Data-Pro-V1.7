@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from 'react';
@@ -69,6 +68,7 @@ export default function PlannerPage() {
     rawMaterialStock,
     manualUBB,
     initialUBBTanks,
+    finalUBBTanks,
     setWeekStartDate, 
     addTask, 
     updateTask, 
@@ -83,6 +83,7 @@ export default function PlannerPage() {
     updateRawMaterialDailyPhysical,
     updateManualUBB,
     updateInitialUBBTanks,
+    updateFinalUBBTanks,
     isLoaded: plannerLoaded
   } = usePlannerStore();
 
@@ -647,6 +648,7 @@ export default function PlannerPage() {
                         rawMaterialStock={rawMaterialStock}
                         manualUBB={manualUBB}
                         initialUBBTanks={initialUBBTanks}
+                        finalUBBTanks={finalUBBTanks}
                         tasks={tasks}
                         recipes={customRecipes}
                         onUpdateStock={updateRawMaterialStock}
@@ -654,6 +656,7 @@ export default function PlannerPage() {
                         onUpdateDailyPhysical={updateRawMaterialDailyPhysical}
                         onUpdateManualUBB={updateManualUBB}
                         onUpdateInitialUBB={updateInitialUBBTanks}
+                        onUpdateFinalUBB={updateFinalUBBTanks}
                       />
                     )}
                   </>

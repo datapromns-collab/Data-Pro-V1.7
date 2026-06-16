@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -33,12 +32,14 @@ import {
 } from '@/lib/planner-utils';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { cn } from '@/lib/utils';
 
 interface RawMaterialModuleProps {
   weekStartDate: Date;
   rawMaterialStock: any;
   manualUBB: Record<string, Record<string, number>>;
   initialUBBTanks: Record<string, number>;
+  finalUBBTanks: Record<string, number>;
   tasks: any[];
   recipes: Record<string, Record<string, number>>;
   onUpdateStock: (code: string, type: 'initial' | 'final', value: number) => void;
@@ -46,6 +47,7 @@ interface RawMaterialModuleProps {
   onUpdateDailyPhysical: (code: string, dateKey: string, value: number) => void;
   onUpdateManualUBB: (flavor: string, dateKey: string, value: number) => void;
   onUpdateInitialUBB: (flavor: string, value: number) => void;
+  onUpdateFinalUBB: (flavor: string, value: number) => void;
 }
 
 const ALL_MATERIALS = [
@@ -63,13 +65,15 @@ export function RawMaterialModule({
   rawMaterialStock,
   manualUBB,
   initialUBBTanks,
+  finalUBBTanks,
   tasks,
   recipes,
   onUpdateStock,
   onUpdateReception,
   onUpdateDailyPhysical,
   onUpdateManualUBB,
-  onUpdateInitialUBB
+  onUpdateInitialUBB,
+  onUpdateFinalUBB
 }: RawMaterialModuleProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   const dateKeys = useMemo(() => weekDays.map(d => format(d, 'yyyy-MM-dd')), [weekDays]);
@@ -114,6 +118,24 @@ export function RawMaterialModule({
     return inTanks;
   }, [initialUBBTanks, recipes]);
 
+  // Cálculo de Materiales en Tanques Finales
+  const materialsInFinalTanks = useMemo(() => {
+    const inTanks: Record<string, number> = {};
+    
+    PRODUCT_LIST.forEach(flavor => {
+      const recipe = recipes[flavor];
+      const ubbInTanks = finalUBBTanks[flavor] || 0;
+      
+      if (recipe && ubbInTanks > 0) {
+        Object.entries(recipe).forEach(([matCode, factor]) => {
+          inTanks[matCode] = (inTanks[matCode] || 0) + (ubbInTanks * factor);
+        });
+      }
+    });
+    
+    return inTanks;
+  }, [finalUBBTanks, recipes]);
+
   const tabsTriggerClass = "gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 transition-colors flex-shrink-0 outline-none focus:ring-0 active:scale-100";
 
   const renderSimpleStockTable = (type: 'initial' | 'final') => (
@@ -150,30 +172,34 @@ export function RawMaterialModule({
     </Card>
   );
 
-  const renderInitialUBBTanksTable = () => (
+  const renderUBBTanksTable = (type: 'initial' | 'final') => (
     <Card className="border-slate-200 rounded-3xl overflow-hidden bg-white shadow-sm">
       <Table>
         <TableHeader>
-          <TableRow className="bg-indigo-600 hover:bg-indigo-600 border-none h-10">
+          <TableRow className={cn("border-none h-10", type === 'initial' ? "bg-indigo-600 hover:bg-indigo-600" : "bg-purple-600 hover:bg-purple-600")}>
             <TableHead className="text-white font-black text-[10px] uppercase pl-6">Sabor / Producto</TableHead>
-            <TableHead className="text-white font-black text-[10px] uppercase text-right pr-6">UBB Inicial en Tanques</TableHead>
+            <TableHead className="text-white font-black text-[10px] uppercase text-right pr-6">UBB {type === 'initial' ? 'Inicial' : 'Final'} en Tanques</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {PRODUCT_LIST.map((flavor) => (
-            <TableRow key={flavor} className="hover:bg-indigo-50/30 transition-colors h-12">
+            <TableRow key={flavor} className={cn("transition-colors h-12", type === 'initial' ? "hover:bg-indigo-50/30" : "hover:bg-purple-50/30")}>
               <TableCell className="pl-6 font-bold text-slate-700 uppercase text-xs">{flavor}</TableCell>
               <TableCell className="pr-6 text-right">
                 <div className="flex items-center justify-end gap-3">
                   <Input 
                     type="number"
                     step="0.01"
-                    value={initialUBBTanks[flavor] || ''}
-                    onChange={(e) => onUpdateInitialUBB(flavor, parseFloat(e.target.value) || 0)}
-                    className="w-32 h-9 text-right font-black text-sm rounded-xl border-indigo-100 bg-indigo-50/30 focus:bg-white"
+                    value={(type === 'initial' ? initialUBBTanks[flavor] : finalUBBTanks[flavor]) || ''}
+                    onChange={(e) => {
+                      const val = parseFloat(e.target.value) || 0;
+                      if (type === 'initial') onUpdateInitialUBB(flavor, val);
+                      else onUpdateFinalUBB(flavor, val);
+                    }}
+                    className={cn("w-32 h-9 text-right font-black text-sm rounded-xl border-slate-100 focus:bg-white", type === 'initial' ? "bg-indigo-50/30" : "bg-purple-50/30")}
                     placeholder="0.00"
                   />
-                  <span className="text-[9px] font-black text-indigo-400 uppercase w-8">UBB</span>
+                  <span className={cn("text-[9px] font-black uppercase w-8", type === 'initial' ? "text-indigo-400" : "text-purple-400")}>UBB</span>
                 </div>
               </TableCell>
             </TableRow>
@@ -309,6 +335,9 @@ export function RawMaterialModule({
             <TabsTrigger value="final" className={tabsTriggerClass}>
               <ClipboardCheck className="h-3.5 w-3.5" /> Inventario Final
             </TabsTrigger>
+            <TabsTrigger value="final-tanks" className={cn(tabsTriggerClass, "data-[state=active]:bg-purple-50 data-[state=active]:text-purple-700")}>
+              <Beaker className="h-3.5 w-3.5" /> UBB Final
+            </TabsTrigger>
             <TabsTrigger value="daily" className={tabsTriggerClass}>
               <FlaskConical className="h-3.5 w-3.5" /> Registro Producción (UBB)
             </TabsTrigger>
@@ -323,7 +352,7 @@ export function RawMaterialModule({
         </TabsContent>
 
         <TabsContent value="initial-tanks" className="m-0 animate-in slide-in-from-left-2 duration-300">
-          {renderInitialUBBTanksTable()}
+          {renderUBBTanksTable('initial')}
         </TabsContent>
 
         <TabsContent value="reception" className="m-0 animate-in slide-in-from-left-2 duration-300">
@@ -332,6 +361,10 @@ export function RawMaterialModule({
 
         <TabsContent value="final" className="m-0 animate-in slide-in-from-left-2 duration-300">
           {renderSimpleStockTable('final')}
+        </TabsContent>
+
+        <TabsContent value="final-tanks" className="m-0 animate-in slide-in-from-left-2 duration-300">
+          {renderUBBTanksTable('final')}
         </TabsContent>
 
         <TabsContent value="daily" className="m-0 animate-in slide-in-from-left-2 duration-300">
@@ -359,6 +392,7 @@ export function RawMaterialModule({
                     <TableHead className="text-right text-[10px] font-black text-indigo-600 uppercase bg-indigo-50/30">I. en Tanques</TableHead>
                     <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">Recepciones</TableHead>
                     <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">I. Final</TableHead>
+                    <TableHead className="text-right text-[10px] font-black text-purple-600 uppercase bg-purple-50/30">F. en Tanques</TableHead>
                     <TableHead className="text-right text-[10px] font-black text-emerald-600 uppercase bg-emerald-50/30">Consumo Físico</TableHead>
                     <TableHead className="text-right text-[10px] font-black text-primary uppercase bg-primary/5">Consumo Teórico</TableHead>
                     <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase pr-6">Variación</TableHead>
@@ -371,9 +405,10 @@ export function RawMaterialModule({
                     const initialInTanks = materialsInTanks[mat.code] || 0;
                     const receptions = Object.values(stock.receptions as Record<string, number>).reduce((a, b) => a + b, 0);
                     const final = stock.final || 0;
+                    const finalInTanks = materialsInFinalTanks[mat.code] || 0;
                     
-                    // Consumo Físico = (I. Inicial + I. en Tanques + Recepción) - Final
-                    const physical = (initial + initialInTanks + receptions) - final;
+                    // Consumo Físico = (I. Inicial + I. en Tanques + Recepción) - (I. Final + F. en Tanques)
+                    const physical = (initial + initialInTanks + receptions) - (final + finalInTanks);
                     const theoretical = theoreticalConsumption[mat.code] || 0;
                     const variance = physical - theoretical;
                     const variancePct = theoretical > 0 ? (variance / theoretical) * 100 : 0;
@@ -390,6 +425,7 @@ export function RawMaterialModule({
                         <TableCell className="text-right font-black text-indigo-600 tabular-nums text-xs bg-indigo-50/20">{initialInTanks.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
                         <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{receptions.toLocaleString('es-ES')}</TableCell>
                         <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{final.toLocaleString('es-ES')}</TableCell>
+                        <TableCell className="text-right font-black text-purple-600 tabular-nums text-xs bg-purple-50/20">{finalInTanks.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
                         <TableCell className="text-right font-black text-emerald-600 tabular-nums text-[13px] bg-emerald-50/20">{physical.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
                         <TableCell className="text-right font-black text-primary tabular-nums text-[13px] bg-primary/5">{theoretical.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
                         <TableCell className="pr-6 text-right">
@@ -413,10 +449,10 @@ export function RawMaterialModule({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Card className="p-6 border-slate-200 rounded-3xl bg-slate-50/50 border-dashed border-2">
               <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-                <ClipboardCheck className="h-4 w-4 text-emerald-600" /> Nota sobre Balance de Apertura
+                <ClipboardCheck className="h-4 w-4 text-emerald-600" /> Nota sobre Balance de Cierre
               </h4>
               <p className="text-[11px] font-bold text-slate-600 leading-relaxed uppercase">
-                La columna <span className="text-indigo-600 font-black">I. en Tanques</span> representa la materia prima contenida en la bebida ya preparada al inicio de la semana. Este valor se suma a las existencias de bodega para determinar el inventario total disponible para consumo físico.
+                La columna <span className="text-purple-600 font-black">F. en Tanques</span> representa la materia prima contenida en la bebida preparada que queda en planta al final de la semana. Este valor se resta de las existencias para determinar el consumo neto del periodo.
               </p>
             </Card>
 
