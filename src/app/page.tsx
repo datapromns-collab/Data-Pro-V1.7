@@ -461,13 +461,13 @@ export default function PlannerPage() {
             <div className="flex flex-col gap-6 h-full">
               
               {/* Barra de Navegación Horizontal (Igual a la imagen) */}
-              <div className="flex items-center bg-white border border-slate-200 rounded-2xl p-1.5 shadow-sm self-start animate-in fade-in slide-in-from-top-2">
+              <div className="flex items-center bg-white border border-slate-200 rounded-2xl p-1.5 shadow-sm self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full">
                 {activeModule === 'planning' ? (
                   <>
                     <button 
                       onClick={() => setActiveTab('gantt')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
+                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all whitespace-nowrap",
                         activeTab === 'gantt' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
@@ -477,7 +477,7 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('daily')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
+                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all whitespace-nowrap",
                         activeTab === 'daily' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
@@ -487,40 +487,17 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('requirement')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
+                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all whitespace-nowrap",
                         activeTab === 'requirement' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <ClipboardList className="h-3.5 w-3.5" />
                       Requerimiento
                     </button>
-                  </>
-                ) : (
-                  <>
-                    <button 
-                      onClick={() => setActiveTab('admin-report')}
-                      className={cn(
-                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
-                        activeTab === 'admin-report' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
-                      )}
-                    >
-                      <BarChart3 className="h-3.5 w-3.5" />
-                      Control Producción
-                    </button>
-                    <button 
-                      onClick={() => setActiveTab('compliance-report')}
-                      className={cn(
-                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
-                        activeTab === 'compliance-report' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
-                      )}
-                    >
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                      Cumplimiento
-                    </button>
                     <button 
                       onClick={() => setActiveTab('speeds')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
+                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all whitespace-nowrap",
                         activeTab === 'speeds' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
@@ -530,12 +507,35 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('calculator')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all",
+                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all whitespace-nowrap",
                         activeTab === 'calculator' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <CalculatorIcon className="h-3.5 w-3.5" />
                       Calculadora
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <button 
+                      onClick={() => setActiveTab('admin-report')}
+                      className={cn(
+                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        activeTab === 'admin-report' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
+                      )}
+                    >
+                      <BarChart3 className="h-3.5 w-3.5" />
+                      Control Producción
+                    </button>
+                    <button 
+                      onClick={() => setActiveTab('compliance-report')}
+                      className={cn(
+                        "flex items-center gap-2 px-6 py-2.5 rounded-xl font-bold text-[11px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        activeTab === 'compliance-report' ? "bg-slate-100 text-slate-900 shadow-inner" : "text-slate-500 hover:bg-slate-50"
+                      )}
+                    >
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                      Cumplimiento
                     </button>
                   </>
                 )}
@@ -553,14 +553,14 @@ export default function PlannerPage() {
                     {activeTab === 'requirement' && (
                       <RequirementSection onPrint={handlePrintRequirements} tasks={tasks} weekStartDate={weekStartDate} />
                     )}
-                  </>
-                )}
-                {isAdmin && activeModule === 'management' && (
-                  <>
                     {activeTab === 'speeds' && (
                       <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} readOnly={!isAdmin} />
                     )}
                     {activeTab === 'calculator' && <Calculator />}
+                  </>
+                )}
+                {isAdmin && activeModule === 'management' && (
+                  <>
                     {activeTab === 'admin-report' && (
                       <AdminReportTool 
                         view="production"
