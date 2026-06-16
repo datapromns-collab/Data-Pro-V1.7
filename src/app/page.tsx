@@ -484,7 +484,7 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('gantt')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0",
                         activeTab === 'gantt' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
@@ -494,7 +494,7 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('daily')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0",
                         activeTab === 'daily' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
@@ -504,7 +504,7 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('requirement')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0",
                         activeTab === 'requirement' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
@@ -514,7 +514,7 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('speeds')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0",
                         activeTab === 'speeds' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
@@ -524,7 +524,7 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('calculator')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0",
                         activeTab === 'calculator' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
@@ -537,7 +537,7 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('admin-report')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0",
                         activeTab === 'admin-report' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
@@ -547,7 +547,7 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('compliance-report')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0",
                         activeTab === 'compliance-report' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
@@ -560,7 +560,7 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('recipes-editor')}
                       className={cn(
-                        "flex items-center gap-2 px-6 py-2 rounded-full font-bold text-[10px] uppercase tracking-widest transition-all whitespace-nowrap",
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0",
                         activeTab === 'recipes-editor' ? "bg-emerald-50 text-emerald-700" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >

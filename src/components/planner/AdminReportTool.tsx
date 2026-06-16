@@ -174,11 +174,11 @@ export function AdminReportTool({
       {view === 'production' && (
         <Tabs value={productionSubTab} onValueChange={setProductionTab} className="w-full">
           <div className="flex items-center justify-between mb-6">
-            <TabsList className="bg-slate-100/50 p-1 rounded-full h-auto border border-slate-200">
-              <TabsTrigger value="weekly" className="gap-2 px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all">
+            <TabsList className="bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+              <TabsTrigger value="weekly" className="gap-2 h-9 px-6 rounded-full font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-colors flex-shrink-0">
                 <CalendarDays className="h-3.5 w-3.5" /> Control Semanal
               </TabsTrigger>
-              <TabsTrigger value="monthly" className="gap-2 px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all">
+              <TabsTrigger value="monthly" className="gap-2 h-9 px-6 rounded-full font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-colors flex-shrink-0">
                 <FileSpreadsheet className="h-3.5 w-3.5" /> Resumen Mensual
               </TabsTrigger>
             </TabsList>
@@ -488,11 +488,11 @@ export function AdminReportTool({
       {view === 'compliance' && (
         <Tabs value={complianceSubTab} onValueChange={setComplianceTab} className="w-full">
            <div className="flex items-center justify-between mb-6">
-            <TabsList className="bg-slate-100/50 p-1 rounded-full h-auto border border-slate-200">
-              <TabsTrigger value="weekly" className="gap-2 px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all">
+            <TabsList className="bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+              <TabsTrigger value="weekly" className="gap-2 h-9 px-6 rounded-full font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-colors flex-shrink-0">
                 <CalendarDays className="h-3.5 w-3.5" /> Detalle Semanal
               </TabsTrigger>
-              <TabsTrigger value="monthly" className="gap-2 px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm transition-all">
+              <TabsTrigger value="monthly" className="gap-2 h-9 px-6 rounded-full font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-colors flex-shrink-0">
                 <BarChart3 className="h-3.5 w-3.5" /> Resumen Mensual
               </TabsTrigger>
             </TabsList>
