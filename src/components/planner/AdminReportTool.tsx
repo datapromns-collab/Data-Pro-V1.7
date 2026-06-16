@@ -170,7 +170,7 @@ export function AdminReportTool({
     [lineData]
   );
 
-  const tabsTriggerClass = "gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 transition-colors flex-shrink-0 outline-none focus:ring-0 active:scale-100";
+  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 transition-colors flex-shrink-0 outline-none focus:ring-0 active:scale-100 border-0 select-none";
 
   return (
     <div className="space-y-4 animate-in fade-in duration-700 pb-4">

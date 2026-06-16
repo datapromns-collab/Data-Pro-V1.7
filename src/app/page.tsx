@@ -315,7 +315,7 @@ export default function PlannerPage() {
   }
 
   const navTabClass = (isActive: boolean) => cn(
-    "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 active:scale-100",
+    "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 active:scale-100 border-0 select-none",
     isActive ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
   );
 
@@ -595,7 +595,7 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('raw-material-view')}
                       className={cn(
-                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 active:scale-100",
+                        "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 active:scale-100 border-0 select-none",
                         activeTab === 'raw-material-view' ? "bg-amber-50 text-amber-700" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
@@ -608,7 +608,7 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('recipes-editor')}
                       className={cn(
-                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 active:scale-100",
+                        "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 active:scale-100 border-0 select-none",
                         activeTab === 'recipes-editor' ? "bg-emerald-50 text-emerald-700" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
