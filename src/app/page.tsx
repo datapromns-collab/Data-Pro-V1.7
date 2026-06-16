@@ -290,7 +290,7 @@ export default function PlannerPage() {
                 <h1 className="text-xl font-headline font-bold text-slate-900 tracking-tight leading-none">
                   Data Pro
                 </h1>
-                <span className="text-[8px] font-black text-slate-300 uppercase tracking-[0.3em] mt-1.5">Pro Edition</span>
+                <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] mt-1.5">Pro Edition</span>
               </div>
             </div>
           </div>
@@ -484,8 +484,8 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('gantt')}
                       className={cn(
-                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0",
-                        activeTab === 'gantt' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0",
+                        activeTab === 'gantt' ? "bg-slate-100 text-slate-900 shadow-sm" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <GanttChartSquare className="h-3.5 w-3.5" />
@@ -494,8 +494,8 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('daily')}
                       className={cn(
-                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0",
-                        activeTab === 'daily' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0",
+                        activeTab === 'daily' ? "bg-slate-100 text-slate-900 shadow-sm" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <ListTodo className="h-3.5 w-3.5" />
@@ -504,8 +504,8 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('requirement')}
                       className={cn(
-                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0",
-                        activeTab === 'requirement' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0",
+                        activeTab === 'requirement' ? "bg-slate-100 text-slate-900 shadow-sm" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <ClipboardList className="h-3.5 w-3.5" />
@@ -514,8 +514,8 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('speeds')}
                       className={cn(
-                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0",
-                        activeTab === 'speeds' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0",
+                        activeTab === 'speeds' ? "bg-slate-100 text-slate-900 shadow-sm" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <Gauge className="h-3.5 w-3.5" />
@@ -524,8 +524,8 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('calculator')}
                       className={cn(
-                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0",
-                        activeTab === 'calculator' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0",
+                        activeTab === 'calculator' ? "bg-slate-100 text-slate-900 shadow-sm" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <CalculatorIcon className="h-3.5 w-3.5" />
@@ -537,8 +537,8 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('admin-report')}
                       className={cn(
-                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0",
-                        activeTab === 'admin-report' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0",
+                        activeTab === 'admin-report' ? "bg-slate-100 text-slate-900 shadow-sm" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <BarChart3 className="h-3.5 w-3.5" />
@@ -547,8 +547,8 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('compliance-report')}
                       className={cn(
-                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0",
-                        activeTab === 'compliance-report' ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0",
+                        activeTab === 'compliance-report' ? "bg-slate-100 text-slate-900 shadow-sm" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <CheckCircle2 className="h-3.5 w-3.5" />
@@ -560,8 +560,8 @@ export default function PlannerPage() {
                     <button 
                       onClick={() => setActiveTab('recipes-editor')}
                       className={cn(
-                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0",
-                        activeTab === 'recipes-editor' ? "bg-emerald-50 text-emerald-700" : "text-slate-500 hover:bg-slate-50"
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0",
+                        activeTab === 'recipes-editor' ? "bg-emerald-50 text-emerald-700 shadow-sm" : "text-slate-500 hover:bg-slate-50"
                       )}
                     >
                       <FlaskConical className="h-3.5 w-3.5" />

@@ -175,10 +175,10 @@ export function AdminReportTool({
         <Tabs value={productionSubTab} onValueChange={setProductionTab} className="w-full">
           <div className="flex items-center justify-between mb-6">
             <TabsList className="bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-              <TabsTrigger value="weekly" className="gap-2 h-9 px-6 rounded-full font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-colors flex-shrink-0">
+              <TabsTrigger value="weekly" className="gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-colors flex-shrink-0 outline-none focus:ring-0">
                 <CalendarDays className="h-3.5 w-3.5" /> Control Semanal
               </TabsTrigger>
-              <TabsTrigger value="monthly" className="gap-2 h-9 px-6 rounded-full font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-colors flex-shrink-0">
+              <TabsTrigger value="monthly" className="gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-colors flex-shrink-0 outline-none focus:ring-0">
                 <FileSpreadsheet className="h-3.5 w-3.5" /> Resumen Mensual
               </TabsTrigger>
             </TabsList>
@@ -197,7 +197,7 @@ export function AdminReportTool({
               ) : (
                 <>
                   <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-                    <SelectTrigger className="w-36 bg-white border-slate-200 font-black uppercase text-[10px] tracking-widest rounded-xl h-10">
+                    <SelectTrigger className="w-36 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -212,7 +212,7 @@ export function AdminReportTool({
                     type="number"
                     value={selectedYear}
                     onChange={(e) => setSelectedYear(e.target.value)}
-                    className="w-24 bg-white border-slate-200 font-black text-center rounded-xl h-10 text-[10px] focus:ring-primary/20"
+                    className="w-24 bg-white border-slate-200 font-bold text-center rounded-xl h-10 text-[10px] focus:ring-primary/20"
                     placeholder="Año"
                   />
                   <Button 
@@ -489,10 +489,10 @@ export function AdminReportTool({
         <Tabs value={complianceSubTab} onValueChange={setComplianceTab} className="w-full">
            <div className="flex items-center justify-between mb-6">
             <TabsList className="bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-              <TabsTrigger value="weekly" className="gap-2 h-9 px-6 rounded-full font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-colors flex-shrink-0">
+              <TabsTrigger value="weekly" className="gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-colors flex-shrink-0 outline-none focus:ring-0">
                 <CalendarDays className="h-3.5 w-3.5" /> Detalle Semanal
               </TabsTrigger>
-              <TabsTrigger value="monthly" className="gap-2 h-9 px-6 rounded-full font-black text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-colors flex-shrink-0">
+              <TabsTrigger value="monthly" className="gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-colors flex-shrink-0 outline-none focus:ring-0">
                 <BarChart3 className="h-3.5 w-3.5" /> Resumen Mensual
               </TabsTrigger>
             </TabsList>
@@ -511,7 +511,7 @@ export function AdminReportTool({
               ) : (
                 <div className="flex items-center gap-2">
                   <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-                    <SelectTrigger className="w-36 bg-white border-slate-200 font-black uppercase text-[10px] tracking-widest rounded-xl h-10">
+                    <SelectTrigger className="w-36 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
@@ -526,7 +526,7 @@ export function AdminReportTool({
                     type="number"
                     value={selectedYear}
                     onChange={(e) => setSelectedYear(e.target.value)}
-                    className="w-24 bg-white border-slate-200 font-black text-center rounded-xl h-10 text-[10px] focus:ring-primary/20"
+                    className="w-24 bg-white border-slate-200 font-bold text-center rounded-xl h-10 text-[10px] focus:ring-primary/20"
                     placeholder="Año"
                   />
                   <Button 
@@ -673,7 +673,7 @@ export function AdminReportTool({
                         dataKey="lineShort" 
                         axisLine={false} 
                         tickLine={false} 
-                        tick={{ fontSize: 10, fontWeight: 900, fill: '#64748b' }}
+                        tick={{ fontSize: 10, fontWeight: 700, fill: '#64748b' }}
                         dy={10}
                       />
                       <YAxis 
