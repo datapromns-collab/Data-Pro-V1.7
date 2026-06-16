@@ -728,7 +728,7 @@ export default function PlannerPage() {
             </div>
           )}
           {printMode === 'raw-material' && (
-            <div className="p-0">
+            <div className="p-0 h-full">
               <RawMaterialReport 
                 weekStartDate={weekStartDate}
                 rawMaterialStock={rawMaterialStock}

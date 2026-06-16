@@ -86,26 +86,26 @@ export function RawMaterialReport({
   }, [finalUBBTanks, recipes]);
 
   return (
-    <div className="bg-white w-full p-4 flex flex-col min-h-screen">
-      <div className="mb-4 border-b-2 border-slate-900 pb-2 flex justify-between items-center shrink-0">
+    <div className="bg-white w-full page-break-section p-2 flex flex-col h-screen" style={{ pageBreakInside: 'avoid' }}>
+      <div className="mb-2 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
         <div className="flex-1">
-          <h1 className="text-xl font-headline font-black text-slate-900 uppercase">Balance de Materia Prima</h1>
-          <p className="text-primary font-black text-[10px] uppercase tracking-widest mt-0.5">Reporte Semanal: Físico vs Teórico</p>
+          <h1 className="text-xl font-headline font-black text-slate-900 uppercase leading-none">Balance de Materia Prima</h1>
+          <p className="text-primary font-black text-[9px] uppercase tracking-widest mt-0.5">Reporte Semanal: Físico vs Teórico</p>
         </div>
         <div className="flex-1 flex justify-center">
-          {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={110} height={40} className="object-contain" />}
+          {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={100} height={35} className="object-contain" />}
         </div>
         <div className="flex-1 text-right">
-          <p className="text-[7px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Confidencial - Planta</p>
+          <p className="text-[6px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Confidencial - Planta</p>
           <p className="text-lg font-black text-slate-900 uppercase leading-none">SEMANA {format(weekStartDate, 'I')}</p>
-          <p className="text-[8px] text-slate-500 font-bold uppercase mt-1">{format(weekStartDate, "dd 'de' MMMM yyyy", { locale: es })}</p>
+          <p className="text-[7px] text-slate-500 font-bold uppercase mt-0.5">{format(weekStartDate, "dd 'de' MMMM yyyy", { locale: es })}</p>
         </div>
       </div>
 
       <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm w-full">
-        <table className="w-full border-collapse text-[7.5pt]">
+        <table className="w-full border-collapse text-[7pt]">
           <thead>
-            <tr className="bg-[#4a7ebb] text-white font-black uppercase h-8">
+            <tr className="bg-[#4a7ebb] text-white font-black uppercase h-7">
               <th className="px-2 py-0 border border-slate-900 text-left">MATERIAL</th>
               <th className="px-1 py-0 border border-slate-900 text-right">INICIAL</th>
               <th className="px-1 py-0 border border-slate-900 text-right bg-[#2f5597]">I. TANQUES</th>
@@ -132,15 +132,15 @@ export function RawMaterialReport({
               const variancePct = theoretical > 0 ? (variance / theoretical) * 100 : 0;
 
               return (
-                <tr key={mat.code} className={`h-6 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
-                  <td className="px-2 py-0 border border-slate-300 uppercase truncate max-w-[150px]">{mat.description}</td>
+                <tr key={mat.code} className={`h-5 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
+                  <td className="px-2 py-0 border border-slate-300 uppercase truncate max-w-[150px] leading-none">{mat.description}</td>
                   <td className="px-1 py-0 border border-slate-300 text-right tabular-nums">{initial.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
                   <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-indigo-50/50">{initialInTanks.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
                   <td className="px-1 py-0 border border-slate-300 text-right tabular-nums">{receptions.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
                   <td className="px-1 py-0 border border-slate-300 text-right tabular-nums">{final.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
                   <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-purple-50/50">{finalInTanks.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
-                  <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-amber-50/30">{physical.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
-                  <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-emerald-50/30">{theoretical.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
+                  <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-amber-50/20">{physical.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
+                  <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-emerald-50/20">{theoretical.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
                   <td className={`px-1 py-0 border border-slate-300 text-right tabular-nums ${Math.abs(variancePct) > 10 ? 'text-red-600' : 'text-slate-600'}`}>
                     {variancePct > 0 ? '+' : ''}{variancePct.toFixed(1)}%
                   </td>
@@ -151,7 +151,7 @@ export function RawMaterialReport({
         </table>
       </div>
 
-      <div className="mt-4 flex justify-between items-end border-t border-slate-200 pt-2 text-[7px] font-black text-slate-400 uppercase tracking-widest shrink-0">
+      <div className="mt-2 flex justify-between items-end border-t border-slate-200 pt-1 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
         <div className="space-y-0.5">
           <p>SISTEMA DE GESTIÓN DE MATERIA PRIMA - MULTINACIONAL DE SABORES</p>
           <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es })}</p>
