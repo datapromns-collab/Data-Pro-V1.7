@@ -21,7 +21,8 @@ import {
   CheckCircle2,
   Calendar as CalendarIcon,
   FlaskConical,
-  ChevronRight
+  ChevronRight,
+  Box
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -39,6 +40,7 @@ import { WeeklyControlReport } from '@/components/planner/WeeklyControlReport';
 import { ComplianceReport } from '@/components/planner/ComplianceReport';
 import { MonthlyComplianceReport } from '@/components/planner/MonthlyComplianceReport';
 import { RecipeEditor } from '@/components/planner/RecipeEditor';
+import { RawMaterialModule } from '@/components/planner/RawMaterialModule';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
@@ -64,6 +66,7 @@ export default function PlannerPage() {
     lineSpeeds,
     realProduction,
     customRecipes,
+    rawMaterialStock,
     setWeekStartDate, 
     addTask, 
     updateTask, 
@@ -73,6 +76,9 @@ export default function PlannerPage() {
     updateRealProduction,
     updateRecipe,
     removeMaterialFromRecipe,
+    updateRawMaterialStock,
+    updateRawMaterialReception,
+    updateRawMaterialDailyPhysical,
     isLoaded: plannerLoaded
   } = usePlannerStore();
 
@@ -93,7 +99,7 @@ export default function PlannerPage() {
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
   
-  const [activeModule, setActiveModule] = useState<'planning' | 'management' | 'recipes'>('planning');
+  const [activeModule, setActiveModule] = useState<'planning' | 'management' | 'recipes' | 'raw-materials'>('planning');
   const [activeTab, setActiveTab] = useState("gantt");
   
   const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance'>('plan');
@@ -110,6 +116,10 @@ export default function PlannerPage() {
       setActiveTab('gantt');
     }
     if (authLoaded && user && !isDemon && activeModule === 'recipes') {
+      setActiveModule('planning');
+      setActiveTab('gantt');
+    }
+    if (authLoaded && user && user.role === 'STANDARD' && activeModule === 'raw-materials') {
       setActiveModule('planning');
       setActiveTab('gantt');
     }
@@ -288,16 +298,11 @@ export default function PlannerPage() {
       <div className="flex min-h-screen w-full bg-[#f8fafc]">
         <Sidebar className="border-r border-slate-200 bg-white no-print">
           <div className="p-6">
-            <div className="flex items-center gap-3">
-              <div className="bg-white p-1 rounded-2xl shadow-lg border border-slate-100 overflow-hidden w-12 h-12 flex items-center justify-center">
-                <Image src="/logo.svg" alt="Data Pro Logo" width={40} height={40} className="object-contain" />
-              </div>
-              <div className="flex flex-col">
-                <h1 className="text-xl font-headline font-bold text-slate-900 tracking-tight leading-none">
-                  Data Pro
-                </h1>
-                <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] mt-1.5">Pro Edition</span>
-              </div>
+            <div className="flex flex-col">
+              <h1 className="text-xl font-headline font-bold text-slate-900 tracking-tight leading-none uppercase">
+                Data Pro
+              </h1>
+              <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] mt-1.5 leading-none">Pro Edition</span>
             </div>
           </div>
           <SidebarContent className="px-4 py-2 flex flex-col h-full">
@@ -318,7 +323,6 @@ export default function PlannerPage() {
                       <GanttChartSquare className="h-4 w-4" />
                     </div>
                     <span className="uppercase text-[11px] tracking-widest text-left">Planificación</span>
-                    {activeModule === 'planning' && <ChevronRight className="ml-auto h-3 w-3 opacity-50" />}
                   </Button>
 
                   {isAdmin && (
@@ -334,7 +338,22 @@ export default function PlannerPage() {
                         <BarChart3 className="h-4 w-4" />
                       </div>
                       <span className="uppercase text-[11px] tracking-widest text-left">Gestión</span>
-                      {activeModule === 'management' && <ChevronRight className="ml-auto h-3 w-3 opacity-50" />}
+                    </Button>
+                  )}
+
+                  {user.role !== 'STANDARD' && (
+                    <Button 
+                      variant={activeModule === 'raw-materials' ? 'default' : 'ghost'} 
+                      onClick={() => { setActiveModule('raw-materials'); setActiveTab('raw-material-view'); }}
+                      className={cn(
+                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-all",
+                        activeModule === 'raw-materials' ? "shadow-md shadow-amber-200 bg-amber-600 hover:bg-amber-700 text-white" : "text-slate-500"
+                      )}
+                    >
+                      <div className={cn("p-1.5 rounded-lg", activeModule === 'raw-materials' ? "bg-white/20" : "bg-slate-100")}>
+                        <Box className="h-4 w-4" />
+                      </div>
+                      <span className="uppercase text-[11px] tracking-widest text-left">Materia Prima</span>
                     </Button>
                   )}
 
@@ -351,7 +370,6 @@ export default function PlannerPage() {
                         <FlaskConical className="h-4 w-4" />
                       </div>
                       <span className="uppercase text-[11px] tracking-widest text-left">Recetas</span>
-                      {activeModule === 'recipes' && <ChevronRight className="ml-auto h-3 w-3 opacity-50" />}
                     </Button>
                   )}
                 </div>
@@ -427,7 +445,7 @@ export default function PlannerPage() {
                   <div className="flex items-center gap-1">
                     <ShieldCheck className={`h-3 w-3 ${isAdmin ? 'text-primary' : 'text-slate-400'}`} />
                     <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">
-                      {isAdmin ? 'ADMINISTRADOR' : 'ESTÁNDAR'}
+                      {user.role}
                     </span>
                   </div>
                 </div>
@@ -449,10 +467,12 @@ export default function PlannerPage() {
               <div className={cn(
                 "px-3 py-1 rounded-lg font-black text-[10px] uppercase tracking-[0.2em]",
                 activeModule === 'management' ? "bg-primary/10 text-primary" : 
-                activeModule === 'recipes' ? "bg-emerald-100 text-emerald-700" : "bg-emerald-50 text-emerald-600"
+                activeModule === 'recipes' ? "bg-emerald-100 text-emerald-700" : 
+                activeModule === 'raw-materials' ? "bg-amber-100 text-amber-700" : "bg-emerald-50 text-emerald-600"
               )}>
                 {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' : 
-                 activeModule === 'recipes' ? 'MÓDULO DE RECETAS' : 'MÓDULO DE PLANIFICACIÓN'}
+                 activeModule === 'recipes' ? 'MÓDULO DE RECETAS' : 
+                 activeModule === 'raw-materials' ? 'MÓDULO DE MATERIA PRIMA' : 'MÓDULO DE PLANIFICACIÓN'}
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -484,7 +504,7 @@ export default function PlannerPage() {
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <div className="flex flex-col gap-6 h-full">
               
-              <div className="flex items-center bg-white border border-slate-200 rounded-full p-1 shadow-sm self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full">
+              <div className="flex items-center bg-white border border-slate-200 rounded-full p-1 shadow-sm self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print">
                 {activeModule === 'planning' ? (
                   <>
                     <button 
@@ -538,6 +558,19 @@ export default function PlannerPage() {
                     >
                       <CheckCircle2 className="h-3.5 w-3.5" />
                       Cumplimiento
+                    </button>
+                  </>
+                ) : activeModule === 'raw-materials' ? (
+                  <>
+                    <button 
+                      onClick={() => setActiveTab('raw-material-view')}
+                      className={cn(
+                        "flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-colors whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 active:scale-100",
+                        activeTab === 'raw-material-view' ? "bg-amber-50 text-amber-700" : "text-slate-500 hover:bg-slate-50"
+                      )}
+                    >
+                      <Box className="h-3.5 w-3.5" />
+                      Control de Inventarios
                     </button>
                   </>
                 ) : (
@@ -596,6 +629,21 @@ export default function PlannerPage() {
                         updateRealProduction={updateRealProduction}
                         onPrintCompliance={handlePrintCompliance}
                         onPrintMonthlyCompliance={handlePrintMonthlyCompliance}
+                      />
+                    )}
+                  </>
+                )}
+                {activeModule === 'raw-materials' && (
+                  <>
+                    {activeTab === 'raw-material-view' && (
+                      <RawMaterialModule 
+                        weekStartDate={weekStartDate}
+                        rawMaterialStock={rawMaterialStock}
+                        tasks={tasks}
+                        recipes={customRecipes}
+                        onUpdateStock={updateRawMaterialStock}
+                        onUpdateReception={updateRawMaterialReception}
+                        onUpdateDailyPhysical={updateRawMaterialDailyPhysical}
                       />
                     )}
                   </>

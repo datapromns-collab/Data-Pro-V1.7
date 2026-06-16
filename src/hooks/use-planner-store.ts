@@ -10,6 +10,14 @@ const STORAGE_KEY_TASKS = 'planner_tasks_v2';
 const STORAGE_KEY_CONFIG = 'planner_config_v2';
 const STORAGE_KEY_REAL_PROD = 'planner_real_production_v1';
 const STORAGE_KEY_RECIPES = 'planner_custom_recipes_v1';
+const STORAGE_KEY_RAW_MAT = 'planner_raw_material_v1';
+
+export interface RawMaterialStock {
+  initial: number;
+  receptions: Record<string, number>; // dateKey -> qty
+  final: number;
+  dailyPhysical: Record<string, number>; // dateKey -> qty
+}
 
 export function usePlannerStore() {
   const [tasks, setTasks] = useState<ScheduledTask[]>([]);
@@ -23,6 +31,7 @@ export function usePlannerStore() {
   });
   const [realProduction, setRealProduction] = useState<Record<string, Record<string, Record<string, number>>>>({});
   const [customRecipes, setCustomRecipes] = useState<Record<string, Record<string, number>>>(RECIPES);
+  const [rawMaterialStock, setRawMaterialStock] = useState<Record<string, RawMaterialStock>>({});
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Cargar datos iniciales
@@ -31,6 +40,7 @@ export function usePlannerStore() {
     const savedConfig = localStorage.getItem(STORAGE_KEY_CONFIG);
     const savedRealProd = localStorage.getItem(STORAGE_KEY_REAL_PROD);
     const savedRecipes = localStorage.getItem(STORAGE_KEY_RECIPES);
+    const savedRawMat = localStorage.getItem(STORAGE_KEY_RAW_MAT);
 
     if (savedTasks) {
       try {
@@ -70,6 +80,14 @@ export function usePlannerStore() {
         console.error("Error loading custom recipes", e);
       }
     }
+
+    if (savedRawMat) {
+      try {
+        setRawMaterialStock(JSON.parse(savedRawMat));
+      } catch (e) {
+        console.error("Error loading raw material stock", e);
+      }
+    }
     
     setIsLoaded(true);
   }, []);
@@ -101,6 +119,12 @@ export function usePlannerStore() {
       localStorage.setItem(STORAGE_KEY_RECIPES, JSON.stringify(customRecipes));
     }
   }, [customRecipes, isLoaded]);
+
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem(STORAGE_KEY_RAW_MAT, JSON.stringify(rawMaterialStock));
+    }
+  }, [rawMaterialStock, isLoaded]);
 
   const addTask = useCallback((taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
@@ -170,21 +194,52 @@ export function usePlannerStore() {
     });
   }, []);
 
+  const updateRawMaterialStock = useCallback((code: string, type: 'initial' | 'final', value: number) => {
+    setRawMaterialStock(prev => {
+      const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {} };
+      return { ...prev, [code]: { ...current, [type]: value } };
+    });
+  }, []);
+
+  const updateRawMaterialReception = useCallback((code: string, dateKey: string, value: number) => {
+    setRawMaterialStock(prev => {
+      const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {} };
+      const newReceptions = { ...current.receptions };
+      if (value <= 0) delete newReceptions[dateKey];
+      else newReceptions[dateKey] = value;
+      return { ...prev, [code]: { ...current, receptions: newReceptions } };
+    });
+  }, []);
+
+  const updateRawMaterialDailyPhysical = useCallback((code: string, dateKey: string, value: number) => {
+    setRawMaterialStock(prev => {
+      const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {} };
+      const newDaily = { ...current.dailyPhysical };
+      if (value <= 0) delete newDaily[dateKey];
+      else newDaily[dateKey] = value;
+      return { ...prev, [code]: { ...current, dailyPhysical: newDaily } };
+    });
+  }, []);
+
   return { 
     tasks, 
     weekStartDate, 
     lineSpeeds,
     realProduction,
     customRecipes,
+    rawMaterialStock,
     setWeekStartDate, 
     addTask, 
     updateTask, 
     removeTask, 
     clearAll, 
     updateLineSpeed, 
-    updateRealProduction,
+    updateRealProduction, 
     updateRecipe,
     removeMaterialFromRecipe,
+    updateRawMaterialStock,
+    updateRawMaterialReception,
+    updateRawMaterialDailyPhysical,
     isLoaded,
     isSyncing: false
   };
