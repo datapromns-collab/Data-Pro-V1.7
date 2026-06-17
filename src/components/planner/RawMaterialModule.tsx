@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
@@ -236,7 +236,7 @@ export function RawMaterialModule({
               <TableRow key={mat.code} className="hover:bg-slate-50 transition-none h-12">
                 <TableCell className="pl-6">
                   <div className="flex flex-col">
-                    <span className="text-[9px] font-bold text-slate-400 leading-none">{mat.code}</span>
+                    <span className="text-[9px] font-bold text-primary leading-none">{mat.code}</span>
                     <span className="text-[10px] font-black text-slate-700 uppercase truncate max-w-[180px]">{mat.description}</span>
                   </div>
                 </TableCell>
@@ -585,7 +585,7 @@ export function RawMaterialModule({
                     </TableHeader>
                     <TableBody>
                       {ALL_MATERIALS.map((mat) => {
-                        const stock = rawMaterialStock[mat.code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {} };
+                        const stock = rawMaterialStock[mat.code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {}, initialDaily: {}, finalDaily: {} };
                         const initial = stock.initial || 0;
                         const initialInTanks = materialsInTanks[mat.code] || 0;
                         const receptions = Object.values(stock.receptions as Record<string, number>).reduce((a, b) => a + b, 0);

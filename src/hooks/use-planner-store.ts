@@ -18,8 +18,8 @@ export interface RawMaterialStock {
   initial: number;
   receptions: Record<string, number>; // dateKey -> qty
   final: number;
-  initialDaily: Record<string, number>; // dateKey -> qty (NUEVO)
-  finalDaily: Record<string, number>;   // dateKey -> qty (NUEVO)
+  initialDaily: Record<string, number>; // dateKey -> qty
+  finalDaily: Record<string, number>;   // dateKey -> qty
   dailyPhysical: Record<string, number>; // dateKey -> qty
 }
 
