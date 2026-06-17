@@ -332,7 +332,7 @@ export function RawMaterialModule({
         </Badge>
       </div>
 
-      <Tabs defaultValue="weekly-main" className="space-y-6">
+      <Tabs defaultValue="daily-main" className="space-y-6">
         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
           <TabsList className="bg-transparent h-auto p-0">
             <TabsTrigger value="daily-main" className={tabsTriggerClass}>
