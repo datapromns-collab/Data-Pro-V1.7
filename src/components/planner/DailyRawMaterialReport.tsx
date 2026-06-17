@@ -85,23 +85,40 @@ export function DailyRawMaterialReport({
     return inTanks;
   }, [finalUBBTanksDaily, recipes, dateKey]);
 
+  const renderHeader = (title: string, subtitle: string) => (
+    <div className="mb-2 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
+      <div className="flex-1">
+        <h1 className="text-xl font-headline font-black text-slate-900 uppercase leading-none">{title}</h1>
+        <p className="text-primary font-black text-[9px] uppercase tracking-widest mt-0.5">{subtitle}</p>
+      </div>
+      <div className="flex-1 flex justify-center">
+        {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={100} height={35} className="object-contain" />}
+      </div>
+      <div className="flex-1 text-right">
+        <p className="text-[6px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Confidencial - Planta</p>
+        <p className="text-lg font-black text-slate-900 uppercase leading-none">{format(workingDate, "EEEE dd/MM", { locale: es })}</p>
+        <p className="text-[7px] text-slate-500 font-bold uppercase mt-0.5">{format(workingDate, "dd 'de' MMMM yyyy", { locale: es })}</p>
+      </div>
+    </div>
+  );
+
+  const renderFooter = (info: string) => (
+    <div className="mt-2 flex justify-between items-end border-t border-slate-200 pt-1 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
+      <div className="space-y-0.5">
+        <p>{info}</p>
+        <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es })}</p>
+      </div>
+      <div className="text-right">
+        <p>MULTINACIONAL DE SABORES</p>
+      </div>
+    </div>
+  );
+
   return (
     <div className="bg-white w-full print:p-0">
-      <div className="page-break-section p-0 flex flex-col h-screen" style={{ pageBreakInside: 'avoid' }}>
-        <div className="mb-2 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
-          <div className="flex-1">
-            <h1 className="text-xl font-headline font-black text-slate-900 uppercase leading-none">Balance Diario de Materia Prima</h1>
-            <p className="text-primary font-black text-[9px] uppercase tracking-widest mt-0.5">Control de Turno: Físico vs Teórico</p>
-          </div>
-          <div className="flex-1 flex justify-center">
-            {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={100} height={35} className="object-contain" />}
-          </div>
-          <div className="flex-1 text-right">
-            <p className="text-[6px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Confidencial - Planta</p>
-            <p className="text-lg font-black text-slate-900 uppercase leading-none">{format(workingDate, "EEEE dd/MM", { locale: es })}</p>
-            <p className="text-[7px] text-slate-500 font-bold uppercase mt-0.5">{format(workingDate, "dd 'de' MMMM yyyy", { locale: es })}</p>
-          </div>
-        </div>
+      {/* HOJA 1: BALANCE DE MATERIA PRIMA */}
+      <div className="page-break-section p-0 flex flex-col h-screen" style={{ pageBreakInside: 'avoid', pageBreakAfter: 'always' }}>
+        {renderHeader('Balance Diario de Materia Prima', 'Control de Turno: Físico vs Teórico')}
 
         <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm w-full">
           <table className="w-full border-collapse text-[7pt]">
@@ -156,15 +173,83 @@ export function DailyRawMaterialReport({
           </table>
         </div>
 
-        <div className="mt-2 flex justify-between items-end border-t border-slate-200 pt-1 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
-          <div className="space-y-0.5">
-            <p>SISTEMA DE GESTIÓN DE MATERIA PRIMA - BALANCE DIARIO</p>
-            <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es })}</p>
-          </div>
-          <div className="text-right">
-            <p>MULTINACIONAL DE SABORES</p>
-          </div>
+        {renderFooter('SISTEMA DE GESTIÓN DE MATERIA PRIMA - BALANCE DIARIO (PÁG 1/2)')}
+      </div>
+
+      {/* HOJA 2: BALANCE DE CONSUMO DE UBB (TANQUES) */}
+      <div className="page-break-section p-0 flex flex-col h-screen" style={{ pageBreakInside: 'avoid' }}>
+        {renderHeader('Balance Diario de Tanques (UBB)', 'Control de Preparación y Llenado')}
+
+        <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm w-full">
+          <table className="w-full border-collapse text-[8.5pt]">
+            <thead>
+              <tr className="bg-[#1e1b4b] text-white font-black uppercase h-9">
+                <th className="px-4 py-0 border border-slate-900 text-left">SABOR / PRODUCTO</th>
+                <th className="px-4 py-0 border border-slate-900 text-right">UBB INICIAL</th>
+                <th className="px-4 py-0 border border-slate-900 text-right text-indigo-200">PREPARADO</th>
+                <th className="px-4 py-0 border border-slate-900 text-right">DISPONIBLE</th>
+                <th className="px-4 py-0 border border-slate-900 text-right">UBB FINAL</th>
+                <th className="px-4 py-0 border border-slate-900 text-right text-emerald-300">CONSUMO</th>
+              </tr>
+            </thead>
+            <tbody>
+              {PRODUCT_LIST.map((flavor, idx) => {
+                const initial = initialUBBTanksDaily[flavor]?.[dateKey] || 0;
+                const prepared = manualUBB[flavor]?.[dateKey] || 0;
+                const final = finalUBBTanksDaily[flavor]?.[dateKey] || 0;
+                
+                const available = initial + prepared;
+                const consumption = available - final;
+
+                if (available === 0 && final === 0) return null;
+
+                return (
+                  <tr key={flavor} className={`h-8 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
+                    <td className="px-4 py-0 border border-slate-300 uppercase leading-none">{flavor}</td>
+                    <td className="px-4 py-0 border border-slate-300 text-right tabular-nums">{initial.toLocaleString('es-ES', { minimumFractionDigits: 2 })}</td>
+                    <td className="px-4 py-0 border border-slate-300 text-right tabular-nums bg-indigo-50/50">{prepared.toLocaleString('es-ES', { minimumFractionDigits: 2 })}</td>
+                    <td className="px-4 py-0 border border-slate-300 text-right tabular-nums">{available.toLocaleString('es-ES', { minimumFractionDigits: 2 })}</td>
+                    <td className="px-4 py-0 border border-slate-300 text-right tabular-nums">{final.toLocaleString('es-ES', { minimumFractionDigits: 2 })}</td>
+                    <td className="px-4 py-0 border border-slate-300 text-right tabular-nums bg-emerald-50/30 text-emerald-700 font-black">
+                      {consumption.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                    </td>
+                  </tr>
+                );
+              })}
+              {/* Rellenar espacios vacíos para mantener altura si hay pocos datos */}
+              {PRODUCT_LIST.filter(f => (initialUBBTanksDaily[f]?.[dateKey] || 0) + (manualUBB[f]?.[dateKey] || 0) + (finalUBBTanksDaily[f]?.[dateKey] || 0) > 0).length < 15 && (
+                <tr className="flex-1"><td colSpan={6} className="h-full border-none"></td></tr>
+              )}
+            </tbody>
+            <tfoot className="bg-slate-900 text-white font-black">
+              <tr className="h-10">
+                <td className="px-4 py-0 border border-slate-900 uppercase">TOTALES PLANTA</td>
+                <td className="px-4 py-0 border border-slate-900 text-right tabular-nums">
+                  {PRODUCT_LIST.reduce((a, f) => a + (initialUBBTanksDaily[f]?.[dateKey] || 0), 0).toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                </td>
+                <td className="px-4 py-0 border border-slate-900 text-right tabular-nums">
+                  {PRODUCT_LIST.reduce((a, f) => a + (manualUBB[f]?.[dateKey] || 0), 0).toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                </td>
+                <td className="px-4 py-0 border border-slate-900 text-right tabular-nums">
+                  {PRODUCT_LIST.reduce((a, f) => a + (initialUBBTanksDaily[f]?.[dateKey] || 0) + (manualUBB[f]?.[dateKey] || 0), 0).toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                </td>
+                <td className="px-4 py-0 border border-slate-900 text-right tabular-nums">
+                  {PRODUCT_LIST.reduce((a, f) => a + (finalUBBTanksDaily[f]?.[dateKey] || 0), 0).toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                </td>
+                <td className="px-4 py-0 border border-slate-900 text-right tabular-nums text-emerald-400">
+                  {PRODUCT_LIST.reduce((a, f) => {
+                    const init = initialUBBTanksDaily[f]?.[dateKey] || 0;
+                    const prep = manualUBB[f]?.[dateKey] || 0;
+                    const fin = finalUBBTanksDaily[f]?.[dateKey] || 0;
+                    return a + ((init + prep) - fin);
+                  }, 0).toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                </td>
+              </tr>
+            </tfoot>
+          </table>
         </div>
+
+        {renderFooter('SISTEMA DE GESTIÓN DE MATERIA PRIMA - BALANCE DE UBB (PÁG 2/2)')}
       </div>
     </div>
   );
