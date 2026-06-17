@@ -21,7 +21,8 @@ import {
   Beaker,
   FileDown,
   CalendarDays,
-  ListTodo
+  ListTodo,
+  ClipboardList
 } from 'lucide-react';
 import { 
   SUGAR_DATA, 
@@ -72,6 +73,7 @@ export function RawMaterialModule({
   tasks,
   recipes,
   onUpdateStock,
+  onUpdateMovement,
   onUpdateReception,
   onUpdateDailyPhysical,
   onUpdateManualUBB,
@@ -322,13 +324,49 @@ export function RawMaterialModule({
           </TabsList>
         </div>
 
-        <TabsContent value="daily-main" className="m-0 animate-in fade-in-50 duration-500">
-          <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-            <ListTodo className="h-12 w-12 text-slate-300 mb-4" />
-            <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
-              Control Diario de Materia Prima<br/>Sección en blanco...
-            </p>
-          </div>
+        <TabsContent value="daily-main" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+          <Tabs defaultValue="daily-inventory" className="space-y-6">
+            <div className="flex items-center bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200 w-fit overflow-x-auto max-w-full no-print">
+              <TabsList className="bg-transparent h-auto p-0">
+                <TabsTrigger value="daily-inventory" className={tabsTriggerClass}>
+                  <Warehouse className="h-3.5 w-3.5" /> Inventario
+                </TabsTrigger>
+                <TabsTrigger value="daily-ubb" className={tabsTriggerClass}>
+                  <Beaker className="h-3.5 w-3.5" /> Consumo de UBB
+                </TabsTrigger>
+                <TabsTrigger value="daily-summary" className={tabsTriggerClass}>
+                  <ClipboardList className="h-3.5 w-3.5" /> Resumen
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
+            <TabsContent value="daily-inventory" className="m-0 animate-in slide-in-from-left-2 duration-300">
+              <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                <Warehouse className="h-12 w-12 text-slate-300 mb-4" />
+                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+                  Inventario Diario<br/>Sección en blanco...
+                </p>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="daily-ubb" className="m-0 animate-in slide-in-from-left-2 duration-300">
+              <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                <Beaker className="h-12 w-12 text-slate-300 mb-4" />
+                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+                  Consumo de UBB Diario<br/>Sección en blanco...
+                </p>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="daily-summary" className="m-0 animate-in slide-in-from-left-2 duration-300">
+              <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                <ClipboardList className="h-12 w-12 text-slate-300 mb-4" />
+                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+                  Resumen Diario<br/>Sección en blanco...
+                </p>
+              </div>
+            </TabsContent>
+          </Tabs>
         </TabsContent>
 
         <TabsContent value="weekly-main" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
