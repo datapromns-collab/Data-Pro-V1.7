@@ -43,6 +43,7 @@ import { MonthlyComplianceReport } from '@/components/planner/MonthlyComplianceR
 import { RecipeEditor } from '@/components/planner/RecipeEditor';
 import { RawMaterialModule } from '@/components/planner/RawMaterialModule';
 import { RawMaterialReport } from '@/components/planner/RawMaterialReport';
+import { DailyRawMaterialReport } from '@/components/planner/DailyRawMaterialReport';
 import { PurchasingModule } from '@/components/planner/PurchasingModule';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
@@ -119,8 +120,9 @@ export default function PlannerPage() {
   const [activeModule, setActiveModule] = useState<'planning' | 'management' | 'recipes' | 'raw-materials' | 'purchasing'>('planning');
   const [activeTab, setActiveTab] = useState("gantt");
   
-  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance' | 'raw-material'>('plan');
+  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance' | 'raw-material' | 'daily-raw-material'>('plan');
   const [emitDate, setEmitDate] = useState('');
+  const [printWorkingDate, setPrintWorkingDate] = useState<Date>(new Date());
   
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
@@ -274,6 +276,19 @@ export default function PlannerPage() {
 
   const handlePrintRawMaterial = () => {
     setPrintMode('raw-material');
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: landscape; margin: 0.5cm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
+
+  const handlePrintDailyRawMaterial = (date: Date) => {
+    setPrintWorkingDate(date);
+    setPrintMode('daily-raw-material');
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: landscape; margin: 0.5cm; }';
@@ -712,6 +727,7 @@ export default function PlannerPage() {
                         onUpdateInitialUBBDaily={updateInitialUBBTanksDaily}
                         onUpdateFinalUBBDaily={updateFinalUBBTanksDaily}
                         onPrintReport={handlePrintRawMaterial}
+                        onPrintDailyReport={handlePrintDailyRawMaterial}
                       />
                     )}
                   </>
@@ -779,6 +795,18 @@ export default function PlannerPage() {
                 manualUBB={manualUBB}
                 initialUBBTanks={initialUBBTanks}
                 finalUBBTanks={finalUBBTanks}
+                recipes={customRecipes}
+              />
+            </div>
+          )}
+          {printMode === 'daily-raw-material' && (
+            <div className="p-0 h-full">
+              <DailyRawMaterialReport 
+                workingDate={printWorkingDate}
+                rawMaterialStock={rawMaterialStock}
+                manualUBB={manualUBB}
+                initialUBBTanksDaily={initialUBBTanksDaily}
+                finalUBBTanksDaily={finalUBBTanksDaily}
                 recipes={customRecipes}
               />
             </div>
