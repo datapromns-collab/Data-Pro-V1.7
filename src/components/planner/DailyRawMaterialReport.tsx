@@ -42,6 +42,7 @@ export function DailyRawMaterialReport({
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
   const dateKey = format(workingDate, 'yyyy-MM-dd');
 
+  // Cálculo de Consumo Teórico Diario
   const theoreticalConsumption = useMemo(() => {
     const consumption: Record<string, number> = {};
     PRODUCT_LIST.forEach(flavor => {
@@ -57,6 +58,7 @@ export function DailyRawMaterialReport({
     return consumption;
   }, [manualUBB, recipes, dateKey]);
 
+  // Cálculo de Materiales en Tanques Iniciales
   const materialsInTanks = useMemo(() => {
     const inTanks: Record<string, number> = {};
     PRODUCT_LIST.forEach(flavor => {
@@ -71,6 +73,7 @@ export function DailyRawMaterialReport({
     return inTanks;
   }, [initialUBBTanksDaily, recipes, dateKey]);
 
+  // Cálculo de Materiales en Tanques Finales
   const materialsInFinalTanks = useMemo(() => {
     const inTanks: Record<string, number> = {};
     PRODUCT_LIST.forEach(flavor => {
@@ -92,7 +95,7 @@ export function DailyRawMaterialReport({
         <p className="text-primary font-black text-[9px] uppercase tracking-widest mt-0.5">{subtitle}</p>
       </div>
       <div className="flex-1 flex justify-center">
-        {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={90} height={30} className="object-contain" />}
+        {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={100} height={35} className="object-contain" />}
       </div>
       <div className="flex-1 text-right">
         <p className="text-[6px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Confidencial - Planta</p>
@@ -116,19 +119,19 @@ export function DailyRawMaterialReport({
 
   return (
     <div className="bg-white w-full print:p-0">
-      {/* HOJA 1: BALANCE DE MATERIA PRIMA */}
-      <div className="page-break-section p-1 flex flex-col min-h-[185mm]" style={{ pageBreakAfter: 'always' }}>
-        {renderHeader('Balance Diario de Materia Prima', 'Control de Turno: Físico vs Teórico')}
+      {/* PÁGINA 1: BALANCE DE MATERIA PRIMA (REPLICA SEMANAL) */}
+      <div className="page-break-section p-1 flex flex-col h-screen" style={{ pageBreakAfter: 'always', pageBreakInside: 'avoid' }}>
+        {renderHeader('Balance Diario de Materia Prima', 'Reporte Diario: Físico vs Teórico')}
 
         <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm w-full">
-          <table className="w-full border-collapse text-[6.5pt]">
+          <table className="w-full border-collapse text-[7pt]">
             <thead>
               <tr className="bg-[#4a7ebb] text-white font-black uppercase h-7">
-                <th className="px-1 py-0 border border-slate-900 text-left">MATERIAL</th>
-                <th className="px-1 py-0 border border-slate-900 text-right">I. INICIAL</th>
+                <th style={{ width: '5cm' }} className="px-1.5 py-0 border border-slate-900 text-left">MATERIAL</th>
+                <th className="px-1 py-0 border border-slate-900 text-right">INICIAL</th>
                 <th className="px-1 py-0 border border-slate-900 text-right bg-[#2f5597]">I. TANQUES</th>
                 <th className="px-1 py-0 border border-slate-900 text-right">RECEPCIÓN</th>
-                <th className="px-1 py-0 border border-slate-900 text-right">I. FINAL</th>
+                <th className="px-1 py-0 border border-slate-900 text-right">FINAL</th>
                 <th className="px-1 py-0 border border-slate-900 text-right bg-[#2f5597]">F. TANQUES</th>
                 <th className="px-1 py-0 border border-slate-900 text-right text-yellow-300">C. FÍSICO</th>
                 <th className="px-1 py-0 border border-slate-900 text-right text-emerald-300">C. TEÓRICO</th>
@@ -137,7 +140,7 @@ export function DailyRawMaterialReport({
               </tr>
             </thead>
             <tbody>
-              {ALL_MATERIALS.map((mat) => {
+              {ALL_MATERIALS.map((mat, idx) => {
                 const stock = rawMaterialStock[mat.code] || { initialDaily: {}, receptions: {}, finalDaily: {} };
                 const initial = stock.initialDaily?.[dateKey] || 0;
                 const initialInTanks = materialsInTanks[mat.code] || 0;
@@ -150,25 +153,25 @@ export function DailyRawMaterialReport({
                 const variance = physical - theoretical;
                 const variancePct = theoretical > 0 ? (variance / theoretical) * 100 : 0;
 
-                // FILTRO: Solo mostrar materiales con algún valor registrado
+                // FILTRO: Solo materiales con actividad
                 if (initial === 0 && initialInTanks === 0 && reception === 0 && final === 0 && finalInTanks === 0 && theoretical === 0) {
                   return null;
                 }
 
                 return (
-                  <tr key={mat.code} className="h-5 font-bold hover:bg-slate-50 transition-none border-b border-slate-200 last:border-b-0">
-                    <td className="px-1 py-0 border-r border-slate-300 uppercase truncate leading-none">{mat.description}</td>
-                    <td className="px-1 py-0 border-r border-slate-300 text-right tabular-nums">{initial.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
-                    <td className="px-1 py-0 border-r border-slate-300 text-right tabular-nums bg-indigo-50/30">{initialInTanks.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
-                    <td className="px-1 py-0 border-r border-slate-300 text-right tabular-nums">{reception.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
-                    <td className="px-1 py-0 border-r border-slate-300 text-right tabular-nums">{final.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
-                    <td className="px-1 py-0 border-r border-slate-300 text-right tabular-nums bg-purple-50/30">{finalInTanks.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
-                    <td className="px-1 py-0 border-r border-slate-300 text-right tabular-nums bg-amber-50/10 font-black">{physical.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
-                    <td className="px-1 py-0 border-r border-slate-300 text-right tabular-nums bg-emerald-50/10 font-black">{theoretical.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
-                    <td className="px-1 py-0 border-r border-slate-300 text-right tabular-nums text-slate-700">
+                  <tr key={mat.code} className={`h-5 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
+                    <td style={{ width: '5cm' }} className="px-1.5 py-0 border border-slate-300 uppercase truncate leading-none">{mat.description}</td>
+                    <td className="px-1 py-0 border border-slate-300 text-right tabular-nums">{initial.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
+                    <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-indigo-50/50">{initialInTanks.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
+                    <td className="px-1 py-0 border border-slate-300 text-right tabular-nums">{reception.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
+                    <td className="px-1 py-0 border border-slate-300 text-right tabular-nums">{final.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
+                    <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-purple-50/50">{finalInTanks.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
+                    <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-amber-50/20 font-black">{physical.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
+                    <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-emerald-50/20 font-black">{theoretical.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
+                    <td className="px-1 py-0 border border-slate-300 text-right tabular-nums text-slate-700">
                       {variance.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                     </td>
-                    <td className={`px-1 py-0 text-right tabular-nums ${Math.abs(variancePct) > 10 ? 'text-red-600 font-black' : 'text-slate-600'}`}>
+                    <td className={`px-1 py-0 border border-slate-300 text-right tabular-nums ${Math.abs(variancePct) > 10 ? 'text-red-600 font-black' : 'text-slate-600'}`}>
                       {variancePct > 0 ? '+' : ''}{variancePct.toFixed(1)}%
                     </td>
                   </tr>
@@ -178,27 +181,27 @@ export function DailyRawMaterialReport({
           </table>
         </div>
 
-        {renderFooter('SISTEMA DE GESTIÓN DE MATERIA PRIMA - BALANCE DIARIO (PÁG 1/2)')}
+        {renderFooter('SISTEMA DE GESTIÓN DE MATERIA PRIMA - BALANCE DIARIO (PÁGINA 1 DE 2)')}
       </div>
 
-      {/* HOJA 2: BALANCE DE CONSUMO DE UBB (TANQUES) */}
-      <div className="page-break-section p-1 flex flex-col min-h-[185mm]">
-        {renderHeader('Balance Diario de Tanques (UBB)', 'Control de Preparación y Llenado')}
+      {/* PÁGINA 2: REGISTRO DE PRODUCCIÓN UBB (REPLICA SEMANAL) */}
+      <div className="page-break-section p-1 flex flex-col h-screen" style={{ pageBreakInside: 'avoid' }}>
+        {renderHeader('Registro de Producción (UBB)', 'Desglose Diario de Preparación y Consumo')}
 
         <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm w-full">
-          <table className="w-full border-collapse text-[8.5pt]">
+          <table className="w-full border-collapse text-[7.5pt] h-full">
             <thead>
-              <tr className="bg-[#1e1b4b] text-white font-black uppercase h-9">
-                <th className="px-4 py-0 border border-slate-900 text-left">SABOR / PRODUCTO</th>
+              <tr className="bg-[#10b981] text-white font-black uppercase h-7">
+                <th style={{ width: '6cm' }} className="px-4 py-0 border border-slate-900 text-left">PRODUCTO (SABOR)</th>
                 <th className="px-4 py-0 border border-slate-900 text-right">UBB INICIAL</th>
-                <th className="px-4 py-0 border border-slate-900 text-right text-indigo-200">PREPARADO</th>
-                <th className="px-4 py-0 border border-slate-900 text-right">DISPONIBLE</th>
+                <th className="px-4 py-0 border border-slate-900 text-right">UBB PREPARADO</th>
+                <th className="px-4 py-0 border border-slate-900 text-right bg-[#065f46]">DISPONIBLE</th>
                 <th className="px-4 py-0 border border-slate-900 text-right">UBB FINAL</th>
-                <th className="px-4 py-0 border border-slate-900 text-right text-emerald-300">CONSUMO</th>
+                <th className="px-4 py-0 border border-slate-900 text-right bg-[#064e3b] text-yellow-300">CONSUMO</th>
               </tr>
             </thead>
             <tbody>
-              {PRODUCT_LIST.map((flavor) => {
+              {PRODUCT_LIST.map((flavor, idx) => {
                 const initial = initialUBBTanksDaily[flavor]?.[dateKey] || 0;
                 const prepared = manualUBB[flavor]?.[dateKey] || 0;
                 const final = finalUBBTanksDaily[flavor]?.[dateKey] || 0;
@@ -206,39 +209,39 @@ export function DailyRawMaterialReport({
                 const available = initial + prepared;
                 const consumption = available - final;
 
-                // FILTRO: Solo mostrar sabores con actividad o inventario
+                // FILTRO: Solo sabores con actividad
                 if (initial === 0 && prepared === 0 && final === 0) return null;
 
                 return (
-                  <tr key={flavor} className="h-8 font-bold hover:bg-slate-50 transition-none border-b border-slate-200 last:border-b-0">
-                    <td className="px-4 py-0 border-r border-slate-300 uppercase leading-none">{flavor}</td>
-                    <td className="px-4 py-0 border-r border-slate-300 text-right tabular-nums">{initial.toLocaleString('es-ES', { minimumFractionDigits: 2 })}</td>
-                    <td className="px-4 py-0 border-r border-slate-300 text-right tabular-nums bg-indigo-50/20">{prepared.toLocaleString('es-ES', { minimumFractionDigits: 2 })}</td>
-                    <td className="px-4 py-0 border-r border-slate-300 text-right tabular-nums font-black">{available.toLocaleString('es-ES', { minimumFractionDigits: 2 })}</td>
-                    <td className="px-4 py-0 border-r border-slate-300 text-right tabular-nums">{final.toLocaleString('es-ES', { minimumFractionDigits: 2 })}</td>
-                    <td className="px-4 py-0 text-right tabular-nums bg-emerald-50/20 text-emerald-700 font-black">
+                  <tr key={flavor} className={`h-6 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
+                    <td style={{ width: '6cm' }} className="px-4 py-0 border border-slate-300 uppercase leading-none">{flavor}</td>
+                    <td className="px-4 py-0 border border-slate-300 text-right tabular-nums">{initial.toLocaleString('es-ES', { minimumFractionDigits: 1 })}</td>
+                    <td className="px-4 py-0 border border-slate-300 text-right tabular-nums bg-emerald-50/30">{prepared.toLocaleString('es-ES', { minimumFractionDigits: 1 })}</td>
+                    <td className="px-4 py-0 border border-slate-300 text-right tabular-nums font-black">{available.toLocaleString('es-ES', { minimumFractionDigits: 1 })}</td>
+                    <td className="px-4 py-0 border border-slate-300 text-right tabular-nums">{final.toLocaleString('es-ES', { minimumFractionDigits: 1 })}</td>
+                    <td className="px-4 py-0 border border-slate-300 text-right tabular-nums bg-emerald-100/50 font-black text-emerald-900">
                       {consumption.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
                     </td>
                   </tr>
                 );
               })}
             </tbody>
-            <tfoot className="bg-slate-900 text-white font-black border-t-2 border-slate-900">
-              <tr className="h-10">
-                <td className="px-4 py-0 border-r border-slate-700 uppercase">TOTALES PLANTA</td>
-                <td className="px-4 py-0 border-r border-slate-700 text-right tabular-nums">
-                  {PRODUCT_LIST.reduce((a, f) => a + (initialUBBTanksDaily[f]?.[dateKey] || 0), 0).toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+            <tfoot className="bg-emerald-100 text-slate-900 font-black">
+              <tr className="h-8">
+                <td style={{ width: '6cm' }} className="px-4 py-0 border border-slate-900 uppercase">TOTALES DIARIOS</td>
+                <td className="px-4 py-0 border border-slate-900 text-right tabular-nums">
+                  {PRODUCT_LIST.reduce((a, f) => a + (initialUBBTanksDaily[f]?.[dateKey] || 0), 0).toLocaleString('es-ES', { minimumFractionDigits: 1 })}
                 </td>
-                <td className="px-4 py-0 border-r border-slate-700 text-right tabular-nums">
-                  {PRODUCT_LIST.reduce((a, f) => a + (manualUBB[f]?.[dateKey] || 0), 0).toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                <td className="px-4 py-0 border border-slate-900 text-right tabular-nums">
+                  {PRODUCT_LIST.reduce((a, f) => a + (manualUBB[f]?.[dateKey] || 0), 0).toLocaleString('es-ES', { minimumFractionDigits: 1 })}
                 </td>
-                <td className="px-4 py-0 border-r border-slate-700 text-right tabular-nums">
-                  {PRODUCT_LIST.reduce((a, f) => a + (initialUBBTanksDaily[f]?.[dateKey] || 0) + (manualUBB[f]?.[dateKey] || 0), 0).toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                <td className="px-4 py-0 border border-slate-900 text-right tabular-nums">
+                  {PRODUCT_LIST.reduce((a, f) => a + (initialUBBTanksDaily[f]?.[dateKey] || 0) + (manualUBB[f]?.[dateKey] || 0), 0).toLocaleString('es-ES', { minimumFractionDigits: 1 })}
                 </td>
-                <td className="px-4 py-0 border-r border-slate-700 text-right tabular-nums">
-                  {PRODUCT_LIST.reduce((a, f) => a + (finalUBBTanksDaily[f]?.[dateKey] || 0), 0).toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                <td className="px-4 py-0 border border-slate-900 text-right tabular-nums">
+                  {PRODUCT_LIST.reduce((a, f) => a + (finalUBBTanksDaily[f]?.[dateKey] || 0), 0).toLocaleString('es-ES', { minimumFractionDigits: 1 })}
                 </td>
-                <td className="px-4 py-0 text-right tabular-nums text-emerald-400">
+                <td className="px-4 py-0 border border-slate-900 text-right tabular-nums bg-emerald-200 text-[10pt]">
                   {PRODUCT_LIST.reduce((a, f) => {
                     const init = initialUBBTanksDaily[f]?.[dateKey] || 0;
                     const prep = manualUBB[f]?.[dateKey] || 0;
@@ -251,7 +254,7 @@ export function DailyRawMaterialReport({
           </table>
         </div>
 
-        {renderFooter('SISTEMA DE GESTIÓN DE MATERIA PRIMA - BALANCE DE UBB (PÁG 2/2)')}
+        {renderFooter('SISTEMA DE GESTIÓN DE MATERIA PRIMA - REGISTRO DE UBB (PÁGINA 2 DE 2)')}
       </div>
     </div>
   );
