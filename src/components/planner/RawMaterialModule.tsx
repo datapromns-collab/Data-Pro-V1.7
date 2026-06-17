@@ -26,7 +26,8 @@ import {
   ListTodo,
   ClipboardList,
   Calendar as CalendarIcon,
-  Search
+  Search,
+  Zap
 } from 'lucide-react';
 import { 
   SUGAR_DATA, 
@@ -279,6 +280,11 @@ export function RawMaterialModule({
 
   const renderDailyUBBTable = () => (
     <Card className="border-slate-200 rounded-3xl overflow-hidden bg-white shadow-sm overflow-x-auto">
+      <div className="bg-emerald-50 p-4 border-b">
+         <p className="text-[10px] font-black text-emerald-700 uppercase tracking-widest flex items-center gap-2">
+           <Zap className="h-4 w-4 text-emerald-500" /> Registro Automatizado: Refleja el consumo diario (Llenado) calculado en la sección Diario.
+         </p>
+      </div>
       <Table>
         <TableHeader>
           <TableRow className="bg-[#10b981] hover:bg-[#10b981] border-none h-10">
@@ -293,26 +299,24 @@ export function RawMaterialModule({
         </TableHeader>
         <TableBody>
           {PRODUCT_LIST.map((flavor) => {
-            const dailyData = dateKeys.map(key => manualUBB[flavor]?.[key] || 0);
-            const total = dailyData.reduce((a, b) => a + (Number(b) || 0), 0);
+            const dailyConsumptionData = dateKeys.map(key => {
+              const init = initialUBBTanksDaily[flavor]?.[key] || 0;
+              const prep = manualUBB[flavor]?.[key] || 0;
+              const fin = finalUBBTanksDaily[flavor]?.[key] || 0;
+              return (init + prep) - fin;
+            });
+            const total = dailyConsumptionData.reduce((a, b) => a + b, 0);
             return (
               <TableRow key={flavor} className="hover:bg-emerald-50/30 transition-none h-12">
                 <TableCell className="pl-6">
                   <span className="text-[10px] font-black text-slate-700 uppercase">{flavor}</span>
                 </TableCell>
-                {dateKeys.map((key, i) => (
-                  <TableCell key={i} className="p-1">
-                    <Input 
-                      type="number"
-                      step="0.01"
-                      value={manualUBB[flavor]?.[key] || ''}
-                      onChange={(e) => onUpdateManualUBB(flavor, key, parseFloat(e.target.value) || 0)}
-                      className="w-full h-8 text-center font-bold text-[10px] rounded-lg border-transparent bg-emerald-50/50 focus:border-emerald-500/20 focus:bg-white"
-                      placeholder="0.00"
-                    />
+                {dailyConsumptionData.map((val, i) => (
+                  <TableCell key={i} className="p-1 text-center font-bold text-[11px] text-emerald-700 tabular-nums">
+                    {val > 0 ? val.toLocaleString('es-ES', { minimumFractionDigits: 2 }) : '-'}
                   </TableCell>
                 ))}
-                <TableCell className="pr-6 text-center font-black text-[11px] text-emerald-600 tabular-nums">
+                <TableCell className="pr-6 text-center font-black text-[12px] text-emerald-900 tabular-nums bg-emerald-50/50">
                   {total > 0 ? total.toLocaleString('es-ES', { minimumFractionDigits: 2 }) : '-'}
                 </TableCell>
               </TableRow>

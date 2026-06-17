@@ -21,6 +21,8 @@ interface RawMaterialReportProps {
   manualUBB: Record<string, Record<string, number>>;
   initialUBBTanks: Record<string, number>;
   finalUBBTanks: Record<string, number>;
+  initialUBBTanksDaily?: Record<string, Record<string, number>>;
+  finalUBBTanksDaily?: Record<string, Record<string, number>>;
   recipes: Record<string, Record<string, number>>;
 }
 
@@ -40,6 +42,8 @@ export function RawMaterialReport({
   manualUBB,
   initialUBBTanks,
   finalUBBTanks,
+  initialUBBTanksDaily = {},
+  finalUBBTanksDaily = {},
   recipes
 }: RawMaterialReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
@@ -178,7 +182,7 @@ export function RawMaterialReport({
         <div className="mb-2 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
           <div className="flex-1">
             <h1 className="text-xl font-headline font-black text-slate-900 uppercase leading-none">Registro de Producción</h1>
-            <p className="text-emerald-600 font-black text-[9px] uppercase tracking-widest mt-0.5">Desglose Diario de UBB producidas</p>
+            <p className="text-emerald-600 font-black text-[9px] uppercase tracking-widest mt-0.5">Desglose Diario de UBB producidas (Consumo/Llenado)</p>
           </div>
           <div className="flex-1 flex justify-center">
             {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={100} height={35} className="object-contain" />}
@@ -206,13 +210,18 @@ export function RawMaterialReport({
             </thead>
             <tbody>
               {PRODUCT_LIST.map((flavor, idx) => {
-                const dailyData = dateKeys.map(key => manualUBB[flavor]?.[key] || 0);
-                const total = dailyData.reduce((a, b) => a + (Number(b) || 0), 0);
+                const dailyConsumptionData = dateKeys.map(key => {
+                  const init = initialUBBTanksDaily[flavor]?.[key] || 0;
+                  const prep = manualUBB[flavor]?.[key] || 0;
+                  const fin = finalUBBTanksDaily[flavor]?.[key] || 0;
+                  return (init + prep) - fin;
+                });
+                const total = dailyConsumptionData.reduce((a, b) => a + b, 0);
                 
                 return (
                   <tr key={flavor} className={`h-5 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
                     <td style={{ width: '1cm' }} className="px-2 py-0 border border-slate-300 uppercase leading-none">{flavor}</td>
-                    {dailyData.map((val, dIdx) => (
+                    {dailyConsumptionData.map((val, dIdx) => (
                       <td key={dIdx} className="px-1 py-0 border border-slate-300 text-center tabular-nums">
                         {val > 0 ? val.toLocaleString('es-ES', { minimumFractionDigits: 1 }) : '-'}
                       </td>
@@ -228,7 +237,12 @@ export function RawMaterialReport({
               <tr className="h-7">
                 <td style={{ width: '1cm' }} className="px-2 py-0 border border-slate-900 uppercase">TOTALES DIARIOS</td>
                 {dateKeys.map((key, i) => {
-                  const dayTotal = PRODUCT_LIST.reduce((acc, flavor) => acc + (Number(manualUBB[flavor]?.[key]) || 0), 0);
+                  const dayTotal = PRODUCT_LIST.reduce((acc, flavor) => {
+                    const init = initialUBBTanksDaily[flavor]?.[key] || 0;
+                    const prep = manualUBB[flavor]?.[key] || 0;
+                    const fin = finalUBBTanksDaily[flavor]?.[key] || 0;
+                    return acc + ((init + prep) - fin);
+                  }, 0);
                   return (
                     <td key={i} className="px-1 py-0 border border-slate-900 text-center tabular-nums">
                       {dayTotal > 0 ? dayTotal.toLocaleString('es-ES', { minimumFractionDigits: 1 }) : '-'}
@@ -237,8 +251,13 @@ export function RawMaterialReport({
                 })}
                 <td className="px-1 py-0 border border-slate-900 text-right tabular-nums bg-emerald-200">
                   {PRODUCT_LIST.reduce((acc, flavor) => {
-                    const flavorData = manualUBB[flavor] || {};
-                    return acc + Object.values(flavorData).reduce((a, b) => a + (Number(b) || 0), 0);
+                    const totalFlavor = dateKeys.reduce((sum, key) => {
+                      const init = initialUBBTanksDaily[flavor]?.[key] || 0;
+                      const prep = manualUBB[flavor]?.[key] || 0;
+                      const fin = finalUBBTanksDaily[flavor]?.[key] || 0;
+                      return sum + ((init + prep) - fin);
+                    }, 0);
+                    return acc + totalFlavor;
                   }, 0).toLocaleString('es-ES', { minimumFractionDigits: 2 })}
                 </td>
               </tr>
@@ -248,7 +267,7 @@ export function RawMaterialReport({
 
         <div className="mt-2 flex justify-between items-end border-t border-slate-200 pt-1 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
           <div className="space-y-0.5">
-            <p>SISTEMA DE GESTIÓN DE MATERIA PRIMA - REGISTRO DE UBB</p>
+            <p>SISTEMA DE GESTIÓN DE MATERIA PRIMA - REGISTRO DE UBB (LLENADO)</p>
             <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es })}</p>
           </div>
           <div className="text-right">
