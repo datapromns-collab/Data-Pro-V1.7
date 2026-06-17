@@ -1,7 +1,7 @@
 'use client';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Layout } from 'lucide-react';
+import { Layout, LineChart, Warehouse, ClipboardList } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function PurchasingModule() {
@@ -21,13 +21,49 @@ export function PurchasingModule() {
           </TabsList>
         </div>
 
-        <TabsContent value="mds" className="m-0 animate-in fade-in-50 duration-500">
-          <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-            <Layout className="h-12 w-12 text-slate-300 mb-4" />
-            <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
-              Sección MDS en blanco<br/>Configurando vista de proyección...
-            </p>
-          </div>
+        <TabsContent value="mds" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+          <Tabs defaultValue="ventas" className="w-full">
+            <div className="flex items-center bg-slate-100/30 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6">
+              <TabsList className="bg-transparent h-auto p-0">
+                <TabsTrigger value="ventas" className={tabsTriggerClass}>
+                  <LineChart className="h-3.5 w-3.5" /> Proyección de Ventas
+                </TabsTrigger>
+                <TabsTrigger value="inventario" className={tabsTriggerClass}>
+                  <Warehouse className="h-3.5 w-3.5" /> Inventario Disponible
+                </TabsTrigger>
+                <TabsTrigger value="resumen" className={tabsTriggerClass}>
+                  <ClipboardList className="h-3.5 w-3.5" /> Resumen
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
+            <TabsContent value="ventas" className="m-0 animate-in fade-in-50 duration-500">
+              <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                <LineChart className="h-12 w-12 text-slate-300 mb-4" />
+                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+                  Proyección de Ventas (MDS)<br/>Sección en blanco...
+                </p>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="inventario" className="m-0 animate-in fade-in-50 duration-500">
+              <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                <Warehouse className="h-12 w-12 text-slate-300 mb-4" />
+                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+                  Inventario Disponible (MDS)<br/>Sección en blanco...
+                </p>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500">
+              <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                <ClipboardList className="h-12 w-12 text-slate-300 mb-4" />
+                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+                  Resumen (MDS)<br/>Sección en blanco...
+                </p>
+              </div>
+            </TabsContent>
+          </Tabs>
         </TabsContent>
 
         <TabsContent value="aw" className="m-0 animate-in fade-in-50 duration-500">
