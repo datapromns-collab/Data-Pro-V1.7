@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
@@ -327,7 +326,7 @@ export default function PlannerPage() {
   }
 
   const navTabClass = (isActive: boolean) => cn(
-    "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-colors",
+    "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none",
     isActive ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
   );
 
@@ -425,7 +424,7 @@ export default function PlannerPage() {
                       <div className={cn("p-1.5 rounded-lg", activeModule === 'purchasing' ? "bg-white/20" : "bg-slate-100")}>
                         <ShoppingCart className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[9.5px] font-black tracking-tighter text-left">Proyección de Compras</span>
+                      <span className="uppercase text-[9px] font-black tracking-tight text-left">Proyección de Compras</span>
                     </Button>
                   )}
                 </div>
@@ -568,7 +567,7 @@ export default function PlannerPage() {
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <div className="flex flex-col gap-6 h-full">
               
-              {activeModule !== 'purchasing' && (
+              {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && (
                 <div className="flex items-center bg-white border border-slate-200 rounded-full p-1 shadow-sm self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print">
                   {activeModule === 'planning' ? (
                     <>
@@ -623,16 +622,6 @@ export default function PlannerPage() {
                       >
                         <CheckCircle2 className="h-3.5 w-3.5" />
                         Cumplimiento
-                      </button>
-                    </>
-                  ) : activeModule === 'raw-materials' ? (
-                    <>
-                      <button 
-                        onClick={() => setActiveTab('raw-material-view')}
-                        className={cn(navTabClass(activeTab === 'raw-material-view'), "bg-amber-50 text-amber-700 active:scale-100 active:transform-none transform-none", activeTab !== 'raw-material-view' && "bg-transparent text-slate-500 hover:bg-slate-50")}
-                      >
-                        <Box className="h-3.5 w-3.5" />
-                        Control de Inventarios
                       </button>
                     </>
                   ) : activeModule === 'recipes' ? (
