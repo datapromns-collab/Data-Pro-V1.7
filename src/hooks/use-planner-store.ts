@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { ScheduledTask } from '@/lib/types';
-import { startOfWeek } from 'date-fns';
+import { startOfWeek, addDays, format, parseISO } from 'date-fns';
 import { RECIPES } from '@/lib/planner-utils';
 
 const STORAGE_KEY_TASKS = 'planner_tasks_v2';
@@ -254,9 +254,29 @@ export function usePlannerStore() {
   const updateRawMaterialStock = useCallback((code: string, type: 'initial' | 'final', value: number) => {
     setRawMaterialStock(prev => {
       const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {}, initialDaily: {}, finalDaily: {} };
-      return { ...prev, [code]: { ...current, [type]: value } };
+      
+      const newInitialDaily = { ...current.initialDaily };
+      const newFinalDaily = { ...current.finalDaily };
+      
+      if (type === 'initial') {
+        const mondayKey = format(weekStartDate, 'yyyy-MM-dd');
+        newInitialDaily[mondayKey] = value;
+      } else if (type === 'final') {
+        const sundayKey = format(addDays(weekStartDate, 6), 'yyyy-MM-dd');
+        newFinalDaily[sundayKey] = value;
+      }
+
+      return { 
+        ...prev, 
+        [code]: { 
+          ...current, 
+          [type]: value,
+          initialDaily: newInitialDaily,
+          finalDaily: newFinalDaily
+        } 
+      };
     });
-  }, []);
+  }, [weekStartDate]);
 
   const updateRawMaterialReception = useCallback((code: string, dateKey: string, value: number) => {
     setRawMaterialStock(prev => {
@@ -281,22 +301,52 @@ export function usePlannerStore() {
   const updateRawMaterialDailyInitial = useCallback((code: string, dateKey: string, value: number) => {
     setRawMaterialStock(prev => {
       const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {}, initialDaily: {}, finalDaily: {} };
-      const newDaily = { ...current.initialDaily };
-      if (value <= 0) delete newDaily[dateKey];
-      else newDaily[dateKey] = value;
-      return { ...prev, [code]: { ...current, initialDaily: newDaily } };
+      const newInitialDaily = { ...current.initialDaily };
+      if (value <= 0) delete newInitialDaily[dateKey];
+      else newInitialDaily[dateKey] = value;
+      
+      // Automation: If dateKey matches week's Monday, update the weekly initial stock too
+      const mondayKey = format(weekStartDate, 'yyyy-MM-dd');
+      let updatedInitial = current.initial;
+      if (dateKey === mondayKey) {
+        updatedInitial = value;
+      }
+
+      return { ...prev, [code]: { ...current, initialDaily: newInitialDaily, initial: updatedInitial } };
     });
-  }, []);
+  }, [weekStartDate]);
 
   const updateRawMaterialDailyFinal = useCallback((code: string, dateKey: string, value: number) => {
     setRawMaterialStock(prev => {
       const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {}, initialDaily: {}, finalDaily: {} };
-      const newDaily = { ...current.finalDaily };
-      if (value <= 0) delete newDaily[dateKey];
-      else newDaily[dateKey] = value;
-      return { ...prev, [code]: { ...current, finalDaily: newDaily } };
+      
+      const newFinalDaily = { ...current.finalDaily };
+      if (value <= 0) delete newFinalDaily[dateKey];
+      else newFinalDaily[dateKey] = value;
+      
+      // Automation 1: Transition to next day's initial
+      const nextDayKey = format(addDays(parseISO(dateKey), 1), 'yyyy-MM-dd');
+      const newInitialDaily = { ...current.initialDaily };
+      newInitialDaily[nextDayKey] = value;
+
+      // Automation 2: If it's Sunday, sync with weekly Final
+      const sundayKey = format(addDays(weekStartDate, 6), 'yyyy-MM-dd');
+      let updatedFinal = current.final;
+      if (dateKey === sundayKey) {
+        updatedFinal = value;
+      }
+
+      return { 
+        ...prev, 
+        [code]: { 
+          ...current, 
+          finalDaily: newFinalDaily, 
+          initialDaily: newInitialDaily,
+          final: updatedFinal
+        } 
+      };
     });
-  }, []);
+  }, [weekStartDate]);
 
   const updateManualUBB = useCallback((flavor: string, dateKey: string, value: number) => {
     setManualUBB(prev => {

@@ -85,6 +85,8 @@ export default function PlannerPage() {
     updateRawMaterialStock,
     updateRawMaterialReception,
     updateRawMaterialDailyPhysical,
+    updateRawMaterialDailyInitial,
+    updateRawMaterialDailyFinal,
     updateManualUBB,
     updateInitialUBBTanks,
     updateFinalUBBTanks,
@@ -696,6 +698,8 @@ export default function PlannerPage() {
                         onUpdateStock={updateRawMaterialStock}
                         onUpdateReception={updateRawMaterialReception}
                         onUpdateDailyPhysical={updateRawMaterialDailyPhysical}
+                        onUpdateDailyInitial={updateRawMaterialDailyInitial}
+                        onUpdateDailyFinal={updateRawMaterialDailyFinal}
                         onUpdateManualUBB={updateManualUBB}
                         onUpdateInitialUBB={updateInitialUBBTanks}
                         onUpdateFinalUBB={updateFinalUBBTanks}

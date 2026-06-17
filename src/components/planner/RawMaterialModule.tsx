@@ -40,7 +40,6 @@ import {
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
-import { usePlannerStore } from '@/hooks/use-planner-store';
 
 interface RawMaterialModuleProps {
   weekStartDate: Date;
@@ -53,6 +52,8 @@ interface RawMaterialModuleProps {
   onUpdateStock: (code: string, type: 'initial' | 'final', value: number) => void;
   onUpdateReception: (code: string, dateKey: string, value: number) => void;
   onUpdateDailyPhysical: (code: string, dateKey: string, value: number) => void;
+  onUpdateDailyInitial: (code: string, dateKey: string, value: number) => void;
+  onUpdateDailyFinal: (code: string, dateKey: string, value: number) => void;
   onUpdateManualUBB: (flavor: string, dateKey: string, value: number) => void;
   onUpdateInitialUBB: (flavor: string, value: number) => void;
   onUpdateFinalUBB: (flavor: string, value: number) => void;
@@ -86,12 +87,13 @@ export function RawMaterialModule({
   onUpdateStock,
   onUpdateReception,
   onUpdateDailyPhysical,
+  onUpdateDailyInitial,
+  onUpdateDailyFinal,
   onUpdateManualUBB,
   onUpdateInitialUBB,
   onUpdateFinalUBB,
   onPrintReport
 }: RawMaterialModuleProps) {
-  const { updateRawMaterialDailyInitial, updateRawMaterialDailyFinal } = usePlannerStore();
   const [workingDate, setWorkingDate] = useState<Date>(new Date());
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   const dateKeys = useMemo(() => weekDays.map(d => format(d, 'yyyy-MM-dd')), [weekDays]);
@@ -433,7 +435,7 @@ export function RawMaterialModule({
                                   <Input 
                                     type="number"
                                     value={initial || ''}
-                                    onChange={(e) => updateRawMaterialDailyInitial(mat.code, currentWorkingDateKey, parseFloat(e.target.value) || 0)}
+                                    onChange={(e) => onUpdateDailyInitial(mat.code, currentWorkingDateKey, parseFloat(e.target.value) || 0)}
                                     className="h-9 text-right font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-xl"
                                     placeholder="0.00"
                                   />
@@ -454,7 +456,7 @@ export function RawMaterialModule({
                                   <Input 
                                     type="number"
                                     value={final || ''}
-                                    onChange={(e) => updateRawMaterialDailyFinal(mat.code, currentWorkingDateKey, parseFloat(e.target.value) || 0)}
+                                    onChange={(e) => onUpdateDailyFinal(mat.code, currentWorkingDateKey, parseFloat(e.target.value) || 0)}
                                     className="h-9 text-right font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-xl"
                                     placeholder="0.00"
                                   />
