@@ -218,6 +218,11 @@ export function RawMaterialModule({
 
   const renderReceptionTable = () => (
     <Card className="border-slate-200 rounded-3xl overflow-hidden bg-white shadow-sm overflow-x-auto">
+      <div className="bg-slate-50 p-4 border-b">
+         <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+           <Truck className="h-4 w-4 text-primary" /> Esta tabla se llena automáticamente desde la sección Diario
+         </p>
+      </div>
       <Table>
         <TableHeader>
           <TableRow className="bg-[#4a7ebb] hover:bg-[#4a7ebb] border-none h-10">
