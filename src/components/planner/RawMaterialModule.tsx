@@ -282,7 +282,7 @@ export function RawMaterialModule({
     <Card className="border-slate-200 rounded-3xl overflow-hidden bg-white shadow-sm overflow-x-auto">
       <div className="bg-emerald-50 p-4 border-b">
          <p className="text-[10px] font-black text-emerald-700 uppercase tracking-widest flex items-center gap-2">
-           <Zap className="h-4 w-4 text-emerald-500" /> Registro Automatizado: Refleja el consumo diario (Llenado) calculado en la sección Diario.
+           <Zap className="h-4 w-4 text-emerald-500" /> Registro Automatizado: Refleja el consumo diario calculado en la sección Diario.
          </p>
       </div>
       <Table>
@@ -515,7 +515,7 @@ export function RawMaterialModule({
                         <TableHead className="text-right text-[10px] font-black text-indigo-600 uppercase w-[120px]">Preparado</TableHead>
                         <TableHead className="text-right text-[10px] font-black text-primary uppercase bg-primary/5 w-[140px]">Disponible</TableHead>
                         <TableHead className="text-right text-[10px] font-black text-slate-500 uppercase w-[120px]">UBB Final</TableHead>
-                        <TableHead className="text-right text-[10px] font-black text-emerald-600 uppercase bg-emerald-50/30 w-[140px] pr-8">Consumo (Llenado)</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-emerald-600 uppercase bg-emerald-50/30 w-[140px] pr-8">Consumo</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -749,3 +749,4 @@ export function RawMaterialModule({
     </div>
   );
 }
+

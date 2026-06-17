@@ -182,7 +182,7 @@ export function RawMaterialReport({
         <div className="mb-2 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
           <div className="flex-1">
             <h1 className="text-xl font-headline font-black text-slate-900 uppercase leading-none">Registro de Producción</h1>
-            <p className="text-emerald-600 font-black text-[9px] uppercase tracking-widest mt-0.5">Desglose Diario de UBB producidas (Consumo/Llenado)</p>
+            <p className="text-emerald-600 font-black text-[9px] uppercase tracking-widest mt-0.5">Desglose Diario de UBB producidas (Consumo)</p>
           </div>
           <div className="flex-1 flex justify-center">
             {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={100} height={35} className="object-contain" />}
@@ -267,7 +267,7 @@ export function RawMaterialReport({
 
         <div className="mt-2 flex justify-between items-end border-t border-slate-200 pt-1 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
           <div className="space-y-0.5">
-            <p>SISTEMA DE GESTIÓN DE MATERIA PRIMA - REGISTRO DE UBB (LLENADO)</p>
+            <p>SISTEMA DE GESTIÓN DE MATERIA PRIMA - REGISTRO DE UBB (CONSUMO)</p>
             <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es })}</p>
           </div>
           <div className="text-right">
@@ -278,3 +278,4 @@ export function RawMaterialReport({
     </div>
   );
 }
+
