@@ -103,7 +103,7 @@ export function DailyRawMaterialReport({
   );
 
   const renderFooter = (info: string) => (
-    <div className="mt-2 flex justify-between items-end border-t border-slate-200 pt-1 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
+    <div className="mt-auto flex justify-between items-end border-t border-slate-200 pt-1 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
       <div className="space-y-0.5">
         <p>{info}</p>
         <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es })}</p>
@@ -117,7 +117,7 @@ export function DailyRawMaterialReport({
   return (
     <div className="bg-white w-full print:p-0">
       {/* HOJA 1: BALANCE DE MATERIA PRIMA */}
-      <div className="page-break-section p-0 flex flex-col h-screen" style={{ pageBreakInside: 'avoid', pageBreakAfter: 'always' }}>
+      <div className="page-break-section p-0 flex flex-col min-h-[190mm]" style={{ pageBreakAfter: 'always' }}>
         {renderHeader('Balance Diario de Materia Prima', 'Control de Turno: Físico vs Teórico')}
 
         <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm w-full">
@@ -177,7 +177,7 @@ export function DailyRawMaterialReport({
       </div>
 
       {/* HOJA 2: BALANCE DE CONSUMO DE UBB (TANQUES) */}
-      <div className="page-break-section p-0 flex flex-col h-screen" style={{ pageBreakInside: 'avoid' }}>
+      <div className="page-break-section p-0 flex flex-col min-h-[190mm]">
         {renderHeader('Balance Diario de Tanques (UBB)', 'Control de Preparación y Llenado')}
 
         <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm w-full">
@@ -216,10 +216,6 @@ export function DailyRawMaterialReport({
                   </tr>
                 );
               })}
-              {/* Rellenar espacios vacíos para mantener altura si hay pocos datos */}
-              {PRODUCT_LIST.filter(f => (initialUBBTanksDaily[f]?.[dateKey] || 0) + (manualUBB[f]?.[dateKey] || 0) + (finalUBBTanksDaily[f]?.[dateKey] || 0) > 0).length < 15 && (
-                <tr className="flex-1"><td colSpan={6} className="h-full border-none"></td></tr>
-              )}
             </tbody>
             <tfoot className="bg-slate-900 text-white font-black">
               <tr className="h-10">
