@@ -19,7 +19,9 @@ import {
   AlertTriangle,
   FlaskConical,
   Beaker,
-  FileDown
+  FileDown,
+  CalendarDays,
+  ListTodo
 } from 'lucide-react';
 import { 
   SUGAR_DATA, 
@@ -308,159 +310,183 @@ export function RawMaterialModule({
         </Badge>
       </div>
 
-      <Tabs defaultValue="initial" className="space-y-6">
-        <div className="flex items-center bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200 w-fit overflow-x-auto max-w-full">
+      <Tabs defaultValue="weekly-main" className="space-y-6">
+        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
           <TabsList className="bg-transparent h-auto p-0">
-            <TabsTrigger value="initial" className={tabsTriggerClass}>
-              <Warehouse className="h-3.5 w-3.5" /> Inventario Inicial
+            <TabsTrigger value="daily-main" className={tabsTriggerClass}>
+              <ListTodo className="h-3.5 w-3.5" /> Diario
             </TabsTrigger>
-            <TabsTrigger value="initial-tanks" className={cn(tabsTriggerClass, "data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700")}>
-              <Beaker className="h-3.5 w-3.5" /> UBB Inicial
-            </TabsTrigger>
-            <TabsTrigger value="reception" className={tabsTriggerClass}>
-              <Truck className="h-3.5 w-3.5" /> Recepción
-            </TabsTrigger>
-            <TabsTrigger value="final" className={tabsTriggerClass}>
-              <ClipboardCheck className="h-3.5 w-3.5" /> Inventario Final
-            </TabsTrigger>
-            <TabsTrigger value="final-tanks" className={cn(tabsTriggerClass, "data-[state=active]:bg-purple-50 data-[state=active]:text-purple-700")}>
-              <Beaker className="h-3.5 w-3.5" /> UBB Final
-            </TabsTrigger>
-            <TabsTrigger value="daily" className={tabsTriggerClass}>
-              <FlaskConical className="h-3.5 w-3.5" /> Registro Producción (UBB)
-            </TabsTrigger>
-            <TabsTrigger value="summary" className={tabsTriggerClass}>
-              <BarChart3 className="h-3.5 w-3.5" /> Resumen Comparativo
+            <TabsTrigger value="weekly-main" className={tabsTriggerClass}>
+              <CalendarDays className="h-3.5 w-3.5" /> Semanal
             </TabsTrigger>
           </TabsList>
         </div>
 
-        <TabsContent value="initial" className="m-0 animate-in slide-in-from-left-2 duration-300">
-          {renderSimpleStockTable('initial')}
-        </TabsContent>
-
-        <TabsContent value="initial-tanks" className="m-0 animate-in slide-in-from-left-2 duration-300">
-          {renderUBBTanksTable('initial')}
-        </TabsContent>
-
-        <TabsContent value="reception" className="m-0 animate-in slide-in-from-left-2 duration-300">
-          {renderReceptionTable()}
-        </TabsContent>
-
-        <TabsContent value="final" className="m-0 animate-in slide-in-from-left-2 duration-300">
-          {renderSimpleStockTable('final')}
-        </TabsContent>
-
-        <TabsContent value="final-tanks" className="m-0 animate-in slide-in-from-left-2 duration-300">
-          {renderUBBTanksTable('final')}
-        </TabsContent>
-
-        <TabsContent value="daily" className="m-0 animate-in slide-in-from-left-2 duration-300">
-          {renderDailyUBBTable()}
-        </TabsContent>
-
-        <TabsContent value="summary" className="m-0 animate-in slide-in-from-left-2 duration-300 space-y-6">
-          <div className="flex justify-end">
-            <Button 
-              onClick={onPrintReport}
-              variant="outline" 
-              className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-100 active:transform-none transition-none"
-            >
-              <FileDown className="h-4 w-4" /> Exportar Reporte PDF
-            </Button>
+        <TabsContent value="daily-main" className="m-0 animate-in fade-in-50 duration-500">
+          <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+            <ListTodo className="h-12 w-12 text-slate-300 mb-4" />
+            <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+              Control Diario de Materia Prima<br/>Sección en blanco...
+            </p>
           </div>
+        </TabsContent>
 
-          <Card className="border-slate-200 rounded-3xl overflow-hidden bg-white shadow-xl shadow-slate-100/50">
-            <div className="bg-[#0c1a3d] p-4 flex items-center justify-between">
-              <div className="flex items-center gap-2 text-white">
-                <TrendingUp className="h-5 w-5" />
-                <h3 className="font-black text-sm uppercase tracking-widest">Balance de Materia Prima: Físico vs Teórico</h3>
+        <TabsContent value="weekly-main" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+          <Tabs defaultValue="initial" className="space-y-6">
+            <div className="flex items-center bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200 w-fit overflow-x-auto max-w-full no-print">
+              <TabsList className="bg-transparent h-auto p-0">
+                <TabsTrigger value="initial" className={tabsTriggerClass}>
+                  <Warehouse className="h-3.5 w-3.5" /> Inventario Inicial
+                </TabsTrigger>
+                <TabsTrigger value="initial-tanks" className={cn(tabsTriggerClass, "data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700")}>
+                  <Beaker className="h-3.5 w-3.5" /> UBB Inicial
+                </TabsTrigger>
+                <TabsTrigger value="reception" className={tabsTriggerClass}>
+                  <Truck className="h-3.5 w-3.5" /> Recepción
+                </TabsTrigger>
+                <TabsTrigger value="final" className={tabsTriggerClass}>
+                  <ClipboardCheck className="h-3.5 w-3.5" /> Inventario Final
+                </TabsTrigger>
+                <TabsTrigger value="final-tanks" className={cn(tabsTriggerClass, "data-[state=active]:bg-purple-50 data-[state=active]:text-purple-700")}>
+                  <Beaker className="h-3.5 w-3.5" /> UBB Final
+                </TabsTrigger>
+                <TabsTrigger value="daily" className={tabsTriggerClass}>
+                  <FlaskConical className="h-3.5 w-3.5" /> Registro Producción (UBB)
+                </TabsTrigger>
+                <TabsTrigger value="summary" className={tabsTriggerClass}>
+                  <BarChart3 className="h-3.5 w-3.5" /> Resumen Comparativo
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
+            <TabsContent value="initial" className="m-0 animate-in slide-in-from-left-2 duration-300">
+              {renderSimpleStockTable('initial')}
+            </TabsContent>
+
+            <TabsContent value="initial-tanks" className="m-0 animate-in slide-in-from-left-2 duration-300">
+              {renderUBBTanksTable('initial')}
+            </TabsContent>
+
+            <TabsContent value="reception" className="m-0 animate-in slide-in-from-left-2 duration-300">
+              {renderReceptionTable()}
+            </TabsContent>
+
+            <TabsContent value="final" className="m-0 animate-in slide-in-from-left-2 duration-300">
+              {renderSimpleStockTable('final')}
+            </TabsContent>
+
+            <TabsContent value="final-tanks" className="m-0 animate-in slide-in-from-left-2 duration-300">
+              {renderUBBTanksTable('final')}
+            </TabsContent>
+
+            <TabsContent value="daily" className="m-0 animate-in slide-in-from-left-2 duration-300">
+              {renderDailyUBBTable()}
+            </TabsContent>
+
+            <TabsContent value="summary" className="m-0 animate-in slide-in-from-left-2 duration-300 space-y-6">
+              <div className="flex justify-end no-print">
+                <Button 
+                  onClick={onPrintReport}
+                  variant="outline" 
+                  className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-100 active:transform-none transition-none"
+                >
+                  <FileDown className="h-4 w-4" /> Exportar Reporte PDF
+                </Button>
               </div>
-              <Badge className="bg-white/10 text-white border-none uppercase text-[9px] font-black px-3 py-1">
-                Totales Semanales
-              </Badge>
-            </div>
-            
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow className="bg-slate-50 border-b border-slate-100 hover:bg-slate-50">
-                    <TableHead className="text-[10px] font-black text-slate-400 uppercase pl-6 min-w-[180px]">Material</TableHead>
-                    <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">I. Inicial</TableHead>
-                    <TableHead className="text-right text-[10px] font-black text-indigo-600 uppercase bg-indigo-50/30">I. en Tanques</TableHead>
-                    <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">Recepciones</TableHead>
-                    <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">I. Final</TableHead>
-                    <TableHead className="text-right text-[10px] font-black text-purple-600 uppercase bg-purple-50/30">F. en Tanques</TableHead>
-                    <TableHead className="text-right text-[10px] font-black text-emerald-600 uppercase bg-emerald-50/30">Consumo Físico</TableHead>
-                    <TableHead className="text-right text-[10px] font-black text-primary uppercase bg-primary/5">Consumo Teórico</TableHead>
-                    <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">Diferencia</TableHead>
-                    <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase pr-6">Variación %</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {ALL_MATERIALS.map((mat) => {
-                    const stock = rawMaterialStock[mat.code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {} };
-                    const initial = stock.initial || 0;
-                    const initialInTanks = materialsInTanks[mat.code] || 0;
-                    const receptions = Object.values(stock.receptions as Record<string, number>).reduce((a, b) => a + b, 0);
-                    const final = stock.final || 0;
-                    const finalInTanks = materialsInFinalTanks[mat.code] || 0;
-                    
-                    const physical = (initial + initialInTanks + receptions) - (final + finalInTanks);
-                    const theoretical = theoreticalConsumption[mat.code] || 0;
-                    const variance = physical - theoretical;
-                    const variancePct = theoretical > 0 ? (variance / theoretical) * 100 : 0;
 
-                    return (
-                      <TableRow key={mat.code} className="hover:bg-slate-50 transition-none h-14 group">
-                        <TableCell className="pl-6">
-                          <div className="flex flex-col">
-                            <span className="text-[9px] font-bold text-primary font-mono">{mat.code}</span>
-                            <span className="text-[10px] font-black text-slate-700 uppercase leading-none">{mat.description}</span>
-                          </div>
-                        </TableCell>
-                        <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{initial.toLocaleString('es-ES')}</TableCell>
-                        <TableCell className="text-right font-black text-indigo-600 tabular-nums text-xs bg-indigo-50/20">{initialInTanks.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
-                        <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{receptions.toLocaleString('es-ES')}</TableCell>
-                        <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{final.toLocaleString('es-ES')}</TableCell>
-                        <TableCell className="text-right font-black text-purple-600 tabular-nums text-xs bg-purple-50/20">{finalInTanks.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
-                        <TableCell className="text-right font-black text-emerald-600 tabular-nums text-[13px] bg-emerald-50/20">{physical.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
-                        <TableCell className="text-right font-black text-primary tabular-nums text-[13px] bg-primary/5">{theoretical.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
-                        <TableCell className="text-right font-black text-slate-700 tabular-nums text-xs">
-                          {variance.toLocaleString('es-ES', { maximumFractionDigits: 2 })}
-                        </TableCell>
-                        <TableCell className="pr-6 text-right font-bold tabular-nums text-xs">
-                          <span className={Math.abs(variancePct) > 10 ? 'text-destructive' : 'text-slate-500'}>
-                            {variancePct > 0 ? '+' : ''}{variancePct.toFixed(1)}%
-                          </span>
-                        </TableCell>
+              <Card className="border-slate-200 rounded-3xl overflow-hidden bg-white shadow-xl shadow-slate-100/50">
+                <div className="bg-[#0c1a3d] p-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-white">
+                    <TrendingUp className="h-5 w-5" />
+                    <h3 className="font-black text-sm uppercase tracking-widest">Balance de Materia Prima: Físico vs Teórico</h3>
+                  </div>
+                  <Badge className="bg-white/10 text-white border-none uppercase text-[9px] font-black px-3 py-1">
+                    Totales Semanales
+                  </Badge>
+                </div>
+                
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-slate-50 border-b border-slate-100 hover:bg-slate-50">
+                        <TableHead className="text-[10px] font-black text-slate-400 uppercase pl-6 min-w-[180px]">Material</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">I. Inicial</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-indigo-600 uppercase bg-indigo-50/30">I. en Tanques</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">Recepciones</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">I. Final</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-purple-600 uppercase bg-purple-50/30">F. en Tanques</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-emerald-600 uppercase bg-emerald-50/30">Consumo Físico</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-primary uppercase bg-primary/5">Consumo Teórico</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">Diferencia</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase pr-6">Variación %</TableHead>
                       </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
-          </Card>
+                    </TableHeader>
+                    <TableBody>
+                      {ALL_MATERIALS.map((mat) => {
+                        const stock = rawMaterialStock[mat.code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {} };
+                        const initial = stock.initial || 0;
+                        const initialInTanks = materialsInTanks[mat.code] || 0;
+                        const receptions = Object.values(stock.receptions as Record<string, number>).reduce((a, b) => a + b, 0);
+                        const final = stock.final || 0;
+                        const finalInTanks = materialsInFinalTanks[mat.code] || 0;
+                        
+                        const physical = (initial + initialInTanks + receptions) - (final + finalInTanks);
+                        const theoretical = theoreticalConsumption[mat.code] || 0;
+                        const variance = physical - theoretical;
+                        const variancePct = theoretical > 0 ? (variance / theoretical) * 100 : 0;
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="p-6 border-slate-200 rounded-3xl bg-slate-50/50 border-dashed border-2">
-              <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-                <ClipboardCheck className="h-4 w-4 text-emerald-600" /> Nota sobre Balance de Cierre
-              </h4>
-              <p className="text-[11px] font-bold text-slate-600 leading-relaxed uppercase">
-                La columna <span className="text-purple-600 font-black">F. en Tanques</span> representa la materia prima contenida en la bebida preparada que queda en planta al final de la semana. Este valor se resta de las existencias para determinar el consumo neto del periodo.
-              </p>
-            </Card>
+                        return (
+                          <TableRow key={mat.code} className="hover:bg-slate-50 transition-none h-14 group">
+                            <TableCell className="pl-6">
+                              <div className="flex flex-col">
+                                <span className="text-[9px] font-bold text-primary font-mono">{mat.code}</span>
+                                <span className="text-[10px] font-black text-slate-700 uppercase leading-none">{mat.description}</span>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{initial.toLocaleString('es-ES')}</TableCell>
+                            <TableCell className="text-right font-black text-indigo-600 tabular-nums text-xs bg-indigo-50/20">{initialInTanks.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
+                            <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{receptions.toLocaleString('es-ES')}</TableCell>
+                            <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{final.toLocaleString('es-ES')}</TableCell>
+                            <TableCell className="text-right font-black text-purple-600 tabular-nums text-xs bg-purple-50/20">{finalInTanks.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
+                            <TableCell className="text-right font-black text-emerald-600 tabular-nums text-[13px] bg-emerald-50/20">{physical.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
+                            <TableCell className="text-right font-black text-primary tabular-nums text-[13px] bg-primary/5">{theoretical.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
+                            <TableCell className="text-right font-black text-slate-700 tabular-nums text-xs">
+                              {variance.toLocaleString('es-ES', { maximumFractionDigits: 2 })}
+                            </TableCell>
+                            <TableCell className="pr-6 text-right font-bold tabular-nums text-xs">
+                              <span className={Math.abs(variancePct) > 10 ? 'text-destructive' : 'text-slate-500'}>
+                                {variancePct > 0 ? '+' : ''}{variancePct.toFixed(1)}%
+                              </span>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              </Card>
 
-            <Card className="p-6 border-slate-200 rounded-3xl bg-amber-50/50 border-amber-100 border-2">
-              <h4 className="text-xs font-black text-amber-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-                <AlertTriangle className="h-4 w-4 text-amber-600" /> Análisis de Variación
-              </h4>
-              <p className="text-[11px] font-bold text-amber-800 leading-relaxed uppercase">
-                Variaciones superiores al 10% se resaltan en rojo para indicar posibles mermas, errores en pesaje o fallas en el registro de inventario físico.
-              </p>
-            </Card>
-          </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 no-print">
+                <Card className="p-6 border-slate-200 rounded-3xl bg-slate-50/50 border-dashed border-2">
+                  <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <ClipboardCheck className="h-4 w-4 text-emerald-600" /> Nota sobre Balance de Cierre
+                  </h4>
+                  <p className="text-[11px] font-bold text-slate-600 leading-relaxed uppercase">
+                    La columna <span className="text-purple-600 font-black">F. en Tanques</span> representa la materia prima contenida en la bebida preparada que queda en planta al final de la semana. Este valor se resta de las existencias para determinar el consumo neto del periodo.
+                  </p>
+                </Card>
+
+                <Card className="p-6 border-slate-200 rounded-3xl bg-amber-50/50 border-amber-100 border-2">
+                  <h4 className="text-xs font-black text-amber-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <AlertTriangle className="h-4 w-4 text-amber-600" /> Análisis de Variación
+                  </h4>
+                  <p className="text-[11px] font-bold text-amber-800 leading-relaxed uppercase">
+                    Variaciones superiores al 10% se resaltan en rojo para indicar posibles mermas, errores en pesaje o fallas en el registro de inventario físico.
+                  </p>
+                </Card>
+              </div>
+            </TabsContent>
+          </Tabs>
         </TabsContent>
       </Tabs>
     </div>
