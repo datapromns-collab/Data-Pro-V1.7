@@ -154,21 +154,27 @@ export function RawMaterialModule({
     return inTanks;
   }, [finalUBBTanks, recipes]);
 
-  // Cálculos para Resumen Diario
+  // Cálculos para Resumen Diario: Basado en Consumo (Inicial + Preparado - Final)
   const theoreticalConsumptionDaily = useMemo(() => {
     const consumption: Record<string, number> = {};
     PRODUCT_LIST.forEach(flavor => {
       const recipe = recipes[flavor];
       if (!recipe) return;
-      const ubbPrepared = manualUBB[flavor]?.[currentWorkingDateKey] || 0;
-      if (ubbPrepared > 0) {
+      
+      const initial = initialUBBTanksDaily[flavor]?.[currentWorkingDateKey] || 0;
+      const prepared = manualUBB[flavor]?.[currentWorkingDateKey] || 0;
+      const final = finalUBBTanksDaily[flavor]?.[currentWorkingDateKey] || 0;
+      
+      const ubbConsumed = (initial + prepared) - final;
+      
+      if (ubbConsumed > 0) {
         Object.entries(recipe).forEach(([matCode, factor]) => {
-          consumption[matCode] = (consumption[matCode] || 0) + (ubbPrepared * factor);
+          consumption[matCode] = (consumption[matCode] || 0) + (ubbConsumed * factor);
         });
       }
     });
     return consumption;
-  }, [manualUBB, recipes, currentWorkingDateKey]);
+  }, [manualUBB, initialUBBTanksDaily, finalUBBTanksDaily, recipes, currentWorkingDateKey]);
 
   const materialsInTanksDaily = useMemo(() => {
     const inTanks: Record<string, number> = {};

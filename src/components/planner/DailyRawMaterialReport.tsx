@@ -42,21 +42,27 @@ export function DailyRawMaterialReport({
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
   const dateKey = format(workingDate, 'yyyy-MM-dd');
 
-  // Cálculo de Consumo Teórico Diario
+  // Cálculo de Consumo Teórico Diario: Basado en Consumo (Inicial + Preparado - Final)
   const theoreticalConsumption = useMemo(() => {
     const consumption: Record<string, number> = {};
     PRODUCT_LIST.forEach(flavor => {
       const recipe = recipes[flavor];
       if (!recipe) return;
-      const ubbPrepared = manualUBB[flavor]?.[dateKey] || 0;
-      if (ubbPrepared > 0) {
+      
+      const initial = initialUBBTanksDaily[flavor]?.[dateKey] || 0;
+      const prepared = manualUBB[flavor]?.[dateKey] || 0;
+      const final = finalUBBTanksDaily[flavor]?.[dateKey] || 0;
+      
+      const ubbConsumed = (initial + prepared) - final;
+      
+      if (ubbConsumed > 0) {
         Object.entries(recipe).forEach(([matCode, factor]) => {
-          consumption[matCode] = (consumption[matCode] || 0) + (ubbPrepared * factor);
+          consumption[matCode] = (consumption[matCode] || 0) + (ubbConsumed * factor);
         });
       }
     });
     return consumption;
-  }, [manualUBB, recipes, dateKey]);
+  }, [manualUBB, initialUBBTanksDaily, finalUBBTanksDaily, recipes, dateKey]);
 
   // Cálculo de Materiales en Tanques Iniciales
   const materialsInTanks = useMemo(() => {
