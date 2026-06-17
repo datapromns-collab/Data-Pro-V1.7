@@ -25,7 +25,8 @@ import {
   CalendarDays,
   ListTodo,
   ClipboardList,
-  Calendar as CalendarIcon
+  Calendar as CalendarIcon,
+  Search
 } from 'lucide-react';
 import { 
   SUGAR_DATA, 
@@ -39,6 +40,7 @@ import {
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
+import { usePlannerStore } from '@/hooks/use-planner-store';
 
 interface RawMaterialModuleProps {
   weekStartDate: Date;
@@ -65,6 +67,12 @@ const ALL_MATERIALS = [
   ...ADDITIVES_DATA
 ];
 
+const CATEGORIES = [
+  { id: 'concentrados', title: 'Concentrados', items: [...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES] },
+  { id: 'solidos', title: 'Sólidos', items: SOLIDS_DATA },
+  { id: 'aditivos', title: 'Aditivos', items: ADDITIVES_DATA }
+];
+
 const DAYS_NAMES = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
 
 export function RawMaterialModule({
@@ -83,9 +91,11 @@ export function RawMaterialModule({
   onUpdateFinalUBB,
   onPrintReport
 }: RawMaterialModuleProps) {
+  const { updateRawMaterialDailyInitial, updateRawMaterialDailyFinal } = usePlannerStore();
   const [workingDate, setWorkingDate] = useState<Date>(new Date());
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   const dateKeys = useMemo(() => weekDays.map(d => format(d, 'yyyy-MM-dd')), [weekDays]);
+  const currentWorkingDateKey = useMemo(() => format(workingDate, 'yyyy-MM-dd'), [workingDate]);
 
   const theoreticalConsumption = useMemo(() => {
     const consumption: Record<string, number> = {};
@@ -366,12 +376,101 @@ export function RawMaterialModule({
             </div>
 
             <TabsContent value="daily-inventory" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                <Warehouse className="h-12 w-12 text-slate-300 mb-4" />
-                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
-                  Inventario Diario para el {format(workingDate, "dd/MM/yyyy")}<br/>Sección en blanco...
-                </p>
-              </div>
+              <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
+                <div className="bg-[#0c1a3d] px-8 py-4 flex items-center justify-between">
+                   <div className="flex items-center gap-3">
+                     <div className="bg-white/10 p-2 rounded-xl">
+                       <Warehouse className="h-5 w-5 text-white" />
+                     </div>
+                     <h3 className="text-white font-black uppercase text-sm tracking-widest">Inventario Diario - {format(workingDate, "dd/MM/yyyy")}</h3>
+                   </div>
+                   <Badge className="bg-white/10 text-white border-none uppercase text-[9px] font-black px-4 py-1.5 rounded-full">
+                     Cálculo Automático
+                   </Badge>
+                </div>
+                
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-10">
+                        <TableHead className="pl-8 text-[10px] font-black text-slate-400 uppercase min-w-[220px]">Componente / Material</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-slate-500 uppercase w-[120px]">Inv. Inicial</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-indigo-600 uppercase w-[120px]">Recepción</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-primary uppercase bg-primary/5 w-[140px]">Disponible</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-slate-500 uppercase w-[120px]">Inv. Final</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-emerald-600 uppercase bg-emerald-50/30 w-[140px] pr-8">Consumo Físico</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {CATEGORIES.map((cat) => (
+                        <React.Fragment key={cat.id}>
+                          <TableRow className="bg-slate-100/50 hover:bg-slate-100/50 h-8">
+                            <TableCell colSpan={6} className="pl-8 py-0">
+                               <div className="flex items-center gap-2">
+                                  <div className="w-1.5 h-1.5 rounded-full bg-primary/50" />
+                                  <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">{cat.title}</span>
+                               </div>
+                            </TableCell>
+                          </TableRow>
+                          {cat.items.map((mat) => {
+                            const stock = rawMaterialStock[mat.code] || { initialDaily: {}, receptions: {}, finalDaily: {} };
+                            const initial = stock.initialDaily?.[currentWorkingDateKey] || 0;
+                            const reception = stock.receptions?.[currentWorkingDateKey] || 0;
+                            const final = stock.finalDaily?.[currentWorkingDateKey] || 0;
+                            
+                            const available = initial + reception;
+                            const physicalConsumption = available - final;
+
+                            return (
+                              <TableRow key={mat.code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
+                                <TableCell className="pl-8">
+                                  <div className="flex flex-col">
+                                    <span className="text-[9px] font-bold text-primary font-mono leading-none mb-1">{mat.code}</span>
+                                    <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[200px]">{mat.description}</span>
+                                  </div>
+                                </TableCell>
+                                <TableCell className="p-1">
+                                  <Input 
+                                    type="number"
+                                    value={initial || ''}
+                                    onChange={(e) => updateRawMaterialDailyInitial(mat.code, currentWorkingDateKey, parseFloat(e.target.value) || 0)}
+                                    className="h-9 text-right font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-xl"
+                                    placeholder="0.00"
+                                  />
+                                </TableCell>
+                                <TableCell className="p-1">
+                                  <Input 
+                                    type="number"
+                                    value={reception || ''}
+                                    onChange={(e) => onUpdateReception(mat.code, currentWorkingDateKey, parseFloat(e.target.value) || 0)}
+                                    className="h-9 text-right font-black text-xs border-none bg-indigo-50/30 focus:bg-white rounded-xl text-indigo-700"
+                                    placeholder="0.00"
+                                  />
+                                </TableCell>
+                                <TableCell className="text-right font-black text-primary tabular-nums text-sm bg-primary/5">
+                                  {available.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                                </TableCell>
+                                <TableCell className="p-1">
+                                  <Input 
+                                    type="number"
+                                    value={final || ''}
+                                    onChange={(e) => updateRawMaterialDailyFinal(mat.code, currentWorkingDateKey, parseFloat(e.target.value) || 0)}
+                                    className="h-9 text-right font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-xl"
+                                    placeholder="0.00"
+                                  />
+                                </TableCell>
+                                <TableCell className="text-right pr-8 font-black text-emerald-600 tabular-nums text-[15px] bg-emerald-50/20">
+                                  {physicalConsumption.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </React.Fragment>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </div>
+              </Card>
             </TabsContent>
 
             <TabsContent value="daily-ubb" className="m-0 animate-in slide-in-from-left-2 duration-300">
@@ -517,7 +616,7 @@ export function RawMaterialModule({
                               {variance.toLocaleString('es-ES', { maximumFractionDigits: 2 })}
                             </TableCell>
                             <TableCell className="pr-6 text-right font-bold tabular-nums text-xs">
-                              <span className={Math.abs(variancePct) > 10 ? 'text-destructive' : 'text-slate-500'}>
+                              <span className={cn(Math.abs(variancePct) > 10 ? 'text-destructive' : 'text-slate-500')}>
                                 {variancePct > 0 ? '+' : ''}{variancePct.toFixed(1)}%
                               </span>
                             </TableCell>

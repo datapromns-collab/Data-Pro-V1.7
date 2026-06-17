@@ -18,6 +18,8 @@ export interface RawMaterialStock {
   initial: number;
   receptions: Record<string, number>; // dateKey -> qty
   final: number;
+  initialDaily: Record<string, number>; // dateKey -> qty (NUEVO)
+  finalDaily: Record<string, number>;   // dateKey -> qty (NUEVO)
   dailyPhysical: Record<string, number>; // dateKey -> qty
 }
 
@@ -251,14 +253,14 @@ export function usePlannerStore() {
 
   const updateRawMaterialStock = useCallback((code: string, type: 'initial' | 'final', value: number) => {
     setRawMaterialStock(prev => {
-      const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {} };
+      const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {}, initialDaily: {}, finalDaily: {} };
       return { ...prev, [code]: { ...current, [type]: value } };
     });
   }, []);
 
   const updateRawMaterialReception = useCallback((code: string, dateKey: string, value: number) => {
     setRawMaterialStock(prev => {
-      const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {} };
+      const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {}, initialDaily: {}, finalDaily: {} };
       const newReceptions = { ...current.receptions };
       if (value <= 0) delete newReceptions[dateKey];
       else newReceptions[dateKey] = value;
@@ -268,11 +270,31 @@ export function usePlannerStore() {
 
   const updateRawMaterialDailyPhysical = useCallback((code: string, dateKey: string, value: number) => {
     setRawMaterialStock(prev => {
-      const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {} };
+      const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {}, initialDaily: {}, finalDaily: {} };
       const newDaily = { ...current.dailyPhysical };
       if (value <= 0) delete newDaily[dateKey];
       else newDaily[dateKey] = value;
       return { ...prev, [code]: { ...current, dailyPhysical: newDaily } };
+    });
+  }, []);
+
+  const updateRawMaterialDailyInitial = useCallback((code: string, dateKey: string, value: number) => {
+    setRawMaterialStock(prev => {
+      const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {}, initialDaily: {}, finalDaily: {} };
+      const newDaily = { ...current.initialDaily };
+      if (value <= 0) delete newDaily[dateKey];
+      else newDaily[dateKey] = value;
+      return { ...prev, [code]: { ...current, initialDaily: newDaily } };
+    });
+  }, []);
+
+  const updateRawMaterialDailyFinal = useCallback((code: string, dateKey: string, value: number) => {
+    setRawMaterialStock(prev => {
+      const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {}, initialDaily: {}, finalDaily: {} };
+      const newDaily = { ...current.finalDaily };
+      if (value <= 0) delete newDaily[dateKey];
+      else newDaily[dateKey] = value;
+      return { ...prev, [code]: { ...current, finalDaily: newDaily } };
     });
   }, []);
 
@@ -324,6 +346,8 @@ export function usePlannerStore() {
     updateRawMaterialStock,
     updateRawMaterialReception,
     updateRawMaterialDailyPhysical,
+    updateRawMaterialDailyInitial,
+    updateRawMaterialDailyFinal,
     updateManualUBB,
     updateInitialUBBTanks,
     updateFinalUBBTanks,
