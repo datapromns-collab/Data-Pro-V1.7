@@ -47,6 +47,8 @@ interface RawMaterialModuleProps {
   manualUBB: Record<string, Record<string, number>>;
   initialUBBTanks: Record<string, number>;
   finalUBBTanks: Record<string, number>;
+  initialUBBTanksDaily?: Record<string, Record<string, number>>;
+  finalUBBTanksDaily?: Record<string, Record<string, number>>;
   tasks: any[];
   recipes: Record<string, Record<string, number>>;
   onUpdateStock: (code: string, type: 'initial' | 'final', value: number) => void;
@@ -57,6 +59,8 @@ interface RawMaterialModuleProps {
   onUpdateManualUBB: (flavor: string, dateKey: string, value: number) => void;
   onUpdateInitialUBB: (flavor: string, value: number) => void;
   onUpdateFinalUBB: (flavor: string, value: number) => void;
+  onUpdateInitialUBBDaily?: (flavor: string, dateKey: string, value: number) => void;
+  onUpdateFinalUBBDaily?: (flavor: string, dateKey: string, value: number) => void;
   onPrintReport?: () => void;
 }
 
@@ -82,6 +86,8 @@ export function RawMaterialModule({
   manualUBB,
   initialUBBTanks,
   finalUBBTanks,
+  initialUBBTanksDaily = {},
+  finalUBBTanksDaily = {},
   tasks,
   recipes,
   onUpdateStock,
@@ -92,6 +98,8 @@ export function RawMaterialModule({
   onUpdateManualUBB,
   onUpdateInitialUBB,
   onUpdateFinalUBB,
+  onUpdateInitialUBBDaily,
+  onUpdateFinalUBBDaily,
   onPrintReport
 }: RawMaterialModuleProps) {
   const [workingDate, setWorkingDate] = useState<Date>(new Date());
@@ -481,12 +489,88 @@ export function RawMaterialModule({
             </TabsContent>
 
             <TabsContent value="daily-ubb" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                <Beaker className="h-12 w-12 text-slate-300 mb-4" />
-                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
-                  Consumo de UBB Diario para el {format(workingDate, "dd/MM/yyyy")}<br/>Sección en blanco...
-                </p>
-              </div>
+              <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
+                <div className="bg-[#1e1b4b] px-8 py-4 flex items-center justify-between">
+                   <div className="flex items-center gap-3">
+                     <div className="bg-white/10 p-2 rounded-xl">
+                       <Beaker className="h-5 w-5 text-white" />
+                     </div>
+                     <h3 className="text-white font-black uppercase text-sm tracking-widest">Control de UBB Diario - {format(workingDate, "dd/MM/yyyy")}</h3>
+                   </div>
+                   <Badge className="bg-indigo-500/20 text-indigo-200 border-none uppercase text-[9px] font-black px-4 py-1.5 rounded-full">
+                     Balance de Tanques
+                   </Badge>
+                </div>
+                
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-10">
+                        <TableHead className="pl-8 text-[10px] font-black text-slate-400 uppercase min-w-[220px]">Sabor / Producto</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-slate-500 uppercase w-[120px]">UBB Inicial</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-indigo-600 uppercase w-[120px]">Preparado</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-primary uppercase bg-primary/5 w-[140px]">Disponible</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-slate-500 uppercase w-[120px]">UBB Final</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-emerald-600 uppercase bg-emerald-50/30 w-[140px] pr-8">Consumo (Llenado)</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {PRODUCT_LIST.map((flavor) => {
+                        const initial = initialUBBTanksDaily[flavor]?.[currentWorkingDateKey] || 0;
+                        const prepared = manualUBB[flavor]?.[currentWorkingDateKey] || 0;
+                        const final = finalUBBTanksDaily[flavor]?.[currentWorkingDateKey] || 0;
+                        
+                        const available = initial + prepared;
+                        const consumption = available - final;
+
+                        return (
+                          <TableRow key={flavor} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
+                            <TableCell className="pl-8">
+                              <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[220px]">{flavor}</span>
+                            </TableCell>
+                            <TableCell className="p-1">
+                              <Input 
+                                type="number"
+                                step="0.01"
+                                value={initial || ''}
+                                onChange={(e) => onUpdateInitialUBBDaily?.(flavor, currentWorkingDateKey, parseFloat(e.target.value) || 0)}
+                                className="h-9 text-right font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-xl"
+                                placeholder="0.00"
+                              />
+                            </TableCell>
+                            <TableCell className="p-1">
+                              <Input 
+                                type="number"
+                                step="0.01"
+                                value={prepared || ''}
+                                onChange={(e) => onUpdateManualUBB(flavor, currentWorkingDateKey, parseFloat(e.target.value) || 0)}
+                                className="h-9 text-right font-black text-xs border-none bg-indigo-50/30 focus:bg-white rounded-xl text-indigo-700"
+                                placeholder="0.00"
+                              />
+                            </TableCell>
+                            <TableCell className="text-right font-black text-primary tabular-nums text-sm bg-primary/5">
+                              {available.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                            </TableCell>
+                            <TableCell className="p-1">
+                              <Input 
+                                type="number"
+                                step="0.01"
+                                value={final || ''}
+                                onChange={(e) => onUpdateFinalUBBDaily?.(flavor, currentWorkingDateKey, parseFloat(e.target.value) || 0)}
+                                className="h-9 text-right font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-xl"
+                                placeholder="0.00"
+                              />
+                            </TableCell>
+                            <TableCell className="text-right pr-8 font-black text-emerald-600 tabular-nums text-[15px] bg-emerald-50/20">
+                              {consumption.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              </Card>
             </TabsContent>
 
             <TabsContent value="daily-summary" className="m-0 animate-in slide-in-from-left-2 duration-300">

@@ -13,6 +13,8 @@ const STORAGE_KEY_RAW_MAT = 'planner_raw_material_v1';
 const STORAGE_KEY_UBB = 'planner_manual_ubb_v1';
 const STORAGE_KEY_INITIAL_UBB_TANKS = 'planner_initial_ubb_tanks_v1';
 const STORAGE_KEY_FINAL_UBB_TANKS = 'planner_final_ubb_tanks_v1';
+const STORAGE_KEY_INITIAL_UBB_DAILY = 'planner_initial_ubb_daily_v1';
+const STORAGE_KEY_FINAL_UBB_DAILY = 'planner_final_ubb_daily_v1';
 
 export interface RawMaterialStock {
   initial: number;
@@ -39,6 +41,8 @@ export function usePlannerStore() {
   const [manualUBB, setManualUBB] = useState<Record<string, Record<string, number>>>({});
   const [initialUBBTanks, setInitialUBBTanks] = useState<Record<string, number>>({});
   const [finalUBBTanks, setFinalUBBTanks] = useState<Record<string, number>>({});
+  const [initialUBBTanksDaily, setInitialUBBTanksDaily] = useState<Record<string, Record<string, number>>>({});
+  const [finalUBBTanksDaily, setFinalUBBTanksDaily] = useState<Record<string, Record<string, number>>>({});
   const [isLoaded, setIsLoaded] = useState(false);
 
   // Cargar datos iniciales
@@ -51,6 +55,8 @@ export function usePlannerStore() {
     const savedUBB = localStorage.getItem(STORAGE_KEY_UBB);
     const savedInitialUBB = localStorage.getItem(STORAGE_KEY_INITIAL_UBB_TANKS);
     const savedFinalUBB = localStorage.getItem(STORAGE_KEY_FINAL_UBB_TANKS);
+    const savedInitialUBBDaily = localStorage.getItem(STORAGE_KEY_INITIAL_UBB_DAILY);
+    const savedFinalUBBDaily = localStorage.getItem(STORAGE_KEY_FINAL_UBB_DAILY);
 
     if (savedTasks) {
       try {
@@ -122,6 +128,22 @@ export function usePlannerStore() {
         console.error("Error loading final UBB tanks", e);
       }
     }
+
+    if (savedInitialUBBDaily) {
+      try {
+        setInitialUBBTanksDaily(JSON.parse(savedInitialUBBDaily));
+      } catch (e) {
+        console.error("Error loading daily initial UBB tanks", e);
+      }
+    }
+
+    if (savedFinalUBBDaily) {
+      try {
+        setFinalUBBTanksDaily(JSON.parse(savedFinalUBBDaily));
+      } catch (e) {
+        console.error("Error loading daily final UBB tanks", e);
+      }
+    }
     
     setIsLoaded(true);
   }, []);
@@ -177,6 +199,18 @@ export function usePlannerStore() {
       localStorage.setItem(STORAGE_KEY_FINAL_UBB_TANKS, JSON.stringify(finalUBBTanks));
     }
   }, [finalUBBTanks, isLoaded]);
+
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem(STORAGE_KEY_INITIAL_UBB_DAILY, JSON.stringify(initialUBBTanksDaily));
+    }
+  }, [initialUBBTanksDaily, isLoaded]);
+
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem(STORAGE_KEY_FINAL_UBB_DAILY, JSON.stringify(finalUBBTanksDaily));
+    }
+  }, [finalUBBTanksDaily, isLoaded]);
 
   const addTask = useCallback((taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
@@ -363,7 +397,13 @@ export function usePlannerStore() {
       if (value <= 0) delete next[flavor];
       return next;
     });
-  }, []);
+
+    setInitialUBBTanksDaily(prev => {
+      const mondayKey = format(weekStartDate, 'yyyy-MM-dd');
+      const flavorData = prev[flavor] || {};
+      return { ...prev, [flavor]: { ...flavorData, [mondayKey]: value } };
+    });
+  }, [weekStartDate]);
 
   const updateFinalUBBTanks = useCallback((flavor: string, value: number) => {
     setFinalUBBTanks(prev => {
@@ -371,7 +411,52 @@ export function usePlannerStore() {
       if (value <= 0) delete next[flavor];
       return next;
     });
-  }, []);
+
+    setFinalUBBTanksDaily(prev => {
+      const sundayKey = format(addDays(weekStartDate, 6), 'yyyy-MM-dd');
+      const flavorData = prev[flavor] || {};
+      return { ...prev, [flavor]: { ...flavorData, [sundayKey]: value } };
+    });
+  }, [weekStartDate]);
+
+  const updateInitialUBBTanksDaily = useCallback((flavor: string, dateKey: string, value: number) => {
+    setInitialUBBTanksDaily(prev => {
+      const current = prev[flavor] || {};
+      const next = { ...current, [dateKey]: value };
+      if (value <= 0) delete next[dateKey];
+      
+      // Automation: If Monday, update weekly initial
+      const mondayKey = format(weekStartDate, 'yyyy-MM-dd');
+      if (dateKey === mondayKey) {
+        setInitialUBBTanks(old => ({ ...old, [flavor]: value }));
+      }
+
+      return { ...prev, [flavor]: next };
+    });
+  }, [weekStartDate]);
+
+  const updateFinalUBBTanksDaily = useCallback((flavor: string, dateKey: string, value: number) => {
+    setFinalUBBTanksDaily(prev => {
+      const current = prev[flavor] || {};
+      const next = { ...current, [dateKey]: value };
+      if (value <= 0) delete next[dateKey];
+      
+      // Automation 1: Next day's initial
+      const nextDayKey = format(addDays(parseISO(dateKey), 1), 'yyyy-MM-dd');
+      setInitialUBBTanksDaily(old => {
+        const fData = old[flavor] || {};
+        return { ...old, [flavor]: { ...fData, [nextDayKey]: value } };
+      });
+
+      // Automation 2: If Sunday, update weekly final
+      const sundayKey = format(addDays(weekStartDate, 6), 'yyyy-MM-dd');
+      if (dateKey === sundayKey) {
+        setFinalUBBTanks(old => ({ ...old, [flavor]: value }));
+      }
+
+      return { ...prev, [flavor]: next };
+    });
+  }, [weekStartDate]);
 
   return { 
     tasks, 
@@ -383,6 +468,8 @@ export function usePlannerStore() {
     manualUBB,
     initialUBBTanks,
     finalUBBTanks,
+    initialUBBTanksDaily,
+    finalUBBTanksDaily,
     setWeekStartDate, 
     addTask, 
     updateTask, 
@@ -401,6 +488,8 @@ export function usePlannerStore() {
     updateManualUBB,
     updateInitialUBBTanks,
     updateFinalUBBTanks,
+    updateInitialUBBTanksDaily,
+    updateFinalUBBTanksDaily,
     isLoaded,
     isSyncing: false
   };

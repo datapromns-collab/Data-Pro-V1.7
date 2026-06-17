@@ -73,6 +73,8 @@ export default function PlannerPage() {
     manualUBB,
     initialUBBTanks,
     finalUBBTanks,
+    initialUBBTanksDaily,
+    finalUBBTanksDaily,
     setWeekStartDate, 
     addTask, 
     updateTask, 
@@ -90,6 +92,8 @@ export default function PlannerPage() {
     updateManualUBB,
     updateInitialUBBTanks,
     updateFinalUBBTanks,
+    updateInitialUBBTanksDaily,
+    updateFinalUBBTanksDaily,
     isLoaded: plannerLoaded
   } = usePlannerStore();
 
@@ -693,6 +697,8 @@ export default function PlannerPage() {
                         manualUBB={manualUBB}
                         initialUBBTanks={initialUBBTanks}
                         finalUBBTanks={finalUBBTanks}
+                        initialUBBTanksDaily={initialUBBTanksDaily}
+                        finalUBBTanksDaily={finalUBBTanksDaily}
                         tasks={tasks}
                         recipes={customRecipes}
                         onUpdateStock={updateRawMaterialStock}
@@ -703,6 +709,8 @@ export default function PlannerPage() {
                         onUpdateManualUBB={updateManualUBB}
                         onUpdateInitialUBB={updateInitialUBBTanks}
                         onUpdateFinalUBB={updateFinalUBBTanks}
+                        onUpdateInitialUBBDaily={updateInitialUBBTanksDaily}
+                        onUpdateFinalUBBDaily={updateFinalUBBTanksDaily}
                         onPrintReport={handlePrintRawMaterial}
                       />
                     )}
