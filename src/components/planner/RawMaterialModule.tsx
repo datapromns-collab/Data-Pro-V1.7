@@ -70,7 +70,7 @@ const ALL_MATERIALS = [
 
 const CATEGORIES = [
   { id: 'concentrados', title: 'Concentrados', items: [...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES] },
-  { id: 'solidos', title: 'Sólidos', items: SOLIDS_DATA },
+  { id: 'solidos', title: 'Sólidos', items: [...SUGAR_DATA, ...SOLIDS_DATA] },
   { id: 'aditivos', title: 'Aditivos', items: ADDITIVES_DATA }
 ];
 
