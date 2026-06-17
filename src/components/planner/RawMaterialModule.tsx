@@ -8,6 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
 import { 
   Package, 
   Warehouse, 
@@ -22,7 +24,8 @@ import {
   FileDown,
   CalendarDays,
   ListTodo,
-  ClipboardList
+  ClipboardList,
+  Calendar as CalendarIcon
 } from 'lucide-react';
 import { 
   SUGAR_DATA, 
@@ -73,7 +76,6 @@ export function RawMaterialModule({
   tasks,
   recipes,
   onUpdateStock,
-  onUpdateMovement,
   onUpdateReception,
   onUpdateDailyPhysical,
   onUpdateManualUBB,
@@ -81,6 +83,7 @@ export function RawMaterialModule({
   onUpdateFinalUBB,
   onPrintReport
 }: RawMaterialModuleProps) {
+  const [workingDate, setWorkingDate] = useState<Date>(new Date());
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   const dateKeys = useMemo(() => weekDays.map(d => format(d, 'yyyy-MM-dd')), [weekDays]);
 
@@ -325,7 +328,7 @@ export function RawMaterialModule({
         </div>
 
         <TabsContent value="daily-main" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
-          <Tabs defaultValue="daily-inventory" className="space-y-6">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200 w-fit overflow-x-auto max-w-full no-print">
               <TabsList className="bg-transparent h-auto p-0">
                 <TabsTrigger value="daily-inventory" className={tabsTriggerClass}>
@@ -340,33 +343,53 @@ export function RawMaterialModule({
               </TabsList>
             </div>
 
-            <TabsContent value="daily-inventory" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                <Warehouse className="h-12 w-12 text-slate-300 mb-4" />
-                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
-                  Inventario Diario<br/>Sección en blanco...
-                </p>
-              </div>
-            </TabsContent>
+            <div className="flex items-center gap-3 bg-white p-2 rounded-2xl border border-slate-200 shadow-sm">
+              <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Día de Trabajo:</span>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="h-10 justify-start text-left font-bold bg-slate-50 border-slate-100 shadow-none hover:bg-slate-100 transition-none rounded-xl px-4">
+                    <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
+                    {format(workingDate, "EEEE dd 'de' MMMM", { locale: es })}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="end">
+                  <Calendar 
+                    mode="single" 
+                    selected={workingDate} 
+                    onSelect={(date) => date && setWorkingDate(date)} 
+                    locale={es} 
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
 
-            <TabsContent value="daily-ubb" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                <Beaker className="h-12 w-12 text-slate-300 mb-4" />
-                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
-                  Consumo de UBB Diario<br/>Sección en blanco...
-                </p>
-              </div>
-            </TabsContent>
+          <TabsContent value="daily-inventory" className="m-0 animate-in slide-in-from-left-2 duration-300">
+            <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+              <Warehouse className="h-12 w-12 text-slate-300 mb-4" />
+              <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+                Inventario Diario para el {format(workingDate, "dd/MM/yyyy")}<br/>Sección en blanco...
+              </p>
+            </div>
+          </TabsContent>
 
-            <TabsContent value="daily-summary" className="m-0 animate-in slide-in-from-left-2 duration-300">
-              <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                <ClipboardList className="h-12 w-12 text-slate-300 mb-4" />
-                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
-                  Resumen Diario<br/>Sección en blanco...
-                </p>
-              </div>
-            </TabsContent>
-          </Tabs>
+          <TabsContent value="daily-ubb" className="m-0 animate-in slide-in-from-left-2 duration-300">
+            <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+              <Beaker className="h-12 w-12 text-slate-300 mb-4" />
+              <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+                Consumo de UBB Diario para el {format(workingDate, "dd/MM/yyyy")}<br/>Sección en blanco...
+              </p>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="daily-summary" className="m-0 animate-in slide-in-from-left-2 duration-300">
+            <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+              <ClipboardList className="h-12 w-12 text-slate-300 mb-4" />
+              <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+                Resumen Diario para el {format(workingDate, "dd/MM/yyyy")}<br/>Sección en blanco...
+              </p>
+            </div>
+          </TabsContent>
         </TabsContent>
 
         <TabsContent value="weekly-main" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
