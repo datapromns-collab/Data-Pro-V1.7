@@ -119,7 +119,7 @@ export function DailyRawMaterialReport({
 
   return (
     <div className="bg-white w-full print:p-0">
-      {/* PÁGINA 1: BALANCE DE MATERIA PRIMA (REPLICA SEMANAL) */}
+      {/* PÁGINA 1: BALANCE DE MATERIA PRIMA */}
       <div className="page-break-section p-1 flex flex-col h-screen" style={{ pageBreakAfter: 'always', pageBreakInside: 'avoid' }}>
         {renderHeader('Balance Diario de Materia Prima', 'Reporte Diario: Físico vs Teórico')}
 
@@ -153,11 +153,6 @@ export function DailyRawMaterialReport({
                 const variance = physical - theoretical;
                 const variancePct = theoretical > 0 ? (variance / theoretical) * 100 : 0;
 
-                // FILTRO: Solo materiales con actividad
-                if (initial === 0 && initialInTanks === 0 && reception === 0 && final === 0 && finalInTanks === 0 && theoretical === 0) {
-                  return null;
-                }
-
                 return (
                   <tr key={mat.code} className={`h-5 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
                     <td style={{ width: '5cm' }} className="px-1.5 py-0 border border-slate-300 uppercase truncate leading-none">{mat.description}</td>
@@ -184,7 +179,7 @@ export function DailyRawMaterialReport({
         {renderFooter('SISTEMA DE GESTIÓN DE MATERIA PRIMA - BALANCE DIARIO (PÁGINA 1 DE 2)')}
       </div>
 
-      {/* PÁGINA 2: REGISTRO DE PRODUCCIÓN UBB (REPLICA SEMANAL) */}
+      {/* PÁGINA 2: REGISTRO DE PRODUCCIÓN UBB */}
       <div className="page-break-section p-1 flex flex-col h-screen" style={{ pageBreakInside: 'avoid' }}>
         {renderHeader('Registro de Producción (UBB)', 'Desglose Diario de Preparación y Consumo')}
 
@@ -208,9 +203,6 @@ export function DailyRawMaterialReport({
                 
                 const available = initial + prepared;
                 const consumption = available - final;
-
-                // FILTRO: Solo sabores con actividad
-                if (initial === 0 && prepared === 0 && final === 0) return null;
 
                 return (
                   <tr key={flavor} className={`h-6 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
