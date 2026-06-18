@@ -23,7 +23,8 @@ import {
   ChevronRight,
   Box,
   ShoppingCart,
-  Copy
+  Copy,
+  Package
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -41,6 +42,7 @@ import { WeeklyControlReport } from '@/components/planner/WeeklyControlReport';
 import { ComplianceReport } from '@/components/planner/ComplianceReport';
 import { MonthlyComplianceReport } from '@/components/planner/MonthlyComplianceReport';
 import { RecipeEditor } from '@/components/planner/RecipeEditor';
+import { PackagingRecipeEditor } from '@/components/planner/PackagingRecipeEditor';
 import { RawMaterialModule } from '@/components/planner/RawMaterialModule';
 import { RawMaterialReport } from '@/components/planner/RawMaterialReport';
 import { DailyRawMaterialReport } from '@/components/planner/DailyRawMaterialReport';
@@ -70,6 +72,7 @@ export default function PlannerPage() {
     lineSpeeds,
     realProduction,
     customRecipes,
+    customPackagingRecipes,
     rawMaterialStock,
     manualUBB,
     initialUBBTanks,
@@ -85,6 +88,8 @@ export default function PlannerPage() {
     updateRealProduction,
     updateRecipe,
     removeMaterialFromRecipe,
+    updatePackagingRecipe,
+    removeMaterialFromPackagingRecipe,
     updateRawMaterialStock,
     updateRawMaterialReception,
     updateRawMaterialDailyPhysical,
@@ -654,6 +659,13 @@ export default function PlannerPage() {
                         <FlaskConical className="h-3.5 w-3.5" />
                         Recetas de Materia Prima
                       </button>
+                      <button 
+                        onClick={() => setActiveTab('packaging-recipes-editor')}
+                        className={cn(navTabClass(activeTab === 'packaging-recipes-editor'), "bg-blue-50 text-blue-700 active:scale-100 active:transform-none transform-none", activeTab !== 'packaging-recipes-editor' && "bg-transparent text-slate-500 hover:bg-slate-50")}
+                      >
+                        <Package className="h-3.5 w-3.5" />
+                        Recetas de Empaque
+                      </button>
                     </>
                   ) : null}
                 </div>
@@ -739,6 +751,13 @@ export default function PlannerPage() {
                         recipes={customRecipes} 
                         onUpdateRecipe={updateRecipe} 
                         onRemoveMaterial={removeMaterialFromRecipe}
+                      />
+                    )}
+                    {activeTab === 'packaging-recipes-editor' && (
+                      <PackagingRecipeEditor 
+                        recipes={customPackagingRecipes} 
+                        onUpdateRecipe={updatePackagingRecipe} 
+                        onRemoveMaterial={removeMaterialFromPackagingRecipe}
                       />
                     )}
                   </>

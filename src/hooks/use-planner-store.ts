@@ -3,12 +3,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ScheduledTask } from '@/lib/types';
 import { startOfWeek, addDays, format, parseISO } from 'date-fns';
-import { RECIPES } from '@/lib/planner-utils';
+import { RECIPES, CONSUMABLES_RECIPES } from '@/lib/planner-utils';
 
 const STORAGE_KEY_TASKS = 'planner_tasks_v2';
 const STORAGE_KEY_CONFIG = 'planner_config_v2';
 const STORAGE_KEY_REAL_PROD = 'planner_real_production_v1';
 const STORAGE_KEY_RECIPES = 'planner_custom_recipes_v1';
+const STORAGE_KEY_PACKAGING_RECIPES = 'planner_custom_packaging_recipes_v1';
 const STORAGE_KEY_RAW_MAT = 'planner_raw_material_v1';
 const STORAGE_KEY_UBB = 'planner_manual_ubb_v1';
 const STORAGE_KEY_INITIAL_UBB_TANKS = 'planner_initial_ubb_tanks_v1';
@@ -37,6 +38,7 @@ export function usePlannerStore() {
   });
   const [realProduction, setRealProduction] = useState<Record<string, Record<string, Record<string, number>>>>({});
   const [customRecipes, setCustomRecipes] = useState<Record<string, Record<string, number>>>(RECIPES);
+  const [customPackagingRecipes, setCustomPackagingRecipes] = useState<Record<string, Record<string, Record<string, number>>>>(CONSUMABLES_RECIPES);
   const [rawMaterialStock, setRawMaterialStock] = useState<Record<string, RawMaterialStock>>({});
   const [manualUBB, setManualUBB] = useState<Record<string, Record<string, number>>>({});
   const [initialUBBTanks, setInitialUBBTanks] = useState<Record<string, number>>({});
@@ -51,6 +53,7 @@ export function usePlannerStore() {
     const savedConfig = localStorage.getItem(STORAGE_KEY_CONFIG);
     const savedRealProd = localStorage.getItem(STORAGE_KEY_REAL_PROD);
     const savedRecipes = localStorage.getItem(STORAGE_KEY_RECIPES);
+    const savedPkgRecipes = localStorage.getItem(STORAGE_KEY_PACKAGING_RECIPES);
     const savedRawMat = localStorage.getItem(STORAGE_KEY_RAW_MAT);
     const savedUBB = localStorage.getItem(STORAGE_KEY_UBB);
     const savedInitialUBB = localStorage.getItem(STORAGE_KEY_INITIAL_UBB_TANKS);
@@ -94,6 +97,14 @@ export function usePlannerStore() {
         setCustomRecipes(JSON.parse(savedRecipes));
       } catch (e) {
         console.error("Error loading custom recipes", e);
+      }
+    }
+
+    if (savedPkgRecipes) {
+      try {
+        setCustomPackagingRecipes(JSON.parse(savedPkgRecipes));
+      } catch (e) {
+        console.error("Error loading custom packaging recipes", e);
       }
     }
 
@@ -175,6 +186,12 @@ export function usePlannerStore() {
       localStorage.setItem(STORAGE_KEY_RECIPES, JSON.stringify(customRecipes));
     }
   }, [customRecipes, isLoaded]);
+
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem(STORAGE_KEY_PACKAGING_RECIPES, JSON.stringify(customPackagingRecipes));
+    }
+  }, [customPackagingRecipes, isLoaded]);
 
   useEffect(() => {
     if (isLoaded) {
@@ -280,9 +297,36 @@ export function usePlannerStore() {
     });
   }, []);
 
+  const updatePackagingRecipe = useCallback((flavor: string, presentation: string, materialCode: string, value: number) => {
+    setCustomPackagingRecipes(prev => {
+      const next = { ...prev };
+      if (!next[flavor]) next[flavor] = {};
+      if (!next[flavor][presentation]) next[flavor][presentation] = {};
+      next[flavor][presentation][materialCode] = value;
+      return next;
+    });
+  }, []);
+
+  const removeMaterialFromPackagingRecipe = useCallback((flavor: string, presentation: string, materialCode: string) => {
+    setCustomPackagingRecipes(prev => {
+      const next = { ...prev };
+      if (next[flavor] && next[flavor][presentation]) {
+        const updated = { ...next[flavor][presentation] };
+        delete updated[materialCode];
+        next[flavor][presentation] = updated;
+      }
+      return next;
+    });
+  }, []);
+
   const resetRecipesToDefaults = useCallback(() => {
     setCustomRecipes(RECIPES);
     localStorage.removeItem(STORAGE_KEY_RECIPES);
+  }, []);
+
+  const resetPackagingRecipesToDefaults = useCallback(() => {
+    setCustomPackagingRecipes(CONSUMABLES_RECIPES);
+    localStorage.removeItem(STORAGE_KEY_PACKAGING_RECIPES);
   }, []);
 
   const updateRawMaterialStock = useCallback((code: string, type: 'initial' | 'final', value: number) => {
@@ -464,6 +508,7 @@ export function usePlannerStore() {
     lineSpeeds,
     realProduction,
     customRecipes,
+    customPackagingRecipes,
     rawMaterialStock,
     manualUBB,
     initialUBBTanks,
@@ -479,7 +524,10 @@ export function usePlannerStore() {
     updateRealProduction, 
     updateRecipe,
     removeMaterialFromRecipe,
+    updatePackagingRecipe,
+    removeMaterialFromPackagingRecipe,
     resetRecipesToDefaults,
+    resetPackagingRecipesToDefaults,
     updateRawMaterialStock,
     updateRawMaterialReception,
     updateRawMaterialDailyPhysical,
