@@ -1,7 +1,7 @@
 'use client';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Layout, LineChart, Warehouse, ClipboardList } from 'lucide-react';
+import { Layout, LineChart, Warehouse, ClipboardList, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function PurchasingModule() {
@@ -17,6 +17,9 @@ export function PurchasingModule() {
             </TabsTrigger>
             <TabsTrigger value="aw" className={tabsTriggerClass}>
               AW
+            </TabsTrigger>
+            <TabsTrigger value="global" className={tabsTriggerClass}>
+              <Globe className="h-3.5 w-3.5" /> Global
             </TabsTrigger>
           </TabsList>
         </div>
@@ -71,6 +74,15 @@ export function PurchasingModule() {
             <Layout className="h-12 w-12 text-slate-300 mb-4" />
             <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
               Sección AW en blanco<br/>Esperando parámetros de cálculo...
+            </p>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="global" className="m-0 animate-in fade-in-50 duration-500">
+          <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+            <Globe className="h-12 w-12 text-slate-300 mb-4" />
+            <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+              Sección Global en blanco<br/>Consolidado de requerimientos de compra...
             </p>
           </div>
         </TabsContent>
