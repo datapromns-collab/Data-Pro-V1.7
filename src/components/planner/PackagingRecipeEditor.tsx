@@ -16,7 +16,8 @@ import {
   LABELS_1_5LTS_DATA,
   LABELS_1LT_DATA,
   LABELS_04LT_DATA,
-  ADHESIVE_DATA
+  ADHESIVE_DATA,
+  DEFAULT_PACKAGING_RECIPES
 } from '@/lib/planner-utils';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -49,14 +50,17 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
   const { resetPackagingRecipesToDefaults } = usePlannerStore();
 
   const currentRecipeRaw = useMemo(() => {
-    return recipes[selectedProduct]?.[selectedPresentation] || {};
+    // Fusión de recetas por defecto con las personalizadas
+    const master = DEFAULT_PACKAGING_RECIPES[selectedProduct]?.[selectedPresentation] || {};
+    const custom = recipes[selectedProduct]?.[selectedPresentation] || {};
+    return { ...master, ...custom };
   }, [recipes, selectedProduct, selectedPresentation]);
 
   const materialsInRecipe = useMemo(() => {
     return Object.entries(currentRecipeRaw)
       .map(([code, value]) => {
         const material = ALL_PACKAGING_MATERIALS.find(m => (m as any).code === code);
-        if (!material) return null; // Filtramos cualquier cosa que no sea empaque (evita "Desconocido")
+        if (!material) return null;
         return {
           code,
           value,

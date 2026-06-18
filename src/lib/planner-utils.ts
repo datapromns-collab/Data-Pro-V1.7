@@ -331,17 +331,31 @@ export const CONSUMABLES_RECIPES: Record<string, Record<string, Record<string, n
 };
 
 // --- RECETAS DE EMPAQUE MAESTRAS ---
-// Basado en los criterios de cálculo de requerimiento (6/12 botellas por caja según lógica)
+// Basado en los criterios de cálculo de requerimiento por defecto del sistema
 export const DEFAULT_PACKAGING_RECIPES: Record<string, Record<string, Record<string, number>>> = {
   "GLUP COLA": {
     "2Lts": { "EMP_0093": 6, "EMP_0105": 6, "EMP_0042": 0.00573, "EMP_0019": 0.006981, "EMP_0080": 0.03221, "EMP_ADH01": 0.0005, "EMP_ADH02": 0.0005 },
-    "1Lt": { "EMP_0166": 12, "EMP_0105": 12, "EMP_0111": 0.006708, "EMP_0019": 0.00716, "EMP_0080": 0.03338 }
+    "1Lt": { "EMP_0166": 12, "EMP_0105": 12, "EMP_0111": 0.006708, "EMP_0019": 0.00716, "EMP_0080": 0.03338, "EMP_ADH01": 0.001 },
+    "0.4Lts": { "EMP_0126": 15, "EMP_0105_N": 15, "EMP_0110": 0.005145, "EMP_0019": 0.0034905, "EMP_0130": 0.02283 }
   },
   "GLUP KOLITA": {
-    "2Lts": { "EMP_068": 6, "EMP_0105": 6, "EMP_0034": 0.005664, "EMP_0019": 0.006981, "EMP_0080": 0.03221 }
+    "2Lts": { "EMP_068": 6, "EMP_0105": 6, "EMP_0034": 0.005664, "EMP_0019": 0.006981, "EMP_0080": 0.03221 },
+    "1Lt": { "EMP_0166": 12, "EMP_0105": 12, "EMP_0115": 0.006516, "EMP_0019": 0.00716, "EMP_0080": 0.03338 },
+    "0.4Lts": { "EMP_0126": 15, "EMP_0105_N": 15, "EMP_0114": 0.0051, "EMP_0019": 0.0034905, "EMP_0130": 0.02283 }
   },
   "GLUP FRESH": {
-    "2Lts": { "EMP_0103": 6, "EMP_0095": 6, "EMP_0038": 0.00495, "EMP_0019": 0.006981, "EMP_0080": 0.03221 }
+    "2Lts": { "EMP_0103": 6, "EMP_0095": 6, "EMP_0038": 0.00495, "EMP_0019": 0.006981, "EMP_0080": 0.03221 },
+    "1Lt": { "EMP_0117": 12, "EMP_0095": 12, "EMP_0117": 0.006684, "EMP_0019": 0.00716, "EMP_0080": 0.03338 },
+    "0.4Lts": { "EMP_0135": 15, "EMP_0095": 15, "EMP_0116": 0.00465, "EMP_0019": 0.0034905, "EMP_0130": 0.02283 }
+  },
+  "GLUP UVA": {
+    "2Lts": { "EMP_0009": 12, "EMP_0105": 12, "EMP_0022": 0.005682, "EMP_0019": 0.006981, "EMP_0080": 0.03221 }
+  },
+  "JUSTY NARANJA": {
+    "1.5Lts": { "EMP_068": 12, "EMP_0105_N": 12, "EMP_0048": 0.0108, "EMP_0019": 0.0111696, "EMP_0017": 0.03929 }
+  },
+  "JUSTY DURAZNO": {
+    "1.5Lts": { "EMP_068": 12, "EMP_0105_N": 12, "EMP_0142": 0.0108, "EMP_0019": 0.0111696, "EMP_0017": 0.03929 }
   }
 };
 
