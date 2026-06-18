@@ -1,7 +1,15 @@
 'use client';
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Layout, LineChart, Warehouse, ClipboardList, Globe } from 'lucide-react';
+import { 
+  Layout, 
+  LineChart, 
+  Warehouse, 
+  ClipboardList, 
+  Globe, 
+  Calendar,
+  FileText
+} from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function PurchasingModule() {
@@ -41,12 +49,36 @@ export function PurchasingModule() {
             </div>
 
             <TabsContent value="ventas" className="m-0 animate-in fade-in-50 duration-500">
-              <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                <LineChart className="h-12 w-12 text-slate-300 mb-4" />
-                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
-                  Proyección de Ventas (MDS)<br/>Sección en blanco...
-                </p>
-              </div>
+              <Tabs defaultValue="planificacion" className="w-full">
+                <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-10 border border-slate-100 w-fit mb-6">
+                  <TabsList className="bg-transparent h-auto p-0">
+                    <TabsTrigger value="planificacion" className={cn(tabsTriggerClass, "h-8 px-4 text-[9px]")}>
+                      <Calendar className="h-3 w-3" /> Planificación
+                    </TabsTrigger>
+                    <TabsTrigger value="requerimientos" className={cn(tabsTriggerClass, "h-8 px-4 text-[9px]")}>
+                      <FileText className="h-3 w-3" /> Requerimientos
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+
+                <TabsContent value="planificacion" className="m-0 animate-in fade-in-50 duration-500">
+                   <div className="h-[350px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                    <Calendar className="h-10 w-10 text-slate-300 mb-4" />
+                    <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+                      Planificación de Demanda (Ventas)<br/>Sección en blanco para ingreso de proyecciones...
+                    </p>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="requerimientos" className="m-0 animate-in fade-in-50 duration-500">
+                  <div className="h-[350px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                    <FileText className="h-10 w-10 text-slate-300 mb-4" />
+                    <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+                      Cálculo de Requerimientos de Ventas<br/>Consolidado de necesidades de despacho...
+                    </p>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </TabsContent>
 
             <TabsContent value="inventario" className="m-0 animate-in fade-in-50 duration-500">
