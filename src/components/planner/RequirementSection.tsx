@@ -15,7 +15,8 @@ import {
   Wheat,
   Box,
   Plus,
-  Waves
+  Waves,
+  StickyNote
 } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
 import { addDays } from 'date-fns';
@@ -42,7 +43,8 @@ import {
   CONCENTRATES_JUICES,
   SOLIDS_DATA,
   ADDITIVES_DATA,
-  CONSUMABLES_DATA
+  CONSUMABLES_DATA,
+  ADHESIVE_DATA
 } from '@/lib/planner-utils';
 
 interface RequirementSectionProps {
@@ -262,6 +264,9 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
               <TabsTrigger value="plasticos" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
                 <Layers className="h-4 w-4" /> Plásticos
               </TabsTrigger>
+              <TabsTrigger value="adhesivos" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
+                <StickyNote className="h-4 w-4" /> Adhesivos
+              </TabsTrigger>
             </TabsList>
             <TabsContent value="preformas" className="m-0 animate-in slide-in-from-left-2 duration-300">{renderTable(PREFORMS_DATA, 'UND')}</TabsContent>
             <TabsContent value="tapas" className="m-0 animate-in slide-in-from-left-2 duration-300">{renderTable(CAPS_DATA, 'UND')}</TabsContent>
@@ -280,6 +285,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
               </Tabs>
             </TabsContent>
             <TabsContent value="plasticos" className="m-0 animate-in slide-in-from-left-2 duration-300">{renderTable(PLASTICS_DATA, 'KG')}</TabsContent>
+            <TabsContent value="adhesivos" className="m-0 animate-in slide-in-from-left-2 duration-300">{renderTable(ADHESIVE_DATA, 'KG')}</TabsContent>
           </Tabs>
         </TabsContent>
 

@@ -27,7 +27,8 @@ import {
   CONCENTRATES_JUICES,
   SOLIDS_DATA,
   ADDITIVES_DATA,
-  CONSUMABLES_DATA
+  CONSUMABLES_DATA,
+  ADHESIVE_DATA
 } from '@/lib/planner-utils';
 
 interface RequirementReportProps {
@@ -260,7 +261,25 @@ export function RequirementReport({ tasks, weekStartDate, recipes, packagingReci
         </section>
 
         <section className="break-inside-avoid">
-          {renderSectionHeader("IV. Sección Etiquetas", "amber-500")}
+          {renderSectionHeader("IV. Sección Adhesivos", "emerald-600")}
+          <div className="rounded border border-slate-200 overflow-hidden">
+            <Table>
+              <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">Código SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Requerido</TableHead></TableRow></TableHeader>
+              <TableBody>
+                {ADHESIVE_DATA.map((item, idx) => (
+                  <TableRow key={`${item.code}-${idx}`} className="border-b last:border-0 h-8">
+                    <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{item.code}</TableCell>
+                    <TableCell className="py-1 text-[11px] font-medium text-slate-800">{item.description}</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{getCalculatedValue(item.code).toLocaleString('es-ES')} KG</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </section>
+
+        <section className="break-inside-avoid">
+          {renderSectionHeader("V. Sección Etiquetas", "amber-500")}
           <div className="grid grid-cols-2 gap-4">
             {[
               { label: 'Formato 2 Lts', data: LABELS_2LTS_DATA },
@@ -289,7 +308,7 @@ export function RequirementReport({ tasks, weekStartDate, recipes, packagingReci
         </section>
 
         <section className="break-inside-avoid">
-          {renderSectionHeader("V. Materia Prima - Azúcar", "emerald-500")}
+          {renderSectionHeader("VI. Materia Prima - Azúcar", "emerald-500")}
           <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
               <TableBody>
@@ -306,7 +325,7 @@ export function RequirementReport({ tasks, weekStartDate, recipes, packagingReci
         </section>
 
         <section className="break-inside-avoid">
-          {renderSectionHeader("VI. Materia Prima - Concentrados", "emerald-600")}
+          {renderSectionHeader("VII. Materia Prima - Concentrados", "emerald-600")}
           <div className="grid grid-cols-2 gap-4">
             <div className="border rounded overflow-hidden">
               <div className="bg-slate-50 px-3 py-1.5 border-b"><p className="text-[10px] font-black text-slate-500 uppercase">Refrescos</p></div>
@@ -340,7 +359,7 @@ export function RequirementReport({ tasks, weekStartDate, recipes, packagingReci
         </section>
 
         <section className="break-inside-avoid">
-          {renderSectionHeader("VII. Materia Prima - Sólidos", "emerald-700")}
+          {renderSectionHeader("VIII. Materia Prima - Sólidos", "emerald-700")}
           <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
               <TableHeader><TableRow className="bg-slate-50 h-8"><TableHead className="py-1 font-bold text-slate-700 text-xs">Código SAP</TableHead><TableHead className="py-1 font-bold text-slate-700 text-xs">Descripción</TableHead><TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Requerido</TableHead></TableRow></TableHeader>
@@ -358,7 +377,7 @@ export function RequirementReport({ tasks, weekStartDate, recipes, packagingReci
         </section>
 
         <section className="break-inside-avoid">
-          {renderSectionHeader("VIII. Materia Prima - Aditivos", "emerald-800")}
+          {renderSectionHeader("IX. Materia Prima - Aditivos", "emerald-800")}
           <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
               <TableBody>
@@ -375,7 +394,7 @@ export function RequirementReport({ tasks, weekStartDate, recipes, packagingReci
         </section>
 
         <section className="break-inside-avoid">
-          {renderSectionHeader("IX. Consumibles", "indigo-600")}
+          {renderSectionHeader("X. Consumibles", "indigo-600")}
           <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
               <TableHeader>
