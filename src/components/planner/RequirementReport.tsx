@@ -34,24 +34,32 @@ interface RequirementReportProps {
   tasks: ScheduledTask[];
   weekStartDate: Date;
   recipes: Record<string, Record<string, number>>;
+  packagingRecipes?: Record<string, Record<string, Record<string, number>>>;
 }
 
-export function RequirementReport({ tasks, weekStartDate, recipes }: RequirementReportProps) {
+export function RequirementReport({ tasks, weekStartDate, recipes, packagingRecipes }: RequirementReportProps) {
   const weekNumber = getISOWeek(weekStartDate);
   const weekEnd = addDays(weekStartDate, 7);
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
 
   const getCalculatedValue = (code: string) => {
-    let consumablesTotal = 0;
+    let packagingTotal = 0;
     tasks.forEach(task => {
       if (task.endTime > weekStartDate && task.startTime < weekEnd) {
-        const recipe = CONSUMABLES_RECIPES[task.name];
-        if (recipe && task.presentation && recipe[task.presentation] && recipe[task.presentation][code]) {
-          consumablesTotal += (task.quantity || 0) * recipe[task.presentation][code];
+        // Prioritize Custom Packaging Recipes
+        const customPkg = packagingRecipes?.[task.name]?.[task.presentation || ''];
+        if (customPkg && customPkg[code] !== undefined) {
+          packagingTotal += (task.quantity || 0) * customPkg[code];
+        } else {
+          // Fallback
+          const recipe = CONSUMABLES_RECIPES[task.name];
+          if (recipe && task.presentation && recipe[task.presentation] && recipe[task.presentation][code]) {
+            packagingTotal += (task.quantity || 0) * recipe[task.presentation][code];
+          }
         }
       }
     });
-    if (consumablesTotal > 0) return Number(consumablesTotal.toFixed(2));
+    if (packagingTotal > 0) return Number(packagingTotal.toFixed(2));
 
     let materialTotal = 0;
     tasks.forEach(task => {

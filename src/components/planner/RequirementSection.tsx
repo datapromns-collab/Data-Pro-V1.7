@@ -50,22 +50,30 @@ interface RequirementSectionProps {
   tasks: ScheduledTask[];
   weekStartDate: Date;
   recipes: Record<string, Record<string, number>>;
+  packagingRecipes?: Record<string, Record<string, Record<string, number>>>;
 }
 
-export function RequirementSection({ onPrint, tasks, weekStartDate, recipes }: RequirementSectionProps) {
+export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, packagingRecipes }: RequirementSectionProps) {
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
   const getCalculatedValue = (code: string) => {
-    let consumablesTotal = 0;
+    let packagingTotal = 0;
     tasks.forEach(task => {
       if (task.endTime > weekStartDate && task.startTime < weekEnd) {
-        const recipe = CONSUMABLES_RECIPES[task.name];
-        if (recipe && task.presentation && recipe[task.presentation] && recipe[task.presentation][code]) {
-          consumablesTotal += (task.quantity || 0) * recipe[task.presentation][code];
+        // Prioritize Custom Packaging Recipes from the new section
+        const customPkg = packagingRecipes?.[task.name]?.[task.presentation || ''];
+        if (customPkg && customPkg[code] !== undefined) {
+          packagingTotal += (task.quantity || 0) * customPkg[code];
+        } else {
+          // Fallback to static CONSUMABLES_RECIPES if it matches there
+          const recipe = CONSUMABLES_RECIPES[task.name];
+          if (recipe && task.presentation && recipe[task.presentation] && recipe[task.presentation][code]) {
+            packagingTotal += (task.quantity || 0) * recipe[task.presentation][code];
+          }
         }
       }
     });
-    if (consumablesTotal > 0) return Number(consumablesTotal.toFixed(2));
+    if (packagingTotal > 0) return Number(packagingTotal.toFixed(2));
 
     let materialTotal = 0;
     tasks.forEach(task => {

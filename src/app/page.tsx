@@ -681,7 +681,7 @@ export default function PlannerPage() {
                       <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintDaily} />
                     )}
                     {activeTab === 'requirement' && (
-                      <RequirementSection onPrint={handlePrintRequirements} tasks={tasks} weekStartDate={weekStartDate} recipes={customRecipes} />
+                      <RequirementSection onPrint={handlePrintRequirements} tasks={tasks} weekStartDate={weekStartDate} recipes={customRecipes} packagingRecipes={customPackagingRecipes} />
                     )}
                     {activeTab === 'speeds' && (
                       <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} readOnly={!isAdmin} />
@@ -793,7 +793,7 @@ export default function PlannerPage() {
           )}
           {printMode === 'requirements' && (
             <div className="p-0">
-              <RequirementReport tasks={tasks} weekStartDate={weekStartDate} recipes={customRecipes} />
+              <RequirementReport tasks={tasks} weekStartDate={weekStartDate} recipes={customRecipes} packagingRecipes={customPackagingRecipes} />
             </div>
           )}
           {printMode === 'summary' && (

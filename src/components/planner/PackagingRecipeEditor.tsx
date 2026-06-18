@@ -16,13 +16,13 @@ import {
   LABELS_1_5LTS_DATA,
   LABELS_1LT_DATA,
   LABELS_04LT_DATA,
-  CONSUMABLES_DATA,
-  CONSUMABLES_RECIPES
+  CONSUMABLES_DATA
 } from '@/lib/planner-utils';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
 import { usePlannerStore } from '@/hooks/use-planner-store';
+import { cn } from '@/lib/utils';
 
 const PRESENTATIONS = ["2Lts", "1Lt", "1.5Lts", "0.4Lts"];
 
@@ -49,7 +49,6 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
   const { resetPackagingRecipesToDefaults } = usePlannerStore();
 
   const currentRecipe = useMemo(() => {
-    // Favor custom recipes if they exist
     return recipes[selectedProduct]?.[selectedPresentation] || {};
   }, [recipes, selectedProduct, selectedPresentation]);
 
@@ -92,7 +91,6 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
   return (
     <div className="max-w-[1400px] mx-auto space-y-8 animate-in fade-in duration-700 pb-10">
       
-      {/* HEADER DE MÓDULO */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6 no-print">
         <div className="flex items-center gap-4">
           <div className="bg-primary p-3 rounded-2xl shadow-lg shadow-primary/10">
@@ -143,8 +141,6 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        
-        {/* TABLA DE RECETA */}
         <div className="lg:col-span-8">
           <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
             <div className="bg-[#0c1a3d] px-10 py-6 flex items-center justify-between">
@@ -253,7 +249,6 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
           </Card>
         </div>
 
-        {/* SIDEBAR INFORMATIVO */}
         <div className="lg:col-span-4 space-y-6">
           <Card className="p-8 border-slate-200 rounded-[2.5rem] bg-white shadow-sm border-dashed border-2">
             <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
