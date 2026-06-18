@@ -652,7 +652,7 @@ export default function PlannerPage() {
                         className={cn(navTabClass(activeTab === 'recipes-editor'), "bg-emerald-50 text-emerald-700 active:scale-100 active:transform-none transform-none", activeTab !== 'recipes-editor' && "bg-transparent text-slate-500 hover:bg-slate-50")}
                       >
                         <FlaskConical className="h-3.5 w-3.5" />
-                        Edición de Recetas
+                        Recetas de Materia Prima
                       </button>
                     </>
                   ) : null}
