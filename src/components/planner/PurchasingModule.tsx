@@ -94,7 +94,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
           return;
         }
 
-        // 2. Lógica de Fallback para Material de Empaque
+        // 2. Lógica de Fallback para Material de Empaque (Actualizada según Tabla Técnica)
         if (code === 'EMP_0019') {
           total += quantity * (PLASTIC_FACTORS[presentation as keyof typeof PLASTIC_FACTORS] || 0);
           return;
@@ -124,23 +124,26 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
           return;
         }
 
-        // Preformas Fallbacks
+        // Preformas Fallbacks (Actualizados según Tabla Técnica del usuario)
         const isFresh = product === "GLUP FRESH";
         const isColaKolita = product === "GLUP COLA" || product === "GLUP KOLITA";
-        const isFruitFlavor = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"].includes(product);
         const isJugo = product.startsWith("JUSTY") || product.startsWith("VITA");
 
-        // PREFORMA 42g (EMP_0093) para COLA/KOLITA 2Lts
-        if (code === 'EMP_0093' && presentation === "2Lts" && isColaKolita) { total += quantity * 6; return; }
-        
-        // Otros mapeos
-        if (code === 'EMP_0166' && presentation === "1Lt" && (isColaKolita || isFruitFlavor)) { total += quantity * 12; return; }
-        if (code === 'EMP_0009' && presentation === "2Lts" && isFruitFlavor) { total += quantity * 6; return; }
-        if (code === 'EMP_068' && (presentation === "1.5Lts")) { total += quantity * 12; return; }
-        if (code === 'EMP_0126' && presentation === "0.4Lts" && !isFresh) { total += quantity * 15; return; }
-        if (code === 'EMP_0135' && presentation === "0.4Lts" && isFresh) { total += quantity * 15; return; }
+        // 2Lts (x6) - 42g
         if (code === 'EMP_0103' && presentation === "2Lts" && isFresh) { total += quantity * 6; return; }
+        if (code === 'EMP_0093' && presentation === "2Lts" && !isFresh && !isJugo) { total += quantity * 6; return; }
+
+        // 1Lt (x12) - 33g Cola/Kolita, 29g Verde Fresh, 29g Trans Resto
+        if (code === 'EMP_0166' && presentation === "1Lt" && isColaKolita) { total += quantity * 12; return; }
         if (code === 'EMP_0120' && presentation === "1Lt" && isFresh) { total += quantity * 12; return; }
+        if (code === 'EMP_0009' && presentation === "1Lt" && !isFresh && !isColaKolita && !isJugo) { total += quantity * 12; return; }
+
+        // 0.4Lts (x15) - 20g
+        if (code === 'EMP_0135' && presentation === "0.4Lts" && isFresh) { total += quantity * 15; return; }
+        if (code === 'EMP_0126' && presentation === "0.4Lts" && !isFresh && !isJugo) { total += quantity * 15; return; }
+        
+        // 1.5Lts Jugos - 36g
+        if (code === 'EMP_068' && presentation === "1.5Lts" && isJugo) { total += quantity * 12; return; }
 
         // Tapas Fallbacks
         if (code === 'EMP_0095' && isFresh) { 
@@ -320,7 +323,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
 
             <TabsContent value="ventas" className="m-0 animate-in fade-in-50 duration-500">
               <Tabs defaultValue="planificacion" className="w-full">
-                <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-100 w-fit mb-6 no-print">
+                <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-100 w-fit no-print">
                   <TabsList className="bg-transparent h-auto p-0">
                     <TabsTrigger value="planificacion" className={tabsTriggerClass}>
                       <Calendar className="h-3.5 w-3.5" /> Planificación

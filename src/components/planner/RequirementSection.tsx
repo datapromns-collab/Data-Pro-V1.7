@@ -69,10 +69,34 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
         if (customPkg && customPkg[code] !== undefined) {
           packagingTotal += (task.quantity || 0) * customPkg[code];
         } else {
-          // Fallback to static CONSUMABLES_RECIPES
+          // Fallback - Actualizado según Tabla Técnica
+          const isFresh = task.name === "GLUP FRESH";
+          const isColaKolita = task.name === "GLUP COLA" || task.name === "GLUP KOLITA";
+          const isJugo = task.name.startsWith("JUSTY") || task.name.startsWith("VITA");
+          const pres = task.presentation || "";
+          const qty = task.quantity || 0;
+
+          // Preformas (Actualizado)
+          // 2Lts (x6)
+          if (code === 'EMP_0103' && pres === "2Lts" && isFresh) { packagingTotal += qty * 6; return; }
+          if (code === 'EMP_0093' && pres === "2Lts" && !isFresh && !isJugo) { packagingTotal += qty * 6; return; }
+
+          // 1Lt (x12)
+          if (code === 'EMP_0166' && pres === "1Lt" && isColaKolita) { packagingTotal += qty * 12; return; }
+          if (code === 'EMP_0120' && pres === "1Lt" && isFresh) { packagingTotal += qty * 12; return; }
+          if (code === 'EMP_0009' && pres === "1Lt" && !isFresh && !isColaKolita && !isJugo) { packagingTotal += qty * 12; return; }
+
+          // 0.4Lts (x15)
+          if (code === 'EMP_0135' && pres === "0.4Lts" && isFresh) { packagingTotal += qty * 15; return; }
+          if (code === 'EMP_0126' && pres === "0.4Lts" && !isFresh && !isJugo) { packagingTotal += qty * 15; return; }
+          
+          // 1.5Lts Jugos
+          if (code === 'EMP_068' && pres === "1.5Lts" && isJugo) { packagingTotal += qty * 12; return; }
+
+          // Otros consumibles
           const recipe = CONSUMABLES_RECIPES[task.name];
-          if (recipe && task.presentation && recipe[task.presentation] && recipe[task.presentation][code]) {
-            packagingTotal += (task.quantity || 0) * recipe[task.presentation][code];
+          if (recipe && pres && recipe[pres] && recipe[pres][code]) {
+            packagingTotal += qty * recipe[pres][code];
           }
         }
       }
@@ -161,54 +185,27 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
       }, 0).toFixed(6));
     }
 
-    switch (code) {
-      case 'EMP_0093': {
-        const isColaKolita = (name: string) => name === "GLUP COLA" || name === "GLUP KOLITA";
-        return Math.round(tasks.filter(t => t.endTime > weekStartDate && t.startTime < weekEnd && t.presentation === '2Lts' && isColaKolita(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
-      }
-      case 'EMP_0009': { 
-        const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
-        return Math.round(tasks.filter(t => t.endTime > weekStartDate && t.startTime < weekEnd && t.presentation === '2Lts' && flavors.includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
-      }
-      case 'EMP_068': { 
-        return Math.round(tasks.filter(t => t.endTime > weekStartDate && t.startTime < weekEnd && t.presentation === '1.5Lts').reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
-      }
-      case 'EMP_0166': {
-        const flavors = ["GLUP COLA", "GLUP KOLITA", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
-        const colaKolita1L = tasks.filter(t => 
-          flavors.includes(t.name) && 
-          t.presentation === "1Lt" &&
-          t.endTime > weekStartDate && t.startTime < weekEnd
-        ).reduce((acc, t) => acc + (t.quantity || 0), 0);
-        return Math.round(colaKolita1L * 12);
-      }
-      case 'EMP_0103': return Math.round(tasks.filter(t => t.presentation === "2Lts" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
-      case 'EMP_0120': return Math.round(tasks.filter(t => t.presentation === "1Lt" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
-      case 'EMP_0126': return Math.round(tasks.filter(t => t.presentation === "0.4Lts" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
-      case 'EMP_0135': return Math.round(tasks.filter(t => t.presentation === "0.4Lts" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
-      case 'EMP_0095': { 
-        const fresh = tasks.filter(t => t.name === "GLUP FRESH" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
+    // Tapas Fallback
+    if (code === 'EMP_0095') {
+       return Math.round(tasks.filter(t => t.name === "GLUP FRESH" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
            const f = t.presentation === "2Lts" ? 6 : (t.presentation === "1Lt" ? 12 : 15);
            return acc + (t.quantity || 0) * f;
-        }, 0);
-        return Math.round(fresh);
-      }
-      case 'EMP_0105': { 
-        const other = tasks.filter(t => t.name !== "GLUP FRESH" && !t.name.startsWith("JUSTY") && !t.name.startsWith("VITA") && t.presentation !== "0.4Lts" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
+        }, 0));
+    }
+    if (code === 'EMP_0105') {
+       return Math.round(tasks.filter(t => t.name !== "GLUP FRESH" && !t.name.startsWith("JUSTY") && !t.name.startsWith("VITA") && t.presentation !== "0.4Lts" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
            const f = t.presentation === "2Lts" ? 6 : 12;
            return acc + (t.quantity || 0) * f;
-        }, 0);
-        return Math.round(other);
-      }
-      case 'EMP_0105_N': { 
-        const jugos = tasks.filter(t => (t.name.startsWith("JUSTY") || t.name.startsWith("VITA") || t.presentation === "0.4Lts") && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
+        }, 0));
+    }
+    if (code === 'EMP_0105_N') {
+       return Math.round(tasks.filter(t => (t.name.startsWith("JUSTY") || t.name.startsWith("VITA") || t.presentation === "0.4Lts") && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
            const f = (t.presentation === "1.5Lts") ? 12 : 15;
            return acc + (t.quantity || 0) * f;
-        }, 0);
-        return Math.round(jugos);
-      }
-      default: return 0;
+        }, 0));
     }
+
+    return 0;
   };
 
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";

@@ -336,7 +336,7 @@ export const CONSUMABLES_RECIPES: Record<string, Record<string, Record<string, n
   }
 };
 
-// --- RECETAS DE EMPAQUE MAESTRAS ---
+// --- RECETAS DE EMPAQUE MAESTRAS (Actualizadas según Tabla Técnica) ---
 export const DEFAULT_PACKAGING_RECIPES: Record<string, Record<string, Record<string, number>>> = {
   "GLUP COLA": {
     "2Lts": { "EMP_0093": 6, "EMP_0105": 6, "EMP_0042": 0.00573, "EMP_0019": 0.006981, "EMP_0080": 0.03221, "EMP_0078": 0.000258 },
@@ -354,7 +354,9 @@ export const DEFAULT_PACKAGING_RECIPES: Record<string, Record<string, Record<str
     "0.4Lts": { "EMP_0135": 15, "EMP_0095": 15, "EMP_0116": 0.00465, "EMP_0019": 0.0034905, "EMP_0130": 0.02283, "EMP_0078": 0.00036 }
   },
   "GLUP UVA": {
-    "2Lts": { "EMP_0009": 6, "EMP_0105": 6, "EMP_0022": 0.005682, "EMP_0019": 0.006981, "EMP_0080": 0.03221, "EMP_0078": 0.000258 }
+    "2Lts": { "EMP_0009": 6, "EMP_0105": 6, "EMP_0022": 0.005682, "EMP_0019": 0.006981, "EMP_0080": 0.03221, "EMP_0078": 0.000258 },
+    "1Lt": { "EMP_0009": 12, "EMP_0105": 12, "EMP_0113": 0.005124, "EMP_0019": 0.00716, "EMP_0080": 0.03338, "EMP_0078": 0.000276 },
+    "0.4Lts": { "EMP_0126": 15, "EMP_0105_N": 15, "EMP_0112": 0.0048, "EMP_0019": 0.0034905, "EMP_0130": 0.02283, "EMP_0078": 0.00036 }
   },
   "JUSTY NARANJA": {
     "1.5Lts": { "EMP_068": 12, "EMP_0105_N": 12, "EMP_0048": 0.0108, "EMP_0019": 0.0111696, "EMP_0017": 0.03929, "EMP_0078": 0.000216 }
