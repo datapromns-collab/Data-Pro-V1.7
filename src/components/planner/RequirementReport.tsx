@@ -129,10 +129,18 @@ export function RequirementReport({ tasks, weekStartDate, recipes }: Requirement
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
         return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && flavors.includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
       }
-      case 'EMP_0068': { 
-        const line7 = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && ["GLUP COLA", "GLUP KOLITA"].includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 12;
-        const line5 = tasks.filter(t => t.lineId === "5" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0) * 12;
+      case 'EMP_068': { 
+        const line7 = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && ["GLUP COLA", "GLUP KOLITA"].includes(t.name) && t.presentation !== '1Lt').reduce((acc, t) => acc + (t.quantity || 0), 0) * 12;
+        const line5 = tasks.filter(t => t.lineId === "5" && t.endTime > weekStartDate && t.startTime < weekEnd && t.presentation !== '1Lt').reduce((acc, t) => acc + (t.quantity || 0), 0) * 12;
         return Math.round(line7 + line5);
+      }
+      case 'EMP_0166': {
+        const colaKolita1L = tasks.filter(t => 
+          (t.name === "GLUP COLA" || t.name === "GLUP KOLITA") && 
+          t.presentation === "1Lt" &&
+          t.endTime > weekStartDate && t.startTime < weekEnd
+        ).reduce((acc, t) => acc + (t.quantity || 0), 0);
+        return Math.round(colaKolita1L * 12);
       }
       case 'EMP_0093': return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
       case 'EMP_0103': return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
