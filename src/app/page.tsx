@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
@@ -47,6 +48,7 @@ import { RawMaterialModule } from '@/components/planner/RawMaterialModule';
 import { RawMaterialReport } from '@/components/planner/RawMaterialReport';
 import { DailyRawMaterialReport } from '@/components/planner/DailyRawMaterialReport';
 import { PurchasingModule } from '@/components/planner/PurchasingModule';
+import { PurchasingRequirementReport } from '@/components/planner/PurchasingRequirementReport';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
@@ -79,6 +81,7 @@ export default function PlannerPage() {
     finalUBBTanks,
     initialUBBTanksDaily,
     finalUBBTanksDaily,
+    salesProjection,
     setWeekStartDate, 
     addTask, 
     updateTask, 
@@ -125,7 +128,7 @@ export default function PlannerPage() {
   const [activeModule, setActiveModule] = useState<'planning' | 'management' | 'recipes' | 'raw-materials' | 'purchasing'>('planning');
   const [activeTab, setActiveTab] = useState("gantt");
   
-  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance' | 'raw-material' | 'daily-raw-material'>('plan');
+  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance' | 'raw-material' | 'daily-raw-material' | 'purchasing-requirements'>('plan');
   const [emitDate, setEmitDate] = useState('');
   const [printWorkingDate, setPrintWorkingDate] = useState<Date>(new Date());
   
@@ -245,6 +248,18 @@ export default function PlannerPage() {
 
   const handlePrintRequirements = () => {
     setPrintMode('requirements');
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
+
+  const handlePrintPurchasingRequirements = () => {
+    setPrintMode('purchasing-requirements');
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: portrait; margin: 5mm; }';
@@ -763,7 +778,7 @@ export default function PlannerPage() {
                   </>
                 )}
                 {activeModule === 'purchasing' && (
-                  <PurchasingModule />
+                  <PurchasingModule onPrintRequirements={handlePrintPurchasingRequirements} />
                 )}
               </div>
             </div>
@@ -794,6 +809,15 @@ export default function PlannerPage() {
           {printMode === 'requirements' && (
             <div className="p-0">
               <RequirementReport tasks={tasks} weekStartDate={weekStartDate} recipes={customRecipes} packagingRecipes={customPackagingRecipes} />
+            </div>
+          )}
+          {printMode === 'purchasing-requirements' && (
+            <div className="p-0">
+              <PurchasingRequirementReport 
+                salesProjection={salesProjection} 
+                customRecipes={customRecipes} 
+                customPackagingRecipes={customPackagingRecipes} 
+              />
             </div>
           )}
           {printMode === 'summary' && (

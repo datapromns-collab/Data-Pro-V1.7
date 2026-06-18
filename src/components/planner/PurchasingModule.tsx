@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useMemo } from 'react';
@@ -20,11 +21,13 @@ import {
   Tag,
   Layers,
   StickyNote,
-  Box
+  Box,
+  Printer
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -64,7 +67,11 @@ const JUGOS = [
   "JUSTY TAMARINDO", "JUSTY MANZANA", "JUSTY PERA", "VITA TEA DURAZNO", "VITA TEA LIMON"
 ];
 
-export function PurchasingModule() {
+interface PurchasingModuleProps {
+  onPrintRequirements?: () => void;
+}
+
+export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps) {
   const { 
     salesProjection, 
     updateSalesProjection,
@@ -340,6 +347,16 @@ export function PurchasingModule() {
 
                 <TabsContent value="requerimientos" className="m-0 animate-in fade-in-50 duration-500 space-y-10">
                   
+                  <div className="flex justify-end no-print">
+                    <Button 
+                      onClick={onPrintRequirements}
+                      variant="outline" 
+                      className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
+                    >
+                      <Printer className="h-4 w-4" /> Generar Reporte PDF
+                    </Button>
+                  </div>
+
                   {/* SECCIÓN I: MATERIA PRIMA */}
                   <div className="space-y-6">
                     <div className="flex items-center gap-3 px-2">
