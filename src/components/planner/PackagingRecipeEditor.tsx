@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Package, Beaker, Plus, Trash2, RotateCcw, Layout, Tag, Target, CircleDot, Layers, Box, Info } from 'lucide-react';
+import { Package, Beaker, Plus, Trash2, RotateCcw, Layout, Tag, Target, CircleDot, Layers, Box, Info, Droplet } from 'lucide-react';
 import { 
   PRODUCT_LIST, 
   PREFORMS_DATA,
@@ -16,7 +16,7 @@ import {
   LABELS_1_5LTS_DATA,
   LABELS_1LT_DATA,
   LABELS_04LT_DATA,
-  CONSUMABLES_DATA
+  ADHESIVE_DATA
 } from '@/lib/planner-utils';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -30,11 +30,11 @@ const ALL_PACKAGING_MATERIALS = [
   ...PREFORMS_DATA,
   ...CAPS_DATA,
   ...PLASTICS_DATA.filter(m => !('isHeader' in m)),
+  ...ADHESIVE_DATA,
   ...LABELS_2LTS_DATA,
   ...LABELS_1_5LTS_DATA,
   ...LABELS_1LT_DATA,
   ...LABELS_04LT_DATA,
-  ...CONSUMABLES_DATA
 ];
 
 export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMaterial }: {
@@ -255,7 +255,7 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
               <Info className="h-4 w-4 text-primary" /> Guía de Gestión
             </h4>
             <p className="text-sm font-bold text-slate-600 leading-relaxed uppercase">
-              Configure los requerimientos de <span className="text-primary font-black">Preformas, Tapas, Plásticos y Etiquetas</span> por cada sabor y presentación. 
+              Configure los requerimientos de <span className="text-primary font-black">Preformas, Tapas, Plásticos, Etiquetas y Adhesivos</span> por cada sabor y presentación. 
               <br/><br/>
               Los valores definidos aquí alimentan directamente el reporte de requerimientos semanales.
             </p>
@@ -271,7 +271,8 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
                 { label: 'Preformas', icon: Target, color: 'bg-red-50 text-red-600' },
                 { label: 'Tapas', icon: CircleDot, color: 'bg-blue-50 text-blue-600' },
                 { label: 'Etiquetas', icon: Tag, color: 'bg-amber-50 text-amber-600' },
-                { label: 'Plásticos', icon: Layers, color: 'bg-indigo-50 text-indigo-600' }
+                { label: 'Plásticos', icon: Layers, color: 'bg-indigo-50 text-indigo-600' },
+                { label: 'Adhesivos', icon: Droplet, color: 'bg-emerald-50 text-emerald-600' }
               ].map(item => (
                 <div key={item.label} className="flex items-center gap-4 p-4 rounded-2xl border border-slate-50 hover:bg-slate-50 transition-all group">
                    <div className={cn("p-2.5 rounded-xl shadow-sm group-hover:bg-white transition-colors", item.color)}>

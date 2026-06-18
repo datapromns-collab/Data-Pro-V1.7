@@ -46,6 +46,11 @@ export const PLASTICS_DATA = [
   { code: 'EMP_0130', description: 'POLIETILENO TERMOENCOGIBLE 43 x 0.06' },
 ];
 
+export const ADHESIVE_DATA = [
+  { code: 'EMP_ADH01', description: 'ADHESIVO HOT MELT (EMPAQUE)', unit: 'KG' },
+  { code: 'EMP_ADH02', description: 'ADHESIVO ETIQUETADO (COLA)', unit: 'KG' },
+];
+
 export const LABELS_2LTS_DATA = [
   { code: 'EMP_0022', description: 'ETIQUETA UVA 2000ML' },
   { code: 'EMP_0026', description: 'ETIQUETA PIÑA 2000ML' },
