@@ -20,30 +20,30 @@ export const ALL_LINES_SUMMARY = ["1", "2", "3", "4", "5", "6", "7", "8"];
 // --- DATOS MAESTROS DE MATERIALES ---
 
 export const PREFORMS_DATA = [
-  { code: 'EMP_0009', description: 'PREFORMA TRANSPARENTE 29.6GR 1881' },
-  { code: 'EMP_068', description: 'PREFORMA TRANSPARENTE 36 GR-1881' },
-  { code: 'EMP_0093', description: 'PREFORMA TRANSPARENTE 42,64 GR-1881' },
-  { code: 'EMP_0103', description: 'PREFORMA VERDE 42,64 GR-1881' },
-  { code: 'EMP_0120', description: 'PREFORMA VERDE 29.6GR 1881' },
-  { code: 'EMP_0126', description: 'PREFORMA TRANSPARENTE 20,55GR-1881' },
-  { code: 'EMP_0135', description: 'PREFORMA VERDE 20,5-1881' },
-  { code: 'EMP_0166', description: 'PREFORMA TRANSPARENTE 33 GR-1881' },
+  { code: 'EMP_0009', description: 'PREFORMA TRANSPARENTE 29.6GR 1881', unit: 'UND' },
+  { code: 'EMP_068', description: 'PREFORMA TRANSPARENTE 36 GR-1881', unit: 'UND' },
+  { code: 'EMP_0093', description: 'PREFORMA TRANSPARENTE 42,64 GR-1881', unit: 'UND' },
+  { code: 'EMP_0103', description: 'PREFORMA VERDE 42,64 GR-1881', unit: 'UND' },
+  { code: 'EMP_0120', description: 'PREFORMA VERDE 29.6GR 1881', unit: 'UND' },
+  { code: 'EMP_0126', description: 'PREFORMA TRANSPARENTE 20,55GR-1881', unit: 'UND' },
+  { code: 'EMP_0135', description: 'PREFORMA VERDE 20,5-1881', unit: 'UND' },
+  { code: 'EMP_0166', description: 'PREFORMA TRANSPARENTE 33 GR-1881', unit: 'UND' },
 ];
 
 export const CAPS_DATA = [
-  { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS IMPORTADAS' },
-  { code: 'EMP_0095_N', description: 'TAPA VERDE REFRESCOS NACIONALES' },
-  { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS IMPORTADAS' },
-  { code: 'EMP_0105_2', description: 'TAPA AZULES REFRESCOS IMPORTADAS #2' },
-  { code: 'EMP_0105_N', description: 'TAPA AZULES REFRESCOS NACIONALES' },
+  { code: 'EMP_0095', description: 'TAPA VERDE REFRESCOS IMPORTADAS', unit: 'UND' },
+  { code: 'EMP_0095_N', description: 'TAPA VERDE REFRESCOS NACIONALES', unit: 'UND' },
+  { code: 'EMP_0105', description: 'TAPA AZULES REFRESCOS IMPORTADAS', unit: 'UND' },
+  { code: 'EMP_0105_2', description: 'TAPA AZULES REFRESCOS IMPORTADAS #2', unit: 'UND' },
+  { code: 'EMP_0105_N', description: 'TAPA AZULES REFRESCOS NACIONALES', unit: 'UND' },
 ];
 
 export const PLASTICS_DATA = [
-  { code: 'EMP_0019', description: 'FILM POLIESTRECH 23 MIC' },
+  { code: 'EMP_0019', description: 'FILM POLIESTRECH 23 MIC', unit: 'KG' },
   { isHeader: true, description: 'Termo Encogible' },
-  { code: 'EMP_0017', description: 'POLIETILENO TERMOENCOGIBLE 55 X 0.07' },
-  { code: 'EMP_0080', description: 'POLIETILENO TERMOENCOGIBLE 48x0.06' },
-  { code: 'EMP_0130', description: 'POLIETILENO TERMOENCOGIBLE 43 x 0.06' },
+  { code: 'EMP_0017', description: 'POLIETILENO TERMOENCOGIBLE 55 X 0.07', unit: 'KG' },
+  { code: 'EMP_0080', description: 'POLIETILENO TERMOENCOGIBLE 48x0.06', unit: 'KG' },
+  { code: 'EMP_0130', description: 'POLIETILENO TERMOENCOGIBLE 43 x 0.06', unit: 'KG' },
 ];
 
 export const ADHESIVE_DATA = [
@@ -52,50 +52,50 @@ export const ADHESIVE_DATA = [
 ];
 
 export const LABELS_2LTS_DATA = [
-  { code: 'EMP_0022', description: 'ETIQUETA UVA 2000ML' },
-  { code: 'EMP_0026', description: 'ETIQUETA PIÑA 2000ML' },
-  { code: 'EMP_0030', description: 'ETIQUETA NARANJA 2000 ML' },
-  { code: 'EMP_0034', description: 'ETIQUETA KOLITA 2000ML' },
-  { code: 'EMP_0038', description: 'ETIQUETA FRESH 2000ML' },
-  { code: 'EMP_0042', description: 'ETIQUETA COLA NEGRA 2000ML' },
-  { code: 'EMP_0101', description: 'ETIQUETA MANZANA VERDE 2000ML' },
-  { code: 'EMP_0136', description: 'ETIQUETA MANZANA ROJA 2000ML' },
-  { code: 'EMP_0137', description: 'ETIQUETA PIÑA PARCHITA 2000ML' },
+  { code: 'EMP_0022', description: 'ETIQUETA UVA 2000ML', unit: 'KG' },
+  { code: 'EMP_0026', description: 'ETIQUETA PIÑA 2000ML', unit: 'KG' },
+  { code: 'EMP_0030', description: 'ETIQUETA NARANJA 2000 ML', unit: 'KG' },
+  { code: 'EMP_0034', description: 'ETIQUETA KOLITA 2000ML', unit: 'KG' },
+  { code: 'EMP_0038', description: 'ETIQUETA FRESH 2000ML', unit: 'KG' },
+  { code: 'EMP_0042', description: 'ETIQUETA COLA NEGRA 2000ML', unit: 'KG' },
+  { code: 'EMP_0101', description: 'ETIQUETA MANZANA VERDE 2000ML', unit: 'KG' },
+  { code: 'EMP_0136', description: 'ETIQUETA MANZANA ROJA 2000ML', unit: 'KG' },
+  { code: 'EMP_0137', description: 'ETIQUETA PIÑA PARCHITA 2000ML', unit: 'KG' },
 ];
 
 export const LABELS_1_5LTS_DATA = [
-  { code: 'EMP_0048', description: 'ETIQUETA JUSTY NARANJA 1.5 LITROS' },
-  { code: 'EMP_0076', description: 'ETIQUETA VITA TE LIMON 1.5 LTS' },
-  { code: 'EMP_0077', description: 'ETIQUETA VITA TE DURAZNO 1.5 LTS' },
-  { code: 'EMP_0142', description: 'ETIQUETA JUSTY DURAZNO 1.5 LITROS' },
-  { code: 'EMP_0143', description: 'ETIQUETA JUSTY MANDARINA 1.5 LITROS' },
-  { code: 'EMP_0144', description: 'ETIQUETA JUSTY SANDIA 1.5 LITROS' },
-  { code: 'EMP_0145', description: 'ETIQUETA JUSTY TAMARINDO 1.5 LITROS' },
-  { code: 'EMP_0146', description: 'ETIQUETA JUSTY LIMON 1.5 LITROS' },
+  { code: 'EMP_0048', description: 'ETIQUETA JUSTY NARANJA 1.5 LITROS', unit: 'KG' },
+  { code: 'EMP_0076', description: 'ETIQUETA VITA TE LIMON 1.5 LTS', unit: 'KG' },
+  { code: 'EMP_0077', description: 'ETIQUETA VITA TE DURAZNO 1.5 LTS', unit: 'KG' },
+  { code: 'EMP_0142', description: 'ETIQUETA JUSTY DURAZNO 1.5 LITROS', unit: 'KG' },
+  { code: 'EMP_0143', description: 'ETIQUETA JUSTY MANDARINA 1.5 LITROS', unit: 'KG' },
+  { code: 'EMP_0144', description: 'ETIQUETA JUSTY SANDIA 1.5 LITROS', unit: 'KG' },
+  { code: 'EMP_0145', description: 'ETIQUETA JUSTY TAMARINDO 1.5 LITROS', unit: 'KG' },
+  { code: 'EMP_0146', description: 'ETIQUETA JUSTY LIMON 1.5 LITROS', unit: 'KG' },
 ];
 
 export const LABELS_1LT_DATA = [
-  { code: 'EMP_0111', description: 'ETIQUETA COLA NEGRA 1000ML' },
-  { code: 'EMP_0113', description: 'ETIQUETA UVA 1000ML' },
-  { code: 'EMP_0115', description: 'ETIQUETA KOLITA 1000ML' },
-  { code: 'EMP_0117', description: 'ETIQUETA FRESH 1000ML' },
-  { code: 'EMP_0118', description: 'ETIQUETA MANZANA VERDE 1000ML' },
-  { code: 'EMP_0147', description: 'ETIQUETA PIÑA 1000ML' },
-  { code: 'EMP_0148', description: 'ETIQUETA NARANJA 1000ML' },
-  { code: 'EMP_0149', description: 'ETIQUETA PIÑA PARCHITA 1000ML' },
-  { code: 'EMP_0150', description: 'ETIQUETA MANZANA ROJA 1000ML' },
+  { code: 'EMP_0111', description: 'ETIQUETA COLA NEGRA 1000ML', unit: 'KG' },
+  { code: 'EMP_0113', description: 'ETIQUETA UVA 1000ML', unit: 'KG' },
+  { code: 'EMP_0115', description: 'ETIQUETA KOLITA 1000ML', unit: 'KG' },
+  { code: 'EMP_0117', description: 'ETIQUETA FRESH 1000ML', unit: 'KG' },
+  { code: 'EMP_0118', description: 'ETIQUETA MANZANA VERDE 1000ML', unit: 'KG' },
+  { code: 'EMP_0147', description: 'ETIQUETA PIÑA 1000ML', unit: 'KG' },
+  { code: 'EMP_0148', description: 'ETIQUETA NARANJA 1000ML', unit: 'KG' },
+  { code: 'EMP_0149', description: 'ETIQUETA PIÑA PARCHITA 1000ML', unit: 'KG' },
+  { code: 'EMP_0150', description: 'ETIQUETA MANZANA ROJA 1000ML', unit: 'KG' },
 ];
 
 export const LABELS_04LT_DATA = [
-  { code: 'EMP_0110', description: 'ETIQUETA COLA NEGRA 400ML' },
-  { code: 'EMP_0112', description: 'ETIQUETA UVA 400ML' },
-  { code: 'EMP_0114', description: 'ETIQUETA KOLITA 400ML' },
-  { code: 'EMP_0116', description: 'ETIQUETA FRESH 400ML' },
-  { code: 'EMP_0119', description: 'ETIQUETA MANZANA VERDE 400ML' },
-  { code: 'EMP_0151', description: 'ETIQUETA PIÑA 400ML' },
-  { code: 'EMP_0152', description: 'ETIQUETA NARANJA 400ML' },
-  { code: 'EMP_0154', description: 'ETIQUETA PIÑA PARCHITA 400ML' },
-  { code: 'EMP_0155', description: 'ETIQUETA MANZANA ROJA 400ML' },
+  { code: 'EMP_0110', description: 'ETIQUETA COLA NEGRA 400ML', unit: 'KG' },
+  { code: 'EMP_0112', description: 'ETIQUETA UVA 400ML', unit: 'KG' },
+  { code: 'EMP_0114', description: 'ETIQUETA KOLITA 400ML', unit: 'KG' },
+  { code: 'EMP_0116', description: 'ETIQUETA FRESH 400ML', unit: 'KG' },
+  { code: 'EMP_0119', description: 'ETIQUETA MANZANA VERDE 400ML', unit: 'KG' },
+  { code: 'EMP_0151', description: 'ETIQUETA PIÑA 400ML', unit: 'KG' },
+  { code: 'EMP_0152', description: 'ETIQUETA NARANJA 400ML', unit: 'KG' },
+  { code: 'EMP_0154', description: 'ETIQUETA PIÑA PARCHITA 400ML', unit: 'KG' },
+  { code: 'EMP_0155', description: 'ETIQUETA MANZANA ROJA 400ML', unit: 'KG' },
 ];
 
 export const SUGAR_DATA = [
@@ -307,460 +307,56 @@ export const UBB_FACTORS: Record<string, number> = {
 };
 
 export const RECIPES: Record<string, Record<string, number>> = {
-  "GLUP COLA": {
-    "MATP_0001": 1925.033645,
-    "MATP_0002": 18.93,
-    "MATP_0009": 18.93,
-    "MATP_0010": 0.95,
-  },
-  "GLUP FRESH": {
-    "MATP_0001": 1904.412248,
-    "MATP_0003": 18.93,
-    "MATP_0017": 25.65,
-    "MATP_0021": 4.55,
-    "MATP_0019": 4.55,
-  },
-  "GLUP UVA": {
-    "MATP_0001": 1024.909587,
-    "MATP_0005": 18.93,
-    "MATP_0017": 5.35,
-    "MATP_0015": 6.4,
-    "MATP_0019": 2.25,
-  },
-  "GLUP PIÑA": {
-    "MATP_0001": 1175.847343,
-    "MATP_0006": 18.93,
-    "MATP_0017": 11.95,
-    "MATP_0019": 1.95,
-  },
-  "GLUP NARANJA": {
-    "MATP_0001": 1030.977235,
-    "MATP_0004": 18.93,
-    "MATP_0017": 13.05,
-    "MATP_0014": 2.25,
-  },
-  "GLUP KOLITA": {
-    "MATP_0001": 666.4654676,
-    "MATP_0007": 18.93,
-    "MATP_0017": 1.45,
-    "MATP_0016": 0.23,
-    "MATP_0019": 0.85,
-  },
-  "GLUP MANZANA VERDE": {
-    "MATP_0001": 624.6972684,
-    "MATP_0032": 18.93,
-    "MATP_0017": 15.1,
-    "MATP_0019": 3.27,
-  },
-  "GLUP PIÑA PARCHITA": {
-    "MATP_0001": 1799.167579,
-    "MATP_0038": 18.93,
-    "MATP_0017": 39.58,
-    "MATP_0019": 2.12,
-  },
-  "GLUP MANZANA ROJA": {
-    "MATP_0001": 1352.053203,
-    "MATP_0039": 18.93,
-    "MATP_0041": 2.29,
-    "MATP_0019": 3.12,
-    "MATP_0017": 10.33,
-    "MATP_0040": 20.69,
-  },
-  "JUSTY NARANJA": {
-    "MATP_0001": 110.0000844,
-    "MATP_0022": 5,
-    "MATP_0017": 3.515,
-    "MATP_0021": 0.85,
-    "MATP_0018": 0.4,
-    "MATP_0019": 0.2,
-    "MATP_0020": 0.25,
-    "MATP_0036": 0.1,
-    "MATP_0031": 0.1,
-  },
-  "JUSTY DURAZNO": {
-    "MATP_0001": 137.5005076,
-    "MATP_0043": 7,
-    "MATP_0017": 2.8,
-    "MATP_0021": 0.6,
-    "MATP_0018": 0.75,
-    "MATP_0019": 0.3,
-    "MATP_0020": 0.3,
-    "MATP_0042": 1.05,
-  },
-  "JUSTY MANDARINA": {
-    "MATP_0001": 110.0000844,
-    "MATP_0045": 5,
-    "MATP_0017": 3.515,
-    "MATP_0021": 0.85,
-    "MATP_0018": 0.4,
-    "MATP_0019": 0.2,
-    "MATP_0020": 0.25,
-    "MATP_0036": 0.1,
-    "MATP_0031": 0.1,
-  },
-  "JUSTY SANDIA": {
-    "MATP_0001": 110.0000844,
-    "MATP_0046": 5,
-    "MATP_0017": 3.515,
-    "MATP_0021": 0.85,
-    "MATP_0018": 0.4,
-    "MATP_0019": 0.2,
-    "MATP_0020": 0.25,
-    "MATP_0036": 0.1,
-    "MATP_0031": 0.1,
-  },
-  "JUSTY LIMON": {
-    "MATP_0001": 110.0000844,
-    "MATP_0017": 3.515,
-    "MATP_0021": 0.85,
-    "MATP_0018": 0.4,
-    "MATP_0019": 0.2,
-    "MATP_0020": 0.25,
-    "MATP_0036": 0.1,
-    "MATP_0031": 0.1,
-  },
-  "JUSTY TAMARINDO": {
-    "MATP_0001": 125.0,
-    "MATP_0044": 6,
-    "MATP_0017": 3.2,
-    "MATP_0021": 0.85,
-    "MATP_0018": 0.4,
-    "MATP_0019": 0.25,
-    "MATP_0020": 0.25,
-    "MATP_0036": 0.1,
-    "MATP_0031": 0.1,
-  },
-  "JUSTY MANZANA": {
-    "MATP_0001": 130.000538,
-    "MATP_0060": 6.0,
-    "MATP_0017": 2.80,
-    "MATP_0021": 0.60,
-    "MATP_0018": 0.75,
-    "MATP_0019": 0.30,
-    "MATP_0020": 0.30,
-    "MATP_0042": 1.05,
-  },
-  "JUSTY PERA": {
-    "MATP_0001": 130.000538,
-    "MATP_0059": 6.0,
-    "MATP_0017": 2.80,
-    "MATP_0021": 0.60,
-    "MATP_0018": 0.75,
-    "MATP_0019": 0.30,
-    "MATP_0020": 0.30,
-    "MATP_0042": 1.05,
-  },
-  "VITA TEA DURAZNO": {
-    "MATP_0001": 105.0,
-    "MATP_0029": 4,
-    "MATP_0027": 1,
-    "MATP_0017": 2.5,
-    "MATP_0019": 0.15,
-    "MATP_0031": 0.1,
-  },
-  "VITA TEA LIMON": {
-    "MATP_0001": 105.0,
-    "MATP_0028": 4,
-    "MATP_0027": 1,
-    "MATP_0017": 2.5,
-    "MATP_0019": 0.15,
-    "MATP_0031": 0.1,
-  }
+  "GLUP COLA": { "MATP_0001": 1925.033645, "MATP_0002": 18.93, "MATP_0009": 18.93, "MATP_0010": 0.95 },
+  "GLUP FRESH": { "MATP_0001": 1904.412248, "MATP_0003": 18.93, "MATP_0017": 25.65, "MATP_0021": 4.55, "MATP_0019": 4.55 },
+  "GLUP UVA": { "MATP_0001": 1024.909587, "MATP_0005": 18.93, "MATP_0017": 5.35, "MATP_0015": 6.4, "MATP_0019": 2.25 },
+  "GLUP PIÑA": { "MATP_0001": 1175.847343, "MATP_0006": 18.93, "MATP_0017": 11.95, "MATP_0019": 1.95 },
+  "GLUP NARANJA": { "MATP_0001": 1030.977235, "MATP_0004": 18.93, "MATP_0017": 13.05, "MATP_0014": 2.25 },
+  "GLUP KOLITA": { "MATP_0001": 666.4654676, "MATP_0007": 18.93, "MATP_0017": 1.45, "MATP_0016": 0.23, "MATP_0019": 0.85 },
+  "GLUP MANZANA VERDE": { "MATP_0001": 624.6972684, "MATP_0032": 18.93, "MATP_0017": 15.1, "MATP_0019": 3.27 },
+  "GLUP PIÑA PARCHITA": { "MATP_0001": 1799.167579, "MATP_0038": 18.93, "MATP_0017": 39.58, "MATP_0019": 2.12 },
+  "GLUP MANZANA ROJA": { "MATP_0001": 1352.053203, "MATP_0039": 18.93, "MATP_0041": 2.29, "MATP_0019": 3.12, "MATP_0017": 10.33, "MATP_0040": 20.69 },
+  "JUSTY NARANJA": { "MATP_0001": 110.0000844, "MATP_0022": 5, "MATP_0017": 3.515, "MATP_0021": 0.85, "MATP_0018": 0.4, "MATP_0019": 0.2, "MATP_0020": 0.25, "MATP_0036": 0.1, "MATP_0031": 0.1 },
+  "JUSTY DURAZNO": { "MATP_0001": 137.5005076, "MATP_0043": 7, "MATP_0017": 2.8, "MATP_0021": 0.6, "MATP_0018": 0.75, "MATP_0019": 0.3, "MATP_0020": 0.3, "MATP_0042": 1.05 },
+  "JUSTY TAMARINDO": { "MATP_0001": 125.0, "MATP_0044": 6, "MATP_0017": 3.2, "MATP_0021": 0.85, "MATP_0018": 0.4, "MATP_0019": 0.25, "MATP_0020": 0.25, "MATP_0036": 0.1, "MATP_0031": 0.1 },
+  "JUSTY MANZANA": { "MATP_0001": 130.000538, "MATP_0060": 6.0, "MATP_0017": 2.80, "MATP_0021": 0.60, "MATP_0018": 0.75, "MATP_0019": 0.30, "MATP_0020": 0.30, "MATP_0042": 1.05 },
+  "JUSTY PERA": { "MATP_0001": 130.000538, "MATP_0059": 6.0, "MATP_0017": 2.80, "MATP_0021": 0.60, "MATP_0018": 0.75, "MATP_0019": 0.30, "MATP_0020": 0.30, "MATP_0042": 1.05 },
 };
 
 export const CONSUMABLES_RECIPES: Record<string, Record<string, Record<string, number>>> = {
   "GLUP COLA": {
-    "2Lts": {
-      "AGUA-00005": 18.114288,
-      "AGUA-00004": 3.714288,
-      "AGUA-00003": 3.6,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 1.6652,
-      "MATP_0008": 0.106176
-    },
-    "1Lt": {
-      "AGUA-00005": 18.114288,
-      "AGUA-00004": 3.714288,
-      "AGUA-00003": 3.6,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 1.6652,
-      "MATP_0008": 0.106176
-    },
-    "0.4Lts": {
-      "AGUA-00005": 9.057144,
-      "AGUA-00004": 1.857144,
-      "AGUA-00003": 1.8,
-      "AGUA-00002": 5.4,
-      "JARA-00001": 0.8326,
-      "MATP_0008": 0.053088
-    }
-  },
-  "GLUP FRESH": {
-    "2Lts": {
-      "AGUA-00005": 24,
-      "AGUA-00004": 9.6,
-      "AGUA-00003": 3.6,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 1.647362,
-      "MATP_0008": 0.098934
-    },
-    "1Lt": {
-      "AGUA-00005": 24,
-      "AGUA-00004": 9.6,
-      "AGUA-00003": 3.6,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 1.647362,
-      "MATP_0008": 0.098934
-    },
-    "0.4Lts": {
-      "AGUA-00005": 12,
-      "AGUA-00004": 4.8,
-      "AGUA-00003": 1.8,
-      "AGUA-00002": 5.4,
-      "JARA-00001": 0.823681,
-      "MATP_0008": 0.049467
-    }
-  },
-  "GLUP UVA": {
-    "2Lts": {
-      "AGUA-00005": 24,
-      "AGUA-00004": 9.6,
-      "AGUA-00003": 3.6,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 1.9710216,
-      "MATP_0008": 0.079632
-    },
-    "1Lt": {
-      "AGUA-00005": 24,
-      "AGUA-00004": 9.6,
-      "AGUA-00003": 3.6,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 1.9710216,
-      "MATP_0008": 0.079632
-    },
-    "0.4Lts": {
-      "AGUA-00005": 12,
-      "AGUA-00004": 4.8,
-      "AGUA-00003": 1.8,
-      "AGUA-00002": 5.4,
-      "JARA-00001": 0.9855108,
-      "MATP_0008": 0.039816
-    }
-  },
-  "GLUP PIÑA": {
-    "2Lts": {
-      "AGUA-00005": 24,
-      "AGUA-00004": 9.6,
-      "AGUA-00003": 3.6,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 2.013264,
-      "MATP_0008": 0.07239
-    },
-    "1Lt": {
-      "AGUA-00005": 24,
-      "AGUA-00004": 9.6,
-      "AGUA-00003": 3.6,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 2.013264,
-      "MATP_0008": 0.07239
-    },
-    "0.4Lts": {
-      "AGUA-00005": 12,
-      "AGUA-00004": 4.8,
-      "AGUA-00003": 1.8,
-      "AGUA-00002": 5.4,
-      "JARA-00001": 1.006632,
-      "MATP_0008": 0.036195
-    }
-  },
-  "GLUP NARANJA": {
-    "2Lts": {
-      "AGUA-00005": 22.8,
-      "AGUA-00004": 9.6,
-      "AGUA-00003": 2.4,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 1.9826904,
-      "MATP_0008": 0.079632
-    },
-    "1Lt": {
-      "AGUA-00005": 22.8,
-      "AGUA-00004": 9.6,
-      "AGUA-00003": 2.4,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 1.9826904,
-      "MATP_0008": 0.079632
-    },
-    "0.4Lts": {
-      "AGUA-00005": 11.4,
-      "AGUA-00004": 4.8,
-      "AGUA-00003": 1.2,
-      "AGUA-00002": 5.4,
-      "JARA-00001": 0.9913452,
-      "MATP_0008": 0.039816
-    }
+    "2Lts": { "AGUA-00005": 18.114288, "AGUA-00004": 3.714288, "AGUA-00003": 3.6, "AGUA-00002": 10.8, "JARA-00001": 1.6652, "MATP_0008": 0.106176 },
+    "1Lt": { "AGUA-00005": 18.114288, "AGUA-00004": 3.714288, "AGUA-00003": 3.6, "AGUA-00002": 10.8, "JARA-00001": 1.6652, "MATP_0008": 0.106176 }
+  }
+};
+
+// --- RECETAS DE EMPAQUE MAESTRAS ---
+// Basado en los criterios de cálculo de requerimiento (6/12 botellas por caja según lógica)
+export const DEFAULT_PACKAGING_RECIPES: Record<string, Record<string, Record<string, number>>> = {
+  "GLUP COLA": {
+    "2Lts": { "EMP_0093": 6, "EMP_0105": 6, "EMP_0042": 0.00573, "EMP_0019": 0.006981, "EMP_0080": 0.03221, "EMP_ADH01": 0.0005, "EMP_ADH02": 0.0005 },
+    "1Lt": { "EMP_0166": 12, "EMP_0105": 12, "EMP_0111": 0.006708, "EMP_0019": 0.00716, "EMP_0080": 0.03338 }
   },
   "GLUP KOLITA": {
-    "2Lts": {
-      "AGUA-00005": 18.114288,
-      "AGUA-00004": 3.714288,
-      "AGUA-00003": 3.6,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 1.677016,
-      "MATP_0008": 0.098934
-    },
-    "1Lt": {
-      "AGUA-00005": 18.114288,
-      "AGUA-00004": 3.714288,
-      "AGUA-00003": 3.6,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 1.677016,
-      "MATP_0008": 0.098934
-    },
-    "0.4Lts": {
-      "AGUA-00005": 9.057144,
-      "AGUA-00004": 1.857144,
-      "AGUA-00003": 1.8,
-      "AGUA-00002": 5.4,
-      "JARA-00001": 0.838508,
-      "MATP_0008": 0.049467
-    }
+    "2Lts": { "EMP_068": 6, "EMP_0105": 6, "EMP_0034": 0.005664, "EMP_0019": 0.006981, "EMP_0080": 0.03221 }
   },
-  "GLUP MANZANA VERDE": {
-    "2Lts": {
-      "AGUA-00005": 24.399996,
-      "AGUA-00004": 9.999996,
-      "AGUA-00003": 3.6,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 1.785732,
-      "MATP_0008": 0.07722
-    },
-    "1Lt": {
-      "AGUA-00005": 24.399996,
-      "AGUA-00004": 9.999996,
-      "AGUA-00003": 3.6,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 1.785732,
-      "MATP_0008": 0.07722
-    },
-    "0.4Lts": {
-      "AGUA-00005": 12.199998,
-      "AGUA-00004": 4.999998,
-      "AGUA-00003": 1.8,
-      "AGUA-00002": 5.4,
-      "JARA-00001": 0.892866,
-      "MATP_0008": 0.03861
-    }
-  },
-  "GLUP PIÑA PARCHITA": {
-    "2Lts": {
-      "AGUA-00005": 24,
-      "AGUA-00004": 9.6,
-      "AGUA-00003": 3.6,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 1.9703904,
-      "MATP_0008": 0.106176
-    },
-    "1Lt": {
-      "AGUA-00005": 24,
-      "AGUA-00004": 9.6,
-      "AGUA-00003": 3.6,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 1.9703904,
-      "MATP_0008": 0.106176
-    },
-    "0.4Lts": {
-      "AGUA-00005": 12,
-      "AGUA-00004": 4.8,
-      "AGUA-00003": 1.8,
-      "AGUA-00002": 5.4,
-      "JARA-00001": 0.9851952,
-      "MATP_0008": 0.053088
-    }
-  },
-  "GLUP MANZANA ROJA": {
-    "2Lts": {
-      "AGUA-00005": 24,
-      "AGUA-00004": 9.6,
-      "AGUA-00003": 3.6,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 1.671316552,
-      "MATP_0008": 0.079632
-    },
-    "1Lt": {
-      "AGUA-00005": 24,
-      "AGUA-00004": 9.6,
-      "AGUA-00003": 3.6,
-      "AGUA-00002": 10.8,
-      "JARA-00001": 1.67131655,
-      "MATP_0008": 0.079632
-    },
-    "0.4Lts": {
-      "AGUA-00005": 12,
-      "AGUA-00004": 4.8,
-      "AGUA-00003": 1.8,
-      "AGUA-00002": 5.4,
-      "JARA-00001": 0.83565828,
-      "MATP_0008": 0.039816
-    }
-  },
-  "JUSTY NARANJA": {
-    "1.5Lts": {
-      "AGUA-00005": 36.985338,
-      "AGUA-00004": 15.385338,
-      "AGUA-00003": 5.4,
-      "AGUA-00002": 16.2,
-      "JARA-00001": 2.462076
-    }
-  },
-  "JUSTY DURAZNO": {
-    "1.5Lts": {
-      "AGUA-00005": 36.985338,
-      "AGUA-00004": 15.385338,
-      "AGUA-00003": 5.4,
-      "AGUA-00002": 16.2,
-      "JARA-00001": 3.077604
-    }
-  },
-  "JUSTY MANZANA": {
-    "1.5Lts": {
-      "AGUA-00005": 36.985,
-      "AGUA-00004": 15.385,
-      "AGUA-00003": 5.4,
-      "AGUA-00002": 16.2,
-      "JARA-00001": 2.462
-    }
-  },
-  "JUSTY PERA": {
-    "1.5Lts": {
-      "AGUA-00005": 36.985,
-      "AGUA-00004": 15.385,
-      "AGUA-00003": 5.4,
-      "AGUA-00002": 16.2,
-      "JARA-00001": 2.462
-    }
+  "GLUP FRESH": {
+    "2Lts": { "EMP_0103": 6, "EMP_0095": 6, "EMP_0038": 0.00495, "EMP_0019": 0.006981, "EMP_0080": 0.03221 }
   }
 };
 
 export const getWeekDays = (baseDate: Date) => {
-  const start = startOfWeek(baseDate, { weekStartsOn: 1 }); // Monday
+  const start = startOfWeek(baseDate, { weekStartsOn: 1 });
   return Array.from({ length: 7 }).map((_, i) => addDays(start, i));
 };
 
 export const isDayShift = (date: Date) => {
-  const hour = date.getHours();
-  const minute = date.getMinutes();
-  
-  const timeVal = hour + minute / 60;
+  const timeVal = date.getHours() + date.getMinutes() / 60;
   return timeVal >= PRODUCTION_START_HOUR && timeVal < SHIFT_SPLIT_HOUR + SHIFT_SPLIT_MINUTE / 60;
 };
 
-export const getWeeklyLimitMinutes = () => {
-  return (24 * 6 + 11.5) * 60;
-};
-
-export const calculateTotalPlannedMinutes = (tasks: ScheduledTask[]) => {
-  return tasks.reduce((acc, task) => acc + (task.durationHours * 60), 0);
-};
+export const getWeeklyLimitMinutes = () => (24 * 6 + 11.5) * 60;
+export const calculateTotalPlannedMinutes = (tasks: ScheduledTask[]) => tasks.reduce((acc, t) => acc + (t.durationHours * 60), 0);
 
 export const getTimeSlots = () => {
   const slots = [];
@@ -776,9 +372,6 @@ export const formatTime = (date: Date) => format(date, 'HH:mm');
 export const getTaskAtSlot = (tasks: ScheduledTask[], day: Date, slot: string) => {
   const [h, m] = slot.split(':').map(Number);
   const slotDate = setMinutes(setHours(day, h), m);
-  
-  return tasks.find(t => {
-    return (isBefore(slotDate, t.endTime) || slotDate.getTime() === t.endTime.getTime()) && 
-           (isAfter(slotDate, t.startTime) || slotDate.getTime() === t.startTime.getTime());
-  });
+  return tasks.find(t => (isBefore(slotDate, t.endTime) || slotDate.getTime() === t.endTime.getTime()) && 
+           (isAfter(slotDate, t.startTime) || slotDate.getTime() === t.startTime.getTime()));
 };

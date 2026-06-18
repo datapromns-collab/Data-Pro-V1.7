@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Package, Beaker, Plus, Trash2, RotateCcw, Layout, Tag, Target, CircleDot, Layers, Box, Info, Droplet } from 'lucide-react';
+import { Package, Plus, Trash2, RotateCcw, Layout, Target, CircleDot, Tag, Layers, Box, Info, Droplet } from 'lucide-react';
 import { 
   PRODUCT_LIST, 
   PREFORMS_DATA,
@@ -48,25 +48,28 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
   const { toast } = useToast();
   const { resetPackagingRecipesToDefaults } = usePlannerStore();
 
-  const currentRecipe = useMemo(() => {
+  const currentRecipeRaw = useMemo(() => {
     return recipes[selectedProduct]?.[selectedPresentation] || {};
   }, [recipes, selectedProduct, selectedPresentation]);
 
   const materialsInRecipe = useMemo(() => {
-    return Object.entries(currentRecipe).map(([code, value]) => {
-      const material = ALL_PACKAGING_MATERIALS.find(m => (m as any).code === code);
-      return {
-        code,
-        value,
-        description: (material as any)?.description || 'Desconocido',
-        unit: (material as any)?.unit || 'UND'
-      };
-    });
-  }, [currentRecipe]);
+    return Object.entries(currentRecipeRaw)
+      .map(([code, value]) => {
+        const material = ALL_PACKAGING_MATERIALS.find(m => (m as any).code === code);
+        if (!material) return null; // Filtramos cualquier cosa que no sea empaque (evita "Desconocido")
+        return {
+          code,
+          value,
+          description: (material as any).description,
+          unit: (material as any).unit || 'UND'
+        };
+      })
+      .filter((m): m is any => m !== null);
+  }, [currentRecipeRaw]);
 
   const availableMaterials = useMemo(() => {
-    return ALL_PACKAGING_MATERIALS.filter(m => !currentRecipe[(m as any).code]);
-  }, [currentRecipe]);
+    return ALL_PACKAGING_MATERIALS.filter(m => !currentRecipeRaw[(m as any).code]);
+  }, [currentRecipeRaw]);
 
   const handleAddMaterial = () => {
     if (!newMaterialCode) return;
@@ -98,7 +101,7 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
           </div>
           <div>
             <h1 className="text-2xl font-headline font-black text-[#0c1a3d] uppercase leading-none">Recetas de Empaque</h1>
-            <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest mt-1.5 leading-none">Control de Materiales por Presentación</p>
+            <p className="text-[11px] text-slate-400 font-bold uppercase tracking-widest mt-1.5 leading-none">Control de Materiales por SKU</p>
           </div>
         </div>
 
@@ -110,12 +113,12 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
             className="h-12 gap-2 border-slate-200 text-slate-600 hover:bg-slate-50 rounded-2xl font-bold px-6 transition-all shadow-sm"
           >
             <RotateCcw className="h-4 w-4" />
-            Valores Maestros
+            Cargar Sugerencia Maestra
           </Button>
           
           <div className="flex gap-4 w-full sm:w-auto">
             <div className="flex-1 sm:w-64">
-              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Producto</Label>
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Sabor</Label>
               <Select value={selectedProduct} onValueChange={setSelectedProduct}>
                 <SelectTrigger className="h-14 bg-white border-2 border-primary/10 rounded-2xl font-black text-xs uppercase shadow-sm">
                   <SelectValue />
@@ -126,7 +129,7 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
               </Select>
             </div>
             <div className="w-32">
-              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Tamaño</Label>
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1 mb-2 block">Formato</Label>
               <Select value={selectedPresentation} onValueChange={setSelectedPresentation}>
                 <SelectTrigger className="h-14 bg-white border-2 border-primary/10 rounded-2xl font-black text-xs uppercase shadow-sm">
                   <SelectValue />
@@ -150,11 +153,11 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
                 </div>
                 <div className="flex flex-col">
                    <h3 className="font-black text-lg uppercase tracking-tight leading-none">{selectedProduct}</h3>
-                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Formato {selectedPresentation}</span>
+                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">PRESENTACIÓN {selectedPresentation}</span>
                 </div>
               </div>
               <Badge className="bg-white/10 text-white border-none uppercase text-[10px] font-black px-5 py-2 rounded-full backdrop-blur-md">
-                CONSUMO POR CAJA
+                FACTOR POR CAJA
               </Badge>
             </div>
             
@@ -163,7 +166,7 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
                 <TableHeader>
                   <TableRow className="hover:bg-transparent border-b border-slate-100 h-16">
                     <TableHead className="text-[11px] font-black text-slate-400 uppercase pl-10">Insumo de Empaque</TableHead>
-                    <TableHead className="text-right text-[11px] font-black text-slate-400 uppercase pr-10">Factor de Consumo</TableHead>
+                    <TableHead className="text-right text-[11px] font-black text-slate-400 uppercase pr-10">Consumo</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -186,8 +189,8 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
                               className="h-14 text-right font-black text-xl bg-transparent border-none focus-visible:ring-0 w-40 pr-4"
                               placeholder="0,0000"
                             />
-                            <div className="h-14 flex items-center px-4 bg-slate-100/30 border-l border-slate-100">
-                              <span className="text-[10px] font-black text-slate-400 uppercase w-8 text-center">{item.unit}</span>
+                            <div className="h-14 flex items-center px-4 bg-slate-100/30 border-l border-slate-100 min-w-[70px] justify-center">
+                              <span className="text-[10px] font-black text-slate-400 uppercase">{item.unit}</span>
                             </div>
                             
                             <Button 
@@ -209,7 +212,7 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
                       <TableCell colSpan={2} className="py-12 text-center">
                         <div className="flex flex-col items-center gap-3 opacity-20">
                           <Box className="h-12 w-12" />
-                          <span className="text-sm font-black uppercase tracking-widest">Sin materiales configurados</span>
+                          <span className="text-sm font-black uppercase tracking-widest text-slate-400">Sin materiales de empaque registrados</span>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -219,7 +222,7 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
                     <TableCell colSpan={2} className="py-10 px-10">
                       <div className="flex flex-col sm:flex-row items-end justify-between gap-6">
                         <div className="flex-1 w-full max-w-md space-y-2">
-                          <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Agregar Insumo de Empaque</Label>
+                          <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Nuevo Insumo de Empaque</Label>
                           <Select value={newMaterialCode} onValueChange={setNewMaterialCode}>
                             <SelectTrigger className="h-14 bg-white border-2 border-slate-100 rounded-2xl font-bold shadow-sm w-full">
                               <SelectValue placeholder="Seleccionar insumo..." />
@@ -252,12 +255,12 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
         <div className="lg:col-span-4 space-y-6">
           <Card className="p-8 border-slate-200 rounded-[2.5rem] bg-white shadow-sm border-dashed border-2">
             <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-              <Info className="h-4 w-4 text-primary" /> Guía de Gestión
+              <Info className="h-4 w-4 text-primary" /> Gestión de Empaque
             </h4>
             <p className="text-sm font-bold text-slate-600 leading-relaxed uppercase">
-              Configure los requerimientos de <span className="text-primary font-black">Preformas, Tapas, Plásticos, Etiquetas y Adhesivos</span> por cada sabor y presentación. 
+              Configure los requerimientos de <span className="text-primary font-black">Preformas, Tapas, Etiquetas, Plásticos y Adhesivos</span> por cada SKU. 
               <br/><br/>
-              Los valores definidos aquí alimentan directamente el reporte de requerimientos semanales.
+              Los consumibles químicos (agua, CO2) se gestionan en la pestaña de Materia Prima.
             </p>
           </Card>
 
@@ -265,7 +268,7 @@ export function PackagingRecipeEditor({ recipes, onUpdateRecipe, onRemoveMateria
             <div className="absolute top-0 right-0 p-4 opacity-5">
               <Package className="h-24 w-24" />
             </div>
-            <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-8">Estructura de Empaque</h4>
+            <h4 className="text-[11px] font-black text-slate-900 uppercase tracking-widest mb-8">Componentes de Empaque</h4>
             <div className="space-y-4">
               {[
                 { label: 'Preformas', icon: Target, color: 'bg-red-50 text-red-600' },

@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { ScheduledTask } from '@/lib/types';
 import { startOfWeek, addDays, format, parseISO } from 'date-fns';
-import { RECIPES, CONSUMABLES_RECIPES } from '@/lib/planner-utils';
+import { RECIPES, CONSUMABLES_RECIPES, DEFAULT_PACKAGING_RECIPES } from '@/lib/planner-utils';
 
 const STORAGE_KEY_TASKS = 'planner_tasks_v2';
 const STORAGE_KEY_CONFIG = 'planner_config_v2';
@@ -19,11 +19,11 @@ const STORAGE_KEY_FINAL_UBB_DAILY = 'planner_final_ubb_daily_v1';
 
 export interface RawMaterialStock {
   initial: number;
-  receptions: Record<string, number>; // dateKey -> qty
+  receptions: Record<string, number>;
   final: number;
-  initialDaily: Record<string, number>; // dateKey -> qty
-  finalDaily: Record<string, number>;   // dateKey -> qty
-  dailyPhysical: Record<string, number>; // dateKey -> qty
+  initialDaily: Record<string, number>;
+  finalDaily: Record<string, number>;
+  dailyPhysical: Record<string, number>;
 }
 
 export function usePlannerStore() {
@@ -38,7 +38,7 @@ export function usePlannerStore() {
   });
   const [realProduction, setRealProduction] = useState<Record<string, Record<string, Record<string, number>>>>({});
   const [customRecipes, setCustomRecipes] = useState<Record<string, Record<string, number>>>(RECIPES);
-  const [customPackagingRecipes, setCustomPackagingRecipes] = useState<Record<string, Record<string, Record<string, number>>>>(CONSUMABLES_RECIPES);
+  const [customPackagingRecipes, setCustomPackagingRecipes] = useState<Record<string, Record<string, Record<string, number>>>>(DEFAULT_PACKAGING_RECIPES);
   const [rawMaterialStock, setRawMaterialStock] = useState<Record<string, RawMaterialStock>>({});
   const [manualUBB, setManualUBB] = useState<Record<string, Record<string, number>>>({});
   const [initialUBBTanks, setInitialUBBTanks] = useState<Record<string, number>>({});
@@ -47,7 +47,6 @@ export function usePlannerStore() {
   const [finalUBBTanksDaily, setFinalUBBTanksDaily] = useState<Record<string, Record<string, number>>>({});
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Cargar datos iniciales
   useEffect(() => {
     const savedTasks = localStorage.getItem(STORAGE_KEY_TASKS);
     const savedConfig = localStorage.getItem(STORAGE_KEY_CONFIG);
@@ -69,9 +68,7 @@ export function usePlannerStore() {
           startTime: new Date(t.startTime),
           endTime: new Date(t.endTime)
         })));
-      } catch (e) {
-        console.error("Error loading tasks", e);
-      }
+      } catch (e) {}
     }
 
     if (savedConfig) {
@@ -79,163 +76,70 @@ export function usePlannerStore() {
         const config = JSON.parse(savedConfig);
         if (config.weekStartDate) setWeekStartDate(new Date(config.weekStartDate));
         if (config.lineSpeeds) setLineSpeeds(config.lineSpeeds);
-      } catch (e) {
-        console.error("Error loading config", e);
-      }
+      } catch (e) {}
     }
 
     if (savedRealProd) {
-      try {
-        setRealProduction(JSON.parse(savedRealProd));
-      } catch (e) {
-        console.error("Error loading real production", e);
-      }
+      try { setRealProduction(JSON.parse(savedRealProd)); } catch (e) {}
     }
 
     if (savedRecipes) {
-      try {
-        setCustomRecipes(JSON.parse(savedRecipes));
-      } catch (e) {
-        console.error("Error loading custom recipes", e);
-      }
+      try { setCustomRecipes(JSON.parse(savedRecipes)); } catch (e) {}
     }
 
     if (savedPkgRecipes) {
-      try {
-        setCustomPackagingRecipes(JSON.parse(savedPkgRecipes));
-      } catch (e) {
-        console.error("Error loading custom packaging recipes", e);
-      }
+      try { setCustomPackagingRecipes(JSON.parse(savedPkgRecipes)); } catch (e) {}
     }
 
     if (savedRawMat) {
-      try {
-        setRawMaterialStock(JSON.parse(savedRawMat));
-      } catch (e) {
-        console.error("Error loading raw material stock", e);
-      }
+      try { setRawMaterialStock(JSON.parse(savedRawMat)); } catch (e) {}
     }
 
     if (savedUBB) {
-      try {
-        setManualUBB(JSON.parse(savedUBB));
-      } catch (e) {
-        console.error("Error loading manual UBB", e);
-      }
+      try { setManualUBB(JSON.parse(savedUBB)); } catch (e) {}
     }
 
     if (savedInitialUBB) {
-      try {
-        setInitialUBBTanks(JSON.parse(savedInitialUBB));
-      } catch (e) {
-        console.error("Error loading initial UBB tanks", e);
-      }
+      try { setInitialUBBTanks(JSON.parse(savedInitialUBB)); } catch (e) {}
     }
 
     if (savedFinalUBB) {
-      try {
-        setFinalUBBTanks(JSON.parse(savedFinalUBB));
-      } catch (e) {
-        console.error("Error loading final UBB tanks", e);
-      }
+      try { setFinalUBBTanks(JSON.parse(savedFinalUBB)); } catch (e) {}
     }
 
     if (savedInitialUBBDaily) {
-      try {
-        setInitialUBBTanksDaily(JSON.parse(savedInitialUBBDaily));
-      } catch (e) {
-        console.error("Error loading daily initial UBB tanks", e);
-      }
+      try { setInitialUBBTanksDaily(JSON.parse(savedInitialUBBDaily)); } catch (e) {}
     }
 
     if (savedFinalUBBDaily) {
-      try {
-        setFinalUBBTanksDaily(JSON.parse(savedFinalUBBDaily));
-      } catch (e) {
-        console.error("Error loading daily final UBB tanks", e);
-      }
+      try { setFinalUBBTanksDaily(JSON.parse(savedFinalUBBDaily)); } catch (e) {}
     }
     
     setIsLoaded(true);
   }, []);
 
-  // Guardar cambios automáticamente
   useEffect(() => {
     if (isLoaded) {
       localStorage.setItem(STORAGE_KEY_TASKS, JSON.stringify(tasks));
-    }
-  }, [tasks, isLoaded]);
-
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem(STORAGE_KEY_CONFIG, JSON.stringify({ 
-        weekStartDate, 
-        lineSpeeds 
-      }));
-    }
-  }, [weekStartDate, lineSpeeds, isLoaded]);
-
-  useEffect(() => {
-    if (isLoaded) {
+      localStorage.setItem(STORAGE_KEY_CONFIG, JSON.stringify({ weekStartDate, lineSpeeds }));
       localStorage.setItem(STORAGE_KEY_REAL_PROD, JSON.stringify(realProduction));
-    }
-  }, [realProduction, isLoaded]);
-
-  useEffect(() => {
-    if (isLoaded) {
       localStorage.setItem(STORAGE_KEY_RECIPES, JSON.stringify(customRecipes));
-    }
-  }, [customRecipes, isLoaded]);
-
-  useEffect(() => {
-    if (isLoaded) {
       localStorage.setItem(STORAGE_KEY_PACKAGING_RECIPES, JSON.stringify(customPackagingRecipes));
-    }
-  }, [customPackagingRecipes, isLoaded]);
-
-  useEffect(() => {
-    if (isLoaded) {
       localStorage.setItem(STORAGE_KEY_RAW_MAT, JSON.stringify(rawMaterialStock));
-    }
-  }, [rawMaterialStock, isLoaded]);
-
-  useEffect(() => {
-    if (isLoaded) {
       localStorage.setItem(STORAGE_KEY_UBB, JSON.stringify(manualUBB));
-    }
-  }, [manualUBB, isLoaded]);
-
-  useEffect(() => {
-    if (isLoaded) {
       localStorage.setItem(STORAGE_KEY_INITIAL_UBB_TANKS, JSON.stringify(initialUBBTanks));
-    }
-  }, [initialUBBTanks, isLoaded]);
-
-  useEffect(() => {
-    if (isLoaded) {
       localStorage.setItem(STORAGE_KEY_FINAL_UBB_TANKS, JSON.stringify(finalUBBTanks));
-    }
-  }, [finalUBBTanks, isLoaded]);
-
-  useEffect(() => {
-    if (isLoaded) {
       localStorage.setItem(STORAGE_KEY_INITIAL_UBB_DAILY, JSON.stringify(initialUBBTanksDaily));
-    }
-  }, [initialUBBTanksDaily, isLoaded]);
-
-  useEffect(() => {
-    if (isLoaded) {
       localStorage.setItem(STORAGE_KEY_FINAL_UBB_DAILY, JSON.stringify(finalUBBTanksDaily));
     }
-  }, [finalUBBTanksDaily, isLoaded]);
+  }, [tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily, isLoaded]);
 
   const addTask = useCallback((taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
-    const randomColor = colors[Math.floor(Math.random() * colors.length)];
     const newTask: ScheduledTask = {
       ...taskData,
       id: Math.random().toString(36).substr(2, 9),
-      color: randomColor,
+      color: colors[Math.floor(Math.random() * colors.length)],
     };
     setTasks(prev => [...prev, newTask]);
   }, []);
@@ -264,13 +168,8 @@ export function usePlannerStore() {
     setRealProduction(prev => {
       const newLineData = { ...(prev[lineId] || {}) };
       const newFlavorData = { ...(newLineData[flavor] || {}) };
-      
-      if (quantity <= 0) {
-        delete newFlavorData[dateKey];
-      } else {
-        newFlavorData[dateKey] = quantity;
-      }
-      
+      if (quantity <= 0) delete newFlavorData[dateKey];
+      else newFlavorData[dateKey] = quantity;
       newLineData[flavor] = newFlavorData;
       return { ...prev, [lineId]: newLineData };
     });
@@ -278,22 +177,22 @@ export function usePlannerStore() {
 
   const updateRecipe = useCallback((product: string, materialCode: string, value: number) => {
     setCustomRecipes(prev => {
-      const newRecipes = { ...prev };
-      if (!newRecipes[product]) newRecipes[product] = {};
-      newRecipes[product][materialCode] = value;
-      return newRecipes;
+      const next = { ...prev };
+      if (!next[product]) next[product] = {};
+      next[product][materialCode] = value;
+      return next;
     });
   }, []);
 
   const removeMaterialFromRecipe = useCallback((product: string, materialCode: string) => {
     setCustomRecipes(prev => {
-      const newRecipes = { ...prev };
-      if (newRecipes[product]) {
-        const updatedRecipe = { ...newRecipes[product] };
-        delete updatedRecipe[materialCode];
-        newRecipes[product] = updatedRecipe;
+      const next = { ...prev };
+      if (next[product]) {
+        const upd = { ...next[product] };
+        delete upd[materialCode];
+        next[product] = upd;
       }
-      return newRecipes;
+      return next;
     });
   }, []);
 
@@ -311,9 +210,9 @@ export function usePlannerStore() {
     setCustomPackagingRecipes(prev => {
       const next = { ...prev };
       if (next[flavor] && next[flavor][presentation]) {
-        const updated = { ...next[flavor][presentation] };
-        delete updated[materialCode];
-        next[flavor][presentation] = updated;
+        const upd = { ...next[flavor][presentation] };
+        delete upd[materialCode];
+        next[flavor][presentation] = upd;
       }
       return next;
     });
@@ -321,224 +220,82 @@ export function usePlannerStore() {
 
   const resetRecipesToDefaults = useCallback(() => {
     setCustomRecipes(RECIPES);
-    localStorage.removeItem(STORAGE_KEY_RECIPES);
   }, []);
 
   const resetPackagingRecipesToDefaults = useCallback(() => {
-    setCustomPackagingRecipes(CONSUMABLES_RECIPES);
-    localStorage.removeItem(STORAGE_KEY_PACKAGING_RECIPES);
+    setCustomPackagingRecipes(DEFAULT_PACKAGING_RECIPES);
   }, []);
 
   const updateRawMaterialStock = useCallback((code: string, type: 'initial' | 'final', value: number) => {
     setRawMaterialStock(prev => {
       const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {}, initialDaily: {}, finalDaily: {} };
-      
       const newInitialDaily = { ...current.initialDaily };
       const newFinalDaily = { ...current.finalDaily };
-      
       if (type === 'initial') {
-        const mondayKey = format(weekStartDate, 'yyyy-MM-dd');
-        newInitialDaily[mondayKey] = value;
+        newInitialDaily[format(weekStartDate, 'yyyy-MM-dd')] = value;
       } else if (type === 'final') {
-        const sundayKey = format(addDays(weekStartDate, 6), 'yyyy-MM-dd');
-        newFinalDaily[sundayKey] = value;
+        newFinalDaily[format(addDays(weekStartDate, 6), 'yyyy-MM-dd')] = value;
       }
-
-      return { 
-        ...prev, 
-        [code]: { 
-          ...current, 
-          [type]: value,
-          initialDaily: newInitialDaily,
-          finalDaily: newFinalDaily
-        } 
-      };
+      return { ...prev, [code]: { ...current, [type]: value, initialDaily: newInitialDaily, finalDaily: newFinalDaily } };
     });
   }, [weekStartDate]);
 
   const updateRawMaterialReception = useCallback((code: string, dateKey: string, value: number) => {
     setRawMaterialStock(prev => {
       const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {}, initialDaily: {}, finalDaily: {} };
-      const newReceptions = { ...current.receptions };
-      if (value <= 0) delete newReceptions[dateKey];
-      else newReceptions[dateKey] = value;
-      return { ...prev, [code]: { ...current, receptions: newReceptions } };
-    });
-  }, []);
-
-  const updateRawMaterialDailyPhysical = useCallback((code: string, dateKey: string, value: number) => {
-    setRawMaterialStock(prev => {
-      const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {}, initialDaily: {}, finalDaily: {} };
-      const newDaily = { ...current.dailyPhysical };
-      if (value <= 0) delete newDaily[dateKey];
-      else newDaily[dateKey] = value;
-      return { ...prev, [code]: { ...current, dailyPhysical: newDaily } };
+      const nextR = { ...current.receptions };
+      if (value <= 0) delete nextR[dateKey];
+      else nextR[dateKey] = value;
+      return { ...prev, [code]: { ...current, receptions: nextR } };
     });
   }, []);
 
   const updateRawMaterialDailyInitial = useCallback((code: string, dateKey: string, value: number) => {
     setRawMaterialStock(prev => {
       const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {}, initialDaily: {}, finalDaily: {} };
-      const newInitialDaily = { ...current.initialDaily };
-      if (value <= 0) delete newInitialDaily[dateKey];
-      else newInitialDaily[dateKey] = value;
-      
-      // Automation: If dateKey matches week's Monday, update the weekly initial stock too
-      const mondayKey = format(weekStartDate, 'yyyy-MM-dd');
-      let updatedInitial = current.initial;
-      if (dateKey === mondayKey) {
-        updatedInitial = value;
-      }
-
-      return { ...prev, [code]: { ...current, initialDaily: newInitialDaily, initial: updatedInitial } };
+      const nextI = { ...current.initialDaily, [dateKey]: value };
+      let updInitial = current.initial;
+      if (dateKey === format(weekStartDate, 'yyyy-MM-dd')) updInitial = value;
+      return { ...prev, [code]: { ...current, initialDaily: nextI, initial: updInitial } };
     });
   }, [weekStartDate]);
 
   const updateRawMaterialDailyFinal = useCallback((code: string, dateKey: string, value: number) => {
     setRawMaterialStock(prev => {
       const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {}, initialDaily: {}, finalDaily: {} };
-      
-      const newFinalDaily = { ...current.finalDaily };
-      if (value <= 0) delete newFinalDaily[dateKey];
-      else newFinalDaily[dateKey] = value;
-      
-      // Automation 1: Transition to next day's initial
-      const nextDayKey = format(addDays(parseISO(dateKey), 1), 'yyyy-MM-dd');
-      const newInitialDaily = { ...current.initialDaily };
-      newInitialDaily[nextDayKey] = value;
-
-      // Automation 2: If it's Sunday, sync with weekly Final
-      const sundayKey = format(addDays(weekStartDate, 6), 'yyyy-MM-dd');
-      let updatedFinal = current.final;
-      if (dateKey === sundayKey) {
-        updatedFinal = value;
-      }
-
-      return { 
-        ...prev, 
-        [code]: { 
-          ...current, 
-          finalDaily: newFinalDaily, 
-          initialDaily: newInitialDaily,
-          final: updatedFinal
-        } 
-      };
+      const nextF = { ...current.finalDaily, [dateKey]: value };
+      const nextDayK = format(addDays(parseISO(dateKey), 1), 'yyyy-MM-dd');
+      const nextI = { ...current.initialDaily, [nextDayK]: value };
+      let updFinal = current.final;
+      if (dateKey === format(addDays(weekStartDate, 6), 'yyyy-MM-dd')) updFinal = value;
+      return { ...prev, [code]: { ...current, finalDaily: nextF, initialDaily: nextI, final: updFinal } };
     });
   }, [weekStartDate]);
 
   const updateManualUBB = useCallback((flavor: string, dateKey: string, value: number) => {
     setManualUBB(prev => {
-      const current = prev[flavor] || {};
-      const next = { ...current, [dateKey]: value };
-      if (value <= 0) delete next[dateKey];
+      const next = { ...prev[flavor], [dateKey]: value };
+      if (value <= 0) delete (next as any)[dateKey];
       return { ...prev, [flavor]: next };
     });
   }, []);
 
-  const updateInitialUBBTanks = useCallback((flavor: string, value: number) => {
-    setInitialUBBTanks(prev => {
-      const next = { ...prev, [flavor]: value };
-      if (value <= 0) delete next[flavor];
-      return next;
-    });
-
-    setInitialUBBTanksDaily(prev => {
-      const mondayKey = format(weekStartDate, 'yyyy-MM-dd');
-      const flavorData = prev[flavor] || {};
-      return { ...prev, [flavor]: { ...flavorData, [mondayKey]: value } };
-    });
-  }, [weekStartDate]);
-
-  const updateFinalUBBTanks = useCallback((flavor: string, value: number) => {
-    setFinalUBBTanks(prev => {
-      const next = { ...prev, [flavor]: value };
-      if (value <= 0) delete next[flavor];
-      return next;
-    });
-
-    setFinalUBBTanksDaily(prev => {
-      const sundayKey = format(addDays(weekStartDate, 6), 'yyyy-MM-dd');
-      const flavorData = prev[flavor] || {};
-      return { ...prev, [flavor]: { ...flavorData, [sundayKey]: value } };
-    });
-  }, [weekStartDate]);
-
   const updateInitialUBBTanksDaily = useCallback((flavor: string, dateKey: string, value: number) => {
-    setInitialUBBTanksDaily(prev => {
-      const current = prev[flavor] || {};
-      const next = { ...current, [dateKey]: value };
-      if (value <= 0) delete next[dateKey];
-      
-      // Automation: If Monday, update weekly initial
-      const mondayKey = format(weekStartDate, 'yyyy-MM-dd');
-      if (dateKey === mondayKey) {
-        setInitialUBBTanks(old => ({ ...old, [flavor]: value }));
-      }
-
-      return { ...prev, [flavor]: next };
-    });
+    setInitialUBBTanksDaily(prev => ({ ...prev, [flavor]: { ...(prev[flavor] || {}), [dateKey]: value } }));
+    if (dateKey === format(weekStartDate, 'yyyy-MM-dd')) setInitialUBBTanks(old => ({ ...old, [flavor]: value }));
   }, [weekStartDate]);
 
   const updateFinalUBBTanksDaily = useCallback((flavor: string, dateKey: string, value: number) => {
-    setFinalUBBTanksDaily(prev => {
-      const current = prev[flavor] || {};
-      const next = { ...current, [dateKey]: value };
-      if (value <= 0) delete next[dateKey];
-      
-      // Automation 1: Next day's initial
-      const nextDayKey = format(addDays(parseISO(dateKey), 1), 'yyyy-MM-dd');
-      setInitialUBBTanksDaily(old => {
-        const fData = old[flavor] || {};
-        return { ...old, [flavor]: { ...fData, [nextDayKey]: value } };
-      });
-
-      // Automation 2: If Sunday, update weekly final
-      const sundayKey = format(addDays(weekStartDate, 6), 'yyyy-MM-dd');
-      if (dateKey === sundayKey) {
-        setFinalUBBTanks(old => ({ ...old, [flavor]: value }));
-      }
-
-      return { ...prev, [flavor]: next };
-    });
+    setFinalUBBTanksDaily(prev => ({ ...prev, [flavor]: { ...(prev[flavor] || {}), [dateKey]: value } }));
+    const nextDayK = format(addDays(parseISO(dateKey), 1), 'yyyy-MM-dd');
+    setInitialUBBTanksDaily(old => ({ ...old, [flavor]: { ...(old[flavor] || {}), [nextDayK]: value } }));
+    if (dateKey === format(addDays(weekStartDate, 6), 'yyyy-MM-dd')) setFinalUBBTanks(old => ({ ...old, [flavor]: value }));
   }, [weekStartDate]);
 
   return { 
-    tasks, 
-    weekStartDate, 
-    lineSpeeds,
-    realProduction,
-    customRecipes,
-    customPackagingRecipes,
-    rawMaterialStock,
-    manualUBB,
-    initialUBBTanks,
-    finalUBBTanks,
-    initialUBBTanksDaily,
-    finalUBBTanksDaily,
-    setWeekStartDate, 
-    addTask, 
-    updateTask, 
-    removeTask, 
-    clearAll, 
-    updateLineSpeed, 
-    updateRealProduction, 
-    updateRecipe,
-    removeMaterialFromRecipe,
-    updatePackagingRecipe,
-    removeMaterialFromPackagingRecipe,
-    resetRecipesToDefaults,
-    resetPackagingRecipesToDefaults,
-    updateRawMaterialStock,
-    updateRawMaterialReception,
-    updateRawMaterialDailyPhysical,
-    updateRawMaterialDailyInitial,
-    updateRawMaterialDailyFinal,
-    updateManualUBB,
-    updateInitialUBBTanks,
-    updateFinalUBBTanks,
-    updateInitialUBBTanksDaily,
-    updateFinalUBBTanksDaily,
-    isLoaded,
-    isSyncing: false
+    tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily,
+    setWeekStartDate, addTask, updateTask, removeTask, clearAll, updateLineSpeed, updateRealProduction, updateRecipe, removeMaterialFromRecipe, updatePackagingRecipe, removeMaterialFromPackagingRecipe, resetRecipesToDefaults, resetPackagingRecipesToDefaults,
+    updateRawMaterialStock, updateRawMaterialReception, updateRawMaterialDailyInitial, updateRawMaterialDailyFinal, updateManualUBB,
+    updateInitialUBBTanksDaily, updateFinalUBBTanksDaily, isLoaded
   };
 }
