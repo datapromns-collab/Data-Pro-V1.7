@@ -90,11 +90,9 @@ export function RawMaterialModule({
   finalUBBTanks,
   initialUBBTanksDaily = {},
   finalUBBTanksDaily = {},
-  tasks,
   recipes,
   onUpdateStock,
   onUpdateReception,
-  onUpdateDailyPhysical,
   onUpdateDailyInitial,
   onUpdateDailyFinal,
   onUpdateManualUBB,
@@ -110,27 +108,35 @@ export function RawMaterialModule({
   const dateKeys = useMemo(() => weekDays.map(d => format(d, 'yyyy-MM-dd')), [weekDays]);
   const currentWorkingDateKey = useMemo(() => format(workingDate, 'yyyy-MM-dd'), [workingDate]);
 
-  const theoreticalConsumption = useMemo(() => {
+  // --- CÁLCULOS SEMANALES ---
+  const theoreticalConsumptionWeekly = useMemo(() => {
     const consumption: Record<string, number> = {};
     PRODUCT_LIST.forEach(flavor => {
       const recipe = recipes[flavor];
       if (!recipe) return;
-      const flavorUbbData = manualUBB[flavor] || {};
-      const totalUbbForFlavor = Object.values(flavorUbbData).reduce((a, b) => a + (Number(b) || 0), 0);
-      if (totalUbbForFlavor > 0) {
-        Object.entries(recipe).forEach(([matCode, factor]) => {
-          consumption[matCode] = (consumption[matCode] || 0) + (totalUbbForFlavor * factor);
-        });
-      }
+      
+      dateKeys.forEach(key => {
+        const init = initialUBBTanksDaily[flavor]?.[key] || 0;
+        const prep = manualUBB[flavor]?.[key] || 0;
+        const fin = finalUBBTanksDaily[flavor]?.[key] || 0;
+        const ubbConsumed = (init + prep) - fin;
+        
+        if (ubbConsumed > 0) {
+          Object.entries(recipe).forEach(([matCode, factor]) => {
+            consumption[matCode] = (consumption[matCode] || 0) + (ubbConsumed * factor);
+          });
+        }
+      });
     });
     return consumption;
-  }, [manualUBB, recipes]);
+  }, [manualUBB, initialUBBTanksDaily, finalUBBTanksDaily, recipes, dateKeys]);
 
-  const materialsInTanks = useMemo(() => {
+  const materialsInTanksWeekly = useMemo(() => {
     const inTanks: Record<string, number> = {};
+    const mondayKey = dateKeys[0];
     PRODUCT_LIST.forEach(flavor => {
       const recipe = recipes[flavor];
-      const ubbInTanks = initialUBBTanks[flavor] || 0;
+      const ubbInTanks = initialUBBTanksDaily[flavor]?.[mondayKey] || 0;
       if (recipe && ubbInTanks > 0) {
         Object.entries(recipe).forEach(([matCode, factor]) => {
           inTanks[matCode] = (inTanks[matCode] || 0) + (ubbInTanks * factor);
@@ -138,13 +144,14 @@ export function RawMaterialModule({
       }
     });
     return inTanks;
-  }, [initialUBBTanks, recipes]);
+  }, [initialUBBTanksDaily, recipes, dateKeys]);
 
-  const materialsInFinalTanks = useMemo(() => {
+  const materialsInFinalTanksWeekly = useMemo(() => {
     const inTanks: Record<string, number> = {};
+    const sundayKey = dateKeys[6];
     PRODUCT_LIST.forEach(flavor => {
       const recipe = recipes[flavor];
-      const ubbInTanks = finalUBBTanks[flavor] || 0;
+      const ubbInTanks = finalUBBTanksDaily[flavor]?.[sundayKey] || 0;
       if (recipe && ubbInTanks > 0) {
         Object.entries(recipe).forEach(([matCode, factor]) => {
           inTanks[matCode] = (inTanks[matCode] || 0) + (ubbInTanks * factor);
@@ -152,9 +159,9 @@ export function RawMaterialModule({
       }
     });
     return inTanks;
-  }, [finalUBBTanks, recipes]);
+  }, [finalUBBTanksDaily, recipes, dateKeys]);
 
-  // Cálculos para Resumen Diario: Basado en Consumo (Inicial + Preparado - Final)
+  // --- CÁLCULOS DIARIOS ---
   const theoreticalConsumptionDaily = useMemo(() => {
     const consumption: Record<string, number> = {};
     PRODUCT_LIST.forEach(flavor => {
@@ -164,7 +171,6 @@ export function RawMaterialModule({
       const initial = initialUBBTanksDaily[flavor]?.[currentWorkingDateKey] || 0;
       const prepared = manualUBB[flavor]?.[currentWorkingDateKey] || 0;
       const final = finalUBBTanksDaily[flavor]?.[currentWorkingDateKey] || 0;
-      
       const ubbConsumed = (initial + prepared) - final;
       
       if (ubbConsumed > 0) {
@@ -816,7 +822,7 @@ export function RawMaterialModule({
                         <TableHead className="text-[10px] font-black text-slate-400 uppercase pl-6 min-w-[180px]">Material</TableHead>
                         <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">I. Inicial</TableHead>
                         <TableHead className="text-right text-[10px] font-black text-indigo-600 uppercase bg-indigo-50/30">I. en Tanques</TableHead>
-                        <TableHead className="text-right text-[10px) font-black text-slate-400 uppercase">Recepciones</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">Recepciones</TableHead>
                         <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">I. Final</TableHead>
                         <TableHead className="text-right text-[10px] font-black text-purple-600 uppercase bg-purple-50/30">F. en Tanques</TableHead>
                         <TableHead className="text-right text-[10px] font-black text-emerald-600 uppercase bg-emerald-50/30">Consumo Físico</TableHead>
@@ -827,15 +833,19 @@ export function RawMaterialModule({
                     </TableHeader>
                     <TableBody>
                       {ALL_MATERIALS.map((mat) => {
-                        const stock = rawMaterialStock[mat.code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {}, initialDaily: {}, finalDaily: {} };
-                        const initial = stock.initial || 0;
-                        const initialInTanks = materialsInTanks[mat.code] || 0;
-                        const receptions = Object.values(stock.receptions as Record<string, number>).reduce((a, b) => a + b, 0);
-                        const final = stock.final || 0;
-                        const finalInTanks = materialsInFinalTanks[mat.code] || 0;
+                        const stock = rawMaterialStock[mat.code] || { initialDaily: {}, receptions: {}, finalDaily: {} };
                         
-                        const physical = (initial + initialInTanks + receptions) - (final + finalInTanks);
-                        const theoretical = theoreticalConsumption[mat.code] || 0;
+                        const firstDayKey = dateKeys[0];
+                        const lastDayKey = dateKeys[6];
+                        
+                        const initial = stock.initialDaily?.[firstDayKey] || rawMaterialStock[mat.code]?.initial || 0;
+                        const initialInTanks = materialsInTanksWeekly[mat.code] || 0;
+                        const weekReceptions = dateKeys.reduce((sum, k) => sum + (stock.receptions?.[k] || 0), 0);
+                        const final = stock.finalDaily?.[lastDayKey] || rawMaterialStock[mat.code]?.final || 0;
+                        const finalInTanks = materialsInFinalTanksWeekly[mat.code] || 0;
+                        
+                        const physical = (initial + initialInTanks + weekReceptions) - (final + finalInTanks);
+                        const theoretical = theoreticalConsumptionWeekly[mat.code] || 0;
                         const variance = physical - theoretical;
                         const variancePct = theoretical > 0 ? (variance / theoretical) * 100 : 0;
 
@@ -847,15 +857,15 @@ export function RawMaterialModule({
                                 <span className="text-[10px] font-black text-slate-700 uppercase leading-none">{mat.description}</span>
                               </div>
                             </TableCell>
-                            <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{initial.toLocaleString('es-ES')}</TableCell>
-                            <TableCell className="text-right font-black text-indigo-600 tabular-nums text-xs bg-indigo-50/20">{initialInTanks.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
-                            <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{receptions.toLocaleString('es-ES')}</TableCell>
-                            <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{final.toLocaleString('es-ES')}</TableCell>
-                            <TableCell className="text-right font-black text-purple-600 tabular-nums text-xs bg-purple-50/20">{finalInTanks.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
-                            <TableCell className="text-right font-black text-emerald-600 tabular-nums text-[13px] bg-emerald-50/20">{physical.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
-                            <TableCell className="text-right font-black text-primary tabular-nums text-[13px] bg-primary/5">{theoretical.toLocaleString('es-ES', { maximumFractionDigits: 2 })}</TableCell>
+                            <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{initial.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</TableCell>
+                            <TableCell className="text-right font-black text-indigo-600 tabular-nums text-xs bg-indigo-50/20">{initialInTanks.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</TableCell>
+                            <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{weekReceptions.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</TableCell>
+                            <TableCell className="text-right font-bold text-slate-500 tabular-nums text-xs">{final.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</TableCell>
+                            <TableCell className="text-right font-black text-purple-600 tabular-nums text-xs bg-purple-50/20">{finalInTanks.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</TableCell>
+                            <TableCell className="text-right font-black text-emerald-600 tabular-nums text-[13px] bg-emerald-50/20">{physical.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</TableCell>
+                            <TableCell className="text-right font-black text-primary tabular-nums text-[13px] bg-primary/5">{theoretical.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</TableCell>
                             <TableCell className="text-right font-black text-slate-700 tabular-nums text-xs">
-                              {variance.toLocaleString('es-ES', { maximumFractionDigits: 2 })}
+                              {variance.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                             </TableCell>
                             <TableCell className="pr-6 text-right font-bold tabular-nums text-xs">
                               <span className={cn(Math.abs(variancePct) > 10 ? 'text-destructive' : 'text-slate-500')}>
