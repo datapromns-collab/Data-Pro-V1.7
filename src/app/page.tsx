@@ -352,8 +352,8 @@ export default function PlannerPage() {
   }
 
   const navTabClass = (isActive: boolean) => cn(
-    "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none",
-    isActive ? "bg-slate-100 text-slate-900" : "text-slate-500 hover:bg-slate-50"
+    "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95",
+    isActive ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
   );
 
   return (
@@ -594,40 +594,40 @@ export default function PlannerPage() {
             <div className="flex flex-col gap-6 h-full">
               
               {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && (
-                <div className="flex items-center bg-white border border-slate-200 rounded-full p-1 shadow-sm self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print">
+                <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1 shadow-none self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print h-11 shrink-0">
                   {activeModule === 'planning' ? (
                     <>
                       <button 
                         onClick={() => setActiveTab('gantt')}
-                        className={cn(navTabClass(activeTab === 'gantt'), "w-[170px] px-0 active:scale-100 active:transform-none transform-none")}
+                        className={cn(navTabClass(activeTab === 'gantt'))}
                       >
                         <GanttChartSquare className="h-3.5 w-3.5" />
                         Programación
                       </button>
                       <button 
                         onClick={() => setActiveTab('daily')}
-                        className={cn(navTabClass(activeTab === 'daily'), "w-[170px] px-0 active:scale-100 active:transform-none transform-none")}
+                        className={cn(navTabClass(activeTab === 'daily'))}
                       >
                         <ListTodo className="h-3.5 w-3.5" />
                         Plan Día a Día
                       </button>
                       <button 
                         onClick={() => setActiveTab('requirement')}
-                        className={cn(navTabClass(activeTab === 'requirement'), "w-[170px] px-0 active:scale-100 active:transform-none transform-none")}
+                        className={cn(navTabClass(activeTab === 'requirement'))}
                       >
                         <ClipboardList className="h-3.5 w-3.5" />
                         Requerimiento
                       </button>
                       <button 
                         onClick={() => setActiveTab('speeds')}
-                        className={cn(navTabClass(activeTab === 'speeds'), "w-[170px] px-0 active:scale-100 active:transform-none transform-none")}
+                        className={cn(navTabClass(activeTab === 'speeds'))}
                       >
                         <Gauge className="h-3.5 w-3.5" />
                         Velocidades
                       </button>
                       <button 
                         onClick={() => setActiveTab('calculator')}
-                        className={cn(navTabClass(activeTab === 'calculator'), "w-[170px] px-0 active:scale-100 active:transform-none transform-none")}
+                        className={cn(navTabClass(activeTab === 'calculator'))}
                       >
                         <CalculatorIcon className="h-3.5 w-3.5" />
                         Calculadora
@@ -637,14 +637,14 @@ export default function PlannerPage() {
                     <>
                       <button 
                         onClick={() => setActiveTab('admin-report')}
-                        className={cn(navTabClass(activeTab === 'admin-report'), "active:scale-100 active:transform-none transform-none")}
+                        className={cn(navTabClass(activeTab === 'admin-report'))}
                       >
                         <BarChart3 className="h-3.5 w-3.5" />
                         Control Producción
                       </button>
                       <button 
                         onClick={() => setActiveTab('compliance-report')}
-                        className={cn(navTabClass(activeTab === 'compliance-report'), "active:scale-100 active:transform-none transform-none")}
+                        className={cn(navTabClass(activeTab === 'compliance-report'))}
                       >
                         <CheckCircle2 className="h-3.5 w-3.5" />
                         Cumplimiento
@@ -654,14 +654,14 @@ export default function PlannerPage() {
                     <>
                       <button 
                         onClick={() => setActiveTab('recipes-editor')}
-                        className={cn(navTabClass(activeTab === 'recipes-editor'), "bg-emerald-50 text-emerald-700 active:scale-100 active:transform-none transform-none", activeTab !== 'recipes-editor' && "bg-transparent text-slate-500 hover:bg-slate-50")}
+                        className={cn(navTabClass(activeTab === 'recipes-editor'))}
                       >
                         <FlaskConical className="h-3.5 w-3.5" />
                         Recetas de Materia Prima
                       </button>
                       <button 
                         onClick={() => setActiveTab('packaging-recipes-editor')}
-                        className={cn(navTabClass(activeTab === 'packaging-recipes-editor'), "bg-blue-50 text-blue-700 active:scale-100 active:transform-none transform-none", activeTab !== 'packaging-recipes-editor' && "bg-transparent text-slate-500 hover:bg-slate-50")}
+                        className={cn(navTabClass(activeTab === 'packaging-recipes-editor'))}
                       >
                         <Package className="h-3.5 w-3.5" />
                         Recetas de Empaque

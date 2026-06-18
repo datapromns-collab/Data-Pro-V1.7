@@ -204,7 +204,7 @@ export function RawMaterialModule({
     return inTanks;
   }, [finalUBBTanksDaily, recipes, currentWorkingDateKey]);
 
-  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-100 active:transform-none transform-none border-0 select-none";
+  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
   const renderSimpleStockTable = (type: 'initial' | 'final') => (
     <Card className="border-slate-200 rounded-3xl overflow-hidden bg-white shadow-sm">
@@ -411,7 +411,7 @@ export function RawMaterialModule({
         <TabsContent value="daily-main" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
           <Tabs defaultValue="daily-inventory" className="w-full space-y-6">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-              <div className="flex items-center bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200 w-fit overflow-x-auto max-w-full no-print">
+              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit no-print">
                 <TabsList className="bg-transparent h-auto p-0">
                   <TabsTrigger value="daily-inventory" className={tabsTriggerClass}>
                     <Warehouse className="h-3.5 w-3.5" /> Inventario
@@ -429,7 +429,7 @@ export function RawMaterialModule({
                 <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-2">Día de Trabajo:</span>
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button variant="outline" className="h-10 justify-start text-left font-bold bg-slate-50 border-slate-100 shadow-none hover:bg-slate-100 transition-none rounded-xl px-4">
+                    <Button variant="outline" className="h-10 justify-start text-left font-bold bg-slate-50 border-slate-100 shadow-none hover:bg-slate-100 transition-none rounded-xl px-4 active:scale-95">
                       <CalendarIcon className="mr-2 h-4 w-4 text-primary" />
                       {format(workingDate, "EEEE dd 'de' MMMM", { locale: es })}
                     </Button>
@@ -634,7 +634,7 @@ export function RawMaterialModule({
                 <Button 
                   onClick={() => onPrintDailyReport?.(workingDate)}
                   variant="outline" 
-                  className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-100 active:transform-none transition-none"
+                  className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
                 >
                   <FileDown className="h-4 w-4" /> Exportar Reporte Diario
                 </Button>
@@ -737,12 +737,12 @@ export function RawMaterialModule({
 
         <TabsContent value="weekly-main" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
           <Tabs defaultValue="initial" className="space-y-6">
-            <div className="flex items-center bg-slate-100/50 p-1.5 rounded-2xl border border-slate-200 w-fit overflow-x-auto max-w-full no-print">
+            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit no-print">
               <TabsList className="bg-transparent h-auto p-0">
                 <TabsTrigger value="initial" className={tabsTriggerClass}>
                   <Warehouse className="h-3.5 w-3.5" /> Inventario Inicial
                 </TabsTrigger>
-                <TabsTrigger value="initial-tanks" className={cn(tabsTriggerClass, "data-[state=active]:bg-indigo-50 data-[state=active]:text-indigo-700")}>
+                <TabsTrigger value="initial-tanks" className={tabsTriggerClass}>
                   <Beaker className="h-3.5 w-3.5" /> UBB Inicial
                 </TabsTrigger>
                 <TabsTrigger value="reception" className={tabsTriggerClass}>
@@ -751,7 +751,7 @@ export function RawMaterialModule({
                 <TabsTrigger value="final" className={tabsTriggerClass}>
                   <ClipboardCheck className="h-3.5 w-3.5" /> Inventario Final
                 </TabsTrigger>
-                <TabsTrigger value="final-tanks" className={cn(tabsTriggerClass, "data-[state=active]:bg-purple-50 data-[state=active]:text-purple-700")}>
+                <TabsTrigger value="final-tanks" className={tabsTriggerClass}>
                   <Beaker className="h-3.5 w-3.5" /> UBB Final
                 </TabsTrigger>
                 <TabsTrigger value="daily" className={tabsTriggerClass}>
@@ -792,7 +792,7 @@ export function RawMaterialModule({
                 <Button 
                   onClick={onPrintReport}
                   variant="outline" 
-                  className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-100 active:transform-none transition-none"
+                  className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
                 >
                   <FileDown className="h-4 w-4" /> Exportar Reporte PDF
                 </Button>
@@ -816,7 +816,7 @@ export function RawMaterialModule({
                         <TableHead className="text-[10px] font-black text-slate-400 uppercase pl-6 min-w-[180px]">Material</TableHead>
                         <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">I. Inicial</TableHead>
                         <TableHead className="text-right text-[10px] font-black text-indigo-600 uppercase bg-indigo-50/30">I. en Tanques</TableHead>
-                        <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">Recepciones</TableHead>
+                        <TableHead className="text-right text-[10px) font-black text-slate-400 uppercase">Recepciones</TableHead>
                         <TableHead className="text-right text-[10px] font-black text-slate-400 uppercase">I. Final</TableHead>
                         <TableHead className="text-right text-[10px] font-black text-purple-600 uppercase bg-purple-50/30">F. en Tanques</TableHead>
                         <TableHead className="text-right text-[10px] font-black text-emerald-600 uppercase bg-emerald-50/30">Consumo Físico</TableHead>

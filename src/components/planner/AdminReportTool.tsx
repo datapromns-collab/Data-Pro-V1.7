@@ -169,21 +169,23 @@ export function AdminReportTool({
     [lineData]
   );
 
-  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-100 active:transform-none transform-none border-0 select-none";
+  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
   return (
     <div className="space-y-4 animate-in fade-in duration-700 pb-4">
       {view === 'production' && (
         <Tabs value={productionSubTab} onValueChange={setProductionTab} className="w-full">
           <div className="flex items-center justify-between mb-6">
-            <TabsList className="bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-              <TabsTrigger value="weekly" className={tabsTriggerClass}>
-                <CalendarDays className="h-3.5 w-3.5" /> Control Semanal
-              </TabsTrigger>
-              <TabsTrigger value="monthly" className={tabsTriggerClass}>
-                <FileSpreadsheet className="h-3.5 w-3.5" /> Resumen Mensual
-              </TabsTrigger>
-            </TabsList>
+            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 no-print">
+              <TabsList className="bg-transparent h-auto p-0">
+                <TabsTrigger value="weekly" className={tabsTriggerClass}>
+                  <CalendarDays className="h-3.5 w-3.5" /> Control Semanal
+                </TabsTrigger>
+                <TabsTrigger value="monthly" className={tabsTriggerClass}>
+                  <FileSpreadsheet className="h-3.5 w-3.5" /> Resumen Mensual
+                </TabsTrigger>
+              </TabsList>
+            </div>
 
             <div className="flex items-center gap-2">
               {productionSubTab === 'weekly' ? (
@@ -490,14 +492,16 @@ export function AdminReportTool({
       {view === 'compliance' && (
         <Tabs value={complianceSubTab} onValueChange={setComplianceTab} className="w-full">
            <div className="flex items-center justify-between mb-6">
-            <TabsList className="bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-              <TabsTrigger value="weekly" className={tabsTriggerClass}>
-                <CalendarDays className="h-3.5 w-3.5" /> Detalle Semanal
-              </TabsTrigger>
-              <TabsTrigger value="monthly" className={tabsTriggerClass}>
-                <BarChart3 className="h-3.5 w-3.5" /> Resumen Mensual
-              </TabsTrigger>
-            </TabsList>
+            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 no-print">
+              <TabsList className="bg-transparent h-auto p-0">
+                <TabsTrigger value="weekly" className={tabsTriggerClass}>
+                  <CalendarDays className="h-3.5 w-3.5" /> Detalle Semanal
+                </TabsTrigger>
+                <TabsTrigger value="monthly" className={tabsTriggerClass}>
+                  <BarChart3 className="h-3.5 w-3.5" /> Resumen Mensual
+                </TabsTrigger>
+              </TabsList>
+            </div>
 
             <div className="flex items-center gap-2">
               {complianceSubTab === 'weekly' ? (

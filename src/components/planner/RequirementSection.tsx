@@ -46,6 +46,7 @@ import {
   CONSUMABLES_DATA,
   ADHESIVE_DATA
 } from '@/lib/planner-utils';
+import { cn } from '@/lib/utils';
 
 interface RequirementSectionProps {
   onPrint?: () => void;
@@ -195,6 +196,8 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
     }
   };
 
+  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
+
   const renderTable = (data: any[], unit: string = 'UND') => (
     <div className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
       <Table>
@@ -226,23 +229,25 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
     <div className="space-y-6">
       <Tabs defaultValue="empaque" className="space-y-6">
         <div className="flex items-center justify-between">
-          <TabsList className="bg-slate-100/50 p-1.5 rounded-2xl h-14 border border-slate-200">
-            <TabsTrigger value="empaque" className="gap-2 px-6 h-full font-black text-xs uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900">
-              <Package className="h-4 w-4" /> Empaque
-            </TabsTrigger>
-            <TabsTrigger value="materia" className="gap-2 px-6 h-full font-black text-xs uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900">
-              <Droplet className="h-4 w-4" /> Materia Prima
-            </TabsTrigger>
-            <TabsTrigger value="consumibles" className="gap-2 px-6 h-full font-black text-xs uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900">
-              <Waves className="h-4 w-4" /> Consumibles
-            </TabsTrigger>
-          </TabsList>
+          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 no-print">
+            <TabsList className="bg-transparent h-auto p-0">
+              <TabsTrigger value="empaque" className={tabsTriggerClass}>
+                <Package className="h-3.5 w-3.5" /> Empaque
+              </TabsTrigger>
+              <TabsTrigger value="materia" className={tabsTriggerClass}>
+                <Droplet className="h-3.5 w-3.5" /> Materia Prima
+              </TabsTrigger>
+              <TabsTrigger value="consumibles" className={tabsTriggerClass}>
+                <Waves className="h-3.5 w-3.5" /> Consumibles
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           <Button 
             onClick={onPrint} 
             variant="outline" 
             size="lg"
-            className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 rounded-xl h-11 px-6 shadow-sm"
+            className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 rounded-xl h-11 px-6 shadow-sm active:scale-95"
           >
             <Printer className="h-4 w-4" />
             Imprimir Reporte
@@ -251,33 +256,37 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
 
         <TabsContent value="empaque" className="space-y-6 m-0 animate-in fade-in-50 duration-500">
           <Tabs defaultValue="preformas" className="space-y-6">
-            <TabsList className="bg-slate-100/50 p-1 rounded-full h-auto border border-slate-200 w-fit">
-              <TabsTrigger value="preformas" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
-                <Target className="h-4 w-4" /> Preformas
-              </TabsTrigger>
-              <TabsTrigger value="tapas" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
-                <CircleDot className="h-4 w-4" /> Tapas
-              </TabsTrigger>
-              <TabsTrigger value="etiquetas" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
-                <Tag className="h-4 w-4" /> Etiquetas
-              </TabsTrigger>
-              <TabsTrigger value="plasticos" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
-                <Layers className="h-4 w-4" /> Plásticos
-              </TabsTrigger>
-              <TabsTrigger value="adhesivos" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
-                <StickyNote className="h-4 w-4" /> Adhesivos
-              </TabsTrigger>
-            </TabsList>
+            <div className="flex items-center bg-slate-100/30 p-1 rounded-full h-11 border border-slate-200 w-fit no-print">
+              <TabsList className="bg-transparent h-auto p-0">
+                <TabsTrigger value="preformas" className={cn(tabsTriggerClass, "h-9 px-4")}>
+                  <Target className="h-3.5 w-3.5" /> Preformas
+                </TabsTrigger>
+                <TabsTrigger value="tapas" className={cn(tabsTriggerClass, "h-9 px-4")}>
+                  <CircleDot className="h-3.5 w-3.5" /> Tapas
+                </TabsTrigger>
+                <TabsTrigger value="etiquetas" className={cn(tabsTriggerClass, "h-9 px-4")}>
+                  <Tag className="h-3.5 w-3.5" /> Etiquetas
+                </TabsTrigger>
+                <TabsTrigger value="plasticos" className={cn(tabsTriggerClass, "h-9 px-4")}>
+                  <Layers className="h-3.5 w-3.5" /> Plásticos
+                </TabsTrigger>
+                <TabsTrigger value="adhesivos" className={cn(tabsTriggerClass, "h-9 px-4")}>
+                  <StickyNote className="h-3.5 w-3.5" /> Adhesivos
+                </TabsTrigger>
+              </TabsList>
+            </div>
             <TabsContent value="preformas" className="m-0 animate-in slide-in-from-left-2 duration-300">{renderTable(PREFORMS_DATA, 'UND')}</TabsContent>
             <TabsContent value="tapas" className="m-0 animate-in slide-in-from-left-2 duration-300">{renderTable(CAPS_DATA, 'UND')}</TabsContent>
             <TabsContent value="etiquetas" className="m-0 animate-in slide-in-from-left-2 duration-300">
               <Tabs defaultValue="2lts" className="space-y-4">
-                <TabsList className="bg-slate-100/30 border p-1 rounded-lg">
-                  <TabsTrigger value="2lts" className="text-[10px] font-bold px-4">2 Lts</TabsTrigger>
-                  <TabsTrigger value="1.5lts" className="text-[10px] font-bold px-4">1.5 Lts</TabsTrigger>
-                  <TabsTrigger value="1lt" className="text-[10px] font-bold px-4">1 Lt</TabsTrigger>
-                  <TabsTrigger value="0.4lts" className="text-[10px] font-bold px-4">0.4 Lts</TabsTrigger>
-                </TabsList>
+                <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-10 border border-slate-200 w-fit">
+                  <TabsList className="bg-transparent h-auto p-0">
+                    <TabsTrigger value="2lts" className={cn(tabsTriggerClass, "h-8 px-4 text-[9px]")}>2 Lts</TabsTrigger>
+                    <TabsTrigger value="1.5lts" className={cn(tabsTriggerClass, "h-8 px-4 text-[9px]")}>1.5 Lts</TabsTrigger>
+                    <TabsTrigger value="1lt" className={cn(tabsTriggerClass, "h-8 px-4 text-[9px]")}>1 Lt</TabsTrigger>
+                    <TabsTrigger value="0.4lts" className={cn(tabsTriggerClass, "h-8 px-4 text-[9px]")}>0.4 Lts</TabsTrigger>
+                  </TabsList>
+                </div>
                 <TabsContent value="2lts" className="m-0">{renderTable(LABELS_2LTS_DATA, 'KG')}</TabsContent>
                 <TabsContent value="1.5lts" className="m-0">{renderTable(LABELS_1_5LTS_DATA, 'KG')}</TabsContent>
                 <TabsContent value="1lt" className="m-0">{renderTable(LABELS_1LT_DATA, 'KG')}</TabsContent>
@@ -291,20 +300,22 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
 
         <TabsContent value="materia" className="space-y-6 m-0 animate-in fade-in-50 duration-500">
           <Tabs defaultValue="azucar" className="space-y-6">
-            <TabsList className="bg-slate-100/50 p-1 rounded-full h-auto border border-slate-200 w-fit">
-              <TabsTrigger value="azucar" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
-                <Wheat className="h-4 w-4" /> Azúcar
-              </TabsTrigger>
-              <TabsTrigger value="concentrados" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
-                <FlaskConical className="h-4 w-4" /> Concentrados
-              </TabsTrigger>
-              <TabsTrigger value="solidos" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
-                <Box className="h-4 w-4" /> Sólidos
-              </TabsTrigger>
-              <TabsTrigger value="aditivos" className="gap-2 px-5 py-2 rounded-full font-bold text-xs data-[state=active]:bg-white data-[state=active]:shadow-sm data-[state=active]:text-slate-900 transition-all">
-                <Plus className="h-4 w-4" /> Aditivos
-              </TabsTrigger>
-            </TabsList>
+            <div className="flex items-center bg-slate-100/30 p-1 rounded-full h-11 border border-slate-200 w-fit no-print">
+              <TabsList className="bg-transparent h-auto p-0">
+                <TabsTrigger value="azucar" className={cn(tabsTriggerClass, "h-9 px-4")}>
+                  <Wheat className="h-3.5 w-3.5" /> Azúcar
+                </TabsTrigger>
+                <TabsTrigger value="concentrados" className={cn(tabsTriggerClass, "h-9 px-4")}>
+                  <FlaskConical className="h-3.5 w-3.5" /> Concentrados
+                </TabsTrigger>
+                <TabsTrigger value="solidos" className={cn(tabsTriggerClass, "h-9 px-4")}>
+                  <Box className="h-3.5 w-3.5" /> Sólidos
+                </TabsTrigger>
+                <TabsTrigger value="aditivos" className={cn(tabsTriggerClass, "h-9 px-4")}>
+                  <Plus className="h-3.5 w-3.5" /> Aditivos
+                </TabsTrigger>
+              </TabsList>
+            </div>
             <TabsContent value="azucar" className="m-0 animate-in slide-in-from-left-2 duration-300">{renderTable(SUGAR_DATA, 'KG')}</TabsContent>
             <TabsContent value="concentrados" className="m-0 animate-in slide-in-from-left-2 duration-300 space-y-8">
               <div className="space-y-4">
