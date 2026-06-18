@@ -36,7 +36,7 @@ export function PurchasingModule() {
 
   const renderSalesPlanTable = () => (
     <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
-      <div className="bg-[#0c1a3d] px-8 py-5 flex items-center justify-between">
+      <div className="bg-primary px-8 py-5 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="bg-white/10 p-2 rounded-xl">
             <LineChart className="h-5 w-5 text-white" />
