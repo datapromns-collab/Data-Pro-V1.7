@@ -44,7 +44,8 @@ import {
   SOLIDS_DATA,
   ADDITIVES_DATA,
   CONSUMABLES_DATA,
-  ADHESIVE_DATA
+  ADHESIVE_DATA,
+  ADHESIVE_FACTORS
 } from '@/lib/planner-utils';
 import { cn } from '@/lib/utils';
 
@@ -76,7 +77,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
         }
       }
     });
-    if (packagingTotal > 0) return Number(packagingTotal.toFixed(2));
+    if (packagingTotal > 0) return Number(packagingTotal.toFixed(6));
 
     let materialTotal = 0;
     tasks.forEach(task => {
@@ -149,6 +150,17 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
       }, 0).toFixed(2));
     }
 
+    if (code === 'EMP_0078') {
+      const formats: (keyof typeof ADHESIVE_FACTORS)[] = ["2Lts", "1Lt", "0.4Lts", "1.5Lts"];
+      return Number(formats.reduce((acc, fmt) => {
+        const factor = ADHESIVE_FACTORS[fmt];
+        const totalBoxes = tasks
+          .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
+          .reduce((sum, t) => sum + (t.quantity || 0), 0);
+        return acc + (totalBoxes * factor);
+      }, 0).toFixed(6));
+    }
+
     switch (code) {
       case 'EMP_0009': { 
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
@@ -215,7 +227,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
               <TableCell className="text-sm font-bold text-slate-700 py-4">{item.description}</TableCell>
               <TableCell className="text-right py-4">
                 <Badge variant="secondary" className="bg-slate-50 text-slate-400 border-slate-200 px-4 py-1.5 font-bold text-[12px] min-w-[100px] justify-center">
-                  {Number(getCalculatedValue(item.code)).toLocaleString('es-ES')} {item.unit || unit}
+                  {Number(getCalculatedValue(item.code)).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 6 })} {item.unit || unit}
                 </Badge>
               </TableCell>
             </TableRow>

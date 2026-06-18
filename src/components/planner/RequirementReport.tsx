@@ -28,7 +28,8 @@ import {
   SOLIDS_DATA,
   ADDITIVES_DATA,
   CONSUMABLES_DATA,
-  ADHESIVE_DATA
+  ADHESIVE_DATA,
+  ADHESIVE_FACTORS
 } from '@/lib/planner-utils';
 
 interface RequirementReportProps {
@@ -60,7 +61,7 @@ export function RequirementReport({ tasks, weekStartDate, recipes, packagingReci
         }
       }
     });
-    if (packagingTotal > 0) return Number(packagingTotal.toFixed(2));
+    if (packagingTotal > 0) return Number(packagingTotal.toFixed(6));
 
     let materialTotal = 0;
     tasks.forEach(task => {
@@ -131,6 +132,17 @@ export function RequirementReport({ tasks, weekStartDate, recipes, packagingReci
           .reduce((sum, t) => sum + (t.quantity || 0), 0);
         return acc + (totalBoxes * factor);
       }, 0).toFixed(2));
+    }
+
+    if (code === 'EMP_0078') {
+      const formats: (keyof typeof ADHESIVE_FACTORS)[] = ["2Lts", "1Lt", "0.4Lts", "1.5Lts"];
+      return Number(formats.reduce((acc, fmt) => {
+        const factor = ADHESIVE_FACTORS[fmt];
+        const totalBoxes = tasks
+          .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
+          .reduce((sum, t) => sum + (t.quantity || 0), 0);
+        return acc + (totalBoxes * factor);
+      }, 0).toFixed(6));
     }
 
     switch (code) {
@@ -270,7 +282,7 @@ export function RequirementReport({ tasks, weekStartDate, recipes, packagingReci
                   <TableRow key={`${item.code}-${idx}`} className="border-b last:border-0 h-8">
                     <TableCell className="py-1 font-mono text-[10px] font-bold text-primary">{item.code}</TableCell>
                     <TableCell className="py-1 text-[11px] font-medium text-slate-800">{item.description}</TableCell>
-                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{getCalculatedValue(item.code).toLocaleString('es-ES')} KG</TableCell>
+                    <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{getCalculatedValue(item.code).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 6 })} KG</TableCell>
                   </TableRow>
                 ))}
               </TableBody>

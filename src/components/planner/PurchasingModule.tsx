@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { useMemo } from 'react';
@@ -51,7 +50,8 @@ import {
   PLASTIC_FACTORS,
   TERMO_0080_FACTORS,
   TERMO_0130_FACTORS,
-  TERMO_0017_FACTORS
+  TERMO_0017_FACTORS,
+  ADHESIVE_FACTORS
 } from '@/lib/planner-utils';
 
 const REFRESCOS = [
@@ -112,7 +112,7 @@ export function PurchasingModule() {
 
         // Adhesivo Krones
         if (code === 'EMP_0078') {
-          const factor = (presentation === "0.4Lts") ? 0.0005 : (presentation === "1.5Lts" ? 0.0015 : 0.001);
+          const factor = ADHESIVE_FACTORS[presentation] || 0;
           total += quantity * factor;
           return;
         }
@@ -206,7 +206,7 @@ export function PurchasingModule() {
                     </div>
                   </TableCell>
                   <TableCell className="pr-6 text-right font-black text-[13px] text-slate-900 tabular-nums">
-                    {item.requirement.toLocaleString('es-ES', { maximumFractionDigits: 2 })} <span className="text-[9px] text-slate-400 ml-1">{item.unit || unit}</span>
+                    {item.requirement.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 6 })} <span className="text-[9px] text-slate-400 ml-1">{item.unit || unit}</span>
                   </TableCell>
                 </TableRow>
               ))}
