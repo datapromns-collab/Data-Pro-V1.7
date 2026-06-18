@@ -60,6 +60,7 @@ export function RequirementReport({ tasks, weekStartDate, recipes, packagingReci
           const pres = task.presentation || "";
           const qty = task.quantity || 0;
 
+          // Preformas (Actualizado)
           // 2Lts (x6)
           if (code === 'EMP_0103' && pres === "2Lts" && isFresh) { packagingTotal += qty * 6; return; }
           if (code === 'EMP_0093' && pres === "2Lts" && !isFresh && !isJugo) { packagingTotal += qty * 6; return; }
@@ -73,10 +74,10 @@ export function RequirementReport({ tasks, weekStartDate, recipes, packagingReci
           if (code === 'EMP_0135' && pres === "0.4Lts" && isFresh) { packagingTotal += qty * 15; return; }
           if (code === 'EMP_0126' && pres === "0.4Lts" && !isFresh && !isJugo) { packagingTotal += qty * 15; return; }
           
-          // 1.5Lts Jugos
-          if (code === 'EMP_068' && pres === "1.5Lts" && isJugo) { packagingTotal += qty * 12; return; }
+          // 1.5Lts Jugos x12 (EMP_0068 - 36g Trans)
+          if (code === 'EMP_0068' && pres === "1.5Lts" && isJugo) { packagingTotal += qty * 12; return; }
 
-          // Otros consumibles (Agua, CO2, etc)
+          // Otros consumibles
           const recipe = CONSUMABLES_RECIPES[task.name];
           if (recipe && pres && recipe[pres] && recipe[pres][code]) {
             packagingTotal += qty * recipe[pres][code];
@@ -168,21 +169,21 @@ export function RequirementReport({ tasks, weekStartDate, recipes, packagingReci
       }, 0).toFixed(6));
     }
 
-    // Tapas Fallback Global
+    // Tapas Fallback
     if (code === 'EMP_0095') {
-       return Math.round(tasks.filter(t => t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => {
+       return Math.round(tasks.filter(t => t.name === "GLUP FRESH" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
            const f = t.presentation === "2Lts" ? 6 : (t.presentation === "1Lt" ? 12 : 15);
            return acc + (t.quantity || 0) * f;
         }, 0));
     }
     if (code === 'EMP_0105') {
-       return Math.round(tasks.filter(t => t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH" && !t.name.startsWith("JUSTY") && !t.name.startsWith("VITA") && t.presentation !== "0.4Lts").reduce((acc, t) => {
+       return Math.round(tasks.filter(t => t.name !== "GLUP FRESH" && !t.name.startsWith("JUSTY") && !t.name.startsWith("VITA") && t.presentation !== "0.4Lts" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
            const f = t.presentation === "2Lts" ? 6 : 12;
            return acc + (t.quantity || 0) * f;
         }, 0));
     }
     if (code === 'EMP_0105_N') {
-       return Math.round(tasks.filter(t => t.endTime > weekStartDate && t.startTime < weekEnd && (t.name.startsWith("JUSTY") || t.name.startsWith("VITA") || t.presentation === "0.4Lts")).reduce((acc, t) => {
+       return Math.round(tasks.filter(t => (t.name.startsWith("JUSTY") || t.name.startsWith("VITA") || t.presentation === "0.4Lts") && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
            const f = (t.presentation === "1.5Lts") ? 12 : 15;
            return acc + (t.quantity || 0) * f;
         }, 0));

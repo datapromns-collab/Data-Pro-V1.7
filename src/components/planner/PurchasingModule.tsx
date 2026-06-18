@@ -124,7 +124,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
           return;
         }
 
-        // Preformas Fallbacks (Actualizados según Tabla Técnica del usuario)
+        // Preformas Fallbacks (Actualizados según Tabla Técnica)
         const isFresh = product === "GLUP FRESH";
         const isColaKolita = product === "GLUP COLA" || product === "GLUP KOLITA";
         const isJugo = product.startsWith("JUSTY") || product.startsWith("VITA");
@@ -142,8 +142,8 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
         if (code === 'EMP_0135' && presentation === "0.4Lts" && isFresh) { total += quantity * 15; return; }
         if (code === 'EMP_0126' && presentation === "0.4Lts" && !isFresh && !isJugo) { total += quantity * 15; return; }
         
-        // 1.5Lts Jugos - 36g
-        if (code === 'EMP_068' && presentation === "1.5Lts" && isJugo) { total += quantity * 12; return; }
+        // 1.5Lts Jugos - 36g x12 (Actualizado según tabla técnica del usuario)
+        if (code === 'EMP_0068' && presentation === "1.5Lts" && isJugo) { total += quantity * 12; return; }
 
         // Tapas Fallbacks
         if (code === 'EMP_0095' && isFresh) { 

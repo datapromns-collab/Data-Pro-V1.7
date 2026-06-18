@@ -107,8 +107,8 @@ export function PurchasingRequirementReport({
         if (code === 'EMP_0135' && presentation === "0.4Lts" && isFresh) { total += quantity * 15; return; }
         if (code === 'EMP_0126' && presentation === "0.4Lts" && !isFresh && !isJugo) { total += quantity * 15; return; }
         
-        // 1.5Lts Jugos
-        if (code === 'EMP_068' && presentation === "1.5Lts" && isJugo) { total += quantity * 12; return; }
+        // 1.5Lts Jugos x12 (EMP_0068 - 36g Trans)
+        if (code === 'EMP_0068' && presentation === "1.5Lts" && isJugo) { total += quantity * 12; return; }
 
         // Tapas Fallbacks
         if (code === 'EMP_0095' && isFresh) { 
