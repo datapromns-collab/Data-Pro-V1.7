@@ -34,9 +34,15 @@ export function PurchasingModule() {
   
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
-  const renderTableForPresentation = (title: string, products: string[], presentation: string, colorClass: string = "bg-[#A67B5B]") => (
+  const renderTableForPresentation = (
+    title: string, 
+    products: string[], 
+    presentation: string, 
+    headerColor: string = "bg-sky-500", 
+    footerColor: string = "bg-sky-400"
+  ) => (
     <Card className="border-slate-200 rounded-[2rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40 h-full">
-      <div className={cn(colorClass, "px-6 py-4 flex items-center justify-between shrink-0")}>
+      <div className={cn(headerColor, "px-6 py-4 flex items-center justify-between shrink-0")}>
         <div className="flex items-center gap-3">
           <div className="bg-white/10 p-2 rounded-xl">
             <Package className="h-4 w-4 text-white" />
@@ -74,7 +80,7 @@ export function PurchasingModule() {
               </TableRow>
             ))}
           </TableBody>
-          <tfoot className="bg-[#5D4037] text-white font-black border-t-2 border-[#3E2723]">
+          <tfoot className={cn(footerColor, "text-white font-black border-t-2 border-white/10")}>
             <tr className="h-10">
               <td className="pl-6 text-[10px] uppercase">Total {presentation}</td>
               <td className="text-center text-xs tabular-nums">
@@ -135,10 +141,10 @@ export function PurchasingModule() {
 
                 <TabsContent value="planificacion" className="m-0 animate-in fade-in-50 duration-500">
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                     {renderTableForPresentation("Refrescos 2 Lts", REFRESCOS, "2Lts")}
-                     {renderTableForPresentation("Refrescos 1 Lt", REFRESCOS, "1Lt")}
-                     {renderTableForPresentation("Refrescos 0.4 Lts", REFRESCOS, "0.4Lts")}
-                     {renderTableForPresentation("Jugos 1.5 Lts", JUGOS, "1.5Lts", "bg-[#8D6E63]")}
+                     {renderTableForPresentation("Refrescos 2 Lts", REFRESCOS, "2Lts", "bg-sky-500", "bg-sky-400")}
+                     {renderTableForPresentation("Refrescos 1 Lt", REFRESCOS, "1Lt", "bg-sky-500", "bg-sky-400")}
+                     {renderTableForPresentation("Refrescos 0.4 Lts", REFRESCOS, "0.4Lts", "bg-sky-500", "bg-sky-400")}
+                     {renderTableForPresentation("Jugos 1.5 Lts", JUGOS, "1.5Lts", "bg-blue-500", "bg-blue-400")}
                    </div>
                 </TabsContent>
 
