@@ -45,7 +45,13 @@ import {
   PLASTICS_DATA,
   ADHESIVE_DATA,
   UBB_FACTORS,
-  PRODUCT_FACTORS
+  PRODUCT_FACTORS,
+  LABEL_FACTORS,
+  LABEL_MAPPING,
+  PLASTIC_FACTORS,
+  TERMO_0080_FACTORS,
+  TERMO_0130_FACTORS,
+  TERMO_0017_FACTORS
 } from '@/lib/planner-utils';
 
 const REFRESCOS = [
@@ -77,14 +83,78 @@ export function PurchasingModule() {
       Object.entries(presentations).forEach(([presentation, quantity]) => {
         if (quantity <= 0) return;
 
-        // 1. Verificar si es Material de Empaque (Prioridad Recetas de Empaque)
+        // 1. Prioridad: Recetas de Empaque Personalizadas/Maestras
         const packagingRecipe = customPackagingRecipes[product]?.[presentation];
         if (packagingRecipe && packagingRecipe[code] !== undefined) {
           total += quantity * packagingRecipe[code];
           return;
         }
 
-        // 2. Verificar si es Materia Prima (Azúcar, Concentrados, etc)
+        // 2. Lógica de Fallback para Material de Empaque (si no está en receta explícita)
+        
+        // Plásticos: Film Stretch (EMP_0019) y Termoencogibles
+        if (code === 'EMP_0019') {
+          total += quantity * (PLASTIC_FACTORS[presentation as keyof typeof PLASTIC_FACTORS] || 0);
+          return;
+        }
+        if (code === 'EMP_0080' && (presentation === "2Lts" || presentation === "1Lt")) {
+          total += quantity * (TERMO_0080_FACTORS[presentation as keyof typeof TERMO_0080_FACTORS] || 0);
+          return;
+        }
+        if (code === 'EMP_0130' && presentation === "0.4Lts") {
+          total += quantity * (TERMO_0130_FACTORS["0.4Lts"] || 0);
+          return;
+        }
+        if (code === 'EMP_0017' && presentation === "1.5Lts") {
+          total += quantity * (TERMO_0017_FACTORS["1.5Lts"] || 0);
+          return;
+        }
+
+        // Adhesivo Krones
+        if (code === 'EMP_0078') {
+          const factor = (presentation === "0.4Lts") ? 0.0005 : (presentation === "1.5Lts" ? 0.0015 : 0.001);
+          total += quantity * factor;
+          return;
+        }
+
+        // Etiquetas
+        const labelMap = LABEL_MAPPING[code];
+        if (labelMap && labelMap.product === product && labelMap.presentation === presentation) {
+          const factor = LABEL_FACTORS[product]?.[presentation] || 0;
+          total += quantity * factor;
+          return;
+        }
+
+        // Tapas y Preformas (Fallbacks por patrones de producción)
+        const isFresh = product === "GLUP FRESH";
+        const isColaKolita = product === "GLUP COLA" || product === "GLUP KOLITA";
+        const isFruitFlavor = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"].includes(product);
+        const isJugo = product.startsWith("JUSTY") || product.startsWith("VITA");
+
+        // Preformas
+        if (code === 'EMP_0166' && presentation === "1Lt" && (isColaKolita || isFruitFlavor)) { total += quantity * 12; return; }
+        if (code === 'EMP_0009' && presentation === "2Lts" && isFruitFlavor) { total += quantity * 12; return; }
+        if (code === 'EMP_068' && (presentation === "1.5Lts" || (presentation === "2Lts" && isColaKolita))) { total += quantity * 12; return; }
+        if (code === 'EMP_0126' && presentation === "0.4Lts" && !isFresh) { total += quantity * 15; return; }
+        if (code === 'EMP_0135' && presentation === "0.4Lts" && isFresh) { total += quantity * 15; return; }
+        if (code === 'EMP_0103' && presentation === "2Lts" && isFresh) { total += quantity * 6; return; }
+        if (code === 'EMP_0120' && presentation === "1Lt" && isFresh) { total += quantity * 12; return; }
+
+        // Tapas
+        if (code === 'EMP_0095' && isFresh) { 
+          total += quantity * (presentation === "2Lts" ? 6 : (presentation === "1Lt" ? 12 : 15)); 
+          return; 
+        }
+        if (code === 'EMP_0105' && !isFresh && !isJugo && presentation !== "0.4Lts") { 
+          total += quantity * (presentation === "2Lts" ? 6 : 12); 
+          return; 
+        }
+        if (code === 'EMP_0105_N' && (isJugo || presentation === "0.4Lts")) { 
+          total += quantity * (presentation === "1.5Lts" ? 12 : 15); 
+          return; 
+        }
+
+        // 3. Materia Prima (Prioridad Recetas de Materia Prima)
         const recipe = customRecipes[product];
         if (recipe && recipe[code] !== undefined) {
           const boxesPerTank = PRODUCT_FACTORS[product]?.[presentation] || 0;
@@ -102,7 +172,10 @@ export function PurchasingModule() {
   };
 
   const renderRequirementTable = (title: string, icon: React.ReactNode, data: any[], unit: string = 'KG', color: string = "bg-primary") => {
-    const hasRequirements = data.some(item => calculateRequirement(item.code) > 0);
+    const tableItems = data.map(item => ({
+      ...item,
+      requirement: calculateRequirement(item.code)
+    })).filter(item => item.requirement > 0);
     
     return (
       <Card className="border-slate-200 rounded-[2rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
@@ -124,24 +197,20 @@ export function PurchasingModule() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.map((item) => {
-                const req = calculateRequirement(item.code);
-                if (req <= 0) return null;
-                return (
-                  <TableRow key={item.code} className="hover:bg-slate-50/50 transition-none h-12 border-b border-slate-100">
-                    <TableCell className="pl-6">
-                      <div className="flex flex-col">
-                        <span className="text-[9px] font-bold text-primary font-mono leading-none mb-0.5">{item.code}</span>
-                        <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[250px]">{item.description}</span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="pr-6 text-right font-black text-[13px] text-slate-900 tabular-nums">
-                      {req.toLocaleString('es-ES', { maximumFractionDigits: 2 })} <span className="text-[9px] text-slate-400 ml-1">{item.unit || unit}</span>
-                    </TableCell>
-                  </TableRow>
-                );
-              })}
-              {!hasRequirements && (
+              {tableItems.map((item) => (
+                <TableRow key={item.code} className="hover:bg-slate-50/50 transition-none h-12 border-b border-slate-100">
+                  <TableCell className="pl-6">
+                    <div className="flex flex-col">
+                      <span className="text-[9px] font-bold text-primary font-mono leading-none mb-0.5">{item.code}</span>
+                      <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[250px]">{item.description}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="pr-6 text-right font-black text-[13px] text-slate-900 tabular-nums">
+                    {item.requirement.toLocaleString('es-ES', { maximumFractionDigits: 2 })} <span className="text-[9px] text-slate-400 ml-1">{item.unit || unit}</span>
+                  </TableCell>
+                </TableRow>
+              ))}
+              {tableItems.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={2} className="h-24 text-center">
                     <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest">Sin requerimientos para esta categoría</p>
