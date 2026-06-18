@@ -27,6 +27,7 @@ export const PREFORMS_DATA = [
   { code: 'EMP_0120', description: 'PREFORMA VERDE 29.6GR 1881' },
   { code: 'EMP_0126', description: 'PREFORMA TRANSPARENTE 20,55GR-1881' },
   { code: 'EMP_0135', description: 'PREFORMA VERDE 20,5-1881' },
+  { code: 'EMP_0166', description: 'PREFORMA TRANSPARENTE 33 GR-1881' },
 ];
 
 export const CAPS_DATA = [
@@ -209,14 +210,15 @@ export const LABEL_FACTORS: Record<string, Record<string, number>> = {
   "GLUP PIÑA PARCHITA": { "2Lts": 0.006750, "1Lt": 0.00654, "0.4Lts": 0.004950 },
   "GLUP MANZANA ROJA": { "2Lts": 0.006744, "1Lt": 0.006540, "0.4Lts": 0.004875 },
   "JUSTY NARANJA": { "1.5Lts": 0.0108 },
-  "JUSTY DURAZNO": { "1.5Lts": 0.00912 },
-  "JUSTY MANDARINA": { "1.5Lts": 0.00882 },
-  "JUSTY SANDIA": { "1.5Lts": 0.00888 },
-  "JUSTY TAMARINDO": { "1.5Lts": 0.00906 },
-  "JUSTY MANZANA": { "1.5Lts": 0.0100 },
-  "JUSTY PERA": { "1.5Lts": 0.0100 },
-  "VITA TEA DURAZNO": { "1.5Lts": 0.006912 },
-  "VITA TEA LIMON": { "1.5Lts": 0.006672 },
+  "JUSTY DURAZNO": { "1.5Lts": 0.0108 },
+  "JUSTY MANDARINA": { "1.5Lts": 0.0108 },
+  "JUSTY SANDIA": { "1.5Lts": 0.0108 },
+  "JUSTY LIMON": { "1.5Lts": 0.0108 },
+  "JUSTY TAMARINDO": { "1.5Lts": 0.0108 },
+  "JUSTY MANZANA": { "1.5Lts": 0.0108 },
+  "JUSTY PERA": { "1.5Lts": 0.0108 },
+  "VITA TEA DURAZNO": { "1.5Lts": 0.0108 },
+  "VITA TEA LIMON": { "1.5Lts": 0.0108 },
 };
 
 export const PLASTIC_FACTORS = {
