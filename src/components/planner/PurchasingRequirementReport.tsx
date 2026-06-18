@@ -141,7 +141,7 @@ export function PurchasingRequirementReport({
     return total;
   };
 
-  const renderSection = (title: string, data: any[], unit: string = 'KG', borderClass: string = "border-primary") => {
+  const renderSection = (title: string, data: any[], unit: string = 'KG', borderClass: string = "border-primary", maxDecimals: number = 6) => {
     const tableItems = data.map(item => ({
       ...item,
       requirement: calculateRequirement(item.code)
@@ -169,7 +169,10 @@ export function PurchasingRequirementReport({
                   <TableCell className="py-1 font-mono text-[9px] font-bold text-primary uppercase">{item.code}</TableCell>
                   <TableCell className="py-1 text-[10px] font-medium text-slate-800 uppercase truncate max-w-[300px]">{item.description}</TableCell>
                   <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[10px] tabular-nums">
-                    {item.requirement.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 6 })} {item.unit || unit}
+                    {item.requirement.toLocaleString('es-ES', { 
+                      minimumFractionDigits: 2, 
+                      maximumFractionDigits: maxDecimals 
+                    })} {item.unit || unit}
                   </TableCell>
                 </TableRow>
               ))}
@@ -203,10 +206,10 @@ export function PurchasingRequirementReport({
         <h3 className="text-sm font-black text-emerald-700 uppercase tracking-widest border-b-2 border-emerald-100 mb-4 pb-1 flex items-center gap-2">
           I. MATERIA PRIMA
         </h3>
-        {renderSection("1. Azúcar", SUGAR_DATA, 'KG', "border-emerald-600")}
-        {renderSection("2. Concentrados", [...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES], 'LTS/KG', "border-emerald-600")}
-        {renderSection("3. Sólidos", SOLIDS_DATA, 'KG', "border-emerald-600")}
-        {renderSection("4. Aditivos", ADDITIVES_DATA, 'LTS/KG', "border-emerald-600")}
+        {renderSection("1. Azúcar", SUGAR_DATA, 'KG', "border-emerald-600", 2)}
+        {renderSection("2. Concentrados", [...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES], 'LTS/KG', "border-emerald-600", 2)}
+        {renderSection("3. Sólidos", SOLIDS_DATA, 'KG', "border-emerald-600", 2)}
+        {renderSection("4. Aditivos", ADDITIVES_DATA, 'LTS/KG', "border-emerald-600", 2)}
       </div>
 
       {/* CONTENIDO - MATERIAL DE EMPAQUE */}
@@ -214,14 +217,14 @@ export function PurchasingRequirementReport({
         <h3 className="text-sm font-black text-blue-700 uppercase tracking-widest border-b-2 border-blue-100 mb-4 pb-1 flex items-center gap-2">
           II. MATERIAL DE EMPAQUE
         </h3>
-        {renderSection("5. Preformas", PREFORMS_DATA, 'UND', "border-blue-600")}
-        {renderSection("6. Tapas", CAPS_DATA, 'UND', "border-blue-600")}
-        {renderSection("7. Etiquetas 2L", LABELS_2LTS_DATA, 'KG', "border-blue-600")}
-        {renderSection("8. Etiquetas Jugos/Té", LABELS_1_5LTS_DATA, 'KG', "border-blue-600")}
-        {renderSection("9. Etiquetas 1L", LABELS_1LT_DATA, 'KG', "border-blue-600")}
-        {renderSection("10. Etiquetas 0.4L", LABELS_04LT_DATA, 'KG', "border-blue-600")}
-        {renderSection("11. Plásticos", PLASTICS_DATA.filter(p => !('isHeader' in p)), 'KG', "border-blue-600")}
-        {renderSection("12. Adhesivos", ADHESIVE_DATA, 'KG', "border-blue-600")}
+        {renderSection("5. Preformas", PREFORMS_DATA, 'UND', "border-blue-600", 2)}
+        {renderSection("6. Tapas", CAPS_DATA, 'UND', "border-blue-600", 2)}
+        {renderSection("7. Etiquetas 2L", LABELS_2LTS_DATA, 'KG', "border-blue-600", 2)}
+        {renderSection("8. Etiquetas Jugos/Té", LABELS_1_5LTS_DATA, 'KG', "border-blue-600", 2)}
+        {renderSection("9. Etiquetas 1L", LABELS_1LT_DATA, 'KG', "border-blue-600", 2)}
+        {renderSection("10. Etiquetas 0.4L", LABELS_04LT_DATA, 'KG', "border-blue-600", 2)}
+        {renderSection("11. Plásticos", PLASTICS_DATA.filter(p => !('isHeader' in p)), 'KG', "border-blue-600", 2)}
+        {renderSection("12. Adhesivos", ADHESIVE_DATA, 'KG', "border-blue-600", 6)}
       </div>
 
       {/* FOOTER */}

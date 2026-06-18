@@ -142,7 +142,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
         if (code === 'EMP_0135' && presentation === "0.4Lts" && isFresh) { total += quantity * 15; return; }
         if (code === 'EMP_0126' && presentation === "0.4Lts" && !isFresh && !isJugo) { total += quantity * 15; return; }
         
-        // 1.5Lts Jugos - 36g x12 (Actualizado según tabla técnica del usuario)
+        // 1.5Lts Jugos - 36g x12
         if (code === 'EMP_0068' && presentation === "1.5Lts" && isJugo) { total += quantity * 12; return; }
 
         // Tapas Fallbacks
@@ -176,7 +176,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
     return total;
   };
 
-  const renderRequirementTable = (title: string, icon: React.ReactNode, data: any[], unit: string = 'KG', color: string = "bg-primary") => {
+  const renderRequirementTable = (title: string, icon: React.ReactNode, data: any[], unit: string = 'KG', color: string = "bg-primary", maxDecimals: number = 6) => {
     const tableItems = data.map(item => ({
       ...item,
       requirement: calculateRequirement(item.code)
@@ -211,7 +211,10 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                     </div>
                   </TableCell>
                   <TableCell className="pr-6 text-right font-black text-[13px] text-slate-900 tabular-nums">
-                    {item.requirement.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 6 })} <span className="text-[9px] text-slate-400 ml-1">{item.unit || unit}</span>
+                    {item.requirement.toLocaleString('es-ES', { 
+                      minimumFractionDigits: 2, 
+                      maximumFractionDigits: maxDecimals 
+                    })} <span className="text-[9px] text-slate-400 ml-1">{item.unit || unit}</span>
                   </TableCell>
                 </TableRow>
               ))}
@@ -365,10 +368,10 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                     </div>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                      {renderRequirementTable("Azúcar", <Wheat className="h-4 w-4" />, SUGAR_DATA, 'KG', "bg-emerald-600")}
-                      {renderRequirementTable("Concentrados", <FlaskConical className="h-4 w-4" />, [...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES], 'LTS/KG', "bg-emerald-600")}
-                      {renderRequirementTable("Sólidos", <Box className="h-4 w-4" />, SOLIDS_DATA, 'KG', "bg-emerald-600")}
-                      {renderRequirementTable("Aditivos", <Plus className="h-4 w-4" />, ADDITIVES_DATA, 'LTS/KG', "bg-emerald-600")}
+                      {renderRequirementTable("Azúcar", <Wheat className="h-4 w-4" />, SUGAR_DATA, 'KG', "bg-emerald-600", 2)}
+                      {renderRequirementTable("Concentrados", <FlaskConical className="h-4 w-4" />, [...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES], 'LTS/KG', "bg-emerald-600", 2)}
+                      {renderRequirementTable("Sólidos", <Box className="h-4 w-4" />, SOLIDS_DATA, 'KG', "bg-emerald-600", 2)}
+                      {renderRequirementTable("Aditivos", <Plus className="h-4 w-4" />, ADDITIVES_DATA, 'LTS/KG', "bg-emerald-600", 2)}
                     </div>
                   </div>
 
@@ -382,8 +385,8 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                      {renderRequirementTable("Preformas", <Target className="h-4 w-4" />, PREFORMS_DATA, 'UND', "bg-blue-600")}
-                      {renderRequirementTable("Tapas", <CircleDot className="h-4 w-4" />, CAPS_DATA, 'UND', "bg-blue-600")}
+                      {renderRequirementTable("Preformas", <Target className="h-4 w-4" />, PREFORMS_DATA, 'UND', "bg-blue-600", 2)}
+                      {renderRequirementTable("Tapas", <CircleDot className="h-4 w-4" />, CAPS_DATA, 'UND', "bg-blue-600", 2)}
                       
                       {/* ETIQUETAS UNIFICADAS */}
                       {renderRequirementTable("Etiquetas", <Tag className="h-4 w-4" />, [
@@ -391,10 +394,10 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                         ...LABELS_1_5LTS_DATA, 
                         ...LABELS_1LT_DATA, 
                         ...LABELS_04LT_DATA
-                      ], 'KG', "bg-blue-600")}
+                      ], 'KG', "bg-blue-600", 2)}
                       
-                      {renderRequirementTable("Plásticos", <Layers className="h-4 w-4" />, PLASTICS_DATA.filter(p => !('isHeader' in p)), 'KG', "bg-blue-600")}
-                      {renderRequirementTable("Adhesivos", <StickyNote className="h-4 w-4" />, ADHESIVE_DATA, 'KG', "bg-blue-600")}
+                      {renderRequirementTable("Plásticos", <Layers className="h-4 w-4" />, PLASTICS_DATA.filter(p => !('isHeader' in p)), 'KG', "bg-blue-600", 2)}
+                      {renderRequirementTable("Adhesivos", <StickyNote className="h-4 w-4" />, ADHESIVE_DATA, 'KG', "bg-blue-600", 6)}
                     </div>
                   </div>
 
