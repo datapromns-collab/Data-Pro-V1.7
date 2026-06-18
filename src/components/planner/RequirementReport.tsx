@@ -146,47 +146,50 @@ export function RequirementReport({ tasks, weekStartDate, recipes, packagingReci
     }
 
     switch (code) {
+      case 'EMP_0093': {
+        const isColaKolita = (name: string) => name === "GLUP COLA" || name === "GLUP KOLITA";
+        return Math.round(tasks.filter(t => t.endTime > weekStartDate && t.startTime < weekEnd && t.presentation === '2Lts' && isColaKolita(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
+      }
       case 'EMP_0009': { 
         const flavors = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
-        return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && flavors.includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
+        return Math.round(tasks.filter(t => t.endTime > weekStartDate && t.startTime < weekEnd && t.presentation === '2Lts' && flavors.includes(t.name)).reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
       }
       case 'EMP_068': { 
-        const line7 = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && ["GLUP COLA", "GLUP KOLITA"].includes(t.name) && t.presentation !== '1Lt').reduce((acc, t) => acc + (t.quantity || 0), 0) * 12;
-        const line5 = tasks.filter(t => t.lineId === "5" && t.endTime > weekStartDate && t.startTime < weekEnd && t.presentation !== '1Lt').reduce((acc, t) => acc + (t.quantity || 0), 0) * 12;
-        return Math.round(line7 + line5);
+        return Math.round(tasks.filter(t => t.endTime > weekStartDate && t.startTime < weekEnd && t.presentation === '1.5Lts').reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
       }
       case 'EMP_0166': {
+        const flavors = ["GLUP COLA", "GLUP KOLITA", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"];
         const colaKolita1L = tasks.filter(t => 
-          (t.name === "GLUP COLA" || t.name === "GLUP KOLITA") && 
+          flavors.includes(t.name) && 
           t.presentation === "1Lt" &&
           t.endTime > weekStartDate && t.startTime < weekEnd
         ).reduce((acc, t) => acc + (t.quantity || 0), 0);
         return Math.round(colaKolita1L * 12);
       }
-      case 'EMP_0093': return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
-      case 'EMP_0103': return Math.round(tasks.filter(t => ["1", "2", "3", "4"].includes(t.lineId) && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
-      case 'EMP_0120': return Math.round(tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
-      case 'EMP_0126': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
-      case 'EMP_0135': return Math.round(tasks.filter(t => t.lineId === "6" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
+      case 'EMP_0103': return Math.round(tasks.filter(t => t.presentation === "2Lts" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 6);
+      case 'EMP_0120': return Math.round(tasks.filter(t => t.presentation === "1Lt" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 12);
+      case 'EMP_0126': return Math.round(tasks.filter(t => t.presentation === "0.4Lts" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name !== "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
+      case 'EMP_0135': return Math.round(tasks.filter(t => t.presentation === "0.4Lts" && t.endTime > weekStartDate && t.startTime < weekEnd && t.name === "GLUP FRESH").reduce((acc, t) => acc + (t.quantity || 0), 0) * 15);
       case 'EMP_0095': { 
-        const line1_3 = tasks.filter(t => (t.lineId === "1" || t.lineId === "3") && t.name === "GLUP FRESH" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
-        return Math.round(line1_3 * 6);
-      }
-      case 'EMP_0095_N': { 
-        const line5 = tasks.filter(t => t.lineId === "5" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
-        return Math.round(line5 * 12);
+        const fresh = tasks.filter(t => t.name === "GLUP FRESH" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
+           const f = t.presentation === "2Lts" ? 6 : (t.presentation === "1Lt" ? 12 : 15);
+           return acc + (t.quantity || 0) * f;
+        }, 0);
+        return Math.round(fresh);
       }
       case 'EMP_0105': { 
-        const line1_3 = tasks.filter(t => (t.lineId === "1" || t.lineId === "3") && t.name !== "GLUP FRESH" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
-        return Math.round(line1_3 * 6);
-      }
-      case 'EMP_0105_2': { 
-        const line7 = tasks.filter(t => t.lineId === "7" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
-        return Math.round(line7 * 12);
+        const other = tasks.filter(t => t.name !== "GLUP FRESH" && !t.name.startsWith("JUSTY") && !t.name.startsWith("VITA") && t.presentation !== "0.4Lts" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
+           const f = t.presentation === "2Lts" ? 6 : 12;
+           return acc + (t.quantity || 0) * f;
+        }, 0);
+        return Math.round(other);
       }
       case 'EMP_0105_N': { 
-        const line2_4 = tasks.filter(t => (t.lineId === "2" || t.lineId === "4") && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => acc + (t.quantity || 0), 0);
-        return Math.round(line2_4 * 6);
+        const jugos = tasks.filter(t => (t.name.startsWith("JUSTY") || t.name.startsWith("VITA") || t.presentation === "0.4Lts") && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
+           const f = (t.presentation === "1.5Lts") ? 12 : 15;
+           return acc + (t.quantity || 0) * f;
+        }, 0);
+        return Math.round(jugos);
       }
       default: return 0;
     }

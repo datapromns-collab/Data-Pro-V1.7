@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useMemo } from 'react';
@@ -96,9 +95,12 @@ export function PurchasingRequirementReport({
         const isFruitFlavor = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"].includes(product);
         const isJugo = product.startsWith("JUSTY") || product.startsWith("VITA");
 
+        // PREFORMA 42g (EMP_0093) para COLA/KOLITA 2Lts
+        if (code === 'EMP_0093' && presentation === "2Lts" && isColaKolita) { total += quantity * 6; return; }
+
         if (code === 'EMP_0166' && presentation === "1Lt" && (isColaKolita || isFruitFlavor)) { total += quantity * 12; return; }
-        if (code === 'EMP_0009' && presentation === "2Lts" && isFruitFlavor) { total += quantity * 12; return; }
-        if (code === 'EMP_068' && (presentation === "1.5Lts" || (presentation === "2Lts" && isColaKolita))) { total += quantity * 12; return; }
+        if (code === 'EMP_0009' && presentation === "2Lts" && isFruitFlavor) { total += quantity * 6; return; }
+        if (code === 'EMP_068' && (presentation === "1.5Lts")) { total += quantity * 12; return; }
         if (code === 'EMP_0126' && presentation === "0.4Lts" && !isFresh) { total += quantity * 15; return; }
         if (code === 'EMP_0135' && presentation === "0.4Lts" && isFresh) { total += quantity * 15; return; }
         if (code === 'EMP_0103' && presentation === "2Lts" && isFresh) { total += quantity * 6; return; }

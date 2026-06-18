@@ -1,13 +1,8 @@
-
 'use client';
 
 import React, { useMemo } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Layout, 
-  LineChart, 
-  Warehouse, 
-  ClipboardList, 
   Globe, 
   Calendar,
   FileText,
@@ -22,7 +17,10 @@ import {
   Layers,
   StickyNote,
   Box,
-  Printer
+  Printer,
+  LineChart,
+  Warehouse,
+  ClipboardList
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -81,8 +79,6 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
   
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
-  // --- LÓGICA DE CÁLCULO DE REQUERIMIENTOS ---
-
   const calculateRequirement = (code: string) => {
     let total = 0;
 
@@ -90,16 +86,14 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
       Object.entries(presentations).forEach(([presentation, quantity]) => {
         if (quantity <= 0) return;
 
-        // 1. Prioridad: Recetas de Empaque Personalizadas/Maestras
+        // 1. Prioridad: Recetas de Empaque Personalizadas
         const packagingRecipe = customPackagingRecipes[product]?.[presentation];
         if (packagingRecipe && packagingRecipe[code] !== undefined) {
           total += quantity * packagingRecipe[code];
           return;
         }
 
-        // 2. Lógica de Fallback para Material de Empaque (si no está en receta explícita)
-        
-        // Plásticos: Film Stretch (EMP_0019) y Termoencogibles
+        // 2. Lógica de Fallback para Material de Empaque
         if (code === 'EMP_0019') {
           total += quantity * (PLASTIC_FACTORS[presentation as keyof typeof PLASTIC_FACTORS] || 0);
           return;
@@ -116,15 +110,12 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
           total += quantity * (TERMO_0017_FACTORS["1.5Lts"] || 0);
           return;
         }
-
-        // Adhesivo Krones
         if (code === 'EMP_0078') {
           const factor = ADHESIVE_FACTORS[presentation] || 0;
           total += quantity * factor;
           return;
         }
 
-        // Etiquetas
         const labelMap = LABEL_MAPPING[code];
         if (labelMap && labelMap.product === product && labelMap.presentation === presentation) {
           const factor = LABEL_FACTORS[product]?.[presentation] || 0;
@@ -132,22 +123,25 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
           return;
         }
 
-        // Tapas y Preformas (Fallbacks por patrones de producción)
+        // Preformas Fallbacks
         const isFresh = product === "GLUP FRESH";
         const isColaKolita = product === "GLUP COLA" || product === "GLUP KOLITA";
         const isFruitFlavor = ["GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP MANZANA VERDE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"].includes(product);
         const isJugo = product.startsWith("JUSTY") || product.startsWith("VITA");
 
-        // Preformas
+        // PREFORMA 42g (EMP_0093) para COLA/KOLITA 2Lts
+        if (code === 'EMP_0093' && presentation === "2Lts" && isColaKolita) { total += quantity * 6; return; }
+        
+        // Otros mapeos
         if (code === 'EMP_0166' && presentation === "1Lt" && (isColaKolita || isFruitFlavor)) { total += quantity * 12; return; }
-        if (code === 'EMP_0009' && presentation === "2Lts" && isFruitFlavor) { total += quantity * 12; return; }
-        if (code === 'EMP_068' && (presentation === "1.5Lts" || (presentation === "2Lts" && isColaKolita))) { total += quantity * 12; return; }
+        if (code === 'EMP_0009' && presentation === "2Lts" && isFruitFlavor) { total += quantity * 6; return; }
+        if (code === 'EMP_068' && (presentation === "1.5Lts")) { total += quantity * 12; return; }
         if (code === 'EMP_0126' && presentation === "0.4Lts" && !isFresh) { total += quantity * 15; return; }
         if (code === 'EMP_0135' && presentation === "0.4Lts" && isFresh) { total += quantity * 15; return; }
         if (code === 'EMP_0103' && presentation === "2Lts" && isFresh) { total += quantity * 6; return; }
         if (code === 'EMP_0120' && presentation === "1Lt" && isFresh) { total += quantity * 12; return; }
 
-        // Tapas
+        // Tapas Fallbacks
         if (code === 'EMP_0095' && isFresh) { 
           total += quantity * (presentation === "2Lts" ? 6 : (presentation === "1Lt" ? 12 : 15)); 
           return; 
@@ -161,7 +155,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
           return; 
         }
 
-        // 3. Materia Prima (Prioridad Recetas de Materia Prima)
+        // 3. Materia Prima
         const recipe = customRecipes[product];
         if (recipe && recipe[code] !== undefined) {
           const boxesPerTank = PRODUCT_FACTORS[product]?.[presentation] || 0;
