@@ -582,6 +582,9 @@ export default function PlannerPage() {
             <div className="flex items-center gap-2">
               {activeModule === 'planning' && (
                 <>
+                  <Badge variant="outline" className="mr-2 bg-primary/5 text-primary border-primary/20 font-black uppercase text-[10px] h-8 px-3 hidden sm:flex items-center">
+                    LÍNEA {selectedLine}
+                  </Badge>
                   <Button 
                     variant="ghost" 
                     size="sm" 
