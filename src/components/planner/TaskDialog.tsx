@@ -152,12 +152,17 @@ export function TaskDialog({
     setDuration(calculatedDuration);
   }, [loadPerHour, quantity, isSpecialTask, lastEdited]);
 
-  // Efecto 3: Duración -> Cantidad (Solo si el usuario editó la duración manualmente)
+  // Efecto 3: Duración -> Cantidad y Tanques (Solo si el usuario editó la duración manualmente)
   useEffect(() => {
     if (isSpecialTask || loadPerHour <= 0 || duration <= 0 || lastEdited !== 'duration') return;
     const calculatedQuantity = Math.round(duration * loadPerHour);
     setQuantity(calculatedQuantity);
-  }, [duration, loadPerHour, isSpecialTask, lastEdited]);
+    
+    // Al modificar la duración, también recalculamos los tanques basados en la nueva cantidad
+    if (factor > 0) {
+      setTanks(Number((calculatedQuantity / factor).toFixed(2)));
+    }
+  }, [duration, loadPerHour, isSpecialTask, lastEdited, factor]);
 
   useEffect(() => {
     if (initialTask || !name) return;
