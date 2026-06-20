@@ -21,7 +21,10 @@ import {
   LineChart,
   Warehouse,
   ClipboardList,
-  Layout
+  Layout,
+  PackageCheck,
+  Truck,
+  Factory
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -406,12 +409,48 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
             </TabsContent>
 
             <TabsContent value="inventario" className="m-0 animate-in fade-in-50 duration-500">
-              <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                <Warehouse className="h-12 w-12 text-slate-300 mb-4" />
-                <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
-                  Inventario Disponible (MDS)<br/>Sección en blanco...
-                </p>
-              </div>
+              <Tabs defaultValue="producto-terminado" className="w-full">
+                <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-100 w-fit mb-6 no-print">
+                  <TabsList className="bg-transparent h-auto p-0">
+                    <TabsTrigger value="producto-terminado" className={tabsTriggerClass}>
+                      <PackageCheck className="h-3.5 w-3.5" /> Producto terminado
+                    </TabsTrigger>
+                    <TabsTrigger value="mat-logistica" className={tabsTriggerClass}>
+                      <Truck className="h-3.5 w-3.5" /> Mat Logística
+                    </TabsTrigger>
+                    <TabsTrigger value="mat-planta" className={tabsTriggerClass}>
+                      <Factory className="h-3.5 w-3.5" /> Mat Planta
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+
+                <TabsContent value="producto-terminado" className="m-0 animate-in fade-in-50 duration-500">
+                  <div className="h-[300px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                    <PackageCheck className="h-12 w-12 text-slate-300 mb-4" />
+                    <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+                      Producto Terminado<br/>Sección en blanco...
+                    </p>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="mat-logistica" className="m-0 animate-in fade-in-50 duration-500">
+                  <div className="h-[300px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                    <Truck className="h-12 w-12 text-slate-300 mb-4" />
+                    <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+                      Mat Logística<br/>Sección en blanco...
+                    </p>
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="mat-planta" className="m-0 animate-in fade-in-50 duration-500">
+                  <div className="h-[300px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                    <Factory className="h-12 w-12 text-slate-300 mb-4" />
+                    <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+                      Mat Planta<br/>Sección en blanco...
+                    </p>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </TabsContent>
 
             <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500">
