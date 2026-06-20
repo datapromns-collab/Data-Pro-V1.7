@@ -24,7 +24,8 @@ import {
   Layout,
   PackageCheck,
   Truck,
-  Factory
+  Factory,
+  Search
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -77,6 +78,8 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
   const { 
     salesProjection, 
     updateSalesProjection,
+    finishedProductInventory,
+    updateFinishedProductInventory,
     customRecipes,
     customPackagingRecipes
   } = usePlannerStore();
@@ -97,7 +100,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
           return;
         }
 
-        // 2. Lógica de Fallback para Material de Empaque (Actualizada según Tabla Técnica)
+        // 2. Lógica de Fallback para Material de Empaque
         if (code === 'EMP_0019') {
           total += quantity * (PLASTIC_FACTORS[presentation as keyof typeof PLASTIC_FACTORS] || 0);
           return;
@@ -127,25 +130,18 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
           return;
         }
 
-        // Preformas Fallbacks (Actualizados según Tabla Técnica)
+        // Preformas Fallbacks
         const isFresh = product === "GLUP FRESH";
         const isColaKolita = product === "GLUP COLA" || product === "GLUP KOLITA";
         const isJugo = product.startsWith("JUSTY") || product.startsWith("VITA");
 
-        // 2Lts (x6) - 42g
         if (code === 'EMP_0103' && presentation === "2Lts" && isFresh) { total += quantity * 6; return; }
         if (code === 'EMP_0093' && presentation === "2Lts" && !isFresh && !isJugo) { total += quantity * 6; return; }
-
-        // 1Lt (x12) - 33g Cola/Kolita, 29g Verde Fresh, 29g Trans Resto
         if (code === 'EMP_0166' && presentation === "1Lt" && isColaKolita) { total += quantity * 12; return; }
         if (code === 'EMP_0120' && presentation === "1Lt" && isFresh) { total += quantity * 12; return; }
         if (code === 'EMP_0009' && presentation === "1Lt" && !isFresh && !isColaKolita && !isJugo) { total += quantity * 12; return; }
-
-        // 0.4Lts (x15) - 20g
         if (code === 'EMP_0135' && presentation === "0.4Lts" && isFresh) { total += quantity * 15; return; }
         if (code === 'EMP_0126' && presentation === "0.4Lts" && !isFresh && !isJugo) { total += quantity * 15; return; }
-        
-        // 1.5Lts Jugos - 36g x12
         if (code === 'EMP_0068' && presentation === "1.5Lts" && isJugo) { total += quantity * 12; return; }
 
         // Tapas Fallbacks
@@ -235,6 +231,65 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
     );
   };
 
+  const renderInventoryTable = (
+    title: string, 
+    products: string[], 
+    presentation: string, 
+    headerColor: string = "bg-emerald-500", 
+    footerColor: string = "bg-emerald-400"
+  ) => (
+    <Card className="border-slate-200 rounded-[2rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40 h-full">
+      <div className={cn(headerColor, "px-6 py-4 flex items-center justify-between shrink-0")}>
+        <div className="flex items-center gap-3">
+          <div className="bg-white/10 p-2 rounded-xl">
+            <PackageCheck className="h-4 w-4 text-white" />
+          </div>
+          <h3 className="text-white font-black uppercase text-[11px] tracking-widest">{title}</h3>
+        </div>
+        <div className="bg-white/10 px-3 py-1 rounded-full">
+           <span className="text-white font-black uppercase text-[9px]">{presentation}</span>
+        </div>
+      </div>
+
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-10">
+              <TableHead className="pl-6 text-[9px] font-black text-slate-400 uppercase py-2">Sabor</TableHead>
+              <TableHead className="text-center text-[9px] font-black text-slate-900 uppercase py-2 w-[120px]">Inventario (Cajas)</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {products.map((product) => (
+              <TableRow key={product} className="hover:bg-slate-50 transition-none h-11 border-b border-slate-100">
+                <TableCell className="pl-6 font-black text-slate-700 uppercase text-[10px]">
+                  {product}
+                </TableCell>
+                <TableCell className="p-1">
+                  <Input 
+                    type="number"
+                    value={finishedProductInventory[product]?.[presentation] || ''}
+                    onChange={(e) => updateFinishedProductInventory(product, presentation, parseInt(e.target.value) || 0)}
+                    className="h-8 text-center font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-lg"
+                    placeholder="0"
+                  />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+          <tfoot className={cn(footerColor, "text-white font-black border-t-2 border-white/10")}>
+            <tr className="h-10">
+              <td className="pl-6 text-[10px] uppercase">Total Inventario {presentation}</td>
+              <td className="text-center text-xs tabular-nums">
+                {products.reduce((acc, p) => acc + (finishedProductInventory[p]?.[presentation] || 0), 0).toLocaleString('es-ES')}
+              </td>
+            </tr>
+          </tfoot>
+        </Table>
+      </div>
+    </Card>
+  );
+
   const renderTableForPresentation = (
     title: string, 
     products: string[], 
@@ -242,7 +297,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
     headerColor: string = "bg-sky-500", 
     footerColor: string = "bg-sky-400"
   ) => (
-    <Card className="border-slate-200 rounded-[2rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40 h-full">
+    <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40 h-full">
       <div className={cn(headerColor, "px-6 py-4 flex items-center justify-between shrink-0")}>
         <div className="flex items-center gap-3">
           <div className="bg-white/10 p-2 rounded-xl">
@@ -424,13 +479,13 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                   </TabsList>
                 </div>
 
-                <TabsContent value="producto-terminado" className="m-0 animate-in fade-in-50 duration-500">
-                  <div className="h-[300px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                    <PackageCheck className="h-12 w-12 text-slate-300 mb-4" />
-                    <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
-                      Producto Terminado<br/>Sección en blanco...
-                    </p>
-                  </div>
+                <TabsContent value="producto-terminado" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                     {renderInventoryTable("Inventario 2 Lts", REFRESCOS, "2Lts", "bg-emerald-600", "bg-emerald-500")}
+                     {renderInventoryTable("Inventario 1 Lt", REFRESCOS, "1Lt", "bg-emerald-600", "bg-emerald-500")}
+                     {renderInventoryTable("Inventario 0.4 Lts", REFRESCOS, "0.4Lts", "bg-emerald-600", "bg-emerald-500")}
+                     {renderInventoryTable("Inventario 1.5 Lts", JUGOS, "1.5Lts", "bg-teal-600", "bg-teal-500")}
+                   </div>
                 </TabsContent>
 
                 <TabsContent value="mat-logistica" className="m-0 animate-in fade-in-50 duration-500">

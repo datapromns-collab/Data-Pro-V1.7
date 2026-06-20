@@ -17,6 +17,7 @@ const STORAGE_KEY_FINAL_UBB_TANKS = 'planner_final_ubb_tanks_v1';
 const STORAGE_KEY_INITIAL_UBB_DAILY = 'planner_initial_ubb_daily_v1';
 const STORAGE_KEY_FINAL_UBB_DAILY = 'planner_final_ubb_daily_v1';
 const STORAGE_KEY_SALES_PROJECTION = 'planner_sales_projection_v1';
+const STORAGE_KEY_FIN_PROD_INV = 'planner_finished_product_inventory_v1';
 
 export interface RawMaterialStock {
   initial: number;
@@ -47,6 +48,7 @@ export function usePlannerStore() {
   const [initialUBBTanksDaily, setInitialUBBTanksDaily] = useState<Record<string, Record<string, number>>>({});
   const [finalUBBTanksDaily, setFinalUBBTanksDaily] = useState<Record<string, Record<string, number>>>({});
   const [salesProjection, setSalesProjection] = useState<Record<string, Record<string, number>>>({});
+  const [finishedProductInventory, setFinishedProductInventory] = useState<Record<string, Record<string, number>>>({});
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -62,6 +64,7 @@ export function usePlannerStore() {
     const savedInitialUBBDaily = localStorage.getItem(STORAGE_KEY_INITIAL_UBB_DAILY);
     const savedFinalUBBDaily = localStorage.getItem(STORAGE_KEY_FINAL_UBB_DAILY);
     const savedSalesProjection = localStorage.getItem(STORAGE_KEY_SALES_PROJECTION);
+    const savedFinProdInv = localStorage.getItem(STORAGE_KEY_FIN_PROD_INV);
 
     if (savedTasks) {
       try {
@@ -121,6 +124,10 @@ export function usePlannerStore() {
     if (savedSalesProjection) {
       try { setSalesProjection(JSON.parse(savedSalesProjection)); } catch (e) {}
     }
+
+    if (savedFinProdInv) {
+      try { setFinishedProductInventory(JSON.parse(savedFinProdInv)); } catch (e) {}
+    }
     
     setIsLoaded(true);
   }, []);
@@ -139,8 +146,9 @@ export function usePlannerStore() {
       localStorage.setItem(STORAGE_KEY_INITIAL_UBB_DAILY, JSON.stringify(initialUBBTanksDaily));
       localStorage.setItem(STORAGE_KEY_FINAL_UBB_DAILY, JSON.stringify(finalUBBTanksDaily));
       localStorage.setItem(STORAGE_KEY_SALES_PROJECTION, JSON.stringify(salesProjection));
+      localStorage.setItem(STORAGE_KEY_FIN_PROD_INV, JSON.stringify(finishedProductInventory));
     }
-  }, [tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily, salesProjection, isLoaded]);
+  }, [tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily, salesProjection, finishedProductInventory, isLoaded]);
 
   const addTask = useCallback((taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
@@ -309,10 +317,19 @@ export function usePlannerStore() {
     });
   }, []);
 
+  const updateFinishedProductInventory = useCallback((flavor: string, presentation: string, quantity: number) => {
+    setFinishedProductInventory(prev => {
+      const next = { ...prev };
+      if (!next[flavor]) next[flavor] = {};
+      next[flavor][presentation] = quantity;
+      return next;
+    });
+  }, []);
+
   return { 
-    tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily, salesProjection,
+    tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily, salesProjection, finishedProductInventory,
     setWeekStartDate, addTask, updateTask, removeTask, clearAll, updateLineSpeed, updateRealProduction, updateRecipe, removeMaterialFromRecipe, updatePackagingRecipe, removeMaterialFromPackagingRecipe, resetRecipesToDefaults, resetPackagingRecipesToDefaults,
     updateRawMaterialStock, updateRawMaterialReception, updateRawMaterialDailyInitial, updateRawMaterialDailyFinal, updateManualUBB,
-    updateInitialUBBTanksDaily, updateFinalUBBTanksDaily, updateSalesProjection, isLoaded
+    updateInitialUBBTanksDaily, updateFinalUBBTanksDaily, updateSalesProjection, updateFinishedProductInventory, isLoaded
   };
 }
