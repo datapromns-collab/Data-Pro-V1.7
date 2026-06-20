@@ -20,7 +20,7 @@ const STORAGE_KEY = 'planner_auth_session';
  *    - Acceso: Planificación, Planta, Logística, Ventas.
  *    - Restricción: No ve Gestión, Jarabes, Materia Prima, Recetas ni Compras.
  * 
- * 2. admin (ADMIN): 
+ * 2. jaime.r (ADMIN): 
  *    - Acceso: Todos los módulos excepto Recetas (específico para Yonny).
  * 
  * 3. demon (ADMIN - Yonny Hernández): 
@@ -36,7 +36,7 @@ const STORAGE_KEY = 'planner_auth_session';
  */
 const VALID_USERS = [
   { id: 'user', password: 'user', name: 'Multinacional de Sabores', role: 'STANDARD' as UserRole },
-  { id: 'admin', password: '123.*', name: 'Gerencia de Planta', role: 'ADMIN' as UserRole },
+  { id: 'jaime.r', password: 'ad.123.', name: 'Gerencia de Planta', role: 'ADMIN' as UserRole },
   { id: 'demon', password: '2005', name: 'Yonny Hernández', role: 'ADMIN' as UserRole },
   { id: 'AG.1', password: '12345', name: 'Maria Reinoso', role: 'INVENTORY' as UserRole },
   { id: 'anto.mds', password: '123.', name: 'Antonella Dos Santos', role: 'PURCHASING' as UserRole },
