@@ -27,7 +27,10 @@ import {
   Factory,
   Search,
   ChevronRight,
-  LayoutDashboard
+  LayoutDashboard,
+  CheckCircle2,
+  TrendingUp,
+  History
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -70,6 +73,24 @@ const REFRESCOS = [
 const JUGOS = [
   "JUSTY NARANJA", "JUSTY DURAZNO", "JUSTY MANDARINA", "JUSTY SANDIA", "JUSTY LIMON", 
   "JUSTY TAMARINDO", "JUSTY MANZANA", "JUSTY PERA", "VITA TEA DURAZNO", "VITA TEA LIMON"
+];
+
+const PRESENTATIONS = ["2Lts", "1.5Lts", "1Lt", "0.4Lts"];
+
+const ALL_MATERIALS_LIST = [
+  ...SUGAR_DATA,
+  ...CONCENTRATES_SOFT_DRINKS,
+  ...CONCENTRATES_JUICES,
+  ...SOLIDS_DATA,
+  ...ADDITIVES_DATA,
+  ...PREFORMS_DATA,
+  ...CAPS_DATA,
+  ...LABELS_2LTS_DATA,
+  ...LABELS_1_5LTS_DATA,
+  ...LABELS_1LT_DATA,
+  ...LABELS_04LT_DATA,
+  ...PLASTICS_DATA.filter(p => !('isHeader' in p)),
+  ...ADHESIVE_DATA
 ];
 
 interface PurchasingModuleProps {
@@ -604,9 +625,9 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                 <TabsContent value="producto-terminado" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                      {renderInventoryTable("Inventario 2 Lts", REFRESCOS, "2Lts", "bg-emerald-600", "bg-emerald-500")}
+                     {renderInventoryTable("Inventario 1.5 Lts", JUGOS, "1.5Lts", "bg-teal-600", "bg-teal-500")}
                      {renderInventoryTable("Inventario 1 Lt", REFRESCOS, "1Lt", "bg-emerald-600", "bg-emerald-500")}
                      {renderInventoryTable("Inventario 0.4 Lts", REFRESCOS, "0.4Lts", "bg-emerald-600", "bg-emerald-500")}
-                     {renderInventoryTable("Inventario 1.5 Lts", JUGOS, "1.5Lts", "bg-teal-600", "bg-teal-500")}
                    </div>
                 </TabsContent>
 
@@ -618,12 +639,142 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                   {renderFullInventoryType('plant')}
                 </TabsContent>
 
-                <TabsContent value="disponible" className="m-0 animate-in fade-in-50 duration-500">
-                  <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                    <LayoutDashboard className="h-12 w-12 text-slate-300 mb-4" />
-                    <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
-                      Inventario Disponible Total<br/>Sección en blanco...
-                    </p>
+                <TabsContent value="disponible" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+                  <div className="grid grid-cols-1 gap-12">
+                    {/* SECCIÓN 1: PRODUCTO TERMINADO DISPONIBLE */}
+                    <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
+                      <div className="bg-[#0c1a3d] px-8 py-5 flex items-center justify-between">
+                        <div className="flex items-center gap-4 text-white">
+                          <div className="bg-white/10 p-2.5 rounded-2xl">
+                            <PackageCheck className="h-6 w-6" />
+                          </div>
+                          <div>
+                            <h3 className="font-black uppercase text-sm tracking-widest leading-none">Consolidado de Producto Terminado</h3>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Total de existencias en almacenes</p>
+                          </div>
+                        </div>
+                        <Badge className="bg-emerald-500 text-white border-none uppercase text-[10px] font-black px-4 py-2 rounded-full">STOCK REAL</Badge>
+                      </div>
+                      
+                      <div className="overflow-x-auto">
+                        <Table>
+                          <TableHeader>
+                            <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-11">
+                              <TableHead className="pl-8 text-[10px] font-black text-slate-400 uppercase">Sabor / Producto</TableHead>
+                              {PRESENTATIONS.map(pres => (
+                                <TableHead key={pres} className="text-right text-[10px] font-black text-slate-900 uppercase w-[120px]">{pres}</TableHead>
+                              ))}
+                              <TableHead className="text-right pr-8 text-[10px] font-black text-primary uppercase w-[140px] bg-primary/5">Total Sabor</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {PRODUCT_LIST.map((product) => {
+                              const productTotal = PRESENTATIONS.reduce((acc, pres) => acc + (finishedProductInventory[product]?.[pres] || 0), 0);
+                              if (productTotal === 0) return null;
+
+                              return (
+                                <TableRow key={product} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100">
+                                  <TableCell className="pl-8 font-black text-slate-700 uppercase text-[11px]">{product}</TableCell>
+                                  {PRESENTATIONS.map(pres => (
+                                    <TableCell key={pres} className="text-right font-bold text-slate-600 tabular-nums">
+                                      {(finishedProductInventory[product]?.[pres] || 0).toLocaleString('es-ES')}
+                                    </TableCell>
+                                  ))}
+                                  <TableCell className="text-right pr-8 font-black text-primary tabular-nums text-sm bg-primary/5">
+                                    {productTotal.toLocaleString('es-ES')}
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
+                          </TableBody>
+                          <tfoot className="bg-[#0c1a3d] text-white font-black">
+                            <tr className="h-11">
+                              <td className="pl-8 text-[11px] uppercase">TOTALES POR FORMATO</td>
+                              {PRESENTATIONS.map(pres => (
+                                <td key={pres} className="text-right text-xs tabular-nums">
+                                  {PRODUCT_LIST.reduce((acc, p) => acc + (finishedProductInventory[p]?.[pres] || 0), 0).toLocaleString('es-ES')}
+                                </td>
+                              ))}
+                              <td className="text-right pr-8 text-sm tabular-nums bg-primary">
+                                {PRODUCT_LIST.reduce((acc, p) => acc + PRESENTATIONS.reduce((sum, pres) => sum + (finishedProductInventory[p]?.[pres] || 0), 0), 0).toLocaleString('es-ES')}
+                              </td>
+                            </tr>
+                          </tfoot>
+                        </Table>
+                      </div>
+                    </Card>
+
+                    {/* SECCIÓN 2: MATERIALES DISPONIBLES (CONSOLIDADO LOGÍSTICA + PLANTA) */}
+                    <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
+                      <div className="bg-[#1e1b4b] px-8 py-5 flex items-center justify-between">
+                        <div className="flex items-center gap-4 text-white">
+                          <div className="bg-white/10 p-2.5 rounded-2xl">
+                            <Box className="h-6 w-6" />
+                          </div>
+                          <div>
+                            <h3 className="font-black uppercase text-sm tracking-widest leading-none">Consolidado de Materiales e Insumos</h3>
+                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Disponibilidad Total (Logística + Planta)</p>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/20 rounded-lg border border-blue-400/30">
+                              <div className="w-2 h-2 rounded-full bg-blue-400" />
+                              <span className="text-[9px] font-black text-blue-200 uppercase">Logística</span>
+                           </div>
+                           <Plus className="h-3 w-3 text-slate-500" />
+                           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/20 rounded-lg border border-emerald-400/30">
+                              <div className="w-2 h-2 rounded-full bg-emerald-400" />
+                              <span className="text-[9px] font-black text-emerald-200 uppercase">Planta</span>
+                           </div>
+                        </div>
+                      </div>
+                      
+                      <div className="overflow-x-auto">
+                        <Table>
+                          <TableHeader>
+                            <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-11">
+                              <TableHead className="pl-8 text-[10px] font-black text-slate-400 uppercase">Material / Insumo</TableHead>
+                              <TableHead className="text-[10px] font-black text-slate-400 uppercase w-[100px] text-center">Unidad</TableHead>
+                              <TableHead className="text-right text-[10px] font-black text-blue-600 uppercase w-[140px]">Stock Logística</TableHead>
+                              <TableHead className="text-right text-[10px] font-black text-emerald-600 uppercase w-[140px]">Stock Planta</TableHead>
+                              <TableHead className="text-right pr-8 text-[10px] font-black text-indigo-900 uppercase w-[160px] bg-indigo-50/50">Disponibilidad Global</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {ALL_MATERIALS_LIST.map((mat) => {
+                              const stockLogistics = logisticsInventory[mat.code] || 0;
+                              const stockPlant = plantInventory[mat.code] || 0;
+                              const totalAvailable = stockLogistics + stockPlant;
+
+                              if (totalAvailable === 0) return null;
+
+                              return (
+                                <TableRow key={mat.code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
+                                  <TableCell className="pl-8">
+                                    <div className="flex flex-col">
+                                      <span className="text-[9px] font-bold text-primary font-mono leading-none mb-1">{mat.code}</span>
+                                      <span className="text-[12px] font-black text-slate-700 uppercase leading-none truncate max-w-[300px]">{mat.description}</span>
+                                    </div>
+                                  </TableCell>
+                                  <TableCell className="text-center font-bold text-slate-400 text-[10px] uppercase">
+                                    {mat.unit || 'KG'}
+                                  </TableCell>
+                                  <TableCell className="text-right font-bold text-blue-600 tabular-nums text-sm">
+                                    {stockLogistics.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                                  </TableCell>
+                                  <TableCell className="text-right font-bold text-emerald-600 tabular-nums text-sm">
+                                    {stockPlant.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                                  </TableCell>
+                                  <TableCell className="text-right pr-8 font-black text-indigo-950 tabular-nums text-[15px] bg-indigo-50/30">
+                                    {totalAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    </Card>
                   </div>
                 </TabsContent>
               </Tabs>
