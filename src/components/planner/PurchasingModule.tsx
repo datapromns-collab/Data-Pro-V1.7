@@ -25,7 +25,8 @@ import {
   PackageCheck,
   Truck,
   Factory,
-  Search
+  Search,
+  ChevronRight
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -179,7 +180,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
     return total;
   };
 
-  const renderRequirementTable = (title: string, icon: React.ReactNode, data: any[], unit: string = 'KG', color: string = "bg-primary", maxDecimals: number = 6) => {
+  const renderRequirementTable = (title: string, icon: React.ReactNode, data: any[], unit: string = 'KG', color: string = "bg-primary", maxDecimals: number = 2) => {
     const tableItems = data.map(item => ({
       ...item,
       requirement: calculateRequirement(item.code)
@@ -351,6 +352,59 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
           </Table>
         </div>
       </Card>
+    );
+  };
+
+  const renderFullInventoryType = (type: 'logistics' | 'plant') => {
+    const isLogistics = type === 'logistics';
+    const mainColor = isLogistics ? "text-blue-700" : "text-emerald-700";
+    const bgColor = isLogistics ? "bg-blue-50" : "bg-emerald-50";
+    const headerIcon = isLogistics ? <Truck className="h-5 w-5" /> : <Factory className="h-5 w-5" />;
+
+    return (
+      <div className="space-y-12 animate-in fade-in-50 duration-500">
+        {/* SECCIÓN I: MATERIA PRIMA */}
+        <div className="space-y-6">
+          <div className={cn("flex items-center gap-3 px-4 py-3 rounded-2xl border border-slate-100 shadow-sm", bgColor)}>
+            <div className={cn("p-2 rounded-xl bg-white shadow-sm", mainColor)}>
+              <Droplet className="h-5 w-5" />
+            </div>
+            <div>
+              <h2 className={cn("text-lg font-black uppercase tracking-tight leading-none", mainColor)}>I. Materia Prima</h2>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Existencias de Ingredientes y Concentrados</p>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            {renderMaterialsInventoryTable("Azúcar", <Wheat className="h-4 w-4" />, SUGAR_DATA, type, isLogistics ? "bg-blue-600" : "bg-emerald-600")}
+            {renderMaterialsInventoryTable("Concentrados", <FlaskConical className="h-4 w-4" />, [...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES], type, isLogistics ? "bg-blue-600" : "bg-emerald-600")}
+            {renderMaterialsInventoryTable("Sólidos", <Box className="h-4 w-4" />, SOLIDS_DATA, type, isLogistics ? "bg-blue-600" : "bg-emerald-600")}
+            {renderMaterialsInventoryTable("Aditivos", <Plus className="h-4 w-4" />, ADDITIVES_DATA, type, isLogistics ? "bg-blue-600" : "bg-emerald-600")}
+          </div>
+        </div>
+
+        {/* SECCIÓN II: MATERIAL DE EMPAQUE */}
+        <div className="space-y-6">
+          <div className={cn("flex items-center gap-3 px-4 py-3 rounded-2xl border border-slate-100 shadow-sm", bgColor)}>
+            <div className={cn("p-2 rounded-xl bg-white shadow-sm", mainColor)}>
+              <Package className="h-5 w-5" />
+            </div>
+            <div>
+              <h2 className={cn("text-lg font-black uppercase tracking-tight leading-none", mainColor)}>II. Material de Empaque</h2>
+              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Existencias de Preformas, Tapas y Etiquetas</p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            {renderMaterialsInventoryTable("Preformas", <Target className="h-4 w-4" />, PREFORMS_DATA, type, isLogistics ? "bg-indigo-600" : "bg-teal-600")}
+            {renderMaterialsInventoryTable("Tapas", <CircleDot className="h-4 w-4" />, CAPS_DATA, type, isLogistics ? "bg-indigo-600" : "bg-teal-600")}
+            {renderMaterialsInventoryTable("Etiquetas (2L/1.5L)", <Tag className="h-4 w-4" />, [...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA], type, isLogistics ? "bg-indigo-600" : "bg-teal-600")}
+            {renderMaterialsInventoryTable("Etiquetas (1L/0.4L)", <Tag className="h-4 w-4" />, [...LABELS_1LT_DATA, ...LABELS_04LT_DATA], type, isLogistics ? "bg-indigo-600" : "bg-teal-600")}
+            {renderMaterialsInventoryTable("Plásticos", <Layers className="h-4 w-4" />, PLASTICS_DATA.filter(p => !('isHeader' in p)), type, isLogistics ? "bg-indigo-600" : "bg-teal-600")}
+            {renderMaterialsInventoryTable("Adhesivos", <StickyNote className="h-4 w-4" />, ADHESIVE_DATA, type, isLogistics ? "bg-indigo-600" : "bg-teal-600")}
+          </div>
+        </div>
+      </div>
     );
   };
 
@@ -552,25 +606,12 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                    </div>
                 </TabsContent>
 
-                <TabsContent value="mat-logistica" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                    {renderMaterialsInventoryTable("Preformas", <Target className="h-4 w-4" />, PREFORMS_DATA, 'logistics', "bg-blue-700")}
-                    {renderMaterialsInventoryTable("Tapas", <CircleDot className="h-4 w-4" />, CAPS_DATA, 'logistics', "bg-blue-700")}
-                    {renderMaterialsInventoryTable("Etiquetas", <Tag className="h-4 w-4" />, [...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA], 'logistics', "bg-blue-700")}
-                    <div className="space-y-8">
-                      {renderMaterialsInventoryTable("Plásticos", <Layers className="h-4 w-4" />, PLASTICS_DATA.filter(p => !('isHeader' in p)), 'logistics', "bg-blue-700")}
-                      {renderMaterialsInventoryTable("Adhesivos", <StickyNote className="h-4 w-4" />, ADHESIVE_DATA, 'logistics', "bg-blue-700")}
-                    </div>
-                  </div>
+                <TabsContent value="mat-logistica" className="m-0">
+                  {renderFullInventoryType('logistics')}
                 </TabsContent>
 
-                <TabsContent value="mat-planta" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                    {renderMaterialsInventoryTable("Azúcar", <Wheat className="h-4 w-4" />, SUGAR_DATA, 'plant', "bg-emerald-700")}
-                    {renderMaterialsInventoryTable("Concentrados", <FlaskConical className="h-4 w-4" />, [...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES], 'plant', "bg-emerald-700")}
-                    {renderMaterialsInventoryTable("Sólidos", <Box className="h-4 w-4" />, SOLIDS_DATA, 'plant', "bg-emerald-700")}
-                    {renderMaterialsInventoryTable("Aditivos", <Plus className="h-4 w-4" />, ADDITIVES_DATA, 'plant', "bg-emerald-700")}
-                  </div>
+                <TabsContent value="mat-planta" className="m-0">
+                  {renderFullInventoryType('plant')}
                 </TabsContent>
               </Tabs>
             </TabsContent>
