@@ -148,7 +148,7 @@ export default function PlannerPage() {
 
   useEffect(() => {
     if (authLoaded && user) {
-      if (isInventory && activeModule !== 'raw-materials' && activeModule !== 'jarabes') {
+      if (isInventory && !['raw-materials', 'jarabes', 'planta'].includes(activeModule)) {
         setActiveModule('raw-materials');
         setActiveTab('raw-material-view');
       }
@@ -500,22 +500,22 @@ export default function PlannerPage() {
                     </Button>
                   )}
 
+                  <Button 
+                    variant={activeModule === 'planta' ? 'default' : 'ghost'} 
+                    onClick={() => { setActiveModule('planta'); setActiveTab('planta-view'); }}
+                    className={cn(
+                      "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
+                      activeModule === 'planta' ? "shadow-md shadow-slate-200 bg-slate-800 text-white" : "text-slate-500"
+                    )}
+                  >
+                    <div className={cn("p-1.5 rounded-lg", activeModule === 'planta' ? "bg-white/20" : "bg-slate-100")}>
+                      <Factory className="h-4 w-4" />
+                    </div>
+                    <span className="uppercase text-[10px] font-black tracking-tight text-left">Planta</span>
+                  </Button>
+
                   {!isRestrictedInventory && (
                     <>
-                      <Button 
-                        variant={activeModule === 'planta' ? 'default' : 'ghost'} 
-                        onClick={() => { setActiveModule('planta'); setActiveTab('planta-view'); }}
-                        className={cn(
-                          "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
-                          activeModule === 'planta' ? "shadow-md shadow-slate-200 bg-slate-800 text-white" : "text-slate-500"
-                        )}
-                      >
-                        <div className={cn("p-1.5 rounded-lg", activeModule === 'planta' ? "bg-white/20" : "bg-slate-100")}>
-                          <Factory className="h-4 w-4" />
-                        </div>
-                        <span className="uppercase text-[10px] font-black tracking-tight text-left">Planta</span>
-                      </Button>
-
                       <Button 
                         variant={activeModule === 'logistica' ? 'default' : 'ghost'} 
                         onClick={() => { setActiveModule('logistica'); setActiveTab('logistica-view'); }}
@@ -887,7 +887,7 @@ export default function PlannerPage() {
                     )}
                   </>
                 )}
-                {!isRestrictedInventory && activeModule === 'planta' && (
+                {activeModule === 'planta' && (
                   <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                     <Factory className="h-12 w-12 mb-4 opacity-20" />
                     Módulo de Planta en Desarrollo

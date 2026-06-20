@@ -26,8 +26,8 @@ const STORAGE_KEY = 'planner_auth_session';
  *    - Acceso: Total absoluto (incluye el módulo Maestro de Recetas).
  * 
  * 4. maria.mds / alex.mds (INVENTORY): 
- *    - Acceso: Jarabes y Materia Prima.
- *    - Restricción: No ven Planificación, Compras, Planta, Logística ni Ventas.
+ *    - Acceso: Jarabes, Materia Prima y Planta.
+ *    - Restricción: No ven Planificación, Compras, Logística ni Ventas.
  * 
  * 5. anto.mds (PURCHASING - Antonella Dos Santos): 
  *    - Acceso: Compras, Planta, Logística, Ventas.
