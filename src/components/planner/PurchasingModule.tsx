@@ -79,22 +79,6 @@ const JUGOS = [
 
 const PRESENTATIONS = ["2Lts", "1.5Lts", "1Lt", "0.4Lts"];
 
-const ALL_MATERIALS_LIST = [
-  ...SUGAR_DATA,
-  ...CONCENTRATES_SOFT_DRINKS,
-  ...CONCENTRATES_JUICES,
-  ...SOLIDS_DATA,
-  ...ADDITIVES_DATA,
-  ...PREFORMS_DATA,
-  ...CAPS_DATA,
-  ...LABELS_2LTS_DATA,
-  ...LABELS_1_5LTS_DATA,
-  ...LABELS_1LT_DATA,
-  ...LABELS_04LT_DATA,
-  ...PLASTICS_DATA.filter(p => !('isHeader' in p)),
-  ...ADHESIVE_DATA
-];
-
 interface PurchasingModuleProps {
   onPrintRequirements?: () => void;
   onPrintInventory?: (type: 'product-finished' | 'logistics' | 'plant' | 'available') => void;
@@ -123,14 +107,12 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
       Object.entries(presentations).forEach(([presentation, quantity]) => {
         if (quantity <= 0) return;
 
-        // 1. Prioridad: Recetas de Empaque Personalizadas
         const packagingRecipe = customPackagingRecipes[product]?.[presentation];
         if (packagingRecipe && packagingRecipe[code] !== undefined) {
           total += quantity * packagingRecipe[code];
           return;
         }
 
-        // 2. Lógica de Fallback para Material de Empaque
         if (code === 'EMP_0019') {
           total += quantity * (PLASTIC_FACTORS[presentation as keyof typeof PLASTIC_FACTORS] || 0);
           return;
@@ -160,7 +142,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
           return;
         }
 
-        // Preformas Fallbacks
         const isFresh = product === "GLUP FRESH";
         const isColaKolita = product === "GLUP COLA" || product === "GLUP KOLITA";
         const isJugo = product.startsWith("JUSTY") || product.startsWith("VITA");
@@ -174,7 +155,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
         if (code === 'EMP_0126' && presentation === "0.4Lts" && !isFresh && !isJugo) { total += quantity * 15; return; }
         if (code === 'EMP_0068' && presentation === "1.5Lts" && isJugo) { total += quantity * 12; return; }
 
-        // Tapas Fallbacks
         if (code === 'EMP_0095' && isFresh) { 
           total += quantity * (presentation === "2Lts" ? 6 : (presentation === "1Lt" ? 12 : 15)); 
           return; 
@@ -188,7 +168,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
           return; 
         }
 
-        // 3. Materia Prima
         const recipe = customRecipes[product];
         if (recipe && recipe[code] !== undefined) {
           const boxesPerTank = PRODUCT_FACTORS[product]?.[presentation] || 0;
@@ -261,57 +240,61 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
     );
   };
 
-  const renderInventoryTable = (
-    title: string, 
-    products: string[], 
-    presentation: string, 
-    headerColor: string = "bg-emerald-500", 
-    footerColor: string = "bg-emerald-400"
-  ) => (
-    <Card className="border-slate-200 rounded-[2rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40 h-full">
-      <div className={cn(headerColor, "px-6 py-4 flex items-center justify-between shrink-0")}>
-        <div className="flex items-center gap-3">
-          <div className="bg-white/10 p-2 rounded-xl">
-            <PackageCheck className="h-4 w-4 text-white" />
+  const renderProductInventoryTable = (title: string, products: string[], icon: React.ReactNode) => (
+    <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
+      <div className="bg-[#8B6E58] px-8 py-5 flex items-center justify-between">
+        <div className="flex items-center gap-4 text-white">
+          <div className="bg-white/10 p-2.5 rounded-2xl">
+            {icon}
           </div>
-          <h3 className="text-white font-black uppercase text-[11px] tracking-widest">{title}</h3>
-        </div>
-        <div className="bg-white/10 px-3 py-1 rounded-full">
-           <span className="text-white font-black uppercase text-[9px]">{presentation}</span>
+          <h3 className="font-black uppercase text-sm tracking-widest leading-none">{title}</h3>
         </div>
       </div>
-
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-10">
-              <TableHead className="pl-6 text-[9px] font-black text-slate-400 uppercase py-2">Sabor</TableHead>
-              <TableHead className="text-center text-[9px] font-black text-slate-900 uppercase py-2 w-[120px]">Inventario (Cajas)</TableHead>
+            <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-11">
+              <TableHead className="pl-8 text-[10px] font-black text-slate-400 uppercase">Sabor / Producto</TableHead>
+              {PRESENTATIONS.map(pres => (
+                <TableHead key={pres} className="text-center text-[10px] font-black text-slate-900 uppercase w-[100px]">{pres}</TableHead>
+              ))}
+              <TableHead className="text-right pr-8 text-[10px] font-black text-[#8B6E58] uppercase w-[120px] bg-[#A67B5B]/5">Total Cajas</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.map((product) => (
-              <TableRow key={product} className="hover:bg-slate-50 transition-none h-11 border-b border-slate-100">
-                <TableCell className="pl-6 font-black text-slate-700 uppercase text-[10px]">
-                  {product}
-                </TableCell>
-                <TableCell className="p-1">
-                  <Input 
-                    type="number"
-                    value={finishedProductInventory[product]?.[presentation] || ''}
-                    onChange={(e) => updateFinishedProductInventory(product, presentation, parseInt(e.target.value) || 0)}
-                    className="h-8 text-center font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-lg"
-                    placeholder="0"
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
+            {products.map((product) => {
+              const productTotal = PRESENTATIONS.reduce((acc, pres) => acc + (finishedProductInventory[product]?.[pres] || 0), 0);
+              return (
+                <TableRow key={product} className="hover:bg-slate-50 transition-none h-11 border-b border-slate-100">
+                  <TableCell className="pl-8 font-black text-slate-700 uppercase text-[10px]">{product}</TableCell>
+                  {PRESENTATIONS.map(pres => (
+                    <TableCell key={pres} className="p-1">
+                      <Input 
+                        type="number"
+                        value={finishedProductInventory[product]?.[pres] || ''}
+                        onChange={(e) => updateFinishedProductInventory(product, pres, parseInt(e.target.value) || 0)}
+                        className="h-8 text-center font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-lg"
+                        placeholder="0"
+                      />
+                    </TableCell>
+                  ))}
+                  <TableCell className="text-right pr-8 font-black text-[#8B6E58] tabular-nums text-sm bg-[#A67B5B]/10">
+                    {productTotal.toLocaleString('es-ES')}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
           </TableBody>
-          <tfoot className={cn(footerColor, "text-white font-black border-t-2 border-white/10")}>
-            <tr className="h-10">
-              <td className="pl-6 text-[10px] uppercase">Total Inventario {presentation}</td>
-              <td className="text-center text-xs tabular-nums">
-                {products.reduce((acc, p) => acc + (finishedProductInventory[p]?.[presentation] || 0), 0).toLocaleString('es-ES')}
+          <tfoot className="bg-[#8B6E58] text-white font-black">
+            <tr className="h-11">
+              <td className="pl-8 text-[11px] uppercase">TOTALES GENERALES</td>
+              {PRESENTATIONS.map(pres => (
+                <td key={pres} className="text-center text-xs tabular-nums">
+                  {products.reduce((acc, p) => acc + (finishedProductInventory[p]?.[pres] || 0), 0).toLocaleString('es-ES')}
+                </td>
+              ))}
+              <td className="text-right pr-8 text-sm tabular-nums bg-[#A67B5B]">
+                {products.reduce((acc, p) => acc + PRESENTATIONS.reduce((sum, pres) => sum + (finishedProductInventory[p]?.[pres] || 0), 0), 0).toLocaleString('es-ES')}
               </td>
             </tr>
           </tfoot>
@@ -320,44 +303,53 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
     </Card>
   );
 
-  const renderMaterialsInventoryTable = (
+  const renderMaterialsInventoryMatrix = (
     title: string,
     icon: React.ReactNode,
-    data: any[],
+    materialGroups: { label: string, items: any[] }[],
     type: 'logistics' | 'plant',
-    color: string = "bg-indigo-600"
-  ) => {
-    return (
-      <Card className="border-slate-200 rounded-[2rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
-        <div className={cn("px-6 py-4 flex items-center justify-between", color)}>
-          <div className="flex items-center gap-3 text-white">
-            <div className="bg-white/10 p-2 rounded-xl">
-              {icon}
-            </div>
-            <h3 className="font-black uppercase text-[11px] tracking-widest">{title}</h3>
+    color: string = "bg-[#A67B5B]"
+  ) => (
+    <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
+      <div className={cn("px-8 py-5 flex items-center justify-between", color)}>
+        <div className="flex items-center gap-4 text-white">
+          <div className="bg-white/10 p-2.5 rounded-2xl">
+            {icon}
           </div>
-          <Badge className="bg-white/20 text-white border-none text-[9px] font-black uppercase px-3 py-1">Stock Actual</Badge>
+          <h3 className="font-black uppercase text-sm tracking-widest leading-none">{title}</h3>
         </div>
-        <div className="p-0">
-          <Table>
-            <TableHeader>
-              <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-10">
-                <TableHead className="pl-6 text-[9px] font-black text-slate-400 uppercase">Material / Insumo</TableHead>
-                <TableHead className="text-center text-[9px] font-black text-slate-900 uppercase w-[150px]">Cantidad Disponible</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {data.map((item) => (
-                <TableRow key={item.code} className="hover:bg-slate-50/50 transition-none h-12 border-b border-slate-100">
-                  <TableCell className="pl-6">
-                    <div className="flex flex-col">
-                      <span className="text-[9px] font-bold text-primary font-mono leading-none mb-0.5">{item.code}</span>
-                      <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[250px]">{item.description}</span>
-                    </div>
+        <Badge className="bg-white/10 text-white border-none uppercase text-[9px] font-black px-4 py-1.5 rounded-full">STOCK REAL</Badge>
+      </div>
+      <div className="overflow-x-auto">
+        <Table>
+          <TableHeader>
+            <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-11">
+              <TableHead className="pl-8 text-[10px] font-black text-slate-400 uppercase">Material / Insumo</TableHead>
+              <TableHead className="text-center text-[10px] font-black text-slate-400 uppercase w-[100px]">Unidad</TableHead>
+              <TableHead className="text-right pr-8 text-[10px] font-black text-slate-900 uppercase w-[200px]">Stock Actual</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {materialGroups.map((group) => (
+              <React.Fragment key={group.label}>
+                <TableRow className="bg-slate-100/50 hover:bg-slate-100/50 h-8 border-y border-slate-200">
+                  <TableCell colSpan={3} className="pl-8 py-0">
+                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{group.label}</span>
                   </TableCell>
-                  <TableCell className="p-1 px-6">
-                    <div className="flex items-center gap-2">
-                       <Input 
+                </TableRow>
+                {group.items.map((item) => (
+                  <TableRow key={item.code} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100 group">
+                    <TableCell className="pl-8">
+                      <div className="flex flex-col">
+                        <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{item.code}</span>
+                        <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[400px]">{item.description}</span>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-center font-bold text-slate-400 text-[10px] uppercase">
+                      {item.unit || 'KG'}
+                    </TableCell>
+                    <TableCell className="p-1 pr-8">
+                      <Input 
                         type="number"
                         value={(type === 'logistics' ? logisticsInventory[item.code] : plantInventory[item.code]) || ''}
                         onChange={(e) => {
@@ -365,26 +357,35 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                           if (type === 'logistics') updateLogisticsInventory(item.code, val);
                           else updatePlantInventory(item.code, val);
                         }}
-                        className="h-9 text-right font-black text-sm border-none bg-slate-50 focus:bg-white rounded-xl"
+                        className="h-8 text-right font-black text-sm border-none bg-slate-50 focus:bg-white rounded-lg"
                         placeholder="0.00"
                       />
-                      <span className="text-[9px] font-black text-slate-400 uppercase w-8">{item.unit || 'KG'}</span>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      </Card>
-    );
-  };
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </React.Fragment>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+    </Card>
+  );
 
   const renderFullInventoryType = (type: 'logistics' | 'plant') => {
     const isLogistics = type === 'logistics';
-    const mainColor = isLogistics ? "text-blue-700" : "text-emerald-700";
-    const bgColor = isLogistics ? "bg-blue-50" : "bg-emerald-50";
-    const headerIcon = isLogistics ? <Truck className="h-5 w-5" /> : <Factory className="h-5 w-5" />;
+    const rawMaterialGroups = [
+      { label: '1. Azúcar', items: SUGAR_DATA },
+      { label: '2. Concentrados', items: [...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES] },
+      { label: '3. Sólidos', items: SOLIDS_DATA },
+      { label: '4. Aditivos', items: ADDITIVES_DATA },
+    ];
+    const packagingGroups = [
+      { label: '5. Preformas', items: PREFORMS_DATA },
+      { label: '6. Tapas', items: CAPS_DATA },
+      { label: '7. Etiquetas (Global)', items: [...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA] },
+      { label: '8. Plásticos y Termoencogibles', items: PLASTICS_DATA.filter(p => !('isHeader' in p)) },
+      { label: '9. Adhesivos', items: ADHESIVE_DATA },
+    ];
 
     return (
       <div className="space-y-12 animate-in fade-in-50 duration-500">
@@ -398,47 +399,21 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
           </Button>
         </div>
 
-        {/* SECCIÓN I: MATERIA PRIMA */}
-        <div className="space-y-6">
-          <div className={cn("flex items-center gap-3 px-4 py-3 rounded-2xl border border-slate-100 shadow-sm", bgColor)}>
-            <div className={cn("p-2 rounded-xl bg-white shadow-sm", mainColor)}>
-              <Droplet className="h-5 w-5" />
-            </div>
-            <div>
-              <h2 className={cn("text-lg font-black uppercase tracking-tight leading-none", mainColor)}>I. Materia Prima</h2>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Existencias de Ingredientes y Concentrados</p>
-            </div>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-            {renderMaterialsInventoryTable("Azúcar", <Wheat className="h-4 w-4" />, SUGAR_DATA, type, isLogistics ? "bg-blue-600" : "bg-emerald-600")}
-            {renderMaterialsInventoryTable("Concentrados", <FlaskConical className="h-4 w-4" />, [...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES], type, isLogistics ? "bg-blue-600" : "bg-emerald-600")}
-            {renderMaterialsInventoryTable("Sólidos", <Box className="h-4 w-4" />, SOLIDS_DATA, type, isLogistics ? "bg-blue-600" : "bg-emerald-600")}
-            {renderMaterialsInventoryTable("Aditivos", <Plus className="h-4 w-4" />, ADDITIVES_DATA, type, isLogistics ? "bg-blue-600" : "bg-emerald-600")}
-          </div>
-        </div>
+        {renderMaterialsInventoryMatrix(
+          `I. Materia Prima - ${isLogistics ? 'Logística' : 'Planta'}`,
+          <Droplet className="h-6 w-6" />,
+          rawMaterialGroups,
+          type,
+          isLogistics ? "bg-blue-600" : "bg-emerald-600"
+        )}
 
-        {/* SECCIÓN II: MATERIAL DE EMPAQUE */}
-        <div className="space-y-6">
-          <div className={cn("flex items-center gap-3 px-4 py-3 rounded-2xl border border-slate-100 shadow-sm", bgColor)}>
-            <div className={cn("p-2 rounded-xl bg-white shadow-sm", mainColor)}>
-              <Package className="h-5 w-5" />
-            </div>
-            <div>
-              <h2 className={cn("text-lg font-black uppercase tracking-tight leading-none", mainColor)}>II. Material de Empaque</h2>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Existencias de Preformas, Tapas y Etiquetas</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-            {renderMaterialsInventoryTable("Preformas", <Target className="h-4 w-4" />, PREFORMS_DATA, type, isLogistics ? "bg-indigo-600" : "bg-teal-600")}
-            {renderMaterialsInventoryTable("Tapas", <CircleDot className="h-4 w-4" />, CAPS_DATA, type, isLogistics ? "bg-indigo-600" : "bg-teal-600")}
-            {renderMaterialsInventoryTable("Etiquetas (2L/1.5L)", <Tag className="h-4 w-4" />, [...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA], type, isLogistics ? "bg-indigo-600" : "bg-teal-600")}
-            {renderMaterialsInventoryTable("Etiquetas (1L/0.4L)", <Tag className="h-4 w-4" />, [...LABELS_1LT_DATA, ...LABELS_04LT_DATA], type, isLogistics ? "bg-indigo-600" : "bg-teal-600")}
-            {renderMaterialsInventoryTable("Plásticos", <Layers className="h-4 w-4" />, PLASTICS_DATA.filter(p => !('isHeader' in p)), type, isLogistics ? "bg-indigo-600" : "bg-teal-600")}
-            {renderMaterialsInventoryTable("Adhesivos", <StickyNote className="h-4 w-4" />, ADHESIVE_DATA, type, isLogistics ? "bg-indigo-600" : "bg-teal-600")}
-          </div>
-        </div>
+        {renderMaterialsInventoryMatrix(
+          `II. Material de Empaque - ${isLogistics ? 'Logística' : 'Planta'}`,
+          <Package className="h-6 w-6" />,
+          packagingGroups,
+          type,
+          isLogistics ? "bg-indigo-600" : "bg-teal-600"
+        )}
       </div>
     );
   };
@@ -558,7 +533,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                 </TabsContent>
 
                 <TabsContent value="requerimientos" className="m-0 animate-in fade-in-50 duration-500 space-y-10">
-                  
                   <div className="flex justify-end no-print">
                     <Button 
                       onClick={onPrintRequirements}
@@ -568,7 +542,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                       <Printer className="h-4 w-4" /> Generar Reporte PDF
                     </Button>
                   </div>
-
                   {/* SECCIÓN I: MATERIA PRIMA */}
                   <div className="space-y-6">
                     <div className="flex items-center gap-3 px-2">
@@ -577,7 +550,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                        </div>
                        <h2 className="text-lg font-black text-slate-800 uppercase tracking-tight">I. Materia Prima</h2>
                     </div>
-                    
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                       {renderRequirementTable("Azúcar", <Wheat className="h-4 w-4" />, SUGAR_DATA, 'KG', "bg-emerald-600", 2)}
                       {renderRequirementTable("Concentrados", <FlaskConical className="h-4 w-4" />, [...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES], 'LTS/KG', "bg-emerald-600", 2)}
@@ -585,7 +557,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                       {renderRequirementTable("Aditivos", <Plus className="h-4 w-4" />, ADDITIVES_DATA, 'LTS/KG', "bg-emerald-600", 2)}
                     </div>
                   </div>
-
                   {/* SECCIÓN II: MATERIAL DE EMPAQUE */}
                   <div className="space-y-6">
                     <div className="flex items-center gap-3 px-2">
@@ -594,24 +565,19 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                        </div>
                        <h2 className="text-lg font-black text-slate-800 uppercase tracking-tight">II. Material de Empaque</h2>
                     </div>
-
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                       {renderRequirementTable("Preformas", <Target className="h-4 w-4" />, PREFORMS_DATA, 'UND', "bg-blue-600", 2)}
                       {renderRequirementTable("Tapas", <CircleDot className="h-4 w-4" />, CAPS_DATA, 'UND', "bg-blue-600", 2)}
-                      
-                      {/* ETIQUETAS UNIFICADAS */}
                       {renderRequirementTable("Etiquetas", <Tag className="h-4 w-4" />, [
                         ...LABELS_2LTS_DATA, 
                         ...LABELS_1_5LTS_DATA, 
                         ...LABELS_1LT_DATA, 
                         ...LABELS_04LT_DATA
                       ], 'KG', "bg-blue-600", 2)}
-                      
                       {renderRequirementTable("Plásticos", <Layers className="h-4 w-4" />, PLASTICS_DATA.filter(p => !('isHeader' in p)), 'KG', "bg-blue-600", 2)}
                       {renderRequirementTable("Adhesivos", <StickyNote className="h-4 w-4" />, ADHESIVE_DATA, 'KG', "bg-blue-600", 6)}
                     </div>
                   </div>
-
                 </TabsContent>
               </Tabs>
             </TabsContent>
@@ -645,11 +611,9 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                       <FileDown className="h-4 w-4" /> Exportar Inventario Producto
                     </Button>
                   </div>
-                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
-                     {renderInventoryTable("Inventario 2 Lts", REFRESCOS, "2Lts", "bg-emerald-600", "bg-emerald-500")}
-                     {renderInventoryTable("Inventario 1.5 Lts", JUGOS, "1.5Lts", "bg-teal-600", "bg-teal-500")}
-                     {renderInventoryTable("Inventario 1 Lt", REFRESCOS, "1Lt", "bg-emerald-600", "bg-emerald-500")}
-                     {renderInventoryTable("Inventario 0.4 Lts", REFRESCOS, "0.4Lts", "bg-emerald-600", "bg-emerald-500")}
+                   <div className="space-y-12">
+                     {renderProductInventoryTable("Inventario de Refrescos (MDS)", REFRESCOS, <PackageCheck className="h-6 w-6" />)}
+                     {renderProductInventoryTable("Inventario de Jugos y Té (MDS)", JUGOS, <PackageCheck className="h-6 w-6" />)}
                    </div>
                 </TabsContent>
 
@@ -671,9 +635,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                       <FileDown className="h-4 w-4" /> Exportar Reporte Consolidado
                     </Button>
                   </div>
-
                   <div className="grid grid-cols-1 gap-12">
-                    {/* SECCIÓN 1: PRODUCTO TERMINADO DISPONIBLE */}
                     <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
                       <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
                         <div className="flex items-center gap-4 text-white">
@@ -687,7 +649,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                         </div>
                         <Badge className="bg-amber-700 text-white border-none uppercase text-[10px] font-black px-4 py-2 rounded-full">STOCK REAL</Badge>
                       </div>
-                      
                       <div className="overflow-x-auto">
                         <Table>
                           <TableHeader>
@@ -703,7 +664,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                             {PRODUCT_LIST.map((product) => {
                               const productTotal = PRESENTATIONS.reduce((acc, pres) => acc + (finishedProductInventory[product]?.[pres] || 0), 0);
                               if (productTotal === 0) return null;
-
                               return (
                                 <TableRow key={product} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100">
                                   <TableCell className="pl-8 font-black text-slate-700 uppercase text-[11px]">{product}</TableCell>
@@ -735,8 +695,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                         </Table>
                       </div>
                     </Card>
-
-                    {/* SECCIÓN 2: MATERIALES DISPONIBLES (CONSOLIDADO LOGÍSTICA + PLANTA) */}
                     <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
                       <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
                         <div className="flex items-center gap-4 text-white">
@@ -748,19 +706,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                             <p className="text-[10px] font-bold text-slate-100/70 uppercase tracking-widest mt-1">Disponibilidad Total (Logística + Planta)</p>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 rounded-lg border border-white/10">
-                              <div className="w-2 h-2 rounded-full bg-blue-400" />
-                              <span className="text-[9px] font-black text-white uppercase">Logística</span>
-                           </div>
-                           <Plus className="h-3 w-3 text-white/50" />
-                           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 rounded-lg border border-white/10">
-                              <div className="w-2 h-2 rounded-full bg-amber-400" />
-                              <span className="text-[9px] font-black text-white uppercase">Planta</span>
-                           </div>
-                        </div>
                       </div>
-                      
                       <div className="overflow-x-auto">
                         <Table>
                           <TableHeader>
@@ -773,13 +719,11 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                             </TableRow>
                           </TableHeader>
                           <TableBody>
-                            {ALL_MATERIALS_LIST.map((mat) => {
+                            {([...SUGAR_DATA, ...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES, ...SOLIDS_DATA, ...ADDITIVES_DATA, ...PREFORMS_DATA, ...CAPS_DATA, ...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA, ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA]).map((mat) => {
                               const stockLogistics = logisticsInventory[mat.code] || 0;
                               const stockPlant = plantInventory[mat.code] || 0;
                               const totalAvailable = stockLogistics + stockPlant;
-
                               if (totalAvailable === 0) return null;
-
                               return (
                                 <TableRow key={mat.code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
                                   <TableCell className="pl-8">
@@ -844,3 +788,4 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
     </div>
   );
 }
+
