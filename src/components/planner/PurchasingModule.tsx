@@ -312,7 +312,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
           </div>
           <h3 className="font-black uppercase text-sm tracking-widest leading-none">{title}</h3>
         </div>
-        <Badge className="bg-amber-700 text-white border-none uppercase text-[9px] font-black px-4 py-1.5 rounded-full">STOCK REAL</Badge>
+        <Badge className="bg-amber-500 text-white border-none uppercase text-[9px] font-black px-4 py-1.5 rounded-full">STOCK REAL</Badge>
       </div>
       <div className="overflow-x-auto">
         <Table>
@@ -335,7 +335,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                   <TableRow key={item.code} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100 group">
                     <TableCell className="pl-8">
                       <div className="flex flex-col">
-                        <span className={cn("text-[9px] font-bold font-mono leading-none mb-1", type === 'logistics' ? "text-emerald-600" : "text-[#A67B5B]")}>{item.code}</span>
+                        <span className={cn("text-[9px] font-bold font-mono leading-none mb-1", type === 'logistics' ? "text-emerald-600" : "text-sky-600")}>{item.code}</span>
                         <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[400px]">{item.description}</span>
                       </div>
                     </TableCell>
@@ -399,7 +399,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
           <Droplet className="h-6 w-6" />,
           rawMaterialGroups,
           type,
-          isLogistics ? "bg-emerald-600" : "bg-[#8B6E58]"
+          isLogistics ? "bg-emerald-600" : "bg-sky-600"
         )}
 
         {renderMaterialsInventoryMatrix(
@@ -407,7 +407,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
           <Package className="h-6 w-6" />,
           packagingGroups,
           type,
-          isLogistics ? "bg-emerald-600" : "bg-[#8B6E58]"
+          isLogistics ? "bg-emerald-600" : "bg-sky-600"
         )}
       </div>
     );
@@ -631,7 +631,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                       className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                     >
                       <FileDown className="h-4 w-4" />
-                      Exportar Reporte Disponibilidad Global
+                      Exportar Reporte Disponible
                     </Button>
                   </div>
                   <div className="grid grid-cols-1 gap-12">
@@ -646,7 +646,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                             <p className="text-[10px] font-bold text-slate-100/70 uppercase tracking-widest mt-1">Total de existencias en almacenes</p>
                           </div>
                         </div>
-                        <Badge className="bg-amber-700 text-white border-none uppercase text-[10px] font-black px-4 py-2 rounded-full">STOCK REAL</Badge>
+                        <Badge className="bg-amber-500 text-white border-none uppercase text-[10px] font-black px-4 py-2 rounded-full">STOCK REAL</Badge>
                       </div>
                       <div className="overflow-x-auto">
                         <Table>
