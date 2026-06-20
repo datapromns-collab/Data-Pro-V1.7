@@ -465,7 +465,7 @@ export default function PlannerPage() {
                       <div className={cn("p-1.5 rounded-lg", activeModule === 'purchasing' ? "bg-white/20" : "bg-slate-100")}>
                         <ShoppingCart className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[9px] font-black tracking-tight text-left">Proyección de Compras</span>
+                      <span className="uppercase text-[9px] font-black tracking-tight text-left">Compras</span>
                     </Button>
                   )}
                 </div>
@@ -576,7 +576,7 @@ export default function PlannerPage() {
                 {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' : 
                  activeModule === 'recipes' ? 'MÓDULO DE RECETAS' : 
                  activeModule === 'raw-materials' ? 'MÓDULO DE MATERIA PRIMA' : 
-                 activeModule === 'purchasing' ? 'MÓDULO DE PROYECCIÓN' : 'MÓDULO DE PLANIFICACIÓN'}
+                 activeModule === 'purchasing' ? 'MÓDULO DE COMPRAS' : 'MÓDULO DE PLANIFICACIÓN'}
               </div>
             </div>
             <div className="flex items-center gap-2">
