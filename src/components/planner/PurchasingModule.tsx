@@ -80,6 +80,10 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
     updateSalesProjection,
     finishedProductInventory,
     updateFinishedProductInventory,
+    logisticsInventory,
+    updateLogisticsInventory,
+    plantInventory,
+    updatePlantInventory,
     customRecipes,
     customPackagingRecipes
   } = usePlannerStore();
@@ -290,6 +294,66 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
     </Card>
   );
 
+  const renderMaterialsInventoryTable = (
+    title: string,
+    icon: React.ReactNode,
+    data: any[],
+    type: 'logistics' | 'plant',
+    color: string = "bg-indigo-600"
+  ) => {
+    return (
+      <Card className="border-slate-200 rounded-[2rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
+        <div className={cn("px-6 py-4 flex items-center justify-between", color)}>
+          <div className="flex items-center gap-3 text-white">
+            <div className="bg-white/10 p-2 rounded-xl">
+              {icon}
+            </div>
+            <h3 className="font-black uppercase text-[11px] tracking-widest">{title}</h3>
+          </div>
+          <Badge className="bg-white/20 text-white border-none text-[9px] font-black uppercase px-3 py-1">Stock Actual</Badge>
+        </div>
+        <div className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-10">
+                <TableHead className="pl-6 text-[9px] font-black text-slate-400 uppercase">Material / Insumo</TableHead>
+                <TableHead className="text-center text-[9px] font-black text-slate-900 uppercase w-[150px]">Cantidad Disponible</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {data.map((item) => (
+                <TableRow key={item.code} className="hover:bg-slate-50/50 transition-none h-12 border-b border-slate-100">
+                  <TableCell className="pl-6">
+                    <div className="flex flex-col">
+                      <span className="text-[9px] font-bold text-primary font-mono leading-none mb-0.5">{item.code}</span>
+                      <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[250px]">{item.description}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="p-1 px-6">
+                    <div className="flex items-center gap-2">
+                       <Input 
+                        type="number"
+                        value={(type === 'logistics' ? logisticsInventory[item.code] : plantInventory[item.code]) || ''}
+                        onChange={(e) => {
+                          const val = parseFloat(e.target.value) || 0;
+                          if (type === 'logistics') updateLogisticsInventory(item.code, val);
+                          else updatePlantInventory(item.code, val);
+                        }}
+                        className="h-9 text-right font-black text-sm border-none bg-slate-50 focus:bg-white rounded-xl"
+                        placeholder="0.00"
+                      />
+                      <span className="text-[9px] font-black text-slate-400 uppercase w-8">{item.unit || 'KG'}</span>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </div>
+      </Card>
+    );
+  };
+
   const renderTableForPresentation = (
     title: string, 
     products: string[], 
@@ -465,7 +529,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
 
             <TabsContent value="inventario" className="m-0 animate-in fade-in-50 duration-500">
               <Tabs defaultValue="producto-terminado" className="w-full">
-                <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-100 w-fit mb-6 no-print">
+                <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
                   <TabsList className="bg-transparent h-auto p-0">
                     <TabsTrigger value="producto-terminado" className={tabsTriggerClass}>
                       <PackageCheck className="h-3.5 w-3.5" /> Producto terminado
@@ -488,21 +552,24 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                    </div>
                 </TabsContent>
 
-                <TabsContent value="mat-logistica" className="m-0 animate-in fade-in-50 duration-500">
-                  <div className="h-[300px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                    <Truck className="h-12 w-12 text-slate-300 mb-4" />
-                    <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
-                      Mat Logística<br/>Sección en blanco...
-                    </p>
+                <TabsContent value="mat-logistica" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                    {renderMaterialsInventoryTable("Preformas", <Target className="h-4 w-4" />, PREFORMS_DATA, 'logistics', "bg-blue-700")}
+                    {renderMaterialsInventoryTable("Tapas", <CircleDot className="h-4 w-4" />, CAPS_DATA, 'logistics', "bg-blue-700")}
+                    {renderMaterialsInventoryTable("Etiquetas", <Tag className="h-4 w-4" />, [...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA], 'logistics', "bg-blue-700")}
+                    <div className="space-y-8">
+                      {renderMaterialsInventoryTable("Plásticos", <Layers className="h-4 w-4" />, PLASTICS_DATA.filter(p => !('isHeader' in p)), 'logistics', "bg-blue-700")}
+                      {renderMaterialsInventoryTable("Adhesivos", <StickyNote className="h-4 w-4" />, ADHESIVE_DATA, 'logistics', "bg-blue-700")}
+                    </div>
                   </div>
                 </TabsContent>
 
-                <TabsContent value="mat-planta" className="m-0 animate-in fade-in-50 duration-500">
-                  <div className="h-[300px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                    <Factory className="h-12 w-12 text-slate-300 mb-4" />
-                    <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
-                      Mat Planta<br/>Sección en blanco...
-                    </p>
+                <TabsContent value="mat-planta" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                    {renderMaterialsInventoryTable("Azúcar", <Wheat className="h-4 w-4" />, SUGAR_DATA, 'plant', "bg-emerald-700")}
+                    {renderMaterialsInventoryTable("Concentrados", <FlaskConical className="h-4 w-4" />, [...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES], 'plant', "bg-emerald-700")}
+                    {renderMaterialsInventoryTable("Sólidos", <Box className="h-4 w-4" />, SOLIDS_DATA, 'plant', "bg-emerald-700")}
+                    {renderMaterialsInventoryTable("Aditivos", <Plus className="h-4 w-4" />, ADDITIVES_DATA, 'plant', "bg-emerald-700")}
                   </div>
                 </TabsContent>
               </Tabs>

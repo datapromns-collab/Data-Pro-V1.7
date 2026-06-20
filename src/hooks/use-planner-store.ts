@@ -18,6 +18,8 @@ const STORAGE_KEY_INITIAL_UBB_DAILY = 'planner_initial_ubb_daily_v1';
 const STORAGE_KEY_FINAL_UBB_DAILY = 'planner_final_ubb_daily_v1';
 const STORAGE_KEY_SALES_PROJECTION = 'planner_sales_projection_v1';
 const STORAGE_KEY_FIN_PROD_INV = 'planner_finished_product_inventory_v1';
+const STORAGE_KEY_LOGISTICS_INV = 'planner_logistics_inventory_v1';
+const STORAGE_KEY_PLANT_INV = 'planner_plant_inventory_v1';
 
 export interface RawMaterialStock {
   initial: number;
@@ -49,6 +51,8 @@ export function usePlannerStore() {
   const [finalUBBTanksDaily, setFinalUBBTanksDaily] = useState<Record<string, Record<string, number>>>({});
   const [salesProjection, setSalesProjection] = useState<Record<string, Record<string, number>>>({});
   const [finishedProductInventory, setFinishedProductInventory] = useState<Record<string, Record<string, number>>>({});
+  const [logisticsInventory, setLogisticsInventory] = useState<Record<string, number>>({});
+  const [plantInventory, setPlantInventory] = useState<Record<string, number>>({});
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -65,6 +69,8 @@ export function usePlannerStore() {
     const savedFinalUBBDaily = localStorage.getItem(STORAGE_KEY_FINAL_UBB_DAILY);
     const savedSalesProjection = localStorage.getItem(STORAGE_KEY_SALES_PROJECTION);
     const savedFinProdInv = localStorage.getItem(STORAGE_KEY_FIN_PROD_INV);
+    const savedLogisticsInv = localStorage.getItem(STORAGE_KEY_LOGISTICS_INV);
+    const savedPlantInv = localStorage.getItem(STORAGE_KEY_PLANT_INV);
 
     if (savedTasks) {
       try {
@@ -128,6 +134,14 @@ export function usePlannerStore() {
     if (savedFinProdInv) {
       try { setFinishedProductInventory(JSON.parse(savedFinProdInv)); } catch (e) {}
     }
+
+    if (savedLogisticsInv) {
+      try { setLogisticsInventory(JSON.parse(savedLogisticsInv)); } catch (e) {}
+    }
+
+    if (savedPlantInv) {
+      try { setPlantInventory(JSON.parse(savedPlantInv)); } catch (e) {}
+    }
     
     setIsLoaded(true);
   }, []);
@@ -147,8 +161,10 @@ export function usePlannerStore() {
       localStorage.setItem(STORAGE_KEY_FINAL_UBB_DAILY, JSON.stringify(finalUBBTanksDaily));
       localStorage.setItem(STORAGE_KEY_SALES_PROJECTION, JSON.stringify(salesProjection));
       localStorage.setItem(STORAGE_KEY_FIN_PROD_INV, JSON.stringify(finishedProductInventory));
+      localStorage.setItem(STORAGE_KEY_LOGISTICS_INV, JSON.stringify(logisticsInventory));
+      localStorage.setItem(STORAGE_KEY_PLANT_INV, JSON.stringify(plantInventory));
     }
-  }, [tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily, salesProjection, finishedProductInventory, isLoaded]);
+  }, [tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily, salesProjection, finishedProductInventory, logisticsInventory, plantInventory, isLoaded]);
 
   const addTask = useCallback((taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
@@ -326,10 +342,18 @@ export function usePlannerStore() {
     });
   }, []);
 
+  const updateLogisticsInventory = useCallback((code: string, qty: number) => {
+    setLogisticsInventory(prev => ({ ...prev, [code]: qty }));
+  }, []);
+
+  const updatePlantInventory = useCallback((code: string, qty: number) => {
+    setPlantInventory(prev => ({ ...prev, [code]: qty }));
+  }, []);
+
   return { 
-    tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily, salesProjection, finishedProductInventory,
+    tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily, salesProjection, finishedProductInventory, logisticsInventory, plantInventory,
     setWeekStartDate, addTask, updateTask, removeTask, clearAll, updateLineSpeed, updateRealProduction, updateRecipe, removeMaterialFromRecipe, updatePackagingRecipe, removeMaterialFromPackagingRecipe, resetRecipesToDefaults, resetPackagingRecipesToDefaults,
     updateRawMaterialStock, updateRawMaterialReception, updateRawMaterialDailyInitial, updateRawMaterialDailyFinal, updateManualUBB,
-    updateInitialUBBTanksDaily, updateFinalUBBTanksDaily, updateSalesProjection, updateFinishedProductInventory, isLoaded
+    updateInitialUBBTanksDaily, updateFinalUBBTanksDaily, updateSalesProjection, updateFinishedProductInventory, updateLogisticsInventory, updatePlantInventory, isLoaded
   };
 }
