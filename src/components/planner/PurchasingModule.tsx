@@ -29,7 +29,8 @@ import {
   FileDown,
   ChevronRight,
   Info,
-  ClipboardCheck
+  ClipboardCheck,
+  ShoppingCart
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -82,6 +83,13 @@ const JUGOS = [
 
 const PRESENTATIONS = ["2Lts", "1.5Lts", "1Lt", "0.4Lts"];
 
+const ALL_MATERIALS_LIST = [
+  ...SUGAR_DATA, ...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES,
+  ...SOLIDS_DATA, ...ADDITIVES_DATA, ...PREFORMS_DATA, ...CAPS_DATA,
+  ...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA,
+  ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA
+];
+
 export function PurchasingModule({ onPrintRequirements, onPrintInventory }: PurchasingModuleProps) {
   const { 
     salesProjection, 
@@ -100,10 +108,10 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
   
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
-  const calculateRequirement = (code: string) => {
+  const calculateRequirementFromSource = (code: string, source: Record<string, Record<string, number>>) => {
     let total = 0;
 
-    Object.entries(salesProjection).forEach(([product, presentations]) => {
+    Object.entries(source).forEach(([product, presentations]) => {
       Object.entries(presentations).forEach(([presentation, quantity]) => {
         if (quantity <= 0) return;
 
@@ -183,6 +191,8 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
 
     return total;
   };
+
+  const calculateRequirement = (code: string) => calculateRequirementFromSource(code, salesProjection);
 
   const renderRequirementTable = (title: string, icon: React.ReactNode, data: any[], unit: string = 'KG', color: string = "bg-primary", maxDecimals: number = 2) => {
     const tableItems = data.map(item => ({
@@ -859,31 +869,97 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                       </div>
                     </ScrollArea>
                   </Card>
-                  
+                </TabsContent>
+
+                <TabsContent value="requisicion" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                  <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
+                    <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
+                      <div className="flex items-center gap-4 text-white">
+                        <div className="bg-white/10 p-2.5 rounded-2xl">
+                          <ShoppingCart className="h-6 w-6" />
+                        </div>
+                        <div>
+                          <h3 className="font-black uppercase text-sm tracking-widest leading-none">Explosión de Materiales y Necesidad de Compra</h3>
+                          <p className="text-[10px] font-bold text-slate-100/70 uppercase tracking-widest mt-1">Cálculo de suministros basado en Plan de Producción (Margen +10%)</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-12">
+                            <TableHead className="pl-8 text-[10px] font-black text-slate-400 uppercase min-w-[200px]">Material / Insumo</TableHead>
+                            <TableHead className="text-right text-[10px] font-black text-slate-500 uppercase w-[120px]">Req. Ventas</TableHead>
+                            <TableHead className="text-right text-[10px] font-black text-amber-600 uppercase w-[120px]">Stock Disponible</TableHead>
+                            <TableHead className="text-right text-[10px] font-black text-sky-600 uppercase w-[140px] bg-sky-50/20">Req. s/ Plan</TableHead>
+                            <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[160px] bg-[#A67B5B]/5">Necesidad Compra</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {ALL_MATERIALS_LIST.map((mat) => {
+                            const reqSales = calculateRequirementFromSource(mat.code, salesProjection);
+                            const stockAvailable = (logisticsInventory[mat.code] || 0) + (plantInventory[mat.code] || 0);
+                            const reqPlan = calculateRequirementFromSource(mat.code, productionPlan);
+                            
+                            // Necesidad de Compra = (Req Plan - Stock Disponible) * 1.10
+                            // Solo si el Req Plan supera al stock disponible
+                            const deficit = Math.max(0, reqPlan - stockAvailable);
+                            const buyNeed = deficit > 0 ? deficit * 1.10 : 0;
+
+                            if (reqSales === 0 && reqPlan === 0 && stockAvailable === 0) return null;
+
+                            return (
+                              <TableRow key={mat.code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
+                                <TableCell className="pl-8">
+                                  <div className="flex flex-col">
+                                    <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{mat.code}</span>
+                                    <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[250px]">{mat.description}</span>
+                                  </div>
+                                </TableCell>
+                                <TableCell className="text-right font-bold text-slate-400 tabular-nums text-xs">
+                                  {reqSales.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </TableCell>
+                                <TableCell className="text-right font-bold text-amber-600 tabular-nums text-xs">
+                                  {stockAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </TableCell>
+                                <TableCell className="text-right font-black text-sky-700 tabular-nums text-sm bg-sky-50/20">
+                                  {reqPlan.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </TableCell>
+                                <TableCell className={cn(
+                                  "text-right pr-8 font-black tabular-nums text-[15px] bg-[#A67B5B]/10",
+                                  buyNeed > 0 ? "text-destructive" : "text-emerald-600"
+                                )}>
+                                  {buyNeed === 0 ? '-' : buyNeed.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </Card>
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 no-print">
                     <Card className="p-6 border-slate-200 rounded-3xl bg-slate-50/50 border-dashed border-2">
                       <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-                        <Info className="h-4 w-4 text-[#A67B5B]" /> Lógica de Cálculo del Saldo
+                        <Info className="h-4 w-4 text-[#A67B5B]" /> Lógica de Necesidad de Compra
                       </h4>
                       <p className="text-[11px] font-bold text-slate-600 leading-relaxed uppercase">
-                        El <span className="text-[#5C4033] font-black">Saldo Final</span> se calcula sumando el Inventario PT actual más el Plan de Producción manual, y restando la Proyección de Ventas. Los valores negativos indican una necesidad insatisfecha.
+                        La <span className="text-destructive font-black">Necesidad de Compra</span> se activa cuando el Requerimiento según Plan de Producción supera al Stock Disponible total (Logística + Planta). El cálculo incluye un <span className="text-[#5C4033] font-black">Margen de Seguridad del 10%</span> sobre el faltante detectado.
                       </p>
                     </Card>
-                    <div className="flex flex-col justify-center">
-                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center">
-                        Los datos de Ventas e Inventario son de solo lectura en esta vista.<br/>
-                        Edítelos en sus respectivas sub-secciones.
-                      </p>
+                    <div className="flex flex-col justify-center bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                       <div className="flex items-center gap-4 mb-4">
+                          <div className="bg-emerald-50 p-2 rounded-xl text-emerald-600">
+                             <ClipboardCheck className="h-5 w-5" />
+                          </div>
+                          <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-tight">Estado de Suministros</span>
+                       </div>
+                       <p className="text-[13px] font-bold text-slate-700 uppercase">
+                          El sistema ha detectado {ALL_MATERIALS_LIST.filter(m => (calculateRequirementFromSource(m.code, productionPlan) - ((logisticsInventory[m.code] || 0) + (plantInventory[m.code] || 0))) > 0).length} materiales con necesidad de compra inmediata para cumplir el plan.
+                       </p>
                     </div>
-                  </div>
-                </TabsContent>
-
-                <TabsContent value="requisicion" className="m-0 animate-in fade-in-50 duration-500">
-                  <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                    <ClipboardCheck className="h-12 w-12 text-slate-300 mb-4" />
-                    <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
-                      Sección de Requisición de Materiales en blanco<br/>Esperando cálculo de explosión de materiales...
-                    </p>
                   </div>
                 </TabsContent>
               </Tabs>
