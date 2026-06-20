@@ -28,7 +28,8 @@ import {
   TrendingUp,
   FileDown,
   ChevronRight,
-  Info
+  Info,
+  ClipboardCheck
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -761,107 +762,131 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
             </TabsContent>
 
             <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
-              <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
-                <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
-                  <div className="flex items-center gap-4 text-white">
-                    <div className="bg-white/10 p-2.5 rounded-2xl">
-                      <ClipboardList className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <h3 className="font-black uppercase text-sm tracking-widest leading-none">Resumen Consolidado de Necesidades (MDS)</h3>
-                      <p className="text-[10px] font-bold text-slate-100/70 uppercase tracking-widest mt-1">Balance de Ventas vs Inventario vs Plan de Producción</p>
-                    </div>
-                  </div>
+              <Tabs defaultValue="plan-produccion" className="w-full">
+                <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
+                  <TabsList className="bg-transparent h-auto p-0">
+                    <TabsTrigger value="plan-produccion" className={tabsTriggerClass}>
+                      <TrendingUp className="h-3.5 w-3.5" /> Planificación de Producción
+                    </TabsTrigger>
+                    <TabsTrigger value="requisicion" className={tabsTriggerClass}>
+                      <ClipboardCheck className="h-3.5 w-3.5" /> Requisición de Materiales
+                    </TabsTrigger>
+                  </TabsList>
                 </div>
-                
-                <ScrollArea className="h-[600px]">
-                  <div className="overflow-x-auto">
-                    <Table>
-                      <TableHeader className="sticky top-0 z-10 bg-white">
-                        <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-12">
-                          <TableHead className="pl-8 text-[10px] font-black text-slate-400 uppercase min-w-[250px]">Sabor / SKU</TableHead>
-                          <TableHead className="text-center text-[10px] font-black text-slate-400 uppercase w-[100px]">Formato</TableHead>
-                          <TableHead className="text-right text-[10px] font-black text-primary uppercase w-[120px]">Proy. Ventas</TableHead>
-                          <TableHead className="text-right text-[10px] font-black text-amber-600 uppercase w-[120px]">Inv. PT</TableHead>
-                          <TableHead className="text-right text-[10px] font-black text-sky-600 uppercase w-[150px] bg-sky-50/30">Plan Producción</TableHead>
-                          <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[120px]">Saldo Final</TableHead>
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        {PRODUCT_LIST.map((product) => (
-                          <React.Fragment key={product}>
-                            <TableRow className="bg-slate-100/30 hover:bg-slate-100/30 h-8 border-y border-slate-200">
-                              <TableCell colSpan={6} className="pl-8 py-0">
-                                <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{product}</span>
-                              </TableCell>
-                            </TableRow>
-                            {PRESENTATIONS.map((pres) => {
-                              const sales = salesProjection[product]?.[pres] || 0;
-                              const inv = finishedProductInventory[product]?.[pres] || 0;
-                              const plan = productionPlan[product]?.[pres] || 0;
-                              const balance = (inv + plan) - sales;
 
-                              return (
-                                <TableRow key={`${product}-${pres}`} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100 group">
-                                  <TableCell className="pl-8 py-2">
-                                    <div className="flex items-center gap-2">
-                                      <ChevronRight className="h-3 w-3 text-slate-300" />
-                                      <span className="text-[11px] font-black text-slate-700 uppercase leading-none">{product}</span>
-                                    </div>
-                                  </TableCell>
-                                  <TableCell className="text-center">
-                                    <Badge variant="outline" className="text-[9px] font-black uppercase text-slate-400 border-slate-200 px-2 py-0">
-                                      {pres}
-                                    </Badge>
-                                  </TableCell>
-                                  <TableCell className="text-right font-bold text-primary tabular-nums">
-                                    {sales > 0 ? sales.toLocaleString('es-ES') : '-'}
-                                  </TableCell>
-                                  <TableCell className="text-right font-bold text-amber-600 tabular-nums">
-                                    {inv > 0 ? inv.toLocaleString('es-ES') : '-'}
-                                  </TableCell>
-                                  <TableCell className="p-1 bg-sky-50/30">
-                                    <Input 
-                                      type="number"
-                                      value={plan || ''}
-                                      onChange={(e) => updateProductionPlan(product, pres, parseInt(e.target.value) || 0)}
-                                      className="h-8 text-right font-black text-sm border-none bg-white/50 focus:bg-white rounded-lg text-sky-700 shadow-inner"
-                                      placeholder="0"
-                                    />
-                                  </TableCell>
-                                  <TableCell className={cn(
-                                    "text-right pr-8 font-black tabular-nums",
-                                    balance < 0 ? "text-destructive" : "text-emerald-600"
-                                  )}>
-                                    {balance.toLocaleString('es-ES')}
+                <TabsContent value="plan-produccion" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                  <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
+                    <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
+                      <div className="flex items-center gap-4 text-white">
+                        <div className="bg-white/10 p-2.5 rounded-2xl">
+                          <ClipboardList className="h-6 w-6" />
+                        </div>
+                        <div>
+                          <h3 className="font-black uppercase text-sm tracking-widest leading-none">Resumen Consolidado de Necesidades (MDS)</h3>
+                          <p className="text-[10px] font-bold text-slate-100/70 uppercase tracking-widest mt-1">Balance de Ventas vs Inventario vs Plan de Producción</p>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <ScrollArea className="h-[600px]">
+                      <div className="overflow-x-auto">
+                        <Table>
+                          <TableHeader className="sticky top-0 z-10 bg-white">
+                            <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-12">
+                              <TableHead className="pl-8 text-[10px] font-black text-slate-400 uppercase min-w-[250px]">Sabor / SKU</TableHead>
+                              <TableHead className="text-center text-[10px] font-black text-slate-400 uppercase w-[100px]">Formato</TableHead>
+                              <TableHead className="text-right text-[10px] font-black text-primary uppercase w-[120px]">Proy. Ventas</TableHead>
+                              <TableHead className="text-right text-[10px] font-black text-amber-600 uppercase w-[120px]">Inv. PT</TableHead>
+                              <TableHead className="text-right text-[10px] font-black text-sky-600 uppercase w-[150px] bg-sky-50/30">Plan Producción</TableHead>
+                              <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[120px]">Saldo Final</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {PRODUCT_LIST.map((product) => (
+                              <React.Fragment key={product}>
+                                <TableRow className="bg-slate-100/30 hover:bg-slate-100/30 h-8 border-y border-slate-200">
+                                  <TableCell colSpan={6} className="pl-8 py-0">
+                                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{product}</span>
                                   </TableCell>
                                 </TableRow>
-                              );
-                            })}
-                          </React.Fragment>
-                        ))}
-                      </TableBody>
-                    </Table>
+                                {PRESENTATIONS.map((pres) => {
+                                  const sales = salesProjection[product]?.[pres] || 0;
+                                  const inv = finishedProductInventory[product]?.[pres] || 0;
+                                  const plan = productionPlan[product]?.[pres] || 0;
+                                  const balance = (inv + plan) - sales;
+
+                                  return (
+                                    <TableRow key={`${product}-${pres}`} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100 group">
+                                      <TableCell className="pl-8 py-2">
+                                        <div className="flex items-center gap-2">
+                                          <ChevronRight className="h-3 w-3 text-slate-300" />
+                                          <span className="text-[11px] font-black text-slate-700 uppercase leading-none">{product}</span>
+                                        </div>
+                                      </TableCell>
+                                      <TableCell className="text-center">
+                                        <Badge variant="outline" className="text-[9px] font-black uppercase text-slate-400 border-slate-200 px-2 py-0">
+                                          {pres}
+                                        </Badge>
+                                      </TableCell>
+                                      <TableCell className="text-right font-bold text-primary tabular-nums">
+                                        {sales > 0 ? sales.toLocaleString('es-ES') : '-'}
+                                      </TableCell>
+                                      <TableCell className="text-right font-bold text-amber-600 tabular-nums">
+                                        {inv > 0 ? inv.toLocaleString('es-ES') : '-'}
+                                      </TableCell>
+                                      <TableCell className="p-1 bg-sky-50/30">
+                                        <Input 
+                                          type="number"
+                                          value={plan || ''}
+                                          onChange={(e) => updateProductionPlan(product, pres, parseInt(e.target.value) || 0)}
+                                          className="h-8 text-right font-black text-sm border-none bg-white/50 focus:bg-white rounded-lg text-sky-700 shadow-inner"
+                                          placeholder="0"
+                                        />
+                                      </TableCell>
+                                      <TableCell className={cn(
+                                        "text-right pr-8 font-black tabular-nums",
+                                        balance < 0 ? "text-destructive" : "text-emerald-600"
+                                      )}>
+                                        {balance.toLocaleString('es-ES')}
+                                      </TableCell>
+                                    </TableRow>
+                                  );
+                                })}
+                              </React.Fragment>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    </ScrollArea>
+                  </Card>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 no-print">
+                    <Card className="p-6 border-slate-200 rounded-3xl bg-slate-50/50 border-dashed border-2">
+                      <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <Info className="h-4 w-4 text-[#A67B5B]" /> Lógica de Cálculo del Saldo
+                      </h4>
+                      <p className="text-[11px] font-bold text-slate-600 leading-relaxed uppercase">
+                        El <span className="text-[#5C4033] font-black">Saldo Final</span> se calcula sumando el Inventario PT actual más el Plan de Producción manual, y restando la Proyección de Ventas. Los valores negativos indican una necesidad insatisfecha.
+                      </p>
+                    </Card>
+                    <div className="flex flex-col justify-center">
+                      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center">
+                        Los datos de Ventas e Inventario son de solo lectura en esta vista.<br/>
+                        Edítelos en sus respectivas sub-secciones.
+                      </p>
+                    </div>
                   </div>
-                </ScrollArea>
-              </Card>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 no-print">
-                <Card className="p-6 border-slate-200 rounded-3xl bg-slate-50/50 border-dashed border-2">
-                  <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
-                    <Info className="h-4 w-4 text-[#A67B5B]" /> Lógica de Cálculo del Saldo
-                  </h4>
-                  <p className="text-[11px] font-bold text-slate-600 leading-relaxed uppercase">
-                    El <span className="text-[#5C4033] font-black">Saldo Final</span> se calcula sumando el Inventario PT actual más el Plan de Producción manual, y restando la Proyección de Ventas. Los valores negativos indican una necesidad insatisfecha.
-                  </p>
-                </Card>
-                <div className="flex flex-col justify-center">
-                  <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center">
-                    Los datos de Ventas e Inventario son de solo lectura en esta vista.<br/>
-                    Edítelos en sus respectivas sub-secciones.
-                  </p>
-                </div>
-              </div>
+                </TabsContent>
+
+                <TabsContent value="requisicion" className="m-0 animate-in fade-in-50 duration-500">
+                  <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                    <ClipboardCheck className="h-12 w-12 text-slate-300 mb-4" />
+                    <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+                      Sección de Requisición de Materiales en blanco<br/>Esperando cálculo de explosión de materiales...
+                    </p>
+                  </div>
+                </TabsContent>
+              </Tabs>
             </TabsContent>
           </Tabs>
         </TabsContent>
