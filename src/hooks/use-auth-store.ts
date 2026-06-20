@@ -13,6 +13,27 @@ export interface UserSession {
 
 const STORAGE_KEY = 'planner_auth_session';
 
+/**
+ * USUARIOS ESTABLECIDOS Y ACCESOS:
+ * 
+ * 1. user (STANDARD): 
+ *    - Acceso: Planificación, Planta, Logística, Ventas.
+ *    - Restricción: No ve Gestión, Jarabes, Materia Prima, Recetas ni Compras.
+ * 
+ * 2. admin (ADMIN): 
+ *    - Acceso: Todos los módulos excepto Recetas (específico para Yonny).
+ * 
+ * 3. demon (ADMIN - Yonny Hernández): 
+ *    - Acceso: Total absoluto (incluye el módulo Maestro de Recetas).
+ * 
+ * 4. AG.1 (INVENTORY - Maria Reinoso): 
+ *    - Acceso: Jarabes, Materia Prima, Planta, Logística, Ventas.
+ *    - Restricción: No ve Planificación ni Compras. Redirección automática a Materia Prima.
+ * 
+ * 5. anto.mds (PURCHASING - Antonella Dos Santos): 
+ *    - Acceso: Compras, Planta, Logística, Ventas.
+ *    - Restricción: No ve Planificación, Jarabes ni Materia Prima. Redirección automática a Compras.
+ */
 const VALID_USERS = [
   { id: 'user', password: 'user', name: 'Multinacional de Sabores', role: 'STANDARD' as UserRole },
   { id: 'admin', password: '123.*', name: 'Gerencia de Planta', role: 'ADMIN' as UserRole },
