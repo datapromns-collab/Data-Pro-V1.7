@@ -430,6 +430,14 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
     );
   };
 
+  const renderFullInventoryTypeWithMDS = () => {
+    return (
+      <div className="space-y-12 animate-in fade-in-50 duration-500">
+        {/* Aquí va el contenido del Inventario Disponible MDS ya existente */}
+      </div>
+    );
+  };
+
   const renderTableForPresentation = (
     title: string, 
     products: string[], 
@@ -653,7 +661,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                             <p className="text-[10px] font-bold text-slate-100/70 uppercase tracking-widest mt-1">Total de existencias en almacenes</p>
                           </div>
                         </div>
-                        <Badge className="bg-emerald-500 text-white border-none uppercase text-[10px] font-black px-4 py-2 rounded-full">STOCK REAL</Badge>
+                        <Badge className="bg-amber-700 text-white border-none uppercase text-[10px] font-black px-4 py-2 rounded-full">STOCK REAL</Badge>
                       </div>
                       
                       <div className="overflow-x-auto">
@@ -723,7 +731,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                            </div>
                            <Plus className="h-3 w-3 text-white/50" />
                            <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 rounded-lg border border-white/10">
-                              <div className="w-2 h-2 rounded-full bg-emerald-400" />
+                              <div className="w-2 h-2 rounded-full bg-amber-400" />
                               <span className="text-[9px] font-black text-white uppercase">Planta</span>
                            </div>
                         </div>
@@ -736,7 +744,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                               <TableHead className="pl-8 text-[10px] font-black text-slate-400 uppercase">Material / Insumo</TableHead>
                               <TableHead className="text-[10px] font-black text-slate-400 uppercase w-[100px] text-center">Unidad</TableHead>
                               <TableHead className="text-right text-[10px] font-black text-blue-600 uppercase w-[140px]">Stock Logística</TableHead>
-                              <TableHead className="text-right text-[10px] font-black text-emerald-600 uppercase w-[140px]">Stock Planta</TableHead>
+                              <TableHead className="text-right text-[10px] font-black text-amber-600 uppercase w-[140px]">Stock Planta</TableHead>
                               <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[160px] bg-[#A67B5B]/5">Disponibilidad Global</TableHead>
                             </TableRow>
                           </TableHeader>
@@ -762,7 +770,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                                   <TableCell className="text-right font-bold text-blue-600 tabular-nums text-sm">
                                     {stockLogistics.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
                                   </TableCell>
-                                  <TableCell className="text-right font-bold text-emerald-600 tabular-nums text-sm">
+                                  <TableCell className="text-right font-bold text-amber-600 tabular-nums text-sm">
                                     {stockPlant.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
                                   </TableCell>
                                   <TableCell className="text-right pr-8 font-black text-[#5C4033] tabular-nums text-[15px] bg-[#A67B5B]/10">
