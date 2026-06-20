@@ -643,14 +643,14 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                   <div className="grid grid-cols-1 gap-12">
                     {/* SECCIÓN 1: PRODUCTO TERMINADO DISPONIBLE */}
                     <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
-                      <div className="bg-[#0c1a3d] px-8 py-5 flex items-center justify-between">
+                      <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
                         <div className="flex items-center gap-4 text-white">
                           <div className="bg-white/10 p-2.5 rounded-2xl">
                             <PackageCheck className="h-6 w-6" />
                           </div>
                           <div>
                             <h3 className="font-black uppercase text-sm tracking-widest leading-none">Consolidado de Producto Terminado</h3>
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Total de existencias en almacenes</p>
+                            <p className="text-[10px] font-bold text-slate-100/70 uppercase tracking-widest mt-1">Total de existencias en almacenes</p>
                           </div>
                         </div>
                         <Badge className="bg-emerald-500 text-white border-none uppercase text-[10px] font-black px-4 py-2 rounded-full">STOCK REAL</Badge>
@@ -664,7 +664,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                               {PRESENTATIONS.map(pres => (
                                 <TableHead key={pres} className="text-right text-[10px] font-black text-slate-900 uppercase w-[120px]">{pres}</TableHead>
                               ))}
-                              <TableHead className="text-right pr-8 text-[10px] font-black text-primary uppercase w-[140px] bg-primary/5">Total Sabor</TableHead>
+                              <TableHead className="text-right pr-8 text-[10px] font-black text-primary uppercase w-[140px] bg-[#A67B5B]/5">Total Sabor</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -680,14 +680,14 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                                       {(finishedProductInventory[product]?.[pres] || 0).toLocaleString('es-ES')}
                                     </TableCell>
                                   ))}
-                                  <TableCell className="text-right pr-8 font-black text-primary tabular-nums text-sm bg-primary/5">
+                                  <TableCell className="text-right pr-8 font-black text-[#8B6E58] tabular-nums text-sm bg-[#A67B5B]/10">
                                     {productTotal.toLocaleString('es-ES')}
                                   </TableCell>
                                 </TableRow>
                               );
                             })}
                           </TableBody>
-                          <tfoot className="bg-[#0c1a3d] text-white font-black">
+                          <tfoot className="bg-[#8B6E58] text-white font-black">
                             <tr className="h-11">
                               <td className="pl-8 text-[11px] uppercase">TOTALES POR FORMATO</td>
                               {PRESENTATIONS.map(pres => (
@@ -695,7 +695,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                                   {PRODUCT_LIST.reduce((acc, p) => acc + (finishedProductInventory[p]?.[pres] || 0), 0).toLocaleString('es-ES')}
                                 </td>
                               ))}
-                              <td className="text-right pr-8 text-sm tabular-nums bg-primary">
+                              <td className="text-right pr-8 text-sm tabular-nums bg-[#A67B5B]">
                                 {PRODUCT_LIST.reduce((acc, p) => acc + PRESENTATIONS.reduce((sum, pres) => sum + (finishedProductInventory[p]?.[pres] || 0), 0), 0).toLocaleString('es-ES')}
                               </td>
                             </tr>
@@ -706,25 +706,25 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
 
                     {/* SECCIÓN 2: MATERIALES DISPONIBLES (CONSOLIDADO LOGÍSTICA + PLANTA) */}
                     <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
-                      <div className="bg-[#1e1b4b] px-8 py-5 flex items-center justify-between">
+                      <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
                         <div className="flex items-center gap-4 text-white">
                           <div className="bg-white/10 p-2.5 rounded-2xl">
                             <Box className="h-6 w-6" />
                           </div>
                           <div>
                             <h3 className="font-black uppercase text-sm tracking-widest leading-none">Consolidado de Materiales e Insumos</h3>
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Disponibilidad Total (Logística + Planta)</p>
+                            <p className="text-[10px] font-bold text-slate-100/70 uppercase tracking-widest mt-1">Disponibilidad Total (Logística + Planta)</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
-                           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500/20 rounded-lg border border-blue-400/30">
+                           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 rounded-lg border border-white/10">
                               <div className="w-2 h-2 rounded-full bg-blue-400" />
-                              <span className="text-[9px] font-black text-blue-200 uppercase">Logística</span>
+                              <span className="text-[9px] font-black text-white uppercase">Logística</span>
                            </div>
-                           <Plus className="h-3 w-3 text-slate-500" />
-                           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/20 rounded-lg border border-emerald-400/30">
+                           <Plus className="h-3 w-3 text-white/50" />
+                           <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white/20 rounded-lg border border-white/10">
                               <div className="w-2 h-2 rounded-full bg-emerald-400" />
-                              <span className="text-[9px] font-black text-emerald-200 uppercase">Planta</span>
+                              <span className="text-[9px] font-black text-white uppercase">Planta</span>
                            </div>
                         </div>
                       </div>
@@ -737,7 +737,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                               <TableHead className="text-[10px] font-black text-slate-400 uppercase w-[100px] text-center">Unidad</TableHead>
                               <TableHead className="text-right text-[10px] font-black text-blue-600 uppercase w-[140px]">Stock Logística</TableHead>
                               <TableHead className="text-right text-[10px] font-black text-emerald-600 uppercase w-[140px]">Stock Planta</TableHead>
-                              <TableHead className="text-right pr-8 text-[10px] font-black text-indigo-900 uppercase w-[160px] bg-indigo-50/50">Disponibilidad Global</TableHead>
+                              <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[160px] bg-[#A67B5B]/5">Disponibilidad Global</TableHead>
                             </TableRow>
                           </TableHeader>
                           <TableBody>
@@ -752,7 +752,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                                 <TableRow key={mat.code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
                                   <TableCell className="pl-8">
                                     <div className="flex flex-col">
-                                      <span className="text-[9px] font-bold text-primary font-mono leading-none mb-1">{mat.code}</span>
+                                      <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{mat.code}</span>
                                       <span className="text-[12px] font-black text-slate-700 uppercase leading-none truncate max-w-[300px]">{mat.description}</span>
                                     </div>
                                   </TableCell>
@@ -765,7 +765,7 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                                   <TableCell className="text-right font-bold text-emerald-600 tabular-nums text-sm">
                                     {stockPlant.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
                                   </TableCell>
-                                  <TableCell className="text-right pr-8 font-black text-indigo-950 tabular-nums text-[15px] bg-indigo-50/30">
+                                  <TableCell className="text-right pr-8 font-black text-[#5C4033] tabular-nums text-[15px] bg-[#A67B5B]/10">
                                     {totalAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
                                   </TableCell>
                                 </TableRow>
