@@ -7,7 +7,7 @@ import {
   Calendar,
   FileText,
   Package,
-  Droplet,
+  Droplet, 
   Wheat,
   FlaskConical,
   Plus,
@@ -26,7 +26,8 @@ import {
   Truck,
   Factory,
   Search,
-  ChevronRight
+  ChevronRight,
+  LayoutDashboard
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -594,6 +595,9 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                     <TabsTrigger value="mat-planta" className={tabsTriggerClass}>
                       <Factory className="h-3.5 w-3.5" /> Mat Planta
                     </TabsTrigger>
+                    <TabsTrigger value="disponible" className={tabsTriggerClass}>
+                      <LayoutDashboard className="h-3.5 w-3.5" /> Disponible
+                    </TabsTrigger>
                   </TabsList>
                 </div>
 
@@ -612,6 +616,15 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
 
                 <TabsContent value="mat-planta" className="m-0">
                   {renderFullInventoryType('plant')}
+                </TabsContent>
+
+                <TabsContent value="disponible" className="m-0 animate-in fade-in-50 duration-500">
+                  <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                    <LayoutDashboard className="h-12 w-12 text-slate-300 mb-4" />
+                    <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
+                      Inventario Disponible Total<br/>Sección en blanco...
+                    </p>
+                  </div>
                 </TabsContent>
               </Tabs>
             </TabsContent>
