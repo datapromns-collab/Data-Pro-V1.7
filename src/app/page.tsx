@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
@@ -27,7 +28,8 @@ import {
   Package,
   Factory,
   Truck,
-  TrendingUp
+  TrendingUp,
+  Droplets
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -119,6 +121,7 @@ export default function PlannerPage() {
     isDemon,
     isInventory,
     isPurchasing,
+    isJarabes,
     login,
     logout
   } = useAuthStore();
@@ -131,7 +134,7 @@ export default function PlannerPage() {
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
   
-  const [activeModule, setActiveModule] = useState<'planning' | 'management' | 'recipes' | 'raw-materials' | 'planta' | 'logistica' | 'ventas' | 'purchasing'>('planning');
+  const [activeModule, setActiveModule] = useState<'planning' | 'management' | 'jarabes' | 'recipes' | 'raw-materials' | 'planta' | 'logistica' | 'ventas' | 'purchasing'>('planning');
   const [activeTab, setActiveTab] = useState("gantt");
   
   const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance' | 'raw-material' | 'daily-raw-material' | 'purchasing-requirements' | 'inventory-finished' | 'inventory-logistics' | 'inventory-plant' | 'inventory-available'>('plan');
@@ -145,7 +148,7 @@ export default function PlannerPage() {
 
   useEffect(() => {
     if (authLoaded && user) {
-      if (isInventory && activeModule !== 'raw-materials') {
+      if (isInventory && activeModule !== 'raw-materials' && activeModule !== 'jarabes') {
         setActiveModule('raw-materials');
         setActiveTab('raw-material-view');
       }
@@ -161,7 +164,7 @@ export default function PlannerPage() {
         setActiveModule('planning');
         setActiveTab('gantt');
       }
-      if (user.role === 'STANDARD' && activeModule === 'raw-materials') {
+      if (user.role === 'STANDARD' && (activeModule === 'raw-materials' || activeModule === 'jarabes')) {
         setActiveModule('planning');
         setActiveTab('gantt');
       }
@@ -169,8 +172,12 @@ export default function PlannerPage() {
         setActiveModule('planning');
         setActiveTab('gantt');
       }
+      if (!isJarabes && activeModule === 'jarabes') {
+        setActiveModule('planning');
+        setActiveTab('gantt');
+      }
     }
-  }, [authLoaded, user, isAdmin, isDemon, isInventory, isPurchasing, activeModule]);
+  }, [authLoaded, user, isAdmin, isDemon, isInventory, isPurchasing, isJarabes, activeModule]);
 
   useEffect(() => {
     if (plannerLoaded) {
@@ -445,6 +452,22 @@ export default function PlannerPage() {
                     </Button>
                   )}
 
+                  {isJarabes && (
+                    <Button 
+                      variant={activeModule === 'jarabes' ? 'default' : 'ghost'} 
+                      onClick={() => { setActiveModule('jarabes'); setActiveTab('jarabes-view'); }}
+                      className={cn(
+                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
+                        activeModule === 'jarabes' ? "shadow-md shadow-blue-400 bg-blue-500 text-white" : "text-slate-500"
+                      )}
+                    >
+                      <div className={cn("p-1.5 rounded-lg", activeModule === 'jarabes' ? "bg-white/20" : "bg-slate-100")}>
+                        <Droplets className="h-4 w-4" />
+                      </div>
+                      <span className="uppercase text-[10px] font-black tracking-tight text-left">Jarabes</span>
+                    </Button>
+                  )}
+
                   {user.role !== 'STANDARD' && !isPurchasing && (
                     <Button 
                       variant={activeModule === 'raw-materials' ? 'default' : 'ghost'} 
@@ -537,7 +560,7 @@ export default function PlannerPage() {
                 </div>
               </section>
 
-              {activeModule !== 'recipes' && activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && (
+              {activeModule !== 'recipes' && activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'jarabes' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && (
                 <section className="pt-4 border-t border-slate-100">
                    <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Configuración Semana</p>
                    <div className="px-2 space-y-3">
@@ -560,7 +583,7 @@ export default function PlannerPage() {
                 </section>
               )}
 
-              {activeModule !== 'raw-materials' && activeModule !== 'recipes' && activeModule !== 'purchasing' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && !isInventory && (
+              {activeModule !== 'raw-materials' && activeModule !== 'recipes' && activeModule !== 'jarabes' && activeModule !== 'purchasing' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && !isInventory && (
                 <section>
                   <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas de Producción</p>
                   <div className="px-2">
@@ -637,6 +660,7 @@ export default function PlannerPage() {
                 activeModule === 'management' ? "bg-[#A67B5B]/10 text-[#A67B5B]" : 
                 activeModule === 'recipes' ? "bg-emerald-100 text-emerald-700" : 
                 activeModule === 'raw-materials' ? "bg-amber-100 text-amber-700" : 
+                activeModule === 'jarabes' ? "bg-blue-100 text-blue-700" :
                 activeModule === 'planta' ? "bg-slate-100 text-slate-700" :
                 activeModule === 'logistica' ? "bg-orange-100 text-orange-700" :
                 activeModule === 'ventas' ? "bg-indigo-100 text-indigo-700" :
@@ -645,6 +669,7 @@ export default function PlannerPage() {
                 {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' : 
                  activeModule === 'recipes' ? 'MÓDULO DE RECETAS' : 
                  activeModule === 'raw-materials' ? 'MÓDULO DE MATERIA PRIMA' : 
+                 activeModule === 'jarabes' ? 'MÓDULO DE JARABES' :
                  activeModule === 'planta' ? 'MÓDULO DE PLANTA' :
                  activeModule === 'logistica' ? 'MÓDULO DE LOGÍSTICA' :
                  activeModule === 'ventas' ? 'MÓDULO DE VENTAS' :
@@ -683,7 +708,7 @@ export default function PlannerPage() {
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <div className="flex flex-col gap-6 h-full">
               
-              {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && (
+              {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'jarabes' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && (
                 <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1 shadow-none self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print h-11 shrink-0">
                   {activeModule === 'planning' ? (
                     <>
@@ -805,6 +830,12 @@ export default function PlannerPage() {
                     )}
                   </>
                 )}
+                {activeModule === 'jarabes' && (
+                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                    <Droplets className="h-12 w-12 mb-4 opacity-20" />
+                    Módulo de Jarabes en Desarrollo
+                  </div>
+                )}
                 {activeModule === 'raw-materials' && !isPurchasing && (
                   <>
                     {activeTab === 'raw-material-view' && (
@@ -919,7 +950,7 @@ export default function PlannerPage() {
           {(printMode === 'inventory-finished' || printMode === 'inventory-logistics' || printMode === 'inventory-plant' || printMode === 'inventory-available') && (
             <div className="p-0">
               <InventoryReport 
-                type={printMode === 'inventory-finished' ? 'product-finished' : printMode === 'inventory-logistics' ? 'logistics' : printMode === 'inventory-plant' ? 'plant' : 'available'}
+                type={printMode === 'inventory-finished' ? 'product-finished' : printMode === 'inventory-logistics' ? 'inventory-logistics' : printMode === 'inventory-plant' ? 'inventory-plant' : 'available'}
                 data={{
                   finishedProductInventory,
                   logisticsInventory,

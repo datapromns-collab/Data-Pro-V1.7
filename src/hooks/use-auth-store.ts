@@ -60,6 +60,7 @@ export function useAuthStore() {
     isDemon: user?.id === 'demon',
     isInventory: user?.role === 'INVENTORY',
     isPurchasing: user?.role === 'PURCHASING',
+    isJarabes: user?.id === 'AG.1' || user?.role === 'ADMIN',
     login,
     logout
   };
