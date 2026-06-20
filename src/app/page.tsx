@@ -118,7 +118,7 @@ export default function PlannerPage() {
     isLoaded: authLoaded,
     isAdmin,
     isDemon,
-    isMaria,
+    isRestrictedInventory,
     isInventory,
     isPurchasing,
     isJarabes,
@@ -500,7 +500,7 @@ export default function PlannerPage() {
                     </Button>
                   )}
 
-                  {!isMaria && (
+                  {!isRestrictedInventory && (
                     <>
                       <Button 
                         variant={activeModule === 'planta' ? 'default' : 'ghost'} 
@@ -887,19 +887,19 @@ export default function PlannerPage() {
                     )}
                   </>
                 )}
-                {!isMaria && activeModule === 'planta' && (
+                {!isRestrictedInventory && activeModule === 'planta' && (
                   <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                     <Factory className="h-12 w-12 mb-4 opacity-20" />
                     Módulo de Planta en Desarrollo
                   </div>
                 )}
-                {!isMaria && activeModule === 'logistica' && (
+                {!isRestrictedInventory && activeModule === 'logistica' && (
                   <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                     <Truck className="h-12 w-12 mb-4 opacity-20" />
                     Módulo de Logística en Desarrollo
                   </div>
                 )}
-                {!isMaria && activeModule === 'ventas' && (
+                {!isRestrictedInventory && activeModule === 'ventas' && (
                   <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                     <TrendingUp className="h-12 w-12 mb-4 opacity-20" />
                     Módulo de Ventas en Desarrollo
