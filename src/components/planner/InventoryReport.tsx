@@ -1,0 +1,220 @@
+
+"use client";
+
+import React, { useMemo } from 'react';
+import Image from 'next/image';
+import { PlaceHolderImages } from '@/lib/placeholder-images';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { 
+  PRODUCT_LIST, 
+  SUGAR_DATA,
+  CONCENTRATES_SOFT_DRINKS,
+  CONCENTRATES_JUICES,
+  SOLIDS_DATA,
+  ADDITIVES_DATA,
+  PREFORMS_DATA,
+  CAPS_DATA,
+  LABELS_2LTS_DATA,
+  LABELS_1_5LTS_DATA,
+  LABELS_1LT_DATA,
+  LABELS_04LT_DATA,
+  PLASTICS_DATA,
+  ADHESIVE_DATA
+} from '@/lib/planner-utils';
+
+interface InventoryReportProps {
+  type: 'product-finished' | 'logistics' | 'plant' | 'available';
+  data: {
+    finishedProductInventory: Record<string, Record<string, number>>;
+    logisticsInventory: Record<string, number>;
+    plantInventory: Record<string, number>;
+  };
+}
+
+const PRESENTATIONS = ["2Lts", "1.5Lts", "1Lt", "0.4Lts"];
+const ALL_MATERIALS_LIST = [
+  ...SUGAR_DATA, ...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES,
+  ...SOLIDS_DATA, ...ADDITIVES_DATA, ...PREFORMS_DATA, ...CAPS_DATA,
+  ...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA,
+  ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA
+];
+
+export function InventoryReport({ type, data }: InventoryReportProps) {
+  const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
+  const { finishedProductInventory, logisticsInventory, plantInventory } = data;
+
+  const titleMap = {
+    'product-finished': 'Reporte de Producto Terminado',
+    'logistics': 'Reporte de Inventario Logística',
+    'plant': 'Reporte de Inventario Planta',
+    'available': 'Reporte de Disponibilidad Global'
+  };
+
+  const renderHeader = () => (
+    <div className="mb-6 border-b-2 border-[#A67B5B] pb-4 flex justify-between items-center">
+      <div className="flex-1">
+        <h1 className="text-xl font-headline font-black text-slate-900 leading-tight uppercase">{titleMap[type]}</h1>
+        <p className="text-[#A67B5B] font-black text-[10px] uppercase tracking-widest mt-1">Sistema de Gestión de Compras e Inventarios</p>
+      </div>
+      <div className="flex-1 flex justify-center">
+        {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={110} height={40} className="object-contain" />}
+      </div>
+      <div className="flex-1 text-right">
+        <p className="text-[8px] font-black text-[#A67B5B] uppercase tracking-widest mb-0.5">Confidencial - Planta</p>
+        <p className="text-[10px] text-slate-500 font-bold uppercase">{format(new Date(), "EEEE dd 'de' MMMM yyyy", { locale: es })}</p>
+        <p className="text-[8px] text-slate-400 font-medium italic">Emitido: {format(new Date(), "HH:mm:ss")}</p>
+      </div>
+    </div>
+  );
+
+  const renderProductFinishedTable = () => (
+    <div className="rounded border border-slate-200 overflow-hidden">
+      <table className="w-full border-collapse text-[9pt]">
+        <thead>
+          <tr className="bg-[#A67B5B] text-white font-black uppercase text-center h-10">
+            <th className="px-4 py-0 border border-[#A67B5B] text-left">SABOR / PRODUCTO</th>
+            {PRESENTATIONS.map(pres => (
+              <th key={pres} className="px-2 py-0 border border-[#A67B5B] w-24">{pres}</th>
+            ))}
+            <th className="px-4 py-0 border border-[#A67B5B] bg-[#8B6E58] w-28">TOTAL</th>
+          </tr>
+        </thead>
+        <tbody>
+          {PRODUCT_LIST.map((product, idx) => {
+            const productTotal = PRESENTATIONS.reduce((acc, pres) => acc + (finishedProductInventory[product]?.[pres] || 0), 0);
+            if (productTotal === 0 && type === 'available') return null;
+
+            return (
+              <tr key={product} className={`h-10 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
+                <td className="px-4 py-0 border border-slate-100 uppercase">{product}</td>
+                {PRESENTATIONS.map(pres => (
+                  <td key={pres} className="px-2 py-0 border border-slate-100 text-right tabular-nums">
+                    {(finishedProductInventory[product]?.[pres] || 0).toLocaleString('es-ES')}
+                  </td>
+                ))}
+                <td className="px-4 py-0 border border-slate-100 text-right tabular-nums bg-[#A67B5B]/5 font-black text-[#5C4033]">
+                  {productTotal.toLocaleString('es-ES')}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+        <tfoot className="bg-[#8B6E58] text-white font-black">
+          <tr className="h-10">
+            <td className="px-4 py-0 uppercase">TOTALES POR FORMATO</td>
+            {PRESENTATIONS.map(pres => (
+              <td key={pres} className="px-2 py-0 text-right tabular-nums">
+                {PRODUCT_LIST.reduce((acc, p) => acc + (finishedProductInventory[p]?.[pres] || 0), 0).toLocaleString('es-ES')}
+              </td>
+            ))}
+            <td className="px-4 py-0 text-right tabular-nums bg-[#A67B5B]">
+              {PRODUCT_LIST.reduce((acc, p) => acc + PRESENTATIONS.reduce((sum, pres) => sum + (finishedProductInventory[p]?.[pres] || 0), 0), 0).toLocaleString('es-ES')}
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  );
+
+  const renderMaterialsTable = (inventorySource: 'logistics' | 'plant' | 'available') => (
+    <div className="rounded border border-slate-200 overflow-hidden">
+      <table className="w-full border-collapse text-[9pt]">
+        <thead>
+          <tr className="bg-[#A67B5B] text-white font-black uppercase h-10">
+            <th className="px-4 py-0 border border-[#A67B5B] text-left">CÓDIGO SAP</th>
+            <th className="px-4 py-0 border border-[#A67B5B] text-left">MATERIAL / INSUMO</th>
+            <th className="px-2 py-0 border border-[#A67B5B] text-center w-20">UNIDAD</th>
+            {inventorySource === 'available' ? (
+              <>
+                <th className="px-3 py-0 border border-[#A67B5B] text-right w-28">LOGÍSTICA</th>
+                <th className="px-3 py-0 border border-[#A67B5B] text-right w-28">PLANTA</th>
+                <th className="px-4 py-0 border border-[#A67B5B] text-right bg-[#8B6E58] w-32">DISPONIBLE</th>
+              </>
+            ) : (
+              <th className="px-4 py-0 border border-[#A67B5B] text-right w-40">STOCK ACTUAL</th>
+            )}
+          </tr>
+        </thead>
+        <tbody>
+          {ALL_MATERIALS_LIST.map((mat, idx) => {
+            const stockLogistics = logisticsInventory[mat.code] || 0;
+            const stockPlant = plantInventory[mat.code] || 0;
+            const total = stockLogistics + stockPlant;
+            const singleStock = inventorySource === 'logistics' ? stockLogistics : stockPlant;
+
+            if (inventorySource === 'available' && total === 0) return null;
+            if (inventorySource !== 'available' && singleStock === 0) return null;
+
+            return (
+              <tr key={mat.code} className={`h-10 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
+                <td className="px-4 py-0 border border-slate-100 font-mono text-[8pt] text-[#A67B5B]">{mat.code}</td>
+                <td className="px-4 py-0 border border-slate-100 uppercase truncate max-w-[250px]">{mat.description}</td>
+                <td className="px-2 py-0 border border-slate-100 text-center text-slate-400 text-[8pt]">{mat.unit || 'KG'}</td>
+                {inventorySource === 'available' ? (
+                  <>
+                    <td className="px-3 py-0 border border-slate-100 text-right tabular-nums text-blue-600">{stockLogistics.toLocaleString('es-ES', { minimumFractionDigits: 2 })}</td>
+                    <td className="px-3 py-0 border border-slate-100 text-right tabular-nums text-amber-600">{stockPlant.toLocaleString('es-ES', { minimumFractionDigits: 2 })}</td>
+                    <td className="px-4 py-0 border border-slate-100 text-right tabular-nums bg-[#A67B5B]/5 font-black text-[#5C4033] text-[11pt]">
+                      {total.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                    </td>
+                  </>
+                ) : (
+                  <td className="px-4 py-0 border border-slate-100 text-right tabular-nums font-black text-slate-900 text-[11pt]">
+                    {singleStock.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                  </td>
+                )}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+
+  return (
+    <div className="bg-white p-8 max-w-[210mm] mx-auto print:p-0 print:max-w-none">
+      {renderHeader()}
+
+      {type === 'product-finished' && (
+        <div className="space-y-6">
+          <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight border-l-4 border-[#A67B5B] pl-2 py-1 bg-slate-50">I. Existencias de Producto Terminado</h2>
+          {renderProductFinishedTable()}
+        </div>
+      )}
+
+      {type === 'logistics' && (
+        <div className="space-y-6">
+          <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight border-l-4 border-[#A67B5B] pl-2 py-1 bg-slate-50">I. Inventario Centralizado (Logística)</h2>
+          {renderMaterialsTable('logistics')}
+        </div>
+      )}
+
+      {type === 'plant' && (
+        <div className="space-y-6">
+          <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight border-l-4 border-[#A67B5B] pl-2 py-1 bg-slate-50">I. Inventario de Piso (Planta)</h2>
+          {renderMaterialsTable('plant')}
+        </div>
+      )}
+
+      {type === 'available' && (
+        <div className="space-y-10">
+          <div>
+            <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight border-l-4 border-[#A67B5B] pl-2 py-1 bg-slate-50 mb-4">I. Consolidado de Producto Terminado</h2>
+            {renderProductFinishedTable()}
+          </div>
+          <div>
+            <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight border-l-4 border-[#A67B5B] pl-2 py-1 bg-slate-50 mb-4">II. Consolidado de Materiales e Insumos (Logística + Planta)</h2>
+            {renderMaterialsTable('available')}
+          </div>
+        </div>
+      )}
+
+      <div className="mt-12 pt-4 border-t border-slate-200 flex justify-between items-center text-[7px] text-slate-400 font-black uppercase tracking-widest">
+        <span>DATA PRO - SISTEMA DE GESTIÓN DE ALMACENES - MULTINACIONAL DE SABORES</span>
+        <span>Página 1 de 1</span>
+      </div>
+    </div>
+  );
+}

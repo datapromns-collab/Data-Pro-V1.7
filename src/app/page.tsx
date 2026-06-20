@@ -49,6 +49,7 @@ import { RawMaterialReport } from '@/components/planner/RawMaterialReport';
 import { DailyRawMaterialReport } from '@/components/planner/DailyRawMaterialReport';
 import { PurchasingModule } from '@/components/planner/PurchasingModule';
 import { PurchasingRequirementReport } from '@/components/planner/PurchasingRequirementReport';
+import { InventoryReport } from '@/components/planner/InventoryReport';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
@@ -82,6 +83,9 @@ export default function PlannerPage() {
     initialUBBTanksDaily,
     finalUBBTanksDaily,
     salesProjection,
+    finishedProductInventory,
+    logisticsInventory,
+    plantInventory,
     setWeekStartDate, 
     addTask, 
     updateTask, 
@@ -128,7 +132,7 @@ export default function PlannerPage() {
   const [activeModule, setActiveModule] = useState<'planning' | 'management' | 'recipes' | 'raw-materials' | 'purchasing'>('planning');
   const [activeTab, setActiveTab] = useState("gantt");
   
-  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance' | 'raw-material' | 'daily-raw-material' | 'purchasing-requirements'>('plan');
+  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance' | 'raw-material' | 'daily-raw-material' | 'purchasing-requirements' | 'inv-product-finished' | 'inv-logistics' | 'inv-plant' | 'inv-available'>('plan');
   const [emitDate, setEmitDate] = useState('');
   const [printWorkingDate, setPrintWorkingDate] = useState<Date>(new Date());
   
@@ -312,6 +316,24 @@ export default function PlannerPage() {
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: landscape; margin: 0.5cm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
+
+  const handlePrintInventory = (type: 'product-finished' | 'logistics' | 'plant' | 'available') => {
+    const modeMap = {
+      'product-finished': 'inv-product-finished',
+      'logistics': 'inv-logistics',
+      'plant': 'inv-plant',
+      'available': 'inv-available'
+    } as const;
+    setPrintMode(modeMap[type]);
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 10mm; }';
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
@@ -781,7 +803,10 @@ export default function PlannerPage() {
                   </>
                 )}
                 {activeModule === 'purchasing' && (
-                  <PurchasingModule onPrintRequirements={handlePrintPurchasingRequirements} />
+                  <PurchasingModule 
+                    onPrintRequirements={handlePrintPurchasingRequirements} 
+                    onPrintInventory={handlePrintInventory}
+                  />
                 )}
               </div>
             </div>
@@ -854,6 +879,18 @@ export default function PlannerPage() {
                 initialUBBTanksDaily={initialUBBTanksDaily}
                 finalUBBTanksDaily={finalUBBTanksDaily}
                 recipes={customRecipes}
+              />
+            </div>
+          )}
+          {(printMode === 'inv-product-finished' || printMode === 'inv-logistics' || printMode === 'inv-plant' || printMode === 'inv-available') && (
+            <div className="p-0 h-full">
+              <InventoryReport 
+                type={
+                  printMode === 'inv-product-finished' ? 'product-finished' :
+                  printMode === 'inv-logistics' ? 'logistics' :
+                  printMode === 'inv-plant' ? 'plant' : 'available'
+                }
+                data={{ finishedProductInventory, logisticsInventory, plantInventory }}
               />
             </div>
           )}

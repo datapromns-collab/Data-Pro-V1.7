@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useMemo } from 'react';
@@ -30,7 +31,8 @@ import {
   LayoutDashboard,
   CheckCircle2,
   TrendingUp,
-  History
+  History,
+  FileDown
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -95,9 +97,10 @@ const ALL_MATERIALS_LIST = [
 
 interface PurchasingModuleProps {
   onPrintRequirements?: () => void;
+  onPrintInventory?: (type: 'product-finished' | 'logistics' | 'plant' | 'available') => void;
 }
 
-export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps) {
+export function PurchasingModule({ onPrintRequirements, onPrintInventory }: PurchasingModuleProps) {
   const { 
     salesProjection, 
     updateSalesProjection,
@@ -385,6 +388,16 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
 
     return (
       <div className="space-y-12 animate-in fade-in-50 duration-500">
+        <div className="flex justify-end mb-4">
+          <Button 
+            onClick={() => onPrintInventory?.(type)}
+            variant="outline" 
+            className="gap-2 font-black text-[10px] uppercase tracking-widest text-[#A67B5B] border-[#A67B5B]/20 hover:bg-[#A67B5B]/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
+          >
+            <FileDown className="h-4 w-4" /> Exportar Reporte {isLogistics ? 'Logística' : 'Planta'}
+          </Button>
+        </div>
+
         {/* SECCIÓN I: MATERIA PRIMA */}
         <div className="space-y-6">
           <div className={cn("flex items-center gap-3 px-4 py-3 rounded-2xl border border-slate-100 shadow-sm", bgColor)}>
@@ -426,14 +439,6 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
             {renderMaterialsInventoryTable("Adhesivos", <StickyNote className="h-4 w-4" />, ADHESIVE_DATA, type, isLogistics ? "bg-indigo-600" : "bg-teal-600")}
           </div>
         </div>
-      </div>
-    );
-  };
-
-  const renderFullInventoryTypeWithMDS = () => {
-    return (
-      <div className="space-y-12 animate-in fade-in-50 duration-500">
-        {/* Aquí va el contenido del Inventario Disponible MDS ya existente */}
       </div>
     );
   };
@@ -631,6 +636,15 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                 </div>
 
                 <TabsContent value="producto-terminado" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+                   <div className="flex justify-end no-print">
+                    <Button 
+                      onClick={() => onPrintInventory?.('product-finished')}
+                      variant="outline" 
+                      className="gap-2 font-black text-[10px] uppercase tracking-widest text-emerald-600 border-emerald-600/20 hover:bg-emerald-50 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
+                    >
+                      <FileDown className="h-4 w-4" /> Exportar Inventario Producto
+                    </Button>
+                  </div>
                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
                      {renderInventoryTable("Inventario 2 Lts", REFRESCOS, "2Lts", "bg-emerald-600", "bg-emerald-500")}
                      {renderInventoryTable("Inventario 1.5 Lts", JUGOS, "1.5Lts", "bg-teal-600", "bg-teal-500")}
@@ -648,6 +662,16 @@ export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps)
                 </TabsContent>
 
                 <TabsContent value="disponible" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+                  <div className="flex justify-end no-print">
+                    <Button 
+                      onClick={() => onPrintInventory?.('available')}
+                      variant="outline" 
+                      className="gap-2 font-black text-[10px] uppercase tracking-widest text-[#A67B5B] border-[#A67B5B]/20 hover:bg-[#A67B5B]/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
+                    >
+                      <FileDown className="h-4 w-4" /> Exportar Reporte Consolidado
+                    </Button>
+                  </div>
+
                   <div className="grid grid-cols-1 gap-12">
                     {/* SECCIÓN 1: PRODUCTO TERMINADO DISPONIBLE */}
                     <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
