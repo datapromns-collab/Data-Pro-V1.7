@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -26,9 +25,9 @@ const STORAGE_KEY = 'planner_auth_session';
  * 3. demon (ADMIN - Yonny Hernández): 
  *    - Acceso: Total absoluto (incluye el módulo Maestro de Recetas).
  * 
- * 4. AG.1 (INVENTORY - Maria Reinoso): 
- *    - Acceso: Jarabes, Materia Prima, Planta, Logística, Ventas.
- *    - Restricción: No ve Planificación ni Compras. Redirección automática a Materia Prima.
+ * 4. maria.mds (INVENTORY - Maria Reinoso): 
+ *    - Acceso: Jarabes y Materia Prima.
+ *    - Restricción: No ve Planificación, Compras, Planta, Logística ni Ventas. Redirección automática a Materia Prima.
  * 
  * 5. anto.mds (PURCHASING - Antonella Dos Santos): 
  *    - Acceso: Compras, Planta, Logística, Ventas.
@@ -38,7 +37,7 @@ const VALID_USERS = [
   { id: 'user', password: 'user', name: 'Multinacional de Sabores', role: 'STANDARD' as UserRole },
   { id: 'jaime.r', password: 'ad.123.', name: 'Gerencia de Planta', role: 'ADMIN' as UserRole },
   { id: 'demon', password: '2005', name: 'Yonny Hernández', role: 'ADMIN' as UserRole },
-  { id: 'AG.1', password: '12345', name: 'Maria Reinoso', role: 'INVENTORY' as UserRole },
+  { id: 'maria.mds', password: 'ad.147.', name: 'Maria Reinoso', role: 'INVENTORY' as UserRole },
   { id: 'anto.mds', password: '123.', name: 'Antonella Dos Santos', role: 'PURCHASING' as UserRole },
 ];
 
@@ -79,9 +78,10 @@ export function useAuthStore() {
     isLoaded,
     isAdmin: user?.role === 'ADMIN',
     isDemon: user?.id === 'demon',
+    isMaria: user?.id === 'maria.mds',
     isInventory: user?.role === 'INVENTORY',
     isPurchasing: user?.role === 'PURCHASING',
-    isJarabes: user?.id === 'AG.1' || user?.role === 'ADMIN',
+    isJarabes: user?.id === 'maria.mds' || user?.role === 'ADMIN',
     login,
     logout
   };
