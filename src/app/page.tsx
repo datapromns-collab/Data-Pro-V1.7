@@ -411,7 +411,7 @@ export default function PlannerPage() {
                       onClick={() => { setActiveModule('management'); setActiveTab('admin-report'); }}
                       className={cn(
                         "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
-                        activeModule === 'management' ? "shadow-md shadow-primary/20" : "text-slate-500"
+                        activeModule === 'management' ? "shadow-md shadow-[#A67B5B]/30 bg-[#A67B5B] hover:bg-[#966B4B] text-white" : "text-slate-500"
                       )}
                     >
                       <div className={cn("p-1.5 rounded-lg", activeModule === 'management' ? "bg-white/20" : "bg-slate-100")}>
@@ -568,7 +568,7 @@ export default function PlannerPage() {
             <div className="flex items-center gap-4">
               <div className={cn(
                 "px-3 py-1 rounded-lg font-black text-[10px] uppercase tracking-[0.2em]",
-                activeModule === 'management' ? "bg-primary/10 text-primary" : 
+                activeModule === 'management' ? "bg-[#A67B5B]/10 text-[#A67B5B]" : 
                 activeModule === 'recipes' ? "bg-emerald-100 text-emerald-700" : 
                 activeModule === 'raw-materials' ? "bg-amber-100 text-amber-700" : 
                 activeModule === 'purchasing' ? "bg-blue-100 text-blue-700" : "bg-emerald-50 text-emerald-600"
