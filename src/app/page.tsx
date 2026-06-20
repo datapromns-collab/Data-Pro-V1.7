@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState, useMemo, useEffect } from "react";
@@ -52,6 +51,7 @@ import { RawMaterialReport } from '@/components/planner/RawMaterialReport';
 import { DailyRawMaterialReport } from '@/components/planner/DailyRawMaterialReport';
 import { PurchasingModule } from '@/components/planner/PurchasingModule';
 import { PurchasingRequirementReport } from '@/components/planner/PurchasingRequirementReport';
+import { InventoryReport } from '@/components/planner/InventoryReport';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
@@ -134,7 +134,7 @@ export default function PlannerPage() {
   const [activeModule, setActiveModule] = useState<'planning' | 'management' | 'recipes' | 'raw-materials' | 'planta' | 'logistica' | 'ventas' | 'purchasing'>('planning');
   const [activeTab, setActiveTab] = useState("gantt");
   
-  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance' | 'raw-material' | 'daily-raw-material' | 'purchasing-requirements'>('plan');
+  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance' | 'raw-material' | 'daily-raw-material' | 'purchasing-requirements' | 'inventory-finished' | 'inventory-logistics' | 'inventory-plant' | 'inventory-available'>('plan');
   const [emitDate, setEmitDate] = useState('');
   const [printWorkingDate, setPrintWorkingDate] = useState<Date>(new Date());
   
@@ -266,6 +266,24 @@ export default function PlannerPage() {
 
   const handlePrintPurchasingRequirements = () => {
     setPrintMode('purchasing-requirements');
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
+
+  const handlePrintInventory = (type: 'product-finished' | 'logistics' | 'plant' | 'available') => {
+    const modeMap = {
+      'product-finished': 'inventory-finished',
+      'logistics': 'inventory-logistics',
+      'plant': 'inventory-plant',
+      'available': 'inventory-available'
+    } as const;
+    setPrintMode(modeMap[type]);
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: portrait; margin: 5mm; }';
@@ -855,6 +873,7 @@ export default function PlannerPage() {
                 {activeModule === 'purchasing' && (
                   <PurchasingModule 
                     onPrintRequirements={handlePrintPurchasingRequirements} 
+                    onPrintInventory={handlePrintInventory}
                   />
                 )}
               </div>
@@ -894,6 +913,18 @@ export default function PlannerPage() {
                 salesProjection={salesProjection} 
                 customRecipes={customRecipes} 
                 customPackagingRecipes={customPackagingRecipes} 
+              />
+            </div>
+          )}
+          {(printMode === 'inventory-finished' || printMode === 'inventory-logistics' || printMode === 'inventory-plant' || printMode === 'inventory-available') && (
+            <div className="p-0">
+              <InventoryReport 
+                type={printMode === 'inventory-finished' ? 'product-finished' : printMode === 'inventory-logistics' ? 'logistics' : printMode === 'inventory-plant' ? 'plant' : 'available'}
+                data={{
+                  finishedProductInventory,
+                  logisticsInventory,
+                  plantInventory
+                }}
               />
             </div>
           )}

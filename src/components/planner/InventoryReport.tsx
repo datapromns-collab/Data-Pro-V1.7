@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useMemo } from 'react';
@@ -45,6 +44,11 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
   const { finishedProductInventory, logisticsInventory, plantInventory } = data;
 
+  const isYellow = type === 'product-finished';
+  const primaryColor = isYellow ? '#F59E0B' : '#A67B5B';
+  const secondaryColor = isYellow ? '#FEF3C7' : '#FDF8F3';
+  const titleColor = isYellow ? '#92400E' : '#5C4033';
+
   const titleMap = {
     'product-finished': 'Reporte de Producto Terminado',
     'logistics': 'Reporte de Inventario Logística',
@@ -53,16 +57,16 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
   };
 
   const renderHeader = () => (
-    <div className="mb-6 border-b-2 border-[#A67B5B] pb-4 flex justify-between items-center">
+    <div className={`mb-6 border-b-2 pb-4 flex justify-between items-center`} style={{ borderColor: primaryColor }}>
       <div className="flex-1">
         <h1 className="text-xl font-headline font-black text-slate-900 leading-tight uppercase">{titleMap[type]}</h1>
-        <p className="text-[#A67B5B] font-black text-[10px] uppercase tracking-widest mt-1">Sistema de Gestión de Compras e Inventarios</p>
+        <p className="font-black text-[10px] uppercase tracking-widest mt-1" style={{ color: primaryColor }}>Sistema de Gestión de Compras e Inventarios</p>
       </div>
       <div className="flex-1 flex justify-center">
         {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={110} height={40} className="object-contain" />}
       </div>
       <div className="flex-1 text-right">
-        <p className="text-[8px] font-black text-[#A67B5B] uppercase tracking-widest mb-0.5">Confidencial - Planta</p>
+        <p className="text-[8px] font-black uppercase tracking-widest mb-0.5" style={{ color: primaryColor }}>Confidencial - Planta</p>
         <p className="text-[10px] text-slate-500 font-bold uppercase">{format(new Date(), "EEEE dd 'de' MMMM yyyy", { locale: es })}</p>
         <p className="text-[8px] text-slate-400 font-medium italic">Emitido: {format(new Date(), "HH:mm:ss")}</p>
       </div>
@@ -73,12 +77,12 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
     <div className="rounded border border-slate-200 overflow-hidden">
       <table className="w-full border-collapse text-[9pt]">
         <thead>
-          <tr className="bg-[#A67B5B] text-white font-black uppercase text-center h-10">
-            <th className="px-4 py-0 border border-[#A67B5B] text-left">SABOR / PRODUCTO</th>
+          <tr className="text-white font-black uppercase text-center h-10" style={{ backgroundColor: primaryColor }}>
+            <th className="px-4 py-0 border border-white/20 text-left">SABOR / PRODUCTO</th>
             {PRESENTATIONS.map(pres => (
-              <th key={pres} className="px-2 py-0 border border-[#A67B5B] w-24">{pres}</th>
+              <th key={pres} className="px-2 py-0 border border-white/20 w-24">{pres}</th>
             ))}
-            <th className="px-4 py-0 border border-[#A67B5B] bg-[#8B6E58] w-28">TOTAL</th>
+            <th className="px-4 py-0 border border-white/20 w-28" style={{ backgroundColor: isYellow ? '#D97706' : '#8B6E58' }}>TOTAL</th>
           </tr>
         </thead>
         <tbody>
@@ -94,14 +98,14 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
                     {(finishedProductInventory[product]?.[pres] || 0).toLocaleString('es-ES')}
                   </td>
                 ))}
-                <td className="px-4 py-0 border border-slate-100 text-right tabular-nums bg-[#A67B5B]/5 font-black text-[#5C4033]">
+                <td className="px-4 py-0 border border-slate-100 text-right tabular-nums font-black" style={{ backgroundColor: `${primaryColor}10`, color: titleColor }}>
                   {productTotal.toLocaleString('es-ES')}
                 </td>
               </tr>
             );
           })}
         </tbody>
-        <tfoot className="bg-[#8B6E58] text-white font-black">
+        <tfoot className="text-white font-black" style={{ backgroundColor: isYellow ? '#D97706' : '#8B6E58' }}>
           <tr className="h-10">
             <td className="px-4 py-0 uppercase">TOTALES POR FORMATO</td>
             {PRESENTATIONS.map(pres => (
@@ -109,7 +113,7 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
                 {PRODUCT_LIST.reduce((acc, p) => acc + (finishedProductInventory[p]?.[pres] || 0), 0).toLocaleString('es-ES')}
               </td>
             ))}
-            <td className="px-4 py-0 text-right tabular-nums bg-[#A67B5B]">
+            <td className="px-4 py-0 text-right tabular-nums" style={{ backgroundColor: primaryColor }}>
               {PRODUCT_LIST.reduce((acc, p) => acc + PRESENTATIONS.reduce((sum, pres) => sum + (finishedProductInventory[p]?.[pres] || 0), 0), 0).toLocaleString('es-ES')}
             </td>
           </tr>
@@ -122,18 +126,18 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
     <div className="rounded border border-slate-200 overflow-hidden">
       <table className="w-full border-collapse text-[9pt]">
         <thead>
-          <tr className="bg-[#A67B5B] text-white font-black uppercase h-10">
-            <th className="px-4 py-0 border border-[#A67B5B] text-left">CÓDIGO SAP</th>
-            <th className="px-4 py-0 border border-[#A67B5B] text-left">MATERIAL / INSUMO</th>
-            <th className="px-2 py-0 border border-[#A67B5B] text-center w-20">UNIDAD</th>
+          <tr className="text-white font-black uppercase h-10" style={{ backgroundColor: primaryColor }}>
+            <th className="px-4 py-0 border border-white/20 text-left">CÓDIGO SAP</th>
+            <th className="px-4 py-0 border border-white/20 text-left">MATERIAL / INSUMO</th>
+            <th className="px-2 py-0 border border-white/20 text-center w-20">UNIDAD</th>
             {inventorySource === 'available' ? (
               <>
-                <th className="px-3 py-0 border border-[#A67B5B] text-right w-28">LOGÍSTICA</th>
-                <th className="px-3 py-0 border border-[#A67B5B] text-right w-28">PLANTA</th>
-                <th className="px-4 py-0 border border-[#A67B5B] text-right bg-[#8B6E58] w-32">DISPONIBLE</th>
+                <th className="px-3 py-0 border border-white/20 text-right w-28">LOGÍSTICA</th>
+                <th className="px-3 py-0 border border-white/20 text-right w-28">PLANTA</th>
+                <th className="px-4 py-0 border border-white/20 text-right w-32" style={{ backgroundColor: '#8B6E58' }}>DISPONIBLE</th>
               </>
             ) : (
-              <th className="px-4 py-0 border border-[#A67B5B] text-right w-40">STOCK ACTUAL</th>
+              <th className="px-4 py-0 border border-white/20 text-right w-40">STOCK ACTUAL</th>
             )}
           </tr>
         </thead>
@@ -149,14 +153,14 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
 
             return (
               <tr key={mat.code} className={`h-10 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
-                <td className="px-4 py-0 border border-slate-100 font-mono text-[8pt] text-[#A67B5B]">{mat.code}</td>
+                <td className="px-4 py-0 border border-slate-100 font-mono text-[8pt]" style={{ color: primaryColor }}>{mat.code}</td>
                 <td className="px-4 py-0 border border-slate-100 uppercase truncate max-w-[250px]">{mat.description}</td>
                 <td className="px-2 py-0 border border-slate-100 text-center text-slate-400 text-[8pt]">{mat.unit || 'KG'}</td>
                 {inventorySource === 'available' ? (
                   <>
                     <td className="px-3 py-0 border border-slate-100 text-right tabular-nums text-blue-600">{stockLogistics.toLocaleString('es-ES', { minimumFractionDigits: 2 })}</td>
                     <td className="px-3 py-0 border border-slate-100 text-right tabular-nums text-amber-600">{stockPlant.toLocaleString('es-ES', { minimumFractionDigits: 2 })}</td>
-                    <td className="px-4 py-0 border border-slate-100 text-right tabular-nums bg-[#A67B5B]/5 font-black text-[#5C4033] text-[11pt]">
+                    <td className="px-4 py-0 border border-slate-100 text-right tabular-nums font-black text-[11pt]" style={{ backgroundColor: `${primaryColor}05`, color: titleColor }}>
                       {total.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
                     </td>
                   </>
@@ -179,21 +183,21 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
 
       {type === 'product-finished' && (
         <div className="space-y-6">
-          <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight border-l-4 border-[#A67B5B] pl-2 py-1 bg-slate-50">I. Existencias de Producto Terminado</h2>
+          <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight border-l-4 pl-2 py-1 bg-slate-50" style={{ borderLeftColor: primaryColor }}>I. Existencias de Producto Terminado</h2>
           {renderProductFinishedTable()}
         </div>
       )}
 
       {type === 'logistics' && (
         <div className="space-y-6">
-          <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight border-l-4 border-[#A67B5B] pl-2 py-1 bg-slate-50">I. Inventario Centralizado (Logística)</h2>
+          <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight border-l-4 pl-2 py-1 bg-slate-50" style={{ borderLeftColor: primaryColor }}>I. Inventario Centralizado (Logística)</h2>
           {renderMaterialsTable('logistics')}
         </div>
       )}
 
       {type === 'plant' && (
         <div className="space-y-6">
-          <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight border-l-4 border-[#A67B5B] pl-2 py-1 bg-slate-50">I. Inventario de Piso (Planta)</h2>
+          <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight border-l-4 pl-2 py-1 bg-slate-50" style={{ borderLeftColor: primaryColor }}>I. Inventario de Piso (Planta)</h2>
           {renderMaterialsTable('plant')}
         </div>
       )}
@@ -201,11 +205,11 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
       {type === 'available' && (
         <div className="space-y-10">
           <div>
-            <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight border-l-4 border-[#A67B5B] pl-2 py-1 bg-slate-50 mb-4">I. Consolidado de Producto Terminado</h2>
+            <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight border-l-4 pl-2 py-1 bg-slate-50 mb-4" style={{ borderLeftColor: '#F59E0B' }}>I. Consolidado de Producto Terminado</h2>
             {renderProductFinishedTable()}
           </div>
           <div>
-            <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight border-l-4 border-[#A67B5B] pl-2 py-1 bg-slate-50 mb-4">II. Consolidado de Materiales e Insumos (Logística + Planta)</h2>
+            <h2 className="text-sm font-black text-slate-800 uppercase tracking-tight border-l-4 pl-2 py-1 bg-slate-50 mb-4" style={{ borderLeftColor: '#A67B5B' }}>II. Consolidado de Materiales e Insumos (Logística + Planta)</h2>
             {renderMaterialsTable('available')}
           </div>
         </div>

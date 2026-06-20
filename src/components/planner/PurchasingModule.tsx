@@ -25,7 +25,8 @@ import {
   PackageCheck,
   Truck,
   Factory,
-  TrendingUp
+  TrendingUp,
+  FileDown
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
@@ -60,6 +61,11 @@ import {
   ADHESIVE_FACTORS
 } from '@/lib/planner-utils';
 
+interface PurchasingModuleProps {
+  onPrintRequirements: () => void;
+  onPrintInventory: (type: 'product-finished' | 'logistics' | 'plant' | 'available') => void;
+}
+
 const REFRESCOS = [
   "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
   "GLUP MANZANA VERDE", "GLUP PONCHE", "GLUP CHICLE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA"
@@ -72,7 +78,7 @@ const JUGOS = [
 
 const PRESENTATIONS = ["2Lts", "1.5Lts", "1Lt", "0.4Lts"];
 
-export function PurchasingModule() {
+export function PurchasingModule({ onPrintRequirements, onPrintInventory }: PurchasingModuleProps) {
   const { 
     salesProjection, 
     updateSalesProjection,
@@ -377,6 +383,17 @@ export function PurchasingModule() {
 
     return (
       <div className="space-y-12 animate-in fade-in-50 duration-500">
+        <div className="flex justify-end no-print">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={() => onPrintInventory(type)}
+            className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+          >
+            <FileDown className="h-4 w-4" />
+            Exportar Reporte {isLogistics ? 'Logística' : 'Planta'}
+          </Button>
+        </div>
         {renderMaterialsInventoryMatrix(
           `I. Materia Prima - ${isLogistics ? 'Logística' : 'Planta'}`,
           <Droplet className="h-6 w-6" />,
@@ -490,15 +507,26 @@ export function PurchasingModule() {
 
             <TabsContent value="ventas" className="m-0 animate-in fade-in-50 duration-500">
               <Tabs defaultValue="planificacion" className="w-full">
-                <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-100 w-fit no-print">
-                  <TabsList className="bg-transparent h-auto p-0">
-                    <TabsTrigger value="planificacion" className={tabsTriggerClass}>
-                      <Calendar className="h-3.5 w-3.5" /> Planificación
-                    </TabsTrigger>
-                    <TabsTrigger value="requerimientos" className={tabsTriggerClass}>
-                      <FileText className="h-3.5 w-3.5" /> Requerimientos
-                    </TabsTrigger>
-                  </TabsList>
+                <div className="flex items-center justify-between gap-4 mb-6">
+                  <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-100 w-fit no-print">
+                    <TabsList className="bg-transparent h-auto p-0">
+                      <TabsTrigger value="planificacion" className={tabsTriggerClass}>
+                        <Calendar className="h-3.5 w-3.5" /> Planificación
+                      </TabsTrigger>
+                      <TabsTrigger value="requerimientos" className={tabsTriggerClass}>
+                        <FileText className="h-3.5 w-3.5" /> Requerimientos
+                      </TabsTrigger>
+                    </TabsList>
+                  </div>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={onPrintRequirements}
+                    className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-11 px-6 rounded-xl text-xs active:scale-95 transition-none no-print"
+                  >
+                    <FileDown className="h-4 w-4" />
+                    Exportar Requerimientos
+                  </Button>
                 </div>
 
                 <TabsContent value="planificacion" className="m-0 animate-in fade-in-50 duration-500">
@@ -569,6 +597,17 @@ export function PurchasingModule() {
                 </div>
 
                 <TabsContent value="producto-terminado" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+                   <div className="flex justify-end no-print">
+                      <Button 
+                        variant="outline" 
+                        size="sm" 
+                        onClick={() => onPrintInventory('product-finished')}
+                        className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                      >
+                        <FileDown className="h-4 w-4" />
+                        Exportar Reporte Producto Terminado
+                      </Button>
+                   </div>
                    <div className="space-y-12">
                      {renderProductInventoryTable("Inventario de Refrescos (MDS)", REFRESCOS, <PackageCheck className="h-6 w-6" />)}
                      {renderProductInventoryTable("Inventario de Jugos y Té (MDS)", JUGOS, <PackageCheck className="h-6 w-6" />)}
@@ -584,6 +623,17 @@ export function PurchasingModule() {
                 </TabsContent>
 
                 <TabsContent value="disponible" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+                  <div className="flex justify-end no-print">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => onPrintInventory('available')}
+                      className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                    >
+                      <FileDown className="h-4 w-4" />
+                      Exportar Reporte Disponibilidad Global
+                    </Button>
+                  </div>
                   <div className="grid grid-cols-1 gap-12">
                     <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
                       <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
