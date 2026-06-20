@@ -81,10 +81,9 @@ const PRESENTATIONS = ["2Lts", "1.5Lts", "1Lt", "0.4Lts"];
 
 interface PurchasingModuleProps {
   onPrintRequirements?: () => void;
-  onPrintInventory?: (type: 'product-finished' | 'logistics' | 'plant' | 'available') => void;
 }
 
-export function PurchasingModule({ onPrintRequirements, onPrintInventory }: PurchasingModuleProps) {
+export function PurchasingModule({ onPrintRequirements }: PurchasingModuleProps) {
   const { 
     salesProjection, 
     updateSalesProjection,
@@ -389,16 +388,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
 
     return (
       <div className="space-y-12 animate-in fade-in-50 duration-500">
-        <div className="flex justify-end mb-4">
-          <Button 
-            onClick={() => onPrintInventory?.(type)}
-            variant="outline" 
-            className="gap-2 font-black text-[10px] uppercase tracking-widest text-[#A67B5B] border-[#A67B5B]/20 hover:bg-[#A67B5B]/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
-          >
-            <FileDown className="h-4 w-4" /> Exportar Reporte {isLogistics ? 'Logística' : 'Planta'}
-          </Button>
-        </div>
-
         {renderMaterialsInventoryMatrix(
           `I. Materia Prima - ${isLogistics ? 'Logística' : 'Planta'}`,
           <Droplet className="h-6 w-6" />,
@@ -602,15 +591,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                 </div>
 
                 <TabsContent value="producto-terminado" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
-                   <div className="flex justify-end no-print">
-                    <Button 
-                      onClick={() => onPrintInventory?.('product-finished')}
-                      variant="outline" 
-                      className="gap-2 font-black text-[10px] uppercase tracking-widest text-emerald-600 border-emerald-600/20 hover:bg-emerald-50 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
-                    >
-                      <FileDown className="h-4 w-4" /> Exportar Inventario Producto
-                    </Button>
-                  </div>
                    <div className="space-y-12">
                      {renderProductInventoryTable("Inventario de Refrescos (MDS)", REFRESCOS, <PackageCheck className="h-6 w-6" />)}
                      {renderProductInventoryTable("Inventario de Jugos y Té (MDS)", JUGOS, <PackageCheck className="h-6 w-6" />)}
@@ -626,15 +606,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                 </TabsContent>
 
                 <TabsContent value="disponible" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
-                  <div className="flex justify-end no-print">
-                    <Button 
-                      onClick={() => onPrintInventory?.('available')}
-                      variant="outline" 
-                      className="gap-2 font-black text-[10px] uppercase tracking-widest text-[#A67B5B] border-[#A67B5B]/20 hover:bg-[#A67B5B]/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
-                    >
-                      <FileDown className="h-4 w-4" /> Exportar Reporte Consolidado
-                    </Button>
-                  </div>
                   <div className="grid grid-cols-1 gap-12">
                     <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
                       <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
@@ -788,4 +759,3 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
     </div>
   );
 }
-
