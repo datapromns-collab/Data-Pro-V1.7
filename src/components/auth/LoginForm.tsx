@@ -42,9 +42,9 @@ export function LoginForm({ onLogin }: LoginFormProps) {
           <div className="space-y-2">
             <Label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">ID de Usuario</Label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-sky-500 z-10" />
               <Input 
-                className="pl-10 h-12 bg-slate-50 border-slate-100 rounded-xl focus:bg-white transition-all"
+                className="pl-10 h-12 bg-slate-50 border-sky-200 rounded-xl focus:bg-white focus:border-sky-500 focus:ring-sky-500/20 transition-all"
                 placeholder="Ingresa tu ID"
                 value={id}
                 onChange={(e) => setId(e.target.value)}
@@ -56,10 +56,10 @@ export function LoginForm({ onLogin }: LoginFormProps) {
           <div className="space-y-2">
             <Label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-1">Contraseña</Label>
             <div className="relative">
-              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+              <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-sky-500 z-10" />
               <Input 
                 type="password"
-                className="pl-10 h-12 bg-slate-50 border-slate-100 rounded-xl focus:bg-white transition-all"
+                className="pl-10 h-12 bg-slate-50 border-sky-200 rounded-xl focus:bg-white focus:border-sky-500 focus:ring-sky-500/20 transition-all"
                 placeholder="••••••••"
                 value={pass}
                 onChange={(e) => setPass(e.target.value)}
