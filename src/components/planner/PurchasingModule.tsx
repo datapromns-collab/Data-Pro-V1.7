@@ -21,6 +21,7 @@ import {
   Warehouse,
   ClipboardList,
   Layout,
+  LayoutDashboard,
   PackageCheck,
   Truck,
   Factory,
