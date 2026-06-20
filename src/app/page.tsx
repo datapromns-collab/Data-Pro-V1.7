@@ -25,7 +25,10 @@ import {
   Box,
   ShoppingCart,
   Copy,
-  Package
+  Package,
+  Factory,
+  Truck,
+  TrendingUp
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -129,7 +132,7 @@ export default function PlannerPage() {
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [selectedLine, setSelectedLine] = useState("1");
   
-  const [activeModule, setActiveModule] = useState<'planning' | 'management' | 'recipes' | 'raw-materials' | 'purchasing'>('planning');
+  const [activeModule, setActiveModule] = useState<'planning' | 'management' | 'recipes' | 'raw-materials' | 'planta' | 'logistica' | 'ventas' | 'purchasing'>('planning');
   const [activeTab, setActiveTab] = useState("gantt");
   
   const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance' | 'raw-material' | 'daily-raw-material' | 'purchasing-requirements' | 'inv-product-finished' | 'inv-logistics' | 'inv-plant' | 'inv-available'>('plan');
@@ -475,6 +478,48 @@ export default function PlannerPage() {
                     </Button>
                   )}
 
+                  <Button 
+                    variant={activeModule === 'planta' ? 'default' : 'ghost'} 
+                    onClick={() => { setActiveModule('planta'); setActiveTab('planta-view'); }}
+                    className={cn(
+                      "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
+                      activeModule === 'planta' ? "shadow-md shadow-slate-200 bg-slate-800 text-white" : "text-slate-500"
+                    )}
+                  >
+                    <div className={cn("p-1.5 rounded-lg", activeModule === 'planta' ? "bg-white/20" : "bg-slate-100")}>
+                      <Factory className="h-4 w-4" />
+                    </div>
+                    <span className="uppercase text-[10px] font-black tracking-tight text-left">Planta</span>
+                  </Button>
+
+                  <Button 
+                    variant={activeModule === 'logistica' ? 'default' : 'ghost'} 
+                    onClick={() => { setActiveModule('logistica'); setActiveTab('logistica-view'); }}
+                    className={cn(
+                      "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
+                      activeModule === 'logistica' ? "shadow-md shadow-orange-200 bg-orange-600 text-white" : "text-slate-500"
+                    )}
+                  >
+                    <div className={cn("p-1.5 rounded-lg", activeModule === 'logistica' ? "bg-white/20" : "bg-slate-100")}>
+                      <Truck className="h-4 w-4" />
+                    </div>
+                    <span className="uppercase text-[10px] font-black tracking-tight text-left">Logística</span>
+                  </Button>
+
+                  <Button 
+                    variant={activeModule === 'ventas' ? 'default' : 'ghost'} 
+                    onClick={() => { setActiveModule('ventas'); setActiveTab('ventas-view'); }}
+                    className={cn(
+                      "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
+                      activeModule === 'ventas' ? "shadow-md shadow-indigo-200 bg-indigo-600 text-white" : "text-slate-500"
+                    )}
+                  >
+                    <div className={cn("p-1.5 rounded-lg", activeModule === 'ventas' ? "bg-white/20" : "bg-slate-100")}>
+                      <TrendingUp className="h-4 w-4" />
+                    </div>
+                    <span className="uppercase text-[10px] font-black tracking-tight text-left">Ventas</span>
+                  </Button>
+
                   {(isAdmin || isPurchasing) && (
                     <Button 
                       variant={activeModule === 'purchasing' ? 'default' : 'ghost'} 
@@ -493,7 +538,7 @@ export default function PlannerPage() {
                 </div>
               </section>
 
-              {activeModule !== 'recipes' && activeModule !== 'purchasing' && activeModule !== 'raw-materials' && (
+              {activeModule !== 'recipes' && activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && (
                 <section className="pt-4 border-t border-slate-100">
                    <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Configuración Semana</p>
                    <div className="px-2 space-y-3">
@@ -516,7 +561,7 @@ export default function PlannerPage() {
                 </section>
               )}
 
-              {activeModule !== 'raw-materials' && activeModule !== 'recipes' && activeModule !== 'purchasing' && !isInventory && (
+              {activeModule !== 'raw-materials' && activeModule !== 'recipes' && activeModule !== 'purchasing' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && !isInventory && (
                 <section>
                   <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas de Producción</p>
                   <div className="px-2">
@@ -593,11 +638,17 @@ export default function PlannerPage() {
                 activeModule === 'management' ? "bg-[#A67B5B]/10 text-[#A67B5B]" : 
                 activeModule === 'recipes' ? "bg-emerald-100 text-emerald-700" : 
                 activeModule === 'raw-materials' ? "bg-amber-100 text-amber-700" : 
+                activeModule === 'planta' ? "bg-slate-100 text-slate-700" :
+                activeModule === 'logistica' ? "bg-orange-100 text-orange-700" :
+                activeModule === 'ventas' ? "bg-indigo-100 text-indigo-700" :
                 activeModule === 'purchasing' ? "bg-blue-100 text-blue-700" : "bg-emerald-50 text-emerald-600"
               )}>
                 {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' : 
                  activeModule === 'recipes' ? 'MÓDULO DE RECETAS' : 
                  activeModule === 'raw-materials' ? 'MÓDULO DE MATERIA PRIMA' : 
+                 activeModule === 'planta' ? 'MÓDULO DE PLANTA' :
+                 activeModule === 'logistica' ? 'MÓDULO DE LOGÍSTICA' :
+                 activeModule === 'ventas' ? 'MÓDULO DE VENTAS' :
                  activeModule === 'purchasing' ? 'MÓDULO DE COMPRAS' : 'MÓDULO DE PLANIFICACIÓN'}
               </div>
             </div>
@@ -633,7 +684,7 @@ export default function PlannerPage() {
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <div className="flex flex-col gap-6 h-full">
               
-              {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && (
+              {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && (
                 <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1 shadow-none self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print h-11 shrink-0">
                   {activeModule === 'planning' ? (
                     <>
@@ -801,6 +852,24 @@ export default function PlannerPage() {
                       />
                     )}
                   </>
+                )}
+                {activeModule === 'planta' && (
+                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                    <Factory className="h-12 w-12 mb-4 opacity-20" />
+                    Módulo de Planta en Desarrollo
+                  </div>
+                )}
+                {activeModule === 'logistica' && (
+                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                    <Truck className="h-12 w-12 mb-4 opacity-20" />
+                    Módulo de Logística en Desarrollo
+                  </div>
+                )}
+                {activeModule === 'ventas' && (
+                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                    <TrendingUp className="h-12 w-12 mb-4 opacity-20" />
+                    Módulo de Ventas en Desarrollo
+                  </div>
                 )}
                 {activeModule === 'purchasing' && (
                   <PurchasingModule 
