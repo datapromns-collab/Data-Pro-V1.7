@@ -335,7 +335,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                   <TableRow key={item.code} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100 group">
                     <TableCell className="pl-8">
                       <div className="flex flex-col">
-                        <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{item.code}</span>
+                        <span className={cn("text-[9px] font-bold font-mono leading-none mb-1", type === 'logistics' ? "text-emerald-600" : "text-[#A67B5B]")}>{item.code}</span>
                         <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[400px]">{item.description}</span>
                       </div>
                     </TableCell>
@@ -399,7 +399,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
           <Droplet className="h-6 w-6" />,
           rawMaterialGroups,
           type,
-          isLogistics ? "bg-[#A67B5B]" : "bg-[#8B6E58]"
+          isLogistics ? "bg-emerald-600" : "bg-[#8B6E58]"
         )}
 
         {renderMaterialsInventoryMatrix(
@@ -407,7 +407,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
           <Package className="h-6 w-6" />,
           packagingGroups,
           type,
-          isLogistics ? "bg-[#A67B5B]" : "bg-[#8B6E58]"
+          isLogistics ? "bg-emerald-600" : "bg-[#8B6E58]"
         )}
       </div>
     );
@@ -508,7 +508,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
             <TabsContent value="ventas" className="m-0 animate-in fade-in-50 duration-500">
               <Tabs defaultValue="planificacion" className="w-full">
                 <div className="flex items-center justify-between gap-4 mb-6">
-                  <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-100 w-fit no-print">
+                  <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-200 w-fit no-print">
                     <TabsList className="bg-transparent h-auto p-0">
                       <TabsTrigger value="planificacion" className={tabsTriggerClass}>
                         <Calendar className="h-3.5 w-3.5" /> Planificación
