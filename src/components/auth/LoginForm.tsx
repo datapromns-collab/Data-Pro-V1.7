@@ -75,7 +75,10 @@ export function LoginForm({ onLogin }: LoginFormProps) {
             </Alert>
           )}
 
-          <Button type="submit" className="w-full h-12 rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-lg shadow-primary/20 hover:translate-y-[-1px] transition-all">
+          <Button 
+            type="submit" 
+            className="w-full h-12 rounded-xl font-black uppercase text-xs tracking-[0.2em] shadow-lg bg-sky-500 hover:bg-sky-600 text-white shadow-sky-200 border-0 hover:translate-y-[-1px] transition-all"
+          >
             Iniciar Sesión
           </Button>
         </form>
