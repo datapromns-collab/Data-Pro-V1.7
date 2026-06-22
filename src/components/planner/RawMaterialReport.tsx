@@ -50,27 +50,36 @@ export function RawMaterialReport({
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   const dateKeys = useMemo(() => weekDays.map(d => format(d, 'yyyy-MM-dd')), [weekDays]);
 
+  // Cálculo de Consumo Teórico: Sumatoria diaria de (Inicial + Preparado - Final) por sabor, multiplicado por la receta
   const theoreticalConsumption = useMemo(() => {
     const consumption: Record<string, number> = {};
     PRODUCT_LIST.forEach(flavor => {
       const recipe = recipes[flavor];
       if (!recipe) return;
-      const flavorUbbData = manualUBB[flavor] || {};
-      const totalUbbForFlavor = Object.values(flavorUbbData).reduce((a, b) => a + (Number(b) || 0), 0);
-      if (totalUbbForFlavor > 0) {
-        Object.entries(recipe).forEach(([matCode, factor]) => {
-          consumption[matCode] = (consumption[matCode] || 0) + (totalUbbForFlavor * factor);
-        });
-      }
+      
+      dateKeys.forEach(key => {
+        const init = initialUBBTanksDaily[flavor]?.[key] || 0;
+        const prep = manualUBB[flavor]?.[key] || 0;
+        const fin = finalUBBTanksDaily[flavor]?.[key] || 0;
+        const ubbConsumed = (init + prep) - fin;
+        
+        if (ubbConsumed > 0) {
+          Object.entries(recipe).forEach(([matCode, factor]) => {
+            consumption[matCode] = (consumption[matCode] || 0) + (ubbConsumed * factor);
+          });
+        }
+      });
     });
     return consumption;
-  }, [manualUBB, recipes]);
+  }, [manualUBB, initialUBBTanksDaily, finalUBBTanksDaily, recipes, dateKeys]);
 
+  // Materiales en Tanques al inicio de la semana (Lunes)
   const materialsInTanks = useMemo(() => {
     const inTanks: Record<string, number> = {};
+    const mondayKey = dateKeys[0];
     PRODUCT_LIST.forEach(flavor => {
       const recipe = recipes[flavor];
-      const ubbInTanks = initialUBBTanks[flavor] || 0;
+      const ubbInTanks = initialUBBTanksDaily[flavor]?.[mondayKey] || 0;
       if (recipe && ubbInTanks > 0) {
         Object.entries(recipe).forEach(([matCode, factor]) => {
           inTanks[matCode] = (inTanks[matCode] || 0) + (ubbInTanks * factor);
@@ -78,13 +87,15 @@ export function RawMaterialReport({
       }
     });
     return inTanks;
-  }, [initialUBBTanks, recipes]);
+  }, [initialUBBTanksDaily, recipes, dateKeys]);
 
+  // Materiales en Tanques al final de la semana (Domingo)
   const materialsInFinalTanks = useMemo(() => {
     const inTanks: Record<string, number> = {};
+    const sundayKey = dateKeys[6];
     PRODUCT_LIST.forEach(flavor => {
       const recipe = recipes[flavor];
-      const ubbInTanks = finalUBBTanks[flavor] || 0;
+      const ubbInTanks = finalUBBTanksDaily[flavor]?.[sundayKey] || 0;
       if (recipe && ubbInTanks > 0) {
         Object.entries(recipe).forEach(([matCode, factor]) => {
           inTanks[matCode] = (inTanks[matCode] || 0) + (ubbInTanks * factor);
@@ -92,7 +103,7 @@ export function RawMaterialReport({
       }
     });
     return inTanks;
-  }, [finalUBBTanks, recipes]);
+  }, [finalUBBTanksDaily, recipes, dateKeys]);
 
   return (
     <div className="bg-white w-full print:p-0">
@@ -131,11 +142,20 @@ export function RawMaterialReport({
             </thead>
             <tbody>
               {ALL_MATERIALS.map((mat, idx) => {
-                const stock = rawMaterialStock[mat.code] || { initial: 0, receptions: {}, final: 0 };
-                const initial = stock.initial || 0;
+                const stock = rawMaterialStock[mat.code] || { initialDaily: {}, receptions: {}, finalDaily: {} };
+                
+                const firstDayKey = dateKeys[0];
+                const lastDayKey = dateKeys[6];
+
+                // Inventario inicial del lunes
+                const initial = stock.initialDaily?.[firstDayKey] || rawMaterialStock[mat.code]?.initial || 0;
                 const initialInTanks = materialsInTanks[mat.code] || 0;
-                const receptions = Object.values(stock.receptions as Record<string, number>).reduce((a, b) => a + b, 0);
-                const final = stock.final || 0;
+                
+                // Sumatoria de recepciones de toda la semana
+                const receptions = dateKeys.reduce((sum, k) => sum + (stock.receptions?.[k] || 0), 0);
+                
+                // Inventario final del domingo
+                const final = stock.finalDaily?.[lastDayKey] || rawMaterialStock[mat.code]?.final || 0;
                 const finalInTanks = materialsInFinalTanks[mat.code] || 0;
                 
                 const physical = (initial + initialInTanks + receptions) - (final + finalInTanks);
@@ -145,14 +165,14 @@ export function RawMaterialReport({
 
                 return (
                   <tr key={mat.code} className={`h-5 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
-                    <td style={{ width: '1cm' }} className="px-1 py-0 border border-slate-300 uppercase truncate leading-none">{mat.description}</td>
+                    <td style={{ width: '1cm' }} className="px-1.5 py-0 border border-slate-300 uppercase truncate leading-none">{mat.description}</td>
                     <td className="px-1 py-0 border border-slate-300 text-right tabular-nums">{initial.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
                     <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-indigo-50/50">{initialInTanks.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
                     <td className="px-1 py-0 border border-slate-300 text-right tabular-nums">{receptions.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
                     <td className="px-1 py-0 border border-slate-300 text-right tabular-nums">{final.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
                     <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-purple-50/50">{finalInTanks.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
-                    <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-amber-50/20">{physical.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
-                    <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-emerald-50/20">{theoretical.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
+                    <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-amber-50/20 font-black">{physical.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
+                    <td className="px-1 py-0 border border-slate-300 text-right tabular-nums bg-emerald-50/20 font-black">{theoretical.toLocaleString('es-ES', { maximumFractionDigits: 1 })}</td>
                     <td className="px-1 py-0 border border-slate-300 text-right tabular-nums text-slate-700">
                       {variance.toLocaleString('es-ES', { maximumFractionDigits: 1 })}
                     </td>
@@ -181,8 +201,8 @@ export function RawMaterialReport({
       <div className="page-break-section p-0 flex flex-col h-screen" style={{ pageBreakInside: 'avoid' }}>
         <div className="mb-2 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
           <div className="flex-1">
-            <h1 className="text-xl font-headline font-black text-slate-900 uppercase leading-none">Registro de Producción</h1>
-            <p className="text-emerald-600 font-black text-[9px] uppercase tracking-widest mt-0.5">Desglose Diario de UBB producidas (Consumo)</p>
+            <h1 className="text-xl font-headline font-black text-slate-900 uppercase leading-none">Registro de Producción (UBB)</h1>
+            <p className="text-emerald-600 font-black text-[9px] uppercase tracking-widest mt-0.5">Desglose Diario de UBB calculadas (Consumo Real)</p>
           </div>
           <div className="flex-1 flex justify-center">
             {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={100} height={35} className="object-contain" />}
@@ -220,7 +240,7 @@ export function RawMaterialReport({
                 
                 return (
                   <tr key={flavor} className={`h-5 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
-                    <td style={{ width: '1cm' }} className="px-2 py-0 border border-slate-300 uppercase leading-none">{flavor}</td>
+                    <td style={{ width: '1cm' }} className="px-1.5 py-0 border border-slate-300 uppercase leading-none">{flavor}</td>
                     {dailyConsumptionData.map((val, dIdx) => (
                       <td key={dIdx} className="px-1 py-0 border border-slate-300 text-center tabular-nums">
                         {val > 0 ? val.toLocaleString('es-ES', { minimumFractionDigits: 1 }) : '-'}
@@ -267,7 +287,7 @@ export function RawMaterialReport({
 
         <div className="mt-2 flex justify-between items-end border-t border-slate-200 pt-1 text-[6.5px] font-black text-slate-400 uppercase tracking-widest shrink-0">
           <div className="space-y-0.5">
-            <p>SISTEMA DE GESTIÓN DE MATERIA PRIMA - REGISTRO DE UBB (CONSUMO)</p>
+            <p>SISTEMA DE GESTIÓN DE MATERIA PRIMA - REGISTRO DE UBB (DIARIO)</p>
             <p>EMITIDO: {format(new Date(), 'dd/MM/yyyy HH:mm', { locale: es })}</p>
           </div>
           <div className="text-right">
@@ -278,4 +298,3 @@ export function RawMaterialReport({
     </div>
   );
 }
-

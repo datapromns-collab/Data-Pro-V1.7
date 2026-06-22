@@ -426,7 +426,7 @@ export default function PlannerPage() {
                       onClick={() => { setActiveModule('planning'); setActiveTab('gantt'); }}
                       className={cn(
                         "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
-                        activeModule === 'planning' ? "shadow-md shadow-primary/20" : "text-slate-500"
+                        activeModule === 'planning' ? "shadow-md shadow-primary/20" : "text-slate-50"
                       )}
                     >
                       <div className={cn("p-1.5 rounded-lg", activeModule === 'planning' ? "bg-white/20" : "bg-slate-100")}>
@@ -981,6 +981,8 @@ export default function PlannerPage() {
                 manualUBB={manualUBB}
                 initialUBBTanks={initialUBBTanks}
                 finalUBBTanks={finalUBBTanks}
+                initialUBBTanksDaily={initialUBBTanksDaily}
+                finalUBBTanksDaily={finalUBBTanksDaily}
                 recipes={customRecipes}
               />
             </div>
