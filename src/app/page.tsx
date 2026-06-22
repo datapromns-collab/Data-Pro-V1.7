@@ -403,6 +403,18 @@ export default function PlannerPage() {
     isActive ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
   );
 
+  const sidebarButtonClass = (isActive: boolean, activeColor: string, shadowColor: string) => cn(
+    "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-all active:scale-95 transform-none",
+    isActive 
+      ? `text-white shadow-md ${activeColor} ${shadowColor}` 
+      : "text-slate-500 hover:bg-slate-100/80 hover:text-slate-900"
+  );
+
+  const iconContainerClass = (isActive: boolean) => cn(
+    "p-1.5 rounded-lg flex items-center justify-center",
+    isActive ? "bg-white/20" : "bg-slate-100"
+  );
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-[#f8fafc]">
@@ -423,143 +435,116 @@ export default function PlannerPage() {
                 <div className="flex flex-col gap-2">
                   {!isInventory && !isPurchasing && (
                     <Button 
-                      variant={activeModule === 'planning' ? 'default' : 'ghost'} 
+                      variant="ghost"
                       onClick={() => { setActiveModule('planning'); setActiveTab('gantt'); }}
-                      className={cn(
-                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
-                        activeModule === 'planning' ? "shadow-md shadow-primary/20" : "text-slate-50"
-                      )}
+                      className={sidebarButtonClass(activeModule === 'planning', "bg-primary", "shadow-primary/20")}
                     >
-                      <div className={cn("p-1.5 rounded-lg", activeModule === 'planning' ? "bg-white/20" : "bg-slate-100")}>
+                      <div className={iconContainerClass(activeModule === 'planning')}>
                         <GanttChartSquare className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[10px] font-black tracking-tight text-left">Planificación</span>
+                      <span className="uppercase text-[10px] font-black tracking-tight">Planificación</span>
                     </Button>
                   )}
 
                   {isAdmin && (
                     <Button 
-                      variant={activeModule === 'management' ? 'default' : 'ghost'} 
+                      variant="ghost" 
                       onClick={() => { setActiveModule('management'); setActiveTab('admin-report'); }}
-                      className={cn(
-                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
-                        activeModule === 'management' ? "shadow-md shadow-[#A67B5B]/30 bg-[#A67B5B] hover:bg-[#966B4B] text-white" : "text-slate-500"
-                      )}
+                      className={sidebarButtonClass(activeModule === 'management', "bg-[#A67B5B] hover:bg-[#966B4B]", "shadow-[#A67B5B]/30")}
                     >
-                      <div className={cn("p-1.5 rounded-lg", activeModule === 'management' ? "bg-white/20" : "bg-slate-100")}>
+                      <div className={iconContainerClass(activeModule === 'management')}>
                         <BarChart3 className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[10px] font-black tracking-tight text-left">Gestión</span>
+                      <span className="uppercase text-[10px] font-black tracking-tight">Gestión</span>
                     </Button>
                   )}
 
                   {isJarabes && (
                     <Button 
-                      variant={activeModule === 'jarabes' ? 'default' : 'ghost'} 
+                      variant="ghost" 
                       onClick={() => { setActiveModule('jarabes'); setActiveTab('jarabes-view'); }}
-                      className={cn(
-                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
-                        activeModule === 'jarabes' ? "shadow-md shadow-blue-400 bg-blue-500 text-white" : "text-slate-500"
-                      )}
+                      className={sidebarButtonClass(activeModule === 'jarabes', "bg-blue-500 hover:bg-blue-600", "shadow-blue-400/30")}
                     >
-                      <div className={cn("p-1.5 rounded-lg", activeModule === 'jarabes' ? "bg-white/20" : "bg-slate-100")}>
+                      <div className={iconContainerClass(activeModule === 'jarabes')}>
                         <Droplets className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[10px] font-black tracking-tight text-left">Jarabes</span>
+                      <span className="uppercase text-[10px] font-black tracking-tight">Jarabes</span>
                     </Button>
                   )}
 
                   {user.role !== 'STANDARD' && !isPurchasing && (
                     <Button 
-                      variant={activeModule === 'raw-materials' ? 'default' : 'ghost'} 
+                      variant="ghost" 
                       onClick={() => { setActiveModule('raw-materials'); setActiveTab('raw-material-view'); }}
-                      className={cn(
-                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
-                        activeModule === 'raw-materials' ? "shadow-md shadow-amber-200 bg-amber-600 hover:bg-amber-700 text-white" : "text-slate-500"
-                      )}
+                      className={sidebarButtonClass(activeModule === 'raw-materials', "bg-amber-600 hover:bg-amber-700", "shadow-amber-200/30")}
                     >
-                      <div className={cn("p-1.5 rounded-lg", activeModule === 'raw-materials' ? "bg-white/20" : "bg-slate-100")}>
+                      <div className={iconContainerClass(activeModule === 'raw-materials')}>
                         <Box className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[10px] font-black tracking-tight text-left">Materia Prima</span>
+                      <span className="uppercase text-[10px] font-black tracking-tight">Materia Prima</span>
                     </Button>
                   )}
 
                   {isDemon && (
                     <Button 
-                      variant={activeModule === 'recipes' ? 'default' : 'ghost'} 
+                      variant="ghost" 
                       onClick={() => { setActiveModule('recipes'); setActiveTab('recipes-editor'); }}
-                      className={cn(
-                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
-                        activeModule === 'recipes' ? "shadow-md shadow-emerald-200 bg-emerald-600 hover:bg-emerald-700 text-white" : "text-slate-500"
-                      )}
+                      className={sidebarButtonClass(activeModule === 'recipes', "bg-emerald-600 hover:bg-emerald-700", "shadow-emerald-200/30")}
                     >
-                      <div className={cn("p-1.5 rounded-lg", activeModule === 'recipes' ? "bg-white/20" : "bg-slate-100")}>
+                      <div className={iconContainerClass(activeModule === 'recipes')}>
                         <FlaskConical className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[10px] font-black tracking-tight text-left">Recetas</span>
+                      <span className="uppercase text-[10px] font-black tracking-tight">Recetas</span>
                     </Button>
                   )}
 
                   <Button 
-                    variant={activeModule === 'planta' ? 'default' : 'ghost'} 
+                    variant="ghost" 
                     onClick={() => { setActiveModule('planta'); setActiveTab('planta-view'); }}
-                    className={cn(
-                      "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
-                      activeModule === 'planta' ? "shadow-md shadow-slate-200 bg-slate-800 text-white" : "text-slate-500"
-                    )}
+                    className={sidebarButtonClass(activeModule === 'planta', "bg-slate-800 hover:bg-slate-900", "shadow-slate-200/30")}
                   >
-                    <div className={cn("p-1.5 rounded-lg", activeModule === 'planta' ? "bg-white/20" : "bg-slate-100")}>
+                    <div className={iconContainerClass(activeModule === 'planta')}>
                       <Factory className="h-4 w-4" />
                     </div>
-                    <span className="uppercase text-[10px] font-black tracking-tight text-left">Planta</span>
+                    <span className="uppercase text-[10px] font-black tracking-tight">Planta</span>
                   </Button>
 
                   {!isRestrictedInventory && (
                     <>
                       <Button 
-                        variant={activeModule === 'logistica' ? 'default' : 'ghost'} 
+                        variant="ghost" 
                         onClick={() => { setActiveModule('logistica'); setActiveTab('logistica-view'); }}
-                        className={cn(
-                          "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
-                          activeModule === 'logistica' ? "shadow-md shadow-orange-200 bg-orange-600 text-white" : "text-slate-500"
-                        )}
+                        className={sidebarButtonClass(activeModule === 'logistica', "bg-orange-600 hover:bg-orange-700", "shadow-orange-200/30")}
                       >
-                        <div className={cn("p-1.5 rounded-lg", activeModule === 'logistica' ? "bg-white/20" : "bg-slate-100")}>
+                        <div className={iconContainerClass(activeModule === 'logistica')}>
                           <Truck className="h-4 w-4" />
                         </div>
-                        <span className="uppercase text-[10px] font-black tracking-tight text-left">Logística</span>
+                        <span className="uppercase text-[10px] font-black tracking-tight">Logística</span>
                       </Button>
 
                       <Button 
-                        variant={activeModule === 'ventas' ? 'default' : 'ghost'} 
+                        variant="ghost" 
                         onClick={() => { setActiveModule('ventas'); setActiveTab('ventas-view'); }}
-                        className={cn(
-                          "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
-                          activeModule === 'ventas' ? "shadow-md shadow-indigo-200 bg-indigo-600 text-white" : "text-slate-500"
-                        )}
+                        className={sidebarButtonClass(activeModule === 'ventas', "bg-indigo-600 hover:bg-indigo-700", "shadow-indigo-200/30")}
                       >
-                        <div className={cn("p-1.5 rounded-lg", activeModule === 'ventas' ? "bg-white/20" : "bg-slate-100")}>
+                        <div className={iconContainerClass(activeModule === 'ventas')}>
                           <TrendingUp className="h-4 w-4" />
                         </div>
-                        <span className="uppercase text-[10px] font-black tracking-tight text-left">Ventas</span>
+                        <span className="uppercase text-[10px] font-black tracking-tight">Ventas</span>
                       </Button>
                     </>
                   )}
 
                   {(isAdmin || isPurchasing) && (
                     <Button 
-                      variant={activeModule === 'purchasing' ? 'default' : 'ghost'} 
+                      variant="ghost" 
                       onClick={() => { setActiveModule('purchasing'); setActiveTab('purchasing-view'); }}
-                      className={cn(
-                        "w-full justify-start h-12 gap-3 px-4 rounded-xl font-bold transition-none active:scale-100 active:transform-none",
-                        activeModule === 'purchasing' ? "shadow-md shadow-blue-200 bg-blue-600 hover:bg-blue-700 text-white" : "text-slate-500"
-                      )}
+                      className={sidebarButtonClass(activeModule === 'purchasing', "bg-blue-600 hover:bg-blue-700", "shadow-blue-200/30")}
                     >
-                      <div className={cn("p-1.5 rounded-lg", activeModule === 'purchasing' ? "bg-white/20" : "bg-slate-100")}>
+                      <div className={iconContainerClass(activeModule === 'purchasing')}>
                         <ShoppingCart className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[9px] font-black tracking-tight text-left">Compras</span>
+                      <span className="uppercase text-[10px] font-black tracking-tight">Compras</span>
                     </Button>
                   )}
                 </div>
