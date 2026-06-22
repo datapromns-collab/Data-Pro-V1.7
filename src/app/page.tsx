@@ -53,6 +53,7 @@ import { DailyRawMaterialReport } from '@/components/planner/DailyRawMaterialRep
 import { PurchasingModule } from '@/components/planner/PurchasingModule';
 import { PurchasingRequirementReport } from '@/components/planner/PurchasingRequirementReport';
 import { InventoryReport } from '@/components/planner/InventoryReport';
+import { JarabesModule } from '@/components/planner/JarabesModule';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
@@ -835,10 +836,7 @@ export default function PlannerPage() {
                   </>
                 )}
                 {activeModule === 'jarabes' && (
-                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                    <Droplets className="h-12 w-12 mb-4 opacity-20" />
-                    Módulo de Jarabes en Desarrollo
-                  </div>
+                  <JarabesModule />
                 )}
                 {activeModule === 'raw-materials' && !isPurchasing && (
                   <>
