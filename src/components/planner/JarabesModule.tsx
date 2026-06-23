@@ -3,25 +3,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
 import { useRef } from 'react';
-
-// ... inside component
-const consumptionRef = useRef<HTMLDivElement>(null);
-
-const handleExportPDF = () => {
-  if (!consumptionRef.current) return;
-  html2canvas(consumptionRef.current).then((canvas) => {
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF('p', 'mm', 'a4');
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save('cálculo_consumo.pdf');
-  });
-};
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
