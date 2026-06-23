@@ -169,6 +169,38 @@ export function JarabesModule() {
     }
   };
 
+  // Export the consumption calculation section as PDF
+  const handleExportPDF = async () => {
+    if (!consumptionRef.current) {
+      toast({
+        title: "Error",
+        description: "No hay contenido disponible para exportar.",
+      });
+      return;
+    }
+    try {
+      const canvas = await html2canvas(consumptionRef.current);
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`reporte_jarabes_${selectedDate}.pdf`);
+      toast({
+        title: "PDF generado",
+        description: "El reporte se ha descargado exitosamente.",
+      });
+    } catch (error) {
+      console.error(error);
+      toast({
+        title: "Error",
+        description: "No se pudo generar el PDF.",
+      });
+    }
+  };
+
+
   // Calcular las filas del buscador y totales
   const { rows, filteredRows, totals, sugarStandard } = useMemo(() => {
     const allRows = SABORES_ESTANDAR.map(sabor => {
