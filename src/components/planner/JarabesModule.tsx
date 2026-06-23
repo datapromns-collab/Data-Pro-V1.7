@@ -758,19 +758,17 @@ export function JarabesModule() {
                         <table className="min-w-[600px]">
                           <thead>
                             <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
-                              <th className="text-white font-black text-[11px] uppercase pl-6 w-1/2">Ítem</th>
-                              <th className="text-white font-black text-[11px] uppercase text-right w-1/5">Estándar</th>
-                              <th className="text-white font-black text-[11px] uppercase text-right w-1/5">Físico</th>
-                              <th className="text-white font-black text-[11px] uppercase text-right w-1/5">Diferencia</th>
-                              <th className="text-white font-black text-[11px] uppercase text-right w-1/5">%</th>
+                              <th className="text-white font-black text-[11px] uppercase pl-6 text-right w-1/4">Estándar</th>
+                              <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Físico</th>
+                              <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Diferencia</th>
+                              <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/4">%</th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
-                              <td className="font-bold text-xs text-slate-700 uppercase pl-6 py-3">TOTAL</td>
-                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(sugarStandard)}</td>
-                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos))}</td>
-                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard))}</td>
+                              <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(sugarStandard)}</td>
+                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos))}</td>
+                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard))}</td>
                               <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard) / sugarStandard * 100)}%</td>
                             </tr>
                           </tbody>
@@ -1159,19 +1157,17 @@ export function JarabesModule() {
                         <table className="min-w-[600px]">
                           <thead>
                             <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
-                              <th className="text-white font-black text-[11px] uppercase pl-6 w-1/2">Ítem</th>
-                              <th className="text-white font-black text-[11px] uppercase text-right w-1/5">Estándar</th>
-                              <th className="text-white font-black text-[11px] uppercase text-right w-1/5">Físico</th>
-                              <th className="text-white font-black text-[11px] uppercase text-right w-1/5">Diferencia</th>
-                              <th className="text-white font-black text-[11px] uppercase text-right w-1/5">%</th>
+                              <th className="text-white font-black text-[11px] uppercase pl-6 text-right w-1/4">Estándar</th>
+                              <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Físico</th>
+                              <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Diferencia</th>
+                              <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/4">%</th>
                             </tr>
                           </thead>
                           <tbody>
                             <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
-                              <td className="font-bold text-xs text-slate-700 uppercase pl-6 py-3">TOTAL</td>
-                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(sugarStandard)}</td>
-                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos))}</td>
-                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard))}</td>
+                              <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(sugarStandard)}</td>
+                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos))}</td>
+                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard))}</td>
                               <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard) / sugarStandard * 100)}%</td>
                             </tr>
                           </tbody>
