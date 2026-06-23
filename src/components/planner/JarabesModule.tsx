@@ -30,11 +30,16 @@ const PROVEEDORES = [
   "PORTUGUESA", "PASTORA", "MONTALBAN", "IMPORTADA 1"
 ];
 
+const TANQUES_KITS = [
+  "JARABE SIMPLE", "KITS PREP."
+];
+
 export function JarabesModule() {
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
   const [ubbData, setUbbData] = useState<Record<string, { ubbInicial?: string; ubbPreparado?: string; ubbFinal?: string }>>({});
   const [sugarData, setSugarData] = useState<Record<string, { invInicialSacos?: string; recepcionSacos?: string; invFinalSacos?: string }>>({});
+  const [tanksData, setTanksData] = useState<Record<string, { invInicialSacos?: string; invFinalSacos?: string }>>({});
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
   const { toast } = useToast();
@@ -59,6 +64,15 @@ export function JarabesModule() {
       }
     }
 
+    const savedTanks = localStorage.getItem('jarabes-tanques-estandar');
+    if (savedTanks) {
+      try {
+        setTanksData(JSON.parse(savedTanks));
+      } catch (e) {
+        console.error('Error cargando datos de tanques y kits', e);
+      }
+    }
+
     setIsLoaded(true);
   }, []);
 
@@ -75,6 +89,13 @@ export function JarabesModule() {
       localStorage.setItem('jarabes-azucar-estandar', JSON.stringify(sugarData));
     }
   }, [sugarData, isLoaded]);
+
+  // Guardar datos en localStorage cuando cambie tanksData
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem('jarabes-tanques-estandar', JSON.stringify(tanksData));
+    }
+  }, [tanksData, isLoaded]);
 
   const handleInputChange = (flavor: string, field: 'ubbInicial' | 'ubbPreparado' | 'ubbFinal', value: string) => {
     setUbbData(prev => ({
@@ -96,13 +117,24 @@ export function JarabesModule() {
     }));
   };
 
+  const handleTanksInputChange = (item: string, field: 'invInicialSacos' | 'invFinalSacos', value: string) => {
+    setTanksData(prev => ({
+      ...prev,
+      [item]: {
+        ...prev[item],
+        [field]: value
+      }
+    }));
+  };
+
   const handleClearTable = () => {
     if (window.confirm('¿Está seguro de que desea limpiar todos los valores de las tablas?')) {
       setUbbData({});
       setSugarData({});
+      setTanksData({});
       toast({
         title: "Tablas restablecidas",
-        description: "Todos los valores de UBB y azúcar han sido eliminados correctamente.",
+        description: "Todos los valores de UBB, azúcar y tanques/kits han sido eliminados correctamente.",
       });
     }
   };
@@ -224,6 +256,48 @@ export function JarabesModule() {
       }
     );
   }, [sugarRows]);
+
+  const tanksRows = useMemo(() => {
+    return TANQUES_KITS.map(item => {
+      const data = tanksData[item] || {};
+      const invInicialSacosStr = data.invInicialSacos ?? '';
+      const invFinalSacosStr = data.invFinalSacos ?? '';
+
+      const invInicialSacos = parseFloat(invInicialSacosStr) || 0;
+      const invFinalSacos = parseFloat(invFinalSacosStr) || 0;
+
+      const invInicialKg = invInicialSacos * 50;
+      const invFinalKg = invFinalSacos * 50;
+
+      return {
+        item,
+        invInicialSacosStr,
+        invFinalSacosStr,
+        invInicialSacos,
+        invInicialKg,
+        invFinalSacos,
+        invFinalKg
+      };
+    });
+  }, [tanksData]);
+
+  const tanksTotals = useMemo(() => {
+    return tanksRows.reduce(
+      (acc, curr) => {
+        acc.invInicialSacos += curr.invInicialSacos;
+        acc.invInicialKg += curr.invInicialKg;
+        acc.invFinalSacos += curr.invFinalSacos;
+        acc.invFinalKg += curr.invFinalKg;
+        return acc;
+      },
+      {
+        invInicialSacos: 0,
+        invInicialKg: 0,
+        invFinalSacos: 0,
+        invFinalKg: 0
+      }
+    );
+  }, [tanksRows]);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
@@ -544,6 +618,94 @@ export function JarabesModule() {
                             </TableCell>
                             <TableCell className="text-right font-black text-emerald-800 bg-emerald-100/40 pr-3">
                               {sugarTotals.consumoKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                            </TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </div>
+
+                    {/* Tanques y Kits Header Controls */}
+                    <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 no-print">
+                      <div className="flex items-center gap-3">
+                        <div className="bg-blue-500/10 p-2.5 rounded-xl">
+                          <Beaker className="h-5 w-5 text-blue-600" />
+                        </div>
+                        <div>
+                          <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Seguimiento de Tanques y Kits</h3>
+                          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Inventario Inicial y Final</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Tanks & Kits Table Container */}
+                    <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
+                      <Table className="min-w-[800px]">
+                        <TableHeader>
+                          <TableRow className="bg-[#ffff00] hover:bg-[#ffff00] text-slate-900 border-b border-slate-300 h-10">
+                            <TableHead className="text-slate-900 font-black text-[10px] uppercase text-center border-r border-slate-300 bg-yellow-400 h-10 py-0" colSpan={3}>INV. INICIAL DE AZUCAR REFINADA</TableHead>
+                            <TableHead className="text-slate-900 font-black text-[10px] uppercase text-center bg-yellow-400 h-10 py-0" colSpan={2}>INV. FINAL DE AZUCAR</TableHead>
+                          </TableRow>
+                          <TableRow className="bg-slate-100/80 hover:bg-slate-100/80 text-slate-800 border-b border-slate-200 h-9 font-bold text-[9px] uppercase">
+                            <TableHead className="text-slate-700 font-black text-[9px] uppercase border-r border-slate-200 w-[150px] pl-4">PROVEEDOR</TableHead>
+                            <TableHead className="text-slate-700 font-black text-[9px] uppercase text-right border-r border-slate-200">CANT. SACOS</TableHead>
+                            <TableHead className="text-slate-700 font-black text-[9px] uppercase text-right border-r border-slate-200">KG</TableHead>
+                            <TableHead className="text-slate-700 font-black text-[9px] uppercase text-right border-r border-slate-200">CANT. SACOS</TableHead>
+                            <TableHead className="text-slate-700 font-black text-[9px] uppercase text-right">KG</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {tanksRows.map((row) => (
+                            <TableRow key={row.item} className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30 text-xs">
+                              <TableCell className="font-bold text-slate-700 uppercase border-r border-slate-100 pl-4">
+                                {row.item}
+                              </TableCell>
+                              {/* INV. INICIAL SACOS (Manual Input) */}
+                              <TableCell className="py-1.5 border-r border-slate-100">
+                                <Input
+                                  type="number"
+                                  value={row.invInicialSacosStr}
+                                  onChange={(e) => handleTanksInputChange(row.item, 'invInicialSacos', e.target.value)}
+                                  className="h-8 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-20 ml-auto"
+                                  placeholder="0"
+                                />
+                              </TableCell>
+                              {/* INV. INICIAL KG (Computed: Sacos * 50) */}
+                              <TableCell className="text-right font-semibold text-slate-600 border-r border-slate-100 bg-slate-50/30 pr-3">
+                                {row.invInicialKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              </TableCell>
+                              {/* INV. FINAL SACOS (Manual Input) */}
+                              <TableCell className="py-1.5 border-r border-slate-100">
+                                <Input
+                                  type="number"
+                                  value={row.invFinalSacosStr}
+                                  onChange={(e) => handleTanksInputChange(row.item, 'invFinalSacos', e.target.value)}
+                                  className="h-8 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-20 ml-auto"
+                                  placeholder="0"
+                                />
+                              </TableCell>
+                              {/* INV. FINAL KG (Computed: Sacos * 50) */}
+                              <TableCell className="text-right font-semibold text-slate-600 pr-3 bg-slate-50/30">
+                                {row.invFinalKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              </TableCell>
+                            </TableRow>
+                          ))}
+
+                          {/* Totales Tanques/Kits Row */}
+                          <TableRow className="bg-slate-100 hover:bg-slate-100 border-t border-slate-200 font-bold text-xs">
+                            <TableCell className="font-black text-slate-800 uppercase border-r border-slate-200 pl-4 py-3">
+                              TOTAL GENERAL
+                            </TableCell>
+                            <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
+                              {tanksTotals.invInicialSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                            </TableCell>
+                            <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
+                              {tanksTotals.invInicialKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                            </TableCell>
+                            <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
+                              {tanksTotals.invFinalSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                            </TableCell>
+                            <TableCell className="text-right font-black text-slate-800 pr-3">
+                              {tanksTotals.invFinalKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                             </TableCell>
                           </TableRow>
                         </TableBody>
