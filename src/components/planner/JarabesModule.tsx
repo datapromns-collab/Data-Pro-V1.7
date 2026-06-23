@@ -631,7 +631,7 @@ export function JarabesModule() {
                           <Beaker className="h-5 w-5 text-blue-600" />
                         </div>
                         <div>
-                          <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Seguimiento de Tanques y Kits</h3>
+                          <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Seguimiento de Tanques y Salas</h3>
                           <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Inventario Inicial y Final</p>
                         </div>
                       </div>

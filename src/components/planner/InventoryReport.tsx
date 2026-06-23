@@ -146,8 +146,10 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
         </thead>
         <tbody>
           {ALL_MATERIALS_LIST.map((mat, idx) => {
-            const stockLogistics = logisticsInventory[mat.code] || 0;
-            const stockPlant = plantInventory[mat.code] || 0;
+            const code = mat.code;
+            if (!code) return null;
+            const stockLogistics = logisticsInventory[code] || 0;
+            const stockPlant = plantInventory[code] || 0;
             const total = stockLogistics + stockPlant;
             const singleStock = inventorySource === 'logistics' ? stockLogistics : stockPlant;
 
@@ -155,8 +157,8 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
             if (inventorySource !== 'available' && singleStock === 0) return null;
 
             return (
-              <tr key={mat.code} className={`h-10 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
-                <td className="px-4 py-0 border border-slate-100 font-mono text-[8pt]" style={{ color: primaryColor }}>{mat.code}</td>
+              <tr key={code} className={`h-10 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
+                <td className="px-4 py-0 border border-slate-100 font-mono text-[8pt]" style={{ color: primaryColor }}>{code}</td>
                 <td className="px-4 py-0 border border-slate-100 uppercase truncate max-w-[250px]">{mat.description}</td>
                 <td className="px-2 py-0 border border-slate-100 text-center text-slate-400 text-[8pt]">{mat.unit || 'KG'}</td>
                 {inventorySource === 'available' ? (

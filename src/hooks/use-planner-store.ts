@@ -312,6 +312,14 @@ export function usePlannerStore() {
     });
   }, [weekStartDate]);
 
+  const updateRawMaterialDailyPhysical = useCallback((code: string, dateKey: string, value: number) => {
+    setRawMaterialStock(prev => {
+      const current = prev[code] || { initial: 0, receptions: {}, final: 0, dailyPhysical: {}, initialDaily: {}, finalDaily: {} };
+      const nextDP = { ...current.dailyPhysical, [dateKey]: value };
+      return { ...prev, [code]: { ...current, dailyPhysical: nextDP } };
+    });
+  }, []);
+
   const updateManualUBB = useCallback((flavor: string, dateKey: string, value: number) => {
     setManualUBB(prev => {
       const next = { ...prev[flavor], [dateKey]: value };
@@ -331,6 +339,14 @@ export function usePlannerStore() {
     setInitialUBBTanksDaily(old => ({ ...old, [flavor]: { ...(old[flavor] || {}), [nextDayK]: value } }));
     if (dateKey === format(addDays(weekStartDate, 6), 'yyyy-MM-dd')) setFinalUBBTanks(old => ({ ...old, [flavor]: value }));
   }, [weekStartDate]);
+
+  const updateInitialUBBTanks = useCallback((flavor: string, value: number) => {
+    setInitialUBBTanks(prev => ({ ...prev, [flavor]: value }));
+  }, []);
+
+  const updateFinalUBBTanks = useCallback((flavor: string, value: number) => {
+    setFinalUBBTanks(prev => ({ ...prev, [flavor]: value }));
+  }, []);
 
   const updateSalesProjection = useCallback((flavor: string, presentation: string, quantity: number) => {
     setSalesProjection(prev => {
@@ -370,7 +386,7 @@ export function usePlannerStore() {
   return { 
     tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily, salesProjection, finishedProductInventory, productionPlan, logisticsInventory, plantInventory,
     setWeekStartDate, addTask, updateTask, removeTask, clearAll, updateLineSpeed, updateRealProduction, updateRecipe, removeMaterialFromRecipe, updatePackagingRecipe, removeMaterialFromPackagingRecipe, resetRecipesToDefaults, resetPackagingRecipesToDefaults,
-    updateRawMaterialStock, updateRawMaterialReception, updateRawMaterialDailyInitial, updateRawMaterialDailyFinal, updateManualUBB,
-    updateInitialUBBTanksDaily, updateFinalUBBTanksDaily, updateSalesProjection, updateFinishedProductInventory, updateProductionPlan, updateLogisticsInventory, updatePlantInventory, isLoaded
+    updateRawMaterialStock, updateRawMaterialReception, updateRawMaterialDailyInitial, updateRawMaterialDailyFinal, updateRawMaterialDailyPhysical, updateManualUBB,
+    updateInitialUBBTanks, updateFinalUBBTanks, updateInitialUBBTanksDaily, updateFinalUBBTanksDaily, updateSalesProjection, updateFinishedProductInventory, updateProductionPlan, updateLogisticsInventory, updatePlantInventory, isLoaded
   };
 }

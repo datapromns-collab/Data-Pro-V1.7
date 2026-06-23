@@ -735,15 +735,17 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                           </TableHeader>
                           <TableBody>
                             {([...SUGAR_DATA, ...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES, ...SOLIDS_DATA, ...ADDITIVES_DATA, ...PREFORMS_DATA, ...CAPS_DATA, ...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA, ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA]).map((mat) => {
-                              const stockLogistics = logisticsInventory[mat.code] || 0;
-                              const stockPlant = plantInventory[mat.code] || 0;
+                              const code = mat.code;
+                              if (!code) return null;
+                              const stockLogistics = logisticsInventory[code] || 0;
+                              const stockPlant = plantInventory[code] || 0;
                               const totalAvailable = stockLogistics + stockPlant;
                               if (totalAvailable === 0) return null;
                               return (
-                                <TableRow key={mat.code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
+                                <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
                                   <TableCell className="pl-8">
                                     <div className="flex flex-col">
-                                      <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{mat.code}</span>
+                                      <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{code}</span>
                                       <span className="text-[12px] font-black text-slate-700 uppercase leading-none truncate max-w-[300px]">{mat.description}</span>
                                     </div>
                                   </TableCell>
@@ -898,9 +900,11 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                         </TableHeader>
                         <TableBody>
                           {ALL_MATERIALS_LIST.map((mat) => {
-                            const reqSales = calculateRequirementFromSource(mat.code, salesProjection);
-                            const stockAvailable = (logisticsInventory[mat.code] || 0) + (plantInventory[mat.code] || 0);
-                            const reqPlan = calculateRequirementFromSource(mat.code, productionPlan);
+                            const code = mat.code;
+                            if (!code) return null;
+                            const reqSales = calculateRequirementFromSource(code, salesProjection);
+                            const stockAvailable = (logisticsInventory[code] || 0) + (plantInventory[code] || 0);
+                            const reqPlan = calculateRequirementFromSource(code, productionPlan);
                             
                             // Necesidad de Compra = (Req Plan - Stock Disponible) * 1.10
                             // Solo si el Req Plan supera al stock disponible
@@ -910,10 +914,10 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                             if (reqSales === 0 && reqPlan === 0 && stockAvailable === 0) return null;
 
                             return (
-                              <TableRow key={mat.code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
+                              <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
                                 <TableCell className="pl-8">
                                   <div className="flex flex-col">
-                                    <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{mat.code}</span>
+                                    <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{code}</span>
                                     <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[250px]">{mat.description}</span>
                                   </div>
                                 </TableCell>
@@ -957,7 +961,13 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                           <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-tight">Estado de Suministros</span>
                        </div>
                        <p className="text-[13px] font-bold text-slate-700 uppercase">
-                          El sistema ha detectado {ALL_MATERIALS_LIST.filter(m => (calculateRequirementFromSource(m.code, productionPlan) - ((logisticsInventory[m.code] || 0) + (plantInventory[m.code] || 0))) > 0).length} materiales con necesidad de compra inmediata para cumplir el plan.
+                          El sistema ha detectado {ALL_MATERIALS_LIST.filter(m => {
+                             const code = m.code;
+                             if (!code) return false;
+                             const req = calculateRequirementFromSource(code, productionPlan);
+                             const stock = (logisticsInventory[code] || 0) + (plantInventory[code] || 0);
+                             return req - stock > 0;
+                           }).length} materiales con necesidad de compra inmediata para cumplir el plan.
                        </p>
                     </div>
                   </div>

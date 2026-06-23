@@ -937,7 +937,7 @@ export default function PlannerPage() {
           {(printMode === 'inventory-finished' || printMode === 'inventory-logistics' || printMode === 'inventory-plant' || printMode === 'inventory-available') && (
             <div className="p-0">
               <InventoryReport 
-                type={printMode === 'inventory-finished' ? 'product-finished' : printMode === 'inventory-logistics' ? 'inventory-logistics' : printMode === 'inventory-plant' ? 'inventory-plant' : 'available'}
+                type={printMode === 'inventory-finished' ? 'product-finished' : printMode === 'inventory-logistics' ? 'logistics' : printMode === 'inventory-plant' ? 'plant' : 'available'}
                 data={{
                   finishedProductInventory,
                   logisticsInventory,
