@@ -421,18 +421,6 @@ export function JarabesModule() {
                               <TableHead className="text-white font-black text-[11px] uppercase text-right w-1/6">UBB Inicial</TableHead>
                               <TableHead className="text-white font-black text-[11px] uppercase text-right w-1/6">UBB Preparado</TableHead>
                               <TableHead className="text-white font-black text-[11px] uppercase text-right w-1/6">UBB Final</TableHead>
-                              <TableHead className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/6">UBB Consumo</TableHead>
-                            </TableRow>
-                          </TableHeader>
-                          <TableBody>
-                            {filteredRows.map((row) => (
-                              <TableRow key={row.sabor} className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
-                                <TableCell className="font-bold text-xs text-slate-700 uppercase pl-6 py-3">
-                                  {row.sabor}
-                                </TableCell>
-                                <TableCell className="py-2 text-right">
-                                  <Input
-                                    type="number"
                                     value={row.ubbInicialStr}
                                     onChange={(e) => handleInputChange(row.sabor, 'ubbInicial', e.target.value)}
                                     className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
@@ -667,28 +655,7 @@ export function JarabesModule() {
                         </div>
                       </div>
                     </div>
-                    {/* Consumption Calculation Table */}
-                    <div className="space-y-6 mt-8">
-                      <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo</h3>
-                      <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
-                        <table className="min-w-[600px]">
-                          <thead>
-                            <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
-                              <th className="text-white font-black text-[11px] uppercase pl-6 w-1/2">Ítem</th>
-                              <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Estándar</th>
-                              <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/4">Físico</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
-                              <td className="font-bold text-xs text-slate-700 uppercase pl-6 py-3">TOTAL</td>
-                              <td className="text-right font-black text-xs text-slate-800 py-3">{sugarStandard.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
-                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos)).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </div>
-                    </div>
+
 
                     {/* Tanks & Kits Table Container */}
                     <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
@@ -765,6 +732,33 @@ export function JarabesModule() {
                       </Table>
                     </div>
                   </div>
+
+                    {/* Consumption Calculation Table */}
+                    <div className="space-y-6 mt-8">
+                      <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo</h3>
+                      <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
+                        <table className="min-w-[600px]">
+                          <thead>
+                            <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
+                              <th className="text-white font-black text-[11px] uppercase pl-6 w-1/2">Ítem</th>
+                              <th className="text-white font-black text-[11px] uppercase text-right w-1/5">Estándar</th>
+                              <th className="text-white font-black text-[11px] uppercase text-right w-1/5">Físico</th>
+                              <th className="text-white font-black text-[11px] uppercase text-right w-1/5">Diferencia</th>
+                              <th className="text-white font-black text-[11px] uppercase text-right w-1/5">%</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
+                              <td className="font-bold text-xs text-slate-700 uppercase pl-6 py-3">TOTAL</td>
+                              <td className="text-right font-black text-xs text-slate-800 py-3">{sugarStandard.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
+                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos)).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
+                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
+                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{((( ( (sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard) / sugarStandard) * 100).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}%</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
                 </TabsContent>
 
                 <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500">
