@@ -805,13 +805,11 @@ export function JarabesModule() {
                           </tbody>
                         </table>
                       </div>
-                    </div>
+                    
                 </TabsContent>
 
                 <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500">
-
-</TabsContent>
-  
+  <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
     <table className="min-w-[600px]">
       <thead>
         <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
@@ -826,18 +824,13 @@ export function JarabesModule() {
         <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
           <td className="font-bold text-xs text-slate-700 uppercase pl-6 py-3">TOTAL</td>
           <td className="text-right font-black text-xs text-slate-800 py-3">{format(sugarStandard)}</td>
-          <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{format((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos))}</td>
+          <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{format(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos)))}</td>
           <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{format(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard))}</td>
-          <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{format((( (sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard) / sugarStandard * 100))}%</td>
+          <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{format((( ((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard) / sugarStandard * 100)))}%</td>
         </tr>
       </tbody>
     </table>
   </div>
-</TabsContent>
-                  <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                    <TrendingUp className="h-12 w-12 mb-4 opacity-20" />
-                    Seguimiento de Disolución - Promedio
-                  </div>
                 </TabsContent>
               </Tabs>
             </TabsContent>
