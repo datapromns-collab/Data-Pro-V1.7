@@ -6,23 +6,23 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
-import { 
-  Beaker, 
-  Pipette, 
-  Activity, 
-  FileSpreadsheet, 
-  TrendingUp, 
-  Search, 
-  Trash2, 
-  Sparkles, 
-  Calculator 
+import {
+  Beaker,
+  Pipette,
+  Activity,
+  FileSpreadsheet,
+  TrendingUp,
+  Search,
+  Trash2,
+  Sparkles,
+  Calculator
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const SABORES_ESTANDAR = [
   "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
-  "GLUP MANZANA VERDE", "GLUP PONCHE", "GLUP CHICLE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA", 
-  "JUSTY NARANJA", "JUSTY DURAZNO", "JUSTY MANDARINA", "JUSTY SANDIA", "JUSTY LIMON", 
+  "GLUP MANZANA VERDE", "GLUP PONCHE", "GLUP CHICLE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA",
+  "JUSTY NARANJA", "JUSTY DURAZNO", "JUSTY MANDARINA", "JUSTY SANDIA", "JUSTY LIMON",
   "JUSTY TAMARINDO", "JUSTY PERA", "JUSTY MANZANA", "VITA TEA DURAZNO", "VITA TEA LIMON"
 ];
 
@@ -30,8 +30,8 @@ const PROVEEDORES = [
   "PORTUGUESA", "PASTORA", "MONTALBAN", "IMPORTADA 1"
 ];
 
-const TANQUES_KITS = [
-  "JARABE SIMPLE", "KITS PREP."
+const TANQUES_SALAS = [
+  "JARABE SIMPLE", "SALA 1.", "SALA 2."
 ];
 
 export function JarabesModule() {
@@ -146,11 +146,11 @@ export function JarabesModule() {
       const ubbInicialStr = rowData.ubbInicial ?? '';
       const ubbPreparadoStr = rowData.ubbPreparado ?? '';
       const ubbFinalStr = rowData.ubbFinal ?? '';
-      
+
       const inicial = parseFloat(ubbInicialStr) || 0;
       const preparado = parseFloat(ubbPreparadoStr) || 0;
       const final = parseFloat(ubbFinalStr) || 0;
-      
+
       // Cálculo: ((ubb inicial + ubb preparado) - ubb final)
       const consumo = (inicial + preparado) - final;
 
@@ -166,7 +166,7 @@ export function JarabesModule() {
       };
     });
 
-    const filtered = allRows.filter(row => 
+    const filtered = allRows.filter(row =>
       row.sabor.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -429,8 +429,8 @@ export function JarabesModule() {
                                 <TableCell className="font-black text-xs text-right pr-6 py-3 text-slate-800">
                                   <span className={cn(
                                     "px-3 py-1.5 rounded-lg inline-block min-w-[70px] text-center font-black",
-                                    row.consumo > 0 ? "bg-emerald-50 text-emerald-700" : 
-                                    row.consumo < 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-600"
+                                    row.consumo > 0 ? "bg-emerald-50 text-emerald-700" :
+                                      row.consumo < 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-600"
                                   )}>
                                     {row.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                                   </span>
@@ -565,14 +565,14 @@ export function JarabesModule() {
                               <TableCell className={cn(
                                 "text-right font-black border-r border-slate-100 pr-3",
                                 row.consumoSacos > 0 ? "bg-emerald-50 text-emerald-700" :
-                                row.consumoSacos < 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-600"
+                                  row.consumoSacos < 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-600"
                               )}>
                                 {row.consumoSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                               <TableCell className={cn(
                                 "text-right font-black pr-3",
                                 row.consumoKg > 0 ? "bg-emerald-50 text-emerald-700" :
-                                row.consumoKg < 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-600"
+                                  row.consumoKg < 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-600"
                               )}>
                                 {row.consumoKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
