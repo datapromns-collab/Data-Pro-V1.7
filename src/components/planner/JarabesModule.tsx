@@ -459,6 +459,16 @@ export function JarabesModule() {
                               <TableHead className="text-white font-black text-[11px] uppercase text-right w-1/6">UBB Inicial</TableHead>
                               <TableHead className="text-white font-black text-[11px] uppercase text-right w-1/6">UBB Preparado</TableHead>
                               <TableHead className="text-white font-black text-[11px] uppercase text-right w-1/6">UBB Final</TableHead>
+                              <TableHead className="text-white font-black text-[11px] uppercase text-right w-1/6 pr-6">Consumo</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {filteredRows.map((row) => (
+                              <TableRow key={row.sabor} className="hover:bg-slate-50 border-b border-slate-100">
+                                <TableCell className="pl-6 py-2 text-xs font-bold text-slate-700">{row.sabor}</TableCell>
+                                <TableCell className="py-2 text-right">
+                                  <Input
+                                    type="number"
                                     value={row.ubbInicialStr}
                                     onChange={(e) => handleInputChange(row.sabor, 'ubbInicial', e.target.value)}
                                     className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
