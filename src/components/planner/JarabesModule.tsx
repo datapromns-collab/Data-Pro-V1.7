@@ -34,6 +34,31 @@ const TANQUES_SALAS = [
   "JARABE SIMPLE", "SALA 1.", "SALA 2."
 ];
 
+// KG de azúcar refinada por UBB, por sabor (según tabla técnica)
+const SUGAR_PER_UBB: Record<string, number> = {
+  "GLUP COLA":         1925.00,
+  "GLUP FRESH":        1904.41,
+  "GLUP UVA":          1025.00,
+  "GLUP PIÑA":         1175.85,
+  "GLUP NARANJA":      1031.00,
+  "GLUP KOLITA":        666.46,
+  "GLUP MANZANA VERDE": 624.70,
+  "GLUP PONCHE":           0,
+  "GLUP CHICLE":           0,
+  "GLUP PIÑA PARCHITA": 1799.17,
+  "GLUP MANZANA ROJA":  1352.05,
+  "JUSTY NARANJA":       110.00,
+  "JUSTY DURAZNO":       137.50,
+  "JUSTY MANDARINA":     122.50,
+  "JUSTY SANDIA":        122.50,
+  "JUSTY LIMON":         122.50,
+  "JUSTY TAMARINDO":     122.50,
+  "JUSTY PERA":          130.00,
+  "JUSTY MANZANA":       130.00,
+  "VITA TEA DURAZNO":    101.00,
+  "VITA TEA LIMON":       97.00,
+};
+
 export function JarabesModule() {
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
@@ -140,7 +165,7 @@ export function JarabesModule() {
   };
 
   // Calcular las filas del buscador y totales
-  const { rows, filteredRows, totals } = useMemo(() => {
+  const { rows, filteredRows, totals, sugarStandard } = useMemo(() => {
     const allRows = SABORES_ESTANDAR.map(sabor => {
       const rowData = ubbData[sabor] || {};
       const ubbInicialStr = rowData.ubbInicial ?? '';
@@ -181,7 +206,13 @@ export function JarabesModule() {
       { inicial: 0, preparado: 0, final: 0, consumo: 0 }
     );
 
-    return { rows: allRows, filteredRows: filtered, totals: sumTotals };
+    // Consumo estándar de azúcar = Σ (UBB Consumo × KG azúcar/UBB por sabor)
+    const sugarStandard = allRows.reduce(
+      (acc, row) => acc + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0),
+      0
+    );
+
+    return { rows: allRows, filteredRows: filtered, totals: sumTotals, sugarStandard };
   }, [ubbData, searchTerm]);
 
   const sugarRows = useMemo(() => {
@@ -651,7 +682,7 @@ export function JarabesModule() {
                           <tbody>
                             <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
                               <td className="font-bold text-xs text-slate-700 uppercase pl-6 py-3">TOTAL</td>
-                              <td className="text-right font-black text-xs text-slate-800 py-3">{(totals.consumo * SUGAR_PER_UBB).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
+                              <td className="text-right font-black text-xs text-slate-800 py-3">{sugarStandard.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
                               <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos)).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
                             </tr>
                           </tbody>
