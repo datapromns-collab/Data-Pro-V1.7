@@ -3,7 +3,25 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Input } from '@/components/ui/input';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
+import { useRef } from 'react';
+
+// ... inside component
+const consumptionRef = useRef<HTMLDivElement>(null);
+
+const handleExportPDF = () => {
+  if (!consumptionRef.current) return;
+  html2canvas(consumptionRef.current).then((canvas) => {
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF('p', 'mm', 'a4');
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save('cálculo_consumo.pdf');
+  });
+};
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import {
@@ -1152,8 +1170,13 @@ export function JarabesModule() {
                       </div>
 
                       {/* Consumption Calculation Table */}
-                      <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo</h3>
-                      <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
+                                                    <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">
+                                Cálculo de Consumo
+                                <Button variant="outline" size="sm" onClick={handleExportPDF} className="ml-2">
+                                  PDF
+                                </Button>
+                              </h3>
+                                              <div ref={consumptionRef} className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
                         <table className="min-w-[600px]">
                           <thead>
                             <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
