@@ -419,37 +419,7 @@ export function JarabesModule() {
     </Button>
   </div>
 </div>
-                        <div className="flex items-center gap-3">
-                          <div className="bg-primary/10 p-2.5 rounded-xl">
-                            <Calculator className="h-5 w-5 text-primary" />
-                          </div>
-                          <div>
-                            <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Seguimiento UBB (Estándar)</h3>
-                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Cálculo de consumo automático</p>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-4 w-full sm:w-auto justify-end">
-                          <div className="relative w-full sm:w-64">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
-                            <Input
-                              type="text"
-                              placeholder="Buscar sabor..."
-                              value={searchTerm}
-                              onChange={(e) => setSearchTerm(e.target.value)}
-                              className="pl-9 pr-4 h-10 rounded-full border-slate-200 focus-visible:ring-primary focus-visible:border-primary text-xs font-semibold"
-                            />
-                          </div>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={handleClearTable}
-                            className="h-10 px-5 gap-2 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-full font-black text-xs uppercase tracking-wider transition-all"
-                          >
-                            <Trash2 className="h-4 w-4" />
-                            Limpiar
-                          </Button>
-                        </div>
-                      </div>
+
 
                       {/* UBB Table Container */}
                       <div className="border border-slate-100 rounded-2xl overflow-hidden bg-white">
@@ -801,14 +771,13 @@ export function JarabesModule() {
                               <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(sugarStandard)}</td>
                               <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos))}</td>
                               <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard))}</td>
-                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber((( ((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard) / sugarStandard * 100)))}%</td>
+                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard) / sugarStandard * 100)}%</td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
+    </TabsContent>
                     
-                </TabsContent>
-
                 <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500">
   <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
     <table className="min-w-[600px]">
@@ -824,42 +793,13 @@ export function JarabesModule() {
       <tbody>
         <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
           <td className="font-bold text-xs text-slate-700 uppercase pl-6 py-3">TOTAL</td>
-          <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(sugarStandard)}</td>
-          <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos)))}</td>
-          <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard))}</td>
-          <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber((( ((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard) / sugarStandard * 100)))}%</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-                </TabsContent>
+</tbody>
+</table>
+</div>
+</TabsContent>
+                  </Tabs>
+
               </Tabs>
-            </TabsContent>
-
-            <TabsContent value="seguimiento-simple" className="m-0 animate-in fade-in-50 duration-500">
-              <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                <Activity className="h-12 w-12 mb-4 opacity-20" />
-                Seguimiento de Jarabe Simple
-              </div>
-            </TabsContent>
-          </Tabs>
-        </TabsContent>
-
-        <TabsContent value="terminado" className="m-0 animate-in fade-in-50 duration-500">
-          <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-            <Pipette className="h-12 w-12 mb-4 opacity-20" />
-            Sección Jarabe Terminado en Desarrollo
-          </div>
-        </TabsContent>
-
-        <TabsContent value="lineas" className="m-0 animate-in fade-in-50 duration-500">
-          <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-            <Activity className="h-12 w-12 mb-4 opacity-20" />
-            Sección Jarabe en Líneas en Desarrollo
-          </div>
-        </TabsContent>
-      </Tabs>
-    </div>
-  );
-}
-
+            </div>
+          );
+        }
