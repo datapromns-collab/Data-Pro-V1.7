@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+
 import { 
   PRODUCT_LIST, 
   SUGAR_DATA,
@@ -49,7 +49,7 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
   const isBlue = type === 'plant';
   
   const primaryColor = isYellow ? '#F59E0B' : (isGreen ? '#10b981' : (isBlue ? '#0ea5e9' : '#A67B5B'));
-  const secondaryColor = isYellow ? '#FEF3C7' : (isGreen ? '#ecfdf5' : (isBlue ? '#f0f9ff' : '#FDF8F3'));
+
   const titleColor = isYellow ? '#92400E' : (isGreen ? '#064e3b' : (isBlue ? '#0c4a6e' : '#5C4033'));
 
   const titleMap = {
