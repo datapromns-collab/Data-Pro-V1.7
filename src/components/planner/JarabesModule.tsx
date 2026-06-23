@@ -782,8 +782,7 @@ export function JarabesModule() {
                   </div>
 
                     {/* Consumption Calculation Table */}
-                    <div className="space-y-6 mt-8">
-                      <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo</h3>
+                    <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo</h3>
                       <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
                         <table className="min-w-[600px]">
                           <thead>
