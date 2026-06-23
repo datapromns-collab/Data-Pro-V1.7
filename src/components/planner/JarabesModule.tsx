@@ -649,13 +649,11 @@ export function JarabesModule() {
                             </tr>
                           </thead>
                           <tbody>
-                            {tanksRows.map(row => (
-                              <tr key={row.item} className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
-                                <td className="font-bold text-xs text-slate-700 uppercase pl-6 py-3">{row.item}</td>
-                                <td className="text-right font-black text-xs text-slate-800 py-3">{totals.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
-                                <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos)).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
-                              </tr>
-                            ))}
+                            <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
+                              <td className="font-bold text-xs text-slate-700 uppercase pl-6 py-3">TOTAL</td>
+                              <td className="text-right font-black text-xs text-slate-800 py-3">{(totals.consumo * SUGAR_PER_UBB).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
+                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos)).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
+                            </tr>
                           </tbody>
                         </table>
                       </div>
