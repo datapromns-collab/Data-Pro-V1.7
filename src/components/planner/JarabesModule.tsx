@@ -26,24 +26,39 @@ const SABORES_ESTANDAR = [
   "JUSTY TAMARINDO", "JUSTY PERA", "JUSTY MANZANA", "VITA TEA DURAZNO", "VITA TEA LIMON"
 ];
 
+const PROVEEDORES = [
+  "PORTUGUESA", "PASTORA", "MONTALBAN", "IMPORTADA 1"
+];
+
 export function JarabesModule() {
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
   const [ubbData, setUbbData] = useState<Record<string, { ubbInicial?: string; ubbPreparado?: string; ubbFinal?: string }>>({});
+  const [sugarData, setSugarData] = useState<Record<string, { invInicialSacos?: string; recepcionSacos?: string; invFinalSacos?: string }>>({});
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
   const { toast } = useToast();
 
   // Cargar datos de localStorage al montar el componente
   useEffect(() => {
-    const saved = localStorage.getItem('jarabes-disolucion-estandar');
-    if (saved) {
+    const savedUbb = localStorage.getItem('jarabes-disolucion-estandar');
+    if (savedUbb) {
       try {
-        setUbbData(JSON.parse(saved));
+        setUbbData(JSON.parse(savedUbb));
       } catch (e) {
         console.error('Error cargando datos de UBB', e);
       }
     }
+
+    const savedSugar = localStorage.getItem('jarabes-azucar-estandar');
+    if (savedSugar) {
+      try {
+        setSugarData(JSON.parse(savedSugar));
+      } catch (e) {
+        console.error('Error cargando datos de azúcar', e);
+      }
+    }
+
     setIsLoaded(true);
   }, []);
 
@@ -53,6 +68,13 @@ export function JarabesModule() {
       localStorage.setItem('jarabes-disolucion-estandar', JSON.stringify(ubbData));
     }
   }, [ubbData, isLoaded]);
+
+  // Guardar datos en localStorage cuando cambie sugarData
+  useEffect(() => {
+    if (isLoaded) {
+      localStorage.setItem('jarabes-azucar-estandar', JSON.stringify(sugarData));
+    }
+  }, [sugarData, isLoaded]);
 
   const handleInputChange = (flavor: string, field: 'ubbInicial' | 'ubbPreparado' | 'ubbFinal', value: string) => {
     setUbbData(prev => ({
@@ -64,12 +86,23 @@ export function JarabesModule() {
     }));
   };
 
+  const handleSugarInputChange = (proveedor: string, field: 'invInicialSacos' | 'recepcionSacos' | 'invFinalSacos', value: string) => {
+    setSugarData(prev => ({
+      ...prev,
+      [proveedor]: {
+        ...prev[proveedor],
+        [field]: value
+      }
+    }));
+  };
+
   const handleClearTable = () => {
-    if (window.confirm('¿Está seguro de que desea limpiar todos los valores de la tabla?')) {
+    if (window.confirm('¿Está seguro de que desea limpiar todos los valores de las tablas?')) {
       setUbbData({});
+      setSugarData({});
       toast({
-        title: "Tabla restablecida",
-        description: "Todos los valores de UBB han sido eliminados correctamente.",
+        title: "Tablas restablecidas",
+        description: "Todos los valores de UBB y azúcar han sido eliminados correctamente.",
       });
     }
   };
@@ -118,6 +151,79 @@ export function JarabesModule() {
 
     return { rows: allRows, filteredRows: filtered, totals: sumTotals };
   }, [ubbData, searchTerm]);
+
+  const sugarRows = useMemo(() => {
+    return PROVEEDORES.map(proveedor => {
+      const data = sugarData[proveedor] || {};
+      const invInicialSacosStr = data.invInicialSacos ?? '';
+      const recepcionSacosStr = data.recepcionSacos ?? '';
+      const invFinalSacosStr = data.invFinalSacos ?? '';
+
+      const invInicialSacos = parseFloat(invInicialSacosStr) || 0;
+      const recepcionSacos = parseFloat(recepcionSacosStr) || 0;
+      const invFinalSacos = parseFloat(invFinalSacosStr) || 0;
+
+      const invInicialKg = invInicialSacos * 50;
+      const recepcionKg = recepcionSacos * 50;
+
+      // Azúcar Disponible = Inv. Inicial + Recepción
+      const disponibleSacos = invInicialSacos + recepcionSacos;
+      const disponibleKg = disponibleSacos * 50;
+
+      // Consumo Físico = Disponible - Inv. Final
+      const consumoSacos = disponibleSacos - invFinalSacos;
+      const consumoKg = consumoSacos * 50;
+
+      const invFinalKg = invFinalSacos * 50;
+
+      return {
+        proveedor,
+        invInicialSacosStr,
+        recepcionSacosStr,
+        invFinalSacosStr,
+        invInicialSacos,
+        invInicialKg,
+        recepcionSacos,
+        recepcionKg,
+        disponibleSacos,
+        disponibleKg,
+        invFinalSacos,
+        invFinalKg,
+        consumoSacos,
+        consumoKg
+      };
+    });
+  }, [sugarData]);
+
+  const sugarTotals = useMemo(() => {
+    return sugarRows.reduce(
+      (acc, curr) => {
+        acc.invInicialSacos += curr.invInicialSacos;
+        acc.invInicialKg += curr.invInicialKg;
+        acc.recepcionSacos += curr.recepcionSacos;
+        acc.recepcionKg += curr.recepcionKg;
+        acc.disponibleSacos += curr.disponibleSacos;
+        acc.disponibleKg += curr.disponibleKg;
+        acc.invFinalSacos += curr.invFinalSacos;
+        acc.invFinalKg += curr.invFinalKg;
+        acc.consumoSacos += curr.consumoSacos;
+        acc.consumoKg += curr.consumoKg;
+        return acc;
+      },
+      {
+        invInicialSacos: 0,
+        invInicialKg: 0,
+        recepcionSacos: 0,
+        recepcionKg: 0,
+        disponibleSacos: 0,
+        disponibleKg: 0,
+        invFinalSacos: 0,
+        invFinalKg: 0,
+        consumoSacos: 0,
+        consumoKg: 0
+      }
+    );
+  }, [sugarRows]);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
@@ -196,6 +302,159 @@ export function JarabesModule() {
                           <Trash2 className="h-4 w-4" />
                           Limpiar
                         </Button>
+                      </div>
+
+                      {/* Sugar Table Header Controls */}
+                      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-10 mb-6 no-print">
+                        <div className="flex items-center gap-3">
+                          <div className="bg-amber-500/10 p-2.5 rounded-xl">
+                            <Calculator className="h-5 w-5 text-amber-600" />
+                          </div>
+                          <div>
+                            <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Seguimiento de Azúcar Refinada</h3>
+                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Inventario y Consumo por Proveedor</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Sugar Table Container */}
+                      <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
+                        <Table className="min-w-[1000px]">
+                          <TableHeader>
+                            <TableRow className="bg-[#ffff00] hover:bg-[#ffff00] text-slate-900 border-b border-slate-300 h-10">
+                              <TableHead className="text-slate-900 font-black text-[10px] uppercase text-center border-r border-slate-300 bg-yellow-400 h-10 py-0" colSpan={3}>INV. INICIAL DE AZUCAR REFINADA</TableHead>
+                              <TableHead className="text-slate-900 font-black text-[10px] uppercase text-center border-r border-slate-300 bg-yellow-400 h-10 py-0" colSpan={2}>RECEPCION DE AZUCAR</TableHead>
+                              <TableHead className="text-slate-900 font-black text-[10px] uppercase text-center border-r border-slate-300 bg-yellow-400 h-10 py-0" colSpan={2}>AZUCAR DISPONIBLE</TableHead>
+                              <TableHead className="text-slate-900 font-black text-[10px] uppercase text-center border-r border-slate-300 bg-yellow-400 h-10 py-0" colSpan={2}>INV. FINAL DE AZUCAR</TableHead>
+                              <TableHead className="text-slate-900 font-black text-[10px] uppercase text-center bg-yellow-400 h-10 py-0" colSpan={2}>CONSUMO FISISCO</TableHead>
+                            </TableRow>
+                            <TableRow className="bg-slate-100/80 hover:bg-slate-100/80 text-slate-800 border-b border-slate-200 h-9 font-bold text-[9px] uppercase">
+                              <TableHead className="text-slate-700 font-black text-[9px] uppercase border-r border-slate-200 w-[150px] pl-4">PROVEEDOR</TableHead>
+                              <TableHead className="text-slate-700 font-black text-[9px] uppercase text-right border-r border-slate-200">CANT. SACOS</TableHead>
+                              <TableHead className="text-slate-700 font-black text-[9px] uppercase text-right border-r border-slate-200">KG</TableHead>
+                              <TableHead className="text-slate-700 font-black text-[9px] uppercase text-right border-r border-slate-200">CANT. SACOS</TableHead>
+                              <TableHead className="text-slate-700 font-black text-[9px] uppercase text-right border-r border-slate-200">KG</TableHead>
+                              <TableHead className="text-slate-700 font-black text-[9px] uppercase text-right border-r border-slate-200">CANT. SACOS</TableHead>
+                              <TableHead className="text-slate-700 font-black text-[9px] uppercase text-right border-r border-slate-200">KG</TableHead>
+                              <TableHead className="text-slate-700 font-black text-[9px] uppercase text-right border-r border-slate-200">CANT. SACOS</TableHead>
+                              <TableHead className="text-slate-700 font-black text-[9px] uppercase text-right border-r border-slate-200">KG</TableHead>
+                              <TableHead className="text-slate-700 font-black text-[9px] uppercase text-right border-r border-slate-200">CANT. SACOS</TableHead>
+                              <TableHead className="text-slate-700 font-black text-[9px] uppercase text-right">KG</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {sugarRows.map((row) => (
+                              <TableRow key={row.proveedor} className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30 text-xs">
+                                <TableCell className="font-bold text-slate-700 uppercase border-r border-slate-100 pl-4">
+                                  {row.proveedor}
+                                </TableCell>
+                                {/* INV. INICIAL */}
+                                <TableCell className="py-1.5 border-r border-slate-100">
+                                  <Input
+                                    type="number"
+                                    value={row.invInicialSacosStr}
+                                    onChange={(e) => handleSugarInputChange(row.proveedor, 'invInicialSacos', e.target.value)}
+                                    className="h-8 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-20 ml-auto"
+                                    placeholder="0"
+                                  />
+                                </TableCell>
+                                <TableCell className="text-right font-semibold text-slate-600 border-r border-slate-100 bg-slate-50/30 pr-3">
+                                  {row.invInicialKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                </TableCell>
+                                {/* RECEPCION */}
+                                <TableCell className="py-1.5 border-r border-slate-100">
+                                  <Input
+                                    type="number"
+                                    value={row.recepcionSacosStr}
+                                    onChange={(e) => handleSugarInputChange(row.proveedor, 'recepcionSacos', e.target.value)}
+                                    className="h-8 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-20 ml-auto"
+                                    placeholder="0"
+                                  />
+                                </TableCell>
+                                <TableCell className="text-right font-semibold text-slate-600 border-r border-slate-100 bg-slate-50/30 pr-3">
+                                  {row.recepcionKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                </TableCell>
+                                {/* DISPONIBLE */}
+                                <TableCell className="text-right font-bold text-slate-800 border-r border-slate-100 bg-amber-50/30 pr-3">
+                                  {row.disponibleSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                </TableCell>
+                                <TableCell className="text-right font-bold text-slate-800 border-r border-slate-100 bg-amber-50/30 pr-3">
+                                  {row.disponibleKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                </TableCell>
+                                {/* INV. FINAL */}
+                                <TableCell className="py-1.5 border-r border-slate-100">
+                                  <Input
+                                    type="number"
+                                    value={row.invFinalSacosStr}
+                                    onChange={(e) => handleSugarInputChange(row.proveedor, 'invFinalSacos', e.target.value)}
+                                    className="h-8 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-20 ml-auto"
+                                    placeholder="0"
+                                  />
+                                </TableCell>
+                                <TableCell className="text-right font-semibold text-slate-600 border-r border-slate-100 bg-slate-50/30 pr-3">
+                                  {row.invFinalKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                </TableCell>
+                                {/* CONSUMO */}
+                                <TableCell className={cn(
+                                  "text-right font-black border-r border-slate-100 pr-3",
+                                  row.consumoSacos > 0 ? "bg-emerald-50 text-emerald-700" :
+                                  row.consumoSacos < 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-600"
+                                )}>
+                                  {row.consumoSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                </TableCell>
+                                <TableCell className={cn(
+                                  "text-right font-black pr-3",
+                                  row.consumoKg > 0 ? "bg-emerald-50 text-emerald-700" :
+                                  row.consumoKg < 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-600"
+                                )}>
+                                  {row.consumoKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                </TableCell>
+                              </TableRow>
+                            ))}
+
+                            {/* Totales Sugar Row */}
+                            <TableRow className="bg-slate-100 hover:bg-slate-100 border-t border-slate-200 font-bold text-xs">
+                              <TableCell className="font-black text-slate-800 uppercase border-r border-slate-200 pl-4 py-3">
+                                TOTAL GENERAL
+                              </TableCell>
+                              {/* INV. INICIAL TOTAL */}
+                              <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
+                                {sugarTotals.invInicialSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              </TableCell>
+                              <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
+                                {sugarTotals.invInicialKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              </TableCell>
+                              {/* RECEPCION TOTAL */}
+                              <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
+                                {sugarTotals.recepcionSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              </TableCell>
+                              <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
+                                {sugarTotals.recepcionKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              </TableCell>
+                              {/* DISPONIBLE TOTAL */}
+                              <TableCell className="text-right font-black text-slate-900 border-r border-slate-200 bg-amber-100/50 pr-3">
+                                {sugarTotals.disponibleSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              </TableCell>
+                              <TableCell className="text-right font-black text-slate-900 border-r border-slate-200 bg-amber-100/50 pr-3">
+                                {sugarTotals.disponibleKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              </TableCell>
+                              {/* INV. FINAL TOTAL */}
+                              <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
+                                {sugarTotals.invFinalSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              </TableCell>
+                              <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
+                                {sugarTotals.invFinalKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              </TableCell>
+                              {/* CONSUMO TOTAL */}
+                              <TableCell className="text-right font-black text-emerald-800 border-r border-slate-200 bg-emerald-100/40 pr-3">
+                                {sugarTotals.consumoSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              </TableCell>
+                              <TableCell className="text-right font-black text-emerald-800 bg-emerald-100/40 pr-3">
+                                {sugarTotals.consumoKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              </TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
                       </div>
                     </div>
 
