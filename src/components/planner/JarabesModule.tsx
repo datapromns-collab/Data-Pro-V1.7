@@ -68,6 +68,7 @@ export function JarabesModule() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isLoaded, setIsLoaded] = useState(false);
   const { toast } = useToast();
+  const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
 
   // Cargar datos de localStorage al montar el componente
   useEffect(() => {
@@ -380,6 +381,43 @@ export function JarabesModule() {
                     <div>
                       {/* UBB Header Controls */}
                       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 no-print">
+  <div className="flex items-center gap-3">
+    <div className="bg-primary/10 p-2.5 rounded-xl">
+      <Calculator className="h-5 w-5 text-primary" />
+    </div>
+    <div>
+      <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Seguimiento UBB (Estándar)</h3>
+      <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Cálculo de consumo automático</p>
+    </div>
+  </div>
+  <div className="flex items-center gap-4 w-full sm:w-auto justify-end">
+    <Input
+      type="date"
+      value={selectedDate}
+      onChange={(e) => setSelectedDate(e.target.value)}
+      className="h-10 rounded-full border-slate-200 focus-visible:ring-primary focus-visible:border-primary text-xs font-semibold"
+    />
+    <div className="relative w-full sm:w-64">
+      <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
+      <Input
+        type="text"
+        placeholder="Buscar sabor..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        className="pl-9 pr-4 h-10 rounded-full border-slate-200 focus-visible:ring-primary focus-visible:border-primary text-xs font-semibold"
+      />
+    </div>
+    <Button
+      variant="outline"
+      size="sm"
+      onClick={handleClearTable}
+      className="h-10 px-5 gap-2 border-red-200 text-red-600 hover:bg-red-50 hover:text-red-700 rounded-full font-black text-xs uppercase tracking-wider transition-all"
+    >
+      <Trash2 className="h-4 w-4" />
+      Limpiar
+    </Button>
+  </div>
+</div>
                         <div className="flex items-center gap-3">
                           <div className="bg-primary/10 p-2.5 rounded-xl">
                             <Calculator className="h-5 w-5 text-primary" />
