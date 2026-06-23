@@ -258,7 +258,7 @@ export function JarabesModule() {
   }, [sugarRows]);
 
   const tanksRows = useMemo(() => {
-    return TANQUES_KITS.map(item => {
+    return TANQUES_SALAS.map(item => {
       const data = tanksData[item] || {};
       const invInicialSacosStr = data.invInicialSacos ?? '';
       const invFinalSacosStr = data.invFinalSacos ?? '';
