@@ -4,6 +4,8 @@ import React from 'react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format } from 'date-fns';
+import { jsPDF } from 'jspdf';
+import html2canvas from 'html2canvas';
 import { es } from 'date-fns/locale';
 
 import { 
@@ -50,6 +52,19 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
   
   const primaryColor = isYellow ? '#F59E0B' : (isGreen ? '#10b981' : (isBlue ? '#0ea5e9' : '#A67B5B'));
 
+  const handleExportPDF = async () => {
+    const report = document.getElementById('report');
+    if (!report) return;
+    const canvas = await html2canvas(report as HTMLElement);
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF();
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save('reporte_semanal.pdf');
+  };
+
   const titleColor = isYellow ? '#92400E' : (isGreen ? '#064e3b' : (isBlue ? '#0c4a6e' : '#5C4033'));
 
   const titleMap = {
@@ -60,6 +75,14 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
   };
 
   const renderHeader = () => (
+
+  // PDF export button placed below header
+  <div className="flex justify-end mb-4">
+    <button onClick={handleExportPDF} className="px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700 transition">
+      Exportar PDF
+    </button>
+  </div>
+
     <div className={`mb-6 border-b-2 pb-4 flex justify-between items-center`} style={{ borderColor: primaryColor }}>
       <div className="flex-1">
         <h1 className="text-xl font-headline font-black text-slate-900 leading-tight uppercase">{titleMap[type]}</h1>
@@ -183,7 +206,7 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
   );
 
   return (
-    <div className="bg-white p-8 max-w-[210mm] mx-auto print:p-0 print:max-w-none">
+    <div id="report" className="bg-white p-8 max-w-[210mm] mx-auto print:p-0 print:max-w-none">
       {renderHeader()}
 
       {type === 'product-finished' && (
