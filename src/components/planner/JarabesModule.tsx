@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Beaker, Pipette, Activity } from 'lucide-react';
+import { Beaker, Pipette, Activity, FileSpreadsheet, TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export function JarabesModule() {
@@ -26,10 +26,54 @@ export function JarabesModule() {
         </div>
 
         <TabsContent value="simple" className="m-0 animate-in fade-in-50 duration-500">
-          <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-            <Beaker className="h-12 w-12 mb-4 opacity-20" />
-            Sección Jarabe Simple en Desarrollo
-          </div>
+          <Tabs defaultValue="disolucion" className="w-full">
+            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
+              <TabsList className="bg-transparent h-auto p-0">
+                <TabsTrigger value="disolucion" className={tabsTriggerClass}>
+                  <Beaker className="h-3.5 w-3.5" /> Seguimiento de Disolución
+                </TabsTrigger>
+                <TabsTrigger value="seguimiento-simple" className={tabsTriggerClass}>
+                  <Activity className="h-3.5 w-3.5" /> Seguimiento de Jarabe Simple
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
+            <TabsContent value="disolucion" className="m-0 animate-in fade-in-50 duration-500">
+              <Tabs defaultValue="estandar" className="w-full">
+                <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
+                  <TabsList className="bg-transparent h-auto p-0">
+                    <TabsTrigger value="estandar" className={tabsTriggerClass}>
+                      <FileSpreadsheet className="h-3.5 w-3.5" /> Estándar
+                    </TabsTrigger>
+                    <TabsTrigger value="promedio" className={tabsTriggerClass}>
+                      <TrendingUp className="h-3.5 w-3.5" /> Promedio
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+
+                <TabsContent value="estandar" className="m-0 animate-in fade-in-50 duration-500">
+                  <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                    <FileSpreadsheet className="h-12 w-12 mb-4 opacity-20" />
+                    Seguimiento de Disolución - Estándar
+                  </div>
+                </TabsContent>
+
+                <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500">
+                  <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                    <TrendingUp className="h-12 w-12 mb-4 opacity-20" />
+                    Seguimiento de Disolución - Promedio
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </TabsContent>
+
+            <TabsContent value="seguimiento-simple" className="m-0 animate-in fade-in-50 duration-500">
+              <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                <Activity className="h-12 w-12 mb-4 opacity-20" />
+                Seguimiento de Jarabe Simple
+              </div>
+            </TabsContent>
+          </Tabs>
         </TabsContent>
 
         <TabsContent value="terminado" className="m-0 animate-in fade-in-50 duration-500">
