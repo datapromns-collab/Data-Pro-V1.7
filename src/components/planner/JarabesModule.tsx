@@ -499,7 +499,7 @@ export function JarabesModule() {
                                     row.consumo > 0 ? "bg-emerald-50 text-emerald-700" :
                                       row.consumo < 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-600"
                                   )}>
-                                    {row.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                    {format(row.consumo)}
                                   </span>
                                 </TableCell>
                               </TableRow>
@@ -797,10 +797,10 @@ export function JarabesModule() {
                           <tbody>
                             <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
                               <td className="font-bold text-xs text-slate-700 uppercase pl-6 py-3">TOTAL</td>
-                              <td className="text-right font-black text-xs text-slate-800 py-3">{sugarStandard.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
-                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos)).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
-                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</td>
-                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{((( ( (sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard) / sugarStandard) * 100).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}%</td>
+                              <td className="text-right font-black text-xs text-slate-800 py-3">{format(sugarStandard)}</td>
+                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{format((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos))}</td>
+                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{format(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard))}</td>
+                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{format((( ((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard) / sugarStandard * 100)))}%</td>
                             </tr>
                           </tbody>
                         </table>
