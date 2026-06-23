@@ -75,6 +75,30 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
   };
 
   const renderHeader = () => (
+  <>
+    {/* PDF export button placed below header */}
+    <div className="flex justify-end mb-4">
+      <button onClick={handleExportPDF} className="px-4 py-2 bg-primary-600 text-white rounded hover:bg-primary-700 transition">
+        Exportar PDF
+      </button>
+    </div>
+
+    <div className={`mb-6 border-b-2 pb-4 flex justify-between items-center`} style={{ borderColor: primaryColor }}>
+      <div className="flex-1">
+        <h1 className="text-xl font-headline font-black text-slate-900 leading-tight uppercase">{titleMap[type]}</h1>
+        <p className="font-black text-[10px] uppercase tracking-widest mt-1" style={{ color: primaryColor }}>Sistema de Gestión de Compras e Inventarios</p>
+      </div>
+      <div className="flex-1 flex justify-center">
+        {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={110} height={40} className="object-contain" />}
+      </div>
+      <div className="flex-1 text-right">
+        <p className="text-[8px] font-black uppercase tracking-widest mb-0.5" style={{ color: primaryColor }}>Confidencial - Planta</p>
+        <p className="text-[10px] text-slate-500 font-bold uppercase">{format(new Date(), "EEEE dd 'de' MMMM yyyy", { locale: es })}</p>
+        <p className="text-[8px] text-slate-400 font-medium italic">Emitido: {format(new Date(), "HH:mm:ss")}</p>
+      </div>
+    </div>
+  </>
+);
 
   // PDF export button placed below header
   <div className="flex justify-end mb-4">
