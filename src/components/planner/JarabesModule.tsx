@@ -314,7 +314,7 @@ export function JarabesModule() {
         </table>
 
         <!-- Sugar Table -->
-        <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento de Azúcar Refinada</p>
+        <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento de Azúcar Refinada – Estándar</p>
         <table style="width:100%;border-collapse:collapse;font-size:8.5px;margin-bottom:18px;">
           <thead>
             <tr style="background:#f59e0b;color:#1e293b;">
@@ -339,7 +339,7 @@ export function JarabesModule() {
             </tr>
           </thead>
           <tbody>
-            ${prom.sugarRows.map((row, i) => `
+            ${est.sugarRows.map((row, i) => `
               <tr style="background:${i % 2 === 0 ? '#fff' : '#fffbeb'};">
                 <td style="padding:3px 5px;border:1px solid #e2e8f0;font-weight:bold;">${row.proveedor}</td>
                 <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invInicialSacos)}</td>
@@ -356,16 +356,16 @@ export function JarabesModule() {
             `).join('')}
             <tr style="background:#fef3c7;font-weight:bold;">
               <td style="padding:4px 5px;border:1px solid #d97706;">TOTAL GENERAL</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.invInicialSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.invInicialKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.recepcionSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.recepcionKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.disponibleSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.disponibleKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.invFinalSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.invFinalKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;color:#059669;">${N(sugarTotals.consumoSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;color:#059669;">${N(sugarTotals.consumoKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.invInicialSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.invInicialKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.recepcionSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.recepcionKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.disponibleSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.disponibleKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.invFinalSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.invFinalKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;color:#059669;">${N(est.sugarTotals.consumoSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;color:#059669;">${N(est.sugarTotals.consumoKg)}</td>
             </tr>
           </tbody>
         </table>
@@ -387,7 +387,7 @@ export function JarabesModule() {
             </tr>
           </thead>
           <tbody>
-            ${tanksRows.map((row, i) => `
+            ${est.tanksRows.map((row, i) => `
               <tr style="background:${i % 2 === 0 ? '#fff' : '#fffbeb'};">
                 <td style="padding:3px 5px;border:1px solid #e2e8f0;font-weight:bold;">${row.item}</td>
                 <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invInicialSacos)}</td>
@@ -398,10 +398,10 @@ export function JarabesModule() {
             `).join('')}
             <tr style="background:#fef3c7;font-weight:bold;">
               <td style="padding:4px 5px;border:1px solid #d97706;">TOTAL GENERAL</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(tanksTotals.invInicialSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(tanksTotals.invInicialKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(tanksTotals.invFinalSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(tanksTotals.invFinalKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.tanksTotals.invInicialSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.tanksTotals.invInicialKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.tanksTotals.invFinalSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.tanksTotals.invFinalKg)}</td>
             </tr>
           </tbody>
         </table>
@@ -419,7 +419,7 @@ export function JarabesModule() {
           </thead>
           <tbody>
             <tr style="background:#dbeafe;font-weight:bold;font-size:11px;">
-              <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;">${N(prom.sugarStandard)}</td>
+              <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;">${N(est.sugarStandard)}</td>
               <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;">${N(fisico)}</td>
               <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;color:${diferencia <= 0 ? '#059669' : '#dc2626'};">${N(diferencia)}</td>
               <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;color:${porcentaje <= 0 ? '#059669' : '#dc2626'};">${N(porcentaje)}%</td>
