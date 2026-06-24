@@ -17,7 +17,8 @@ import {
   Search,
   Trash2,
   Sparkles,
-  Calculator
+  Calculator,
+  FileDown
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
@@ -782,13 +783,22 @@ export function JarabesModule() {
                   </TabsList>
                 </div>
 
-                <TabsContent value="estandar" className="m-0 animate-in fade-in-50 duration-500">
-                  <div className="bg-white border border-slate-200 rounded-[2rem] p-6 shadow-sm overflow-hidden space-y-8">
+<TabsContent value="estandar" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                   <div className="flex justify-end no-print">
+                     <Button 
+                       onClick={handleExportPDF}
+                       variant="outline" 
+                       className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
+                     >
+                       <FileDown className="h-4 w-4" /> Exportar Reporte PDF Estándar
+                     </Button>
+                   </div>
+                   <div className="bg-white border border-slate-200 rounded-[2rem] p-6 shadow-sm overflow-hidden space-y-8">
 
-                    {/* UBB Section */}
-                    <div>
-                      {/* UBB Header Controls */}
-                      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 no-print">
+                     {/* UBB Section */}
+                     <div>
+                       {/* UBB Header Controls */}
+                       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 no-print">
   <div className="flex items-center gap-3">
     <div className="bg-primary/10 p-2.5 rounded-xl">
       <Calculator className="h-5 w-5 text-primary" />
@@ -1159,15 +1169,12 @@ export function JarabesModule() {
                     </div>
 
 
-                    {/* Consumption Calculation Table */}
+{/* Consumption Calculation Table */}
 <div className="flex items-center justify-between">
-                         <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo</h3>
-                         <Button variant="outline" size="sm" onClick={handleExportPDF} className="ml-2 no-print">
-                           PDF Estándar
-                         </Button>
-                       </div>
-                       <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
-                        <table className="min-w-[600px]">
+  <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo – Estándar</h3>
+</div>
+<div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
+  <table className="min-w-[600px]">
                           <thead>
                             <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
                               <th className="text-white font-black text-[11px] uppercase pl-6 text-right w-1/4">Estándar</th>
@@ -1189,13 +1196,22 @@ export function JarabesModule() {
                     </div>
                   </TabsContent>
 
-                  <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500">
-                    <div className="bg-white border border-slate-200 rounded-[2rem] p-6 shadow-sm overflow-hidden space-y-8">
+<TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                     <div className="flex justify-end no-print">
+                     <Button 
+                       onClick={handleExportPDFPromedio}
+                       variant="outline" 
+                       className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
+                     >
+                       <FileDown className="h-4 w-4" /> Exportar Reporte PDF Promedio
+                     </Button>
+                   </div>
+                   <div className="bg-white border border-slate-200 rounded-[2rem] p-6 shadow-sm overflow-hidden space-y-8">
 
-                      {/* UBB Section */}
-                      <div>
-                        {/* UBB Header Controls */}
-                        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 no-print">
+                       {/* UBB Section */}
+                       <div>
+                         {/* UBB Header Controls */}
+                         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 no-print">
                           <div className="flex items-center gap-3">
                             <div className="bg-primary/10 p-2.5 rounded-xl">
                               <Calculator className="h-5 w-5 text-primary" />
@@ -1563,15 +1579,12 @@ export function JarabesModule() {
                         </Table>
                       </div>
 
-                      {/* Consumption Calculation Table */}
-<div className="flex items-center justify-between no-print">
-  <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo</h3>
-  <Button variant="outline" size="sm" onClick={handleExportPDFPromedio} className="h-10 px-5 gap-2 rounded-full font-black text-xs uppercase tracking-wider transition-all">
-    PDF Promedio
-  </Button>
+{/* Consumption Calculation Table */}
+<div className="flex items-center justify-between">
+  <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo – Promedio</h3>
 </div>
-                                              <div ref={consumptionRef} className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
-                        <table className="min-w-[600px]">
+<div ref={consumptionRef} className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
+  <table className="min-w-[600px]">
                           <thead>
                             <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
                               <th className="text-white font-black text-[11px] uppercase pl-6 text-right w-1/4">Estándar</th>
