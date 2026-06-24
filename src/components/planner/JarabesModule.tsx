@@ -371,6 +371,206 @@ export function JarabesModule() {
     }
   };
 
+  // Export styled PDF report – Promedio
+  const handleExportPDFPromedio = async () => {
+    try {
+      const dateObj = new Date(selectedDate + 'T12:00:00');
+      const monthName = dateObj.toLocaleString('es', { month: 'long' }).toUpperCase();
+
+      const fisico = (sugarRows.reduce((a, r) => a + r.disponibleSacos, 0) + tanksRows.reduce((a, r) => a + r.invInicialSacos, 0))
+        - (sugarRows.reduce((a, r) => a + r.invFinalSacos, 0) + tanksRows.reduce((a, r) => a + r.invFinalSacos, 0));
+      const diferencia = fisico - sugarStandard;
+      const porcentaje = sugarStandard !== 0 ? (diferencia / sugarStandard * 100) : 0;
+
+      const reportEl = document.createElement('div');
+      reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:28px 24px;font-family:Arial,sans-serif;';
+
+      const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      reportEl.innerHTML = `
+        <div style="text-align:center;margin-bottom:18px;">
+          <h2 style="font-size:15px;font-weight:bold;margin:0 0 4px;">Resumen de Azúcar Semanal – Promedio</h2>
+          <p style="font-size:11px;margin:2px 0;">Fecha: <strong>${selectedDate}</strong> &nbsp;&nbsp; Mes: <strong>${monthName}</strong></p>
+        </div>
+
+        <!-- UBB Table -->
+        <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento UBB – Promedio</p>
+        <table style="width:100%;border-collapse:collapse;font-size:9.5px;margin-bottom:18px;">
+          <thead>
+            <tr style="background:#4f81bd;color:#fff;">
+              <th style="padding:5px 8px;text-align:left;border:1px solid #3a6499;">SABOR</th>
+              <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;">UBB INICIAL</th>
+              <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;">UBB PREPARADO</th>
+              <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;">UBB FINAL</th>
+              <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;">CONSUMO</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map((row, i) => `
+              <tr style="background:${i % 2 === 0 ? '#fff' : '#f0f4f8'};">
+                <td style="padding:3px 8px;border:1px solid #e2e8f0;">${row.sabor}</td>
+                <td style="padding:3px 8px;text-align:right;border:1px solid #e2e8f0;">${N(row.inicial)}</td>
+                <td style="padding:3px 8px;text-align:right;border:1px solid #e2e8f0;">${N(row.preparado)}</td>
+                <td style="padding:3px 8px;text-align:right;border:1px solid #e2e8f0;">${N(row.final)}</td>
+                <td style="padding:3px 8px;text-align:right;border:1px solid #e2e8f0;font-weight:bold;color:${row.consumo > 0 ? '#059669' : row.consumo < 0 ? '#dc2626' : '#64748b'};">${N(row.consumo)}</td>
+              </tr>
+            `).join('')}
+            <tr style="background:#dbeafe;font-weight:bold;">
+              <td style="padding:5px 8px;border:1px solid #93c5fd;">TOTAL GENERAL</td>
+              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(totals.inicial)}</td>
+              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(totals.preparado)}</td>
+              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(totals.final)}</td>
+              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;background:#4f81bd;color:#fff;">${N(totals.consumo)}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Sugar Table -->
+        <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento de Azúcar Refinada</p>
+        <table style="width:100%;border-collapse:collapse;font-size:8.5px;margin-bottom:18px;">
+          <thead>
+            <tr style="background:#f59e0b;color:#1e293b;">
+              <th style="padding:4px 5px;text-align:center;border:1px solid #d97706;" colspan="3">INV. INICIAL AZÚCAR</th>
+              <th style="padding:4px 5px;text-align:center;border:1px solid #d97706;" colspan="2">RECEPCIÓN</th>
+              <th style="padding:4px 5px;text-align:center;border:1px solid #d97706;" colspan="2">DISPONIBLE</th>
+              <th style="padding:4px 5px;text-align:center;border:1px solid #d97706;" colspan="2">INV. FINAL</th>
+              <th style="padding:4px 5px;text-align:center;border:1px solid #d97706;" colspan="2">CONSUMO FÍSICO</th>
+            </tr>
+            <tr style="background:#fef3c7;color:#1e293b;font-size:8px;">
+              <th style="padding:3px 5px;text-align:left;border:1px solid #e2e8f0;">PROVEEDOR</th>
+              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">SACOS</th>
+              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">KG</th>
+              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">SACOS</th>
+              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">KG</th>
+              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">SACOS</th>
+              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">KG</th>
+              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">SACOS</th>
+              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">KG</th>
+              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">SACOS</th>
+              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">KG</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${sugarRows.map((row, i) => `
+              <tr style="background:${i % 2 === 0 ? '#fff' : '#fffbeb'};">
+                <td style="padding:3px 5px;border:1px solid #e2e8f0;font-weight:bold;">${row.proveedor}</td>
+                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invInicialSacos)}</td>
+                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invInicialKg)}</td>
+                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.recepcionSacos)}</td>
+                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.recepcionKg)}</td>
+                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;font-weight:bold;">${N(row.disponibleSacos)}</td>
+                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;font-weight:bold;">${N(row.disponibleKg)}</td>
+                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invFinalSacos)}</td>
+                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invFinalKg)}</td>
+                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;font-weight:bold;color:${row.consumoSacos >= 0 ? '#059669' : '#dc2626'};">${N(row.consumoSacos)}</td>
+                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;font-weight:bold;color:${row.consumoKg >= 0 ? '#059669' : '#dc2626'};">${N(row.consumoKg)}</td>
+              </tr>
+            `).join('')}
+            <tr style="background:#fef3c7;font-weight:bold;">
+              <td style="padding:4px 5px;border:1px solid #d97706;">TOTAL GENERAL</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.invInicialSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.invInicialKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.recepcionSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.recepcionKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.disponibleSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.disponibleKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.invFinalSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.invFinalKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;color:#059669;">${N(sugarTotals.consumoSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;color:#059669;">${N(sugarTotals.consumoKg)}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Tanks Table -->
+        <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento de Tanques y Salas</p>
+        <table style="width:100%;border-collapse:collapse;font-size:8.5px;margin-bottom:18px;">
+          <thead>
+            <tr style="background:#f59e0b;color:#1e293b;">
+              <th style="padding:4px 5px;text-align:center;border:1px solid #d97706;" colspan="3">INV. INICIAL AZÚCAR</th>
+              <th style="padding:4px 5px;text-align:center;border:1px solid #d97706;" colspan="2">INV. FINAL AZÚCAR</th>
+            </tr>
+            <tr style="background:#fef3c7;color:#1e293b;font-size:8px;">
+              <th style="padding:3px 5px;text-align:left;border:1px solid #e2e8f0;">TANQUE / SALA</th>
+              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">SACOS</th>
+              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">KG</th>
+              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">SACOS</th>
+              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">KG</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${tanksRows.map((row, i) => `
+              <tr style="background:${i % 2 === 0 ? '#fff' : '#fffbeb'};">
+                <td style="padding:3px 5px;border:1px solid #e2e8f0;font-weight:bold;">${row.item}</td>
+                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invInicialSacos)}</td>
+                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invInicialKg)}</td>
+                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invFinalSacos)}</td>
+                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invFinalKg)}</td>
+              </tr>
+            `).join('')}
+            <tr style="background:#fef3c7;font-weight:bold;">
+              <td style="padding:4px 5px;border:1px solid #d97706;">TOTAL GENERAL</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(tanksTotals.invInicialSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(tanksTotals.invInicialKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(tanksTotals.invFinalSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(tanksTotals.invFinalKg)}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- Consumption Summary -->
+        <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Cálculo de Consumo – Promedio</p>
+        <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:8px;">
+          <thead>
+            <tr style="background:#4f81bd;color:#fff;">
+              <th style="padding:6px 10px;text-align:right;border:1px solid #3a6499;">ESTÁNDAR (SACOS)</th>
+              <th style="padding:6px 10px;text-align:right;border:1px solid #3a6499;">FÍSICO (SACOS)</th>
+              <th style="padding:6px 10px;text-align:right;border:1px solid #3a6499;">DIFERENCIA</th>
+              <th style="padding:6px 10px;text-align:right;border:1px solid #3a6499;">%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:#dbeafe;font-weight:bold;font-size:11px;">
+              <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;">${N(sugarStandard)}</td>
+              <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;">${N(fisico)}</td>
+              <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;color:${diferencia <= 0 ? '#059669' : '#dc2626'};">${N(diferencia)}</td>
+              <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;color:${porcentaje <= 0 ? '#059669' : '#dc2626'};">${N(porcentaje)}%</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p style="font-size:8px;color:#94a3b8;text-align:right;margin-top:12px;">Generado el ${new Date().toLocaleString('es')}</p>
+      `;
+
+      document.body.appendChild(reportEl);
+      const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      document.body.removeChild(reportEl);
+
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      const imgW = pageW;
+      const imgH = (canvas.height * imgW) / canvas.width;
+
+      let addedHeight = 0;
+      let remainingH = imgH;
+      let firstPage = true;
+      while (remainingH > 0) {
+        if (!firstPage) pdf.addPage();
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, -addedHeight, imgW, imgH);
+        addedHeight += pageH;
+        remainingH -= pageH;
+        firstPage = false;
+      }
+
+      pdf.save(`reporte_jarabes_promedio_${selectedDate}.pdf`);
+      toast({ title: 'PDF generado', description: 'El reporte Promedio se descargó exitosamente.' });
+    } catch (error) {
+      console.error(error);
+      toast({ title: 'Error', description: 'No se pudo generar el PDF.' });
+    }
+  };
+
 
 
   // Calcular las filas del buscador y totales
@@ -1364,12 +1564,12 @@ export function JarabesModule() {
                       </div>
 
                       {/* Consumption Calculation Table */}
-                                                    <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">
-                                Cálculo de Consumo
-                                <Button variant="outline" size="sm" onClick={handleExportPDF} className="ml-2">
-                                  PDF
-                                </Button>
-                              </h3>
+<div className="flex items-center justify-between no-print">
+  <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo</h3>
+  <Button variant="outline" size="sm" onClick={handleExportPDFPromedio} className="h-10 px-5 gap-2 rounded-full font-black text-xs uppercase tracking-wider transition-all">
+    PDF Promedio
+  </Button>
+</div>
                                               <div ref={consumptionRef} className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
                         <table className="min-w-[600px]">
                           <thead>
