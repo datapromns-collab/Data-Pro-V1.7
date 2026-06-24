@@ -1884,18 +1884,18 @@ export function JarabesModule() {
                               <TableCell className="font-black text-slate-800 uppercase border-r border-slate-200 pl-4 py-3">
                                 TOTAL GENERAL
                               </TableCell>
-                              <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                                {tanksTotals.invInicialSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                              </TableCell>
-                              <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                                {tanksTotals.invInicialKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                              </TableCell>
-                              <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                                {tanksTotals.invFinalSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                              </TableCell>
-                              <TableCell className="text-right font-black text-slate-800 pr-3">
-                                {tanksTotals.invFinalKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                              </TableCell>
+                            <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
+                              {prom.tanksTotals.invInicialSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                            </TableCell>
+                            <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
+                              {prom.tanksTotals.invInicialKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                            </TableCell>
+                            <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
+                              {prom.tanksTotals.invFinalSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                            </TableCell>
+                            <TableCell className="text-right font-black text-slate-800 pr-3">
+                              {prom.tanksTotals.invFinalKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                            </TableCell>
                             </TableRow>
                           </TableBody>
                         </Table>
