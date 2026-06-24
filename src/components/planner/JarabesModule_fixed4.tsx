@@ -263,11 +263,11 @@ export function JarabesModule() {
       const dateObj = new Date(selectedDate + 'T12:00:00');
       const monthName = dateObj.toLocaleString('es', { month: 'long' }).toUpperCase();
 
-      const { sugarRows, tanksRows, sugarStandard, sugarTotals, tanksTotals } = est;
+      const { sugarRows, tanksRows, est.sugarStandard, sugarTotals, tanksTotals } = est;
       const fisico = (sugarRows.reduce((a, r) => a + r.disponibleSacos, 0) + tanksRows.reduce((a, r) => a + r.invInicialSacos, 0))
         - (sugarRows.reduce((a, r) => a + r.invFinalSacos, 0) + tanksRows.reduce((a, r) => a + r.invFinalSacos, 0));
-      const diferencia = fisico - prom.sugarStandard;
-      const porcentaje = prom.sugarStandard !== 0 ? (diferencia / sugarStandard * 100) : 0;
+      const diferencia = fisico - prom.est.sugarStandard;
+      const porcentaje = prom.est.sugarStandard !== 0 ? (diferencia / est.sugarStandard * 100) : 0;
 
       // Build the hidden report div
       const reportEl = document.createElement('div');
@@ -294,7 +294,7 @@ export function JarabesModule() {
             </tr>
           </thead>
           <tbody>
-            ${est.rows.map((row, i) => `
+            ${est.filteredRows.map((row, i) => `
               <tr style="background:${i % 2 === 0 ? '#fff' : '#f0f4f8'};">
                 <td style="padding:3px 8px;border:1px solid #e2e8f0;">${row.sabor}</td>
                 <td style="padding:3px 8px;text-align:right;border:1px solid #e2e8f0;">${N(row.inicial)}</td>
@@ -305,10 +305,10 @@ export function JarabesModule() {
             `).join('')}
             <tr style="background:#dbeafe;font-weight:bold;">
               <td style="padding:5px 8px;border:1px solid #93c5fd;">TOTAL GENERAL</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(est.totals.inicial)}</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(est.totals.preparado)}</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(est.totals.final)}</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;background:#4f81bd;color:#fff;">${N(est.totals.consumo)}</td>
+              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(est.est.totals.inicial)}</td>
+              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(est.est.totals.preparado)}</td>
+              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(est.est.totals.final)}</td>
+              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;background:#4f81bd;color:#fff;">${N(est.est.totals.consumo)}</td>
             </tr>
           </tbody>
         </table>
@@ -339,7 +339,7 @@ export function JarabesModule() {
             </tr>
           </thead>
           <tbody>
-            ${prom.sugarRows.map((row, i) => `
+            ${prom.est.sugarRows.map((row, i) => `
               <tr style="background:${i % 2 === 0 ? '#fff' : '#fffbeb'};">
                 <td style="padding:3px 5px;border:1px solid #e2e8f0;font-weight:bold;">${row.proveedor}</td>
                 <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invInicialSacos)}</td>
@@ -356,16 +356,16 @@ export function JarabesModule() {
             `).join('')}
             <tr style="background:#fef3c7;font-weight:bold;">
               <td style="padding:4px 5px;border:1px solid #d97706;">TOTAL GENERAL</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.invInicialSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.invInicialKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.recepcionSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.recepcionKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.disponibleSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.disponibleKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.invFinalSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.invFinalKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;color:#059669;">${N(sugarTotals.consumoSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;color:#059669;">${N(sugarTotals.consumoKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.invInicialSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.invInicialKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.recepcionSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.recepcionKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.disponibleSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.disponibleKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.invFinalSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.invFinalKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;color:#059669;">${N(sugarest.totals.consumoSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;color:#059669;">${N(sugarest.totals.consumoKg)}</td>
             </tr>
           </tbody>
         </table>
@@ -387,7 +387,7 @@ export function JarabesModule() {
             </tr>
           </thead>
           <tbody>
-            ${tanksRows.map((row, i) => `
+            ${est.tanksRows.map((row, i) => `
               <tr style="background:${i % 2 === 0 ? '#fff' : '#fffbeb'};">
                 <td style="padding:3px 5px;border:1px solid #e2e8f0;font-weight:bold;">${row.item}</td>
                 <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invInicialSacos)}</td>
@@ -398,10 +398,10 @@ export function JarabesModule() {
             `).join('')}
             <tr style="background:#fef3c7;font-weight:bold;">
               <td style="padding:4px 5px;border:1px solid #d97706;">TOTAL GENERAL</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(tanksTotals.invInicialSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(tanksTotals.invInicialKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(tanksTotals.invFinalSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(tanksTotals.invFinalKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.tanksTotals.invInicialSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.tanksTotals.invInicialKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.tanksTotals.invFinalSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.tanksTotals.invFinalKg)}</td>
             </tr>
           </tbody>
         </table>
@@ -419,7 +419,7 @@ export function JarabesModule() {
           </thead>
           <tbody>
             <tr style="background:#dbeafe;font-weight:bold;font-size:11px;">
-              <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;">${N(prom.sugarStandard)}</td>
+              <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;">${N(prom.est.sugarStandard)}</td>
               <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;">${N(fisico)}</td>
               <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;color:${diferencia <= 0 ? '#059669' : '#dc2626'};">${N(diferencia)}</td>
               <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;color:${porcentaje <= 0 ? '#059669' : '#dc2626'};">${N(porcentaje)}%</td>
@@ -466,11 +466,11 @@ export function JarabesModule() {
       const dateObj = new Date(selectedDate + 'T12:00:00');
       const monthName = dateObj.toLocaleString('es', { month: 'long' }).toUpperCase();
 
-      const { sugarRows, tanksRows, sugarStandard, sugarTotals, tanksTotals } = prom;
+      const { sugarRows, tanksRows, est.sugarStandard, sugarTotals, tanksTotals } = prom;
       const fisico = (sugarRows.reduce((a, r) => a + r.disponibleSacos, 0) + tanksRows.reduce((a, r) => a + r.invInicialSacos, 0))
         - (sugarRows.reduce((a, r) => a + r.invFinalSacos, 0) + tanksRows.reduce((a, r) => a + r.invFinalSacos, 0));
-      const diferencia = fisico - prom.sugarStandard;
-      const porcentaje = prom.sugarStandard !== 0 ? (diferencia / sugarStandard * 100) : 0;
+      const diferencia = fisico - prom.est.sugarStandard;
+      const porcentaje = prom.est.sugarStandard !== 0 ? (diferencia / est.sugarStandard * 100) : 0;
 
       const reportEl = document.createElement('div');
       reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:28px 24px;font-family:Arial,sans-serif;';
@@ -507,10 +507,10 @@ export function JarabesModule() {
             `).join('')}
             <tr style="background:#dbeafe;font-weight:bold;">
               <td style="padding:5px 8px;border:1px solid #93c5fd;">TOTAL GENERAL</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(totals.inicial)}</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(totals.preparado)}</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(totals.final)}</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;background:#4f81bd;color:#fff;">${N(totals.consumo)}</td>
+              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(est.totals.inicial)}</td>
+              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(est.totals.preparado)}</td>
+              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(est.totals.final)}</td>
+              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;background:#4f81bd;color:#fff;">${N(est.totals.consumo)}</td>
             </tr>
           </tbody>
         </table>
@@ -541,7 +541,7 @@ export function JarabesModule() {
             </tr>
           </thead>
           <tbody>
-            ${prom.sugarRows.map((row, i) => `
+            ${prom.est.sugarRows.map((row, i) => `
               <tr style="background:${i % 2 === 0 ? '#fff' : '#fffbeb'};">
                 <td style="padding:3px 5px;border:1px solid #e2e8f0;font-weight:bold;">${row.proveedor}</td>
                 <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invInicialSacos)}</td>
@@ -558,16 +558,16 @@ export function JarabesModule() {
             `).join('')}
             <tr style="background:#fef3c7;font-weight:bold;">
               <td style="padding:4px 5px;border:1px solid #d97706;">TOTAL GENERAL</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.invInicialSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.invInicialKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.recepcionSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.recepcionKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.disponibleSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.disponibleKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.invFinalSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(sugarTotals.invFinalKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;color:#059669;">${N(sugarTotals.consumoSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;color:#059669;">${N(sugarTotals.consumoKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.invInicialSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.invInicialKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.recepcionSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.recepcionKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.disponibleSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.disponibleKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.invFinalSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.invFinalKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;color:#059669;">${N(sugarest.totals.consumoSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;color:#059669;">${N(sugarest.totals.consumoKg)}</td>
             </tr>
           </tbody>
         </table>
@@ -589,7 +589,7 @@ export function JarabesModule() {
             </tr>
           </thead>
           <tbody>
-            ${tanksRows.map((row, i) => `
+            ${est.tanksRows.map((row, i) => `
               <tr style="background:${i % 2 === 0 ? '#fff' : '#fffbeb'};">
                 <td style="padding:3px 5px;border:1px solid #e2e8f0;font-weight:bold;">${row.item}</td>
                 <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invInicialSacos)}</td>
@@ -600,10 +600,10 @@ export function JarabesModule() {
             `).join('')}
             <tr style="background:#fef3c7;font-weight:bold;">
               <td style="padding:4px 5px;border:1px solid #d97706;">TOTAL GENERAL</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(tanksTotals.invInicialSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(tanksTotals.invInicialKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(tanksTotals.invFinalSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(tanksTotals.invFinalKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.tanksTotals.invInicialSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.tanksTotals.invInicialKg)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.tanksTotals.invFinalSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.tanksTotals.invFinalKg)}</td>
             </tr>
           </tbody>
         </table>
@@ -621,7 +621,7 @@ export function JarabesModule() {
           </thead>
           <tbody>
             <tr style="background:#dbeafe;font-weight:bold;font-size:11px;">
-              <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;">${N(prom.sugarStandard)}</td>
+              <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;">${N(prom.est.sugarStandard)}</td>
               <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;">${N(fisico)}</td>
               <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;color:${diferencia <= 0 ? '#059669' : '#dc2626'};">${N(diferencia)}</td>
               <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;color:${porcentaje <= 0 ? '#059669' : '#dc2626'};">${N(porcentaje)}%</td>
@@ -704,7 +704,7 @@ export function JarabesModule() {
       { inicial: 0, preparado: 0, final: 0, consumo: 0 }
     );
 
-    const sugarStandard = allRows.reduce(
+    const est.sugarStandard = allRows.reduce(
       (acc, row) => acc + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0),
       0
     );
@@ -814,7 +814,7 @@ export function JarabesModule() {
       }
     );
 
-    return { rows: allRows, filteredRows: filtered, totals: sumTotals, sugarStandard, sugarRows, sugarTotals, tanksRows, tanksTotals };
+    return { rows: allRows, filteredRows: filtered, totals: sumTotals, est.sugarStandard, sugarRows, sugarTotals, tanksRows, tanksTotals };
   };
 
   const est = useMemo(() => computePlannerMetrics(ubbDataEst, sugarDataEst, tanksDataEst, searchTerm), [ubbDataEst, sugarDataEst, tanksDataEst, searchTerm]);
@@ -931,14 +931,14 @@ export function JarabesModule() {
                             </TableRow>
                           </TableHeader>
                           <TableBody>
-                            {filteredRows.map((row) => (
+                            {est.filteredRows.map((row) => (
                               <TableRow key={row.sabor} className="hover:bg-slate-50 border-b border-slate-100">
                                 <TableCell className="pl-6 py-2 text-xs font-bold text-slate-700">{row.sabor}</TableCell>
                                 <TableCell className="py-2 text-right">
                                   <Input
                                     type="number"
                                     value={row.ubbInicialStr}
-                                    onChange={(e) => handleInputChange(row.sabor, 'ubbInicial', e.target.value)}
+                                    onChange={(e) => handleInputChangeEst(row.sabor, 'ubbInicial', e.target.value)}
                                     className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
                                     placeholder="0"
                                   />
@@ -947,7 +947,7 @@ export function JarabesModule() {
                                   <Input
                                     type="number"
                                     value={row.ubbPreparadoStr}
-                                    onChange={(e) => handleInputChange(row.sabor, 'ubbPreparado', e.target.value)}
+                                    onChange={(e) => handleInputChangeEst(row.sabor, 'ubbPreparado', e.target.value)}
                                     className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
                                     placeholder="0"
                                   />
@@ -956,7 +956,7 @@ export function JarabesModule() {
                                   <Input
                                     type="number"
                                     value={row.ubbFinalStr}
-                                    onChange={(e) => handleInputChange(row.sabor, 'ubbFinal', e.target.value)}
+                                    onChange={(e) => handleInputChangeEst(row.sabor, 'ubbFinal', e.target.value)}
                                     className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
                                     placeholder="0"
                                   />
@@ -973,7 +973,7 @@ export function JarabesModule() {
                               </TableRow>
                             ))}
 
-                            {filteredRows.length === 0 && (
+                            {est.filteredRows.length === 0 && (
                               <TableRow>
                                 <TableCell colSpan={5} className="text-center py-12 text-slate-400 font-bold uppercase text-xs">
                                   No se encontraron sabores que coincidan con la búsqueda.
@@ -987,17 +987,17 @@ export function JarabesModule() {
                                 TOTAL GENERAL
                               </TableCell>
                               <TableCell className="text-right py-4 text-xs font-black text-slate-800">
-                                {totals.inicial.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {est.totals.inicial.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                               <TableCell className="text-right py-4 text-xs font-black text-slate-800">
-                                {totals.preparado.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {est.totals.preparado.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                               <TableCell className="text-right py-4 text-xs font-black text-slate-800">
-                                {totals.final.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {est.totals.final.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                               <TableCell className="text-right pr-6 py-4 text-xs font-black text-[#4f81bd]">
                                 <span className="bg-[#4f81bd] text-white px-3 py-1.5 rounded-lg inline-block min-w-[70px] text-center font-black shadow-sm">
-                                  {totals.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                  {est.totals.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                                 </span>
                               </TableCell>
                             </TableRow>
@@ -1045,7 +1045,7 @@ export function JarabesModule() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {sugarRows.map((row) => (
+                          {est.sugarRows.map((row) => (
                             <TableRow key={row.proveedor} className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30 text-xs">
                               <TableCell className="font-bold text-slate-700 uppercase border-r border-slate-100 pl-4">
                                 {row.proveedor}
@@ -1055,7 +1055,7 @@ export function JarabesModule() {
                                 <Input
                                   type="number"
                                   value={row.invInicialSacosStr}
-                                  onChange={(e) => handleSugarInputChange(row.proveedor, 'invInicialSacos', e.target.value)}
+                                  onChange={(e) => handleSugarInputChangeEst(row.proveedor, 'invInicialSacos', e.target.value)}
                                   className="h-8 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-20 ml-auto"
                                   placeholder="0"
                                 />
@@ -1068,7 +1068,7 @@ export function JarabesModule() {
                                 <Input
                                   type="number"
                                   value={row.recepcionSacosStr}
-                                  onChange={(e) => handleSugarInputChange(row.proveedor, 'recepcionSacos', e.target.value)}
+                                  onChange={(e) => handleSugarInputChangeEst(row.proveedor, 'recepcionSacos', e.target.value)}
                                   className="h-8 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-20 ml-auto"
                                   placeholder="0"
                                 />
@@ -1088,7 +1088,7 @@ export function JarabesModule() {
                                 <Input
                                   type="number"
                                   value={row.invFinalSacosStr}
-                                  onChange={(e) => handleSugarInputChange(row.proveedor, 'invFinalSacos', e.target.value)}
+                                  onChange={(e) => handleSugarInputChangeEst(row.proveedor, 'invFinalSacos', e.target.value)}
                                   className="h-8 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-20 ml-auto"
                                   placeholder="0"
                                 />
@@ -1121,38 +1121,38 @@ export function JarabesModule() {
                             </TableCell>
                             {/* INV. INICIAL TOTAL */}
                             <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                              {sugarTotals.invInicialSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              {est.sugarTotals.invInicialSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                             </TableCell>
                             <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                              {sugarTotals.invInicialKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              {est.sugarTotals.invInicialKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                             </TableCell>
                             {/* RECEPCION TOTAL */}
                             <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                              {sugarTotals.recepcionSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              {est.sugarTotals.recepcionSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                             </TableCell>
                             <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                              {sugarTotals.recepcionKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              {est.sugarTotals.recepcionKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                             </TableCell>
                             {/* DISPONIBLE TOTAL */}
                             <TableCell className="text-right font-black text-slate-900 border-r border-slate-200 bg-amber-100/50 pr-3">
-                              {sugarTotals.disponibleSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              {est.sugarTotals.disponibleSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                             </TableCell>
                             <TableCell className="text-right font-black text-slate-900 border-r border-slate-200 bg-amber-100/50 pr-3">
-                              {sugarTotals.disponibleKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              {est.sugarTotals.disponibleKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                             </TableCell>
                             {/* INV. FINAL TOTAL */}
                             <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                              {sugarTotals.invFinalSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              {est.sugarTotals.invFinalSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                             </TableCell>
                             <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                              {sugarTotals.invFinalKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              {est.sugarTotals.invFinalKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                             </TableCell>
                             {/* CONSUMO TOTAL */}
                             <TableCell className="text-right font-black text-emerald-800 border-r border-slate-200 bg-emerald-100/40 pr-3">
-                              {sugarTotals.consumoSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              {sugarest.totals.consumoSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                             </TableCell>
                             <TableCell className="text-right font-black text-emerald-800 bg-emerald-100/40 pr-3">
-                              {sugarTotals.consumoKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              {sugarest.totals.consumoKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                             </TableCell>
                           </TableRow>
                         </TableBody>
@@ -1190,7 +1190,7 @@ export function JarabesModule() {
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {tanksRows.map((row) => (
+                          {est.tanksRows.map((row) => (
                             <TableRow key={row.item} className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30 text-xs">
                               <TableCell className="font-bold text-slate-700 uppercase border-r border-slate-100 pl-4">
                                 {row.item}
@@ -1200,7 +1200,7 @@ export function JarabesModule() {
                                 <Input
                                   type="number"
                                   value={row.invInicialSacosStr}
-                                  onChange={(e) => handleTanksInputChange(row.item, 'invInicialSacos', e.target.value)}
+                                  onChange={(e) => handleTanksInputChangeEst(row.item, 'invInicialSacos', e.target.value)}
                                   className="h-8 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-20 ml-auto"
                                   placeholder="0"
                                 />
@@ -1214,7 +1214,7 @@ export function JarabesModule() {
                                 <Input
                                   type="number"
                                   value={row.invFinalSacosStr}
-                                  onChange={(e) => handleTanksInputChange(row.item, 'invFinalSacos', e.target.value)}
+                                  onChange={(e) => handleTanksInputChangeEst(row.item, 'invFinalSacos', e.target.value)}
                                   className="h-8 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-20 ml-auto"
                                   placeholder="0"
                                 />
@@ -1232,16 +1232,16 @@ export function JarabesModule() {
                               TOTAL GENERAL
                             </TableCell>
                             <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                              {tanksTotals.invInicialSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              {est.tanksTotals.invInicialSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                             </TableCell>
                             <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                              {tanksTotals.invInicialKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              {est.tanksTotals.invInicialKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                             </TableCell>
                             <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                              {tanksTotals.invFinalSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              {est.tanksTotals.invFinalSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                             </TableCell>
                             <TableCell className="text-right font-black text-slate-800 pr-3">
-                              {tanksTotals.invFinalKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                              {est.tanksTotals.invFinalKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                             </TableCell>
                           </TableRow>
                         </TableBody>
@@ -1265,10 +1265,10 @@ export function JarabesModule() {
                           </thead>
                           <tbody>
                             <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
-                              <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(sugarStandard)}</td>
-                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos))}</td>
-                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard))}</td>
-                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard) / sugarStandard * 100)}%</td>
+                              <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(est.sugarStandard)}</td>
+                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber((est.sugarTotals.disponibleSacos + est.tanksTotals.invInicialSacos) - (est.sugarTotals.invFinalSacos + est.tanksTotals.invFinalSacos))}</td>
+                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(((est.sugarTotals.disponibleSacos + est.tanksTotals.invInicialSacos) - (est.sugarTotals.invFinalSacos + est.tanksTotals.invFinalSacos) - est.sugarStandard))}</td>
+                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((est.sugarTotals.disponibleSacos + est.tanksTotals.invInicialSacos) - (est.sugarTotals.invFinalSacos + est.tanksTotals.invFinalSacos) - est.sugarStandard) / est.sugarStandard * 100)}%</td>
                             </tr>
                           </tbody>
                         </table>
@@ -1343,14 +1343,14 @@ export function JarabesModule() {
                               </TableRow>
                             </TableHeader>
                             <TableBody>
-                              {filteredRows.map((row) => (
+                              {est.filteredRows.map((row) => (
                                 <TableRow key={row.sabor} className="hover:bg-slate-50 border-b border-slate-100">
                                   <TableCell className="pl-6 py-2 text-xs font-bold text-slate-700">{row.sabor}</TableCell>
                                   <TableCell className="py-2 text-right">
                                     <Input
                                       type="number"
                                       value={row.ubbInicialStr}
-                                      onChange={(e) => handleInputChange(row.sabor, 'ubbInicial', e.target.value)}
+                                      onChange={(e) => handleInputChangeEst(row.sabor, 'ubbInicial', e.target.value)}
                                       className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
                                       placeholder="0"
                                     />
@@ -1359,7 +1359,7 @@ export function JarabesModule() {
                                     <Input
                                       type="number"
                                       value={row.ubbPreparadoStr}
-                                      onChange={(e) => handleInputChange(row.sabor, 'ubbPreparado', e.target.value)}
+                                      onChange={(e) => handleInputChangeEst(row.sabor, 'ubbPreparado', e.target.value)}
                                       className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
                                       placeholder="0"
                                     />
@@ -1368,7 +1368,7 @@ export function JarabesModule() {
                                     <Input
                                       type="number"
                                       value={row.ubbFinalStr}
-                                      onChange={(e) => handleInputChange(row.sabor, 'ubbFinal', e.target.value)}
+                                      onChange={(e) => handleInputChangeEst(row.sabor, 'ubbFinal', e.target.value)}
                                       className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
                                       placeholder="0"
                                     />
@@ -1385,7 +1385,7 @@ export function JarabesModule() {
                                 </TableRow>
                               ))}
 
-                              {filteredRows.length === 0 && (
+                              {est.filteredRows.length === 0 && (
                                 <TableRow>
                                   <TableCell colSpan={5} className="text-center py-12 text-slate-400 font-bold uppercase text-xs">
                                     No se encontraron sabores que coincidan con la búsqueda.
@@ -1399,17 +1399,17 @@ export function JarabesModule() {
                                   TOTAL GENERAL
                                 </TableCell>
                                 <TableCell className="text-right py-4 text-xs font-black text-slate-800">
-                                  {totals.inicial.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                  {est.totals.inicial.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                                 </TableCell>
                                 <TableCell className="text-right py-4 text-xs font-black text-slate-800">
-                                  {totals.preparado.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                  {est.totals.preparado.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                                 </TableCell>
                                 <TableCell className="text-right py-4 text-xs font-black text-slate-800">
-                                  {totals.final.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                  {est.totals.final.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                                 </TableCell>
                                 <TableCell className="text-right pr-6 py-4 text-xs font-black text-[#4f81bd]">
                                   <span className="bg-[#4f81bd] text-white px-3 py-1.5 rounded-lg inline-block min-w-[70px] text-center font-black shadow-sm">
-                                    {totals.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                    {est.totals.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                                   </span>
                                 </TableCell>
                               </TableRow>
@@ -1457,7 +1457,7 @@ export function JarabesModule() {
                             </TableRow>
                           </TableHeader>
                           <TableBody>
-                            {sugarRows.map((row) => (
+                            {est.sugarRows.map((row) => (
                               <TableRow key={row.proveedor} className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30 text-xs">
                                 <TableCell className="font-bold text-slate-700 uppercase border-r border-slate-100 pl-4">
                                   {row.proveedor}
@@ -1467,7 +1467,7 @@ export function JarabesModule() {
                                   <Input
                                     type="number"
                                     value={row.invInicialSacosStr}
-                                    onChange={(e) => handleSugarInputChange(row.proveedor, 'invInicialSacos', e.target.value)}
+                                    onChange={(e) => handleSugarInputChangeEst(row.proveedor, 'invInicialSacos', e.target.value)}
                                     className="h-8 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-20 ml-auto"
                                     placeholder="0"
                                   />
@@ -1480,7 +1480,7 @@ export function JarabesModule() {
                                   <Input
                                     type="number"
                                     value={row.recepcionSacosStr}
-                                    onChange={(e) => handleSugarInputChange(row.proveedor, 'recepcionSacos', e.target.value)}
+                                    onChange={(e) => handleSugarInputChangeEst(row.proveedor, 'recepcionSacos', e.target.value)}
                                     className="h-8 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-20 ml-auto"
                                     placeholder="0"
                                   />
@@ -1500,7 +1500,7 @@ export function JarabesModule() {
                                   <Input
                                     type="number"
                                     value={row.invFinalSacosStr}
-                                    onChange={(e) => handleSugarInputChange(row.proveedor, 'invFinalSacos', e.target.value)}
+                                    onChange={(e) => handleSugarInputChangeEst(row.proveedor, 'invFinalSacos', e.target.value)}
                                     className="h-8 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-20 ml-auto"
                                     placeholder="0"
                                   />
@@ -1533,38 +1533,38 @@ export function JarabesModule() {
                               </TableCell>
                               {/* INV. INICIAL TOTAL */}
                               <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                                {sugarTotals.invInicialSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {est.sugarTotals.invInicialSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                               <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                                {sugarTotals.invInicialKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {est.sugarTotals.invInicialKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                               {/* RECEPCION TOTAL */}
                               <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                                {sugarTotals.recepcionSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {est.sugarTotals.recepcionSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                               <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                                {sugarTotals.recepcionKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {est.sugarTotals.recepcionKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                               {/* DISPONIBLE TOTAL */}
                               <TableCell className="text-right font-black text-slate-900 border-r border-slate-200 bg-amber-100/50 pr-3">
-                                {sugarTotals.disponibleSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {est.sugarTotals.disponibleSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                               <TableCell className="text-right font-black text-slate-900 border-r border-slate-200 bg-amber-100/50 pr-3">
-                                {sugarTotals.disponibleKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {est.sugarTotals.disponibleKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                               {/* INV. FINAL TOTAL */}
                               <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                                {sugarTotals.invFinalSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {est.sugarTotals.invFinalSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                               <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                                {sugarTotals.invFinalKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {est.sugarTotals.invFinalKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                               {/* CONSUMO TOTAL */}
                               <TableCell className="text-right font-black text-emerald-800 border-r border-slate-200 bg-emerald-100/40 pr-3">
-                                {sugarTotals.consumoSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {sugarest.totals.consumoSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                               <TableCell className="text-right font-black text-emerald-800 bg-emerald-100/40 pr-3">
-                                {sugarTotals.consumoKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {sugarest.totals.consumoKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                             </TableRow>
                           </TableBody>
@@ -1601,7 +1601,7 @@ export function JarabesModule() {
                             </TableRow>
                           </TableHeader>
                           <TableBody>
-                            {tanksRows.map((row) => (
+                            {est.tanksRows.map((row) => (
                               <TableRow key={row.item} className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30 text-xs">
                                 <TableCell className="font-bold text-slate-700 uppercase border-r border-slate-100 pl-4">
                                   {row.item}
@@ -1611,7 +1611,7 @@ export function JarabesModule() {
                                   <Input
                                     type="number"
                                     value={row.invInicialSacosStr}
-                                    onChange={(e) => handleTanksInputChange(row.item, 'invInicialSacos', e.target.value)}
+                                    onChange={(e) => handleTanksInputChangeEst(row.item, 'invInicialSacos', e.target.value)}
                                     className="h-8 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-20 ml-auto"
                                     placeholder="0"
                                   />
@@ -1625,7 +1625,7 @@ export function JarabesModule() {
                                   <Input
                                     type="number"
                                     value={row.invFinalSacosStr}
-                                    onChange={(e) => handleTanksInputChange(row.item, 'invFinalSacos', e.target.value)}
+                                    onChange={(e) => handleTanksInputChangeEst(row.item, 'invFinalSacos', e.target.value)}
                                     className="h-8 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-20 ml-auto"
                                     placeholder="0"
                                   />
@@ -1643,16 +1643,16 @@ export function JarabesModule() {
                                 TOTAL GENERAL
                               </TableCell>
                               <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                                {tanksTotals.invInicialSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {est.tanksTotals.invInicialSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                               <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                                {tanksTotals.invInicialKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {est.tanksTotals.invInicialKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                               <TableCell className="text-right font-black text-slate-800 border-r border-slate-200 pr-3">
-                                {tanksTotals.invFinalSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {est.tanksTotals.invFinalSacos.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                               <TableCell className="text-right font-black text-slate-800 pr-3">
-                                {tanksTotals.invFinalKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                {est.tanksTotals.invFinalKg.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
                               </TableCell>
                             </TableRow>
                           </TableBody>
@@ -1675,10 +1675,10 @@ export function JarabesModule() {
                           </thead>
                           <tbody>
                             <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
-                              <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(sugarStandard)}</td>
-                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos))}</td>
-                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard))}</td>
-                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((sugarTotals.disponibleSacos + tanksTotals.invInicialSacos) - (sugarTotals.invFinalSacos + tanksTotals.invFinalSacos) - sugarStandard) / sugarStandard * 100)}%</td>
+                              <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(est.sugarStandard)}</td>
+                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber((est.sugarTotals.disponibleSacos + est.tanksTotals.invInicialSacos) - (est.sugarTotals.invFinalSacos + est.tanksTotals.invFinalSacos))}</td>
+                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(((est.sugarTotals.disponibleSacos + est.tanksTotals.invInicialSacos) - (est.sugarTotals.invFinalSacos + est.tanksTotals.invFinalSacos) - est.sugarStandard))}</td>
+                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((est.sugarTotals.disponibleSacos + est.tanksTotals.invInicialSacos) - (est.sugarTotals.invFinalSacos + est.tanksTotals.invFinalSacos) - est.sugarStandard) / est.sugarStandard * 100)}%</td>
                             </tr>
                           </tbody>
                         </table>
@@ -1714,6 +1714,7 @@ export function JarabesModule() {
     </div>
   );
 }
+
 
 
 
