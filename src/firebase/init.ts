@@ -13,7 +13,7 @@ let auth: Auth;
  * Inicializa las instancias de Firebase asegurando que solo ocurra una vez en el cliente.
  */
 export function initializeFirebase() {
-  if (typeof window !== 'undefined') {
+  if (typeof window !== 'undefined' && firebaseConfig.apiKey) {
     if (!getApps().length) {
       app = initializeApp(firebaseConfig);
     } else {
@@ -21,7 +21,6 @@ export function initializeFirebase() {
     }
     db = getFirestore(app);
     auth = getAuth(app);
-    
     return { firebaseApp: app, firestore: db, auth };
   }
   

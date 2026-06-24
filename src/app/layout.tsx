@@ -23,6 +23,9 @@ export const metadata: Metadata = {
     icon: '/logo.svg',
     apple: '/logo.svg',
   },
+  other: {
+    'mobile-web-app-capable': 'yes',
+  },
 };
 
 export const viewport: Viewport = {
@@ -39,9 +42,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className={`${inter.variable} ${spaceGrotesk.variable}`}>
-      <head>
-        <meta name="mobile-web-app-capable" content="yes" />
-      </head>
       <body className="font-body antialiased">
         <FirebaseClientProvider>
           <FirebaseErrorListener />

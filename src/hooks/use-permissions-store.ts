@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export type ModuleId =
   | 'planning'
@@ -96,11 +96,11 @@ export function usePermissionsStore() {
     savePermissions({ ...permissions, [userId]: next });
   };
 
-  const hasAccess = (userId: string, module: ModuleId): boolean => {
+  const hasAccess = useCallback((userId: string, module: ModuleId): boolean => {
     const current = permissions[userId];
     if (current) return current.includes(module);
     return (DEFAULT_PERMISSIONS[userId] ?? []).includes(module);
-  };
+  }, [permissions]);
 
   const resetToDefaults = () => {
     savePermissions({ ...DEFAULT_PERMISSIONS });
