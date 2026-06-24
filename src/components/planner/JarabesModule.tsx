@@ -960,8 +960,13 @@ export function JarabesModule() {
 
 
                     {/* Consumption Calculation Table */}
-                    <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo</h3>
-                      <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
+<div className="flex items-center justify-between">
+                         <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo</h3>
+                         <Button variant="outline" size="sm" onClick={handleExportPDF} className="ml-2 no-print">
+                           PDF Estándar
+                         </Button>
+                       </div>
+                       <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
                         <table className="min-w-[600px]">
                           <thead>
                             <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
