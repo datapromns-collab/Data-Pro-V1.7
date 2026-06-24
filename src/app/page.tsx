@@ -57,6 +57,8 @@ import { JarabesModule } from '@/components/planner/JarabesModule';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
+import { usePermissionsStore, MODULE_LABELS, MODULE_COLORS } from '@/hooks/use-permissions-store';
+import { PermisosModule } from '@/components/planner/PermisosModule';
 import { Toaster } from '@/components/ui/toaster';
 import { SidebarProvider, Sidebar, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
@@ -121,70 +123,70 @@ export default function PlannerPage() {
     isDemon,
     isRestrictedInventory,
     isInventory,
-    isPurchasing,
     isJarabes,
     login,
     logout
   } = useAuthStore();
 
+  const {
+    permissions,
+    isLoaded: permissionsLoaded,
+    toggleModuleForUser,
+    hasAccess,
+    resetToDefaults,
+    allModules
+  } = usePermissionsStore();
+
   const { toast } = useToast();
-  
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isEntryDialogOpen, setIsEntryDialogOpen] = useState(false);
-  const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
-  const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
-  const [selectedLine, setSelectedLine] = useState("1");
-  
-  const [activeModule, setActiveModule] = useState<'planning' | 'management' | 'jarabes' | 'recipes' | 'raw-materials' | 'planta' | 'logistica' | 'ventas' | 'purchasing'>('planning');
-  const [activeTab, setActiveTab] = useState("gantt");
-  
-  const [printMode, setPrintMode] = useState<'plan' | 'requirements' | 'summary' | 'daily' | 'monthly' | 'weekly-control' | 'compliance' | 'monthly-compliance' | 'raw-material' | 'daily-raw-material' | 'purchasing-requirements' | 'inventory-finished' | 'inventory-logistics' | 'inventory-plant' | 'inventory-available'>('plan');
-  const [emitDate, setEmitDate] = useState('');
-  const [printWorkingDate, setPrintWorkingDate] = useState<Date>(new Date());
-  
+  const [activeModule, setActiveModule] = useState('planning');
+  const [activeTab, setActiveTab] = useState('gantt');
+  const [printMode, setPrintMode] = useState('');
+  const [selectedLine, setSelectedLine] = useState('1');
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
+  const [printWorkingDate, setPrintWorkingDate] = useState<Date>(new Date());
+  const [isShortcutsOpen, setIsShortcutsOpen] = useState(false);
+  const [isEntryDialogOpen, setIsEntryDialogOpen] = useState(false);
+  const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
+  const [emitDate, setEmitDate] = useState('');
 
-  const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
-
-  useEffect(() => {
-    if (authLoaded && user) {
-      if (isInventory && !['raw-materials', 'jarabes', 'planta'].includes(activeModule)) {
-        setActiveModule('raw-materials');
-        setActiveTab('raw-material-view');
-      }
-      if (isPurchasing && activeModule !== 'purchasing') {
-        setActiveModule('purchasing');
-        setActiveTab('purchasing-view');
-      }
-      if (!isAdmin && activeModule === 'management') {
-        setActiveModule('planning');
-        setActiveTab('gantt');
-      }
-      if (!isDemon && activeModule === 'recipes') {
-        setActiveModule('planning');
-        setActiveTab('gantt');
-      }
-      if (user.role === 'STANDARD' && (activeModule === 'raw-materials' || activeModule === 'jarabes')) {
-        setActiveModule('planning');
-        setActiveTab('gantt');
-      }
-      if (!isAdmin && !isPurchasing && activeModule === 'purchasing') {
-        setActiveModule('planning');
-        setActiveTab('gantt');
-      }
-      if (!isJarabes && activeModule === 'jarabes') {
-        setActiveModule('planning');
-        setActiveTab('gantt');
-      }
-    }
-  }, [authLoaded, user, isAdmin, isDemon, isInventory, isPurchasing, isJarabes, activeModule]);
+  const weekEnd = addDays(weekStartDate, 7);
 
   useEffect(() => {
     if (plannerLoaded) {
       setEmitDate(format(new Date(), 'd/M/yyyy'));
     }
   }, [plannerLoaded]);
+
+  const defaultTabForModule: Record<string, string> = {
+    planning: 'gantt',
+    management: 'admin-report',
+    jarabes: 'jarabes-view',
+    'raw-materials': 'raw-material-view',
+    recipes: 'recipes-editor',
+    planta: 'planta-view',
+    logistica: 'logistica-view',
+    ventas: 'ventas-view',
+    purchasing: 'purchasing-view',
+    permissions: 'permissions-view',
+  };
+
+  useEffect(() => {
+    if (authLoaded && user && permissionsLoaded) {
+      if (activeModule === 'permissions' && !isDemon) {
+        setActiveModule('planning');
+        setActiveTab('gantt');
+        return;
+      }
+      if (activeModule !== 'permissions' && !hasAccess(user.id, activeModule as any)) {
+        const firstAllowed = allModules.find(m => hasAccess(user.id, m)) || 'planning';
+        setActiveModule(firstAllowed as any);
+        setActiveTab(defaultTabForModule[firstAllowed] || 'gantt');
+      }
+    }
+  }, [authLoaded, user, permissionsLoaded, activeModule, isDemon, hasAccess, allModules]);
 
   const weekNumber = getISOWeek(weekStartDate);
 
@@ -430,127 +432,142 @@ export default function PlannerPage() {
           <SidebarContent className="px-4 py-2 flex flex-col h-full">
             <div className="space-y-6 flex-1 overflow-y-auto">
               
-              <section className="space-y-2">
-                <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Módulos</p>
-                <div className="flex flex-col gap-2">
-                  {!isInventory && !isPurchasing && (
-                    <Button 
-                      variant="ghost"
-                      onClick={() => { setActiveModule('planning'); setActiveTab('gantt'); }}
-                      className={sidebarButtonClass(activeModule === 'planning', "bg-primary", "shadow-primary/20")}
-                    >
-                      <div className={iconContainerClass(activeModule === 'planning')}>
-                        <GanttChartSquare className="h-4 w-4" />
-                      </div>
-                      <span className="uppercase text-[10px] font-black tracking-tight">Planificación</span>
-                    </Button>
-                  )}
+               <section className="space-y-2">
+                 <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Módulos</p>
+                 <div className="flex flex-col gap-2">
+                   {hasAccess(user.id, 'planning') && (
+                     <Button 
+                       variant="ghost"
+                       onClick={() => { setActiveModule('planning'); setActiveTab('gantt'); }}
+                       className={sidebarButtonClass(activeModule === 'planning', "bg-primary", "shadow-primary/20")}
+                     >
+                       <div className={iconContainerClass(activeModule === 'planning')}>
+                         <GanttChartSquare className="h-4 w-4" />
+                       </div>
+                       <span className="uppercase text-[10px] font-black tracking-tight">Planificación</span>
+                     </Button>
+                   )}
 
-                  {isAdmin && (
-                    <Button 
-                      variant="ghost" 
-                      onClick={() => { setActiveModule('management'); setActiveTab('admin-report'); }}
-                      className={sidebarButtonClass(activeModule === 'management', "bg-[#A67B5B] hover:bg-[#966B4B]", "shadow-[#A67B5B]/30")}
-                    >
-                      <div className={iconContainerClass(activeModule === 'management')}>
-                        <BarChart3 className="h-4 w-4" />
-                      </div>
-                      <span className="uppercase text-[10px] font-black tracking-tight">Gestión</span>
-                    </Button>
-                  )}
+                   {hasAccess(user.id, 'management') && (
+                     <Button 
+                       variant="ghost" 
+                       onClick={() => { setActiveModule('management'); setActiveTab('admin-report'); }}
+                       className={sidebarButtonClass(activeModule === 'management', "bg-[#A67B5B] hover:bg-[#966B4B]", "shadow-[#A67B5B]/30")}
+                     >
+                       <div className={iconContainerClass(activeModule === 'management')}>
+                         <BarChart3 className="h-4 w-4" />
+                       </div>
+                       <span className="uppercase text-[10px] font-black tracking-tight">Gestión</span>
+                     </Button>
+                   )}
 
-                  {isJarabes && (
-                    <Button 
-                      variant="ghost" 
-                      onClick={() => { setActiveModule('jarabes'); setActiveTab('jarabes-view'); }}
-                      className={sidebarButtonClass(activeModule === 'jarabes', "bg-blue-500 hover:bg-blue-600", "shadow-blue-400/30")}
-                    >
-                      <div className={iconContainerClass(activeModule === 'jarabes')}>
-                        <Droplets className="h-4 w-4" />
-                      </div>
-                      <span className="uppercase text-[10px] font-black tracking-tight">Jarabes</span>
-                    </Button>
-                  )}
+                   {hasAccess(user.id, 'jarabes') && (
+                     <Button 
+                       variant="ghost" 
+                       onClick={() => { setActiveModule('jarabes'); setActiveTab('jarabes-view'); }}
+                       className={sidebarButtonClass(activeModule === 'jarabes', "bg-blue-500 hover:bg-blue-600", "shadow-blue-400/30")}
+                     >
+                       <div className={iconContainerClass(activeModule === 'jarabes')}>
+                         <Droplets className="h-4 w-4" />
+                       </div>
+                       <span className="uppercase text-[10px] font-black tracking-tight">Jarabes</span>
+                     </Button>
+                   )}
 
-                  {user.role !== 'STANDARD' && !isPurchasing && (
-                    <Button 
-                      variant="ghost" 
-                      onClick={() => { setActiveModule('raw-materials'); setActiveTab('raw-material-view'); }}
-                      className={sidebarButtonClass(activeModule === 'raw-materials', "bg-amber-600 hover:bg-amber-700", "shadow-amber-200/30")}
-                    >
-                      <div className={iconContainerClass(activeModule === 'raw-materials')}>
-                        <Box className="h-4 w-4" />
-                      </div>
-                      <span className="uppercase text-[10px] font-black tracking-tight">Materia Prima</span>
-                    </Button>
-                  )}
+                   {hasAccess(user.id, 'raw-materials') && (
+                     <Button 
+                       variant="ghost" 
+                       onClick={() => { setActiveModule('raw-materials'); setActiveTab('raw-material-view'); }}
+                       className={sidebarButtonClass(activeModule === 'raw-materials', "bg-amber-600 hover:bg-amber-700", "shadow-amber-200/30")}
+                     >
+                       <div className={iconContainerClass(activeModule === 'raw-materials')}>
+                         <Box className="h-4 w-4" />
+                       </div>
+                       <span className="uppercase text-[10px] font-black tracking-tight">Materia Prima</span>
+                     </Button>
+                   )}
 
-                  {isDemon && (
-                    <Button 
-                      variant="ghost" 
-                      onClick={() => { setActiveModule('recipes'); setActiveTab('recipes-editor'); }}
-                      className={sidebarButtonClass(activeModule === 'recipes', "bg-emerald-600 hover:bg-emerald-700", "shadow-emerald-200/30")}
-                    >
-                      <div className={iconContainerClass(activeModule === 'recipes')}>
-                        <FlaskConical className="h-4 w-4" />
-                      </div>
-                      <span className="uppercase text-[10px] font-black tracking-tight">Recetas</span>
-                    </Button>
-                  )}
+                   {hasAccess(user.id, 'recipes') && (
+                     <Button 
+                       variant="ghost" 
+                       onClick={() => { setActiveModule('recipes'); setActiveTab('recipes-editor'); }}
+                       className={sidebarButtonClass(activeModule === 'recipes', "bg-emerald-600 hover:bg-emerald-700", "shadow-emerald-200/30")}
+                     >
+                       <div className={iconContainerClass(activeModule === 'recipes')}>
+                         <FlaskConical className="h-4 w-4" />
+                       </div>
+                       <span className="uppercase text-[10px] font-black tracking-tight">Recetas</span>
+                     </Button>
+                   )}
 
-                  <Button 
-                    variant="ghost" 
-                    onClick={() => { setActiveModule('planta'); setActiveTab('planta-view'); }}
-                    className={sidebarButtonClass(activeModule === 'planta', "bg-slate-800 hover:bg-slate-900", "shadow-slate-200/30")}
-                  >
-                    <div className={iconContainerClass(activeModule === 'planta')}>
-                      <Factory className="h-4 w-4" />
-                    </div>
-                    <span className="uppercase text-[10px] font-black tracking-tight">Planta</span>
-                  </Button>
+                   {hasAccess(user.id, 'planta') && (
+                   <Button 
+                     variant="ghost" 
+                     onClick={() => { setActiveModule('planta'); setActiveTab('planta-view'); }}
+                     className={sidebarButtonClass(activeModule === 'planta', "bg-slate-800 hover:bg-slate-900", "shadow-slate-200/30")}
+                   >
+                     <div className={iconContainerClass(activeModule === 'planta')}>
+                       <Factory className="h-4 w-4" />
+                     </div>
+                     <span className="uppercase text-[10px] font-black tracking-tight">Planta</span>
+                   </Button>
+                   )}
 
-                  {!isRestrictedInventory && (
-                    <>
-                      <Button 
-                        variant="ghost" 
-                        onClick={() => { setActiveModule('logistica'); setActiveTab('logistica-view'); }}
-                        className={sidebarButtonClass(activeModule === 'logistica', "bg-orange-600 hover:bg-orange-700", "shadow-orange-200/30")}
-                      >
-                        <div className={iconContainerClass(activeModule === 'logistica')}>
-                          <Truck className="h-4 w-4" />
-                        </div>
-                        <span className="uppercase text-[10px] font-black tracking-tight">Logística</span>
-                      </Button>
+                   {hasAccess(user.id, 'logistica') && (
+                   <Button 
+                     variant="ghost" 
+                     onClick={() => { setActiveModule('logistica'); setActiveTab('logistica-view'); }}
+                     className={sidebarButtonClass(activeModule === 'logistica', "bg-orange-600 hover:bg-orange-700", "shadow-orange-200/30")}
+                   >
+                     <div className={iconContainerClass(activeModule === 'logistica')}>
+                       <Truck className="h-4 w-4" />
+                     </div>
+                     <span className="uppercase text-[10px] font-black tracking-tight">Logística</span>
+                   </Button>
+                   )}
 
-                      <Button 
-                        variant="ghost" 
-                        onClick={() => { setActiveModule('ventas'); setActiveTab('ventas-view'); }}
-                        className={sidebarButtonClass(activeModule === 'ventas', "bg-indigo-600 hover:bg-indigo-700", "shadow-indigo-200/30")}
-                      >
-                        <div className={iconContainerClass(activeModule === 'ventas')}>
-                          <TrendingUp className="h-4 w-4" />
-                        </div>
-                        <span className="uppercase text-[10px] font-black tracking-tight">Ventas</span>
-                      </Button>
-                    </>
-                  )}
+                   {hasAccess(user.id, 'ventas') && (
+                   <Button 
+                     variant="ghost" 
+                     onClick={() => { setActiveModule('ventas'); setActiveTab('ventas-view'); }}
+                     className={sidebarButtonClass(activeModule === 'ventas', "bg-indigo-600 hover:bg-indigo-700", "shadow-indigo-200/30")}
+                   >
+                     <div className={iconContainerClass(activeModule === 'ventas')}>
+                       <TrendingUp className="h-4 w-4" />
+                     </div>
+                     <span className="uppercase text-[10px] font-black tracking-tight">Ventas</span>
+                   </Button>
+                   )}
 
-                  {(isAdmin || isPurchasing) && (
-                    <Button 
-                      variant="ghost" 
-                      onClick={() => { setActiveModule('purchasing'); setActiveTab('purchasing-view'); }}
-                      className={sidebarButtonClass(activeModule === 'purchasing', "bg-blue-600 hover:bg-blue-700", "shadow-blue-200/30")}
-                    >
-                      <div className={iconContainerClass(activeModule === 'purchasing')}>
-                        <ShoppingCart className="h-4 w-4" />
-                      </div>
-                      <span className="uppercase text-[10px] font-black tracking-tight">Compras</span>
-                    </Button>
-                  )}
-                </div>
-              </section>
+                   {hasAccess(user.id, 'purchasing') && (
+                   <Button 
+                     variant="ghost" 
+                     onClick={() => { setActiveModule('purchasing'); setActiveTab('purchasing-view'); }}
+                     className={sidebarButtonClass(activeModule === 'purchasing', "bg-blue-600 hover:bg-blue-700", "shadow-blue-200/30")}
+                   >
+                     <div className={iconContainerClass(activeModule === 'purchasing')}>
+                       <ShoppingCart className="h-4 w-4" />
+                     </div>
+                     <span className="uppercase text-[10px] font-black tracking-tight">Compras</span>
+                   </Button>
+                   )}
 
-              {activeModule !== 'recipes' && activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'jarabes' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && (
+                   {isDemon && (
+                   <Button 
+                     variant="ghost" 
+                     onClick={() => { setActiveModule('permissions'); setActiveTab('permissions-view'); }}
+                     className={sidebarButtonClass(activeModule === 'permissions', "bg-violet-600 hover:bg-violet-700", "shadow-violet-200/30")}
+                   >
+                     <div className={iconContainerClass(activeModule === 'permissions')}>
+                       <ShieldCheck className="h-4 w-4" />
+                     </div>
+                     <span className="uppercase text-[10px] font-black tracking-tight">Permisos</span>
+                   </Button>
+                   )}
+                 </div>
+               </section>
+
+              {activeModule !== 'recipes' && activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'jarabes' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && (
                 <section className="pt-4 border-t border-slate-100">
                    <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Configuración Semana</p>
                    <div className="px-2 space-y-3">
@@ -573,7 +590,7 @@ export default function PlannerPage() {
                 </section>
               )}
 
-              {activeModule !== 'raw-materials' && activeModule !== 'recipes' && activeModule !== 'jarabes' && activeModule !== 'purchasing' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && !isInventory && (
+              {activeModule !== 'raw-materials' && activeModule !== 'recipes' && activeModule !== 'jarabes' && activeModule !== 'purchasing' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && !isInventory && (
                 <section>
                   <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas de Producción</p>
                   <div className="px-2">
@@ -654,7 +671,8 @@ export default function PlannerPage() {
                 activeModule === 'planta' ? "bg-slate-100 text-slate-700" :
                 activeModule === 'logistica' ? "bg-orange-100 text-orange-700" :
                 activeModule === 'ventas' ? "bg-indigo-100 text-indigo-700" :
-                activeModule === 'purchasing' ? "bg-blue-100 text-blue-700" : "bg-emerald-50 text-emerald-600"
+                activeModule === 'purchasing' ? "bg-blue-100 text-blue-700" :
+                activeModule === 'permissions' ? "bg-violet-100 text-violet-700" : "bg-emerald-50 text-emerald-600"
               )}>
                 {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' : 
                  activeModule === 'recipes' ? 'MÓDULO DE RECETAS' : 
@@ -663,7 +681,8 @@ export default function PlannerPage() {
                  activeModule === 'planta' ? 'MÓDULO DE PLANTA' :
                  activeModule === 'logistica' ? 'MÓDULO DE LOGÍSTICA' :
                  activeModule === 'ventas' ? 'MÓDULO DE VENTAS' :
-                 activeModule === 'purchasing' ? 'MÓDULO DE COMPRAS' : 'MÓDULO DE PLANIFICACIÓN'}
+                 activeModule === 'purchasing' ? 'MÓDULO DE COMPRAS' :
+                 activeModule === 'permissions' ? 'MÓDULO DE PERMISOS' : 'MÓDULO DE PLANIFICACIÓN'}
               </div>
             </div>
             <div className="flex items-center gap-2">
@@ -698,7 +717,7 @@ export default function PlannerPage() {
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <div className="flex flex-col gap-6 h-full">
               
-              {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'jarabes' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && (
+              {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'jarabes' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && (
                 <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1 shadow-none self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print h-11 shrink-0">
                   {activeModule === 'planning' ? (
                     <>
@@ -777,7 +796,7 @@ export default function PlannerPage() {
               )}
 
               <div className="flex-1 min-w-0">
-                {activeModule === 'planning' && !isInventory && !isPurchasing && (
+                {activeModule === 'planning' && hasAccess(user.id, 'planning') && (
                   <>
                     {activeTab === 'gantt' && (
                       <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
@@ -794,7 +813,7 @@ export default function PlannerPage() {
                     {activeTab === 'calculator' && <Calculator />}
                   </>
                 )}
-                {isAdmin && activeModule === 'management' && (
+                {activeModule === 'management' && hasAccess(user.id, 'management') && (
                   <>
                     {activeTab === 'admin-report' && (
                       <AdminReportTool 
@@ -820,10 +839,10 @@ export default function PlannerPage() {
                     )}
                   </>
                 )}
-                {activeModule === 'jarabes' && (
+                {activeModule === 'jarabes' && hasAccess(user.id, 'jarabes') && (
                   <JarabesModule />
                 )}
-                {activeModule === 'raw-materials' && !isPurchasing && (
+                {activeModule === 'raw-materials' && hasAccess(user.id, 'raw-materials') && (
                   <>
                     {activeTab === 'raw-material-view' && (
                       <RawMaterialModule 
@@ -852,7 +871,7 @@ export default function PlannerPage() {
                     )}
                   </>
                 )}
-                {isDemon && activeModule === 'recipes' && (
+                {activeModule === 'recipes' && hasAccess(user.id, 'recipes') && (
                   <>
                     {activeTab === 'recipes-editor' && (
                       <RecipeEditor 
@@ -870,30 +889,31 @@ export default function PlannerPage() {
                     )}
                   </>
                 )}
-                {activeModule === 'planta' && (
+                {activeModule === 'planta' && hasAccess(user.id, 'planta') && (
                   <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                     <Factory className="h-12 w-12 mb-4 opacity-20" />
                     Módulo de Planta en Desarrollo
                   </div>
                 )}
-                {!isRestrictedInventory && activeModule === 'logistica' && (
+                {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
                   <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                     <Truck className="h-12 w-12 mb-4 opacity-20" />
                     Módulo de Logística en Desarrollo
                   </div>
                 )}
-                {!isRestrictedInventory && activeModule === 'ventas' && (
+                {activeModule === 'ventas' && hasAccess(user.id, 'ventas') && (
                   <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                     <TrendingUp className="h-12 w-12 mb-4 opacity-20" />
                     Módulo de Ventas en Desarrollo
                   </div>
                 )}
-                {activeModule === 'purchasing' && (
+                {activeModule === 'purchasing' && hasAccess(user.id, 'purchasing') && (
                   <PurchasingModule 
                     onPrintRequirements={handlePrintPurchasingRequirements} 
                     onPrintInventory={handlePrintInventory}
                   />
                 )}
+                {activeModule === 'permissions' && <PermisosModule />}
               </div>
             </div>
           </div>

@@ -42,6 +42,14 @@ const VALID_USERS = [
   { id: 'anto.mds', password: '123.', name: 'Antonella Dos Santos', role: 'PURCHASING' as UserRole },
 ];
 
+export interface UserInfo {
+  id: string;
+  name: string;
+  role: UserRole;
+}
+
+export const USERS_LIST: UserInfo[] = VALID_USERS.map(({ id, name, role }) => ({ id, name, role }));
+
 export function useAuthStore() {
   const [user, setUser] = useState<UserSession | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
