@@ -19,9 +19,14 @@ import {
   Sparkles,
   Calculator,
   FileDown,
-  ScrollText
+  ScrollText,
+  BarChart3
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { format, addDays } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { getWeekDays } from '@/lib/planner-utils';
+import { Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Line, ComposedChart } from 'recharts';
 
 const formatNumber = (value: number | string) => Number(value).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 const SABORES_ESTANDAR = [
@@ -64,7 +69,7 @@ const SUGAR_PER_UBB: Record<string, number> = {
   "VITA TEA LIMON":       97.00,
 };
 
-export function JarabesModule({ onPrintStandard, onPrintPromedio }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void }) {
+export function JarabesModule({ onPrintStandard, onPrintPromedio, weekStartDate }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; weekStartDate?: Date }) {
   const consumptionRef = useRef<HTMLDivElement>(null);
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
@@ -105,6 +110,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio }: { onPrintSta
       } else { setTanksDataEst({}); }
     };
     loadEstData();
+    setIsLoaded(true);
   }, [selectedDateEst]);
 
   useEffect(() => {
@@ -128,6 +134,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio }: { onPrintSta
       } else { setTanksDataProm({}); }
     };
     loadPromData();
+    setIsLoaded(true);
   }, [selectedDate]);
 
   useEffect(() => {
@@ -277,194 +284,184 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio }: { onPrintSta
       const diferencia = fisico - prom.sugarStandard;
       const porcentaje = prom.sugarStandard !== 0 ? (diferencia / sugarStandard * 100) : 0;
 
-      // Build the hidden report div
-      const reportEl = document.createElement('div');
-      reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:28px 24px;font-family:Arial,sans-serif;';
+      const printWindow = window.open('', '_blank', 'width=900,height=800');
+      if (!printWindow) {
+        toast({ title: 'Error', description: 'No se pudo abrir la ventana de vista previa.' });
+        return;
+      }
 
       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-      reportEl.innerHTML = `
-        <div style="text-align:center;margin-bottom:18px;">
-          <h2 style="font-size:15px;font-weight:bold;margin:0 0 4px;">Resumen de Azúcar Semanal</h2>
-          <p style="font-size:11px;margin:2px 0;">Fecha: <strong>${selectedDate}</strong> &nbsp;&nbsp; Mes: <strong>${monthName}</strong></p>
+      printWindow.document.write(`<!DOCTYPE html><html><head><title>Vista Previa</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
+          table { width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 18px; }
+          th, td { border: 1px solid #cbd5e1; padding: 4px 6px; }
+          th { text-align: center; background: #f59e0b; color: #0f172a; font-weight: bold; }
+          .sub { background: #fef3c7; font-weight: bold; font-size: 9px; }
+          .total { background: #fef3c7; font-weight: bold; }
+          .summary th { background: #4f81bd; color: #fff; }
+          h2 { text-align: center; font-size: 16px; margin-bottom: 4px; }
+          p.info { text-align: center; font-size: 11px; margin: 2px 0; }
+          .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 12px; }
+        </style>
+      </head><body>
+        <div>
+          <h2>Resumen de Azúcar Semanal</h2>
+          <p class="info">Fecha: <strong>${selectedDate}</strong> &nbsp;&nbsp; Mes: <strong>${monthName}</strong></p>
         </div>
 
-        <!-- UBB Table -->
         <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento UBB – Estándar</p>
-        <table style="width:100%;border-collapse:collapse;font-size:9.5px;margin-bottom:18px;">
+        <table>
           <thead>
             <tr style="background:#4f81bd;color:#fff;">
-              <th style="padding:5px 8px;text-align:left;border:1px solid #3a6499;">SABOR</th>
-              <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;">UBB INICIAL</th>
-              <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;">UBB PREPARADO</th>
-              <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;">UBB FINAL</th>
-              <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;">CONSUMO</th>
+              <th style="padding:5px 8px;text-align:left;">SABOR</th>
+              <th style="padding:5px 8px;text-align:right;">UBB INICIAL</th>
+              <th style="padding:5px 8px;text-align:right;">UBB PREPARADO</th>
+              <th style="padding:5px 8px;text-align:right;">UBB FINAL</th>
+              <th style="padding:5px 8px;text-align:right;">CONSUMO</th>
             </tr>
           </thead>
           <tbody>
             ${est.rows.map((row, i) => `
               <tr style="background:${i % 2 === 0 ? '#fff' : '#f0f4f8'};">
-                <td style="padding:3px 8px;border:1px solid #e2e8f0;">${row.sabor}</td>
-                <td style="padding:3px 8px;text-align:right;border:1px solid #e2e8f0;">${N(row.inicial)}</td>
-                <td style="padding:3px 8px;text-align:right;border:1px solid #e2e8f0;">${N(row.preparado)}</td>
-                <td style="padding:3px 8px;text-align:right;border:1px solid #e2e8f0;">${N(row.final)}</td>
-                <td style="padding:3px 8px;text-align:right;border:1px solid #e2e8f0;font-weight:bold;color:${row.consumo > 0 ? '#059669' : row.consumo < 0 ? '#dc2626' : '#64748b'};">${N(row.consumo)}</td>
+                <td style="padding:3px 8px;">${row.sabor}</td>
+                <td style="padding:3px 8px;text-align:right;">${N(row.inicial)}</td>
+                <td style="padding:3px 8px;text-align:right;">${N(row.preparado)}</td>
+                <td style="padding:3px 8px;text-align:right;">${N(row.final)}</td>
+                <td style="padding:3px 8px;text-align:right;font-weight:bold;color:${row.consumo > 0 ? '#059669' : row.consumo < 0 ? '#dc2626' : '#64748b'};">${N(row.consumo)}</td>
               </tr>
             `).join('')}
             <tr style="background:#dbeafe;font-weight:bold;">
-              <td style="padding:5px 8px;border:1px solid #93c5fd;">TOTAL GENERAL</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(est.totals.inicial)}</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(est.totals.preparado)}</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(est.totals.final)}</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;background:#4f81bd;color:#fff;">${N(est.totals.consumo)}</td>
+              <td style="padding:5px 8px;">TOTAL GENERAL</td>
+              <td style="padding:5px 8px;text-align:right;">${N(est.totals.inicial)}</td>
+              <td style="padding:5px 8px;text-align:right;">${N(est.totals.preparado)}</td>
+              <td style="padding:5px 8px;text-align:right;">${N(est.totals.final)}</td>
+              <td style="padding:5px 8px;text-align:right;background:#4f81bd;color:#fff;">${N(est.totals.consumo)}</td>
             </tr>
           </tbody>
         </table>
 
-        <!-- Sugar Table -->
         <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento de Azúcar Refinada – Estándar</p>
-        <table style="width:100%;border-collapse:collapse;font-size:8.5px;margin-bottom:18px;">
+        <table>
           <thead>
             <tr style="background:#f59e0b;color:#1e293b;">
-              <th style="padding:4px 5px;text-align:center;border:1px solid #d97706;" colspan="3">INV. INICIAL AZÚCAR</th>
-              <th style="padding:4px 5px;text-align:center;border:1px solid #d97706;" colspan="2">RECEPCIÓN</th>
-              <th style="padding:4px 5px;text-align:center;border:1px solid #d97706;" colspan="2">DISPONIBLE</th>
-              <th style="padding:4px 5px;text-align:center;border:1px solid #d97706;" colspan="2">INV. FINAL</th>
-              <th style="padding:4px 5px;text-align:center;border:1px solid #d97706;" colspan="2">CONSUMO FÍSICO</th>
+              <th style="padding:4px 5px;text-align:center;" colspan="3">INV. INICIAL AZÚCAR</th>
+              <th style="padding:4px 5px;text-align:center;" colspan="2">RECEPCIÓN</th>
+              <th style="padding:4px 5px;text-align:center;" colspan="2">DISPONIBLE</th>
+              <th style="padding:4px 5px;text-align:center;" colspan="2">INV. FINAL</th>
+              <th style="padding:4px 5px;text-align:center;" colspan="2">CONSUMO FÍSICO</th>
             </tr>
             <tr style="background:#fef3c7;color:#1e293b;font-size:8px;">
-              <th style="padding:3px 5px;text-align:left;border:1px solid #e2e8f0;">PROVEEDOR</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">SACOS</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">KG</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">SACOS</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">KG</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">SACOS</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">KG</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">SACOS</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">KG</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">SACOS</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">KG</th>
+              <th style="padding:3px 5px;text-align:left;">PROVEEDOR</th>
+              <th style="padding:3px 5px;text-align:right;">SACOS</th>
+              <th style="padding:3px 5px;text-align:right;">KG</th>
+              <th style="padding:3px 5px;text-align:right;">SACOS</th>
+              <th style="padding:3px 5px;text-align:right;">KG</th>
+              <th style="padding:3px 5px;text-align:right;">SACOS</th>
+              <th style="padding:3px 5px;text-align:right;">KG</th>
+              <th style="padding:3px 5px;text-align:right;">SACOS</th>
+              <th style="padding:3px 5px;text-align:right;">KG</th>
+              <th style="padding:3px 5px;text-align:right;">SACOS</th>
+              <th style="padding:3px 5px;text-align:right;">KG</th>
             </tr>
           </thead>
           <tbody>
             ${est.sugarRows.map((row, i) => `
               <tr style="background:${i % 2 === 0 ? '#fff' : '#fffbeb'};">
-                <td style="padding:3px 5px;border:1px solid #e2e8f0;font-weight:bold;">${row.proveedor}</td>
-                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invInicialSacos)}</td>
-                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invInicialKg)}</td>
-                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.recepcionSacos)}</td>
-                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.recepcionKg)}</td>
-                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;font-weight:bold;">${N(row.disponibleSacos)}</td>
-                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;font-weight:bold;">${N(row.disponibleKg)}</td>
-                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invFinalSacos)}</td>
-                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invFinalKg)}</td>
-                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;font-weight:bold;color:${row.consumoSacos >= 0 ? '#059669' : '#dc2626'};">${N(row.consumoSacos)}</td>
-                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;font-weight:bold;color:${row.consumoKg >= 0 ? '#059669' : '#dc2626'};">${N(row.consumoKg)}</td>
+                <td style="padding:3px 5px;font-weight:bold;">${row.proveedor}</td>
+                <td style="padding:3px 5px;text-align:right;">${N(row.invInicialSacos)}</td>
+                <td style="padding:3px 5px;text-align:right;">${N(row.invInicialKg)}</td>
+                <td style="padding:3px 5px;text-align:right;">${N(row.recepcionSacos)}</td>
+                <td style="padding:3px 5px;text-align:right;">${N(row.recepcionKg)}</td>
+                <td style="padding:3px 5px;text-align:right;font-weight:bold;">${N(row.disponibleSacos)}</td>
+                <td style="padding:3px 5px;text-align:right;font-weight:bold;">${N(row.disponibleKg)}</td>
+                <td style="padding:3px 5px;text-align:right;">${N(row.invFinalSacos)}</td>
+                <td style="padding:3px 5px;text-align:right;">${N(row.invFinalKg)}</td>
+                <td style="padding:3px 5px;text-align:right;font-weight:bold;color:${row.consumoSacos >= 0 ? '#059669' : '#dc2626'};">${N(row.consumoSacos)}</td>
+                <td style="padding:3px 5px;text-align:right;font-weight:bold;color:${row.consumoKg >= 0 ? '#059669' : '#dc2626'};">${N(row.consumoKg)}</td>
               </tr>
             `).join('')}
-            <tr style="background:#fef3c7;font-weight:bold;">
-              <td style="padding:4px 5px;border:1px solid #d97706;">TOTAL GENERAL</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.invInicialSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.invInicialKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.recepcionSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.recepcionKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.disponibleSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.disponibleKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.invFinalSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.sugarTotals.invFinalKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;color:#059669;">${N(est.sugarTotals.consumoSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;color:#059669;">${N(est.sugarTotals.consumoKg)}</td>
+            <tr class="total">
+              <td style="padding:4px 5px;">TOTAL GENERAL</td>
+              <td style="padding:4px 5px;text-align:right;">${N(est.sugarTotals.invInicialSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;">${N(est.sugarTotals.invInicialKg)}</td>
+              <td style="padding:4px 5px;text-align:right;">${N(est.sugarTotals.recepcionSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;">${N(est.sugarTotals.recepcionKg)}</td>
+              <td style="padding:4px 5px;text-align:right;">${N(est.sugarTotals.disponibleSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;">${N(est.sugarTotals.disponibleKg)}</td>
+              <td style="padding:4px 5px;text-align:right;">${N(est.sugarTotals.invFinalSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;">${N(est.sugarTotals.invFinalKg)}</td>
+              <td style="padding:4px 5px;text-align:right;color:#059669;">${N(est.sugarTotals.consumoSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;color:#059669;">${N(est.sugarTotals.consumoKg)}</td>
             </tr>
           </tbody>
         </table>
 
-        <!-- Tanks Table -->
         <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento de Tanques y Salas</p>
-        <table style="width:100%;border-collapse:collapse;font-size:8.5px;margin-bottom:18px;">
+        <table>
           <thead>
             <tr style="background:#f59e0b;color:#1e293b;">
-              <th style="padding:4px 5px;text-align:center;border:1px solid #d97706;" colspan="3">INV. INICIAL AZÚCAR</th>
-              <th style="padding:4px 5px;text-align:center;border:1px solid #d97706;" colspan="2">INV. FINAL AZÚCAR</th>
+              <th style="padding:4px 5px;text-align:center;" colspan="3">INV. INICIAL AZÚCAR</th>
+              <th style="padding:4px 5px;text-align:center;" colspan="2">INV. FINAL AZÚCAR</th>
             </tr>
             <tr style="background:#fef3c7;color:#1e293b;font-size:8px;">
-              <th style="padding:3px 5px;text-align:left;border:1px solid #e2e8f0;">TANQUE / SALA</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">SACOS</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">KG</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">SACOS</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">KG</th>
+              <th style="padding:3px 5px;text-align:left;">TANQUE / SALA</th>
+              <th style="padding:3px 5px;text-align:right;">SACOS</th>
+              <th style="padding:3px 5px;text-align:right;">KG</th>
+              <th style="padding:3px 5px;text-align:right;">SACOS</th>
+              <th style="padding:3px 5px;text-align:right;">KG</th>
             </tr>
           </thead>
           <tbody>
             ${est.tanksRows.map((row, i) => `
               <tr style="background:${i % 2 === 0 ? '#fff' : '#fffbeb'};">
-                <td style="padding:3px 5px;border:1px solid #e2e8f0;font-weight:bold;">${row.item}</td>
-                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invInicialSacos)}</td>
-                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invInicialKg)}</td>
-                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invFinalSacos)}</td>
-                <td style="padding:3px 5px;text-align:right;border:1px solid #e2e8f0;">${N(row.invFinalKg)}</td>
+                <td style="padding:3px 5px;font-weight:bold;">${row.item}</td>
+                <td style="padding:3px 5px;text-align:right;">${N(row.invInicialSacos)}</td>
+                <td style="padding:3px 5px;text-align:right;">${N(row.invInicialKg)}</td>
+                <td style="padding:3px 5px;text-align:right;">${N(row.invFinalSacos)}</td>
+                <td style="padding:3px 5px;text-align:right;">${N(row.invFinalKg)}</td>
               </tr>
             `).join('')}
-            <tr style="background:#fef3c7;font-weight:bold;">
-              <td style="padding:4px 5px;border:1px solid #d97706;">TOTAL GENERAL</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.tanksTotals.invInicialSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.tanksTotals.invInicialKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.tanksTotals.invFinalSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #d97706;">${N(est.tanksTotals.invFinalKg)}</td>
+            <tr class="total">
+              <td style="padding:4px 5px;">TOTAL GENERAL</td>
+              <td style="padding:4px 5px;text-align:right;">${N(tanksTotals.invInicialSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;">${N(tanksTotals.invInicialKg)}</td>
+              <td style="padding:4px 5px;text-align:right;">${N(tanksTotals.invFinalSacos)}</td>
+              <td style="padding:4px 5px;text-align:right;">${N(tanksTotals.invFinalKg)}</td>
             </tr>
           </tbody>
         </table>
 
-        <!-- Consumption Summary -->
         <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Cálculo de Consumo</p>
-        <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:8px;">
+        <table class="summary">
           <thead>
-            <tr style="background:#4f81bd;color:#fff;">
-              <th style="padding:6px 10px;text-align:right;border:1px solid #3a6499;">ESTÁNDAR (SACOS)</th>
-              <th style="padding:6px 10px;text-align:right;border:1px solid #3a6499;">FÍSICO (SACOS)</th>
-              <th style="padding:6px 10px;text-align:right;border:1px solid #3a6499;">DIFERENCIA</th>
-              <th style="padding:6px 10px;text-align:right;border:1px solid #3a6499;">%</th>
+            <tr>
+              <th style="padding:6px 10px;text-align:right;">ESTÁNDAR (SACOS)</th>
+              <th style="padding:6px 10px;text-align:right;">FÍSICO (SACOS)</th>
+              <th style="padding:6px 10px;text-align:right;">DIFERENCIA</th>
+              <th style="padding:6px 10px;text-align:right;">%</th>
             </tr>
           </thead>
           <tbody>
             <tr style="background:#dbeafe;font-weight:bold;font-size:11px;">
-              <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;">${N(est.sugarStandard)}</td>
-              <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;">${N(fisico)}</td>
-              <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;color:${diferencia <= 0 ? '#059669' : '#dc2626'};">${N(diferencia)}</td>
-              <td style="padding:6px 10px;text-align:right;border:1px solid #93c5fd;color:${porcentaje <= 0 ? '#059669' : '#dc2626'};">${N(porcentaje)}%</td>
+              <td style="padding:6px 10px;text-align:right;">${N(est.sugarStandard)}</td>
+              <td style="padding:6px 10px;text-align:right;">${N(fisico)}</td>
+              <td style="padding:6px 10px;text-align:right;color:${diferencia <= 0 ? '#059669' : '#dc2626'};">${N(diferencia)}</td>
+              <td style="padding:6px 10px;text-align:right;color:${porcentaje <= 0 ? '#059669' : '#dc2626'};">${N(porcentaje)}%</td>
             </tr>
           </tbody>
         </table>
 
-        <p style="font-size:8px;color:#94a3b8;text-align:right;margin-top:12px;">Generado el ${new Date().toLocaleString('es')}</p>
-      `;
+        <div class="footer">Generado el ${new Date().toLocaleString('es')}</div>
+        <script>setTimeout(() => { window.print(); }, 150);</script>
+      </body></html>`);
 
-      document.body.appendChild(reportEl);
-      const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-      document.body.removeChild(reportEl);
-
-      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-      const pageW = pdf.internal.pageSize.getWidth();
-      const pageH = pdf.internal.pageSize.getHeight();
-      const imgW = pageW;
-      const imgH = (canvas.height * imgW) / canvas.width;
-
-      // Handle multi-page
-      let addedHeight = 0;
-      let remainingH = imgH;
-      let firstPage = true;
-      while (remainingH > 0) {
-        if (!firstPage) pdf.addPage();
-        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, -addedHeight, imgW, imgH);
-        addedHeight += pageH;
-        remainingH -= pageH;
-        firstPage = false;
-      }
-
-      pdf.save(`reporte_jarabes_estandar_${selectedDate}.pdf`);
-      toast({ title: 'PDF generado', description: 'El reporte se descargó exitosamente.' });
+      printWindow.document.close();
+      toast({ title: 'Vista previa', description: 'Use el cuadro de impresión para guardar o imprimir el reporte.' });
     } catch (error) {
       console.error(error);
-      toast({ title: 'Error', description: 'No se pudo generar el PDF.' });
+      toast({ title: 'Error', description: 'No se pudo generar la vista previa.' });
     }
   };
 
@@ -669,6 +666,227 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio }: { onPrintSta
     }
   };
 
+  const buildWeeklyReportHTML = (section: 'estandar' | 'promedio', data: any) => {
+    const weekStart = weekStartDate || new Date();
+    const weekEnd = addDays(weekStart, 6);
+    const title = section === 'estandar' ? 'Resumen de Azúcar Semanal – Estándar' : 'Resumen de Azúcar Semanal – Promedio';
+    return `
+      <!DOCTYPE html><html><head><title>${title}</title>
+      <style>
+        body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
+        table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 18px; }
+        th, td { border: 1px solid #cbd5e1; padding: 5px 8px; }
+        th { background: #f59e0b; color: #0f172a; font-weight: bold; }
+        .total { background: #fef3c7; font-weight: bold; }
+        h2 { text-align: center; font-size: 16px; margin-bottom: 4px; }
+        p.info { text-align: center; font-size: 11px; margin: 2px 0; }
+        .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 12px; }
+      </style>
+      </head><body>
+        <div>
+          <h2>${title}</h2>
+          <p class="info">Semana: <strong>${format(weekStart, 'dd/MM/yyyy')}</strong> al <strong>${format(weekEnd, 'dd/MM/yyyy')}</strong></p>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>DÍA</th>
+              <th>FECHA</th>
+              <th>ESTÁNDAR</th>
+              <th>FÍSICO</th>
+              <th>DIFERENCIA</th>
+              <th>%</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${weekDays.map(day => {
+              const dateStr = format(day, 'yyyy-MM-dd');
+              const dayData = loadDayData(dateStr, 'ugar'.replace('ugar', 'sugar'), section);
+              // placeholders so the structure is visible; values will be injected via the render path
+              return `<tr><td>${format(day, 'EEEE', { locale: es }).toUpperCase()}</td><td>${dateStr}</td><td colspan="4">Sin datos</td></tr>`;
+            }).join('')}
+          </tbody>
+        </table>
+        <div class="footer">Generado el ${new Date().toLocaleString('es')}</div>
+      </body></html>`;
+  };
+
+  const handleExportWeeklyPDFStandard = async () => {
+    try {
+      if (!weekDays.length) return;
+      const weekStart = weekStartDate!;
+      const weekEnd = addDays(weekStart, 6);
+      const rows: any[] = [];
+      weekDays.forEach(day => {
+        const dateStr = format(day, 'yyyy-MM-dd');
+        const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
+        const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
+        const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
+        const metrics = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+        const fisico = (metrics.sugarTotals.disponibleSacos + metrics.tanksTotals.invInicialSacos) - (metrics.sugarTotals.invFinalSacos + metrics.tanksTotals.invFinalSacos);
+        const diferencia = fisico - metrics.sugarStandard;
+        const porcentaje = metrics.sugarStandard !== 0 ? (diferencia / metrics.sugarStandard * 100) : 0;
+        rows.push({
+          dia: format(day, 'EEEE', { locale: es }).toUpperCase(),
+          fecha: dateStr,
+          estandar: metrics.sugarStandard,
+          fisico,
+          diferencia,
+          porcentaje
+        });
+      });
+
+      const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      const printWindow = window.open('', '_blank', 'width=900,height=800');
+      if (!printWindow) { toast({ title: 'Error', description: 'No se pudo abrir la ventana de vista previa.' }); return; }
+
+      printWindow.document.write(`<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
+          table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 18px; }
+          th, td { border: 1px solid #cbd5e1; padding: 5px 8px; }
+          th { background: #f59e0b; color: #0f172a; }
+          .total { background: #fef3c7; font-weight: bold; }
+          h2 { text-align: center; font-size: 16px; margin-bottom: 4px; }
+          p.info { text-align: center; font-size: 11px; margin: 2px 0; }
+          .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 12px; }
+        </style>
+      </head><body>
+        <div>
+          <h2>Resumen de Azúcar Semanal – Estándar</h2>
+          <p class="info">Semana: <strong>${format(weekStart, 'dd/MM/yyyy')}</strong> al <strong>${format(weekEnd, 'dd/MM/yyyy')}</strong></p>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>DÍA</th>
+              <th>FECHA</th>
+              <th>ESTÁNDAR</th>
+              <th>FÍSICO</th>
+              <th>DIFERENCIA</th>
+              <th>%</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map((r, i) => `
+              <tr style="background:${i % 2 === 0 ? '#fff' : '#fffbeb'};">
+                <td>${r.dia}</td>
+                <td>${r.fecha}</td>
+                <td style="text-align:right;">${N(r.estandar)}</td>
+                <td style="text-align:right;">${N(r.fisico)}</td>
+                <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};">${N(r.diferencia)}</td>
+                <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};">${N(r.porcentaje)}%</td>
+              </tr>
+            `).join('')}
+            <tr class="total">
+              <td colspan="2">TOTAL SEMANA</td>
+              <td style="text-align:right;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
+              <td style="text-align:right;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
+              <td style="text-align:right;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
+              <td style="text-align:right;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="footer">Generado el ${new Date().toLocaleString('es')}</div>
+        <script>setTimeout(() => { window.print(); }, 150);</script>
+      </body></html>`);
+      printWindow.document.close();
+      toast({ title: 'Vista previa semanal', description: 'Estándar semanal listo para imprimir o guardar.' });
+    } catch (error) {
+      console.error(error);
+      toast({ title: 'Error', description: 'No se pudo generar la vista previa semanal.' });
+    }
+  };
+
+  const handleExportWeeklyPDFPromedio = async () => {
+    try {
+      if (!weekDays.length) return;
+      const weekStart = weekStartDate!;
+      const weekEnd = addDays(weekStart, 6);
+      const rows: any[] = [];
+      weekDays.forEach(day => {
+        const dateStr = format(day, 'yyyy-MM-dd');
+        const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
+        const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
+        const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
+        const metrics = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+        const fisico = (metrics.sugarTotals.disponibleSacos + metrics.tanksTotals.invInicialSacos) - (metrics.sugarTotals.invFinalSacos + metrics.tanksTotals.invFinalSacos);
+        const diferencia = fisico - metrics.sugarStandard;
+        const porcentaje = metrics.sugarStandard !== 0 ? (diferencia / metrics.sugarStandard * 100) : 0;
+        rows.push({
+          dia: format(day, 'EEEE', { locale: es }).toUpperCase(),
+          fecha: dateStr,
+          estandar: metrics.sugarStandard,
+          fisico,
+          diferencia,
+          porcentaje
+        });
+      });
+
+      const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      const printWindow = window.open('', '_blank', 'width=900,height=800');
+      if (!printWindow) { toast({ title: 'Error', description: 'No se pudo abrir la ventana de vista previa.' }); return; }
+
+      printWindow.document.write(`<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
+          table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 18px; }
+          th, td { border: 1px solid #cbd5e1; padding: 5px 8px; }
+          th { background: #f59e0b; color: #0f172a; }
+          .total { background: #fef3c7; font-weight: bold; }
+          h2 { text-align: center; font-size: 16px; margin-bottom: 4px; }
+          p.info { text-align: center; font-size: 11px; margin: 2px 0; }
+          .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 12px; }
+        </style>
+      </head><body>
+        <div>
+          <h2>Resumen de Azúcar Semanal – Promedio</h2>
+          <p class="info">Semana: <strong>${format(weekStart, 'dd/MM/yyyy')}</strong> al <strong>${format(weekEnd, 'dd/MM/yyyy')}</strong></p>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>DÍA</th>
+              <th>FECHA</th>
+              <th>ESTÁNDAR</th>
+              <th>FÍSICO</th>
+              <th>DIFERENCIA</th>
+              <th>%</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${rows.map((r, i) => `
+              <tr style="background:${i % 2 === 0 ? '#fff' : '#fffbeb'};">
+                <td>${r.dia}</td>
+                <td>${r.fecha}</td>
+                <td style="text-align:right;">${N(r.estandar)}</td>
+                <td style="text-align:right;">${N(r.fisico)}</td>
+                <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};">${N(r.diferencia)}</td>
+                <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};">${N(r.porcentaje)}%</td>
+              </tr>
+            `).join('')}
+            <tr class="total">
+              <td colspan="2">TOTAL SEMANA</td>
+              <td style="text-align:right;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
+              <td style="text-align:right;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
+              <td style="text-align:right;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
+              <td style="text-align:right;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="footer">Generado el ${new Date().toLocaleString('es')}</div>
+        <script>setTimeout(() => { window.print(); }, 150);</script>
+      </body></html>`);
+      printWindow.document.close();
+      toast({ title: 'Vista previa semanal', description: 'Promedio semanal listo para imprimir o guardar.' });
+    } catch (error) {
+      console.error(error);
+      toast({ title: 'Error', description: 'No se pudo generar la vista previa semanal.' });
+    }
+  };
+
 
 
   // Helper function to compute all planner metrics
@@ -827,6 +1045,79 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio }: { onPrintSta
 
   const est = useMemo(() => computePlannerMetrics(ubbDataEst, sugarDataEst, tanksDataEst, searchTermEst), [ubbDataEst, sugarDataEst, tanksDataEst, searchTermEst]);
   const prom = useMemo(() => computePlannerMetrics(ubbDataProm, sugarDataProm, tanksDataProm, searchTerm, promKgFactor), [ubbDataProm, sugarDataProm, tanksDataProm, searchTerm, promKgFactor]);
+
+  const weekDays = useMemo(() => weekStartDate ? getWeekDays(weekStartDate) : [], [weekStartDate]);
+
+  const loadDayData = (date: string, type: string, field: string) => {
+    try {
+      const raw = localStorage.getItem(getKey(type, field, date));
+      return raw ? JSON.parse(raw) : {};
+    } catch {
+      return {};
+    }
+  };
+
+  const weeklyEst = useMemo(() => {
+    if (!weekDays.length) return null;
+    let ubb: Record<string, { ubbInicial?: string; ubbPreparado?: string; ubbFinal?: string }> = {};
+    let sugar: Record<string, { invInicialSacos?: string; recepcionSacos?: string; invFinalSacos?: string }> = {};
+    let tanks: Record<string, { invInicialSacos?: string; invFinalSacos?: string }> = {};
+    weekDays.forEach(day => {
+      const dateStr = format(day, 'yyyy-MM-dd');
+      const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
+      const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
+      const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
+      Object.keys(dUbb).forEach(k => {
+        ubb[k] = ubb[k] || {};
+        ubb[k]!.ubbInicial = String(parseFloat(ubb[k]!.ubbInicial || '0') + parseFloat(dUbb[k].ubbInicial || '0'));
+        ubb[k]!.ubbPreparado = String(parseFloat(ubb[k]!.ubbPreparado || '0') + parseFloat(dUbb[k].ubbPreparado || '0'));
+        ubb[k]!.ubbFinal = String(parseFloat(ubb[k]!.ubbFinal || '0') + parseFloat(dUbb[k].ubbFinal || '0'));
+      });
+      Object.keys(dSugar).forEach(k => {
+        sugar[k] = sugar[k] || {};
+        sugar[k]!.invInicialSacos = String(parseFloat(sugar[k]!.invInicialSacos || '0') + parseFloat(dSugar[k].invInicialSacos || '0'));
+        sugar[k]!.recepcionSacos = String(parseFloat(sugar[k]!.recepcionSacos || '0') + parseFloat(dSugar[k].recepcionSacos || '0'));
+        sugar[k]!.invFinalSacos = String(parseFloat(sugar[k]!.invFinalSacos || '0') + parseFloat(dSugar[k].invFinalSacos || '0'));
+      });
+      Object.keys(dTanks).forEach(k => {
+        tanks[k] = tanks[k] || {};
+        tanks[k]!.invInicialSacos = String(parseFloat(tanks[k]!.invInicialSacos || '0') + parseFloat(dTanks[k].invInicialSacos || '0'));
+        tanks[k]!.invFinalSacos = String(parseFloat(tanks[k]!.invFinalSacos || '0') + parseFloat(dTanks[k].invFinalSacos || '0'));
+      });
+    });
+    return computePlannerMetrics(ubb, sugar, tanks, '', 50);
+  }, [weekDays]);
+
+  const weeklyProm = useMemo(() => {
+    if (!weekDays.length) return null;
+    let ubb: Record<string, { ubbInicial?: string; ubbPreparado?: string; ubbFinal?: string }> = {};
+    let sugar: Record<string, { invInicialSacos?: string; recepcionSacos?: string; invFinalSacos?: string }> = {};
+    let tanks: Record<string, { invInicialSacos?: string; invFinalSacos?: string }> = {};
+    weekDays.forEach(day => {
+      const dateStr = format(day, 'yyyy-MM-dd');
+      const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
+      const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
+      const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
+      Object.keys(dUbb).forEach(k => {
+        ubb[k] = ubb[k] || {};
+        ubb[k]!.ubbInicial = String(parseFloat(ubb[k]!.ubbInicial || '0') + parseFloat(dUbb[k].ubbInicial || '0'));
+        ubb[k]!.ubbPreparado = String(parseFloat(ubb[k]!.ubbPreparado || '0') + parseFloat(dUbb[k].ubbPreparado || '0'));
+        ubb[k]!.ubbFinal = String(parseFloat(ubb[k]!.ubbFinal || '0') + parseFloat(dUbb[k].ubbFinal || '0'));
+      });
+      Object.keys(dSugar).forEach(k => {
+        sugar[k] = sugar[k] || {};
+        sugar[k]!.invInicialSacos = String(parseFloat(sugar[k]!.invInicialSacos || '0') + parseFloat(dSugar[k].invInicialSacos || '0'));
+        sugar[k]!.recepcionSacos = String(parseFloat(sugar[k]!.recepcionSacos || '0') + parseFloat(dSugar[k].recepcionSacos || '0'));
+        sugar[k]!.invFinalSacos = String(parseFloat(sugar[k]!.invFinalSacos || '0') + parseFloat(dSugar[k].invFinalSacos || '0'));
+      });
+      Object.keys(dTanks).forEach(k => {
+        tanks[k] = tanks[k] || {};
+        tanks[k]!.invInicialSacos = String(parseFloat(tanks[k]!.invInicialSacos || '0') + parseFloat(dTanks[k].invInicialSacos || '0'));
+        tanks[k]!.invFinalSacos = String(parseFloat(tanks[k]!.invFinalSacos || '0') + parseFloat(dTanks[k].invFinalSacos || '0'));
+      });
+    });
+    return computePlannerMetrics(ubb, sugar, tanks, '', 50);
+  }, [weekDays]);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
@@ -1705,34 +1996,152 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio }: { onPrintSta
                        </div>
                      </TabsContent>
 
-                    <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
-                          <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider mb-4">Resumen Estándar Semanal</h3>
-                          <div className="h-64 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
-                            Pendiente
-                          </div>
-                        </div>
-                        <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
-                          <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider mb-4">Resumen Promedio Semanal</h3>
-                          <div className="h-64 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
-                            Pendiente
-                          </div>
-                        </div>
-                        <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
-                          <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider mb-4">Estándar Mensual</h3>
-                          <div className="h-64 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
-                            Pendiente
-                          </div>
-                        </div>
-                        <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
-                          <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider mb-4">Resumen Promedio Mensual</h3>
-                          <div className="h-64 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
-                            Pendiente
-                          </div>
-                        </div>
-                      </div>
-                    </TabsContent>
+                     <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                         <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
+                           <div className="flex items-center justify-between mb-4">
+                             <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Estándar Semanal</h3>
+                             <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFStandard} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
+                               <FileDown className="h-4 w-4" /> PDF
+                             </Button>
+                           </div>
+                           {weeklyEst && weekDays.length > 0 ? (
+                             <>
+                               <div className="overflow-x-auto mb-4">
+                                 <table className="min-w-[500px] text-xs">
+                                   <thead>
+                                     <tr className="bg-slate-100">
+                                       <th className="p-2 text-left border border-slate-200">DÍA</th>
+                                       <th className="p-2 text-right border border-slate-200">ESTÁNDAR</th>
+                                       <th className="p-2 text-right border border-slate-200">FÍSICO</th>
+                                       <th className="p-2 text-right border border-slate-200">DIFERENCIA</th>
+                                       <th className="p-2 text-right border border-slate-200">%</th>
+                                     </tr>
+                                   </thead>
+                                   <tbody>
+                                     {weekDays.map((day, idx) => {
+                                       const dateStr = format(day, 'yyyy-MM-dd');
+                                       const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
+                                       const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
+                                       const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
+                                       const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+                                       const fisico = (m.sugarTotals.disponibleSacos + m.tanksTotals.invInicialSacos) - (m.sugarTotals.invFinalSacos + m.tanksTotals.invFinalSacos);
+                                       const diferencia = fisico - m.sugarStandard;
+                                       const porcentaje = m.sugarStandard !== 0 ? (diferencia / m.sugarStandard * 100) : 0;
+                                       return (
+                                         <tr key={dateStr} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
+                                           <td className="p-2 border border-slate-200 font-bold uppercase">{format(day, 'EEEE', { locale: es })}</td>
+                                           <td className="p-2 text-right border border-slate-200">{formatNumber(m.sugarStandard)}</td>
+                                           <td className="p-2 text-right border border-slate-200">{formatNumber(fisico)}</td>
+                                           <td className="p-2 text-right border border-slate-200" style={{ color: diferencia <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(diferencia)}</td>
+                                           <td className="p-2 text-right border border-slate-200" style={{ color: porcentaje <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(porcentaje)}%</td>
+                                         </tr>
+                                       );
+                                     })}
+                                   </tbody>
+                                 </table>
+                               </div>
+                               <div className="h-64">
+                                 <ResponsiveContainer width="100%" height="100%">
+                                   <ComposedChart data={weekDays.map(day => {
+                                     const dateStr = format(day, 'yyyy-MM-dd');
+                                     const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
+                                     const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
+                                     const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
+                                     const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+                                     const fisico = (m.sugarTotals.disponibleSacos + m.tanksTotals.invInicialSacos) - (m.sugarTotals.invFinalSacos + m.tanksTotals.invFinalSacos);
+                                     return { dia: format(day, 'EEE', { locale: es }).toUpperCase(), estandar: m.sugarStandard, fisico, porcentaje: m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0 };
+                                   })} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                                     <CartesianGrid strokeDasharray="3 3" />
+                                     <XAxis dataKey="dia" />
+                                     <YAxis />
+                                     <Tooltip />
+                                     <Bar dataKey="estandar" fill="#4f81bd" name="Estándar" />
+                                     <Bar dataKey="fisico" fill="#f59e0b" name="Físico" />
+                                     <Line type="monotone" dataKey="porcentaje" stroke="#dc2626" name="%" />
+                                   </ComposedChart>
+                                 </ResponsiveContainer>
+                               </div>
+                             </>
+                           ) : (
+                             <div className="h-64 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
+                               Sin datos esta semana
+                             </div>
+                           )}
+                         </div>
+                         <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
+                           <div className="flex items-center justify-between mb-4">
+                             <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Promedio Semanal</h3>
+                             <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFPromedio} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
+                               <FileDown className="h-4 w-4" /> PDF
+                             </Button>
+                           </div>
+                           {weeklyProm && weekDays.length > 0 ? (
+                             <>
+                               <div className="overflow-x-auto mb-4">
+                                 <table className="min-w-[500px] text-xs">
+                                   <thead>
+                                     <tr className="bg-slate-100">
+                                       <th className="p-2 text-left border border-slate-200">DÍA</th>
+                                       <th className="p-2 text-right border border-slate-200">ESTÁNDAR</th>
+                                       <th className="p-2 text-right border border-slate-200">FÍSICO</th>
+                                       <th className="p-2 text-right border border-slate-200">DIFERENCIA</th>
+                                       <th className="p-2 text-right border border-slate-200">%</th>
+                                     </tr>
+                                   </thead>
+                                   <tbody>
+                                     {weekDays.map((day, idx) => {
+                                       const dateStr = format(day, 'yyyy-MM-dd');
+                                       const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
+                                       const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
+                                       const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
+                                       const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+                                       const fisico = (m.sugarTotals.disponibleSacos + m.tanksTotals.invInicialSacos) - (m.sugarTotals.invFinalSacos + m.tanksTotals.invFinalSacos);
+                                       const diferencia = fisico - m.sugarStandard;
+                                       const porcentaje = m.sugarStandard !== 0 ? (diferencia / m.sugarStandard * 100) : 0;
+                                       return (
+                                         <tr key={dateStr} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
+                                           <td className="p-2 border border-slate-200 font-bold uppercase">{format(day, 'EEEE', { locale: es })}</td>
+                                           <td className="p-2 text-right border border-slate-200">{formatNumber(m.sugarStandard)}</td>
+                                           <td className="p-2 text-right border border-slate-200">{formatNumber(fisico)}</td>
+                                           <td className="p-2 text-right border border-slate-200" style={{ color: diferencia <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(diferencia)}</td>
+                                           <td className="p-2 text-right border border-slate-200" style={{ color: porcentaje <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(porcentaje)}%</td>
+                                         </tr>
+                                       );
+                                     })}
+                                   </tbody>
+                                 </table>
+                               </div>
+                               <div className="h-64">
+                                 <ResponsiveContainer width="100%" height="100%">
+                                   <ComposedChart data={weekDays.map(day => {
+                                     const dateStr = format(day, 'yyyy-MM-dd');
+                                     const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
+                                     const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
+                                     const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
+                                     const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+                                     const fisico = (m.sugarTotals.disponibleSacos + m.tanksTotals.invInicialSacos) - (m.sugarTotals.invFinalSacos + m.tanksTotals.invFinalSacos);
+                                     return { dia: format(day, 'EEE', { locale: es }).toUpperCase(), estandar: m.sugarStandard, fisico, porcentaje: m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0 };
+                                   })} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                                     <CartesianGrid strokeDasharray="3 3" />
+                                     <XAxis dataKey="dia" />
+                                     <YAxis />
+                                     <Tooltip />
+                                     <Bar dataKey="estandar" fill="#4f81bd" name="Estándar" />
+                                     <Bar dataKey="fisico" fill="#f59e0b" name="Físico" />
+                                     <Line type="monotone" dataKey="porcentaje" stroke="#dc2626" name="%" />
+                                   </ComposedChart>
+                                 </ResponsiveContainer>
+                               </div>
+                             </>
+                           ) : (
+                             <div className="h-64 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
+                               Sin datos esta semana
+                             </div>
+                           )}
+                         </div>
+                       </div>
+                     </TabsContent>
 
                   </Tabs>
 

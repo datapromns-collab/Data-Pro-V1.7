@@ -871,12 +871,13 @@ export default function PlannerPage() {
                     )}
                   </>
                 )}
-                {activeModule === 'jarabes' && hasAccess(user.id, 'jarabes') && (
-                  <JarabesModule 
-                    onPrintStandard={handlePrintJarabes}
-                    onPrintPromedio={handlePrintJarabesPromedio}
-                  />
-                )}
+                 {activeModule === 'jarabes' && hasAccess(user.id, 'jarabes') && (
+                   <JarabesModule 
+                     onPrintStandard={handlePrintJarabes}
+                     onPrintPromedio={handlePrintJarabesPromedio}
+                     weekStartDate={weekStartDate}
+                   />
+                 )}
                 {activeModule === 'raw-materials' && hasAccess(user.id, 'raw-materials') && (
                   <>
                     {activeTab === 'raw-material-view' && (
