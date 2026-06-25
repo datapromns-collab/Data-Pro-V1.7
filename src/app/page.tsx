@@ -143,6 +143,8 @@ export default function PlannerPage() {
   const [activeModule, setActiveModule] = useState('planning');
   const [activeTab, setActiveTab] = useState('gantt');
   const [printMode, setPrintMode] = useState('');
+  const [jarabesPrintMode, setJarabesPrintMode] = useState('');
+  const [jarabesPrintHtml, setJarabesPrintHtml] = useState('');
   const [selectedLine, setSelectedLine] = useState('1');
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
@@ -350,6 +352,36 @@ export default function PlannerPage() {
     setTimeout(() => {
       window.print();
       document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
+
+  const handlePrintJarabes = (html: string) => {
+    setJarabesPrintMode('estandar');
+    setJarabesPrintHtml(html);
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+      setJarabesPrintMode('');
+      setJarabesPrintHtml('');
+    }, 150);
+  };
+
+  const handlePrintJarabesPromedio = (html: string) => {
+    setJarabesPrintMode('promedio');
+    setJarabesPrintHtml(html);
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+      setJarabesPrintMode('');
+      setJarabesPrintHtml('');
     }, 150);
   };
 
@@ -840,7 +872,10 @@ export default function PlannerPage() {
                   </>
                 )}
                 {activeModule === 'jarabes' && hasAccess(user.id, 'jarabes') && (
-                  <JarabesModule />
+                  <JarabesModule 
+                    onPrintStandard={handlePrintJarabes}
+                    onPrintPromedio={handlePrintJarabesPromedio}
+                  />
                 )}
                 {activeModule === 'raw-materials' && hasAccess(user.id, 'raw-materials') && (
                   <>
@@ -1039,6 +1074,12 @@ export default function PlannerPage() {
                     selectedYear={selectedYear}
                   />
                 </div>
+              )}
+              {jarabesPrintMode === 'estandar' && (
+                <div className="p-0" dangerouslySetInnerHTML={{ __html: jarabesPrintHtml }} />
+              )}
+              {jarabesPrintMode === 'promedio' && (
+                <div className="p-0" dangerouslySetInnerHTML={{ __html: jarabesPrintHtml }} />
               )}
             </>
           )}
