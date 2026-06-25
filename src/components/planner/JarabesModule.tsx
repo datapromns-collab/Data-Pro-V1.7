@@ -2032,29 +2032,30 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, weekStartDate 
 
 {/* Consumption Calculation Table */}
 <div className="flex items-center justify-between">
-  <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo – Promedio</h3>
-</div>
-<div ref={consumptionRef} className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
-  <table className="min-w-[600px]">
-                          <thead>
-                            <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
-                              <th className="text-white font-black text-[11px] uppercase pl-6 text-right w-1/4">Estándar</th>
-                              <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Físico</th>
-                              <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Diferencia</th>
-                              <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/4">%</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
-                              <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(est.sugarStandard)}</td>
-                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber((est.sugarTotals.disponibleSacos + est.tanksTotals.invInicialSacos) - (est.sugarTotals.invFinalSacos + est.tanksTotals.invFinalSacos))}</td>
-                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(((est.sugarTotals.disponibleSacos + est.tanksTotals.invInicialSacos) - (est.sugarTotals.invFinalSacos + est.tanksTotals.invFinalSacos) - est.sugarStandard))}</td>
-                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((est.sugarTotals.disponibleSacos + est.tanksTotals.invInicialSacos) - (est.sugarTotals.invFinalSacos + est.tanksTotals.invFinalSacos) - est.sugarStandard) / est.sugarStandard * 100)}%</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                       </div>
-                     </TabsContent>
+                  <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo – Promedio</h3>
+                </div>
+                <div ref={consumptionRef} className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
+                  <table className="min-w-[600px]">
+                                  <thead>
+                                    <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
+                                      <th className="text-white font-black text-[11px] uppercase pl-6 text-right w-1/4">Estándar</th>
+                                      <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Físico</th>
+                                      <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Diferencia</th>
+                                      <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/4">%</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
+                                      <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(prom.sugarStandard)}</td>
+                                      <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber((prom.sugarTotals.disponibleSacos + prom.tanksTotals.invInicialSacos) - (prom.sugarTotals.invFinalSacos + prom.tanksTotals.invFinalSacos))}</td>
+                                      <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(((prom.sugarTotals.disponibleSacos + prom.tanksTotals.invInicialSacos) - (prom.sugarTotals.invFinalSacos + prom.tanksTotals.invFinalSacos) - prom.sugarStandard))}</td>
+                                      <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((prom.sugarTotals.disponibleSacos + prom.tanksTotals.invInicialSacos) - (prom.sugarTotals.invFinalSacos + prom.tanksTotals.invFinalSacos) - prom.sugarStandard) / prom.sugarStandard * 100)}%</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                               </div>
+                             </div>
+                           </TabsContent>
 
                      <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
