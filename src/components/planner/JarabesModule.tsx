@@ -64,7 +64,7 @@ const SUGAR_PER_UBB: Record<string, number> = {
   "VITA TEA LIMON":       97.00,
 };
 
-export function JarabesModule() {
+export function JarabesModule({ onPrintStandard, onPrintPromedio }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void }) {
   const consumptionRef = useRef<HTMLDivElement>(null);
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
@@ -80,6 +80,7 @@ export function JarabesModule() {
   const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [selectedDateEst, setSelectedDateEst] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [promKgFactor, setPromKgFactor] = useState<number>(50);
 
   const getKey = (type: string, section: string, date: string) => `jarabes-${type}-${section}-${date}`;
 
@@ -671,7 +672,7 @@ export function JarabesModule() {
 
 
   // Helper function to compute all planner metrics
-  const computePlannerMetrics = (ubbData: Record<string, { ubbInicial?: string; ubbPreparado?: string; ubbFinal?: string }>, sugarData: Record<string, { invInicialSacos?: string; recepcionSacos?: string; invFinalSacos?: string }>, tanksData: Record<string, { invInicialSacos?: string; invFinalSacos?: string }>, search: string) => {
+  const computePlannerMetrics = (ubbData: Record<string, { ubbInicial?: string; ubbPreparado?: string; ubbFinal?: string }>, sugarData: Record<string, { invInicialSacos?: string; recepcionSacos?: string; invFinalSacos?: string }>, tanksData: Record<string, { invInicialSacos?: string; invFinalSacos?: string }>, search: string, kgFactor = 50) => {
     const allRows = SABORES_ESTANDAR.map(sabor => {
       const rowData = ubbData[sabor] || {};
       const ubbInicialStr = rowData.ubbInicial ?? '';
@@ -726,16 +727,16 @@ export function JarabesModule() {
       const recepcionSacos = parseFloat(recepcionSacosStr) || 0;
       const invFinalSacos = parseFloat(invFinalSacosStr) || 0;
 
-      const invInicialKg = invInicialSacos * 50;
-      const recepcionKg = recepcionSacos * 50;
+      const invInicialKg = invInicialSacos * kgFactor;
+      const recepcionKg = recepcionSacos * kgFactor;
 
       const disponibleSacos = invInicialSacos + recepcionSacos;
-      const disponibleKg = disponibleSacos * 50;
+      const disponibleKg = disponibleSacos * kgFactor;
 
       const consumoSacos = disponibleSacos - invFinalSacos;
-      const consumoKg = consumoSacos * 50;
+      const consumoKg = consumoSacos * kgFactor;
 
-      const invFinalKg = invFinalSacos * 50;
+      const invFinalKg = invFinalSacos * kgFactor;
 
       return {
         proveedor,
@@ -791,8 +792,8 @@ export function JarabesModule() {
       const invInicialSacos = parseFloat(invInicialSacosStr) || 0;
       const invFinalSacos = parseFloat(invFinalSacosStr) || 0;
 
-      const invInicialKg = invInicialSacos * 50;
-      const invFinalKg = invFinalSacos * 50;
+      const invInicialKg = invInicialSacos * kgFactor;
+      const invFinalKg = invFinalSacos * kgFactor;
 
       return {
         item,
@@ -825,7 +826,7 @@ export function JarabesModule() {
   };
 
   const est = useMemo(() => computePlannerMetrics(ubbDataEst, sugarDataEst, tanksDataEst, searchTermEst), [ubbDataEst, sugarDataEst, tanksDataEst, searchTermEst]);
-  const prom = useMemo(() => computePlannerMetrics(ubbDataProm, sugarDataProm, tanksDataProm, searchTerm), [ubbDataProm, sugarDataProm, tanksDataProm, searchTerm]);
+  const prom = useMemo(() => computePlannerMetrics(ubbDataProm, sugarDataProm, tanksDataProm, searchTerm, promKgFactor), [ubbDataProm, sugarDataProm, tanksDataProm, searchTerm, promKgFactor]);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
@@ -1425,18 +1426,28 @@ export function JarabesModule() {
                         </div>
                       </div>
 
-                      {/* Sugar Table Header Controls */}
-                      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 no-print">
-                        <div className="flex items-center gap-3">
-                          <div className="bg-amber-500/10 p-2.5 rounded-xl">
-                            <Calculator className="h-5 w-5 text-amber-600" />
-                          </div>
-                          <div>
-                            <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Seguimiento de Azúcar Refinada – Promedio</h3>
-                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Inventario y Consumo por Proveedor</p>
-                          </div>
-                        </div>
-                      </div>
+                       {/* Sugar Table Header Controls */}
+                       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 no-print">
+                         <div className="flex items-center gap-3">
+                           <div className="bg-amber-500/10 p-2.5 rounded-xl">
+                             <Calculator className="h-5 w-5 text-amber-600" />
+                           </div>
+                           <div>
+                             <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Seguimiento de Azúcar Refinada – Promedio</h3>
+                             <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Inventario y Consumo por Proveedor</p>
+                           </div>
+                         </div>
+                         <div className="flex items-center gap-2">
+                           <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Kilos por saco</label>
+                           <Input
+                             type="number"
+                             value={promKgFactor}
+                             onChange={(e) => setPromKgFactor(Number(e.target.value))}
+                             className="h-8 w-20 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary"
+                             placeholder="50"
+                           />
+                         </div>
+                       </div>
 
                       {/* Sugar Table Container */}
                       <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
