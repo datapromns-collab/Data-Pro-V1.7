@@ -2054,7 +2054,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, weekStartDate 
                                   </tbody>
                                 </table>
                                </div>
-                             </div>
+
                            </TabsContent>
 
                      <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
