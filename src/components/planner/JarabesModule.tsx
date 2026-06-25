@@ -284,15 +284,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, weekStartDate 
       const diferencia = fisico - prom.sugarStandard;
       const porcentaje = prom.sugarStandard !== 0 ? (diferencia / sugarStandard * 100) : 0;
 
-      const printWindow = window.open('', '_blank', 'width=900,height=800');
-      if (!printWindow) {
-        toast({ title: 'Error', description: 'No se pudo abrir la ventana de vista previa.' });
-        return;
-      }
-
       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-
-      printWindow.document.write(`<!DOCTYPE html><html><head><title>Vista Previa</title>
+      const reportContent = `<!DOCTYPE html><html><head><title>Vista Previa</title>
         <style>
           body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
           table { width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 18px; }
@@ -454,11 +447,34 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, weekStartDate 
         </table>
 
         <div class="footer">Generado el ${new Date().toLocaleString('es')}</div>
-        <script>setTimeout(() => { window.print(); }, 150);</script>
-      </body></html>`);
+      </body></html>      `;
 
-      printWindow.document.close();
-      toast({ title: 'Vista previa', description: 'Use el cuadro de impresión para guardar o imprimir el reporte.' });
+      const reportEl = document.createElement('div');
+      reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:28px 24px;font-family:Arial,sans-serif;';
+      reportEl.innerHTML = reportContent;
+      document.body.appendChild(reportEl);
+      const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      document.body.removeChild(reportEl);
+
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      const imgW = pageW;
+      const imgH = (canvas.height * imgW) / canvas.width;
+
+      let addedHeight = 0;
+      let remainingH = imgH;
+      let firstPage = true;
+      while (remainingH > 0) {
+        if (!firstPage) pdf.addPage();
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, -addedHeight, imgW, imgH);
+        addedHeight += pageH;
+        remainingH -= pageH;
+        firstPage = false;
+      }
+
+      pdf.save('reporte_jarabes_estandar_' + selectedDate + '.pdf');
+      toast({ title: 'PDF generado', description: 'El reporte Estándar se descargó exitosamente.' });
     } catch (error) {
       console.error(error);
       toast({ title: 'Error', description: 'No se pudo generar la vista previa.' });
@@ -738,10 +754,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, weekStartDate 
 
       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-      const printWindow = window.open('', '_blank', 'width=900,height=800');
-      if (!printWindow) { toast({ title: 'Error', description: 'No se pudo abrir la ventana de vista previa.' }); return; }
-
-      printWindow.document.write(`<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
+      const reportContent = `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
         <style>
           body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
           table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 18px; }
@@ -789,10 +802,35 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, weekStartDate 
           </tbody>
         </table>
         <div class="footer">Generado el ${new Date().toLocaleString('es')}</div>
-        <script>setTimeout(() => { window.print(); }, 150);</script>
-      </body></html>`);
-      printWindow.document.close();
-      toast({ title: 'Vista previa semanal', description: 'Estándar semanal listo para imprimir o guardar.' });
+
+      </body></html>      `;
+
+      const reportEl = document.createElement('div');
+      reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:28px 24px;font-family:Arial,sans-serif;';
+      reportEl.innerHTML = reportContent;
+      document.body.appendChild(reportEl);
+      const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      document.body.removeChild(reportEl);
+
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      const imgW = pageW;
+      const imgH = (canvas.height * imgW) / canvas.width;
+
+      let addedHeight = 0;
+      let remainingH = imgH;
+      let firstPage = true;
+      while (remainingH > 0) {
+        if (!firstPage) pdf.addPage();
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, -addedHeight, imgW, imgH);
+        addedHeight += pageH;
+        remainingH -= pageH;
+        firstPage = false;
+      }
+
+      pdf.save('reporte_jarabes_semanal_estandar_' + format(weekStartDate!, 'yyyy-MM-dd') + '.pdf');
+      toast({ title: 'PDF generado', description: 'El reporte semanal Estándar se descargó exitosamente.' });
     } catch (error) {
       console.error(error);
       toast({ title: 'Error', description: 'No se pudo generar la vista previa semanal.' });
@@ -826,10 +864,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, weekStartDate 
 
       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-      const printWindow = window.open('', '_blank', 'width=900,height=800');
-      if (!printWindow) { toast({ title: 'Error', description: 'No se pudo abrir la ventana de vista previa.' }); return; }
-
-      printWindow.document.write(`<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
+      const reportContent = `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
         <style>
           body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
           table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 18px; }
@@ -877,10 +912,35 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, weekStartDate 
           </tbody>
         </table>
         <div class="footer">Generado el ${new Date().toLocaleString('es')}</div>
-        <script>setTimeout(() => { window.print(); }, 150);</script>
-      </body></html>`);
-      printWindow.document.close();
-      toast({ title: 'Vista previa semanal', description: 'Promedio semanal listo para imprimir o guardar.' });
+
+      </body></html>      `;
+
+      const reportEl = document.createElement('div');
+      reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:28px 24px;font-family:Arial,sans-serif;';
+      reportEl.innerHTML = reportContent;
+      document.body.appendChild(reportEl);
+      const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      document.body.removeChild(reportEl);
+
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      const imgW = pageW;
+      const imgH = (canvas.height * imgW) / canvas.width;
+
+      let addedHeight = 0;
+      let remainingH = imgH;
+      let firstPage = true;
+      while (remainingH > 0) {
+        if (!firstPage) pdf.addPage();
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, -addedHeight, imgW, imgH);
+        addedHeight += pageH;
+        remainingH -= pageH;
+        firstPage = false;
+      }
+
+      pdf.save('reporte_jarabes_semanal_promedio_' + format(weekStartDate!, 'yyyy-MM-dd') + '.pdf');
+      toast({ title: 'PDF generado', description: 'El reporte semanal Promedio se descargó exitosamente.' });
     } catch (error) {
       console.error(error);
       toast({ title: 'Error', description: 'No se pudo generar la vista previa semanal.' });
