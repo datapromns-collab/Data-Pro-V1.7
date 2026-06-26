@@ -767,8 +767,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         });
       });
 
-        const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-         const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;height:auto;margin-top:10px;border:1px solid #93c5fd;border-radius:4px;display:block;" />` : '';
+         const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+          const chartSection = chartImage ? `<div style="height:148mm;display:flex;align-items:center;justify-content:center;margin-top:10px;border:1px solid #93c5fd;border-radius:4px;"><img src="${chartImage}" style="max-height:100%;max-width:100%;object-fit:contain;" /></div>` : '';
         return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
           <style>
             body { font-family: Arial, sans-serif; margin: 12px; color: #1e293b; }
@@ -895,8 +895,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         });
       });
 
-       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-          const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;height:auto;margin-top:18px;border:1px solid #6ee7b7;border-radius:4px;display:block;" />` : '';
+        const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+           const chartSection = chartImage ? `<div style="height:148mm;display:flex;align-items:center;justify-content:center;margin-top:18px;border:1px solid #6ee7b7;border-radius:4px;"><img src="${chartImage}" style="max-height:100%;max-width:100%;object-fit:contain;" /></div>` : '';
         return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
           <style>
             body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
@@ -2181,7 +2181,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                     let chartImage;
                                     try {
                                       if (standardChartRef.current) {
-                                        standardChartRef.current.style.height = '550px';
+                                        standardChartRef.current.style.height = '350px';
                                         const canvas = await html2canvas(standardChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
                                         chartImage = canvas.toDataURL('image/png');
                                         standardChartRef.current.style.height = '';
@@ -2285,7 +2285,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    let chartImage;
                                    try {
                                      if (promedioChartRef.current) {
-                                       promedioChartRef.current.style.height = '550px';
+                                       promedioChartRef.current.style.height = '350px';
                                        const canvas = await html2canvas(promedioChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
                                        chartImage = canvas.toDataURL('image/png');
                                        promedioChartRef.current.style.height = '';
