@@ -347,17 +347,17 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                <th style="padding:3px 4px;text-align:center;border:1px solid #d1d5db;" colspan="2">CONSUMO FISISCO</th>
              </tr>
              <tr style="background:#f3f4f6;color:#1e293b;font-size:8px;font-weight:bold;border-bottom:1px solid #d1d5db;">
-               <th style="padding:2px 4px;text-align:left;border:1px solid #e5e7eb;">PROVEEDOR</th>
-               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
-               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
-               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
-               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
-               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
+               <th style="padding:2px 4px;text-align:left;border:1px solid #93c5fd;">PROVEEDOR</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">CANT. SACOS</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">KG</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">CANT. SACOS</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">KG</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">CANT. SACOS</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">KG</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">CANT. SACOS</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">KG</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">CANT. SACOS</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">KG</th>
              </tr>
            </thead>
            <tbody>
@@ -377,17 +377,17 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                </tr>
              `).join('')}
              <tr style="background:#f3f4f6;font-weight:bold;border-top:2px solid #d1d5db;">
-               <td style="padding:3px 4px;border:1px solid #e5e7eb;font-weight:bold;">TOTAL GENERAL</td>
-               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.invInicialSacos)}</td>
-               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.invInicialKg)}</td>
-               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.recepcionSacos)}</td>
-               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.recepcionKg)}</td>
-               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.disponibleSacos)}</td>
-               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.disponibleKg)}</td>
-               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.invFinalSacos)}</td>
-               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.invFinalKg)}</td>
-               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;color:#059669;">${N(est.sugarTotals.consumoSacos)}</td>
-               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;color:#059669;">${N(est.sugarTotals.consumoKg)}</td>
+               <td style="padding:3px 4px;border:1px solid #93c5fd;font-weight:bold;">TOTAL GENERAL</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(est.sugarTotals.invInicialSacos)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(est.sugarTotals.invInicialKg)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(est.sugarTotals.recepcionSacos)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(est.sugarTotals.recepcionKg)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(est.sugarTotals.disponibleSacos)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(est.sugarTotals.disponibleKg)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(est.sugarTotals.invFinalSacos)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(est.sugarTotals.invFinalKg)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;color:#059669;">${N(est.sugarTotals.consumoSacos)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;color:#059669;">${N(est.sugarTotals.consumoKg)}</td>
              </tr>
           </tbody>
          </table>
@@ -400,11 +400,11 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
               <th style="padding:3px 4px;text-align:center;border:1px solid #d1d5db;" colspan="2">INV. FINAL DE AZUCAR</th>
             </tr>
             <tr style="background:#f3f4f6;color:#1e293b;font-size:8px;font-weight:bold;border-bottom:1px solid #d1d5db;">
-              <th style="padding:2px 4px;text-align:left;border:1px solid #e5e7eb;">TANQUE / SALA</th>
-              <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-              <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
-              <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-              <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
+              <th style="padding:2px 4px;text-align:left;border:1px solid #93c5fd;">TANQUE / SALA</th>
+              <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">CANT. SACOS</th>
+              <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">KG</th>
+              <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">CANT. SACOS</th>
+              <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">KG</th>
             </tr>
           </thead>
           <tbody>
@@ -418,11 +418,11 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
               </tr>
             `).join('')}
              <tr style="background:#f3f4f6;font-weight:bold;border-top:2px solid #d1d5db;">
-               <td style="padding:3px 4px;border:1px solid #e5e7eb;font-weight:bold;">TOTAL GENERAL</td>
-               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(tanksTotals.invInicialSacos)}</td>
-               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(tanksTotals.invInicialKg)}</td>
-               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(tanksTotals.invFinalSacos)}</td>
-               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(tanksTotals.invFinalKg)}</td>
+               <td style="padding:3px 4px;border:1px solid #93c5fd;font-weight:bold;">TOTAL GENERAL</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(tanksTotals.invInicialSacos)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(tanksTotals.invInicialKg)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(tanksTotals.invFinalSacos)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(tanksTotals.invFinalKg)}</td>
              </tr>
            </tbody>
          </table>
@@ -557,17 +557,17 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                 <th style="padding:3px 4px;text-align:center;border:1px solid #d1d5db;" colspan="2">CONSUMO FISISCO</th>
               </tr>
               <tr style="background:#f3f4f6;color:#1e293b;font-size:8px;font-weight:bold;border-bottom:1px solid #d1d5db;">
-                <th style="padding:2px 4px;text-align:left;border:1px solid #e5e7eb;">PROVEEDOR</th>
-                <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-                <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
-                <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-                <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
-                <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-                <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
-                <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-                <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
-                <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-                <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
+                <th style="padding:2px 4px;text-align:left;border:1px solid #93c5fd;">PROVEEDOR</th>
+                <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">CANT. SACOS</th>
+                <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">KG</th>
+                <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">CANT. SACOS</th>
+                <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">KG</th>
+                <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">CANT. SACOS</th>
+                <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">KG</th>
+                <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">CANT. SACOS</th>
+                <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">KG</th>
+                <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">CANT. SACOS</th>
+                <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">KG</th>
               </tr>
             </thead>
             <tbody>
@@ -587,17 +587,17 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                 </tr>
               `).join('')}
               <tr style="background:#f3f4f6;font-weight:bold;border-top:2px solid #d1d5db;">
-                <td style="padding:3px 4px;border:1px solid #e5e7eb;font-weight:bold;">TOTAL GENERAL</td>
-                <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(sugarTotals.invInicialSacos)}</td>
-                <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(sugarTotals.invInicialKg)}</td>
-                <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(sugarTotals.recepcionSacos)}</td>
-                <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(sugarTotals.recepcionKg)}</td>
-                <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(sugarTotals.disponibleSacos)}</td>
-                <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(sugarTotals.disponibleKg)}</td>
-                <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(sugarTotals.invFinalSacos)}</td>
-                <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(sugarTotals.invFinalKg)}</td>
-                <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;color:#059669;">${N(sugarTotals.consumoSacos)}</td>
-                <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;color:#059669;">${N(sugarTotals.consumoKg)}</td>
+                <td style="padding:3px 4px;border:1px solid #93c5fd;font-weight:bold;">TOTAL GENERAL</td>
+                <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(sugarTotals.invInicialSacos)}</td>
+                <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(sugarTotals.invInicialKg)}</td>
+                <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(sugarTotals.recepcionSacos)}</td>
+                <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(sugarTotals.recepcionKg)}</td>
+                <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(sugarTotals.disponibleSacos)}</td>
+                <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(sugarTotals.disponibleKg)}</td>
+                <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(sugarTotals.invFinalSacos)}</td>
+                <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(sugarTotals.invFinalKg)}</td>
+                <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;color:#059669;">${N(sugarTotals.consumoSacos)}</td>
+                <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;color:#059669;">${N(sugarTotals.consumoKg)}</td>
               </tr>
            </tbody>
           </table>
@@ -610,11 +610,11 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                <th style="padding:3px 4px;text-align:center;border:1px solid #d1d5db;" colspan="2">INV. FINAL DE AZUCAR</th>
              </tr>
              <tr style="background:#f3f4f6;color:#1e293b;font-size:8px;font-weight:bold;border-bottom:1px solid #d1d5db;">
-               <th style="padding:2px 4px;text-align:left;border:1px solid #e5e7eb;">TANQUE / SALA</th>
-               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
-               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
+               <th style="padding:2px 4px;text-align:left;border:1px solid #93c5fd;">TANQUE / SALA</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">CANT. SACOS</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">KG</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">CANT. SACOS</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #93c5fd;">KG</th>
              </tr>
            </thead>
            <tbody>
@@ -628,11 +628,11 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                </tr>
              `).join('')}
               <tr style="background:#f3f4f6;font-weight:bold;border-top:2px solid #d1d5db;">
-                <td style="padding:3px 4px;border:1px solid #e5e7eb;font-weight:bold;">TOTAL GENERAL</td>
-                <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(tanksTotals.invInicialSacos)}</td>
-                <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(tanksTotals.invInicialKg)}</td>
-                <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(tanksTotals.invFinalSacos)}</td>
-                <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(tanksTotals.invFinalKg)}</td>
+                <td style="padding:3px 4px;border:1px solid #93c5fd;font-weight:bold;">TOTAL GENERAL</td>
+                <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(tanksTotals.invInicialSacos)}</td>
+                <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(tanksTotals.invInicialKg)}</td>
+                <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(tanksTotals.invFinalSacos)}</td>
+                <td style="padding:3px 4px;text-align:right;border:1px solid #93c5fd;">${N(tanksTotals.invFinalKg)}</td>
               </tr>
             </tbody>
           </table>
@@ -768,14 +768,14 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       });
 
         const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;margin-top:10px;border:1px solid #e5e7eb;border-radius:4px;" />` : '';
+        const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;margin-top:10px;border:1px solid #93c5fd;border-radius:4px;" />` : '';
         return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
           <style>
             body { font-family: Arial, sans-serif; margin: 12px; color: #1e293b; }
             table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 12px; }
-            th, td { border: 1px solid #e5e7eb; padding: 5px; }
-            th { background: #f3f4f6; color: #1e293b; font-weight: bold; }
-            .total { background: #f3f4f6; font-weight: bold; }
+            th, td { border: 1px solid #93c5fd; padding: 5px; }
+            th { background: #dbeafe; color: #1e3a5f; font-weight: bold; }
+            .total { background: #dbeafe; font-weight: bold; }
             h2 { text-align: center; font-size: 14px; margin-bottom: 3px; }
             p.info { text-align: center; font-size: 10px; margin: 1px 0; }
             .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 8px; }
@@ -799,21 +799,21 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
              <tbody>
                ${rows.map((r, i) => `
                  <tr style="background:${i % 2 === 0 ? '#fff' : '#f9fafb'};">
-                   <td style="border:1px solid #e5e7eb;">${r.dia}</td>
-                   <td style="text-align:right;border:1px solid #e5e7eb;">${N(r.estandar)}</td>
-                   <td style="text-align:right;border:1px solid #e5e7eb;">${N(r.fisico)}</td>
-                   <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.diferencia)}</td>
-                   <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.porcentaje)}%</td>
-                   <td style="text-align:right;color:${r.desviacionCosto <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.desviacionCosto)}</td>
+                   <td style="border:1px solid #93c5fd;">${r.dia}</td>
+                   <td style="text-align:right;border:1px solid #93c5fd;">${N(r.estandar)}</td>
+                   <td style="text-align:right;border:1px solid #93c5fd;">${N(r.fisico)}</td>
+                   <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border:1px solid #93c5fd;">${N(r.diferencia)}</td>
+                   <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border:1px solid #93c5fd;">${N(r.porcentaje)}%</td>
+                   <td style="text-align:right;color:${r.desviacionCosto <= 0 ? '#059669' : '#dc2626'};border:1px solid #93c5fd;">${N(r.desviacionCosto)}</td>
                  </tr>
                  `).join('')}
-                 <tr style="background:#fef3c7;font-weight:bold;border-top:2px solid #d1d5db;">
-                   <td style="border:1px solid #e5e7eb;font-weight:bold;">TOTAL SEMANA</td>
-                   <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
-                   <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
-                   <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
-                   <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
-                   <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.desviacionCosto, 0))}</td>
+                  <tr style="background:#dbeafe;font-weight:bold;border-top:2px solid #93c5fd;">
+                   <td style="border:1px solid #93c5fd;font-weight:bold;">TOTAL SEMANA</td>
+                   <td style="text-align:right;border:1px solid #93c5fd;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
+                   <td style="text-align:right;border:1px solid #93c5fd;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
+                   <td style="text-align:right;border:1px solid #93c5fd;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
+                   <td style="text-align:right;border:1px solid #93c5fd;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
+                   <td style="text-align:right;border:1px solid #93c5fd;">${N(rows.reduce((a, b) => a + b.desviacionCosto, 0))}</td>
                  </tr>
               </tbody>
             </table>
@@ -885,14 +885,14 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       });
 
        const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;margin-top:18px;border:1px solid #e5e7eb;border-radius:4px;" />` : '';
+        const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;margin-top:18px;border:1px solid #93c5fd;border-radius:4px;" />` : '';
         return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
           <style>
             body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
             table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 18px; }
-            th, td { border: 1px solid #e5e7eb; padding: 8px; }
-            th { background: #f3f4f6; color: #1e293b; font-weight: bold; }
-            .total { background: #f3f4f6; font-weight: bold; }
+            th, td { border: 1px solid #6ee7b7; padding: 8px; }
+            th { background: #d1fae5; color: #064e3b; font-weight: bold; }
+            .total { background: #d1fae5; font-weight: bold; }
             h2 { text-align: center; font-size: 16px; margin-bottom: 4px; }
             p.info { text-align: center; font-size: 11px; margin: 2px 0; }
             .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 12px; }
@@ -915,23 +915,23 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
              </thead>
              <tbody>
                ${rows.map((r, i) => `
-                 <tr style="background:${i % 2 === 0 ? '#fff' : '#f9fafb'};">
-                   <td style="border:1px solid #e5e7eb;">${r.dia}</td>
-                   <td style="text-align:right;border:1px solid #e5e7eb;">${N(r.estandar)}</td>
-                   <td style="text-align:right;border:1px solid #e5e7eb;">${N(r.fisico)}</td>
-                   <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.diferencia)}</td>
-                   <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.porcentaje)}%</td>
-                   <td style="text-align:right;color:${r.desviacionCosto <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.desviacionCosto)}</td>
-                 </tr>
-                 `).join('')}
-                 <tr style="background:#f3f4f6;font-weight:bold;border-top:2px solid #d1d5db;">
-                   <td style="border:1px solid #e5e7eb;font-weight:bold;">TOTAL SEMANA</td>
-                   <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
-                   <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
-                   <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
-                   <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
-                   <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.desviacionCosto, 0))}</td>
-                 </tr>
+                  <tr style="background:${i % 2 === 0 ? '#fff' : '#f9fafb'};">
+                    <td style="border:1px solid #6ee7b7;">${r.dia}</td>
+                    <td style="text-align:right;border:1px solid #6ee7b7;">${N(r.estandar)}</td>
+                    <td style="text-align:right;border:1px solid #6ee7b7;">${N(r.fisico)}</td>
+                    <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border:1px solid #6ee7b7;">${N(r.diferencia)}</td>
+                    <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border:1px solid #6ee7b7;">${N(r.porcentaje)}%</td>
+                    <td style="text-align:right;color:${r.desviacionCosto <= 0 ? '#059669' : '#dc2626'};border:1px solid #6ee7b7;">${N(r.desviacionCosto)}</td>
+                  </tr>
+                  `).join('')}
+                   <tr style="background:#d1fae5;font-weight:bold;border-top:2px solid #6ee7b7;">
+                    <td style="border:1px solid #6ee7b7;font-weight:bold;">TOTAL SEMANA</td>
+                    <td style="text-align:right;border:1px solid #6ee7b7;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
+                    <td style="text-align:right;border:1px solid #6ee7b7;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
+                    <td style="text-align:right;border:1px solid #6ee7b7;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
+                    <td style="text-align:right;border:1px solid #6ee7b7;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
+                    <td style="text-align:right;border:1px solid #6ee7b7;">${N(rows.reduce((a, b) => a + b.desviacionCosto, 0))}</td>
+                  </tr>
               </tbody>
             </table>
             ${chartSection}
