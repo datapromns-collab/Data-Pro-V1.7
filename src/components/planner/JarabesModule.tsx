@@ -2228,7 +2228,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    </tbody>
                                  </table>
                                </div>
-                                <div className="h-64" ref={standardChartRef}>
+                                 <div className="h-64 bg-[#fef9ef] rounded-xl" ref={standardChartRef}>
                                   <ResponsiveContainer width="100%" height="100%">
                                     <ComposedChart data={weekDays.map(day => {
                                       const dateStr = format(day, 'yyyy-MM-dd');
@@ -2332,7 +2332,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    </tbody>
                                  </table>
                                </div>
-                                <div className="h-64" ref={promedioChartRef}>
+                                 <div className="h-64 bg-[#fef9ef] rounded-xl" ref={promedioChartRef}>
                                   <ResponsiveContainer width="100%" height="100%">
                                     <ComposedChart data={weekDays.map(day => {
                                       const dateStr = format(day, 'yyyy-MM-dd');
