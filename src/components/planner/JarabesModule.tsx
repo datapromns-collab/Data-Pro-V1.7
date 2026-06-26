@@ -315,22 +315,22 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             </tr>
           </thead>
           <tbody>
-             ${est.rows.map((row, i) => `
-               <tr style="background:${i % 2 === 0 ? '#fff' : '#f8fafc'};">
-                 <td style="padding:3px 8px;border-bottom:1px solid #e5e7eb;width:33%;">${row.sabor}</td>
-                 <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.inicial)}</td>
-                 <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.preparado)}</td>
-                 <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.final)}</td>
-                 <td style="padding:3px 8px;text-align:right;font-weight:bold;color:${row.consumo > 0 ? '#059669' : row.consumo < 0 ? '#dc2626' : '#64748b'};border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.consumo)}</td>
-               </tr>
-             `).join('')}
-             <tr style="background:#dbeafe;font-weight:bold;border-top:2px solid #93c5fd;">
-               <td style="padding:5px 8px;border:1px solid #93c5fd;width:33%;">TOTAL GENERAL</td>
-               <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;width:16.67%;">${N(est.totals.inicial)}</td>
-               <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;width:16.67%;">${N(est.totals.preparado)}</td>
-               <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;width:16.67%;">${N(est.totals.final)}</td>
-               <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;background:#4f81bd;color:#fff;width:16.67%;">${N(est.totals.consumo)}</td>
-             </tr>
+              ${est.rows.map((row, i) => `
+                <tr style="background:#fff;">
+                  <td style="padding:3px 8px;border-bottom:1px solid #e5e7eb;width:33%;">${row.sabor}</td>
+                  <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.inicial)}</td>
+                  <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.preparado)}</td>
+                  <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.final)}</td>
+                  <td style="padding:3px 8px;text-align:right;font-weight:bold;color:${row.consumo > 0 ? '#059669' : row.consumo < 0 ? '#dc2626' : '#64748b'};border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.consumo)}</td>
+                </tr>
+              `).join('')}
+              <tr style="background:#dbeafe;font-weight:bold;border-top:2px solid #e2e8f0;">
+                <td style="padding:5px 8px;border:1px solid #e2e8f0;width:33%;">TOTAL GENERAL</td>
+                <td style="padding:5px 8px;text-align:right;border:1px solid #e2e8f0;width:16.67%;">${N(est.totals.inicial)}</td>
+                <td style="padding:5px 8px;text-align:right;border:1px solid #e2e8f0;width:16.67%;">${N(est.totals.preparado)}</td>
+                <td style="padding:5px 8px;text-align:right;border:1px solid #e2e8f0;width:16.67%;">${N(est.totals.final)}</td>
+                <td style="padding:5px 8px;text-align:right;border:1px solid #e2e8f0;background:#4f81bd;color:#fff;width:16.67%;">${N(est.totals.consumo)}</td>
+              </tr>
           </tbody>
         </table>
 
@@ -359,8 +359,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             </tr>
           </thead>
           <tbody>
-            ${est.sugarRows.map((row, i) => `
-              <tr style="background:${i % 2 === 0 ? '#fff' : '#f9fafb'};">
+             ${est.sugarRows.map((row, i) => `
+              <tr style="background:${i % 2 === 0 ? '#fff' : '#fafbfc'};">
                 <td style="padding:3px 5px;font-weight:bold;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${row.proveedor}</td>
                 <td style="padding:3px 5px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invInicialSacos)}</td>
                 <td style="padding:3px 5px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invInicialKg)}</td>
@@ -406,8 +406,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             </tr>
           </thead>
           <tbody>
-            ${est.tanksRows.map((row, i) => `
-              <tr style="background:${i % 2 === 0 ? '#fff' : '#f9fafb'};">
+             ${est.tanksRows.map((row, i) => `
+              <tr style="background:${i % 2 === 0 ? '#fff' : '#fafbfc'};">
                 <td style="padding:3px 5px;font-weight:bold;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${row.item}</td>
                 <td style="padding:3px 5px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invInicialSacos)}</td>
                 <td style="padding:3px 5px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invInicialKg)}</td>
@@ -436,7 +436,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
           </tr>
         </thead>
         <tbody>
-          <tr style="background:#dbeaude;font-weight:bold;font-size:11px;">
+          <tr style="background:#dbeafe;font-weight:bold;font-size:11px;">
             <td style="padding:6px 10px;text-align:right;">${N(est.sugarStandard)}</td>
             <td style="padding:6px 10px;text-align:right;">${N(fisico)}</td>
             <td style="padding:6px 10px;text-align:right;color:${diferencia <= 0 ? '#059669' : '#dc2626'};">${N(diferencia)}</td>
