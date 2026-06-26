@@ -89,6 +89,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
   const [selectedDateEst, setSelectedDateEst] = useState<string>(new Date().toISOString().split('T')[0]);
   const [promKgFactor, setPromKgFactor] = useState<number>(50);
   const [costoAzucar, setCostoAzucar] = useState<string>('');
+  const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
 
   const getKey = (type: string, section: string, date: string) => `jarabes-${type}-${section}-${date}`;
 
@@ -1283,19 +1284,20 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             </div>
 
             <TabsContent value="disolucion" className="m-0 animate-in fade-in-50 duration-500">
-              <Tabs defaultValue="estandar" className="w-full">
-                <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 mb-6 no-print">
-                  <TabsList className="bg-transparent h-auto p-0">
-                    <TabsTrigger value="estandar" className={tabsTriggerClass}>
-                      <FileSpreadsheet className="h-3.5 w-3.5" /> Estándar
-                    </TabsTrigger>
-                    <TabsTrigger value="promedio" className={tabsTriggerClass}>
-                      <TrendingUp className="h-3.5 w-3.5" /> Promedio
-                    </TabsTrigger>
-                    <TabsTrigger value="resumen" className={tabsTriggerClass}>
-                      <ScrollText className="h-3.5 w-3.5" /> Resumen
-                    </TabsTrigger>
-                  </TabsList>
+              <Tabs value={activeInnerTab} onValueChange={setActiveInnerTab} defaultValue="estandar" className="w-full">
+              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 mb-6 no-print">
+                <TabsList className="bg-transparent h-auto p-0">
+                  <TabsTrigger value="estandar" className={tabsTriggerClass}>
+                    <FileSpreadsheet className="h-3.5 w-3.5" /> Estándar
+                  </TabsTrigger>
+                  <TabsTrigger value="promedio" className={tabsTriggerClass}>
+                    <TrendingUp className="h-3.5 w-3.5" /> Promedio
+                  </TabsTrigger>
+                  <TabsTrigger value="resumen" className={tabsTriggerClass}>
+                    <ScrollText className="h-3.5 w-3.5" /> Resumen
+                  </TabsTrigger>
+                </TabsList>
+                {activeInnerTab === 'resumen' && (
                   <div className="ml-auto flex items-center gap-2 pl-4">
                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">Costo Actual Azúcar</span>
                     <div className="relative flex items-center bg-white border border-slate-200 rounded-full h-8 px-3 min-w-[100px]">
@@ -1311,7 +1313,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                       />
                     </div>
                   </div>
-                </div>
+                )}
+              </div>
 
 <TabsContent value="estandar" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
                    <div className="flex justify-end no-print">
