@@ -1285,20 +1285,22 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
             <TabsContent value="disolucion" className="m-0 animate-in fade-in-50 duration-500">
               <Tabs value={activeInnerTab} onValueChange={setActiveInnerTab} defaultValue="estandar" className="w-full">
-              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 mb-6 no-print">
-                <TabsList className="bg-transparent h-auto p-0">
-                  <TabsTrigger value="estandar" className={tabsTriggerClass}>
-                    <FileSpreadsheet className="h-3.5 w-3.5" /> Estándar
-                  </TabsTrigger>
-                  <TabsTrigger value="promedio" className={tabsTriggerClass}>
-                    <TrendingUp className="h-3.5 w-3.5" /> Promedio
-                  </TabsTrigger>
-                  <TabsTrigger value="resumen" className={tabsTriggerClass}>
-                    <ScrollText className="h-3.5 w-3.5" /> Resumen
-                  </TabsTrigger>
-                </TabsList>
+              <div className="flex items-center justify-between mb-6 no-print">
+                <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                  <TabsList className="bg-transparent h-auto p-0">
+                    <TabsTrigger value="estandar" className={tabsTriggerClass}>
+                      <FileSpreadsheet className="h-3.5 w-3.5" /> Estándar
+                    </TabsTrigger>
+                    <TabsTrigger value="promedio" className={tabsTriggerClass}>
+                      <TrendingUp className="h-3.5 w-3.5" /> Promedio
+                    </TabsTrigger>
+                    <TabsTrigger value="resumen" className={tabsTriggerClass}>
+                      <ScrollText className="h-3.5 w-3.5" /> Resumen
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
                 {activeInnerTab === 'resumen' && (
-                  <div className="ml-auto flex items-center gap-2 pl-4">
+                  <div className="flex items-center gap-2 pl-4 bg-slate-100/50 border border-slate-200 rounded-full h-11 px-4">
                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">Costo Actual Azúcar</span>
                     <div className="relative flex items-center bg-white border border-slate-200 rounded-full h-8 px-3 min-w-[100px]">
                       <span className="text-slate-500 font-bold text-xs mr-0.5">$</span>
