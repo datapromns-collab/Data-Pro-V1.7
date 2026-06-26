@@ -770,7 +770,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       });
 
          const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-          const chartSection = chartImage ? `<div style="height:148mm;display:flex;align-items:center;justify-content:center;margin-top:10px;border:1px solid #93c5fd;border-radius:4px;"><img src="${chartImage}" style="max-height:100%;max-width:100%;object-fit:contain;" /></div>` : '';
+          const chartSection = chartImage ? `<div style="height:148mm;display:flex;align-items:center;justify-content:center;margin-top:10px;border:1px solid #93c5fd;border-radius:4px;overflow:hidden;"><img src="${chartImage}" style="max-height:100%;max-width:100%;object-fit:contain;" /></div>` : '';
         return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
           <style>
             body { font-family: Arial, sans-serif; margin: 12px; color: #1e293b; }
@@ -896,7 +896,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       });
 
         const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-           const chartSection = chartImage ? `<div style="height:148mm;display:flex;align-items:center;justify-content:center;margin-top:18px;border:1px solid #6ee7b7;border-radius:4px;"><img src="${chartImage}" style="max-height:100%;max-width:100%;object-fit:contain;" /></div>` : '';
+           const chartSection = chartImage ? `<div style="height:148mm;display:flex;align-items:center;justify-content:center;margin-top:18px;border:1px solid #6ee7b7;border-radius:4px;overflow:hidden;"><img src="${chartImage}" style="max-height:100%;max-width:100%;object-fit:contain;" /></div>` : '';
         return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
           <style>
             body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
@@ -2406,9 +2406,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             </div>
           </TabsContent>
         </Tabs>
-        <div style={{ position: 'absolute', left: '-9999px', visibility: 'hidden' }}>
-      <div ref={hiddenStandardChartRef} style={{ width: '800px', height: '500px', overflow: 'hidden' }}>
-        <ResponsiveContainer width="800" height="500">
+        <div style={{ maxHeight: 0, overflow: 'visible' }}>
+      <div ref={hiddenStandardChartRef} style={{ width: '1000px', height: '600px' }}>
+        <ResponsiveContainer width="1000" height="600">
           <ComposedChart data={weekDays.map(day => {
             const dateStr = format(day, 'yyyy-MM-dd');
             const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
@@ -2428,8 +2428,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
           </ComposedChart>
         </ResponsiveContainer>
       </div>
-      <div ref={hiddenPromedioChartRef} style={{ width: '800px', height: '500px', overflow: 'hidden' }}>
-        <ResponsiveContainer width="800" height="500">
+      <div ref={hiddenPromedioChartRef} style={{ width: '1000px', height: '600px' }}>
+        <ResponsiveContainer width="1000" height="600">
           <ComposedChart data={weekDays.map(day => {
             const dateStr = format(day, 'yyyy-MM-dd');
             const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
