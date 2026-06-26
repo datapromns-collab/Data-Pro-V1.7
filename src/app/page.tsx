@@ -385,6 +385,36 @@ export default function PlannerPage() {
     }, 150);
   };
 
+  const handlePrintJarabesSemanalEst = (html: string) => {
+    setJarabesPrintMode('semanal-estandar');
+    setJarabesPrintHtml(html);
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+      setJarabesPrintMode('');
+      setJarabesPrintHtml('');
+    }, 150);
+  };
+
+  const handlePrintJarabesSemanalProm = (html: string) => {
+    setJarabesPrintMode('semanal-promedio');
+    setJarabesPrintHtml(html);
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+      setJarabesPrintMode('');
+      setJarabesPrintHtml('');
+    }, 150);
+  };
+
   const handleTaskClick = (task: ScheduledTask) => {
     setEditingTask(task);
     setIsDialogOpen(true);
@@ -872,11 +902,13 @@ export default function PlannerPage() {
                   </>
                 )}
                  {activeModule === 'jarabes' && hasAccess(user.id, 'jarabes') && (
-                   <JarabesModule 
-                     onPrintStandard={handlePrintJarabes}
-                     onPrintPromedio={handlePrintJarabesPromedio}
-                     weekStartDate={weekStartDate}
-                   />
+                    <JarabesModule 
+                      onPrintStandard={handlePrintJarabes}
+                      onPrintPromedio={handlePrintJarabesPromedio}
+                      onPrintWeeklyStandard={handlePrintJarabesSemanalEst}
+                      onPrintWeeklyPromedio={handlePrintJarabesSemanalProm}
+                      weekStartDate={weekStartDate}
+                    />
                  )}
                 {activeModule === 'raw-materials' && hasAccess(user.id, 'raw-materials') && (
                   <>
@@ -1080,6 +1112,12 @@ export default function PlannerPage() {
                 <div className="p-0" dangerouslySetInnerHTML={{ __html: jarabesPrintHtml }} />
               )}
               {jarabesPrintMode === 'promedio' && (
+                <div className="p-0" dangerouslySetInnerHTML={{ __html: jarabesPrintHtml }} />
+              )}
+              {jarabesPrintMode === 'semanal-estandar' && (
+                <div className="p-0" dangerouslySetInnerHTML={{ __html: jarabesPrintHtml }} />
+              )}
+              {jarabesPrintMode === 'semanal-promedio' && (
                 <div className="p-0" dangerouslySetInnerHTML={{ __html: jarabesPrintHtml }} />
               )}
             </>
