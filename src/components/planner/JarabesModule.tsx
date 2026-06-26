@@ -2406,8 +2406,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             </div>
           </TabsContent>
         </Tabs>
-        <div style={{ position: 'fixed', top: '-99999px', left: '-99999px', pointerEvents: 'none' }}>
-      <div ref={hiddenStandardChartRef} style={{ width: '800px', height: '500px' }}>
+        <div style={{ position: 'absolute', left: '-9999px', visibility: 'hidden' }}>
+      <div ref={hiddenStandardChartRef} style={{ width: '800px', height: '500px', overflow: 'hidden' }}>
         <ResponsiveContainer width="800" height="500">
           <ComposedChart data={weekDays.map(day => {
             const dateStr = format(day, 'yyyy-MM-dd');
@@ -2428,7 +2428,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
           </ComposedChart>
         </ResponsiveContainer>
       </div>
-      <div ref={hiddenPromedioChartRef} style={{ width: '800px', height: '500px' }}>
+      <div ref={hiddenPromedioChartRef} style={{ width: '800px', height: '500px', overflow: 'hidden' }}>
         <ResponsiveContainer width="800" height="500">
           <ComposedChart data={weekDays.map(day => {
             const dateStr = format(day, 'yyyy-MM-dd');
@@ -2449,7 +2449,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
           </ComposedChart>
         </ResponsiveContainer>
       </div>
-       </div>
+    </div>
     </div>
   );
 }
