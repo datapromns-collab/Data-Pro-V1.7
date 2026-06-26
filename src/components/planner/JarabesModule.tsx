@@ -71,6 +71,8 @@ const SUGAR_PER_UBB: Record<string, number> = {
 
 export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, weekStartDate }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; weekStartDate?: Date }) {
   const consumptionRef = useRef<HTMLDivElement>(null);
+  const standardChartRef = useRef<HTMLDivElement>(null);
+  const promedioChartRef = useRef<HTMLDivElement>(null);
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
   const [ubbDataEst, setUbbDataEst] = useState<Record<string, { ubbInicial?: string; ubbPreparado?: string; ubbFinal?: string }>>({});
@@ -735,77 +737,79 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       </body></html>`;
   };
 
-   const buildWeeklyStandardHtml = (): string => {
-     if (!weekDays.length) return '';
-     const weekStart = weekStartDate || new Date();
-     const weekEnd = addDays(weekStart, 6);
-     const rows: any[] = [];
-     weekDays.forEach(day => {
-       const dateStr = format(day, 'yyyy-MM-dd');
-       const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
-       const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
-       const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
-       const metrics = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-       const fisico = (metrics.sugarTotals.disponibleSacos + metrics.tanksTotals.invInicialSacos) - (metrics.sugarTotals.invFinalSacos + metrics.tanksTotals.invFinalSacos);
-       const diferencia = fisico - metrics.sugarStandard;
-       const porcentaje = metrics.sugarStandard !== 0 ? (diferencia / metrics.sugarStandard * 100) : 0;
-       rows.push({
-         dia: format(day, 'EEEE', { locale: es }).toUpperCase(),
-         fecha: dateStr,
-         estandar: metrics.sugarStandard,
-         fisico,
-         diferencia,
-         porcentaje
-       });
-     });
+    const buildWeeklyStandardHtml = (chartImage?: string): string => {
+      if (!weekDays.length) return '';
+      const weekStart = weekStartDate || new Date();
+      const weekEnd = addDays(weekStart, 6);
+      const rows: any[] = [];
+      weekDays.forEach(day => {
+        const dateStr = format(day, 'yyyy-MM-dd');
+        const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
+        const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
+        const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
+        const metrics = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+        const fisico = (metrics.sugarTotals.disponibleSacos + metrics.tanksTotals.invInicialSacos) - (metrics.sugarTotals.invFinalSacos + metrics.tanksTotals.invFinalSacos);
+        const diferencia = fisico - metrics.sugarStandard;
+        const porcentaje = metrics.sugarStandard !== 0 ? (diferencia / metrics.sugarStandard * 100) : 0;
+        rows.push({
+          dia: format(day, 'EEEE', { locale: es }).toUpperCase(),
+          fecha: dateStr,
+          estandar: metrics.sugarStandard,
+          fisico,
+          diferencia,
+          porcentaje
+        });
+      });
 
-       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-       return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
-         <style>
-           body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
-           table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 18px; }
-           th, td { border: 1px solid #e5e7eb; padding: 8px; }
-           th { background: #f3f4f6; color: #1e293b; font-weight: bold; }
-           .total { background: #f3f4f6; font-weight: bold; }
-           h2 { text-align: center; font-size: 16px; margin-bottom: 4px; }
-           p.info { text-align: center; font-size: 11px; margin: 2px 0; }
-           .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 12px; }
-         </style>
-       </head><body>
-         <div>
-           <h2>Resumen de Azúcar Semanal – Estándar</h2>
-           <p class="info">Semana: <strong>${format(weekStart, 'dd/MM/yyyy')}</strong> al <strong>${format(weekEnd, 'dd/MM/yyyy')}</strong></p>
-         </div>
-         <table>
-           <thead>
-             <tr>
-               <th style="width:30%;">DÍA</th>
-               <th style="width:17.5%;text-align:right;">ESTÁNDAR</th>
-               <th style="width:17.5%;text-align:right;">FÍSICO</th>
-               <th style="width:17.5%;text-align:right;">DIFERENCIA</th>
-               <th style="width:17.5%;text-align:right;">%</th>
-             </tr>
-           </thead>
-           <tbody>
-             ${rows.map((r, i) => `
-               <tr style="background:${i % 2 === 0 ? '#fff' : '#f9fafb'};">
-                 <td style="border:1px solid #e5e7eb;">${r.dia}</td>
-                 <td style="text-align:right;border:1px solid #e5e7eb;">${N(r.estandar)}</td>
-                 <td style="text-align:right;border:1px solid #e5e7eb;">${N(r.fisico)}</td>
-                 <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.diferencia)}</td>
-                 <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.porcentaje)}%</td>
-               </tr>
-              `).join('')}
-              <tr class="total" style="border-top:2px solid #d1d5db;">
-                <td style="border:1px solid #e5e7eb;font-weight:bold;">TOTAL SEMANA</td>
-                <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
-                <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
-                <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
-                <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
+        const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;max-width:780px;margin-top:18px;border:1px solid #e5e7eb;border-radius:4px;" />` : '';
+        return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
+            table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 18px; }
+            th, td { border: 1px solid #e5e7eb; padding: 8px; }
+            th { background: #f3f4f6; color: #1e293b; font-weight: bold; }
+            .total { background: #f3f4f6; font-weight: bold; }
+            h2 { text-align: center; font-size: 16px; margin-bottom: 4px; }
+            p.info { text-align: center; font-size: 11px; margin: 2px 0; }
+            .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 12px; }
+          </style>
+        </head><body>
+          <div>
+            <h2>Resumen de Azúcar Semanal – Estándar</h2>
+            <p class="info">Semana: <strong>${format(weekStart, 'dd/MM/yyyy')}</strong> al <strong>${format(weekEnd, 'dd/MM/yyyy')}</strong></p>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:30%;">DÍA</th>
+                <th style="width:17.5%;text-align:right;">ESTÁNDAR</th>
+                <th style="width:17.5%;text-align:right;">FÍSICO</th>
+                <th style="width:17.5%;text-align:right;">DIFERENCIA</th>
+                <th style="width:17.5%;text-align:right;">%</th>
               </tr>
-            </tbody>
-          </table>
-          <div class="footer">Generado el ${new Date().toLocaleString('es')}</div>
+            </thead>
+            <tbody>
+              ${rows.map((r, i) => `
+                <tr style="background:${i % 2 === 0 ? '#fff' : '#f9fafb'};">
+                  <td style="border:1px solid #e5e7eb;">${r.dia}</td>
+                  <td style="text-align:right;border:1px solid #e5e7eb;">${N(r.estandar)}</td>
+                  <td style="text-align:right;border:1px solid #e5e7eb;">${N(r.fisico)}</td>
+                  <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.diferencia)}</td>
+                  <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.porcentaje)}%</td>
+                </tr>
+               `).join('')}
+               <tr class="total" style="border-top:2px solid #d1d5db;">
+                 <td style="border:1px solid #e5e7eb;font-weight:bold;">TOTAL SEMANA</td>
+                 <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
+                 <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
+                 <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
+                 <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
+               </tr>
+             </tbody>
+           </table>
+           ${chartSection}
+           <div class="footer">Generado el ${new Date().toLocaleString('es')}</div>
         </body></html>`;
     };
 
@@ -845,77 +849,79 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
      }
    };
 
-   const buildWeeklyPromedioHtml = (): string => {
-     if (!weekDays.length) return '';
-     const weekStart = weekStartDate || new Date();
-     const weekEnd = addDays(weekStart, 6);
-     const rows: any[] = [];
-     weekDays.forEach(day => {
-       const dateStr = format(day, 'yyyy-MM-dd');
-       const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
-       const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
-       const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
-       const metrics = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-       const fisico = (metrics.sugarTotals.disponibleSacos + metrics.tanksTotals.invInicialSacos) - (metrics.sugarTotals.invFinalSacos + metrics.tanksTotals.invFinalSacos);
-       const diferencia = fisico - metrics.sugarStandard;
-       const porcentaje = metrics.sugarStandard !== 0 ? (diferencia / metrics.sugarStandard * 100) : 0;
-       rows.push({
-         dia: format(day, 'EEEE', { locale: es }).toUpperCase(),
-         fecha: dateStr,
-         estandar: metrics.sugarStandard,
-         fisico,
-         diferencia,
-         porcentaje
-       });
-     });
+    const buildWeeklyPromedioHtml = (chartImage?: string): string => {
+      if (!weekDays.length) return '';
+      const weekStart = weekStartDate || new Date();
+      const weekEnd = addDays(weekStart, 6);
+      const rows: any[] = [];
+      weekDays.forEach(day => {
+        const dateStr = format(day, 'yyyy-MM-dd');
+        const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
+        const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
+        const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
+        const metrics = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+        const fisico = (metrics.sugarTotals.disponibleSacos + metrics.tanksTotals.invInicialSacos) - (metrics.sugarTotals.invFinalSacos + metrics.tanksTotals.invFinalSacos);
+        const diferencia = fisico - metrics.sugarStandard;
+        const porcentaje = metrics.sugarStandard !== 0 ? (diferencia / metrics.sugarStandard * 100) : 0;
+        rows.push({
+          dia: format(day, 'EEEE', { locale: es }).toUpperCase(),
+          fecha: dateStr,
+          estandar: metrics.sugarStandard,
+          fisico,
+          diferencia,
+          porcentaje
+        });
+      });
 
-      const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-       return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
-         <style>
-           body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
-           table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 18px; }
-           th, td { border: 1px solid #e5e7eb; padding: 8px; }
-           th { background: #f3f4f6; color: #1e293b; font-weight: bold; }
-           .total { background: #f3f4f6; font-weight: bold; }
-           h2 { text-align: center; font-size: 16px; margin-bottom: 4px; }
-           p.info { text-align: center; font-size: 11px; margin: 2px 0; }
-           .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 12px; }
-         </style>
-       </head><body>
-         <div>
-           <h2>Resumen de Azúcar Semanal – Promedio</h2>
-           <p class="info">Semana: <strong>${format(weekStart, 'dd/MM/yyyy')}</strong> al <strong>${format(weekEnd, 'dd/MM/yyyy')}</strong></p>
-         </div>
-         <table>
-           <thead>
-             <tr>
-               <th style="width:30%;">DÍA</th>
-               <th style="width:17.5%;text-align:right;">ESTÁNDAR</th>
-               <th style="width:17.5%;text-align:right;">FÍSICO</th>
-               <th style="width:17.5%;text-align:right;">DIFERENCIA</th>
-               <th style="width:17.5%;text-align:right;">%</th>
-             </tr>
-           </thead>
-           <tbody>
-             ${rows.map((r, i) => `
-               <tr style="background:${i % 2 === 0 ? '#fff' : '#f9fafb'};">
-                 <td style="border:1px solid #e5e7eb;">${r.dia}</td>
-                 <td style="text-align:right;border:1px solid #e5e7eb;">${N(r.estandar)}</td>
-                 <td style="text-align:right;border:1px solid #e5e7eb;">${N(r.fisico)}</td>
-                 <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.diferencia)}</td>
-                 <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.porcentaje)}%</td>
-               </tr>
-              `).join('')}
-              <tr class="total" style="border-top:2px solid #d1d5db;">
-                <td style="border:1px solid #e5e7eb;font-weight:bold;">TOTAL SEMANA</td>
-                <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
-                <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
-                <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
-                <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
+       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;max-width:780px;margin-top:18px;border:1px solid #e5e7eb;border-radius:4px;" />` : '';
+        return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
+          <style>
+            body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
+            table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 18px; }
+            th, td { border: 1px solid #e5e7eb; padding: 8px; }
+            th { background: #f3f4f6; color: #1e293b; font-weight: bold; }
+            .total { background: #f3f4f6; font-weight: bold; }
+            h2 { text-align: center; font-size: 16px; margin-bottom: 4px; }
+            p.info { text-align: center; font-size: 11px; margin: 2px 0; }
+            .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 12px; }
+          </style>
+        </head><body>
+          <div>
+            <h2>Resumen de Azúcar Semanal – Promedio</h2>
+            <p class="info">Semana: <strong>${format(weekStart, 'dd/MM/yyyy')}</strong> al <strong>${format(weekEnd, 'dd/MM/yyyy')}</strong></p>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th style="width:30%;">DÍA</th>
+                <th style="width:17.5%;text-align:right;">ESTÁNDAR</th>
+                <th style="width:17.5%;text-align:right;">FÍSICO</th>
+                <th style="width:17.5%;text-align:right;">DIFERENCIA</th>
+                <th style="width:17.5%;text-align:right;">%</th>
               </tr>
-            </tbody>
-          </table>
-          <div class="footer">Generado el ${new Date().toLocaleString('es')}</div>
+            </thead>
+            <tbody>
+              ${rows.map((r, i) => `
+                <tr style="background:${i % 2 === 0 ? '#fff' : '#f9fafb'};">
+                  <td style="border:1px solid #e5e7eb;">${r.dia}</td>
+                  <td style="text-align:right;border:1px solid #e5e7eb;">${N(r.estandar)}</td>
+                  <td style="text-align:right;border:1px solid #e5e7eb;">${N(r.fisico)}</td>
+                  <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.diferencia)}</td>
+                  <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.porcentaje)}%</td>
+                </tr>
+               `).join('')}
+               <tr class="total" style="border-top:2px solid #d1d5db;">
+                 <td style="border:1px solid #e5e7eb;font-weight:bold;">TOTAL SEMANA</td>
+                 <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
+                 <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
+                 <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
+                 <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
+               </tr>
+             </tbody>
+           </table>
+           ${chartSection}
+           <div class="footer">Generado el ${new Date().toLocaleString('es')}</div>
         </body></html>`;
     };
 
@@ -2068,12 +2074,23 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                      <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                          <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
-                           <div className="flex items-center justify-between mb-4">
-                             <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Estándar Semanal</h3>
-                              <Button size="sm" variant="outline" onClick={() => onPrintWeeklyStandard?.(buildWeeklyStandardHtml())} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
-                                <FileDown className="h-4 w-4" /> PDF
-                              </Button>
-                           </div>
+                            <div className="flex items-center justify-between mb-4">
+                              <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Estándar Semanal</h3>
+                               <Button size="sm" variant="outline" onClick={async () => {
+                                 let chartImage;
+                                 try {
+                                   if (standardChartRef.current) {
+                                     const canvas = await html2canvas(standardChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+                                     chartImage = canvas.toDataURL('image/png');
+                                   }
+                                 } catch (e) {
+                                   console.error('Error capturing chart:', e);
+                                 }
+                                 onPrintWeeklyStandard?.(buildWeeklyStandardHtml(chartImage));
+                               }} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
+                                 <FileDown className="h-4 w-4" /> PDF
+                               </Button>
+                            </div>
                            {weeklyEst && weekDays.length > 0 ? (
                              <>
                                <div className="overflow-x-auto mb-4">
@@ -2125,27 +2142,27 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    </tbody>
                                  </table>
                                </div>
-                               <div className="h-64">
-                                 <ResponsiveContainer width="100%" height="100%">
-                                   <ComposedChart data={weekDays.map(day => {
-                                     const dateStr = format(day, 'yyyy-MM-dd');
-                                     const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
-                                     const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
-                                     const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
-                                     const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                     const fisico = (m.sugarTotals.disponibleSacos + m.tanksTotals.invInicialSacos) - (m.sugarTotals.invFinalSacos + m.tanksTotals.invFinalSacos);
-                                     return { dia: format(day, 'EEE', { locale: es }).toUpperCase(), estandar: m.sugarStandard, fisico, porcentaje: m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0 };
-                                   })} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                                     <CartesianGrid strokeDasharray="3 3" />
-                                     <XAxis dataKey="dia" />
-                                     <YAxis />
-                                     <Tooltip />
-                                     <Bar dataKey="estandar" fill="#4f81bd" name="Estándar" />
-                                     <Bar dataKey="fisico" fill="#f59e0b" name="Físico" />
-                                     <Line type="monotone" dataKey="porcentaje" stroke="#dc2626" name="%" />
-                                   </ComposedChart>
-                                 </ResponsiveContainer>
-                               </div>
+                                <div className="h-64" ref={standardChartRef}>
+                                  <ResponsiveContainer width="100%" height="100%">
+                                    <ComposedChart data={weekDays.map(day => {
+                                      const dateStr = format(day, 'yyyy-MM-dd');
+                                      const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
+                                      const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
+                                      const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
+                                      const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+                                      const fisico = (m.sugarTotals.disponibleSacos + m.tanksTotals.invInicialSacos) - (m.sugarTotals.invFinalSacos + m.tanksTotals.invFinalSacos);
+                                      return { dia: format(day, 'EEE', { locale: es }).toUpperCase(), estandar: m.sugarStandard, fisico, porcentaje: m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0 };
+                                    })} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                                      <CartesianGrid strokeDasharray="3 3" />
+                                      <XAxis dataKey="dia" />
+                                      <YAxis />
+                                      <Tooltip />
+                                      <Bar dataKey="estandar" fill="#4f81bd" name="Estándar" />
+                                      <Bar dataKey="fisico" fill="#f59e0b" name="Físico" />
+                                      <Line type="monotone" dataKey="porcentaje" stroke="#dc2626" name="%" />
+                                    </ComposedChart>
+                                  </ResponsiveContainer>
+                                </div>
                              </>
                            ) : (
                              <div className="h-64 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
@@ -2154,12 +2171,23 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                            )}
                          </div>
                          <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
-                           <div className="flex items-center justify-between mb-4">
-                             <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Promedio Semanal</h3>
-                              <Button size="sm" variant="outline" onClick={() => onPrintWeeklyPromedio?.(buildWeeklyPromedioHtml())} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
-                                <FileDown className="h-4 w-4" /> PDF
-                              </Button>
-                           </div>
+                            <div className="flex items-center justify-between mb-4">
+                              <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Promedio Semanal</h3>
+                               <Button size="sm" variant="outline" onClick={async () => {
+                                 let chartImage;
+                                 try {
+                                   if (promedioChartRef.current) {
+                                     const canvas = await html2canvas(promedioChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+                                     chartImage = canvas.toDataURL('image/png');
+                                   }
+                                 } catch (e) {
+                                   console.error('Error capturing chart:', e);
+                                 }
+                                 onPrintWeeklyPromedio?.(buildWeeklyPromedioHtml(chartImage));
+                               }} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
+                                 <FileDown className="h-4 w-4" /> PDF
+                               </Button>
+                            </div>
                            {weeklyProm && weekDays.length > 0 ? (
                              <>
                                <div className="overflow-x-auto mb-4">
@@ -2211,27 +2239,27 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    </tbody>
                                  </table>
                                </div>
-                               <div className="h-64">
-                                 <ResponsiveContainer width="100%" height="100%">
-                                   <ComposedChart data={weekDays.map(day => {
-                                     const dateStr = format(day, 'yyyy-MM-dd');
-                                     const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
-                                     const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
-                                     const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
-                                     const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                     const fisico = (m.sugarTotals.disponibleSacos + m.tanksTotals.invInicialSacos) - (m.sugarTotals.invFinalSacos + m.tanksTotals.invFinalSacos);
-                                     return { dia: format(day, 'EEE', { locale: es }).toUpperCase(), estandar: m.sugarStandard, fisico, porcentaje: m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0 };
-                                   })} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                                     <CartesianGrid strokeDasharray="3 3" />
-                                     <XAxis dataKey="dia" />
-                                     <YAxis />
-                                     <Tooltip />
-                                     <Bar dataKey="estandar" fill="#4f81bd" name="Estándar" />
-                                     <Bar dataKey="fisico" fill="#f59e0b" name="Físico" />
-                                     <Line type="monotone" dataKey="porcentaje" stroke="#dc2626" name="%" />
-                                   </ComposedChart>
-                                 </ResponsiveContainer>
-                               </div>
+                                <div className="h-64" ref={promedioChartRef}>
+                                  <ResponsiveContainer width="100%" height="100%">
+                                    <ComposedChart data={weekDays.map(day => {
+                                      const dateStr = format(day, 'yyyy-MM-dd');
+                                      const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
+                                      const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
+                                      const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
+                                      const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+                                      const fisico = (m.sugarTotals.disponibleSacos + m.tanksTotals.invInicialSacos) - (m.sugarTotals.invFinalSacos + m.tanksTotals.invFinalSacos);
+                                      return { dia: format(day, 'EEE', { locale: es }).toUpperCase(), estandar: m.sugarStandard, fisico, porcentaje: m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0 };
+                                    })} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                                      <CartesianGrid strokeDasharray="3 3" />
+                                      <XAxis dataKey="dia" />
+                                      <YAxis />
+                                      <Tooltip />
+                                      <Bar dataKey="estandar" fill="#4f81bd" name="Estándar" />
+                                      <Bar dataKey="fisico" fill="#f59e0b" name="Físico" />
+                                      <Line type="monotone" dataKey="porcentaje" stroke="#dc2626" name="%" />
+                                    </ComposedChart>
+                                  </ResponsiveContainer>
+                                </div>
                              </>
                            ) : (
                              <div className="h-64 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
