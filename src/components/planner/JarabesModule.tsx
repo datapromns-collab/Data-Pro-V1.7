@@ -2177,22 +2177,22 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                           <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
                              <div className="flex items-center justify-between mb-4">
                                <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Estándar Semanal</h3>
-                                  <Button size="sm" variant="outline" onClick={async () => {
-                                   let chartImage;
-                                   try {
-                                     if (standardChartRef.current) {
-                                       standardChartRef.current.style.height = '400px';
-                                       const canvas = await html2canvas(standardChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-                                       chartImage = canvas.toDataURL('image/png');
-                                       standardChartRef.current.style.height = '';
-                                     }
-                                   } catch (e) {
-                                     console.error('Error capturing chart:', e);
-                                   }
-                                   onPrintWeeklyStandard?.(buildWeeklyStandardHtml(chartImage));
-                                 }} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
-                                 <FileDown className="h-4 w-4" /> PDF
-                               </Button>
+                                   <Button size="sm" variant="outline" onClick={async () => {
+                                    let chartImage;
+                                    try {
+                                      if (standardChartRef.current) {
+                                        standardChartRef.current.style.height = '550px';
+                                        const canvas = await html2canvas(standardChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+                                        chartImage = canvas.toDataURL('image/png');
+                                        standardChartRef.current.style.height = '';
+                                      }
+                                    } catch (e) {
+                                      console.error('Error capturing chart:', e);
+                                    }
+                                    onPrintWeeklyStandard?.(buildWeeklyStandardHtml(chartImage));
+                                  }} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
+                                  <FileDown className="h-4 w-4" /> PDF
+                                </Button>
                             </div>
                            {weeklyEst && weekDays.length > 0 ? (
                              <>
@@ -2281,22 +2281,22 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                           <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
                              <div className="flex items-center justify-between mb-4">
                                <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Promedio Semanal</h3>
-                                <Button size="sm" variant="outline" onClick={async () => {
-                                  let chartImage;
-                                  try {
-                                    if (promedioChartRef.current) {
-                                      promedioChartRef.current.style.height = '400px';
-                                      const canvas = await html2canvas(promedioChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-                                      chartImage = canvas.toDataURL('image/png');
-                                      promedioChartRef.current.style.height = '';
-                                    }
-                                  } catch (e) {
-                                    console.error('Error capturing chart:', e);
-                                  }
-                                  onPrintWeeklyPromedio?.(buildWeeklyPromedioHtml(chartImage));
-                                }} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
-                                 <FileDown className="h-4 w-4" /> PDF
-                               </Button>
+                                 <Button size="sm" variant="outline" onClick={async () => {
+                                   let chartImage;
+                                   try {
+                                     if (promedioChartRef.current) {
+                                       promedioChartRef.current.style.height = '550px';
+                                       const canvas = await html2canvas(promedioChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+                                       chartImage = canvas.toDataURL('image/png');
+                                       promedioChartRef.current.style.height = '';
+                                     }
+                                   } catch (e) {
+                                     console.error('Error capturing chart:', e);
+                                   }
+                                   onPrintWeeklyPromedio?.(buildWeeklyPromedioHtml(chartImage));
+                                 }} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
+                                  <FileDown className="h-4 w-4" /> PDF
+                                </Button>
                             </div>
                            {weeklyProm && weekDays.length > 0 ? (
                              <>
