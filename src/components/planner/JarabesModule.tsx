@@ -306,13 +306,13 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento UBB – Estándar</p>
         <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:18px;">
           <thead>
-            <tr style="background:#4f81bd;color:#fff;">
-              <th style="padding:5px 8px;text-align:left;width:33%;">SABOR</th>
-              <th style="padding:5px 8px;text-align:right;width:16.67%;">UBB INICIAL</th>
-              <th style="padding:5px 8px;text-align:right;width:16.67%;">UBB PREPARADO</th>
-              <th style="padding:5px 8px;text-align:right;width:16.67%;">UBB FINAL</th>
-              <th style="padding:5px 8px;text-align:right;width:16.67%;">CONSUMO</th>
-            </tr>
+             <tr style="background:#4f81bd;color:#fff;">
+               <th style="padding:5px 8px;text-align:left;width:33%;background:#4f81bd;color:#fff;">SABOR</th>
+               <th style="padding:5px 8px;text-align:right;width:16.67%;background:#4f81bd;color:#fff;">UBB INICIAL</th>
+               <th style="padding:5px 8px;text-align:right;width:16.67%;background:#4f81bd;color:#fff;">UBB PREPARADO</th>
+               <th style="padding:5px 8px;text-align:right;width:16.67%;background:#4f81bd;color:#fff;">UBB FINAL</th>
+               <th style="padding:5px 8px;text-align:right;width:16.67%;background:#4f81bd;color:#fff;">CONSUMO</th>
+             </tr>
           </thead>
           <tbody>
               ${est.rows.map((row, i) => `
@@ -504,13 +504,13 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento UBB – Promedio</p>
         <table style="width:100%;border-collapse:collapse;font-size:9.5px;margin-bottom:18px;">
           <thead>
-            <tr style="background:#4f81bd;color:#fff;">
-              <th style="padding:5px 8px;text-align:left;border:1px solid #3a6499;width:33%;">SABOR</th>
-              <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;width:16.67%;">UBB INICIAL</th>
-              <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;width:16.67%;">UBB PREPARADO</th>
-              <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;width:16.67%;">UBB FINAL</th>
-              <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;width:16.67%;">CONSUMO</th>
-            </tr>
+             <tr style="background:#4f81bd;color:#fff;">
+               <th style="padding:5px 8px;text-align:left;border:1px solid #3a6499;width:33%;background:#4f81bd;color:#fff;">SABOR</th>
+               <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;width:16.67%;background:#4f81bd;color:#fff;">UBB INICIAL</th>
+               <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;width:16.67%;background:#4f81bd;color:#fff;">UBB PREPARADO</th>
+               <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;width:16.67%;background:#4f81bd;color:#fff;">UBB FINAL</th>
+               <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;width:16.67%;background:#4f81bd;color:#fff;">CONSUMO</th>
+             </tr>
           </thead>
           <tbody>
              ${prom.rows.map((row, i) => `
