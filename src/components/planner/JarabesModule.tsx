@@ -822,16 +822,27 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
          </body></html>`;
      };
 
-     const handleExportWeeklyPDFStandard = async () => {
-      try {
-        if (!weekDays.length) return;
-         const reportContent = buildWeeklyStandardHtml();
-        const reportEl = document.createElement('div');
-        reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
-        reportEl.innerHTML = reportContent;
-        document.body.appendChild(reportEl);
-        const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-       document.body.removeChild(reportEl);
+      const handleExportWeeklyPDFStandard = async () => {
+       try {
+         if (!weekDays.length) return;
+         let chartImage;
+         try {
+           if (standardChartRef.current) {
+             standardChartRef.current.style.height = '400px';
+             const canvas = await html2canvas(standardChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+             chartImage = canvas.toDataURL('image/png');
+             standardChartRef.current.style.height = '';
+           }
+         } catch (e) {
+           console.error('Error capturing chart:', e);
+         }
+         const reportContent = buildWeeklyStandardHtml(chartImage);
+         const reportEl = document.createElement('div');
+         reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
+         reportEl.innerHTML = reportContent;
+         document.body.appendChild(reportEl);
+         const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+        document.body.removeChild(reportEl);
 
        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
        const pageW = pdf.internal.pageSize.getWidth();
@@ -939,16 +950,27 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
          </body></html>`;
      };
 
-      const handleExportWeeklyPDFPromedio = async () => {
-       try {
-         if (!weekDays.length) return;
-         const reportContent = buildWeeklyPromedioHtml();
-        const reportEl = document.createElement('div');
-        reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
-        reportEl.innerHTML = reportContent;
-        document.body.appendChild(reportEl);
-        const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-        document.body.removeChild(reportEl);
+       const handleExportWeeklyPDFPromedio = async () => {
+        try {
+          if (!weekDays.length) return;
+          let chartImage;
+          try {
+            if (promedioChartRef.current) {
+              promedioChartRef.current.style.height = '400px';
+              const canvas = await html2canvas(promedioChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+              chartImage = canvas.toDataURL('image/png');
+              promedioChartRef.current.style.height = '';
+            }
+          } catch (e) {
+            console.error('Error capturing chart:', e);
+          }
+          const reportContent = buildWeeklyPromedioHtml(chartImage);
+         const reportEl = document.createElement('div');
+         reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
+         reportEl.innerHTML = reportContent;
+         document.body.appendChild(reportEl);
+         const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+         document.body.removeChild(reportEl);
 
        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
        const pageW = pdf.internal.pageSize.getWidth();
