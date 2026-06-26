@@ -1284,7 +1284,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
             <TabsContent value="disolucion" className="m-0 animate-in fade-in-50 duration-500">
               <Tabs defaultValue="estandar" className="w-full">
-                <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
+                <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 mb-6 no-print">
                   <TabsList className="bg-transparent h-auto p-0">
                     <TabsTrigger value="estandar" className={tabsTriggerClass}>
                       <FileSpreadsheet className="h-3.5 w-3.5" /> Estándar
@@ -1296,6 +1296,21 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                       <ScrollText className="h-3.5 w-3.5" /> Resumen
                     </TabsTrigger>
                   </TabsList>
+                  <div className="ml-auto flex items-center gap-2 pl-4">
+                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">Costo Actual Azúcar</span>
+                    <div className="relative flex items-center bg-white border border-slate-200 rounded-full h-8 px-3 min-w-[100px]">
+                      <span className="text-slate-500 font-bold text-xs mr-0.5">$</span>
+                      <Input
+                        type="number"
+                        value={costoAzucar}
+                        onChange={(e) => setCostoAzucar(e.target.value)}
+                        className="h-auto p-0 border-none text-center font-black text-sm bg-transparent focus-visible:ring-0 w-16"
+                        placeholder="0.00"
+                        step="0.01"
+                        min="0"
+                      />
+                    </div>
+                  </div>
                 </div>
 
 <TabsContent value="estandar" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
@@ -2131,8 +2146,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                            </TabsContent>
 
                       <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                          <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm md:col-span-2">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
                              <div className="flex items-center justify-between mb-4">
                                <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Estándar Semanal</h3>
                                 <Button size="sm" variant="outline" onClick={async () => {
@@ -2234,7 +2249,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                              </div>
                            )}
                           </div>
-                          <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm md:col-span-2">
+                          <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
                              <div className="flex items-center justify-between mb-4">
                                <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Promedio Semanal</h3>
                                <Button size="sm" variant="outline" onClick={async () => {
@@ -2335,21 +2350,6 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                Sin datos esta semana
                              </div>
                             )}
-                          </div>
-                          <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm flex flex-col items-center justify-center">
-                            <label className="font-black text-slate-800 text-sm uppercase tracking-wider mb-4 text-center">Costo Actual Azúcar</label>
-                            <div className="relative w-full max-w-[160px]">
-                              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-sm">$</span>
-                              <Input
-                                type="number"
-                                value={costoAzucar}
-                                onChange={(e) => setCostoAzucar(e.target.value)}
-                                className="h-10 text-center font-black text-lg bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary pl-8 pr-3"
-                                placeholder="0.00"
-                                step="0.01"
-                                min="0"
-                              />
-                            </div>
                           </div>
                         </div>
                       </TabsContent>
