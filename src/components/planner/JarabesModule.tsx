@@ -92,52 +92,52 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
   const getKey = (type: string, section: string, date: string) => `jarabes-${type}-${section}-${date}`;
 
    useEffect(() => {
-    const loadEstData = () => {
-      const savedUbbEst = localStorage.getItem(getKey('ubb', 'estandar', selectedDateEst));
-      if (savedUbbEst) {
-        try { setUbbDataEst(JSON.parse(savedUbbEst)); }
-        catch (e) { console.error('Error cargando datos UBB estándar', e); }
-      } else { setUbbDataEst({}); }
+     const loadEstData = () => {
+       const savedUbbEst = loadDayDataWithCarryOver(selectedDateEst, 'ubb', 'estandar');
+       if (Object.keys(savedUbbEst).length) {
+         try { setUbbDataEst(savedUbbEst); }
+         catch (e) { console.error('Error cargando datos UBB estándar', e); }
+       } else { setUbbDataEst({}); }
 
-      const savedSugarEst = localStorage.getItem(getKey('sugar', 'estandar', selectedDateEst));
-      if (savedSugarEst) {
-        try { setSugarDataEst(JSON.parse(savedSugarEst)); }
-        catch (e) { console.error('Error cargando datos azúcar estándar', e); }
-      } else { setSugarDataEst({}); }
+       const savedSugarEst = loadDayDataWithCarryOver(selectedDateEst, 'sugar', 'estandar');
+       if (Object.keys(savedSugarEst).length) {
+         try { setSugarDataEst(savedSugarEst); }
+         catch (e) { console.error('Error cargando datos azúcar estándar', e); }
+       } else { setSugarDataEst({}); }
 
-      const savedTanksEst = localStorage.getItem(getKey('tanks', 'estandar', selectedDateEst));
-      if (savedTanksEst) {
-        try { setTanksDataEst(JSON.parse(savedTanksEst)); }
-        catch (e) { console.error('Error cargando datos tanques estándar', e); }
-      } else { setTanksDataEst({}); }
-    };
-    loadEstData();
-    setIsLoaded(true);
-  }, [selectedDateEst]);
+       const savedTanksEst = loadDayDataWithCarryOver(selectedDateEst, 'tanks', 'estandar');
+       if (Object.keys(savedTanksEst).length) {
+         try { setTanksDataEst(savedTanksEst); }
+         catch (e) { console.error('Error cargando datos tanques estándar', e); }
+       } else { setTanksDataEst({}); }
+     };
+     loadEstData();
+     setIsLoaded(true);
+   }, [selectedDateEst]);
 
-  useEffect(() => {
-    const loadPromData = () => {
-      const savedUbbProm = localStorage.getItem(getKey('ubb', 'promedio', selectedDate));
-      if (savedUbbProm) {
-        try { setUbbDataProm(JSON.parse(savedUbbProm)); }
-        catch (e) { console.error('Error cargando datos UBB promedio', e); }
-      } else { setUbbDataProm({}); }
+   useEffect(() => {
+     const loadPromData = () => {
+       const savedUbbProm = loadDayDataWithCarryOver(selectedDate, 'ubb', 'promedio');
+       if (Object.keys(savedUbbProm).length) {
+         try { setUbbDataProm(savedUbbProm); }
+         catch (e) { console.error('Error cargando datos UBB promedio', e); }
+       } else { setUbbDataProm({}); }
 
-      const savedSugarProm = localStorage.getItem(getKey('sugar', 'promedio', selectedDate));
-      if (savedSugarProm) {
-        try { setSugarDataProm(JSON.parse(savedSugarProm)); }
-        catch (e) { console.error('Error cargando datos azúcar promedio', e); }
-      } else { setSugarDataProm({}); }
+       const savedSugarProm = loadDayDataWithCarryOver(selectedDate, 'sugar', 'promedio');
+       if (Object.keys(savedSugarProm).length) {
+         try { setSugarDataProm(savedSugarProm); }
+         catch (e) { console.error('Error cargando datos azúcar promedio', e); }
+       } else { setSugarDataProm({}); }
 
-      const savedTanksProm = localStorage.getItem(getKey('tanks', 'promedio', selectedDate));
-      if (savedTanksProm) {
-        try { setTanksDataProm(JSON.parse(savedTanksProm)); }
-        catch (e) { console.error('Error cargando datos tanques promedio', e); }
-      } else { setTanksDataProm({}); }
-    };
-    loadPromData();
-    setIsLoaded(true);
-  }, [selectedDate]);
+       const savedTanksProm = loadDayDataWithCarryOver(selectedDate, 'tanks', 'promedio');
+       if (Object.keys(savedTanksProm).length) {
+         try { setTanksDataProm(savedTanksProm); }
+         catch (e) { console.error('Error cargando datos tanques promedio', e); }
+       } else { setTanksDataProm({}); }
+     };
+     loadPromData();
+     setIsLoaded(true);
+   }, [selectedDate]);
 
   useEffect(() => {
     if (isLoaded) {
@@ -1112,6 +1112,41 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     } catch {
       return {};
     }
+  };
+
+  const getPrevDay = (dateStr: string) => format(addDays(new Date(dateStr + 'T00:00:00'), -1), 'yyyy-MM-dd');
+
+  const loadDayDataWithCarryOver = (date: string, type: string, field: string) => {
+    const current = loadDayData(date, type, field);
+    const prevData = loadDayData(getPrevDay(date), type, field);
+    if (!Object.keys(prevData).length) return current;
+
+    const result: Record<string, any> = {};
+    Object.keys(current).forEach(k => {
+      result[k] = { ...current[k] };
+    });
+
+    Object.keys(prevData).forEach(k => {
+      if (!result[k]) result[k] = {};
+      if (type === 'ubb') {
+        const prevFinal = prevData[k].ubbFinal;
+        if (prevFinal && !result[k].ubbInicial) {
+          result[k] = { ...result[k], ubbInicial: prevFinal };
+        }
+      } else if (type === 'sugar') {
+        const prevFinal = prevData[k].invFinalSacos;
+        if (prevFinal && !result[k].invInicialSacos) {
+          result[k] = { ...result[k], invInicialSacos: prevFinal };
+        }
+      } else if (type === 'tanks') {
+        const prevFinal = prevData[k].invFinalSacos;
+        if (prevFinal && !result[k].invInicialSacos) {
+          result[k] = { ...result[k], invInicialSacos: prevFinal };
+        }
+      }
+    });
+
+    return result;
   };
 
   const weeklyEst = useMemo(() => {
