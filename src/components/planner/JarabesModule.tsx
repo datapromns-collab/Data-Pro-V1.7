@@ -768,7 +768,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       });
 
         const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-         const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;height:529px;margin-top:10px;border:1px solid #93c5fd;border-radius:4px;" />` : '';
+         const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;height:auto;margin-top:10px;border:1px solid #93c5fd;border-radius:4px;display:block;" />` : '';
         return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
           <style>
             body { font-family: Arial, sans-serif; margin: 12px; color: #1e293b; }
@@ -885,7 +885,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       });
 
        const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-          const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;height:529px;margin-top:18px;border:1px solid #6ee7b7;border-radius:4px;" />` : '';
+          const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;height:auto;margin-top:18px;border:1px solid #6ee7b7;border-radius:4px;display:block;" />` : '';
         return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
           <style>
             body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
@@ -2155,18 +2155,20 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                           <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
                              <div className="flex items-center justify-between mb-4">
                                <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Estándar Semanal</h3>
-                                <Button size="sm" variant="outline" onClick={async () => {
-                                 let chartImage;
-                                 try {
-                                   if (standardChartRef.current) {
-                                     const canvas = await html2canvas(standardChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-                                     chartImage = canvas.toDataURL('image/png');
+                                  <Button size="sm" variant="outline" onClick={async () => {
+                                   let chartImage;
+                                   try {
+                                     if (standardChartRef.current) {
+                                       standardChartRef.current.style.height = '400px';
+                                       const canvas = await html2canvas(standardChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+                                       chartImage = canvas.toDataURL('image/png');
+                                       standardChartRef.current.style.height = '';
+                                     }
+                                   } catch (e) {
+                                     console.error('Error capturing chart:', e);
                                    }
-                                 } catch (e) {
-                                   console.error('Error capturing chart:', e);
-                                 }
-                                 onPrintWeeklyStandard?.(buildWeeklyStandardHtml(chartImage));
-                               }} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
+                                   onPrintWeeklyStandard?.(buildWeeklyStandardHtml(chartImage));
+                                 }} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
                                  <FileDown className="h-4 w-4" /> PDF
                                </Button>
                             </div>
@@ -2257,18 +2259,20 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                           <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
                              <div className="flex items-center justify-between mb-4">
                                <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Promedio Semanal</h3>
-                               <Button size="sm" variant="outline" onClick={async () => {
-                                 let chartImage;
-                                 try {
-                                   if (promedioChartRef.current) {
-                                     const canvas = await html2canvas(promedioChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-                                     chartImage = canvas.toDataURL('image/png');
-                                   }
-                                 } catch (e) {
-                                   console.error('Error capturing chart:', e);
-                                 }
-                                 onPrintWeeklyPromedio?.(buildWeeklyPromedioHtml(chartImage));
-                               }} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
+                                <Button size="sm" variant="outline" onClick={async () => {
+                                  let chartImage;
+                                  try {
+                                    if (promedioChartRef.current) {
+                                      promedioChartRef.current.style.height = '400px';
+                                      const canvas = await html2canvas(promedioChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+                                      chartImage = canvas.toDataURL('image/png');
+                                      promedioChartRef.current.style.height = '';
+                                    }
+                                  } catch (e) {
+                                    console.error('Error capturing chart:', e);
+                                  }
+                                  onPrintWeeklyPromedio?.(buildWeeklyPromedioHtml(chartImage));
+                                }} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
                                  <FileDown className="h-4 w-4" /> PDF
                                </Button>
                             </div>
