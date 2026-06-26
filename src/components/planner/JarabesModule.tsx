@@ -278,9 +278,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
      const dateObj = new Date(selectedDate + 'T12:00:00');
      const monthName = dateObj.toLocaleString('es', { month: 'long' }).toUpperCase();
 
-     const { sugarRows, tanksRows, sugarStandard, sugarTotals, tanksTotals } = est;
-     const fisico = (sugarRows.reduce((a, r) => a + r.disponibleSacos, 0) + tanksRows.reduce((a, r) => a + r.invInicialSacos, 0))
-       - (sugarRows.reduce((a, r) => a + r.invFinalSacos, 0) + tanksRows.reduce((a, r) => a + r.invFinalSacos, 0));
+      const { sugarRows, tanksRows, sugarStandard, sugarTotals, tanksTotals } = est;
+      const fisico = (sugarRows.reduce((a, r) => a + r.disponibleKg, 0) + tanksRows.reduce((a, r) => a + r.invInicialKg, 0))
+        - (sugarRows.reduce((a, r) => a + r.invFinalKg, 0) + tanksRows.reduce((a, r) => a + r.invFinalKg, 0));
      const diferencia = fisico - prom.sugarStandard;
      const porcentaje = prom.sugarStandard !== 0 ? (diferencia / sugarStandard * 100) : 0;
 
@@ -430,8 +430,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       <table class="summary">
         <thead>
           <tr>
-            <th style="padding:6px 10px;text-align:right;background:#4f81bd;color:#fff;">ESTÁNDAR (SACOS)</th>
-            <th style="padding:6px 10px;text-align:right;background:#4f81bd;color:#fff;">FÍSICO (SACOS)</th>
+            <th style="padding:6px 10px;text-align:right;background:#4f81bd;color:#fff;">ESTÁNDAR (KG)</th>
+            <th style="padding:6px 10px;text-align:right;background:#4f81bd;color:#fff;">FÍSICO (KG)</th>
             <th style="padding:6px 10px;text-align:right;background:#4f81bd;color:#fff;">DIFERENCIA</th>
             <th style="padding:6px 10px;text-align:right;background:#4f81bd;color:#fff;">%</th>
           </tr>
@@ -489,9 +489,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
      const dateObj = new Date(selectedDate + 'T12:00:00');
      const monthName = dateObj.toLocaleString('es', { month: 'long' }).toUpperCase();
 
-     const { sugarRows, tanksRows, sugarStandard, sugarTotals, tanksTotals } = prom;
-     const fisico = (sugarRows.reduce((a, r) => a + r.disponibleSacos, 0) + tanksRows.reduce((a, r) => a + r.invInicialSacos, 0))
-       - (sugarRows.reduce((a, r) => a + r.invFinalSacos, 0) + tanksRows.reduce((a, r) => a + r.invFinalSacos, 0));
+      const { sugarRows, tanksRows, sugarStandard, sugarTotals, tanksTotals } = prom;
+      const fisico = (sugarRows.reduce((a, r) => a + r.disponibleKg, 0) + tanksRows.reduce((a, r) => a + r.invInicialKg, 0))
+        - (sugarRows.reduce((a, r) => a + r.invFinalKg, 0) + tanksRows.reduce((a, r) => a + r.invFinalKg, 0));
      const diferencia = fisico - prom.sugarStandard;
      const porcentaje = prom.sugarStandard !== 0 ? (diferencia / sugarStandard * 100) : 0;
 
@@ -722,7 +722,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
         const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
         const metrics = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-        const fisico = (metrics.sugarTotals.disponibleSacos + metrics.tanksTotals.invInicialSacos) - (metrics.sugarTotals.invFinalSacos + metrics.tanksTotals.invFinalSacos);
+        const fisico = (metrics.sugarTotals.disponibleKg + metrics.tanksTotals.invInicialKg) - (metrics.sugarTotals.invFinalKg + metrics.tanksTotals.invFinalKg);
         const diferencia = fisico - metrics.sugarStandard;
         const porcentaje = metrics.sugarStandard !== 0 ? (diferencia / metrics.sugarStandard * 100) : 0;
         rows.push({
@@ -834,7 +834,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
         const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
         const metrics = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-        const fisico = (metrics.sugarTotals.disponibleSacos + metrics.tanksTotals.invInicialSacos) - (metrics.sugarTotals.invFinalSacos + metrics.tanksTotals.invFinalSacos);
+        const fisico = (metrics.sugarTotals.disponibleKg + metrics.tanksTotals.invInicialKg) - (metrics.sugarTotals.invFinalKg + metrics.tanksTotals.invFinalKg);
         const diferencia = fisico - metrics.sugarStandard;
         const porcentaje = metrics.sugarStandard !== 0 ? (diferencia / metrics.sugarStandard * 100) : 0;
         rows.push({
@@ -1613,9 +1613,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                           <tbody>
                             <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
                               <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(est.sugarStandard)}</td>
-                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber((est.sugarTotals.disponibleSacos + est.tanksTotals.invInicialSacos) - (est.sugarTotals.invFinalSacos + est.tanksTotals.invFinalSacos))}</td>
-                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(((est.sugarTotals.disponibleSacos + est.tanksTotals.invInicialSacos) - (est.sugarTotals.invFinalSacos + est.tanksTotals.invFinalSacos) - est.sugarStandard))}</td>
-                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((est.sugarTotals.disponibleSacos + est.tanksTotals.invInicialSacos) - (est.sugarTotals.invFinalSacos + est.tanksTotals.invFinalSacos) - est.sugarStandard) / est.sugarStandard * 100)}%</td>
+                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber((est.sugarTotals.disponibleKg + est.tanksTotals.invInicialKg) - (est.sugarTotals.invFinalKg + est.tanksTotals.invFinalKg))}</td>
+                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(((est.sugarTotals.disponibleKg + est.tanksTotals.invInicialKg) - (est.sugarTotals.invFinalKg + est.tanksTotals.invFinalKg) - est.sugarStandard))}</td>
+                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((est.sugarTotals.disponibleKg + est.tanksTotals.invInicialKg) - (est.sugarTotals.invFinalKg + est.tanksTotals.invFinalKg) - est.sugarStandard) / est.sugarStandard * 100)}%</td>
                             </tr>
                           </tbody>
                         </table>
@@ -2035,9 +2035,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                   <tbody>
                                     <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
                                       <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(prom.sugarStandard)}</td>
-                                      <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber((prom.sugarTotals.disponibleSacos + prom.tanksTotals.invInicialSacos) - (prom.sugarTotals.invFinalSacos + prom.tanksTotals.invFinalSacos))}</td>
-                                      <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(((prom.sugarTotals.disponibleSacos + prom.tanksTotals.invInicialSacos) - (prom.sugarTotals.invFinalSacos + prom.tanksTotals.invFinalSacos) - prom.sugarStandard))}</td>
-                                      <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((prom.sugarTotals.disponibleSacos + prom.tanksTotals.invInicialSacos) - (prom.sugarTotals.invFinalSacos + prom.tanksTotals.invFinalSacos) - prom.sugarStandard) / prom.sugarStandard * 100)}%</td>
+                                      <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber((prom.sugarTotals.disponibleKg + prom.tanksTotals.invInicialKg) - (prom.sugarTotals.invFinalKg + prom.tanksTotals.invFinalKg))}</td>
+                                      <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(((prom.sugarTotals.disponibleKg + prom.tanksTotals.invInicialKg) - (prom.sugarTotals.invFinalKg + prom.tanksTotals.invFinalKg) - prom.sugarStandard))}</td>
+                                      <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber(((prom.sugarTotals.disponibleKg + prom.tanksTotals.invInicialKg) - (prom.sugarTotals.invFinalKg + prom.tanksTotals.invFinalKg) - prom.sugarStandard) / prom.sugarStandard * 100)}%</td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -2085,7 +2085,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                         const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
                                         const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
                                         const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                        const fisico = (m.sugarTotals.disponibleSacos + m.tanksTotals.invInicialSacos) - (m.sugarTotals.invFinalSacos + m.tanksTotals.invFinalSacos);
+                                         const fisico = (m.sugarTotals.disponibleKg + m.tanksTotals.invInicialKg) - (m.sugarTotals.invFinalKg + m.tanksTotals.invFinalKg);
                                         const diferencia = fisico - m.sugarStandard;
                                         const porcentaje = m.sugarStandard !== 0 ? (diferencia / m.sugarStandard * 100) : 0;
                                         return (
@@ -2100,7 +2100,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                       })}
                                       {weeklyEst && (() => {
                                         const totalEstandar = weeklyEst.sugarStandard;
-                                        const totalFisico = (weeklyEst.sugarTotals.disponibleSacos + weeklyEst.tanksTotals.invInicialSacos) - (weeklyEst.sugarTotals.invFinalSacos + weeklyEst.tanksTotals.invFinalSacos);
+                                         const totalFisico = (weeklyEst.sugarTotals.disponibleKg + weeklyEst.tanksTotals.invInicialKg) - (weeklyEst.sugarTotals.invFinalKg + weeklyEst.tanksTotals.invFinalKg);
                                         const totalDiferencia = totalFisico - totalEstandar;
                                         const totalPorcentaje = totalEstandar !== 0 ? (totalDiferencia / totalEstandar * 100) : 0;
                                         return (
@@ -2124,7 +2124,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                       const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
                                       const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
                                       const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                      const fisico = (m.sugarTotals.disponibleSacos + m.tanksTotals.invInicialSacos) - (m.sugarTotals.invFinalSacos + m.tanksTotals.invFinalSacos);
+                                      const fisico = (m.sugarTotals.disponibleKg + m.tanksTotals.invInicialKg) - (m.sugarTotals.invFinalKg + m.tanksTotals.invFinalKg);
                                       return { dia: format(day, 'EEE', { locale: es }).toUpperCase(), estandar: m.sugarStandard, fisico, porcentaje: m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0 };
                                     })} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                                       <CartesianGrid strokeDasharray="3 3" />
@@ -2182,7 +2182,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                         const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
                                         const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
                                         const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                        const fisico = (m.sugarTotals.disponibleSacos + m.tanksTotals.invInicialSacos) - (m.sugarTotals.invFinalSacos + m.tanksTotals.invFinalSacos);
+                                         const fisico = (m.sugarTotals.disponibleKg + m.tanksTotals.invInicialKg) - (m.sugarTotals.invFinalKg + m.tanksTotals.invFinalKg);
                                         const diferencia = fisico - m.sugarStandard;
                                         const porcentaje = m.sugarStandard !== 0 ? (diferencia / m.sugarStandard * 100) : 0;
                                         return (
@@ -2197,7 +2197,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                       })}
                                       {weeklyProm && (() => {
                                         const totalEstandar = weeklyProm.sugarStandard;
-                                        const totalFisico = (weeklyProm.sugarTotals.disponibleSacos + weeklyProm.tanksTotals.invInicialSacos) - (weeklyProm.sugarTotals.invFinalSacos + weeklyProm.tanksTotals.invFinalSacos);
+                                         const totalFisico = (weeklyProm.sugarTotals.disponibleKg + weeklyProm.tanksTotals.invInicialKg) - (weeklyProm.sugarTotals.invFinalKg + weeklyProm.tanksTotals.invFinalKg);
                                         const totalDiferencia = totalFisico - totalEstandar;
                                         const totalPorcentaje = totalEstandar !== 0 ? (totalDiferencia / totalEstandar * 100) : 0;
                                         return (
@@ -2221,7 +2221,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                       const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
                                       const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
                                       const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                      const fisico = (m.sugarTotals.disponibleSacos + m.tanksTotals.invInicialSacos) - (m.sugarTotals.invFinalSacos + m.tanksTotals.invFinalSacos);
+                                      const fisico = (m.sugarTotals.disponibleKg + m.tanksTotals.invInicialKg) - (m.sugarTotals.invFinalKg + m.tanksTotals.invFinalKg);
                                       return { dia: format(day, 'EEE', { locale: es }).toUpperCase(), estandar: m.sugarStandard, fisico, porcentaje: m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0 };
                                     })} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
                                       <CartesianGrid strokeDasharray="3 3" />
