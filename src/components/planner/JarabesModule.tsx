@@ -302,36 +302,36 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
          <p class="info">Fecha: <strong>${selectedDate}</strong> &nbsp;&nbsp; Mes: <strong>${monthName}</strong></p>
        </div>
 
-       <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento UBB – Estándar</p>
-       <table>
-         <thead>
-           <tr style="background:#4f81bd;color:#fff;">
-             <th style="padding:5px 8px;text-align:left;">SABOR</th>
-             <th style="padding:5px 8px;text-align:right;">UBB INICIAL</th>
-             <th style="padding:5px 8px;text-align:right;">UBB PREPARADO</th>
-             <th style="padding:5px 8px;text-align:right;">UBB FINAL</th>
-             <th style="padding:5px 8px;text-align:right;">CONSUMO</th>
-           </tr>
-         </thead>
-         <tbody>
-            ${est.rows.map((row, i) => `
-              <tr style="background:${i % 2 === 0 ? '#fff' : '#f8fafc'};">
-                <td style="padding:3px 8px;border-bottom:1px solid #e5e7eb;">${row.sabor}</td>
-                <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;">${N(row.inicial)}</td>
-                <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;">${N(row.preparado)}</td>
-                <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;">${N(row.final)}</td>
-                <td style="padding:3px 8px;text-align:right;font-weight:bold;color:${row.consumo > 0 ? '#059669' : row.consumo < 0 ? '#dc2626' : '#64748b'};border-bottom:1px solid #e5e7eb;">${N(row.consumo)}</td>
-              </tr>
-            `).join('')}
-            <tr style="background:#dbeafe;font-weight:bold;border-top:2px solid #93c5fd;">
-              <td style="padding:5px 8px;border:1px solid #93c5fd;">TOTAL GENERAL</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(est.totals.inicial)}</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(est.totals.preparado)}</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(est.totals.final)}</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;background:#4f81bd;color:#fff;">${N(est.totals.consumo)}</td>
+        <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento UBB – Estándar</p>
+        <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:18px;">
+          <thead>
+            <tr style="background:#4f81bd;color:#fff;">
+              <th style="padding:5px 8px;text-align:left;width:33%;">SABOR</th>
+              <th style="padding:5px 8px;text-align:right;width:16.67%;">UBB INICIAL</th>
+              <th style="padding:5px 8px;text-align:right;width:16.67%;">UBB PREPARADO</th>
+              <th style="padding:5px 8px;text-align:right;width:16.67%;">UBB FINAL</th>
+              <th style="padding:5px 8px;text-align:right;width:16.67%;">CONSUMO</th>
             </tr>
-         </tbody>
-       </table>
+          </thead>
+          <tbody>
+             ${est.rows.map((row, i) => `
+               <tr style="background:${i % 2 === 0 ? '#fff' : '#f8fafc'};">
+                 <td style="padding:3px 8px;border-bottom:1px solid #e5e7eb;width:33%;">${row.sabor}</td>
+                 <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.inicial)}</td>
+                 <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.preparado)}</td>
+                 <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.final)}</td>
+                 <td style="padding:3px 8px;text-align:right;font-weight:bold;color:${row.consumo > 0 ? '#059669' : row.consumo < 0 ? '#dc2626' : '#64748b'};border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.consumo)}</td>
+               </tr>
+             `).join('')}
+             <tr style="background:#dbeafe;font-weight:bold;border-top:2px solid #93c5fd;">
+               <td style="padding:5px 8px;border:1px solid #93c5fd;width:33%;">TOTAL GENERAL</td>
+               <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;width:16.67%;">${N(est.totals.inicial)}</td>
+               <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;width:16.67%;">${N(est.totals.preparado)}</td>
+               <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;width:16.67%;">${N(est.totals.final)}</td>
+               <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;background:#4f81bd;color:#fff;width:16.67%;">${N(est.totals.consumo)}</td>
+             </tr>
+          </tbody>
+        </table>
 
         <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento de Azúcar Refinada – Estándar</p>
         <table>
@@ -500,37 +500,37 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
          <p style="font-size:11px;margin:2px 0;">Fecha: <strong>${selectedDate}</strong> &nbsp;&nbsp; Mes: <strong>${monthName}</strong></p>
        </div>
 
-       <!-- UBB Table -->
-       <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento UBB – Promedio</p>
-       <table style="width:100%;border-collapse:collapse;font-size:9.5px;margin-bottom:18px;">
-         <thead>
-           <tr style="background:#4f81bd;color:#fff;">
-             <th style="padding:5px 8px;text-align:left;border:1px solid #3a6499;">SABOR</th>
-             <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;">UBB INICIAL</th>
-             <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;">UBB PREPARADO</th>
-             <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;">UBB FINAL</th>
-             <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;">CONSUMO</th>
-           </tr>
-         </thead>
-         <tbody>
-            ${prom.rows.map((row, i) => `
-              <tr style="background:${i % 2 === 0 ? '#fff' : '#f8fafc'};">
-                <td style="padding:3px 8px;border-bottom:1px solid #e5e7eb;">${row.sabor}</td>
-                <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;">${N(row.inicial)}</td>
-                <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;">${N(row.preparado)}</td>
-                <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;">${N(row.final)}</td>
-                <td style="padding:3px 8px;text-align:right;font-weight:bold;color:${row.consumo > 0 ? '#059669' : row.consumo < 0 ? '#dc2626' : '#64748b'};border-bottom:1px solid #e5e7eb;">${N(row.consumo)}</td>
-              </tr>
-            `).join('')}
-            <tr style="background:#dbeafe;font-weight:bold;border-top:2px solid #93c5fd;">
-              <td style="padding:5px 8px;border:1px solid #93c5fd;">TOTAL GENERAL</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(prom.totals.inicial)}</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(prom.totals.preparado)}</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;">${N(prom.totals.final)}</td>
-              <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;background:#4f81bd;color:#fff;">${N(prom.totals.consumo)}</td>
+        <!-- UBB Table -->
+        <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento UBB – Promedio</p>
+        <table style="width:100%;border-collapse:collapse;font-size:9.5px;margin-bottom:18px;">
+          <thead>
+            <tr style="background:#4f81bd;color:#fff;">
+              <th style="padding:5px 8px;text-align:left;border:1px solid #3a6499;width:33%;">SABOR</th>
+              <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;width:16.67%;">UBB INICIAL</th>
+              <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;width:16.67%;">UBB PREPARADO</th>
+              <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;width:16.67%;">UBB FINAL</th>
+              <th style="padding:5px 8px;text-align:right;border:1px solid #3a6499;width:16.67%;">CONSUMO</th>
             </tr>
-         </tbody>
-       </table>
+          </thead>
+          <tbody>
+             ${prom.rows.map((row, i) => `
+               <tr style="background:${i % 2 === 0 ? '#fff' : '#f8fafc'};">
+                 <td style="padding:3px 8px;border-bottom:1px solid #e5e7eb;width:33%;">${row.sabor}</td>
+                 <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.inicial)}</td>
+                 <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.preparado)}</td>
+                 <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.final)}</td>
+                 <td style="padding:3px 8px;text-align:right;font-weight:bold;color:${row.consumo > 0 ? '#059669' : row.consumo < 0 ? '#dc2626' : '#64748b'};border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.consumo)}</td>
+               </tr>
+             `).join('')}
+             <tr style="background:#dbeafe;font-weight:bold;border-top:2px solid #93c5fd;">
+               <td style="padding:5px 8px;border:1px solid #93c5fd;width:33%;">TOTAL GENERAL</td>
+               <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;width:16.67%;">${N(prom.totals.inicial)}</td>
+               <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;width:16.67%;">${N(prom.totals.preparado)}</td>
+               <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;width:16.67%;">${N(prom.totals.final)}</td>
+               <td style="padding:5px 8px;text-align:right;border:1px solid #93c5fd;background:#4f81bd;color:#fff;width:16.67%;">${N(prom.totals.consumo)}</td>
+             </tr>
+          </tbody>
+        </table>
 
         <!-- Sugar Table -->
         <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento de Azúcar Refinada</p>
