@@ -23,7 +23,7 @@ import {
   BarChart3
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { format, addDays } from 'date-fns';
+import { format, addDays, getISOWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { getWeekDays } from '@/lib/planner-utils';
 import { Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Line, ComposedChart } from 'recharts';
@@ -2080,25 +2080,40 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, weekStartDate 
                                      </tr>
                                    </thead>
                                    <tbody>
-                                     {weekDays.map((day, idx) => {
-                                       const dateStr = format(day, 'yyyy-MM-dd');
-                                       const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
-                                       const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
-                                       const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
-                                       const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                       const fisico = (m.sugarTotals.disponibleSacos + m.tanksTotals.invInicialSacos) - (m.sugarTotals.invFinalSacos + m.tanksTotals.invFinalSacos);
-                                       const diferencia = fisico - m.sugarStandard;
-                                       const porcentaje = m.sugarStandard !== 0 ? (diferencia / m.sugarStandard * 100) : 0;
-                                       return (
-                                         <tr key={dateStr} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
-                                           <td className="p-2 border border-slate-200 font-bold uppercase">{format(day, 'EEEE', { locale: es })}</td>
-                                           <td className="p-2 text-right border border-slate-200">{formatNumber(m.sugarStandard)}</td>
-                                           <td className="p-2 text-right border border-slate-200">{formatNumber(fisico)}</td>
-                                           <td className="p-2 text-right border border-slate-200" style={{ color: diferencia <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(diferencia)}</td>
-                                           <td className="p-2 text-right border border-slate-200" style={{ color: porcentaje <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(porcentaje)}%</td>
-                                         </tr>
-                                       );
-                                     })}
+                                      {weekDays.map((day, idx) => {
+                                        const dateStr = format(day, 'yyyy-MM-dd');
+                                        const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
+                                        const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
+                                        const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
+                                        const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+                                        const fisico = (m.sugarTotals.disponibleSacos + m.tanksTotals.invInicialSacos) - (m.sugarTotals.invFinalSacos + m.tanksTotals.invFinalSacos);
+                                        const diferencia = fisico - m.sugarStandard;
+                                        const porcentaje = m.sugarStandard !== 0 ? (diferencia / m.sugarStandard * 100) : 0;
+                                        return (
+                                          <tr key={dateStr} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
+                                            <td className="p-2 border border-slate-200 font-bold uppercase">{format(day, 'EEEE', { locale: es })}</td>
+                                            <td className="p-2 text-right border border-slate-200">{formatNumber(m.sugarStandard)}</td>
+                                            <td className="p-2 text-right border border-slate-200">{formatNumber(fisico)}</td>
+                                            <td className="p-2 text-right border border-slate-200" style={{ color: diferencia <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(diferencia)}</td>
+                                            <td className="p-2 text-right border border-slate-200" style={{ color: porcentaje <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(porcentaje)}%</td>
+                                          </tr>
+                                        );
+                                      })}
+                                      {weeklyEst && (() => {
+                                        const totalEstandar = weeklyEst.sugarStandard;
+                                        const totalFisico = (weeklyEst.sugarTotals.disponibleSacos + weeklyEst.tanksTotals.invInicialSacos) - (weeklyEst.sugarTotals.invFinalSacos + weeklyEst.tanksTotals.invFinalSacos);
+                                        const totalDiferencia = totalFisico - totalEstandar;
+                                        const totalPorcentaje = totalEstandar !== 0 ? (totalDiferencia / totalEstandar * 100) : 0;
+                                        return (
+                                          <tr className="bg-slate-100 font-black text-xs">
+                                            <td className="p-2 border border-slate-200">SEMANA {getISOWeek(weekDays[0])}</td>
+                                            <td className="p-2 text-right border border-slate-200">{formatNumber(totalEstandar)}</td>
+                                            <td className="p-2 text-right border border-slate-200">{formatNumber(totalFisico)}</td>
+                                            <td className="p-2 text-right border border-slate-200" style={{ color: totalDiferencia <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(totalDiferencia)}</td>
+                                            <td className="p-2 text-right border border-slate-200" style={{ color: totalPorcentaje <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(totalPorcentaje)}%</td>
+                                          </tr>
+                                        );
+                                      })()}
                                    </tbody>
                                  </table>
                                </div>
@@ -2151,25 +2166,40 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, weekStartDate 
                                      </tr>
                                    </thead>
                                    <tbody>
-                                     {weekDays.map((day, idx) => {
-                                       const dateStr = format(day, 'yyyy-MM-dd');
-                                       const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
-                                       const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
-                                       const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
-                                       const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                       const fisico = (m.sugarTotals.disponibleSacos + m.tanksTotals.invInicialSacos) - (m.sugarTotals.invFinalSacos + m.tanksTotals.invFinalSacos);
-                                       const diferencia = fisico - m.sugarStandard;
-                                       const porcentaje = m.sugarStandard !== 0 ? (diferencia / m.sugarStandard * 100) : 0;
-                                       return (
-                                         <tr key={dateStr} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
-                                           <td className="p-2 border border-slate-200 font-bold uppercase">{format(day, 'EEEE', { locale: es })}</td>
-                                           <td className="p-2 text-right border border-slate-200">{formatNumber(m.sugarStandard)}</td>
-                                           <td className="p-2 text-right border border-slate-200">{formatNumber(fisico)}</td>
-                                           <td className="p-2 text-right border border-slate-200" style={{ color: diferencia <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(diferencia)}</td>
-                                           <td className="p-2 text-right border border-slate-200" style={{ color: porcentaje <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(porcentaje)}%</td>
-                                         </tr>
-                                       );
-                                     })}
+                                      {weekDays.map((day, idx) => {
+                                        const dateStr = format(day, 'yyyy-MM-dd');
+                                        const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
+                                        const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
+                                        const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
+                                        const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+                                        const fisico = (m.sugarTotals.disponibleSacos + m.tanksTotals.invInicialSacos) - (m.sugarTotals.invFinalSacos + m.tanksTotals.invFinalSacos);
+                                        const diferencia = fisico - m.sugarStandard;
+                                        const porcentaje = m.sugarStandard !== 0 ? (diferencia / m.sugarStandard * 100) : 0;
+                                        return (
+                                          <tr key={dateStr} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
+                                            <td className="p-2 border border-slate-200 font-bold uppercase">{format(day, 'EEEE', { locale: es })}</td>
+                                            <td className="p-2 text-right border border-slate-200">{formatNumber(m.sugarStandard)}</td>
+                                            <td className="p-2 text-right border border-slate-200">{formatNumber(fisico)}</td>
+                                            <td className="p-2 text-right border border-slate-200" style={{ color: diferencia <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(diferencia)}</td>
+                                            <td className="p-2 text-right border border-slate-200" style={{ color: porcentaje <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(porcentaje)}%</td>
+                                          </tr>
+                                        );
+                                      })}
+                                      {weeklyProm && (() => {
+                                        const totalEstandar = weeklyProm.sugarStandard;
+                                        const totalFisico = (weeklyProm.sugarTotals.disponibleSacos + weeklyProm.tanksTotals.invInicialSacos) - (weeklyProm.sugarTotals.invFinalSacos + weeklyProm.tanksTotals.invFinalSacos);
+                                        const totalDiferencia = totalFisico - totalEstandar;
+                                        const totalPorcentaje = totalEstandar !== 0 ? (totalDiferencia / totalEstandar * 100) : 0;
+                                        return (
+                                          <tr className="bg-slate-100 font-black text-xs">
+                                            <td className="p-2 border border-slate-200">SEMANA {getISOWeek(weekDays[0])}</td>
+                                            <td className="p-2 text-right border border-slate-200">{formatNumber(totalEstandar)}</td>
+                                            <td className="p-2 text-right border border-slate-200">{formatNumber(totalFisico)}</td>
+                                            <td className="p-2 text-right border border-slate-200" style={{ color: totalDiferencia <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(totalDiferencia)}</td>
+                                            <td className="p-2 text-right border border-slate-200" style={{ color: totalPorcentaje <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(totalPorcentaje)}%</td>
+                                          </tr>
+                                        );
+                                      })()}
                                    </tbody>
                                  </table>
                                </div>
