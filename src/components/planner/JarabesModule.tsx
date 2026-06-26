@@ -88,6 +88,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [selectedDateEst, setSelectedDateEst] = useState<string>(new Date().toISOString().split('T')[0]);
   const [promKgFactor, setPromKgFactor] = useState<number>(50);
+  const [costoAzucar, setCostoAzucar] = useState<string>('');
 
   const getKey = (type: string, section: string, date: string) => `jarabes-${type}-${section}-${date}`;
 
@@ -2119,12 +2120,12 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
                            </TabsContent>
 
-                     <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
-                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                         <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
-                            <div className="flex items-center justify-between mb-4">
-                              <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Estándar Semanal</h3>
-                               <Button size="sm" variant="outline" onClick={async () => {
+                      <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                          <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm md:col-span-2">
+                             <div className="flex items-center justify-between mb-4">
+                               <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Estándar Semanal</h3>
+                                <Button size="sm" variant="outline" onClick={async () => {
                                  let chartImage;
                                  try {
                                    if (standardChartRef.current) {
@@ -2217,10 +2218,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                Sin datos esta semana
                              </div>
                            )}
-                         </div>
-                         <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
-                            <div className="flex items-center justify-between mb-4">
-                              <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Promedio Semanal</h3>
+                          </div>
+                          <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm md:col-span-2">
+                             <div className="flex items-center justify-between mb-4">
+                               <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Promedio Semanal</h3>
                                <Button size="sm" variant="outline" onClick={async () => {
                                  let chartImage;
                                  try {
@@ -2313,10 +2314,25 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                              <div className="h-64 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
                                Sin datos esta semana
                              </div>
-                           )}
-                         </div>
-                       </div>
-                     </TabsContent>
+                            )}
+                          </div>
+                          <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm flex flex-col items-center justify-center">
+                            <label className="font-black text-slate-800 text-sm uppercase tracking-wider mb-4 text-center">Costo Actual Azúcar</label>
+                            <div className="relative w-full max-w-[160px]">
+                              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 font-bold text-sm">$</span>
+                              <Input
+                                type="number"
+                                value={costoAzucar}
+                                onChange={(e) => setCostoAzucar(e.target.value)}
+                                className="h-10 text-center font-black text-lg bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary pl-8 pr-3"
+                                placeholder="0.00"
+                                step="0.01"
+                                min="0"
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </TabsContent>
 
                   </Tabs>
 
