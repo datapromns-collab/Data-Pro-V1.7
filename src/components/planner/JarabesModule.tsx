@@ -768,7 +768,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       });
 
         const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;margin-top:10px;border:1px solid #93c5fd;border-radius:4px;" />` : '';
+         const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;height:377px;margin-top:10px;border:1px solid #93c5fd;border-radius:4px;" />` : '';
         return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
           <style>
             body { font-family: Arial, sans-serif; margin: 12px; color: #1e293b; }
@@ -885,7 +885,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       });
 
        const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;margin-top:18px;border:1px solid #93c5fd;border-radius:4px;" />` : '';
+         const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;height:377px;margin-top:18px;border:1px solid #6ee7b7;border-radius:4px;" />` : '';
         return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
           <style>
             body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
