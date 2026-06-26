@@ -632,12 +632,8 @@ export default function PlannerPage() {
               {activeModule !== 'recipes' && activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'jarabes' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && (
                 <section className="pt-4 border-t border-slate-100">
                    <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Configuración Semana</p>
-                   <div className="px-2 space-y-3">
-                      <div className="flex items-center justify-between p-4 bg-slate-50 rounded-2xl border border-slate-100/80 shadow-sm">
-                        <span className="text-sm font-bold text-slate-600">Semana</span>
-                        <Badge variant="secondary" className="font-black text-[13px] text-primary bg-primary/10 px-3 py-0.5 rounded-lg border-primary/5">{weekNumber}</Badge>
-                      </div>
-                      <Popover>
+                    <div className="px-2 space-y-3">
+                       <Popover>
                         <PopoverTrigger asChild disabled={!isAdmin && !isInventory}>
                           <Button variant="outline" className="w-full h-12 justify-start text-left font-bold bg-white border-slate-200 shadow-sm hover:bg-slate-50 transition-none rounded-2xl disabled:opacity-80 active:scale-100 active:transform-none">
                             <CalendarIcon className="mr-3 h-4 w-4 text-primary" />
@@ -750,6 +746,9 @@ export default function PlannerPage() {
             <div className="flex items-center gap-2">
               {activeModule === 'planning' && (
                 <>
+                  <Badge variant="secondary" className="mr-2 bg-primary/10 text-primary border-primary/5 font-black text-[13px] h-8 px-3 hidden sm:flex items-center">
+                    Semana {weekNumber}
+                  </Badge>
                   <Badge variant="outline" className="mr-2 bg-primary/5 text-primary border-primary/20 font-black uppercase text-[10px] h-8 px-3 hidden sm:flex items-center">
                     LÍNEA {selectedLine}
                   </Badge>
