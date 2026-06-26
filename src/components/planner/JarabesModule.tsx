@@ -759,62 +759,60 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
        });
      });
 
-      const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
-        <style>
-          body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
-          table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 18px; }
-          th, td { border: 1px solid #e5e7eb; padding: 5px 8px; }
-          th { background: #ffff00; color: #1e293b; }
-          .total { background: #f3f4f6; font-weight: bold; }
-          h2 { text-align: center; font-size: 16px; margin-bottom: 4px; }
-          p.info { text-align: center; font-size: 11px; margin: 2px 0; }
-          .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 12px; }
-        </style>
-      </head><body>
-        <div>
-          <h2>Resumen de Azúcar Semanal – Estándar</h2>
-          <p class="info">Semana: <strong>${format(weekStart, 'dd/MM/yyyy')}</strong> al <strong>${format(weekEnd, 'dd/MM/yyyy')}</strong></p>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>DÍA</th>
-              <th>FECHA</th>
-              <th>ESTÁNDAR</th>
-              <th>FÍSICO</th>
-              <th>DIFERENCIA</th>
-              <th>%</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rows.map((r, i) => `
-              <tr style="background:${i % 2 === 0 ? '#fff' : '#f9fafb'};">
-                <td style="border-bottom:1px solid #e5e7eb;">${r.dia}</td>
-                <td style="border-bottom:1px solid #e5e7eb;">${r.fecha}</td>
-                <td style="text-align:right;border-bottom:1px solid #e5e7eb;">${N(r.estandar)}</td>
-                <td style="text-align:right;border-bottom:1px solid #e5e7eb;">${N(r.fisico)}</td>
-                <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border-bottom:1px solid #e5e7eb;">${N(r.diferencia)}</td>
-                <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border-bottom:1px solid #e5e7eb;">${N(r.porcentaje)}%</td>
+       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+       return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
+         <style>
+           body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
+           table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 18px; }
+           th, td { border: 1px solid #e5e7eb; padding: 8px; }
+           th { background: #f3f4f6; color: #1e293b; font-weight: bold; }
+           .total { background: #f3f4f6; font-weight: bold; }
+           h2 { text-align: center; font-size: 16px; margin-bottom: 4px; }
+           p.info { text-align: center; font-size: 11px; margin: 2px 0; }
+           .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 12px; }
+         </style>
+       </head><body>
+         <div>
+           <h2>Resumen de Azúcar Semanal – Estándar</h2>
+           <p class="info">Semana: <strong>${format(weekStart, 'dd/MM/yyyy')}</strong> al <strong>${format(weekEnd, 'dd/MM/yyyy')}</strong></p>
+         </div>
+         <table>
+           <thead>
+             <tr>
+               <th style="width:30%;">DÍA</th>
+               <th style="width:17.5%;text-align:right;">ESTÁNDAR</th>
+               <th style="width:17.5%;text-align:right;">FÍSICO</th>
+               <th style="width:17.5%;text-align:right;">DIFERENCIA</th>
+               <th style="width:17.5%;text-align:right;">%</th>
+             </tr>
+           </thead>
+           <tbody>
+             ${rows.map((r, i) => `
+               <tr style="background:${i % 2 === 0 ? '#fff' : '#f9fafb'};">
+                 <td style="border:1px solid #e5e7eb;">${r.dia}</td>
+                 <td style="text-align:right;border:1px solid #e5e7eb;">${N(r.estandar)}</td>
+                 <td style="text-align:right;border:1px solid #e5e7eb;">${N(r.fisico)}</td>
+                 <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.diferencia)}</td>
+                 <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.porcentaje)}%</td>
+               </tr>
+              `).join('')}
+              <tr class="total" style="border-top:2px solid #d1d5db;">
+                <td style="border:1px solid #e5e7eb;font-weight:bold;">TOTAL SEMANA</td>
+                <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
+                <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
+                <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
+                <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
               </tr>
-            `).join('')}
-            <tr class="total" style="border-top:2px solid #d1d5db;">
-              <td colspan="2" style="border:1px solid #e5e7eb;">TOTAL SEMANA</td>
-              <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
-              <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
-              <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
-              <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="footer">Generado el ${new Date().toLocaleString('es')}</div>
-      </body></html>`;
-   };
+            </tbody>
+          </table>
+          <div class="footer">Generado el ${new Date().toLocaleString('es')}</div>
+        </body></html>`;
+    };
 
-   const handleExportWeeklyPDFStandard = async () => {
-     try {
-       if (!weekDays.length) return;
-       const reportContent = buildWeeklyStandardHtml();
+    const handleExportWeeklyPDFStandard = async () => {
+      try {
+        if (!weekDays.length) return;
+        const reportContent = buildWeeklyStandardHtml();
        const reportEl = document.createElement('div');
        reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:28px 24px;font-family:Arial,sans-serif;';
        reportEl.innerHTML = reportContent;
@@ -871,62 +869,60 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
        });
      });
 
-     const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
-        <style>
-          body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
-          table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 18px; }
-          th, td { border: 1px solid #e5e7eb; padding: 5px 8px; }
-          th { background: #ffff00; color: #1e293b; }
-          .total { background: #f3f4f6; font-weight: bold; }
-          h2 { text-align: center; font-size: 16px; margin-bottom: 4px; }
-          p.info { text-align: center; font-size: 11px; margin: 2px 0; }
-          .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 12px; }
-        </style>
-      </head><body>
-        <div>
-          <h2>Resumen de Azúcar Semanal – Promedio</h2>
-          <p class="info">Semana: <strong>${format(weekStart, 'dd/MM/yyyy')}</strong> al <strong>${format(weekEnd, 'dd/MM/yyyy')}</strong></p>
-        </div>
-        <table>
-          <thead>
-            <tr>
-              <th>DÍA</th>
-              <th>FECHA</th>
-              <th>ESTÁNDAR</th>
-              <th>FÍSICO</th>
-              <th>DIFERENCIA</th>
-              <th>%</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${rows.map((r, i) => `
-              <tr style="background:${i % 2 === 0 ? '#fff' : '#f9fafb'};">
-                <td style="border-bottom:1px solid #e5e7eb;">${r.dia}</td>
-                <td style="border-bottom:1px solid #e5e7eb;">${r.fecha}</td>
-                <td style="text-align:right;border-bottom:1px solid #e5e7eb;">${N(r.estandar)}</td>
-                <td style="text-align:right;border-bottom:1px solid #e5e7eb;">${N(r.fisico)}</td>
-                <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border-bottom:1px solid #e5e7eb;">${N(r.diferencia)}</td>
-                <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border-bottom:1px solid #e5e7eb;">${N(r.porcentaje)}%</td>
+      const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+       return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
+         <style>
+           body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
+           table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 18px; }
+           th, td { border: 1px solid #e5e7eb; padding: 8px; }
+           th { background: #f3f4f6; color: #1e293b; font-weight: bold; }
+           .total { background: #f3f4f6; font-weight: bold; }
+           h2 { text-align: center; font-size: 16px; margin-bottom: 4px; }
+           p.info { text-align: center; font-size: 11px; margin: 2px 0; }
+           .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 12px; }
+         </style>
+       </head><body>
+         <div>
+           <h2>Resumen de Azúcar Semanal – Promedio</h2>
+           <p class="info">Semana: <strong>${format(weekStart, 'dd/MM/yyyy')}</strong> al <strong>${format(weekEnd, 'dd/MM/yyyy')}</strong></p>
+         </div>
+         <table>
+           <thead>
+             <tr>
+               <th style="width:30%;">DÍA</th>
+               <th style="width:17.5%;text-align:right;">ESTÁNDAR</th>
+               <th style="width:17.5%;text-align:right;">FÍSICO</th>
+               <th style="width:17.5%;text-align:right;">DIFERENCIA</th>
+               <th style="width:17.5%;text-align:right;">%</th>
+             </tr>
+           </thead>
+           <tbody>
+             ${rows.map((r, i) => `
+               <tr style="background:${i % 2 === 0 ? '#fff' : '#f9fafb'};">
+                 <td style="border:1px solid #e5e7eb;">${r.dia}</td>
+                 <td style="text-align:right;border:1px solid #e5e7eb;">${N(r.estandar)}</td>
+                 <td style="text-align:right;border:1px solid #e5e7eb;">${N(r.fisico)}</td>
+                 <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.diferencia)}</td>
+                 <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border:1px solid #e5e7eb;">${N(r.porcentaje)}%</td>
+               </tr>
+              `).join('')}
+              <tr class="total" style="border-top:2px solid #d1d5db;">
+                <td style="border:1px solid #e5e7eb;font-weight:bold;">TOTAL SEMANA</td>
+                <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
+                <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
+                <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
+                <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
               </tr>
-            `).join('')}
-            <tr class="total" style="border-top:2px solid #d1d5db;">
-              <td colspan="2" style="border:1px solid #e5e7eb;">TOTAL SEMANA</td>
-              <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
-              <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
-              <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
-              <td style="text-align:right;border:1px solid #e5e7eb;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="footer">Generado el ${new Date().toLocaleString('es')}</div>
-      </body></html>`;
-   };
+            </tbody>
+          </table>
+          <div class="footer">Generado el ${new Date().toLocaleString('es')}</div>
+        </body></html>`;
+    };
 
-   const handleExportWeeklyPDFPromedio = async () => {
-     try {
-       if (!weekDays.length) return;
-       const reportContent = buildWeeklyPromedioHtml();
+    const handleExportWeeklyPDFPromedio = async () => {
+      try {
+        if (!weekDays.length) return;
+        const reportContent = buildWeeklyPromedioHtml();
        const reportEl = document.createElement('div');
        reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:28px 24px;font-family:Arial,sans-serif;';
        reportEl.innerHTML = reportContent;
