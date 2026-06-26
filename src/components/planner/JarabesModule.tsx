@@ -2406,8 +2406,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             </div>
           </TabsContent>
         </Tabs>
-    </div>
-    <div style="position:fixed;top:-99999px;left:-99999px;pointer-events:none;">
+        <div style="position:fixed;top:-99999px;left:-99999px;pointer-events:none;">
       <div ref={hiddenStandardChartRef} style={{ width: '800px', height: '500px' }}>
         <ResponsiveContainer width="800" height="500">
           <ComposedChart data={weekDays.map(day => {
@@ -2450,6 +2449,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
           </ComposedChart>
         </ResponsiveContainer>
       </div>
+       </div>
     </div>
   );
 }
