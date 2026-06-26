@@ -285,162 +285,162 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
      const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
      return `<!DOCTYPE html><html><head><title>Vista Previa</title>
-       <style>
-         body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
-         table { width: 100%; border-collapse: collapse; font-size: 10px; margin-bottom: 18px; }
-         th, td { border: 1px solid #cbd5e1; padding: 4px 6px; }
-          th { text-align: center; background: #ffff00; color: #1e293b; font-weight: bold; }
-          .sub { background: #f3f4f6; font-weight: bold; font-size: 9px; }
-          .total { background: #f3f4f6; font-weight: bold; }
-         .summary th { background: #4f81bd; color: #fff; }
-         h2 { text-align: center; font-size: 16px; margin-bottom: 4px; }
-         p.info { text-align: center; font-size: 11px; margin: 2px 0; }
-         .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 12px; }
-       </style>
+         <style>
+          body { font-family: Arial, sans-serif; margin: 12px; font-size: 9px; color: #1e293b; }
+          table { width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 12px; }
+          th, td { border: 1px solid #cbd5e1; padding: 3px 5px; }
+           th { text-align: center; background: #ffff00; color: #1e293b; font-weight: bold; }
+           .sub { background: #f3f4f6; font-weight: bold; font-size: 8px; }
+           .total { background: #f3f4f6; font-weight: bold; }
+          .summary th { background: #4f81bd; color: #fff; }
+          h2 { text-align: center; font-size: 14px; margin-bottom: 3px; }
+          p.info { text-align: center; font-size: 10px; margin: 1px 0; }
+          .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 8px; }
+        </style>
      </head><body>
        <div>
          <h2>Resumen de Azúcar Semanal</h2>
          <p class="info">Fecha: <strong>${selectedDate}</strong> &nbsp;&nbsp; Mes: <strong>${monthName}</strong></p>
        </div>
 
-        <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento UBB – Estándar</p>
-        <table style="width:100%;border-collapse:collapse;font-size:10px;margin-bottom:18px;">
+         <p style="font-size:9px;font-weight:bold;text-transform:uppercase;margin:0 0 2px;color:#334155;">Seguimiento UBB – Estándar</p>
+         <table style="width:100%;border-collapse:collapse;font-size:9px;margin-bottom:12px;">
           <thead>
-             <tr style="background:#4f81bd;color:#fff;">
-               <th style="padding:5px 8px;text-align:left;width:33%;background:#4f81bd;color:#fff;">SABOR</th>
-               <th style="padding:5px 8px;text-align:right;width:16.67%;background:#4f81bd;color:#fff;">UBB INICIAL</th>
-               <th style="padding:5px 8px;text-align:right;width:16.67%;background:#4f81bd;color:#fff;">UBB PREPARADO</th>
-               <th style="padding:5px 8px;text-align:right;width:16.67%;background:#4f81bd;color:#fff;">UBB FINAL</th>
-               <th style="padding:5px 8px;text-align:right;width:16.67%;background:#4f81bd;color:#fff;">CONSUMO</th>
+              <tr style="background:#4f81bd;color:#fff;">
+                <th style="padding:4px 6px;text-align:left;width:33%;background:#4f81bd;color:#fff;">SABOR</th>
+                <th style="padding:4px 6px;text-align:right;width:16.67%;background:#4f81bd;color:#fff;">UBB INICIAL</th>
+                <th style="padding:4px 6px;text-align:right;width:16.67%;background:#4f81bd;color:#fff;">UBB PREPARADO</th>
+                <th style="padding:4px 6px;text-align:right;width:16.67%;background:#4f81bd;color:#fff;">UBB FINAL</th>
+                <th style="padding:4px 6px;text-align:right;width:16.67%;background:#4f81bd;color:#fff;">CONSUMO</th>
+              </tr>
+           </thead>
+           <tbody>
+               ${est.rows.map((row, i) => `
+                 <tr style="background:#fff;">
+                   <td style="padding:2px 6px;border-bottom:1px solid #e5e7eb;width:33%;">${row.sabor}</td>
+                   <td style="padding:2px 6px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.inicial)}</td>
+                   <td style="padding:2px 6px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.preparado)}</td>
+                   <td style="padding:2px 6px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.final)}</td>
+                   <td style="padding:2px 6px;text-align:right;font-weight:bold;color:${row.consumo > 0 ? '#059669' : row.consumo < 0 ? '#dc2626' : '#64748b'};border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.consumo)}</td>
+                 </tr>
+               `).join('')}
+               <tr style="background:#dbeafe;font-weight:bold;border-top:2px solid #e2e8f0;">
+                 <td style="padding:4px 6px;border:1px solid #e2e8f0;width:33%;">TOTAL GENERAL</td>
+                 <td style="padding:4px 6px;text-align:right;border:1px solid #e2e8f0;width:16.67%;">${N(est.totals.inicial)}</td>
+                 <td style="padding:4px 6px;text-align:right;border:1px solid #e2e8f0;width:16.67%;">${N(est.totals.preparado)}</td>
+                 <td style="padding:4px 6px;text-align:right;border:1px solid #e2e8f0;width:16.67%;">${N(est.totals.final)}</td>
+                 <td style="padding:4px 6px;text-align:right;border:1px solid #e2e8f0;background:#4f81bd;color:#fff;width:16.67%;">${N(est.totals.consumo)}</td>
+               </tr>
+           </tbody>
+         </table>
+
+         <p style="font-size:9px;font-weight:bold;text-transform:uppercase;margin:0 0 2px;color:#334155;">Seguimiento de Azúcar Refinada – Estándar</p>
+         <table>
+           <thead>
+             <tr style="background:#ffff00;color:#1e293b;border-bottom:2px solid #d1d5db;">
+               <th style="padding:3px 4px;text-align:center;border:1px solid #d1d5db;" colspan="3">INV. INICIAL DE AZUCAR REFINADA</th>
+               <th style="padding:3px 4px;text-align:center;border:1px solid #d1d5db;" colspan="2">RECEPCION DE AZUCAR</th>
+               <th style="padding:3px 4px;text-align:center;border:1px solid #d1d5db;" colspan="2">AZUCAR DISPONIBLE</th>
+               <th style="padding:3px 4px;text-align:center;border:1px solid #d1d5db;" colspan="2">INV. FINAL DE AZUCAR</th>
+               <th style="padding:3px 4px;text-align:center;border:1px solid #d1d5db;" colspan="2">CONSUMO FISISCO</th>
              </tr>
-          </thead>
-          <tbody>
-              ${est.rows.map((row, i) => `
-                <tr style="background:#fff;">
-                  <td style="padding:3px 8px;border-bottom:1px solid #e5e7eb;width:33%;">${row.sabor}</td>
-                  <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.inicial)}</td>
-                  <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.preparado)}</td>
-                  <td style="padding:3px 8px;text-align:right;border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.final)}</td>
-                  <td style="padding:3px 8px;text-align:right;font-weight:bold;color:${row.consumo > 0 ? '#059669' : row.consumo < 0 ? '#dc2626' : '#64748b'};border-bottom:1px solid #e5e7eb;width:16.67%;">${N(row.consumo)}</td>
-                </tr>
-              `).join('')}
-              <tr style="background:#dbeafe;font-weight:bold;border-top:2px solid #e2e8f0;">
-                <td style="padding:5px 8px;border:1px solid #e2e8f0;width:33%;">TOTAL GENERAL</td>
-                <td style="padding:5px 8px;text-align:right;border:1px solid #e2e8f0;width:16.67%;">${N(est.totals.inicial)}</td>
-                <td style="padding:5px 8px;text-align:right;border:1px solid #e2e8f0;width:16.67%;">${N(est.totals.preparado)}</td>
-                <td style="padding:5px 8px;text-align:right;border:1px solid #e2e8f0;width:16.67%;">${N(est.totals.final)}</td>
-                <td style="padding:5px 8px;text-align:right;border:1px solid #e2e8f0;background:#4f81bd;color:#fff;width:16.67%;">${N(est.totals.consumo)}</td>
-              </tr>
+             <tr style="background:#f3f4f6;color:#1e293b;font-size:8px;font-weight:bold;border-bottom:1px solid #d1d5db;">
+               <th style="padding:2px 4px;text-align:left;border:1px solid #e5e7eb;">PROVEEDOR</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
+               <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
+             </tr>
+           </thead>
+           <tbody>
+              ${est.sugarRows.map((row, i) => `
+               <tr style="background:${i % 2 === 0 ? '#fff' : '#fafbfc'};">
+                 <td style="padding:2px 4px;font-weight:bold;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${row.proveedor}</td>
+                 <td style="padding:2px 4px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invInicialSacos)}</td>
+                 <td style="padding:2px 4px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invInicialKg)}</td>
+                 <td style="padding:2px 4px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.recepcionSacos)}</td>
+                 <td style="padding:2px 4px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.recepcionKg)}</td>
+                 <td style="padding:2px 4px;text-align:right;font-weight:bold;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.disponibleSacos)}</td>
+                 <td style="padding:2px 4px;text-align:right;font-weight:bold;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.disponibleKg)}</td>
+                 <td style="padding:2px 4px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invFinalSacos)}</td>
+                 <td style="padding:2px 4px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invFinalKg)}</td>
+                 <td style="padding:2px 4px;text-align:right;font-weight:bold;color:${row.consumoSacos >= 0 ? '#059669' : '#dc2626'};border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.consumoSacos)}</td>
+                 <td style="padding:2px 4px;text-align:right;font-weight:bold;color:${row.consumoKg >= 0 ? '#059669' : '#dc2626'};border-bottom:1px solid #e5e7eb;">${N(row.consumoKg)}</td>
+               </tr>
+             `).join('')}
+             <tr style="background:#f3f4f6;font-weight:bold;border-top:2px solid #d1d5db;">
+               <td style="padding:3px 4px;border:1px solid #e5e7eb;font-weight:bold;">TOTAL GENERAL</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.invInicialSacos)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.invInicialKg)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.recepcionSacos)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.recepcionKg)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.disponibleSacos)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.disponibleKg)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.invFinalSacos)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.invFinalKg)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;color:#059669;">${N(est.sugarTotals.consumoSacos)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;color:#059669;">${N(est.sugarTotals.consumoKg)}</td>
+             </tr>
           </tbody>
-        </table>
+         </table>
 
-        <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento de Azúcar Refinada – Estándar</p>
+        <p style="font-size:9px;font-weight:bold;text-transform:uppercase;margin:0 0 2px;color:#334155;">Seguimiento de Tanques y Salas</p>
         <table>
           <thead>
             <tr style="background:#ffff00;color:#1e293b;border-bottom:2px solid #d1d5db;">
-              <th style="padding:4px 5px;text-align:center;border:1px solid #d1d5db;" colspan="3">INV. INICIAL DE AZUCAR REFINADA</th>
-              <th style="padding:4px 5px;text-align:center;border:1px solid #d1d5db;" colspan="2">RECEPCION DE AZUCAR</th>
-              <th style="padding:4px 5px;text-align:center;border:1px solid #d1d5db;" colspan="2">AZUCAR DISPONIBLE</th>
-              <th style="padding:4px 5px;text-align:center;border:1px solid #d1d5db;" colspan="2">INV. FINAL DE AZUCAR</th>
-              <th style="padding:4px 5px;text-align:center;border:1px solid #d1d5db;" colspan="2">CONSUMO FISISCO</th>
+              <th style="padding:3px 4px;text-align:center;border:1px solid #d1d5db;" colspan="3">INV. INICIAL DE AZUCAR REFINADA</th>
+              <th style="padding:3px 4px;text-align:center;border:1px solid #d1d5db;" colspan="2">INV. FINAL DE AZUCAR</th>
             </tr>
-            <tr style="background:#f3f4f6;color:#1e293b;font-size:9px;font-weight:bold;border-bottom:1px solid #d1d5db;">
-              <th style="padding:3px 5px;text-align:left;border:1px solid #e5e7eb;">PROVEEDOR</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e5e7eb;">KG</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e5e7eb;">KG</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e5e7eb;">KG</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e5e7eb;">KG</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e5e7eb;">KG</th>
-            </tr>
-          </thead>
-          <tbody>
-             ${est.sugarRows.map((row, i) => `
-              <tr style="background:${i % 2 === 0 ? '#fff' : '#fafbfc'};">
-                <td style="padding:3px 5px;font-weight:bold;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${row.proveedor}</td>
-                <td style="padding:3px 5px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invInicialSacos)}</td>
-                <td style="padding:3px 5px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invInicialKg)}</td>
-                <td style="padding:3px 5px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.recepcionSacos)}</td>
-                <td style="padding:3px 5px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.recepcionKg)}</td>
-                <td style="padding:3px 5px;text-align:right;font-weight:bold;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.disponibleSacos)}</td>
-                <td style="padding:3px 5px;text-align:right;font-weight:bold;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.disponibleKg)}</td>
-                <td style="padding:3px 5px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invFinalSacos)}</td>
-                <td style="padding:3px 5px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invFinalKg)}</td>
-                <td style="padding:3px 5px;text-align:right;font-weight:bold;color:${row.consumoSacos >= 0 ? '#059669' : '#dc2626'};border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.consumoSacos)}</td>
-                <td style="padding:3px 5px;text-align:right;font-weight:bold;color:${row.consumoKg >= 0 ? '#059669' : '#dc2626'};border-bottom:1px solid #e5e7eb;">${N(row.consumoKg)}</td>
-              </tr>
-            `).join('')}
-            <tr style="background:#f3f4f6;font-weight:bold;border-top:2px solid #d1d5db;">
-              <td style="padding:4px 5px;border:1px solid #e5e7eb;font-weight:bold;">TOTAL GENERAL</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.invInicialSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.invInicialKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.recepcionSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.recepcionKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.disponibleSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.disponibleKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.invFinalSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #e5e7eb;">${N(est.sugarTotals.invFinalKg)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #e5e7eb;color:#059669;">${N(est.sugarTotals.consumoSacos)}</td>
-              <td style="padding:4px 5px;text-align:right;border:1px solid #e5e7eb;color:#059669;">${N(est.sugarTotals.consumoKg)}</td>
-            </tr>
-         </tbody>
-        </table>
-
-        <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Seguimiento de Tanques y Salas</p>
-        <table>
-          <thead>
-            <tr style="background:#ffff00;color:#1e293b;border-bottom:2px solid #d1d5db;">
-              <th style="padding:4px 5px;text-align:center;border:1px solid #d1d5db;" colspan="3">INV. INICIAL DE AZUCAR REFINADA</th>
-              <th style="padding:4px 5px;text-align:center;border:1px solid #d1d5db;" colspan="2">INV. FINAL DE AZUCAR</th>
-            </tr>
-            <tr style="background:#f3f4f6;color:#1e293b;font-size:9px;font-weight:bold;border-bottom:1px solid #d1d5db;">
-              <th style="padding:3px 5px;text-align:left;border:1px solid #e5e7eb;">TANQUE / SALA</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e5e7eb;">KG</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
-              <th style="padding:3px 5px;text-align:right;border:1px solid #e5e7eb;">KG</th>
+            <tr style="background:#f3f4f6;color:#1e293b;font-size:8px;font-weight:bold;border-bottom:1px solid #d1d5db;">
+              <th style="padding:2px 4px;text-align:left;border:1px solid #e5e7eb;">TANQUE / SALA</th>
+              <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
+              <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
+              <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">CANT. SACOS</th>
+              <th style="padding:2px 4px;text-align:right;border:1px solid #e5e7eb;">KG</th>
             </tr>
           </thead>
           <tbody>
              ${est.tanksRows.map((row, i) => `
               <tr style="background:${i % 2 === 0 ? '#fff' : '#fafbfc'};">
-                <td style="padding:3px 5px;font-weight:bold;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${row.item}</td>
-                <td style="padding:3px 5px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invInicialSacos)}</td>
-                <td style="padding:3px 5px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invInicialKg)}</td>
-                <td style="padding:3px 5px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invFinalSacos)}</td>
-                <td style="padding:3px 5px;text-align:right;border-bottom:1px solid #e5e7eb;">${N(row.invFinalKg)}</td>
+                <td style="padding:2px 4px;font-weight:bold;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${row.item}</td>
+                <td style="padding:2px 4px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invInicialSacos)}</td>
+                <td style="padding:2px 4px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invInicialKg)}</td>
+                <td style="padding:2px 4px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invFinalSacos)}</td>
+                <td style="padding:2px 4px;text-align:right;border-bottom:1px solid #e5e7eb;border-right:1px solid #e5e7eb;">${N(row.invFinalKg)}</td>
               </tr>
             `).join('')}
              <tr style="background:#f3f4f6;font-weight:bold;border-top:2px solid #d1d5db;">
-               <td style="padding:4px 5px;border:1px solid #e5e7eb;font-weight:bold;">TOTAL GENERAL</td>
-               <td style="padding:4px 5px;text-align:right;border:1px solid #e5e7eb;">${N(tanksTotals.invInicialSacos)}</td>
-               <td style="padding:4px 5px;text-align:right;border:1px solid #e5e7eb;">${N(tanksTotals.invInicialKg)}</td>
-               <td style="padding:4px 5px;text-align:right;border:1px solid #e5e7eb;">${N(tanksTotals.invFinalSacos)}</td>
-               <td style="padding:4px 5px;text-align:right;border:1px solid #e5e7eb;">${N(tanksTotals.invFinalKg)}</td>
+               <td style="padding:3px 4px;border:1px solid #e5e7eb;font-weight:bold;">TOTAL GENERAL</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(tanksTotals.invInicialSacos)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(tanksTotals.invInicialKg)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(tanksTotals.invFinalSacos)}</td>
+               <td style="padding:3px 4px;text-align:right;border:1px solid #e5e7eb;">${N(tanksTotals.invFinalKg)}</td>
              </tr>
-          </tbody>
-        </table>
+           </tbody>
+         </table>
 
-       <p style="font-size:10px;font-weight:bold;text-transform:uppercase;margin:0 0 4px;color:#334155;">Cálculo de Consumo</p>
+       <p style="font-size:9px;font-weight:bold;text-transform:uppercase;margin:0 0 2px;color:#334155;">Cálculo de Consumo</p>
       <table class="summary">
         <thead>
           <tr>
-            <th style="padding:6px 10px;text-align:right;background:#4f81bd;color:#fff;">ESTÁNDAR (KG)</th>
-            <th style="padding:6px 10px;text-align:right;background:#4f81bd;color:#fff;">FÍSICO (KG)</th>
-            <th style="padding:6px 10px;text-align:right;background:#4f81bd;color:#fff;">DIFERENCIA</th>
-            <th style="padding:6px 10px;text-align:right;background:#4f81bd;color:#fff;">%</th>
+            <th style="padding:4px 7px;text-align:right;background:#4f81bd;color:#fff;">ESTÁNDAR (KG)</th>
+            <th style="padding:4px 7px;text-align:right;background:#4f81bd;color:#fff;">FÍSICO (KG)</th>
+            <th style="padding:4px 7px;text-align:right;background:#4f81bd;color:#fff;">DIFERENCIA</th>
+            <th style="padding:4px 7px;text-align:right;background:#4f81bd;color:#fff;">%</th>
           </tr>
         </thead>
         <tbody>
-          <tr style="background:#dbeafe;font-weight:bold;font-size:11px;">
-            <td style="padding:6px 10px;text-align:right;">${N(est.sugarStandard)}</td>
-            <td style="padding:6px 10px;text-align:right;">${N(fisico)}</td>
-            <td style="padding:6px 10px;text-align:right;color:${diferencia <= 0 ? '#059669' : '#dc2626'};">${N(diferencia)}</td>
-            <td style="padding:6px 10px;text-align:right;color:${porcentaje <= 0 ? '#059669' : '#dc2626'};">${N(porcentaje)}%</td>
+          <tr style="background:#dbeafe;font-weight:bold;font-size:10px;">
+            <td style="padding:4px 7px;text-align:right;">${N(est.sugarStandard)}</td>
+            <td style="padding:4px 7px;text-align:right;">${N(fisico)}</td>
+            <td style="padding:4px 7px;text-align:right;color:${diferencia <= 0 ? '#059669' : '#dc2626'};">${N(diferencia)}</td>
+            <td style="padding:4px 7px;text-align:right;color:${porcentaje <= 0 ? '#059669' : '#dc2626'};">${N(porcentaje)}%</td>
           </tr>
         </tbody>
       </table>
@@ -451,12 +451,12 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
    const handleExportPDF = async () => {
      try {
-       const reportContent = buildStandardHtml();
-       const reportEl = document.createElement('div');
-       reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:28px 24px;font-family:Arial,sans-serif;';
-       reportEl.innerHTML = reportContent;
-       document.body.appendChild(reportEl);
-       const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+        const reportContent = buildStandardHtml();
+        const reportEl = document.createElement('div');
+        reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
+        reportEl.innerHTML = reportContent;
+        document.body.appendChild(reportEl);
+        const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
        document.body.removeChild(reportEl);
 
        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
@@ -734,17 +734,17 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       });
 
         const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;margin-top:18px;border:1px solid #e5e7eb;border-radius:4px;" />` : '';
+        const chartSection = chartImage ? `<img src="${chartImage}" style="width:100%;margin-top:10px;border:1px solid #e5e7eb;border-radius:4px;" />` : '';
         return `<!DOCTYPE html><html><head><title>Vista Previa Semanal</title>
           <style>
-            body { font-family: Arial, sans-serif; margin: 20px; color: #1e293b; }
-            table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 18px; }
-            th, td { border: 1px solid #e5e7eb; padding: 8px; }
+            body { font-family: Arial, sans-serif; margin: 12px; color: #1e293b; }
+            table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 12px; }
+            th, td { border: 1px solid #e5e7eb; padding: 5px; }
             th { background: #f3f4f6; color: #1e293b; font-weight: bold; }
             .total { background: #f3f4f6; font-weight: bold; }
-            h2 { text-align: center; font-size: 16px; margin-bottom: 4px; }
-            p.info { text-align: center; font-size: 11px; margin: 2px 0; }
-            .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 12px; }
+            h2 { text-align: center; font-size: 14px; margin-bottom: 3px; }
+            p.info { text-align: center; font-size: 10px; margin: 1px 0; }
+            .footer { font-size: 8px; color: #94a3b8; text-align: right; margin-top: 8px; }
           </style>
         </head><body>
           <div>
@@ -788,12 +788,12 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
      const handleExportWeeklyPDFStandard = async () => {
       try {
         if (!weekDays.length) return;
-        const reportContent = buildWeeklyStandardHtml();
-       const reportEl = document.createElement('div');
-       reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:28px 24px;font-family:Arial,sans-serif;';
-       reportEl.innerHTML = reportContent;
-       document.body.appendChild(reportEl);
-       const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+         const reportContent = buildWeeklyStandardHtml();
+        const reportEl = document.createElement('div');
+        reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
+        reportEl.innerHTML = reportContent;
+        document.body.appendChild(reportEl);
+        const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
        document.body.removeChild(reportEl);
 
        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
