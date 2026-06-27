@@ -228,7 +228,7 @@ export default function PlannerPage() {
     jarabes: 'jarabes-view',
     'raw-materials': 'raw-material-view',
     recipes: 'recipes-editor',
-    planta: 'planta-view',
+    planta: 'paradas-lineas',
     logistica: 'logistica-view',
     ventas: 'ventas-view',
     purchasing: 'purchasing-view',
@@ -643,7 +643,7 @@ export default function PlannerPage() {
                    {hasAccess(user.id, 'planta') && (
                    <Button 
                      variant="ghost" 
-                     onClick={() => { setActiveModule('planta'); setActiveTab('planta-view'); }}
+                      onClick={() => { setActiveModule('planta'); setActiveTab('paradas-lineas'); }}
                      className={sidebarButtonClass(activeModule === 'planta', "bg-slate-800 hover:bg-slate-900", "shadow-slate-200/30")}
                    >
                      <div className={iconContainerClass(activeModule === 'planta')}>
@@ -1037,9 +1037,22 @@ export default function PlannerPage() {
                   </>
                 )}
                 {activeModule === 'planta' && hasAccess(user.id, 'planta') && (
-                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                    <Factory className="h-12 w-12 mb-4 opacity-20" />
-                    Módulo de Planta en Desarrollo
+                  <div className="flex flex-col h-full bg-white rounded-[2.5rem]">
+                    <div className="flex items-center gap-2 p-4 pb-0">
+                      {['paradas-lineas', 'planificacion', 'produccion'].map((tab) => (
+                        <button
+                          key={tab}
+                          onClick={() => setActiveTab(tab)}
+                          className={cn(
+                            "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap outline-none focus:ring-0 border-0 select-none transition-none active:scale-95",
+                            activeTab === tab ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-500 hover:bg-slate-200"
+                          )}
+                        >
+                          {tab === 'paradas-lineas' ? 'Paradas de Líneas' : tab === 'planificacion' ? 'Planificación' : 'Producción'}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex-1 m-4 rounded-2xl bg-slate-50/50 border border-slate-100" />
                   </div>
                 )}
                 {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
