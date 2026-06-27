@@ -464,7 +464,7 @@ export default function PlannerPage() {
 
   const navTabClass = (isActive: boolean) => cn(
     "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95",
-    isActive ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+    isActive ? "bg-white text-slate-900 shadow-sm" : "bg-slate-200/50 text-slate-500 hover:bg-slate-200 hover:text-slate-700"
   );
 
   const sidebarButtonClass = (isActive: boolean, activeColor: string, shadowColor: string) => cn(
@@ -736,8 +736,7 @@ export default function PlannerPage() {
                   <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1 shadow-none self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print h-11 shrink-0 gap-1 w-full justify-between">
                     {activeModule === 'planning' && (
                       <>
-                        <div className="flex items-center gap-0.5">
-                          <div className="w-px h-5 bg-slate-300/60 mx-1 flex-shrink-0" />
+                        <div className="flex items-center gap-1">
                           <button 
                             onClick={() => setActiveTab('gantt')}
                             className={cn(navTabClass(activeTab === 'gantt'))}
