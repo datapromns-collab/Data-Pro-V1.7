@@ -287,8 +287,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       const diferencia = fisico - prom.sugarStandard;
      const porcentaje = prom.sugarStandard !== 0 ? (diferencia / sugarStandard * 100) : 0;
 
-     const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-     return `<!DOCTYPE html><html><head><title>Vista Previa</title>
+      const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+      return `<!DOCTYPE html><html><head><title>Vista Previa Estándar</title>
          <style>
           body { font-family: Arial, sans-serif; margin: 12px; font-size: 9px; color: #1e293b; }
           table { width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 12px; }
@@ -497,8 +497,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       const diferencia = fisico - prom.sugarStandard;
       const porcentaje = prom.sugarStandard !== 0 ? (diferencia / sugarStandard * 100) : 0;
 
-      const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      return `<!DOCTYPE html><html><head><title>Vista Previa</title>
+      const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+      return `<!DOCTYPE html><html><head><title>Vista Previa Promedio</title>
           <style>
            body { font-family: Arial, sans-serif; margin: 12px; font-size: 9px; color: #1e293b; }
            table { width: 100%; border-collapse: collapse; font-size: 9px; margin-bottom: 12px; }
@@ -768,7 +768,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         });
       });
 
-      const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
       const chartSection = chartImage ? `<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;background:#f8fafc;margin-top:14px;"><img src="${chartImage}" style="max-height:260px;max-width:100%;object-fit:contain;display:block;margin:0 auto;" /></div>` : '';
       return `<!DOCTYPE html><html><head><title>Resumen Semanal Estándar</title>
         <style>
@@ -913,7 +913,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
          });
        });
 
-          const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
              const chartSection = chartImage ? `<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;background:#f8fafc;margin-top:14px;"><img src="${chartImage}" style="max-height:260px;max-width:100%;object-fit:contain;display:block;margin:0 auto;" /></div>` : '';
          return `<!DOCTYPE html><html><head><title>Resumen Semanal Promedio</title>
           <style>
