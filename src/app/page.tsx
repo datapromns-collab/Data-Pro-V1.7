@@ -629,52 +629,6 @@ export default function PlannerPage() {
                  </div>
                </section>
 
-              {activeModule !== 'recipes' && activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'jarabes' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && (
-                <section className="pt-4 border-t border-slate-100">
-                   <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Configuración Semana</p>
-                    <div className="px-2 space-y-3">
-                       <Popover>
-                        <PopoverTrigger asChild disabled={!isAdmin && !isInventory}>
-                          <Button variant="outline" className="w-full h-12 justify-start text-left font-bold bg-white border-slate-200 shadow-sm hover:bg-slate-50 transition-none rounded-2xl disabled:opacity-80 active:scale-100 active:transform-none">
-                            <CalendarIcon className="mr-3 h-4 w-4 text-primary" />
-                            {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
-                          </Button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <Calendar mode="single" selected={weekStartDate} onSelect={(date) => date && setWeekStartDate(date)} locale={es} />
-                        </PopoverContent>
-                      </Popover>
-                   </div>
-                </section>
-              )}
-
-              {activeModule !== 'raw-materials' && activeModule !== 'recipes' && activeModule !== 'jarabes' && activeModule !== 'purchasing' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && !isInventory && (
-                <section>
-                  <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4">Líneas de Producción</p>
-                  <div className="px-2">
-                    <Select value={selectedLine} onValueChange={setSelectedLine}>
-                      <SelectTrigger className="w-full h-12 bg-slate-50 border-slate-100 font-bold rounded-2xl hover:bg-slate-100/50 transition-none">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {LINES.map((l, i) => <SelectItem key={l} value={(i + 1).toString()}>{l}</SelectItem>)}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </section>
-              )}
-
-              {isAdmin && activeModule === 'planning' && (
-                <section className="px-2 space-y-3">
-                  <Button size="lg" onClick={() => { setEditingTask(null); setIsDialogOpen(true); }} className="w-full gap-2 font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-primary/20 transition-none active:scale-100 active:transform-none">
-                    <Plus className="h-4 w-4" /> Nueva Tarea
-                  </Button>
-                  <Button variant="ghost" size="sm" onClick={handleClearContext} className="w-full gap-2 text-destructive font-black uppercase text-xs tracking-widest hover:bg-destructive/5 py-4 active:scale-100 active:transform-none">
-                    <Trash2 className="h-4 w-4" /> Limpiar Plan
-                  </Button>
-                </section>
-              )}
-
               {isAdmin && activeModule === 'management' && (
                 <section className="px-2">
                   <Button 
@@ -778,83 +732,122 @@ export default function PlannerPage() {
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <div className="flex flex-col gap-6 h-full">
               
-              {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'jarabes' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && (
-                <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1 shadow-none self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print h-11 shrink-0">
-                  {activeModule === 'planning' ? (
-                    <>
-                      <button 
-                        onClick={() => setActiveTab('gantt')}
-                        className={cn(navTabClass(activeTab === 'gantt'))}
-                      >
-                        <GanttChartSquare className="h-3.5 w-3.5" />
-                        Programación
-                      </button>
-                      <button 
-                        onClick={() => setActiveTab('daily')}
-                        className={cn(navTabClass(activeTab === 'daily'))}
-                      >
-                        <ListTodo className="h-3.5 w-3.5" />
-                        Plan Día a Día
-                      </button>
-                      <button 
-                        onClick={() => setActiveTab('requirement')}
-                        className={cn(navTabClass(activeTab === 'requirement'))}
-                      >
-                        <ClipboardList className="h-3.5 w-3.5" />
-                        Requerimiento
-                      </button>
-                      <button 
-                        onClick={() => setActiveTab('speeds')}
-                        className={cn(navTabClass(activeTab === 'speeds'))}
-                      >
-                        <Gauge className="h-3.5 w-3.5" />
-                        Velocidades
-                      </button>
-                      <button 
-                        onClick={() => setActiveTab('calculator')}
-                        className={cn(navTabClass(activeTab === 'calculator'))}
-                      >
-                        <CalculatorIcon className="h-3.5 w-3.5" />
-                        Calculadora
-                      </button>
-                    </>
-                  ) : activeModule === 'management' ? (
-                    <>
-                      <button 
-                        onClick={() => setActiveTab('admin-report')}
-                        className={cn(navTabClass(activeTab === 'admin-report'))}
-                      >
-                        <BarChart3 className="h-3.5 w-3.5" />
-                        Control Producción
-                      </button>
-                      <button 
-                        onClick={() => setActiveTab('compliance-report')}
-                        className={cn(navTabClass(activeTab === 'compliance-report'))}
-                      >
-                        <CheckCircle2 className="h-3.5 w-3.5" />
-                        Cumplimiento
-                      </button>
-                    </>
-                  ) : activeModule === 'recipes' ? (
-                    <>
-                      <button 
-                        onClick={() => setActiveTab('recipes-editor')}
-                        className={cn(navTabClass(activeTab === 'recipes-editor'))}
-                      >
-                        <FlaskConical className="h-3.5 w-3.5" />
-                        Recetas de Materia Prima
-                      </button>
-                      <button 
-                        onClick={() => setActiveTab('packaging-recipes-editor')}
-                        className={cn(navTabClass(activeTab === 'packaging-recipes-editor'))}
-                      >
-                        <Package className="h-3.5 w-3.5" />
-                        Recetas de Empaque
-                      </button>
-                    </>
-                  ) : null}
-                </div>
-              )}
+               {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'jarabes' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && (
+                 <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1 shadow-none self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print h-11 shrink-0 gap-1">
+                   {activeModule === 'planning' && (
+                     <>
+                       <Popover>
+                         <PopoverTrigger asChild>
+                           <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[11px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                             <CalendarIcon className="h-3.5 w-3.5 text-primary" />
+                             {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
+                           </button>
+                         </PopoverTrigger>
+                         <PopoverContent className="w-auto p-0" align="start">
+                           <Calendar mode="single" selected={weekStartDate} onSelect={(date) => date && setWeekStartDate(date)} locale={es} />
+                         </PopoverContent>
+                       </Popover>
+                       <Select value={selectedLine} onValueChange={setSelectedLine}>
+                         <SelectTrigger className="h-9 pl-3 pr-4 bg-white border-0 shadow-sm rounded-full font-bold gap-2 text-[11px] border-0">
+                           <SelectValue placeholder="Línea" />
+                         </SelectTrigger>
+                         <SelectContent>
+                           {LINES.map((l, i) => <SelectItem key={l} value={(i + 1).toString()} className="font-bold text-[11px]">Línea {i + 1}</SelectItem>)}
+                         </SelectContent>
+                       </Select>
+                       {isAdmin && (
+                         <>
+                           <button
+                             onClick={() => { setEditingTask(null); setIsDialogOpen(true); }}
+                             className="inline-flex items-center gap-1.5 h-9 pl-4 pr-5 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-[#F59E0B] text-white shadow-sm active:scale-95"
+                           >
+                             <Plus className="h-3.5 w-3.5" />
+                             Nueva Tarea
+                           </button>
+                           <button
+                             onClick={handleClearContext}
+                             className="inline-flex items-center gap-1.5 h-9 px-4 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 text-red-500 hover:bg-red-50 active:scale-95"
+                           >
+                             <Trash2 className="h-3.5 w-3.5" />
+                             Limpiar Plan
+                           </button>
+                         </>
+                       )}
+                       <div className="w-px h-5 bg-slate-300/60 mx-1 flex-shrink-0" />
+                       <button 
+                         onClick={() => setActiveTab('gantt')}
+                         className={cn(navTabClass(activeTab === 'gantt'))}
+                       >
+                         <GanttChartSquare className="h-3.5 w-3.5" />
+                         Programación
+                       </button>
+                       <button 
+                         onClick={() => setActiveTab('daily')}
+                         className={cn(navTabClass(activeTab === 'daily'))}
+                       >
+                         <ListTodo className="h-3.5 w-3.5" />
+                         Plan Día a Día
+                       </button>
+                       <button 
+                         onClick={() => setActiveTab('requirement')}
+                         className={cn(navTabClass(activeTab === 'requirement'))}
+                       >
+                         <ClipboardList className="h-3.5 w-3.5" />
+                         Requerimiento
+                       </button>
+                       <button 
+                         onClick={() => setActiveTab('speeds')}
+                         className={cn(navTabClass(activeTab === 'speeds'))}
+                       >
+                         <Gauge className="h-3.5 w-3.5" />
+                         Velocidades
+                       </button>
+                       <button 
+                         onClick={() => setActiveTab('calculator')}
+                         className={cn(navTabClass(activeTab === 'calculator'))}
+                       >
+                         <CalculatorIcon className="h-3.5 w-3.5" />
+                         Calculadora
+                       </button>
+                     </>
+                   )}
+                   {activeModule === 'management' ? (
+                     <>
+                       <button 
+                         onClick={() => setActiveTab('admin-report')}
+                         className={cn(navTabClass(activeTab === 'admin-report'))}
+                       >
+                         <BarChart3 className="h-3.5 w-3.5" />
+                         Control Producción
+                       </button>
+                       <button 
+                         onClick={() => setActiveTab('compliance-report')}
+                         className={cn(navTabClass(activeTab === 'compliance-report'))}
+                       >
+                         <CheckCircle2 className="h-3.5 w-3.5" />
+                         Cumplimiento
+                       </button>
+                     </>
+                   ) : activeModule === 'recipes' ? (
+                     <>
+                       <button 
+                         onClick={() => setActiveTab('recipes-editor')}
+                         className={cn(navTabClass(activeTab === 'recipes-editor'))}
+                       >
+                         <FlaskConical className="h-3.5 w-3.5" />
+                         Recetas de Materia Prima
+                       </button>
+                       <button 
+                         onClick={() => setActiveTab('packaging-recipes-editor')}
+                         className={cn(navTabClass(activeTab === 'packaging-recipes-editor'))}
+                       >
+                         <Package className="h-3.5 w-3.5" />
+                         Recetas de Empaque
+                       </button>
+                     </>
+                   ) : null}
+                 </div>
+               )}
 
               <div className="flex-1 min-w-0">
                 {activeModule === 'planning' && hasAccess(user.id, 'planning') && (
