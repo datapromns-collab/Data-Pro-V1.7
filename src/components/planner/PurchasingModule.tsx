@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
+import {
   Globe, 
   Calendar,
   FileText,
@@ -40,6 +40,9 @@ import { usePlannerStore } from '@/hooks/use-planner-store';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
+import { useToast } from '@/hooks/use-toast';
 import { 
   PRODUCT_LIST, 
   SUGAR_DATA,
@@ -107,6 +110,10 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
   } = usePlannerStore();
   
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
+
+  const { toast } = useToast();
+  const planProduccionRef = useRef<HTMLDivElement>(null);
+  const requisicionRef = useRef<HTMLDivElement>(null);
 
   const calculateRequirementFromSource = (code: string, source: Record<string, Record<string, number>>) => {
     let total = 0;
@@ -488,6 +495,37 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
     </Card>
   );
 
+  const exportToPDF = async (ref: React.RefObject<HTMLDivElement | null>, filename: string) => {
+    if (!ref.current) return;
+    const canvas = await html2canvas(ref.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageW = pdf.internal.pageSize.getWidth();
+    const pageH = pdf.internal.pageSize.getHeight();
+    const imgH = (canvas.height * pageW) / canvas.width;
+    let addedHeight = 0;
+    let remainingH = imgH;
+    let firstPage = true;
+    while (remainingH > 0) {
+      if (!firstPage) pdf.addPage();
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, -addedHeight, pageW, imgH);
+      addedHeight += pageH;
+      remainingH -= pageH;
+      firstPage = false;
+    }
+    pdf.save(filename);
+    toast({ title: 'PDF generado', description: 'El reporte se descargó exitosamente.' });
+  };
+
+  const handleExportPlanProduccionPDF = async () => {
+    try { await exportToPDF(planProduccionRef, 'planificacion_produccion.pdf'); }
+    catch (e) { console.error(e); toast({ title: 'Error', description: 'No se pudo generar el PDF.' }); }
+  };
+
+  const handleExportRequisicionPDF = async () => {
+    try { await exportToPDF(requisicionRef, 'requisicion_materiales.pdf'); }
+    catch (e) { console.error(e); toast({ title: 'Error', description: 'No se pudo generar el PDF.' }); }
+  };
+
   return (
     <div className="space-y-6 animate-in fade-in duration-700 pb-10">
       <Tabs defaultValue="mds" className="w-full">
@@ -787,6 +825,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                 </div>
 
                 <TabsContent value="plan-produccion" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                  <div ref={planProduccionRef}>
                   <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
                     <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
                       <div className="flex items-center gap-4 text-white">
@@ -798,6 +837,15 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                           <p className="text-[10px] font-bold text-slate-100/70 uppercase tracking-widest mt-1">Balance de Ventas vs Inventario vs Plan de Producción</p>
                         </div>
                       </div>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={handleExportPlanProduccionPDF}
+                        className="gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                      >
+                        <FileDown className="h-4 w-4" />
+                        PDF
+                      </Button>
                     </div>
                     
                     <ScrollArea className="h-[600px]">
@@ -870,10 +918,12 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                         </Table>
                       </div>
                     </ScrollArea>
-                  </Card>
+                    </Card>
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="requisicion" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                  <div ref={requisicionRef}>
                   <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
                     <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
                       <div className="flex items-center gap-4 text-white">
@@ -885,6 +935,15 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                           <p className="text-[10px] font-bold text-slate-100/70 uppercase tracking-widest mt-1">Cálculo de suministros basado en Plan de Producción (Margen +10%)</p>
                         </div>
                       </div>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={handleExportRequisicionPDF}
+                        className="gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                      >
+                        <FileDown className="h-4 w-4" />
+                        PDF
+                      </Button>
                     </div>
                     
                     <div className="overflow-x-auto">
@@ -970,6 +1029,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                            }).length} materiales con necesidad de compra inmediata para cumplir el plan.
                        </p>
                     </div>
+                  </div>
                   </div>
                 </TabsContent>
               </Tabs>
