@@ -2173,11 +2173,11 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                            </TabsContent>
 
                       <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
-                             <div className="flex items-center justify-between mb-4">
-                               <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Estándar Semanal</h3>
-                                    <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFStandard} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
+                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                           <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm flex flex-col min-h-[520px]">
+                              <div className="flex items-center justify-between mb-4">
+                                <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Estándar Semanal</h3>
+                                     <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFStandard} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
                                   <FileDown className="h-4 w-4" /> PDF
                                 </Button>
                             </div>
@@ -2237,7 +2237,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    </tbody>
                                  </table>
                                </div>
-                                 <div className="h-64 bg-white rounded-xl" ref={standardChartRef}>
+                                  <div className="flex-1 min-h-[300px] bg-white rounded-xl" ref={standardChartRef}>
                                   <ResponsiveContainer width="100%" height="100%">
                                     <ComposedChart data={weekDays.map(day => {
                                       const dateStr = format(day, 'yyyy-MM-dd');
@@ -2260,15 +2260,15 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                 </div>
                              </>
                            ) : (
-                             <div className="h-64 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
-                               Sin datos esta semana
-                             </div>
-                           )}
-                          </div>
-                          <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
-                             <div className="flex items-center justify-between mb-4">
-                               <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Promedio Semanal</h3>
-                                  <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFPromedio} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
+                              <div className="flex-1 min-h-[300px] border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
+                                Sin datos esta semana
+                              </div>
+                            )}
+                           </div>
+                            <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm flex flex-col min-h-[520px]">
+                              <div className="flex items-center justify-between mb-4">
+                                <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Promedio Semanal</h3>
+                                   <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFPromedio} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
                                   <FileDown className="h-4 w-4" /> PDF
                                 </Button>
                             </div>
@@ -2328,7 +2328,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    </tbody>
                                  </table>
                                </div>
-                                 <div className="h-64 bg-white rounded-xl" ref={promedioChartRef}>
+                                  <div className="flex-1 min-h-[300px] bg-white rounded-xl" ref={promedioChartRef}>
                                   <ResponsiveContainer width="100%" height="100%">
                                     <ComposedChart data={weekDays.map(day => {
                                       const dateStr = format(day, 'yyyy-MM-dd');
@@ -2351,11 +2351,11 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                 </div>
                              </>
                            ) : (
-                             <div className="h-64 border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
-                               Sin datos esta semana
-                             </div>
-                            )}
-                          </div>
+                              <div className="flex-1 min-h-[300px] border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
+                                Sin datos esta semana
+                              </div>
+                             )}
+                           </div>
                         </div>
                       </TabsContent>
 
@@ -2386,7 +2386,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             </div>
           </TabsContent>
         </Tabs>
-        <div style={{ position: 'absolute', left: '-9999px', top: 0 }}>
+        <div style={{ position: 'fixed', bottom: 0, left: 0, opacity: 0, pointerEvents: 'none', width: '1000px', height: '600px' }}>
       <div ref={hiddenStandardChartRef} style={{ width: '1000px', height: '600px' }}>
         <ResponsiveContainer width="1000" height="600">
           <ComposedChart data={weekDays.map(day => {
