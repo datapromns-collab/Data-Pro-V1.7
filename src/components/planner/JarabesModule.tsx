@@ -862,8 +862,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
          firstPage = false;
        }
 
-       pdf.save('reporte_jarabes_semanal_estandar_' + format(weekStartDate!, 'yyyy-MM-dd') + '.pdf');
-       toast({ title: 'PDF generado', description: 'El reporte semanal Estándar se descargó exitosamente.' });
+        const pdfBlob = pdf.output('blob');
+        const url = URL.createObjectURL(pdfBlob);
+        window.open(url, '_blank');
+        toast({ title: 'Vista previa', description: 'Abriendo el reporte semanal Estándar en una nueva pestaña.' });
      } catch (error) {
        console.error(error);
        toast({ title: 'Error', description: 'No se pudo generar la vista previa semanal.' });
@@ -989,8 +991,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
          firstPage = false;
        }
 
-       pdf.save('reporte_jarabes_semanal_promedio_' + format(weekStartDate!, 'yyyy-MM-dd') + '.pdf');
-       toast({ title: 'PDF generado', description: 'El reporte semanal Promedio se descargó exitosamente.' });
+        const pdfBlob = pdf.output('blob');
+        const url = URL.createObjectURL(pdfBlob);
+        window.open(url, '_blank');
+        toast({ title: 'Vista previa', description: 'Abriendo el reporte semanal Promedio en una nueva pestaña.' });
      } catch (error) {
        console.error(error);
        toast({ title: 'Error', description: 'No se pudo generar la vista previa semanal.' });
