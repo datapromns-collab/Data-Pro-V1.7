@@ -23,7 +23,6 @@ import {
   BarChart3
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { getWeekDays } from '@/lib/planner-utils';
@@ -770,8 +769,6 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       });
 
       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-      const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
-      const logoHtml = glupLogo ? `<img src="${glupLogo.imageUrl}" style="height:32px;object-fit:contain;" />` : '';
       const chartSection = chartImage ? `<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;background:#f8fafc;margin-top:14px;"><img src="${chartImage}" style="max-height:260px;max-width:100%;object-fit:contain;display:block;margin:0 auto;" /></div>` : '';
       return `<!DOCTYPE html><html><head><title>Resumen Semanal Estándar</title>
         <style>
@@ -794,7 +791,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             <h1>Resumen de Azúcar Semanal – Estándar</h1>
             <h2>Semana: ${format(weekStart, 'dd/MM/yyyy')} al ${format(weekEnd, 'dd/MM/yyyy')}</h2>
           </div>
-          <div style="flex:1;text-align:center;">${logoHtml}</div>
+          <div style="flex:1;"></div>
           <div style="flex:1;">
             <p class="confidential">Confidencial – Gestión</p>
             <p class="date-large">${format(weekStart, 'dd/MM/yyyy')} – ${format(weekEnd, 'dd/MM/yyyy')}</p>
@@ -918,11 +915,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
          });
        });
 
-         const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
-            const logoHtml = glupLogo ? `<img src="${glupLogo.imageUrl}" style="height:32px;object-fit:contain;" />` : '';
-            const chartSection = chartImage ? `<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;background:#f8fafc;margin-top:14px;"><img src="${chartImage}" style="max-height:260px;max-width:100%;object-fit:contain;display:block;margin:0 auto;" /></div>` : '';
-        return `<!DOCTYPE html><html><head><title>Resumen Semanal Promedio</title>
+          const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+             const chartSection = chartImage ? `<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;background:#f8fafc;margin-top:14px;"><img src="${chartImage}" style="max-height:260px;max-width:100%;object-fit:contain;display:block;margin:0 auto;" /></div>` : '';
+         return `<!DOCTYPE html><html><head><title>Resumen Semanal Promedio</title>
           <style>
             body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
             table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 14px; }
@@ -938,13 +933,13 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             .date-large { font-size: 13px; font-weight: 900; color: #1e293b; text-transform: uppercase; text-align: right; line-height: 1.2; }
           </style>
         </head><body>
-          <div class="header">
-            <div style="flex:1;">
-              <h1>Resumen de Azúcar Semanal – Promedio</h1>
-              <h2>Semana: ${format(weekStart, 'dd/MM/yyyy')} al ${format(weekEnd, 'dd/MM/yyyy')}</h2>
-            </div>
-            <div style="flex:1;text-align:center;">${logoHtml}</div>
-            <div style="flex:1;">
+           <div class="header">
+             <div style="flex:1;">
+               <h1>Resumen de Azúcar Semanal – Promedio</h1>
+               <h2>Semana: ${format(weekStart, 'dd/MM/yyyy')} al ${format(weekEnd, 'dd/MM/yyyy')}</h2>
+             </div>
+             <div style="flex:1;"></div>
+             <div style="flex:1;">
               <p class="confidential">Confidencial – Gestión</p>
               <p class="date-large">${format(weekStart, 'dd/MM/yyyy')} – ${format(weekEnd, 'dd/MM/yyyy')}</p>
             </div>
