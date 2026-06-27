@@ -45,7 +45,7 @@ export function RequisicionReport({
 
   return (
     <div id="report" className="bg-white p-8 max-w-[210mm] mx-auto print:p-0 print:max-w-none">
-      <div className="flex justify-end mb-4">
+      <div className="flex justify-end mb-4 no-print">
         <button onClick={handleExportPDF} className="px-4 py-2 text-white rounded hover:opacity-90 transition" style={{ backgroundColor: '#A67B5B' }}>
           Exportar PDF
         </button>
