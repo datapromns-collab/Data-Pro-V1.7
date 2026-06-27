@@ -29,6 +29,33 @@ import { getWeekDays } from '@/lib/planner-utils';
 import { Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Line, ComposedChart } from 'recharts';
 
 const formatNumber = (value: number | string) => Number(value).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+const captureChartSvg = async (chartRef: React.RefObject<HTMLDivElement | null>): Promise<string | null> => {
+  if (!chartRef.current) return null;
+  await new Promise(r => setTimeout(r, 400));
+  const svgEl = chartRef.current.querySelector('svg');
+  if (!svgEl) return null;
+  const serializer = new XMLSerializer();
+  const svgString = serializer.serializeToString(svgEl);
+  const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+  const url = URL.createObjectURL(svgBlob);
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      const canvas = document.createElement('canvas');
+      canvas.width = svgEl.clientWidth || 1000;
+      canvas.height = svgEl.clientHeight || 400;
+      const ctx = canvas.getContext('2d');
+      if (ctx) ctx.fillStyle = '#ffffff';
+      if (ctx) ctx.fillRect(0, 0, canvas.width, canvas.height);
+      if (ctx) ctx.drawImage(img, 0, 0);
+      URL.revokeObjectURL(url);
+      resolve(canvas.toDataURL('image/png'));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+    img.src = url;
+  });
+};
+
 const SABORES_ESTANDAR = [
   "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
   "GLUP MANZANA VERDE", "GLUP PONCHE", "GLUP CHICLE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA",
@@ -838,26 +865,22 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       </body></html>`;
     };
 
-        const handleExportWeeklyPDFStandard = async () => {
-         try {
-           if (!weekDays.length) return;
-           let chartImage;
-           try {
-             if (hiddenStandardChartRef.current) {
-               await new Promise(r => setTimeout(r, 300));
-               const canvas = await html2canvas(hiddenStandardChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-               chartImage = canvas.toDataURL('image/png');
-             }
-           } catch (e) {
-             console.error('Error capturing chart:', e);
-           }
-         const reportContent = buildWeeklyStandardHtml(chartImage);
-         const reportEl = document.createElement('div');
-         reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
-         reportEl.innerHTML = reportContent;
-         document.body.appendChild(reportEl);
-         const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-        document.body.removeChild(reportEl);
+         const handleExportWeeklyPDFStandard = async () => {
+          try {
+            if (!weekDays.length) return;
+            let chartImage = null;
+            try {
+              chartImage = await captureChartSvg(hiddenStandardChartRef);
+            } catch (e) {
+              console.error('Error capturing chart:', e);
+            }
+            const reportContent = buildWeeklyStandardHtml(chartImage);
+            const reportEl = document.createElement('div');
+            reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
+            reportEl.innerHTML = reportContent;
+            document.body.appendChild(reportEl);
+            const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+            document.body.removeChild(reportEl);
 
        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
        const pageW = pdf.internal.pageSize.getWidth();
@@ -981,26 +1004,22 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
            </body></html>`;
       };
 
-          const handleExportWeeklyPDFPromedio = async () => {
-           try {
-             if (!weekDays.length) return;
-             let chartImage;
-             try {
-               if (hiddenPromedioChartRef.current) {
-                 await new Promise(r => setTimeout(r, 300));
-                 const canvas = await html2canvas(hiddenPromedioChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-                 chartImage = canvas.toDataURL('image/png');
-               }
-             } catch (e) {
-               console.error('Error capturing chart:', e);
-             }
-           const reportContent = buildWeeklyPromedioHtml(chartImage);
-         const reportEl = document.createElement('div');
-         reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
-         reportEl.innerHTML = reportContent;
-         document.body.appendChild(reportEl);
-         const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-         document.body.removeChild(reportEl);
+           const handleExportWeeklyPDFPromedio = async () => {
+            try {
+              if (!weekDays.length) return;
+              let chartImage = null;
+              try {
+                chartImage = await captureChartSvg(hiddenPromedioChartRef);
+              } catch (e) {
+                console.error('Error capturing chart:', e);
+              }
+            const reportContent = buildWeeklyPromedioHtml(chartImage);
+          const reportEl = document.createElement('div');
+          reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
+          reportEl.innerHTML = reportContent;
+          document.body.appendChild(reportEl);
+          const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+          document.body.removeChild(reportEl);
 
        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
        const pageW = pdf.internal.pageSize.getWidth();
@@ -2418,7 +2437,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             </div>
           </TabsContent>
         </Tabs>
-        <div style={{ position: 'fixed', bottom: 0, left: 0, opacity: 0, pointerEvents: 'none', width: '1000px', height: '600px' }}>
+        <div style={{ position: 'fixed', bottom: 0, left: 0, opacity: 0, pointerEvents: 'none', width: '1000px', height: '600px', background: '#ffffff' }}>
       <div ref={hiddenStandardChartRef} style={{ width: '1000px', height: '600px' }}>
         <ResponsiveContainer width="1000" height="600">
           <ComposedChart data={weekDays.map(day => {
