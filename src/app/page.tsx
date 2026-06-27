@@ -1038,8 +1038,8 @@ export default function PlannerPage() {
                   </>
                 )}
                 {activeModule === 'planta' && hasAccess(user.id, 'planta') && (
-                  <div className="flex flex-col h-full bg-white rounded-[2.5rem]">
-                    <div className="flex items-center gap-2 p-4 pb-0">
+                  <>
+                    <div className="flex items-center gap-2 bg-white rounded-[2.5rem] p-4">
                       {['paradas-lineas', 'planificacion', 'produccion'].map((tab) => (
                         <button
                           key={tab}
@@ -1053,8 +1053,10 @@ export default function PlannerPage() {
                         </button>
                       ))}
                     </div>
-                    <div className="flex-1 m-4 rounded-2xl bg-slate-50/50 border border-slate-100" />
-                  </div>
+                    <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                      <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100" />
+                    </div>
+                  </>
                 )}
                 {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
                   <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
