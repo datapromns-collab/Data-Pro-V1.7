@@ -774,11 +774,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         <style>
           body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
           table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 14px; }
-          th, td { border: 1px solid #1e293b; padding: 4px 8px; }
-          th { background: #4a7ebb; color: white; font-weight: bold; text-transform: uppercase; height: 28px; }
-          td { background: #dce6f1; height: 28px; }
-          tfoot td { background: #b8cce4; font-weight: bold; border-top: 2px solid #1e293b; height: 32px; }
-          .header { border-bottom: 2px solid #1e293b; padding: 8px 0; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+          th, td { border: 1px solid #e2e8f0; padding: 4px 8px; }
+          th { background: #dbeafe; color: #1e3a5f; font-weight: bold; text-transform: uppercase; height: 28px; }
+          tfoot td { background: #dbeafe; font-weight: bold; border-top: 2px solid #e2e8f0; height: 32px; }
+          .header { border-bottom: 2px solid #e2e8f0; padding: 8px 0; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
           .footer { margin-top: 14px; border-top: 1px solid #e2e8f0; padding-top: 8px; display: flex; justify-content: space-between; font-size: 8px; font-weight: 900; color: #94a3b8; text-transform: uppercase; }
           h1 { font-size: 16px; font-weight: 900; margin: 0; line-height: 1.2; text-transform: uppercase; }
           .confidential { font-size: 7px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.15em; text-align: right; margin-bottom: 2px; }
@@ -808,22 +807,22 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
            </thead>
            <tbody>
              ${rows.map((r, i) => `
-               <tr style="height:28px;">
-                 <td style="border:1px solid #1e293b;font-weight:bold;">${r.dia}</td>
-                 <td style="text-align:right;border:1px solid #1e293b;">${N(r.estandar)}</td>
-                 <td style="text-align:right;border:1px solid #1e293b;">${N(r.fisico)}</td>
-                 <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border:1px solid #1e293b;">${N(r.diferencia)}</td>
-                 <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border:1px solid #1e293b;">${N(r.porcentaje)}%</td>
-                 <td style="text-align:right;color:${r.desviacionCosto <= 0 ? '#059669' : '#dc2626'};border:1px solid #1e293b;padding-right:16px;">${N(r.desviacionCosto)}</td>
+               <tr style="height:28px;background:${i % 2 === 0 ? '#ffffff' : '#f8fafc'};">
+                 <td style="border:1px solid #e2e8f0;font-weight:bold;">${r.dia}</td>
+                 <td style="text-align:right;border:1px solid #e2e8f0;">${N(r.estandar)}</td>
+                 <td style="text-align:right;border:1px solid #e2e8f0;">${N(r.fisico)}</td>
+                 <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border:1px solid #e2e8f0;">${N(r.diferencia)}</td>
+                 <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border:1px solid #e2e8f0;">${N(r.porcentaje)}%</td>
+                 <td style="text-align:right;color:${r.desviacionCosto <= 0 ? '#059669' : '#dc2626'};border:1px solid #e2e8f0;padding-right:16px;">${N(r.desviacionCosto)}</td>
                </tr>
              `).join('')}
-              <tr style="background:#b8cce4;font-weight:bold;border-top:2px solid #1e293b;height:32px;">
-               <td style="border:1px solid #1e293b;font-weight:bold;text-transform:uppercase;">TOTAL SEMANAL</td>
-               <td style="text-align:right;border:1px solid #1e293b;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
-               <td style="text-align:right;border:1px solid #1e293b;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
-               <td style="text-align:right;border:1px solid #1e293b;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
-               <td style="text-align:right;border:1px solid #1e293b;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
-               <td style="text-align:right;border:1px solid #1e293b;padding-right:16px;">${N(rows.reduce((a, b) => a + b.desviacionCosto, 0))}</td>
+              <tr style="background:#dbeafe;font-weight:bold;border-top:2px solid #e2e8f0;height:32px;">
+               <td style="border:1px solid #e2e8f0;font-weight:bold;text-transform:uppercase;">TOTAL SEMANAL</td>
+               <td style="text-align:right;border:1px solid #e2e8f0;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
+               <td style="text-align:right;border:1px solid #e2e8f0;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
+               <td style="text-align:right;border:1px solid #e2e8f0;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
+               <td style="text-align:right;border:1px solid #e2e8f0;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
+               <td style="text-align:right;border:1px solid #e2e8f0;padding-right:16px;">${N(rows.reduce((a, b) => a + b.desviacionCosto, 0))}</td>
              </tr>
            </tbody>
          </table>
@@ -914,75 +913,74 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
        });
 
       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-             const chartSection = chartImage ? `<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;background:#f8fafc;margin-top:14px;"><img src="${chartImage}" style="max-height:260px;max-width:100%;object-fit:contain;display:block;margin:0 auto;" /></div>` : '';
-         return `<!DOCTYPE html><html><head><title>Resumen Semanal Promedio</title>
-          <style>
-            body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
-            table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 14px; }
-            th, td { border: 1px solid #1e293b; padding: 4px 8px; }
-            th { background: #4a7ebb; color: white; font-weight: bold; text-transform: uppercase; height: 28px; }
-            td { background: #dce6f1; height: 28px; }
-            tfoot td { background: #b8cce4; font-weight: bold; border-top: 2px solid #1e293b; height: 32px; }
-            .header { border-bottom: 2px solid #1e293b; padding: 8px 0; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-            .footer { margin-top: 14px; border-top: 1px solid #e2e8f0; padding-top: 8px; display: flex; justify-content: space-between; font-size: 8px; font-weight: 900; color: #94a3b8; text-transform: uppercase; }
-            h1 { font-size: 16px; font-weight: 900; margin: 0; line-height: 1.2; text-transform: uppercase; }
-            .confidential { font-size: 7px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.15em; text-align: right; margin-bottom: 2px; }
-            .date-large { font-size: 13px; font-weight: 900; color: #1e293b; text-transform: uppercase; text-align: right; line-height: 1.2; }
-          </style>
-        </head><body>
-          <div class="header">
-            <div style="flex:1;">
-              <h1>Resumen de Azúcar Semanal – Promedio</h1>
-            </div>
-             <div style="flex:1;"></div>
+              const chartSection = chartImage ? `<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;background:#f8fafc;margin-top:14px;"><img src="${chartImage}" style="max-height:260px;max-width:100%;object-fit:contain;display:block;margin:0 auto;" /></div>` : '';
+          return `<!DOCTYPE html><html><head><title>Resumen Semanal Promedio</title>
+           <style>
+             body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
+             table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 14px; }
+             th, td { border: 1px solid #e2e8f0; padding: 4px 8px; }
+             th { background: #d1fae5; color: #064e3b; font-weight: bold; text-transform: uppercase; height: 28px; }
+             tfoot td { background: #d1fae5; font-weight: bold; border-top: 2px solid #e2e8f0; height: 32px; }
+             .header { border-bottom: 2px solid #e2e8f0; padding: 8px 0; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+             .footer { margin-top: 14px; border-top: 1px solid #e2e8f0; padding-top: 8px; display: flex; justify-content: space-between; font-size: 8px; font-weight: 900; color: #94a3b8; text-transform: uppercase; }
+             h1 { font-size: 16px; font-weight: 900; margin: 0; line-height: 1.2; text-transform: uppercase; }
+             .confidential { font-size: 7px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.15em; text-align: right; margin-bottom: 2px; }
+             .date-large { font-size: 13px; font-weight: 900; color: #1e293b; text-transform: uppercase; text-align: right; line-height: 1.2; }
+           </style>
+         </head><body>
+           <div class="header">
              <div style="flex:1;">
-              <p class="confidential">Confidencial – Gestión</p>
-              <p class="date-large">${format(weekStart, 'dd/MM/yyyy')} – ${format(weekEnd, 'dd/MM/yyyy')}</p>
-            </div>
-          </div>
-          <table>
-             <thead>
-               <tr>
-                 <th style="width:16%;text-align:left;">DÍA</th>
-                 <th style="width:14%;text-align:right;">ESTÁNDAR</th>
-                 <th style="width:14%;text-align:right;">FÍSICO</th>
-                 <th style="width:14%;text-align:right;">DIFERENCIA</th>
-                 <th style="width:14%;text-align:right;">%</th>
-                 <th style="width:14%;text-align:right;padding-right:16px;">DESVIACIÓN COSTO</th>
-               </tr>
-             </thead>
-             <tbody>
-               ${rows.map((r, i) => `
-                 <tr style="height:28px;">
-                   <td style="border:1px solid #1e293b;font-weight:bold;">${r.dia}</td>
-                   <td style="text-align:right;border:1px solid #1e293b;">${N(r.estandar)}</td>
-                   <td style="text-align:right;border:1px solid #1e293b;">${N(r.fisico)}</td>
-                   <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border:1px solid #1e293b;">${N(r.diferencia)}</td>
-                   <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border:1px solid #1e293b;">${N(r.porcentaje)}%</td>
-                   <td style="text-align:right;color:${r.desviacionCosto <= 0 ? '#059669' : '#dc2626'};border:1px solid #1e293b;padding-right:16px;">${N(r.desviacionCosto)}</td>
-                 </tr>
-                 `).join('')}
-                  <tr style="background:#b8cce4;font-weight:bold;border-top:2px solid #1e293b;height:32px;">
-                   <td style="border:1px solid #1e293b;font-weight:bold;text-transform:uppercase;">TOTAL SEMANAL</td>
-                   <td style="text-align:right;border:1px solid #1e293b;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
-                   <td style="text-align:right;border:1px solid #1e293b;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
-                   <td style="text-align:right;border:1px solid #1e293b;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
-                   <td style="text-align:right;border:1px solid #1e293b;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
-                   <td style="text-align:right;border:1px solid #1e293b;padding-right:16px;">${N(rows.reduce((a, b) => a + b.desviacionCosto, 0))}</td>
-                 </tr>
-               </tbody>
-             </table>
-             ${chartSection}
-             <div class="footer">
-               <div>
-                 <p>SISTEMA DE GESTIÓN DE JARABES – RESUMEN SEMANAL</p>
-                 <p>EMITIDO: ${new Date().toLocaleString('es')}</p>
-               </div>
-               <div style="text-align:right;">
-                 <p>MULTINACIONAL DE SABORES</p>
-               </div>
+               <h1>Resumen de Azúcar Semanal – Promedio</h1>
              </div>
-          </body></html>`;
+              <div style="flex:1;"></div>
+              <div style="flex:1;">
+               <p class="confidential">Confidencial – Gestión</p>
+               <p class="date-large">${format(weekStart, 'dd/MM/yyyy')} – ${format(weekEnd, 'dd/MM/yyyy')}</p>
+             </div>
+           </div>
+           <table>
+              <thead>
+                <tr>
+                  <th style="width:16%;text-align:left;">DÍA</th>
+                  <th style="width:14%;text-align:right;">ESTÁNDAR</th>
+                  <th style="width:14%;text-align:right;">FÍSICO</th>
+                  <th style="width:14%;text-align:right;">DIFERENCIA</th>
+                  <th style="width:14%;text-align:right;">%</th>
+                  <th style="width:14%;text-align:right;padding-right:16px;">DESVIACIÓN COSTO</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${rows.map((r, i) => `
+                  <tr style="height:28px;background:${i % 2 === 0 ? '#ffffff' : '#f8fafc'};">
+                    <td style="border:1px solid #e2e8f0;font-weight:bold;">${r.dia}</td>
+                    <td style="text-align:right;border:1px solid #e2e8f0;">${N(r.estandar)}</td>
+                    <td style="text-align:right;border:1px solid #e2e8f0;">${N(r.fisico)}</td>
+                    <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border:1px solid #e2e8f0;">${N(r.diferencia)}</td>
+                    <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border:1px solid #e2e8f0;">${N(r.porcentaje)}%</td>
+                    <td style="text-align:right;color:${r.desviacionCosto <= 0 ? '#059669' : '#dc2626'};border:1px solid #e2e8f0;padding-right:16px;">${N(r.desviacionCosto)}</td>
+                  </tr>
+                  `).join('')}
+                   <tr style="background:#d1fae5;font-weight:bold;border-top:2px solid #e2e8f0;height:32px;">
+                    <td style="border:1px solid #e2e8f0;font-weight:bold;text-transform:uppercase;">TOTAL SEMANAL</td>
+                    <td style="text-align:right;border:1px solid #e2e8f0;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
+                    <td style="text-align:right;border:1px solid #e2e8f0;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
+                    <td style="text-align:right;border:1px solid #e2e8f0;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
+                    <td style="text-align:right;border:1px solid #e2e8f0;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
+                    <td style="text-align:right;border:1px solid #e2e8f0;padding-right:16px;">${N(rows.reduce((a, b) => a + b.desviacionCosto, 0))}</td>
+                  </tr>
+                </tbody>
+              </table>
+              ${chartSection}
+              <div class="footer">
+                <div>
+                  <p>SISTEMA DE GESTIÓN DE JARABES – RESUMEN SEMANAL</p>
+                  <p>EMITIDO: ${new Date().toLocaleString('es')}</p>
+                </div>
+                <div style="text-align:right;">
+                  <p>MULTINACIONAL DE SABORES</p>
+                </div>
+              </div>
+           </body></html>`;
       };
 
           const handleExportWeeklyPDFPromedio = async () => {
