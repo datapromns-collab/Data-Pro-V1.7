@@ -827,15 +827,14 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
            </tbody>
          </table>
          ${chartSection}
-         <div class="footer">
-           <div>
-             <p>SISTEMA DE GESTIÓN DE JARABES – RESUMEN SEMANAL</p>
-             <p>EMITIDO: ${new Date().toLocaleString('es')}</p>
-           </div>
-           <div style="text-align:right;">
-             <p>MULTINACIONAL DE SABORES</p>
-           </div>
-         </div>
+        <div class="footer">
+          <div>
+            <p>EMITIDO: ${new Date().toLocaleString('es')}</p>
+          </div>
+          <div style="text-align:right;">
+            <p>MULTINACIONAL DE SABORES</p>
+          </div>
+        </div>
       </body></html>`;
     };
 
@@ -973,7 +972,6 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
               ${chartSection}
               <div class="footer">
                 <div>
-                  <p>SISTEMA DE GESTIÓN DE JARABES – RESUMEN SEMANAL</p>
                   <p>EMITIDO: ${new Date().toLocaleString('es')}</p>
                 </div>
                 <div style="text-align:right;">
