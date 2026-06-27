@@ -62,7 +62,7 @@ export function usePlannerStore() {
   const [plantInventory, setPlantInventory] = useState<Record<string, number>>({});
   const [salesProjectionAW, setSalesProjectionAW] = useState<Record<string, Record<string, number>>>({});
   const [finishedProductInventoryAW, setFinishedProductInventoryAW] = useState<Record<string, Record<string, number>>>({});
-  const [productionPlanAW, setProductionPlanAW] = useState<Record<string, Record<string, number>>({});
+  const [productionPlanAW, setProductionPlanAW] = useState<Record<string, Record<string, number>>>({});
   const [logisticsInventoryAW, setLogisticsInventoryAW] = useState<Record<string, number>>({});
   const [plantInventoryAW, setPlantInventoryAW] = useState<Record<string, number>>({});
   const [isLoaded, setIsLoaded] = useState(false);

@@ -11,6 +11,7 @@ import html2canvas from 'html2canvas';
 import { getAllMaterialsList, calculateRequirementFromSource } from '@/lib/planner-utils';
 
 interface RequisicionReportProps {
+  section?: 'mds' | 'aw';
   salesProjection: Record<string, Record<string, number>>;
   productionPlan: Record<string, Record<string, number>>;
   logisticsInventory: Record<string, number>;
@@ -20,6 +21,7 @@ interface RequisicionReportProps {
 }
 
 export function RequisicionReport({
+  section = 'mds',
   salesProjection,
   productionPlan,
   logisticsInventory,
@@ -53,7 +55,7 @@ export function RequisicionReport({
 
       <div className="mb-6 border-b-2 pb-4 flex justify-between items-center" style={{ borderColor: '#A67B5B' }}>
         <div className="flex-1">
-          <h1 className="text-xl font-headline font-black text-slate-900 leading-tight uppercase">Explosión de Materiales y Necesidad de Compra</h1>
+          <h1 className="text-xl font-headline font-black text-slate-900 leading-tight uppercase">Explosión de Materiales y Necesidad de Compra ({section.toUpperCase()})</h1>
           <p className="font-black text-[10px] uppercase tracking-widest mt-1" style={{ color: '#A67B5B' }}>Cálculo de suministros basado en Plan de Producción (Margen +10%)</p>
         </div>
         <div className="flex-1 flex justify-center">

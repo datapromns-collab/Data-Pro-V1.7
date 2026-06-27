@@ -26,6 +26,7 @@ import {
 } from '@/lib/planner-utils';
 
 interface InventoryReportProps {
+  section?: 'mds' | 'aw';
   type: 'product-finished' | 'logistics' | 'plant' | 'available';
   data: {
     finishedProductInventory: Record<string, Record<string, number>>;
@@ -42,7 +43,7 @@ const ALL_MATERIALS_LIST = [
   ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA
 ];
 
-export function InventoryReport({ type, data }: InventoryReportProps) {
+export function InventoryReport({ section = 'mds', type, data }: InventoryReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
   const { finishedProductInventory, logisticsInventory, plantInventory } = data;
 
@@ -83,11 +84,11 @@ export function InventoryReport({ type, data }: InventoryReportProps) {
       </button>
     </div>
 
-    <div className={`mb-6 border-b-2 pb-4 flex justify-between items-center`} style={{ borderColor: primaryColor }}>
-      <div className="flex-1">
-        <h1 className="text-xl font-headline font-black text-slate-900 leading-tight uppercase">{titleMap[type]}</h1>
-        <p className="font-black text-[10px] uppercase tracking-widest mt-1" style={{ color: primaryColor }}>Sistema de Gestión de Compras e Inventarios</p>
-      </div>
+      <div className={`mb-6 border-b-2 pb-4 flex justify-between items-center`} style={{ borderColor: primaryColor }}>
+        <div className="flex-1">
+          <h1 className="text-xl font-headline font-black text-slate-900 leading-tight uppercase">{titleMap[type]} ({section.toUpperCase()})</h1>
+          <p className="font-black text-[10px] uppercase tracking-widest mt-1" style={{ color: primaryColor }}>Sistema de Gestión de Compras e Inventarios</p>
+        </div>
       <div className="flex-1 flex justify-center">
         {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={110} height={40} className="object-contain" />}
       </div>

@@ -33,17 +33,20 @@ import {
 } from '@/lib/planner-utils';
 
 interface PurchasingRequirementReportProps {
+  section?: 'mds' | 'aw';
   salesProjection: Record<string, Record<string, number>>;
   customRecipes: Record<string, Record<string, number>>;
   customPackagingRecipes: Record<string, Record<string, Record<string, number>>>;
 }
 
 export function PurchasingRequirementReport({ 
+  section = 'mds',
   salesProjection, 
   customRecipes, 
   customPackagingRecipes 
 }: PurchasingRequirementReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
+  const sectionLabel = section.toUpperCase();
 
   const calculateRequirement = (code: string) => {
     let total = 0;

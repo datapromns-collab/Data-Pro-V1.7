@@ -13,13 +13,15 @@ import { PRODUCT_LIST } from '@/lib/planner-utils';
 const PRESENTATIONS = ["2Lts", "1.5Lts", "1Lt", "0.4Lts"];
 
 interface PlanProduccionReportProps {
+  section?: 'mds' | 'aw';
   salesProjection: Record<string, Record<string, number>>;
   finishedProductInventory: Record<string, Record<string, number>>;
   productionPlan: Record<string, Record<string, number>>;
 }
 
-export function PlanProduccionReport({ salesProjection, finishedProductInventory, productionPlan }: PlanProduccionReportProps) {
+export function PlanProduccionReport({ section = 'mds', salesProjection, finishedProductInventory, productionPlan }: PlanProduccionReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
+  const sectionLabel = section.toUpperCase();
 
   const handleExportPDF = async () => {
     const report = document.getElementById('report');
@@ -54,7 +56,7 @@ export function PlanProduccionReport({ salesProjection, finishedProductInventory
 
       <div className="mb-4 pb-2 flex justify-between items-center" style={{ borderColor: '#A67B5B' }}>
         <div className="flex-1">
-          <h1 className="text-lg font-headline font-black text-slate-900 leading-tight uppercase">Resumen Consolidado de Necesidades (MDS)</h1>
+          <h1 className="text-lg font-headline font-black text-slate-900 leading-tight uppercase">Resumen Consolidado de Necesidades ({sectionLabel})</h1>
           <p className="font-black text-[9px] uppercase tracking-widest mt-0.5" style={{ color: '#A67B5B' }}>Balance de Ventas vs Inventario vs Plan de Producción</p>
         </div>
         <div className="flex-1 flex justify-center">

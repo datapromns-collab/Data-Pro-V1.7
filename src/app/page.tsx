@@ -95,6 +95,11 @@ export default function PlannerPage() {
     logisticsInventory,
     plantInventory,
     productionPlan,
+    salesProjectionAW,
+    finishedProductInventoryAW,
+    logisticsInventoryAW,
+    plantInventoryAW,
+    productionPlanAW,
     updateProductionPlan,
     setWeekStartDate, 
     addTask, 
@@ -280,8 +285,8 @@ export default function PlannerPage() {
     }, 150);
   };
 
-  const handlePrintPurchasingRequirements = () => {
-    setPrintMode('purchasing-requirements');
+  const handlePrintPurchasingRequirements = (section: 'mds' | 'aw') => {
+    setPrintMode(section === 'mds' ? 'purchasing-requirements' : 'purchasing-requirements-aw');
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: portrait; margin: 5mm; }';
@@ -292,14 +297,15 @@ export default function PlannerPage() {
     }, 150);
   };
 
-  const handlePrintInventory = (type: 'product-finished' | 'logistics' | 'plant' | 'available') => {
-    const modeMap = {
+  const handlePrintInventory = (section: 'mds' | 'aw', type: 'product-finished' | 'logistics' | 'plant' | 'available') => {
+    const modeMap: Record<string, string> = {
       'product-finished': 'inventory-finished',
       'logistics': 'inventory-logistics',
       'plant': 'inventory-plant',
       'available': 'inventory-available'
-    } as const;
-    setPrintMode(modeMap[type]);
+    };
+    const suffix = section === 'aw' ? '-aw' : '';
+    setPrintMode(`${modeMap[type]}${suffix}`);
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: portrait; margin: 5mm; }';
@@ -310,12 +316,13 @@ export default function PlannerPage() {
     }, 150);
   };
 
-  const handlePrintResumen = (type: 'plan-produccion' | 'requisicion') => {
-    const modeMap = {
+  const handlePrintResumen = (section: 'mds' | 'aw', type: 'plan-produccion' | 'requisicion') => {
+    const modeMap: Record<string, string> = {
       'plan-produccion': 'resumen-plan',
       'requisicion': 'resumen-requisicion'
-    } as const;
-    setPrintMode(modeMap[type]);
+    };
+    const suffix = section === 'aw' ? '-aw' : '';
+    setPrintMode(`${modeMap[type]}${suffix}`);
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: portrait; margin: 5mm; }';
@@ -1035,43 +1042,47 @@ export default function PlannerPage() {
               <RequirementReport tasks={tasks} weekStartDate={weekStartDate} recipes={customRecipes} packagingRecipes={customPackagingRecipes} />
             </div>
           )}
-          {printMode === 'purchasing-requirements' && (
+          {(printMode === 'purchasing-requirements' || printMode === 'purchasing-requirements-aw') && (
             <div className="p-0">
               <PurchasingRequirementReport 
-                salesProjection={salesProjection} 
+                section={printMode === 'purchasing-requirements-aw' ? 'aw' : 'mds'}
+                salesProjection={printMode === 'purchasing-requirements-aw' ? salesProjectionAW : salesProjection} 
                 customRecipes={customRecipes} 
                 customPackagingRecipes={customPackagingRecipes} 
               />
             </div>
           )}
-          {(printMode === 'inventory-finished' || printMode === 'inventory-logistics' || printMode === 'inventory-plant' || printMode === 'inventory-available') && (
+          {(printMode === 'inventory-finished' || printMode === 'inventory-logistics' || printMode === 'inventory-plant' || printMode === 'inventory-available' || printMode === 'inventory-finished-aw' || printMode === 'inventory-logistics-aw' || printMode === 'inventory-plant-aw' || printMode === 'inventory-available-aw') && (
             <div className="p-0">
               <InventoryReport 
-                type={printMode === 'inventory-finished' ? 'product-finished' : printMode === 'inventory-logistics' ? 'logistics' : printMode === 'inventory-plant' ? 'plant' : 'available'}
+                type={printMode.includes('finished') ? 'product-finished' : printMode.includes('logistics') ? 'logistics' : printMode.includes('plant') ? 'plant' : 'available'}
+                section={printMode.endsWith('-aw') ? 'aw' : 'mds'}
                 data={{
-                  finishedProductInventory,
-                  logisticsInventory,
-                  plantInventory
+                  finishedProductInventory: printMode.endsWith('-aw') ? finishedProductInventoryAW : finishedProductInventory,
+                  logisticsInventory: printMode.endsWith('-aw') ? logisticsInventoryAW : logisticsInventory,
+                  plantInventory: printMode.endsWith('-aw') ? plantInventoryAW : plantInventory
                 }}
               />
             </div>
           )}
-          {printMode === 'resumen-plan' && (
+          {(printMode === 'resumen-plan' || printMode === 'resumen-plan-aw') && (
             <div className="p-0">
               <PlanProduccionReport 
-                salesProjection={salesProjection}
-                finishedProductInventory={finishedProductInventory}
-                productionPlan={productionPlan}
+                section={printMode === 'resumen-plan-aw' ? 'aw' : 'mds'}
+                salesProjection={printMode === 'resumen-plan-aw' ? salesProjectionAW : salesProjection}
+                finishedProductInventory={printMode === 'resumen-plan-aw' ? finishedProductInventoryAW : finishedProductInventory}
+                productionPlan={printMode === 'resumen-plan-aw' ? productionPlanAW : productionPlan}
               />
             </div>
           )}
-          {printMode === 'resumen-requisicion' && (
+          {(printMode === 'resumen-requisicion' || printMode === 'resumen-requisicion-aw') && (
             <div className="p-0">
               <RequisicionReport 
-                salesProjection={salesProjection}
-                productionPlan={productionPlan}
-                logisticsInventory={logisticsInventory}
-                plantInventory={plantInventory}
+                section={printMode === 'resumen-requisicion-aw' ? 'aw' : 'mds'}
+                salesProjection={printMode === 'resumen-requisicion-aw' ? salesProjectionAW : salesProjection}
+                productionPlan={printMode === 'resumen-requisicion-aw' ? productionPlanAW : productionPlan}
+                logisticsInventory={printMode === 'resumen-requisicion-aw' ? logisticsInventoryAW : logisticsInventory}
+                plantInventory={printMode === 'resumen-requisicion-aw' ? plantInventoryAW : plantInventory}
                 customRecipes={customRecipes}
                 customPackagingRecipes={customPackagingRecipes}
               />
