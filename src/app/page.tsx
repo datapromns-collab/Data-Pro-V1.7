@@ -1043,10 +1043,15 @@ export default function PlannerPage() {
                         <button
                           key={tab}
                           onClick={() => setActiveTab(tab)}
-                          className={cn(
-                            "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap outline-none focus:ring-0 border-0 select-none transition-none active:scale-95",
-                            activeTab === tab ? "bg-slate-900 text-white" : "bg-slate-100 text-slate-500 hover:bg-slate-200"
-                          )}
+                          className={cn(navTabClass(activeTab === tab))}
+                        >
+                          {tab === 'paradas-lineas' ? 'Paradas de Líneas' : tab === 'planificacion' ? 'Planificación' : 'Producción'}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex-1 m-4 rounded-2xl bg-slate-50/50 border border-slate-100" />
+                  </div>
+                )}
                         >
                           {tab === 'paradas-lineas' ? 'Paradas de Líneas' : tab === 'planificacion' ? 'Planificación' : 'Producción'}
                         </button>
