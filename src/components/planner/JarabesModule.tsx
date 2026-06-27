@@ -23,7 +23,7 @@ import {
   BarChart3
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { format, addDays, getISOWeek } from 'date-fns';
+import { format, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { getWeekDays } from '@/lib/planner-utils';
 import { Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Line, ComposedChart } from 'recharts';
@@ -809,8 +809,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                    <td style="text-align:right;color:${r.desviacionCosto <= 0 ? '#059669' : '#dc2626'};border:1px solid #93c5fd;">${N(r.desviacionCosto)}</td>
                  </tr>
                  `).join('')}
-                  <tr style="background:#dbeafe;font-weight:bold;border-top:2px solid #93c5fd;">
-                   <td style="border:1px solid #93c5fd;font-weight:bold;">TOTAL SEMANA</td>
+                   <tr style="background:#dbeafe;font-weight:bold;border-top:2px solid #93c5fd;">
+                    <td style="border:1px solid #93c5fd;font-weight:bold;">TOTAL SEMANAL</td>
                    <td style="text-align:right;border:1px solid #93c5fd;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
                    <td style="text-align:right;border:1px solid #93c5fd;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
                    <td style="text-align:right;border:1px solid #93c5fd;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
@@ -936,8 +936,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                     <td style="text-align:right;color:${r.desviacionCosto <= 0 ? '#059669' : '#dc2626'};border:1px solid #6ee7b7;">${N(r.desviacionCosto)}</td>
                   </tr>
                   `).join('')}
-                   <tr style="background:#d1fae5;font-weight:bold;border-top:2px solid #6ee7b7;">
-                    <td style="border:1px solid #6ee7b7;font-weight:bold;">TOTAL SEMANA</td>
+                    <tr style="background:#d1fae5;font-weight:bold;border-top:2px solid #6ee7b7;">
+                     <td style="border:1px solid #6ee7b7;font-weight:bold;">TOTAL SEMANAL</td>
                     <td style="text-align:right;border:1px solid #6ee7b7;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
                     <td style="text-align:right;border:1px solid #6ee7b7;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
                     <td style="text-align:right;border:1px solid #6ee7b7;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
@@ -2177,18 +2177,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                           <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
                              <div className="flex items-center justify-between mb-4">
                                <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Estándar Semanal</h3>
-                                   <Button size="sm" variant="outline" onClick={async () => {
-                                    let chartImage;
-                                    try {
-                                      if (hiddenStandardChartRef.current) {
-                                        const canvas = await html2canvas(hiddenStandardChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-                                        chartImage = canvas.toDataURL('image/png');
-                                      }
-                                    } catch (e) {
-                                      console.error('Error capturing chart:', e);
-                                    }
-                                    onPrintWeeklyStandard?.(buildWeeklyStandardHtml(chartImage));
-                                  }} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
+                                    <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFStandard} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
                                   <FileDown className="h-4 w-4" /> PDF
                                 </Button>
                             </div>
@@ -2235,8 +2224,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                           const totalPorcentaje = totalEstandar !== 0 ? (totalDiferencia / totalEstandar * 100) : 0;
                                           const totalDesviacionCosto = totalDiferencia * (parseFloat(costoAzucar) || 0);
                                           return (
-                                            <tr className="bg-blue-100 font-black text-xs">
-                                             <td className="p-2 border border-slate-200">SEMANA {getISOWeek(weekDays[0])}</td>
+                                             <tr className="bg-blue-100 font-black text-xs">
+                                              <td className="p-2 border border-slate-200">TOTAL SEMANAL</td>
                                              <td className="p-2 text-right border border-slate-200">{formatNumber(totalEstandar)}</td>
                                              <td className="p-2 text-right border border-slate-200">{formatNumber(totalFisico)}</td>
                                              <td className="p-2 text-right border border-slate-200" style={{ color: totalDiferencia <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(totalDiferencia)}</td>
@@ -2279,18 +2268,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                           <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
                              <div className="flex items-center justify-between mb-4">
                                <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Promedio Semanal</h3>
-                                 <Button size="sm" variant="outline" onClick={async () => {
-                                   let chartImage;
-                                   try {
-                                     if (hiddenPromedioChartRef.current) {
-                                       const canvas = await html2canvas(hiddenPromedioChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-                                       chartImage = canvas.toDataURL('image/png');
-                                     }
-                                   } catch (e) {
-                                     console.error('Error capturing chart:', e);
-                                   }
-                                   onPrintWeeklyPromedio?.(buildWeeklyPromedioHtml(chartImage));
-                                 }} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
+                                  <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFPromedio} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
                                   <FileDown className="h-4 w-4" /> PDF
                                 </Button>
                             </div>
@@ -2337,8 +2315,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                           const totalPorcentaje = totalEstandar !== 0 ? (totalDiferencia / totalEstandar * 100) : 0;
                                           const totalDesviacionCosto = totalDiferencia * (parseFloat(costoAzucar) || 0);
                                           return (
-                                            <tr className="bg-green-100 font-black text-xs">
-                                             <td className="p-2 border border-slate-200">SEMANA {getISOWeek(weekDays[0])}</td>
+                                             <tr className="bg-green-100 font-black text-xs">
+                                              <td className="p-2 border border-slate-200">TOTAL SEMANAL</td>
                                              <td className="p-2 text-right border border-slate-200">{formatNumber(totalEstandar)}</td>
                                              <td className="p-2 text-right border border-slate-200">{formatNumber(totalFisico)}</td>
                                              <td className="p-2 text-right border border-slate-200" style={{ color: totalDiferencia <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(totalDiferencia)}</td>
