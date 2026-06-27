@@ -70,7 +70,7 @@ import {
 interface PurchasingModuleProps {
   onPrintRequirements: (section: 'mds' | 'aw') => void;
   onPrintInventory: (section: 'mds' | 'aw', type: 'product-finished' | 'logistics' | 'plant' | 'available') => void;
-  onPrintResumen: (section: 'mds' | 'aw', type: 'plan-produccion' | 'requisicion') => void;
+  onPrintResumen: (section: 'mds' | 'aw' | 'global', type: 'plan-produccion' | 'requisicion') => void;
 }
 
 const REFRESCOS = [
@@ -116,11 +116,35 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
     updatePlantInventoryAW,
     customRecipes,
     customPackagingRecipes
-  } = usePlannerStore();
-  
-  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
+   } = usePlannerStore();
+   
+   const mergeRecords = (a: Record<string, number>, b: Record<string, number>): Record<string, number> => {
+     const result: Record<string, number> = {};
+     const keys = new Set([...Object.keys(a), ...Object.keys(b)]);
+     keys.forEach(key => { result[key] = (a[key] || 0) + (b[key] || 0); });
+     return result;
+   };
 
-  const calculateRequirement = (code: string) => calculateRequirementFromSource(code, salesProjection, customPackagingRecipes, customRecipes);
+   const mergeNestedRecords = (a: Record<string, Record<string, number>>, b: Record<string, Record<string, number>>): Record<string, Record<string, number>> => {
+     const result: Record<string, Record<string, number>> = {};
+     const outerKeys = new Set([...Object.keys(a), ...Object.keys(b)]);
+     outerKeys.forEach(key => {
+       result[key] = mergeRecords(a[key] || {}, b[key] || {});
+     });
+     return result;
+   };
+
+   const globalSalesProjection = mergeNestedRecords(salesProjection, salesProjectionAW);
+   const globalFinishedProductInventory = mergeNestedRecords(finishedProductInventory, finishedProductInventoryAW);
+   const globalProductionPlan = mergeNestedRecords(productionPlan, productionPlanAW);
+   const globalLogisticsInventory = mergeRecords(logisticsInventory, logisticsInventoryAW);
+   const globalPlantInventory = mergeRecords(plantInventory, plantInventoryAW);
+   const calculateGlobalRequirement = (code: string) => calculateRequirementFromSource(code, globalSalesProjection, customPackagingRecipes, customRecipes);
+   const calculateGlobalRequirementFromPlan = (code: string) => calculateRequirementFromSource(code, globalProductionPlan, customPackagingRecipes, customRecipes);
+
+   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
+
+   const calculateRequirement = (code: string) => calculateRequirementFromSource(code, salesProjection, customPackagingRecipes, customRecipes);
 
   const renderRequirementTable = (section: 'mds' | 'aw', title: string, icon: React.ReactNode, data: any[], unit: string = 'KG', color: string = "bg-primary", maxDecimals: number = 2) => {
     const tableItems = data.map(item => ({
@@ -1422,13 +1446,218 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
           </Tabs>
         </TabsContent>
 
-        <TabsContent value="global" className="m-0 animate-in fade-in-50 duration-500">
-          <div className="h-[400px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-            <Globe className="h-12 w-12 text-slate-300 mb-4" />
-            <p className="text-slate-400 font-black uppercase text-[10px] tracking-widest text-center px-10 leading-relaxed">
-              Sección Global en blanco<br/>Consolidado de requerimientos de compra...
-            </p>
-          </div>
+        <TabsContent value="global" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+          <Tabs defaultValue="plan-produccion" className="w-full">
+            <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
+              <TabsList className="bg-transparent h-auto p-0">
+                <TabsTrigger value="plan-produccion" className={tabsTriggerClass}>
+                  <TrendingUp className="h-3.5 w-3.5" /> Planificación de Producción
+                </TabsTrigger>
+                <TabsTrigger value="requisicion" className={tabsTriggerClass}>
+                  <ClipboardCheck className="h-3.5 w-3.5" /> Requisición de Materiales
+                </TabsTrigger>
+              </TabsList>
+            </div>
+
+            <TabsContent value="plan-produccion" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+              <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
+                <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
+                  <div className="flex items-center gap-4 text-white">
+                    <div className="bg-white/10 p-2.5 rounded-2xl">
+                      <ClipboardList className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-black uppercase text-sm tracking-widest leading-none">Resumen Consolidado de Necesidades (GLOBAL)</h3>
+                      <p className="text-[10px] font-bold text-slate-100/70 uppercase tracking-widest mt-1">Balance de Ventas vs Inventario vs Plan de Producción</p>
+                    </div>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => onPrintResumen('global', 'plan-produccion')}
+                    className="gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                  >
+                    <FileDown className="h-4 w-4" />
+                    PDF
+                  </Button>
+                </div>
+                
+                <ScrollArea className="h-[600px]">
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader className="sticky top-0 z-10 bg-white">
+                        <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-12">
+                          <TableHead className="pl-8 text-[10px] font-black text-slate-400 uppercase min-w-[250px]">Sabor / SKU</TableHead>
+                          <TableHead className="text-center text-[10px] font-black text-slate-400 uppercase w-[100px]">Formato</TableHead>
+                          <TableHead className="text-right text-[10px] font-black text-primary uppercase w-[120px]">Proy. Ventas</TableHead>
+                          <TableHead className="text-right text-[10px] font-black text-amber-600 uppercase w-[120px]">Inv. PT</TableHead>
+                          <TableHead className="text-right text-[10px] font-black text-sky-600 uppercase w-[150px] bg-sky-50/30">Plan Producción</TableHead>
+                          <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[120px]">Saldo Final</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {PRODUCT_LIST.map((product) => (
+                          <React.Fragment key={product}>
+                            <TableRow className="bg-slate-100/30 hover:bg-slate-100/30 h-8 border-y border-slate-200">
+                              <TableCell colSpan={6} className="pl-8 py-0">
+                                <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{product}</span>
+                              </TableCell>
+                            </TableRow>
+                            {PRESENTATIONS.map((pres) => {
+                              const sales = globalSalesProjection[product]?.[pres] || 0;
+                              const inv = globalFinishedProductInventory[product]?.[pres] || 0;
+                              const plan = globalProductionPlan[product]?.[pres] || 0;
+                              const balance = (inv + plan) - sales;
+
+                              return (
+                                <TableRow key={`${product}-${pres}`} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100 group">
+                                  <TableCell className="pl-8 py-2">
+                                    <div className="flex items-center gap-2">
+                                      <ChevronRight className="h-3 w-3 text-slate-300" />
+                                      <span className="text-[11px] font-black text-slate-700 uppercase leading-none">{product}</span>
+                                    </div>
+                                  </TableCell>
+                                  <TableCell className="text-center">
+                                    <Badge variant="outline" className="text-[9px] font-black uppercase text-slate-400 border-slate-200 px-2 py-0">
+                                      {pres}
+                                    </Badge>
+                                  </TableCell>
+                                  <TableCell className="text-right font-bold text-primary tabular-nums">
+                                    {sales > 0 ? sales.toLocaleString('es-ES') : '-'}
+                                  </TableCell>
+                                  <TableCell className="text-right font-bold text-amber-600 tabular-nums">
+                                    {inv > 0 ? inv.toLocaleString('es-ES') : '-'}
+                                  </TableCell>
+                                  <TableCell className="p-1 text-right">
+                                    <span className="font-black text-sm text-sky-700">
+                                      {plan > 0 ? plan.toLocaleString('es-ES') : '-'}
+                                    </span>
+                                  </TableCell>
+                                  <TableCell className={cn(
+                                    "text-right pr-8 font-black tabular-nums",
+                                    balance < 0 ? "text-destructive" : "text-emerald-600"
+                                  )}>
+                                    {balance.toLocaleString('es-ES')}
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
+                          </React.Fragment>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </ScrollArea>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="requisicion" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+              <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
+                <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
+                  <div className="flex items-center gap-4 text-white">
+                    <div className="bg-white/10 p-2.5 rounded-2xl">
+                      <ShoppingCart className="h-6 w-6" />
+                    </div>
+                    <div>
+                      <h3 className="font-black uppercase text-sm tracking-widest leading-none">Explosión de Materiales y Necesidad de Compra (GLOBAL)</h3>
+                      <p className="text-[10px] font-bold text-slate-100/70 uppercase tracking-widest mt-1">Cálculo de suministros basado en Plan de Producción (Margen +10%)</p>
+                    </div>
+                  </div>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => onPrintResumen('global', 'requisicion')}
+                    className="gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                  >
+                    <FileDown className="h-4 w-4" />
+                    PDF
+                  </Button>
+                </div>
+                
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-12">
+                        <TableHead className="pl-8 text-[10px] font-black text-slate-400 uppercase min-w-[200px]">Material / Insumo</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-slate-500 uppercase w-[120px]">Req. Ventas</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-amber-600 uppercase w-[120px]">Stock Disponible</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-sky-600 uppercase w-[140px] bg-sky-50/20">Req. s/ Plan</TableHead>
+                        <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[160px] bg-[#A67B5B]/5">Necesidad Compra</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {ALL_MATERIALS_LIST.map((mat) => {
+                        const code = mat.code;
+                        if (!code) return null;
+                        const reqSales = calculateGlobalRequirement(code);
+                        const stockAvailable = (globalLogisticsInventory[code] || 0) + (globalPlantInventory[code] || 0);
+                        const reqPlan = calculateGlobalRequirementFromPlan(code);
+                        
+                        const deficit = Math.max(0, reqPlan - stockAvailable);
+                        const buyNeed = deficit > 0 ? deficit * 1.10 : 0;
+
+                        if (reqSales === 0 && reqPlan === 0 && stockAvailable === 0) return null;
+
+                        return (
+                          <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
+                            <TableCell className="pl-8">
+                              <div className="flex flex-col">
+                                <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{code}</span>
+                                <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[250px]">{mat.description}</span>
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-right font-bold text-slate-400 tabular-nums text-xs">
+                              {reqSales.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </TableCell>
+                            <TableCell className="text-right font-bold text-amber-600 tabular-nums text-xs">
+                              {stockAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </TableCell>
+                            <TableCell className="text-right font-black text-sky-700 tabular-nums text-sm bg-sky-50/20">
+                              {reqPlan.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </TableCell>
+                            <TableCell className={cn(
+                              "text-right pr-8 font-black tabular-nums text-[15px] bg-[#A67B5B]/10",
+                              buyNeed > 0 ? "text-destructive" : "text-emerald-600"
+                            )}>
+                              {buyNeed === 0 ? '-' : buyNeed.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              </Card>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 no-print">
+                <Card className="p-6 border-slate-200 rounded-3xl bg-slate-50/50 border-dashed border-2">
+                  <h4 className="text-xs font-black text-slate-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                    <Info className="h-4 w-4 text-[#A67B5B]" /> Lógica de Necesidad de Compra
+                  </h4>
+                  <p className="text-[11px] font-bold text-slate-600 leading-relaxed uppercase">
+                    La <span className="text-destructive font-black">Necesidad de Compra</span> se activa cuando el Requerimiento según Plan de Producción supera al Stock Disponible total (Logística + Planta). El cálculo incluye un <span className="text-[#5C4033] font-black">Margen de Seguridad del 10%</span> sobre el faltante detectado.
+                  </p>
+                </Card>
+                <div className="flex flex-col justify-center bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                   <div className="flex items-center gap-4 mb-4">
+                      <div className="bg-emerald-50 p-2 rounded-xl text-emerald-600">
+                         <ClipboardCheck className="h-5 w-5" />
+                      </div>
+                      <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-tight">Estado de Suministros</span>
+                   </div>
+                   <p className="text-[13px] font-bold text-slate-700 uppercase">
+                      El sistema ha detectado {ALL_MATERIALS_LIST.filter(m => {
+                         const code = m.code;
+                         if (!code) return false;
+                         const req = calculateGlobalRequirementFromPlan(code);
+                         const stock = (globalLogisticsInventory[code] || 0) + (globalPlantInventory[code] || 0);
+                         return req - stock > 0;
+                       }).length} materiales con necesidad de compra inmediata para cumplir el plan.
+                    </p>
+                 </div>
+              </div>
+            </TabsContent>
+          </Tabs>
         </TabsContent>
       </Tabs>
     </div>

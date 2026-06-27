@@ -13,7 +13,7 @@ import { PRODUCT_LIST } from '@/lib/planner-utils';
 const PRESENTATIONS = ["2Lts", "1.5Lts", "1Lt", "0.4Lts"];
 
 interface PlanProduccionReportProps {
-  section?: 'mds' | 'aw';
+  section?: 'mds' | 'aw' | 'global';
   salesProjection: Record<string, Record<string, number>>;
   finishedProductInventory: Record<string, Record<string, number>>;
   productionPlan: Record<string, Record<string, number>>;
@@ -21,7 +21,7 @@ interface PlanProduccionReportProps {
 
 export function PlanProduccionReport({ section = 'mds', salesProjection, finishedProductInventory, productionPlan }: PlanProduccionReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
-  const sectionLabel = section.toUpperCase();
+  const sectionLabel = section?.toUpperCase();
 
   const handleExportPDF = async () => {
     const report = document.getElementById('report');

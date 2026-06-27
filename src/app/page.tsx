@@ -163,6 +163,57 @@ export default function PlannerPage() {
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [emitDate, setEmitDate] = useState('');
 
+  const globalSalesProjection = useMemo(() => {
+    const result: Record<string, Record<string, number>> = {};
+    const outerKeys = new Set([...Object.keys(salesProjection), ...Object.keys(salesProjectionAW)]);
+    outerKeys.forEach(key => {
+      result[key] = { ...(salesProjection[key] || {}), ...(salesProjectionAW[key] || {}) };
+      Object.keys(result[key]).forEach(pres => {
+        result[key][pres] = (salesProjection[key]?.[pres] || 0) + (salesProjectionAW[key]?.[pres] || 0);
+      });
+    });
+    return result;
+  }, [salesProjection, salesProjectionAW]);
+
+  const globalFinishedProductInventory = useMemo(() => {
+    const result: Record<string, Record<string, number>> = {};
+    const outerKeys = new Set([...Object.keys(finishedProductInventory), ...Object.keys(finishedProductInventoryAW)]);
+    outerKeys.forEach(key => {
+      result[key] = { ...(finishedProductInventory[key] || {}), ...(finishedProductInventoryAW[key] || {}) };
+      Object.keys(result[key]).forEach(pres => {
+        result[key][pres] = (finishedProductInventory[key]?.[pres] || 0) + (finishedProductInventoryAW[key]?.[pres] || 0);
+      });
+    });
+    return result;
+  }, [finishedProductInventory, finishedProductInventoryAW]);
+
+  const globalProductionPlan = useMemo(() => {
+    const result: Record<string, Record<string, number>> = {};
+    const outerKeys = new Set([...Object.keys(productionPlan), ...Object.keys(productionPlanAW)]);
+    outerKeys.forEach(key => {
+      result[key] = { ...(productionPlan[key] || {}), ...(productionPlanAW[key] || {}) };
+      Object.keys(result[key]).forEach(pres => {
+        result[key][pres] = (productionPlan[key]?.[pres] || 0) + (productionPlanAW[key]?.[pres] || 0);
+      });
+    });
+    return result;
+  }, [productionPlan, productionPlanAW]);
+
+  const globalLogisticsInventory = useMemo(() => {
+    const result: Record<string, number> = {};
+    Object.keys(logisticsInventory).forEach(key => { result[key] = (result[key] || 0) + (logisticsInventory[key] || 0); });
+    Object.keys(logisticsInventoryAW).forEach(key => { result[key] = (result[key] || 0) + (logisticsInventoryAW[key] || 0); });
+    return result;
+  }, [logisticsInventory, logisticsInventoryAW]);
+
+  const globalPlantInventory = useMemo(() => {
+    const result: Record<string, number> = {};
+    Object.keys(plantInventory).forEach(key => { result[key] = (result[key] || 0) + (plantInventory[key] || 0); });
+    Object.keys(plantInventoryAW).forEach(key => { result[key] = (result[key] || 0) + (plantInventoryAW[key] || 0); });
+    return result;
+  }, [plantInventory, plantInventoryAW]);
+
+
   const weekEnd = addDays(weekStartDate, 7);
 
   useEffect(() => {
@@ -316,12 +367,12 @@ export default function PlannerPage() {
     }, 150);
   };
 
-  const handlePrintResumen = (section: 'mds' | 'aw', type: 'plan-produccion' | 'requisicion') => {
+  const handlePrintResumen = (section: 'mds' | 'aw' | 'global', type: 'plan-produccion' | 'requisicion') => {
     const modeMap: Record<string, string> = {
       'plan-produccion': 'resumen-plan',
       'requisicion': 'resumen-requisicion'
     };
-    const suffix = section === 'aw' ? '-aw' : '';
+    const suffix = section === 'aw' ? '-aw' : section === 'global' ? '-global' : '';
     setPrintMode(`${modeMap[type]}${suffix}`);
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
@@ -1083,6 +1134,29 @@ export default function PlannerPage() {
                 productionPlan={printMode === 'resumen-requisicion-aw' ? productionPlanAW : productionPlan}
                 logisticsInventory={printMode === 'resumen-requisicion-aw' ? logisticsInventoryAW : logisticsInventory}
                 plantInventory={printMode === 'resumen-requisicion-aw' ? plantInventoryAW : plantInventory}
+                customRecipes={customRecipes}
+                customPackagingRecipes={customPackagingRecipes}
+              />
+            </div>
+          )}
+          {printMode === 'resumen-plan-global' && (
+            <div className="p-0">
+              <PlanProduccionReport 
+                section="global"
+                salesProjection={globalSalesProjection}
+                finishedProductInventory={globalFinishedProductInventory}
+                productionPlan={globalProductionPlan}
+              />
+            </div>
+          )}
+          {printMode === 'resumen-requisicion-global' && (
+            <div className="p-0">
+              <RequisicionReport 
+                section="global"
+                salesProjection={globalSalesProjection}
+                productionPlan={globalProductionPlan}
+                logisticsInventory={globalLogisticsInventory}
+                plantInventory={globalPlantInventory}
                 customRecipes={customRecipes}
                 customPackagingRecipes={customPackagingRecipes}
               />

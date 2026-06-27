@@ -11,7 +11,7 @@ import html2canvas from 'html2canvas';
 import { getAllMaterialsList, calculateRequirementFromSource } from '@/lib/planner-utils';
 
 interface RequisicionReportProps {
-  section?: 'mds' | 'aw';
+  section?: 'mds' | 'aw' | 'global';
   salesProjection: Record<string, Record<string, number>>;
   productionPlan: Record<string, Record<string, number>>;
   logisticsInventory: Record<string, number>;
