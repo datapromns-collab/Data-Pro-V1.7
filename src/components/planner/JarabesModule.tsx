@@ -781,7 +781,6 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
           .header { border-bottom: 2px solid #1e293b; padding: 8px 0; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
           .footer { margin-top: 14px; border-top: 1px solid #e2e8f0; padding-top: 8px; display: flex; justify-content: space-between; font-size: 8px; font-weight: 900; color: #94a3b8; text-transform: uppercase; }
           h1 { font-size: 16px; font-weight: 900; margin: 0; line-height: 1.2; text-transform: uppercase; }
-          h2 { font-size: 10px; font-weight: 900; margin: 4px 0 0 0; color: #4a7ebb; text-transform: uppercase; letter-spacing: 0.05em; }
           .confidential { font-size: 7px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.15em; text-align: right; margin-bottom: 2px; }
           .date-large { font-size: 13px; font-weight: 900; color: #1e293b; text-transform: uppercase; text-align: right; line-height: 1.2; }
         </style>
@@ -789,7 +788,6 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         <div class="header">
           <div style="flex:1;">
             <h1>Resumen de Azúcar Semanal – Estándar</h1>
-            <h2>Semana: ${format(weekStart, 'dd/MM/yyyy')} al ${format(weekEnd, 'dd/MM/yyyy')}</h2>
           </div>
           <div style="flex:1;"></div>
           <div style="flex:1;">
@@ -928,16 +926,14 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             .header { border-bottom: 2px solid #1e293b; padding: 8px 0; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
             .footer { margin-top: 14px; border-top: 1px solid #e2e8f0; padding-top: 8px; display: flex; justify-content: space-between; font-size: 8px; font-weight: 900; color: #94a3b8; text-transform: uppercase; }
             h1 { font-size: 16px; font-weight: 900; margin: 0; line-height: 1.2; text-transform: uppercase; }
-            h2 { font-size: 10px; font-weight: 900; margin: 4px 0 0 0; color: #4a7ebb; text-transform: uppercase; letter-spacing: 0.05em; }
             .confidential { font-size: 7px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.15em; text-align: right; margin-bottom: 2px; }
             .date-large { font-size: 13px; font-weight: 900; color: #1e293b; text-transform: uppercase; text-align: right; line-height: 1.2; }
           </style>
         </head><body>
-           <div class="header">
-             <div style="flex:1;">
-               <h1>Resumen de Azúcar Semanal – Promedio</h1>
-               <h2>Semana: ${format(weekStart, 'dd/MM/yyyy')} al ${format(weekEnd, 'dd/MM/yyyy')}</h2>
-             </div>
+          <div class="header">
+            <div style="flex:1;">
+              <h1>Resumen de Azúcar Semanal – Promedio</h1>
+            </div>
              <div style="flex:1;"></div>
              <div style="flex:1;">
               <p class="confidential">Confidencial – Gestión</p>
