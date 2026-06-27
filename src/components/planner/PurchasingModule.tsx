@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Globe, 
@@ -40,16 +40,6 @@ import { usePlannerStore } from '@/hooks/use-planner-store';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import html2canvas from 'html2canvas';
-import { jsPDF } from 'jspdf';
-import { useToast } from '@/hooks/use-toast';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter
-} from '@/components/ui/dialog';
 import { 
   PRODUCT_LIST, 
   SUGAR_DATA,
@@ -73,12 +63,14 @@ import {
   TERMO_0080_FACTORS,
   TERMO_0130_FACTORS,
   TERMO_0017_FACTORS,
-  ADHESIVE_FACTORS
+  ADHESIVE_FACTORS,
+  calculateRequirementFromSource
 } from '@/lib/planner-utils';
 
 interface PurchasingModuleProps {
   onPrintRequirements: () => void;
   onPrintInventory: (type: 'product-finished' | 'logistics' | 'plant' | 'available') => void;
+  onPrintResumen: (type: 'plan-produccion' | 'requisicion') => void;
 }
 
 const REFRESCOS = [
@@ -100,7 +92,7 @@ const ALL_MATERIALS_LIST = [
   ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA
 ];
 
-export function PurchasingModule({ onPrintRequirements, onPrintInventory }: PurchasingModuleProps) {
+export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrintResumen }: PurchasingModuleProps) {
   const { 
     salesProjection, 
     updateSalesProjection,
@@ -118,98 +110,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
   
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
-  const { toast } = useToast();
-  const planProduccionRef = useRef<HTMLDivElement>(null);
-  const requisicionRef = useRef<HTMLDivElement>(null);
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewImg, setPreviewImg] = useState<string | null>(null);
-  const [previewFilename, setPreviewFilename] = useState('');
-
-  const calculateRequirementFromSource = (code: string, source: Record<string, Record<string, number>>) => {
-    let total = 0;
-
-    Object.entries(source).forEach(([product, presentations]) => {
-      Object.entries(presentations).forEach(([presentation, quantity]) => {
-        if (quantity <= 0) return;
-
-        const packagingRecipe = customPackagingRecipes[product]?.[presentation];
-        if (packagingRecipe && packagingRecipe[code] !== undefined) {
-          total += quantity * packagingRecipe[code];
-          return;
-        }
-
-        if (code === 'EMP_0019') {
-          total += quantity * (PLASTIC_FACTORS[presentation as keyof typeof PLASTIC_FACTORS] || 0);
-          return;
-        }
-        if (code === 'EMP_0080' && (presentation === "2Lts" || presentation === "1Lt")) {
-          total += quantity * (TERMO_0080_FACTORS[presentation as keyof typeof TERMO_0080_FACTORS] || 0);
-          return;
-        }
-        if (code === 'EMP_0130' && presentation === "0.4Lts") {
-          total += quantity * (TERMO_0130_FACTORS["0.4Lts"] || 0);
-          return;
-        }
-        if (code === 'EMP_0017' && presentation === "1.5Lts") {
-          total += quantity * (TERMO_0017_FACTORS["1.5Lts"] || 0);
-          return;
-        }
-        if (code === 'EMP_0078') {
-          const factor = ADHESIVE_FACTORS[presentation] || 0;
-          total += quantity * factor;
-          return;
-        }
-
-        const labelMap = LABEL_MAPPING[code];
-        if (labelMap && labelMap.product === product && labelMap.presentation === presentation) {
-          const factor = LABEL_FACTORS[product]?.[presentation] || 0;
-          total += quantity * factor;
-          return;
-        }
-
-        const isFresh = product === "GLUP FRESH";
-        const isColaKolita = product === "GLUP COLA" || product === "GLUP KOLITA";
-        const isJugo = product.startsWith("JUSTY") || product.startsWith("VITA");
-
-        if (code === 'EMP_0103' && presentation === "2Lts" && isFresh) { total += quantity * 6; return; }
-        if (code === 'EMP_0093' && presentation === "2Lts" && !isFresh && !isJugo) { total += quantity * 6; return; }
-        if (code === 'EMP_0166' && presentation === "1Lt" && isColaKolita) { total += quantity * 12; return; }
-        if (code === 'EMP_0120' && presentation === "1Lt" && isFresh) { total += quantity * 12; return; }
-        if (code === 'EMP_0009' && presentation === "1Lt" && !isFresh && !isColaKolita && !isJugo) { total += quantity * 12; return; }
-        if (code === 'EMP_0135' && presentation === "0.4Lts" && isFresh) { total += quantity * 15; return; }
-        if (code === 'EMP_0126' && presentation === "0.4Lts" && !isFresh && !isJugo) { total += quantity * 15; return; }
-        if (code === 'EMP_0068' && presentation === "1.5Lts" && isJugo) { total += quantity * 12; return; }
-
-        if (code === 'EMP_0095' && isFresh) { 
-          total += quantity * (presentation === "2Lts" ? 6 : (presentation === "1Lt" ? 12 : 15)); 
-          return; 
-        }
-        if (code === 'EMP_0105' && !isFresh && !isJugo && presentation !== "0.4Lts") { 
-          total += quantity * (presentation === "2Lts" ? 6 : 12); 
-          return; 
-        }
-        if (code === 'EMP_0105_N' && (isJugo || presentation === "0.4Lts")) { 
-          total += quantity * (presentation === "1.5Lts" ? 12 : 15); 
-          return; 
-        }
-
-        const recipe = customRecipes[product];
-        if (recipe && recipe[code] !== undefined) {
-          const boxesPerTank = PRODUCT_FACTORS[product]?.[presentation] || 0;
-          const ubbPerTank = UBB_FACTORS[product] || 0;
-          if (boxesPerTank > 0) {
-            const tanks = quantity / boxesPerTank;
-            const ubb = tanks * ubbPerTank;
-            total += ubb * recipe[code];
-          }
-        }
-      });
-    });
-
-    return total;
-  };
-
-  const calculateRequirement = (code: string) => calculateRequirementFromSource(code, salesProjection);
+  const calculateRequirement = (code: string) => calculateRequirementFromSource(code, salesProjection, customPackagingRecipes, customRecipes);
 
   const renderRequirementTable = (title: string, icon: React.ReactNode, data: any[], unit: string = 'KG', color: string = "bg-primary", maxDecimals: number = 2) => {
     const tableItems = data.map(item => ({
@@ -505,43 +406,8 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
     </Card>
   );
 
-  const renderPreview = async (ref: React.RefObject<HTMLDivElement | null>) => {
-    if (!ref.current) return;
-    const canvas = await html2canvas(ref.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-    return canvas.toDataURL('image/png');
-  };
-
-  const exportToPDF = async (ref: React.RefObject<HTMLDivElement | null>, filename: string) => {
-    const imgData = await renderPreview(ref);
-    if (!imgData) { toast({ title: 'Error', description: 'No se pudo generar la vista previa.' }); return; }
-    setPreviewImg(imgData);
-    setPreviewFilename(filename);
-    setPreviewOpen(true);
-  };
-
-  const confirmSavePDF = () => {
-    if (!previewImg) return;
-    try {
-      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-      const imgProps = pdf.getImageProperties(previewImg);
-      const pdfW = pdf.internal.pageSize.getWidth();
-      const imgH = (imgProps.height * pdfW) / imgProps.width;
-      pdf.addImage(previewImg, 'PNG', 0, 0, pdfW, imgH);
-      pdf.save(previewFilename);
-      toast({ title: 'PDF generado', description: 'El reporte se descargó exitosamente.' });
-    } catch (e) { console.error(e); toast({ title: 'Error', description: 'No se pudo guardar el PDF.' }); }
-    setPreviewOpen(false);
-  };
-
-  const handleExportPlanProduccionPDF = async () => {
-    try { await exportToPDF(planProduccionRef, 'planificacion_produccion.pdf'); }
-    catch (e) { console.error(e); toast({ title: 'Error', description: 'No se pudo generar el PDF.' }); }
-  };
-
-  const handleExportRequisicionPDF = async () => {
-    try { await exportToPDF(requisicionRef, 'requisicion_materiales.pdf'); }
-    catch (e) { console.error(e); toast({ title: 'Error', description: 'No se pudo generar el PDF.' }); }
-  };
+  const handleExportPlanProduccionPDF = () => onPrintResumen('plan-produccion');
+  const handleExportRequisicionPDF = () => onPrintResumen('requisicion');
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700 pb-10">
@@ -842,7 +708,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                 </div>
 
                 <TabsContent value="plan-produccion" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
-                  <div ref={planProduccionRef}>
                   <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
                     <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
                       <div className="flex items-center gap-4 text-white">
@@ -854,15 +719,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                           <p className="text-[10px] font-bold text-slate-100/70 uppercase tracking-widest mt-1">Balance de Ventas vs Inventario vs Plan de Producción</p>
                         </div>
                       </div>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
-                        onClick={handleExportPlanProduccionPDF}
-                        className="gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
-                      >
-                        <FileDown className="h-4 w-4" />
-                        PDF
-                      </Button>
                     </div>
                     
                     <ScrollArea className="h-[600px]">
@@ -935,12 +791,10 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                         </Table>
                       </div>
                     </ScrollArea>
-                    </Card>
-                  </div>
+                  </Card>
                 </TabsContent>
 
                 <TabsContent value="requisicion" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
-                  <div ref={requisicionRef}>
                   <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
                     <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
                       <div className="flex items-center gap-4 text-white">
@@ -978,9 +832,9 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                           {ALL_MATERIALS_LIST.map((mat) => {
                             const code = mat.code;
                             if (!code) return null;
-                            const reqSales = calculateRequirementFromSource(code, salesProjection);
+                            const reqSales = calculateRequirementFromSource(code, salesProjection, customPackagingRecipes, customRecipes);
                             const stockAvailable = (logisticsInventory[code] || 0) + (plantInventory[code] || 0);
-                            const reqPlan = calculateRequirementFromSource(code, productionPlan);
+                            const reqPlan = calculateRequirementFromSource(code, productionPlan, customPackagingRecipes, customRecipes);
                             
                             // Necesidad de Compra = (Req Plan - Stock Disponible) * 1.10
                             // Solo si el Req Plan supera al stock disponible
@@ -1040,13 +894,12 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
                           El sistema ha detectado {ALL_MATERIALS_LIST.filter(m => {
                              const code = m.code;
                              if (!code) return false;
-                             const req = calculateRequirementFromSource(code, productionPlan);
+                             const req = calculateRequirementFromSource(code, productionPlan, customPackagingRecipes, customRecipes);
                              const stock = (logisticsInventory[code] || 0) + (plantInventory[code] || 0);
                              return req - stock > 0;
                            }).length} materiales con necesidad de compra inmediata para cumplir el plan.
-                       </p>
-                    </div>
-                  </div>
+                        </p>
+                     </div>
                   </div>
                 </TabsContent>
               </Tabs>
@@ -1072,30 +925,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
           </div>
         </TabsContent>
       </Tabs>
-
-      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-        <DialogContent className="max-w-3xl max-h-[90vh]">
-          <DialogHeader>
-            <DialogTitle className="text-xs font-black uppercase tracking-widest">Vista Previa del Reporte</DialogTitle>
-          </DialogHeader>
-          <div className="overflow-auto max-h-[70vh] border border-slate-200 rounded-xl bg-white">
-            {previewImg && (
-              <img
-                src={previewImg}
-                alt="Vista previa PDF"
-                className="w-full h-auto"
-              />
-            )}
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setPreviewOpen(false)} className="rounded-xl">Cancelar</Button>
-            <Button onClick={confirmSavePDF} className="rounded-xl">
-              <FileDown className="h-4 w-4 mr-2" />
-              Guardar PDF
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }

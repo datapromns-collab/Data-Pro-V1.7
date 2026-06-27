@@ -390,6 +390,102 @@ export const getTimeSlots = () => {
 
 export const formatTime = (date: Date) => format(date, 'HH:mm');
 
+export const calculateRequirementFromSource = (
+  code: string,
+  source: Record<string, Record<string, number>>,
+  customPackagingRecipes: Record<string, Record<string, Record<string, number>>>,
+  customRecipes: Record<string, Record<string, number>>
+) => {
+  let total = 0;
+
+  Object.entries(source).forEach(([product, presentations]) => {
+    Object.entries(presentations).forEach(([presentation, quantity]) => {
+      if (quantity <= 0) return;
+
+      const packagingRecipe = customPackagingRecipes[product]?.[presentation];
+      if (packagingRecipe && packagingRecipe[code] !== undefined) {
+        total += quantity * packagingRecipe[code];
+        return;
+      }
+
+      if (code === 'EMP_0019') {
+        total += quantity * (PLASTIC_FACTORS[presentation as keyof typeof PLASTIC_FACTORS] || 0);
+        return;
+      }
+      if (code === 'EMP_0080' && (presentation === '2Lts' || presentation === '1Lt')) {
+        total += quantity * (TERMO_0080_FACTORS[presentation as keyof typeof TERMO_0080_FACTORS] || 0);
+        return;
+      }
+      if (code === 'EMP_0130' && presentation === '0.4Lts') {
+        total += quantity * (TERMO_0130_FACTORS['0.4Lts'] || 0);
+        return;
+      }
+      if (code === 'EMP_0017' && presentation === '1.5Lts') {
+        total += quantity * (TERMO_0017_FACTORS['1.5Lts'] || 0);
+        return;
+      }
+      if (code === 'EMP_0078') {
+        const factor = ADHESIVE_FACTORS[presentation] || 0;
+        total += quantity * factor;
+        return;
+      }
+
+      const labelMap = LABEL_MAPPING[code];
+      if (labelMap && labelMap.product === product && labelMap.presentation === presentation) {
+        const factor = LABEL_FACTORS[product]?.[presentation] || 0;
+        total += quantity * factor;
+        return;
+      }
+
+      const isFresh = product === 'GLUP FRESH';
+      const isColaKolita = product === 'GLUP COLA' || product === 'GLUP KOLITA';
+      const isJugo = product.startsWith('JUSTY') || product.startsWith('VITA');
+
+      if (code === 'EMP_0103' && presentation === '2Lts' && isFresh) { total += quantity * 6; return; }
+      if (code === 'EMP_0093' && presentation === '2Lts' && !isFresh && !isJugo) { total += quantity * 6; return; }
+      if (code === 'EMP_0166' && presentation === '1Lt' && isColaKolita) { total += quantity * 12; return; }
+      if (code === 'EMP_0120' && presentation === '1Lt' && isFresh) { total += quantity * 12; return; }
+      if (code === 'EMP_0009' && presentation === '1Lt' && !isFresh && !isColaKolita && !isJugo) { total += quantity * 12; return; }
+      if (code === 'EMP_0135' && presentation === '0.4Lts' && isFresh) { total += quantity * 15; return; }
+      if (code === 'EMP_0126' && presentation === '0.4Lts' && !isFresh && !isJugo) { total += quantity * 15; return; }
+      if (code === 'EMP_0068' && presentation === '1.5Lts' && isJugo) { total += quantity * 12; return; }
+
+      if (code === 'EMP_0095' && isFresh) {
+        total += quantity * (presentation === '2Lts' ? 6 : (presentation === '1Lt' ? 12 : 15));
+        return;
+      }
+      if (code === 'EMP_0105' && !isFresh && !isJugo && presentation !== '0.4Lts') {
+        total += quantity * (presentation === '2Lts' ? 6 : 12);
+        return;
+      }
+      if (code === 'EMP_0105_N' && (isJugo || presentation === '0.4Lts')) {
+        total += quantity * (presentation === '1.5Lts' ? 12 : 15);
+        return;
+      }
+
+      const recipe = customRecipes[product];
+      if (recipe && recipe[code] !== undefined) {
+        const boxesPerTank = PRODUCT_FACTORS[product]?.[presentation] || 0;
+        const ubbPerTank = UBB_FACTORS[product] || 0;
+        if (boxesPerTank > 0) {
+          const tanks = quantity / boxesPerTank;
+          const ubb = tanks * ubbPerTank;
+          total += ubb * recipe[code];
+        }
+      }
+    });
+  });
+
+  return total;
+};
+
+export const getAllMaterialsList = () => [
+  ...SUGAR_DATA, ...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES,
+  ...SOLIDS_DATA, ...ADDITIVES_DATA, ...PREFORMS_DATA, ...CAPS_DATA,
+  ...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA,
+  ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA
+];
+
 export const getTaskAtSlot = (tasks: ScheduledTask[], day: Date, slot: string) => {
   const [h, m] = slot.split(':').map(Number);
   const slotDate = setMinutes(setHours(day, h), m);

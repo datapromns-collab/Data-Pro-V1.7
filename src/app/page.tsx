@@ -53,6 +53,8 @@ import { DailyRawMaterialReport } from '@/components/planner/DailyRawMaterialRep
 import { PurchasingModule } from '@/components/planner/PurchasingModule';
 import { PurchasingRequirementReport } from '@/components/planner/PurchasingRequirementReport';
 import { InventoryReport } from '@/components/planner/InventoryReport';
+import { PlanProduccionReport } from '@/components/planner/PlanProduccionReport';
+import { RequisicionReport } from '@/components/planner/RequisicionReport';
 import { JarabesModule } from '@/components/planner/JarabesModule';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
@@ -92,6 +94,8 @@ export default function PlannerPage() {
     finishedProductInventory,
     logisticsInventory,
     plantInventory,
+    productionPlan,
+    updateProductionPlan,
     setWeekStartDate, 
     addTask, 
     updateTask, 
@@ -294,6 +298,22 @@ export default function PlannerPage() {
       'logistics': 'inventory-logistics',
       'plant': 'inventory-plant',
       'available': 'inventory-available'
+    } as const;
+    setPrintMode(modeMap[type]);
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
+
+  const handlePrintResumen = (type: 'plan-produccion' | 'requisicion') => {
+    const modeMap = {
+      'plan-produccion': 'resumen-plan',
+      'requisicion': 'resumen-requisicion'
     } as const;
     setPrintMode(modeMap[type]);
     const style = document.createElement('style');
@@ -980,6 +1000,7 @@ export default function PlannerPage() {
                   <PurchasingModule 
                     onPrintRequirements={handlePrintPurchasingRequirements} 
                     onPrintInventory={handlePrintInventory}
+                    onPrintResumen={handlePrintResumen}
                   />
                 )}
                 {activeModule === 'permissions' && <PermisosModule />}
@@ -1032,6 +1053,27 @@ export default function PlannerPage() {
                   logisticsInventory,
                   plantInventory
                 }}
+              />
+            </div>
+          )}
+          {printMode === 'resumen-plan' && (
+            <div className="p-0">
+              <PlanProduccionReport 
+                salesProjection={salesProjection}
+                finishedProductInventory={finishedProductInventory}
+                productionPlan={productionPlan}
+              />
+            </div>
+          )}
+          {printMode === 'resumen-requisicion' && (
+            <div className="p-0">
+              <RequisicionReport 
+                salesProjection={salesProjection}
+                productionPlan={productionPlan}
+                logisticsInventory={logisticsInventory}
+                plantInventory={plantInventory}
+                customRecipes={customRecipes}
+                customPackagingRecipes={customPackagingRecipes}
               />
             </div>
           )}
