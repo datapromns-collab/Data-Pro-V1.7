@@ -824,18 +824,19 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
          </body></html>`;
       };
 
-       const handleExportWeeklyPDFStandard = async () => {
-        try {
-          if (!weekDays.length) return;
-          let chartImage;
-          try {
-            if (hiddenStandardChartRef.current) {
-              const canvas = await html2canvas(hiddenStandardChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-              chartImage = canvas.toDataURL('image/png');
-            }
-          } catch (e) {
-            console.error('Error capturing chart:', e);
-          }
+        const handleExportWeeklyPDFStandard = async () => {
+         try {
+           if (!weekDays.length) return;
+           let chartImage;
+           try {
+             if (hiddenStandardChartRef.current) {
+               await new Promise(r => setTimeout(r, 300));
+               const canvas = await html2canvas(hiddenStandardChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+               chartImage = canvas.toDataURL('image/png');
+             }
+           } catch (e) {
+             console.error('Error capturing chart:', e);
+           }
          const reportContent = buildWeeklyStandardHtml(chartImage);
          const reportEl = document.createElement('div');
          reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
@@ -950,18 +951,19 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
          </body></html>`;
      };
 
-         const handleExportWeeklyPDFPromedio = async () => {
-          try {
-            if (!weekDays.length) return;
-            let chartImage;
-            try {
-              if (hiddenPromedioChartRef.current) {
-                const canvas = await html2canvas(hiddenPromedioChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-                chartImage = canvas.toDataURL('image/png');
-              }
-            } catch (e) {
-              console.error('Error capturing chart:', e);
-            }
+          const handleExportWeeklyPDFPromedio = async () => {
+           try {
+             if (!weekDays.length) return;
+             let chartImage;
+             try {
+               if (hiddenPromedioChartRef.current) {
+                 await new Promise(r => setTimeout(r, 300));
+                 const canvas = await html2canvas(hiddenPromedioChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+                 chartImage = canvas.toDataURL('image/png');
+               }
+             } catch (e) {
+               console.error('Error capturing chart:', e);
+             }
            const reportContent = buildWeeklyPromedioHtml(chartImage);
          const reportEl = document.createElement('div');
          reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
