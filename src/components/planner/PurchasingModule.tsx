@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Globe, 
@@ -43,6 +43,13 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter
+} from '@/components/ui/dialog';
 import { 
   PRODUCT_LIST, 
   SUGAR_DATA,
@@ -114,6 +121,9 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
   const { toast } = useToast();
   const planProduccionRef = useRef<HTMLDivElement>(null);
   const requisicionRef = useRef<HTMLDivElement>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewImg, setPreviewImg] = useState<string | null>(null);
+  const [previewFilename, setPreviewFilename] = useState('');
 
   const calculateRequirementFromSource = (code: string, source: Record<string, Record<string, number>>) => {
     let total = 0;
@@ -495,25 +505,32 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
     </Card>
   );
 
-  const exportToPDF = async (ref: React.RefObject<HTMLDivElement | null>, filename: string) => {
+  const renderPreview = async (ref: React.RefObject<HTMLDivElement | null>) => {
     if (!ref.current) return;
     const canvas = await html2canvas(ref.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const pageW = pdf.internal.pageSize.getWidth();
-    const pageH = pdf.internal.pageSize.getHeight();
-    const imgH = (canvas.height * pageW) / canvas.width;
-    let addedHeight = 0;
-    let remainingH = imgH;
-    let firstPage = true;
-    while (remainingH > 0) {
-      if (!firstPage) pdf.addPage();
-      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, -addedHeight, pageW, imgH);
-      addedHeight += pageH;
-      remainingH -= pageH;
-      firstPage = false;
-    }
-    pdf.save(filename);
-    toast({ title: 'PDF generado', description: 'El reporte se descargó exitosamente.' });
+    return canvas.toDataURL('image/png');
+  };
+
+  const exportToPDF = async (ref: React.RefObject<HTMLDivElement | null>, filename: string) => {
+    const imgData = await renderPreview(ref);
+    if (!imgData) { toast({ title: 'Error', description: 'No se pudo generar la vista previa.' }); return; }
+    setPreviewImg(imgData);
+    setPreviewFilename(filename);
+    setPreviewOpen(true);
+  };
+
+  const confirmSavePDF = () => {
+    if (!previewImg) return;
+    try {
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const imgProps = pdf.getImageProperties(previewImg);
+      const pdfW = pdf.internal.pageSize.getWidth();
+      const imgH = (imgProps.height * pdfW) / imgProps.width;
+      pdf.addImage(previewImg, 'PNG', 0, 0, pdfW, imgH);
+      pdf.save(previewFilename);
+      toast({ title: 'PDF generado', description: 'El reporte se descargó exitosamente.' });
+    } catch (e) { console.error(e); toast({ title: 'Error', description: 'No se pudo guardar el PDF.' }); }
+    setPreviewOpen(false);
   };
 
   const handleExportPlanProduccionPDF = async () => {
@@ -1055,6 +1072,30 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory }: Purc
           </div>
         </TabsContent>
       </Tabs>
+
+      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+        <DialogContent className="max-w-3xl max-h-[90vh]">
+          <DialogHeader>
+            <DialogTitle className="text-xs font-black uppercase tracking-widest">Vista Previa del Reporte</DialogTitle>
+          </DialogHeader>
+          <div className="overflow-auto max-h-[70vh] border border-slate-200 rounded-xl bg-white">
+            {previewImg && (
+              <img
+                src={previewImg}
+                alt="Vista previa PDF"
+                className="w-full h-auto"
+              />
+            )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setPreviewOpen(false)} className="rounded-xl">Cancelar</Button>
+            <Button onClick={confirmSavePDF} className="rounded-xl">
+              <FileDown className="h-4 w-4 mr-2" />
+              Guardar PDF
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
