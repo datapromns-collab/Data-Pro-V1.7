@@ -28,7 +28,8 @@ import {
   Factory,
   Truck,
   TrendingUp,
-  Droplets
+  Droplets,
+  AlertTriangle
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -1045,6 +1046,9 @@ export default function PlannerPage() {
                           onClick={() => setActiveTab(tab)}
                           className={cn(navTabClass(activeTab === tab))}
                         >
+                          {tab === 'paradas-lineas' && <AlertTriangle className="h-3.5 w-3.5" />}
+                          {tab === 'planificacion' && <CalendarIcon className="h-3.5 w-3.5" />}
+                          {tab === 'produccion' && <Factory className="h-3.5 w-3.5" />}
                           {tab === 'paradas-lineas' ? 'Paradas de Líneas' : tab === 'planificacion' ? 'Planificación' : 'Producción'}
                         </button>
                       ))}
