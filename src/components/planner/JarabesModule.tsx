@@ -822,58 +822,17 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             ${chartSection}
             <div class="footer">Generado el ${new Date().toLocaleString('es')}</div>
          </body></html>`;
-     };
+      };
 
-     const captureChartPng = async (chartRef: React.RefObject<HTMLDivElement | null>, width = 1000, height = 600): Promise<string | null> => {
-      try {
-        const container = chartRef.current;
-        if (!container) return null;
-        const svg = container.querySelector('svg');
-        if (!svg) return null;
-
-        const clone = svg.cloneNode(true) as SVGSVGElement;
-        clone.setAttribute('width', String(width));
-        clone.setAttribute('height', String(height));
-        clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-
-        const serializer = new XMLSerializer();
-        const svgString = serializer.serializeToString(clone);
-        const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-        const url = URL.createObjectURL(svgBlob);
-
-        return new Promise<string | null>((resolve) => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = width;
-            canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            if (ctx) {
-              ctx.fillStyle = '#ffffff';
-              ctx.fillRect(0, 0, width, height);
-              ctx.drawImage(img, 0, 0, width, height);
-            }
-            URL.revokeObjectURL(url);
-            resolve(canvas.toDataURL('image/png'));
-          };
-          img.onerror = () => {
-            URL.revokeObjectURL(url);
-            resolve(null);
-          };
-          img.src = url;
-        });
-      } catch (e) {
-        console.error('Error capturing chart:', e);
-        return null;
-      }
-    };
-
-      const handleExportWeeklyPDFStandard = async () => {
+       const handleExportWeeklyPDFStandard = async () => {
         try {
           if (!weekDays.length) return;
           let chartImage;
           try {
-            chartImage = await captureChartPng(hiddenStandardChartRef);
+            if (hiddenStandardChartRef.current) {
+              const canvas = await html2canvas(hiddenStandardChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+              chartImage = canvas.toDataURL('image/png');
+            }
           } catch (e) {
             console.error('Error capturing chart:', e);
           }
@@ -991,15 +950,18 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
          </body></html>`;
      };
 
-        const handleExportWeeklyPDFPromedio = async () => {
-         try {
-           if (!weekDays.length) return;
-          let chartImage;
+         const handleExportWeeklyPDFPromedio = async () => {
           try {
-            chartImage = await captureChartPng(hiddenPromedioChartRef);
-          } catch (e) {
-            console.error('Error capturing chart:', e);
-          }
+            if (!weekDays.length) return;
+            let chartImage;
+            try {
+              if (hiddenPromedioChartRef.current) {
+                const canvas = await html2canvas(hiddenPromedioChartRef.current, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+                chartImage = canvas.toDataURL('image/png');
+              }
+            } catch (e) {
+              console.error('Error capturing chart:', e);
+            }
            const reportContent = buildWeeklyPromedioHtml(chartImage);
          const reportEl = document.createElement('div');
          reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
