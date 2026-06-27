@@ -719,6 +719,15 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                           <p className="text-[10px] font-bold text-slate-100/70 uppercase tracking-widest mt-1">Balance de Ventas vs Inventario vs Plan de Producción</p>
                         </div>
                       </div>
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        onClick={handleExportPlanProduccionPDF}
+                        className="gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                      >
+                        <FileDown className="h-4 w-4" />
+                        PDF
+                      </Button>
                     </div>
                     
                     <ScrollArea className="h-[600px]">
