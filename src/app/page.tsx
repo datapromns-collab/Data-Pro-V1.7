@@ -86,15 +86,6 @@ const ZONAS = ["Llenado", "Etiquetado", "Empaque", "Preforma", "Soplado", "Lavad
 const EQUIPOS = ["Llenadora", "Etiquetadora", "Empacadora", "Sopladora", "CIP", "Tanque CIP", "Transportador", "Montacargas"];
 
 const mockInformesOperacionales: any[] = [];
-  { id: 1, fecha: "2025-06-26", semana: 26, turno: "TUR", operador: "CARLOS MENDEZ", linea: "Línea 1", equipo: "Llenadora", tipoParada: "MECÁNICO", inicio: "08:15", fin: "09:45", totalMin: 90, zona: "Llenado", falla: "Fuga en válvula de llenado", orden: "OT-2025-1201", observaciones: "Cambio de empaque de sellado. Técnico asignado: R. Gomez" },
-  { id: 2, fecha: "2025-06-26", semana: 26, turno: "TUR", operador: "MARIA LOPEZ", linea: "Línea 2", equipo: "Etiquetadora", tipoParada: "CAMBIO DE PRODUCTO", inicio: "10:00", fin: "10:30", totalMin: 30, zona: "Etiquetado", falla: "Cambio de etiqueta UVA → COLA", orden: "OT-2025-1202", observaciones: "Preparación de cambio de presentación programada" },
-  { id: 3, fecha: "2025-06-26", semana: 26, turno: "NOC", operador: "JUAN PEREZ", linea: "Línea 1", equipo: "Sopladora", tipoParada: "ELÉCTRICO", inicio: "14:20", fin: "15:10", totalMin: 50, zona: "Preforma", falla: "Falla variador de frecuencia", orden: "OT-2025-1203", observaciones: "Revisado por mantenimiento preventivo" },
-  { id: 4, fecha: "2025-06-27", semana: 26, turno: "TUR", operador: "ANA RODRIGUEZ", linea: "Línea 3", equipo: "Empacadora", tipoParada: "MANTENIMIENTO PREVENTIVO", inicio: "07:30", fin: "08:00", totalMin: 30, zona: "Empaque", falla: "N/A - Preventivo", orden: "OT-2025-1204", observaciones: "Lubricación general y revisión de cadenas" },
-  { id: 5, fecha: "2025-06-27", semana: 26, turno: "TUR", operador: "LUIS MARTINEZ", linea: "Línea 4", equipo: "Llenadora", tipoParada: "PROCESO", inicio: "11:45", fin: "12:30", totalMin: 45, zona: "Llenado", falla: "Observada variación en temperatura de producto", orden: "OT-2025-1205", observaciones: "Verificado parámetros CIP de línea" },
-  { id: 6, fecha: "2025-06-27", semana: 26, turno: "NOC", operador: "CARLOS MENDEZ", linea: "Línea 2", equipo: "Transportador", tipoParada: "MECÁNICO", inicio: "16:00", fin: "16:40", totalMin: 40, zona: "General", falla: "Radiada cadena de transporte", orden: "OT-2025-1206", observaciones: "Reemplazo de eslabón número 4" },
-  { id: 7, fecha: "2025-06-28", semana: 26, turno: "TUR", operador: "MARIA LOPEZ", linea: "Línea 5", equipo: "CIP", tipoParada: "CAMBIO DE FORMATO", inicio: "06:00", fin: "07:15", totalMin: 75, zona: "Lavado CIP", falla: "N/A - Cambio de formato", orden: "OT-2025-1207", observaciones: "Ajuste de sensores para envase 600ml" },
-  { id: 8, fecha: "2025-06-28", semana: 26, turno: "TUR", operador: "JUAN PEREZ", linea: "Línea 1", equipo: "Llenadora", tipoParada: "MECÁNICO", inicio: "09:00", fin: "09:20", totalMin: 20, zona: "Llenado", falla: "Pinza de tapado defectuosa", orden: "OT-2025-1208", observaciones: "Reparación en línea, reanudación sin novedad" },
-];
 
 export default function PlannerPage() {
   const { 
