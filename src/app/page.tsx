@@ -1047,53 +1047,54 @@ export default function PlannerPage() {
                     )}
                   </>
                 )}
-                {activeModule === 'planta' && hasAccess(user.id, 'planta') && (
-                  <>
-                    <div className="flex items-center gap-2">
-                      <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 no-print">
-                        {['paradas-lineas', 'planificacion', 'produccion'].map((tab) => (
-                          <button
-                            key={tab}
-                            onClick={() => { setActiveTab(tab); if (tab === 'paradas-lineas') setParadasSubTab('informes-operacionales'); }}
-                            className={cn(
-                              "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                              activeTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                            )}
-                          >
-                            {tab === 'paradas-lineas' && <AlertTriangle className="h-3.5 w-3.5" />}
-                            {tab === 'planificacion' && <CalendarIcon className="h-3.5 w-3.5" />}
-                            {tab === 'produccion' && <Factory className="h-3.5 w-3.5" />}
-                            {tab === 'paradas-lineas' ? 'Paradas de Líneas' : tab === 'planificacion' ? 'Planificación' : 'Producción'}
-                          </button>
-                        ))}
-                      </div>
-                      {activeTab === 'paradas-lineas' && (
-                        <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                          <div className="flex items-center justify-between gap-2 mb-4 no-print">
-                            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                              {['informes-operacionales', 'ordenes-trabajo'].map((subTab) => (
-                                <button
-                                  key={subTab}
-                                  onClick={() => setParadasSubTab(subTab)}
-                                  className={cn(
-                                    "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                    paradasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                  )}
-                                >
-                                  {subTab === 'informes-operacionales' ? 'Informes Operacionales' : 'Órdenes de Trabajo'}
-                                </button>
-                              ))}
-                            </div>
-                            {isAdmin && (
-                              <button
-                                onClick={() => setIsPlantaDialogOpen(true)}
-                                className="inline-flex items-center gap-1.5 h-9 pl-4 pr-5 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-slate-800 text-white shadow-sm hover:bg-slate-900 active:scale-95"
-                              >
-                                <Plus className="h-3.5 w-3.5" />
-                                Nueva Tarea
-                              </button>
-                            )}
-                          </div>
+                 {activeModule === 'planta' && hasAccess(user.id, 'planta') && (
+                   <>
+                     <div className="flex items-center gap-2 no-print">
+                       <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                         {['paradas-lineas', 'planificacion', 'produccion'].map((tab) => (
+                           <button
+                             key={tab}
+                             onClick={() => { setActiveTab(tab); if (tab === 'paradas-lineas') setParadasSubTab('informes-operacionales'); }}
+                             className={cn(
+                               "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                               activeTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                             )}
+                           >
+                             {tab === 'paradas-lineas' && <AlertTriangle className="h-3.5 w-3.5" />}
+                             {tab === 'planificacion' && <CalendarIcon className="h-3.5 w-3.5" />}
+                             {tab === 'produccion' && <Factory className="h-3.5 w-3.5" />}
+                             {tab === 'paradas-lineas' ? 'Paradas de Líneas' : tab === 'planificacion' ? 'Planificación' : 'Producción'}
+                           </button>
+                         ))}
+                       </div>
+                     </div>
+                     {activeTab === 'paradas-lineas' && (
+                       <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                         <div className="flex items-center justify-between gap-2 mb-4 no-print">
+                           <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                             {['informes-operacionales', 'ordenes-trabajo'].map((subTab) => (
+                               <button
+                                 key={subTab}
+                                 onClick={() => setParadasSubTab(subTab)}
+                                 className={cn(
+                                   "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                   paradasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                 )}
+                               >
+                                 {subTab === 'informes-operacionales' ? 'Informes Operacionales' : 'Órdenes de Trabajo'}
+                               </button>
+                             ))}
+                           </div>
+                           {isAdmin && (
+                             <button
+                               onClick={() => setIsPlantaDialogOpen(true)}
+                               className="inline-flex items-center gap-1.5 h-9 pl-4 pr-5 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-slate-800 text-white shadow-sm hover:bg-slate-900 active:scale-95"
+                             >
+                               <Plus className="h-3.5 w-3.5" />
+                               Nueva Tarea
+                             </button>
+                           )}
+                         </div>
                          <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                            {paradasSubTab === 'informes-operacionales' && (
                              <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest">
@@ -1114,11 +1115,10 @@ export default function PlannerPage() {
                        <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                          <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100" />
                        </div>
-                      )}
-                      </div>
-                    </>
-                  )}
-                {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
+                     )}
+                   </>
+                 )}
+                 {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
                   <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                     <Truck className="h-12 w-12 mb-4 opacity-20" />
                     Módulo de Logística en Desarrollo
