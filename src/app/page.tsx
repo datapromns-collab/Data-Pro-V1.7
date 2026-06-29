@@ -1039,22 +1039,33 @@ export default function PlannerPage() {
                 )}
                 {activeModule === 'planta' && hasAccess(user.id, 'planta') && (
                   <>
-                    <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
-                      {['paradas-lineas', 'planificacion', 'produccion'].map((tab) => (
+                    <div className="flex items-center gap-2">
+                      <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 no-print">
+                        {['paradas-lineas', 'planificacion', 'produccion'].map((tab) => (
+                          <button
+                            key={tab}
+                            onClick={() => setActiveTab(tab)}
+                            className={cn(
+                              "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                              activeTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                            )}
+                          >
+                            {tab === 'paradas-lineas' && <AlertTriangle className="h-3.5 w-3.5" />}
+                            {tab === 'planificacion' && <CalendarIcon className="h-3.5 w-3.5" />}
+                            {tab === 'produccion' && <Factory className="h-3.5 w-3.5" />}
+                            {tab === 'paradas-lineas' ? 'Paradas de Líneas' : tab === 'planificacion' ? 'Planificación' : 'Producción'}
+                          </button>
+                        ))}
+                      </div>
+                      {activeTab === 'paradas-lineas' && isAdmin && (
                         <button
-                          key={tab}
-                          onClick={() => setActiveTab(tab)}
-                          className={cn(
-                            "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                            activeTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                          )}
+                          onClick={() => { setEditingTask(null); setIsDialogOpen(true); }}
+                          className="inline-flex items-center gap-1.5 h-9 pl-4 pr-5 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-[#F59E0B] text-white shadow-sm active:scale-95"
                         >
-                          {tab === 'paradas-lineas' && <AlertTriangle className="h-3.5 w-3.5" />}
-                          {tab === 'planificacion' && <CalendarIcon className="h-3.5 w-3.5" />}
-                          {tab === 'produccion' && <Factory className="h-3.5 w-3.5" />}
-                          {tab === 'paradas-lineas' ? 'Paradas de Líneas' : tab === 'planificacion' ? 'Planificación' : 'Producción'}
+                          <Plus className="h-3.5 w-3.5" />
+                          Nueva Tarea
                         </button>
-                      ))}
+                      )}
                     </div>
                     <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                       <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100" />
