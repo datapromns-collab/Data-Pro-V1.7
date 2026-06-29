@@ -29,37 +29,13 @@ import { getWeekDays } from '@/lib/planner-utils';
 import { Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Line, ComposedChart } from 'recharts';
 
 const formatNumber = (value: number | string) => Number(value).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-const captureChartSvg = async (chartRef: React.RefObject<HTMLDivElement | null>): Promise<string | null> => {
-  if (!chartRef.current) { console.warn('captureChartSvg: chartRef.current es null'); return null; }
-  for (let attempt = 0; attempt < 40; attempt++) {
-    await new Promise(r => setTimeout(r, 150));
-    const svgEl = chartRef.current.querySelector('svg');
-    if (svgEl && svgEl.clientWidth > 0 && svgEl.clientHeight > 0) {
-      try {
-        const serializer = new XMLSerializer();
-        const svgString = serializer.serializeToString(svgEl);
-        const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-        const url = URL.createObjectURL(svgBlob);
-        return await new Promise((resolve) => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = svgEl.clientWidth || 1000;
-            canvas.height = svgEl.clientHeight || 600;
-            const ctx = canvas.getContext('2d');
-            if (ctx) { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height); }
-            if (ctx) ctx.drawImage(img, 0, 0);
-            URL.revokeObjectURL(url);
-            resolve(canvas.toDataURL('image/png'));
-          };
-          img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
-          img.src = url;
-        });
-      } catch (e) { console.warn('captureChartSvg error:', e); }
-    }
-  }
-  console.warn('captureChartSvg: Timeout esperando SVG en', chartRef);
-  return null;
+const captureChart = async (chartRef: React.RefObject<HTMLDivElement | null>): Promise<string | null> => {
+  if (!chartRef.current) return null;
+  try {
+    await new Promise(r => setTimeout(r, 100));
+    const canvas = await html2canvas(chartRef.current, { scale: 1, useCORS: true, backgroundColor: '#ffffff', logging: false });
+    return canvas.toDataURL('image/png');
+  } catch (e) { console.error('Error capturing chart:', e); return null; }
 };
 
 const SABORES_ESTANDAR = [
@@ -936,7 +912,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             if (!weekDays.length) return;
             let chartImage = null;
             try {
-              chartImage = await captureChartSvg(hiddenStandardChartRef);
+              chartImage = await captureChart(hiddenStandardChartRef);
             } catch (e) {
               console.error('Error capturing chart:', e);
             }
@@ -1075,7 +1051,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
               if (!weekDays.length) return;
               let chartImage = null;
               try {
-                chartImage = await captureChartSvg(hiddenPromedioChartRef);
+                chartImage = await captureChart(hiddenPromedioChartRef);
               } catch (e) {
                 console.error('Error capturing chart:', e);
               }
