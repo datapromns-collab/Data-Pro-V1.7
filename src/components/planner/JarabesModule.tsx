@@ -857,7 +857,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       return `<!DOCTYPE html><html><head><title>Resumen Semanal Estándar</title>
         <style>
           body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
-          table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 14px; }
+              table { width: 100%; border-collapse: collapse; font-size: 16px; margin-bottom: 14px; }
           th, td { border: 1px solid #e2e8f0; padding: 4px 8px; }
           th { background: #dbeafe; color: #1e3a5f; font-weight: bold; text-transform: uppercase; height: 28px; }
           tfoot td { background: #dbeafe; font-weight: bold; border-top: 2px solid #e2e8f0; height: 32px; }
@@ -996,7 +996,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
           return `<!DOCTYPE html><html><head><title>Resumen Semanal Promedio</title>
            <style>
              body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
-             table { width: 100%; border-collapse: collapse; font-size: 11px; margin-bottom: 14px; }
+             table { width: 100%; border-collapse: collapse; font-size: 16px; margin-bottom: 14px; }
              th, td { border: 1px solid #e2e8f0; padding: 4px 8px; }
              th { background: #d1fae5; color: #064e3b; font-weight: bold; text-transform: uppercase; height: 28px; }
              tfoot td { background: #d1fae5; font-weight: bold; border-top: 2px solid #e2e8f0; height: 32px; }
