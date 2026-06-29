@@ -65,6 +65,7 @@ import { PermisosModule } from '@/components/planner/PermisosModule';
 import { Toaster } from '@/components/ui/toaster';
 import { SidebarProvider, Sidebar, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
@@ -150,6 +151,7 @@ export default function PlannerPage() {
   const { toast } = useToast();
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isPlantaDialogOpen, setIsPlantaDialogOpen] = useState(false);
   const [activeModule, setActiveModule] = useState('planning');
   const [activeTab, setActiveTab] = useState('gantt');
   const [printMode, setPrintMode] = useState('');
@@ -1059,7 +1061,7 @@ export default function PlannerPage() {
                       </div>
                       {activeTab === 'paradas-lineas' && isAdmin && (
                         <button
-                          onClick={() => { setEditingTask(null); setIsDialogOpen(true); }}
+                          onClick={() => setIsPlantaDialogOpen(true)}
                           className="inline-flex items-center gap-1.5 h-9 pl-4 pr-5 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-[#F59E0B] text-white shadow-sm active:scale-95"
                         >
                           <Plus className="h-3.5 w-3.5" />
@@ -1294,6 +1296,26 @@ export default function PlannerPage() {
           lineSpeeds={lineSpeeds} 
           readOnly={!isAdmin}
         />
+
+        <Dialog open={isPlantaDialogOpen} onOpenChange={setIsPlantaDialogOpen}>
+          <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto">
+            <DialogHeader>
+              <DialogTitle className="flex items-center gap-2">
+                <AlertTriangle className="h-5 w-5 text-primary" />
+                Nueva Tarea
+              </DialogTitle>
+              <DialogDescription>
+                Ventana emergente en blanco para el módulo de planta.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="py-4" />
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setIsPlantaDialogOpen(false)} className="rounded-xl">
+                Cancelar
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
         {isAdmin && (
           <ProductionEntryDialog
