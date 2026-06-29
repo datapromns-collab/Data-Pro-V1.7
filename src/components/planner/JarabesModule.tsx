@@ -32,7 +32,7 @@ const formatNumber = (value: number | string) => Number(value).toLocaleString(un
 const captureChart = async (chartRef: React.RefObject<HTMLDivElement | null>): Promise<string | null> => {
   if (!chartRef.current) return null;
   try {
-    const canvas = await html2canvas(chartRef.current, { scale: 4, useCORS: true, backgroundColor: '#ffffff', logging: false });
+    const canvas = await html2canvas(chartRef.current, { scale: 6, useCORS: true, backgroundColor: '#ffffff', logging: false });
     return canvas.toDataURL('image/png');
   } catch (e) { console.error('Error capturing chart:', e); return null; }
 };
@@ -853,7 +853,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       });
 
       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-               const chartSection = chartImage ? `<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;background:#f8fafc;margin-top:14px;"><img src="${chartImage}" style="max-width:100%;object-fit:contain;display:block;margin:0 auto;" /></div>` : '';
+      const chartSection = chartImage ? `<div style="margin-top:20px;"><img src="${chartImage}" style="width:100%;display:block;" /></div>` : '';
       return `<!DOCTYPE html><html><head><title>Resumen Semanal Estándar</title>
         <style>
           body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
@@ -933,7 +933,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             }
             const reportContent = buildWeeklyStandardHtml(chartImage);
             const reportEl = document.createElement('div');
-            reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:1200px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
+            reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:1600px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
             reportEl.innerHTML = reportContent;
             document.body.appendChild(reportEl);
             const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
@@ -992,7 +992,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
        });
 
       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-      const chartSection = chartImage ? `<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;background:#f8fafc;margin-top:14px;"><img src="${chartImage}" style="max-width:100%;object-fit:contain;display:block;margin:0 auto;" /></div>` : '';
+       const chartSection = chartImage ? `<div style="margin-top:20px;"><img src="${chartImage}" style="width:100%;display:block;" /></div>` : '';
           return `<!DOCTYPE html><html><head><title>Resumen Semanal Promedio</title>
            <style>
              body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
@@ -2359,8 +2359,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    </tbody>
                                  </table>
                                </div>
-                                   <div className="flex-1 min-h-[700px] bg-white rounded-xl" ref={standardChartRef}>
-                                   <ResponsiveContainer width="100%" height={700}>
+                                   <div className="flex-1 min-h-[800px] bg-white rounded-xl" ref={standardChartRef}>
+                                   <ResponsiveContainer width="100%" height={800}>
                                     <ComposedChart data={weekDays.map(day => {
                                       const dateStr = format(day, 'yyyy-MM-dd');
                                       const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
@@ -2450,8 +2450,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    </tbody>
                                  </table>
                                </div>
-                                   <div className="flex-1 min-h-[700px] bg-white rounded-xl" ref={promedioChartRef}>
-                                   <ResponsiveContainer width="100%" height={700}>
+                                   <div className="flex-1 min-h-[800px] bg-white rounded-xl" ref={promedioChartRef}>
+                                   <ResponsiveContainer width="100%" height={800}>
                                     <ComposedChart data={weekDays.map(day => {
                                       const dateStr = format(day, 'yyyy-MM-dd');
                                       const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
