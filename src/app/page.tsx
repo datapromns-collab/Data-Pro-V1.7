@@ -1062,7 +1062,7 @@ export default function PlannerPage() {
                       {activeTab === 'paradas-lineas' && isAdmin && (
                         <button
                           onClick={() => setIsPlantaDialogOpen(true)}
-                          className="inline-flex items-center gap-1.5 h-9 pl-4 pr-5 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-[#F59E0B] text-white shadow-sm active:scale-95"
+                          className="inline-flex items-center gap-1.5 h-9 pl-4 pr-5 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-slate-800 text-white shadow-sm hover:bg-slate-900 active:scale-95"
                         >
                           <Plus className="h-3.5 w-3.5" />
                           Nueva Tarea
