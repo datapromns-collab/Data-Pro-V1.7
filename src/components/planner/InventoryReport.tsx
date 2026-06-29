@@ -116,7 +116,7 @@ export function InventoryReport({ section = 'mds', type, data }: InventoryReport
         <tbody>
           {PRODUCT_LIST.map((product, idx) => {
             const productTotal = PRESENTATIONS.reduce((acc, pres) => acc + (finishedProductInventory[product]?.[pres] || 0), 0);
-            if (productTotal === 0 && type === 'available') return null;
+            if (productTotal === 0 && (type === 'available' || type === 'product-finished')) return null;
 
             return (
               <tr key={product} className={`h-10 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
