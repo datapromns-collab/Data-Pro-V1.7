@@ -532,7 +532,11 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
     presentation: string, 
     headerColor: string = "bg-sky-500", 
     footerColor: string = "bg-sky-400"
-  ) => (
+  ) => {
+    const salesProj = section === 'aw' ? salesProjectionAW : salesProjection;
+    const updateSales = section === 'aw' ? updateSalesProjectionAW : updateSalesProjection;
+
+    return (
     <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40 h-full">
       <div className={cn(headerColor, "px-6 py-4 flex items-center justify-between shrink-0")}>
         <div className="flex items-center gap-3">
@@ -563,8 +567,8 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                 <TableCell className="p-1">
                   <Input 
                     type="number"
-                    value={salesProjection[product]?.[presentation] || ''}
-                    onChange={(e) => updateSalesProjection(product, presentation, parseInt(e.target.value) || 0)}
+                    value={salesProj[product]?.[presentation] || ''}
+                    onChange={(e) => updateSales(product, presentation, parseInt(e.target.value) || 0)}
                     className="h-8 text-center font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-lg"
                     placeholder="0"
                   />
@@ -576,14 +580,15 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
             <tr className="h-10">
               <td className="pl-6 text-[10px] uppercase">Total {presentation}</td>
               <td className="text-center text-xs tabular-nums">
-                {products.reduce((acc, p) => acc + (salesProjection[p]?.[presentation] || 0), 0).toLocaleString('es-ES')}
+                {products.reduce((acc, p) => acc + (salesProj[p]?.[presentation] || 0), 0).toLocaleString('es-ES')}
               </td>
             </tr>
           </tfoot>
         </Table>
       </div>
     </Card>
-  );
+    );
+  };
 
   const handleExportPlanProduccionPDF = () => onPrintResumen('mds', 'plan-produccion');
   const handleExportRequisicionPDF = () => onPrintResumen('mds', 'requisicion');
@@ -833,36 +838,36 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                               <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[160px] bg-[#A67B5B]/5">Disponibilidad Global</TableHead>
                             </TableRow>
                           </TableHeader>
-                          <TableBody>
-                            {([...SUGAR_DATA, ...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES, ...SOLIDS_DATA, ...ADDITIVES_DATA, ...PREFORMS_DATA, ...CAPS_DATA, ...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA, ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA]).map((mat) => {
-                              const code = mat.code;
-                              if (!code) return null;
-                              const stockLogistics = logisticsInventory[code] || 0;
-                              const stockPlant = plantInventory[code] || 0;
-                              const totalAvailable = stockLogistics + stockPlant;
-                              if (totalAvailable === 0) return null;
-                              return (
-                                <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
-                                  <TableCell className="pl-8">
-                                    <div className="flex flex-col">
-                                      <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{code}</span>
-                                      <span className="text-[12px] font-black text-slate-700 uppercase leading-none truncate max-w-[300px]">{mat.description}</span>
-                                    </div>
-                                  </TableCell>
-                                  <TableCell className="text-center font-bold text-slate-400 text-[10px] uppercase">
-                                    {mat.unit || 'KG'}
-                                  </TableCell>
-                                  <TableCell className="text-right font-bold text-blue-600 tabular-nums text-sm">
-                                    {stockLogistics.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
-                                  </TableCell>
-                                  <TableCell className="text-right font-bold text-amber-600 tabular-nums text-sm">
-                                    {stockPlant.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
-                                  </TableCell>
-                                  <TableCell className="text-right pr-8 font-black text-[#5C4033] tabular-nums text-[15px] bg-[#A67B5B]/10">
-                                    {totalAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
-                                  </TableCell>
-                                </TableRow>
-                              );
+                           <TableBody>
+                             {([...SUGAR_DATA, ...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES, ...SOLIDS_DATA, ...ADDITIVES_DATA, ...PREFORMS_DATA, ...CAPS_DATA, ...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA, ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA]).map((mat) => {
+                               const code = mat.code;
+                               if (!code) return null;
+                               const stockLogistics = logInv[code] || 0;
+                               const stockPlant = plInv[code] || 0;
+                               const totalAvailable = stockLogistics + stockPlant;
+                               if (totalAvailable === 0) return null;
+                               return (
+                                 <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
+                                   <TableCell className="pl-8">
+                                     <div className="flex flex-col">
+                                       <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{code}</span>
+                                       <span className="text-[12px] font-black text-slate-700 uppercase leading-none truncate max-w-[300px]">{mat.description}</span>
+                                     </div>
+                                   </TableCell>
+                                   <TableCell className="text-center font-bold text-slate-400 text-[10px] uppercase">
+                                     {mat.unit || 'KG'}
+                                   </TableCell>
+                                   <TableCell className="text-right font-bold text-blue-600 tabular-nums text-sm">
+                                     {stockLogistics.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                                   </TableCell>
+                                   <TableCell className="text-right font-bold text-amber-600 tabular-nums text-sm">
+                                     {stockPlant.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                                   </TableCell>
+                                   <TableCell className="text-right pr-8 font-black text-[#5C4033] tabular-nums text-[15px] bg-[#A67B5B]/10">
+                                     {totalAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+                                   </TableCell>
+                                 </TableRow>
+                               );
                             })}
                           </TableBody>
                         </Table>
