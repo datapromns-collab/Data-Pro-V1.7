@@ -66,11 +66,13 @@ import { PermisosModule } from '@/components/planner/PermisosModule';
 import { Toaster } from '@/components/ui/toaster';
 import { SidebarProvider, Sidebar, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { Badge } from '@/components/ui/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { ScheduledTask } from '@/lib/types';
 import { format, getISOWeek, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -78,6 +80,21 @@ import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7", "Línea 8"];
+
+const TIPOS_PARADA = ["MECÁNICO", "ELÉCTRICO", "PROCESO", "CAMBIO DE PRODUCTO", "CAMBIO DE FORMATO", "MANTENIMIENTO PREVENTIVO", "FALLA DE MATERIA PRIMA"];
+const ZONAS = ["Llenado", "Etiquetado", "Empaque", "Preforma", "Soplado", "Lavado CIP", "Almacén", "General"];
+const EQUIPOS = ["Llenadora", "Etiquetadora", "Empacadora", "Sopladora", "CIP", "Tanque CIP", "Transportador", "Montacargas"];
+
+const mockInformesOperacionales = [
+  { id: 1, fecha: "2025-06-26", semana: 26, turno: "TUR", operador: "CARLOS MENDEZ", linea: "Línea 1", equipo: "Llenadora", tipoParada: "MECÁNICO", inicio: "08:15", fin: "09:45", totalMin: 90, zona: "Llenado", falla: "Fuga en válvula de llenado", orden: "OT-2025-1201", observaciones: "Cambio de empaque de sellado. Técnico asignado: R. Gomez" },
+  { id: 2, fecha: "2025-06-26", semana: 26, turno: "TUR", operador: "MARIA LOPEZ", linea: "Línea 2", equipo: "Etiquetadora", tipoParada: "CAMBIO DE PRODUCTO", inicio: "10:00", fin: "10:30", totalMin: 30, zona: "Etiquetado", falla: "Cambio de etiqueta UVA → COLA", orden: "OT-2025-1202", observaciones: "Preparación de cambio de presentación programada" },
+  { id: 3, fecha: "2025-06-26", semana: 26, turno: "NOC", operador: "JUAN PEREZ", linea: "Línea 1", equipo: "Sopladora", tipoParada: "ELÉCTRICO", inicio: "14:20", fin: "15:10", totalMin: 50, zona: "Preforma", falla: "Falla variador de frecuencia", orden: "OT-2025-1203", observaciones: "Revisado por mantenimiento preventivo" },
+  { id: 4, fecha: "2025-06-27", semana: 26, turno: "TUR", operador: "ANA RODRIGUEZ", linea: "Línea 3", equipo: "Empacadora", tipoParada: "MANTENIMIENTO PREVENTIVO", inicio: "07:30", fin: "08:00", totalMin: 30, zona: "Empaque", falla: "N/A - Preventivo", orden: "OT-2025-1204", observaciones: "Lubricación general y revisión de cadenas" },
+  { id: 5, fecha: "2025-06-27", semana: 26, turno: "TUR", operador: "LUIS MARTINEZ", linea: "Línea 4", equipo: "Llenadora", tipoParada: "PROCESO", inicio: "11:45", fin: "12:30", totalMin: 45, zona: "Llenado", falla: "Observada variación en temperatura de producto", orden: "OT-2025-1205", observaciones: "Verificado parámetros CIP de línea" },
+  { id: 6, fecha: "2025-06-27", semana: 26, turno: "NOC", operador: "CARLOS MENDEZ", linea: "Línea 2", equipo: "Transportador", tipoParada: "MECÁNICO", inicio: "16:00", fin: "16:40", totalMin: 40, zona: "General", falla: "Radiada cadena de transporte", orden: "OT-2025-1206", observaciones: "Reemplazo de eslabón número 4" },
+  { id: 7, fecha: "2025-06-28", semana: 26, turno: "TUR", operador: "MARIA LOPEZ", linea: "Línea 5", equipo: "CIP", tipoParada: "CAMBIO DE FORMATO", inicio: "06:00", fin: "07:15", totalMin: 75, zona: "Lavado CIP", falla: "N/A - Cambio de formato", orden: "OT-2025-1207", observaciones: "Ajuste de sensores para envase 600ml" },
+  { id: 8, fecha: "2025-06-28", semana: 26, turno: "TUR", operador: "JUAN PEREZ", linea: "Línea 1", equipo: "Llenadora", tipoParada: "MECÁNICO", inicio: "09:00", fin: "09:20", totalMin: 20, zona: "Llenado", falla: "Pinza de tapado defectuosa", orden: "OT-2025-1208", observaciones: "Reparación en línea, reanudación sin novedad" },
+];
 
 export default function PlannerPage() {
   const { 
@@ -167,6 +184,7 @@ export default function PlannerPage() {
   const [isEntryDialogOpen, setIsEntryDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [emitDate, setEmitDate] = useState('');
+  const [paradaFiltroLinea, setParadaFiltroLinea] = useState('all');
 
   const globalSalesProjection = useMemo(() => {
     const result: Record<string, Record<string, number>> = {};
@@ -1101,9 +1119,74 @@ export default function PlannerPage() {
                         <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                           <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                             {paradasSubTab === 'informes-operacionales' && (
-                              <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest">
-                                <ClipboardList className="h-12 w-12 mb-4 opacity-20" />
-                                Informes Operacionales en Desarrollo
+                              <div className="flex flex-col h-full gap-3">
+                                <div className="flex items-center gap-3 no-print">
+                                  <Select value={paradaFiltroLinea} onValueChange={setParadaFiltroLinea}>
+                                    <SelectTrigger className="h-9 w-44 text-[10px] font-bold uppercase tracking-wider rounded-lg border-slate-200">
+                                      <SelectValue placeholder="Todas las líneas" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="all">Todas las líneas</SelectItem>
+                                      {LINES.map((l) => (
+                                        <SelectItem key={l} value={l}>{l}</SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                    {mockInformesOperacionales.filter((r) => paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea).length} registros
+                                  </span>
+                                </div>
+                                <div className="overflow-auto rounded-lg border border-slate-200">
+                                  <Table>
+                                    <TableHeader>
+                                      <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
+                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Fecha</TableHead>
+                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Sem</TableHead>
+                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Tur</TableHead>
+                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Operador</TableHead>
+                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Línea</TableHead>
+                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Equipo</TableHead>
+                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Tipo de Parada</TableHead>
+                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">I-Parada</TableHead>
+                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">F-Parada</TableHead>
+                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">T-Parada</TableHead>
+                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Zona</TableHead>
+                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Falla</TableHead>
+                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Orden</TableHead>
+                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Observaciones</TableHead>
+                                      </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                      {mockInformesOperacionales
+                                        .filter((r) => paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea)
+                                        .map((row) => (
+                                        <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
+                                          <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fecha}</TableCell>
+                                          <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {row.semana}</TableCell>
+                                          <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{row.turno}</TableCell>
+                                          <TableCell className="px-2 py-2 text-[11px] font-semibold text-slate-800 whitespace-nowrap">{row.operador}</TableCell>
+                                          <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap">{row.linea}</TableCell>
+                                          <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.equipo}</TableCell>
+                                          <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.tipoParada}</TableCell>
+                                          <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.inicio}</TableCell>
+                                          <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.fin}</TableCell>
+                                          <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums">{row.totalMin} min</TableCell>
+                                          <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.zona}</TableCell>
+                                          <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.falla}>{row.falla}</TableCell>
+                                          <TableCell className="px-2 py-2 text-[11px] font-mono text-slate-600 whitespace-nowrap">{row.orden}</TableCell>
+                                          <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[200px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
+                                        </TableRow>
+                                      ))}
+                                      {mockInformesOperacionales.filter((r) => paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea).length === 0 && (
+                                        <TableRow>
+                                          <TableCell colSpan={14} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
+                                            Sin registros para el filtro seleccionado
+                                          </TableCell>
+                                        </TableRow>
+                                      )}
+                                    </TableBody>
+                                  </Table>
+                                </div>
                               </div>
                             )}
                             {paradasSubTab === 'ordenes-trabajo' && (
