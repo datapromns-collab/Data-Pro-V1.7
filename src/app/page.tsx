@@ -87,6 +87,51 @@ const EQUIPOS = ["Llenadora", "Etiquetadora", "Empacadora", "Sopladora", "CIP", 
 
 const mockInformesOperacionales: any[] = [];
 
+const mockOrdenesTrabajo: any[] = [
+  {
+    id: 1,
+    fechaOrden: '2026-06-29',
+    orden: 'WO-2026-001',
+    fechaEmision: '2026-06-29',
+    semana: 26,
+    turno: 'T1',
+    solicitante: 'Juan Carlos',
+    linea: 'Línea 1',
+    maquina: 'Llenadora',
+    fechaParada: '2026-06-29',
+    inicioMtto: '08:00',
+    finMtto: '10:30',
+    tipoParada: 'MECÁNICO',
+    mtto: 'CORRECTIVO',
+    falla: 'Fuga en sellos',
+    mttoEsp: 'MTTO',
+    descripcionFalla: 'Fuga de producto en sellos de la llenadora',
+    descripcionAccion: 'Cambio de sellos y ajuste de presión',
+    observaciones: 'Realizado por equipo de mantenimiento',
+  },
+  {
+    id: 2,
+    fechaOrden: '2026-06-29',
+    orden: 'WO-2026-002',
+    fechaEmision: '2026-06-29',
+    semana: 26,
+    turno: 'T2',
+    solicitante: 'María González',
+    linea: 'Línea 3',
+    maquina: 'Etiquetadora',
+    fechaParada: '2026-06-29',
+    inicioMtto: '14:00',
+    finMtto: '15:00',
+    tipoParada: 'ELÉCTRICO',
+    mtto: 'CORRECTIVO',
+    falla: 'Falla sensor',
+    mttoEsp: 'MTTO',
+    descripcionFalla: 'Sensor de etiqueta no detecta',
+    descripcionAccion: 'Reemplazo de sensor y calibración',
+    observaciones: 'Queda pendiente verificación',
+  },
+];
+
 export default function PlannerPage() {
   const { 
     tasks, 
@@ -175,7 +220,8 @@ export default function PlannerPage() {
   const [isEntryDialogOpen, setIsEntryDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [emitDate, setEmitDate] = useState('');
-  const [paradaFiltroLinea, setParadaFiltroLinea] = useState('all');
+   const [paradaFiltroLinea, setParadaFiltroLinea] = useState('all');
+  const [ordenFiltroLinea, setOrdenFiltroLinea] = useState('all');
 
   const globalSalesProjection = useMemo(() => {
     const result: Record<string, Record<string, number>> = {};
@@ -1180,12 +1226,85 @@ export default function PlannerPage() {
                                 </div>
                               </div>
                             )}
-                            {paradasSubTab === 'ordenes-trabajo' && (
-                              <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest">
-                                <Wrench className="h-12 w-12 mb-4 opacity-20" />
-                                Órdenes de Trabajo en Desarrollo
-                              </div>
-                            )}
+                             {paradasSubTab === 'ordenes-trabajo' && (
+                               <div className="flex flex-col h-full gap-3">
+                                 <div className="flex items-center gap-3 no-print">
+                                   <Select value={ordenFiltroLinea} onValueChange={setOrdenFiltroLinea}>
+                                     <SelectTrigger className="h-9 w-44 text-[10px] font-bold uppercase tracking-wider rounded-lg border-slate-200">
+                                       <SelectValue placeholder="Todas las líneas" />
+                                     </SelectTrigger>
+                                     <SelectContent>
+                                       <SelectItem value="all">Todas las líneas</SelectItem>
+                                       {LINES.map((l) => (
+                                         <SelectItem key={l} value={l}>{l}</SelectItem>
+                                       ))}
+                                     </SelectContent>
+                                   </Select>
+                                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                     {mockOrdenesTrabajo.filter((r) => ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea).length} registros
+                                   </span>
+                                 </div>
+                                 <div className="overflow-auto rounded-lg border border-slate-200">
+                                   <Table>
+                                     <TableHeader>
+                                       <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">F-ORDEN</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">ORDEN</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">F-EMISION</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SEM</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">TUR</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SOLICITANTE</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">LINEA</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MAQUINA</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">F-PARADA</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">I-MTTO</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">F-MTTO</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">PARADA</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">FALLA</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO/ESP</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCION FALLA</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">ACCION MTTO</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">OBSERVACIONES</TableHead>
+                                       </TableRow>
+                                     </TableHeader>
+                                     <TableBody>
+                                       {mockOrdenesTrabajo
+                                         .filter((r) => ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea)
+                                         .map((row) => (
+                                         <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
+                                           <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fechaOrden}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] font-mono font-bold text-slate-900 whitespace-nowrap">{row.orden}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fechaEmision}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {row.semana}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{row.turno}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] font-semibold text-slate-800 whitespace-nowrap">{row.solicitante}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap">{row.linea}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.maquina}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.fechaParada}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.inicioMtto}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.finMtto}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.tipoParada}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.mtto}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[120px] truncate" title={row.falla}>{row.falla}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.mttoEsp}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.descripcionFalla}>{row.descripcionFalla}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.descripcionAccion}>{row.descripcionAccion}</TableCell>
+                                           <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[180px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
+                                         </TableRow>
+                                       ))}
+                                       {mockOrdenesTrabajo.filter((r) => ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea).length === 0 && (
+                                         <TableRow>
+                                           <TableCell colSpan={18} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
+                                             Sin registros para el filtro seleccionado
+                                           </TableCell>
+                                         </TableRow>
+                                       )}
+                                     </TableBody>
+                                   </Table>
+                                 </div>
+                               </div>
+                             )}
                           </div>
                         </div>
                       )}
