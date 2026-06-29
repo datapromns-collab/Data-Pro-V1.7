@@ -30,30 +30,36 @@ import { Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Line, C
 
 const formatNumber = (value: number | string) => Number(value).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 const captureChartSvg = async (chartRef: React.RefObject<HTMLDivElement | null>): Promise<string | null> => {
-  if (!chartRef.current) return null;
-  await new Promise(r => setTimeout(r, 400));
-  const svgEl = chartRef.current.querySelector('svg');
-  if (!svgEl) return null;
-  const serializer = new XMLSerializer();
-  const svgString = serializer.serializeToString(svgEl);
-  const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-  const url = URL.createObjectURL(svgBlob);
-  return new Promise((resolve) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = svgEl.clientWidth || 1000;
-      canvas.height = svgEl.clientHeight || 400;
-      const ctx = canvas.getContext('2d');
-      if (ctx) ctx.fillStyle = '#ffffff';
-      if (ctx) ctx.fillRect(0, 0, canvas.width, canvas.height);
-      if (ctx) ctx.drawImage(img, 0, 0);
-      URL.revokeObjectURL(url);
-      resolve(canvas.toDataURL('image/png'));
-    };
-    img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
-    img.src = url;
-  });
+  if (!chartRef.current) { console.warn('captureChartSvg: chartRef.current es null'); return null; }
+  for (let attempt = 0; attempt < 40; attempt++) {
+    await new Promise(r => setTimeout(r, 150));
+    const svgEl = chartRef.current.querySelector('svg');
+    if (svgEl && svgEl.clientWidth > 0 && svgEl.clientHeight > 0) {
+      try {
+        const serializer = new XMLSerializer();
+        const svgString = serializer.serializeToString(svgEl);
+        const svgBlob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+        const url = URL.createObjectURL(svgBlob);
+        return await new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = svgEl.clientWidth || 1000;
+            canvas.height = svgEl.clientHeight || 600;
+            const ctx = canvas.getContext('2d');
+            if (ctx) { ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+            if (ctx) ctx.drawImage(img, 0, 0);
+            URL.revokeObjectURL(url);
+            resolve(canvas.toDataURL('image/png'));
+          };
+          img.onerror = () => { URL.revokeObjectURL(url); resolve(null); };
+          img.src = url;
+        });
+      } catch (e) { console.warn('captureChartSvg error:', e); }
+    }
+  }
+  console.warn('captureChartSvg: Timeout esperando SVG en', chartRef);
+  return null;
 };
 
 const SABORES_ESTANDAR = [
@@ -2497,7 +2503,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             </div>
           </TabsContent>
         </Tabs>
-        <div style={{ position: 'fixed', bottom: 0, left: 0, opacity: 0, pointerEvents: 'none', width: '1000px', height: '600px', background: '#ffffff' }}>
+        <div style={{ position: 'fixed', top: '-9999px', left: '-9999px', width: '1000px', height: '600px', background: '#ffffff' }}>
       <div ref={hiddenStandardChartRef} style={{ width: '1000px', height: '600px' }}>
         <ResponsiveContainer width="1000" height="600">
           <ComposedChart data={weekDays.map(day => {
