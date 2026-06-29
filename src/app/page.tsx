@@ -1080,9 +1080,11 @@ export default function PlannerPage() {
                                    "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                    paradasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                  )}
-                               >
-                                 {subTab === 'informes-operacionales' ? 'Informes Operacionales' : 'Órdenes de Trabajo'}
-                               </button>
+                                >
+                                  {subTab === 'informes-operacionales' && <ClipboardList className="h-3.5 w-3.5" />}
+                                  {subTab === 'informes-operacionales' ? 'Informes Operacionales' : 'Órdenes de Trabajo'}
+                                  {subTab === 'ordenes-trabajo' && <Wrench className="h-3.5 w-3.5" />}
+                                </button>
                              ))}
                            </div>
                            {isAdmin && (
