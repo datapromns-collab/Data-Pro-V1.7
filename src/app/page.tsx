@@ -1049,7 +1049,7 @@ export default function PlannerPage() {
                 )}
                  {activeModule === 'planta' && hasAccess(user.id, 'planta') && (
                    <>
-                     <div className="flex items-center gap-2 no-print">
+                      <div className="flex items-center gap-2 mb-2 no-print">
                        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
                          {['paradas-lineas', 'planificacion', 'produccion'].map((tab) => (
                            <button
