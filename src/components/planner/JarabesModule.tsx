@@ -32,7 +32,7 @@ const formatNumber = (value: number | string) => Number(value).toLocaleString(un
 const captureChart = async (chartRef: React.RefObject<HTMLDivElement | null>): Promise<string | null> => {
   if (!chartRef.current) return null;
   try {
-    const canvas = await html2canvas(chartRef.current, { scale: 3, useCORS: true, backgroundColor: '#ffffff', logging: false });
+    const canvas = await html2canvas(chartRef.current, { scale: 4, useCORS: true, backgroundColor: '#ffffff', logging: false });
     return canvas.toDataURL('image/png');
   } catch (e) { console.error('Error capturing chart:', e); return null; }
 };
@@ -2345,8 +2345,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    </tbody>
                                  </table>
                                </div>
-                                   <div className="flex-1 min-h-[600px] bg-white rounded-xl" ref={standardChartRef}>
-                                   <ResponsiveContainer width="100%" height={600}>
+                                   <div className="flex-1 min-h-[700px] bg-white rounded-xl" ref={standardChartRef}>
+                                   <ResponsiveContainer width="100%" height={700}>
                                     <ComposedChart data={weekDays.map(day => {
                                       const dateStr = format(day, 'yyyy-MM-dd');
                                       const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
@@ -2436,8 +2436,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    </tbody>
                                  </table>
                                </div>
-                                   <div className="flex-1 min-h-[600px] bg-white rounded-xl" ref={promedioChartRef}>
-                                   <ResponsiveContainer width="100%" height={600}>
+                                   <div className="flex-1 min-h-[700px] bg-white rounded-xl" ref={promedioChartRef}>
+                                   <ResponsiveContainer width="100%" height={700}>
                                     <ComposedChart data={weekDays.map(day => {
                                       const dateStr = format(day, 'yyyy-MM-dd');
                                       const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
