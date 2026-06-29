@@ -85,7 +85,7 @@ const TIPOS_PARADA = ["MECÁNICO", "ELÉCTRICO", "PROCESO", "CAMBIO DE PRODUCTO"
 const ZONAS = ["Llenado", "Etiquetado", "Empaque", "Preforma", "Soplado", "Lavado CIP", "Almacén", "General"];
 const EQUIPOS = ["Llenadora", "Etiquetadora", "Empacadora", "Sopladora", "CIP", "Tanque CIP", "Transportador", "Montacargas"];
 
-const mockInformesOperacionales = [
+const mockInformesOperacionales: any[] = [];
   { id: 1, fecha: "2025-06-26", semana: 26, turno: "TUR", operador: "CARLOS MENDEZ", linea: "Línea 1", equipo: "Llenadora", tipoParada: "MECÁNICO", inicio: "08:15", fin: "09:45", totalMin: 90, zona: "Llenado", falla: "Fuga en válvula de llenado", orden: "OT-2025-1201", observaciones: "Cambio de empaque de sellado. Técnico asignado: R. Gomez" },
   { id: 2, fecha: "2025-06-26", semana: 26, turno: "TUR", operador: "MARIA LOPEZ", linea: "Línea 2", equipo: "Etiquetadora", tipoParada: "CAMBIO DE PRODUCTO", inicio: "10:00", fin: "10:30", totalMin: 30, zona: "Etiquetado", falla: "Cambio de etiqueta UVA → COLA", orden: "OT-2025-1202", observaciones: "Preparación de cambio de presentación programada" },
   { id: 3, fecha: "2025-06-26", semana: 26, turno: "NOC", operador: "JUAN PEREZ", linea: "Línea 1", equipo: "Sopladora", tipoParada: "ELÉCTRICO", inicio: "14:20", fin: "15:10", totalMin: 50, zona: "Preforma", falla: "Falla variador de frecuencia", orden: "OT-2025-1203", observaciones: "Revisado por mantenimiento preventivo" },

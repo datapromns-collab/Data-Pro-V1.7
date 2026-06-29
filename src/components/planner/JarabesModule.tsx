@@ -211,123 +211,63 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
    }, [selectedDate]);
 
   const handleInputChangeEst = (flavor: string, field: 'ubbInicial' | 'ubbPreparado' | 'ubbFinal', value: string) => {
-    setUbbDataEst(prev => {
-      const nextPrev = {
-        ...prev,
-        [flavor]: {
-          ...prev[flavor],
-          [field]: value
-        }
-      };
-      setUbbDataProm(prevProm => ({
-        ...prevProm,
-        [flavor]: {
-          ...prevProm[flavor],
-          [field]: value
-        }
-      }));
-      return nextPrev;
-    });
+    setUbbDataEst(prev => ({
+      ...prev,
+      [flavor]: {
+        ...prev[flavor],
+        [field]: value
+      }
+    }));
   };
 
   const handleInputChangeProm = (flavor: string, field: 'ubbInicial' | 'ubbPreparado' | 'ubbFinal', value: string) => {
-    setUbbDataProm(prev => {
-      const nextPrev = {
-        ...prev,
-        [flavor]: {
-          ...prev[flavor],
-          [field]: value
-        }
-      };
-      setUbbDataEst(prevEst => ({
-        ...prevEst,
-        [flavor]: {
-          ...prevEst[flavor],
-          [field]: value
-        }
-      }));
-      return nextPrev;
-    });
+    setUbbDataProm(prev => ({
+      ...prev,
+      [flavor]: {
+        ...prev[flavor],
+        [field]: value
+      }
+    }));
   };
 
   const handleSugarInputChangeEst = (proveedor: string, field: 'invInicialSacos' | 'recepcionSacos' | 'invFinalSacos', value: string) => {
-    setSugarDataEst(prev => {
-      const nextPrev = {
-        ...prev,
-        [proveedor]: {
-          ...prev[proveedor],
-          [field]: value
-        }
-      };
-      setSugarDataProm(prevProm => ({
-        ...prevProm,
-        [proveedor]: {
-          ...prevProm[proveedor],
-          [field]: value
-        }
-      }));
-      return nextPrev;
-    });
+    setSugarDataEst(prev => ({
+      ...prev,
+      [proveedor]: {
+        ...prev[proveedor],
+        [field]: value
+      }
+    }));
   };
 
   const handleSugarInputChangeProm = (proveedor: string, field: 'invInicialSacos' | 'recepcionSacos' | 'invFinalSacos', value: string) => {
-    setSugarDataProm(prev => {
-      const nextPrev = {
-        ...prev,
-        [proveedor]: {
-          ...prev[proveedor],
-          [field]: value
-        }
-      };
-      setSugarDataEst(prevEst => ({
-        ...prevEst,
-        [proveedor]: {
-          ...prevEst[proveedor],
-          [field]: value
-        }
-      }));
-      return nextPrev;
-    });
+    setSugarDataProm(prev => ({
+      ...prev,
+      [proveedor]: {
+        ...prev[proveedor],
+        [field]: value
+      }
+    }));
   };
 
   const handleTanksInputChangeEst = (item: string, field: 'invInicialSacos' | 'invFinalSacos', value: string) => {
-    setTanksDataEst(prev => {
-      const nextPrev = {
-        ...prev,
-        [item]: {
-          ...prev[item],
-          [field]: value
-        }
-      };
-      setTanksDataProm(prevProm => ({
-        ...prevProm,
-        [item]: {
-          ...prevProm[item],
-          [field]: value
-        }
-      }));
-      return nextPrev;
-    });
+    setTanksDataEst(prev => ({
+      ...prev,
+      [item]: {
+        ...prev[item],
+        [field]: value
+      }
+    }));
   };
 
   const handleTanksInputChangeProm = (item: string, field: 'invInicialSacos' | 'invFinalSacos', value: string) => {
-    setTanksDataProm(prev => {
-      const nextPrev = {
-        ...prev,
-        [item]: {
-          ...prev[item],
-          [field]: value
-        }
-      };
-      setTanksDataEst(prevEst => ({
-        ...prevEst,
-        [item]: {
-          ...prevEst[item],
-          [field]: value
-        }
-      }));
-      return nextPrev;
-    });
+    setTanksDataProm(prev => ({
+      ...prev,
+      [item]: {
+        ...prev[item],
+        [field]: value
+      }
+    }));
   };
 
   const handleClearTable = () => {
@@ -983,7 +923,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
           const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
           const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
           const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
-         const metrics = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+          const metrics = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
          const fisico = metrics.fisico;
          const diferencia = fisico - metrics.sugarStandard;
          const porcentaje = metrics.sugarStandard !== 0 ? (diferencia / metrics.sugarStandard * 100) : 0;
