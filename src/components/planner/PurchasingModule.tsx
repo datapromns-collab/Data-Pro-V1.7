@@ -351,6 +351,8 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
 
   const renderFullInventoryType = (section: 'mds' | 'aw', type: 'logistics' | 'plant') => {
     const isLogistics = type === 'logistics';
+    const logInv = section === 'aw' ? logisticsInventoryAW : logisticsInventory;
+    const plInv = section === 'aw' ? plantInventoryAW : plantInventory;
     const rawMaterialGroups = [
       { label: '1. Azúcar', items: SUGAR_DATA },
       { label: '2. Concentrados', items: [...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES] },
@@ -423,8 +425,8 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
     const availableRawMats = [...SUGAR_DATA, ...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES, ...SOLIDS_DATA, ...ADDITIVES_DATA, ...PREFORMS_DATA, ...CAPS_DATA, ...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA, ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA].map((mat) => {
       const code = mat.code;
       if (!code) return null;
-      const stockLogistics = logInv[code] || 0;
-      const stockPlant = plInv[code] || 0;
+                                const stockLogistics = logisticsInventory[code] || 0;
+                                const stockPlant = plantInventory[code] || 0;
       const totalAvailable = stockLogistics + stockPlant;
       if (totalAvailable === 0) return null;
       return (
@@ -842,8 +844,8 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                              {([...SUGAR_DATA, ...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES, ...SOLIDS_DATA, ...ADDITIVES_DATA, ...PREFORMS_DATA, ...CAPS_DATA, ...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA, ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA]).map((mat) => {
                                const code = mat.code;
                                if (!code) return null;
-                               const stockLogistics = logInv[code] || 0;
-                               const stockPlant = plInv[code] || 0;
+                                const stockLogistics = logisticsInventory[code] || 0;
+                                const stockPlant = plantInventory[code] || 0;
                                const totalAvailable = stockLogistics + stockPlant;
                                if (totalAvailable === 0) return null;
                                return (
