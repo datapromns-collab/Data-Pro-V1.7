@@ -147,9 +147,10 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
    const calculateRequirement = (code: string) => calculateRequirementFromSource(code, salesProjection, customPackagingRecipes, customRecipes);
 
   const renderRequirementTable = (section: 'mds' | 'aw', title: string, icon: React.ReactNode, data: any[], unit: string = 'KG', color: string = "bg-primary", maxDecimals: number = 2) => {
+    const salesProj = section === 'aw' ? salesProjectionAW : salesProjection;
     const tableItems = data.map(item => ({
       ...item,
-      requirement: calculateRequirement(item.code)
+      requirement: calculateRequirementFromSource(item.code, salesProj, customPackagingRecipes, customRecipes)
     })).filter(item => item.requirement > 0);
     
     return (
@@ -202,7 +203,11 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
     );
   };
 
-  const renderProductInventoryTable = (section: 'mds' | 'aw', title: string, products: string[], icon: React.ReactNode) => (
+  const renderProductInventoryTable = (section: 'mds' | 'aw', title: string, products: string[], icon: React.ReactNode) => {
+    const finProdInv = section === 'aw' ? finishedProductInventoryAW : finishedProductInventory;
+    const updateFinProd = section === 'aw' ? updateFinishedProductInventoryAW : updateFinishedProductInventory;
+
+    return (
     <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
       <div className="bg-amber-400/90 px-8 py-5 flex items-center justify-between">
         <div className="flex items-center gap-4 text-white">
@@ -225,7 +230,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
           </TableHeader>
           <TableBody>
             {products.map((product) => {
-              const productTotal = PRESENTATIONS.reduce((acc, pres) => acc + (finishedProductInventory[product]?.[pres] || 0), 0);
+              const productTotal = PRESENTATIONS.reduce((acc, pres) => acc + (finProdInv[product]?.[pres] || 0), 0);
               return (
                 <TableRow key={product} className="hover:bg-amber-50/20 transition-none h-11 border-b border-slate-100">
                   <TableCell className="pl-8 font-black text-slate-700 uppercase text-[10px]">{product}</TableCell>
@@ -233,8 +238,8 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                     <TableCell key={pres} className="p-1">
                       <Input 
                         type="number"
-                        value={finishedProductInventory[product]?.[pres] || ''}
-                        onChange={(e) => updateFinishedProductInventory(product, pres, parseInt(e.target.value) || 0)}
+                        value={finProdInv[product]?.[pres] || ''}
+                        onChange={(e) => updateFinProd(product, pres, parseInt(e.target.value) || 0)}
                         className="h-8 text-center font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-lg"
                         placeholder="0"
                       />
@@ -252,18 +257,19 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
               <td className="pl-8 text-[11px] uppercase">TOTALES POR FORMATO</td>
               {PRESENTATIONS.map(pres => (
                 <td key={pres} className="text-center text-xs tabular-nums">
-                  {products.reduce((acc, p) => acc + (finishedProductInventory[p]?.[pres] || 0), 0).toLocaleString('es-ES')}
+                  {products.reduce((acc, p) => acc + (finProdInv[p]?.[pres] || 0), 0).toLocaleString('es-ES')}
                 </td>
               ))}
               <td className="text-right pr-8 text-sm tabular-nums bg-white/20">
-                {products.reduce((acc, p) => acc + PRESENTATIONS.reduce((sum, pres) => sum + (finishedProductInventory[p]?.[pres] || 0), 0), 0).toLocaleString('es-ES')}
+                {products.reduce((acc, p) => acc + PRESENTATIONS.reduce((sum, pres) => sum + (finProdInv[p]?.[pres] || 0), 0), 0).toLocaleString('es-ES')}
               </td>
             </tr>
           </tfoot>
         </Table>
       </div>
     </Card>
-  );
+    );
+  };
 
   const renderMaterialsInventoryMatrix = (
     section: 'mds' | 'aw',
@@ -272,7 +278,16 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
     materialGroups: { label: string, items: any[] }[],
     type: 'logistics' | 'plant',
     color: string = "bg-[#A67B5B]"
-  ) => (
+  ) => {
+    const isLogistics = type === 'logistics';
+    const inventorySource = section === 'aw'
+      ? (isLogistics ? logisticsInventoryAW : plantInventoryAW)
+      : (isLogistics ? logisticsInventory : plantInventory);
+    const updateInventory = section === 'aw'
+      ? (isLogistics ? updateLogisticsInventoryAW : updatePlantInventoryAW)
+      : (isLogistics ? updateLogisticsInventory : updatePlantInventory);
+
+    return (
     <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
       <div className={cn("px-8 py-5 flex items-center justify-between", color)}>
         <div className="flex items-center gap-4 text-white">
@@ -304,7 +319,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                   <TableRow key={item.code} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100 group">
                     <TableCell className="pl-8">
                       <div className="flex flex-col">
-                        <span className={cn("text-[9px] font-bold font-mono leading-none mb-1", type === 'logistics' ? "text-emerald-600" : "text-sky-600")}>{item.code}</span>
+                        <span className={cn("text-[9px] font-bold font-mono leading-none mb-1", isLogistics ? "text-emerald-600" : "text-sky-600")}>{item.code}</span>
                         <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[400px]">{item.description}</span>
                       </div>
                     </TableCell>
@@ -314,11 +329,10 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                     <TableCell className="p-1 pr-8">
                       <Input 
                         type="number"
-                        value={(type === 'logistics' ? logisticsInventory[item.code] : plantInventory[item.code]) || ''}
+                        value={(inventorySource[item.code] || '')}
                         onChange={(e) => {
                           const val = parseFloat(e.target.value) || 0;
-                          if (type === 'logistics') updateLogisticsInventory(item.code, val);
-                          else updatePlantInventory(item.code, val);
+                          updateInventory(item.code, val);
                         }}
                         className="h-8 text-right font-black text-sm border-none bg-slate-50 focus:bg-white rounded-lg"
                         placeholder="0.00"
@@ -332,7 +346,8 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
         </Table>
       </div>
     </Card>
-  );
+    );
+  };
 
   const renderFullInventoryType = (section: 'mds' | 'aw', type: 'logistics' | 'plant') => {
     const isLogistics = type === 'logistics';
@@ -356,14 +371,14 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
           <Button 
             variant="outline" 
             size="sm" 
-            onClick={() => onPrintInventory('mds', type)}
+            onClick={() => onPrintInventory(section, type)}
             className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
           >
             <FileDown className="h-4 w-4" />
             Exportar Reporte {isLogistics ? 'Logística' : 'Planta'}
           </Button>
         </div>
-        {renderMaterialsInventoryMatrix('mds',
+        {renderMaterialsInventoryMatrix(section,
           `I. Materia Prima - ${isLogistics ? 'Logística' : 'Planta'}`,
           <Droplet className="h-6 w-6" />,
           rawMaterialGroups,
@@ -371,7 +386,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
           isLogistics ? "bg-emerald-600" : "bg-sky-600"
         )}
 
-        {renderMaterialsInventoryMatrix('mds',
+        {renderMaterialsInventoryMatrix(section,
           `II. Material de Empaque - ${isLogistics ? 'Logística' : 'Planta'}`,
           <Package className="h-6 w-6" />,
           packagingGroups,
@@ -383,15 +398,19 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
   };
 
   const renderAvailableInventory = (section: 'mds' | 'aw') => {
+    const finProdInv = section === 'aw' ? finishedProductInventoryAW : finishedProductInventory;
+    const logInv = section === 'aw' ? logisticsInventoryAW : logisticsInventory;
+    const plInv = section === 'aw' ? plantInventoryAW : plantInventory;
+
     const availableFinished = PRODUCT_LIST.map((product) => {
-      const productTotal = PRESENTATIONS.reduce((acc, pres) => acc + (finishedProductInventory[product]?.[pres] || 0), 0);
+      const productTotal = PRESENTATIONS.reduce((acc, pres) => acc + (finProdInv[product]?.[pres] || 0), 0);
       if (productTotal === 0) return null;
       return (
         <TableRow key={product} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100">
           <TableCell className="pl-8 font-black text-slate-700 uppercase text-[11px]">{product}</TableCell>
           {PRESENTATIONS.map(pres => (
             <TableCell key={pres} className="text-right font-bold text-slate-600 tabular-nums">
-              {(finishedProductInventory[product]?.[pres] || 0).toLocaleString('es-ES')}
+              {(finProdInv[product]?.[pres] || 0).toLocaleString('es-ES')}
             </TableCell>
           ))}
           <TableCell className="text-right pr-8 font-black text-[#8B6E58] tabular-nums text-sm bg-[#A67B5B]/10">
@@ -404,8 +423,8 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
     const availableRawMats = [...SUGAR_DATA, ...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES, ...SOLIDS_DATA, ...ADDITIVES_DATA, ...PREFORMS_DATA, ...CAPS_DATA, ...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA, ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA].map((mat) => {
       const code = mat.code;
       if (!code) return null;
-      const stockLogistics = logisticsInventory[code] || 0;
-      const stockPlant = plantInventory[code] || 0;
+      const stockLogistics = logInv[code] || 0;
+      const stockPlant = plInv[code] || 0;
       const totalAvailable = stockLogistics + stockPlant;
       if (totalAvailable === 0) return null;
       return (
@@ -464,11 +483,11 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                   <td className="pl-8 text-[11px] uppercase">TOTALES POR FORMATO</td>
                   {PRESENTATIONS.map(pres => (
                     <td key={pres} className="text-right text-xs tabular-nums">
-                      {PRODUCT_LIST.reduce((acc, p) => acc + (finishedProductInventory[p]?.[pres] || 0), 0).toLocaleString('es-ES')}
+                      {PRODUCT_LIST.reduce((acc, p) => acc + (finProdInv[p]?.[pres] || 0), 0).toLocaleString('es-ES')}
                     </td>
                   ))}
                   <td className="text-right pr-8 text-sm tabular-nums bg-[#A67B5B]">
-                    {PRODUCT_LIST.reduce((acc, p) => acc + PRESENTATIONS.reduce((sum, pres) => sum + (finishedProductInventory[p]?.[pres] || 0), 0), 0).toLocaleString('es-ES')}
+                    {PRODUCT_LIST.reduce((acc, p) => acc + PRESENTATIONS.reduce((sum, pres) => sum + (finProdInv[p]?.[pres] || 0), 0), 0).toLocaleString('es-ES')}
                   </td>
                 </tr>
               </tfoot>

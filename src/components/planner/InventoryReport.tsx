@@ -50,8 +50,9 @@ export function InventoryReport({ section = 'mds', type, data }: InventoryReport
   const isYellow = type === 'product-finished';
   const isGreen = type === 'logistics';
   const isBlue = type === 'plant';
+  const isAvailable = type === 'available';
   
-  const primaryColor = isYellow ? '#F59E0B' : (isGreen ? '#10b981' : (isBlue ? '#0ea5e9' : '#A67B5B'));
+  const primaryColor = isYellow ? '#F59E0B' : isGreen ? '#10b981' : isBlue ? '#0ea5e9' : '#A67B5B';
 
   const handleExportPDF = async () => {
     const report = document.getElementById('report');
@@ -66,7 +67,7 @@ export function InventoryReport({ section = 'mds', type, data }: InventoryReport
     pdf.save('reporte_semanal.pdf');
   };
 
-  const titleColor = isYellow ? '#92400E' : (isGreen ? '#064e3b' : (isBlue ? '#0c4a6e' : '#5C4033'));
+  const titleColor = isYellow ? '#92400E' : isGreen ? '#064e3b' : isBlue ? '#0c4a6e' : '#5C4033';
 
   const titleMap = {
     'product-finished': 'Reporte de Producto Terminado',
