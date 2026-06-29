@@ -94,11 +94,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
   const [isLoaded, setIsLoaded] = useState(false);
   const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState<string>(() => {
-    const saved = localStorage.getItem('jarabes-selectedDate-promedio');
-    return saved || new Date().toISOString().split('T')[0];
-  });
-  const [selectedDateEst, setSelectedDateEst] = useState<string>(() => {
-    const saved = localStorage.getItem('jarabes-selectedDate-estandar');
+    const saved = localStorage.getItem('jarabes-selectedDate-estandar') || localStorage.getItem('jarabes-selectedDate-promedio');
     return saved || new Date().toISOString().split('T')[0];
   });
   const [promKgFactors, setPromKgFactors] = useState<Record<string, number>>(() => {
@@ -119,28 +115,28 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
   const getKey = (type: string, section: string, date: string) => `jarabes-${type}-${section}-${date}`;
 
    useEffect(() => {
-     const loadEstData = () => {
-       const savedUbbEst = loadDayDataWithCarryOver(selectedDateEst, 'ubb', 'estandar');
-       if (Object.keys(savedUbbEst).length) {
-         try { setUbbDataEst(savedUbbEst); }
-         catch (e) { console.error('Error cargando datos UBB estándar', e); }
-       } else { setUbbDataEst({}); }
+      const loadEstData = () => {
+        const savedUbbEst = loadDayDataWithCarryOver(selectedDate, 'ubb', 'estandar');
+        if (Object.keys(savedUbbEst).length) {
+          try { setUbbDataEst(savedUbbEst); }
+          catch (e) { console.error('Error cargando datos UBB estándar', e); }
+        } else { setUbbDataEst({}); }
 
-       const savedSugarEst = loadDayDataWithCarryOver(selectedDateEst, 'sugar', 'estandar');
-       if (Object.keys(savedSugarEst).length) {
-         try { setSugarDataEst(savedSugarEst); }
-         catch (e) { console.error('Error cargando datos azúcar estándar', e); }
-       } else { setSugarDataEst({}); }
+        const savedSugarEst = loadDayDataWithCarryOver(selectedDate, 'sugar', 'estandar');
+        if (Object.keys(savedSugarEst).length) {
+          try { setSugarDataEst(savedSugarEst); }
+          catch (e) { console.error('Error cargando datos azúcar estándar', e); }
+        } else { setSugarDataEst({}); }
 
-       const savedTanksEst = loadDayDataWithCarryOver(selectedDateEst, 'tanks', 'estandar');
-       if (Object.keys(savedTanksEst).length) {
-         try { setTanksDataEst(savedTanksEst); }
-         catch (e) { console.error('Error cargando datos tanques estándar', e); }
-       } else { setTanksDataEst({}); }
-     };
-     loadEstData();
-     setIsLoaded(true);
-   }, [selectedDateEst]);
+        const savedTanksEst = loadDayDataWithCarryOver(selectedDate, 'tanks', 'estandar');
+        if (Object.keys(savedTanksEst).length) {
+          try { setTanksDataEst(savedTanksEst); }
+          catch (e) { console.error('Error cargando datos tanques estándar', e); }
+        } else { setTanksDataEst({}); }
+      };
+      loadEstData();
+      setIsLoaded(true);
+    }, [selectedDate]);
 
    useEffect(() => {
      const loadPromData = () => {
@@ -166,35 +162,35 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
      setIsLoaded(true);
    }, [selectedDate]);
 
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem(getKey('ubb', 'estandar', selectedDateEst), JSON.stringify(ubbDataEst));
-    }
-  }, [ubbDataEst, selectedDateEst, isLoaded]);
+   useEffect(() => {
+     if (isLoaded) {
+       localStorage.setItem(getKey('ubb', 'estandar', selectedDate), JSON.stringify(ubbDataEst));
+     }
+   }, [ubbDataEst, selectedDate, isLoaded]);
 
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem(getKey('ubb', 'promedio', selectedDate), JSON.stringify(ubbDataProm));
-    }
-  }, [ubbDataProm, selectedDate, isLoaded]);
+   useEffect(() => {
+     if (isLoaded) {
+       localStorage.setItem(getKey('ubb', 'promedio', selectedDate), JSON.stringify(ubbDataProm));
+     }
+   }, [ubbDataProm, selectedDate, isLoaded]);
 
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem(getKey('sugar', 'estandar', selectedDateEst), JSON.stringify(sugarDataEst));
-    }
-  }, [sugarDataEst, selectedDateEst, isLoaded]);
+   useEffect(() => {
+     if (isLoaded) {
+       localStorage.setItem(getKey('sugar', 'estandar', selectedDate), JSON.stringify(sugarDataEst));
+     }
+   }, [sugarDataEst, selectedDate, isLoaded]);
 
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem(getKey('sugar', 'promedio', selectedDate), JSON.stringify(sugarDataProm));
-    }
-  }, [sugarDataProm, selectedDate, isLoaded]);
+   useEffect(() => {
+     if (isLoaded) {
+       localStorage.setItem(getKey('sugar', 'promedio', selectedDate), JSON.stringify(sugarDataProm));
+     }
+   }, [sugarDataProm, selectedDate, isLoaded]);
 
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem(getKey('tanks', 'estandar', selectedDateEst), JSON.stringify(tanksDataEst));
-    }
-  }, [tanksDataEst, selectedDateEst, isLoaded]);
+   useEffect(() => {
+     if (isLoaded) {
+       localStorage.setItem(getKey('tanks', 'estandar', selectedDate), JSON.stringify(tanksDataEst));
+     }
+   }, [tanksDataEst, selectedDate, isLoaded]);
 
    useEffect(() => {
      if (isLoaded) {
@@ -210,9 +206,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
      localStorage.setItem('jarabes-selectedDate-promedio', selectedDate);
   }, [selectedDate]);
 
-  useEffect(() => {
-    localStorage.setItem('jarabes-selectedDate-estandar', selectedDateEst);
-  }, [selectedDateEst]);
+   useEffect(() => {
+     localStorage.setItem('jarabes-selectedDate-estandar', selectedDate);
+   }, [selectedDate]);
 
   const handleInputChangeEst = (flavor: string, field: 'ubbInicial' | 'ubbPreparado' | 'ubbFinal', value: string) => {
     setUbbDataEst(prev => {
@@ -379,8 +375,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
       const { sugarRows, tanksRows, sugarStandard, sugarTotals, tanksTotals } = est;
       const fisico = est.fisico;
-      const diferencia = fisico - prom.sugarStandard;
-     const porcentaje = prom.sugarStandard !== 0 ? (diferencia / sugarStandard * 100) : 0;
+      const diferencia = fisico - sugarStandard;
+      const porcentaje = sugarStandard !== 0 ? (diferencia / sugarStandard * 100) : 0;
 
       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
       return `<!DOCTYPE html><html><head><title>Vista Previa Estándar</title>
@@ -845,9 +841,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       const rows: any[] = [];
       weekDays.forEach(day => {
         const dateStr = format(day, 'yyyy-MM-dd');
-        const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
-        const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
-        const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
+        const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
+        const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
+        const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
         const metrics = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
         const fisico = metrics.fisico;
         const diferencia = fisico - metrics.sugarStandard;
@@ -984,9 +980,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
        const rows: any[] = [];
        weekDays.forEach(day => {
          const dateStr = format(day, 'yyyy-MM-dd');
-         const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
-         const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
-         const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
+          const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
+          const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
+          const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
          const metrics = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
          const fisico = metrics.fisico;
          const diferencia = fisico - metrics.sugarStandard;
@@ -1342,9 +1338,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     let tanks: Record<string, { invInicialSacos?: string; invFinalSacos?: string }> = {};
     weekDays.forEach(day => {
       const dateStr = format(day, 'yyyy-MM-dd');
-      const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
-      const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
-      const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
+      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
+      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
+      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
       Object.keys(dUbb).forEach(k => {
         ubb[k] = ubb[k] || {};
         ubb[k]!.ubbInicial = String(parseFloat(ubb[k]!.ubbInicial || '0') + parseFloat(dUbb[k].ubbInicial || '0'));
@@ -1373,9 +1369,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     let tanks: Record<string, { invInicialSacos?: string; invFinalSacos?: string }> = {};
     weekDays.forEach(day => {
       const dateStr = format(day, 'yyyy-MM-dd');
-      const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
-      const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
-      const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
+      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
+      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
+      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
       Object.keys(dUbb).forEach(k => {
         ubb[k] = ubb[k] || {};
         ubb[k]!.ubbInicial = String(parseFloat(ubb[k]!.ubbInicial || '0') + parseFloat(dUbb[k].ubbInicial || '0'));
@@ -1499,12 +1495,12 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                             </div>
                           </div>
                           <div className="flex items-center gap-4 w-full sm:w-auto justify-end">
-                            <Input
-                              type="date"
-                              value={selectedDateEst}
-                              onChange={(e) => setSelectedDateEst(e.target.value)}
-                              className="h-10 rounded-full border-slate-200 focus-visible:ring-primary focus-visible:border-primary text-xs font-semibold"
-                            />
+                             <Input
+                               type="date"
+                               value={selectedDate}
+                               onChange={(e) => setSelectedDate(e.target.value)}
+                               className="h-10 rounded-full border-slate-200 focus-visible:ring-primary focus-visible:border-primary text-xs font-semibold"
+                             />
                             <div className="relative w-full sm:w-64">
                               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-slate-400" />
                               <Input
@@ -2331,9 +2327,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                     <tbody>
                                         {weekDays.map((day, idx) => {
                                           const dateStr = format(day, 'yyyy-MM-dd');
-                                          const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
-                                          const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
-                                          const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
+                                          const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
+                                          const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
+                                          const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
                                           const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
                                            const fisico = m.fisico;
                                           const diferencia = fisico - m.sugarStandard;
@@ -2374,9 +2370,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    <ResponsiveContainer width="100%" height={800}>
                                     <ComposedChart data={weekDays.map(day => {
                                       const dateStr = format(day, 'yyyy-MM-dd');
-                                      const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
-                                      const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
-                                      const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
+                                       const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
+                                       const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
+                                       const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
                                       const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
                                       const fisico = m.fisico;
                                       return { dia: format(day, 'EEE', { locale: es }).toUpperCase(), estandar: m.sugarStandard, fisico, porcentaje: m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0 };
@@ -2422,9 +2418,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                     <tbody>
                                         {weekDays.map((day, idx) => {
                                           const dateStr = format(day, 'yyyy-MM-dd');
-                                          const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
-                                          const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
-                                          const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
+                                           const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
+                                          const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
+                                          const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
                                           const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
                                            const fisico = m.fisico;
                                           const diferencia = fisico - m.sugarStandard;
@@ -2465,9 +2461,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    <ResponsiveContainer width="100%" height={800}>
                                     <ComposedChart data={weekDays.map(day => {
                                       const dateStr = format(day, 'yyyy-MM-dd');
-                                      const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
-                                      const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
-                                      const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
+                                       const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
+                                       const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
+                                       const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
                                       const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
                                       const fisico = m.fisico;
                                       return { dia: format(day, 'EEE', { locale: es }).toUpperCase(), estandar: m.sugarStandard, fisico, porcentaje: m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0 };
