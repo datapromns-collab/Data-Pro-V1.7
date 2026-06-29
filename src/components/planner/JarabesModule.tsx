@@ -919,7 +919,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             }
             const reportContent = buildWeeklyStandardHtml(chartImage);
             const reportEl = document.createElement('div');
-            reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
+            reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:1200px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
             reportEl.innerHTML = reportContent;
             document.body.appendChild(reportEl);
             const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
