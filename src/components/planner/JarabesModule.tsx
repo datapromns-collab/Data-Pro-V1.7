@@ -32,7 +32,7 @@ const formatNumber = (value: number | string) => Number(value).toLocaleString(un
 const captureChart = async (chartRef: React.RefObject<HTMLDivElement | null>): Promise<string | null> => {
   if (!chartRef.current) return null;
   try {
-    const canvas = await html2canvas(chartRef.current, { scale: 8, useCORS: true, backgroundColor: '#ffffff', logging: false });
+    const canvas = await html2canvas(chartRef.current, { scale: 4, useCORS: true, backgroundColor: '#ffffff', logging: false });
     return canvas.toDataURL('image/png');
   } catch (e) { console.error('Error capturing chart:', e); return null; }
 };
@@ -857,10 +857,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       return `<!DOCTYPE html><html><head><title>Resumen Semanal Estándar</title>
         <style>
           body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
-              table { width: 100%; border-collapse: collapse; font-size: 16px; margin-bottom: 14px; }
-          th, td { border: 1px solid #e2e8f0; padding: 4px 8px; }
-          th { background: #dbeafe; color: #1e3a5f; font-weight: bold; text-transform: uppercase; height: 28px; }
-          tfoot td { background: #dbeafe; font-weight: bold; border-top: 2px solid #e2e8f0; height: 32px; }
+           table { width: 100%; border-collapse: collapse; font-size: 20px; margin-bottom: 14px; }
+           th, td { border: 1px solid #e2e8f0; padding: 10px 14px; }
+           th { background: #dbeafe; color: #1e3a5f; font-weight: bold; text-transform: uppercase; height: 44px; }
+           tfoot td { background: #dbeafe; font-weight: bold; border-top: 2px solid #e2e8f0; height: 48px; }
           .header { border-bottom: 2px solid #e2e8f0; padding: 8px 0; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
           .footer { margin-top: 14px; border-top: 1px solid #e2e8f0; padding-top: 8px; display: flex; justify-content: space-between; font-size: 8px; font-weight: 900; color: #94a3b8; text-transform: uppercase; }
           h1 { font-size: 16px; font-weight: 900; margin: 0; line-height: 1.2; text-transform: uppercase; }
@@ -996,10 +996,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
           return `<!DOCTYPE html><html><head><title>Resumen Semanal Promedio</title>
            <style>
              body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
-             table { width: 100%; border-collapse: collapse; font-size: 16px; margin-bottom: 14px; }
-             th, td { border: 1px solid #e2e8f0; padding: 4px 8px; }
-             th { background: #d1fae5; color: #064e3b; font-weight: bold; text-transform: uppercase; height: 28px; }
-             tfoot td { background: #d1fae5; font-weight: bold; border-top: 2px solid #e2e8f0; height: 32px; }
+              table { width: 100%; border-collapse: collapse; font-size: 20px; margin-bottom: 14px; }
+              th, td { border: 1px solid #e2e8f0; padding: 10px 14px; }
+              th { background: #d1fae5; color: #064e3b; font-weight: bold; text-transform: uppercase; height: 44px; }
+              tfoot td { background: #d1fae5; font-weight: bold; border-top: 2px solid #e2e8f0; height: 48px; }
              .header { border-bottom: 2px solid #e2e8f0; padding: 8px 0; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
              .footer { margin-top: 14px; border-top: 1px solid #e2e8f0; padding-top: 8px; display: flex; justify-content: space-between; font-size: 8px; font-weight: 900; color: #94a3b8; text-transform: uppercase; }
              h1 { font-size: 16px; font-weight: 900; margin: 0; line-height: 1.2; text-transform: uppercase; }
