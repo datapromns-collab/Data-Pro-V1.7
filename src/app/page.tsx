@@ -1114,9 +1114,10 @@ export default function PlannerPage() {
                        <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                          <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100" />
                        </div>
-                     )}
-                   </>
-                 )}
+                      )}
+                      </div>
+                    </>
+                  )}
                 {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
                   <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                     <Truck className="h-12 w-12 mb-4 opacity-20" />
