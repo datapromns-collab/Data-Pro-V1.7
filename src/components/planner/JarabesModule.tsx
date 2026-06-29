@@ -240,10 +240,24 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         [field]: value
       }
     }));
+    setSugarDataProm(prev => ({
+      ...prev,
+      [proveedor]: {
+        ...prev[proveedor],
+        [field]: value
+      }
+    }));
   };
 
   const handleSugarInputChangeProm = (proveedor: string, field: 'invInicialSacos' | 'recepcionSacos' | 'invFinalSacos', value: string) => {
     setSugarDataProm(prev => ({
+      ...prev,
+      [proveedor]: {
+        ...prev[proveedor],
+        [field]: value
+      }
+    }));
+    setSugarDataEst(prev => ({
       ...prev,
       [proveedor]: {
         ...prev[proveedor],
@@ -260,10 +274,24 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         [field]: value
       }
     }));
+    setTanksDataProm(prev => ({
+      ...prev,
+      [item]: {
+        ...prev[item],
+        [field]: value
+      }
+    }));
   };
 
   const handleTanksInputChangeProm = (item: string, field: 'invInicialSacos' | 'invFinalSacos', value: string) => {
     setTanksDataProm(prev => ({
+      ...prev,
+      [item]: {
+        ...prev[item],
+        [field]: value
+      }
+    }));
+    setTanksDataEst(prev => ({
       ...prev,
       [item]: {
         ...prev[item],
