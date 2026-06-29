@@ -32,7 +32,6 @@ const formatNumber = (value: number | string) => Number(value).toLocaleString(un
 const captureChart = async (chartRef: React.RefObject<HTMLDivElement | null>): Promise<string | null> => {
   if (!chartRef.current) return null;
   try {
-    await new Promise(r => setTimeout(r, 100));
     const canvas = await html2canvas(chartRef.current, { scale: 1, useCORS: true, backgroundColor: '#ffffff', logging: false });
     return canvas.toDataURL('image/png');
   } catch (e) { console.error('Error capturing chart:', e); return null; }
@@ -82,8 +81,6 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
   const consumptionRef = useRef<HTMLDivElement>(null);
   const standardChartRef = useRef<HTMLDivElement>(null);
   const promedioChartRef = useRef<HTMLDivElement>(null);
-  const hiddenStandardChartRef = useRef<HTMLDivElement>(null);
-  const hiddenPromedioChartRef = useRef<HTMLDivElement>(null);
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
     const [ubbDataEst, setUbbDataEst] = useState<Record<string, { ubbInicial?: string; ubbPreparado?: string; ubbFinal?: string }>>({});
@@ -916,7 +913,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             if (!weekDays.length) return;
             let chartImage = null;
             try {
-              chartImage = await captureChart(hiddenStandardChartRef);
+              chartImage = await captureChart(standardChartRef);
             } catch (e) {
               console.error('Error capturing chart:', e);
             }
@@ -1055,7 +1052,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
               if (!weekDays.length) return;
               let chartImage = null;
               try {
-                chartImage = await captureChart(hiddenPromedioChartRef);
+                chartImage = await captureChart(promedioChartRef);
               } catch (e) {
                 console.error('Error capturing chart:', e);
               }
@@ -2498,50 +2495,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             </div>
           </TabsContent>
         </Tabs>
-        <div style={{ position: 'fixed', top: '-9999px', left: '-9999px', width: '1000px', height: '600px', background: '#ffffff' }}>
-      <div ref={hiddenStandardChartRef} style={{ width: '1000px', height: '600px' }}>
-        <ResponsiveContainer width="1000" height="600">
-          <ComposedChart data={weekDays.map(day => {
-            const dateStr = format(day, 'yyyy-MM-dd');
-            const dUbb = loadDayData(dateStr, 'ubb', 'estandar');
-            const dSugar = loadDayData(dateStr, 'sugar', 'estandar');
-            const dTanks = loadDayData(dateStr, 'tanks', 'estandar');
-            const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-            const fisico = m.fisico;
-            return { dia: format(day, 'EEE', { locale: es }).toUpperCase(), estandar: m.sugarStandard, fisico, porcentaje: m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0 };
-          })} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="dia" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="estandar" fill="#4f81bd" name="Estándar" />
-            <Bar dataKey="fisico" fill="#f59e0b" name="Físico" />
-            <Line type="monotone" dataKey="porcentaje" stroke="#dc2626" name="%" />
-          </ComposedChart>
-        </ResponsiveContainer>
-      </div>
-      <div ref={hiddenPromedioChartRef} style={{ width: '1000px', height: '600px' }}>
-        <ResponsiveContainer width="1000" height="600">
-          <ComposedChart data={weekDays.map(day => {
-            const dateStr = format(day, 'yyyy-MM-dd');
-            const dUbb = loadDayData(dateStr, 'ubb', 'promedio');
-            const dSugar = loadDayData(dateStr, 'sugar', 'promedio');
-            const dTanks = loadDayData(dateStr, 'tanks', 'promedio');
-            const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-            const fisico = m.fisico;
-            return { dia: format(day, 'EEE', { locale: es }).toUpperCase(), estandar: m.sugarStandard, fisico, porcentaje: m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0 };
-          })} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="dia" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="estandar" fill="#4f81bd" name="Estándar" />
-            <Bar dataKey="fisico" fill="#f59e0b" name="Físico" />
-            <Line type="monotone" dataKey="porcentaje" stroke="#dc2626" name="%" />
-          </ComposedChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
+
     </div>
   );
 }
