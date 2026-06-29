@@ -1262,10 +1262,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
    const promKgFactor = getPromKgFactor(selectedDate);
    const prom = useMemo(() => computePlannerMetrics(ubbDataProm, sugarDataProm, tanksDataProm, searchTerm, promKgFactor), [ubbDataProm, sugarDataProm, tanksDataProm, searchTerm, promKgFactor, selectedDate]);
 
-  const weekAnchor = weekStartDate || new Date();
-  const [activeWeekAnchor, setActiveWeekAnchor] = useState<Date>(weekAnchor);
-  useEffect(() => { setActiveWeekAnchor(weekAnchor); }, [weekAnchor.toISOString()]);
-  const weekDays = useMemo(() => getWeekDays(activeWeekAnchor), [activeWeekAnchor]);
+   const weekAnchor = weekStartDate || new Date();
+   const [activeWeekAnchor, setActiveWeekAnchor] = useState<Date>(weekAnchor);
+   const weekDays = useMemo(() => getWeekDays(activeWeekAnchor), [activeWeekAnchor]);
 
   const loadDayData = (date: string, type: string, field: string) => {
     try {
