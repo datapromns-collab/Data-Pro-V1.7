@@ -98,7 +98,11 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
   const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState<string>(new Date().toISOString().split('T')[0]);
   const [selectedDateEst, setSelectedDateEst] = useState<string>(new Date().toISOString().split('T')[0]);
-  const [promKgFactor, setPromKgFactor] = useState<number>(50);
+  const [promKgFactors, setPromKgFactors] = useState<Record<string, number>>({});
+  const getPromKgFactor = (dateStr: string) => promKgFactors[dateStr] ?? 50;
+  const setPromKgFactorForDate = (dateStr: string, value: number) => {
+    setPromKgFactors(prev => ({ ...prev, [dateStr]: value }));
+  };
   const [costoAzucar, setCostoAzucar] = useState<string>('');
   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
 
@@ -1257,8 +1261,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     return { rows: allRows, filteredRows: filtered, totals: sumTotals, sugarStandard, sugarRows, sugarTotals, tanksRows, tanksTotals, ubbInicialSugarKg, ubbFinalSugarKg, fisico };
   };
 
-  const est = useMemo(() => computePlannerMetrics(ubbDataEst, sugarDataEst, tanksDataEst, searchTermEst), [ubbDataEst, sugarDataEst, tanksDataEst, searchTermEst]);
-  const prom = useMemo(() => computePlannerMetrics(ubbDataProm, sugarDataProm, tanksDataProm, searchTerm, promKgFactor), [ubbDataProm, sugarDataProm, tanksDataProm, searchTerm, promKgFactor]);
+   const est = useMemo(() => computePlannerMetrics(ubbDataEst, sugarDataEst, tanksDataEst, searchTermEst), [ubbDataEst, sugarDataEst, tanksDataEst, searchTermEst]);
+   const promKgFactor = getPromKgFactor(selectedDate);
+   const prom = useMemo(() => computePlannerMetrics(ubbDataProm, sugarDataProm, tanksDataProm, searchTerm, promKgFactor), [ubbDataProm, sugarDataProm, tanksDataProm, searchTerm, promKgFactor, selectedDate]);
 
   const weekAnchor = weekStartDate || new Date();
   const [activeWeekAnchor, setActiveWeekAnchor] = useState<Date>(weekAnchor);
@@ -2010,16 +2015,16 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest mt-1">Inventario y Consumo por Proveedor</p>
                            </div>
                          </div>
-                         <div className="flex items-center gap-2">
-                           <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Kilos por saco</label>
-                           <Input
-                             type="number"
-                             value={promKgFactor}
-                             onChange={(e) => setPromKgFactor(Number(e.target.value))}
-                             className="h-8 w-20 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary"
-                             placeholder="50"
-                           />
-                         </div>
+                          <div className="flex items-center gap-2">
+                            <label className="text-[10px] font-black uppercase tracking-widest text-slate-500">Kilos por saco</label>
+                            <Input
+                              type="number"
+                              value={getPromKgFactor(selectedDate)}
+                              onChange={(e) => setPromKgFactorForDate(selectedDate, Number(e.target.value))}
+                              className="h-8 w-20 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary"
+                              placeholder="50"
+                            />
+                          </div>
                        </div>
 
                       {/* Sugar Table Container */}
