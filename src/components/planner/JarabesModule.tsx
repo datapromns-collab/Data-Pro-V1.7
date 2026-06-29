@@ -213,20 +213,22 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
   const handleInputChangeEst = (flavor: string, field: 'ubbInicial' | 'ubbPreparado' | 'ubbFinal', value: string) => {
     setUbbDataEst(prev => ({
       ...prev,
-      [flavor]: {
-        ...prev[flavor],
-        [field]: value
-      }
+      [flavor]: { ...prev[flavor], [field]: value }
+    }));
+    setUbbDataProm(prev => ({
+      ...prev,
+      [flavor]: { ...prev[flavor], [field]: value }
     }));
   };
 
   const handleInputChangeProm = (flavor: string, field: 'ubbInicial' | 'ubbPreparado' | 'ubbFinal', value: string) => {
     setUbbDataProm(prev => ({
       ...prev,
-      [flavor]: {
-        ...prev[flavor],
-        [field]: value
-      }
+      [flavor]: { ...prev[flavor], [field]: value }
+    }));
+    setUbbDataEst(prev => ({
+      ...prev,
+      [flavor]: { ...prev[flavor], [field]: value }
     }));
   };
 
