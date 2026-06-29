@@ -1070,33 +1070,35 @@ export default function PlannerPage() {
                      </div>
                      {activeTab === 'paradas-lineas' && (
                        <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                         <div className="flex items-center justify-between gap-2 mb-4 no-print">
-                           <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                             {['informes-operacionales', 'ordenes-trabajo'].map((subTab) => (
-                               <button
-                                 key={subTab}
-                                 onClick={() => setParadasSubTab(subTab)}
-                                 className={cn(
-                                   "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                   paradasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                 )}
+                          <div className="flex items-center gap-2 mb-2 no-print">
+                            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                              {['informes-operacionales', 'ordenes-trabajo'].map((subTab) => (
+                                <button
+                                  key={subTab}
+                                  onClick={() => setParadasSubTab(subTab)}
+                                  className={cn(
+                                    "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                    paradasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                  )}
                                 >
                                   {subTab === 'informes-operacionales' && <ClipboardList className="h-3.5 w-3.5" />}
                                   {subTab === 'informes-operacionales' ? 'Informes Operacionales' : 'Órdenes de Trabajo'}
                                   {subTab === 'ordenes-trabajo' && <Wrench className="h-3.5 w-3.5" />}
                                 </button>
-                             ))}
-                           </div>
-                           {isAdmin && (
-                             <button
-                               onClick={() => setIsPlantaDialogOpen(true)}
-                               className="inline-flex items-center gap-1.5 h-9 pl-4 pr-5 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-slate-800 text-white shadow-sm hover:bg-slate-900 active:scale-95"
-                             >
-                               <Plus className="h-3.5 w-3.5" />
-                               Nueva Tarea
-                             </button>
-                           )}
-                         </div>
+                              ))}
+                            </div>
+                          </div>
+                          {isAdmin && (
+                            <div className="flex justify-end mb-4 no-print">
+                              <button
+                                onClick={() => setIsPlantaDialogOpen(true)}
+                                className="inline-flex items-center gap-1.5 h-9 pl-4 pr-5 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-slate-800 text-white shadow-sm hover:bg-slate-900 active:scale-95"
+                              >
+                                <Plus className="h-3.5 w-3.5" />
+                                Nueva Tarea
+                              </button>
+                            </div>
+                          )}
                          <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                            {paradasSubTab === 'informes-operacionales' && (
                              <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest">
