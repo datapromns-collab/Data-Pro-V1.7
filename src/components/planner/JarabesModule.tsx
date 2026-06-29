@@ -207,63 +207,123 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
   }, [tanksDataProm, selectedDate, isLoaded]);
 
   const handleInputChangeEst = (flavor: string, field: 'ubbInicial' | 'ubbPreparado' | 'ubbFinal', value: string) => {
-    setUbbDataEst(prev => ({
-      ...prev,
-      [flavor]: {
-        ...prev[flavor],
-        [field]: value
-      }
-    }));
+    setUbbDataEst(prev => {
+      const nextPrev = {
+        ...prev,
+        [flavor]: {
+          ...prev[flavor],
+          [field]: value
+        }
+      };
+      setUbbDataProm(prevProm => ({
+        ...prevProm,
+        [flavor]: {
+          ...prevProm[flavor],
+          [field]: value
+        }
+      }));
+      return nextPrev;
+    });
   };
 
   const handleInputChangeProm = (flavor: string, field: 'ubbInicial' | 'ubbPreparado' | 'ubbFinal', value: string) => {
-    setUbbDataProm(prev => ({
-      ...prev,
-      [flavor]: {
-        ...prev[flavor],
-        [field]: value
-      }
-    }));
+    setUbbDataProm(prev => {
+      const nextPrev = {
+        ...prev,
+        [flavor]: {
+          ...prev[flavor],
+          [field]: value
+        }
+      };
+      setUbbDataEst(prevEst => ({
+        ...prevEst,
+        [flavor]: {
+          ...prevEst[flavor],
+          [field]: value
+        }
+      }));
+      return nextPrev;
+    });
   };
 
   const handleSugarInputChangeEst = (proveedor: string, field: 'invInicialSacos' | 'recepcionSacos' | 'invFinalSacos', value: string) => {
-    setSugarDataEst(prev => ({
-      ...prev,
-      [proveedor]: {
-        ...prev[proveedor],
-        [field]: value
-      }
-    }));
+    setSugarDataEst(prev => {
+      const nextPrev = {
+        ...prev,
+        [proveedor]: {
+          ...prev[proveedor],
+          [field]: value
+        }
+      };
+      setSugarDataProm(prevProm => ({
+        ...prevProm,
+        [proveedor]: {
+          ...prevProm[proveedor],
+          [field]: value
+        }
+      }));
+      return nextPrev;
+    });
   };
 
   const handleSugarInputChangeProm = (proveedor: string, field: 'invInicialSacos' | 'recepcionSacos' | 'invFinalSacos', value: string) => {
-    setSugarDataProm(prev => ({
-      ...prev,
-      [proveedor]: {
-        ...prev[proveedor],
-        [field]: value
-      }
-    }));
+    setSugarDataProm(prev => {
+      const nextPrev = {
+        ...prev,
+        [proveedor]: {
+          ...prev[proveedor],
+          [field]: value
+        }
+      };
+      setSugarDataEst(prevEst => ({
+        ...prevEst,
+        [proveedor]: {
+          ...prevEst[proveedor],
+          [field]: value
+        }
+      }));
+      return nextPrev;
+    });
   };
 
   const handleTanksInputChangeEst = (item: string, field: 'invInicialSacos' | 'invFinalSacos', value: string) => {
-    setTanksDataEst(prev => ({
-      ...prev,
-      [item]: {
-        ...prev[item],
-        [field]: value
-      }
-    }));
+    setTanksDataEst(prev => {
+      const nextPrev = {
+        ...prev,
+        [item]: {
+          ...prev[item],
+          [field]: value
+        }
+      };
+      setTanksDataProm(prevProm => ({
+        ...prevProm,
+        [item]: {
+          ...prevProm[item],
+          [field]: value
+        }
+      }));
+      return nextPrev;
+    });
   };
 
   const handleTanksInputChangeProm = (item: string, field: 'invInicialSacos' | 'invFinalSacos', value: string) => {
-    setTanksDataProm(prev => ({
-      ...prev,
-      [item]: {
-        ...prev[item],
-        [field]: value
-      }
-    }));
+    setTanksDataProm(prev => {
+      const nextPrev = {
+        ...prev,
+        [item]: {
+          ...prev[item],
+          [field]: value
+        }
+      };
+      setTanksDataEst(prevEst => ({
+        ...prevEst,
+        [item]: {
+          ...prevEst[item],
+          [field]: value
+        }
+      }));
+      return nextPrev;
+    });
   };
 
   const handleClearTable = () => {
