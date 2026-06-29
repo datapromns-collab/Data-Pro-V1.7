@@ -32,7 +32,7 @@ const formatNumber = (value: number | string) => Number(value).toLocaleString(un
 const captureChart = async (chartRef: React.RefObject<HTMLDivElement | null>): Promise<string | null> => {
   if (!chartRef.current) return null;
   try {
-    const canvas = await html2canvas(chartRef.current, { scale: 4, useCORS: true, backgroundColor: '#ffffff', logging: false });
+    const canvas = await html2canvas(chartRef.current, { scale: 8, useCORS: true, backgroundColor: '#ffffff', logging: false });
     return canvas.toDataURL('image/png');
   } catch (e) { console.error('Error capturing chart:', e); return null; }
 };
