@@ -856,7 +856,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       });
 
       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-      const chartSection = chartImage ? `<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;background:#f8fafc;margin-top:14px;"><img src="${chartImage}" style="max-height:260px;max-width:100%;object-fit:contain;display:block;margin:0 auto;" /></div>` : '';
+               const chartSection = chartImage ? `<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;background:#f8fafc;margin-top:14px;"><img src="${chartImage}" style="max-width:100%;object-fit:contain;display:block;margin:0 auto;" /></div>` : '';
       return `<!DOCTYPE html><html><head><title>Resumen Semanal Estándar</title>
         <style>
           body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
@@ -995,7 +995,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
        });
 
       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-              const chartSection = chartImage ? `<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;background:#f8fafc;margin-top:14px;"><img src="${chartImage}" style="max-height:260px;max-width:100%;object-fit:contain;display:block;margin:0 auto;" /></div>` : '';
+      const chartSection = chartImage ? `<div style="border:1px solid #e2e8f0;border-radius:8px;padding:10px;background:#f8fafc;margin-top:14px;"><img src="${chartImage}" style="max-width:100%;object-fit:contain;display:block;margin:0 auto;" /></div>` : '';
           return `<!DOCTYPE html><html><head><title>Resumen Semanal Promedio</title>
            <style>
              body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
