@@ -110,11 +110,11 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
   const hiddenPromedioChartRef = useRef<HTMLDivElement>(null);
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
-  const [ubbDataEst, setUbbDataEst] = useState<Record<string, { ubbInicial?: string; ubbPreparado?: string; ubbFinal?: string }>>({});
-  const [ubbDataProm, setUbbDataProm] = useState<Record<string, { ubbInicial?: string; ubbPreparado?: string; ubbFinal?: string }>>({});
-  const [sugarDataEst, setSugarDataEst] = useState<Record<string, { invInicialSacos?: string; recepcionSacos?: string; invFinalSacos?: string }>>({});
-  const [sugarDataProm, setSugarDataProm] = useState<Record<string, { invInicialSacos?: string; recepcionSacos?: string; invFinalSacos?: string }>>({});
-  const [tanksDataEst, setTanksDataEst] = useState<Record<string, { invInicialSacos?: string; invFinalSacos?: string }>>({});
+    const [ubbDataEst, setUbbDataEst] = useState<Record<string, { ubbInicial?: string; ubbPreparado?: string; ubbFinal?: string }>>({});
+    const [ubbDataProm, setUbbDataProm] = useState<Record<string, { ubbInicial?: string; ubbPreparado?: string; ubbFinal?: string }>>({});
+    const [sugarDataEst, setSugarDataEst] = useState<Record<string, { invInicialSacos?: string; recepcionSacos?: string; invFinalSacos?: string }>>({});
+    const [sugarDataProm, setSugarDataProm] = useState<Record<string, { invInicialSacos?: string; recepcionSacos?: string; invFinalSacos?: string }>>({});
+   const [tanksDataEst, setTanksDataEst] = useState<Record<string, { invInicialSacos?: string; invFinalSacos?: string }>>({});
   const [tanksDataProm, setTanksDataProm] = useState<Record<string, { invInicialSacos?: string; invFinalSacos?: string }>>({});
   const [searchTerm, setSearchTerm] = useState('');
   const [searchTermEst, setSearchTermEst] = useState('');
@@ -1284,7 +1284,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
   const est = useMemo(() => computePlannerMetrics(ubbDataEst, sugarDataEst, tanksDataEst, searchTermEst), [ubbDataEst, sugarDataEst, tanksDataEst, searchTermEst]);
   const prom = useMemo(() => computePlannerMetrics(ubbDataProm, sugarDataProm, tanksDataProm, searchTerm, promKgFactor), [ubbDataProm, sugarDataProm, tanksDataProm, searchTerm, promKgFactor]);
 
-  const weekDays = useMemo(() => weekStartDate ? getWeekDays(weekStartDate) : [], [weekStartDate]);
+  const weekAnchor = weekStartDate || new Date();
+  const [activeWeekAnchor, setActiveWeekAnchor] = useState<Date>(weekAnchor);
+  useEffect(() => { setActiveWeekAnchor(weekAnchor); }, [weekAnchor.toISOString()]);
+  const weekDays = useMemo(() => getWeekDays(activeWeekAnchor), [activeWeekAnchor]);
 
   const loadDayData = (date: string, type: string, field: string) => {
     try {
@@ -1438,23 +1441,34 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                     </TabsTrigger>
                   </TabsList>
                 </div>
-                {activeInnerTab === 'resumen' && (
-                  <div className="flex items-center gap-2 pl-4 bg-slate-100/50 border border-slate-200 rounded-full h-11 px-4">
-                    <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">Costo Actual Azúcar</span>
-                    <div className="relative flex items-center bg-white border border-slate-200 rounded-full h-8 px-3 min-w-[100px]">
-                      <span className="text-slate-500 font-bold text-xs mr-0.5">$</span>
-                      <Input
-                        type="number"
-                        value={costoAzucar}
-                        onChange={(e) => setCostoAzucar(e.target.value)}
-                        className="h-auto p-0 border-none text-center font-black text-sm bg-transparent focus-visible:ring-0 w-16"
-                        placeholder="0.00"
-                        step="0.01"
-                        min="0"
-                      />
-                    </div>
-                  </div>
-                )}
+                 {activeInnerTab === 'resumen' && (
+                   <div className="flex items-center gap-2 pl-4">
+                   <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full h-11 px-4 gap-2">
+                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">Semana inicio</span>
+                     <Input
+                       type="date"
+                       value={format(activeWeekAnchor, 'yyyy-MM-dd')}
+                       onChange={(e) => setActiveWeekAnchor(new Date(e.target.value + 'T00:00:00'))}
+                       className="h-auto p-2 rounded-full font-bold text-xs bg-white border border-slate-200 w-[140px]"
+                     />
+                   </div>
+                   <div className="flex items-center gap-2 pl-2 bg-slate-100/50 border border-slate-200 rounded-full h-11 px-4">
+                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">Costo Actual Azúcar</span>
+                     <div className="relative flex items-center bg-white border border-slate-200 rounded-full h-8 px-3 min-w-[100px]">
+                       <span className="text-slate-500 font-bold text-xs mr-0.5">$</span>
+                       <Input
+                         type="number"
+                         value={costoAzucar}
+                         onChange={(e) => setCostoAzucar(e.target.value)}
+                         className="h-auto p-0 border-none text-center font-black text-sm bg-transparent focus-visible:ring-0 w-16"
+                         placeholder="0.00"
+                         step="0.01"
+                         min="0"
+                       />
+                     </div>
+                   </div>
+                   </div>
+                 )}
               </div>
 
 <TabsContent value="estandar" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
