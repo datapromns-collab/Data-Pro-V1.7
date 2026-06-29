@@ -101,7 +101,14 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     const saved = localStorage.getItem('jarabes-selectedDate-estandar');
     return saved || new Date().toISOString().split('T')[0];
   });
-  const [promKgFactors, setPromKgFactors] = useState<Record<string, number>>({});
+  const [promKgFactors, setPromKgFactors] = useState<Record<string, number>>(() => {
+    try {
+      const saved = localStorage.getItem('jarabes-promKgFactors');
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
   const getPromKgFactor = (dateStr: string) => promKgFactors[dateStr] ?? 50;
   const setPromKgFactorForDate = (dateStr: string, value: number) => {
     setPromKgFactors(prev => ({ ...prev, [dateStr]: value }));
@@ -189,14 +196,18 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     }
   }, [tanksDataEst, selectedDateEst, isLoaded]);
 
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem(getKey('tanks', 'promedio', selectedDate), JSON.stringify(tanksDataProm));
-    }
-  }, [tanksDataProm, selectedDate, isLoaded]);
+   useEffect(() => {
+     if (isLoaded) {
+       localStorage.setItem(getKey('tanks', 'promedio', selectedDate), JSON.stringify(tanksDataProm));
+     }
+   }, [tanksDataProm, selectedDate, isLoaded]);
 
-  useEffect(() => {
-    localStorage.setItem('jarabes-selectedDate-promedio', selectedDate);
+    useEffect(() => {
+     localStorage.setItem('jarabes-promKgFactors', JSON.stringify(promKgFactors));
+   }, [promKgFactors]);
+
+   useEffect(() => {
+     localStorage.setItem('jarabes-selectedDate-promedio', selectedDate);
   }, [selectedDate]);
 
   useEffect(() => {
