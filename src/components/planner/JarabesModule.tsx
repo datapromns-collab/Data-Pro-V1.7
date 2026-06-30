@@ -794,8 +794,6 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       });
 
       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-      const chartWidthPx = 423;
-      const chartSection = chartImage ? `<div style="margin-top:20px;width:423px;max-width:423px;"><img src="${chartImage}" style="width:${chartWidthPx}px;display:block;max-width:${chartWidthPx}px;" /></div>` : '';
       return `<!DOCTYPE html><html><head><title>Resumen Semanal Estándar</title>
         <style>
           body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
@@ -851,9 +849,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                <td style="text-align:right;border:1px solid #e2e8f0;padding-right:16px;">${N(rows.reduce((a, b) => a + b.desviacionCosto, 0))}</td>
              </tr>
            </tbody>
-         </table>
-         ${chartSection}
-        <div class="footer">
+          </table>
+         <div class="footer">
           <div>
             <p>EMITIDO: ${new Date().toLocaleString('es')}</p>
           </div>
@@ -942,10 +939,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
           });
         });
 
-       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-        const chartWidthPx = 423;
-       const chartSection = chartImage ? `<div style="margin-top:20px;width:${chartWidthPx}px;max-width:${chartWidthPx}px;"><img src="${chartImage}" style="width:${chartWidthPx}px;display:block;max-width:${chartWidthPx}px;" /></div>` : '';
-           return `<!DOCTYPE html><html><head><title>Resumen Semanal Promedio</title>
+        const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+            return `<!DOCTYPE html><html><head><title>Resumen Semanal Promedio</title>
             <style>
               body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
                table { width: 100%; border-collapse: collapse; font-size: 20px; margin-bottom: 14px; }
@@ -1000,9 +995,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                      <td style="text-align:right;border:1px solid #e2e8f0;padding-right:16px;">${N(rows.reduce((a, b) => a + b.desviacionCosto, 0))}</td>
                    </tr>
                  </tbody>
-               </table>
-               ${chartSection}
-               <div class="footer">
+                </table>
+                <div class="footer">
                  <div>
                    <p>EMITIDO: ${new Date().toLocaleString('es')}</p>
                  </div>
