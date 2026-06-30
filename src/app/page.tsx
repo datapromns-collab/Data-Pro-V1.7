@@ -1290,8 +1290,9 @@ export default function PlannerPage() {
                                      }).length} registros
                                   </span>
                                 </div>
-                                <div className="overflow-auto rounded-lg border border-slate-200">
-                                  <Table>
+                                 <div className="rounded-lg border border-slate-200 overflow-x-auto overflow-y-auto max-h-[60vh]">
+                                   <div className="min-w-[1200px]">
+                                     <Table>
                                     <TableHeader>
                                       <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Fecha</TableHead>
@@ -1346,35 +1347,37 @@ export default function PlannerPage() {
                                           </TableCell>
                                         </TableRow>
                                       )}
-                                    </TableBody>
-                                  </Table>
+                                      </TableBody>
+                                    </Table>
+                                    </div>
+                                  </div>
                                 </div>
-                              </div>
-                            )}
-                             {paradasSubTab === 'ordenes-trabajo' && (
-                               <div className="flex flex-col h-full gap-3">
-                                 <div className="flex items-center gap-3 no-print">
-                                   <Select value={ordenFiltroLinea} onValueChange={setOrdenFiltroLinea}>
-                                     <SelectTrigger className="h-9 w-44 text-[10px] font-bold uppercase tracking-wider rounded-lg border-slate-200">
-                                       <SelectValue placeholder="Todas las líneas" />
-                                     </SelectTrigger>
-                                     <SelectContent>
-                                       <SelectItem value="all">Todas las líneas</SelectItem>
-                                       {LINES.map((l) => (
-                                         <SelectItem key={l} value={l}>{l}</SelectItem>
-                                       ))}
-                                     </SelectContent>
-                                   </Select>
-                                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                      {ordenesTrabajo.filter((r) => {
-                                        const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
-                                        const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
-                                        return matchLine && matchDate;
-                                      }).length} registros
-                                   </span>
-                                 </div>
-                                 <div className="overflow-auto rounded-lg border border-slate-200">
-                                   <Table>
+                              )}
+                              {paradasSubTab === 'ordenes-trabajo' && (
+                                <div className="flex flex-col h-full gap-3">
+                                  <div className="flex items-center gap-3 no-print">
+                                    <Select value={ordenFiltroLinea} onValueChange={setOrdenFiltroLinea}>
+                                      <SelectTrigger className="h-9 w-44 text-[10px] font-bold uppercase tracking-wider rounded-lg border-slate-200">
+                                        <SelectValue placeholder="Todas las líneas" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value="all">Todas las líneas</SelectItem>
+                                        {LINES.map((l) => (
+                                          <SelectItem key={l} value={l}>{l}</SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                       {ordenesTrabajo.filter((r) => {
+                                         const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
+                                         const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
+                                         return matchLine && matchDate;
+                                       }).length} registros
+                                    </span>
+                                  </div>
+                                  <div className="rounded-lg border border-slate-200 overflow-x-auto overflow-y-auto max-h-[60vh]">
+                                    <div className="min-w-[1800px]">
+                                      <Table>
                                      <TableHeader>
                                        <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">F-ORDEN</TableHead>
@@ -1437,15 +1440,16 @@ export default function PlannerPage() {
                                            </TableCell>
                                          </TableRow>
                                        )}
-                                     </TableBody>
-                                   </Table>
+                                      </TableBody>
+                                    </Table>
+                                   </div>
                                  </div>
                                </div>
-                             )}
-                          </div>
-                        </div>
-                      )}
-                     {activeTab !== 'paradas-lineas' && (
+                               )}
+                                </div>
+                             </div>
+                        )}
+                      {activeTab !== 'paradas-lineas' && (
                        <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                          <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100" />
                        </div>
