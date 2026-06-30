@@ -85,8 +85,6 @@ const TIPOS_PARADA = ["MECÁNICO", "ELÉCTRICO", "PROCESO", "CAMBIO DE PRODUCTO"
 const ZONAS = ["Llenado", "Etiquetado", "Empaque", "Preforma", "Soplado", "Lavado CIP", "Almacén", "General"];
 const EQUIPOS = ["Llenadora", "Etiquetadora", "Empacadora", "Sopladora", "CIP", "Tanque CIP", "Transportador", "Montacargas"];
 
-const mockInformesOperacionales: any[] = [];
-
 const mockOrdenesTrabajo: any[] = [
   {
     id: 1,
@@ -206,6 +204,8 @@ export default function PlannerPage() {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPlantaDialogOpen, setIsPlantaDialogOpen] = useState(false);
+  const [informesOperacionales, setInformesOperacionales] = useState<any[]>([]);
+  const [ordenesTrabajo, setOrdenesTrabajo] = useState<any[]>(mockOrdenesTrabajo);
   const [activeModule, setActiveModule] = useState('planning');
   const [activeTab, setActiveTab] = useState('gantt');
   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
@@ -222,6 +222,44 @@ export default function PlannerPage() {
   const [emitDate, setEmitDate] = useState('');
    const [paradaFiltroLinea, setParadaFiltroLinea] = useState('all');
   const [ordenFiltroLinea, setOrdenFiltroLinea] = useState('all');
+
+  const [plantaFormData, setPlantaFormData] = useState({
+    fecha: format(new Date(), 'yyyy-MM-dd'),
+    semana: getISOWeek(new Date()),
+    turno: 'T1',
+    operador: '',
+    linea: 'Línea 1',
+    equipo: '',
+    tipoParada: 'MECÁNICO',
+    inicioParada: '',
+    finParada: '',
+    totalMin: '',
+    zona: 'Llenado',
+    falla: '',
+    orden: '',
+    observaciones: '',
+  });
+
+  const [ordenFormData, setOrdenFormData] = useState({
+    fechaOrden: format(new Date(), 'yyyy-MM-dd'),
+    orden: '',
+    fechaEmision: format(new Date(), 'yyyy-MM-dd'),
+    semana: getISOWeek(new Date()),
+    turno: 'T1',
+    solicitante: '',
+    linea: 'Línea 1',
+    maquina: '',
+    fechaParada: format(new Date(), 'yyyy-MM-dd'),
+    inicioMtto: '',
+    finMtto: '',
+    tipoParada: 'MECÁNICO',
+    mtto: 'CORRECTIVO',
+    falla: '',
+    mttoEsp: 'MTTO',
+    descripcionFalla: '',
+    descripcionAccion: '',
+    observaciones: '',
+  });
 
   const globalSalesProjection = useMemo(() => {
     const result: Record<string, Record<string, number>> = {};
@@ -1170,7 +1208,7 @@ export default function PlannerPage() {
                                     </SelectContent>
                                   </Select>
                                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                    {mockInformesOperacionales.filter((r) => paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea).length} registros
+                                     {informesOperacionales.filter((r) => paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea).length} registros
                                   </span>
                                 </div>
                                 <div className="overflow-auto rounded-lg border border-slate-200">
@@ -1194,9 +1232,9 @@ export default function PlannerPage() {
                                       </TableRow>
                                     </TableHeader>
                                     <TableBody>
-                                      {mockInformesOperacionales
-                                        .filter((r) => paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea)
-                                        .map((row) => (
+                                       {informesOperacionales
+                                         .filter((r) => paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea)
+                                         .map((row) => (
                                         <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
                                           <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fecha}</TableCell>
                                           <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {row.semana}</TableCell>
@@ -1214,7 +1252,7 @@ export default function PlannerPage() {
                                           <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[200px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
                                         </TableRow>
                                       ))}
-                                      {mockInformesOperacionales.filter((r) => paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea).length === 0 && (
+                                       {informesOperacionales.filter((r) => paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea).length === 0 && (
                                         <TableRow>
                                           <TableCell colSpan={14} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
                                             Sin registros para el filtro seleccionado
@@ -1241,7 +1279,7 @@ export default function PlannerPage() {
                                      </SelectContent>
                                    </Select>
                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                     {mockOrdenesTrabajo.filter((r) => ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea).length} registros
+                                     {ordenesTrabajo.filter((r) => ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea).length} registros
                                    </span>
                                  </div>
                                  <div className="overflow-auto rounded-lg border border-slate-200">
@@ -1269,7 +1307,7 @@ export default function PlannerPage() {
                                        </TableRow>
                                      </TableHeader>
                                      <TableBody>
-                                       {mockOrdenesTrabajo
+                                       {ordenesTrabajo
                                          .filter((r) => ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea)
                                          .map((row) => (
                                          <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
@@ -1293,7 +1331,7 @@ export default function PlannerPage() {
                                            <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[180px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
                                          </TableRow>
                                        ))}
-                                       {mockOrdenesTrabajo.filter((r) => ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea).length === 0 && (
+                                       {ordenesTrabajo.filter((r) => ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea).length === 0 && (
                                          <TableRow>
                                            <TableCell colSpan={18} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
                                              Sin registros para el filtro seleccionado
@@ -1539,20 +1577,229 @@ export default function PlannerPage() {
         />
 
         <Dialog open={isPlantaDialogOpen} onOpenChange={setIsPlantaDialogOpen}>
-          <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto">
+          <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
                 <AlertTriangle className="h-5 w-5 text-primary" />
-                Nueva Tarea
+                {paradasSubTab === 'informes-operacionales' ? 'Nuevo Informe Operacional' : 'Nueva Orden de Trabajo'}
               </DialogTitle>
               <DialogDescription>
-                Ventana emergente en blanco para el módulo de planta.
+                Formulario para registrar datos en la subsección activa.
               </DialogDescription>
             </DialogHeader>
-            <div className="py-4" />
+
+            {paradasSubTab === 'informes-operacionales' ? (
+              <div className="grid grid-cols-2 gap-4 py-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fecha</label>
+                  <Input type="date" value={plantaFormData.fecha} onChange={(e) => setPlantaFormData({...plantaFormData, fecha: e.target.value})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Semana</label>
+                  <Input type="number" value={plantaFormData.semana} onChange={(e) => setPlantaFormData({...plantaFormData, semana: parseInt(e.target.value) || 0})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Turno</label>
+                  <select value={plantaFormData.turno} onChange={(e) => setPlantaFormData({...plantaFormData, turno: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                    <option value="T1">T1</option>
+                    <option value="T2">T2</option>
+                    <option value="T3">T3</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Operador</label>
+                  <Input value={plantaFormData.operador} onChange={(e) => setPlantaFormData({...plantaFormData, operador: e.target.value})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Línea</label>
+                  <select value={plantaFormData.linea} onChange={(e) => setPlantaFormData({...plantaFormData, linea: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                    {LINES.map((l) => <option key={l} value={l}>{l}</option>)}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Equipo</label>
+                  <select value={plantaFormData.equipo} onChange={(e) => setPlantaFormData({...plantaFormData, equipo: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                    {EQUIPOS.map((e) => <option key={e} value={e}>{e}</option>)}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Tipo de Parada</label>
+                  <select value={plantaFormData.tipoParada} onChange={(e) => setPlantaFormData({...plantaFormData, tipoParada: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                    {TIPOS_PARADA.map((t) => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Zona</label>
+                  <select value={plantaFormData.zona} onChange={(e) => setPlantaFormData({...plantaFormData, zona: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                    {ZONAS.map((z) => <option key={z} value={z}>{z}</option>)}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Parada</label>
+                  <Input type="time" value={plantaFormData.inicioParada} onChange={(e) => setPlantaFormData({...plantaFormData, inicioParada: e.target.value})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Parada</label>
+                  <Input type="time" value={plantaFormData.finParada} onChange={(e) => setPlantaFormData({...plantaFormData, finParada: e.target.value})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Total (min)</label>
+                  <Input type="number" value={plantaFormData.totalMin} onChange={(e) => setPlantaFormData({...plantaFormData, totalMin: e.target.value})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Orden</label>
+                  <Input value={plantaFormData.orden} onChange={(e) => setPlantaFormData({...plantaFormData, orden: e.target.value})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2 col-span-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Falla</label>
+                  <Input value={plantaFormData.falla} onChange={(e) => setPlantaFormData({...plantaFormData, falla: e.target.value})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2 col-span-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Observaciones</label>
+                  <textarea value={plantaFormData.observaciones} onChange={(e) => setPlantaFormData({...plantaFormData, observaciones: e.target.value})} className="h-20 text-[11px] border border-slate-200 rounded-md px-3 py-2 w-full resize-none" />
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 gap-4 py-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fecha Orden</label>
+                  <Input type="date" value={ordenFormData.fechaOrden} onChange={(e) => setOrdenFormData({...ordenFormData, fechaOrden: e.target.value})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Número Orden</label>
+                  <Input value={ordenFormData.orden} onChange={(e) => setOrdenFormData({...ordenFormData, orden: e.target.value})} className="h-9 text-[11px]" placeholder="WO-2026-XXX" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fecha Emisión</label>
+                  <Input type="date" value={ordenFormData.fechaEmision} onChange={(e) => setOrdenFormData({...ordenFormData, fechaEmision: e.target.value})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Semana</label>
+                  <Input type="number" value={ordenFormData.semana} onChange={(e) => setOrdenFormData({...ordenFormData, semana: parseInt(e.target.value) || 0})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Turno</label>
+                  <select value={ordenFormData.turno} onChange={(e) => setOrdenFormData({...ordenFormData, turno: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                    <option value="T1">T1</option>
+                    <option value="T2">T2</option>
+                    <option value="T3">T3</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Solicitante</label>
+                  <Input value={ordenFormData.solicitante} onChange={(e) => setOrdenFormData({...ordenFormData, solicitante: e.target.value})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Línea</label>
+                  <select value={ordenFormData.linea} onChange={(e) => setOrdenFormData({...ordenFormData, linea: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                    {LINES.map((l) => <option key={l} value={l}>{l}</option>)}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Máquina</label>
+                  <select value={ordenFormData.maquina} onChange={(e) => setOrdenFormData({...ordenFormData, maquina: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                    {EQUIPOS.map((e) => <option key={e} value={e}>{e}</option>)}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fecha Parada</label>
+                  <Input type="date" value={ordenFormData.fechaParada} onChange={(e) => setOrdenFormData({...ordenFormData, fechaParada: e.target.value})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Mantenimiento</label>
+                  <Input type="time" value={ordenFormData.inicioMtto} onChange={(e) => setOrdenFormData({...ordenFormData, inicioMtto: e.target.value})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Mantenimiento</label>
+                  <Input type="time" value={ordenFormData.finMtto} onChange={(e) => setOrdenFormData({...ordenFormData, finMtto: e.target.value})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Tipo de Parada</label>
+                  <select value={ordenFormData.tipoParada} onChange={(e) => setOrdenFormData({...ordenFormData, tipoParada: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                    {TIPOS_PARADA.map((t) => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Tipo Mantenimiento</label>
+                  <select value={ordenFormData.mtto} onChange={(e) => setOrdenFormData({...ordenFormData, mtto: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                    <option value="CORRECTIVO">CORRECTIVO</option>
+                    <option value="PREVENTIVO">PREVENTIVO</option>
+                    <option value="PREDICTIVO">PREDICTIVO</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Falla</label>
+                  <Input value={ordenFormData.falla} onChange={(e) => setOrdenFormData({...ordenFormData, falla: e.target.value})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">MTTO/ESP</label>
+                  <Input value={ordenFormData.mttoEsp} onChange={(e) => setOrdenFormData({...ordenFormData, mttoEsp: e.target.value})} className="h-9 text-[11px]" />
+                </div>
+                <div className="space-y-2 col-span-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Descripción Falla</label>
+                  <textarea value={ordenFormData.descripcionFalla} onChange={(e) => setOrdenFormData({...ordenFormData, descripcionFalla: e.target.value})} className="h-20 text-[11px] border border-slate-200 rounded-md px-3 py-2 w-full resize-none" />
+                </div>
+                <div className="space-y-2 col-span-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Acción Mantenimiento</label>
+                  <textarea value={ordenFormData.descripcionAccion} onChange={(e) => setOrdenFormData({...ordenFormData, descripcionAccion: e.target.value})} className="h-20 text-[11px] border border-slate-200 rounded-md px-3 py-2 w-full resize-none" />
+                </div>
+                <div className="space-y-2 col-span-2">
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Observaciones</label>
+                  <textarea value={ordenFormData.observaciones} onChange={(e) => setOrdenFormData({...ordenFormData, observaciones: e.target.value})} className="h-20 text-[11px] border border-slate-200 rounded-md px-3 py-2 w-full resize-none" />
+                </div>
+              </div>
+            )}
+
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsPlantaDialogOpen(false)} className="rounded-xl">
                 Cancelar
+              </Button>
+              <Button onClick={() => {
+                if (paradasSubTab === 'informes-operacionales') {
+                  setInformesOperacionales([...informesOperacionales, { ...plantaFormData, id: Date.now() }]);
+                  setPlantaFormData({
+                    fecha: format(new Date(), 'yyyy-MM-dd'),
+                    semana: getISOWeek(new Date()),
+                    turno: 'T1',
+                    operador: '',
+                    linea: 'Línea 1',
+                    equipo: '',
+                    tipoParada: 'MECÁNICO',
+                    inicioParada: '',
+                    finParada: '',
+                    totalMin: '',
+                    zona: 'Llenado',
+                    falla: '',
+                    orden: '',
+                    observaciones: '',
+                  });
+                } else {
+                  setOrdenesTrabajo([...ordenesTrabajo, { ...ordenFormData, id: Date.now() }]);
+                  setOrdenFormData({
+                    fechaOrden: format(new Date(), 'yyyy-MM-dd'),
+                    orden: '',
+                    fechaEmision: format(new Date(), 'yyyy-MM-dd'),
+                    semana: getISOWeek(new Date()),
+                    turno: 'T1',
+                    solicitante: '',
+                    linea: 'Línea 1',
+                    maquina: '',
+                    fechaParada: format(new Date(), 'yyyy-MM-dd'),
+                    inicioMtto: '',
+                    finMtto: '',
+                    tipoParada: 'MECÁNICO',
+                    mtto: 'CORRECTIVO',
+                    falla: '',
+                    mttoEsp: 'MTTO',
+                    descripcionFalla: '',
+                    descripcionAccion: '',
+                    observaciones: '',
+                  });
+                }
+                setIsPlantaDialogOpen(false);
+                toast({ title: 'Registro guardado exitosamente' });
+              }} className="rounded-xl bg-slate-800 text-white hover:bg-slate-900">
+                Guardar
               </Button>
             </DialogFooter>
           </DialogContent>
