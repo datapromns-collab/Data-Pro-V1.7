@@ -2285,78 +2285,21 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                   <FileDown className="h-4 w-4" /> PDF
                                 </Button>
                             </div>
-                           {weeklyEst && weekDays.length > 0 ? (
-                             <>
-                               <div className="overflow-x-auto mb-4">
-                                 <table className="min-w-[500px] text-xs">
-                                   <thead>
-                                       <tr className="bg-blue-100">
-                                         <th className="p-2 text-left border border-slate-200">DÍA</th>
-                                         <th className="p-2 text-right border border-slate-200">ESTÁNDAR</th>
-                                         <th className="p-2 text-right border border-slate-200">FÍSICO</th>
-                                         <th className="p-2 text-right border border-slate-200">DIFERENCIA</th>
-                                         <th className="p-2 text-right border border-slate-200">%</th>
-                                         <th className="p-2 text-right border border-slate-200">DESVIACIÓN COSTO</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                         {weekDays.map((day, idx) => {
-                                           const dateStr = format(day, 'yyyy-MM-dd');
-                                           const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
-                                           const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
-                                           const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
-                                           const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                           const fisico = m.fisico;
-                                          const diferencia = fisico - m.sugarStandard;
-                                          const porcentaje = m.sugarStandard !== 0 ? (diferencia / m.sugarStandard * 100) : 0;
-                                          const desviacionCosto = diferencia * (parseFloat(costoAzucar) || 0);
-                                          return (
-                                            <tr key={dateStr} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
-                                              <td className="p-2 border border-slate-200 font-bold uppercase">{format(day, 'EEEE', { locale: es })}</td>
-                                              <td className="p-2 text-right border border-slate-200">{formatNumber(m.sugarStandard)}</td>
-                                              <td className="p-2 text-right border border-slate-200">{formatNumber(fisico)}</td>
-                                              <td className="p-2 text-right border border-slate-200" style={{ color: diferencia <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(diferencia)}</td>
-                                              <td className="p-2 text-right border border-slate-200" style={{ color: porcentaje <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(porcentaje)}%</td>
-                                              <td className="p-2 text-right border border-slate-200" style={{ color: desviacionCosto <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(desviacionCosto)}</td>
-                                            </tr>
-                                         );
-                                       })}
-                                       {weeklyEst && (() => {
-                                          const totalEstandar = weeklyEst.sugarStandard;
-                                           const totalFisico = weeklyEst.fisico;
-                                          const totalDiferencia = totalFisico - totalEstandar;
-                                          const totalPorcentaje = totalEstandar !== 0 ? (totalDiferencia / totalEstandar * 100) : 0;
-                                          const totalDesviacionCosto = totalDiferencia * (parseFloat(costoAzucar) || 0);
-                                          return (
-                                             <tr className="bg-blue-100 font-black text-xs">
-                                              <td className="p-2 border border-slate-200">TOTAL SEMANAL</td>
-                                             <td className="p-2 text-right border border-slate-200">{formatNumber(totalEstandar)}</td>
-                                             <td className="p-2 text-right border border-slate-200">{formatNumber(totalFisico)}</td>
-                                             <td className="p-2 text-right border border-slate-200" style={{ color: totalDiferencia <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(totalDiferencia)}</td>
-                                             <td className="p-2 text-right border border-slate-200" style={{ color: totalPorcentaje <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(totalPorcentaje)}%</td>
-                                             <td className="p-2 text-right border border-slate-200" style={{ color: totalDesviacionCosto <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(totalDesviacionCosto)}</td>
-                                           </tr>
-                                        );
-                                      })()}
-                                   </tbody>
-                                 </table>
-                               </div>
-                                      <div className="flex-1 min-h-[529px] bg-slate-50/40 rounded-2xl border-2 border-slate-200 max-w-[605px] relative" ref={standardChartRef}>
-                                      <div className="flex-1 flex items-end justify-between gap-4 px-6 pb-8 relative">
-                                        <svg className="absolute inset-x-6 top-0 bottom-8 w-[calc(100%-48px)] h-[calc(100%-32px)] z-20 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
-                                          <polyline points={weekDays.map((day, idx) => {
-                                            const dateStr = format(day, 'yyyy-MM-dd');
-                                            const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
-                                            const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
-                                            const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
-                                            const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                            const fisico = m.fisico;
-                                            const maxVal = Math.max(m.sugarStandard, fisico, 1);
-                                            const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-                                            const x = (idx + 0.5) * (100 / weekDays.length);
-                                            const y = 100 - (Math.min(Math.max(pct, 0), 120) / 120) * 100;
-                                            return `${x},${y}`;
-                                          }).join(' ')} fill="none" stroke="#f59e0b" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+                            {weeklyEst && weekDays.length > 0 ? (
+                              <div className="flex flex-col gap-4">
+                                <div className="overflow-x-auto">
+                                  <table className="min-w-[500px] text-xs">
+                                    <thead>
+                                        <tr className="bg-blue-100">
+                                          <th className="p-2 text-left border border-slate-200">DÍA</th>
+                                          <th className="p-2 text-right border border-slate-200">ESTÁNDAR</th>
+                                          <th className="p-2 text-right border border-slate-200">FÍSICO</th>
+                                          <th className="p-2 text-right border border-slate-200">DIFERENCIA</th>
+                                          <th className="p-2 text-right border border-slate-200">%</th>
+                                          <th className="p-2 text-right border border-slate-200">DESVIACIÓN COSTO</th>
+                                       </tr>
+                                     </thead>
+                                     <tbody>
                                           {weekDays.map((day, idx) => {
                                             const dateStr = format(day, 'yyyy-MM-dd');
                                             const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
@@ -2364,52 +2307,111 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                             const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
                                             const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
                                             const fisico = m.fisico;
-                                            const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-                                            const x = (idx + 0.5) * (100 / weekDays.length);
-                                            const y = 100 - (Math.min(Math.max(pct, 0), 120) / 120) * 100;
-                                            return <circle key={dateStr} cx={x} cy={y} r="0.8" fill="#f59e0b" stroke="white" strokeWidth="0.2" vectorEffect="non-scaling-stroke" />;
+                                            const diferencia = fisico - m.sugarStandard;
+                                            const porcentaje = m.sugarStandard !== 0 ? (diferencia / m.sugarStandard * 100) : 0;
+                                            const desviacionCosto = diferencia * (parseFloat(costoAzucar) || 0);
+                                            return (
+                                              <tr key={dateStr} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
+                                                <td className="p-2 border border-slate-200 font-bold uppercase">{format(day, 'EEEE', { locale: es })}</td>
+                                                <td className="p-2 text-right border border-slate-200">{formatNumber(m.sugarStandard)}</td>
+                                                <td className="p-2 text-right border border-slate-200">{formatNumber(fisico)}</td>
+                                                <td className="p-2 text-right border border-slate-200" style={{ color: diferencia <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(diferencia)}</td>
+                                                <td className="p-2 text-right border border-slate-200" style={{ color: porcentaje <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(porcentaje)}%</td>
+                                                <td className="p-2 text-right border border-slate-200" style={{ color: desviacionCosto <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(desviacionCosto)}</td>
+                                              </tr>
+                                            );
                                           })}
-                                        </svg>
-                                        {weekDays.map((day, idx) => {
-                                          const dateStr = format(day, 'yyyy-MM-dd');
-                                          const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
-                                          const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
-                                          const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
-                                          const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                          const fisico = m.fisico;
-                                          return (
-                                            <div key={dateStr} className="flex-1 flex flex-col items-center h-full justify-end relative z-10">
-                                              <div className="w-full flex items-end justify-center gap-2 h-full relative">
-                                                <span className="absolute -top-8 text-[10px] font-black text-slate-800 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-sm whitespace-nowrap z-30">
-                                                  {m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100).toFixed(1) : '0.0'}%
-                                                </span>
-                                                <div className="w-1/3 bg-[#4f81bd] rounded-t-xl shadow-md border-x border-t border-[#4f81bd]/30" style={{ height: `${(m.sugarStandard / weeklyEstMax) * 100}%` }} />
-                                                <div className="w-1/3 bg-[#f59e0b] rounded-t-xl shadow-md border-x border-t border-[#f59e0b]/30" style={{ height: `${(fisico / weeklyEstMax) * 100}%` }} />
-                                              </div>
-                                              <div className="mt-3 pt-2 border-t-2 border-slate-200 w-full text-center">
-                                                <span className="text-[10px] font-black text-slate-700 uppercase">{format(day, 'EEE', { locale: es })}</span>
-                                              </div>
-                                            </div>
-                                          );
-                                        })}
-                                      </div>
-                                      <div className="flex justify-center gap-10 py-3 border-t-2 border-slate-200 bg-white shadow-md rounded-full mx-6 mb-4 shrink-0">
-                                        <div className="flex items-center gap-2">
-                                          <div className="w-5 h-5 bg-[#4f81bd] rounded shadow-sm border border-[#4f81bd]/30" />
-                                          <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Estándar</span>
+                                          {weeklyEst && (() => {
+                                            const totalEstandar = weeklyEst.sugarStandard;
+                                            const totalFisico = weeklyEst.fisico;
+                                            const totalDiferencia = totalFisico - totalEstandar;
+                                            const totalPorcentaje = totalEstandar !== 0 ? (totalDiferencia / totalEstandar * 100) : 0;
+                                            const totalDesviacionCosto = totalDiferencia * (parseFloat(costoAzucar) || 0);
+                                            return (
+                                              <tr className="bg-blue-100 font-black text-xs">
+                                                <td className="p-2 border border-slate-200">TOTAL SEMANAL</td>
+                                                <td className="p-2 text-right border border-slate-200">{formatNumber(totalEstandar)}</td>
+                                                <td className="p-2 text-right border border-slate-200">{formatNumber(totalFisico)}</td>
+                                                <td className="p-2 text-right border border-slate-200" style={{ color: totalDiferencia <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(totalDiferencia)}</td>
+                                                <td className="p-2 text-right border border-slate-200" style={{ color: totalPorcentaje <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(totalPorcentaje)}%</td>
+                                                <td className="p-2 text-right border border-slate-200" style={{ color: totalDesviacionCosto <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(totalDesviacionCosto)}</td>
+                                              </tr>
+                                            );
+                                          })()}
+                                    </tbody>
+                                  </table>
+                                </div>
+                                <div className="bg-slate-50/40 rounded-2xl border-2 border-slate-200 p-4 relative" ref={standardChartRef}>
+                                  <div className="flex items-end justify-between gap-4 px-2 pb-6 pt-8 relative">
+                                    <svg className="absolute inset-x-2 top-0 bottom-6 w-[calc(100%-16px)] h-[calc(100%-24px)] z-20 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                      <polyline points={weekDays.map((day, idx) => {
+                                        const dateStr = format(day, 'yyyy-MM-dd');
+                                        const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
+                                        const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
+                                        const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
+                                        const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+                                        const fisico = m.fisico;
+                                        const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
+                                        const x = (idx + 0.5) * (100 / weekDays.length);
+                                        const y = 100 - (Math.min(Math.max(pct, 0), 120) / 120) * 100;
+                                        return `${x},${y}`;
+                                      }).join(' ')} fill="none" stroke="#f59e0b" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+                                      {weekDays.map((day, idx) => {
+                                        const dateStr = format(day, 'yyyy-MM-dd');
+                                        const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
+                                        const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
+                                        const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
+                                        const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+                                        const fisico = m.fisico;
+                                        const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
+                                        const x = (idx + 0.5) * (100 / weekDays.length);
+                                        const y = 100 - (Math.min(Math.max(pct, 0), 120) / 120) * 100;
+                                        return <circle key={dateStr} cx={x} cy={y} r="0.8" fill="#f59e0b" stroke="white" strokeWidth="0.2" vectorEffect="non-scaling-stroke" />;
+                                      })}
+                                    </svg>
+                                    {weekDays.map((day, idx) => {
+                                      const dateStr = format(day, 'yyyy-MM-dd');
+                                      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
+                                      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
+                                      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
+                                      const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+                                      const fisico = m.fisico;
+                                      const maxVal = Math.max(m.sugarStandard, fisico, 1);
+                                      const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
+                                      return (
+                                        <div key={dateStr} className="flex-1 flex flex-col items-center h-full justify-end relative z-10">
+                                          <div className="w-full flex items-end justify-center gap-2 h-full relative">
+                                            <span className="absolute -top-8 text-[10px] font-black text-slate-800 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-sm whitespace-nowrap z-30">
+                                              {pct.toFixed(1)}%
+                                            </span>
+                                            <div className="w-1/3 bg-[#4f81bd] rounded-t-xl shadow-md border-x border-t border-[#4f81bd]/30" style={{ height: `${(m.sugarStandard / maxVal) * 100}%` }} />
+                                            <div className="w-1/3 bg-[#f59e0b] rounded-t-xl shadow-md border-x border-t border-[#f59e0b]/30" style={{ height: `${(fisico / maxVal) * 100}%` }} />
+                                          </div>
+                                          <div className="mt-3 pt-2 border-t-2 border-slate-200 w-full text-center">
+                                            <span className="text-[10px] font-black text-slate-700 uppercase">{format(day, 'EEE', { locale: es })}</span>
+                                          </div>
                                         </div>
-                                        <div className="flex items-center gap-2">
-                                          <div className="w-5 h-5 bg-[#f59e0b] rounded shadow-sm border border-[#f59e0b]/30" />
-                                          <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Físico</span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                          <div className="w-6 h-1 bg-[#f59e0b] rounded-full shadow-sm" />
-                                          <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">%</span>
-                                        </div>
-                                      </div>
+                                      );
+                                    })}
+                                  </div>
+                                  <div className="flex justify-center gap-10 py-3 border-t-2 border-slate-200 bg-white shadow-md rounded-full mx-6 mb-4 shrink-0">
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-5 h-5 bg-[#4f81bd] rounded shadow-sm border border-[#4f81bd]/30" />
+                                      <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Estándar</span>
                                     </div>
-                             </>
-                           ) : (
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-5 h-5 bg-[#f59e0b] rounded shadow-sm border border-[#f59e0b]/30" />
+                                      <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Físico</span>
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                      <div className="w-6 h-1 bg-[#f59e0b] rounded-full shadow-sm" />
+                                      <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">%</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              )
+                            : (
                               <div className="flex-1 min-h-[300px] border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
                                 Sin datos esta semana
                               </div>
