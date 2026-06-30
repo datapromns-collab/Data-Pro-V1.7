@@ -2261,10 +2261,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                     <tbody>
                                          {weekDays.map((day, idx) => {
                                            const dateStr = format(day, 'yyyy-MM-dd');
-                                           const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
-                                           const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
-                                           const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
-                                           const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
+                                           const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
+                                           const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
+                                           const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
+                                           const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
                                            const fisico = m.fisico;
                                           const diferencia = fisico - m.sugarStandard;
                                           const porcentaje = m.sugarStandard !== 0 ? (diferencia / m.sugarStandard * 100) : 0;
@@ -2300,8 +2300,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    </tbody>
                                  </table>
                                </div>
-                                   <div className="flex-1 min-h-[800px] bg-white rounded-xl" ref={standardChartRef}>
-                                   <ResponsiveContainer width="100%" height={800}>
+                                    <div className="flex-1 min-h-[529px] bg-white rounded-xl max-w-[605px]" ref={standardChartRef}>
+                                    <ResponsiveContainer width="100%" height={529}>
                                     <ComposedChart data={weekDays.map(day => {
                                       const dateStr = format(day, 'yyyy-MM-dd');
                                        const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
@@ -2391,8 +2391,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    </tbody>
                                  </table>
                                </div>
-                                   <div className="flex-1 min-h-[800px] bg-white rounded-xl" ref={promedioChartRef}>
-                                   <ResponsiveContainer width="100%" height={800}>
+                                    <div className="flex-1 min-h-[529px] bg-white rounded-xl max-w-[605px]" ref={promedioChartRef}>
+                                    <ResponsiveContainer width="100%" height={529}>
                                     <ComposedChart data={weekDays.map(day => {
                                       const dateStr = format(day, 'yyyy-MM-dd');
                                        const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
