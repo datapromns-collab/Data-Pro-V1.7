@@ -205,7 +205,7 @@ export default function PlannerPage() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPlantaDialogOpen, setIsPlantaDialogOpen] = useState(false);
   const [informesOperacionales, setInformesOperacionales] = useState<any[]>([]);
-  const [ordenesTrabajo, setOrdenesTrabajo] = useState<any[]>(mockOrdenesTrabajo);
+  const [ordenesTrabajo, setOrdenesTrabajo] = useState<any[]>([]);
   const [activeModule, setActiveModule] = useState('planning');
   const [activeTab, setActiveTab] = useState('gantt');
   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
