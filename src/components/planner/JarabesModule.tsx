@@ -768,7 +768,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       </body></html>`;
   };
 
-    const buildWeeklyStandardHtml = (chartImage?: string | null): string => {
+  const buildWeeklyStandardHtml = (chartImage?: string | null): string => {
       if (!weekDays.length) return '';
       const weekStart = weekStartDate || new Date();
       const weekEnd = addDays(weekStart, 6);
@@ -794,7 +794,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       });
 
       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-      const chartSection = chartImage ? `<div style="margin-top:20px;"><img src="${chartImage}" style="width:100%;display:block;" /></div>` : '';
+      const chartWidthPx = 423;
+      const chartSection = chartImage ? `<div style="margin-top:20px;width:423px;max-width:423px;"><img src="${chartImage}" style="width:${chartWidthPx}px;display:block;max-width:${chartWidthPx}px;" /></div>` : '';
       return `<!DOCTYPE html><html><head><title>Resumen Semanal Estándar</title>
         <style>
           body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
@@ -863,188 +864,206 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       </body></html>`;
     };
 
-         const handleExportWeeklyPDFStandard = async () => {
-          try {
-            if (!weekDays.length) return;
-            let chartImage = null;
-            try {
-              chartImage = await captureChart(standardChartRef);
-            } catch (e) {
-              console.error('Error capturing chart:', e);
-            }
-            const reportContent = buildWeeklyStandardHtml(chartImage);
-            const reportEl = document.createElement('div');
-            reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:1600px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
-            reportEl.innerHTML = reportContent;
-            document.body.appendChild(reportEl);
-            const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-            document.body.removeChild(reportEl);
+          const handleExportWeeklyPDFStandard = async () => {
+           try {
+             if (!weekDays.length) return;
+             let chartImage = null;
+             try {
+               chartImage = await captureChart(standardChartRef);
+             } catch (e) {
+               console.error('Error capturing chart:', e);
+             }
+             const reportContent = buildWeeklyStandardHtml(chartImage);
+             const reportEl = document.createElement('div');
+             reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:1600px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
+             reportEl.innerHTML = reportContent;
+             document.body.appendChild(reportEl);
+             const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+             document.body.removeChild(reportEl);
 
-       const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-       const pageW = pdf.internal.pageSize.getWidth();
-       const pageH = pdf.internal.pageSize.getHeight();
-       const imgW = pageW;
-       const imgH = (canvas.height * imgW) / canvas.width;
+        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        const pageW = pdf.internal.pageSize.getWidth();
+        const pageH = pdf.internal.pageSize.getHeight();
+        const pageMargins = 14.4;
+        const chartTargetWidth = 160; // 16cm
+        const chartTargetHeight = 141; // 14cm (proporción 605:529 ≈ 16:14)
+        const chartAvailableWidth = pageW - pageMargins * 2;
+        const chartFitWidth = Math.min(chartTargetWidth, chartAvailableWidth);
+        const chartFitHeight = chartFitWidth * (chartTargetHeight / chartTargetWidth);
+        const tableImgW = pageW;
+        const tableImgH = (canvas.height * tableImgW) / canvas.width;
 
-       let addedHeight = 0;
-       let remainingH = imgH;
-       let firstPage = true;
-       while (remainingH > 0) {
-         if (!firstPage) pdf.addPage();
-         pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, -addedHeight, imgW, imgH);
-         addedHeight += pageH;
-         remainingH -= pageH;
-         firstPage = false;
-       }
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, tableImgW, tableImgH);
 
-        const pdfBlob = pdf.output('blob');
-        const url = URL.createObjectURL(pdfBlob);
-        window.open(url, '_blank');
-        toast({ title: 'Vista previa', description: 'Abriendo el reporte semanal Estándar en una nueva pestaña.' });
-     } catch (error) {
-       console.error(error);
-       toast({ title: 'Error', description: 'No se pudo generar la vista previa semanal.' });
-     }
-   };
+        if (chartImage) {
+          const chartX = (pageW - chartFitWidth) / 2;
+          const chartY = tableImgH + 10;
+          if (chartY + chartFitHeight > pageH) {
+            const spaceOnCurrentPage = pageH - tableImgH - 10;
+            const secondPageChartTopY = 14.4;
+            pdf.addImage(chartImage, 'PNG', chartX, secondPageChartTopY, chartFitWidth, chartFitHeight);
+          } else {
+            pdf.addImage(chartImage, 'PNG', chartX, chartY, chartFitWidth, chartFitHeight);
+          }
+        }
 
-       const buildWeeklyPromedioHtml = (chartImage?: string | null): string => {
-       if (!weekDays.length) return '';
-       const weekStart = weekStartDate || new Date();
-       const weekEnd = addDays(weekStart, 6);
-       const rows: any[] = [];
-       weekDays.forEach(day => {
-         const dateStr = format(day, 'yyyy-MM-dd');
-          const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
-          const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
-          const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
-          const metrics = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
-         const fisico = metrics.fisico;
-         const diferencia = fisico - metrics.sugarStandard;
-         const porcentaje = metrics.sugarStandard !== 0 ? (diferencia / metrics.sugarStandard * 100) : 0;
-         const desviacionCosto = diferencia * (parseFloat(costoAzucar) || 0);
-         rows.push({
-           dia: format(day, 'EEEE', { locale: es }).toUpperCase(),
-           estandar: metrics.sugarStandard,
-           fisico,
-           diferencia,
-           porcentaje,
-           desviacionCosto
-         });
-       });
+         const pdfBlob = pdf.output('blob');
+         const url = URL.createObjectURL(pdfBlob);
+         window.open(url, '_blank');
+         toast({ title: 'Vista previa', description: 'Abriendo el reporte semanal Estándar en una nueva pestaña.' });
+      } catch (error) {
+        console.error(error);
+        toast({ title: 'Error', description: 'No se pudo generar la vista previa semanal.' });
+      }
+    };
 
-      const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-       const chartSection = chartImage ? `<div style="margin-top:20px;"><img src="${chartImage}" style="width:100%;display:block;" /></div>` : '';
-          return `<!DOCTYPE html><html><head><title>Resumen Semanal Promedio</title>
-           <style>
-             body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
-              table { width: 100%; border-collapse: collapse; font-size: 20px; margin-bottom: 14px; }
-              th, td { border: 1px solid #e2e8f0; padding: 10px 14px; }
-              th { background: #d1fae5; color: #064e3b; font-weight: bold; text-transform: uppercase; height: 44px; }
-              tfoot td { background: #d1fae5; font-weight: bold; border-top: 2px solid #e2e8f0; height: 48px; }
-             .header { border-bottom: 2px solid #e2e8f0; padding: 8px 0; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-             .footer { margin-top: 14px; border-top: 1px solid #e2e8f0; padding-top: 8px; display: flex; justify-content: space-between; font-size: 8px; font-weight: 900; color: #94a3b8; text-transform: uppercase; }
-             h1 { font-size: 16px; font-weight: 900; margin: 0; line-height: 1.2; text-transform: uppercase; }
-             .confidential { font-size: 7px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.15em; text-align: right; margin-bottom: 2px; }
-             .date-large { font-size: 13px; font-weight: 900; color: #1e293b; text-transform: uppercase; text-align: right; line-height: 1.2; }
-           </style>
-         </head><body>
-           <div class="header">
-             <div style="flex:1;">
-               <h1>Resumen de Azúcar Semanal – Promedio</h1>
-             </div>
-              <div style="flex:1;"></div>
+  const buildWeeklyPromedioHtml = (chartImage?: string | null): string => {
+        if (!weekDays.length) return '';
+        const weekStart = weekStartDate || new Date();
+        const weekEnd = addDays(weekStart, 6);
+        const rows: any[] = [];
+        weekDays.forEach(day => {
+          const dateStr = format(day, 'yyyy-MM-dd');
+           const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
+           const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
+           const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
+           const metrics = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
+          const fisico = metrics.fisico;
+          const diferencia = fisico - metrics.sugarStandard;
+          const porcentaje = metrics.sugarStandard !== 0 ? (diferencia / metrics.sugarStandard * 100) : 0;
+          const desviacionCosto = diferencia * (parseFloat(costoAzucar) || 0);
+          rows.push({
+            dia: format(day, 'EEEE', { locale: es }).toUpperCase(),
+            estandar: metrics.sugarStandard,
+            fisico,
+            diferencia,
+            porcentaje,
+            desviacionCosto
+          });
+        });
+
+       const N = (v: number) => v.toLocaleString('es', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+        const chartWidthPx = 423;
+       const chartSection = chartImage ? `<div style="margin-top:20px;width:${chartWidthPx}px;max-width:${chartWidthPx}px;"><img src="${chartImage}" style="width:${chartWidthPx}px;display:block;max-width:${chartWidthPx}px;" /></div>` : '';
+           return `<!DOCTYPE html><html><head><title>Resumen Semanal Promedio</title>
+            <style>
+              body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #1e293b; }
+               table { width: 100%; border-collapse: collapse; font-size: 20px; margin-bottom: 14px; }
+               th, td { border: 1px solid #e2e8f0; padding: 10px 14px; }
+               th { background: #d1fae5; color: #064e3b; font-weight: bold; text-transform: uppercase; height: 44px; }
+               tfoot td { background: #d1fae5; font-weight: bold; border-top: 2px solid #e2e8f0; height: 48px; }
+              .header { border-bottom: 2px solid #e2e8f0; padding: 8px 0; display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+              .footer { margin-top: 14px; border-top: 1px solid #e2e8f0; padding-top: 8px; display: flex; justify-content: space-between; font-size: 8px; font-weight: 900; color: #94a3b8; text-transform: uppercase; }
+              h1 { font-size: 16px; font-weight: 900; margin: 0; line-height: 1.2; text-transform: uppercase; }
+              .confidential { font-size: 7px; font-weight: 900; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.15em; text-align: right; margin-bottom: 2px; }
+              .date-large { font-size: 13px; font-weight: 900; color: #1e293b; text-transform: uppercase; text-align: right; line-height: 1.2; }
+            </style>
+          </head><body>
+            <div class="header">
               <div style="flex:1;">
-               <p class="confidential">Confidencial – Gestión</p>
-               <p class="date-large">${format(weekStart, 'dd/MM/yyyy')} – ${format(weekEnd, 'dd/MM/yyyy')}</p>
-             </div>
-           </div>
-           <table>
-              <thead>
-                <tr>
-                  <th style="width:16%;text-align:left;">DÍA</th>
-                  <th style="width:14%;text-align:right;">ESTÁNDAR</th>
-                  <th style="width:14%;text-align:right;">FÍSICO</th>
-                  <th style="width:14%;text-align:right;">DIFERENCIA</th>
-                  <th style="width:14%;text-align:right;">%</th>
-                  <th style="width:14%;text-align:right;padding-right:16px;">DESVIACIÓN COSTO</th>
-                </tr>
-              </thead>
-              <tbody>
-                ${rows.map((r, i) => `
-                  <tr style="height:28px;background:${i % 2 === 0 ? '#ffffff' : '#f8fafc'};">
-                    <td style="border:1px solid #e2e8f0;font-weight:bold;">${r.dia}</td>
-                    <td style="text-align:right;border:1px solid #e2e8f0;">${N(r.estandar)}</td>
-                    <td style="text-align:right;border:1px solid #e2e8f0;">${N(r.fisico)}</td>
-                    <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border:1px solid #e2e8f0;">${N(r.diferencia)}</td>
-                    <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border:1px solid #e2e8f0;">${N(r.porcentaje)}%</td>
-                    <td style="text-align:right;color:${r.desviacionCosto <= 0 ? '#059669' : '#dc2626'};border:1px solid #e2e8f0;padding-right:16px;">${N(r.desviacionCosto)}</td>
-                  </tr>
-                  `).join('')}
-                   <tr style="background:#d1fae5;font-weight:bold;border-top:2px solid #e2e8f0;height:32px;">
-                    <td style="border:1px solid #e2e8f0;font-weight:bold;text-transform:uppercase;">TOTAL SEMANAL</td>
-                    <td style="text-align:right;border:1px solid #e2e8f0;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
-                    <td style="text-align:right;border:1px solid #e2e8f0;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
-                    <td style="text-align:right;border:1px solid #e2e8f0;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
-                    <td style="text-align:right;border:1px solid #e2e8f0;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
-                    <td style="text-align:right;border:1px solid #e2e8f0;padding-right:16px;">${N(rows.reduce((a, b) => a + b.desviacionCosto, 0))}</td>
-                  </tr>
-                </tbody>
-              </table>
-              ${chartSection}
-              <div class="footer">
-                <div>
-                  <p>EMITIDO: ${new Date().toLocaleString('es')}</p>
-                </div>
-                <div style="text-align:right;">
-                  <p>MULTINACIONAL DE SABORES</p>
-                </div>
+                <h1>Resumen de Azúcar Semanal – Promedio</h1>
               </div>
-           </body></html>`;
-      };
+               <div style="flex:1;"></div>
+               <div style="flex:1;">
+                <p class="confidential">Confidencial – Gestión</p>
+                <p class="date-large">${format(weekStart, 'dd/MM/yyyy')} – ${format(weekEnd, 'dd/MM/yyyy')}</p>
+              </div>
+            </div>
+            <table>
+               <thead>
+                 <tr>
+                   <th style="width:16%;text-align:left;">DÍA</th>
+                   <th style="width:14%;text-align:right;">ESTÁNDAR</th>
+                   <th style="width:14%;text-align:right;">FÍSICO</th>
+                   <th style="width:14%;text-align:right;">DIFERENCIA</th>
+                   <th style="width:14%;text-align:right;">%</th>
+                   <th style="width:14%;text-align:right;padding-right:16px;">DESVIACIÓN COSTO</th>
+                 </tr>
+               </thead>
+               <tbody>
+                 ${rows.map((r, i) => `
+                   <tr style="height:28px;background:${i % 2 === 0 ? '#ffffff' : '#f8fafc'};">
+                     <td style="border:1px solid #e2e8f0;font-weight:bold;">${r.dia}</td>
+                     <td style="text-align:right;border:1px solid #e2e8f0;">${N(r.estandar)}</td>
+                     <td style="text-align:right;border:1px solid #e2e8f0;">${N(r.fisico)}</td>
+                     <td style="text-align:right;color:${r.diferencia <= 0 ? '#059669' : '#dc2626'};border:1px solid #e2e8f0;">${N(r.diferencia)}</td>
+                     <td style="text-align:right;color:${r.porcentaje <= 0 ? '#059669' : '#dc2626'};border:1px solid #e2e8f0;">${N(r.porcentaje)}%</td>
+                     <td style="text-align:right;color:${r.desviacionCosto <= 0 ? '#059669' : '#dc2626'};border:1px solid #e2e8f0;padding-right:16px;">${N(r.desviacionCosto)}</td>
+                   </tr>
+                   `).join('')}
+                    <tr style="background:#d1fae5;font-weight:bold;border-top:2px solid #e2e8f0;height:32px;">
+                     <td style="border:1px solid #e2e8f0;font-weight:bold;text-transform:uppercase;">TOTAL SEMANAL</td>
+                     <td style="text-align:right;border:1px solid #e2e8f0;">${N(rows.reduce((a, b) => a + b.estandar, 0))}</td>
+                     <td style="text-align:right;border:1px solid #e2e8f0;">${N(rows.reduce((a, b) => a + b.fisico, 0))}</td>
+                     <td style="text-align:right;border:1px solid #e2e8f0;">${N(rows.reduce((a, b) => a + b.diferencia, 0))}</td>
+                     <td style="text-align:right;border:1px solid #e2e8f0;">${N(rows.reduce((a, b) => a + b.porcentaje, 0) / (rows.length || 1))}%</td>
+                     <td style="text-align:right;border:1px solid #e2e8f0;padding-right:16px;">${N(rows.reduce((a, b) => a + b.desviacionCosto, 0))}</td>
+                   </tr>
+                 </tbody>
+               </table>
+               ${chartSection}
+               <div class="footer">
+                 <div>
+                   <p>EMITIDO: ${new Date().toLocaleString('es')}</p>
+                 </div>
+                 <div style="text-align:right;">
+                   <p>MULTINACIONAL DE SABORES</p>
+                 </div>
+               </div>
+            </body></html>`;
+       };
 
-           const handleExportWeeklyPDFPromedio = async () => {
-            try {
-              if (!weekDays.length) return;
-              let chartImage = null;
-              try {
-                chartImage = await captureChart(promedioChartRef);
-              } catch (e) {
-                console.error('Error capturing chart:', e);
-              }
-            const reportContent = buildWeeklyPromedioHtml(chartImage);
-          const reportEl = document.createElement('div');
-          reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:780px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
-          reportEl.innerHTML = reportContent;
-          document.body.appendChild(reportEl);
-          const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-          document.body.removeChild(reportEl);
+            const handleExportWeeklyPDFPromedio = async () => {
+             try {
+               if (!weekDays.length) return;
+               let chartImage = null;
+               try {
+                 chartImage = await captureChart(promedioChartRef);
+               } catch (e) {
+                 console.error('Error capturing chart:', e);
+               }
+             const reportContent = buildWeeklyPromedioHtml(chartImage);
+           const reportEl = document.createElement('div');
+           reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:1600px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
+           reportEl.innerHTML = reportContent;
+           document.body.appendChild(reportEl);
+           const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+           document.body.removeChild(reportEl);
 
-       const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-       const pageW = pdf.internal.pageSize.getWidth();
-       const pageH = pdf.internal.pageSize.getHeight();
-       const imgW = pageW;
-       const imgH = (canvas.height * imgW) / canvas.width;
+        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        const pageW = pdf.internal.pageSize.getWidth();
+        const pageH = pdf.internal.pageSize.getHeight();
+        const pageMargins = 14.4;
+        const chartTargetWidth = 160; // 16cm
+        const chartTargetHeight = 141; // 14cm (proporción 605:529 ≈ 16:14)
+        const chartAvailableWidth = pageW - pageMargins * 2;
+        const chartFitWidth = Math.min(chartTargetWidth, chartAvailableWidth);
+        const chartFitHeight = chartFitWidth * (chartTargetHeight / chartTargetWidth);
+        const tableImgW = pageW;
+        const tableImgH = (canvas.height * tableImgW) / canvas.width;
 
-       let addedHeight = 0;
-       let remainingH = imgH;
-       let firstPage = true;
-       while (remainingH > 0) {
-         if (!firstPage) pdf.addPage();
-         pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, -addedHeight, imgW, imgH);
-         addedHeight += pageH;
-         remainingH -= pageH;
-         firstPage = false;
-       }
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, tableImgW, tableImgH);
 
-        const pdfBlob = pdf.output('blob');
-        const url = URL.createObjectURL(pdfBlob);
-        window.open(url, '_blank');
-        toast({ title: 'Vista previa', description: 'Abriendo el reporte semanal Promedio en una nueva pestaña.' });
-     } catch (error) {
-       console.error(error);
-       toast({ title: 'Error', description: 'No se pudo generar la vista previa semanal.' });
-     }
-   };
+        if (chartImage) {
+          const chartX = (pageW - chartFitWidth) / 2;
+          const chartY = tableImgH + 10;
+          if (chartY + chartFitHeight > pageH) {
+            const secondPageChartTopY = 14.4;
+            pdf.addImage(chartImage, 'PNG', chartX, secondPageChartTopY, chartFitWidth, chartFitHeight);
+          } else {
+            pdf.addImage(chartImage, 'PNG', chartX, chartY, chartFitWidth, chartFitHeight);
+          }
+        }
+
+         const pdfBlob = pdf.output('blob');
+         const url = URL.createObjectURL(pdfBlob);
+         window.open(url, '_blank');
+         toast({ title: 'Vista previa', description: 'Abriendo el reporte semanal Promedio en una nueva pestaña.' });
+      } catch (error) {
+        console.error(error);
+        toast({ title: 'Error', description: 'No se pudo generar la vista previa semanal.' });
+      }
+    };
 
 
 
