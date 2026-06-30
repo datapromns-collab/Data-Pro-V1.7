@@ -220,9 +220,10 @@ export default function PlannerPage() {
   const [isEntryDialogOpen, setIsEntryDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [emitDate, setEmitDate] = useState('');
-   const [paradaFiltroLinea, setParadaFiltroLinea] = useState('all');
+  const [paradaFiltroLinea, setParadaFiltroLinea] = useState('all');
   const [ordenFiltroLinea, setOrdenFiltroLinea] = useState('all');
-
+  const [paradaFiltroFecha, setParadaFiltroFecha] = useState('');
+  const [plantaWeekStartDate, setPlantaWeekStartDate] = useState(new Date());
   const [plantaFormData, setPlantaFormData] = useState({
     fecha: format(new Date(), 'yyyy-MM-dd'),
     semana: getISOWeek(new Date()),
@@ -239,7 +240,6 @@ export default function PlannerPage() {
     orden: '',
     observaciones: '',
   });
-
   const [ordenFormData, setOrdenFormData] = useState({
     fechaOrden: format(new Date(), 'yyyy-MM-dd'),
     orden: '',
@@ -260,6 +260,22 @@ export default function PlannerPage() {
     descripcionAccion: '',
     observaciones: '',
   });
+
+  const weeksForYear = useMemo(() => {
+    const weeks: { isoWeek: number; start: Date; end: Date }[] = [];
+    const year = plantaWeekStartDate.getFullYear();
+    const d = new Date(year, 0, 1);
+    let week = 1;
+    while (d.getFullYear() === year) {
+      const start = new Date(d);
+      const end = new Date(d);
+      end.setDate(end.getDate() + 6);
+      weeks.push({ isoWeek: week, start: new Date(start), end: new Date(end) });
+      d.setDate(d.getDate() + 7);
+      week++;
+    }
+    return weeks;
+  }, [plantaWeekStartDate]);
 
   const globalSalesProjection = useMemo(() => {
     const result: Record<string, Record<string, number>> = {};
@@ -1161,25 +1177,84 @@ export default function PlannerPage() {
                          ))}
                        </div>
                       </div>
-                      {activeTab === 'paradas-lineas' && (
-                        <div className="flex items-center justify-between gap-2 mb-4 no-print">
-                          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                            {['informes-operacionales', 'ordenes-trabajo'].map((subTab) => (
-                              <button
-                                key={subTab}
-                                onClick={() => setParadasSubTab(subTab)}
-                                className={cn(
-                                  "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                  paradasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                       {activeTab === 'paradas-lineas' && (
+                         <div className="flex items-center justify-between gap-2 mb-4 no-print">
+                           <div className="flex items-center gap-3">
+                            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                              {['informes-operacionales', 'ordenes-trabajo'].map((subTab) => (
+                                <button
+                                  key={subTab}
+                                  onClick={() => setParadasSubTab(subTab)}
+                                  className={cn(
+                                    "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                    paradasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                  )}
+                                >
+                                  {subTab === 'informes-operacionales' && <ClipboardList className="h-3.5 w-3.5" />}
+                                  {subTab === 'informes-operacionales' ? 'Informes Operacionales' : 'Órdenes de Trabajo'}
+                                  {subTab === 'ordenes-trabajo' && <Wrench className="h-3.5 w-3.5" />}
+                                </button>
+                              ))}
+                            </div>
+                             <div className="flex items-center gap-2">
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                                      <CalendarIcon className="h-3.5 w-3.5 text-primary" />
+                                      Semana {getISOWeek(plantaWeekStartDate)}
+                                    </button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="p-0 w-72" align="start">
+                                    <div className="flex flex-col p-2">
+                                      <div className="flex items-center justify-between mb-2">
+                                        <button onClick={() => {
+                                          const d = new Date(plantaWeekStartDate);
+                                          d.setFullYear(d.getFullYear() - 1);
+                                          setPlantaWeekStartDate(d);
+                                        }} className="h-7 px-2 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50">← Año</button>
+                                        <span className="text-[11px] font-black text-slate-700">{plantaWeekStartDate.getFullYear()}</span>
+                                        <button onClick={() => {
+                                          const d = new Date(plantaWeekStartDate);
+                                          d.setFullYear(d.getFullYear() + 1);
+                                          setPlantaWeekStartDate(d);
+                                        }} className="h-7 px-2 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50">Año →</button>
+                                      </div>
+                                      <div className="max-h-64 overflow-auto rounded-lg border border-slate-200">
+                                        {weeksForYear.map((week) => (
+                                          <button
+                                            key={week.isoWeek}
+                                            onClick={() => setPlantaWeekStartDate(week.start)}
+                                            className={cn(
+                                              "w-full text-left px-3 py-2 text-[11px] border-b border-slate-100 last:border-0 flex items-center justify-between",
+                                              getISOWeek(plantaWeekStartDate) === week.isoWeek ? "bg-slate-800 text-white" : "hover:bg-slate-50"
+                                            )}
+                                          >
+                                            <span className="font-bold">Sem {week.isoWeek}</span>
+                                            <span className="text-[10px] opacity-70">{format(week.start, 'dd MMM', { locale: es })} - {format(week.end, 'dd MMM', { locale: es })}</span>
+                                          </button>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </PopoverContent>
+                                </Popover>
+                                <Input 
+                                  type="date" 
+                                  value={paradaFiltroFecha} 
+                                  onChange={(e) => setParadaFiltroFecha(e.target.value)}
+                                  className="h-9 text-[11px] w-44 bg-white"
+                                  placeholder="Filtrar fecha"
+                                />
+                                {paradaFiltroFecha && (
+                                  <button 
+                                    onClick={() => setParadaFiltroFecha('')}
+                                    className="h-9 px-3 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50"
+                                  >
+                                    Limpiar
+                                  </button>
                                 )}
-                              >
-                                {subTab === 'informes-operacionales' && <ClipboardList className="h-3.5 w-3.5" />}
-                                {subTab === 'informes-operacionales' ? 'Informes Operacionales' : 'Órdenes de Trabajo'}
-                                {subTab === 'ordenes-trabajo' && <Wrench className="h-3.5 w-3.5" />}
-                              </button>
-                            ))}
-                          </div>
-                           {(isAdmin || hasAccess(user.id, 'planta')) && (
+                               </div>
+                           </div>
+                            {(isAdmin || hasAccess(user.id, 'planta')) && (
                              <button
                                onClick={() => setIsPlantaDialogOpen(true)}
                                className="inline-flex items-center gap-1.5 h-9 pl-4 pr-5 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-slate-800 text-white shadow-sm hover:bg-slate-900 active:scale-95"
@@ -1208,7 +1283,11 @@ export default function PlannerPage() {
                                     </SelectContent>
                                   </Select>
                                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                     {informesOperacionales.filter((r) => paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea).length} registros
+                                     {informesOperacionales.filter((r) => {
+                                       const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
+                                       const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
+                                       return matchLine && matchDate;
+                                     }).length} registros
                                   </span>
                                 </div>
                                 <div className="overflow-auto rounded-lg border border-slate-200">
@@ -1233,7 +1312,11 @@ export default function PlannerPage() {
                                     </TableHeader>
                                     <TableBody>
                                        {informesOperacionales
-                                         .filter((r) => paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea)
+                                         .filter((r) => {
+                                           const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
+                                           const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
+                                           return matchLine && matchDate;
+                                         })
                                          .map((row) => (
                                         <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
                                           <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fecha}</TableCell>
@@ -1252,7 +1335,11 @@ export default function PlannerPage() {
                                           <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[200px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
                                         </TableRow>
                                       ))}
-                                       {informesOperacionales.filter((r) => paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea).length === 0 && (
+                                        {informesOperacionales.filter((r) => {
+                                          const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
+                                          const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
+                                          return matchLine && matchDate;
+                                        }).length === 0 && (
                                         <TableRow>
                                           <TableCell colSpan={14} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
                                             Sin registros para el filtro seleccionado
@@ -1279,7 +1366,11 @@ export default function PlannerPage() {
                                      </SelectContent>
                                    </Select>
                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                     {ordenesTrabajo.filter((r) => ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea).length} registros
+                                      {ordenesTrabajo.filter((r) => {
+                                        const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
+                                        const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
+                                        return matchLine && matchDate;
+                                      }).length} registros
                                    </span>
                                  </div>
                                  <div className="overflow-auto rounded-lg border border-slate-200">
@@ -1306,10 +1397,14 @@ export default function PlannerPage() {
                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">OBSERVACIONES</TableHead>
                                        </TableRow>
                                      </TableHeader>
-                                     <TableBody>
-                                       {ordenesTrabajo
-                                         .filter((r) => ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea)
-                                         .map((row) => (
+                                      <TableBody>
+                                        {ordenesTrabajo
+                                          .filter((r) => {
+                                            const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
+                                            const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
+                                            return matchLine && matchDate;
+                                          })
+                                          .map((row) => (
                                          <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
                                            <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fechaOrden}</TableCell>
                                            <TableCell className="px-2 py-2 text-[11px] font-mono font-bold text-slate-900 whitespace-nowrap">{row.orden}</TableCell>
@@ -1331,7 +1426,11 @@ export default function PlannerPage() {
                                            <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[180px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
                                          </TableRow>
                                        ))}
-                                       {ordenesTrabajo.filter((r) => ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea).length === 0 && (
+                                        {ordenesTrabajo.filter((r) => {
+                                          const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
+                                          const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
+                                          return matchLine && matchDate;
+                                        }).length === 0 && (
                                          <TableRow>
                                            <TableCell colSpan={18} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
                                              Sin registros para el filtro seleccionado
