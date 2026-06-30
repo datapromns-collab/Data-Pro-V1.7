@@ -1340,6 +1340,34 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     return computePlannerMetrics(ubb, sugar, tanks, '', 50);
   }, [weekDays]);
 
+  const weeklyEstMax = useMemo(() => {
+    if (!weekDays.length) return 1;
+    let maxVal = 1;
+    weekDays.forEach(day => {
+      const dateStr = format(day, 'yyyy-MM-dd');
+      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
+      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
+      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
+      const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+      maxVal = Math.max(maxVal, m.sugarStandard, m.fisico);
+    });
+    return maxVal;
+  }, [weekDays]);
+
+  const weeklyPromMax = useMemo(() => {
+    if (!weekDays.length) return 1;
+    let maxVal = 1;
+    weekDays.forEach(day => {
+      const dateStr = format(day, 'yyyy-MM-dd');
+      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
+      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
+      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
+      const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
+      maxVal = Math.max(maxVal, m.sugarStandard, m.fisico);
+    });
+    return maxVal;
+  }, [weekDays]);
+
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
       <Tabs defaultValue="simple" className="w-full">
@@ -2313,8 +2341,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    </tbody>
                                  </table>
                                </div>
-                                     <div className="flex-1 min-h-[529px] bg-slate-50/40 rounded-2xl border-2 border-slate-200 max-w-[605px] relative" ref={standardChartRef}>
-                                     <div className="flex-1 flex items-end justify-between gap-4 px-6 pb-8 pt-10 relative">
+                                      <div className="flex-1 min-h-[529px] bg-slate-50/40 rounded-2xl border-2 border-slate-200 max-w-[605px] relative" ref={standardChartRef}>
+                                      <div className="flex-1 flex items-end justify-between gap-4 px-6 pb-8 relative">
                                         <svg className="absolute inset-x-6 top-0 bottom-8 w-[calc(100%-48px)] h-[calc(100%-32px)] z-20 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
                                           <polyline points={weekDays.map((day, idx) => {
                                             const dateStr = format(day, 'yyyy-MM-dd');
@@ -2349,16 +2377,14 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                           const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
                                           const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
                                           const fisico = m.fisico;
-                                          const maxVal = Math.max(m.sugarStandard, fisico, 1);
-                                          const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
                                           return (
                                             <div key={dateStr} className="flex-1 flex flex-col items-center h-full justify-end relative z-10">
                                               <div className="w-full flex items-end justify-center gap-2 h-full relative">
                                                 <span className="absolute -top-8 text-[10px] font-black text-slate-800 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-sm whitespace-nowrap z-30">
-                                                  {pct.toFixed(1)}%
+                                                  {m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100).toFixed(1) : '0.0'}%
                                                 </span>
-                                                <div className="w-1/3 bg-[#4f81bd] rounded-t-xl shadow-md border-x border-t border-[#4f81bd]/30" style={{ height: `${(m.sugarStandard / maxVal) * 100}%` }} />
-                                                <div className="w-1/3 bg-[#f59e0b] rounded-t-xl shadow-md border-x border-t border-[#f59e0b]/30" style={{ height: `${(fisico / maxVal) * 100}%` }} />
+                                                <div className="w-1/3 bg-[#4f81bd] rounded-t-xl shadow-md border-x border-t border-[#4f81bd]/30" style={{ height: `${(m.sugarStandard / weeklyEstMax) * 100}%` }} />
+                                                <div className="w-1/3 bg-[#f59e0b] rounded-t-xl shadow-md border-x border-t border-[#f59e0b]/30" style={{ height: `${(fisico / weeklyEstMax) * 100}%` }} />
                                               </div>
                                               <div className="mt-3 pt-2 border-t-2 border-slate-200 w-full text-center">
                                                 <span className="text-[10px] font-black text-slate-700 uppercase">{format(day, 'EEE', { locale: es })}</span>
