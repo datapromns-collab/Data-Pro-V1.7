@@ -965,6 +965,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
           return;
         }
 
+        const pdfButtonEst = cardEl.querySelector('button[onClick="handleExportWeeklyPDFStandard"]') as HTMLElement | null;
+        if (pdfButtonEst) pdfButtonEst.style.visibility = 'hidden';
+
         const canvas = await html2canvas(cardEl, {
           scale: 2,
           useCORS: true,
@@ -973,6 +976,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
           windowWidth: cardEl.scrollWidth,
           windowHeight: cardEl.scrollHeight
         });
+
+        if (pdfButtonEst) pdfButtonEst.style.visibility = 'visible';
+
         const pdf = buildLetterPdf(canvas, 10);
         const pdfBlob = pdf.output('blob');
         openPdfInPrintView(canvas);
@@ -1075,30 +1081,37 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             </body></html>`;
        };
 
-              const handleExportWeeklyPDFPromedio = async () => {
-               try {
-                 if (!weekDays.length) return;
-                 const cardEl = document.querySelector('[data-resumen-promedio-card]') as HTMLElement | null;
-                 if (!cardEl) {
-                   toast({ title: 'Error', description: 'No se encontró la sección de Resumen Promedio.' });
-                   return;
-                 }
-                 const canvas = await html2canvas(cardEl, {
-                   scale: 2,
-                   useCORS: true,
-                   backgroundColor: '#ffffff',
-                   logging: false,
-                   windowWidth: cardEl.scrollWidth,
-                   windowHeight: cardEl.scrollHeight
-                 });
-                 const pdf = buildLetterPdf(canvas, 10);
-                 const pdfBlob = pdf.output('blob');
-                 openPdfInPrintView(canvas);
-               } catch (error) {
-                 console.error(error);
-                 toast({ title: 'Error', description: 'No se pudo generar el PDF de Resumen Promedio.' });
-               }
-             };
+               const handleExportWeeklyPDFPromedio = async () => {
+                try {
+                  if (!weekDays.length) return;
+                  const cardEl = document.querySelector('[data-resumen-promedio-card]') as HTMLElement | null;
+                  if (!cardEl) {
+                    toast({ title: 'Error', description: 'No se encontró la sección de Resumen Promedio.' });
+                    return;
+                  }
+
+                  const pdfButtonProm = cardEl.querySelector('button[onClick="handleExportWeeklyPDFPromedio"]') as HTMLElement | null;
+                  if (pdfButtonProm) pdfButtonProm.style.visibility = 'hidden';
+
+                  const canvas = await html2canvas(cardEl, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff',
+                    logging: false,
+                    windowWidth: cardEl.scrollWidth,
+                    windowHeight: cardEl.scrollHeight
+                  });
+
+                  if (pdfButtonProm) pdfButtonProm.style.visibility = 'visible';
+
+                  const pdf = buildLetterPdf(canvas, 10);
+                  const pdfBlob = pdf.output('blob');
+                  openPdfInPrintView(canvas);
+                } catch (error) {
+                  console.error(error);
+                  toast({ title: 'Error', description: 'No se pudo generar el PDF de Resumen Promedio.' });
+                }
+              };
 
 
 
