@@ -928,7 +928,11 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
     const openPdfInPrintView = (canvas: HTMLCanvasElement) => {
       const imgSrc = canvas.toDataURL('image/png');
-      const printWindow = window.open('', '_blank');
+      const w = 900;
+      const h = 700;
+      const left = (window.screen.width - w) / 2;
+      const top = (window.screen.height - h) / 2;
+      const printWindow = window.open('', '_blank', `width=${w},height=${h},left=${left},top=${top},resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,status=no`);
       if (!printWindow) {
         toast({ title: 'Bloqueado', description: 'Permite ventanas emergentes para ver la vista de impresión.' });
         return;
