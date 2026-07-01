@@ -1397,7 +1397,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       maxPct = Math.max(maxPct, pct);
     });
     return maxPct;
-    const standardChartData = useMemo(() => {
+  }, [weekDays]);
+
+  const standardChartData = useMemo(() => {
     if (!weekDays.length) return [];
     return weekDays.map((day) => {
       const dateStr = format(day, 'yyyy-MM-dd');
