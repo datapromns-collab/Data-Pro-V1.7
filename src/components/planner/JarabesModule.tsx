@@ -904,7 +904,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       </body></html>`;
     };
 
-    const buildLetterPdf = (canvas: HTMLCanvasElement, marginMM = 14.4, footerHtml?: string) => {
+    const buildLetterPdf = (canvas: HTMLCanvasElement, marginMM = 10) => {
       const imgData = canvas.toDataURL('image/png');
       const pageW = 215.9;
       const pageH = 279.4;
@@ -913,30 +913,35 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
       const imgPxW = canvas.width;
       const imgPxH = canvas.height;
-      const fit = Math.min(contentW / (imgPxW / 2), contentH / (imgPxH / 2));
+
+      const fitW = contentW / (imgPxW / 2);
+      const fitH = contentH / (imgPxH / 2);
+      const fit = Math.min(fitW, fitH);
+
       const imgMMW = (imgPxW / 2) * fit;
       const imgMMH = (imgPxH / 2) * fit;
 
-      const pdf = new jsPDF({ orientation: imgMMW > imgMMH ? 'landscape' : 'portrait', unit: 'mm', format: 'letter' });
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'letter' });
       pdf.addImage(imgData, 'PNG', marginMM, marginMM, imgMMW, imgMMH);
       return pdf;
     };
 
-    const openPdfInPrintView = (canvas: HTMLCanvasElement, filename = 'reporte.pdf') => {
+    const openPdfInPrintView = (pdfBlob: Blob) => {
+      const url = URL.createObjectURL(pdfBlob);
       const printWindow = window.open('', '_blank', 'width=900,height=700');
       if (!printWindow) {
         toast({ title: 'Bloqueado', description: 'Permite ventanas emergentes para ver la vista de impresión.' });
+        URL.revokeObjectURL(url);
         return;
       }
-      const imgSrc = canvas.toDataURL('image/png');
       const doc = printWindow.document;
       doc.open();
-      doc.write(`<!DOCTYPE html><html><head><title>${filename}</title><style>
+      doc.write(`<!DOCTYPE html><html><head><title>Imprimiendo…</title><style>
         html,body{margin:0;padding:0;background:#fff}
         img{display:block;margin:0 auto;max-width:100%;height:auto;box-sizing:border-box}
-        @page{size: auto;margin:0}
+        @page{size: letter portrait;margin:10mm}
         @media print{body> :not(img){display:none}}
-      </style></head><body><img src="${imgSrc}" /></body></html>`);
+      </style></head><body><img src="${url}" /></body></html>`);
       doc.close();
       const timer = setInterval(() => {
         try {
@@ -946,7 +951,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             printWindow.print();
             setTimeout(() => {
               try { printWindow.close(); } catch {}
-              setTimeout(() => URL.revokeObjectURL(imgSrc), 1000 * 60);
+              setTimeout(() => URL.revokeObjectURL(url), 1000 * 60);
             }, 1500);
           }
         } catch {}
@@ -972,7 +977,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         });
         const pdf = buildLetterPdf(canvas, 10);
         const pdfBlob = pdf.output('blob');
-        openPdfInPrintView(canvas, 'resumen-estandar.pdf');
+        openPdfInPrintView(pdfBlob);
       } catch (error) {
         console.error(error);
         toast({ title: 'Error', description: 'No se pudo generar el PDF de Resumen Estándar.' });
@@ -1090,7 +1095,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                  });
                  const pdf = buildLetterPdf(canvas, 10);
                  const pdfBlob = pdf.output('blob');
-                 openPdfInPrintView(canvas, 'resumen-promedio.pdf');
+                 openPdfInPrintView(pdfBlob);
                } catch (error) {
                  console.error(error);
                  toast({ title: 'Error', description: 'No se pudo generar el PDF de Resumen Promedio.' });
