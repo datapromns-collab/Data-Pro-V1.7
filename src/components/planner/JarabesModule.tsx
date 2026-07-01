@@ -904,58 +904,80 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       </body></html>`;
     };
 
-          const handleExportWeeklyPDFStandard = async () => {
-           try {
-             if (!weekDays.length) return;
-             let chartImage = null;
-             try {
-               chartImage = await captureChart(standardChartRef);
-             } catch (e) {
-               console.error('Error capturing chart:', e);
-             }
-             const reportContent = buildWeeklyStandardHtml(chartImage);
-             const reportEl = document.createElement('div');
-             reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:1600px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
-             reportEl.innerHTML = reportContent;
-             document.body.appendChild(reportEl);
-             const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-             document.body.removeChild(reportEl);
+   const openPdfInPrintView = (pdfBlob: Blob) => {
+     const url = URL.createObjectURL(pdfBlob);
+     const printWindow = window.open('', '_blank');
+     if (!printWindow) {
+       toast({ title: 'Bloqueado', description: 'Permite ventanas emergentes para ver la vista de impresión.' });
+       URL.revokeObjectURL(url);
+       return;
+     }
+     printWindow.document.write(`<!DOCTYPE html><html><head><title>Vista de impresión</title><style>html,body{margin:0;padding:0}iframe{border:0;width:100%;height:100vh}</style></head><body><iframe src="${url}"></iframe></body></html>`);
+     printWindow.document.close();
+     const iframe = printWindow.document.querySelector('iframe');
+     if (iframe) {
+       iframe.addEventListener('load', () => {
+         try {
+           printWindow.focus();
+           iframe.contentWindow?.print();
+         } catch {
+           // print blocked
+         }
+       });
+     }
+     setTimeout(() => URL.revokeObjectURL(url), 1000 * 60 * 5);
+     toast({ title: 'Vista previa', description: 'Abriendo el reporte semanal en vista de impresión.' });
+   };
 
-        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-        const pageW = pdf.internal.pageSize.getWidth();
-        const pageH = pdf.internal.pageSize.getHeight();
-        const pageMargins = 14.4;
-        const chartTargetWidth = 160; // 16cm
-        const chartTargetHeight = 141; // 14cm (proporción 605:529 ≈ 16:14)
-        const chartAvailableWidth = pageW - pageMargins * 2;
-        const chartFitWidth = Math.min(chartTargetWidth, chartAvailableWidth);
-        const chartFitHeight = chartFitWidth * (chartTargetHeight / chartTargetWidth);
-        const tableImgW = pageW;
-        const tableImgH = (canvas.height * tableImgW) / canvas.width;
-
-        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, tableImgW, tableImgH);
-
-        if (chartImage) {
-          const chartX = (pageW - chartFitWidth) / 2;
-          const chartY = tableImgH + 10;
-          if (chartY + chartFitHeight > pageH) {
-            const spaceOnCurrentPage = pageH - tableImgH - 10;
-            const secondPageChartTopY = 14.4;
-            pdf.addImage(chartImage, 'PNG', chartX, secondPageChartTopY, chartFitWidth, chartFitHeight);
-          } else {
-            pdf.addImage(chartImage, 'PNG', chartX, chartY, chartFitWidth, chartFitHeight);
-          }
-        }
-
-         const pdfBlob = pdf.output('blob');
-         const url = URL.createObjectURL(pdfBlob);
-         window.open(url, '_blank');
-         toast({ title: 'Vista previa', description: 'Abriendo el reporte semanal Estándar en una nueva pestaña.' });
-      } catch (error) {
-        console.error(error);
-        toast({ title: 'Error', description: 'No se pudo generar la vista previa semanal.' });
+   const handleExportWeeklyPDFStandard = async () => {
+    try {
+      if (!weekDays.length) return;
+      let chartImage = null;
+      try {
+        chartImage = await captureChart(standardChartRef);
+      } catch (e) {
+        console.error('Error capturing chart:', e);
       }
-    };
+      const reportContent = buildWeeklyStandardHtml(chartImage);
+      const reportEl = document.createElement('div');
+      reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:1600px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
+      reportEl.innerHTML = reportContent;
+      document.body.appendChild(reportEl);
+      const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      document.body.removeChild(reportEl);
+
+    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+    const pageW = pdf.internal.pageSize.getWidth();
+    const pageH = pdf.internal.pageSize.getHeight();
+    const pageMargins = 14.4;
+    const chartTargetWidth = 160; // 16cm
+    const chartTargetHeight = 141; // 14cm (proporción 605:529 ≈ 16:14)
+    const chartAvailableWidth = pageW - pageMargins * 2;
+    const chartFitWidth = Math.min(chartTargetWidth, chartAvailableWidth);
+    const chartFitHeight = chartFitWidth * (chartTargetHeight / chartTargetWidth);
+    const tableImgW = pageW;
+    const tableImgH = (canvas.height * tableImgW) / canvas.width;
+
+    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, tableImgW, tableImgH);
+
+    if (chartImage) {
+      const chartX = (pageW - chartFitWidth) / 2;
+      const chartY = tableImgH + 10;
+      if (chartY + chartFitHeight > pageH) {
+        const secondPageChartTopY = 14.4;
+        pdf.addImage(chartImage, 'PNG', chartX, secondPageChartTopY, chartFitWidth, chartFitHeight);
+      } else {
+        pdf.addImage(chartImage, 'PNG', chartX, chartY, chartFitWidth, chartFitHeight);
+      }
+    }
+
+     const pdfBlob = pdf.output('blob');
+     openPdfInPrintView(pdfBlob);
+   } catch (error) {
+     console.error(error);
+     toast({ title: 'Error', description: 'No se pudo generar la vista previa semanal.' });
+   }
+ };
 
   const buildWeeklyPromedioHtml = (chartImage?: string | null): string => {
         if (!weekDays.length) return '';
@@ -1093,14 +1115,12 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         }
 
          const pdfBlob = pdf.output('blob');
-         const url = URL.createObjectURL(pdfBlob);
-         window.open(url, '_blank');
-         toast({ title: 'Vista previa', description: 'Abriendo el reporte semanal Promedio en una nueva pestaña.' });
-      } catch (error) {
-        console.error(error);
-        toast({ title: 'Error', description: 'No se pudo generar la vista previa semanal.' });
-      }
-    };
+         openPdfInPrintView(pdfBlob);
+       } catch (error) {
+         console.error(error);
+         toast({ title: 'Error', description: 'No se pudo generar la vista previa semanal.' });
+       }
+     };
 
 
 
