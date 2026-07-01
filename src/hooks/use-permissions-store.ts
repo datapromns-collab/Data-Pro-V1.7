@@ -11,7 +11,8 @@ export type ModuleId =
   | 'planta'
   | 'logistica'
   | 'ventas'
-  | 'purchasing';
+  | 'purchasing'
+  | 'ordenes-sap';
 
 export interface UserPermissions {
   [userId: string]: ModuleId[];
@@ -29,6 +30,7 @@ export const MODULE_LABELS: Record<ModuleId, string> = {
   logistica: 'Logística',
   ventas: 'Ventas',
   purchasing: 'Compras',
+  'ordenes-sap': 'Órdenes SAP',
 };
 
 export const MODULE_COLORS: Record<ModuleId, string> = {
@@ -41,6 +43,7 @@ export const MODULE_COLORS: Record<ModuleId, string> = {
   logistica: 'bg-orange-600',
   ventas: 'bg-indigo-600',
   purchasing: 'bg-blue-600',
+  'ordenes-sap': 'bg-sky-600',
 };
 
 export const ALL_MODULES = [
@@ -53,12 +56,13 @@ export const ALL_MODULES = [
   'logistica',
   'ventas',
   'purchasing',
+  'ordenes-sap',
 ] as const satisfies readonly ModuleId[];
 
 const DEFAULT_PERMISSIONS: UserPermissions = {
   mds: ['planning', 'planta', 'logistica', 'ventas'],
   'jaime.r': ['planning', 'management', 'jarabes', 'raw-materials', 'planta', 'logistica', 'ventas', 'purchasing'],
-  demon: ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'logistica', 'ventas', 'purchasing'],
+  demon: ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'logistica', 'ventas', 'purchasing', 'ordenes-sap'],
   'maria.mds': ['jarabes', 'raw-materials', 'planta'],
   'alex.mds': ['jarabes', 'raw-materials', 'planta'],
   'anto.mds': ['purchasing', 'planta', 'logistica', 'ventas'],

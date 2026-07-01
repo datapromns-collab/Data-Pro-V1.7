@@ -13,6 +13,7 @@ import {
   LayoutDashboard,
   ListTodo,
   LogOut,
+  Shield,
   ShieldCheck,
   User as UserIcon,
   BarChart3,
@@ -48,6 +49,7 @@ import { WeeklyControlReport } from '@/components/planner/WeeklyControlReport';
 import { ComplianceReport } from '@/components/planner/ComplianceReport';
 import { MonthlyComplianceReport } from '@/components/planner/MonthlyComplianceReport';
 import { RecipeEditor } from '@/components/planner/RecipeEditor';
+import OrdenesSapModule from '@/components/planner/OrdenesSapModule';
 import { PackagingRecipeEditor } from '@/components/planner/PackagingRecipeEditor';
 import { RawMaterialModule } from '@/components/planner/RawMaterialModule';
 import { RawMaterialReport } from '@/components/planner/RawMaterialReport';
@@ -812,18 +814,31 @@ export default function PlannerPage() {
                    </Button>
                    )}
 
-                   {isDemon && (
-                   <Button 
-                     variant="ghost" 
-                     onClick={() => { setActiveModule('permissions'); setActiveTab('permissions-view'); }}
-                     className={sidebarButtonClass(activeModule === 'permissions', "bg-violet-600 hover:bg-violet-700", "shadow-violet-200/30")}
-                   >
-                     <div className={iconContainerClass(activeModule === 'permissions')}>
-                       <ShieldCheck className="h-4 w-4" />
-                     </div>
-                     <span className="uppercase text-[10px] font-black tracking-tight">Permisos</span>
-                   </Button>
-                   )}
+                    {isDemon && (
+                    <Button 
+                      variant="ghost" 
+                      onClick={() => { setActiveModule('ordenes-sap'); setActiveTab('ordenes-sap'); }}
+                      className={sidebarButtonClass(activeModule === 'ordenes-sap', "bg-sky-600 hover:bg-sky-700", "shadow-sky-200/30")}
+                    >
+                      <div className={iconContainerClass(activeModule === 'ordenes-sap')}>
+                        <ClipboardList className="h-4 w-4" />
+                      </div>
+                      <span className="uppercase text-[10px] font-black tracking-tight">Órdenes SAP</span>
+                    </Button>
+                    )}
+
+                    {isDemon && (
+                    <Button 
+                      variant="ghost" 
+                      onClick={() => { setActiveModule('permissions'); setActiveTab('permissions-view'); }}
+                      className={sidebarButtonClass(activeModule === 'permissions', "bg-violet-600 hover:bg-violet-700", "shadow-violet-200/30")}
+                    >
+                      <div className={iconContainerClass(activeModule === 'permissions')}>
+                        <Shield className="h-4 w-4" />
+                      </div>
+                      <span className="uppercase text-[10px] font-black tracking-tight">Permisos</span>
+                    </Button>
+                    )}
                  </div>
                </section>
 
@@ -1468,14 +1483,15 @@ export default function PlannerPage() {
                     Módulo de Ventas en Desarrollo
                   </div>
                 )}
-                {activeModule === 'purchasing' && hasAccess(user.id, 'purchasing') && (
-                  <PurchasingModule 
-                    onPrintRequirements={handlePrintPurchasingRequirements} 
-                    onPrintInventory={handlePrintInventory}
-                    onPrintResumen={handlePrintResumen}
-                  />
-                )}
-                {activeModule === 'permissions' && <PermisosModule />}
+                 {activeModule === 'purchasing' && hasAccess(user.id, 'purchasing') && (
+                   <PurchasingModule 
+                     onPrintRequirements={handlePrintPurchasingRequirements} 
+                     onPrintInventory={handlePrintInventory}
+                     onPrintResumen={handlePrintResumen}
+                   />
+                 )}
+                 {activeModule === 'ordenes-sap' && hasAccess(user.id, 'ordenes-sap') && <OrdenesSapModule />}
+                 {activeModule === 'permissions' && <PermisosModule />}
               </div>
             </div>
           </div>
