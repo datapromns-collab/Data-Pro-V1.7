@@ -2415,78 +2415,39 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                   </table>
                                 </div>
                                  <div className="flex flex-col flex-1 min-h-[529px] bg-slate-50/40 rounded-2xl border-2 border-slate-200 p-4 relative" ref={standardChartRef}>
-                                   <div className="flex-1 flex items-end justify-between gap-4 px-2 pb-6 pt-8 relative">
-                                     <svg className="absolute inset-x-2 top-8 bottom-6 w-[calc(100%-16px)] z-20 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
-                                       <polyline points={weekDays.map((day, idx) => {
-                                         const dateStr = format(day, 'yyyy-MM-dd');
-                                         const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
-                                         const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
-                                         const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
-                                         const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                         const fisico = m.fisico;
-                                         const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-                                         const x = (idx + 0.5) * (100 / weekDays.length);
-                                          const y = 100 - (Number.isFinite(pct) ? Math.min(weeklyEstPctMax, Math.max(0, pct)) : 0);
-                                          return `${x},${y}`;
-                                       }).join(' ')} fill="none" stroke="#f59e0b" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
-                                        {weekDays.map((day, idx) => {
-                                          const dateStr = format(day, 'yyyy-MM-dd');
-                                          const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
-                                          const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
-                                          const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
-                                          const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                          const fisico = m.fisico;
-                                          const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-                                          const x = (idx + 0.5) * (100 / weekDays.length);
-                                           const y = 100 - (Number.isFinite(pct) ? Math.min(weeklyEstPctMax, Math.max(0, pct)) : 0);
-                                           return (
-                                             <g key={dateStr}>
-                                               <circle cx={x} cy={y} r="0.8" fill="#f59e0b" stroke="white" strokeWidth="0.2" vectorEffect="non-scaling-stroke" />
-                                               <text x={x} y={y} dy="-4" textAnchor="middle" fill="#1e293b" stroke="white" strokeWidth="0.3" fontSize="4.5" fontWeight="800">{pct.toFixed(2)}%</text>
-                                             </g>
-                                           );
-                                        })}
-                                    </svg>
-                                    {weekDays.map((day, idx) => {
-                                      const dateStr = format(day, 'yyyy-MM-dd');
-                                      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
-                                      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
-                                      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
-                                      const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                      const fisico = m.fisico;
-                                      const maxVal = Math.max(m.sugarStandard, fisico, 1);
-                                      const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-                                      return (
-                                         <div key={dateStr} className="flex-1 flex flex-col items-center justify-end relative z-10">
-                                            <div className="w-full flex items-end justify-center gap-2 flex-1 relative">
-                                              <div className="w-1/3 bg-[#4f81bd] rounded-t-xl shadow-md border-x border-t border-[#4f81bd]/30" style={{ height: `${(m.sugarStandard / weeklyEstMax) * 100}%` }} />
-                                             <div className="w-1/3 bg-[#f59e0b] rounded-t-xl shadow-md border-x border-t border-[#f59e0b]/30" style={{ height: `${(fisico / weeklyEstMax) * 100}%` }} />
-                                          </div>
-                                          <div className="mt-3 pt-2 border-t-2 border-slate-200 w-full text-center">
-                                            <span className="text-[10px] font-black text-slate-700 uppercase">{format(day, 'EEE', { locale: es })}</span>
-                                          </div>
-                                        </div>
-                                      );
-                                    })}
-                                  </div>
-                                  <div className="flex justify-center gap-10 py-3 border-t-2 border-slate-200 bg-white shadow-md rounded-full mx-6 mb-4 shrink-0">
-                                    <div className="flex items-center gap-2">
-                                      <div className="w-5 h-5 bg-[#4f81bd] rounded shadow-sm border border-[#4f81bd]/30" />
-                                      <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Estándar</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                      <div className="w-5 h-5 bg-[#f59e0b] rounded shadow-sm border border-[#f59e0b]/30" />
-                                      <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Físico</span>
-                                    </div>
-                                    <div className="flex items-center gap-2">
-                                      <div className="w-6 h-1 bg-[#f59e0b] rounded-full shadow-sm" />
-                                      <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">%</span>
+                                   <ChartContainer config={chartConfig} className="flex-1 w-full">
+                                     <ResponsiveContainer width="100%" height="100%">
+                                       <ComposedChart data={standardChartData} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
+                                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                         <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 700, fill: '#64748b' }} dy={8} />
+                                         <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(0)}k` : val} />
+                                         <YAxis yAxisId="right" orientation="right" domain={[0, Math.max(20, Math.ceil(weeklyEstPctMax / 5) * 5 + 10)]} axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(val) => `${val}%`} />
+                                         <Tooltip content={<ChartTooltipContent />} cursor={{ fill: '#f8fafc' }} />
+                                         <Bar yAxisId="left" dataKey="estandar" fill="var(--color-estandar)" radius={[4, 4, 0, 0]} barSize={30} name="Estándar" />
+                                         <Bar yAxisId="left" dataKey="fisico" fill="var(--color-fisico)" radius={[4, 4, 0, 0]} barSize={30} name="Físico" />
+                                         <Line yAxisId="right" type="monotone" dataKey="pct" stroke="var(--color-pct)" strokeWidth={3} dot={{ r: 4, fill: 'var(--color-pct)', strokeWidth: 2, stroke: '#fff' }} name="%" />
+                                       </ComposedChart>
+                                     </ResponsiveContainer>
+                                   </ChartContainer>
+                                   <div className="flex justify-center gap-10 py-3 border-t-2 border-slate-200 bg-white shadow-md rounded-full mx-6 mb-4 shrink-0">
+                                     <div className="flex items-center gap-2">
+                                       <div className="w-5 h-5 bg-[#4f81bd] rounded shadow-sm border border-[#4f81bd]/30" />
+                                       <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Estándar</span>
+                                     </div>
+                                     <div className="flex items-center gap-2">
+                                       <div className="w-5 h-5 bg-[#f59e0b] rounded shadow-sm border border-[#f59e0b]/30" />
+                                       <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Físico</span>
+                                     </div>
+                                     <div className="flex items-center gap-2">
+                                       <div className="w-6 h-1 bg-[#f59e0b] rounded-full shadow-sm" />
+                                       <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">%</span>
+                                     </div>
                                     </div>
                                   </div>
-                                </div>
-                              </div>
-                              )
-                            : (
+                                 </div>
+                               </div>
+                               )
+                             : (
                               <div className="flex-1 min-h-[300px] border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
                                 Sin datos esta semana
                               </div>
@@ -2555,76 +2516,36 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    </tbody>
                                  </table>
                                </div>
-                                      <div className="flex flex-col flex-1 min-h-[529px] bg-slate-50/40 rounded-2xl border-2 border-slate-200 max-w-[605px] relative" ref={promedioChartRef}>
-                                       <div className="flex-1 flex items-end justify-between gap-4 px-6 pb-8 pt-10 relative">
-                                           <svg className="absolute inset-x-6 top-8 bottom-8 w-[calc(100%-48px)] z-20 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
-                                           <polyline points={weekDays.map((day, idx) => {
-                                             const dateStr = format(day, 'yyyy-MM-dd');
-                                             const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
-                                             const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
-                                             const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
-                                             const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
-                                             const fisico = m.fisico;
-                                             const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-                                             const x = (idx + 0.5) * (100 / weekDays.length);
-                                             const y = 100 - (Number.isFinite(pct) ? Math.min(weeklyEstPctMax, Math.max(0, pct)) : 0);
-                                             return `${x},${y}`;
-                                           }).join(' ')} fill="none" stroke="#f59e0b" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
-                                            {weekDays.map((day, idx) => {
-                                              const dateStr = format(day, 'yyyy-MM-dd');
-                                              const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
-                                              const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
-                                              const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
-                                              const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
-                                              const fisico = m.fisico;
-                                              const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-                                              const x = (idx + 0.5) * (100 / weekDays.length);
-                                              const y = 100 - (Number.isFinite(pct) ? Math.min(weeklyEstPctMax, Math.max(0, pct)) : 0);
-                                              return (
-                                                <g key={dateStr}>
-                                                  <circle cx={x} cy={y} r="0.8" fill="#f59e0b" stroke="white" strokeWidth="0.2" vectorEffect="non-scaling-stroke" />
-                                                  <text x={x} y={y} dy="-4" textAnchor="middle" fill="#1e293b" stroke="white" strokeWidth="0.3" fontSize="4.5" fontWeight="800">{pct.toFixed(2)}%</text>
-                                                </g>
-                                              );
-                                            })}
-                                         </svg>
-                                        {weekDays.map((day, idx) => {
-                                          const dateStr = format(day, 'yyyy-MM-dd');
-                                          const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
-                                          const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
-                                          const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
-                                          const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
-                                          const fisico = m.fisico;
-                                          const maxVal = Math.max(m.sugarStandard, fisico, 1);
-                                          const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-                                          return (
-                                             <div key={dateStr} className="flex-1 flex flex-col items-center h-full justify-end relative z-10">
-                                               <div className="w-full flex items-end justify-center gap-2 h-full relative">
-                                                 <div className="w-1/3 bg-[#4f81bd] rounded-t-xl shadow-md border-x border-t border-[#4f81bd]/30" style={{ height: `${(m.sugarStandard / weeklyPromMax) * 100}%` }} />
-                                                <div className="w-1/3 bg-[#f59e0b] rounded-t-xl shadow-md border-x border-t border-[#f59e0b]/30" style={{ height: `${(fisico / weeklyPromMax) * 100}%` }} />
-                                              </div>
-                                              <div className="pt-2 border-t-2 border-slate-200 w-full text-center">
-                                                <span className="text-[10px] font-black text-slate-700 uppercase">{format(day, 'EEE', { locale: es })}</span>
-                                              </div>
-                                            </div>
-                                          );
-                                        })}
-                                      </div>
-                                      <div className="flex justify-center gap-10 py-3 border-t-2 border-slate-200 bg-white shadow-md rounded-full mx-6 mb-4 shrink-0">
-                                        <div className="flex items-center gap-2">
-                                          <div className="w-5 h-5 bg-[#4f81bd] rounded shadow-sm border border-[#4f81bd]/30" />
-                                          <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Estándar</span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                          <div className="w-5 h-5 bg-[#f59e0b] rounded shadow-sm border border-[#f59e0b]/30" />
-                                          <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Físico</span>
-                                        </div>
-                                        <div className="flex items-center gap-2">
-                                          <div className="w-6 h-1 bg-[#f59e0b] rounded-full shadow-sm" />
-                                          <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">%</span>
-                                        </div>
-                                      </div>
-                                    </div>
+                                       <div className="flex flex-col flex-1 min-h-[529px] bg-slate-50/40 rounded-2xl border-2 border-slate-200 max-w-[605px] relative" ref={promedioChartRef}>
+                                         <ChartContainer config={chartConfig} className="flex-1 w-full">
+                                           <ResponsiveContainer width="100%" height="100%">
+                                             <ComposedChart data={promedioChartData} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
+                                               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                               <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 700, fill: '#64748b' }} dy={8} />
+                                               <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(0)}k` : val} />
+                                               <YAxis yAxisId="right" orientation="right" domain={[0, Math.max(20, Math.ceil(weeklyPromPctMax / 5) * 5 + 10)]} axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(val) => `${val}%`} />
+                                               <Tooltip content={<ChartTooltipContent />} cursor={{ fill: '#f8fafc' }} />
+                                               <Bar yAxisId="left" dataKey="estandar" fill="var(--color-estandar)" radius={[4, 4, 0, 0]} barSize={30} name="Estándar" />
+                                               <Bar yAxisId="left" dataKey="fisico" fill="var(--color-fisico)" radius={[4, 4, 0, 0]} barSize={30} name="Físico" />
+                                               <Line yAxisId="right" type="monotone" dataKey="pct" stroke="var(--color-pct)" strokeWidth={3} dot={{ r: 4, fill: 'var(--color-pct)', strokeWidth: 2, stroke: '#fff' }} name="%" />
+                                             </ComposedChart>
+                                           </ResponsiveContainer>
+                                         </ChartContainer>
+                                         <div className="flex justify-center gap-10 py-3 border-t-2 border-slate-200 bg-white shadow-md rounded-full mx-6 mb-4 shrink-0">
+                                           <div className="flex items-center gap-2">
+                                             <div className="w-5 h-5 bg-[#4f81bd] rounded shadow-sm border border-[#4f81bd]/30" />
+                                             <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Estándar</span>
+                                           </div>
+                                           <div className="flex items-center gap-2">
+                                             <div className="w-5 h-5 bg-[#f59e0b] rounded shadow-sm border border-[#f59e0b]/30" />
+                                             <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Físico</span>
+                                           </div>
+                                           <div className="flex items-center gap-2">
+                                             <div className="w-6 h-1 bg-[#f59e0b] rounded-full shadow-sm" />
+                                             <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">%</span>
+                                           </div>
+                                         </div>
+                                       </div>
                              </>
                            ) : (
                               <div className="flex-1 min-h-[300px] border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
