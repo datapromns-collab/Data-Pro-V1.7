@@ -926,12 +926,11 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       return pdf;
     };
 
-    const openPdfInPrintView = (pdfBlob: Blob) => {
-      const url = URL.createObjectURL(pdfBlob);
+    const openPdfInPrintView = (canvas: HTMLCanvasElement) => {
+      const imgSrc = canvas.toDataURL('image/png');
       const printWindow = window.open('', '_blank', 'width=900,height=700');
       if (!printWindow) {
         toast({ title: 'Bloqueado', description: 'Permite ventanas emergentes para ver la vista de impresión.' });
-        URL.revokeObjectURL(url);
         return;
       }
       const doc = printWindow.document;
@@ -941,7 +940,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         img{display:block;margin:0 auto;max-width:100%;height:auto;box-sizing:border-box}
         @page{size: letter portrait;margin:10mm}
         @media print{body> :not(img){display:none}}
-      </style></head><body><img src="${url}" /></body></html>`);
+      </style></head><body><img src="${imgSrc}" /></body></html>`);
       doc.close();
       const timer = setInterval(() => {
         try {
@@ -951,7 +950,6 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             printWindow.print();
             setTimeout(() => {
               try { printWindow.close(); } catch {}
-              setTimeout(() => URL.revokeObjectURL(url), 1000 * 60);
             }, 1500);
           }
         } catch {}
@@ -977,7 +975,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         });
         const pdf = buildLetterPdf(canvas, 10);
         const pdfBlob = pdf.output('blob');
-        openPdfInPrintView(pdfBlob);
+        openPdfInPrintView(canvas);
       } catch (error) {
         console.error(error);
         toast({ title: 'Error', description: 'No se pudo generar el PDF de Resumen Estándar.' });
@@ -1095,7 +1093,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                  });
                  const pdf = buildLetterPdf(canvas, 10);
                  const pdfBlob = pdf.output('blob');
-                 openPdfInPrintView(pdfBlob);
+                 openPdfInPrintView(canvas);
                } catch (error) {
                  console.error(error);
                  toast({ title: 'Error', description: 'No se pudo generar el PDF de Resumen Promedio.' });
