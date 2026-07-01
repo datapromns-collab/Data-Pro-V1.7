@@ -1368,6 +1368,36 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     return maxVal;
   }, [weekDays]);
 
+  const weeklyEstPctMax = useMemo(() => {
+    if (!weekDays.length) return 20;
+    let maxPct = 20;
+    weekDays.forEach(day => {
+      const dateStr = format(day, 'yyyy-MM-dd');
+      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
+      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
+      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
+      const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+      const pct = m.sugarStandard !== 0 ? Math.abs((m.fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
+      maxPct = Math.max(maxPct, pct);
+    });
+    return maxPct;
+  }, [weekDays]);
+
+  const weeklyPromPctMax = useMemo(() => {
+    if (!weekDays.length) return 20;
+    let maxPct = 20;
+    weekDays.forEach(day => {
+      const dateStr = format(day, 'yyyy-MM-dd');
+      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
+      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
+      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
+      const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
+      const pct = m.sugarStandard !== 0 ? Math.abs((m.fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
+      maxPct = Math.max(maxPct, pct);
+    });
+    return maxPct;
+  }, [weekDays]);
+
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
       <Tabs defaultValue="simple" className="w-full">
@@ -2353,7 +2383,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                         const fisico = m.fisico;
                                         const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
                                         const x = (idx + 0.5) * (100 / weekDays.length);
-                                        const y = 100 - (Math.min(Math.max(pct, 0), 120) / weeklyEstMax) * 100;
+                                        const y = 100 - (Math.min(Math.max(pct, 0), weeklyEstPctMax) / weeklyEstPctMax) * 100;
                                         return `${x},${y}`;
                                       }).join(' ')} fill="none" stroke="#f59e0b" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
                                       {weekDays.map((day, idx) => {
@@ -2365,7 +2395,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                         const fisico = m.fisico;
                                         const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
                                         const x = (idx + 0.5) * (100 / weekDays.length);
-                                        const y = 100 - (Math.min(Math.max(pct, 0), 120) / weeklyEstMax) * 100;
+                                        const y = 100 - (Math.min(Math.max(pct, 0), weeklyEstPctMax) / weeklyEstPctMax) * 100;
                                         return <circle key={dateStr} cx={x} cy={y} r="0.8" fill="#f59e0b" stroke="white" strokeWidth="0.2" vectorEffect="non-scaling-stroke" />;
                                       })}
                                     </svg>
@@ -2380,10 +2410,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                       const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
                                       return (
                                         <div key={dateStr} className="flex-1 flex flex-col items-center h-full justify-end relative z-10">
-                                          <div className="w-full flex items-end justify-center gap-2 h-full relative">
-                                             <span className="absolute -top-8 text-[10px] font-black text-slate-800 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-sm whitespace-nowrap z-30">
-                                                   {pct.toFixed(2)}%
-                                             </span>
+                                           <div className="w-full flex items-end justify-center gap-2 h-full relative">
+                                              <span className="absolute text-[10px] font-black text-slate-800 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-sm whitespace-nowrap z-30" style={{ bottom: `calc(${(Math.min(Math.max(pct, 0), weeklyEstPctMax) / weeklyEstPctMax) * 100}% + 12px)`, left: '50%', transform: 'translateX(-50%)' }}>
+                                                    {pct.toFixed(2)}%
+                                              </span>
                                              <div className="w-1/3 bg-[#4f81bd] rounded-t-xl shadow-md border-x border-t border-[#4f81bd]/30" style={{ height: `${(m.sugarStandard / weeklyEstMax) * 100}%` }} />
                                              <div className="w-1/3 bg-[#f59e0b] rounded-t-xl shadow-md border-x border-t border-[#f59e0b]/30" style={{ height: `${(fisico / weeklyEstMax) * 100}%` }} />
                                           </div>
@@ -2492,7 +2522,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                         const fisico = m.fisico;
                                         const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
                                         const x = (idx + 0.5) * (100 / weekDays.length);
-                                        const y = 100 - (Math.min(Math.max(pct, 0), 120) / weeklyPromMax) * 100;
+                                        const y = 100 - (Math.min(Math.max(pct, 0), weeklyPromPctMax) / weeklyPromPctMax) * 100;
                                         return `${x},${y}`;
                                           }).join(' ')} fill="none" stroke="#f59e0b" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
                                           {weekDays.map((day, idx) => {
@@ -2504,7 +2534,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                         const fisico = m.fisico;
                                         const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
                                         const x = (idx + 0.5) * (100 / weekDays.length);
-                                        const y = 100 - (Math.min(Math.max(pct, 0), 120) / weeklyPromMax) * 100;
+                                        const y = 100 - (Math.min(Math.max(pct, 0), weeklyPromPctMax) / weeklyPromPctMax) * 100;
                                         return <circle key={dateStr} cx={x} cy={y} r="0.8" fill="#f59e0b" stroke="white" strokeWidth="0.2" vectorEffect="non-scaling-stroke" />;
                                           })}
                                         </svg>
@@ -2520,7 +2550,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                           return (
                                             <div key={dateStr} className="flex-1 flex flex-col items-center h-full justify-end relative z-10">
                                               <div className="w-full flex items-end justify-center gap-2 h-full relative">
-                                                <span className="absolute -top-8 text-[10px] font-black text-slate-800 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-sm whitespace-nowrap z-30">
+                                                <span className="absolute text-[10px] font-black text-slate-800 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-sm whitespace-nowrap z-30" style={{ bottom: `calc(${(Math.min(Math.max(pct, 0), weeklyPromPctMax) / weeklyPromPctMax) * 100}% + 12px)`, left: '50%', transform: 'translateX(-50%)' }}>
                                                   {pct.toFixed(2)}%
                                                 </span>
                                                 <div className="w-1/3 bg-[#4f81bd] rounded-t-xl shadow-md border-x border-t border-[#4f81bd]/30" style={{ height: `${(m.sugarStandard / weeklyPromMax) * 100}%` }} />
