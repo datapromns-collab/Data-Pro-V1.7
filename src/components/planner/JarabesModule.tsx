@@ -1368,36 +1368,6 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     return maxVal;
   }, [weekDays]);
 
-  const weeklyEstPctMax = useMemo(() => {
-    if (!weekDays.length) return 20;
-    let maxPct = 20;
-    weekDays.forEach(day => {
-      const dateStr = format(day, 'yyyy-MM-dd');
-      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
-      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
-      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
-      const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-      const pct = m.sugarStandard !== 0 ? Math.abs((m.fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-      maxPct = Math.max(maxPct, pct);
-    });
-    return maxPct;
-  }, [weekDays]);
-
-  const weeklyPromPctMax = useMemo(() => {
-    if (!weekDays.length) return 20;
-    let maxPct = 20;
-    weekDays.forEach(day => {
-      const dateStr = format(day, 'yyyy-MM-dd');
-      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
-      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
-      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
-      const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
-      const pct = m.sugarStandard !== 0 ? Math.abs((m.fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-      maxPct = Math.max(maxPct, pct);
-    });
-    return maxPct;
-  }, [weekDays]);
-
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
       <Tabs defaultValue="simple" className="w-full">
@@ -2374,30 +2344,30 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                  <div className="flex flex-col flex-1 min-h-[529px] bg-slate-50/40 rounded-2xl border-2 border-slate-200 p-4 relative" ref={standardChartRef}>
                                    <div className="flex-1 flex items-end justify-between gap-4 px-2 pb-6 pt-8 relative">
                                      <svg className="absolute inset-x-2 top-8 bottom-6 w-[calc(100%-16px)] h-[calc(100%-32px)] z-20 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
-                                      <polyline points={weekDays.map((day, idx) => {
-                                        const dateStr = format(day, 'yyyy-MM-dd');
-                                        const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
-                                        const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
-                                        const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
-                                        const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                        const fisico = m.fisico;
-                                        const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-                                        const x = (idx + 0.5) * (100 / weekDays.length);
-                                        const y = 100 - (Math.min(Math.max(pct, 0), weeklyEstPctMax) / weeklyEstPctMax) * 100;
-                                        return `${x},${y}`;
-                                      }).join(' ')} fill="none" stroke="#f59e0b" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
-                                      {weekDays.map((day, idx) => {
-                                        const dateStr = format(day, 'yyyy-MM-dd');
-                                        const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
-                                        const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
-                                        const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
-                                        const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                        const fisico = m.fisico;
-                                        const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-                                        const x = (idx + 0.5) * (100 / weekDays.length);
-                                        const y = 100 - (Math.min(Math.max(pct, 0), weeklyEstPctMax) / weeklyEstPctMax) * 100;
-                                        return <circle key={dateStr} cx={x} cy={y} r="0.8" fill="#f59e0b" stroke="white" strokeWidth="0.2" vectorEffect="non-scaling-stroke" />;
-                                      })}
+                                       <polyline points={weekDays.map((day, idx) => {
+                                         const dateStr = format(day, 'yyyy-MM-dd');
+                                         const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
+                                         const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
+                                         const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
+                                         const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+                                         const fisico = m.fisico;
+                                         const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
+                                         const x = (idx + 0.5) * (100 / weekDays.length);
+                                         const y = 100 - (Number.isFinite(pct) ? Math.min(100, Math.max(0, pct)) : 100);
+                                         return `${x},${y}`;
+                                       }).join(' ')} fill="none" stroke="#f59e0b" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+                                       {weekDays.map((day, idx) => {
+                                         const dateStr = format(day, 'yyyy-MM-dd');
+                                         const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
+                                         const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
+                                         const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
+                                         const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+                                         const fisico = m.fisico;
+                                         const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
+                                         const x = (idx + 0.5) * (100 / weekDays.length);
+                                         const y = 100 - (Number.isFinite(pct) ? Math.min(100, Math.max(0, pct)) : 100);
+                                         return <circle key={dateStr} cx={x} cy={y} r="0.8" fill="#f59e0b" stroke="white" strokeWidth="0.2" vectorEffect="non-scaling-stroke" />;
+                                       })}
                                     </svg>
                                     {weekDays.map((day, idx) => {
                                       const dateStr = format(day, 'yyyy-MM-dd');
@@ -2512,32 +2482,32 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                </div>
                                       <div className="flex flex-col flex-1 min-h-[529px] bg-slate-50/40 rounded-2xl border-2 border-slate-200 max-w-[605px] relative" ref={promedioChartRef}>
                                       <div className="flex-1 flex items-end justify-between gap-4 px-6 pb-8 pt-10 relative">
-                                         <svg className="absolute inset-x-6 top-8 bottom-8 w-[calc(100%-48px)] h-[calc(100%-32px)] z-20 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
-                                          <polyline points={weekDays.map((day, idx) => {
-                                            const dateStr = format(day, 'yyyy-MM-dd');
-                                        const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
-                                        const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
-                                        const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
-                                        const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
-                                        const fisico = m.fisico;
-                                        const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-                                        const x = (idx + 0.5) * (100 / weekDays.length);
-                                        const y = 100 - (Math.min(Math.max(pct, 0), weeklyPromPctMax) / weeklyPromPctMax) * 100;
-                                        return `${x},${y}`;
-                                          }).join(' ')} fill="none" stroke="#f59e0b" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
-                                          {weekDays.map((day, idx) => {
-                                            const dateStr = format(day, 'yyyy-MM-dd');
-                                        const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
-                                        const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
-                                        const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
-                                        const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
-                                        const fisico = m.fisico;
-                                        const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-                                        const x = (idx + 0.5) * (100 / weekDays.length);
-                                        const y = 100 - (Math.min(Math.max(pct, 0), weeklyPromPctMax) / weeklyPromPctMax) * 100;
-                                        return <circle key={dateStr} cx={x} cy={y} r="0.8" fill="#f59e0b" stroke="white" strokeWidth="0.2" vectorEffect="non-scaling-stroke" />;
-                                          })}
-                                        </svg>
+                                          <svg className="absolute inset-x-6 top-8 bottom-8 w-[calc(100%-48px)] h-[calc(100%-32px)] z-20 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                           <polyline points={weekDays.map((day, idx) => {
+                                             const dateStr = format(day, 'yyyy-MM-dd');
+                                             const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
+                                             const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
+                                             const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
+                                             const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
+                                             const fisico = m.fisico;
+                                             const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
+                                             const x = (idx + 0.5) * (100 / weekDays.length);
+                                             const y = 100 - (Number.isFinite(pct) ? Math.min(100, Math.max(0, pct)) : 100);
+                                             return `${x},${y}`;
+                                           }).join(' ')} fill="none" stroke="#f59e0b" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
+                                           {weekDays.map((day, idx) => {
+                                             const dateStr = format(day, 'yyyy-MM-dd');
+                                             const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
+                                             const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
+                                             const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
+                                             const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
+                                             const fisico = m.fisico;
+                                             const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
+                                             const x = (idx + 0.5) * (100 / weekDays.length);
+                                             const y = 100 - (Number.isFinite(pct) ? Math.min(100, Math.max(0, pct)) : 100);
+                                             return <circle key={dateStr} cx={x} cy={y} r="0.8" fill="#f59e0b" stroke="white" strokeWidth="0.2" vectorEffect="non-scaling-stroke" />;
+                                           })}
+                                         </svg>
                                         {weekDays.map((day, idx) => {
                                           const dateStr = format(day, 'yyyy-MM-dd');
                                           const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
