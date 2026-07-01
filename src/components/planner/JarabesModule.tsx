@@ -113,91 +113,139 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
   const [costoAzucar, setCostoAzucar] = useState<string>('');
   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
 
-  const getKey = (type: string, section: string, date: string) => `jarabes-${type}-${section}-${date}`;
+   const getKey = (type: string, date: string, section?: string) => {
+    if (section) return `jarabes-${type}-${section}-${date}`;
+    return `jarabes-${type}-${date}`;
+  };
+
+  const loadDayData = (date: string, type: string) => {
+    const newKey = getKey(type, date);
+    const raw = localStorage.getItem(newKey);
+    if (raw) {
+      try {
+        return JSON.parse(raw);
+      } catch {
+        return {};
+      }
+    }
+
+    let migratedData: Record<string, any> | null = null;
+    for (const section of ['estandar', 'promedio']) {
+      const oldKey = getKey(type, date, section);
+      const oldRaw = localStorage.getItem(oldKey);
+      if (oldRaw) {
+        try {
+          const data = JSON.parse(oldRaw);
+          if (section === 'estandar' || !migratedData) {
+            migratedData = data;
+          }
+        } catch {
+          // continue
+        }
+      }
+    }
+
+    if (migratedData) {
+      localStorage.setItem(newKey, JSON.stringify(migratedData));
+      for (const section of ['estandar', 'promedio']) {
+        const oldKey = getKey(type, date, section);
+        localStorage.removeItem(oldKey);
+      }
+      return migratedData;
+    }
+
+    return {};
+  };
+
+  const loadDayDataWithCarryOver = (date: string, type: string) => {
+    const current = loadDayData(date, type);
+    const prevData = loadDayData(getPrevDay(date), type);
+    if (!Object.keys(prevData).length) return current;
+
+    const result: Record<string, any> = {};
+    Object.keys(current).forEach(k => {
+      result[k] = { ...current[k] };
+    });
+
+    Object.keys(prevData).forEach(k => {
+      if (!result[k]) result[k] = {};
+      if (type === 'ubb') {
+        const prevFinal = prevData[k].ubbFinal;
+        if (prevFinal && !result[k].ubbInicial) {
+          result[k] = { ...result[k], ubbInicial: prevFinal };
+        }
+      } else if (type === 'sugar') {
+        const prevFinal = prevData[k].invFinalSacos;
+        if (prevFinal && !result[k].invInicialSacos) {
+          result[k] = { ...result[k], invInicialSacos: prevFinal };
+        }
+      } else if (type === 'tanks') {
+        const prevFinal = prevData[k].invFinalSacos;
+        if (prevFinal && !result[k].invInicialSacos) {
+          result[k] = { ...result[k], invInicialSacos: prevFinal };
+        }
+      }
+    });
+
+    return result;
+   };
 
    useEffect(() => {
       const loadEstData = () => {
-        const savedUbbEst = loadDayDataWithCarryOver(selectedDate, 'ubb', 'estandar');
-        if (Object.keys(savedUbbEst).length) {
-          try { setUbbDataEst(savedUbbEst); }
-          catch (e) { console.error('Error cargando datos UBB estándar', e); }
-        } else { setUbbDataEst({}); }
+        const savedUbb = loadDayDataWithCarryOver(selectedDate, 'ubb');
+        if (Object.keys(savedUbb).length) {
+          try {
+            setUbbDataEst(savedUbb);
+            setUbbDataProm(savedUbb);
+          } catch (e) { console.error('Error cargando datos UBB', e); }
+        } else {
+          setUbbDataEst({});
+          setUbbDataProm({});
+        }
 
-        const savedSugarEst = loadDayDataWithCarryOver(selectedDate, 'sugar', 'estandar');
-        if (Object.keys(savedSugarEst).length) {
-          try { setSugarDataEst(savedSugarEst); }
-          catch (e) { console.error('Error cargando datos azúcar estándar', e); }
-        } else { setSugarDataEst({}); }
+        const savedSugar = loadDayDataWithCarryOver(selectedDate, 'sugar');
+        if (Object.keys(savedSugar).length) {
+          try {
+            setSugarDataEst(savedSugar);
+            setSugarDataProm(savedSugar);
+          } catch (e) { console.error('Error cargando datos azúcar', e); }
+        } else {
+          setSugarDataEst({});
+          setSugarDataProm({});
+        }
 
-        const savedTanksEst = loadDayDataWithCarryOver(selectedDate, 'tanks', 'estandar');
-        if (Object.keys(savedTanksEst).length) {
-          try { setTanksDataEst(savedTanksEst); }
-          catch (e) { console.error('Error cargando datos tanques estándar', e); }
-        } else { setTanksDataEst({}); }
+        const savedTanks = loadDayDataWithCarryOver(selectedDate, 'tanks');
+        if (Object.keys(savedTanks).length) {
+          try {
+            setTanksDataEst(savedTanks);
+            setTanksDataProm(savedTanks);
+          } catch (e) { console.error('Error cargando datos tanques', e); }
+         } else {
+           setTanksDataEst({});
+           setTanksDataProm({});
+         }
       };
       loadEstData();
       setIsLoaded(true);
     }, [selectedDate]);
 
-   useEffect(() => {
-     const loadPromData = () => {
-       const savedUbbProm = loadDayDataWithCarryOver(selectedDate, 'ubb', 'promedio');
-       if (Object.keys(savedUbbProm).length) {
-         try { setUbbDataProm(savedUbbProm); }
-         catch (e) { console.error('Error cargando datos UBB promedio', e); }
-       } else { setUbbDataProm({}); }
+    useEffect(() => {
+      if (isLoaded) {
+        localStorage.setItem(getKey('ubb', selectedDate), JSON.stringify(ubbDataEst));
+      }
+    }, [ubbDataEst, selectedDate, isLoaded]);
 
-       const savedSugarProm = loadDayDataWithCarryOver(selectedDate, 'sugar', 'promedio');
-       if (Object.keys(savedSugarProm).length) {
-         try { setSugarDataProm(savedSugarProm); }
-         catch (e) { console.error('Error cargando datos azúcar promedio', e); }
-       } else { setSugarDataProm({}); }
+    useEffect(() => {
+      if (isLoaded) {
+        localStorage.setItem(getKey('sugar', selectedDate), JSON.stringify(sugarDataEst));
+      }
+    }, [sugarDataEst, selectedDate, isLoaded]);
 
-       const savedTanksProm = loadDayDataWithCarryOver(selectedDate, 'tanks', 'promedio');
-       if (Object.keys(savedTanksProm).length) {
-         try { setTanksDataProm(savedTanksProm); }
-         catch (e) { console.error('Error cargando datos tanques promedio', e); }
-       } else { setTanksDataProm({}); }
-     };
-     loadPromData();
-     setIsLoaded(true);
-   }, [selectedDate]);
-
-   useEffect(() => {
-     if (isLoaded) {
-       localStorage.setItem(getKey('ubb', 'estandar', selectedDate), JSON.stringify(ubbDataEst));
-     }
-   }, [ubbDataEst, selectedDate, isLoaded]);
-
-   useEffect(() => {
-     if (isLoaded) {
-       localStorage.setItem(getKey('ubb', 'promedio', selectedDate), JSON.stringify(ubbDataProm));
-     }
-   }, [ubbDataProm, selectedDate, isLoaded]);
-
-   useEffect(() => {
-     if (isLoaded) {
-       localStorage.setItem(getKey('sugar', 'estandar', selectedDate), JSON.stringify(sugarDataEst));
-     }
-   }, [sugarDataEst, selectedDate, isLoaded]);
-
-   useEffect(() => {
-     if (isLoaded) {
-       localStorage.setItem(getKey('sugar', 'promedio', selectedDate), JSON.stringify(sugarDataProm));
-     }
-   }, [sugarDataProm, selectedDate, isLoaded]);
-
-   useEffect(() => {
-     if (isLoaded) {
-       localStorage.setItem(getKey('tanks', 'estandar', selectedDate), JSON.stringify(tanksDataEst));
-     }
-   }, [tanksDataEst, selectedDate, isLoaded]);
-
-   useEffect(() => {
-     if (isLoaded) {
-       localStorage.setItem(getKey('tanks', 'promedio', selectedDate), JSON.stringify(tanksDataProm));
-     }
-   }, [tanksDataProm, selectedDate, isLoaded]);
+    useEffect(() => {
+      if (isLoaded) {
+        localStorage.setItem(getKey('tanks', selectedDate), JSON.stringify(tanksDataEst));
+      }
+    }, [tanksDataEst, selectedDate, isLoaded]);
 
     useEffect(() => {
      localStorage.setItem('jarabes-promKgFactors', JSON.stringify(promKgFactors));
@@ -211,61 +259,55 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
      localStorage.setItem('jarabes-selectedDate-estandar', selectedDate);
    }, [selectedDate]);
 
-  const handleInputChangeEst = (flavor: string, field: 'ubbInicial' | 'ubbPreparado' | 'ubbFinal', value: string) => {
-    setUbbDataEst(prev => ({
-      ...prev,
-      [flavor]: { ...prev[flavor], [field]: value }
-    }));
-  };
+   const handleInputChangeEst = (flavor: string, field: 'ubbInicial' | 'ubbPreparado' | 'ubbFinal', value: string) => {
+     setUbbDataEst(prev => {
+       const updated = { ...prev, [flavor]: { ...prev[flavor], [field]: value } };
+       setUbbDataProm(updated);
+       return updated;
+     });
+   };
 
-  const handleInputChangeProm = (flavor: string, field: 'ubbInicial' | 'ubbPreparado' | 'ubbFinal', value: string) => {
-    setUbbDataProm(prev => ({
-      ...prev,
-      [flavor]: { ...prev[flavor], [field]: value }
-    }));
-  };
+   const handleInputChangeProm = (flavor: string, field: 'ubbInicial' | 'ubbPreparado' | 'ubbFinal', value: string) => {
+     setUbbDataProm(prev => {
+       const updated = { ...prev, [flavor]: { ...prev[flavor], [field]: value } };
+       setUbbDataEst(updated);
+       return updated;
+     });
+   };
 
-  const handleSugarInputChangeEst = (proveedor: string, field: 'invInicialSacos' | 'recepcionSacos' | 'invFinalSacos', value: string) => {
-    setSugarDataEst(prev => ({
-      ...prev,
-      [proveedor]: {
-        ...prev[proveedor],
-        [field]: value
-      }
-    }));
-  };
+   const handleSugarInputChangeEst = (proveedor: string, field: 'invInicialSacos' | 'recepcionSacos' | 'invFinalSacos', value: string) => {
+     setSugarDataEst(prev => {
+       const updated = { ...prev, [proveedor]: { ...prev[proveedor], [field]: value } };
+       setSugarDataProm(updated);
+       return updated;
+     });
+   };
 
-  const handleSugarInputChangeProm = (proveedor: string, field: 'invInicialSacos' | 'recepcionSacos' | 'invFinalSacos', value: string) => {
-    setSugarDataProm(prev => ({
-      ...prev,
-      [proveedor]: {
-        ...prev[proveedor],
-        [field]: value
-      }
-    }));
-  };
+   const handleSugarInputChangeProm = (proveedor: string, field: 'invInicialSacos' | 'recepcionSacos' | 'invFinalSacos', value: string) => {
+     setSugarDataProm(prev => {
+       const updated = { ...prev, [proveedor]: { ...prev[proveedor], [field]: value } };
+       setSugarDataEst(updated);
+       return updated;
+     });
+   };
 
-  const handleTanksInputChangeEst = (item: string, field: 'invInicialSacos' | 'invFinalSacos', value: string) => {
-    setTanksDataEst(prev => ({
-      ...prev,
-      [item]: {
-        ...prev[item],
-        [field]: value
-      }
-    }));
-  };
+   const handleTanksInputChangeEst = (item: string, field: 'invInicialSacos' | 'invFinalSacos', value: string) => {
+     setTanksDataEst(prev => {
+       const updated = { ...prev, [item]: { ...prev[item], [field]: value } };
+       setTanksDataProm(updated);
+       return updated;
+     });
+   };
 
-  const handleTanksInputChangeProm = (item: string, field: 'invInicialSacos' | 'invFinalSacos', value: string) => {
-    setTanksDataProm(prev => ({
-      ...prev,
-      [item]: {
-        ...prev[item],
-        [field]: value
-      }
-    }));
-  };
+   const handleTanksInputChangeProm = (item: string, field: 'invInicialSacos' | 'invFinalSacos', value: string) => {
+     setTanksDataProm(prev => {
+       const updated = { ...prev, [item]: { ...prev[item], [field]: value } };
+       setTanksDataEst(updated);
+       return updated;
+     });
+   };
 
-  const handleClearTable = () => {
+   const handleClearTable = () => {
     if (window.confirm('¿Está seguro de que desea limpiar todos los valores de las tablas?')) {
       setUbbDataEst({});
       setUbbDataProm({});
@@ -759,7 +801,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
           <tbody>
             ${weekDays.map(day => {
               const dateStr = format(day, 'yyyy-MM-dd');
-              const dayData = loadDayData(dateStr, 'ugar'.replace('ugar', 'sugar'), section);
+               const dayData = loadDayData(dateStr, 'ugar'.replace('ugar', 'sugar'));
               // placeholders so the structure is visible; values will be injected via the render path
               return `<tr><td>${format(day, 'EEEE', { locale: es }).toUpperCase()}</td><td>${dateStr}</td><td colspan="4">Sin datos</td></tr>`;
             }).join('')}
@@ -776,9 +818,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       const rows: any[] = [];
       weekDays.forEach(day => {
         const dateStr = format(day, 'yyyy-MM-dd');
-        const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
-        const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
-        const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
+                                             const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb');
+                                             const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar');
+                                             const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks');
         const metrics = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
         const fisico = metrics.fisico;
         const diferencia = fisico - metrics.sugarStandard;
@@ -922,9 +964,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         const rows: any[] = [];
         weekDays.forEach(day => {
           const dateStr = format(day, 'yyyy-MM-dd');
-           const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
-           const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
-           const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
+           const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb');
+           const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar');
+           const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks');
            const metrics = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
           const fisico = metrics.fisico;
           const diferencia = fisico - metrics.sugarStandard;
@@ -1235,83 +1277,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
    const [activeWeekAnchor, setActiveWeekAnchor] = useState<Date>(weekAnchor);
    const weekDays = useMemo(() => getWeekDays(activeWeekAnchor), [activeWeekAnchor]);
 
-  const loadDayData = (date: string, type: string, section: string) => {
-    const raw = localStorage.getItem(getKey(type, section, date));
-    if (!raw) return {};
-    try {
-      return JSON.parse(raw);
-    } catch {
-      return {};
-    }
-  };
-
-  const loadDayDataWithCarryOver = (date: string, type: string, section: string) => {
-    const current = loadDayData(date, type, section);
-    const prevData = loadDayData(getPrevDay(date), type, section);
-    if (!Object.keys(prevData).length) return current;
-
-    const result: Record<string, any> = {};
-    Object.keys(current).forEach(k => {
-      result[k] = { ...current[k] };
-    });
-
-    Object.keys(prevData).forEach(k => {
-      if (!result[k]) result[k] = {};
-      if (type === 'ubb') {
-        const prevFinal = prevData[k].ubbFinal;
-        if (prevFinal && !result[k].ubbInicial) {
-          result[k] = { ...result[k], ubbInicial: prevFinal };
-        }
-      } else if (type === 'sugar') {
-        const prevFinal = prevData[k].invFinalSacos;
-        if (prevFinal && !result[k].invInicialSacos) {
-          result[k] = { ...result[k], invInicialSacos: prevFinal };
-        }
-      } else if (type === 'tanks') {
-        const prevFinal = prevData[k].invFinalSacos;
-        if (prevFinal && !result[k].invInicialSacos) {
-          result[k] = { ...result[k], invInicialSacos: prevFinal };
-        }
-      }
-    });
-
-    return result;
-  };
-
-  const getPrevDay = (dateStr: string) => format(addDays(new Date(dateStr + 'T00:00:00'), -1), 'yyyy-MM-dd');
-
-  const loadDayDataWithCarryOver = (date: string, type: string, field: string) => {
-    const current = loadDayData(date, type, field);
-    const prevData = loadDayData(getPrevDay(date), type, field);
-    if (!Object.keys(prevData).length) return current;
-
-    const result: Record<string, any> = {};
-    Object.keys(current).forEach(k => {
-      result[k] = { ...current[k] };
-    });
-
-    Object.keys(prevData).forEach(k => {
-      if (!result[k]) result[k] = {};
-      if (type === 'ubb') {
-        const prevFinal = prevData[k].ubbFinal;
-        if (prevFinal && !result[k].ubbInicial) {
-          result[k] = { ...result[k], ubbInicial: prevFinal };
-        }
-      } else if (type === 'sugar') {
-        const prevFinal = prevData[k].invFinalSacos;
-        if (prevFinal && !result[k].invInicialSacos) {
-          result[k] = { ...result[k], invInicialSacos: prevFinal };
-        }
-      } else if (type === 'tanks') {
-        const prevFinal = prevData[k].invFinalSacos;
-        if (prevFinal && !result[k].invInicialSacos) {
-          result[k] = { ...result[k], invInicialSacos: prevFinal };
-        }
-      }
-    });
-
-    return result;
-  };
+   const getPrevDay = (dateStr: string) => format(addDays(new Date(dateStr + 'T00:00:00'), -1), 'yyyy-MM-dd');
 
   const weeklyEst = useMemo(() => {
     if (!weekDays.length) return null;
@@ -1320,9 +1286,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     let tanks: Record<string, { invInicialSacos?: string; invFinalSacos?: string }> = {};
     weekDays.forEach(day => {
       const dateStr = format(day, 'yyyy-MM-dd');
-      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
-      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
-      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
+      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb');
+      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar');
+      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks');
       Object.keys(dUbb).forEach(k => {
         ubb[k] = ubb[k] || {};
         ubb[k]!.ubbInicial = String(parseFloat(ubb[k]!.ubbInicial || '0') + parseFloat(dUbb[k].ubbInicial || '0'));
@@ -1351,9 +1317,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     let tanks: Record<string, { invInicialSacos?: string; invFinalSacos?: string }> = {};
     weekDays.forEach(day => {
       const dateStr = format(day, 'yyyy-MM-dd');
-      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
-      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
-      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
+      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb');
+      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar');
+      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks');
       Object.keys(dUbb).forEach(k => {
         ubb[k] = ubb[k] || {};
         ubb[k]!.ubbInicial = String(parseFloat(ubb[k]!.ubbInicial || '0') + parseFloat(dUbb[k].ubbInicial || '0'));
@@ -1380,9 +1346,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     let maxVal = 1;
     weekDays.forEach(day => {
       const dateStr = format(day, 'yyyy-MM-dd');
-      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
-      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
-      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
+      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb');
+      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar');
+      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks');
       const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
       maxVal = Math.max(maxVal, m.sugarStandard, m.fisico);
     });
@@ -1394,9 +1360,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     let maxVal = 1;
     weekDays.forEach(day => {
       const dateStr = format(day, 'yyyy-MM-dd');
-      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
-      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
-      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
+      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb');
+      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar');
+      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks');
       const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
       maxVal = Math.max(maxVal, m.sugarStandard, m.fisico);
     });
@@ -1408,9 +1374,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     let maxPct = 20;
     weekDays.forEach(day => {
       const dateStr = format(day, 'yyyy-MM-dd');
-      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
-      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
-      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
+      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb');
+      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar');
+      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks');
       const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
       const pct = m.sugarStandard !== 0 ? Math.abs((m.fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
       maxPct = Math.max(maxPct, pct);
@@ -1423,9 +1389,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     let maxPct = 20;
     weekDays.forEach(day => {
       const dateStr = format(day, 'yyyy-MM-dd');
-      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
-      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
-      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
+      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb');
+      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar');
+      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks');
       const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
       const pct = m.sugarStandard !== 0 ? Math.abs((m.fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
       maxPct = Math.max(maxPct, pct);
@@ -1437,9 +1403,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     if (!weekDays.length) return [];
     return weekDays.map((day) => {
       const dateStr = format(day, 'yyyy-MM-dd');
-      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
-      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
-      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
+      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb');
+      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar');
+      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks');
       const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
       const pct = m.sugarStandard !== 0 ? ((m.fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
       return {
@@ -1455,9 +1421,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     if (!weekDays.length) return [];
     return weekDays.map((day) => {
       const dateStr = format(day, 'yyyy-MM-dd');
-      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
-      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
-      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
+      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb');
+      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar');
+      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks');
       const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
       const pct = m.sugarStandard !== 0 ? ((m.fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
       return {
@@ -2409,9 +2375,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                      <tbody>
                                           {weekDays.map((day, idx) => {
                                             const dateStr = format(day, 'yyyy-MM-dd');
-                                            const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
-                                            const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
-                                            const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
+                                            const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb');
+                                            const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar');
+                                            const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks');
                                             const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
                                             const fisico = m.fisico;
                                             const diferencia = fisico - m.sugarStandard;
@@ -2510,9 +2476,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                     <tbody>
                                         {weekDays.map((day, idx) => {
                                           const dateStr = format(day, 'yyyy-MM-dd');
-                                           const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
-                                          const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
-                                          const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
+                                           const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb');
+                                          const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar');
+                                          const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks');
                                            const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
                                            const fisico = m.fisico;
                                           const diferencia = fisico - m.sugarStandard;
