@@ -2383,8 +2383,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                          const fisico = m.fisico;
                                          const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
                                          const x = (idx + 0.5) * (100 / weekDays.length);
-                                              const y = 100 - (Number.isFinite(pct) ? Math.min(weeklyPromPctMax, Math.max(0, pct)) : 0);
-                                              return `${x},${y}`;
+                                          const y = 100 - (Number.isFinite(pct) ? Math.min(weeklyEstPctMax, Math.max(0, pct)) : 0);
+                                          return `${x},${y}`;
                                        }).join(' ')} fill="none" stroke="#f59e0b" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
                                        {weekDays.map((day, idx) => {
                                          const dateStr = format(day, 'yyyy-MM-dd');
@@ -2395,8 +2395,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                          const fisico = m.fisico;
                                          const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
                                          const x = (idx + 0.5) * (100 / weekDays.length);
-                                              const y = 100 - (Number.isFinite(pct) ? Math.min(weeklyPromPctMax, Math.max(0, pct)) : 0);
-                                              return <circle key={dateStr} cx={x} cy={y} r="0.8" fill="#f59e0b" stroke="white" strokeWidth="0.2" vectorEffect="non-scaling-stroke" />;
+                                          const y = 100 - (Number.isFinite(pct) ? Math.min(weeklyEstPctMax, Math.max(0, pct)) : 0);
+                                          return <circle key={dateStr} cx={x} cy={y} r="0.8" fill="#f59e0b" stroke="white" strokeWidth="0.2" vectorEffect="non-scaling-stroke" />;
                                        })}
                                     </svg>
                                     {weekDays.map((day, idx) => {
