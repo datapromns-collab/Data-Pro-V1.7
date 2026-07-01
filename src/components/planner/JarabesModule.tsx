@@ -929,55 +929,36 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
      toast({ title: 'Vista previa', description: 'Abriendo el reporte semanal en vista de impresión.' });
    };
 
-   const handleExportWeeklyPDFStandard = async () => {
-    try {
-      if (!weekDays.length) return;
-      let chartImage = null;
-      try {
-        chartImage = await captureChart(standardChartRef);
-      } catch (e) {
-        console.error('Error capturing chart:', e);
-      }
-      const reportContent = buildWeeklyStandardHtml(chartImage);
-      const reportEl = document.createElement('div');
-      reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:1600px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
-      reportEl.innerHTML = reportContent;
-      document.body.appendChild(reportEl);
-      const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-      document.body.removeChild(reportEl);
+    const handleExportWeeklyPDFStandard = async () => {
+     try {
+       if (!weekDays.length) return;
+       const cardEl = document.querySelector('[data-resumen-estandar-card]') as HTMLElement | null;
+       if (!cardEl) {
+         toast({ title: 'Error', description: 'No se encontró la sección de Resumen Estándar.' });
+         return;
+       }
 
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const pageW = pdf.internal.pageSize.getWidth();
-    const pageH = pdf.internal.pageSize.getHeight();
-    const pageMargins = 14.4;
-    const chartTargetWidth = 160; // 16cm
-    const chartTargetHeight = 141; // 14cm (proporción 605:529 ≈ 16:14)
-    const chartAvailableWidth = pageW - pageMargins * 2;
-    const chartFitWidth = Math.min(chartTargetWidth, chartAvailableWidth);
-    const chartFitHeight = chartFitWidth * (chartTargetHeight / chartTargetWidth);
-    const tableImgW = pageW;
-    const tableImgH = (canvas.height * tableImgW) / canvas.width;
+       const canvas = await html2canvas(cardEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+       const imgData = canvas.toDataURL('image/png');
 
-    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, tableImgW, tableImgH);
+       const pxToMM = 25.4 / 96;
+       const pdfWidth = (canvas.width / 2) * pxToMM;
+       const pdfHeight = (canvas.height / 2) * pxToMM;
 
-    if (chartImage) {
-      const chartX = (pageW - chartFitWidth) / 2;
-      const chartY = tableImgH + 10;
-      if (chartY + chartFitHeight > pageH) {
-        const secondPageChartTopY = 14.4;
-        pdf.addImage(chartImage, 'PNG', chartX, secondPageChartTopY, chartFitWidth, chartFitHeight);
-      } else {
-        pdf.addImage(chartImage, 'PNG', chartX, chartY, chartFitWidth, chartFitHeight);
-      }
-    }
+       const pdf = new jsPDF({
+         orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
+         unit: 'mm',
+         format: [pdfWidth, pdfHeight],
+       });
+       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
 
-     const pdfBlob = pdf.output('blob');
-     openPdfInPrintView(pdfBlob);
-   } catch (error) {
-     console.error(error);
-     toast({ title: 'Error', description: 'No se pudo generar la vista previa semanal.' });
-   }
- };
+       const pdfBlob = pdf.output('blob');
+       openPdfInPrintView(pdfBlob);
+     } catch (error) {
+       console.error(error);
+       toast({ title: 'Error', description: 'No se pudo generar el PDF de Resumen Estándar.' });
+     }
+   };
 
   const buildWeeklyPromedioHtml = (chartImage?: string | null): string => {
         if (!weekDays.length) return '';
@@ -1072,55 +1053,35 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             </body></html>`;
        };
 
-            const handleExportWeeklyPDFPromedio = async () => {
-             try {
-               if (!weekDays.length) return;
-               let chartImage = null;
-               try {
-                 chartImage = await captureChart(promedioChartRef);
-               } catch (e) {
-                 console.error('Error capturing chart:', e);
-               }
-             const reportContent = buildWeeklyPromedioHtml(chartImage);
-           const reportEl = document.createElement('div');
-           reportEl.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:1600px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
-           reportEl.innerHTML = reportContent;
-           document.body.appendChild(reportEl);
-           const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-           document.body.removeChild(reportEl);
+             const handleExportWeeklyPDFPromedio = async () => {
+              try {
+                if (!weekDays.length) return;
+                const cardEl = document.querySelector('[data-resumen-promedio-card]') as HTMLElement | null;
+                if (!cardEl) {
+                  toast({ title: 'Error', description: 'No se encontró la sección de Resumen Promedio.' });
+                  return;
+                }
+                const canvas = await html2canvas(cardEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+                const imgData = canvas.toDataURL('image/png');
 
-        const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-        const pageW = pdf.internal.pageSize.getWidth();
-        const pageH = pdf.internal.pageSize.getHeight();
-        const pageMargins = 14.4;
-        const chartTargetWidth = 160; // 16cm
-        const chartTargetHeight = 141; // 14cm (proporción 605:529 ≈ 16:14)
-        const chartAvailableWidth = pageW - pageMargins * 2;
-        const chartFitWidth = Math.min(chartTargetWidth, chartAvailableWidth);
-        const chartFitHeight = chartFitWidth * (chartTargetHeight / chartTargetWidth);
-        const tableImgW = pageW;
-        const tableImgH = (canvas.height * tableImgW) / canvas.width;
+                const pxToMM = 25.4 / 96;
+                const pdfWidth = (canvas.width / 2) * pxToMM;
+                const pdfHeight = (canvas.height / 2) * pxToMM;
 
-        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, 0, tableImgW, tableImgH);
+                const pdf = new jsPDF({
+                  orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
+                  unit: 'mm',
+                  format: [pdfWidth, pdfHeight],
+                });
+                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
 
-        if (chartImage) {
-          const chartX = (pageW - chartFitWidth) / 2;
-          const chartY = tableImgH + 10;
-          if (chartY + chartFitHeight > pageH) {
-            const secondPageChartTopY = 14.4;
-            pdf.addImage(chartImage, 'PNG', chartX, secondPageChartTopY, chartFitWidth, chartFitHeight);
-          } else {
-            pdf.addImage(chartImage, 'PNG', chartX, chartY, chartFitWidth, chartFitHeight);
-          }
-        }
-
-         const pdfBlob = pdf.output('blob');
-         openPdfInPrintView(pdfBlob);
-       } catch (error) {
-         console.error(error);
-         toast({ title: 'Error', description: 'No se pudo generar la vista previa semanal.' });
-       }
-     };
+                const pdfBlob = pdf.output('blob');
+                openPdfInPrintView(pdfBlob);
+              } catch (error) {
+                console.error(error);
+                toast({ title: 'Error', description: 'No se pudo generar el PDF de Resumen Promedio.' });
+              }
+            };
 
 
 
@@ -2370,9 +2331,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
                            </TabsContent>
 
-                      <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
-                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                           <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm flex flex-col min-h-[520px]">
+                       <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div data-resumen-estandar-card className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm flex flex-col min-h-[520px]">
                               <div className="flex items-center justify-between mb-4">
                                 <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Estándar Semanal</h3>
                                      <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFStandard} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
@@ -2473,7 +2434,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                               </div>
                             )}
                            </div>
-                            <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm flex flex-col min-h-[520px]">
+                             <div data-resumen-promedio-card className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm flex flex-col min-h-[520px]">
                               <div className="flex items-center justify-between mb-4">
                                 <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Promedio Semanal</h3>
                                    <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFPromedio} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
