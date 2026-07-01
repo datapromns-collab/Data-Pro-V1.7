@@ -2546,7 +2546,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                                <Tooltip content={<ChartTooltipContent />} cursor={{ fill: '#f8fafc' }} />
                                                <Bar yAxisId="left" dataKey="estandar" fill="var(--color-estandar)" radius={[4, 4, 0, 0]} barSize={30} name="Estándar" />
                                                <Bar yAxisId="left" dataKey="fisico" fill="var(--color-fisico)" radius={[4, 4, 0, 0]} barSize={30} name="Físico" />
-                                               <Line yAxisId="right" type="monotone" dataKey="pct" stroke="var(--color-pct)" strokeWidth={3} dot={{ r: 4, fill: 'var(--color-pct)', strokeWidth: 2, stroke: '#fff' }} name="%" />
+                                               <Line yAxisId="right" type="monotone" dataKey="pct" stroke="var(--color-pct)" strokeWidth={3} dot={{ r: 4, fill: 'var(--color-pct)', strokeWidth: 2, stroke: '#fff' }} name="%" label={{ fill: '#1e293b', fontSize: 10, fontWeight: 800, position: 'top', formatter: (value: number) => `${value.toFixed(2)}%` }} />
                                              </ComposedChart>
                                            </ResponsiveContainer>
                                          </ChartContainer>
