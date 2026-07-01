@@ -2516,7 +2516,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                    </tbody>
                                  </table>
                                </div>
-                                       <div className="flex flex-col flex-1 min-h-[529px] bg-slate-50/40 rounded-2xl border-2 border-slate-200 max-w-[605px] relative" ref={promedioChartRef}>
+                                        <div className="flex flex-col flex-1 min-h-[529px] bg-slate-50/40 rounded-2xl border-2 border-slate-200 p-4 relative" ref={promedioChartRef}>
                                          <ChartContainer config={chartConfig} className="flex-1 w-full">
                                            <ResponsiveContainer width="100%" height="100%">
                                              <ComposedChart data={promedioChartData} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
