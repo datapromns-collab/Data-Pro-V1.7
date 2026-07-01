@@ -924,43 +924,26 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
     const openPdfInPrintView = (pdfBlob: Blob) => {
       const url = URL.createObjectURL(pdfBlob);
-      const printWindow = window.open('about:blank', '_blank');
-      if (!printWindow) {
-        toast({ title: 'Bloqueado', description: 'Permite ventanas emergentes para ver la vista de impresión.' });
-        URL.revokeObjectURL(url);
-        return;
-      }
-      const doc = printWindow.document;
-      doc.open();
-      doc.write(`<!DOCTYPE html><html><head><title>Imprimiendo…</title><style>html,body{margin:0;padding:0}embed{border:0;width:100vw;height:100vh}@media print{body> :not(embed){display:none}}</style></head><body><embed src="" type="application/pdf" width="100%" height="100%"></body></html>`);
-      doc.close();
-      const embed = doc.querySelector('embed');
-      if (embed) {
-        embed.setAttribute('src', url);
-        const tryPrint = () => {
-          try {
-            printWindow.focus();
-            printWindow.print();
-          } catch {
-            // print blocked
-          }
-          setTimeout(() => {
-            try {
-              printWindow.close();
-            } catch {
-              // already closed
-            }
-            setTimeout(() => URL.revokeObjectURL(url), 1000 * 60 * 5);
-          }, 1500);
-        };
-        if (doc.readyState === 'complete') {
-          tryPrint();
-        } else {
-          doc.addEventListener('readystatechange', () => {
-            if (doc.readyState === 'complete') tryPrint();
-          });
+      const iframe = document.createElement('iframe');
+      iframe.style.cssText = 'position:fixed;width:0;height:0;opacity:0;pointer-events:none;border:0;visibility:hidden;';
+      iframe.src = url;
+      document.body.appendChild(iframe);
+
+      const tryPrint = () => {
+        try {
+          iframe.contentWindow?.focus();
+          iframe.contentWindow?.print();
+        } catch {
+          // print blocked
         }
-      }
+        setTimeout(() => {
+          try { document.body.removeChild(iframe); } catch { /* ignore */ }
+          setTimeout(() => URL.revokeObjectURL(url), 1000 * 30);
+        }, 1000);
+      };
+
+      iframe.addEventListener('load', tryPrint, { once: true });
+      setTimeout(tryPrint, 400);
     };
 
     const handleExportWeeklyPDFStandard = async () => {
@@ -972,8 +955,15 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
           return;
         }
 
-        const canvas = await html2canvas(cardEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-        const pdf = buildLetterPdf(canvas, 14.4);
+        const canvas = await html2canvas(cardEl, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: '#ffffff',
+          logging: false,
+          windowWidth: cardEl.scrollWidth,
+          windowHeight: cardEl.scrollHeight
+        });
+        const pdf = buildLetterPdf(canvas, 10);
         const pdfBlob = pdf.output('blob');
         openPdfInPrintView(pdfBlob);
       } catch (error) {
@@ -1075,23 +1065,30 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
             </body></html>`;
        };
 
-             const handleExportWeeklyPDFPromedio = async () => {
-              try {
-                if (!weekDays.length) return;
-                const cardEl = document.querySelector('[data-resumen-promedio-card]') as HTMLElement | null;
-                if (!cardEl) {
-                  toast({ title: 'Error', description: 'No se encontró la sección de Resumen Promedio.' });
-                  return;
-                }
-                const canvas = await html2canvas(cardEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-                const pdf = buildLetterPdf(canvas, 14.4);
-                const pdfBlob = pdf.output('blob');
-                openPdfInPrintView(pdfBlob);
-              } catch (error) {
-                console.error(error);
-                toast({ title: 'Error', description: 'No se pudo generar el PDF de Resumen Promedio.' });
-              }
-            };
+              const handleExportWeeklyPDFPromedio = async () => {
+               try {
+                 if (!weekDays.length) return;
+                 const cardEl = document.querySelector('[data-resumen-promedio-card]') as HTMLElement | null;
+                 if (!cardEl) {
+                   toast({ title: 'Error', description: 'No se encontró la sección de Resumen Promedio.' });
+                   return;
+                 }
+                 const canvas = await html2canvas(cardEl, {
+                   scale: 2,
+                   useCORS: true,
+                   backgroundColor: '#ffffff',
+                   logging: false,
+                   windowWidth: cardEl.scrollWidth,
+                   windowHeight: cardEl.scrollHeight
+                 });
+                 const pdf = buildLetterPdf(canvas, 10);
+                 const pdfBlob = pdf.output('blob');
+                 openPdfInPrintView(pdfBlob);
+               } catch (error) {
+                 console.error(error);
+                 toast({ title: 'Error', description: 'No se pudo generar el PDF de Resumen Promedio.' });
+               }
+             };
 
 
 
