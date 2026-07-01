@@ -928,8 +928,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
     const openPdfInPrintView = (canvas: HTMLCanvasElement) => {
       const imgSrc = canvas.toDataURL('image/png');
-
-      const printWindow = window.open('', '_self')!;
+      const printWindow = window.open('', '_blank');
       if (!printWindow) {
         toast({ title: 'Bloqueado', description: 'Permite ventanas emergentes para ver la vista de impresión.' });
         return;
@@ -943,6 +942,18 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
         @media print{html,body{background:#fff} img{max-height:100vh;object-fit:contain}}
       </style></head><body><img src="${imgSrc}" /></body></html>`);
       doc.close();
+      const timer = setInterval(() => {
+        try {
+          if (doc.readyState === 'complete') {
+            clearInterval(timer);
+            printWindow.focus();
+            printWindow.print();
+            setTimeout(() => {
+              try { printWindow.close(); } catch {}
+            }, 1500);
+          }
+        } catch {}
+      }, 150);
     };
 
     const handleExportWeeklyPDFStandard = async () => {
