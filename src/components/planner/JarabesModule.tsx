@@ -2550,7 +2550,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                                <Tooltip content={<ChartTooltipContent />} cursor={{ fill: '#f8fafc' }} />
                                                 <Bar yAxisId="left" dataKey="estandar" fill="#fb923c" radius={[4, 4, 0, 0]} barSize={30} name="Estándar" />
                                                 <Bar yAxisId="left" dataKey="fisico" fill="#10b981" radius={[4, 4, 0, 0]} barSize={30} name="Físico" />
-                                          <Line yAxisId="right" type="monotone" dataKey="pct" stroke="#ef4444" strokeWidth={3} dot={{ r: 4, fill: '#ef4444', strokeWidth: 2, stroke: '#fff' }} name="%" label={{ fill: '#b91c1c', fontSize: 9, fontWeight: 800, position: 'top', dy: -8, formatter: (value: number) => `${value.toFixed(2)}%` }} />
+                                          <Line yAxisId="right" type="monotone" dataKey="pct" stroke="#ef4444" strokeWidth={3} dot={{ r: 4, fill: '#ef4444', strokeWidth: 2, stroke: '#fff' }} name="%" label={{ content: ({ x, y, value }: any) => <g><rect x={Number(x) - 14} y={Number(y) - 20} width={28} height={18} rx={9} fill="white" stroke="#e2e8f0" strokeWidth={1} /><text x={Number(x)} y={Number(y) - 8} textAnchor="middle" fontSize={9} fontWeight={800} fill="#1e293b">{`${Number(value).toFixed(2)}%`}</text></g>, position: 'top' }} />
                                              </ComposedChart>
                                            </ResponsiveContainer>
                                          </ChartContainer>
