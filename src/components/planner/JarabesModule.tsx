@@ -2446,8 +2446,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                          <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(0)}k` : val} />
                                          <YAxis yAxisId="right" orientation="right" domain={[0, Math.max(20, Math.ceil(weeklyEstPctMax / 5) * 5 + 10)]} axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(val) => `${val}%`} />
                                          <Tooltip content={<ChartTooltipContent />} cursor={{ fill: '#f8fafc' }} />
-                                         <Bar yAxisId="left" dataKey="estandar" fill="var(--color-estandar)" radius={[4, 4, 0, 0]} barSize={30} name="Estándar" />
-                                                <Bar yAxisId="left" dataKey="fisico" fill="#10b981" radius={[4, 4, 0, 0]} barSize={30} name="Físico" />
+                                          <Bar yAxisId="left" dataKey="estandar" fill="#1d4ed8" radius={[4, 4, 0, 0]} barSize={30} name="Estándar" />
+                                          <Bar yAxisId="left" dataKey="fisico" fill="#4f81bd" radius={[4, 4, 0, 0]} barSize={30} name="Físico" />
                                           <Line yAxisId="right" type="monotone" dataKey="pct" stroke="#ef4444" strokeWidth={3} dot={{ r: 4, fill: '#ef4444', strokeWidth: 2, stroke: '#fff' }} name="%" label={{ fill: '#1e293b', fontSize: 10, fontWeight: 800, position: 'top', formatter: (value: number) => `${value.toFixed(2)}%` }} />
                                        </ComposedChart>
                                      </ResponsiveContainer>
@@ -2457,10 +2457,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                        <div className="w-5 h-5 bg-[#4f81bd] rounded shadow-sm border border-[#4f81bd]/30" />
                                        <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Estándar</span>
                                      </div>
-                                     <div className="flex items-center gap-2">
-                                       <div className="w-5 h-5 bg-[#f59e0b] rounded shadow-sm border border-[#f59e0b]/30" />
-                                       <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Físico</span>
-                                     </div>
+                                      <div className="flex items-center gap-2">
+                                        <div className="w-5 h-5 bg-[#4f81bd] rounded shadow-sm border border-[#4f81bd]/30" />
+                                        <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Físico</span>
+                                      </div>
                                      <div className="flex items-center gap-2">
                                        <div className="w-6 h-1 bg-[#f59e0b] rounded-full shadow-sm" />
                                        <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">%</span>
@@ -2548,8 +2548,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                                <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(0)}k` : val} />
                                                <YAxis yAxisId="right" orientation="right" domain={[0, Math.max(20, Math.ceil(weeklyPromPctMax / 5) * 5 + 10)]} axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(val) => `${val}%`} />
                                                <Tooltip content={<ChartTooltipContent />} cursor={{ fill: '#f8fafc' }} />
-                                               <Bar yAxisId="left" dataKey="estandar" fill="var(--color-estandar)" radius={[4, 4, 0, 0]} barSize={30} name="Estándar" />
-                                               <Bar yAxisId="left" dataKey="fisico" fill="#4f81bd" radius={[4, 4, 0, 0]} barSize={30} name="Físico" />
+                                                <Bar yAxisId="left" dataKey="estandar" fill="#1d4ed8" radius={[4, 4, 0, 0]} barSize={30} name="Estándar" />
+                                                <Bar yAxisId="left" dataKey="fisico" fill="#10b981" radius={[4, 4, 0, 0]} barSize={30} name="Físico" />
                                                <Line yAxisId="right" type="monotone" dataKey="pct" stroke="#ef4444" strokeWidth={3} dot={{ r: 4, fill: '#ef4444', strokeWidth: 2, stroke: '#fff' }} name="%" label={{ fill: '#1e293b', fontSize: 10, fontWeight: 800, position: 'top', formatter: (value: number) => `${value.toFixed(2)}%` }} />
                                              </ComposedChart>
                                            </ResponsiveContainer>
@@ -2559,10 +2559,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                              <div className="w-5 h-5 bg-[#4f81bd] rounded shadow-sm border border-[#4f81bd]/30" />
                                              <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Estándar</span>
                                            </div>
-                                           <div className="flex items-center gap-2">
-                                             <div className="w-5 h-5 bg-[#f59e0b] rounded shadow-sm border border-[#f59e0b]/30" />
-                                             <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Físico</span>
-                                           </div>
+                                            <div className="flex items-center gap-2">
+                                              <div className="w-5 h-5 bg-[#10b981] rounded shadow-sm border border-[#10b981]/30" />
+                                              <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Físico</span>
+                                            </div>
                                            <div className="flex items-center gap-2">
                                              <div className="w-6 h-1 bg-[#f59e0b] rounded-full shadow-sm" />
                                              <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">%</span>
