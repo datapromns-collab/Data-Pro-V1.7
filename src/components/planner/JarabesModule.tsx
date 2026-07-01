@@ -928,35 +928,32 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
     const openPdfInPrintView = (canvas: HTMLCanvasElement) => {
       const imgSrc = canvas.toDataURL('image/png');
-      const iframe = document.createElement('iframe');
-      iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
-      iframe.style.cssText = 'position:fixed;left:0;top:0;width:0;height:0;border:0;visibility:hidden;pointer-events:none;';
-      document.body.appendChild(iframe);
-
-      const written = new Promise<void>((resolve) => {
-        iframe.addEventListener('load', () => resolve(), { once: true });
-      });
-
-      iframe.contentDocument?.open();
-      iframe.contentDocument?.write(`<!DOCTYPE html><html><head><title>Imprimir</title><style>
+      const printWindow = window.open('', '_blank', 'width=900,height=700');
+      if (!printWindow) {
+        toast({ title: 'Bloqueado', description: 'Permite ventanas emergentes para ver la vista de impresión.' });
+        return;
+      }
+      const doc = printWindow.document;
+      doc.open();
+      doc.write(`<!DOCTYPE html><html><head><title>Imprimir</title><style>
         html,body{margin:0;padding:0;background:#fff}
         img{display:block;margin:0 auto;max-width:100%;height:auto;box-sizing:border-box}
         @page{size: letter portrait;margin:10mm}
         @media print{html,body{background:#fff} img{max-height:100vh;object-fit:contain}}
       </style></head><body><img src="${imgSrc}" /></body></html>`);
-      iframe.contentDocument?.close();
-
-      written.then(() => {
+      doc.close();
+      const timer = setInterval(() => {
         try {
-          iframe.contentWindow?.focus();
-          iframe.contentWindow?.print();
-        } catch {
-          // print blocked
-        }
-        setTimeout(() => {
-          try { document.body.removeChild(iframe); } catch {}
-        }, 1000);
-      });
+          if (doc.readyState === 'complete') {
+            clearInterval(timer);
+            printWindow.focus();
+            printWindow.print();
+            setTimeout(() => {
+              try { printWindow.close(); } catch {}
+            }, 1500);
+          }
+        } catch {}
+      }, 150);
     };
 
     const handleExportWeeklyPDFStandard = async () => {
