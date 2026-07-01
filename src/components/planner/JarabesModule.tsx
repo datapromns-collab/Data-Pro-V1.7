@@ -965,7 +965,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
           return;
         }
 
-        const pdfButtonEst = cardEl.querySelector('button[onClick="handleExportWeeklyPDFStandard"]') as HTMLElement | null;
+        const pdfButtonEst = cardEl.querySelector('.pdf-export-btn') as HTMLElement | null;
         if (pdfButtonEst) pdfButtonEst.style.visibility = 'hidden';
 
         const canvas = await html2canvas(cardEl, {
@@ -1091,7 +1091,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                     return;
                   }
 
-                  const pdfButtonProm = cardEl.querySelector('button[onClick="handleExportWeeklyPDFPromedio"]') as HTMLElement | null;
+                  const pdfButtonProm = cardEl.querySelector('.pdf-export-btn') as HTMLElement | null;
                   if (pdfButtonProm) pdfButtonProm.style.visibility = 'hidden';
 
                   const canvas = await html2canvas(cardEl, {
@@ -2368,7 +2368,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                             <div data-resumen-estandar-card className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm flex flex-col min-h-[520px]">
                               <div className="flex items-center justify-between mb-4">
                                 <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Estándar Semanal</h3>
-                                     <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFStandard} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
+                                      <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFStandard} className="pdf-export-btn gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
                                   <FileDown className="h-4 w-4" /> PDF
                                 </Button>
                             </div>
@@ -2469,7 +2469,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                              <div data-resumen-promedio-card className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm flex flex-col min-h-[520px]">
                               <div className="flex items-center justify-between mb-4">
                                 <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Promedio Semanal</h3>
-                                   <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFPromedio} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
+                                    <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFPromedio} className="pdf-export-btn gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
                                   <FileDown className="h-4 w-4" /> PDF
                                 </Button>
                             </div>
