@@ -904,30 +904,27 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       </body></html>`;
     };
 
-   const openPdfInPrintView = (pdfBlob: Blob) => {
-     const url = URL.createObjectURL(pdfBlob);
-     const printWindow = window.open('', '_blank');
-     if (!printWindow) {
-       toast({ title: 'Bloqueado', description: 'Permite ventanas emergentes para ver la vista de impresión.' });
-       URL.revokeObjectURL(url);
-       return;
-     }
-     printWindow.document.write(`<!DOCTYPE html><html><head><title>Vista de impresión</title><style>html,body{margin:0;padding:0}iframe{border:0;width:100%;height:100vh}</style></head><body><iframe src="${url}"></iframe></body></html>`);
-     printWindow.document.close();
-     const iframe = printWindow.document.querySelector('iframe');
-     if (iframe) {
-       iframe.addEventListener('load', () => {
-         try {
-           printWindow.focus();
-           iframe.contentWindow?.print();
-         } catch {
-           // print blocked
-         }
-       });
-     }
-     setTimeout(() => URL.revokeObjectURL(url), 1000 * 60 * 5);
-     toast({ title: 'Vista previa', description: 'Abriendo el reporte semanal en vista de impresión.' });
-   };
+    const openPdfInPrintView = (pdfBlob: Blob) => {
+      const url = URL.createObjectURL(pdfBlob);
+      const printWindow = window.open(url, '_blank');
+      if (!printWindow) {
+        toast({ title: 'Bloqueado', description: 'Permite ventanas emergentes para ver la vista de impresión.' });
+        URL.revokeObjectURL(url);
+        return;
+      }
+      const timer = setInterval(() => {
+        try {
+          if (printWindow.document.readyState === 'complete') {
+            clearInterval(timer);
+            printWindow.focus();
+            printWindow.print();
+            setTimeout(() => URL.revokeObjectURL(url), 1000 * 60 * 5);
+          }
+        } catch {
+          // cross-origin PDF viewer, ignore
+        }
+      }, 150);
+    };
 
     const handleExportWeeklyPDFStandard = async () => {
      try {
