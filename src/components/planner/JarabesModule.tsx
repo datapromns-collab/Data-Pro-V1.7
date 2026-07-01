@@ -928,35 +928,35 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
     const openPdfInPrintView = (canvas: HTMLCanvasElement) => {
       const imgSrc = canvas.toDataURL('image/png');
-      const printWindow = window.open('', '_blank', 'width=900,height=700');
-      if (!printWindow) {
-        toast({ title: 'Bloqueado', description: 'Permite ventanas emergentes para ver la vista de impresión.' });
-        return;
-      }
-      const doc = printWindow.document;
-      doc.open();
-      const now = new Date();
-      const printedAt = now.toLocaleString('es');
-      doc.write(`<!DOCTYPE html><html><head><title>Imprimir</title><style>
+      const iframe = document.createElement('iframe');
+      iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin');
+      iframe.style.cssText = 'position:fixed;left:0;top:0;width:0;height:0;border:0;visibility:hidden;pointer-events:none;';
+      document.body.appendChild(iframe);
+
+      const written = new Promise<void>((resolve) => {
+        iframe.addEventListener('load', () => resolve(), { once: true });
+      });
+
+      iframe.contentDocument?.open();
+      iframe.contentDocument?.write(`<!DOCTYPE html><html><head><title>Imprimir</title><style>
         html,body{margin:0;padding:0;background:#fff}
         img{display:block;margin:0 auto;max-width:100%;height:auto;box-sizing:border-box}
-        .footer{display:none}
-        @page{size: letter portrait;margin:10mm; @bottom-left { content: "EMITIDO: ${printedAt}"; font-size: 9px; color: #94a3b8; } @bottom-right { content: "MULTINACIONAL DE SABORES"; font-size: 9px; color: #94a3b8; } }
+        @page{size: letter portrait;margin:10mm}
         @media print{html,body{background:#fff} img{max-height:100vh;object-fit:contain}}
       </style></head><body><img src="${imgSrc}" /></body></html>`);
-      doc.close();
-      const timer = setInterval(() => {
+      iframe.contentDocument?.close();
+
+      written.then(() => {
         try {
-          if (doc.readyState === 'complete') {
-            clearInterval(timer);
-            printWindow.focus();
-            printWindow.print();
-            setTimeout(() => {
-              try { printWindow.close(); } catch {}
-            }, 1500);
-          }
-        } catch {}
-      }, 150);
+          iframe.contentWindow?.focus();
+          iframe.contentWindow?.print();
+        } catch {
+          // print blocked
+        }
+        setTimeout(() => {
+          try { document.body.removeChild(iframe); } catch {}
+        }, 1000);
+      });
     };
 
     const handleExportWeeklyPDFStandard = async () => {
@@ -2375,7 +2375,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                              <div data-resumen-estandar-card className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm flex flex-col min-h-[520px]">
                                 <div className="flex items-center justify-between mb-4">
                                   <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Estándar Semanal</h3>
-                                  <span id="semana-title-estandar" className="font-black text-slate-800 text-sm uppercase tracking-wider">Semana {getWeek(selectedDate || new Date())}</span>
+                                  <span className="font-black text-slate-800 text-sm uppercase tracking-wider">Semana {getWeek(selectedDate || new Date())}</span>
                                   <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFStandard} className="pdf-export-btn gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
                                     <FileDown className="h-4 w-4" /> PDF
                                   </Button>
@@ -2477,7 +2477,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                              <div data-resumen-promedio-card className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm flex flex-col min-h-[520px]">
                                 <div className="flex items-center justify-between mb-4">
                                   <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Promedio Semanal</h3>
-                                  <span id="semana-title-promedio" className="font-black text-slate-800 text-sm uppercase tracking-wider">Semana {getWeek(selectedDate || new Date())}</span>
+                                  <span className="font-black text-slate-800 text-sm uppercase tracking-wider">Semana {getWeek(selectedDate || new Date())}</span>
                                      <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFPromedio} className="pdf-export-btn gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
                                     <FileDown className="h-4 w-4" /> PDF
                                   </Button>
