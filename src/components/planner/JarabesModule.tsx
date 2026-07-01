@@ -2372,8 +2372,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                   </table>
                                 </div>
                                  <div className="flex flex-col flex-1 min-h-[529px] bg-slate-50/40 rounded-2xl border-2 border-slate-200 p-4 relative" ref={standardChartRef}>
-                                   <div className="flex-1 flex items-end justify-between gap-4 px-2 pb-6 pt-8 relative">
-                                      <svg className="absolute inset-x-2 top-8 bottom-10 w-[calc(100%-16px)] h-[calc(100%-40px)] z-20 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                   <div className="flex-1 flex items-end justify-between gap-4 px-2 pt-8 relative">
+                                     <svg className="absolute inset-x-2 top-8 bottom-0 w-[calc(100%-16px)] h-[calc(100%-32px)] z-20 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
                                        <polyline points={weekDays.map((day, idx) => {
                                          const dateStr = format(day, 'yyyy-MM-dd');
                                          const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
@@ -2386,18 +2386,23 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                           const y = 100 - (Number.isFinite(pct) ? Math.min(weeklyEstPctMax, Math.max(0, pct)) : 0);
                                           return `${x},${y}`;
                                        }).join(' ')} fill="none" stroke="#f59e0b" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
-                                       {weekDays.map((day, idx) => {
-                                         const dateStr = format(day, 'yyyy-MM-dd');
-                                         const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
-                                         const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
-                                         const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
-                                         const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-                                         const fisico = m.fisico;
-                                         const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-                                         const x = (idx + 0.5) * (100 / weekDays.length);
-                                          const y = 100 - (Number.isFinite(pct) ? Math.min(weeklyEstPctMax, Math.max(0, pct)) : 0);
-                                          return <circle key={dateStr} cx={x} cy={y} r="0.8" fill="#f59e0b" stroke="white" strokeWidth="0.2" vectorEffect="non-scaling-stroke" />;
-                                       })}
+                                        {weekDays.map((day, idx) => {
+                                          const dateStr = format(day, 'yyyy-MM-dd');
+                                          const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
+                                          const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
+                                          const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
+                                          const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+                                          const fisico = m.fisico;
+                                          const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
+                                          const x = (idx + 0.5) * (100 / weekDays.length);
+                                           const y = 100 - (Number.isFinite(pct) ? Math.min(weeklyEstPctMax, Math.max(0, pct)) : 0);
+                                           return (
+                                             <g key={dateStr}>
+                                               <circle cx={x} cy={y} r="0.8" fill="#f59e0b" stroke="white" strokeWidth="0.2" vectorEffect="non-scaling-stroke" />
+                                               <text x={x} y={y} dy="-4" textAnchor="middle" fill="#1e293b" stroke="white" strokeWidth="0.3" fontSize="4.5" fontWeight="800">{pct.toFixed(2)}%</text>
+                                             </g>
+                                           );
+                                        })}
                                     </svg>
                                     {weekDays.map((day, idx) => {
                                       const dateStr = format(day, 'yyyy-MM-dd');
@@ -2409,12 +2414,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                       const maxVal = Math.max(m.sugarStandard, fisico, 1);
                                       const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
                                       return (
-                                        <div key={dateStr} className="flex-1 flex flex-col items-center h-full justify-end relative z-10">
-                                           <div className="w-full flex items-end justify-center gap-2 h-full relative">
-                                              <span className="absolute -top-6 text-[10px] font-black text-slate-800 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-sm whitespace-nowrap z-30">
-                                                    {pct.toFixed(2)}%
-                                              </span>
-                                             <div className="w-1/3 bg-[#4f81bd] rounded-t-xl shadow-md border-x border-t border-[#4f81bd]/30" style={{ height: `${(m.sugarStandard / weeklyEstMax) * 100}%` }} />
+                                         <div key={dateStr} className="flex-1 flex flex-col items-center h-full justify-end relative z-10">
+                                            <div className="w-full flex items-end justify-center gap-2 h-full relative">
+                                              <div className="w-1/3 bg-[#4f81bd] rounded-t-xl shadow-md border-x border-t border-[#4f81bd]/30" style={{ height: `${(m.sugarStandard / weeklyEstMax) * 100}%` }} />
                                              <div className="w-1/3 bg-[#f59e0b] rounded-t-xl shadow-md border-x border-t border-[#f59e0b]/30" style={{ height: `${(fisico / weeklyEstMax) * 100}%` }} />
                                           </div>
                                           <div className="mt-3 pt-2 border-t-2 border-slate-200 w-full text-center">
@@ -2511,8 +2513,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                  </table>
                                </div>
                                       <div className="flex flex-col flex-1 min-h-[529px] bg-slate-50/40 rounded-2xl border-2 border-slate-200 max-w-[605px] relative" ref={promedioChartRef}>
-                                      <div className="flex-1 flex items-end justify-between gap-4 px-6 pb-8 pt-10 relative">
-                                          <svg className="absolute inset-x-6 top-8 bottom-10 w-[calc(100%-48px)] h-[calc(100%-40px)] z-20 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                       <div className="flex-1 flex items-end justify-between gap-4 px-6 pt-10 relative">
+                                           <svg className="absolute inset-x-6 top-8 bottom-0 w-[calc(100%-48px)] h-[calc(100%-32px)] z-20 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
                                            <polyline points={weekDays.map((day, idx) => {
                                              const dateStr = format(day, 'yyyy-MM-dd');
                                              const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
@@ -2525,18 +2527,23 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                              const y = 100 - (Number.isFinite(pct) ? Math.min(weeklyEstPctMax, Math.max(0, pct)) : 0);
                                              return `${x},${y}`;
                                            }).join(' ')} fill="none" stroke="#f59e0b" strokeWidth="1.5" strokeLinejoin="round" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
-                                           {weekDays.map((day, idx) => {
-                                             const dateStr = format(day, 'yyyy-MM-dd');
-                                             const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
-                                             const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
-                                             const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
-                                             const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
-                                             const fisico = m.fisico;
-                                             const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-                                             const x = (idx + 0.5) * (100 / weekDays.length);
-                                             const y = 100 - (Number.isFinite(pct) ? Math.min(weeklyEstPctMax, Math.max(0, pct)) : 0);
-                                             return <circle key={dateStr} cx={x} cy={y} r="0.8" fill="#f59e0b" stroke="white" strokeWidth="0.2" vectorEffect="non-scaling-stroke" />;
-                                           })}
+                                            {weekDays.map((day, idx) => {
+                                              const dateStr = format(day, 'yyyy-MM-dd');
+                                              const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
+                                              const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
+                                              const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
+                                              const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
+                                              const fisico = m.fisico;
+                                              const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
+                                              const x = (idx + 0.5) * (100 / weekDays.length);
+                                              const y = 100 - (Number.isFinite(pct) ? Math.min(weeklyEstPctMax, Math.max(0, pct)) : 0);
+                                              return (
+                                                <g key={dateStr}>
+                                                  <circle cx={x} cy={y} r="0.8" fill="#f59e0b" stroke="white" strokeWidth="0.2" vectorEffect="non-scaling-stroke" />
+                                                  <text x={x} y={y} dy="-4" textAnchor="middle" fill="#1e293b" stroke="white" strokeWidth="0.3" fontSize="4.5" fontWeight="800">{pct.toFixed(2)}%</text>
+                                                </g>
+                                              );
+                                            })}
                                          </svg>
                                         {weekDays.map((day, idx) => {
                                           const dateStr = format(day, 'yyyy-MM-dd');
@@ -2548,12 +2555,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                           const maxVal = Math.max(m.sugarStandard, fisico, 1);
                                           const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
                                           return (
-                                            <div key={dateStr} className="flex-1 flex flex-col items-center h-full justify-end relative z-10">
-                                              <div className="w-full flex items-end justify-center gap-2 h-full relative">
-                                                <span className="absolute -top-6 text-[10px] font-black text-slate-800 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-sm whitespace-nowrap z-30">
-                                                  {pct.toFixed(2)}%
-                                                </span>
-                                                <div className="w-1/3 bg-[#4f81bd] rounded-t-xl shadow-md border-x border-t border-[#4f81bd]/30" style={{ height: `${(m.sugarStandard / weeklyPromMax) * 100}%` }} />
+                                             <div key={dateStr} className="flex-1 flex flex-col items-center h-full justify-end relative z-10">
+                                               <div className="w-full flex items-end justify-center gap-2 h-full relative">
+                                                 <div className="w-1/3 bg-[#4f81bd] rounded-t-xl shadow-md border-x border-t border-[#4f81bd]/30" style={{ height: `${(m.sugarStandard / weeklyPromMax) * 100}%` }} />
                                                 <div className="w-1/3 bg-[#f59e0b] rounded-t-xl shadow-md border-x border-t border-[#f59e0b]/30" style={{ height: `${(fisico / weeklyPromMax) * 100}%` }} />
                                               </div>
                                               <div className="mt-3 pt-2 border-t-2 border-slate-200 w-full text-center">
