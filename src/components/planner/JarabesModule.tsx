@@ -937,7 +937,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       doc.open();
       const now = new Date();
       const printedAt = now.toLocaleString('es');
-      doc.write(`<!DOCTYPE html><html><head><title>Semana ${getWeek(selectedDate || new Date())}</title><style>
+      doc.write(`<!DOCTYPE html><html><head><title>Imprimir</title><style>
         html,body{margin:0;padding:0;background:#fff}
         img{display:block;margin:0 auto;max-width:100%;height:auto;box-sizing:border-box}
         .footer{margin-top:8px;padding:6px 10px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:10px;font-weight:900;color:#94a3b8;text-transform:uppercase}
