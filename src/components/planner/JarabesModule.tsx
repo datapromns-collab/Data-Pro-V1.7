@@ -1235,13 +1235,47 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
    const [activeWeekAnchor, setActiveWeekAnchor] = useState<Date>(weekAnchor);
    const weekDays = useMemo(() => getWeekDays(activeWeekAnchor), [activeWeekAnchor]);
 
-  const loadDayData = (date: string, type: string, field: string) => {
+  const loadDayData = (date: string, type: string, section: string) => {
+    const raw = localStorage.getItem(getKey(type, section, date));
+    if (!raw) return {};
     try {
-      const raw = localStorage.getItem(getKey(type, field, date));
-      return raw ? JSON.parse(raw) : {};
+      return JSON.parse(raw);
     } catch {
       return {};
     }
+  };
+
+  const loadDayDataWithCarryOver = (date: string, type: string, section: string) => {
+    const current = loadDayData(date, type, section);
+    const prevData = loadDayData(getPrevDay(date), type, section);
+    if (!Object.keys(prevData).length) return current;
+
+    const result: Record<string, any> = {};
+    Object.keys(current).forEach(k => {
+      result[k] = { ...current[k] };
+    });
+
+    Object.keys(prevData).forEach(k => {
+      if (!result[k]) result[k] = {};
+      if (type === 'ubb') {
+        const prevFinal = prevData[k].ubbFinal;
+        if (prevFinal && !result[k].ubbInicial) {
+          result[k] = { ...result[k], ubbInicial: prevFinal };
+        }
+      } else if (type === 'sugar') {
+        const prevFinal = prevData[k].invFinalSacos;
+        if (prevFinal && !result[k].invInicialSacos) {
+          result[k] = { ...result[k], invInicialSacos: prevFinal };
+        }
+      } else if (type === 'tanks') {
+        const prevFinal = prevData[k].invFinalSacos;
+        if (prevFinal && !result[k].invInicialSacos) {
+          result[k] = { ...result[k], invInicialSacos: prevFinal };
+        }
+      }
+    });
+
+    return result;
   };
 
   const getPrevDay = (dateStr: string) => format(addDays(new Date(dateStr + 'T00:00:00'), -1), 'yyyy-MM-dd');
