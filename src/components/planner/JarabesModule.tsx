@@ -924,24 +924,43 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
     const openPdfInPrintView = (pdfBlob: Blob) => {
       const url = URL.createObjectURL(pdfBlob);
-      const printWindow = window.open(url, '_blank');
+      const printWindow = window.open('about:blank', '_blank');
       if (!printWindow) {
         toast({ title: 'Bloqueado', description: 'Permite ventanas emergentes para ver la vista de impresión.' });
         URL.revokeObjectURL(url);
         return;
       }
-      const timer = setInterval(() => {
-        try {
-          if (printWindow.document.readyState === 'complete') {
-            clearInterval(timer);
+      const doc = printWindow.document;
+      doc.open();
+      doc.write(`<!DOCTYPE html><html><head><title>Imprimiendo…</title><style>html,body{margin:0;padding:0}embed{border:0;width:100vw;height:100vh}@media print{body> :not(embed){display:none}}</style></head><body><embed src="" type="application/pdf" width="100%" height="100%"></body></html>`);
+      doc.close();
+      const embed = doc.querySelector('embed');
+      if (embed) {
+        embed.setAttribute('src', url);
+        const tryPrint = () => {
+          try {
             printWindow.focus();
             printWindow.print();
-            setTimeout(() => URL.revokeObjectURL(url), 1000 * 60 * 5);
+          } catch {
+            // print blocked
           }
-        } catch {
-          // cross-origin PDF viewer, ignore
+          setTimeout(() => {
+            try {
+              printWindow.close();
+            } catch {
+              // already closed
+            }
+            setTimeout(() => URL.revokeObjectURL(url), 1000 * 60 * 5);
+          }, 1500);
+        };
+        if (doc.readyState === 'complete') {
+          tryPrint();
+        } else {
+          doc.addEventListener('readystatechange', () => {
+            if (doc.readyState === 'complete') tryPrint();
+          });
         }
-      }, 150);
+      }
     };
 
     const handleExportWeeklyPDFStandard = async () => {
