@@ -2444,10 +2444,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                      </div>
                                     </div>
                                   </div>
-                                 </div>
-                               </div>
-                               )
-                             : (
+                                </div>
+                                )
+                              : (
                               <div className="flex-1 min-h-[300px] border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
                                 Sin datos esta semana
                               </div>
