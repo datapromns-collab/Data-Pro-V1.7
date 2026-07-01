@@ -926,7 +926,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       return pdf;
     };
 
-    const openPdfInPrintView = (canvas: HTMLCanvasElement, weekNumber: number) => {
+    const openPdfInPrintView = (canvas: HTMLCanvasElement) => {
       const imgSrc = canvas.toDataURL('image/png');
       const printWindow = window.open('', '_blank', 'width=900,height=700');
       if (!printWindow) {
@@ -935,12 +935,15 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       }
       const doc = printWindow.document;
       doc.open();
-      doc.write(`<!DOCTYPE html><html><head><title>Semana ${weekNumber}</title><style>
+      const now = new Date();
+      const printedAt = now.toLocaleString('es');
+      doc.write(`<!DOCTYPE html><html><head><title>Semana ${getWeek(selectedDate || new Date())}</title><style>
         html,body{margin:0;padding:0;background:#fff}
         img{display:block;margin:0 auto;max-width:100%;height:auto;box-sizing:border-box}
+        .footer{margin-top:8px;padding:6px 10px;border-top:1px solid #e2e8f0;display:flex;justify-content:space-between;font-size:10px;font-weight:900;color:#94a3b8;text-transform:uppercase}
         @page{size: letter portrait;margin:10mm}
-        @media print{body> :not(img){display:none}}
-      </style></head><body><img src="${imgSrc}" /></body></html>`);
+        @media print{body> :not(img):not(.footer){display:none}}
+      </style></head><body><img src="${imgSrc}" /><div class="footer"><span>EMITIDO: ${printedAt}</span><span>MULTINACIONAL DE SABORES</span></div></body></html>`);
       doc.close();
       const timer = setInterval(() => {
         try {
@@ -981,8 +984,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
         const pdf = buildLetterPdf(canvas, 10);
         const pdfBlob = pdf.output('blob');
-        const weekNumber = getWeek(selectedDate || new Date());
-        openPdfInPrintView(canvas, weekNumber);
+        openPdfInPrintView(canvas);
       } catch (error) {
         console.error(error);
         toast({ title: 'Error', description: 'No se pudo generar el PDF de Resumen Estándar.' });
@@ -1107,8 +1109,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
                    const pdf = buildLetterPdf(canvas, 10);
                    const pdfBlob = pdf.output('blob');
-                   const weekNumber = getWeek(selectedDate || new Date());
-                   openPdfInPrintView(canvas, weekNumber);
+                   openPdfInPrintView(canvas);
                 } catch (error) {
                   console.error(error);
                   toast({ title: 'Error', description: 'No se pudo generar el PDF de Resumen Promedio.' });
