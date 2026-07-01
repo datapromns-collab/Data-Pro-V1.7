@@ -26,6 +26,7 @@ import { cn } from '@/lib/utils';
 import { format, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { getWeekDays } from '@/lib/planner-utils';
+import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Line, ComposedChart } from 'recharts';
 
 const formatNumber = (value: number | string) => Number(value).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
@@ -1396,7 +1397,47 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       maxPct = Math.max(maxPct, pct);
     });
     return maxPct;
+    const standardChartData = useMemo(() => {
+    if (!weekDays.length) return [];
+    return weekDays.map((day) => {
+      const dateStr = format(day, 'yyyy-MM-dd');
+      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
+      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'estandar');
+      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'estandar');
+      const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
+      const pct = m.sugarStandard !== 0 ? ((m.fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
+      return {
+        day: format(day, 'EEE', { locale: es }).toUpperCase(),
+        estandar: m.sugarStandard,
+        fisico: m.fisico,
+        pct: Math.max(0, pct)
+      };
+    });
   }, [weekDays]);
+
+  const promedioChartData = useMemo(() => {
+    if (!weekDays.length) return [];
+    return weekDays.map((day) => {
+      const dateStr = format(day, 'yyyy-MM-dd');
+      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
+      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar', 'promedio');
+      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks', 'promedio');
+      const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
+      const pct = m.sugarStandard !== 0 ? ((m.fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
+      return {
+        day: format(day, 'EEE', { locale: es }).toUpperCase(),
+        estandar: m.sugarStandard,
+        fisico: m.fisico,
+        pct: Math.max(0, pct)
+      };
+    });
+  }, [weekDays]);
+
+  const chartConfig = {
+    estandar: { label: 'Estándar', color: '#4f81bd' },
+    fisico: { label: 'Físico', color: '#f59e0b' },
+    pct: { label: '%', color: '#f59e0b' }
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
@@ -2414,8 +2455,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                       const maxVal = Math.max(m.sugarStandard, fisico, 1);
                                       const pct = m.sugarStandard !== 0 ? ((fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
                                       return (
-                                         <div key={dateStr} className="flex-1 flex flex-col items-center h-full justify-end relative z-10">
-                                            <div className="w-full flex items-end justify-center gap-2 h-full relative">
+                                         <div key={dateStr} className="flex-1 flex flex-col items-center justify-end relative z-10">
+                                            <div className="w-full flex items-end justify-center gap-2 flex-1 relative">
                                               <div className="w-1/3 bg-[#4f81bd] rounded-t-xl shadow-md border-x border-t border-[#4f81bd]/30" style={{ height: `${(m.sugarStandard / weeklyEstMax) * 100}%` }} />
                                              <div className="w-1/3 bg-[#f59e0b] rounded-t-xl shadow-md border-x border-t border-[#f59e0b]/30" style={{ height: `${(fisico / weeklyEstMax) * 100}%` }} />
                                           </div>
@@ -2560,7 +2601,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                                  <div className="w-1/3 bg-[#4f81bd] rounded-t-xl shadow-md border-x border-t border-[#4f81bd]/30" style={{ height: `${(m.sugarStandard / weeklyPromMax) * 100}%` }} />
                                                 <div className="w-1/3 bg-[#f59e0b] rounded-t-xl shadow-md border-x border-t border-[#f59e0b]/30" style={{ height: `${(fisico / weeklyPromMax) * 100}%` }} />
                                               </div>
-                                              <div className="mt-3 pt-2 border-t-2 border-slate-200 w-full text-center">
+                                              <div className="pt-2 border-t-2 border-slate-200 w-full text-center">
                                                 <span className="text-[10px] font-black text-slate-700 uppercase">{format(day, 'EEE', { locale: es })}</span>
                                               </div>
                                             </div>
