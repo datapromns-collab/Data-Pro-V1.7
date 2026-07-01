@@ -1401,39 +1401,23 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
   const standardChartData = useMemo(() => {
     if (!weekDays.length) return [];
-    return weekDays.map((day) => {
-      const dateStr = format(day, 'yyyy-MM-dd');
-      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb');
-      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar');
-      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks');
-      const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', 50);
-      const pct = m.sugarStandard !== 0 ? ((m.fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-      return {
-        day: format(day, 'EEE', { locale: es }).toUpperCase(),
-        estandar: m.sugarStandard,
-        fisico: m.fisico,
-        pct: Math.max(0, pct)
-      };
-    });
-  }, [weekDays]);
+    return weekDays.map((day) => ({
+      day: format(day, 'EEE', { locale: es }).toUpperCase(),
+      estandar: est.sugarStandard,
+      fisico: est.fisico,
+      pct: est.sugarStandard !== 0 ? ((est.fisico - est.sugarStandard) / est.sugarStandard * 100) : 0,
+    }));
+  }, [weekDays, est, selectedDate]);
 
   const promedioChartData = useMemo(() => {
     if (!weekDays.length) return [];
-    return weekDays.map((day) => {
-      const dateStr = format(day, 'yyyy-MM-dd');
-      const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb');
-      const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar');
-      const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks');
-      const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
-      const pct = m.sugarStandard !== 0 ? ((m.fisico - m.sugarStandard) / m.sugarStandard * 100) : 0;
-      return {
-        day: format(day, 'EEE', { locale: es }).toUpperCase(),
-        estandar: m.sugarStandard,
-        fisico: m.fisico,
-        pct: Math.max(0, pct)
-      };
-    });
-  }, [weekDays]);
+    return weekDays.map((day) => ({
+      day: format(day, 'EEE', { locale: es }).toUpperCase(),
+      estandar: prom.sugarStandard,
+      fisico: prom.fisico,
+      pct: prom.sugarStandard !== 0 ? ((prom.fisico - prom.sugarStandard) / prom.sugarStandard * 100) : 0,
+    }));
+  }, [weekDays, prom, selectedDate]);
 
   const chartConfig = {
     estandar: { label: 'Estándar', color: '#4f81bd' },
