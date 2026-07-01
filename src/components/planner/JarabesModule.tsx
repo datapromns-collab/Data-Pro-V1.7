@@ -904,6 +904,24 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       </body></html>`;
     };
 
+    const buildLetterPdf = (canvas: HTMLCanvasElement, marginMM = 14.4, footerHtml?: string) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pageW = 215.9;
+      const pageH = 279.4;
+      const contentW = pageW - marginMM * 2;
+      const contentH = pageH - marginMM * 2;
+
+      const imgPxW = canvas.width;
+      const imgPxH = canvas.height;
+      const fit = Math.min(contentW / (imgPxW / 2), contentH / (imgPxH / 2));
+      const imgMMW = (imgPxW / 2) * fit;
+      const imgMMH = (imgPxH / 2) * fit;
+
+      const pdf = new jsPDF({ orientation: imgMMW > imgMMH ? 'landscape' : 'portrait', unit: 'mm', format: 'letter' });
+      pdf.addImage(imgData, 'PNG', marginMM, marginMM, imgMMW, imgMMH);
+      return pdf;
+    };
+
     const openPdfInPrintView = (pdfBlob: Blob) => {
       const url = URL.createObjectURL(pdfBlob);
       const printWindow = window.open(url, '_blank');
@@ -927,35 +945,23 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     };
 
     const handleExportWeeklyPDFStandard = async () => {
-     try {
-       if (!weekDays.length) return;
-       const cardEl = document.querySelector('[data-resumen-estandar-card]') as HTMLElement | null;
-       if (!cardEl) {
-         toast({ title: 'Error', description: 'No se encontró la sección de Resumen Estándar.' });
-         return;
-       }
+      try {
+        if (!weekDays.length) return;
+        const cardEl = document.querySelector('[data-resumen-estandar-card]') as HTMLElement | null;
+        if (!cardEl) {
+          toast({ title: 'Error', description: 'No se encontró la sección de Resumen Estándar.' });
+          return;
+        }
 
-       const canvas = await html2canvas(cardEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-       const imgData = canvas.toDataURL('image/png');
-
-       const pxToMM = 25.4 / 96;
-       const pdfWidth = (canvas.width / 2) * pxToMM;
-       const pdfHeight = (canvas.height / 2) * pxToMM;
-
-       const pdf = new jsPDF({
-         orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
-         unit: 'mm',
-         format: [pdfWidth, pdfHeight],
-       });
-       pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-
-       const pdfBlob = pdf.output('blob');
-       openPdfInPrintView(pdfBlob);
-     } catch (error) {
-       console.error(error);
-       toast({ title: 'Error', description: 'No se pudo generar el PDF de Resumen Estándar.' });
-     }
-   };
+        const canvas = await html2canvas(cardEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+        const pdf = buildLetterPdf(canvas, 14.4);
+        const pdfBlob = pdf.output('blob');
+        openPdfInPrintView(pdfBlob);
+      } catch (error) {
+        console.error(error);
+        toast({ title: 'Error', description: 'No se pudo generar el PDF de Resumen Estándar.' });
+      }
+    };
 
   const buildWeeklyPromedioHtml = (chartImage?: string | null): string => {
         if (!weekDays.length) return '';
@@ -1059,19 +1065,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                   return;
                 }
                 const canvas = await html2canvas(cardEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-                const imgData = canvas.toDataURL('image/png');
-
-                const pxToMM = 25.4 / 96;
-                const pdfWidth = (canvas.width / 2) * pxToMM;
-                const pdfHeight = (canvas.height / 2) * pxToMM;
-
-                const pdf = new jsPDF({
-                  orientation: pdfWidth > pdfHeight ? 'landscape' : 'portrait',
-                  unit: 'mm',
-                  format: [pdfWidth, pdfHeight],
-                });
-                pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-
+                const pdf = buildLetterPdf(canvas, 14.4);
                 const pdfBlob = pdf.output('blob');
                 openPdfInPrintView(pdfBlob);
               } catch (error) {
