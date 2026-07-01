@@ -2411,7 +2411,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                       return (
                                         <div key={dateStr} className="flex-1 flex flex-col items-center h-full justify-end relative z-10">
                                            <div className="w-full flex items-end justify-center gap-2 h-full relative">
-                                              <span className="absolute text-[10px] font-black text-slate-800 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-sm whitespace-nowrap z-30" style={{ bottom: `calc(${(Math.min(Math.max(pct, 0), weeklyEstPctMax) / weeklyEstPctMax) * 100}% + 12px)`, left: '50%', transform: 'translateX(-50%)' }}>
+                                              <span className="absolute -top-6 text-[10px] font-black text-slate-800 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-sm whitespace-nowrap z-30">
                                                     {pct.toFixed(2)}%
                                               </span>
                                              <div className="w-1/3 bg-[#4f81bd] rounded-t-xl shadow-md border-x border-t border-[#4f81bd]/30" style={{ height: `${(m.sugarStandard / weeklyEstMax) * 100}%` }} />
@@ -2550,7 +2550,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                           return (
                                             <div key={dateStr} className="flex-1 flex flex-col items-center h-full justify-end relative z-10">
                                               <div className="w-full flex items-end justify-center gap-2 h-full relative">
-                                                <span className="absolute text-[10px] font-black text-slate-800 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-sm whitespace-nowrap z-30" style={{ bottom: `calc(${(Math.min(Math.max(pct, 0), weeklyPromPctMax) / weeklyPromPctMax) * 100}% + 12px)`, left: '50%', transform: 'translateX(-50%)' }}>
+                                                <span className="absolute -top-6 text-[10px] font-black text-slate-800 bg-white px-2 py-0.5 rounded-md border border-slate-200 shadow-sm whitespace-nowrap z-30">
                                                   {pct.toFixed(2)}%
                                                 </span>
                                                 <div className="w-1/3 bg-[#4f81bd] rounded-t-xl shadow-md border-x border-t border-[#4f81bd]/30" style={{ height: `${(m.sugarStandard / weeklyPromMax) * 100}%` }} />
