@@ -1607,8 +1607,11 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                         <TableHead className="pl-8 text-[10px] font-black text-slate-400 uppercase min-w-[200px]">Material / Insumo</TableHead>
                         <TableHead className="text-right text-[10px] font-black text-slate-500 uppercase w-[120px]">Req. Ventas</TableHead>
                         <TableHead className="text-right text-[10px] font-black text-amber-600 uppercase w-[120px]">Stock Disponible</TableHead>
-                        <TableHead className="text-right text-[10px] font-black text-sky-600 uppercase w-[140px] bg-sky-50/20">Req. s/ Plan</TableHead>
-                        <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[160px] bg-[#A67B5B]/5">Necesidad Compra</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-sky-600 uppercase w-[140px] bg-sky-50/20">Req. s/ Plan MDS</TableHead>
+                        <TableHead className="text-right text-[10px] font-black text-sky-600 uppercase w-[140px] bg-sky-50/20">Req. s/ Plan AW</TableHead>
+                        <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[160px] bg-[#A67B5B]/5">Necesidad Compra MDS</TableHead>
+                        <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[160px] bg-[#A67B5B]/5">Necesidad Compra AW</TableHead>
+                        <TableHead className="text-right pr-8 text-[10px] font-black text-destructive uppercase w-[160px] bg-red-50/40">Necesidad Compra Global</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -1618,11 +1621,19 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                         const reqSales = calculateGlobalRequirement(code);
                         const stockAvailable = (globalLogisticsInventory[code] || 0) + (globalPlantInventory[code] || 0);
                         const reqPlan = calculateGlobalRequirementFromPlan(code);
-                        
-                        const deficit = Math.max(0, reqPlan - stockAvailable);
-                        const buyNeed = deficit > 0 ? deficit * 1.10 : 0;
 
-                        if (reqSales === 0 && reqPlan === 0 && stockAvailable === 0) return null;
+                        const reqPlanMDS = calculateRequirementFromSource(code, productionPlan, customPackagingRecipes, customRecipes);
+                        const reqPlanAW = calculateRequirementFromSource(code, productionPlanAW, customPackagingRecipes, customRecipes);
+                        const stockMDS = (logisticsInventory[code] || 0) + (plantInventory[code] || 0);
+                        const stockAW = (logisticsInventoryAW[code] || 0) + (plantInventoryAW[code] || 0);
+
+                        const deficitMDS = Math.max(0, reqPlanMDS - stockMDS);
+                        const deficitAW = Math.max(0, reqPlanAW - stockAW);
+                        const buyNeedMDS = deficitMDS > 0 ? deficitMDS * 1.10 : 0;
+                        const buyNeedAW = deficitAW > 0 ? deficitAW * 1.10 : 0;
+                        const buyNeed = buyNeedMDS + buyNeedAW;
+
+                        if (reqSales === 0 && reqPlan === 0 && stockAvailable === 0 && buyNeedMDS === 0 && buyNeedAW === 0) return null;
 
                         return (
                           <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
@@ -1639,10 +1650,25 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                               {stockAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </TableCell>
                             <TableCell className="text-right font-black text-sky-700 tabular-nums text-sm bg-sky-50/20">
-                              {reqPlan.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                              {reqPlanMDS.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </TableCell>
+                            <TableCell className="text-right font-black text-sky-700 tabular-nums text-sm bg-sky-50/20">
+                              {reqPlanAW.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                             </TableCell>
                             <TableCell className={cn(
                               "text-right pr-8 font-black tabular-nums text-[15px] bg-[#A67B5B]/10",
+                              buyNeedMDS > 0 ? "text-destructive" : "text-emerald-600"
+                            )}>
+                              {buyNeedMDS === 0 ? '-' : buyNeedMDS.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </TableCell>
+                            <TableCell className={cn(
+                              "text-right pr-8 font-black tabular-nums text-[15px] bg-[#A67B5B]/10",
+                              buyNeedAW > 0 ? "text-destructive" : "text-emerald-600"
+                            )}>
+                              {buyNeedAW === 0 ? '-' : buyNeedAW.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                            </TableCell>
+                            <TableCell className={cn(
+                              "text-right pr-8 font-black tabular-nums text-[15px] bg-red-50/40",
                               buyNeed > 0 ? "text-destructive" : "text-emerald-600"
                             )}>
                               {buyNeed === 0 ? '-' : buyNeed.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -1661,7 +1687,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                     <Info className="h-4 w-4 text-[#A67B5B]" /> Lógica de Necesidad de Compra
                   </h4>
                   <p className="text-[11px] font-bold text-slate-600 leading-relaxed uppercase">
-                    La <span className="text-destructive font-black">Necesidad de Compra</span> se activa cuando el Requerimiento según Plan de Producción supera al Stock Disponible total (Logística + Planta). El cálculo incluye un <span className="text-[#5C4033] font-black">Margen de Seguridad del 10%</span> sobre el faltante detectado.
+                    La <span className="text-destructive font-black">Necesidad de Compra</span> se activa cuando el Requerimiento según Plan de Producción supera al Stock Disponible total (Logística + Planta) por sección. Se muestra el desglose <span className="text-sky-700 font-black">MDS</span> y <span className="text-sky-700 font-black">AW</span>, y la <span className="text-destructive font-black">Necesidad Global</span> es la suma de ambas. En cada caso se incluye un <span className="text-[#5C4033] font-black">Margen de Seguridad del 10%</span> sobre el faltante detectado.
                   </p>
                 </Card>
                 <div className="flex flex-col justify-center bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
