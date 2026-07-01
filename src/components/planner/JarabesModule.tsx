@@ -23,7 +23,7 @@ import {
   BarChart3
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { format, addDays } from 'date-fns';
+import { format, addDays, getWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { getWeekDays } from '@/lib/planner-utils';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
@@ -926,7 +926,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       return pdf;
     };
 
-    const openPdfInPrintView = (canvas: HTMLCanvasElement) => {
+    const openPdfInPrintView = (canvas: HTMLCanvasElement, weekNumber: number) => {
       const imgSrc = canvas.toDataURL('image/png');
       const printWindow = window.open('', '_blank', 'width=900,height=700');
       if (!printWindow) {
@@ -935,7 +935,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       }
       const doc = printWindow.document;
       doc.open();
-      doc.write(`<!DOCTYPE html><html><head><title>Imprimiendo…</title><style>
+      doc.write(`<!DOCTYPE html><html><head><title>Semana ${weekNumber}</title><style>
         html,body{margin:0;padding:0;background:#fff}
         img{display:block;margin:0 auto;max-width:100%;height:auto;box-sizing:border-box}
         @page{size: letter portrait;margin:10mm}
@@ -981,7 +981,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
         const pdf = buildLetterPdf(canvas, 10);
         const pdfBlob = pdf.output('blob');
-        openPdfInPrintView(canvas);
+        const weekNumber = getWeek(selectedDate || new Date());
+        openPdfInPrintView(canvas, weekNumber);
       } catch (error) {
         console.error(error);
         toast({ title: 'Error', description: 'No se pudo generar el PDF de Resumen Estándar.' });
@@ -1104,9 +1105,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
                   if (pdfButtonProm) pdfButtonProm.style.visibility = 'visible';
 
-                  const pdf = buildLetterPdf(canvas, 10);
-                  const pdfBlob = pdf.output('blob');
-                  openPdfInPrintView(canvas);
+                   const pdf = buildLetterPdf(canvas, 10);
+                   const pdfBlob = pdf.output('blob');
+                   const weekNumber = getWeek(selectedDate || new Date());
+                   openPdfInPrintView(canvas, weekNumber);
                 } catch (error) {
                   console.error(error);
                   toast({ title: 'Error', description: 'No se pudo generar el PDF de Resumen Promedio.' });
