@@ -2373,7 +2373,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                 </div>
                                  <div className="flex flex-col flex-1 min-h-[529px] bg-slate-50/40 rounded-2xl border-2 border-slate-200 p-4 relative" ref={standardChartRef}>
                                    <div className="flex-1 flex items-end justify-between gap-4 px-2 pb-6 pt-8 relative">
-                                     <svg className="absolute inset-x-2 top-8 bottom-6 w-[calc(100%-16px)] h-[calc(100%-32px)] z-20 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                      <svg className="absolute inset-x-2 top-8 bottom-10 w-[calc(100%-16px)] h-[calc(100%-40px)] z-20 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
                                        <polyline points={weekDays.map((day, idx) => {
                                          const dateStr = format(day, 'yyyy-MM-dd');
                                          const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'estandar');
@@ -2512,7 +2512,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                </div>
                                       <div className="flex flex-col flex-1 min-h-[529px] bg-slate-50/40 rounded-2xl border-2 border-slate-200 max-w-[605px] relative" ref={promedioChartRef}>
                                       <div className="flex-1 flex items-end justify-between gap-4 px-6 pb-8 pt-10 relative">
-                                          <svg className="absolute inset-x-6 top-8 bottom-8 w-[calc(100%-48px)] h-[calc(100%-32px)] z-20 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                          <svg className="absolute inset-x-6 top-8 bottom-10 w-[calc(100%-48px)] h-[calc(100%-40px)] z-20 pointer-events-none" viewBox="0 0 100 100" preserveAspectRatio="none">
                                            <polyline points={weekDays.map((day, idx) => {
                                              const dateStr = format(day, 'yyyy-MM-dd');
                                              const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb', 'promedio');
