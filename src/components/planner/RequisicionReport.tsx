@@ -118,15 +118,4 @@ export function RequisicionReport({
       </div>
     </div>
   );
-            })}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="mt-12 pt-4 border-t border-slate-200 flex justify-between items-center text-[7px] text-slate-400 font-black uppercase tracking-widest">
-        <span>DATA PRO - SISTEMA DE GESTIÓN DE COMPRAS - MULTINACIONAL DE SABORES</span>
-        <span>Página 1 de 1</span>
-      </div>
-    </div>
-  );
 }
