@@ -940,7 +940,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       }
       const doc = printWindow.document;
       doc.open();
-      doc.write(`<!DOCTYPE html><html><head><title>Imprimir</title><style>
+      doc.write(`<!DOCTYPE html><html><head><title>\u200B</title><style>
         html,body{margin:0;padding:0;background:#fff}
         img{display:block;margin:0 auto;max-width:100%;height:auto;box-sizing:border-box}
         @page{size: letter portrait;margin:10mm}
