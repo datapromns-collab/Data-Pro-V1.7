@@ -9,7 +9,6 @@ export default function OrdenesSapModule() {
       <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
         <div className="flex items-center gap-2 px-4">
           <ClipboardList className="h-4 w-4 text-sky-600" />
-          <span className="text-xs font-black text-slate-700 uppercase tracking-widest">Módulo en desarrollo</span>
         </div>
       </div>
 
