@@ -29,6 +29,7 @@ import { es } from 'date-fns/locale';
 import { getWeekDays } from '@/lib/planner-utils';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Line, ComposedChart } from 'recharts';
+import ResumenMensualModule from './ResumenMensualModule';
 
 const formatNumber = (value: number | string) => Number(value).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 const captureChart = async (chartRef: React.RefObject<HTMLDivElement | null>): Promise<string | null> => {
