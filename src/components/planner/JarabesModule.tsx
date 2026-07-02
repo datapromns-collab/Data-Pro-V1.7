@@ -24,12 +24,11 @@ import {
   FileText
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { format, addDays, getWeek } from 'date-fns';
+import { format, addDays, getWeek, startOfMonth } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { getWeekDays } from '@/lib/planner-utils';
+import { computePlannerMetrics } from '@/lib/planner-metrics';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
-import { Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Line, ComposedChart } from 'recharts';
-import ResumenMensualModule from './ResumenMensualModule';
 
 const formatNumber = (value: number | string) => Number(value).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
 const captureChart = async (chartRef: React.RefObject<HTMLDivElement | null>): Promise<string | null> => {
@@ -112,18 +111,14 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
   const setPromKgFactorForDate = (dateStr: string, value: number) => {
     setPromKgFactors(prev => ({ ...prev, [dateStr]: value }));
   };
-  const [costoAzucar, setCostoAzucar] = useState<string>('');
+   const [costoAzucar, setCostoAzucar] = useState<string>('');
    const [activeMonthAnchor, setActiveMonthAnchor] = useState<Date>(startOfMonth(new Date()));
    const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
 
-   // Resumen mensual state
-   const [monthlyUbbDataEst, setMonthlyUbbDataEst] = useState<Record<string, any>>({});
-   const [monthlyUbbDataProm, setMonthlyUbbDataProm] = useState<Record<string, any>>({});
-   const [monthlySugarDataEst, setMonthlySugarDataEst] = useState<Record<string, any>>({});
-   const [monthlySugarDataProm, setMonthlySugarDataProm] = useState<Record<string, any>>({})
-    if (section) return `jarabes-${type}-${section}-${date}`;
-    return `jarabes-${type}-${date}`;
-  };
+   const getKey = (type: string, date: string, section?: string) => {
+     if (section) return `jarabes-${type}-${section}-${date}`;
+     return `jarabes-${type}-${date}`;
+   };
 
   const loadDayData = (date: string, type: string) => {
     const newKey = getKey(type, date);
@@ -1133,7 +1128,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
 
   // Helper function to compute all planner metrics
-  const computePlannerMetrics = (ubbData: Record<string, { ubbInicial?: string; ubbPreparado?: string; ubbFinal?: string }>, sugarData: Record<string, { invInicialSacos?: string; recepcionSacos?: string; invFinalSacos?: string }>, tanksData: Record<string, { invInicialSacos?: string; invFinalSacos?: string }>, search: string, kgFactor = 50) => {
+  export const computePlannerMetrics = (ubbData: Record<string, { ubbInicial?: string; ubbPreparado?: string; ubbFinal?: string }>, sugarData: Record<string, { invInicialSacos?: string; recepcionSacos?: string; invFinalSacos?: string }>, tanksData: Record<string, { invInicialSacos?: string; invFinalSacos?: string }>, search: string, kgFactor = 50) => {
     const allRows = SABORES_ESTANDAR.map(sabor => {
       const rowData = ubbData[sabor] || {};
       const ubbInicialStr = rowData.ubbInicial ?? '';
@@ -2589,35 +2584,26 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                         </div>
                        </TabsContent>
 
-                    <TabsContent value="resumen-mensual" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
-                      <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
-                        <div className="flex items-center justify-between mb-4">
-                          <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Mensual</h3>
-                          <Button size="sm" variant="outline" onClick={() => {}} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
-                            <FileDown className="h-4 w-4" /> PDF
-                          </Button>
-                        </div>
-                        <div className="flex flex-col items-center justify-center h-[300px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2rem] bg-white/50">
-                          <FileText className="h-12 w-12 mb-4 opacity-20" />
-                          Sección Resumen Mensual en Desarrollo
-                        </div>
+                    <TabsContent value="resumen-mensual" className="m-0 animate-in fade-in-50 duration-500">
+                      <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                        <FileText className="h-12 w-12 mb-4 opacity-20" />
+                        Resumen Mensual en Desarrollo
                       </div>
                      </TabsContent>
 
-                </Tabs>
-              </TabsContent>
+                   </Tabs>
+                 </TabsContent>
 
-            </Tabs>
-          </TabsContent>
-                <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                  <Activity className="h-12 w-12 mb-4 opacity-20" />
-                  Seguimiento de Jarabe Simple
-                </div>
-              </TabsContent>
-            </Tabs>
-          </TabsContent>
+                 <TabsContent value="seguimiento-simple" className="m-0 animate-in fade-in-50 duration-500">
+                   <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                     <Activity className="h-12 w-12 mb-4 opacity-20" />
+                     Seguimiento de Jarabe Simple
+                   </div>
+                 </TabsContent>
+               </Tabs>
+             </TabsContent>
 
-          <TabsContent value="terminado" className="m-0 animate-in fade-in-50 duration-500">
+           <TabsContent value="terminado" className="m-0 animate-in fade-in-50 duration-500">
             <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
               <Pipette className="h-12 w-12 mb-4 opacity-20" />
               Sección Jarabe Terminado en Desarrollo
@@ -2629,9 +2615,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
               <Activity className="h-12 w-12 mb-4 opacity-20" />
               Sección Jarabe en Líneas en Desarrollo
             </div>
-          </TabsContent>
-        </Tabs>
-
+           </TabsContent>
+         </Tabs>
     </div>
   );
 }
