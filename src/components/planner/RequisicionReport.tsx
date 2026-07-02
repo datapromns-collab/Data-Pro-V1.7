@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format } from 'date-fns';
@@ -29,6 +29,13 @@ export function RequisicionReport({
 }: RequisicionReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
   const materialsList = getAllMaterialsList();
+
+  useEffect(() => {
+    const report = document.getElementById('report');
+    if (!report) return;
+    report.scrollIntoView({ block: 'start', behavior: 'instant' });
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div id="report" className="bg-white p-0 max-w-none mx-0 print:p-0 print:max-w-none">
