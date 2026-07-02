@@ -600,9 +600,6 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
     if (!report) return;
     await new Promise(requestAnimationFrame);
     const rect = report.getBoundingClientRect();
-    if (rect.width === 0 || rect.height === 0) {
-      return;
-    }
     const canvas = await html2canvas(report, {
       scale: 2,
       useCORS: true,
@@ -1041,7 +1038,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                       </Button>
                     </div>
                     
-                    <div className="overflow-x-auto">
+                    <div id="report" className="overflow-x-auto bg-white">
                       <Table>
                         <TableHeader>
                           <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-12">
