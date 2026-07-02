@@ -2450,17 +2450,17 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                          <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(0)}k` : val} />
                                          <YAxis yAxisId="right" orientation="right" domain={[0, Math.max(20, Math.ceil(weeklyEstPctMax / 5) * 5 + 10)]} axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(val) => `${val}%`} />
                                          <Tooltip content={<ChartTooltipContent />} cursor={{ fill: '#f8fafc' }} />
-                                          <Bar yAxisId="left" dataKey="estandar" fill="#fb923c" radius={[4, 4, 0, 0]} barSize={30} name="Estándar" />
+                                                <Bar yAxisId="left" dataKey="estandar" fill="#ff9a76" radius={[4, 4, 0, 0]} barSize={30} name="Estándar" />
                                           <Bar yAxisId="left" dataKey="fisico" fill="#dbeafe" radius={[4, 4, 0, 0]} barSize={30} name="Físico" />
                                            <Line yAxisId="right" type="monotone" dataKey="pct" stroke="#ef4444" strokeWidth={3} dot={{ r: 4, fill: '#ef4444', strokeWidth: 2, stroke: '#fff' }} name="%" label={{ content: ({ x, y, value }: any) => <g><rect x={Number(x) - 20} y={Number(y) - 24} width={40} height={22} rx={11} fill="white" stroke="#e2e8f0" strokeWidth={1} /><text x={Number(x)} y={Number(y) - 8} textAnchor="middle" fontSize={10} fontWeight={800} fill="#1e293b">{`${Number(value).toFixed(2)}%`}</text></g>, position: 'top' }} />
                                        </ComposedChart>
                                      </ResponsiveContainer>
                                    </ChartContainer>
                                    <div className="flex justify-center gap-10 py-3 border-t-2 border-slate-200 bg-white shadow-md rounded-full mx-6 mb-4 shrink-0">
-                                      <div className="flex items-center gap-2">
-                                        <div className="w-5 h-5 bg-[#fb923c] rounded shadow-sm border border-[#fb923c]/30" />
-                                        <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Estándar</span>
-                                      </div>
+                                       <div className="flex items-center gap-2">
+                                         <div className="w-5 h-5 bg-[#ff9a76] rounded shadow-sm border border-[#ff9a76]/30" />
+                                         <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Estándar</span>
+                                       </div>
                                        <div className="flex items-center gap-2">
                                          <div className="w-5 h-5 bg-[#dbeafe] rounded shadow-sm border border-[#dbeafe]/30" />
                                          <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Físico</span>
@@ -2552,7 +2552,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                                <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(0)}k` : val} />
                                                <YAxis yAxisId="right" orientation="right" domain={[0, Math.max(20, Math.ceil(weeklyPromPctMax / 5) * 5 + 10)]} axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(val) => `${val}%`} />
                                                <Tooltip content={<ChartTooltipContent />} cursor={{ fill: '#f8fafc' }} />
-                                                <Bar yAxisId="left" dataKey="estandar" fill="#fb923c" radius={[4, 4, 0, 0]} barSize={30} name="Estándar" />
+                                          <Bar yAxisId="left" dataKey="estandar" fill="#ff9a76" radius={[4, 4, 0, 0]} barSize={30} name="Estándar" />
                                                  <Bar yAxisId="left" dataKey="fisico" fill="#d1fae5" radius={[4, 4, 0, 0]} barSize={30} name="Físico" />
                                            <Line yAxisId="right" type="monotone" dataKey="pct" stroke="#ef4444" strokeWidth={3} dot={{ r: 4, fill: '#ef4444', strokeWidth: 2, stroke: '#fff' }} name="%" label={{ content: ({ x, y, value }: any) => <g><rect x={Number(x) - 20} y={Number(y) - 24} width={40} height={22} rx={11} fill="white" stroke="#e2e8f0" strokeWidth={1} /><text x={Number(x)} y={Number(y) - 8} textAnchor="middle" fontSize={10} fontWeight={800} fill="#1e293b">{`${Number(value).toFixed(2)}%`}</text></g>, position: 'top' }} />
                                              </ComposedChart>
@@ -2560,7 +2560,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                          </ChartContainer>
                                          <div className="flex justify-center gap-10 py-3 border-t-2 border-slate-200 bg-white shadow-md rounded-full mx-6 mb-4 shrink-0">
                                             <div className="flex items-center gap-2">
-                                              <div className="w-5 h-5 bg-[#fb923c] rounded shadow-sm border border-[#fb923c]/30" />
+                                              <div className="w-5 h-5 bg-[#ff9a76] rounded shadow-sm border border-[#ff9a76]/30" />
                                               <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Estándar</span>
                                             </div>
                                              <div className="flex items-center gap-2">
