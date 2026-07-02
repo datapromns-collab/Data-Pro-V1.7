@@ -26,7 +26,7 @@ import { cn } from '@/lib/utils';
 import { format, addDays, getWeek, startOfMonth } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { getWeekDays } from '@/lib/planner-utils';
-import { computePlannerMetrics } from '@/lib/planner-metrics';
+import { computePlannerMetrics, SUGAR_PER_UBB } from '@/lib/planner-metrics';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { ResponsiveContainer, ComposedChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar, Line } from 'recharts';
 
@@ -1712,31 +1712,58 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                          </Table>
                        </div>
 
-                      {/* Consumption Calculation */}
-                      <div className="flex items-center justify-between">
-                        <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo – Estándar</h3>
-                      </div>
-                      <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
-                        <table className="min-w-[600px]">
-                          <thead>
-                            <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
-                              <th className="text-white font-black text-[11px] uppercase pl-6 text-right w-1/4">Estándar</th>
-                              <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Físico</th>
-                              <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Diferencia</th>
-                              <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/4">%</th>
-                            </tr>
-                          </thead>
-                          <tbody>
-                            <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
-                              <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(est.sugarStandard)}</td>
-                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(est.fisico)}</td>
-                              <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(est.fisico - est.sugarStandard)}</td>
-                              <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber((est.fisico - est.sugarStandard) / est.sugarStandard * 100)}%</td>
-                            </tr>
-                          </tbody>
-                        </table>
-                        </div>
-                    </div>
+                       {/* Consumption Calculation */}
+                       <div className="flex items-center justify-between">
+                         <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo – Estándar</h3>
+                       </div>
+                       <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
+                         <table className="min-w-[640px]">
+                           <thead>
+                             <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
+                               <th className="text-white font-black text-[11px] uppercase pl-6 text-left w-1/4">Sabor</th>
+                               <th className="text-white font-black text-[11px] uppercase text-right w-1/6">Consumo UBB</th>
+                               <th className="text-white font-black text-[11px] uppercase text-right w-1/6">Factor Azúcar</th>
+                               <th className="text-white font-black text-[11px] uppercase text-right w-1/6">Estándar</th>
+                               <th className="text-white font-black text-[11px] uppercase text-right w-1/6">Físico</th>
+                               <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/6">%</th>
+                             </tr>
+                           </thead>
+                           <tbody>
+                             {est.filteredRows.map((row) => {
+                               const sugarFactor = SUGAR_PER_UBB[row.sabor] || 0;
+                               const estandar = row.consumo * sugarFactor;
+                               return (
+                                 <tr key={row.sabor} className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
+                                   <td className="pl-6 py-2 text-xs font-bold text-slate-700">{row.sabor}</td>
+                                   <td className="text-right py-2 text-xs font-black text-slate-800">{formatNumber(row.consumo)}</td>
+                                   <td className="text-right py-2 text-xs font-black text-slate-700">{formatNumber(sugarFactor)}</td>
+                                   <td className="text-right py-2 text-xs font-black text-slate-900">{formatNumber(estandar)}</td>
+                                   <td className="text-right py-2 text-xs text-slate-400">-</td>
+                                   <td className="text-right py-2 pr-6 text-xs text-slate-400">-</td>
+                                 </tr>
+                               );
+                             })}
+                             <tr className="bg-slate-100 hover:bg-slate-100 border-t border-slate-200 font-bold">
+                               <td className="pl-6 py-3 text-xs font-black text-slate-800 uppercase">TOTAL</td>
+                               <td className="text-right py-3 text-xs font-black text-slate-800">
+                                 {est.totals.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                               </td>
+                               <td className="text-right py-3 text-xs font-black text-slate-800">-</td>
+                               <td className="text-right py-3 text-xs font-black text-slate-900">
+                                 {est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                               </td>
+                               <td className="text-right py-3 text-xs font-black text-slate-800">{formatNumber(est.fisico)}</td>
+                               <td className="text-right py-3 pr-6 text-xs font-black text-slate-800">
+                                 {(() => {
+                                   const totalEstandar = est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0);
+                                   return totalEstandar !== 0 ? formatNumber((est.fisico - totalEstandar) / totalEstandar * 100) : '0';
+                                 })()}%
+                               </td>
+                             </tr>
+                           </tbody>
+                         </table>
+                       </div>
+                     </div>
                    </TabsContent>
 
 <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
@@ -2139,27 +2166,54 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                   <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo – Promedio</h3>
                 </div>
                 <div ref={consumptionRef} className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
-                  <table className="min-w-[600px]">
+                  <table className="min-w-[640px]">
                                   <thead>
                                     <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
-                                      <th className="text-white font-black text-[11px] uppercase pl-6 text-right w-1/4">Estándar</th>
-                                      <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Físico</th>
-                                      <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Diferencia</th>
-                                      <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/4">%</th>
+                                      <th className="text-white font-black text-[11px] uppercase pl-6 text-left w-1/4">Sabor</th>
+                                      <th className="text-white font-black text-[11px] uppercase text-right w-1/6">Consumo UBB</th>
+                                      <th className="text-white font-black text-[11px] uppercase text-right w-1/6">Factor Azúcar</th>
+                                      <th className="text-white font-black text-[11px] uppercase text-right w-1/6">Estándar</th>
+                                      <th className="text-white font-black text-[11px] uppercase text-right w-1/6">Físico</th>
+                                      <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/6">%</th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
-                                      <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(prom.sugarStandard)}</td>
-                                      <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(prom.fisico)}</td>
-                                      <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(prom.fisico - prom.sugarStandard)}</td>
-                                      <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{formatNumber((prom.fisico - prom.sugarStandard) / prom.sugarStandard * 100)}%</td>
+                                    {prom.filteredRows.map((row) => {
+                                      const sugarFactor = SUGAR_PER_UBB[row.sabor] || 0;
+                                      const estandar = row.consumo * sugarFactor;
+                                      return (
+                                        <tr key={row.sabor} className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
+                                          <td className="pl-6 py-2 text-xs font-bold text-slate-700">{row.sabor}</td>
+                                          <td className="text-right py-2 text-xs font-black text-slate-800">{formatNumber(row.consumo)}</td>
+                                          <td className="text-right py-2 text-xs font-black text-slate-700">{formatNumber(sugarFactor)}</td>
+                                          <td className="text-right py-2 text-xs font-black text-slate-900">{formatNumber(estandar)}</td>
+                                          <td className="text-right py-2 text-xs text-slate-400">-</td>
+                                          <td className="text-right py-2 pr-6 text-xs text-slate-400">-</td>
+                                        </tr>
+                                      );
+                                    })}
+                                    <tr className="bg-slate-100 hover:bg-slate-100 border-t border-slate-200 font-bold">
+                                      <td className="pl-6 py-3 text-xs font-black text-slate-800 uppercase">TOTAL</td>
+                                      <td className="text-right py-3 text-xs font-black text-slate-800">
+                                        {prom.totals.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                      </td>
+                                      <td className="text-right py-3 text-xs font-black text-slate-800">-</td>
+                                      <td className="text-right py-3 text-xs font-black text-slate-900">
+                                        {prom.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                      </td>
+                                      <td className="text-right py-3 text-xs font-black text-slate-800">{formatNumber(prom.fisico)}</td>
+                                      <td className="text-right py-3 pr-6 text-xs font-black text-slate-800">
+                                        {(() => {
+                                          const totalEstandar = prom.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0);
+                                          return totalEstandar !== 0 ? formatNumber((prom.fisico - totalEstandar) / totalEstandar * 100) : '0';
+                                        })()}%
+                                      </td>
                                     </tr>
                                   </tbody>
                                 </table>
                                </div>
 
-                           </TabsContent>
+                          </TabsContent>
 
                        <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
