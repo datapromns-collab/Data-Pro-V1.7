@@ -51,7 +51,7 @@ export function RequisicionReport({
         <table className="w-full border-collapse text-[9pt]">
           <thead>
             <tr className="text-white font-black uppercase text-center h-10" style={{ backgroundColor: '#A67B5B' }}>
-              <th className="pl-4 py-0 border border-white/20 text-left flex-1 min-w-[320px]">MATERIAL / INSUMO</th>
+              <th className="px-4 py-0 border border-white/20 text-left flex-1 min-w-[320px]">MATERIAL / INSUMO</th>
               <th className="px-3 py-0 border border-white/20 text-right w-28" style={{ backgroundColor: '#D97706' }}>STOCK DISPONIBLE</th>
               <th className="px-3 py-0 border border-white/20 text-right w-36">REQ. S/ PLAN</th>
               <th className="px-4 py-0 border border-white/20 text-right w-36" style={{ backgroundColor: '#5C4033' }}>NECESIDAD COMPRA</th>
