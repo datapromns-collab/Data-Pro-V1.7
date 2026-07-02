@@ -20,8 +20,7 @@ import {
   Calculator,
   FileDown,
   ScrollText,
-  BarChart3,
-  FileText
+  BarChart3
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format, addDays, getWeek, startOfMonth } from 'date-fns';
@@ -29,55 +28,9 @@ import { es } from 'date-fns/locale';
 import { getWeekDays } from '@/lib/planner-utils';
 import { computePlannerMetrics } from '@/lib/planner-metrics';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
+import { ResponsiveContainer, ComposedChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar, Line } from 'recharts';
 
 const formatNumber = (value: number | string) => Number(value).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 });
-const captureChart = async (chartRef: React.RefObject<HTMLDivElement | null>): Promise<string | null> => {
-  if (!chartRef.current) return null;
-  try {
-    const canvas = await html2canvas(chartRef.current, { scale: 6, useCORS: true, backgroundColor: '#ffffff', logging: false });
-    return canvas.toDataURL('image/png');
-  } catch (e) { console.error('Error capturing chart:', e); return null; }
-};
-
-const SABORES_ESTANDAR = [
-  "GLUP COLA", "GLUP FRESH", "GLUP UVA", "GLUP PIÑA", "GLUP NARANJA", "GLUP KOLITA",
-  "GLUP MANZANA VERDE", "GLUP PONCHE", "GLUP CHICLE", "GLUP PIÑA PARCHITA", "GLUP MANZANA ROJA",
-  "JUSTY NARANJA", "JUSTY DURAZNO", "JUSTY MANDARINA", "JUSTY SANDIA", "JUSTY LIMON",
-  "JUSTY TAMARINDO", "JUSTY PERA", "JUSTY MANZANA", "VITA TEA DURAZNO", "VITA TEA LIMON"
-];
-
-const PROVEEDORES = [
-  "PORTUGUESA", "PASTORA", "MONTALBAN", "IMPORTADA 1"
-];
-
-const TANQUES_SALAS = [
-  "JARABE SIMPLE", "SALA 1.", "SALA 2."
-];
-
-// KG de azúcar refinada por UBB, por sabor (según tabla técnica)
-const SUGAR_PER_UBB: Record<string, number> = {
-  "GLUP COLA":         1925.00,
-  "GLUP FRESH":        1904.41,
-  "GLUP UVA":          1025.00,
-  "GLUP PIÑA":         1175.85,
-  "GLUP NARANJA":      1031.00,
-  "GLUP KOLITA":        666.46,
-  "GLUP MANZANA VERDE": 624.70,
-  "GLUP PONCHE":           0,
-  "GLUP CHICLE":           0,
-  "GLUP PIÑA PARCHITA": 1799.17,
-  "GLUP MANZANA ROJA":  1352.05,
-  "JUSTY NARANJA":       110.00,
-  "JUSTY DURAZNO":       137.50,
-  "JUSTY MANDARINA":     122.50,
-  "JUSTY SANDIA":        122.50,
-  "JUSTY LIMON":         122.50,
-  "JUSTY TAMARINDO":     122.50,
-  "JUSTY PERA":          130.00,
-  "JUSTY MANZANA":       130.00,
-  "VITA TEA DURAZNO":    101.00,
-  "VITA TEA LIMON":       97.00,
-};
 
 export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, weekStartDate }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; weekStartDate?: Date }) {
   const consumptionRef = useRef<HTMLDivElement>(null);
@@ -1127,171 +1080,6 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
 
 
-  // Helper function to compute all planner metrics
-  export const computePlannerMetrics = (ubbData: Record<string, { ubbInicial?: string; ubbPreparado?: string; ubbFinal?: string }>, sugarData: Record<string, { invInicialSacos?: string; recepcionSacos?: string; invFinalSacos?: string }>, tanksData: Record<string, { invInicialSacos?: string; invFinalSacos?: string }>, search: string, kgFactor = 50) => {
-    const allRows = SABORES_ESTANDAR.map(sabor => {
-      const rowData = ubbData[sabor] || {};
-      const ubbInicialStr = rowData.ubbInicial ?? '';
-      const ubbPreparadoStr = rowData.ubbPreparado ?? '';
-      const ubbFinalStr = rowData.ubbFinal ?? '';
-
-      const inicial = parseFloat(ubbInicialStr) || 0;
-      const preparado = parseFloat(ubbPreparadoStr) || 0;
-      const final = parseFloat(ubbFinalStr) || 0;
-
-      const consumo = (inicial + preparado) - final;
-
-      return {
-        sabor,
-        ubbInicialStr,
-        ubbPreparadoStr,
-        ubbFinalStr,
-        inicial,
-        preparado,
-        final,
-        consumo
-      };
-    });
-
-    const filtered = allRows.filter(row =>
-      row.sabor.toLowerCase().includes(search.toLowerCase())
-    );
-
-    const sumTotals = allRows.reduce(
-      (acc, curr) => {
-        acc.inicial += curr.inicial;
-        acc.preparado += curr.preparado;
-        acc.final += curr.final;
-        acc.consumo += curr.consumo;
-        return acc;
-      },
-      { inicial: 0, preparado: 0, final: 0, consumo: 0 }
-    );
-
-    const sugarStandard = allRows.reduce(
-      (acc, row) => acc + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0),
-      0
-    );
-
-    const sugarRows = PROVEEDORES.map(proveedor => {
-      const data = sugarData[proveedor] || {};
-      const invInicialSacosStr = data.invInicialSacos ?? '';
-      const recepcionSacosStr = data.recepcionSacos ?? '';
-      const invFinalSacosStr = data.invFinalSacos ?? '';
-
-      const invInicialSacos = parseFloat(invInicialSacosStr) || 0;
-      const recepcionSacos = parseFloat(recepcionSacosStr) || 0;
-      const invFinalSacos = parseFloat(invFinalSacosStr) || 0;
-
-      const invInicialKg = invInicialSacos * kgFactor;
-      const recepcionKg = recepcionSacos * kgFactor;
-
-      const disponibleSacos = invInicialSacos + recepcionSacos;
-      const disponibleKg = disponibleSacos * kgFactor;
-
-      const consumoSacos = disponibleSacos - invFinalSacos;
-      const consumoKg = consumoSacos * kgFactor;
-
-      const invFinalKg = invFinalSacos * kgFactor;
-
-      return {
-        proveedor,
-        invInicialSacosStr,
-        recepcionSacosStr,
-        invFinalSacosStr,
-        invInicialSacos,
-        invInicialKg,
-        recepcionSacos,
-        recepcionKg,
-        disponibleSacos,
-        disponibleKg,
-        invFinalSacos,
-        invFinalKg,
-        consumoSacos,
-        consumoKg
-      };
-    });
-
-    const sugarTotals = sugarRows.reduce(
-      (acc, curr) => {
-        acc.invInicialSacos += curr.invInicialSacos;
-        acc.invInicialKg += curr.invInicialKg;
-        acc.recepcionSacos += curr.recepcionSacos;
-        acc.recepcionKg += curr.recepcionKg;
-        acc.disponibleSacos += curr.disponibleSacos;
-        acc.disponibleKg += curr.disponibleKg;
-        acc.invFinalSacos += curr.invFinalSacos;
-        acc.invFinalKg += curr.invFinalKg;
-        acc.consumoSacos += curr.consumoSacos;
-        acc.consumoKg += curr.consumoKg;
-        return acc;
-      },
-      {
-        invInicialSacos: 0,
-        invInicialKg: 0,
-        recepcionSacos: 0,
-        recepcionKg: 0,
-        disponibleSacos: 0,
-        disponibleKg: 0,
-        invFinalSacos: 0,
-        invFinalKg: 0,
-        consumoSacos: 0,
-        consumoKg: 0
-      }
-    );
-
-    const tanksRows = TANQUES_SALAS.map(item => {
-      const data = tanksData[item] || {};
-      const invInicialSacosStr = data.invInicialSacos ?? '';
-      const invFinalSacosStr = data.invFinalSacos ?? '';
-
-      const invInicialSacos = parseFloat(invInicialSacosStr) || 0;
-      const invFinalSacos = parseFloat(invFinalSacosStr) || 0;
-
-      const invInicialKg = invInicialSacos * kgFactor;
-      const invFinalKg = invFinalSacos * kgFactor;
-
-      return {
-        item,
-        invInicialSacosStr,
-        invFinalSacosStr,
-        invInicialSacos,
-        invInicialKg,
-        invFinalSacos,
-        invFinalKg
-      };
-    });
-
-    const tanksTotals = tanksRows.reduce(
-      (acc, curr) => {
-        acc.invInicialSacos += curr.invInicialSacos;
-        acc.invInicialKg += curr.invInicialKg;
-        acc.invFinalSacos += curr.invFinalSacos;
-        acc.invFinalKg += curr.invFinalKg;
-        return acc;
-      },
-      {
-        invInicialSacos: 0,
-        invInicialKg: 0,
-        invFinalSacos: 0,
-        invFinalKg: 0
-      }
-    );
-
-    const ubbInicialSugarKg = allRows.reduce(
-      (acc, row) => acc + row.inicial * (SUGAR_PER_UBB[row.sabor] || 0),
-      0
-    );
-    const ubbFinalSugarKg = allRows.reduce(
-      (acc, row) => acc + row.final * (SUGAR_PER_UBB[row.sabor] || 0),
-      0
-    );
-
-    const fisico = (sugarTotals.disponibleKg + tanksTotals.invInicialKg + ubbInicialSugarKg) - (sugarTotals.invFinalKg + tanksTotals.invFinalKg + ubbFinalSugarKg);
-
-    return { rows: allRows, filteredRows: filtered, totals: sumTotals, sugarStandard, sugarRows, sugarTotals, tanksRows, tanksTotals, ubbInicialSugarKg, ubbFinalSugarKg, fisico };
-  };
-
    const est = useMemo(() => computePlannerMetrics(ubbDataEst, sugarDataEst, tanksDataEst, searchTermEst), [ubbDataEst, sugarDataEst, tanksDataEst, searchTermEst]);
    const promKgFactor = getPromKgFactor(selectedDate);
    const prom = useMemo(() => computePlannerMetrics(ubbDataProm, sugarDataProm, tanksDataProm, searchTerm, promKgFactor), [ubbDataProm, sugarDataProm, tanksDataProm, searchTerm, promKgFactor, selectedDate]);
@@ -1506,13 +1294,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                     <TabsTrigger value="promedio" className={tabsTriggerClass}>
                       <TrendingUp className="h-3.5 w-3.5" /> Promedio
                     </TabsTrigger>
-                 <TabsTrigger value="resumen" className={tabsTriggerClass}>
-                   <ScrollText className="h-3.5 w-3.5" /> Resumen
-                 </TabsTrigger>
-                  <TabsTrigger value="resumen-mensual" className={tabsTriggerClass}>
-                    <FileText className="h-3.5 w-3.5" /> Resumen Mensual
-                  </TabsTrigger>
-                   </TabsList>
+                   <TabsTrigger value="resumen" className={tabsTriggerClass}>
+                     <ScrollText className="h-3.5 w-3.5" /> Resumen
+                   </TabsTrigger>
+                    </TabsList>
                 </div>
                  {activeInnerTab === 'resumen' && (
                    <div className="flex items-center gap-2 pl-4">
@@ -2581,17 +2366,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                               </div>
                              )}
                            </div>
-                        </div>
-                       </TabsContent>
+                           </div>
+                        </TabsContent>
 
-                    <TabsContent value="resumen-mensual" className="m-0 animate-in fade-in-50 duration-500">
-                      <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                        <FileText className="h-12 w-12 mb-4 opacity-20" />
-                        Resumen Mensual en Desarrollo
-                      </div>
-                     </TabsContent>
-
-                   </Tabs>
+                    </Tabs>
                  </TabsContent>
 
                  <TabsContent value="seguimiento-simple" className="m-0 animate-in fade-in-50 duration-500">
