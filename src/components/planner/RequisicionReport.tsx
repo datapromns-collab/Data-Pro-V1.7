@@ -32,7 +32,7 @@ export function RequisicionReport({
 
   return (
     <div id="report" className="bg-white p-0 max-w-none mx-0">
-      <div className="border-b-2 pb-4 flex justify-between items-center" style={{ borderColor: '#A67B5B' }}>
+      <div style={{ borderBottom: '2px solid #A67B5B', paddingBottom: '0', marginBottom: 0 }} className="flex justify-between items-start">
         <div className="flex-1">
           <h1 className="text-xl font-headline font-black text-slate-900 leading-tight uppercase">Explosión de Materiales y Necesidad de Compra ({section.toUpperCase()})</h1>
           <p className="font-black text-[10px] uppercase tracking-widest mt-1" style={{ color: '#A67B5B' }}>Cálculo de suministros basado en Plan de Producción (Margen +10%)</p>
@@ -47,7 +47,7 @@ export function RequisicionReport({
         </div>
       </div>
 
-      <div className="rounded border border-slate-200 overflow-hidden mt-2">
+      <div className="rounded border border-slate-200 overflow-hidden" style={{ marginTop: 0, paddingTop: 0 }}>
         <table className="w-full border-collapse text-[9pt]">
           <thead>
             <tr className="text-white font-black uppercase text-center h-10" style={{ backgroundColor: '#A67B5B' }}>
