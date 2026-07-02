@@ -221,8 +221,8 @@ export const LABEL_FACTORS: Record<string, Record<string, number>> = {
   "JUSTY SANDIA": { "1.5Lts": 0.0108 },
   "JUSTY LIMON": { "1.5Lts": 0.0108 },
   "JUSTY TAMARINDO": { "1.5Lts": 0.0108 },
-  "JUSTY MANZANA": { "1.5Lts": 0.000995 },
-  "JUSTY PERA": { "1.5Lts": 0.000900 },
+  "JUSTY MANZANA": { "1.5Lts": 0.01194 },
+  "JUSTY PERA": { "1.5Lts": 0.0108 },
   "VITA TEA DURAZNO": { "1.5Lts": 0.0108 },
   "VITA TEA LIMON": { "1.5Lts": 0.0108 },
 };
