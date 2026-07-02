@@ -1508,13 +1508,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                  <TabsTrigger value="resumen" className={tabsTriggerClass}>
                    <ScrollText className="h-3.5 w-3.5" /> Resumen
                  </TabsTrigger>
-                 <TabsTrigger value="resumen-mensual" className={tabsTriggerClass}>
-                   <FileText className="h-3.5 w-3.5" /> Resumen Mensual
-                 </TabsTrigger>
-                     <TabsTrigger value="resumen-mensual" className={tabsTriggerClass}>
-                       <FileText className="h-3.5 w-3.5" /> Resumen Mensual
-                     </TabsTrigger>
-                  </TabsList>
+                  <TabsTrigger value="resumen-mensual" className={tabsTriggerClass}>
+                    <FileText className="h-3.5 w-3.5" /> Resumen Mensual
+                  </TabsTrigger>
+                   </TabsList>
                 </div>
                  {activeInnerTab === 'resumen' && (
                    <div className="flex items-center gap-2 pl-4">
