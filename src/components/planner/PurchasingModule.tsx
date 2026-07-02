@@ -597,28 +597,53 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
   const handleExportPlanProduccionPDF = () => onPrintResumen('mds', 'plan-produccion');
   const handleExportRequisicionPDF = async () => {
     const report = document.getElementById('report');
-    if (!report) return;
-    await new Promise(requestAnimationFrame);
-    const rect = report.getBoundingClientRect();
-    const canvas = await html2canvas(report, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: '#ffffff',
-      logging: false,
-      windowWidth: rect.width,
-      windowHeight: rect.height,
-      width: rect.width,
-      height: rect.height,
-      x: rect.left,
-      y: rect.top
-    });
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF();
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save('requisicion_materiales.pdf');
+    const card = report?.closest('div[class*="border-slate-200"]');
+    const rawTarget = card || report;
+    if (!rawTarget) return;
+
+    const target = rawTarget as HTMLElement;
+
+    const prevOverflow = target.style.overflow;
+    const prevWidth = target.style.width;
+    target.style.overflow = 'visible';
+    target.style.width = target.scrollWidth + 'px';
+
+    await new Promise((resolve) => setTimeout(resolve, 150));
+
+    try {
+      const canvas = await html2canvas(target, {
+        scale: 4,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+        windowWidth: target.scrollWidth,
+        windowHeight: target.scrollHeight,
+        width: target.scrollWidth,
+        height: target.scrollHeight,
+        x: 0,
+        y: 0,
+        scrollX: 0,
+        scrollY: 0,
+        allowTaint: true
+      });
+
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF({
+        orientation: 'portrait',
+        unit: 'px',
+        format: [canvas.width, canvas.height]
+      });
+
+      const imgProps = pdf.getImageProperties(imgData);
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save('requisicion_materiales.pdf');
+    } finally {
+      target.style.overflow = prevOverflow;
+      target.style.width = prevWidth;
+    }
   };
 
   return (
