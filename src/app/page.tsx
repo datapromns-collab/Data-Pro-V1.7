@@ -1508,6 +1508,15 @@ export default function PlannerPage() {
                 min-height: auto !important;
                 display: block !important;
                 width: 100% !important;
+                left: 0 !important;
+                right: 0 !important;
+              }
+              .print-only > div {
+                margin-top: 0 !important;
+                padding-top: 0 !important;
+              }
+              @page {
+                margin: 5mm !important;
               }
             }
           `}</style>
