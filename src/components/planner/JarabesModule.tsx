@@ -2601,9 +2601,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                           Sección Resumen Mensual en Desarrollo
                         </div>
                       </div>
-                    </TabsContent>
-
-                    </TabsContent>
+                     </TabsContent>
 
                 </Tabs>
               </TabsContent>
