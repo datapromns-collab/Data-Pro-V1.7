@@ -5,8 +5,6 @@ import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { jsPDF } from 'jspdf';
-import html2canvas from 'html2canvas';
 
 import { getAllMaterialsList, calculateRequirementFromSource } from '@/lib/planner-utils';
 
@@ -32,27 +30,8 @@ export function RequisicionReport({
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
   const materialsList = getAllMaterialsList();
 
-  const handleExportPDF = async () => {
-    const report = document.getElementById('report');
-    if (!report) return;
-    const canvas = await html2canvas(report as HTMLElement);
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF();
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-    pdf.save('requisicion_materiales.pdf');
-  };
-
   return (
     <div id="report" className="bg-white p-0 max-w-none mx-0 print:p-0 print:max-w-none">
-      <div className="no-print flex justify-end mb-4">
-        <button onClick={handleExportPDF} className="px-4 py-2 text-white rounded hover:opacity-90 transition" style={{ backgroundColor: '#A67B5B' }}>
-          Exportar PDF
-        </button>
-      </div>
-
       <div className="border-b-2 pb-4 flex justify-between items-center" style={{ borderColor: '#A67B5B' }}>
         <div className="flex-1">
           <h1 className="text-xl font-headline font-black text-slate-900 leading-tight uppercase">Explosión de Materiales y Necesidad de Compra ({section.toUpperCase()})</h1>
