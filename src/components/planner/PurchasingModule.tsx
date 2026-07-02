@@ -598,7 +598,11 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
   const handleExportRequisicionPDF = async () => {
     const report = document.getElementById('report');
     if (!report) return;
+    await new Promise(requestAnimationFrame);
     const rect = report.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) {
+      return;
+    }
     const canvas = await html2canvas(report, {
       scale: 2,
       useCORS: true,
