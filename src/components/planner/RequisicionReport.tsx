@@ -46,14 +46,14 @@ export function RequisicionReport({
   };
 
   return (
-    <div id="report" className="bg-white p-8 max-w-[210mm] mx-auto print:p-0 print:max-w-none">
-      <div className="flex justify-end mb-4 no-print">
+    <div id="report" className="bg-white p-0 max-w-none mx-0 print:p-0 print:max-w-none">
+      <div className="no-print flex justify-end mb-4">
         <button onClick={handleExportPDF} className="px-4 py-2 text-white rounded hover:opacity-90 transition" style={{ backgroundColor: '#A67B5B' }}>
           Exportar PDF
         </button>
       </div>
 
-      <div className="mb-6 border-b-2 pb-4 flex justify-between items-center" style={{ borderColor: '#A67B5B' }}>
+      <div className="border-b-2 pb-4 flex justify-between items-center" style={{ borderColor: '#A67B5B' }}>
         <div className="flex-1">
           <h1 className="text-xl font-headline font-black text-slate-900 leading-tight uppercase">Explosión de Materiales y Necesidad de Compra ({section.toUpperCase()})</h1>
           <p className="font-black text-[10px] uppercase tracking-widest mt-1" style={{ color: '#A67B5B' }}>Cálculo de suministros basado en Plan de Producción (Margen +10%)</p>
@@ -92,21 +92,32 @@ export function RequisicionReport({
               if (reqSales === 0 && reqPlan === 0 && stockAvailable === 0) return null;
 
               return (
-                <tr key={code} className={`h-10 font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
-                  <td className="px-4 py-0 border border-slate-100">
+                <tr key={code} className={`font-bold ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
+                  <td className="px-4 py-1 border border-slate-100">
                     <div className="flex flex-col">
                       <span className="font-mono text-[8pt]" style={{ color: '#A67B5B' }}>{code}</span>
                       <span className="uppercase truncate max-w-[200px]">{mat.description}</span>
                     </div>
                   </td>
-                  <td className="px-3 py-0 border border-slate-100 text-right tabular-nums text-slate-400">{reqSales.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                  <td className="px-3 py-0 border border-slate-100 text-right tabular-nums" style={{ color: '#D97706' }}>{stockAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                  <td className="px-3 py-0 border border-slate-100 text-right tabular-nums font-black" style={{ backgroundColor: '#f0f9ff', color: '#0369a1' }}>{reqPlan.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                  <td className="px-4 py-0 border border-slate-100 text-right tabular-nums font-black text-[11pt]" style={{ backgroundColor: '#5C403310', color: buyNeed > 0 ? '#dc2626' : '#059669' }}>
+                  <td className="px-3 py-1 border border-slate-100 text-right tabular-nums text-slate-400">{reqSales.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                  <td className="px-3 py-1 border border-slate-100 text-right tabular-nums" style={{ color: '#D97706' }}>{stockAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                  <td className="px-3 py-1 border border-slate-100 text-right tabular-nums font-black" style={{ backgroundColor: '#f0f9ff', color: '#0369a1' }}>{reqPlan.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                  <td className="px-4 py-1 border border-slate-100 text-right tabular-nums font-black text-[11pt]" style={{ backgroundColor: '#5C403310', color: buyNeed > 0 ? '#dc2626' : '#059669' }}>
                     {buyNeed === 0 ? '-' : buyNeed.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
                 </tr>
               );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="pt-2 border-t border-slate-200 flex justify-between items-center text-[7px] text-slate-400 font-black uppercase tracking-widest">
+        <span>DATA PRO - SISTEMA DE GESTIÓN DE COMPRAS - MULTINACIONAL DE SABORES</span>
+        <span>Página 1 de 1</span>
+      </div>
+    </div>
+  );
             })}
           </tbody>
         </table>
