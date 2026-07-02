@@ -71,6 +71,8 @@ export const LABELS_1_5LTS_DATA = [
   { code: 'EMP_0144', description: 'ETIQUETA JUSTY SANDIA 1.5 LITROS', unit: 'KG' },
   { code: 'EMP_0145', description: 'ETIQUETA JUSTY TAMARINDO 1.5 LITROS', unit: 'KG' },
   { code: 'EMP_0146', description: 'ETIQUETA JUSTY LIMON 1.5 LITROS', unit: 'KG' },
+  { code: 'EMP_0157', description: 'ETIQUETA JUSTY MANZANA 1.5LITROS', unit: 'KG' },
+  { code: 'EMP_0158', description: 'ETIQUETA JUSTY PERA 1.5 LITROS', unit: 'KG' },
 ];
 
 export const LABELS_1LT_DATA = [
@@ -219,8 +221,8 @@ export const LABEL_FACTORS: Record<string, Record<string, number>> = {
   "JUSTY SANDIA": { "1.5Lts": 0.0108 },
   "JUSTY LIMON": { "1.5Lts": 0.0108 },
   "JUSTY TAMARINDO": { "1.5Lts": 0.0108 },
-  "JUSTY MANZANA": { "1.5Lts": 0.0108 },
-  "JUSTY PERA": { "1.5Lts": 0.0108 },
+  "JUSTY MANZANA": { "1.5Lts": 0.000995 },
+  "JUSTY PERA": { "1.5Lts": 0.000900 },
   "VITA TEA DURAZNO": { "1.5Lts": 0.0108 },
   "VITA TEA LIMON": { "1.5Lts": 0.0108 },
 };
@@ -270,6 +272,8 @@ export const LABEL_MAPPING: Record<string, { product: string, presentation: stri
   'EMP_0144': { product: 'JUSTY SANDIA', presentation: '1.5Lts' },
   'EMP_0145': { product: 'JUSTY TAMARINDO', presentation: '1.5Lts' },
   'EMP_0146': { product: 'JUSTY LIMON', presentation: '1.5Lts' },
+  'EMP_0157': { product: 'JUSTY MANZANA', presentation: '1.5Lts' },
+  'EMP_0158': { product: 'JUSTY PERA', presentation: '1.5Lts' },
   'EMP_0111': { product: 'GLUP COLA', presentation: '1Lt' },
   'EMP_0113': { product: 'GLUP UVA', presentation: '1Lt' },
   'EMP_0115': { product: 'GLUP KOLITA', presentation: '1Lt' },
