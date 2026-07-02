@@ -1754,9 +1754,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(est.fisico - est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0))}</td>
                                <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{(() => { const estTotal = est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0); return estTotal !== 0 ? formatNumber((est.fisico - estTotal) / estTotal * 100) : '0'; })()}%</td>
                              </tr>
-                           </tbody>
-                         </table>
-                       </div>
+                            </tbody>
+                          </table>
+                        </div>
                       </div>
                     </TabsContent>
 
