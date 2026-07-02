@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format } from 'date-fns';
@@ -27,21 +27,12 @@ export function RequisicionReport({
   customRecipes,
   customPackagingRecipes
 }: RequisicionReportProps) {
-  const reportRef = useRef<HTMLDivElement>(null);
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
   const materialsList = getAllMaterialsList();
 
-  useEffect(() => {
-    const report = reportRef.current;
-    if (!report) return;
-    report.scrollTop = 0;
-    report.scrollLeft = 0;
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-  }, []);
-
   return (
-    <div ref={reportRef} id="report" className="bg-white p-0 max-w-none mx-0 print:p-0 print:max-w-none print-min-h-0">
-      <div style={{ borderBottom: '2px solid #A67B5B', paddingBottom: '4px', marginBottom: 0 }} className="flex justify-between items-start">
+    <div id="report" className="bg-white p-0 max-w-none mx-0">
+      <div className="border-b-2 pb-4 flex justify-between items-center" style={{ borderColor: '#A67B5B' }}>
         <div className="flex-1">
           <h1 className="text-xl font-headline font-black text-slate-900 leading-tight uppercase">Explosión de Materiales y Necesidad de Compra ({section.toUpperCase()})</h1>
           <p className="font-black text-[10px] uppercase tracking-widest mt-1" style={{ color: '#A67B5B' }}>Cálculo de suministros basado en Plan de Producción (Margen +10%)</p>
@@ -56,7 +47,7 @@ export function RequisicionReport({
         </div>
       </div>
 
-      <div className="rounded border border-slate-200 overflow-hidden">
+      <div className="rounded border border-slate-200 overflow-hidden mt-2">
         <table className="w-full border-collapse text-[9pt]">
           <thead>
             <tr className="text-white font-black uppercase text-center h-10" style={{ backgroundColor: '#A67B5B' }}>
@@ -102,7 +93,7 @@ export function RequisicionReport({
         </table>
       </div>
 
-      <div style={{ borderTop: '1px solid #e2e8f0', marginTop: '2px', paddingTop: '2px' }} className="flex justify-between items-center text-[7px] text-slate-400 font-black uppercase tracking-widest">
+      <div className="pt-1 border-t border-slate-200 flex justify-between items-center text-[7px] text-slate-400 font-black uppercase tracking-widest">
         <span>DATA PRO - SISTEMA DE GESTIÓN DE COMPRAS - MULTINACIONAL DE SABORES</span>
         <span>Página 1 de 1</span>
       </div>

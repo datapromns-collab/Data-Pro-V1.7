@@ -497,12 +497,13 @@ export default function PlannerPage() {
     const suffix = section === 'aw' ? '-aw' : section === 'global' ? '-global' : '';
     setPrintMode(`${modeMap[type]}${suffix}`);
     const style = document.createElement('style');
-    style.innerHTML = '@page { size: portrait; margin: 0; }';
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
-      style.remove();
-    }, 300);
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
   };
 
   const handlePrintSummary = () => {
@@ -1497,6 +1498,19 @@ export default function PlannerPage() {
         </main>
 
         <div className="print-only w-full bg-white">
+          <style>{`
+            @media print {
+              .print-only {
+                margin-top: 0 !important;
+                padding-top: 0 !important;
+                position: static !important;
+                flex: none !important;
+                min-height: auto !important;
+                display: block !important;
+                width: 100% !important;
+              }
+            }
+          `}</style>
           {printMode === 'plan' && (
             LINES.map((lineName, i) => (
               <div key={lineName} className="page-break-section">
