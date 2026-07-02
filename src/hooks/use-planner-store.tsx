@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, createContext, useContext, ReactNode } from 'react';
 import { ScheduledTask } from '@/lib/types';
 import { startOfWeek, addDays, format, parseISO } from 'date-fns';
 import { RECIPES, CONSUMABLES_RECIPES, DEFAULT_PACKAGING_RECIPES } from '@/lib/planner-utils';
@@ -36,7 +36,7 @@ export interface RawMaterialStock {
   dailyPhysical: Record<string, number>;
 }
 
-export function usePlannerStore() {
+function usePlannerStoreInner() {
   const [tasks, setTasks] = useState<ScheduledTask[]>([]);
   const [weekStartDate, setWeekStartDate] = useState<Date>(() => {
     const d = new Date();
@@ -235,8 +235,8 @@ export function usePlannerStore() {
   const clearAll = useCallback((lineId?: string, startDate?: Date, endDate?: Date) => {
     setTasks(prev => prev.filter(t => {
       const matchLine = lineId ? t.lineId === lineId : true;
-      const matchTime = (startDate && endDate) ? (t.endTime >= startDate && t.startTime <= endDate) : true;
-      return !(matchLine && matchTime);
+      const matchDate = startDate && endDate ? t.endTime >= startDate && t.startTime <= endDate : true;
+      return matchLine && matchDate;
     }));
   }, []);
 
@@ -264,36 +264,35 @@ export function usePlannerStore() {
     });
   }, []);
 
+  const updatePackagingRecipe = useCallback((product: string, presentation: string, materialCode: string, value: number) => {
+    setCustomPackagingRecipes(prev => {
+      const next = { ...prev };
+      if (!next[product]) next[product] = {};
+      if (!next[product][presentation]) next[product][presentation] = {};
+      next[product][presentation][materialCode] = value;
+      return next;
+    });
+  }, []);
+
   const removeMaterialFromRecipe = useCallback((product: string, materialCode: string) => {
     setCustomRecipes(prev => {
       const next = { ...prev };
-      if (next[product]) {
-        const upd = { ...next[product] };
-        delete upd[materialCode];
-        next[product] = upd;
-      }
+      if (!next[product]) return prev;
+      const upd = { ...next[product] };
+      delete upd[materialCode];
+      next[product] = upd;
       return next;
     });
   }, []);
 
-  const updatePackagingRecipe = useCallback((flavor: string, presentation: string, materialCode: string, value: number) => {
+  const removeMaterialFromPackagingRecipe = useCallback((product: string, presentation: string, materialCode: string) => {
     setCustomPackagingRecipes(prev => {
       const next = { ...prev };
-      if (!next[flavor]) next[flavor] = {};
-      if (!next[flavor][presentation]) next[flavor][presentation] = {};
-      next[flavor][presentation][materialCode] = value;
-      return next;
-    });
-  }, []);
-
-  const removeMaterialFromPackagingRecipe = useCallback((flavor: string, presentation: string, materialCode: string) => {
-    setCustomPackagingRecipes(prev => {
-      const next = { ...prev };
-      if (next[flavor] && next[flavor][presentation]) {
-        const upd = { ...next[flavor][presentation] };
-        delete upd[materialCode];
-        next[flavor][presentation] = upd;
-      }
+      if (!next[product]) return prev;
+      if (!next[product][presentation]) return prev;
+      const upd = { ...next[product][presentation] };
+      delete upd[materialCode];
+      next[product][presentation] = upd;
       return next;
     });
   }, []);
@@ -313,7 +312,7 @@ export function usePlannerStore() {
       const newFinalDaily = { ...current.finalDaily };
       if (type === 'initial') {
         newInitialDaily[format(weekStartDate, 'yyyy-MM-dd')] = value;
-      } else if (type === 'final') {
+      } else {
         newFinalDaily[format(addDays(weekStartDate, 6), 'yyyy-MM-dd')] = value;
       }
       return { ...prev, [code]: { ...current, [type]: value, initialDaily: newInitialDaily, finalDaily: newFinalDaily } };
@@ -362,8 +361,8 @@ export function usePlannerStore() {
 
   const updateManualUBB = useCallback((flavor: string, dateKey: string, value: number) => {
     setManualUBB(prev => {
-      const next = { ...prev[flavor], [dateKey]: value };
-      if (value <= 0) delete (next as any)[dateKey];
+      const next = { ...(prev[flavor] || {}), [dateKey]: value };
+      if (value <= 0) delete (next as Record<string, number>)[dateKey];
       return { ...prev, [flavor]: next };
     });
   }, []);
@@ -406,11 +405,11 @@ export function usePlannerStore() {
     });
   }, []);
 
-  const updateProductionPlan = useCallback((flavor: string, presentation: string, quantity: number) => {
+  const updateProductionPlan = useCallback((product: string, presentation: string, quantity: number) => {
     setProductionPlan(prev => {
       const next = { ...prev };
-      if (!next[flavor]) next[flavor] = {};
-      next[flavor][presentation] = quantity;
+      if (!next[product]) next[product] = {};
+      next[product][presentation] = quantity;
       return next;
     });
   }, []);
@@ -441,11 +440,11 @@ export function usePlannerStore() {
     });
   }, []);
 
-  const updateProductionPlanAW = useCallback((flavor: string, presentation: string, quantity: number) => {
+  const updateProductionPlanAW = useCallback((product: string, presentation: string, quantity: number) => {
     setProductionPlanAW(prev => {
       const next = { ...prev };
-      if (!next[flavor]) next[flavor] = {};
-      next[flavor][presentation] = quantity;
+      if (!next[product]) next[product] = {};
+      next[product][presentation] = quantity;
       return next;
     });
   }, []);
@@ -458,10 +457,103 @@ export function usePlannerStore() {
     setPlantInventoryAW(prev => ({ ...prev, [code]: qty }));
   }, []);
 
-  return { 
-    tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily, salesProjection, finishedProductInventory, productionPlan, logisticsInventory, plantInventory, salesProjectionAW, finishedProductInventoryAW, productionPlanAW, logisticsInventoryAW, plantInventoryAW,
-    setWeekStartDate, addTask, updateTask, removeTask, clearAll, updateLineSpeed, updateRealProduction, updateRecipe, removeMaterialFromRecipe, updatePackagingRecipe, removeMaterialFromPackagingRecipe, resetRecipesToDefaults, resetPackagingRecipesToDefaults,
-    updateRawMaterialStock, updateRawMaterialReception, updateRawMaterialDailyInitial, updateRawMaterialDailyFinal, updateRawMaterialDailyPhysical, updateManualUBB,
-    updateInitialUBBTanks, updateFinalUBBTanks, updateInitialUBBTanksDaily, updateFinalUBBTanksDaily, updateSalesProjection, updateFinishedProductInventory, updateProductionPlan, updateLogisticsInventory, updatePlantInventory, updateSalesProjectionAW, updateFinishedProductInventoryAW, updateProductionPlanAW, updateLogisticsInventoryAW, updatePlantInventoryAW, isLoaded
+  return {
+    tasks,
+    setTasks,
+    weekStartDate,
+    setWeekStartDate,
+    lineSpeeds,
+    setLineSpeeds,
+    realProduction,
+    setRealProduction,
+    customRecipes,
+    setCustomRecipes,
+    customPackagingRecipes,
+    setCustomPackagingRecipes,
+    rawMaterialStock,
+    setRawMaterialStock,
+    manualUBB,
+    setManualUBB,
+    initialUBBTanks,
+    setInitialUBBTanks,
+    finalUBBTanks,
+    setFinalUBBTanks,
+    initialUBBTanksDaily,
+    setInitialUBBTanksDaily,
+    finalUBBTanksDaily,
+    setFinalUBBTanksDaily,
+    salesProjection,
+    setSalesProjection,
+    finishedProductInventory,
+    setFinishedProductInventory,
+    productionPlan,
+    setProductionPlan,
+    logisticsInventory,
+    setLogisticsInventory,
+    plantInventory,
+    setPlantInventory,
+    salesProjectionAW,
+    setSalesProjectionAW,
+    finishedProductInventoryAW,
+    setFinishedProductInventoryAW,
+    productionPlanAW,
+    setProductionPlanAW,
+    logisticsInventoryAW,
+    setLogisticsInventoryAW,
+    plantInventoryAW,
+    setPlantInventoryAW,
+    isLoaded,
+    setIsLoaded,
+    addTask,
+    updateTask,
+    removeTask,
+    clearAll,
+    updateLineSpeed,
+    updateRealProduction,
+    updateRecipe,
+    removeMaterialFromRecipe,
+    updatePackagingRecipe,
+    removeMaterialFromPackagingRecipe,
+    resetRecipesToDefaults,
+    resetPackagingRecipesToDefaults,
+    updateRawMaterialStock,
+    updateRawMaterialReception,
+    updateRawMaterialDailyInitial,
+    updateRawMaterialDailyFinal,
+    updateRawMaterialDailyPhysical,
+    updateManualUBB,
+    updateInitialUBBTanksDaily,
+    updateFinalUBBTanksDaily,
+    updateInitialUBBTanks,
+    updateFinalUBBTanks,
+    updateSalesProjection,
+    updateFinishedProductInventory,
+    updateProductionPlan,
+    updateLogisticsInventory,
+    updatePlantInventory,
+    updateSalesProjectionAW,
+    updateFinishedProductInventoryAW,
+    updateProductionPlanAW,
+    updateLogisticsInventoryAW,
+    updatePlantInventoryAW,
   };
+}
+
+const PlannerContext = createContext<ReturnType<typeof usePlannerStoreInner> | null>(null);
+
+export function PlannerProvider({ children }: { children: ReactNode }) {
+  const store = usePlannerStoreInner();
+  return (
+    <PlannerContext.Provider value={store}>
+      {children}
+    </PlannerContext.Provider>
+  );
+}
+
+export function usePlannerStore() {
+  const ctx = useContext(PlannerContext);
+  if (!ctx) {
+    throw new Error('usePlannerStore must be used within a PlannerProvider');
+  }
+  return ctx;
 }

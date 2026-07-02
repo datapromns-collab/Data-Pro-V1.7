@@ -3,6 +3,7 @@ import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { FirebaseClientProvider } from '@/firebase';
 import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
+import { PlannerProvider } from '@/hooks/use-planner-store';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -45,7 +46,9 @@ export default function RootLayout({
       <body className="font-body antialiased">
         <FirebaseClientProvider>
           <FirebaseErrorListener />
-          {children}
+          <PlannerProvider>
+            {children}
+          </PlannerProvider>
         </FirebaseClientProvider>
       </body>
     </html>
