@@ -2543,7 +2543,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                          <ChartContainer config={chartConfig} className="flex-1 w-full">
                                            <ResponsiveContainer width="100%" height="100%">
                                              <ComposedChart data={promedioChartData} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
-                                               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                                               <CartesianGrid strokeDasharray="0" vertical={true} horizontal={true} stroke="#cbd5e1" strokeWidth={1} />
                                                <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fontSize: 10, fontWeight: 700, fill: '#64748b' }} dy={8} />
                                                <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(0)}k` : val} />
                                                <YAxis yAxisId="right" orientation="right" domain={[0, Math.max(20, Math.ceil(weeklyPromPctMax / 5) * 5 + 10)]} axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(val) => `${val}%`} />
