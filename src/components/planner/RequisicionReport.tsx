@@ -56,6 +56,7 @@ export function RequisicionReport({
               <th className="px-3 py-0 border border-white/20 text-right w-28" style={{ backgroundColor: '#D97706' }}>STOCK DISPONIBLE</th>
               <th className="px-3 py-0 border border-white/20 text-right w-32">REQ. S/ PLAN</th>
               <th className="px-4 py-0 border border-white/20 text-right w-32" style={{ backgroundColor: '#5C4033' }}>NECESIDAD COMPRA</th>
+              <th className="px-3 py-0 border border-white/20 text-center w-16">UNIDAD</th>
             </tr>
           </thead>
           <tbody>
@@ -83,6 +84,9 @@ export function RequisicionReport({
                   <td className="px-3 py-1 border border-slate-100 text-right tabular-nums font-black" style={{ backgroundColor: '#f0f9ff', color: '#0369a1' }}>{reqPlan.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                   <td className="px-4 py-1 border border-slate-100 text-right tabular-nums font-black text-[11pt]" style={{ backgroundColor: '#5C403310', color: buyNeed > 0 ? '#dc2626' : '#059669' }}>
                     {buyNeed === 0 ? '-' : buyNeed.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                  </td>
+                  <td className="px-3 py-1 border border-slate-100 text-center text-[10px] font-black text-slate-500 uppercase">
+                    {mat.unit || '-'}
                   </td>
                 </tr>
               );
