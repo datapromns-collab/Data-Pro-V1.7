@@ -497,13 +497,12 @@ export default function PlannerPage() {
     const suffix = section === 'aw' ? '-aw' : section === 'global' ? '-global' : '';
     setPrintMode(`${modeMap[type]}${suffix}`);
     const style = document.createElement('style');
-    style.id = 'print-orientation-style';
-    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    style.innerHTML = '@page { size: portrait; margin: 0; }';
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
-      document.getElementById('print-orientation-style')?.remove();
-    }, 150);
+      style.remove();
+    }, 300);
   };
 
   const handlePrintSummary = () => {
