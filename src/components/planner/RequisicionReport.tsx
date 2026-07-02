@@ -51,11 +51,10 @@ export function RequisicionReport({
         <table className="w-full border-collapse text-[9pt]">
           <thead>
             <tr className="text-white font-black uppercase text-center h-10" style={{ backgroundColor: '#A67B5B' }}>
-              <th className="px-4 py-0 border border-white/20 text-left w-40">MATERIAL / INSUMO</th>
-              <th className="px-3 py-0 border border-white/20 text-right w-28">REQ. VENTAS</th>
+              <th className="pl-4 py-0 border border-white/20 text-left flex-1 min-w-[320px]">MATERIAL / INSUMO</th>
               <th className="px-3 py-0 border border-white/20 text-right w-28" style={{ backgroundColor: '#D97706' }}>STOCK DISPONIBLE</th>
-              <th className="px-3 py-0 border border-white/20 text-right w-32">REQ. S/ PLAN</th>
-              <th className="px-4 py-0 border border-white/20 text-right w-32" style={{ backgroundColor: '#5C4033' }}>NECESIDAD COMPRA</th>
+              <th className="px-3 py-0 border border-white/20 text-right w-36">REQ. S/ PLAN</th>
+              <th className="px-4 py-0 border border-white/20 text-right w-36" style={{ backgroundColor: '#5C4033' }}>NECESIDAD COMPRA</th>
               <th className="px-3 py-0 border border-white/20 text-center w-16">UNIDAD</th>
             </tr>
           </thead>
@@ -76,10 +75,9 @@ export function RequisicionReport({
                   <td className="px-4 py-1 border border-slate-100">
                     <div className="flex flex-col">
                       <span className="font-mono text-[8pt]" style={{ color: '#A67B5B' }}>{code}</span>
-                      <span className="uppercase truncate max-w-[200px]">{mat.description}</span>
+                      <span className="uppercase truncate max-w-[360px]">{mat.description}</span>
                     </div>
                   </td>
-                  <td className="px-3 py-1 border border-slate-100 text-right tabular-nums text-slate-400">{reqSales.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                   <td className="px-3 py-1 border border-slate-100 text-right tabular-nums" style={{ color: '#D97706' }}>{stockAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                   <td className="px-3 py-1 border border-slate-100 text-right tabular-nums font-black" style={{ backgroundColor: '#f0f9ff', color: '#0369a1' }}>{reqPlan.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                   <td className="px-4 py-1 border border-slate-100 text-right tabular-nums font-black text-[11pt]" style={{ backgroundColor: '#5C403310', color: buyNeed > 0 ? '#dc2626' : '#059669' }}>
