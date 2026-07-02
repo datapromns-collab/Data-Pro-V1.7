@@ -1728,39 +1728,40 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/6">%</th>
                              </tr>
                            </thead>
-                           <tbody>
-                             {est.filteredRows.map((row) => {
-                               const sugarFactor = SUGAR_PER_UBB[row.sabor] || 0;
-                               const estandar = row.consumo * sugarFactor;
-                               return (
-                                 <tr key={row.sabor} className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
-                                   <td className="pl-6 py-2 text-xs font-bold text-slate-700">{row.sabor}</td>
-                                   <td className="text-right py-2 text-xs font-black text-slate-800">{formatNumber(row.consumo)}</td>
-                                   <td className="text-right py-2 text-xs font-black text-slate-700">{formatNumber(sugarFactor)}</td>
-                                   <td className="text-right py-2 text-xs font-black text-slate-900">{formatNumber(estandar)}</td>
-                                   <td className="text-right py-2 text-xs text-slate-400">-</td>
-                                   <td className="text-right py-2 pr-6 text-xs text-slate-400">-</td>
-                                 </tr>
-                               );
-                             })}
-                             <tr className="bg-slate-100 hover:bg-slate-100 border-t border-slate-200 font-bold">
-                               <td className="pl-6 py-3 text-xs font-black text-slate-800 uppercase">TOTAL</td>
-                               <td className="text-right py-3 text-xs font-black text-slate-800">
-                                 {est.totals.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                               </td>
-                               <td className="text-right py-3 text-xs font-black text-slate-800">-</td>
-                               <td className="text-right py-3 text-xs font-black text-slate-900">
-                                 {est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                               </td>
-                               <td className="text-right py-3 text-xs font-black text-slate-800">{formatNumber(est.fisico)}</td>
-                               <td className="text-right py-3 pr-6 text-xs font-black text-slate-800">
-                                 {(() => {
-                                   const totalEstandar = est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0);
-                                   return totalEstandar !== 0 ? formatNumber((est.fisico - totalEstandar) / totalEstandar * 100) : '0';
-                                 })()}%
-                               </td>
-                             </tr>
-                           </tbody>
+                            <tbody>
+                              {est.filteredRows.map((row) => {
+                                const sugarFactor = SUGAR_PER_UBB[row.sabor] || 0;
+                                const estandar = row.consumo * sugarFactor;
+                                const fisico = estandar;
+                                return (
+                                  <tr key={row.sabor} className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
+                                    <td className="pl-6 py-2 text-xs font-bold text-slate-700">{row.sabor}</td>
+                                    <td className="text-right py-2 text-xs font-black text-slate-800">{formatNumber(row.consumo)}</td>
+                                    <td className="text-right py-2 text-xs font-black text-slate-700">{formatNumber(sugarFactor)}</td>
+                                    <td className="text-right py-2 text-xs font-black text-slate-900">{formatNumber(estandar)}</td>
+                                    <td className="text-right py-2 text-xs font-black text-slate-800">{formatNumber(fisico)}</td>
+                                    <td className="text-right py-2 pr-6 text-xs text-slate-400">-</td>
+                                  </tr>
+                                );
+                              })}
+                              <tr className="bg-slate-100 hover:bg-slate-100 border-t border-slate-200 font-bold">
+                                <td className="pl-6 py-3 text-xs font-black text-slate-800 uppercase">TOTAL</td>
+                                <td className="text-right py-3 text-xs font-black text-slate-800">
+                                  {est.totals.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                </td>
+                                <td className="text-right py-3 text-xs font-black text-slate-800">-</td>
+                                <td className="text-right py-3 text-xs font-black text-slate-900">
+                                  {est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                </td>
+                                <td className="text-right py-3 text-xs font-black text-slate-800">{formatNumber(est.fisico)}</td>
+                                <td className="text-right py-3 pr-6 text-xs font-black text-slate-800">
+                                  {(() => {
+                                    const totalEstandar = est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0);
+                                    return totalEstandar !== 0 ? formatNumber((est.fisico - totalEstandar) / totalEstandar * 100) : '0';
+                                  })()}%
+                                </td>
+                              </tr>
+                            </tbody>
                          </table>
                        </div>
                      </div>
