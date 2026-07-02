@@ -1717,7 +1717,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                          <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo – Estándar</h3>
                        </div>
                        <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
-                         <table className="min-w-[640px]">
+                         <table className="min-w-[600px]">
                            <thead>
                              <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
                                <th className="text-white font-black text-[11px] uppercase pl-6 text-right w-1/4">Estándar</th>
@@ -1737,19 +1737,40 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                          </table>
                        </div>
                      </div>
-                   </TabsContent>
+                       <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
+                         <table className="min-w-[640px]">
+                           <thead>
+                             <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
+                               <th className="text-white font-black text-[11px] uppercase pl-6 text-right w-1/4">Estándar</th>
+                               <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Físico</th>
+                               <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Diferencia</th>
+                               <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/4">%</th>
+                             </tr>
+                           </thead>
+                           <tbody>
+                             <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
+                               <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0))}</td>
+                               <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(est.fisico)}</td>
+                               <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(est.fisico - est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0))}</td>
+                               <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{(() => { const estTotal = est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0); return estTotal !== 0 ? formatNumber((est.fisico - estTotal) / estTotal * 100) : '0'; })()}%</td>
+                             </tr>
+                           </tbody>
+                         </table>
+                       </div>
+                      </div>
+                    </TabsContent>
 
-<TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
-                     <div className="flex justify-end no-print">
-                      <Button 
-                        onClick={() => onPrintPromedio?.(buildPromedioHtml())}
-                        variant="outline" 
-                        className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
-                      >
-                        <FileDown className="h-4 w-4" /> Exportar Reporte PDF Promedio
-                      </Button>
-                   </div>
-                   <div className="bg-white border border-slate-200 rounded-[2rem] p-6 shadow-sm overflow-hidden space-y-8">
+                    <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                      <div className="flex justify-end no-print">
+                        <Button
+                          onClick={() => onPrintPromedio?.(buildPromedioHtml())}
+                          variant="outline"
+                          className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
+                        >
+                          <FileDown className="h-4 w-4" /> Exportar Reporte PDF Promedio
+                        </Button>
+                      </div>
+                      <div className="bg-white border border-slate-200 rounded-[2rem] p-6 shadow-sm overflow-hidden space-y-8">
 
                        {/* UBB Section */}
                        <div>
@@ -2139,48 +2160,21 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                   <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo – Promedio</h3>
                 </div>
                 <div ref={consumptionRef} className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
-                  <table className="min-w-[640px]">
+                  <table className="min-w-[600px]">
                                   <thead>
                                     <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
-                                      <th className="text-white font-black text-[11px] uppercase pl-6 text-left w-1/4">Sabor</th>
-                                      <th className="text-white font-black text-[11px] uppercase text-right w-1/6">Consumo UBB</th>
-                                      <th className="text-white font-black text-[11px] uppercase text-right w-1/6">Factor Azúcar</th>
-                                      <th className="text-white font-black text-[11px] uppercase text-right w-1/6">Estándar</th>
-                                      <th className="text-white font-black text-[11px] uppercase text-right w-1/6">Físico</th>
-                                      <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/6">%</th>
+                                      <th className="text-white font-black text-[11px] uppercase pl-6 text-right w-1/4">Estándar</th>
+                                      <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Físico</th>
+                                      <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Diferencia</th>
+                                      <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/4">%</th>
                                     </tr>
                                   </thead>
                                   <tbody>
-                                    {prom.filteredRows.map((row) => {
-                                      const sugarFactor = SUGAR_PER_UBB[row.sabor] || 0;
-                                      const estandar = row.consumo * sugarFactor;
-                                      return (
-                                        <tr key={row.sabor} className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
-                                          <td className="pl-6 py-2 text-xs font-bold text-slate-700">{row.sabor}</td>
-                                          <td className="text-right py-2 text-xs font-black text-slate-800">{formatNumber(row.consumo)}</td>
-                                          <td className="text-right py-2 text-xs font-black text-slate-700">{formatNumber(sugarFactor)}</td>
-                                          <td className="text-right py-2 text-xs font-black text-slate-900">{formatNumber(estandar)}</td>
-                                          <td className="text-right py-2 text-xs text-slate-400">-</td>
-                                          <td className="text-right py-2 pr-6 text-xs text-slate-400">-</td>
-                                        </tr>
-                                      );
-                                    })}
-                                    <tr className="bg-slate-100 hover:bg-slate-100 border-t border-slate-200 font-bold">
-                                      <td className="pl-6 py-3 text-xs font-black text-slate-800 uppercase">TOTAL</td>
-                                      <td className="text-right py-3 text-xs font-black text-slate-800">
-                                        {prom.totals.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                                      </td>
-                                      <td className="text-right py-3 text-xs font-black text-slate-800">-</td>
-                                      <td className="text-right py-3 text-xs font-black text-slate-900">
-                                        {prom.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                                      </td>
-                                      <td className="text-right py-3 text-xs font-black text-slate-800">{formatNumber(prom.fisico)}</td>
-                                      <td className="text-right py-3 pr-6 text-xs font-black text-slate-800">
-                                        {(() => {
-                                          const totalEstandar = prom.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0);
-                                          return totalEstandar !== 0 ? formatNumber((prom.fisico - totalEstandar) / totalEstandar * 100) : '0';
-                                        })()}%
-                                      </td>
+                                    <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
+                                      <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(prom.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0))}</td>
+                                      <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(prom.fisico)}</td>
+                                      <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(prom.fisico - prom.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0))}</td>
+                                      <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{(() => { const promTotal = prom.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0); return promTotal !== 0 ? formatNumber((prom.fisico - promTotal) / promTotal * 100) : '0'; })()}%</td>
                                     </tr>
                                   </tbody>
                                 </table>
@@ -2391,40 +2385,41 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                               <div className="flex-1 min-h-[300px] border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
                                 Sin datos esta semana
                               </div>
-                             )}
-                           </div>
-                           </div>
-                        </TabsContent>
+                              )}
+                            </div>
+                         </TabsContent>
+                       </Tabs>
+                     </TabsContent>
 
-                    </Tabs>
+                     <TabsContent value="seguimiento-simple" className="m-0 animate-in fade-in-50 duration-500">
+                       <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                         <Activity className="h-12 w-12 mb-4 opacity-20" />
+                         Seguimiento de Jarabe Simple
+                       </div>
+                     </TabsContent>
+                   </Tabs>
                  </TabsContent>
-
-                 <TabsContent value="seguimiento-simple" className="m-0 animate-in fade-in-50 duration-500">
-                   <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                     <Activity className="h-12 w-12 mb-4 opacity-20" />
-                     Seguimiento de Jarabe Simple
-                   </div>
-                 </TabsContent>
-               </Tabs>
-             </TabsContent>
+              </Tabs>
+           </TabsContent>
 
            <TabsContent value="terminado" className="m-0 animate-in fade-in-50 duration-500">
-            <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-              <Pipette className="h-12 w-12 mb-4 opacity-20" />
-              Sección Jarabe Terminado en Desarrollo
-            </div>
-          </TabsContent>
+             <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+               <Pipette className="h-12 w-12 mb-4 opacity-20" />
+               Sección Jarabe Terminado en Desarrollo
+             </div>
+           </TabsContent>
 
-          <TabsContent value="lineas" className="m-0 animate-in fade-in-50 duration-500">
-            <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-              <Activity className="h-12 w-12 mb-4 opacity-20" />
-              Sección Jarabe en Líneas en Desarrollo
-            </div>
+           <TabsContent value="lineas" className="m-0 animate-in fade-in-50 duration-500">
+             <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+               <Activity className="h-12 w-12 mb-4 opacity-20" />
+               Sección Jarabe en Líneas en Desarrollo
+             </div>
            </TabsContent>
          </Tabs>
-    </div>
-  );
-}
+       </Tabs>
+     </div>
+   );
+ }
 
 
 
