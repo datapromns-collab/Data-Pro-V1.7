@@ -112,9 +112,14 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     setPromKgFactors(prev => ({ ...prev, [dateStr]: value }));
   };
   const [costoAzucar, setCostoAzucar] = useState<string>('');
-  const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
+   const [activeMonthAnchor, setActiveMonthAnchor] = useState<Date>(startOfMonth(new Date()));
+   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
 
-   const getKey = (type: string, date: string, section?: string) => {
+   // Resumen mensual state
+   const [monthlyUbbDataEst, setMonthlyUbbDataEst] = useState<Record<string, any>>({});
+   const [monthlyUbbDataProm, setMonthlyUbbDataProm] = useState<Record<string, any>>({});
+   const [monthlySugarDataEst, setMonthlySugarDataEst] = useState<Record<string, any>>({});
+   const [monthlySugarDataProm, setMonthlySugarDataProm] = useState<Record<string, any>>({})
     if (section) return `jarabes-${type}-${section}-${date}`;
     return `jarabes-${type}-${date}`;
   };
@@ -2583,18 +2588,28 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                         </div>
                        </TabsContent>
 
-                   <TabsContent value="resumen-mensual" className="m-0 animate-in fade-in-50 duration-500">
-                     <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                       <FileText className="h-12 w-12 mb-4 opacity-20" />
-                       Resumen Mensual en Desarrollo
-                     </div>
-                   </TabsContent>
+                    <TabsContent value="resumen-mensual" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                      <div className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm">
+                        <div className="flex items-center justify-between mb-4">
+                          <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Mensual</h3>
+                          <Button size="sm" variant="outline" onClick={() => {}} className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
+                            <FileDown className="h-4 w-4" /> PDF
+                          </Button>
+                        </div>
+                        <div className="flex flex-col items-center justify-center h-[300px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2rem] bg-white/50">
+                          <FileText className="h-12 w-12 mb-4 opacity-20" />
+                          Sección Resumen Mensual en Desarrollo
+                        </div>
+                      </div>
+                    </TabsContent>
 
-                   </Tabs>
+                    </TabsContent>
 
-                </TabsContent>
+                </Tabs>
+              </TabsContent>
 
-                <TabsContent value="seguimiento-simple" className="m-0 animate-in fade-in-50 duration-500">
+            </Tabs>
+          </TabsContent>
                 <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                   <Activity className="h-12 w-12 mb-4 opacity-20" />
                   Seguimiento de Jarabe Simple
