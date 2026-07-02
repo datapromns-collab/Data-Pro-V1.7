@@ -20,7 +20,8 @@ import {
   Calculator,
   FileDown,
   ScrollText,
-  BarChart3
+  BarChart3,
+  FileText
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { format, addDays, getWeek } from 'date-fns';
@@ -1504,9 +1505,15 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                     <TabsTrigger value="promedio" className={tabsTriggerClass}>
                       <TrendingUp className="h-3.5 w-3.5" /> Promedio
                     </TabsTrigger>
-                    <TabsTrigger value="resumen" className={tabsTriggerClass}>
-                      <ScrollText className="h-3.5 w-3.5" /> Resumen
-                    </TabsTrigger>
+                 <TabsTrigger value="resumen" className={tabsTriggerClass}>
+                   <ScrollText className="h-3.5 w-3.5" /> Resumen
+                 </TabsTrigger>
+                 <TabsTrigger value="resumen-mensual" className={tabsTriggerClass}>
+                   <FileText className="h-3.5 w-3.5" /> Resumen Mensual
+                 </TabsTrigger>
+                     <TabsTrigger value="resumen-mensual" className={tabsTriggerClass}>
+                       <FileText className="h-3.5 w-3.5" /> Resumen Mensual
+                     </TabsTrigger>
                   </TabsList>
                 </div>
                  {activeInnerTab === 'resumen' && (
@@ -2577,9 +2584,16 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                              )}
                            </div>
                         </div>
-                      </TabsContent>
+                       </TabsContent>
 
-                  </Tabs>
+                   <TabsContent value="resumen-mensual" className="m-0 animate-in fade-in-50 duration-500">
+                     <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                       <FileText className="h-12 w-12 mb-4 opacity-20" />
+                       Resumen Mensual en Desarrollo
+                     </div>
+                   </TabsContent>
+
+                   </Tabs>
 
                 </TabsContent>
 
