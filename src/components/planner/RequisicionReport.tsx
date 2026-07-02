@@ -32,7 +32,7 @@ export function RequisicionReport({
 
   return (
     <div id="report" className="bg-white p-0 max-w-none mx-0 print:p-0 print:max-w-none">
-      <div className="border-b-2 pb-4 flex justify-between items-center" style={{ borderColor: '#A67B5B' }}>
+      <div className="flex justify-between items-start" style={{ borderBottom: '2px solid #A67B5B', paddingBottom: '4px' }}>
         <div className="flex-1">
           <h1 className="text-xl font-headline font-black text-slate-900 leading-tight uppercase">Explosión de Materiales y Necesidad de Compra ({section.toUpperCase()})</h1>
           <p className="font-black text-[10px] uppercase tracking-widest mt-1" style={{ color: '#A67B5B' }}>Cálculo de suministros basado en Plan de Producción (Margen +10%)</p>
@@ -93,7 +93,7 @@ export function RequisicionReport({
         </table>
       </div>
 
-      <div className="pt-2 border-t border-slate-200 flex justify-between items-center text-[7px] text-slate-400 font-black uppercase tracking-widest">
+      <div style={{ borderTop: '1px solid #e2e8f0', marginTop: '2px', paddingTop: '2px' }} className="flex justify-between items-center text-[7px] text-slate-400 font-black uppercase tracking-widest">
         <span>DATA PRO - SISTEMA DE GESTIÓN DE COMPRAS - MULTINACIONAL DE SABORES</span>
         <span>Página 1 de 1</span>
       </div>
