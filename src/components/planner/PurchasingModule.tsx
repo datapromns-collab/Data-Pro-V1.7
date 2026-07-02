@@ -38,6 +38,8 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { Card } from '@/components/ui/card';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
 import { Badge } from '@/components/ui/badge';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { 
@@ -593,7 +595,30 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
   };
 
   const handleExportPlanProduccionPDF = () => onPrintResumen('mds', 'plan-produccion');
-  const handleExportRequisicionPDF = () => onPrintResumen('mds', 'requisicion');
+  const handleExportRequisicionPDF = async () => {
+    const report = document.getElementById('report');
+    if (!report) return;
+    const rect = report.getBoundingClientRect();
+    const canvas = await html2canvas(report, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      logging: false,
+      windowWidth: rect.width,
+      windowHeight: rect.height,
+      width: rect.width,
+      height: rect.height,
+      x: rect.left,
+      y: rect.top
+    });
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF();
+    const imgProps = pdf.getImageProperties(imgData);
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    pdf.save('requisicion_materiales.pdf');
+  };
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700 pb-10">
