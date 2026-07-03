@@ -175,7 +175,7 @@ export default function OrdenesSapModule() {
                         </TableHeader>
                         <TableBody>
                           <TableRow>
-                            <TableCell className="pl-2 text-[10px] font-bold text-slate-700 align-top" rowSpan={2}>
+                            <TableCell className="pl-2 text-[10px] font-bold text-slate-700 align-top" rowSpan={4}>
                               {new Date(orden.fechaInicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
                             </TableCell>
                             <TableCell className="py-1">
