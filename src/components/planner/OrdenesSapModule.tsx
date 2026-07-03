@@ -3,6 +3,8 @@
 import { Factory } from 'lucide-react';
 
 export default function OrdenesSapModule() {
+  const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
+
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
       <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-200 w-fit">
@@ -12,7 +14,7 @@ export default function OrdenesSapModule() {
       </div>
 
       <div className="bg-white rounded-[2.5rem] border border-slate-200 p-8">
-        <div className="flex items-center gap-4 mb-6">
+        <div className="flex items-center gap-4 mb-8">
           <div className="bg-slate-100 p-3 rounded-xl">
             <Factory className="h-6 w-6 text-slate-700" />
           </div>
@@ -22,9 +24,20 @@ export default function OrdenesSapModule() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center justify-center h-[400px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2rem] bg-slate-50/50">
-          <Factory className="h-12 w-12 mb-4 opacity-20" />
-          Sección Carga ProdT en Desarrollo
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {lineas.map((linea) => (
+            <div key={linea} className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-hidden">
+              <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                <div className="w-2 h-2 rounded-full bg-sky-500" />
+                <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                  Línea {linea}
+                </h4>
+              </div>
+              <div className="h-28 flex items-center justify-center text-slate-400">
+                <p className="text-[10px] font-bold uppercase tracking-widest">Datos de la línea {linea}</p>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
