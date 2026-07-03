@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 
 export default function OrdenesSapModule() {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
-  const [activeLinea, setActiveLinea] = useState<number | null>(null);
+  const [activeLinea, setActiveLinea] = useState<number | null>(1);
 
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
