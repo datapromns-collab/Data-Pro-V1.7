@@ -2290,9 +2290,6 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                        </TabsContent>
                      </Tabs>
                   </TabsContent>
-                </Tabs>
-              </TabsContent>
-            </Tabs>
 
              <TabsContent value="terminado" className="m-0 animate-in fade-in-50 duration-500">
              <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
@@ -2308,8 +2305,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
              </div>
            </TabsContent>
          </Tabs>
-       </Tabs>
-     </div>
+      </div>
    );
  }
 
