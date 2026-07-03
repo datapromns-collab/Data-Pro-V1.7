@@ -1327,19 +1327,20 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                     </div>
                     </div>
                   )}
-                </div>
-              </Tabs>
-            </TabsContent>
+</div>
+                   </Tabs>
+                 </TabsContent>
+                  <TabsContent value="estandar" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
                     <div className="flex justify-end no-print">
-                  <Button 
-                        onClick={() => onPrintStandard?.(buildStandardHtml())}
-                        variant="outline" 
-                        className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
-                      >
-                        <FileDown className="h-4 w-4" /> Exportar Reporte PDF Estándar
-                      </Button>
-                   </div>
-                   <div className="bg-white border border-slate-200 rounded-[2rem] p-6 shadow-sm overflow-hidden space-y-8">
+                      <Button 
+                          onClick={() => onPrintStandard?.(buildStandardHtml())}
+                          variant="outline" 
+                          className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
+                        >
+                          <FileDown className="h-4 w-4" /> Exportar Reporte PDF Estándar
+                        </Button>
+                     </div>
+                     <div className="bg-white border border-slate-200 rounded-[2rem] p-6 shadow-sm overflow-hidden space-y-8">
 
                       {/* UBB Section */}
                       <div>
@@ -1712,54 +1713,54 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                          </Table>
                        </div>
 
-                       {/* Consumption Calculation */}
-                       <div className="flex items-center justify-between">
-                         <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo – Estándar</h3>
-                       </div>
-                       <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
-                         <table className="min-w-[600px]">
-                           <thead>
-                             <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
-                               <th className="text-white font-black text-[11px] uppercase pl-6 text-right w-1/4">Estándar</th>
-                               <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Físico</th>
-                               <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Diferencia</th>
-                               <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/4">%</th>
-                             </tr>
-                           </thead>
-                           <tbody>
-                             <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
-                               <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0))}</td>
-                               <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(est.fisico)}</td>
-                               <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(est.fisico - est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0))}</td>
-                               <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{(() => { const estTotal = est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0); return estTotal !== 0 ? formatNumber((est.fisico - estTotal) / estTotal * 100) : '0'; })()}%</td>
-                             </tr>
-                           </tbody>
-                         </table>
-                       </div>
-                     </div>
-                       <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
-                         <table className="min-w-[640px]">
-                           <thead>
-                             <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
-                               <th className="text-white font-black text-[11px] uppercase pl-6 text-right w-1/4">Estándar</th>
-                               <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Físico</th>
-                               <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Diferencia</th>
-                               <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/4">%</th>
-                             </tr>
-                           </thead>
-                           <tbody>
-                             <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
-                               <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0))}</td>
-                               <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(est.fisico)}</td>
-                               <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(est.fisico - est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0))}</td>
-                               <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{(() => { const estTotal = est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0); return estTotal !== 0 ? formatNumber((est.fisico - estTotal) / estTotal * 100) : '0'; })()}%</td>
-                             </tr>
+{/* Consumption Calculation */}
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider leading-none">Cálculo de Consumo – Estándar</h3>
+                        </div>
+                        <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
+                          <table className="min-w-[600px]">
+                            <thead>
+                              <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
+                                <th className="text-white font-black text-[11px] uppercase pl-6 text-right w-1/4">Estándar</th>
+                                <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Físico</th>
+                                <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Diferencia</th>
+                                <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/4">%</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
+                                <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0))}</td>
+                                <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(est.fisico)}</td>
+                                <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(est.fisico - est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0))}</td>
+                                <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{(() => { const estTotal = est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0); return estTotal !== 0 ? formatNumber((est.fisico - estTotal) / estTotal * 100) : '0'; })()}%</td>
+                              </tr>
                             </tbody>
-                           </table>
-                         </div>
-                     </TabsContent>
+                          </table>
+                        </div>
+                      </div>
+                        <div className="border border-slate-100 rounded-2xl overflow-x-auto bg-white">
+                          <table className="min-w-[640px]">
+                            <thead>
+                              <tr className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
+                                <th className="text-white font-black text-[11px] uppercase pl-6 text-right w-1/4">Estándar</th>
+                                <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Físico</th>
+                                <th className="text-white font-black text-[11px] uppercase text-right w-1/4">Diferencia</th>
+                                <th className="text-white font-black text-[11px] uppercase text-right pr-6 w-1/4">%</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr className="hover:bg-slate-50/50 transition-colors border-b border-slate-100 odd:bg-white even:bg-slate-50/30">
+                                <td className="text-right font-black text-xs text-slate-800 pl-6 py-3">{formatNumber(est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0))}</td>
+                                <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(est.fisico)}</td>
+                                <td className="text-right font-black text-xs text-slate-800 py-3">{formatNumber(est.fisico - est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0))}</td>
+                                <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{(() => { const estTotal = est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0); return estTotal !== 0 ? formatNumber((est.fisico - estTotal) / estTotal * 100) : '0'; })()}%</td>
+                              </tr>
+                             </tbody>
+                            </table>
+                          </div>
+                      </TabsContent>
 
-                     <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                      <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
                       <div className="flex justify-end no-print">
                         <Button
                           onClick={() => onPrintPromedio?.(buildPromedioHtml())}
