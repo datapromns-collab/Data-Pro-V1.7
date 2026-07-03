@@ -11,6 +11,32 @@ import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from '@
 import { PRODUCT_LIST } from '@/lib/planner-utils';
 import { getISOWeek } from 'date-fns';
 
+const SABOR_COLORS: Record<string, string> = {
+  "GLUP COLA": "bg-slate-200 text-slate-800",
+  "GLUP FRESH": "bg-emerald-200 text-emerald-900",
+  "GLUP UVA": "bg-violet-200 text-violet-900",
+  "GLUP PIÑA": "bg-amber-200 text-amber-900",
+  "GLUP NARANJA": "bg-orange-200 text-orange-900",
+  "GLUP KOLITA": "bg-sky-200 text-sky-900",
+  "GLUP MANZANA VERDE": "bg-lime-200 text-lime-900",
+  "GLUP PONCHE": "bg-rose-200 text-rose-900",
+  "GLUP CHICLE": "bg-pink-200 text-pink-900",
+  "GLUP PIÑA PARCHITA": "bg-fuchsia-200 text-fuchsia-900",
+  "GLUP MANZANA ROJA": "bg-red-200 text-red-900",
+  "JUSTY NARANJA": "bg-orange-200 text-orange-900",
+  "JUSTY DURAZNO": "bg-amber-200 text-amber-900",
+  "JUSTY MANDARINA": "bg-yellow-200 text-yellow-900",
+  "JUSTY SANDIA": "bg-red-200 text-red-900",
+  "JUSTY LIMON": "bg-lime-200 text-lime-900",
+  "JUSTY TAMARINDO": "bg-amber-200 text-amber-900",
+  "JUSTY MANZANA": "bg-emerald-200 text-emerald-900",
+  "JUSTY PERA": "bg-green-200 text-green-900",
+  "VITA TEA DURAZNO": "bg-orange-200 text-orange-900",
+  "VITA TEA LIMON": "bg-yellow-200 text-yellow-900",
+};
+
+const FALLBACK_COLOR = "bg-gray-200 text-gray-900";
+
 interface OrdenSap {
   id: string;
   linea: number;
@@ -117,46 +143,57 @@ export default function OrdenesSapModule() {
               </h4>
             </div>
 
-            <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4">
-              {ordenesPorLinea.map((orden) => (
-                <div key={orden.id} className="border border-slate-200 rounded-xl bg-white overflow-hidden">
-                  <div className="bg-slate-100 px-3 py-1.5 border-b border-slate-200">
-                    <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest truncate">
-                      {orden.sabor} - SEMANA {orden.semana}
-                    </p>
-                  </div>
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-8">
-                        <TableHead className="text-[9px] font-black text-slate-500 uppercase pl-2 py-1">Fecha</TableHead>
-                        <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Ticket</TableHead>
-                        <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Cajas</TableHead>
-                        <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Total Día</TableHead>
-                        <TableHead className="text-[9px] font-black text-slate-500 uppercase pr-2 py-1">N° Orden</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      <TableRow className="h-10">
-                        <TableCell className="pl-2 text-[10px] font-bold text-slate-700 py-1">
-                          {new Date(orden.fechaInicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
-                        </TableCell>
-                        <TableCell className="py-1">
-                          <Input placeholder="Ticket" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2" />
-                        </TableCell>
-                        <TableCell className="py-1">
-                          <Input type="number" placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2" />
-                        </TableCell>
-                        <TableCell className="py-1">
-                          <Input placeholder="Total día" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2" />
-                        </TableCell>
-                        <TableCell className="pr-2 py-1">
-                          <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-2" />
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
+            <div className="p-4">
+              {ordenesPorLinea.length === 0 && (
+                <div className="h-32 flex items-center justify-center text-slate-400">
+                  <p className="text-[10px] font-bold uppercase tracking-widest">Sin órdenes registradas para esta línea</p>
                 </div>
-              ))}
+              )}
+
+              <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-3">
+                {ordenesPorLinea.map((orden) => {
+                  const colorClass = SABOR_COLORS[orden.sabor] || FALLBACK_COLOR;
+                  return (
+                    <div key={orden.id} className="border border-slate-200 rounded-xl bg-white overflow-hidden">
+                      <div className={`px-3 py-1.5 border-b border-slate-200 ${colorClass}`}>
+                        <p className="text-[10px] font-black uppercase tracking-widest truncate">
+                          {orden.sabor} - SEMANA {orden.semana}
+                        </p>
+                      </div>
+                      <Table>
+                        <TableHeader>
+                          <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-8">
+                            <TableHead className="text-[9px] font-black text-slate-500 uppercase pl-2 py-1">Fecha</TableHead>
+                            <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Ticket</TableHead>
+                            <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Cajas</TableHead>
+                            <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Total Día</TableHead>
+                            <TableHead className="text-[9px] font-black text-slate-500 uppercase pr-2 py-1">N° Orden</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow className="h-10">
+                            <TableCell className="pl-2 text-[10px] font-bold text-slate-700 py-1">
+                              {new Date(orden.fechaInicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+                            </TableCell>
+                            <TableCell className="py-1">
+                              <Input placeholder="Ticket" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2" />
+                            </TableCell>
+                            <TableCell className="py-1">
+                              <Input type="number" placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2" />
+                            </TableCell>
+                            <TableCell className="py-1">
+                              <Input placeholder="Total día" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2" />
+                            </TableCell>
+                            <TableCell className="pr-2 py-1">
+                              <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-2" />
+                            </TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
