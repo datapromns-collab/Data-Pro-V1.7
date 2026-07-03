@@ -295,97 +295,97 @@ export default function OrdenesSapModule() {
                                 </button>
                               </div>
                               <div className="border-b border-slate-200">
-                                <div className="grid grid-cols-[80px_96px_1fr_80px_112px]">
-                                  <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Fecha</div>
-                                  <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Ticket</div>
-                                  <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Cajas</div>
-                                  <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Total día</div>
-                                  <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-slate-200 bg-slate-50">N° Orden</div>
+                              <div className="grid grid-cols-5 gap-0">
+                                <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50 w-16">Fecha</div>
+                                <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Ticket</div>
+                                <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Cajas</div>
+                                <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Total día</div>
+                                <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-slate-200 bg-slate-50">N° Orden</div>
 
-                                  <div className="px-1 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-100 border-b border-slate-100 whitespace-nowrap">
-                                    {formatDate(dia.fechaInicio)}
-                                  </div>
-                                  <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                    <Input value={dia.ticket1} onChange={(e) => updateDia(orden.id, diaIndex, 'ticket1', e.target.value)} placeholder="Ticket" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
-                                  </div>
-                                  <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                    <Input type="number" value={dia.cajas1} onChange={(e) => updateDia(orden.id, diaIndex, 'cajas1', Number(e.target.value))} placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
-                                  </div>
-                                  <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                    <Input value={calcularTotalDia(dia)} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-1.5 w-full" />
-                                  </div>
-                                  <div className="p-1 border-b border-slate-100">
-                                    <div className="flex items-center gap-1">
-                                      <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-1.5 flex-1 min-w-0" />
-                                      <button onClick={() => navigator.clipboard.writeText(orden.ordenNumero)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar número de orden">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                                      </button>
-                                    </div>
-                                  </div>
-
-                                  <div className="px-1 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-100 border-b border-slate-100 whitespace-nowrap">
-                                    {formatDate(dia.fechaInicio)}
-                                  </div>
-                                  <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                    <div className="h-7"></div>
-                                  </div>
-                                  <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                    <Input type="number" value={dia.cajas2} onChange={(e) => updateDia(orden.id, diaIndex, 'cajas2', Number(e.target.value))} placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
-                                  </div>
-                                  <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                    <Input value={calcularTotalDia(dia)} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-1.5 w-full" />
-                                  </div>
-                                  <div className="p-1 border-b border-slate-100">
-                                    <div className="flex items-center gap-1">
-                                      <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-1.5 flex-1 min-w-0" />
-                                      <button onClick={() => navigator.clipboard.writeText(orden.ordenNumero)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar número de orden">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                                      </button>
-                                    </div>
-                                  </div>
-
-                                  <div className="px-1 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-100 border-b border-slate-100 whitespace-nowrap">
-                                    {formatDate(dia.fechaInicio)}
-                                  </div>
-                                  <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                    <Input value={dia.ticket2} onChange={(e) => updateDia(orden.id, diaIndex, 'ticket2', e.target.value)} placeholder="Ticket" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
-                                  </div>
-                                  <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                    <Input type="number" value={dia.cajas3} onChange={(e) => updateDia(orden.id, diaIndex, 'cajas3', Number(e.target.value))} placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
-                                  </div>
-                                  <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                    <Input value={calcularTotalDia(dia)} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-1.5 w-full" />
-                                  </div>
-                                  <div className="p-1 border-b border-slate-100">
-                                    <div className="flex items-center gap-1">
-                                      <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-1.5 flex-1 min-w-0" />
-                                      <button onClick={() => navigator.clipboard.writeText(orden.ordenNumero)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar número de orden">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                                      </button>
-                                    </div>
-                                  </div>
-
-                                  <div className="px-1 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-100 border-b border-slate-100 whitespace-nowrap">
-                                    {formatDate(dia.fechaInicio)}
-                                  </div>
-                                  <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                    <div className="h-7"></div>
-                                  </div>
-                                  <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                    <Input type="number" value={dia.cajas4} onChange={(e) => updateDia(orden.id, diaIndex, 'cajas4', Number(e.target.value))} placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
-                                  </div>
-                                  <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                    <Input value={calcularTotalDia(dia)} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-1.5 w-full" />
-                                  </div>
-                                  <div className="p-1 border-b border-slate-100">
-                                    <div className="flex items-center gap-1">
-                                      <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-1.5 flex-1 min-w-0" />
-                                      <button onClick={() => navigator.clipboard.writeText(orden.ordenNumero)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar número de orden">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                                      </button>
-                                    </div>
+                                <div className="px-1 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-100 border-b border-slate-100 whitespace-nowrap">
+                                  {formatDate(dia.fechaInicio)}
+                                </div>
+                                <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                  <Input value={dia.ticket1} onChange={(e) => updateDia(orden.id, diaIndex, 'ticket1', e.target.value)} placeholder="Ticket" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                </div>
+                                <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                  <Input type="number" value={dia.cajas1} onChange={(e) => updateDia(orden.id, diaIndex, 'cajas1', Number(e.target.value))} placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                </div>
+                                <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                  <Input value={calcularTotalDia(dia)} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-1.5 w-full" />
+                                </div>
+                                <div className="p-1 border-b border-slate-100">
+                                  <div className="flex items-center gap-1">
+                                    <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-1.5 flex-1 min-w-0" />
+                                    <button onClick={() => navigator.clipboard.writeText(orden.ordenNumero)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar número de orden">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                    </button>
                                   </div>
                                 </div>
+
+                                <div className="px-1 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-100 border-b border-slate-100 whitespace-nowrap">
+                                  {formatDate(dia.fechaInicio)}
+                                </div>
+                                <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                  <div className="h-7"></div>
+                                </div>
+                                <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                  <Input type="number" value={dia.cajas2} onChange={(e) => updateDia(orden.id, diaIndex, 'cajas2', Number(e.target.value))} placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                </div>
+                                <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                  <Input value={calcularTotalDia(dia)} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-1.5 w-full" />
+                                </div>
+                                <div className="p-1 border-b border-slate-100">
+                                  <div className="flex items-center gap-1">
+                                    <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-1.5 flex-1 min-w-0" />
+                                    <button onClick={() => navigator.clipboard.writeText(orden.ordenNumero)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar número de orden">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                    </button>
+                                  </div>
+                                </div>
+
+                                <div className="px-1 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-100 border-b border-slate-100 whitespace-nowrap">
+                                  {formatDate(dia.fechaInicio)}
+                                </div>
+                                <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                  <Input value={dia.ticket2} onChange={(e) => updateDia(orden.id, diaIndex, 'ticket2', e.target.value)} placeholder="Ticket" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                </div>
+                                <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                  <Input type="number" value={dia.cajas3} onChange={(e) => updateDia(orden.id, diaIndex, 'cajas3', Number(e.target.value))} placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                </div>
+                                <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                  <Input value={calcularTotalDia(dia)} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-1.5 w-full" />
+                                </div>
+                                <div className="p-1 border-b border-slate-100">
+                                  <div className="flex items-center gap-1">
+                                    <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-1.5 flex-1 min-w-0" />
+                                    <button onClick={() => navigator.clipboard.writeText(orden.ordenNumero)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar número de orden">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                    </button>
+                                  </div>
+                                </div>
+
+                                <div className="px-1 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-100 border-b border-slate-100 whitespace-nowrap">
+                                  {formatDate(dia.fechaInicio)}
+                                </div>
+                                <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                  <div className="h-7"></div>
+                                </div>
+                                <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                  <Input type="number" value={dia.cajas4} onChange={(e) => updateDia(orden.id, diaIndex, 'cajas4', Number(e.target.value))} placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                </div>
+                                <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                  <Input value={calcularTotalDia(dia)} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-1.5 w-full" />
+                                </div>
+                                <div className="p-1 border-b border-slate-100">
+                                  <div className="flex items-center gap-1">
+                                    <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-1.5 flex-1 min-w-0" />
+                                    <button onClick={() => navigator.clipboard.writeText(orden.ordenNumero)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar número de orden">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
                               </div>
                             </div>
                           ))}
