@@ -97,16 +97,6 @@ export default function OrdenesSapModule() {
 
       {activeLinea && (
         <div className="bg-white rounded-[2.5rem] border border-slate-200 p-8">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="bg-slate-100 p-3 rounded-xl">
-              <Factory className="h-6 w-6 text-slate-700" />
-            </div>
-            <div>
-              <h3 className="font-black uppercase text-sm tracking-widest text-slate-900">Carga de Producción</h3>
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">Registro de órdenes SAP</p>
-            </div>
-          </div>
-
           <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-hidden">
             <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
               <div className="w-2 h-2 rounded-full bg-sky-500" />
