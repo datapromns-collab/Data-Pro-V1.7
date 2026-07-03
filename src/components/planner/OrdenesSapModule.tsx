@@ -278,6 +278,7 @@ export default function OrdenesSapModule() {
                             </TableCell>
                           </TableRow>
                           <TableRow>
+                            <TableCell className="py-1 w-32"></TableCell>
                             <TableCell className="py-1">
                               <Input
                                 type="number"
@@ -289,6 +290,7 @@ export default function OrdenesSapModule() {
                             </TableCell>
                           </TableRow>
                           <TableRow>
+                            <TableCell className="py-1 w-32"></TableCell>
                             <TableCell className="py-1">
                               <Input
                                 type="number"
