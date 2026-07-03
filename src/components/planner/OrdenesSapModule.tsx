@@ -134,8 +134,8 @@ export default function OrdenesSapModule() {
       )}
 
       {activeLinea && (
-        <div className="bg-white rounded-[2.5rem] border border-slate-200 p-8">
-          <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-hidden">
+        <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
+          <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
             <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
               <div className="w-2 h-2 rounded-full bg-sky-500" />
               <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
@@ -150,7 +150,7 @@ export default function OrdenesSapModule() {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4">
                 {ordenesPorLinea.map((orden) => {
                   const colorClass = SABOR_COLORS[orden.sabor] || FALLBACK_COLOR;
                   return (
