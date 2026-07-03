@@ -1300,37 +1300,37 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                     </TabsList>
                 </div>
                  {activeInnerTab === 'resumen' && (
-                   <div className="flex items-center gap-2 pl-4">
-                   <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full h-11 px-4 gap-2">
-                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">Semana inicio</span>
-                     <Input
-                       type="date"
-                       value={format(activeWeekAnchor, 'yyyy-MM-dd')}
-                       onChange={(e) => setActiveWeekAnchor(new Date(e.target.value + 'T00:00:00'))}
-                       className="h-auto p-2 rounded-full font-bold text-xs bg-white border border-slate-200 w-[140px]"
-                     />
-                   </div>
-                   <div className="flex items-center gap-2 pl-2 bg-slate-100/50 border border-slate-200 rounded-full h-11 px-4">
-                     <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">Costo Actual Azúcar</span>
-                     <div className="relative flex items-center bg-white border border-slate-200 rounded-full h-8 px-3 min-w-[100px]">
-                       <span className="text-slate-500 font-bold text-xs mr-0.5">$</span>
-                       <Input
-                         type="number"
-                         value={costoAzucar}
-                         onChange={(e) => setCostoAzucar(e.target.value)}
-                         className="h-auto p-0 border-none text-center font-black text-sm bg-transparent focus-visible:ring-0 w-16"
-                         placeholder="0.00"
-                         step="0.01"
-                         min="0"
-                       />
-                     </div>
-                   </div>
-                   </div>
-                 )}
-              </div>
-
-<TabsContent value="estandar" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
-                   <div className="flex justify-end no-print">
+                    <div className="flex items-center gap-2 pl-4">
+                    <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full h-11 px-4 gap-2">
+                      <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">Semana inicio</span>
+                      <Input
+                        type="date"
+                        value={format(activeWeekAnchor, 'yyyy-MM-dd')}
+                        onChange={(e) => setActiveWeekAnchor(new Date(e.target.value + 'T00:00:00'))}
+                        className="h-auto p-2 rounded-full font-bold text-xs bg-white border border-slate-200 w-[140px]"
+                      />
+                    </div>
+                    <div className="flex items-center gap-2 pl-2 bg-slate-100/50 border border-slate-200 rounded-full h-11 px-4">
+                      <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest whitespace-nowrap">Costo Actual Azúcar</span>
+                      <div className="relative flex items-center bg-white border border-slate-200 rounded-full h-8 px-3 min-w-[100px]">
+                        <span className="text-slate-500 font-bold text-xs mr-0.5">$</span>
+                        <Input
+                          type="number"
+                          value={costoAzucar}
+                          onChange={(e) => setCostoAzucar(e.target.value)}
+                          className="h-auto p-0 border-none text-center font-black text-sm bg-transparent focus-visible:ring-0 w-16"
+                          placeholder="0.00"
+                          step="0.01"
+                          min="0"
+                        />
+                      </div>
+                    </div>
+                    </div>
+                  )}
+                </div>
+              </Tabs>
+            </TabsContent>
+                    <div className="flex justify-end no-print">
                   <Button 
                         onClick={() => onPrintStandard?.(buildStandardHtml())}
                         variant="outline" 
@@ -1755,12 +1755,11 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                                <td className="text-right font-black text-xs text-slate-800 pr-6 py-3">{(() => { const estTotal = est.filteredRows.reduce((sum, row) => sum + row.consumo * (SUGAR_PER_UBB[row.sabor] || 0), 0); return estTotal !== 0 ? formatNumber((est.fisico - estTotal) / estTotal * 100) : '0'; })()}%</td>
                              </tr>
                             </tbody>
-                          </table>
-                        </div>
-                      </div>
-                    </TabsContent>
+                           </table>
+                         </div>
+                     </TabsContent>
 
-                    <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                     <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
                       <div className="flex justify-end no-print">
                         <Button
                           onClick={() => onPrintPromedio?.(buildPromedioHtml())}
@@ -2286,123 +2285,15 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                               </div>
                             )}
                            </div>
-                             <div data-resumen-promedio-card className="border border-slate-200 rounded-[2rem] p-6 bg-white shadow-sm flex flex-col min-h-[520px]">
-                                <div className="flex items-center justify-between mb-4">
-                                  <h3 className="font-black text-slate-800 text-sm uppercase tracking-wider">Resumen Promedio Semanal</h3>
-                                  <span className="font-black text-slate-800 text-sm uppercase tracking-wider">Semana {getWeek(selectedDate || new Date())}</span>
-                                     <Button size="sm" variant="outline" onClick={handleExportWeeklyPDFPromedio} className="pdf-export-btn gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20">
-                                    <FileDown className="h-4 w-4" /> PDF
-                                  </Button>
-                                </div>
-                           {weeklyProm && weekDays.length > 0 ? (
-                             <>
-                               <div className="overflow-x-auto mb-4">
-                                 <table className="min-w-[500px] text-xs">
-                                   <thead>
-                                       <tr className="bg-green-100">
-                                         <th className="p-2 text-left border border-slate-200">DÍA</th>
-                                         <th className="p-2 text-right border border-slate-200">ESTÁNDAR</th>
-                                         <th className="p-2 text-right border border-slate-200">FÍSICO</th>
-                                         <th className="p-2 text-right border border-slate-200">DIFERENCIA</th>
-                                         <th className="p-2 text-right border border-slate-200">%</th>
-                                         <th className="p-2 text-right border border-slate-200">DESVIACIÓN COSTO</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                        {weekDays.map((day, idx) => {
-                                          const dateStr = format(day, 'yyyy-MM-dd');
-                                           const dUbb = loadDayDataWithCarryOver(dateStr, 'ubb');
-                                          const dSugar = loadDayDataWithCarryOver(dateStr, 'sugar');
-                                          const dTanks = loadDayDataWithCarryOver(dateStr, 'tanks');
-                                           const m = computePlannerMetrics(dUbb, dSugar, dTanks, '', getPromKgFactor(dateStr));
-                                           const fisico = m.fisico;
-                                          const diferencia = fisico - m.sugarStandard;
-                                          const porcentaje = m.sugarStandard !== 0 ? (diferencia / m.sugarStandard * 100) : 0;
-                                          const desviacionCosto = diferencia * (parseFloat(costoAzucar) || 0);
-                                          return (
-                                            <tr key={dateStr} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}>
-                                              <td className="p-2 border border-slate-200 font-bold uppercase">{format(day, 'EEEE', { locale: es })}</td>
-                                              <td className="p-2 text-right border border-slate-200">{formatNumber(m.sugarStandard)}</td>
-                                              <td className="p-2 text-right border border-slate-200">{formatNumber(fisico)}</td>
-                                              <td className="p-2 text-right border border-slate-200" style={{ color: diferencia <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(diferencia)}</td>
-                                              <td className="p-2 text-right border border-slate-200" style={{ color: porcentaje <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(porcentaje)}%</td>
-                                              <td className="p-2 text-right border border-slate-200" style={{ color: desviacionCosto <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(desviacionCosto)}</td>
-                                            </tr>
-                                         );
-                                       })}
-                                        {weeklyProm && (() => {
-                                          const totalEstandar = weeklyProm.sugarStandard;
-                                           const totalFisico = weeklyProm.fisico;
-                                          const totalDiferencia = totalFisico - totalEstandar;
-                                          const totalPorcentaje = totalEstandar !== 0 ? (totalDiferencia / totalEstandar * 100) : 0;
-                                          const totalDesviacionCosto = totalDiferencia * (parseFloat(costoAzucar) || 0);
-                                          return (
-                                             <tr className="bg-green-100 font-black text-xs">
-                                              <td className="p-2 border border-slate-200">TOTAL SEMANAL</td>
-                                             <td className="p-2 text-right border border-slate-200">{formatNumber(totalEstandar)}</td>
-                                             <td className="p-2 text-right border border-slate-200">{formatNumber(totalFisico)}</td>
-                                             <td className="p-2 text-right border border-slate-200" style={{ color: totalDiferencia <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(totalDiferencia)}</td>
-                                             <td className="p-2 text-right border border-slate-200" style={{ color: totalPorcentaje <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(totalPorcentaje)}%</td>
-                                             <td className="p-2 text-right border border-slate-200" style={{ color: totalDesviacionCosto <= 0 ? '#059669' : '#dc2626' }}>{formatNumber(totalDesviacionCosto)}</td>
-                                           </tr>
-                                        );
-                                      })()}
-                                   </tbody>
-                                 </table>
-                               </div>
-                                        <div className="flex flex-col flex-1 min-h-[529px] bg-slate-50/40 rounded-2xl border-2 border-slate-200 p-4 relative" ref={promedioChartRef}>
-                                         <ChartContainer config={chartConfig} className="flex-1 w-full">
-                                           <ResponsiveContainer width="100%" height="100%">
-                                              <ComposedChart data={promedioChartData} margin={{ top: 40, right: 30, left: 0, bottom: 20 }}>
-                                               <CartesianGrid strokeDasharray="0" vertical={true} horizontal={true} stroke="#cbd5e1" strokeWidth={1} />
-                                               <XAxis dataKey="day" axisLine={false} tickLine={true} tick={{ fontSize: 10, fontWeight: 700, fill: '#64748b' }} dy={8} />
-                                               <YAxis yAxisId="left" axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(0)}k` : val} />
-                                               <YAxis yAxisId="right" orientation="right" domain={[0, Math.max(20, Math.ceil(weeklyPromPctMax / 5) * 5 + 10)]} axisLine={false} tickLine={false} tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }} tickFormatter={(val) => `${val}%`} />
-                                               <Tooltip content={<ChartTooltipContent />} cursor={{ fill: '#f8fafc' }} />
-                                          <Bar yAxisId="left" dataKey="estandar" fill="#ff9a76" radius={[4, 4, 0, 0]} barSize={30} name="Estándar" />
-                                                 <Bar yAxisId="left" dataKey="fisico" fill="#d1fae5" radius={[4, 4, 0, 0]} barSize={30} name="Físico" />
-                                           <Line yAxisId="right" type="monotone" dataKey="pct" stroke="#ef4444" strokeWidth={3} dot={{ r: 4, fill: '#ef4444', strokeWidth: 2, stroke: '#fff' }} name="%" label={{ content: ({ x, y, value }: any) => <g><rect x={Number(x) - 20} y={Number(y) - 24} width={40} height={22} rx={11} fill="white" stroke="#e2e8f0" strokeWidth={1} /><text x={Number(x)} y={Number(y) - 8} textAnchor="middle" fontSize={10} fontWeight={800} fill="#1e293b">{`${Number(value).toFixed(2)}%`}</text></g>, position: 'top' }} />
-                                             </ComposedChart>
-                                           </ResponsiveContainer>
-                                         </ChartContainer>
-                                         <div className="flex justify-center gap-10 py-3 border-t-2 border-slate-200 bg-white shadow-md rounded-full mx-6 mb-4 shrink-0">
-                                            <div className="flex items-center gap-2">
-                                              <div className="w-5 h-5 bg-[#ff9a76] rounded shadow-sm border border-[#ff9a76]/30" />
-                                              <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Estándar</span>
-                                            </div>
-                                             <div className="flex items-center gap-2">
-                                               <div className="w-5 h-5 bg-[#d1fae5] rounded shadow-sm border border-[#d1fae5]/30" />
-                                               <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">Físico</span>
-                                             </div>
-                                            <div className="flex items-center gap-2">
-                                              <div className="w-6 h-1 bg-[#ef4444] rounded-full shadow-sm" />
-                                              <span className="text-[9px] font-black text-slate-700 uppercase tracking-wider">%</span>
-                                            </div>
-                                         </div>
-                                       </div>
-                             </>
-                           ) : (
-                              <div className="flex-1 min-h-[300px] border-2 border-dashed border-slate-200 rounded-xl flex items-center justify-center text-slate-400 text-xs font-bold uppercase tracking-widest">
-                                Sin datos esta semana
-                              </div>
-                              )}
-                            </div>
-                         </TabsContent>
-                       </Tabs>
-                     </TabsContent>
+                         </div>
+                       </TabsContent>
+                     </Tabs>
+                  </TabsContent>
+                </Tabs>
+              </TabsContent>
+            </Tabs>
 
-                     <TabsContent value="seguimiento-simple" className="m-0 animate-in fade-in-50 duration-500">
-                       <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                         <Activity className="h-12 w-12 mb-4 opacity-20" />
-                         Seguimiento de Jarabe Simple
-                       </div>
-                     </TabsContent>
-                   </Tabs>
-                 </TabsContent>
-              </Tabs>
-           </TabsContent>
-
-           <TabsContent value="terminado" className="m-0 animate-in fade-in-50 duration-500">
+             <TabsContent value="terminado" className="m-0 animate-in fade-in-50 duration-500">
              <div className="flex flex-col items-center justify-center h-[500px] text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                <Pipette className="h-12 w-12 mb-4 opacity-20" />
                Sección Jarabe Terminado en Desarrollo
