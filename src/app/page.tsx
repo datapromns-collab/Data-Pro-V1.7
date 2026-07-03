@@ -843,16 +843,14 @@ export default function PlannerPage() {
                </section>
 
               {isAdmin && activeModule === 'management' && (
-                <section className="px-2">
-                  <Button 
-                    variant="default" 
-                    size="lg" 
-                    onClick={() => setIsEntryDialogOpen(true)} 
-                    className="w-full gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-emerald-200 transition-none active:scale-100 active:transform-none"
-                  >
-                    <PackageCheck className="h-4 w-4" /> Cargar Producción
-                  </Button>
-                </section>
+                <Button 
+                  variant="default" 
+                  size="lg" 
+                  onClick={() => setIsEntryDialogOpen(true)} 
+                  className="px-2 w-full gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-emerald-200 transition-none active:scale-100 active:transform-none"
+                >
+                  <PackageCheck className="h-4 w-4" /> Cargar Producción
+                </Button>
               )}
             </div>
 
