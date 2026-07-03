@@ -321,7 +321,7 @@ export default function OrdenesSapModule() {
                                 </TableCell>
                             <TableCell className="pr-2 py-1 align-top w-24 relative" rowSpan={4}>
                               <div className="flex items-center gap-1">
-                                <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-2 w-full" />
+                                <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-2 flex-1 min-w-0" />
                                 <button
                                   onClick={() => navigator.clipboard.writeText(orden.ordenNumero)}
                                   className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0"
