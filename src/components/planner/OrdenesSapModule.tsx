@@ -26,7 +26,7 @@ export default function OrdenesSapModule() {
           </div>
         </div>
 
-        <div className="bg-slate-100/30 rounded-full p-1 flex flex-wrap gap-1">
+        <div className="bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
           {lineas.map((linea) => {
             const isActive = activeLinea === linea;
             return (
@@ -34,11 +34,12 @@ export default function OrdenesSapModule() {
                 key={linea}
                 onClick={() => setActiveLinea(isActive ? null : linea)}
                 className={`
-                  inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-black text-[10px] uppercase tracking-widest transition-all duration-200
+                  inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full
+                  font-black text-[10px] uppercase tracking-widest
+                  transition-none outline-none focus:ring-0 select-none
                   ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}
                 `}
               >
-                <span className={isActive ? 'w-2 h-2 rounded-full bg-sky-500' : 'w-2 h-2 rounded-full bg-slate-300'} />
                 Línea {linea}
               </button>
             );
