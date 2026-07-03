@@ -162,17 +162,20 @@ export default function OrdenesSapModule() {
                       </div>
                       <Table>
                         <TableHeader>
-                          <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-8">
-                            <TableHead className="text-[9px] font-black text-slate-500 uppercase pl-2 py-1">Fecha</TableHead>
-                            <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Ticket</TableHead>
+                          <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200">
+                            <TableHead className="text-[9px] font-black text-slate-500 uppercase pl-2 py-1 align-top" rowSpan={2}>Fecha</TableHead>
+                            <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1 align-top" colSpan={2}>Ticket</TableHead>
+                            <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1 align-top" rowSpan={2}>Total Día</TableHead>
+                            <TableHead className="text-[9px] font-black text-slate-500 uppercase pr-2 py-1 align-top" rowSpan={2}>N° Orden</TableHead>
+                          </TableRow>
+                          <TableRow className="border-b border-slate-100">
+                            <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1 w-24">Ticket</TableHead>
                             <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Cajas</TableHead>
-                            <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Total Día</TableHead>
-                            <TableHead className="text-[9px] font-black text-slate-500 uppercase pr-2 py-1">N° Orden</TableHead>
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          <TableRow className="h-10">
-                            <TableCell className="pl-2 text-[10px] font-bold text-slate-700 py-1">
+                          <TableRow>
+                            <TableCell className="pl-2 text-[10px] font-bold text-slate-700 align-top" rowSpan={2}>
                               {new Date(orden.fechaInicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
                             </TableCell>
                             <TableCell className="py-1">
@@ -181,11 +184,29 @@ export default function OrdenesSapModule() {
                             <TableCell className="py-1">
                               <Input type="number" placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2" />
                             </TableCell>
-                            <TableCell className="py-1">
+                            <TableCell className="align-top" rowSpan={4}>
                               <Input placeholder="Total día" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2" />
                             </TableCell>
-                            <TableCell className="pr-2 py-1">
+                            <TableCell className="pr-2 py-1 align-top" rowSpan={4}>
                               <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-2" />
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="py-1">
+                              <Input placeholder="Ticket" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2" />
+                            </TableCell>
+                            <TableCell className="py-1">
+                              <Input type="number" placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2" />
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="py-1">
+                              <Input type="number" placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2" />
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="py-1">
+                              <Input type="number" placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2" />
                             </TableCell>
                           </TableRow>
                         </TableBody>
