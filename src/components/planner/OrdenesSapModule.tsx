@@ -3,12 +3,20 @@
 import { Factory, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 
 export default function OrdenesSapModule() {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
   const [activeLinea, setActiveLinea] = useState<number | null>(1);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [dialogLinea, setDialogLinea] = useState<number | null>(null);
 
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
+
+  const openNuevaOrden = (linea: number) => {
+    setDialogLinea(linea);
+    setIsDialogOpen(true);
+  };
 
   return (
     <div className="pb-10">
@@ -39,6 +47,7 @@ export default function OrdenesSapModule() {
           </div>
           <Button
             size="sm"
+            onClick={() => openNuevaOrden(activeLinea ?? 1)}
             className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
           >
             <Plus className="h-3.5 w-3.5" />
@@ -90,6 +99,16 @@ export default function OrdenesSapModule() {
           </div>
         </div>
       )}
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[500px] rounded-3xl">
+          <DialogHeader>
+            <DialogTitle className="font-headline text-xl text-slate-900">
+              Nueva Orden {dialogLinea ? `- Línea ${dialogLinea}` : ''}
+            </DialogTitle>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
