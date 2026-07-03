@@ -319,9 +319,18 @@ export default function OrdenesSapModule() {
                                     className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-2 w-full"
                                   />
                                 </TableCell>
-                                <TableCell className="pr-2 py-1 align-top w-24" rowSpan={4}>
-                                  <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-2 w-full" />
-                                </TableCell>
+                            <TableCell className="pr-2 py-1 align-top w-24 relative" rowSpan={4}>
+                              <div className="flex items-center gap-1">
+                                <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-2 w-full" />
+                                <button
+                                  onClick={() => navigator.clipboard.writeText(orden.ordenNumero)}
+                                  className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0"
+                                  title="Copiar número de orden"
+                                >
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                </button>
+                              </div>
+                            </TableCell>
                               </TableRow>
                               <TableRow>
                                 <TableCell className="py-1 w-20">
