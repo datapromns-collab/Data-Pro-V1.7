@@ -144,13 +144,16 @@ export default function OrdenesSapModule() {
   };
 
   const agregarDia = (ordenId: string) => {
-    const fechaHoy = new Date().toISOString().split('T')[0];
     setOrdenes(prev => prev.map(o => {
       if (o.id !== ordenId) return o;
+      const lastFecha = o.dias.length > 0 ? new Date(o.dias[o.dias.length - 1].fechaInicio) : new Date();
+      const nextFecha = new Date(lastFecha);
+      nextFecha.setDate(nextFecha.getDate() + 1);
+      const nextFechaStr = nextFecha.toISOString().split('T')[0];
       return {
         ...o,
         dias: [...o.dias, {
-          fechaInicio: fechaHoy,
+          fechaInicio: nextFechaStr,
           ticket1: '',
           cajas1: 0,
           ticket2: '',
