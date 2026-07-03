@@ -60,6 +60,7 @@ interface OrdenSap {
 
 export default function OrdenesSapModule() {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
+  const [activeSection, setActiveSection] = useState<'carga-prod' | 'dia-a-dia'>('carga-prod');
   const [activeLinea, setActiveLinea] = useState<number | null>(1);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogLinea, setDialogLinea] = useState<number | null>(null);
@@ -196,37 +197,45 @@ export default function OrdenesSapModule() {
       <div className="space-y-3 mb-6 no-print">
         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
           <button
-            onClick={() => setActiveLinea(null)}
-            className={`${tabsTriggerClass} ${activeLinea === null ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            onClick={() => setActiveSection('carga-prod')}
+            className={`${tabsTriggerClass} ${activeSection === 'carga-prod' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
           >
             <Factory className="h-3.5 w-3.5" /> CARGA PRODT
           </button>
+          <button
+            onClick={() => setActiveSection('dia-a-dia')}
+            className={`${tabsTriggerClass} ${activeSection === 'dia-a-dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+          >
+            <Factory className="h-3.5 w-3.5" /> DÍA A DÍA
+          </button>
         </div>
 
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-            {lineas.map((linea) => {
-              const isActive = activeLinea === linea;
-              return (
-                <button
-                  key={linea}
-                  onClick={() => setActiveLinea(isActive ? null : linea)}
-                  className={`${tabsTriggerClass} ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                >
-                  Línea {linea}
-                </button>
-              );
-            })}
+        {activeSection === 'carga-prod' && (
+          <div className="flex items-center justify-between gap-3">
+            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+              {lineas.map((linea) => {
+                const isActive = activeLinea === linea;
+                return (
+                  <button
+                    key={linea}
+                    onClick={() => setActiveLinea(isActive ? null : linea)}
+                    className={`${tabsTriggerClass} ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                  >
+                    Línea {linea}
+                  </button>
+                );
+              })}
+            </div>
+            <Button
+              size="sm"
+              onClick={() => openNuevaOrden(activeLinea ?? 1)}
+              className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Nueva Orden
+            </Button>
           </div>
-          <Button
-            size="sm"
-            onClick={() => openNuevaOrden(activeLinea ?? 1)}
-            className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
-          >
-            <Plus className="h-3.5 w-3.5" />
-            Nueva Orden
-          </Button>
-        </div>
+        )}
       </div>
 
       {activeLinea === null && (
@@ -252,7 +261,95 @@ export default function OrdenesSapModule() {
                 <div className="h-32 flex items-center justify-center text-slate-400">
                   <p className="text-[10px] font-bold uppercase tracking-widest">Sin órdenes registradas para esta línea</p>
                 </div>
+      )}
+
+      {activeSection === 'dia-a-dia' && (
+        <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
+          <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+            <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+              <div className="w-2 h-2 rounded-full bg-emerald-500" />
+              <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                Vista Día a Día
+              </h4>
+            </div>
+
+            <div className="p-4">
+              {ordenes.length === 0 && (
+                <div className="h-32 flex items-center justify-center text-slate-400">
+                  <p className="text-[10px] font-bold uppercase tracking-widest">Sin órdenes registradas</p>
+                </div>
               )}
+
+              <div className="space-y-4">
+                {(() => {
+                  const diasMap = new Map<string, Array<{ orden: OrdenSap; dia: OrdenSap['dias'][0]; diaIndex: number }>>();
+                  ordenes.forEach((orden) => {
+                    orden.dias.forEach((dia, diaIndex) => {
+                      const fecha = dia.fechaInicio;
+                      if (!diasMap.has(fecha)) {
+                        diasMap.set(fecha, []);
+                      }
+                      diasMap.get(fecha)!.push({ orden, dia, diaIndex });
+                    });
+                  });
+
+                  const sortedFechas = Array.from(diasMap.keys()).sort();
+
+                  return sortedFechas.map((fecha) => {
+                    const items = diasMap.get(fecha)!;
+                    const totalCajas = items.reduce((sum, item) => sum + calcularTotalDia(item.dia), 0);
+                    return (
+                      <div key={fecha} className="border border-slate-200 rounded-xl bg-white overflow-hidden">
+                        <div className="px-4 py-2 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+                          <span className="text-[10px] font-black text-slate-700 uppercase tracking-widest">
+                            {formatDate(fecha)}
+                          </span>
+                          <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                            Total: {totalCajas} cajas
+                          </span>
+                        </div>
+                        <div className="p-3">
+                          <div className="space-y-2">
+                            {items.map(({ orden, dia, diaIndex }) => {
+                              const colorClass = SABOR_COLORS[orden.sabor] || FALLBACK_COLOR;
+                              return (
+                                <div key={`${orden.id}-${diaIndex}`} className={`p-2 rounded-lg border border-slate-200 ${colorClass}`}>
+                                  <div className="flex items-center justify-between mb-1">
+                                    <span className="text-[10px] font-black uppercase tracking-widest truncate">
+                                      {orden.sabor} - Línea {orden.linea} - Orden {orden.ordenNumero}
+                                    </span>
+                                    <span className="text-[10px] font-black uppercase tracking-widest">
+                                      {calcularTotalDia(dia)} cajas
+                                    </span>
+                                  </div>
+                                  <div className="grid grid-cols-2 gap-1">
+                                    <div className="text-[9px] font-bold text-slate-600">
+                                      Ticket 1: {dia.ticket1 || '-'} / Cajas: {dia.cajas1}
+                                    </div>
+                                    <div className="text-[9px] font-bold text-slate-600">
+                                      Ticket 2: {dia.ticket2 || '-'} / Cajas: {dia.cajas2}
+                                    </div>
+                                    <div className="text-[9px] font-bold text-slate-600">
+                                      Ticket 3: {dia.ticket3 || '-'} / Cajas: {dia.cajas3}
+                                    </div>
+                                    <div className="text-[9px] font-bold text-slate-600">
+                                      Ticket 4: {dia.ticket4 || '-'} / Cajas: {dia.cajas4}
+                                    </div>
+                                  </div>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  });
+                })()}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
               <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-3">
                 {ordenesPorLinea.map((orden) => {
