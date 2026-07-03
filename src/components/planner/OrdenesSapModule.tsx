@@ -248,7 +248,7 @@ export default function OrdenesSapModule() {
                 </div>
               )}
 
-              <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-3">
                 {ordenesPorLinea.map((orden) => {
                   const colorClass = SABOR_COLORS[orden.sabor] || FALLBACK_COLOR;
                   return (
@@ -279,28 +279,28 @@ export default function OrdenesSapModule() {
                           </div>
                           <Table>
                             <TableHeader>
-                              <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200">
-                                <TableHead className="text-[9px] font-black text-slate-500 uppercase pl-2 py-1 align-top w-20" rowSpan={2}>Fecha</TableHead>
-                                <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1 align-top" colSpan={2}>Ticket</TableHead>
-                                <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1 align-top" rowSpan={2}>Total Día</TableHead>
-                                <TableHead className="text-[9px] font-black text-slate-500 uppercase pr-2 py-1 align-top w-24" rowSpan={2}>N° Orden</TableHead>
-                              </TableRow>
-                              <TableRow className="border-b border-slate-100">
-                                <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1 w-20">Ticket</TableHead>
-                                <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Cajas</TableHead>
-                              </TableRow>
+                               <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200">
+                                 <TableHead className="text-[9px] font-black text-slate-500 uppercase pl-2 py-1 align-top w-20" rowSpan={2}>Fecha</TableHead>
+                                 <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1 align-top" colSpan={2}>Ticket</TableHead>
+                                 <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1 align-top" rowSpan={2}>Total Día</TableHead>
+                                 <TableHead className="text-[9px] font-black text-slate-500 uppercase pr-2 py-1 align-top w-24" rowSpan={2}>N° Orden</TableHead>
+                               </TableRow>
+                               <TableRow className="border-b border-slate-100">
+                                 <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1 w-24">Ticket</TableHead>
+                                 <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Cajas</TableHead>
+                               </TableRow>
                             </TableHeader>
                             <TableBody>
                               <TableRow>
                                 <TableCell className="pl-2 text-[10px] font-bold text-slate-700 align-top" rowSpan={4}>
                                   {new Date(dia.fechaInicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
                                 </TableCell>
-                                <TableCell className="py-1 w-20">
+                                <TableCell className="py-1 w-24">
                                   <Input
                                     value={dia.ticket1}
                                     onChange={(e) => updateDia(orden.id, diaIndex, 'ticket1', e.target.value)}
                                     placeholder="Ticket"
-                                    className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2 w-full"
+                                    className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full"
                                   />
                                 </TableCell>
                                 <TableCell className="py-1">
@@ -333,12 +333,12 @@ export default function OrdenesSapModule() {
                             </TableCell>
                               </TableRow>
                               <TableRow>
-                                <TableCell className="py-1 w-20">
+                                <TableCell className="py-1 w-24">
                                   <Input
                                     value={dia.ticket2}
                                     onChange={(e) => updateDia(orden.id, diaIndex, 'ticket2', e.target.value)}
                                     placeholder="Ticket"
-                                    className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2 w-full"
+                                    className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full"
                                   />
                                 </TableCell>
                                 <TableCell className="py-1">
