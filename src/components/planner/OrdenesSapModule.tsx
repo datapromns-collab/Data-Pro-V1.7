@@ -10,8 +10,8 @@ export default function OrdenesSapModule() {
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-700 pb-10">
-      <div className="space-y-3 no-print">
+    <div className="pb-10">
+      <div className="space-y-3 no-print mb-6">
         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
           <button
             onClick={() => setActiveLinea(null)}
