@@ -905,9 +905,10 @@ export default function PlannerPage() {
                  activeModule === 'jarabes' ? 'MÓDULO DE JARABES' :
                  activeModule === 'planta' ? 'MÓDULO DE PLANTA' :
                  activeModule === 'logistica' ? 'MÓDULO DE LOGÍSTICA' :
-                 activeModule === 'ventas' ? 'MÓDULO DE VENTAS' :
-                 activeModule === 'purchasing' ? 'MÓDULO DE COMPRAS' :
-                 activeModule === 'permissions' ? 'MÓDULO DE PERMISOS' : 'MÓDULO DE PLANIFICACIÓN'}
+                  activeModule === 'ventas' ? 'MÓDULO DE VENTAS' :
+                  activeModule === 'purchasing' ? 'MÓDULO DE COMPRAS' :
+                  activeModule === 'ordenes-sap' ? 'MÓDULO DE ORDENES SAP' :
+                  activeModule === 'permissions' ? 'MÓDULO DE PERMISOS' : 'MÓDULO DE PLANIFICACIÓN'}
               </div>
             </div>
             <div className="flex items-center gap-2">
