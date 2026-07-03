@@ -6,15 +6,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 export default function OrdenesSapModule() {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
-  const [tabsValue, setTabsValue] = useState<string>('carga-prod');
+  const [tabsValue, setTabsValue] = useState<string>('');
 
-  const activeLinea = tabsValue.startsWith('linea-') ? parseInt(tabsValue.replace('linea-', '')) : null;
+  const activeLinea = tabsValue ? parseInt(tabsValue) : null;
 
   const handleValueChange = (newValue: string) => {
     if (newValue === tabsValue) {
-      if (tabsValue !== 'carga-prod') {
-        setTabsValue('carga-prod');
-      }
+      setTabsValue('');
     } else {
       setTabsValue(newValue);
     }
@@ -24,21 +22,18 @@ export default function OrdenesSapModule() {
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700 pb-10">
-      <Tabs value={tabsValue} onValueChange={handleValueChange} className="w-full">
-        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
+      <Tabs value={tabsValue} onValueChange={handleValueChange}>
+        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit no-print">
           <TabsList className="bg-transparent h-auto p-0">
-            <TabsTrigger value="carga-prod" className={tabsTriggerClass}>
-              <Factory className="h-3.5 w-3.5" /> Carga Prodt
-            </TabsTrigger>
             {lineas.map((linea) => (
-              <TabsTrigger key={linea} value={`linea-${linea}`} className={tabsTriggerClass}>
+              <TabsTrigger key={linea} value={String(linea)} className={tabsTriggerClass}>
                 Línea {linea}
               </TabsTrigger>
             ))}
           </TabsList>
         </div>
 
-        <TabsContent value="carga-prod" className="m-0 animate-in fade-in-50 duration-500">
+        {!activeLinea && (
           <div className="bg-white rounded-[2.5rem] border border-slate-200 p-8">
             <div className="flex items-center gap-4 mb-8">
               <div className="bg-slate-100 p-3 rounded-xl">
@@ -54,10 +49,10 @@ export default function OrdenesSapModule() {
               <p className="text-[10px] font-bold uppercase tracking-widest">Seleccione una línea para ver los datos</p>
             </div>
           </div>
-        </TabsContent>
+        )}
 
         {lineas.map((linea) => (
-          <TabsContent key={linea} value={`linea-${linea}`} className="m-0 animate-in fade-in-50 duration-500">
+          <TabsContent key={linea} value={String(linea)} className="m-0 animate-in fade-in-50 duration-500">
             <div className="bg-white rounded-[2.5rem] border border-slate-200 p-8">
               <div className="flex items-center gap-4 mb-8">
                 <div className="bg-slate-100 p-3 rounded-xl">
