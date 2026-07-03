@@ -117,46 +117,40 @@ export default function OrdenesSapModule() {
               </h4>
             </div>
 
-            <div className="p-6 space-y-4">
-              {ordenesPorLinea.length === 0 && (
-                <div className="h-48 flex items-center justify-center text-slate-400">
-                  <p className="text-[10px] font-bold uppercase tracking-widest">Sin órdenes registradas para esta línea</p>
-                </div>
-              )}
-
+            <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-4">
               {ordenesPorLinea.map((orden) => (
-                <div key={orden.id} className="border border-slate-200 rounded-2xl bg-white overflow-hidden">
-                  <div className="bg-slate-100 px-4 py-2 border-b border-slate-200">
-                    <p className="text-[11px] font-black text-slate-700 uppercase tracking-widest">
+                <div key={orden.id} className="border border-slate-200 rounded-xl bg-white overflow-hidden">
+                  <div className="bg-slate-100 px-3 py-1.5 border-b border-slate-200">
+                    <p className="text-[10px] font-black text-slate-700 uppercase tracking-widest truncate">
                       {orden.sabor} - SEMANA {orden.semana}
                     </p>
                   </div>
                   <Table>
                     <TableHeader>
-                      <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-10">
-                        <TableHead className="text-[10px] font-black text-slate-500 uppercase pl-4">Fecha</TableHead>
-                        <TableHead className="text-[10px] font-black text-slate-500 uppercase">Ticket</TableHead>
-                        <TableHead className="text-[10px] font-black text-slate-500 uppercase">Cajas</TableHead>
-                        <TableHead className="text-[10px] font-black text-slate-500 uppercase">Total Día</TableHead>
-                        <TableHead className="text-[10px] font-black text-slate-500 uppercase pr-4">N° Orden</TableHead>
+                      <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-8">
+                        <TableHead className="text-[9px] font-black text-slate-500 uppercase pl-2 py-1">Fecha</TableHead>
+                        <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Ticket</TableHead>
+                        <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Cajas</TableHead>
+                        <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Total Día</TableHead>
+                        <TableHead className="text-[9px] font-black text-slate-500 uppercase pr-2 py-1">N° Orden</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      <TableRow className="h-14">
-                        <TableCell className="pl-4 text-[11px] font-bold text-slate-700">
+                      <TableRow className="h-10">
+                        <TableCell className="pl-2 text-[10px] font-bold text-slate-700 py-1">
                           {new Date(orden.fechaInicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
                         </TableCell>
-                        <TableCell>
-                          <Input placeholder="Ticket" className="h-8 text-[10px] font-bold rounded-lg border-slate-100 bg-slate-50" />
+                        <TableCell className="py-1">
+                          <Input placeholder="Ticket" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2" />
                         </TableCell>
-                        <TableCell>
-                          <Input type="number" placeholder="0" className="h-8 text-center text-[10px] font-bold rounded-lg border-slate-100 bg-slate-50" />
+                        <TableCell className="py-1">
+                          <Input type="number" placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2" />
                         </TableCell>
-                        <TableCell>
-                          <Input placeholder="Total día" className="h-8 text-[10px] font-bold rounded-lg border-slate-100 bg-slate-50" />
+                        <TableCell className="py-1">
+                          <Input placeholder="Total día" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2" />
                         </TableCell>
-                        <TableCell className="pr-4">
-                          <Input value={orden.ordenNumero} readOnly className="h-8 text-[10px] font-bold rounded-lg border-slate-100 bg-slate-50 text-slate-500" />
+                        <TableCell className="pr-2 py-1">
+                          <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-2" />
                         </TableCell>
                       </TableRow>
                     </TableBody>
