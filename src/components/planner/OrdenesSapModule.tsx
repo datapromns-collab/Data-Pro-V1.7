@@ -1,9 +1,11 @@
 "use client";
 
 import { Factory } from 'lucide-react';
+import { useState } from 'react';
 
 export default function OrdenesSapModule() {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
+  const [activeLinea, setActiveLinea] = useState<number | null>(null);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
@@ -24,21 +26,38 @@ export default function OrdenesSapModule() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {lineas.map((linea) => (
-            <div key={linea} className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-hidden">
-              <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-                <div className="w-2 h-2 rounded-full bg-sky-500" />
-                <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                  Línea {linea}
-                </h4>
-              </div>
-              <div className="h-28 flex items-center justify-center text-slate-400">
-                <p className="text-[10px] font-bold uppercase tracking-widest">Datos de la línea {linea}</p>
-              </div>
-            </div>
-          ))}
+        <div className="bg-slate-100/30 rounded-full p-1 flex flex-wrap gap-1">
+          {lineas.map((linea) => {
+            const isActive = activeLinea === linea;
+            return (
+              <button
+                key={linea}
+                onClick={() => setActiveLinea(isActive ? null : linea)}
+                className={`
+                  inline-flex items-center gap-2 px-5 py-2.5 rounded-full font-black text-[10px] uppercase tracking-widest transition-all duration-200
+                  ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}
+                `}
+              >
+                <span className={isActive ? 'w-2 h-2 rounded-full bg-sky-500' : 'w-2 h-2 rounded-full bg-slate-300'} />
+                Línea {linea}
+              </button>
+            );
+          })}
         </div>
+
+        {activeLinea && (
+          <div className="mt-8 border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-hidden animate-in fade-in duration-300">
+            <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+              <div className="w-2 h-2 rounded-full bg-sky-500" />
+              <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                Línea {activeLinea}
+              </h4>
+            </div>
+            <div className="h-48 flex items-center justify-center text-slate-400">
+              <p className="text-[10px] font-bold uppercase tracking-widest">Datos de la línea {activeLinea}</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
