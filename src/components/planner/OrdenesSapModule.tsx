@@ -22,7 +22,7 @@ export default function OrdenesSapModule() {
           </button>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between gap-3">
           <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
             {lineas.map((linea) => {
               const isActive = activeLinea === linea;
@@ -39,9 +39,9 @@ export default function OrdenesSapModule() {
           </div>
           <Button
             size="sm"
-            className="h-11 px-6 rounded-full bg-slate-900 text-white font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 active:scale-95 flex items-center gap-2"
+            className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
           >
-            <Plus className="h-4 w-4" />
+            <Plus className="h-3.5 w-3.5" />
             Nueva Orden
           </Button>
         </div>
