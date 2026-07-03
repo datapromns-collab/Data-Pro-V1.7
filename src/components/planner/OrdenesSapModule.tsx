@@ -1,13 +1,24 @@
 "use client";
 
 import { Factory, Plus } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from '@/components/ui/table';
 import { PRODUCT_LIST } from '@/lib/planner-utils';
+import { getISOWeek } from 'date-fns';
+
+interface OrdenSap {
+  id: string;
+  linea: number;
+  sabor: string;
+  ordenNumero: string;
+  fechaInicio: string;
+  semana: number;
+}
 
 export default function OrdenesSapModule() {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
@@ -17,8 +28,14 @@ export default function OrdenesSapModule() {
   const [sabor, setSabor] = useState('');
   const [ordenNumero, setOrdenNumero] = useState('');
   const [fechaInicio, setFechaInicio] = useState('');
+  const [ordenes, setOrdenes] = useState<OrdenSap[]>([]);
 
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
+
+  const ordenesPorLinea = useMemo(() => {
+    if (!activeLinea) return [];
+    return ordenes.filter(o => o.linea === activeLinea);
+  }, [ordenes, activeLinea]);
 
   const openNuevaOrden = (linea: number) => {
     setDialogLinea(linea);
@@ -30,12 +47,17 @@ export default function OrdenesSapModule() {
 
   const handleCreate = () => {
     if (!sabor || !ordenNumero || !fechaInicio) return;
-    console.log('Nueva orden creada:', {
-      linea: dialogLinea,
+    const fecha = new Date(fechaInicio);
+    const semana = getISOWeek(fecha);
+    const nuevaOrden: OrdenSap = {
+      id: `${activeLinea}-${Date.now()}`,
+      linea: dialogLinea ?? activeLinea ?? 1,
       sabor,
       ordenNumero,
       fechaInicio,
-    });
+      semana,
+    };
+    setOrdenes(prev => [...prev, nuevaOrden]);
     setIsDialogOpen(false);
   };
 
@@ -79,16 +101,6 @@ export default function OrdenesSapModule() {
 
       {activeLinea === null && (
         <div className="bg-white rounded-[2.5rem] border border-slate-200 p-8">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="bg-slate-100 p-3 rounded-xl">
-              <Factory className="h-6 w-6 text-slate-700" />
-            </div>
-            <div>
-              <h3 className="font-black uppercase text-sm tracking-widest text-slate-900">Carga de Producción</h3>
-              <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-0.5">Registro de órdenes SAP</p>
-            </div>
-          </div>
-
           <div className="h-48 flex items-center justify-center text-slate-400">
             <p className="text-[10px] font-bold uppercase tracking-widest">Seleccione una línea para ver los datos</p>
           </div>
@@ -104,8 +116,53 @@ export default function OrdenesSapModule() {
                 Línea {activeLinea}
               </h4>
             </div>
-            <div className="h-48 flex items-center justify-center text-slate-400">
-              <p className="text-[10px] font-bold uppercase tracking-widest">Datos de la línea {activeLinea}</p>
+
+            <div className="p-6 space-y-4">
+              {ordenesPorLinea.length === 0 && (
+                <div className="h-48 flex items-center justify-center text-slate-400">
+                  <p className="text-[10px] font-bold uppercase tracking-widest">Sin órdenes registradas para esta línea</p>
+                </div>
+              )}
+
+              {ordenesPorLinea.map((orden) => (
+                <div key={orden.id} className="border border-slate-200 rounded-2xl bg-white overflow-hidden">
+                  <div className="bg-slate-100 px-4 py-2 border-b border-slate-200">
+                    <p className="text-[11px] font-black text-slate-700 uppercase tracking-widest">
+                      {orden.sabor} - SEMANA {orden.semana}
+                    </p>
+                  </div>
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-10">
+                        <TableHead className="text-[10px] font-black text-slate-500 uppercase pl-4">Fecha</TableHead>
+                        <TableHead className="text-[10px] font-black text-slate-500 uppercase">Ticket</TableHead>
+                        <TableHead className="text-[10px] font-black text-slate-500 uppercase">Cajas</TableHead>
+                        <TableHead className="text-[10px] font-black text-slate-500 uppercase">Total Día</TableHead>
+                        <TableHead className="text-[10px] font-black text-slate-500 uppercase pr-4">N° Orden</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      <TableRow className="h-14">
+                        <TableCell className="pl-4 text-[11px] font-bold text-slate-700">
+                          {new Date(orden.fechaInicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+                        </TableCell>
+                        <TableCell>
+                          <Input placeholder="Ticket" className="h-8 text-[10px] font-bold rounded-lg border-slate-100 bg-slate-50" />
+                        </TableCell>
+                        <TableCell>
+                          <Input type="number" placeholder="0" className="h-8 text-center text-[10px] font-bold rounded-lg border-slate-100 bg-slate-50" />
+                        </TableCell>
+                        <TableCell>
+                          <Input placeholder="Total día" className="h-8 text-[10px] font-bold rounded-lg border-slate-100 bg-slate-50" />
+                        </TableCell>
+                        <TableCell className="pr-4">
+                          <Input value={orden.ordenNumero} readOnly className="h-8 text-[10px] font-bold rounded-lg border-slate-100 bg-slate-50 text-slate-500" />
+                        </TableCell>
+                      </TableRow>
+                    </TableBody>
+                  </Table>
+                </div>
+              ))}
             </div>
           </div>
         </div>
