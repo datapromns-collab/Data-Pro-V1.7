@@ -3,19 +3,40 @@
 import { Factory, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { PRODUCT_LIST } from '@/lib/planner-utils';
 
 export default function OrdenesSapModule() {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
   const [activeLinea, setActiveLinea] = useState<number | null>(1);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogLinea, setDialogLinea] = useState<number | null>(null);
+  const [sabor, setSabor] = useState('');
+  const [ordenNumero, setOrdenNumero] = useState('');
+  const [fechaInicio, setFechaInicio] = useState('');
 
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
   const openNuevaOrden = (linea: number) => {
     setDialogLinea(linea);
+    setSabor('');
+    setOrdenNumero('');
+    setFechaInicio('');
     setIsDialogOpen(true);
+  };
+
+  const handleCreate = () => {
+    if (!sabor || !ordenNumero || !fechaInicio) return;
+    console.log('Nueva orden creada:', {
+      linea: dialogLinea,
+      sabor,
+      ordenNumero,
+      fechaInicio,
+    });
+    setIsDialogOpen(false);
   };
 
   return (
@@ -101,12 +122,60 @@ export default function OrdenesSapModule() {
       )}
 
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[500px] rounded-3xl">
+        <DialogContent className="sm:max-w-[520px] rounded-3xl">
           <DialogHeader>
             <DialogTitle className="font-headline text-xl text-slate-900">
               Nueva Orden {dialogLinea ? `- Línea ${dialogLinea}` : ''}
             </DialogTitle>
           </DialogHeader>
+
+          <div className="space-y-5 py-2">
+            <div className="grid gap-2">
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Sabor</Label>
+              <Select value={sabor} onValueChange={setSabor}>
+                <SelectTrigger className="h-11 rounded-xl border-slate-100 bg-slate-50 font-bold text-sm">
+                  <SelectValue placeholder="Seleccione un sabor" />
+                </SelectTrigger>
+                <SelectContent>
+                  {PRODUCT_LIST.map((flavor) => (
+                    <SelectItem key={flavor} value={flavor} className="font-bold">
+                      {flavor}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="grid gap-2">
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Número de Orden</Label>
+              <Input
+                value={ordenNumero}
+                onChange={(e) => setOrdenNumero(e.target.value)}
+                placeholder="Ej: 00123456"
+                className="h-11 rounded-xl border-slate-100 bg-slate-50 font-bold text-sm"
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Fecha de Inicio</Label>
+              <Input
+                type="date"
+                value={fechaInicio}
+                onChange={(e) => setFechaInicio(e.target.value)}
+                className="h-11 rounded-xl border-slate-100 bg-slate-50 font-bold text-sm"
+              />
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button
+              onClick={handleCreate}
+              disabled={!sabor || !ordenNumero || !fechaInicio}
+              className="w-full h-11 rounded-xl bg-slate-900 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-800 transition-none shadow-sm disabled:opacity-50"
+            >
+              Crear
+            </Button>
+          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>
