@@ -1,7 +1,7 @@
 "use client";
 
 import { Factory, Plus } from 'lucide-react';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -10,6 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from '@/components/ui/table';
 import { PRODUCT_LIST } from '@/lib/planner-utils';
 import { getISOWeek } from 'date-fns';
+
+const STORAGE_KEY = 'ordenes-sap-v1';
 
 const SABOR_COLORS: Record<string, string> = {
   "GLUP COLA": "bg-slate-200 text-slate-800",
@@ -57,6 +59,28 @@ export default function OrdenesSapModule() {
   const [ordenes, setOrdenes] = useState<OrdenSap[]>([]);
 
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored) as OrdenSap[];
+        if (Array.isArray(parsed)) {
+          setOrdenes(parsed);
+        }
+      }
+    } catch (e) {
+      console.error('Error cargando órdenes SAP desde localStorage', e);
+    }
+  }, []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(ordenes));
+    } catch (e) {
+      console.error('Error guardando órdenes SAP en localStorage', e);
+    }
+  }, [ordenes]);
 
   const ordenesPorLinea = useMemo(() => {
     if (!activeLinea) return [];
