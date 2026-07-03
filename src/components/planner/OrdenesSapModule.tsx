@@ -1,8 +1,9 @@
 "use client";
 
-import { Factory } from 'lucide-react';
+import { Factory, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
 
 export default function OrdenesSapModule() {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
@@ -30,14 +31,23 @@ export default function OrdenesSapModule() {
             </span>
           </div>
 
-          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
-            <TabsList className="bg-transparent h-auto p-0">
-              {lineas.map((linea) => (
-                <TabsTrigger key={linea} value={String(linea)} className={tabsTriggerClass}>
-                  Línea {linea}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+          <div className="flex items-center gap-3">
+            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+              <TabsList className="bg-transparent h-auto p-0">
+                {lineas.map((linea) => (
+                  <TabsTrigger key={linea} value={String(linea)} className={tabsTriggerClass}>
+                    Línea {linea}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
+            <Button
+              size="sm"
+              className="h-11 px-6 rounded-full bg-slate-900 text-white font-black text-[10px] uppercase tracking-widest hover:bg-slate-800 transition-all shadow-lg shadow-slate-200 active:scale-95 flex items-center gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Nueva Orden
+            </Button>
           </div>
         </div>
 
