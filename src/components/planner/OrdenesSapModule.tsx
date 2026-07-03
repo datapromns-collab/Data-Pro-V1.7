@@ -255,83 +255,95 @@ export default function OrdenesSapModule() {
                               <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Cajas</TableHead>
                             </TableRow>
                           </TableHeader>
-                          <TableBody>
-                            <TableRow>
-                              <TableCell className="pl-2 text-[10px] font-bold text-slate-700 align-top" rowSpan={2}>
-                                {new Date(dia.fechaInicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
-                              </TableCell>
-                              <TableCell className="py-1 w-24">
-                                <Input
-                                  value={dia.ticket1}
-                                  onChange={(e) => updateDia(orden.id, diaIndex, 'ticket1', e.target.value)}
-                                  placeholder="Ticket"
-                                  className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
-                                />
-                              </TableCell>
-                              <TableCell className="py-1">
-                                <Input
-                                  type="number"
-                                  value={dia.cajas1}
-                                  onChange={(e) => updateDia(orden.id, diaIndex, 'cajas1', Number(e.target.value))}
-                                  placeholder="0"
-                                  className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
-                                />
-                              </TableCell>
-                              <TableCell className="align-top" rowSpan={4}>
-                                <Input
-                                  value={calcularTotalDia(dia)}
-                                  readOnly
-                                  className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-2"
-                                />
-                              </TableCell>
-                              <TableCell className="pr-2 py-1 align-top w-24" rowSpan={4}>
-                                <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-2" />
-                              </TableCell>
-                            </TableRow>
-                            <TableRow>
-                              <TableCell className="py-1 w-24">
-                                <Input
-                                  value={dia.ticket2}
-                                  onChange={(e) => updateDia(orden.id, diaIndex, 'ticket2', e.target.value)}
-                                  placeholder="Ticket"
-                                  className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
-                                />
-                              </TableCell>
-                              <TableCell className="py-1">
-                                <Input
-                                  type="number"
-                                  value={dia.cajas2}
-                                  onChange={(e) => updateDia(orden.id, diaIndex, 'cajas2', Number(e.target.value))}
-                                  placeholder="0"
-                                  className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
-                                />
-                              </TableCell>
-                            </TableRow>
-                            <TableRow>
-                              <TableCell className="py-1 w-32"></TableCell>
-                              <TableCell className="py-1">
-                                <Input
-                                  type="number"
-                                  value={dia.cajas3}
-                                  onChange={(e) => updateDia(orden.id, diaIndex, 'cajas3', Number(e.target.value))}
-                                  placeholder="0"
-                                  className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
-                                />
-                              </TableCell>
-                            </TableRow>
-                            <TableRow>
-                              <TableCell className="py-1 w-32"></TableCell>
-                              <TableCell className="py-1">
-                                <Input
-                                  type="number"
-                                  value={dia.cajas4}
-                                  onChange={(e) => updateDia(orden.id, diaIndex, 'cajas4', Number(e.target.value))}
-                                  placeholder="0"
-                                  className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
-                                />
-                              </TableCell>
-                            </TableRow>
-                          </TableBody>
+                        <TableBody>
+                          <TableRow>
+                            <TableCell className="pl-2 text-[10px] font-bold text-slate-700 align-top" rowSpan={4}>
+                              {new Date(dia.fechaInicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+                            </TableCell>
+                            <TableCell className="py-1 w-24">
+                              <Input
+                                value={dia.ticket1}
+                                onChange={(e) => updateDia(orden.id, diaIndex, 'ticket1', e.target.value)}
+                                placeholder="Ticket"
+                                className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
+                              />
+                            </TableCell>
+                            <TableCell className="py-1">
+                              <Input
+                                type="number"
+                                value={dia.cajas1}
+                                onChange={(e) => updateDia(orden.id, diaIndex, 'cajas1', Number(e.target.value))}
+                                placeholder="0"
+                                className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
+                              />
+                            </TableCell>
+                            <TableCell className="align-top" rowSpan={4}>
+                              <Input
+                                value={calcularTotalDia(dia)}
+                                readOnly
+                                className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-2"
+                              />
+                            </TableCell>
+                            <TableCell className="pr-2 py-1 align-top w-24" rowSpan={4}>
+                              <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-2" />
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="py-1 w-24">
+                              <Input
+                                value={dia.ticket2}
+                                onChange={(e) => updateDia(orden.id, diaIndex, 'ticket2', e.target.value)}
+                                placeholder="Ticket"
+                                className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
+                              />
+                            </TableCell>
+                            <TableCell className="py-1">
+                              <Input
+                                type="number"
+                                value={dia.cajas2}
+                                onChange={(e) => updateDia(orden.id, diaIndex, 'cajas2', Number(e.target.value))}
+                                placeholder="0"
+                                className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
+                              />
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="py-1 w-24"></TableCell>
+                            <TableCell className="py-1">
+                              <Input
+                                type="number"
+                                value={dia.cajas3}
+                                onChange={(e) => updateDia(orden.id, diaIndex, 'cajas3', Number(e.target.value))}
+                                placeholder="0"
+                                className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
+                              />
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="py-1 w-24"></TableCell>
+                            <TableCell className="py-1">
+                              <Input
+                                type="number"
+                                value={dia.cajas4}
+                                onChange={(e) => updateDia(orden.id, diaIndex, 'cajas4', Number(e.target.value))}
+                                placeholder="0"
+                                className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
+                              />
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className="py-1 w-24"></TableCell>
+                            <TableCell className="py-1">
+                              <Input
+                                type="number"
+                                value={dia.cajas4}
+                                onChange={(e) => updateDia(orden.id, diaIndex, 'cajas4', Number(e.target.value))}
+                                placeholder="0"
+                                className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
+                              />
+                            </TableCell>
+                          </TableRow>
+                        </TableBody>
                         </Table>
                       ))}
                       <div className="p-2 border-t border-slate-100">
