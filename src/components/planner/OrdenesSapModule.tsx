@@ -185,6 +185,12 @@ export default function OrdenesSapModule() {
     return (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
   };
 
+  const formatDate = (dateStr: string) => {
+    const [year, month, day] = dateStr.split('-');
+    const date = new Date(Number(year), Number(month) - 1, Number(day));
+    return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
+  };
+
   return (
     <div className="pb-10">
       <div className="space-y-3 mb-6 no-print">
@@ -268,7 +274,7 @@ export default function OrdenesSapModule() {
                         <div key={diaIndex}>
                           <div className="flex items-center justify-between px-3 py-1 bg-slate-50 border-b border-slate-100">
                             <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
-                              {new Date(dia.fechaInicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+                              {formatDate(dia.fechaInicio)}
                             </span>
                             <button
                               onClick={() => eliminarDia(orden.id, diaIndex)}
@@ -293,7 +299,7 @@ export default function OrdenesSapModule() {
                             <TableBody>
                               <TableRow>
                                 <TableCell className="pl-2 text-[10px] font-bold text-slate-700 align-top" rowSpan={4}>
-                                  {new Date(dia.fechaInicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                  {formatDate(dia.fechaInicio)}
                                 </TableCell>
                                 <TableCell className="py-1 w-24">
                                   <Input
