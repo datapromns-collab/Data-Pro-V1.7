@@ -44,17 +44,18 @@ interface OrdenSap {
   linea: number;
   sabor: string;
   ordenNumero: string;
-  fechaInicio: string;
   semana: number;
-  ticket1: string;
-  cajas1: number;
-  ticket2: string;
-  cajas2: number;
-  ticket3: string;
-  cajas3: number;
-  ticket4: string;
-  cajas4: number;
-  totalDia: number;
+  dias: Array<{
+    fechaInicio: string;
+    ticket1: string;
+    cajas1: number;
+    ticket2: string;
+    cajas2: number;
+    ticket3: string;
+    cajas3: number;
+    ticket4: string;
+    cajas4: number;
+  }>;
 }
 
 export default function OrdenesSapModule() {
@@ -113,30 +114,58 @@ export default function OrdenesSapModule() {
       linea: dialogLinea ?? activeLinea ?? 1,
       sabor,
       ordenNumero,
-      fechaInicio,
       semana,
-      ticket1: '',
-      cajas1: 0,
-      ticket2: '',
-      cajas2: 0,
-      ticket3: '',
-      cajas3: 0,
-      ticket4: '',
-      cajas4: 0,
-      totalDia: 0,
+      dias: [
+        {
+          fechaInicio,
+          ticket1: '',
+          cajas1: 0,
+          ticket2: '',
+          cajas2: 0,
+          ticket3: '',
+          cajas3: 0,
+          ticket4: '',
+          cajas4: 0,
+        },
+      ],
     };
     setOrdenes(prev => [...prev, nuevaOrden]);
     setIsDialogOpen(false);
   };
 
-  const updateOrden = (id: string, field: keyof OrdenSap, value: string | number) => {
+  const updateDia = (ordenId: string, diaIndex: number, field: string, value: string | number) => {
     setOrdenes(prev => prev.map(o => {
-      if (o.id !== id) return o;
-      const updated = { ...o, [field]: value };
-      const cajas = Number(updated.cajas1 || 0) + Number(updated.cajas2 || 0) + Number(updated.cajas3 || 0) + Number(updated.cajas4 || 0);
-      updated.totalDia = cajas;
+      if (o.id !== ordenId) return o;
+      const updated = { ...o };
+      updated.dias = [...updated.dias];
+      updated.dias[diaIndex] = { ...updated.dias[diaIndex], [field]: value };
       return updated;
     }));
+  };
+
+  const agregarDia = (ordenId: string) => {
+    const fechaHoy = new Date().toISOString().split('T')[0];
+    setOrdenes(prev => prev.map(o => {
+      if (o.id !== ordenId) return o;
+      return {
+        ...o,
+        dias: [...o.dias, {
+          fechaInicio: fechaHoy,
+          ticket1: '',
+          cajas1: 0,
+          ticket2: '',
+          cajas2: 0,
+          ticket3: '',
+          cajas3: 0,
+          ticket4: '',
+          cajas4: 0,
+        }],
+      };
+    }));
+  };
+
+  const calcularTotalDia = (dia: OrdenSap['dias'][0]) => {
+    return (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
   };
 
   return (
@@ -212,97 +241,107 @@ export default function OrdenesSapModule() {
                           {orden.sabor} - SEMANA {orden.semana}
                         </p>
                       </div>
-                      <Table>
-                        <TableHeader>
-                          <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200">
-                            <TableHead className="text-[9px] font-black text-slate-500 uppercase pl-2 py-1 align-top w-24" rowSpan={2}>Fecha</TableHead>
-                            <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1 align-top" colSpan={2}>Ticket</TableHead>
-                            <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1 align-top" rowSpan={2}>Total Día</TableHead>
-                            <TableHead className="text-[9px] font-black text-slate-500 uppercase pr-2 py-1 align-top w-24" rowSpan={2}>N° Orden</TableHead>
-                          </TableRow>
-                          <TableRow className="border-b border-slate-100">
-                            <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1 w-32">Ticket</TableHead>
-                            <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Cajas</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          <TableRow>
-                            <TableCell className="pl-2 text-[10px] font-bold text-slate-700 align-top" rowSpan={2}>
-                              {new Date(orden.fechaInicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
-                            </TableCell>
-                            <TableCell className="py-1 w-24">
-                              <Input
-                                value={orden.ticket1}
-                                onChange={(e) => updateOrden(orden.id, 'ticket1', e.target.value)}
-                                placeholder="Ticket"
-                                className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
-                              />
-                            </TableCell>
-                            <TableCell className="py-1">
-                              <Input
-                                type="number"
-                                value={orden.cajas1}
-                                onChange={(e) => updateOrden(orden.id, 'cajas1', Number(e.target.value))}
-                                placeholder="0"
-                                className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
-                              />
-                            </TableCell>
-                            <TableCell className="align-top" rowSpan={4}>
-                              <Input
-                                value={orden.totalDia}
-                                readOnly
-                                className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-2"
-                              />
-                            </TableCell>
-                            <TableCell className="pr-2 py-1 align-top" rowSpan={4}>
-                              <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-2" />
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell className="py-1 w-24">
-                              <Input
-                                value={orden.ticket2}
-                                onChange={(e) => updateOrden(orden.id, 'ticket2', e.target.value)}
-                                placeholder="Ticket"
-                                className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
-                              />
-                            </TableCell>
-                            <TableCell className="py-1">
-                              <Input
-                                type="number"
-                                value={orden.cajas2}
-                                onChange={(e) => updateOrden(orden.id, 'cajas2', Number(e.target.value))}
-                                placeholder="0"
-                                className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
-                              />
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell className="py-1 w-32"></TableCell>
-                            <TableCell className="py-1">
-                              <Input
-                                type="number"
-                                value={orden.cajas3}
-                                onChange={(e) => updateOrden(orden.id, 'cajas3', Number(e.target.value))}
-                                placeholder="0"
-                                className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
-                              />
-                            </TableCell>
-                          </TableRow>
-                          <TableRow>
-                            <TableCell className="py-1 w-32"></TableCell>
-                            <TableCell className="py-1">
-                              <Input
-                                type="number"
-                                value={orden.cajas4}
-                                onChange={(e) => updateOrden(orden.id, 'cajas4', Number(e.target.value))}
-                                placeholder="0"
-                                className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
-                              />
-                            </TableCell>
-                          </TableRow>
-                        </TableBody>
-                      </Table>
+                      {orden.dias.map((dia, diaIndex) => (
+                        <Table key={diaIndex}>
+                          <TableHeader>
+                            <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200">
+                              <TableHead className="text-[9px] font-black text-slate-500 uppercase pl-2 py-1 align-top w-24" rowSpan={2}>Fecha</TableHead>
+                              <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1 align-top" colSpan={2}>Ticket</TableHead>
+                              <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1 align-top" rowSpan={2}>Total Día</TableHead>
+                              <TableHead className="text-[9px] font-black text-slate-500 uppercase pr-2 py-1 align-top w-24" rowSpan={2}>N° Orden</TableHead>
+                            </TableRow>
+                            <TableRow className="border-b border-slate-100">
+                              <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1 w-32">Ticket</TableHead>
+                              <TableHead className="text-[9px] font-black text-slate-500 uppercase py-1">Cajas</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            <TableRow>
+                              <TableCell className="pl-2 text-[10px] font-bold text-slate-700 align-top" rowSpan={2}>
+                                {new Date(dia.fechaInicio).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })}
+                              </TableCell>
+                              <TableCell className="py-1 w-24">
+                                <Input
+                                  value={dia.ticket1}
+                                  onChange={(e) => updateDia(orden.id, diaIndex, 'ticket1', e.target.value)}
+                                  placeholder="Ticket"
+                                  className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
+                                />
+                              </TableCell>
+                              <TableCell className="py-1">
+                                <Input
+                                  type="number"
+                                  value={dia.cajas1}
+                                  onChange={(e) => updateDia(orden.id, diaIndex, 'cajas1', Number(e.target.value))}
+                                  placeholder="0"
+                                  className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
+                                />
+                              </TableCell>
+                              <TableCell className="align-top" rowSpan={4}>
+                                <Input
+                                  value={calcularTotalDia(dia)}
+                                  readOnly
+                                  className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-2"
+                                />
+                              </TableCell>
+                              <TableCell className="pr-2 py-1 align-top w-24" rowSpan={4}>
+                                <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-2" />
+                              </TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className="py-1 w-24">
+                                <Input
+                                  value={dia.ticket2}
+                                  onChange={(e) => updateDia(orden.id, diaIndex, 'ticket2', e.target.value)}
+                                  placeholder="Ticket"
+                                  className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
+                                />
+                              </TableCell>
+                              <TableCell className="py-1">
+                                <Input
+                                  type="number"
+                                  value={dia.cajas2}
+                                  onChange={(e) => updateDia(orden.id, diaIndex, 'cajas2', Number(e.target.value))}
+                                  placeholder="0"
+                                  className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
+                                />
+                              </TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className="py-1 w-32"></TableCell>
+                              <TableCell className="py-1">
+                                <Input
+                                  type="number"
+                                  value={dia.cajas3}
+                                  onChange={(e) => updateDia(orden.id, diaIndex, 'cajas3', Number(e.target.value))}
+                                  placeholder="0"
+                                  className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
+                                />
+                              </TableCell>
+                            </TableRow>
+                            <TableRow>
+                              <TableCell className="py-1 w-32"></TableCell>
+                              <TableCell className="py-1">
+                                <Input
+                                  type="number"
+                                  value={dia.cajas4}
+                                  onChange={(e) => updateDia(orden.id, diaIndex, 'cajas4', Number(e.target.value))}
+                                  placeholder="0"
+                                  className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-2"
+                                />
+                              </TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      ))}
+                      <div className="p-2 border-t border-slate-100">
+                        <button
+                          onClick={() => agregarDia(orden.id)}
+                          className="w-full h-8 rounded-lg border border-dashed border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none"
+                        >
+                          Agregar fecha
+                        </button>
+                      </div>
                     </div>
                   );
                 })}
