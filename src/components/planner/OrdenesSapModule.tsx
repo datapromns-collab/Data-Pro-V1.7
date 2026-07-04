@@ -465,13 +465,13 @@ export default function OrdenesSapModule({
       'bg-slate-200': 'C0C0C0',
       'text-slate-800': '000000',
       'bg-emerald-200': '6EE7B7',
-      'text-emerald-900': '064E3B',
+      'bg-emerald-900': '064E3B',
       'bg-violet-200': 'C4B5FD',
-      'text-violet-900': '4C1D95',
+      'bg-violet-900': '4C1D95',
       'bg-amber-200': 'FDE68A',
-      'text-amber-900': '78350F',
+      'bg-amber-900': '78350F',
       'bg-orange-200': 'FED7AA',
-      'text-orange-900': '7C2D12',
+      'bg-orange-900': '7C2D12',
       'bg-sky-200': 'BAE6FD',
       'bg-sky-900': '0C4A6E',
       'bg-lime-200': 'D9F99D',
@@ -508,7 +508,7 @@ export default function OrdenesSapModule({
         const bg = hexMap[colorClass.split(' ')[0]] || 'FFFFFF';
         const textColor = hexMap[colorClass.split(' ')[1]] || '000000';
 
-        ws.push(
+        ws.push([
           {
             s: {
               fill: { fgColor: { rgb: bg } },
@@ -518,19 +518,21 @@ export default function OrdenesSapModule({
             v: `${orden.sabor} - SEMANA ${orden.semana}`,
           },
           { v: 'ELIMINAR ORDEN', s: { font: { color: { rgb: 'DC2626' }, bold: true, sz: 10 }, alignment: { horizontal: 'right' } } }
-        );
+        ]);
 
-        ws.push({ v: 'FECHA', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
-        ws.push({ v: 'TICKET', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
-        ws.push({ v: 'CAJAS', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
-        ws.push({ v: '', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
-        ws.push({ v: '', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
-        ws.push({ v: 'TOTAL DÍA', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
-        ws.push({ v: 'N° ORDEN', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
+        ws.push([
+          { v: 'FECHA', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { v: 'TICKET', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { v: 'CAJAS', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { v: '', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { v: '', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { v: 'TOTAL DÍA', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { v: 'N° ORDEN', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
+        ]);
 
         orden.dias.forEach((dia, diaIndex) => {
           const totalDia = calcularTotalDia(dia);
-          ws.push(
+          ws.push([
             { v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
             { v: dia.ticket1 || '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
             { v: dia.cajas1 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
@@ -538,9 +540,9 @@ export default function OrdenesSapModule({
             { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
             { v: totalDia, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
             { v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
-          );
+          ]);
 
-          ws.push(
+          ws.push([
             { v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
             { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
             { v: dia.cajas2 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
@@ -548,9 +550,9 @@ export default function OrdenesSapModule({
             { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
             { v: totalDia, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
             { v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
-          );
+          ]);
 
-          ws.push(
+          ws.push([
             { v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
             { v: dia.ticket2 || '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
             { v: dia.cajas3 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
@@ -558,9 +560,9 @@ export default function OrdenesSapModule({
             { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
             { v: totalDia, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
             { v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
-          );
+          ]);
 
-          ws.push(
+          ws.push([
             { v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
             { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
             { v: dia.cajas4 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
@@ -568,11 +570,11 @@ export default function OrdenesSapModule({
             { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
             { v: totalDia, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
             { v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
-          );
+          ]);
         });
 
         const totalOrden = orden.dias.reduce((sum, d) => sum + calcularTotalDia(d), 0);
-        ws.push(
+        ws.push([
           { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
           { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
           { v: totalOrden, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
@@ -580,10 +582,9 @@ export default function OrdenesSapModule({
           { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
           { v: totalOrden, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
           { v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
-        );
+        ]);
 
-        ws.push({ v: '' });
-        ws.push({ v: 'AGREGAR FECHA', s: { font: { bold: true, sz: 9 }, border: { style: 'dashed' } } });
+        ws.push(['', 'AGREGAR FECHA', '', '', '', '', '']);
       });
 
       const worksheet = XLSX.utils.aoa_to_sheet(ws);
