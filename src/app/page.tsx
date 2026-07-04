@@ -49,7 +49,7 @@ import { WeeklyControlReport } from '@/components/planner/WeeklyControlReport';
 import { ComplianceReport } from '@/components/planner/ComplianceReport';
 import { MonthlyComplianceReport } from '@/components/planner/MonthlyComplianceReport';
 import { RecipeEditor } from '@/components/planner/RecipeEditor';
-import OrdenesSapModule from '@/components/planner/OrdenesSapModule';
+import OrdenesSapModule, { CorrelativoSelector } from '@/components/planner/OrdenesSapModule';
 import { PackagingRecipeEditor } from '@/components/planner/PackagingRecipeEditor';
 import { RawMaterialModule } from '@/components/planner/RawMaterialModule';
 import { RawMaterialReport } from '@/components/planner/RawMaterialReport';
@@ -910,6 +910,7 @@ export default function PlannerPage() {
               </div>
             </div>
             <div className="flex items-center gap-2">
+              {activeModule === 'ordenes-sap' && <CorrelativoSelector />}
               {activeModule === 'planning' && (
                 <>
                   <Badge variant="secondary" className="mr-2 bg-primary/10 text-primary border-primary/5 font-black text-[13px] h-8 px-3 hidden sm:flex items-center">

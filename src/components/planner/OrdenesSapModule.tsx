@@ -106,6 +106,41 @@ interface OrdenSap {
   }>;
 }
 
+export function CorrelativoSelector() {
+  const [correlativoNumero, setCorrelativoNumero] = useState<number>(1);
+
+  const getCorrelativo = () => {
+    const hoy = new Date();
+    const dia = String(hoy.getDate()).padStart(2, '0');
+    const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+    const anio = hoy.getFullYear();
+    return `L-${dia}/${mes}/${anio}_${correlativoNumero}`;
+  };
+
+  return (
+    <div className="flex items-center gap-2">
+      <Select
+        value={String(correlativoNumero)}
+        onValueChange={(value) => setCorrelativoNumero(Number(value))}
+      >
+        <SelectTrigger className="h-8 w-16 rounded-md border-slate-200 bg-white font-black text-[10px] text-center uppercase">
+          <SelectValue />
+        </SelectTrigger>
+        <SelectContent>
+          {Array.from({ length: 40 }, (_, i) => i + 1).map(num => (
+            <SelectItem key={num} value={String(num)} className="font-black text-[10px] text-center uppercase">
+              {num}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">
+        {getCorrelativo()}
+      </span>
+    </div>
+  );
+}
+
 export default function OrdenesSapModule() {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
   const [activeSection, setActiveSection] = useState<'carga-prod' | 'dia-a-dia'>('carga-prod');
@@ -118,17 +153,8 @@ export default function OrdenesSapModule() {
   const [ordenNumero, setOrdenNumero] = useState('');
   const [fechaInicio, setFechaInicio] = useState('');
   const [ordenes, setOrdenes] = useState<OrdenSap[]>([]);
-  const [correlativoNumero, setCorrelativoNumero] = useState<number>(1);
 
   const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
-
-  const getCorrelativo = () => {
-    const hoy = new Date();
-    const dia = String(hoy.getDate()).padStart(2, '0');
-    const mes = String(hoy.getMonth() + 1).padStart(2, '0');
-    const anio = hoy.getFullYear();
-    return `L-${dia}/${mes}/${anio}_${correlativoNumero}`;
-  };
 
   useEffect(() => {
     try {
@@ -296,31 +322,6 @@ export default function OrdenesSapModule() {
 
   return (
     <div className="pb-10">
-      <div className="flex items-center justify-between mb-6 no-print">
-        <div className="bg-emerald-100 text-emerald-900 px-4 py-1.5 rounded-full">
-          <span className="text-[10px] font-black uppercase tracking-widest">Módulo de Ordenes SAP</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <Select
-            value={String(correlativoNumero)}
-            onValueChange={(value) => setCorrelativoNumero(Number(value))}
-          >
-            <SelectTrigger className="h-8 w-16 rounded-md border-slate-200 bg-white font-black text-[10px] text-center uppercase">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {Array.from({ length: 40 }, (_, i) => i + 1).map(num => (
-                <SelectItem key={num} value={String(num)} className="font-black text-[10px] text-center uppercase">
-                  {num}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-            {getCorrelativo()}
-          </span>
-        </div>
-      </div>
       <div className="space-y-3 mb-6 no-print">
         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
           <button
