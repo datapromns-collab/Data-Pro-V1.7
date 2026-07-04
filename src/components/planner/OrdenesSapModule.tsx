@@ -106,16 +106,54 @@ interface OrdenSap {
   }>;
 }
 
+const CORRELATIVO_KEY = 'correlativo-sap-v1';
+
 export function CorrelativoSelector() {
-  const [correlativoNumero, setCorrelativoNumero] = useState<number>(1);
+  const [correlativoNumero, setCorrelativoNumero] = useState<number>(() => {
+    try {
+      const stored = localStorage.getItem(CORRELATIVO_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (typeof parsed.numero === 'number') {
+          return parsed.numero;
+        }
+      }
+    } catch (e) {
+      console.error('Error cargando correlativo SAP desde localStorage', e);
+    }
+    return 1;
+  });
 
   const getCorrelativo = () => {
+    try {
+      const stored = localStorage.getItem(CORRELATIVO_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed.fecha) {
+          return `L-${parsed.fecha}_${correlativoNumero}`;
+        }
+      }
+    } catch (e) {
+      console.error('Error parseando correlativo SAP desde localStorage', e);
+    }
     const hoy = new Date();
     const dia = String(hoy.getDate()).padStart(2, '0');
     const mes = String(hoy.getMonth() + 1).padStart(2, '0');
     const anio = hoy.getFullYear();
-    return `L-${dia}/${mes}/${anio}_${correlativoNumero}`;
+    const fecha = `${dia}/${mes}/${anio}`;
+    localStorage.setItem(CORRELATIVO_KEY, JSON.stringify({ numero: correlativoNumero, fecha }));
+    return `L-${fecha}_${correlativoNumero}`;
   };
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(CORRELATIVO_KEY);
+      const parsed = stored ? JSON.parse(stored) : {};
+      localStorage.setItem(CORRELATIVO_KEY, JSON.stringify({ ...parsed, numero: correlativoNumero }));
+    } catch (e) {
+      console.error('Error guardando correlativo SAP en localStorage', e);
+    }
+  }, [correlativoNumero]);
 
   return (
     <div className="flex items-center gap-2">
@@ -148,7 +186,20 @@ export default function OrdenesSapModule() {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
   const [activeSection, setActiveSection] = useState<'carga-prod' | 'dia-a-dia'>('carga-prod');
   const [activeLinea, setActiveLinea] = useState<number | null>(1);
-  const [selectedFecha, setSelectedFecha] = useState<Date | undefined>(undefined);
+  const [selectedFecha, setSelectedFecha] = useState<Date | undefined>(() => {
+    try {
+      const stored = localStorage.getItem('semana-fecha-sap-v1');
+      if (stored) {
+        const parsed = new Date(stored);
+        if (!isNaN(parsed.getTime())) {
+          return parsed;
+        }
+      }
+    } catch (e) {
+      console.error('Error cargando fecha SAP desde localStorage', e);
+    }
+    return undefined;
+  });
   const [diaADiaValues, setDiaADiaValues] = useState<Record<string, Record<number, number>>>({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogLinea, setDialogLinea] = useState<number | null>(null);

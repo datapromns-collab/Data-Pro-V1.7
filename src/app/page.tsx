@@ -892,10 +892,11 @@ export default function PlannerPage() {
                 activeModule === 'raw-materials' ? "bg-amber-100 text-amber-700" : 
                 activeModule === 'jarabes' ? "bg-blue-100 text-blue-700" :
                 activeModule === 'planta' ? "bg-slate-100 text-slate-700" :
-                activeModule === 'logistica' ? "bg-orange-100 text-orange-700" :
-                activeModule === 'ventas' ? "bg-indigo-100 text-indigo-700" :
-                activeModule === 'purchasing' ? "bg-blue-100 text-blue-700" :
-                activeModule === 'permissions' ? "bg-violet-100 text-violet-700" : "bg-emerald-50 text-emerald-600"
+                 activeModule === 'logistica' ? "bg-orange-100 text-orange-700" :
+                 activeModule === 'ventas' ? "bg-indigo-100 text-indigo-700" :
+                 activeModule === 'purchasing' ? "bg-blue-100 text-blue-700" :
+                 activeModule === 'permissions' ? "bg-violet-100 text-violet-700" :
+                 activeModule === 'ordenes-sap' ? "bg-sky-100 text-sky-700" : "bg-emerald-50 text-emerald-600"
               )}>
                 {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' : 
                  activeModule === 'recipes' ? 'MÓDULO DE RECETAS' : 
