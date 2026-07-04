@@ -652,26 +652,28 @@ export default function OrdenesSapModule({
               <Factory className="h-3.5 w-3.5" /> DÍA A DÍA
             </button>
           </div>
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
-              >
-                <CalendarIcon className="h-3.5 w-3.5 mr-2" />
-                {selectedFecha ? format(selectedFecha, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar semana"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="p-0 rounded-2xl" align="start">
-              <Calendar
-                mode="single"
-                selected={selectedFecha}
-                onSelect={onFechaChange}
-                locale={es}
-                className="rounded-md"
-              />
-            </PopoverContent>
-          </Popover>
+          {activeSection === 'carga-prod' && (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                >
+                  <CalendarIcon className="h-3.5 w-3.5 mr-2" />
+                  {selectedFecha ? format(selectedFecha, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar semana"}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="p-0 rounded-2xl" align="start">
+                <Calendar
+                  mode="single"
+                  selected={selectedFecha}
+                  onSelect={onFechaChange}
+                  locale={es}
+                  className="rounded-md"
+                />
+              </PopoverContent>
+            </Popover>
+          )}
         </div>
 
         <div className="flex items-center justify-between gap-3">
