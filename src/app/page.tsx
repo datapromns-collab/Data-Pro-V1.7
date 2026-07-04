@@ -886,19 +886,19 @@ export default function PlannerPage() {
 
         <main className="flex-1 flex flex-col h-screen overflow-hidden no-print">
           <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-4 flex-1">
+            <div className="flex items-center gap-4">
               <div className={cn(
-                "rounded-lg font-black text-[10px] uppercase tracking-[0.2em] whitespace-nowrap",
-                activeModule === 'management' ? "px-3 py-1 bg-[#A67B5B]/10 text-[#A67B5B]" :
-                activeModule === 'recipes' ? "px-3 py-1 bg-emerald-100 text-emerald-700" :
-                activeModule === 'raw-materials' ? "px-3 py-1 bg-amber-100 text-amber-700" :
-                activeModule === 'jarabes' ? "px-3 py-1 bg-blue-100 text-blue-700" :
-                activeModule === 'planta' ? "px-3 py-1 bg-slate-100 text-slate-700" :
-                 activeModule === 'logistica' ? "px-3 py-1 bg-orange-100 text-orange-700" :
-                 activeModule === 'ventas' ? "px-3 py-1 bg-indigo-100 text-indigo-700" :
-                 activeModule === 'purchasing' ? "px-3 py-1 bg-blue-100 text-blue-700" :
-                 activeModule === 'permissions' ? "px-3 py-1 bg-violet-100 text-violet-700" :
-                 activeModule === 'ordenes-sap' ? "px-8 py-2 flex-1 bg-sky-100 text-sky-700" : "px-3 py-1 bg-emerald-50 text-emerald-600"
+                "px-3 py-1 rounded-lg font-black text-[10px] uppercase tracking-[0.2em] whitespace-nowrap",
+                activeModule === 'management' ? "bg-[#A67B5B]/10 text-[#A67B5B]" :
+                activeModule === 'recipes' ? "bg-emerald-100 text-emerald-700" :
+                activeModule === 'raw-materials' ? "bg-amber-100 text-amber-700" :
+                activeModule === 'jarabes' ? "bg-blue-100 text-blue-700" :
+                activeModule === 'planta' ? "bg-slate-100 text-slate-700" :
+                 activeModule === 'logistica' ? "bg-orange-100 text-orange-700" :
+                 activeModule === 'ventas' ? "bg-indigo-100 text-indigo-700" :
+                 activeModule === 'purchasing' ? "bg-blue-100 text-blue-700" :
+                 activeModule === 'permissions' ? "bg-violet-100 text-violet-700" :
+                 activeModule === 'ordenes-sap' ? "px-8 py-2 bg-sky-100 text-sky-700" : "bg-emerald-50 text-emerald-600"
               )}>
                 {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' :
                  activeModule === 'recipes' ? 'MÓDULO DE RECETAS' :
@@ -912,8 +912,7 @@ export default function PlannerPage() {
                  activeModule === 'permissions' ? 'MÓDULO DE PERMISOS' : 'MÓDULO DE PLANIFICACIÓN'}
               </div>
             </div>
-            <div className="flex items-center gap-2 justify-end">
-                {activeModule === 'ordenes-sap' && <CorrelativoSelector activeLinea={ordenesSapActiveLinea} selectedFecha={selectedFechaSap} />}
+             <div className="flex items-center gap-2 justify-end">
                 {activeModule === 'planning' && (
                  <>
                    <Badge variant="secondary" className="mr-2 bg-primary/10 text-primary border-primary/5 font-black text-[13px] h-8 px-3 hidden sm:flex items-center">
@@ -944,7 +943,11 @@ export default function PlannerPage() {
                )}
             </div>
           </header>
-
+          {activeModule === 'ordenes-sap' && (
+            <div className="px-6 py-3 bg-white/50 border-b">
+              <CorrelativoSelector activeLinea={ordenesSapActiveLinea} selectedFecha={selectedFechaSap} />
+            </div>
+          )}
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <div className="flex flex-col gap-6 h-full">
               
