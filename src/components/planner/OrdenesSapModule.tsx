@@ -1,6 +1,6 @@
 "use client";
 
-import { Factory, Plus } from 'lucide-react';
+import { Factory, Plus, CalendarIcon } from 'lucide-react';
 import { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -9,8 +9,9 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from '@/components/ui/table';
 import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { PRODUCT_LIST } from '@/lib/planner-utils';
-import { getISOWeek } from 'date-fns';
+import { getISOWeek, format, startOfWeek, endOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 
 const STORAGE_KEY = 'ordenes-sap-v1';
@@ -339,13 +340,26 @@ export default function OrdenesSapModule() {
         {activeSection === 'carga-prod' && (
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Calendar
-                mode="single"
-                selected={selectedFecha}
-                onSelect={setSelectedFecha}
-                locale={es}
-                className="rounded-md border border-slate-200 bg-white"
-              />
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                  >
+                    <CalendarIcon className="h-3.5 w-3.5 mr-2" />
+                    {selectedFecha ? format(selectedFecha, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar semana"}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="p-0 rounded-2xl" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={selectedFecha}
+                    onSelect={setSelectedFecha}
+                    locale={es}
+                    className="rounded-md"
+                  />
+                </PopoverContent>
+              </Popover>
 
               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
                 {lineas.map((linea) => {
