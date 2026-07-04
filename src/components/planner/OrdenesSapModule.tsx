@@ -607,6 +607,10 @@ export default function OrdenesSapModule({
     });
 
     pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+    const blob = pdf.output('blob');
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
     pdf.save(`Ordenes semana ${weekNumber}.pdf`);
   };
 
