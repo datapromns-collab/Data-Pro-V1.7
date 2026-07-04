@@ -324,6 +324,7 @@ export default function OrdenesSapModule({
 }) {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
   const [activeSection, setActiveSection] = useState<'carga-prod' | 'dia-a-dia'>('carga-prod');
+  const [diaSubsection, setDiaSubsection] = useState<'dia' | 'turno'>('dia');
   const [internalActiveLinea, setInternalActiveLinea] = useState<number | null>(1);
 
   const activeLinea = externalActiveLinea ?? internalActiveLinea;
@@ -602,6 +603,22 @@ export default function OrdenesSapModule({
                   <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
                     Línea {activeLinea}
                   </h4>
+                  {activeSection === 'dia-a-dia' && (
+                    <div className="ml-auto flex items-center bg-slate-100/50 p-1 rounded-full h-9 border border-slate-200">
+                      <button
+                        onClick={() => setDiaSubsection('dia')}
+                        className={`inline-flex items-center justify-center gap-2 h-7 px-4 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 border-0 select-none ${diaSubsection === 'dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                      >
+                        Día
+                      </button>
+                      <button
+                        onClick={() => setDiaSubsection('turno')}
+                        className={`inline-flex items-center justify-center gap-2 h-7 px-4 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 border-0 select-none ${diaSubsection === 'turno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                      >
+                        Por Turno
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 <div className="p-4">
