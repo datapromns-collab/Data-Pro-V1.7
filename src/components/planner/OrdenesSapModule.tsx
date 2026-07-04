@@ -450,15 +450,154 @@ export default function OrdenesSapModule({
   };
 
   const exportarPDF = async () => {
-    const element = document.getElementById('ordenes-sap-export');
-    if (!element) return;
+    const container = document.createElement('div');
+    container.style.position = 'absolute';
+    container.style.left = '-9999px';
+    container.style.top = '0';
+    container.style.background = '#ffffff';
+    container.style.padding = '16px';
+    container.style.display = 'grid';
+    container.style.gridTemplateColumns = 'repeat(3, 1fr)';
+    container.style.gap = '14px';
+    container.style.width = '1400px';
 
-    const canvas = await html2canvas(element, {
+    const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
+    const weekNumber = selectedFecha ? getISOWeek(selectedFecha) : (ordenes[0]?.semana || getISOWeek(new Date()));
+
+    lineas.forEach((linea) => {
+      const ordenesLinea = ordenes.filter((o) => o.linea === linea);
+      if (ordenesLinea.length === 0) return;
+
+      const tarjeta = document.createElement('div');
+      tarjeta.style.border = '1px solid #e2e8f0';
+      tarjeta.style.borderRadius = '16px';
+      tarjeta.style.background = '#ffffff';
+      tarjeta.style.overflow = 'hidden';
+      tarjeta.style.minWidth = '0';
+
+      const titulo = document.createElement('div');
+      titulo.style.padding = '6px 10px';
+      titulo.style.borderBottom = '1px solid #e2e8f0';
+      titulo.style.display = 'flex';
+      titulo.style.alignItems = 'center';
+      titulo.style.justifyContent = 'space-between';
+      titulo.style.background = '#f8fafc';
+      titulo.innerHTML = `<span style="font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; color: #0f172a;">Línea ${linea} - Semana ${weekNumber}</span>
+      <span style="font-size: 8px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; color: #dc2626;">Eliminar orden</span>`;
+
+      const cuerpo = document.createElement('div');
+      cuerpo.style.borderTop = '1px solid #e2e8f0';
+
+      ordenesLinea.forEach((orden) => {
+        const saborTitulo = document.createElement('div');
+        saborTitulo.style.padding = '5px 10px';
+        saborTitulo.style.borderBottom = '1px solid #e2e8f0';
+        saborTitulo.style.display = 'flex';
+        saborTitulo.style.alignItems = 'center';
+        saborTitulo.style.justifyContent = 'space-between';
+        saborTitulo.innerHTML = `<span style="font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em;">${orden.sabor} - SEMANA ${orden.semana}</span>`;
+
+        const tabla = document.createElement('div');
+        tabla.style.display = 'grid';
+        tabla.style.gridTemplateColumns = '78px 92px 1fr 78px 104px';
+
+        const headers = ['Fecha', 'Ticket', 'Cajas', 'Total día', 'N° Orden'];
+        headers.forEach((h) => {
+          const hcell = document.createElement('div');
+          hcell.style.cssText = 'padding: 4px; font-size: 8px; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; background: #f8fafc; color: #64748b;';
+          hcell.textContent = h;
+          tabla.appendChild(hcell);
+        });
+
+        (orden.dias || []).forEach((dia) => {
+          const totalDia = calcularTotalDia(dia);
+          const celdas = [
+            formatDate(dia.fechaInicio),
+            dia.ticket1 || '',
+            String(dia.cajas1 || 0),
+            String(totalDia),
+            orden.ordenNumero,
+          ];
+          celdas.forEach((texto) => {
+            const cell = document.createElement('div');
+            cell.style.cssText = 'padding: 3px 4px; font-size: 9px; font-weight: 700; border-bottom: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
+            cell.textContent = texto;
+            tabla.appendChild(cell);
+          });
+
+          const celdas2 = [
+            formatDate(dia.fechaInicio),
+            '',
+            String(dia.cajas2 || 0),
+            String(totalDia),
+            orden.ordenNumero,
+          ];
+          celdas2.forEach((texto) => {
+            const cell = document.createElement('div');
+            cell.style.cssText = 'padding: 3px 4px; font-size: 9px; font-weight: 700; border-bottom: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
+            cell.textContent = texto;
+            tabla.appendChild(cell);
+          });
+
+          const celdas3 = [
+            formatDate(dia.fechaInicio),
+            dia.ticket2 || '',
+            String(dia.cajas3 || 0),
+            String(totalDia),
+            orden.ordenNumero,
+          ];
+          celdas3.forEach((texto) => {
+            const cell = document.createElement('div');
+            cell.style.cssText = 'padding: 3px 4px; font-size: 9px; font-weight: 700; border-bottom: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
+            cell.textContent = texto;
+            tabla.appendChild(cell);
+          });
+
+          const celdas4 = [
+            formatDate(dia.fechaInicio),
+            '',
+            String(dia.cajas4 || 0),
+            String(totalDia),
+            orden.ordenNumero,
+          ];
+          celdas4.forEach((texto) => {
+            const cell = document.createElement('div');
+            cell.style.cssText = 'padding: 3px 4px; font-size: 9px; font-weight: 700; border-bottom: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
+            cell.textContent = texto;
+            tabla.appendChild(cell);
+          });
+        });
+
+        const totalOrden = (orden.dias || []).reduce((sum, d) => sum + calcularTotalDia(d), 0);
+        const totalCell = document.createElement('div');
+        totalCell.style.cssText = 'padding: 4px; font-size: 9px; font-weight: 900; border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; color: #0f172a;';
+        totalCell.textContent = String(totalOrden);
+        tabla.appendChild(totalCell);
+
+        const agregarBtn = document.createElement('button');
+        agregarBtn.style.cssText = 'width: 100%; padding: 6px; border-top: 1px dashed #e2e8f0; background: transparent; font-size: 8px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; color: #94a3b8; cursor: default;';
+        agregarBtn.textContent = 'Agregar fecha';
+
+        cuerpo.appendChild(saborTitulo);
+        cuerpo.appendChild(tabla);
+        cuerpo.appendChild(agregarBtn);
+      });
+
+      tarjeta.appendChild(titulo);
+      tarjeta.appendChild(cuerpo);
+      container.appendChild(tarjeta);
+    });
+
+    document.body.appendChild(container);
+
+    const canvas = await html2canvas(container, {
       scale: 2,
       useCORS: true,
       backgroundColor: '#ffffff',
       logging: false,
     });
+
+    document.body.removeChild(container);
 
     const imgData = canvas.toDataURL('image/png');
     const pdf = new jsPDF({
@@ -468,10 +607,7 @@ export default function OrdenesSapModule({
     });
 
     pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-
-    const weekNumber = selectedFecha ? getISOWeek(selectedFecha) : (ordenes[0]?.semana || getISOWeek(new Date()));
-    const nombreArchivo = `Ordenes semana ${weekNumber}.pdf`;
-    pdf.save(nombreArchivo);
+    pdf.save(`Ordenes semana ${weekNumber}.pdf`);
   };
 
   const eliminarDia = (ordenId: string, diaIndex: number) => {
@@ -491,7 +627,6 @@ export default function OrdenesSapModule({
   const calcularTotalDia = (dia: OrdenSap['dias'][0]) => {
     return (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
   };
-
 
   const formatDate = (dateStr: string) => {
     const [year, month, day] = dateStr.split('-');
@@ -575,33 +710,173 @@ export default function OrdenesSapModule({
         </div>
       </div>
 
-      <div>
-        {activeLinea === null && (
-          <div className="bg-white rounded-[2.5rem] border border-slate-200 p-8">
-            <div className="h-48 flex items-center justify-center text-slate-400">
-              <p className="text-[10px] font-bold uppercase tracking-widest">Seleccione una línea para ver los datos</p>
-            </div>
-          </div>
-        )}
+       <div>
+         {activeLinea === null && (
+           <div className="bg-white rounded-[2.5rem] border border-slate-200 p-8">
+             <div className="h-48 flex items-center justify-center text-slate-400">
+               <p className="text-[10px] font-bold uppercase tracking-widest">Seleccione una línea para ver los datos</p>
+             </div>
+           </div>
+         )}
 
-        {activeLinea && (
-            <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
-              <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-                  <div className="w-2 h-2 rounded-full bg-sky-500" />
-                  <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                    Línea {activeLinea}
-                  </h4>
-                </div>
+         {activeLinea && (
+             <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
+               {activeSection === 'carga-prod' ? (
+                 <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                   <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                     <div className="w-2 h-2 rounded-full bg-sky-500" />
+                     <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                       Línea {activeLinea}
+                     </h4>
+                   </div>
+                   <div className="p-4">
+                     {ordenesPorLinea.length === 0 && (
+                       <div className="h-32 flex items-center justify-center text-slate-400">
+                         <p className="text-[10px] font-bold uppercase tracking-widest">Sin órdenes registradas para esta línea</p>
+                       </div>
+                     )}
 
-                <div className="p-4">
-                  <div className="h-32 flex items-center justify-center text-slate-400">
-                    <p className="text-[10px] font-bold uppercase tracking-widest">Sección en desarrollo</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-           )}
+                     <div id="ordenes-sap-export" className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-3">
+                       {ordenesPorLinea.map((orden) => {
+                         const colorClass = SABOR_COLORS[orden.sabor] || FALLBACK_COLOR;
+                         return (
+                           <div key={orden.id} className="border border-slate-200 rounded-xl bg-white overflow-hidden">
+                             <div className={`px-3 py-1.5 border-b border-slate-200 flex items-center justify-between ${colorClass}`}>
+                               <p className="text-[10px] font-black uppercase tracking-widest truncate">
+                                 {orden.sabor} - SEMANA {orden.semana}
+                               </p>
+                               <button
+                                 onClick={() => eliminarOrden(orden.id)}
+                                 className="text-[9px] font-black uppercase tracking-widest text-red-600 hover:text-red-800 transition-none"
+                               >
+                                 Eliminar orden
+                               </button>
+                             </div>
+                             {orden.dias.map((dia, diaIndex) => (
+                               <div key={diaIndex}>
+                                 <div className="flex items-center justify-between px-3 py-1 bg-slate-50 border-b border-slate-100">
+                                   <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
+                                     {formatDate(dia.fechaInicio)}
+                                   </span>
+                                   <button
+                                     onClick={() => eliminarDia(orden.id, diaIndex)}
+                                     className="text-[9px] font-black uppercase tracking-widest text-red-600 hover:text-red-800 transition-none"
+                                   >
+                                     Eliminar fecha
+                                   </button>
+                                 </div>
+                                 <div className="border-b border-slate-200">
+                                 <div className="grid grid-cols-[80px_96px_1fr_80px_112px] gap-0">
+                                   <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Fecha</div>
+                                   <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Ticket</div>
+                                   <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Cajas</div>
+                                   <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Total día</div>
+                                   <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">N° Orden</div>
+
+                                   <div className="px-1 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-100 border-b border-slate-100 whitespace-nowrap">
+                                     {formatDate(dia.fechaInicio)}
+                                   </div>
+                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                     <Input value={dia.ticket1} onChange={(e) => updateDia(orden.id, diaIndex, 'ticket1', e.target.value)} placeholder="Ticket" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                   </div>
+                                    <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                       <NumberInput value={dia.cajas1} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas1', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                     </div>
+                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                     <Input value={calcularTotalDia(dia)} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-1.5 w-full" />
+                                   </div>
+                                   <div className="p-1 border-b border-slate-100">
+                                     <div className="flex items-center gap-1">
+                                       <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-1.5 flex-1 min-w-0" />
+                                       <button onClick={() => navigator.clipboard.writeText(orden.ordenNumero)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar número de orden">
+                                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                       </button>
+                                     </div>
+                                   </div>
+
+                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                                    <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                       <NumberInput value={dia.cajas2} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas2', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                     </div>
+                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                                   <div className="p-1 border-b border-slate-100"></div>
+
+                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                     <Input value={dia.ticket2} onChange={(e) => updateDia(orden.id, diaIndex, 'ticket2', e.target.value)} placeholder="Ticket" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                   </div>
+                                    <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                       <NumberInput value={dia.cajas3} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas3', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                     </div>
+                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                                   <div className="p-1 border-b border-slate-100"></div>
+
+                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                                    <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                       <NumberInput value={dia.cajas4} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas4', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                     </div>
+                               <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                               <div className="p-1 border-b border-slate-100"></div>
+                             </div>
+                             </div>
+                           </div>
+                         ))}
+                         <div className="grid grid-cols-[80px_96px_1fr_80px_112px] gap-0">
+                           <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                           <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                           <div className="p-1 border-r border-slate-100 border-b border-slate-100 font-black text-slate-900">
+                             {orden.dias.reduce((sum, d) => sum + calcularTotalDia(d), 0)}
+                           </div>
+                           <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                           <div className="p-1 border-b border-slate-100"></div>
+                         </div>
+                         <div className="p-2 border-t border-slate-100">
+                           <button
+                             onClick={() => agregarDia(orden.id)}
+                             className="w-full h-8 rounded-lg border border-dashed border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none"
+                           >
+                             Agregar fecha
+                           </button>
+                         </div>
+                           </div>
+                         );
+                       })}
+                     </div>
+                   </div>
+                 </div>
+               ) : (
+                 <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                   <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                     <div className="w-2 h-2 rounded-full bg-sky-500" />
+                     <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                       Día a día - Línea {activeLinea}
+                     </h4>
+                     <div className="ml-auto flex items-center bg-slate-100/50 p-1 rounded-full h-9 border border-slate-200">
+                       <button
+                         onClick={() => setDiaSubsection('dia')}
+                         className={`inline-flex items-center justify-center gap-2 h-7 px-4 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 border-0 select-none ${diaSubsection === 'dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                       >
+                         Día
+                       </button>
+                       <button
+                         onClick={() => setDiaSubsection('turno')}
+                         className={`inline-flex items-center justify-center gap-2 h-7 px-4 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 border-0 select-none ${diaSubsection === 'turno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                       >
+                         Por Turno
+                       </button>
+                     </div>
+                   </div>
+                   <div className="p-4">
+                     <div className="h-32 flex items-center justify-center text-slate-400">
+                       <p className="text-[10px] font-bold uppercase tracking-widest">Sección en desarrollo</p>
+                     </div>
+                   </div>
+                 </div>
+               )}
+             </div>
+            )}
  
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
