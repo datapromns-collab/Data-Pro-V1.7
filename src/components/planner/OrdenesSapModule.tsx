@@ -122,7 +122,13 @@ const TURNOS_OPCIONES = [
   'única del día',
 ];
 
-export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number }) {
+export function CorrelativoSelector({ 
+  activeLinea = 1, 
+  selectedFecha,
+}: { 
+  activeLinea?: number; 
+  selectedFecha?: Date | undefined;
+}) {
   const [correlativoNumero, setCorrelativoNumero] = useState<number>(() => {
     try {
       const stored = localStorage.getItem(CORRELATIVO_KEY);
@@ -162,7 +168,18 @@ export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number 
     return () => clearInterval(intervalo);
   }, []);
 
+  const formatearFecha = (fecha: Date | undefined): string => {
+    if (!fecha) return '';
+    const dia = fecha.getDate();
+    const mes = fecha.getMonth() + 1;
+    const anio = fecha.getFullYear();
+    return `${dia}-${mes}-${anio}`;
+  };
+
   const getFechaLinea = (useYesterday = false) => {
+    if (selectedFecha) {
+      return formatearFecha(selectedFecha);
+    }
     const hoy = new Date();
     const offset = [1, 2, 3, 4].includes(activeLinea) ? 182 : activeLinea === 5 ? 280 : activeLinea === 6 ? 119 : activeLinea === 7 ? 154 : 182;
     const fecha = new Date(hoy);
@@ -178,6 +195,9 @@ export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number 
   };
 
   const getFechaParaTurno = (turno: string) => {
+    if (selectedFecha) {
+      return formatearFecha(selectedFecha);
+    }
     const turnosAyer = ['producción del día', 'restante del día'];
     const useYesterday = turnosAyer.includes(turno);
     const hoy = new Date();
@@ -206,6 +226,14 @@ export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number 
     } catch (e) {
       console.error('Error parseando correlativo SAP desde localStorage', e);
     }
+    if (selectedFecha) {
+      const dia = String(selectedFecha.getDate()).padStart(2, '0');
+      const mes = String(selectedFecha.getMonth() + 1).padStart(2, '0');
+      const anio = selectedFecha.getFullYear();
+      const fecha = `${dia}/${mes}/${anio}`;
+      localStorage.setItem(CORRELATIVO_KEY, JSON.stringify({ numero: correlativoNumero, fecha }));
+      return `L-${fecha}_${correlativoNumero}`;
+    }
     const hoy = new Date();
     const dia = String(hoy.getDate()).padStart(2, '0');
     const mes = String(hoy.getMonth() + 1).padStart(2, '0');
@@ -216,7 +244,8 @@ export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number 
   };
 
   const getTurnoConLinea = () => {
-    return `${turnoSeleccionado} ${getFechaParaTurno(turnoSeleccionado)} L${activeLinea}`;
+    const fecha = selectedFecha ? formatearFecha(selectedFecha) : getFechaParaTurno(turnoSeleccionado);
+    return `${turnoSeleccionado} ${fecha} L${activeLinea}`;
   };
 
   useEffect(() => {
@@ -562,10 +591,10 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
       XLSX.utils.book_append_sheet(workbook, worksheet, `Línea ${linea}`);
     });
 
-    const fechaActual = new Date();
-    const dia = String(fechaActual.getDate()).padStart(2, '0');
-    const mes = String(fechaActual.getMonth() + 1).padStart(2, '0');
-    const anio = fechaActual.getFullYear();
+    const fechaReferencia = selectedFecha || new Date();
+    const dia = String(fechaReferencia.getDate()).padStart(2, '0');
+    const mes = String(fechaReferencia.getMonth() + 1).padStart(2, '0');
+    const anio = fechaReferencia.getFullYear();
     const nombreArchivo = `OrdenesSAP_${dia}-${mes}-${anio}.xlsx`;
 
     XLSX.writeFile(workbook, nombreArchivo);
@@ -623,6 +652,9 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
 
   return (
     <div className="pb-10">
+      <div className="flex justify-end mb-4 no-print">
+        <CorrelativoSelector activeLinea={activeLinea ?? 1} selectedFecha={selectedFecha} />
+      </div>
       <div className="space-y-3 mb-6 no-print">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
