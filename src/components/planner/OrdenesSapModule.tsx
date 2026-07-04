@@ -153,15 +153,24 @@ export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number 
     return TURNOS_OPCIONES[0];
   });
 
-  const getFechaLinea = () => {
+  const getFechaLinea = (useYesterday = false) => {
     const hoy = new Date();
     const offset = [1, 2, 3, 4].includes(activeLinea) ? 182 : activeLinea === 5 ? 280 : activeLinea === 6 ? 119 : activeLinea === 7 ? 154 : 182;
     const fecha = new Date(hoy);
-    fecha.setDate(fecha.getDate() + offset);
+    if (useYesterday) {
+      fecha.setDate(fecha.getDate() + offset - 1);
+    } else {
+      fecha.setDate(fecha.getDate() + offset);
+    }
     const mes = fecha.getMonth() + 1;
     const dia = fecha.getDate();
     const anio = fecha.getFullYear();
     return `${dia}-${mes}-${anio}`;
+  };
+
+  const getFechaParaTurno = (turno: string) => {
+    const turnosAyer = ['producción del día', 'restante del día'];
+    return getFechaLinea(turnosAyer.includes(turno));
   };
 
   const getCorrelativo = () => {
@@ -186,7 +195,7 @@ export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number 
   };
 
   const getTurnoConLinea = () => {
-    return `${turnoSeleccionado} L${activeLinea}`;
+    return `${turnoSeleccionado} ${getFechaParaTurno(turnoSeleccionado)} L${activeLinea}`;
   };
 
   useEffect(() => {
@@ -253,7 +262,7 @@ export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number 
           <SelectContent>
             {TURNOS_OPCIONES.map(opcion => (
               <SelectItem key={opcion} value={opcion} className="font-black text-[10px] uppercase tracking-widest">
-                {opcion} {getFechaLinea()} L{activeLinea}
+                {opcion} {getFechaParaTurno(opcion)} L{activeLinea}
               </SelectItem>
             ))}
           </SelectContent>
