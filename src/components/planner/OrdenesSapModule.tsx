@@ -161,7 +161,7 @@ export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number 
     const mes = fecha.getMonth() + 1;
     const dia = fecha.getDate();
     const anio = fecha.getFullYear();
-    return `${mes}/${dia}/${anio}`;
+    return `${dia}-${mes}-${anio}`;
   };
 
   const getCorrelativo = () => {
@@ -253,7 +253,7 @@ export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number 
           <SelectContent>
             {TURNOS_OPCIONES.map(opcion => (
               <SelectItem key={opcion} value={opcion} className="font-black text-[10px] uppercase tracking-widest">
-                {opcion} L{activeLinea}
+                {opcion} {getFechaLinea()} L{activeLinea}
               </SelectItem>
             ))}
           </SelectContent>
