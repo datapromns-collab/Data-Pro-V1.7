@@ -913,6 +913,7 @@ export default function PlannerPage() {
               </div>
             </div>
              <div className="flex items-center gap-2 justify-end">
+                {activeModule === 'ordenes-sap' && <CorrelativoSelector activeLinea={ordenesSapActiveLinea} selectedFecha={selectedFechaSap} />}
                 {activeModule === 'planning' && (
                  <>
                    <Badge variant="secondary" className="mr-2 bg-primary/10 text-primary border-primary/5 font-black text-[13px] h-8 px-3 hidden sm:flex items-center">
@@ -943,11 +944,6 @@ export default function PlannerPage() {
                )}
             </div>
           </header>
-          {activeModule === 'ordenes-sap' && (
-            <div className="px-6 py-3 bg-white/50 border-b">
-              <CorrelativoSelector activeLinea={ordenesSapActiveLinea} selectedFecha={selectedFechaSap} />
-            </div>
-          )}
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <div className="flex flex-col gap-6 h-full">
               

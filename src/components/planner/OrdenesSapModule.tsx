@@ -695,6 +695,7 @@ export default function OrdenesSapModule({
           </div>
         </div>
       </div>
+      </div>
 
       <div>
         {activeLinea === null && (
