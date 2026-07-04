@@ -13,6 +13,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { PRODUCT_LIST } from '@/lib/planner-utils';
 import { getISOWeek, format, startOfWeek, endOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
+import * as XLSX from 'xlsx';
 
 const STORAGE_KEY = 'ordenes-sap-v1';
 
@@ -402,6 +403,66 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
     }));
   };
 
+  const exportarExcel = () => {
+    const workbook = XLSX.utils.book_new();
+    const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
+
+    lineas.forEach(linea => {
+      const ordenesLinea = ordenes.filter(o => o.linea === linea);
+      const rows: any[] = [];
+
+      ordenesLinea.forEach(orden => {
+        orden.dias.forEach((dia, diaIndex) => {
+          rows.push({
+            'Sabor': orden.sabor,
+            'Semana': orden.semana,
+            'Línea': orden.linea,
+            'N° Orden': orden.ordenNumero,
+            'Fecha': formatDate(dia.fechaInicio),
+            'Ticket 1': dia.ticket1,
+            'Cajas 1': dia.cajas1,
+            'Ticket 2': dia.ticket2,
+            'Cajas 2': dia.cajas2,
+            'Ticket 3': dia.ticket3,
+            'Cajas 3': dia.cajas3,
+            'Ticket 4': dia.ticket4,
+            'Cajas 4': dia.cajas4,
+            'Total Día': calcularTotalDia(dia),
+          });
+        });
+
+        const totalOrden = orden.dias.reduce((sum, d) => sum + calcularTotalDia(d), 0);
+        rows.push({
+          'Sabor': orden.sabor,
+          'Semana': orden.semana,
+          'Línea': orden.linea,
+          'N° Orden': orden.ordenNumero,
+          'Fecha': 'TOTAL ORDEN',
+          'Ticket 1': '',
+          'Cajas 1': '',
+          'Ticket 2': '',
+          'Cajas 2': '',
+          'Ticket 3': '',
+          'Cajas 3': '',
+          'Ticket 4': '',
+          'Cajas 4': '',
+          'Total Día': totalOrden,
+        });
+      });
+
+      const worksheet = XLSX.utils.json_to_sheet(rows);
+      XLSX.utils.book_append_sheet(workbook, worksheet, `Línea ${linea}`);
+    });
+
+    const fechaActual = new Date();
+    const dia = String(fechaActual.getDate()).padStart(2, '0');
+    const mes = String(fechaActual.getMonth() + 1).padStart(2, '0');
+    const anio = fechaActual.getFullYear();
+    const nombreArchivo = `OrdenesSAP_${dia}-${mes}-${anio}.xlsx`;
+
+    XLSX.writeFile(workbook, nombreArchivo);
+  };
+
   const eliminarDia = (ordenId: string, diaIndex: number) => {
     setOrdenes(prev => prev.map(o => {
       if (o.id !== ordenId) return o;
@@ -509,14 +570,24 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
                 );
               })}
             </div>
-            <Button
-              size="sm"
-              onClick={() => openNuevaOrden(activeLinea ?? 1)}
-              className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              Nueva Orden
-            </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                size="sm"
+                onClick={exportarExcel}
+                className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                Exportar Archivo
+              </Button>
+              <Button
+                size="sm"
+                onClick={() => openNuevaOrden(activeLinea ?? 1)}
+                className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                Nueva Orden
+              </Button>
+            </div>
           </div>
         )}
       </div>
