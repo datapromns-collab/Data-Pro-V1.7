@@ -695,7 +695,6 @@ export default function OrdenesSapModule({
           </div>
         </div>
       </div>
-      </div>
 
       <div>
         {activeLinea === null && (
@@ -834,12 +833,10 @@ export default function OrdenesSapModule({
                 </div>
               </div>
             </div>
-          )}
+           )}
+ 
 
-
-       </div>
-
-       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
          <DialogContent className="sm:max-w-[520px] rounded-3xl">
           <DialogHeader>
             <DialogTitle className="font-headline text-xl text-slate-900">
@@ -895,7 +892,8 @@ export default function OrdenesSapModule({
             </Button>
           </DialogFooter>
         </DialogContent>
-      </Dialog>
+       </Dialog>
+      </div>
     </div>
   );
 }
