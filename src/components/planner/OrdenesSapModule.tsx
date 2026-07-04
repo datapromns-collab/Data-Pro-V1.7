@@ -8,8 +8,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from '@/components/ui/table';
+import { Calendar } from '@/components/ui/calendar';
 import { PRODUCT_LIST } from '@/lib/planner-utils';
 import { getISOWeek } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 const STORAGE_KEY = 'ordenes-sap-v1';
 
@@ -107,7 +109,7 @@ export default function OrdenesSapModule() {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
   const [activeSection, setActiveSection] = useState<'carga-prod' | 'dia-a-dia'>('carga-prod');
   const [activeLinea, setActiveLinea] = useState<number | null>(1);
-  const [selectedFecha, setSelectedFecha] = useState<string>('');
+  const [selectedFecha, setSelectedFecha] = useState<Date | undefined>(undefined);
   const [diaADiaValues, setDiaADiaValues] = useState<Record<string, Record<number, number>>>({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogLinea, setDialogLinea] = useState<number | null>(null);
@@ -144,9 +146,7 @@ export default function OrdenesSapModule() {
     if (!activeLinea) return [];
     const base = ordenes.filter(o => o.linea === activeLinea);
     if (!selectedFecha) return base;
-    const fecha = new Date(selectedFecha);
-    if (isNaN(fecha.getTime())) return base;
-    const semanaSeleccionada = getISOWeek(fecha);
+    const semanaSeleccionada = getISOWeek(selectedFecha);
     return base.filter(o => o.semana === semanaSeleccionada);
   }, [ordenes, activeLinea, selectedFecha]);
 
@@ -305,11 +305,12 @@ export default function OrdenesSapModule() {
         {activeSection === 'carga-prod' && (
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Input
-                type="date"
-                value={selectedFecha}
-                onChange={(e) => setSelectedFecha(e.target.value)}
-                className="h-9 rounded-full border-slate-200 bg-white font-black text-[10px] uppercase tracking-widest px-3 w-fit"
+              <Calendar
+                mode="single"
+                selected={selectedFecha}
+                onSelect={setSelectedFecha}
+                locale={es}
+                className="rounded-md border border-slate-200 bg-white"
               />
 
               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
