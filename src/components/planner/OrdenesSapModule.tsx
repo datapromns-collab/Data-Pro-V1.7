@@ -62,6 +62,7 @@ export default function OrdenesSapModule() {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
   const [activeSection, setActiveSection] = useState<'carga-prod' | 'dia-a-dia'>('carga-prod');
   const [activeLinea, setActiveLinea] = useState<number | null>(1);
+  const [diaADiaValues, setDiaADiaValues] = useState<Record<string, Record<number, number>>>({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogLinea, setDialogLinea] = useState<number | null>(null);
   const [sabor, setSabor] = useState('');
@@ -184,6 +185,32 @@ export default function OrdenesSapModule() {
 
   const calcularTotalDia = (dia: OrdenSap['dias'][0]) => {
     return (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
+  };
+
+  const updateDiaADia = (sabor: string, linea: number, value: number) => {
+    setDiaADiaValues(prev => ({
+      ...prev,
+      [sabor]: {
+        ...(prev[sabor] || {}),
+        [linea]: value
+      }
+    }));
+  };
+
+  const getDiaADiaValue = (sabor: string, linea: number): number => {
+    return diaADiaValues[sabor]?.[linea] || 0;
+  };
+
+  const getLineTotal = (linea: number): number => {
+    return PRODUCT_LIST.reduce((sum, sabor) => sum + getDiaADiaValue(sabor, linea), 0);
+  };
+
+  const getRowTotal = (sabor: string): number => {
+    return Array.from({ length: 7 }, (_, i) => i + 1).reduce((sum, linea) => sum + getDiaADiaValue(sabor, linea), 0);
+  };
+
+  const getGrandTotal = (): number => {
+    return PRODUCT_LIST.reduce((sum, sabor) => sum + getRowTotal(sabor), 0);
   };
 
   const formatDate = (dateStr: string) => {
@@ -376,7 +403,47 @@ export default function OrdenesSapModule() {
               </h4>
             </div>
 
-            <div className="p-4">
+            <div className="p-4 overflow-x-auto">
+              <table className="w-full border-collapse text-[10px]">
+                <thead>
+                  <tr className="bg-slate-50">
+                    <th className="border border-slate-200 px-2 py-1.5 text-left font-black text-slate-500 uppercase tracking-widest">Sabor</th>
+                    {Array.from({ length: 7 }, (_, i) => i + 1).map(linea => (
+                      <th key={linea} className="border border-slate-200 px-2 py-1.5 text-center font-black text-slate-500 uppercase tracking-widest min-w-[60px]">Línea {linea}</th>
+                    ))}
+                    <th className="border border-slate-200 px-2 py-1.5 text-center font-black text-slate-500 uppercase tracking-widest">Totales</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {PRODUCT_LIST.map((sabor, idx) => {
+                    const rowTotal = getRowTotal(sabor);
+                    const isEven = idx % 2 === 0;
+                    return (
+                      <tr key={sabor} className={isEven ? 'bg-white' : 'bg-slate-50/50'}>
+                        <td className="border border-slate-200 px-2 py-1 font-bold text-slate-700 whitespace-nowrap">{sabor}</td>
+                        {Array.from({ length: 7 }, (_, i) => i + 1).map(linea => (
+                          <td key={linea} className="border border-slate-200 px-1 py-1">
+                            <Input
+                              type="number"
+                              value={getDiaADiaValue(sabor, linea)}
+                              onChange={(e) => updateDiaADia(sabor, linea, Number(e.target.value))}
+                              className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-white px-1.5 w-full"
+                            />
+                          </td>
+                        ))}
+                        <td className="border border-slate-200 px-2 py-1 text-center font-black text-slate-900">{rowTotal}</td>
+                      </tr>
+                    );
+                  })}
+                  <tr className="bg-slate-100">
+                    <td className="border border-slate-200 px-2 py-1.5 text-center font-black text-slate-700 uppercase tracking-widest">Totales</td>
+                    {Array.from({ length: 7 }, (_, i) => i + 1).map(linea => (
+                      <td key={linea} className="border border-slate-200 px-2 py-1.5 text-center font-black text-slate-900">{getLineTotal(linea)}</td>
+                    ))}
+                    <td className="border border-slate-200 px-2 py-1.5 text-center font-black text-slate-900">{getGrandTotal()}</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
