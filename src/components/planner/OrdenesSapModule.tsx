@@ -323,7 +323,6 @@ export function CorrelativoSelector({
 
 export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onLineaChange }: { activeLinea?: number; onLineaChange?: (linea: number) => void }) {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
-  const [activeSection, setActiveSection] = useState<'carga-prod' | 'dia-a-dia'>('carga-prod');
   const [internalActiveLinea, setInternalActiveLinea] = useState<number | null>(1);
 
   const activeLinea = externalActiveLinea ?? internalActiveLinea;
@@ -338,7 +337,6 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
     }
   };
   const [selectedFecha, setSelectedFecha] = useState<Date | undefined>(undefined);
-  const [diaADiaValues, setDiaADiaValues] = useState<Record<string, Record<number, number>>>({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogLinea, setDialogLinea] = useState<number | null>(null);
   const [sabor, setSabor] = useState('');
@@ -346,7 +344,6 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
   const [fechaInicio, setFechaInicio] = useState('');
   const [ordenes, setOrdenes] = useState<OrdenSap[]>([]);
 
-  const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
   useEffect(() => {
     try {
@@ -618,31 +615,6 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
     return (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
   };
 
-  const updateDiaADia = (sabor: string, linea: number, value: number) => {
-    setDiaADiaValues(prev => ({
-      ...prev,
-      [sabor]: {
-        ...(prev[sabor] || {}),
-        [linea]: value
-      }
-    }));
-  };
-
-  const getDiaADiaValue = (sabor: string, linea: number): number => {
-    return diaADiaValues[sabor]?.[linea] || 0;
-  };
-
-  const getLineTotal = (linea: number): number => {
-    return PRODUCT_LIST.reduce((sum, sabor) => sum + getDiaADiaValue(sabor, linea), 0);
-  };
-
-  const getRowTotal = (sabor: string): number => {
-    return Array.from({ length: 7 }, (_, i) => i + 1).reduce((sum, linea) => sum + getDiaADiaValue(sabor, linea), 0);
-  };
-
-  const getGrandTotal = (): number => {
-    return PRODUCT_LIST.reduce((sum, sabor) => sum + getRowTotal(sabor), 0);
-  };
 
   const formatDate = (dateStr: string) => {
     const [year, month, day] = dateStr.split('-');
@@ -657,20 +629,20 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
       </div>
       <div className="space-y-3 mb-6 no-print">
         <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-            <button
-              onClick={() => setActiveSection('carga-prod')}
-              className={`${tabsTriggerClass} ${activeSection === 'carga-prod' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-            >
-              <Factory className="h-3.5 w-3.5" /> CARGA PRODT
-            </button>
-            <button
-              onClick={() => setActiveSection('dia-a-dia')}
-              className={`${tabsTriggerClass} ${activeSection === 'dia-a-dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-            >
-              <Factory className="h-3.5 w-3.5" /> DÍA A DÍA
-            </button>
-          </div>
+            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+              {lineas.map((linea) => {
+                const isActive = activeLinea === linea;
+                return (
+                  <button
+                    key={linea}
+                    onClick={() => setActiveLinea(isActive ? null : linea)}
+                    className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                  >
+                    Línea {linea}
+                  </button>
+                );
+              })}
+            </div>
 
           <Popover>
             <PopoverTrigger asChild>
@@ -694,7 +666,6 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
           </Popover>
         </div>
 
-        {activeSection === 'carga-prod' && (
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
               {lineas.map((linea) => {
@@ -703,7 +674,7 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
                   <button
                     key={linea}
                     onClick={() => setActiveLinea(isActive ? null : linea)}
-                    className={`${tabsTriggerClass} ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                    className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                   >
                     Línea {linea}
                   </button>
@@ -728,13 +699,10 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
                 Nueva Orden
               </Button>
             </div>
-          </div>
-        )}
       </div>
 
-      {activeSection === 'carga-prod' && (
-        <>
-          {activeLinea === null && (
+      
+      {activeLinea === null && (
             <div className="bg-white rounded-[2.5rem] border border-slate-200 p-8">
               <div className="h-48 flex items-center justify-center text-slate-400">
                 <p className="text-[10px] font-bold uppercase tracking-widest">Seleccione una línea para ver los datos</p>
@@ -871,66 +839,12 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
               </div>
             </div>
           )}
-        </>
-      )}
 
-      {activeSection === 'dia-a-dia' && (
-        <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
-          <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-            <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-              <div className="w-2 h-2 rounded-full bg-emerald-500" />
-              <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                Vista Día a Día
-              </h4>
-            </div>
 
-            <div className="p-4 overflow-x-auto">
-              <table className="w-full border-collapse text-[10px]">
-                <thead>
-                  <tr className="bg-slate-50">
-                    <th className="border border-slate-200 px-2 py-1.5 text-left font-black text-slate-500 uppercase tracking-widest">Sabor</th>
-                    {Array.from({ length: 7 }, (_, i) => i + 1).map(linea => (
-                      <th key={linea} className="border border-slate-200 px-2 py-1.5 text-center font-black text-slate-500 uppercase tracking-widest min-w-[60px]">Línea {linea}</th>
-                    ))}
-                    <th className="border border-slate-200 px-2 py-1.5 text-center font-black text-slate-500 uppercase tracking-widest">Totales</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {PRODUCT_LIST.map((sabor, idx) => {
-                    const rowTotal = getRowTotal(sabor);
-                    const isEven = idx % 2 === 0;
-                    return (
-                      <tr key={sabor} className={isEven ? 'bg-white' : 'bg-slate-50/50'}>
-                        <td className="border border-slate-200 px-2 py-1 font-bold text-slate-700 whitespace-nowrap">{sabor}</td>
-                        {Array.from({ length: 7 }, (_, i) => i + 1).map(linea => (
-                          <td key={linea} className="border border-slate-200 px-1 py-1">
-                            <NumberInput
-                              value={getDiaADiaValue(sabor, linea)}
-                              onChange={(value: number) => updateDiaADia(sabor, linea, value)}
-                              className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-white px-1.5 w-full"
-                            />
-                          </td>
-                        ))}
-                        <td className="border border-slate-200 px-2 py-1 text-center font-black text-slate-900">{rowTotal}</td>
-                      </tr>
-                    );
-                  })}
-                  <tr className="bg-slate-100">
-                    <td className="border border-slate-200 px-2 py-1.5 text-center font-black text-slate-700 uppercase tracking-widest">Totales</td>
-                    {Array.from({ length: 7 }, (_, i) => i + 1).map(linea => (
-                      <td key={linea} className="border border-slate-200 px-2 py-1.5 text-center font-black text-slate-900">{getLineTotal(linea)}</td>
-                    ))}
-                    <td className="border border-slate-200 px-2 py-1.5 text-center font-black text-slate-900">{getGrandTotal()}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      )}
+       </div>
 
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent className="sm:max-w-[520px] rounded-3xl">
+       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+         <DialogContent className="sm:max-w-[520px] rounded-3xl">
           <DialogHeader>
             <DialogTitle className="font-headline text-xl text-slate-900">
               Nueva Orden {dialogLinea ? `- Línea ${dialogLinea}` : ''}
