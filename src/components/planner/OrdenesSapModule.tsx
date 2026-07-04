@@ -327,6 +327,7 @@ export default function OrdenesSapModule({
   onFechaChange?: (fecha: Date | undefined) => void;
 }) {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
+  const [activeSection, setActiveSection] = useState<'carga-prod' | 'dia-a-dia'>('carga-prod');
   const [internalActiveLinea, setInternalActiveLinea] = useState<number | null>(1);
 
   const activeLinea = externalActiveLinea ?? internalActiveLinea;
@@ -629,21 +630,20 @@ export default function OrdenesSapModule({
     <div className="pb-10">
       <div className="space-y-3 mb-6 no-print">
         <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-              {lineas.map((linea) => {
-                const isActive = activeLinea === linea;
-                return (
-                  <button
-                    key={linea}
-                    onClick={() => setActiveLinea(isActive ? null : linea)}
-                    className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                  >
-                    Línea {linea}
-                  </button>
-                );
-              })}
-            </div>
-
+          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+            <button
+              onClick={() => setActiveSection('carga-prod')}
+              className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'carga-prod' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              <Factory className="h-3.5 w-3.5" /> CARGA PRODT
+            </button>
+            <button
+              onClick={() => setActiveSection('dia-a-dia')}
+              className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'dia-a-dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              <Factory className="h-3.5 w-3.5" /> DÍA A DÍA
+            </button>
+          </div>
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -666,51 +666,52 @@ export default function OrdenesSapModule({
           </Popover>
         </div>
 
-          <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-              {lineas.map((linea) => {
-                const isActive = activeLinea === linea;
-                return (
-                  <button
-                    key={linea}
-                    onClick={() => setActiveLinea(isActive ? null : linea)}
-                    className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                  >
-                    Línea {linea}
-                  </button>
-                );
-              })}
-            </div>
-            <div className="flex items-center gap-2">
-              <Button
-                size="sm"
-                onClick={exportarExcel}
-                className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
-              >
-                <Plus className="h-3.5 w-3.5" />
-                Exportar Archivo
-              </Button>
-              <Button
-                size="sm"
-                onClick={() => openNuevaOrden(activeLinea ?? 1)}
-                className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
-              >
-                <Plus className="h-3.5 w-3.5" />
-                Nueva Orden
-              </Button>
-            </div>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+            {lineas.map((linea) => {
+              const isActive = activeLinea === linea;
+              return (
+                <button
+                  key={linea}
+                  onClick={() => setActiveLinea(isActive ? null : linea)}
+                  className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                >
+                  Línea {linea}
+                </button>
+              );
+            })}
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              size="sm"
+              onClick={exportarExcel}
+              className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Exportar Archivo
+            </Button>
+            <Button
+              size="sm"
+              onClick={() => openNuevaOrden(activeLinea ?? 1)}
+              className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Nueva Orden
+            </Button>
+          </div>
+        </div>
       </div>
 
-      
-      {activeLinea === null && (
-            <div className="bg-white rounded-[2.5rem] border border-slate-200 p-8">
-              <div className="h-48 flex items-center justify-center text-slate-400">
-                <p className="text-[10px] font-bold uppercase tracking-widest">Seleccione una línea para ver los datos</p>
-              </div>
+      <div>
+        {activeLinea === null && (
+          <div className="bg-white rounded-[2.5rem] border border-slate-200 p-8">
+            <div className="h-48 flex items-center justify-center text-slate-400">
+              <p className="text-[10px] font-bold uppercase tracking-widest">Seleccione una línea para ver los datos</p>
             </div>
-          )}
+          </div>
+        )}
 
-          {activeLinea && (
+        {activeLinea && (
             <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
               <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
                 <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
