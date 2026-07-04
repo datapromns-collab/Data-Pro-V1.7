@@ -285,25 +285,11 @@ export function CorrelativoSelector({ activeLinea = 1, selectedFecha }: { active
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {TURNOS_OPCIONES.map(opcion => {
-              const label = `${opcion} ${getFechaParaTurno(opcion)} L${activeLinea}`;
-              return (
-                <SelectItem key={opcion} value={opcion} className="font-black text-[10px] uppercase tracking-widest flex items-center justify-between gap-2">
-                  <span className="truncate">{label}</span>
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      navigator.clipboard.writeText(label);
-                    }}
-                    className="h-6 w-6 inline-flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0"
-                    title="Copiar"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                  </button>
-                </SelectItem>
-              );
-            })}
+            {TURNOS_OPCIONES.map(opcion => (
+              <SelectItem key={opcion} value={opcion} className="font-black text-[10px] uppercase tracking-widest">
+                {opcion} {getFechaParaTurno(opcion)} L{activeLinea}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
         <button onClick={() => navigator.clipboard.writeText(`${turnoSeleccionado} ${getFechaParaTurno(turnoSeleccionado)} L${activeLinea}`)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar turno">
@@ -879,26 +865,12 @@ export default function OrdenesSapModule({
                  </div>
                ) : (
                  <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                   <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-                     <div className="w-2 h-2 rounded-full bg-sky-500" />
-                     <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                       Día a día - Línea {activeLinea}
-                     </h4>
-                     <div className="ml-auto flex items-center bg-slate-100/50 p-1 rounded-full h-9 border border-slate-200">
-                       <button
-                         onClick={() => setDiaSubsection('dia')}
-                         className={`inline-flex items-center justify-center gap-2 h-7 px-4 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 border-0 select-none ${diaSubsection === 'dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                       >
-                         Día
-                       </button>
-                       <button
-                         onClick={() => setDiaSubsection('turno')}
-                         className={`inline-flex items-center justify-center gap-2 h-7 px-4 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 border-0 select-none ${diaSubsection === 'turno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                       >
-                         Por Turno
-                       </button>
-                     </div>
-                   </div>
+                <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                  <div className="w-2 h-2 rounded-full bg-sky-500" />
+                  <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                    Día a día - Línea {activeLinea}
+                  </h4>
+                </div>
                    <div className="p-4">
                      <div className="h-32 flex items-center justify-center text-slate-400">
                        <p className="text-[10px] font-bold uppercase tracking-widest">Sección en desarrollo</p>
