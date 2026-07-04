@@ -323,59 +323,59 @@ export default function OrdenesSapModule() {
   return (
     <div className="pb-10">
       <div className="space-y-3 mb-6 no-print">
-        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
-          <button
-            onClick={() => setActiveSection('carga-prod')}
-            className={`${tabsTriggerClass} ${activeSection === 'carga-prod' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-          >
-            <Factory className="h-3.5 w-3.5" /> CARGA PRODT
-          </button>
-          <button
-            onClick={() => setActiveSection('dia-a-dia')}
-            className={`${tabsTriggerClass} ${activeSection === 'dia-a-dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-          >
-            <Factory className="h-3.5 w-3.5" /> DÍA A DÍA
-          </button>
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+            <button
+              onClick={() => setActiveSection('carga-prod')}
+              className={`${tabsTriggerClass} ${activeSection === 'carga-prod' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              <Factory className="h-3.5 w-3.5" /> CARGA PRODT
+            </button>
+            <button
+              onClick={() => setActiveSection('dia-a-dia')}
+              className={`${tabsTriggerClass} ${activeSection === 'dia-a-dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              <Factory className="h-3.5 w-3.5" /> DÍA A DÍA
+            </button>
+          </div>
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+              >
+                <CalendarIcon className="h-3.5 w-3.5 mr-2" />
+                {selectedFecha ? format(selectedFecha, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar semana"}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="p-0 rounded-2xl" align="start">
+              <Calendar
+                mode="single"
+                selected={selectedFecha}
+                onSelect={setSelectedFecha}
+                locale={es}
+                className="rounded-md"
+              />
+            </PopoverContent>
+          </Popover>
         </div>
 
         {activeSection === 'carga-prod' && (
           <div className="flex items-center justify-between gap-3">
-            <div className="flex items-center gap-2">
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+              {lineas.map((linea) => {
+                const isActive = activeLinea === linea;
+                return (
+                  <button
+                    key={linea}
+                    onClick={() => setActiveLinea(isActive ? null : linea)}
+                    className={`${tabsTriggerClass} ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                   >
-                    <CalendarIcon className="h-3.5 w-3.5 mr-2" />
-                    {selectedFecha ? format(selectedFecha, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar semana"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="p-0 rounded-2xl" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={selectedFecha}
-                    onSelect={setSelectedFecha}
-                    locale={es}
-                    className="rounded-md"
-                  />
-                </PopoverContent>
-              </Popover>
-
-              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                {lineas.map((linea) => {
-                  const isActive = activeLinea === linea;
-                  return (
-                    <button
-                      key={linea}
-                      onClick={() => setActiveLinea(isActive ? null : linea)}
-                      className={`${tabsTriggerClass} ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                    >
-                      Línea {linea}
-                    </button>
-                  );
-                })}
-              </div>
+                    Línea {linea}
+                  </button>
+                );
+              })}
             </div>
             <Button
               size="sm"
