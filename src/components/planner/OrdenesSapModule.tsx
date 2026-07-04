@@ -28,7 +28,7 @@ const SABOR_COLORS: Record<string, string> = {
   "GLUP PONCHE": "bg-rose-200 text-rose-900",
   "GLUP CHICLE": "bg-pink-200 text-pink-900",
   "GLUP PIÑA PARCHITA": "bg-fuchsia-200 text-fuchsia-900",
-  "GLUP MANZANA ROJA": "bg-red-200 text-red-900",
+  "GLUP MANZANA ROJA": "bg-amber-400 text-amber-900",
   "JUSTY NARANJA": "bg-orange-200 text-orange-900",
   "JUSTY DURAZNO": "bg-amber-200 text-amber-900",
   "JUSTY MANDARINA": "bg-yellow-200 text-yellow-900",
