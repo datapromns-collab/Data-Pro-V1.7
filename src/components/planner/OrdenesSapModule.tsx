@@ -688,19 +688,19 @@ export default function OrdenesSapModule({
           <div className="flex items-center gap-2">
             <Button
               size="sm"
-              onClick={exportarExcel}
-              className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              Exportar Archivo
-            </Button>
-            <Button
-              size="sm"
               onClick={() => openNuevaOrden(activeLinea ?? 1)}
               className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
             >
               <Plus className="h-3.5 w-3.5" />
               Nueva Orden
+            </Button>
+            <Button
+              size="sm"
+              onClick={exportarExcel}
+              className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Exportar Archivo
             </Button>
           </div>
         </div>
