@@ -447,20 +447,27 @@ export default function OrdenesSapModule() {
                                  <div className="p-1 border-r border-slate-100 border-b border-slate-100">
                                    <NumberInput value={dia.cajas4} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas4', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
                                  </div>
-                                <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
-                                <div className="p-1 border-b border-slate-100"></div>
-                              </div>
-                               </div>
-                             </div>
-                          ))}
-                          <div className="p-2 border-t border-slate-100">
-                            <button
-                              onClick={() => agregarDia(orden.id)}
-                              className="w-full h-8 rounded-lg border border-dashed border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none"
-                            >
-                              Agregar fecha
-                            </button>
+                            <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                            <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                            <div className="p-1 border-r border-slate-100 border-b border-slate-100 font-black text-slate-900">
+                              {orden.dias.reduce((sum, d) => sum + calcularTotalDia(d), 0)}
+                            </div>
+                            <div className="p-1 border-r border-slate-100 border-b border-slate-100 font-black text-slate-900">
+                              {orden.ordenNumero}
+                            </div>
+                            <div className="p-1 border-b border-slate-100"></div>
                           </div>
+                          </div>
+                        </div>
+                      ))}
+                      <div className="p-2 border-t border-slate-100">
+                        <button
+                          onClick={() => agregarDia(orden.id)}
+                          className="w-full h-8 rounded-lg border border-dashed border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none"
+                        >
+                          Agregar fecha
+                        </button>
+                      </div>
                         </div>
                       );
                     })}
