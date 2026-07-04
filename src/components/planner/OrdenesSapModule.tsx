@@ -171,9 +171,6 @@ export function CorrelativoSelector({ activeLinea = 1, selectedFecha }: { active
   };
 
   const getFechaLinea = (useYesterday = false) => {
-    if (selectedFecha) {
-      return formatearFecha(selectedFecha);
-    }
     const hoy = new Date();
     const offset = [1, 2, 3, 4].includes(activeLinea) ? 182 : activeLinea === 5 ? 280 : activeLinea === 6 ? 119 : activeLinea === 7 ? 154 : 182;
     const fecha = new Date(hoy);
