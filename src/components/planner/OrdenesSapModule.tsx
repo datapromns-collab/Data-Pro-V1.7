@@ -712,6 +712,7 @@ export default function OrdenesSapModule({
               </button>
             </div>
           )}
+        {activeSection === 'carga-prod' && (
           <div className="flex items-center gap-2">
             <Button
               size="sm"
@@ -730,6 +731,7 @@ export default function OrdenesSapModule({
               Exportar Archivo
             </Button>
           </div>
+        )}
         </div>
       </div>
 
