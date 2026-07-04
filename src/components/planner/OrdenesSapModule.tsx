@@ -631,7 +631,7 @@ export default function OrdenesSapModule({
               return (
                 <button
                   key={linea}
-                  onClick={() => setActiveLinea(isActive ? null : linea)}
+                  onClick={() => !isActive && setActiveLinea(linea)}
                   className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                 >
                   Línea {linea}
