@@ -313,8 +313,8 @@ export default function OrdenesSapModule({
 }) {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
   const [activeSection, setActiveSection] = useState<'carga-prod' | 'dia-a-dia'>('carga-prod');
-  const [diaSubsection, setDiaSubsection] = useState<'dia' | 'turno'>('dia');
   const [internalActiveLinea, setInternalActiveLinea] = useState<number | null>(1);
+  const [turnoSubsection, setTurnoSubsection] = useState<'diurno' | 'nocturno'>('diurno');
 
   const activeLinea = externalActiveLinea ?? internalActiveLinea;
   const setActiveLinea = (linea: number | null) => {
@@ -609,7 +609,13 @@ export default function OrdenesSapModule({
     pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
     const blob = pdf.output('blob');
     const url = URL.createObjectURL(blob);
-    window.open(url, '_blank');
+    const win = window.open(url, '_blank');
+    if (win) {
+      win.focus();
+      setTimeout(() => {
+        win.print();
+      }, 300);
+    }
     setTimeout(() => URL.revokeObjectURL(url), 1000);
     pdf.save(`Ordenes semana ${weekNumber}.pdf`);
   };
@@ -682,56 +688,50 @@ export default function OrdenesSapModule({
 
         <div className="flex items-center justify-between gap-3">
           {activeSection === 'carga-prod' ? (
-            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-              {lineas.map((linea) => {
-                const isActive = activeLinea === linea;
-                return (
-                  <button
-                    key={linea}
-                    onClick={() => !isActive && setActiveLinea(linea)}
-                    className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                  >
-                    Línea {linea}
-                  </button>
-                );
-              })}
-            </div>
+            <>
+              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                {lineas.map((linea) => {
+                  const isActive = activeLinea === linea;
+                  return (
+                    <button
+                      key={linea}
+                      onClick={() => !isActive && setActiveLinea(linea)}
+                      className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                    >
+                      Línea {linea}
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  onClick={() => openNuevaOrden(activeLinea ?? 1)}
+                  className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                  Nueva Orden
+                </Button>
+                <Button
+                  size="sm"
+                  onClick={exportarPDF}
+                  className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                >
+                  <Plus className="h-3.5 w-3.5" />
+                  Exportar Archivo
+                </Button>
+              </div>
+            </>
           ) : (
             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
               <button
-                onClick={() => setDiaSubsection('dia')}
-                className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${diaSubsection === 'dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                onClick={() => setActiveSection('dia-a-dia')}
+                className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none bg-white text-slate-900 shadow-sm`}
               >
-                Día
-              </button>
-              <button
-                onClick={() => setDiaSubsection('turno')}
-                className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${diaSubsection === 'turno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-              >
-                Por Turno
+                <Factory className="h-3.5 w-3.5" /> DÍA A DÍA
               </button>
             </div>
           )}
-        {activeSection === 'carga-prod' && (
-          <div className="flex items-center gap-2">
-            <Button
-              size="sm"
-              onClick={() => openNuevaOrden(activeLinea ?? 1)}
-              className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              Nueva Orden
-            </Button>
-            <Button
-              size="sm"
-              onClick={exportarPDF}
-              className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              Exportar Archivo
-            </Button>
-          </div>
-        )}
         </div>
       </div>
 
@@ -871,21 +871,57 @@ export default function OrdenesSapModule({
                      </div>
                    </div>
                  </div>
-               ) : (
-                 <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-                  <div className="w-2 h-2 rounded-full bg-sky-500" />
-                  <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                    Día a día - Línea {activeLinea}
-                  </h4>
-                </div>
-                   <div className="p-4">
-                     <div className="h-32 flex items-center justify-center text-slate-400">
-                       <p className="text-[10px] font-bold uppercase tracking-widest">Sección en desarrollo</p>
+                ) : (
+                   <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                     <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                       <div className="w-2 h-2 rounded-full bg-sky-500" />
+                       <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                         Día a día - Línea {activeLinea}
+                       </h4>
+                       <div className="ml-auto flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                         <button
+                           onClick={() => {}}
+                           className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none bg-white text-slate-900 shadow-sm`}
+                         >
+                           Día
+                         </button>
+                         <button
+                           onClick={() => setTurnoSubsection(turnoSubsection === 'diurno' ? 'nocturno' : 'diurno')}
+                           className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none text-slate-500 hover:text-slate-700`}
+                         >
+                           Por Turno
+                         </button>
+                       </div>
+                     </div>
+                     <div className="p-4 space-y-3">
+                       <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                         <button
+                           onClick={() => setTurnoSubsection('diurno')}
+                           className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${turnoSubsection === 'diurno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                         >
+                           Diurno
+                         </button>
+                         <button
+                           onClick={() => setTurnoSubsection('nocturno')}
+                           className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${turnoSubsection === 'nocturno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                         >
+                           Nocturno
+                         </button>
+                       </div>
+
+                       {turnoSubsection === 'diurno' && (
+                         <div className="h-32 flex items-center justify-center text-slate-400">
+                           <p className="text-[10px] font-bold uppercase tracking-widest">Sección Diurno</p>
+                         </div>
+                       )}
+                       {turnoSubsection === 'nocturno' && (
+                         <div className="h-32 flex items-center justify-center text-slate-400">
+                           <p className="text-[10px] font-bold uppercase tracking-widest">Sección Nocturno</p>
+                         </div>
+                       )}
                      </div>
                    </div>
-                 </div>
-               )}
+                )}
              </div>
             )}
  
