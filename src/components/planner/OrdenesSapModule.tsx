@@ -122,13 +122,7 @@ const TURNOS_OPCIONES = [
   'única del día',
 ];
 
-export function CorrelativoSelector({ 
-  activeLinea = 1, 
-  selectedFecha,
-}: { 
-  activeLinea?: number; 
-  selectedFecha?: Date | undefined;
-}) {
+export function CorrelativoSelector({ activeLinea = 1, selectedFecha }: { activeLinea?: number; selectedFecha?: Date | undefined; }) {
   const [correlativoNumero, setCorrelativoNumero] = useState<number>(() => {
     try {
       const stored = localStorage.getItem(CORRELATIVO_KEY);
@@ -321,7 +315,17 @@ export function CorrelativoSelector({
   );
 }
 
-export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onLineaChange }: { activeLinea?: number; onLineaChange?: (linea: number) => void }) {
+export default function OrdenesSapModule({ 
+  activeLinea: externalActiveLinea, 
+  onLineaChange,
+  selectedFecha,
+  onFechaChange,
+}: { 
+  activeLinea?: number; 
+  onLineaChange?: (linea: number) => void;
+  selectedFecha?: Date | undefined;
+  onFechaChange?: (fecha: Date | undefined) => void;
+}) {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
   const [internalActiveLinea, setInternalActiveLinea] = useState<number | null>(1);
 
@@ -336,7 +340,6 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
       onLineaChange?.(next);
     }
   };
-  const [selectedFecha, setSelectedFecha] = useState<Date | undefined>(undefined);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogLinea, setDialogLinea] = useState<number | null>(null);
   const [sabor, setSabor] = useState('');
@@ -624,9 +627,6 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
 
   return (
     <div className="pb-10">
-      <div className="flex justify-end mb-4 no-print">
-        <CorrelativoSelector activeLinea={activeLinea ?? 1} selectedFecha={selectedFecha} />
-      </div>
       <div className="space-y-3 mb-6 no-print">
         <div className="flex items-center justify-between gap-3">
             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
@@ -658,7 +658,7 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
               <Calendar
                 mode="single"
                 selected={selectedFecha}
-                onSelect={setSelectedFecha}
+                onSelect={onFechaChange}
                 locale={es}
                 className="rounded-md"
               />

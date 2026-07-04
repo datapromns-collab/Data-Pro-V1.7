@@ -49,7 +49,7 @@ import { WeeklyControlReport } from '@/components/planner/WeeklyControlReport';
 import { ComplianceReport } from '@/components/planner/ComplianceReport';
 import { MonthlyComplianceReport } from '@/components/planner/MonthlyComplianceReport';
 import { RecipeEditor } from '@/components/planner/RecipeEditor';
-import OrdenesSapModule from '@/components/planner/OrdenesSapModule';
+import OrdenesSapModule, { CorrelativoSelector } from '@/components/planner/OrdenesSapModule';
 import { PackagingRecipeEditor } from '@/components/planner/PackagingRecipeEditor';
 import { RawMaterialModule } from '@/components/planner/RawMaterialModule';
 import { RawMaterialReport } from '@/components/planner/RawMaterialReport';
@@ -216,6 +216,7 @@ export default function PlannerPage() {
   const [jarabesPrintHtml, setJarabesPrintHtml] = useState('');
   const [selectedLine, setSelectedLine] = useState('1');
   const [ordenesSapActiveLinea, setOrdenesSapActiveLinea] = useState<number>(1);
+  const [selectedFechaSap, setSelectedFechaSap] = useState<Date | undefined>(undefined);
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
   const [printWorkingDate, setPrintWorkingDate] = useState<Date>(new Date());
@@ -912,6 +913,7 @@ export default function PlannerPage() {
               </div>
             </div>
             <div className="flex items-center gap-2 flex-1 justify-end">
+                {activeModule === 'ordenes-sap' && <CorrelativoSelector activeLinea={ordenesSapActiveLinea} selectedFecha={selectedFechaSap} />}
                 {activeModule === 'planning' && (
                  <>
                    <Badge variant="secondary" className="mr-2 bg-primary/10 text-primary border-primary/5 font-black text-[13px] h-8 px-3 hidden sm:flex items-center">
@@ -1491,7 +1493,7 @@ export default function PlannerPage() {
                      onPrintResumen={handlePrintResumen}
                    />
                  )}
-                  {activeModule === 'ordenes-sap' && hasAccess(user.id, 'ordenes-sap') && <OrdenesSapModule activeLinea={ordenesSapActiveLinea} onLineaChange={setOrdenesSapActiveLinea} />}
+                   {activeModule === 'ordenes-sap' && hasAccess(user.id, 'ordenes-sap') && <OrdenesSapModule activeLinea={ordenesSapActiveLinea} onLineaChange={setOrdenesSapActiveLinea} selectedFecha={selectedFechaSap} onFechaChange={setSelectedFechaSap} />}
                  {activeModule === 'permissions' && <PermisosModule />}
               </div>
             </div>
