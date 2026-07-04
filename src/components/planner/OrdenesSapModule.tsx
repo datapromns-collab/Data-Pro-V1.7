@@ -675,20 +675,37 @@ export default function OrdenesSapModule({
         </div>
 
         <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-            {lineas.map((linea) => {
-              const isActive = activeLinea === linea;
-              return (
-                <button
-                  key={linea}
-                  onClick={() => !isActive && setActiveLinea(linea)}
-                  className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                >
-                  Línea {linea}
-                </button>
-              );
-            })}
-          </div>
+          {activeSection === 'carga-prod' ? (
+            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+              {lineas.map((linea) => {
+                const isActive = activeLinea === linea;
+                return (
+                  <button
+                    key={linea}
+                    onClick={() => !isActive && setActiveLinea(linea)}
+                    className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                  >
+                    Línea {linea}
+                  </button>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+              <button
+                onClick={() => setDiaSubsection('dia')}
+                className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${diaSubsection === 'dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              >
+                Día
+              </button>
+              <button
+                onClick={() => setDiaSubsection('turno')}
+                className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${diaSubsection === 'turno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              >
+                Por Turno
+              </button>
+            </div>
+          )}
           <div className="flex items-center gap-2">
             <Button
               size="sm"
