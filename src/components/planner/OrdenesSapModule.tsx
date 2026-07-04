@@ -163,8 +163,9 @@ export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number 
   }, []);
 
   const getFechaLinea = (useYesterday = false) => {
+    const hoy = new Date();
     const offset = [1, 2, 3, 4].includes(activeLinea) ? 182 : activeLinea === 5 ? 280 : activeLinea === 6 ? 119 : activeLinea === 7 ? 154 : 182;
-    const fecha = new Date(fechaActual);
+    const fecha = new Date(hoy);
     if (useYesterday) {
       fecha.setDate(fecha.getDate() + offset - 1);
     } else {
@@ -178,7 +179,19 @@ export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number 
 
   const getFechaParaTurno = (turno: string) => {
     const turnosAyer = ['producción del día', 'restante del día'];
-    return getFechaLinea(turnosAyer.includes(turno));
+    const useYesterday = turnosAyer.includes(turno);
+    const hoy = new Date();
+    const offset = [1, 2, 3, 4].includes(activeLinea) ? 182 : activeLinea === 5 ? 280 : activeLinea === 6 ? 119 : activeLinea === 7 ? 154 : 182;
+    const fecha = new Date(hoy);
+    if (useYesterday) {
+      fecha.setDate(fecha.getDate() + offset - 1);
+    } else {
+      fecha.setDate(fecha.getDate() + offset);
+    }
+    const mes = fecha.getMonth() + 1;
+    const dia = fecha.getDate();
+    const anio = fecha.getFullYear();
+    return `${dia}-${mes}-${anio}`;
   };
 
   const getCorrelativo = () => {
