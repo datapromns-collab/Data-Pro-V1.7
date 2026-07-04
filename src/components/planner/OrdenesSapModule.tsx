@@ -13,6 +13,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { PRODUCT_LIST } from '@/lib/planner-utils';
 import { getISOWeek, format, startOfWeek, endOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
 
 const STORAGE_KEY = 'ordenes-sap-v1';
@@ -457,106 +459,29 @@ export default function OrdenesSapModule({
     }));
   };
 
-  const exportarExcel = () => {
-    const workbook = XLSX.utils.book_new();
-    const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
+  const exportarPDF = async () => {
+    const element = document.getElementById('ordenes-sap-export');
+    if (!element) return;
 
-    lineas.forEach(linea => {
-      const ordenesLinea = ordenes.filter(o => o.linea === linea);
-      const ws: any[] = [];
-
-      if (ordenesLinea.length === 0) {
-        ws.push(['', '', '', '', '']);
-        ws.push(['Sin órdenes registradas para esta línea']);
-        const worksheet = XLSX.utils.aoa_to_sheet(ws);
-        worksheet['!cols'] = [{ wch: 16 }, { wch: 14 }, { wch: 12 }, { wch: 14 }, { wch: 16 }];
-        XLSX.utils.book_append_sheet(workbook, worksheet, `Línea ${linea}`);
-        return;
-      }
-
-      ordenesLinea.forEach((orden) => {
-        ws.push([
-          { t: 's', v: `${orden.sabor} - SEMANA ${orden.semana}`, s: { font: { bold: true, sz: 10 }, fill: { fgColor: { rgb: 'EEEEEE' } }, alignment: { horizontal: 'left' } } },
-          { t: 's', v: 'ELIMINAR ORDEN', s: { font: { color: { rgb: 'DC2626' }, bold: true, sz: 10 }, alignment: { horizontal: 'right' } } },
-          { t: 's', v: '' },
-          { t: 's', v: '' },
-          { t: 's', v: '' }
-        ]);
-
-        ws.push([
-          { t: 's', v: 'FECHA', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { t: 's', v: 'TICKET', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { t: 's', v: 'CAJAS', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { t: 's', v: 'TOTAL DÍA', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { t: 's', v: 'N° ORDEN', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
-        ]);
-
-        orden.dias.forEach((dia) => {
-          const totalDia = calcularTotalDia(dia);
-          ws.push([
-            { t: 's', v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: dia.ticket1 || '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: dia.cajas1 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: totalDia, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
-          ]);
-
-          ws.push([
-            { t: 's', v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: dia.cajas2 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: totalDia, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
-          ]);
-
-          ws.push([
-            { t: 's', v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: dia.ticket2 || '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: dia.cajas3 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: totalDia, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
-          ]);
-
-          ws.push([
-            { t: 's', v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: dia.cajas4 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: totalDia, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { t: 's', v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
-          ]);
-        });
-
-        const totalOrden = orden.dias.reduce((sum, d) => sum + calcularTotalDia(d), 0);
-        ws.push([
-          { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { t: 's', v: totalOrden, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { t: 's', v: totalOrden, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { t: 's', v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
-        ]);
-
-        ws.push(['', 'AGREGAR FECHA', '', '', '', '']);
-      });
-
-      const worksheet = XLSX.utils.aoa_to_sheet(ws);
-      worksheet['!cols'] = [
-        { wch: 16 },
-        { wch: 14 },
-        { wch: 12 },
-        { wch: 14 },
-        { wch: 16 },
-      ];
-      XLSX.utils.book_append_sheet(workbook, worksheet, `Línea ${linea}`);
+    const canvas = await html2canvas(element, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: '#ffffff',
+      logging: false,
     });
 
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({
+      orientation: 'landscape',
+      unit: 'px',
+      format: [canvas.width, canvas.height],
+    });
+
+    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+
     const weekNumber = selectedFecha ? getISOWeek(selectedFecha) : (ordenes[0]?.semana || getISOWeek(new Date()));
-    const nombreArchivo = `Ordenes semana ${weekNumber}.xlsx`;
-    XLSX.writeFile(workbook, nombreArchivo);
+    const nombreArchivo = `Ordenes semana ${weekNumber}.pdf`;
+    pdf.save(nombreArchivo);
   };
 
   const eliminarDia = (ordenId: string, diaIndex: number) => {
@@ -650,7 +575,7 @@ export default function OrdenesSapModule({
             </Button>
             <Button
               size="sm"
-              onClick={exportarExcel}
+              onClick={exportarPDF}
               className="h-9 pl-4 pr-5 rounded-full bg-slate-800 text-white font-black uppercase text-[10px] tracking-widest hover:bg-slate-900 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
             >
               <Plus className="h-3.5 w-3.5" />
@@ -686,7 +611,7 @@ export default function OrdenesSapModule({
                     </div>
                   )}
 
-                  <div className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-3">
+                  <div id="ordenes-sap-export" className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-3">
                     {ordenesPorLinea.map((orden) => {
                       const colorClass = SABOR_COLORS[orden.sabor] || FALLBACK_COLOR;
                       return (
