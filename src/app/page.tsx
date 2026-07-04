@@ -911,10 +911,10 @@ export default function PlannerPage() {
                   activeModule === 'permissions' ? 'MÓDULO DE PERMISOS' : 'MÓDULO DE PLANIFICACIÓN'}
               </div>
             </div>
-            <div className="flex flex-col gap-3 flex-1">
+            <div className="flex items-center gap-2 flex-1 justify-end">
                {activeModule === 'ordenes-sap' && <CorrelativoSelector activeLinea={ordenesSapActiveLinea} />}
                {activeModule === 'planning' && (
-                 <div className="flex items-center gap-2 flex-wrap">
+                 <>
                    <Badge variant="secondary" className="mr-2 bg-primary/10 text-primary border-primary/5 font-black text-[13px] h-8 px-3 hidden sm:flex items-center">
                      Semana {weekNumber}
                    </Badge>
@@ -939,7 +939,7 @@ export default function PlannerPage() {
                      <Printer className="h-4 w-4" /> 
                      <span className="hidden sm:inline">Programa</span>
                    </Button>
-                 </div>
+                 </>
                )}
             </div>
           </header>

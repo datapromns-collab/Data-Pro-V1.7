@@ -225,46 +225,42 @@ export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number 
   }, [correlativoNumero]);
 
   return (
-    <div className="w-full">
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2">
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-            {getFechaLinea()}
-          </span>
-          <button onClick={() => navigator.clipboard.writeText(getFechaLinea())} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar fecha">
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-          </button>
-        </div>
-        <div className="flex items-center gap-2">
-          <Select
-            value={String(correlativoNumero)}
-            onValueChange={(value) => setCorrelativoNumero(Number(value))}
-          >
-            <SelectTrigger className="h-8 w-16 rounded-md border-slate-200 bg-white font-black text-[10px] text-center uppercase">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {Array.from({ length: 40 }, (_, i) => i + 1).map(num => (
-                <SelectItem key={num} value={String(num)} className="font-black text-[10px] text-center uppercase">
-                  {num}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-            {getCorrelativo()}
-          </span>
-          <button onClick={() => navigator.clipboard.writeText(getCorrelativo())} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar correlativo">
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-          </button>
-        </div>
+    <div className="flex flex-col gap-2 w-fit ml-auto">
+      <div className="flex items-center gap-2">
+        <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">
+          {getFechaLinea()}
+        </span>
+        <button onClick={() => navigator.clipboard.writeText(getFechaLinea())} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar fecha">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        </button>
+        <Select
+          value={String(correlativoNumero)}
+          onValueChange={(value) => setCorrelativoNumero(Number(value))}
+        >
+          <SelectTrigger className="h-8 w-16 rounded-md border-slate-200 bg-white font-black text-[10px] text-center uppercase">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {Array.from({ length: 40 }, (_, i) => i + 1).map(num => (
+              <SelectItem key={num} value={String(num)} className="font-black text-[10px] text-center uppercase">
+                {num}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">
+          {getCorrelativo()}
+        </span>
+        <button onClick={() => navigator.clipboard.writeText(getCorrelativo())} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar correlativo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        </button>
       </div>
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center gap-2">
         <Select
           value={turnoSeleccionado}
           onValueChange={(value) => setTurnoSeleccionado(value)}
         >
-          <SelectTrigger className="h-8 flex-1 rounded-md border-slate-200 bg-white font-black text-[10px] text-left uppercase tracking-widest">
+          <SelectTrigger className="h-8 rounded-md border-slate-200 bg-white font-black text-[10px] text-left uppercase tracking-widest">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
