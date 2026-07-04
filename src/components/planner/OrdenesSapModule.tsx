@@ -153,10 +153,18 @@ export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number 
     return TURNOS_OPCIONES[0];
   });
 
+  const [fechaActual, setFechaActual] = useState<Date>(new Date());
+
+  useEffect(() => {
+    const intervalo = setInterval(() => {
+      setFechaActual(new Date());
+    }, 60000);
+    return () => clearInterval(intervalo);
+  }, []);
+
   const getFechaLinea = (useYesterday = false) => {
-    const hoy = new Date();
     const offset = [1, 2, 3, 4].includes(activeLinea) ? 182 : activeLinea === 5 ? 280 : activeLinea === 6 ? 119 : activeLinea === 7 ? 154 : 182;
-    const fecha = new Date(hoy);
+    const fecha = new Date(fechaActual);
     if (useYesterday) {
       fecha.setDate(fecha.getDate() + offset - 1);
     } else {
