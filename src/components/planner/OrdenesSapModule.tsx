@@ -461,138 +461,92 @@ export default function OrdenesSapModule({
     const workbook = XLSX.utils.book_new();
     const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
 
-    const hexMap: Record<string, string> = {
-      'bg-slate-200': 'C0C0C0',
-      'text-slate-800': '000000',
-      'bg-emerald-200': '6EE7B7',
-      'bg-emerald-900': '064E3B',
-      'bg-violet-200': 'C4B5FD',
-      'bg-violet-900': '4C1D95',
-      'bg-amber-200': 'FDE68A',
-      'bg-amber-900': '78350F',
-      'bg-orange-200': 'FED7AA',
-      'bg-orange-900': '7C2D12',
-      'bg-sky-200': 'BAE6FD',
-      'bg-sky-900': '0C4A6E',
-      'bg-lime-200': 'D9F99D',
-      'bg-lime-900': '365314',
-      'bg-rose-200': 'FECDD3',
-      'bg-rose-900': '881337',
-      'bg-pink-200': 'FBCFE8',
-      'bg-pink-900': '831843',
-      'bg-fuchsia-200': 'E9D5FF',
-      'bg-fuchsia-900': '701A75',
-      'bg-red-200': 'FECACA',
-      'bg-red-900': '7F1D1D',
-      'bg-green-200': 'BBF7D0',
-      'bg-green-900': '14532D',
-      'bg-yellow-200': 'FEF08A',
-      'bg-yellow-900': '713F12',
-    };
-
     lineas.forEach(linea => {
       const ordenesLinea = ordenes.filter(o => o.linea === linea);
       const ws: any[] = [];
 
       if (ordenesLinea.length === 0) {
-        ws.push(['', '', '', '', '', '', '']);
+        ws.push(['', '', '', '', '']);
         ws.push(['Sin órdenes registradas para esta línea']);
         const worksheet = XLSX.utils.aoa_to_sheet(ws);
-        worksheet['!cols'] = [{ wch: 16 }, { wch: 14 }, { wch: 12 }, { wch: 12 }, { wch: 14 }, { wch: 14 }, { wch: 18 }];
+        worksheet['!cols'] = [{ wch: 16 }, { wch: 14 }, { wch: 12 }, { wch: 14 }, { wch: 16 }];
         XLSX.utils.book_append_sheet(workbook, worksheet, `Línea ${linea}`);
         return;
       }
 
-      ordenesLinea.forEach((orden, ordenIdx) => {
-        const colorClass = SABOR_COLORS[orden.sabor] || FALLBACK_COLOR;
-        const bg = hexMap[colorClass.split(' ')[0]] || 'FFFFFF';
-        const textColor = hexMap[colorClass.split(' ')[1]] || '000000';
-
+      ordenesLinea.forEach((orden) => {
         ws.push([
-          {
-            s: {
-              fill: { fgColor: { rgb: bg } },
-              font: { color: { rgb: textColor }, bold: true, sz: 10 },
-              alignment: { horizontal: 'left', vertical: 'center' },
-            },
-            v: `${orden.sabor} - SEMANA ${orden.semana}`,
-          },
-          { v: 'ELIMINAR ORDEN', s: { font: { color: { rgb: 'DC2626' }, bold: true, sz: 10 }, alignment: { horizontal: 'right' } } }
+          { t: 's', v: `${orden.sabor} - SEMANA ${orden.semana}`, s: { font: { bold: true, sz: 10 }, fill: { fgColor: { rgb: 'EEEEEE' } }, alignment: { horizontal: 'left' } } },
+          { t: 's', v: 'ELIMINAR ORDEN', s: { font: { color: { rgb: 'DC2626' }, bold: true, sz: 10 }, alignment: { horizontal: 'right' } } },
+          { t: 's', v: '' },
+          { t: 's', v: '' },
+          { t: 's', v: '' }
         ]);
 
         ws.push([
-          { v: 'FECHA', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { v: 'TICKET', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { v: 'CAJAS', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { v: '', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { v: '', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { v: 'TOTAL DÍA', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { v: 'N° ORDEN', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
+          { t: 's', v: 'FECHA', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { t: 's', v: 'TICKET', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { t: 's', v: 'CAJAS', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { t: 's', v: 'TOTAL DÍA', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { t: 's', v: 'N° ORDEN', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
         ]);
 
-        orden.dias.forEach((dia, diaIndex) => {
+        orden.dias.forEach((dia) => {
           const totalDia = calcularTotalDia(dia);
           ws.push([
-            { v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: dia.ticket1 || '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: dia.cajas1 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: totalDia, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
+            { t: 's', v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: dia.ticket1 || '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: dia.cajas1 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: totalDia, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
           ]);
 
           ws.push([
-            { v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: dia.cajas2 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: totalDia, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
+            { t: 's', v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: dia.cajas2 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: totalDia, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
           ]);
 
           ws.push([
-            { v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: dia.ticket2 || '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: dia.cajas3 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: totalDia, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
+            { t: 's', v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: dia.ticket2 || '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: dia.cajas3 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: totalDia, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
           ]);
 
           ws.push([
-            { v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: dia.cajas4 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: totalDia, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-            { v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
+            { t: 's', v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: dia.cajas4 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: totalDia, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { t: 's', v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
           ]);
         });
 
         const totalOrden = orden.dias.reduce((sum, d) => sum + calcularTotalDia(d), 0);
         ws.push([
-          { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { v: totalOrden, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { v: totalOrden, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
-          { v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
+          { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { t: 's', v: totalOrden, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { t: 's', v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { t: 's', v: totalOrden, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { t: 's', v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
         ]);
 
-        ws.push(['', 'AGREGAR FECHA', '', '', '', '', '']);
+        ws.push(['', 'AGREGAR FECHA', '', '', '', '']);
       });
 
       const worksheet = XLSX.utils.aoa_to_sheet(ws);
       worksheet['!cols'] = [
+        { wch: 16 },
         { wch: 14 },
-        { wch: 12 },
-        { wch: 10 },
-        { wch: 12 },
         { wch: 12 },
         { wch: 14 },
         { wch: 16 },
