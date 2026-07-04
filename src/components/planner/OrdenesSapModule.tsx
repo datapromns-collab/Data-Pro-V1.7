@@ -420,49 +420,129 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
     const workbook = XLSX.utils.book_new();
     const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
 
+    const hexMap: Record<string, string> = {
+      'bg-slate-200': 'C0C0C0',
+      'text-slate-800': '000000',
+      'bg-emerald-200': '6EE7B7',
+      'text-emerald-900': '064E3B',
+      'bg-violet-200': 'C4B5FD',
+      'text-violet-900': '4C1D95',
+      'bg-amber-200': 'FDE68A',
+      'text-amber-900': '78350F',
+      'bg-orange-200': 'FED7AA',
+      'text-orange-900': '7C2D12',
+      'bg-sky-200': 'BAE6FD',
+      'text-sky-900': '0C4A6E',
+      'bg-lime-200': 'D9F99D',
+      'text-lime-900': '365314',
+      'bg-rose-200': 'FECDD3',
+      'text-rose-900': '881337',
+      'bg-pink-200': 'FBCFE8',
+      'text-pink-900': '831843',
+      'bg-fuchsia-200': 'E9D5FF',
+      'text-fuchsia-900': '701A75',
+      'bg-red-200': 'FECACA',
+      'text-red-900': '7F1D1D',
+      'bg-green-200': 'BBF7D0',
+      'text-green-900': '14532D',
+      'bg-yellow-200': 'FEF08A',
+      'text-yellow-900': '713F12',
+    };
+
     lineas.forEach(linea => {
       const ordenesLinea = ordenes.filter(o => o.linea === linea);
-      const rows: any[] = [];
-      const borders: any[] = [];
+      const ws: any[] = [];
 
-      ordenesLinea.forEach(orden => {
-        orden.dias.forEach((dia) => {
+      ordenesLinea.forEach((orden, ordenIdx) => {
+        const colorClass = SABOR_COLORS[orden.sabor] || FALLBACK_COLOR;
+        const bg = hexMap[colorClass.split(' ')[0]] || 'FFFFFF';
+        const textColor = hexMap[colorClass.split(' ')[1]] || '000000';
+
+        ws.push(
+          {
+            s: {
+              fill: { fgColor: { rgb: bg } },
+              font: { color: { rgb: textColor }, bold: true, sz: 10 },
+              alignment: { horizontal: 'left', vertical: 'center' },
+            },
+            v: `${orden.sabor} - SEMANA ${orden.semana}`,
+          },
+          { v: 'ELIMINAR ORDEN', s: { font: { color: { rgb: 'DC2626' }, bold: true, sz: 10 }, alignment: { horizontal: 'right' } } }
+        );
+
+        ws.push({ v: 'FECHA', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
+        ws.push({ v: 'TICKET', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
+        ws.push({ v: 'CAJAS', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
+        ws.push({ v: 'TOTAL DÍA', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
+        ws.push({ v: 'N° ORDEN', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
+
+        orden.dias.forEach((dia, diaIndex) => {
           const totalDia = calcularTotalDia(dia);
-          rows.push(
-            formatDate(dia.fechaInicio),
-            dia.ticket1 || '',
-            dia.cajas1 || 0,
-            '',
-            '',
-            totalDia,
-            orden.ordenNumero || ''
+          ws.push(
+            { v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: dia.ticket1 || '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: dia.cajas1 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: totalDia, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
           );
-          borders.push(['fecha', 'ticket', 'cajas', 'empty', 'empty', 'total', 'orden']);
+
+          ws.push(
+            { v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: dia.cajas2 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: totalDia, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
+          );
+
+          ws.push(
+            { v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: dia.ticket2 || '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: dia.cajas3 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: totalDia, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
+          );
+
+          ws.push(
+            { v: formatDate(dia.fechaInicio), s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: dia.cajas4 || 0, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: totalDia, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+            { v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
+          );
         });
+
+        const totalOrden = orden.dias.reduce((sum, d) => sum + calcularTotalDia(d), 0);
+        ws.push(
+          { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { v: totalOrden, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { v: '', s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { v: totalOrden, s: { font: { bold: true }, border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } },
+          { v: orden.ordenNumero, s: { border: { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } }
+        );
+
+        ws.push({ v: '' });
+        ws.push({ v: 'AGREGAR FECHA', s: { font: { bold: true, sz: 9 }, border: { style: 'dashed' } } });
       });
 
-      const ws = XLSX.utils.aoa_to_sheet([['Fecha', 'Ticket', 'Cajas', '', '', 'Total día', 'N° Orden'], ...rows.map(r => [r[0], r[1], r[2], '', '', r[5], r[6]])]);
-
-      ws['!cols'] = [
+      const worksheet = XLSX.utils.aoa_to_sheet(ws);
+      worksheet['!cols'] = [
         { wch: 14 },
         { wch: 12 },
         { wch: 10 },
-        { wch: 4 },
-        { wch: 4 },
         { wch: 12 },
         { wch: 16 },
       ];
-
-      ws['!borders'] = {
-        top: { style: 'medium', color: { rgb: '000000' } },
-        bottom: { style: 'thin', color: { rgb: '000000' } },
-        left: { style: 'thin', color: { rgb: '000000' } },
-        right: { style: 'thin', color: { rgb: '000000' } },
-        vertical: { style: 'thin', color: { rgb: '000000' } },
-        horizontal: { style: 'thin', color: { rgb: '000000' } },
-      };
-
-      XLSX.utils.book_append_sheet(workbook, ws, `Línea ${linea}`);
+      XLSX.utils.book_append_sheet(workbook, worksheet, `Línea ${linea}`);
     });
 
     const fechaActual = new Date();
