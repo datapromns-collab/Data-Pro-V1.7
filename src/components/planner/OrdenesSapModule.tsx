@@ -107,7 +107,7 @@ export default function OrdenesSapModule() {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
   const [activeSection, setActiveSection] = useState<'carga-prod' | 'dia-a-dia'>('carga-prod');
   const [activeLinea, setActiveLinea] = useState<number | null>(1);
-  const [selectedSemana, setSelectedSemana] = useState<number | null>(null);
+  const [selectedFecha, setSelectedFecha] = useState<string>('');
   const [diaADiaValues, setDiaADiaValues] = useState<Record<string, Record<number, number>>>({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogLinea, setDialogLinea] = useState<number | null>(null);
@@ -143,9 +143,12 @@ export default function OrdenesSapModule() {
   const ordenesPorLinea = useMemo(() => {
     if (!activeLinea) return [];
     const base = ordenes.filter(o => o.linea === activeLinea);
-    if (!selectedSemana) return base;
-    return base.filter(o => o.semana === selectedSemana);
-  }, [ordenes, activeLinea, selectedSemana]);
+    if (!selectedFecha) return base;
+    const fecha = new Date(selectedFecha);
+    if (isNaN(fecha.getTime())) return base;
+    const semanaSeleccionada = getISOWeek(fecha);
+    return base.filter(o => o.semana === semanaSeleccionada);
+  }, [ordenes, activeLinea, selectedFecha]);
 
   const semanasDisponibles = useMemo(() => {
     const set = new Set<number>();
@@ -302,22 +305,12 @@ export default function OrdenesSapModule() {
         {activeSection === 'carga-prod' && (
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <Select
-                value={selectedSemana ? String(selectedSemana) : 'all'}
-                onValueChange={(value) => setSelectedSemana(value === 'all' ? null : Number(value))}
-              >
-                <SelectTrigger className="h-9 rounded-full border-slate-200 bg-white font-black text-[10px] uppercase tracking-widest px-3 w-fit">
-                  <SelectValue placeholder="Semana" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all" className="font-black text-[10px] uppercase tracking-widest">Todas las semanas</SelectItem>
-                  {semanasDisponibles.map(semana => (
-                    <SelectItem key={semana} value={String(semana)} className="font-black text-[10px] uppercase tracking-widest">
-                      Semana {semana}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Input
+                type="date"
+                value={selectedFecha}
+                onChange={(e) => setSelectedFecha(e.target.value)}
+                className="h-9 rounded-full border-slate-200 bg-white font-black text-[10px] uppercase tracking-widest px-3 w-fit"
+              />
 
               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
                 {lineas.map((linea) => {
