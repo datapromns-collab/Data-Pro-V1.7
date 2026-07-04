@@ -276,7 +276,7 @@ export function CorrelativoSelector({ activeLinea = 1, selectedFecha }: { active
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
         </button>
       </div>
-      <div className="flex items-center gap-2 relative">
+      <div className="flex items-center gap-2">
         <Select
           value={turnoSeleccionado}
           onValueChange={(value) => setTurnoSeleccionado(value)}
@@ -288,11 +288,7 @@ export function CorrelativoSelector({ activeLinea = 1, selectedFecha }: { active
             {TURNOS_OPCIONES.map(opcion => {
               const label = `${opcion} ${getFechaParaTurno(opcion)} L${activeLinea}`;
               return (
-                <SelectItem
-                  key={opcion}
-                  value={opcion}
-                  className="font-black text-[10px] uppercase tracking-widest flex items-center justify-between gap-2"
-                >
+                <SelectItem key={opcion} value={opcion} className="font-black text-[10px] uppercase tracking-widest flex items-center justify-between gap-2">
                   <span className="truncate">{label}</span>
                   <button
                     type="button"
@@ -310,6 +306,9 @@ export function CorrelativoSelector({ activeLinea = 1, selectedFecha }: { active
             })}
           </SelectContent>
         </Select>
+        <button onClick={() => navigator.clipboard.writeText(`${turnoSeleccionado} ${getFechaParaTurno(turnoSeleccionado)} L${activeLinea}`)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar turno">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        </button>
       </div>
     </div>
   );
