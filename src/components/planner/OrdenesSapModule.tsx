@@ -108,7 +108,7 @@ interface OrdenSap {
 
 const CORRELATIVO_KEY = 'correlativo-sap-v1';
 
-export function CorrelativoSelector() {
+export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number }) {
   const [correlativoNumero, setCorrelativoNumero] = useState<number>(() => {
     try {
       const stored = localStorage.getItem(CORRELATIVO_KEY);
@@ -123,6 +123,17 @@ export function CorrelativoSelector() {
     }
     return 1;
   });
+
+  const getFechaLinea = () => {
+    const hoy = new Date();
+    const offset = [1, 2, 3, 4].includes(activeLinea) ? 182 : activeLinea === 5 ? 280 : activeLinea === 6 ? 119 : activeLinea === 7 ? 154 : 182;
+    const fecha = new Date(hoy);
+    fecha.setDate(fecha.getDate() + offset);
+    const mes = fecha.getMonth() + 1;
+    const dia = fecha.getDate();
+    const anio = fecha.getFullYear();
+    return `${mes}/${dia}/${anio}`;
+  };
 
   const getCorrelativo = () => {
     try {
@@ -157,6 +168,12 @@ export function CorrelativoSelector() {
 
   return (
     <div className="flex items-center gap-2">
+      <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">
+        {getFechaLinea()}
+      </span>
+      <button onClick={() => navigator.clipboard.writeText(getFechaLinea())} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar fecha">
+        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+      </button>
       <Select
         value={String(correlativoNumero)}
         onValueChange={(value) => setCorrelativoNumero(Number(value))}
@@ -182,10 +199,22 @@ export function CorrelativoSelector() {
   );
 }
 
-export default function OrdenesSapModule() {
+export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onLineaChange }: { activeLinea?: number; onLineaChange?: (linea: number) => void }) {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
   const [activeSection, setActiveSection] = useState<'carga-prod' | 'dia-a-dia'>('carga-prod');
-  const [activeLinea, setActiveLinea] = useState<number | null>(1);
+  const [internalActiveLinea, setInternalActiveLinea] = useState<number | null>(1);
+
+  const activeLinea = externalActiveLinea ?? internalActiveLinea;
+  const setActiveLinea = (linea: number | null) => {
+    if (linea === null) {
+      setInternalActiveLinea(null);
+      onLineaChange?.(0);
+    } else {
+      const next = linea as number;
+      setInternalActiveLinea(next);
+      onLineaChange?.(next);
+    }
+  };
   const [selectedFecha, setSelectedFecha] = useState<Date | undefined>(() => {
     try {
       const stored = localStorage.getItem('semana-fecha-sap-v1');

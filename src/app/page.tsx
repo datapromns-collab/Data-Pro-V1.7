@@ -215,6 +215,7 @@ export default function PlannerPage() {
   const [jarabesPrintMode, setJarabesPrintMode] = useState('');
   const [jarabesPrintHtml, setJarabesPrintHtml] = useState('');
   const [selectedLine, setSelectedLine] = useState('1');
+  const [ordenesSapActiveLinea, setOrdenesSapActiveLinea] = useState<number>(1);
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
   const [printWorkingDate, setPrintWorkingDate] = useState<Date>(new Date());
@@ -911,7 +912,7 @@ export default function PlannerPage() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              {activeModule === 'ordenes-sap' && <CorrelativoSelector />}
+               {activeModule === 'ordenes-sap' && <CorrelativoSelector activeLinea={ordenesSapActiveLinea} />}
               {activeModule === 'planning' && (
                 <>
                   <Badge variant="secondary" className="mr-2 bg-primary/10 text-primary border-primary/5 font-black text-[13px] h-8 px-3 hidden sm:flex items-center">
@@ -1491,7 +1492,7 @@ export default function PlannerPage() {
                      onPrintResumen={handlePrintResumen}
                    />
                  )}
-                 {activeModule === 'ordenes-sap' && hasAccess(user.id, 'ordenes-sap') && <OrdenesSapModule />}
+                  {activeModule === 'ordenes-sap' && hasAccess(user.id, 'ordenes-sap') && <OrdenesSapModule activeLinea={ordenesSapActiveLinea} onLineaChange={setOrdenesSapActiveLinea} />}
                  {activeModule === 'permissions' && <PermisosModule />}
               </div>
             </div>
