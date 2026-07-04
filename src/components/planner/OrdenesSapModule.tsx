@@ -190,14 +190,11 @@ export function CorrelativoSelector({ activeLinea = 1, selectedFecha }: { active
       return formatearFecha(selectedFecha);
     }
     const turnosAyer = ['producción del día', 'restante del día'];
-    const useYesterday = turnosAyer.includes(turno);
+    const useAyer = turnosAyer.includes(turno);
     const hoy = new Date();
-    const offset = [1, 2, 3, 4].includes(activeLinea) ? 182 : activeLinea === 5 ? 280 : activeLinea === 6 ? 119 : activeLinea === 7 ? 154 : 182;
     const fecha = new Date(hoy);
-    if (useYesterday) {
-      fecha.setDate(fecha.getDate() + offset - 1);
-    } else {
-      fecha.setDate(fecha.getDate() + offset);
+    if (useAyer) {
+      fecha.setDate(fecha.getDate() - 1);
     }
     const mes = fecha.getMonth() + 1;
     const dia = fecha.getDate();
