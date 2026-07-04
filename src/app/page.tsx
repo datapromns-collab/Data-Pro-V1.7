@@ -886,33 +886,33 @@ export default function PlannerPage() {
 
         <main className="flex-1 flex flex-col h-screen overflow-hidden no-print">
           <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 flex-1">
               <div className={cn(
-                "px-3 py-1 rounded-lg font-black text-[10px] uppercase tracking-[0.2em]",
-                activeModule === 'management' ? "bg-[#A67B5B]/10 text-[#A67B5B]" : 
-                activeModule === 'recipes' ? "bg-emerald-100 text-emerald-700" : 
-                activeModule === 'raw-materials' ? "bg-amber-100 text-amber-700" : 
-                activeModule === 'jarabes' ? "bg-blue-100 text-blue-700" :
-                activeModule === 'planta' ? "bg-slate-100 text-slate-700" :
-                 activeModule === 'logistica' ? "bg-orange-100 text-orange-700" :
-                 activeModule === 'ventas' ? "bg-indigo-100 text-indigo-700" :
-                 activeModule === 'purchasing' ? "bg-blue-100 text-blue-700" :
-                 activeModule === 'permissions' ? "bg-violet-100 text-violet-700" :
-                 activeModule === 'ordenes-sap' ? "bg-sky-100 text-sky-700" : "bg-emerald-50 text-emerald-600"
+                "rounded-lg font-black text-[10px] uppercase tracking-[0.2em] whitespace-nowrap",
+                activeModule === 'management' ? "px-3 py-1 bg-[#A67B5B]/10 text-[#A67B5B]" :
+                activeModule === 'recipes' ? "px-3 py-1 bg-emerald-100 text-emerald-700" :
+                activeModule === 'raw-materials' ? "px-3 py-1 bg-amber-100 text-amber-700" :
+                activeModule === 'jarabes' ? "px-3 py-1 bg-blue-100 text-blue-700" :
+                activeModule === 'planta' ? "px-3 py-1 bg-slate-100 text-slate-700" :
+                 activeModule === 'logistica' ? "px-3 py-1 bg-orange-100 text-orange-700" :
+                 activeModule === 'ventas' ? "px-3 py-1 bg-indigo-100 text-indigo-700" :
+                 activeModule === 'purchasing' ? "px-3 py-1 bg-blue-100 text-blue-700" :
+                 activeModule === 'permissions' ? "px-3 py-1 bg-violet-100 text-violet-700" :
+                 activeModule === 'ordenes-sap' ? "px-8 py-2 flex-1 bg-sky-100 text-sky-700" : "px-3 py-1 bg-emerald-50 text-emerald-600"
               )}>
-                {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' : 
-                 activeModule === 'recipes' ? 'MÓDULO DE RECETAS' : 
-                 activeModule === 'raw-materials' ? 'MÓDULO DE MATERIA PRIMA' : 
+                {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' :
+                 activeModule === 'recipes' ? 'MÓDULO DE RECETAS' :
+                 activeModule === 'raw-materials' ? 'MÓDULO DE MATERIA PRIMA' :
                  activeModule === 'jarabes' ? 'MÓDULO DE JARABES' :
                  activeModule === 'planta' ? 'MÓDULO DE PLANTA' :
                  activeModule === 'logistica' ? 'MÓDULO DE LOGÍSTICA' :
-                  activeModule === 'ventas' ? 'MÓDULO DE VENTAS' :
-                  activeModule === 'purchasing' ? 'MÓDULO DE COMPRAS' :
-                  activeModule === 'ordenes-sap' ? 'MÓDULO DE ORDENES SAP' :
-                  activeModule === 'permissions' ? 'MÓDULO DE PERMISOS' : 'MÓDULO DE PLANIFICACIÓN'}
+                 activeModule === 'ventas' ? 'MÓDULO DE VENTAS' :
+                 activeModule === 'purchasing' ? 'MÓDULO DE COMPRAS' :
+                 activeModule === 'ordenes-sap' ? 'MÓDULO DE ORDENES SAP' :
+                 activeModule === 'permissions' ? 'MÓDULO DE PERMISOS' : 'MÓDULO DE PLANIFICACIÓN'}
               </div>
             </div>
-            <div className="flex items-center gap-2 flex-1 justify-end">
+            <div className="flex items-center gap-2 justify-end">
                 {activeModule === 'ordenes-sap' && <CorrelativoSelector activeLinea={ordenesSapActiveLinea} selectedFecha={selectedFechaSap} />}
                 {activeModule === 'planning' && (
                  <>
