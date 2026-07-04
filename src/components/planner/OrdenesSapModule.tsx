@@ -414,48 +414,46 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
     lineas.forEach(linea => {
       const ordenesLinea = ordenes.filter(o => o.linea === linea);
       const rows: any[] = [];
+      const borders: any[] = [];
 
       ordenesLinea.forEach(orden => {
-        orden.dias.forEach((dia, diaIndex) => {
-          rows.push({
-            'Sabor': orden.sabor,
-            'Semana': orden.semana,
-            'Línea': orden.linea,
-            'N° Orden': orden.ordenNumero,
-            'Fecha': formatDate(dia.fechaInicio),
-            'Ticket 1': dia.ticket1,
-            'Cajas 1': dia.cajas1,
-            'Ticket 2': dia.ticket2,
-            'Cajas 2': dia.cajas2,
-            'Ticket 3': dia.ticket3,
-            'Cajas 3': dia.cajas3,
-            'Ticket 4': dia.ticket4,
-            'Cajas 4': dia.cajas4,
-            'Total Día': calcularTotalDia(dia),
-          });
-        });
-
-        const totalOrden = orden.dias.reduce((sum, d) => sum + calcularTotalDia(d), 0);
-        rows.push({
-          'Sabor': orden.sabor,
-          'Semana': orden.semana,
-          'Línea': orden.linea,
-          'N° Orden': orden.ordenNumero,
-          'Fecha': 'TOTAL ORDEN',
-          'Ticket 1': '',
-          'Cajas 1': '',
-          'Ticket 2': '',
-          'Cajas 2': '',
-          'Ticket 3': '',
-          'Cajas 3': '',
-          'Ticket 4': '',
-          'Cajas 4': '',
-          'Total Día': totalOrden,
+        orden.dias.forEach((dia) => {
+          const totalDia = calcularTotalDia(dia);
+          rows.push(
+            formatDate(dia.fechaInicio),
+            dia.ticket1 || '',
+            dia.cajas1 || 0,
+            '',
+            '',
+            totalDia,
+            orden.ordenNumero || ''
+          );
+          borders.push(['fecha', 'ticket', 'cajas', 'empty', 'empty', 'total', 'orden']);
         });
       });
 
-      const worksheet = XLSX.utils.json_to_sheet(rows);
-      XLSX.utils.book_append_sheet(workbook, worksheet, `Línea ${linea}`);
+      const ws = XLSX.utils.aoa_to_sheet([['Fecha', 'Ticket', 'Cajas', '', '', 'Total día', 'N° Orden'], ...rows.map(r => [r[0], r[1], r[2], '', '', r[5], r[6]])]);
+
+      ws['!cols'] = [
+        { wch: 14 },
+        { wch: 12 },
+        { wch: 10 },
+        { wch: 4 },
+        { wch: 4 },
+        { wch: 12 },
+        { wch: 16 },
+      ];
+
+      ws['!borders'] = {
+        top: { style: 'medium', color: { rgb: '000000' } },
+        bottom: { style: 'thin', color: { rgb: '000000' } },
+        left: { style: 'thin', color: { rgb: '000000' } },
+        right: { style: 'thin', color: { rgb: '000000' } },
+        vertical: { style: 'thin', color: { rgb: '000000' } },
+        horizontal: { style: 'thin', color: { rgb: '000000' } },
+      };
+
+      XLSX.utils.book_append_sheet(workbook, ws, `Línea ${linea}`);
     });
 
     const fechaActual = new Date();
