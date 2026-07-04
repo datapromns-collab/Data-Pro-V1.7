@@ -188,9 +188,6 @@ export function CorrelativoSelector({ activeLinea = 1, selectedFecha }: { active
   };
 
   const getFechaParaTurno = (turno: string) => {
-    if (selectedFecha) {
-      return formatearFecha(selectedFecha);
-    }
     const turnosAyer = ['producción del día', 'restante del día'];
     const useAyer = turnosAyer.includes(turno);
     const hoy = new Date();
@@ -215,14 +212,6 @@ export function CorrelativoSelector({ activeLinea = 1, selectedFecha }: { active
       }
     } catch (e) {
       console.error('Error parseando correlativo SAP desde localStorage', e);
-    }
-    if (selectedFecha) {
-      const dia = String(selectedFecha.getDate()).padStart(2, '0');
-      const mes = String(selectedFecha.getMonth() + 1).padStart(2, '0');
-      const anio = selectedFecha.getFullYear();
-      const fecha = `${dia}/${mes}/${anio}`;
-      localStorage.setItem(CORRELATIVO_KEY, JSON.stringify({ numero: correlativoNumero, fecha }));
-      return `L-${fecha}_${correlativoNumero}`;
     }
     const hoy = new Date();
     const dia = String(hoy.getDate()).padStart(2, '0');
