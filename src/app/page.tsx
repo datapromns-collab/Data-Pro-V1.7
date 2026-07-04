@@ -911,36 +911,36 @@ export default function PlannerPage() {
                   activeModule === 'permissions' ? 'MÓDULO DE PERMISOS' : 'MÓDULO DE PLANIFICACIÓN'}
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-1">
                {activeModule === 'ordenes-sap' && <CorrelativoSelector activeLinea={ordenesSapActiveLinea} />}
-              {activeModule === 'planning' && (
-                <>
-                  <Badge variant="secondary" className="mr-2 bg-primary/10 text-primary border-primary/5 font-black text-[13px] h-8 px-3 hidden sm:flex items-center">
-                    Semana {weekNumber}
-                  </Badge>
-                  <Badge variant="outline" className="mr-2 bg-primary/5 text-primary border-primary/20 font-black uppercase text-[10px] h-8 px-3 hidden sm:flex items-center">
-                    LÍNEA {selectedLine}
-                  </Badge>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={handlePrintSummary}
-                    className="gap-2 font-bold text-slate-600 hover:text-primary active:scale-100 active:transform-none transition-none"
-                  >
-                    <LayoutDashboard className="h-4 w-4" /> 
-                    <span className="hidden sm:inline">Resumen</span>
-                  </Button>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    onClick={handlePrintPlan}
-                    className="gap-2 font-bold text-slate-600 hover:text-primary active:scale-100 active:transform-none transition-none"
-                  >
-                    <Printer className="h-4 w-4" /> 
-                    <span className="hidden sm:inline">Programa</span>
-                  </Button>
-                </>
-              )}
+               {activeModule === 'planning' && (
+                 <>
+                   <Badge variant="secondary" className="mr-2 bg-primary/10 text-primary border-primary/5 font-black text-[13px] h-8 px-3 hidden sm:flex items-center">
+                     Semana {weekNumber}
+                   </Badge>
+                   <Badge variant="outline" className="mr-2 bg-primary/5 text-primary border-primary/20 font-black uppercase text-[10px] h-8 px-3 hidden sm:flex items-center">
+                     LÍNEA {selectedLine}
+                   </Badge>
+                   <Button 
+                     variant="ghost" 
+                     size="sm" 
+                     onClick={handlePrintSummary}
+                     className="gap-2 font-bold text-slate-600 hover:text-primary active:scale-100 active:transform-none transition-none"
+                   >
+                     <LayoutDashboard className="h-4 w-4" /> 
+                     <span className="hidden sm:inline">Resumen</span>
+                   </Button>
+                   <Button 
+                     variant="ghost" 
+                     size="sm" 
+                     onClick={handlePrintPlan}
+                     className="gap-2 font-bold text-slate-600 hover:text-primary active:scale-100 active:transform-none transition-none"
+                   >
+                     <Printer className="h-4 w-4" /> 
+                     <span className="hidden sm:inline">Programa</span>
+                   </Button>
+                 </>
+               )}
             </div>
           </header>
 
