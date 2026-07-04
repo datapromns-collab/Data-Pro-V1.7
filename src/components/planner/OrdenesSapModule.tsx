@@ -473,26 +473,35 @@ export default function OrdenesSapModule({
       'bg-orange-200': 'FED7AA',
       'text-orange-900': '7C2D12',
       'bg-sky-200': 'BAE6FD',
-      'text-sky-900': '0C4A6E',
+      'bg-sky-900': '0C4A6E',
       'bg-lime-200': 'D9F99D',
-      'text-lime-900': '365314',
+      'bg-lime-900': '365314',
       'bg-rose-200': 'FECDD3',
-      'text-rose-900': '881337',
+      'bg-rose-900': '881337',
       'bg-pink-200': 'FBCFE8',
-      'text-pink-900': '831843',
+      'bg-pink-900': '831843',
       'bg-fuchsia-200': 'E9D5FF',
-      'text-fuchsia-900': '701A75',
+      'bg-fuchsia-900': '701A75',
       'bg-red-200': 'FECACA',
-      'text-red-900': '7F1D1D',
+      'bg-red-900': '7F1D1D',
       'bg-green-200': 'BBF7D0',
-      'text-green-900': '14532D',
+      'bg-green-900': '14532D',
       'bg-yellow-200': 'FEF08A',
-      'text-yellow-900': '713F12',
+      'bg-yellow-900': '713F12',
     };
 
     lineas.forEach(linea => {
       const ordenesLinea = ordenes.filter(o => o.linea === linea);
       const ws: any[] = [];
+
+      if (ordenesLinea.length === 0) {
+        ws.push(['', '', '', '', '', '', '']);
+        ws.push(['Sin órdenes registradas para esta línea']);
+        const worksheet = XLSX.utils.aoa_to_sheet(ws);
+        worksheet['!cols'] = [{ wch: 16 }, { wch: 14 }, { wch: 12 }, { wch: 12 }, { wch: 14 }, { wch: 14 }, { wch: 18 }];
+        XLSX.utils.book_append_sheet(workbook, worksheet, `Línea ${linea}`);
+        return;
+      }
 
       ordenesLinea.forEach((orden, ordenIdx) => {
         const colorClass = SABOR_COLORS[orden.sabor] || FALLBACK_COLOR;
@@ -514,6 +523,8 @@ export default function OrdenesSapModule({
         ws.push({ v: 'FECHA', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
         ws.push({ v: 'TICKET', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
         ws.push({ v: 'CAJAS', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
+        ws.push({ v: '', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
+        ws.push({ v: '', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
         ws.push({ v: 'TOTAL DÍA', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
         ws.push({ v: 'N° ORDEN', s: { font: { bold: true, sz: 9 }, border: { top: { style: 'medium' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } } } });
 
@@ -581,17 +592,15 @@ export default function OrdenesSapModule({
         { wch: 12 },
         { wch: 10 },
         { wch: 12 },
+        { wch: 12 },
+        { wch: 14 },
         { wch: 16 },
       ];
       XLSX.utils.book_append_sheet(workbook, worksheet, `Línea ${linea}`);
     });
 
-    const fechaReferencia = selectedFecha || new Date();
-    const dia = String(fechaReferencia.getDate()).padStart(2, '0');
-    const mes = String(fechaReferencia.getMonth() + 1).padStart(2, '0');
-    const anio = fechaReferencia.getFullYear();
-    const nombreArchivo = `OrdenesSAP_${dia}-${mes}-${anio}.xlsx`;
-
+    const weekNumber = selectedFecha ? getISOWeek(selectedFecha) : (ordenes[0]?.semana || getISOWeek(new Date()));
+    const nombreArchivo = `Ordenes semana ${weekNumber}.xlsx`;
     XLSX.writeFile(workbook, nombreArchivo);
   };
 
