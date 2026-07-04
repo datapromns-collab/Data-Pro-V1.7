@@ -39,6 +39,51 @@ const SABOR_COLORS: Record<string, string> = {
 
 const FALLBACK_COLOR = "bg-gray-200 text-gray-900";
 
+const NumberInput = ({ value, onChange, onBlur, ...props }: any) => {
+  const [tempValue, setTempValue] = useState(String(value ?? 0));
+
+  useEffect(() => {
+    setTempValue(String(value ?? 0));
+  }, [value]);
+
+  const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (tempValue === '0') {
+      setTempValue('');
+      e.target.select();
+    }
+  };
+
+  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+    if (tempValue === '' || tempValue === '0') {
+      const newValue = 0;
+      setTempValue('0');
+      onChange?.(newValue);
+    }
+    onBlur?.(e);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setTempValue(val);
+    if (val === '' || val === '0') {
+      onChange?.(0);
+    } else {
+      onChange?.(Number(val));
+    }
+  };
+
+  return (
+    <Input
+      type="number"
+      value={tempValue}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      onChange={handleChange}
+      {...props}
+    />
+  );
+};
+
 interface OrdenSap {
   id: string;
   linea: number;
@@ -371,9 +416,9 @@ export default function OrdenesSapModule() {
                                 <div className="p-1 border-r border-slate-100 border-b border-slate-100">
                                   <Input value={dia.ticket1} onChange={(e) => updateDia(orden.id, diaIndex, 'ticket1', e.target.value)} placeholder="Ticket" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
                                 </div>
-                                <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                  <Input type="number" value={dia.cajas1} onChange={(e) => updateDia(orden.id, diaIndex, 'cajas1', Number(e.target.value))} placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
-                                </div>
+                                 <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                   <NumberInput value={dia.cajas1} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas1', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                 </div>
                                 <div className="p-1 border-r border-slate-100 border-b border-slate-100">
                                   <Input value={calcularTotalDia(dia)} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-1.5 w-full" />
                                 </div>
@@ -388,9 +433,9 @@ export default function OrdenesSapModule() {
 
                                 <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
                                 <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
-                                <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                  <Input type="number" value={dia.cajas2} onChange={(e) => updateDia(orden.id, diaIndex, 'cajas2', Number(e.target.value))} placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
-                                </div>
+                                 <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                   <NumberInput value={dia.cajas2} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas2', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                 </div>
                                 <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
                                 <div className="p-1 border-b border-slate-100"></div>
 
@@ -398,17 +443,17 @@ export default function OrdenesSapModule() {
                                 <div className="p-1 border-r border-slate-100 border-b border-slate-100">
                                   <Input value={dia.ticket2} onChange={(e) => updateDia(orden.id, diaIndex, 'ticket2', e.target.value)} placeholder="Ticket" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
                                 </div>
-                                <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                  <Input type="number" value={dia.cajas3} onChange={(e) => updateDia(orden.id, diaIndex, 'cajas3', Number(e.target.value))} placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
-                                </div>
+                                 <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                   <NumberInput value={dia.cajas3} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas3', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                 </div>
                                 <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
                                 <div className="p-1 border-b border-slate-100"></div>
 
                                 <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
                                 <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
-                                <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                  <Input type="number" value={dia.cajas4} onChange={(e) => updateDia(orden.id, diaIndex, 'cajas4', Number(e.target.value))} placeholder="0" className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
-                                </div>
+                                 <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                   <NumberInput value={dia.cajas4} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas4', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                 </div>
                                 <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
                                 <div className="p-1 border-b border-slate-100"></div>
                               </div>
@@ -464,10 +509,9 @@ export default function OrdenesSapModule() {
                         <td className="border border-slate-200 px-2 py-1 font-bold text-slate-700 whitespace-nowrap">{sabor}</td>
                         {Array.from({ length: 7 }, (_, i) => i + 1).map(linea => (
                           <td key={linea} className="border border-slate-200 px-1 py-1">
-                            <Input
-                              type="number"
+                            <NumberInput
                               value={getDiaADiaValue(sabor, linea)}
-                              onChange={(e) => updateDiaADia(sabor, linea, Number(e.target.value))}
+                              onChange={(value: number) => updateDiaADia(sabor, linea, value)}
                               className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-white px-1.5 w-full"
                             />
                           </td>
