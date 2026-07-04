@@ -107,6 +107,19 @@ interface OrdenSap {
 }
 
 const CORRELATIVO_KEY = 'correlativo-sap-v1';
+const TURNOS_KEY = 'turnos-sap-v1';
+
+const TURNOS_OPCIONES = [
+  'producción del día',
+  'restante del día',
+  'primera del día',
+  'segunda del día',
+  'tercera del día',
+  'cuarta del día',
+  'quinta del día',
+  'última del día',
+  'única del día',
+];
 
 export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number }) {
   const [correlativoNumero, setCorrelativoNumero] = useState<number>(() => {
@@ -122,6 +135,21 @@ export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number 
       console.error('Error cargando correlativo SAP desde localStorage', e);
     }
     return 1;
+  });
+
+  const [turnoSeleccionado, setTurnoSeleccionado] = useState<string>(() => {
+    try {
+      const stored = localStorage.getItem(TURNOS_KEY);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (typeof parsed.turno === 'string') {
+          return parsed.turno;
+        }
+      }
+    } catch (e) {
+      console.error('Error cargando turno SAP desde localStorage', e);
+    }
+    return TURNOS_OPCIONES[0];
   });
 
   const getFechaLinea = () => {
@@ -156,6 +184,18 @@ export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number 
     return `L-${fecha}_${correlativoNumero}`;
   };
 
+  const getTurnoConLinea = () => {
+    return `${turnoSeleccionado} L${activeLinea}`;
+  };
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(TURNOS_KEY, JSON.stringify({ turno: turnoSeleccionado }));
+    } catch (e) {
+      console.error('Error guardando turno SAP en localStorage', e);
+    }
+  }, [turnoSeleccionado]);
+
   useEffect(() => {
     try {
       const stored = localStorage.getItem(CORRELATIVO_KEY);
@@ -167,34 +207,56 @@ export function CorrelativoSelector({ activeLinea = 1 }: { activeLinea?: number 
   }, [correlativoNumero]);
 
   return (
-    <div className="flex items-center gap-2">
-      <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-        {getFechaLinea()}
-      </span>
-      <button onClick={() => navigator.clipboard.writeText(getFechaLinea())} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar fecha">
-        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-      </button>
-      <Select
-        value={String(correlativoNumero)}
-        onValueChange={(value) => setCorrelativoNumero(Number(value))}
-      >
-        <SelectTrigger className="h-8 w-16 rounded-md border-slate-200 bg-white font-black text-[10px] text-center uppercase">
-          <SelectValue />
-        </SelectTrigger>
-        <SelectContent>
-          {Array.from({ length: 40 }, (_, i) => i + 1).map(num => (
-            <SelectItem key={num} value={String(num)} className="font-black text-[10px] text-center uppercase">
-              {num}
-            </SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">
-        {getCorrelativo()}
-      </span>
-      <button onClick={() => navigator.clipboard.writeText(getCorrelativo())} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar correlativo">
-        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-      </button>
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center gap-2">
+        <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">
+          {getFechaLinea()}
+        </span>
+        <button onClick={() => navigator.clipboard.writeText(getFechaLinea())} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar fecha">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        </button>
+        <Select
+          value={String(correlativoNumero)}
+          onValueChange={(value) => setCorrelativoNumero(Number(value))}
+        >
+          <SelectTrigger className="h-8 w-16 rounded-md border-slate-200 bg-white font-black text-[10px] text-center uppercase">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {Array.from({ length: 40 }, (_, i) => i + 1).map(num => (
+              <SelectItem key={num} value={String(num)} className="font-black text-[10px] text-center uppercase">
+                {num}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">
+          {getCorrelativo()}
+        </span>
+        <button onClick={() => navigator.clipboard.writeText(getCorrelativo())} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar correlativo">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        </button>
+      </div>
+      <div className="flex items-center gap-2">
+        <Select
+          value={turnoSeleccionado}
+          onValueChange={(value) => setTurnoSeleccionado(value)}
+        >
+          <SelectTrigger className="h-8 w-[200px] rounded-md border-slate-200 bg-white font-black text-[10px] text-left uppercase tracking-widest">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {TURNOS_OPCIONES.map(opcion => (
+              <SelectItem key={opcion} value={opcion} className="font-black text-[10px] uppercase tracking-widest">
+                {opcion} L{activeLinea}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <button onClick={() => navigator.clipboard.writeText(getTurnoConLinea())} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar turno">
+          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+        </button>
+      </div>
     </div>
   );
 }
@@ -215,20 +277,7 @@ export default function OrdenesSapModule({ activeLinea: externalActiveLinea, onL
       onLineaChange?.(next);
     }
   };
-  const [selectedFecha, setSelectedFecha] = useState<Date | undefined>(() => {
-    try {
-      const stored = localStorage.getItem('semana-fecha-sap-v1');
-      if (stored) {
-        const parsed = new Date(stored);
-        if (!isNaN(parsed.getTime())) {
-          return parsed;
-        }
-      }
-    } catch (e) {
-      console.error('Error cargando fecha SAP desde localStorage', e);
-    }
-    return undefined;
-  });
+  const [selectedFecha, setSelectedFecha] = useState<Date | undefined>(undefined);
   const [diaADiaValues, setDiaADiaValues] = useState<Record<string, Record<number, number>>>({});
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogLinea, setDialogLinea] = useState<number | null>(null);
