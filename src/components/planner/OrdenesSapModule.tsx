@@ -1,6 +1,6 @@
 "use client";
 
-import { Factory, Plus, CalendarIcon } from 'lucide-react';
+import { Factory, Plus, CalendarIcon, FileDown } from 'lucide-react';
 import { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -557,139 +557,90 @@ export default function OrdenesSapModule({
     window.print();
   };
 
-  const exportarPDFdia = () => {
-    const doc = new jsPDF({
-      orientation: 'landscape',
-      unit: 'mm',
-      format: 'a4',
-    });
-
-    const pageWidth = doc.internal.pageSize.getWidth();
-    const pageHeight = doc.internal.pageSize.getHeight();
-    const marginX = 6;
-    const marginY = 8;
-    const usableWidth = pageWidth - marginX * 2;
-
-    const logoSize = 20;
-    doc.addImage('/logo-izquierdo.png', 'PNG', marginX, marginY, logoSize, logoSize);
-    doc.addImage('/logo-derecho.png', 'PNG', pageWidth - marginX - logoSize, marginY, logoSize, logoSize);
-
-    const titleY = marginY + logoSize / 2;
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(12);
-    doc.setTextColor(15, 23, 42);
-    doc.text('Produccion diaria Por sabor y por linea', pageWidth / 2, titleY, { align: 'center' });
+  const exportarPDFdia = async () => {
+    const tabla = document.getElementById('tabla-dia-a-dia-export');
+    if (!tabla) {
+      console.warn('No se encontró la tabla para exportar');
+      return;
+    }
 
     const fecha = fechaDiaADia || new Date();
     const diaNombre = format(fecha, 'eeee', { locale: es }).toUpperCase();
     const fechaStr = format(fecha, 'd/M/yyyy');
     const mes = format(fecha, 'MMMM', { locale: es }).toUpperCase();
 
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(10);
-    doc.text(`Dia ${diaNombre}`, pageWidth / 2, titleY + 5, { align: 'center' });
-    doc.text(`Fecha ${fechaStr}`, pageWidth / 2, titleY + 10, { align: 'center' });
-    doc.text(`Mes ${mes}`, pageWidth / 2, titleY + 15, { align: 'center' });
+    const wrapper = document.createElement('div');
+    wrapper.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:800px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
+    wrapper.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
+        <div style="flex:1;">
+          <p style="font-size:8px;color:#a67b5b;font-weight:bold;text-transform:uppercase;">Confidencial - Planta</p>
+        </div>
+        <div style="flex:1;display:flex;justify-content:center;">
+          <img src="/logo-derecho.png" alt="Logo" style="max-height:40px;object-fit:contain;" />
+        </div>
+        <div style="flex:1;text-align:right;">
+          <p style="font-weight:bold;text-transform:uppercase;font-size:10px;">Producción diaria Por sabor y por linea</p>
+          <p style="font-size:10px;color:#64748b;">Día ${diaNombre}</p>
+          <p style="font-size:10px;color:#64748b;">Fecha ${fechaStr}</p>
+          <p style="font-size:10px;color:#64748b;">Mes ${mes}</p>
+        </div>
+      </div>
+      <div id="pdf-content">${tabla.outerHTML}</div>
+      <div style="font-size:8px;color:#94a3b8;text-align:right;margin-top:8px;">
+        DATA PRO - SISTEMA DE GESTIÓN - MULTINACIONAL DE SABORES | Generado el ${new Date().toLocaleString('es')}
+      </div>
+    `;
+    document.body.appendChild(wrapper);
 
-    const tableStartY = titleY + 20;
-    const lineas = [1, 2, 3, 4, 5, 6, 7];
-    const headers = ['SABOR', ...lineas.map((n) => `Linea ${n}`), 'Totales'];
-    const colWidths = [70, 20, 20, 20, 20, 20, 20, 20, usableWidth - 70 - 20 * 7];
-    const tableWidth = usableWidth;
-    const startX = marginX;
-    const headerHeight = 7;
-    const rowHeight = 5;
-
-    doc.setFillColor(234, 88, 12);
-    doc.rect(startX, tableStartY, tableWidth, headerHeight, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(9);
-    doc.setTextColor(255, 255, 255);
-    let x = startX;
-    headers.forEach((h, i) => {
-      doc.text(h, x + colWidths[i] / 2, tableStartY + 5, { align: 'center' });
-      x += colWidths[i];
-    });
-
-    const tablaPDF: Record<string, Record<number, number>> = {};
-    PRODUCT_LIST.forEach(sabor => {
-      tablaPDF[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
-    });
-
-    if (fechaDiaADia) {
-      const fechaStr = format(fechaDiaADia, 'yyyy-MM-dd');
-      (ordenes || []).forEach(orden => {
-        (orden.dias || []).forEach(dia => {
-          if (dia.fechaInicio !== fechaStr) return;
-          const total = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
-          tablaPDF[orden.sabor][orden.linea] = (tablaPDF[orden.sabor][orden.linea] || 0) + total;
+    try {
+      const tablaClone = wrapper.querySelector('table') as HTMLTableElement;
+      if (tablaClone) {
+        const ths = tablaClone.querySelectorAll('th');
+        ths.forEach(th => {
+          th.style.cssText = 'background:#ea4e0c;color:#fff;font-weight:bold;padding:4px 6px;text-align:center;border:1px solid #cbd5e1;';
         });
-      });
-    }
-
-    const rows = PRODUCT_LIST.map((sabor) => {
-      const valores = lineas.map((linea) => tablaPDF[sabor]?.[linea] || 0);
-      const total = valores.reduce((a, b) => a + b, 0);
-      return { valores, total, row: [sabor, ...valores, total] };
-    });
-
-    const totales = lineas.map((linea) =>
-      PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaPDF[sabor]?.[linea] || 0), 0)
-    );
-    const totalGeneral = totales.reduce((a, b) => a + b, 0);
-    const totalRow = ['Totales', ...totales, totalGeneral];
-
-    let y = tableStartY + headerHeight;
-    doc.setFont('helvetica', 'normal');
-    doc.setFontSize(9);
-    doc.setTextColor(15, 23, 42);
-
-    rows.forEach((item, idx) => {
-      if (y + rowHeight > pageHeight - 40) {
-        doc.addPage();
-        y = marginY;
+        const tds = tablaClone.querySelectorAll('td');
+        tds.forEach(td => {
+          td.style.cssText = 'padding:3px 5px;border:1px solid #cbd5e1;text-align:center;';
+        });
+        const stickyTds = tablaClone.querySelectorAll('td[style*="sticky"], td.sticky');
+        stickyTds.forEach(td => {
+          (td as HTMLTableCellElement).style.position = 'sticky';
+          (td as HTMLTableCellElement).style.left = '0';
+          (td as HTMLTableCellElement).style.background = '#f8fafc';
+          (td as HTMLTableCellElement).style.zIndex = '10';
+        });
+        const evenTrs = tablaClone.querySelectorAll('tr.even\\:bg-slate-50\\/60, tr:nth-child(even)');
+        evenTrs.forEach(tr => {
+          (tr as HTMLTableRowElement).style.background = '#f8fafc';
+        });
       }
 
-      doc.setFillColor(idx % 2 === 0 ? 255 : 249, idx % 2 === 0 ? 255 : 250, idx % 2 === 0 ? 255 : 252);
-      doc.rect(startX, y, tableWidth, rowHeight, 'F');
+      const canvas = await html2canvas(wrapper, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+      const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+      const pageW = pdf.internal.pageSize.getWidth();
+      const pageH = pdf.internal.pageSize.getHeight();
+      const imgW = pageW - 12;
+      const imgH = (canvas.height * imgW) / canvas.width;
 
-      x = startX;
-      doc.setDrawColor(203, 213, 225);
-      doc.setLineWidth(0.2);
-      item.row.forEach((val, i) => {
-        const text = typeof val === 'number' ? String(val) : val;
-        doc.text(text, x + colWidths[i] / 2, y + 3.8, { align: 'center' });
-        doc.line(startX + colWidths[i], y, startX + colWidths[i], y + rowHeight);
-        x += colWidths[i];
-      });
-      doc.line(startX, y, startX + tableWidth, y);
-      doc.line(startX, y + rowHeight, startX + tableWidth, y + rowHeight);
-      y += rowHeight;
-    });
+      let addedHeight = 0;
+      let remainingH = imgH;
+      let firstPage = true;
+      while (remainingH > 0) {
+        if (!firstPage) pdf.addPage();
+        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 6, 8 - addedHeight, imgW, imgH);
+        addedHeight += pageH - 16;
+        remainingH -= pageH - 16;
+        firstPage = false;
+      }
 
-    const totalRowY = y;
-    doc.setFillColor(234, 88, 12);
-    doc.rect(startX, totalRowY, tableWidth, headerHeight, 'F');
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(9);
-    doc.setTextColor(255, 255, 255);
-    x = startX;
-    totalRow.forEach((val, i) => {
-      doc.text(String(val), x + colWidths[i] / 2, totalRowY + 5, { align: 'center' });
-      doc.line(startX + colWidths[i], totalRowY, startX + colWidths[i], totalRowY + headerHeight);
-      x += colWidths[i];
-    });
-    doc.line(startX, totalRowY, startX + tableWidth, totalRowY);
-    doc.line(startX, totalRowY + headerHeight, startX + tableWidth, totalRowY + headerHeight);
-
-    const firmaY = totalRowY + headerHeight + 8;
-    try {
-      doc.addImage('/firma.png', 'PNG', pageWidth - 50, firmaY, 40, 20);
-    } catch (e) {
-      console.warn('No se pudo cargar la firma', e);
+      pdf.save(`produccion-diaria-${format(fecha, 'yyyy-MM-dd')}.pdf`);
+    } catch (error) {
+      console.error('Error generando PDF:', error);
+    } finally {
+      document.body.removeChild(wrapper);
     }
-
-    doc.save(`produccion-diaria-${format(fecha, 'yyyy-MM-dd')}.pdf`);
   };
 
   const eliminarDia = (ordenId: string, diaIndex: number) => {
@@ -996,14 +947,14 @@ export default function OrdenesSapModule({
                           {fechaDiaADia ? format(fechaDiaADia, "eeee d/M/yyyy", { locale: es }) : "Día a día - Línea " + activeLinea}
                         </h4>
                       </div>
-                      <Button
-                        size="sm"
-                        onClick={() => {}}
-                        className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
-                      >
-                        <Plus className="h-3 w-3" />
-                        Exportar PDF
-                      </Button>
+<Button
+                         size="sm"
+                         onClick={exportarPDFdia}
+                         className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                       >
+                         <FileDown className="h-3 w-3" />
+                         Exportar PDF
+                       </Button>
                     </div>
                     <div className="p-4">
                       <div id="tabla-dia-a-dia-export" className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
