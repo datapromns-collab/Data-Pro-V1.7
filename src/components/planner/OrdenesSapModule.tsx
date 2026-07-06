@@ -850,8 +850,8 @@ const exportarPDFdia = async () => {
                   Día
                 </button>
                 <button
-                  onClick={() => setActiveSubsection('turno')}
-                  className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSubsection === 'turno' || activeSubsection === 'diurno' || activeSubsection === 'nocturno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                  onClick={() => setActiveSubsection('diurno')}
+                  className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSubsection === 'diurno' || activeSubsection === 'nocturno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                 >
                   Por Turno
                 </button>
