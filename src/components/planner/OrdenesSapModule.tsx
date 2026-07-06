@@ -566,11 +566,9 @@ const exportarPDFdia = async () => {
 
     const lineas = [1, 2, 3, 4, 5, 6, 7];
     const headers = ['SABOR', ...lineas.map((n) => `Línea ${n}`), 'Totales'];
-    const colWidths = [120, 28, 28, 28, 28, 28, 28, 28, 36];
-    const startX = 6;
-    const startY = 38;
-    const headerHeight = 8;
-    const rowHeight = 6;
+    const colWidths = [90, 22, 22, 22, 22, 22, 22, 22, 31];
+    const headerHeight = 7;
+    const rowHeight = 5.5;
 
     const tablaPDF: Record<string, Record<number, number>> = {};
     PRODUCT_LIST.forEach(sabor => {
@@ -603,6 +601,9 @@ const exportarPDFdia = async () => {
     const marginX = 6;
     const marginY = 8;
     const logoSize = 18;
+    const tableWidth = colWidths.reduce((a, b) => a + b, 0);
+    const startX = (pageWidth - tableWidth) / 2;
+    const startY = 38;
 
     try {
       pdf.addImage('/logo-izquierdo.png', 'PNG', marginX, marginY, logoSize, logoSize);
@@ -624,7 +625,6 @@ const exportarPDFdia = async () => {
     pdf.text(`Mes ${mes}`, pageWidth / 2, titleY + 16, { align: 'center' });
 
     let y = startY;
-    const tableWidth = colWidths.reduce((a, b) => a + b, 0);
     pdf.setFillColor(234, 88, 12);
     pdf.rect(startX, y, tableWidth, headerHeight, 'F');
     pdf.setFont('helvetica', 'bold');
