@@ -313,8 +313,8 @@ export default function OrdenesSapModule({
 }) {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
   const [activeSection, setActiveSection] = useState<'carga-prod' | 'dia-a-dia'>('carga-prod');
+  const [activeSubsection, setActiveSubsection] = useState<any>(null);
   const [internalActiveLinea, setInternalActiveLinea] = useState<number | null>(1);
-  const [turnoSubsection, setTurnoSubsection] = useState<'diurno' | 'nocturno'>('diurno');
 
   const activeLinea = externalActiveLinea ?? internalActiveLinea;
   const setActiveLinea = (linea: number | null) => {
@@ -725,14 +725,37 @@ export default function OrdenesSapModule({
           ) : (
             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
               <button
-                onClick={() => setActiveSection('dia-a-dia')}
-                className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none bg-white text-slate-900 shadow-sm`}
+                onClick={() => setActiveSubsection('dia')}
+                className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSubsection === 'dia' || activeSubsection === null ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
               >
-                <Factory className="h-3.5 w-3.5" /> DÍA A DÍA
+                Día
+              </button>
+              <button
+                onClick={() => setActiveSubsection('turno')}
+                className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSubsection === 'turno' || activeSubsection === 'diurno' || activeSubsection === 'nocturno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              >
+                Por Turno
               </button>
             </div>
           )}
         </div>
+
+        {activeSubsection === 'turno' && (
+          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
+            <button
+              onClick={() => setActiveSubsection('diurno')}
+              className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSubsection === 'diurno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              Diurno
+            </button>
+            <button
+              onClick={() => setActiveSubsection('nocturno')}
+              className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSubsection === 'nocturno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+            >
+              Nocturno
+            </button>
+          </div>
+        )}
       </div>
 
        <div>
@@ -744,185 +767,177 @@ export default function OrdenesSapModule({
            </div>
          )}
 
-         {activeLinea && (
-             <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
-               {activeSection === 'carga-prod' ? (
-                 <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                   <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-                     <div className="w-2 h-2 rounded-full bg-sky-500" />
-                     <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                       Línea {activeLinea}
-                     </h4>
-                   </div>
-                   <div className="p-4">
-                     {ordenesPorLinea.length === 0 && (
-                       <div className="h-32 flex items-center justify-center text-slate-400">
-                         <p className="text-[10px] font-bold uppercase tracking-widest">Sin órdenes registradas para esta línea</p>
-                       </div>
-                     )}
+          {activeLinea && (
+              <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
+                {activeSection === 'carga-prod' ? (
+                  <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                    <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                      <div className="w-2 h-2 rounded-full bg-sky-500" />
+                      <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                        Línea {activeLinea}
+                      </h4>
+                    </div>
+                    <div className="p-4">
+                      {ordenesPorLinea.length === 0 && (
+                        <div className="h-32 flex items-center justify-center text-slate-400">
+                          <p className="text-[10px] font-bold uppercase tracking-widest">Sin órdenes registradas para esta línea</p>
+                        </div>
+                      )}
 
-                     <div id="ordenes-sap-export" className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-3">
-                       {ordenesPorLinea.map((orden) => {
-                         const colorClass = SABOR_COLORS[orden.sabor] || FALLBACK_COLOR;
-                         return (
-                           <div key={orden.id} className="border border-slate-200 rounded-xl bg-white overflow-hidden">
-                             <div className={`px-3 py-1.5 border-b border-slate-200 flex items-center justify-between ${colorClass}`}>
-                               <p className="text-[10px] font-black uppercase tracking-widest truncate">
-                                 {orden.sabor} - SEMANA {orden.semana}
-                               </p>
-                               <button
-                                 onClick={() => eliminarOrden(orden.id)}
-                                 className="text-[9px] font-black uppercase tracking-widest text-red-600 hover:text-red-800 transition-none"
-                               >
-                                 Eliminar orden
-                               </button>
-                             </div>
-                             {orden.dias.map((dia, diaIndex) => (
-                               <div key={diaIndex}>
-                                 <div className="flex items-center justify-between px-3 py-1 bg-slate-50 border-b border-slate-100">
-                                   <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
-                                     {formatDate(dia.fechaInicio)}
-                                   </span>
-                                   <button
-                                     onClick={() => eliminarDia(orden.id, diaIndex)}
-                                     className="text-[9px] font-black uppercase tracking-widest text-red-600 hover:text-red-800 transition-none"
-                                   >
-                                     Eliminar fecha
-                                   </button>
-                                 </div>
-                                 <div className="border-b border-slate-200">
-                                 <div className="grid grid-cols-[80px_96px_1fr_80px_112px] gap-0">
-                                   <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Fecha</div>
-                                   <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Ticket</div>
-                                   <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Cajas</div>
-                                   <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Total día</div>
-                                   <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">N° Orden</div>
+                      <div id="ordenes-sap-export" className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-3">
+                        {ordenesPorLinea.map((orden) => {
+                          const colorClass = SABOR_COLORS[orden.sabor] || FALLBACK_COLOR;
+                          return (
+                            <div key={orden.id} className="border border-slate-200 rounded-xl bg-white overflow-hidden">
+                              <div className={`px-3 py-1.5 border-b border-slate-200 flex items-center justify-between ${colorClass}`}>
+                                <p className="text-[10px] font-black uppercase tracking-widest truncate">
+                                  {orden.sabor} - SEMANA {orden.semana}
+                                </p>
+                                <button
+                                  onClick={() => eliminarOrden(orden.id)}
+                                  className="text-[9px] font-black uppercase tracking-widest text-red-600 hover:text-red-800 transition-none"
+                                >
+                                  Eliminar orden
+                                </button>
+                              </div>
+                              {orden.dias.map((dia, diaIndex) => (
+                                <div key={diaIndex}>
+                                  <div className="flex items-center justify-between px-3 py-1 bg-slate-50 border-b border-slate-100">
+                                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
+                                      {formatDate(dia.fechaInicio)}
+                                    </span>
+                                    <button
+                                      onClick={() => eliminarDia(orden.id, diaIndex)}
+                                      className="text-[9px] font-black uppercase tracking-widest text-red-600 hover:text-red-800 transition-none"
+                                    >
+                                      Eliminar fecha
+                                    </button>
+                                  </div>
+                                  <div className="border-b border-slate-200">
+                                  <div className="grid grid-cols-[80px_96px_1fr_80px_112px] gap-0">
+                                    <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Fecha</div>
+                                    <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Ticket</div>
+                                    <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Cajas</div>
+                                    <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Total día</div>
+                                    <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">N° Orden</div>
 
-                                   <div className="px-1 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-100 border-b border-slate-100 whitespace-nowrap">
-                                     {formatDate(dia.fechaInicio)}
-                                   </div>
-                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                     <Input value={dia.ticket1} onChange={(e) => updateDia(orden.id, diaIndex, 'ticket1', e.target.value)} placeholder="Ticket" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
-                                   </div>
+                                    <div className="px-1 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-100 border-b border-slate-100 whitespace-nowrap">
+                                      {formatDate(dia.fechaInicio)}
+                                    </div>
                                     <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                       <NumberInput value={dia.cajas1} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas1', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
-                                     </div>
-                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                     <Input value={calcularTotalDia(dia)} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-1.5 w-full" />
-                                   </div>
-                                   <div className="p-1 border-b border-slate-100">
-                                     <div className="flex items-center gap-1">
-                                       <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-1.5 flex-1 min-w-0" />
-                                       <button onClick={() => navigator.clipboard.writeText(orden.ordenNumero)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar número de orden">
-                                         <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                                       </button>
-                                     </div>
-                                   </div>
-
-                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
-                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                                      <Input value={dia.ticket1} onChange={(e) => updateDia(orden.id, diaIndex, 'ticket1', e.target.value)} placeholder="Ticket" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                    </div>
+                                     <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                        <NumberInput value={dia.cajas1} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas1', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                      </div>
                                     <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                       <NumberInput value={dia.cajas2} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas2', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
-                                     </div>
-                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
-                                   <div className="p-1 border-b border-slate-100"></div>
+                                      <Input value={calcularTotalDia(dia)} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-900 px-1.5 w-full" />
+                                    </div>
+                                    <div className="p-1 border-b border-slate-100">
+                                      <div className="flex items-center gap-1">
+                                        <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-1.5 flex-1 min-w-0" />
+                                        <button onClick={() => navigator.clipboard.writeText(orden.ordenNumero)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar número de orden">
+                                          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                        </button>
+                                      </div>
+                                    </div>
 
-                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
-                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                     <Input value={dia.ticket2} onChange={(e) => updateDia(orden.id, diaIndex, 'ticket2', e.target.value)} placeholder="Ticket" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
-                                   </div>
-                                    <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                       <NumberInput value={dia.cajas3} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas3', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
-                                     </div>
-                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
-                                   <div className="p-1 border-b border-slate-100"></div>
+                                    <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                                    <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                                     <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                        <NumberInput value={dia.cajas2} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas2', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                      </div>
+                                    <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                                    <div className="p-1 border-b border-slate-100"></div>
 
-                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
-                                   <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                                    <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
                                     <div className="p-1 border-r border-slate-100 border-b border-slate-100">
-                                       <NumberInput value={dia.cajas4} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas4', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
-                                     </div>
-                               <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
-                               <div className="p-1 border-b border-slate-100"></div>
-                             </div>
-                             </div>
-                           </div>
-                         ))}
-                         <div className="grid grid-cols-[80px_96px_1fr_80px_112px] gap-0">
-                           <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
-                           <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
-                           <div className="p-1 border-r border-slate-100 border-b border-slate-100 font-black text-slate-900">
-                             {orden.dias.reduce((sum, d) => sum + calcularTotalDia(d), 0)}
-                           </div>
-                           <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
-                           <div className="p-1 border-b border-slate-100"></div>
-                         </div>
-                         <div className="p-2 border-t border-slate-100">
-                           <button
-                             onClick={() => agregarDia(orden.id)}
-                             className="w-full h-8 rounded-lg border border-dashed border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none"
-                           >
-                             Agregar fecha
-                           </button>
-                         </div>
-                           </div>
-                         );
-                       })}
-                     </div>
-                   </div>
-                 </div>
+                                      <Input value={dia.ticket2} onChange={(e) => updateDia(orden.id, diaIndex, 'ticket2', e.target.value)} placeholder="Ticket" className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                    </div>
+                                     <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                        <NumberInput value={dia.cajas3} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas3', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                      </div>
+                                    <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                                    <div className="p-1 border-b border-slate-100"></div>
+
+                                    <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                                    <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                                     <div className="p-1 border-r border-slate-100 border-b border-slate-100">
+                                        <NumberInput value={dia.cajas4} onChange={(value: number) => updateDia(orden.id, diaIndex, 'cajas4', value)} className="h-7 text-center text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 px-1.5 w-full" />
+                                      </div>
+                                <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                                <div className="p-1 border-b border-slate-100"></div>
+                              </div>
+                              </div>
+                            </div>
+                          ))}
+                          <div className="grid grid-cols-[80px_96px_1fr_80px_112px] gap-0">
+                            <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                            <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                            <div className="p-1 border-r border-slate-100 border-b border-slate-100 font-black text-slate-900">
+                              {orden.dias.reduce((sum, d) => sum + calcularTotalDia(d), 0)}
+                            </div>
+                            <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
+                            <div className="p-1 border-b border-slate-100"></div>
+                          </div>
+                          <div className="p-2 border-t border-slate-100">
+                            <button
+                              onClick={() => agregarDia(orden.id)}
+                              className="w-full h-8 rounded-lg border border-dashed border-slate-200 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none"
+                            >
+                              Agregar fecha
+                            </button>
+                          </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                ) : activeSubsection === null || activeSubsection === 'dia' ? (
+                  <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                    <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                      <div className="w-2 h-2 rounded-full bg-sky-500" />
+                      <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                        Día a día - Línea {activeLinea}
+                      </h4>
+                    </div>
+                    <div className="p-4">
+                      <div className="h-32 flex items-center justify-center text-slate-400">
+                        <p className="text-[10px] font-bold uppercase tracking-widest">Sección en desarrollo</p>
+                      </div>
+                    </div>
+                  </div>
+                ) : activeSubsection === 'turno' ? (
+                  <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                    <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                      <div className="w-2 h-2 rounded-full bg-sky-500" />
+                      <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                        Por Turno - Línea {activeLinea}
+                      </h4>
+                    </div>
+                    <div className="p-4">
+                      <div className="h-32 flex items-center justify-center text-slate-400">
+                        <p className="text-[10px] font-bold uppercase tracking-widest">Sección en desarrollo</p>
+                      </div>
+                    </div>
+                  </div>
                 ) : (
-                   <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                     <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-                       <div className="w-2 h-2 rounded-full bg-sky-500" />
-                       <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                         Día a día - Línea {activeLinea}
-                       </h4>
-                       <div className="ml-auto flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                         <button
-                           onClick={() => {}}
-                           className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none bg-white text-slate-900 shadow-sm`}
-                         >
-                           Día
-                         </button>
-                         <button
-                           onClick={() => setTurnoSubsection(turnoSubsection === 'diurno' ? 'nocturno' : 'diurno')}
-                           className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none text-slate-500 hover:text-slate-700`}
-                         >
-                           Por Turno
-                         </button>
-                       </div>
-                     </div>
-                     <div className="p-4 space-y-3">
-                       <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                         <button
-                           onClick={() => setTurnoSubsection('diurno')}
-                           className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${turnoSubsection === 'diurno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                         >
-                           Diurno
-                         </button>
-                         <button
-                           onClick={() => setTurnoSubsection('nocturno')}
-                           className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${turnoSubsection === 'nocturno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                         >
-                           Nocturno
-                         </button>
-                       </div>
-
-                       {turnoSubsection === 'diurno' && (
-                         <div className="h-32 flex items-center justify-center text-slate-400">
-                           <p className="text-[10px] font-bold uppercase tracking-widest">Sección Diurno</p>
-                         </div>
-                       )}
-                       {turnoSubsection === 'nocturno' && (
-                         <div className="h-32 flex items-center justify-center text-slate-400">
-                           <p className="text-[10px] font-bold uppercase tracking-widest">Sección Nocturno</p>
-                         </div>
-                       )}
-                     </div>
-                   </div>
+                  <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                    <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                      <div className="w-2 h-2 rounded-full bg-sky-500" />
+                      <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                        {activeSubsection === 'diurno' ? 'Diurno' : 'Nocturno'} - Línea {activeLinea}
+                      </h4>
+                    </div>
+                    <div className="p-4">
+                      <div className="h-32 flex items-center justify-center text-slate-400">
+                        <p className="text-[10px] font-bold uppercase tracking-widest">Sección en desarrollo</p>
+                      </div>
+                    </div>
+                  </div>
                 )}
-             </div>
+              </div>
             )}
  
 
