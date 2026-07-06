@@ -11,7 +11,7 @@ import { Table, TableBody, TableHead, TableHeader, TableRow, TableCell } from '@
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { PRODUCT_LIST } from '@/lib/planner-utils';
-import { getISOWeek, format, startOfWeek, endOfWeek } from 'date-fns';
+import { getISOWeek, format, startOfWeek, endOfWeek, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
@@ -402,7 +402,7 @@ export default function OrdenesSapModule({
     ordenes.forEach(o => {
       const fecha = o.dias[0]?.fechaInicio;
       if (fecha) {
-        const d = new Date(fecha);
+        const d = new Date(fecha + 'T12:00:00');
         if (!isNaN(d.getTime())) {
           set.add(getISOWeek(d));
         }
@@ -421,7 +421,7 @@ export default function OrdenesSapModule({
 
   const handleCreate = () => {
     if (!sabor || !ordenNumero || !fechaInicio) return;
-    const fecha = new Date(fechaInicio);
+    const fecha = new Date(fechaInicio + 'T12:00:00');
     const semana = getISOWeek(fecha);
     const nuevaOrden: OrdenSap = {
       id: `${activeLinea}-${Date.now()}`,
@@ -460,10 +460,10 @@ export default function OrdenesSapModule({
   const agregarDia = (ordenId: string) => {
     setOrdenes(prev => prev.map(o => {
       if (o.id !== ordenId) return o;
-      const lastFecha = o.dias.length > 0 ? new Date(o.dias[o.dias.length - 1].fechaInicio) : new Date();
-      const nextFecha = new Date(lastFecha);
-      nextFecha.setDate(nextFecha.getDate() + 1);
-      const nextFechaStr = nextFecha.toISOString().split('T')[0];
+      const lastFechaStr = o.dias.length > 0 ? o.dias[o.dias.length - 1].fechaInicio : format(new Date(), 'yyyy-MM-dd');
+      const lastFecha = new Date(lastFechaStr + 'T12:00:00');
+      const nextFecha = addDays(lastFecha, 1);
+      const nextFechaStr = format(nextFecha, 'yyyy-MM-dd');
       return {
         ...o,
         dias: [...o.dias, {
