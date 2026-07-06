@@ -526,6 +526,141 @@ export default function OrdenesSapModule({
     window.print();
   };
 
+  const exportarPDFdia = () => {
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4',
+    });
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const marginX = 6;
+    const marginY = 8;
+    const usableWidth = pageWidth - marginX * 2;
+
+    const logoSize = 20;
+    doc.addImage('/logo-izquierdo.png', 'PNG', marginX, marginY, logoSize, logoSize);
+    doc.addImage('/logo-derecho.png', 'PNG', pageWidth - marginX - logoSize, marginY, logoSize, logoSize);
+
+    const titleY = marginY + logoSize / 2;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.setTextColor(15, 23, 42);
+    doc.text('Produccion diaria Por sabor y por linea', pageWidth / 2, titleY, { align: 'center' });
+
+    const fecha = fechaDiaADia || new Date();
+    const diaNombre = format(fecha, 'eeee', { locale: es }).toUpperCase();
+    const fechaStr = format(fecha, 'd/M/yyyy');
+    const mes = format(fecha, 'MMMM', { locale: es }).toUpperCase();
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text(`Dia ${diaNombre}`, pageWidth / 2, titleY + 5, { align: 'center' });
+    doc.text(`Fecha ${fechaStr}`, pageWidth / 2, titleY + 10, { align: 'center' });
+    doc.text(`Mes ${mes}`, pageWidth / 2, titleY + 15, { align: 'center' });
+
+    const tableStartY = titleY + 20;
+    const lineas = [1, 2, 3, 4, 5, 6, 7];
+    const headers = ['SABOR', ...lineas.map((n) => `Linea ${n}`), 'Totales'];
+    const colWidths = [70, 20, 20, 20, 20, 20, 20, 20, usableWidth - 70 - 20 * 7];
+    const tableWidth = usableWidth;
+    const startX = marginX;
+    const headerHeight = 7;
+    const rowHeight = 5;
+
+    doc.setFillColor(234, 88, 12);
+    doc.rect(startX, tableStartY, tableWidth, headerHeight, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(255, 255, 255);
+    let x = startX;
+    headers.forEach((h, i) => {
+      doc.text(h, x + colWidths[i] / 2, tableStartY + 5, { align: 'center' });
+      x += colWidths[i];
+    });
+
+    const tablaPDF: Record<string, Record<number, number>> = {};
+    PRODUCT_LIST.forEach(sabor => {
+      tablaPDF[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    });
+
+    if (fechaDiaADia) {
+      const fechaStr = format(fechaDiaADia, 'yyyy-MM-dd');
+      (ordenes || []).forEach(orden => {
+        (orden.dias || []).forEach(dia => {
+          if (dia.fechaInicio !== fechaStr) return;
+          const total = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
+          tablaPDF[orden.sabor][orden.linea] = (tablaPDF[orden.sabor][orden.linea] || 0) + total;
+        });
+      });
+    }
+
+    const rows = PRODUCT_LIST.map((sabor) => {
+      const valores = lineas.map((linea) => tablaPDF[sabor]?.[linea] || 0);
+      const total = valores.reduce((a, b) => a + b, 0);
+      return { valores, total, row: [sabor, ...valores, total] };
+    });
+
+    const totales = lineas.map((linea) =>
+      PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaPDF[sabor]?.[linea] || 0), 0)
+    );
+    const totalGeneral = totales.reduce((a, b) => a + b, 0);
+    const totalRow = ['Totales', ...totales, totalGeneral];
+
+    let y = tableStartY + headerHeight;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(15, 23, 42);
+
+    rows.forEach((item, idx) => {
+      if (y + rowHeight > pageHeight - 40) {
+        doc.addPage();
+        y = marginY;
+      }
+
+      doc.setFillColor(idx % 2 === 0 ? 255 : 249, idx % 2 === 0 ? 255 : 250, idx % 2 === 0 ? 255 : 252);
+      doc.rect(startX, y, tableWidth, rowHeight, 'F');
+
+      x = startX;
+      doc.setDrawColor(203, 213, 225);
+      doc.setLineWidth(0.2);
+      item.row.forEach((val, i) => {
+        const text = typeof val === 'number' ? String(val) : val;
+        doc.text(text, x + colWidths[i] / 2, y + 3.8, { align: 'center' });
+        doc.line(startX + colWidths[i], y, startX + colWidths[i], y + rowHeight);
+        x += colWidths[i];
+      });
+      doc.line(startX, y, startX + tableWidth, y);
+      doc.line(startX, y + rowHeight, startX + tableWidth, y + rowHeight);
+      y += rowHeight;
+    });
+
+    const totalRowY = y;
+    doc.setFillColor(234, 88, 12);
+    doc.rect(startX, totalRowY, tableWidth, headerHeight, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(255, 255, 255);
+    x = startX;
+    totalRow.forEach((val, i) => {
+      doc.text(String(val), x + colWidths[i] / 2, totalRowY + 5, { align: 'center' });
+      doc.line(startX + colWidths[i], totalRowY, startX + colWidths[i], totalRowY + headerHeight);
+      x += colWidths[i];
+    });
+    doc.line(startX, totalRowY, startX + tableWidth, totalRowY);
+    doc.line(startX, totalRowY + headerHeight, startX + tableWidth, totalRowY + headerHeight);
+
+    const firmaY = totalRowY + headerHeight + 8;
+    try {
+      doc.addImage('/firma.png', 'PNG', pageWidth - 50, firmaY, 40, 20);
+    } catch (e) {
+      console.warn('No se pudo cargar la firma', e);
+    }
+
+    doc.save(`produccion-diaria-${format(fecha, 'yyyy-MM-dd')}.pdf`);
+  };
+
   const eliminarDia = (ordenId: string, diaIndex: number) => {
     setOrdenes(prev => prev.map(o => {
       if (o.id !== ordenId) return o;
