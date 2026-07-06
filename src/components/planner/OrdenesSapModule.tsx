@@ -333,6 +333,15 @@ export default function OrdenesSapModule({
   const [ordenNumero, setOrdenNumero] = useState('');
   const [fechaInicio, setFechaInicio] = useState('');
   const [fechaDiaADia, setFechaDiaADia] = useState<Date | undefined>(undefined);
+  const [tablaDiaADia, setTablaDiaADia] = useState<Record<string, Record<number, number>>>(() => {
+    const initial: Record<string, Record<number, number>> = {};
+    PRODUCT_LIST.forEach(sabor => {
+      initial[sabor] = {
+        1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0
+      };
+    });
+    return initial;
+  });
   const [ordenes, setOrdenes] = useState<OrdenSap[]>([]);
 
 
@@ -926,8 +935,53 @@ export default function OrdenesSapModule({
                       </h4>
                     </div>
                     <div className="p-4">
-                      <div className="h-32 flex items-center justify-center text-slate-400">
-                        <p className="text-[10px] font-bold uppercase tracking-widest">Sección en desarrollo</p>
+                      <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                        <table className="w-full border-collapse text-center">
+                          <thead>
+                            <tr className="bg-slate-100">
+                              <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
+                              {[1,2,3,4,5,6,7].map(n => (
+                                <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
+                              ))}
+                              <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {PRODUCT_LIST.map((sabor) => {
+                              const totalSabor = [1,2,3,4,5,6,7].reduce((sum, l) => sum + (tablaDiaADia[sabor]?.[l] || 0), 0);
+                              return (
+                                <tr key={sabor} className="even:bg-slate-50/60">
+                                  <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
+                                  {[1,2,3,4,5,6,7].map(linea => (
+                                    <td key={linea} className="px-1 py-0.5 border-r border-b border-slate-100">
+                                      <input
+                                        type="number"
+                                        min="0"
+                                        value={tablaDiaADia[sabor]?.[linea] || 0}
+                                        onChange={(e) => setTablaDiaADia(prev => ({
+                                          ...prev,
+                                          [sabor]: { ...prev[sabor], [linea]: Math.max(0, parseInt(e.target.value) || 0) }
+                                        }))}
+                                        className="h-7 w-full rounded-md border border-slate-100 bg-white text-center text-[10px] font-bold text-slate-700 hover:border-slate-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-none"
+                                      />
+                                    </td>
+                                  ))}
+                                  <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100">{totalSabor}</td>
+                                </tr>
+                              );
+                            })}
+                            <tr className="bg-slate-100 font-black">
+                              <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
+                              {[1,2,3,4,5,6,7].map(linea => {
+                                const totalColumna = PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaDiaADia[sabor]?.[linea] || 0), 0);
+                                return (
+                                  <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200">{totalColumna}</td>
+                                );
+                              })}
+                              <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200">{PRODUCT_LIST.reduce((sum, sabor) => sum + [1,2,3,4,5,6,7].reduce((s, l) => s + (tablaDiaADia[sabor]?.[l] || 0), 0), 0)}</td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>
