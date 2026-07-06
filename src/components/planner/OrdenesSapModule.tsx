@@ -333,6 +333,37 @@ export default function OrdenesSapModule({
   const [ordenNumero, setOrdenNumero] = useState('');
   const [fechaInicio, setFechaInicio] = useState('');
   const [fechaDiaADia, setFechaDiaADia] = useState<Date | undefined>(undefined);
+  const [fechaDiaADiaInicializada, setFechaDiaADiaInicializada] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('selected-fecha-dia-a-dia');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed) {
+          setFechaDiaADia(new Date(parsed));
+          return;
+        }
+      }
+    } catch (e) {
+      console.error('Error cargando fecha de DÍA A DÍA desde localStorage', e);
+    } finally {
+      setFechaDiaADiaInicializada(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!fechaDiaADiaInicializada || typeof window === 'undefined') return;
+    try {
+      if (fechaDiaADia) {
+        localStorage.setItem('selected-fecha-dia-a-dia', JSON.stringify(fechaDiaADia));
+      } else {
+        localStorage.removeItem('selected-fecha-dia-a-dia');
+      }
+    } catch (e) {
+      console.error('Error guardando fecha de DÍA A DÍA en localStorage', e);
+    }
+  }, [fechaDiaADia, fechaDiaADiaInicializada]);
   const [tablaDiaADIAEdits, setTablaDiaADIAEdits] = useState<Record<string, Record<number, number>>>({});
   const [tablaDiaADia, setTablaDiaADia] = useState<Record<string, Record<number, number>>>({});
   const [ordenes, setOrdenes] = useState<OrdenSap[]>([]);
