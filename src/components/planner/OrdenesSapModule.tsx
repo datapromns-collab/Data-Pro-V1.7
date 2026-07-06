@@ -332,7 +332,6 @@ export default function OrdenesSapModule({
   const [sabor, setSabor] = useState('');
   const [ordenNumero, setOrdenNumero] = useState('');
   const [fechaInicio, setFechaInicio] = useState('');
-  const [fechaDiaADia, setFechaDiaADia] = useState<Date | undefined>(undefined);
   const [tablaDiaADia, setTablaDiaADia] = useState<Record<string, Record<number, number>>>(() => {
     const initial: Record<string, Record<number, number>> = {};
     PRODUCT_LIST.forEach(sabor => {
@@ -755,16 +754,15 @@ export default function OrdenesSapModule({
                     className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
                   >
                     <CalendarIcon className="h-3.5 w-3.5 mr-2" />
-                    {fechaDiaADia ? format(fechaDiaADia, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar día"}
+                    {selectedFecha ? format(selectedFecha, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar día"}
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="p-0 rounded-2xl" align="start">
+                <PopoverContent className="w-auto p-0 rounded-md" align="start">
                   <Calendar
                     mode="single"
-                    selected={fechaDiaADia}
-                    onSelect={setFechaDiaADia}
+                    selected={selectedFecha}
+                    onSelect={onFechaChange}
                     locale={es}
-                    className="rounded-md"
                   />
                 </PopoverContent>
               </Popover>
@@ -931,7 +929,7 @@ export default function OrdenesSapModule({
                     <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
                       <div className="w-2 h-2 rounded-full bg-sky-500" />
                       <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                        {fechaDiaADia ? format(fechaDiaADia, "eeee d/M/yyyy", { locale: es }) : "Día a día - Línea " + activeLinea}
+                        {selectedFecha ? format(selectedFecha, "eeee d/M/yyyy", { locale: es }) : "Día a día - Línea " + activeLinea}
                       </h4>
                     </div>
                     <div className="p-4">
