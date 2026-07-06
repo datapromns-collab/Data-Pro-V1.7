@@ -1,6 +1,6 @@
 "use client";
 
-import { Factory, Plus, CalendarIcon, FileDown } from 'lucide-react';
+import { Factory, Plus, CalendarIcon, FileDown, FileSpreadsheet } from 'lucide-react';
 import { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -722,6 +722,45 @@ const exportarPDFdia = async () => {
     return date.toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' });
   };
 
+  const exportarExcelDia = () => {
+    const fecha = fechaDiaADia || new Date();
+    const diaNombre = format(fecha, 'eeee', { locale: es }).toUpperCase();
+    const fechaStr = format(fecha, 'd/M/yyyy');
+    const fechaComparacion = format(fecha, 'yyyy-MM-dd');
+
+    const lineas = [1, 2, 3, 4, 5, 6, 7];
+    const headers = ['Sabor', ...lineas.map((n) => `Línea ${n}`), 'Totales'];
+    const tablaExcel: Record<string, Record<number, number>> = {};
+    PRODUCT_LIST.forEach(sabor => {
+      tablaExcel[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    });
+
+    (ordenes || []).forEach(orden => {
+      (orden.dias || []).forEach(dia => {
+        if (dia.fechaInicio !== fechaComparacion) return;
+        const total = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
+        tablaExcel[orden.sabor][orden.linea] = (tablaExcel[orden.sabor][orden.linea] || 0) + total;
+      });
+    });
+
+    const rows = PRODUCT_LIST.map((sabor) => {
+      const valores = lineas.map((linea) => tablaExcel[sabor]?.[linea] || 0);
+      const total = valores.reduce((a, b) => a + b, 0);
+      return [sabor, ...valores, total];
+    });
+
+    const totales = lineas.map((linea) =>
+      PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaExcel[sabor]?.[linea] || 0), 0)
+    );
+    const totalGeneral = totales.reduce((a, b) => a + b, 0);
+
+    const wsData = [headers, ...rows, ['Totales', ...totales, totalGeneral]];
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Día a día');
+    XLSX.writeFile(wb, `dia-a-dia ${fechaStr} ${diaNombre}.xlsx`);
+  };
+
   return (
     <div className="pb-10">
       <div className="space-y-3 mb-6 no-print">
@@ -1002,14 +1041,24 @@ const exportarPDFdia = async () => {
                           {fechaDiaADia ? format(fechaDiaADia, "eeee d/M/yyyy", { locale: es }) : "Día a día - Línea " + activeLinea}
                         </h4>
                       </div>
-<Button
-                         size="sm"
-                         onClick={exportarPDFdia}
-                         className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
-                       >
-                         <FileDown className="h-3 w-3" />
-                         Exportar PDF
-                       </Button>
+                      <div className="flex items-center gap-2">
+                        <Button
+                          size="sm"
+                          onClick={exportarExcelDia}
+                          className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                        >
+                          <FileSpreadsheet className="h-3 w-3" />
+                          Exportar archivo
+                        </Button>
+                        <Button
+                          size="sm"
+                          onClick={exportarPDFdia}
+                          className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                        >
+                          <FileDown className="h-3 w-3" />
+                          Exportar PDF
+                        </Button>
+                      </div>
                     </div>
                     <div className="p-4">
                       <div id="tabla-dia-a-dia-export" className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
