@@ -557,92 +557,132 @@ export default function OrdenesSapModule({
     window.print();
   };
 
-  const exportarPDFdia = async () => {
-    const tabla = document.getElementById('tabla-dia-a-dia-export');
-    if (!tabla) {
-      console.warn('No se encontró la tabla para exportar');
-      return;
-    }
-
+const exportarPDFdia = async () => {
     const fecha = fechaDiaADia || new Date();
     const diaNombre = format(fecha, 'eeee', { locale: es }).toUpperCase();
     const fechaStr = format(fecha, 'd/M/yyyy');
     const mes = format(fecha, 'MMMM', { locale: es }).toUpperCase();
+    const fechaComparacion = format(fecha, 'yyyy-MM-dd');
 
-    const wrapper = document.createElement('div');
-    wrapper.style.cssText = 'position:fixed;top:-99999px;left:-99999px;width:800px;background:#fff;padding:14px 12px;font-family:Arial,sans-serif;';
-    wrapper.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px;">
-        <div style="flex:1;">
-          <p style="font-size:8px;color:#a67b5b;font-weight:bold;text-transform:uppercase;">Confidencial - Planta</p>
-        </div>
-        <div style="flex:1;display:flex;justify-content:center;">
-          <img src="/logo-derecho.png" alt="Logo" style="max-height:40px;object-fit:contain;" />
-        </div>
-        <div style="flex:1;text-align:right;">
-          <p style="font-weight:bold;text-transform:uppercase;font-size:10px;">Producción diaria Por sabor y por linea</p>
-          <p style="font-size:10px;color:#64748b;">Día ${diaNombre}</p>
-          <p style="font-size:10px;color:#64748b;">Fecha ${fechaStr}</p>
-          <p style="font-size:10px;color:#64748b;">Mes ${mes}</p>
-        </div>
-      </div>
-      <div id="pdf-content">${tabla.outerHTML}</div>
-      <div style="font-size:8px;color:#94a3b8;text-align:right;margin-top:8px;">
-        DATA PRO - SISTEMA DE GESTIÓN - MULTINACIONAL DE SABORES | Generado el ${new Date().toLocaleString('es')}
-      </div>
-    `;
-    document.body.appendChild(wrapper);
+    const lineas = [1, 2, 3, 4, 5, 6, 7];
+    const headers = ['SABOR', ...lineas.map((n) => `Línea ${n}`), 'Totales'];
+    const colWidths = [120, 28, 28, 28, 28, 28, 28, 28, 36];
+    const startX = 6;
+    const startY = 38;
+    const headerHeight = 8;
+    const rowHeight = 6;
+
+    const tablaPDF: Record<string, Record<number, number>> = {};
+    PRODUCT_LIST.forEach(sabor => {
+      tablaPDF[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    });
+
+    if (fechaDiaADia) {
+      (ordenes || []).forEach(orden => {
+        (orden.dias || []).forEach(dia => {
+          if (dia.fechaInicio !== fechaComparacion) return;
+          const total = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
+          tablaPDF[orden.sabor][orden.linea] = (tablaPDF[orden.sabor][orden.linea] || 0) + total;
+        });
+      });
+    }
+
+    const rows = PRODUCT_LIST.map((sabor) => {
+      const valores = lineas.map((linea) => tablaPDF[sabor]?.[linea] || 0);
+      const total = valores.reduce((a, b) => a + b, 0);
+      return { sabor, valores, total };
+    });
+
+    const totales = lineas.map((linea) =>
+      PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaPDF[sabor]?.[linea] || 0), 0)
+    );
+    const totalGeneral = totales.reduce((a, b) => a + b, 0);
+
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const marginX = 6;
+    const marginY = 8;
+    const logoSize = 18;
 
     try {
-      const tablaClone = wrapper.querySelector('table') as HTMLTableElement;
-      if (tablaClone) {
-        const ths = tablaClone.querySelectorAll('th');
-        ths.forEach(th => {
-          th.style.cssText = 'background:#ea4e0c;color:#fff;font-weight:bold;padding:4px 6px;text-align:center;border:1px solid #cbd5e1;';
-        });
-        const tds = tablaClone.querySelectorAll('td');
-        tds.forEach(td => {
-          td.style.cssText = 'padding:3px 5px;border:1px solid #cbd5e1;text-align:center;';
-        });
-        const stickyTds = tablaClone.querySelectorAll('td[style*="sticky"], td.sticky');
-        stickyTds.forEach(td => {
-          (td as HTMLTableCellElement).style.position = 'sticky';
-          (td as HTMLTableCellElement).style.left = '0';
-          (td as HTMLTableCellElement).style.background = '#f8fafc';
-          (td as HTMLTableCellElement).style.zIndex = '10';
-        });
-        const evenTrs = tablaClone.querySelectorAll('tr.even\\:bg-slate-50\\/60, tr:nth-child(even)');
-        evenTrs.forEach(tr => {
-          (tr as HTMLTableRowElement).style.background = '#f8fafc';
-        });
-      }
-
-      const canvas = await html2canvas(wrapper, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-      const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
-      const pageW = pdf.internal.pageSize.getWidth();
-      const pageH = pdf.internal.pageSize.getHeight();
-      const imgW = pageW - 12;
-      const imgH = (canvas.height * imgW) / canvas.width;
-
-      let addedHeight = 0;
-      let remainingH = imgH;
-      let firstPage = true;
-      while (remainingH > 0) {
-        if (!firstPage) pdf.addPage();
-        pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 6, 8 - addedHeight, imgW, imgH);
-        addedHeight += pageH - 16;
-        remainingH -= pageH - 16;
-        firstPage = false;
-      }
-
-      const pdfBlob = pdf.output('blob');
-      const blobUrl = URL.createObjectURL(pdfBlob);
-      window.open(blobUrl, '_blank');
-    } catch (error) {
-      console.error('Error generando PDF:', error);
-    } finally {
-      document.body.removeChild(wrapper);
+      pdf.addImage('/logo-izquierdo.png', 'PNG', marginX, marginY, logoSize, logoSize);
+      pdf.addImage('/logo-derecho.png', 'PNG', pageWidth - marginX - logoSize, marginY, logoSize, logoSize);
+    } catch (e) {
+      console.warn('No se pudieron cargar los logos', e);
     }
+
+    const titleY = marginY + 7;
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(13);
+    pdf.setTextColor(15, 23, 42);
+    pdf.text('Produccion diaria Por sabor y por linea', pageWidth / 2, titleY, { align: 'center' });
+
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(11);
+    pdf.text(`Dia ${diaNombre}`, pageWidth / 2, titleY + 6, { align: 'center' });
+    pdf.text(`Fecha ${fechaStr}`, pageWidth / 2, titleY + 11, { align: 'center' });
+    pdf.text(`Mes ${mes}`, pageWidth / 2, titleY + 16, { align: 'center' });
+
+    let y = startY;
+    const tableWidth = colWidths.reduce((a, b) => a + b, 0);
+    pdf.setFillColor(234, 88, 12);
+    pdf.rect(startX, y, tableWidth, headerHeight, 'F');
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(10);
+    pdf.setTextColor(255, 255, 255);
+    let x = startX;
+    headers.forEach((h, i) => {
+      pdf.text(h, x + colWidths[i] / 2, y + 5.5, { align: 'center' });
+      x += colWidths[i];
+    });
+
+    y += headerHeight;
+    rows.forEach((item, idx) => {
+      if (y + rowHeight > pdf.internal.pageSize.getHeight() - marginY - 20) {
+        pdf.addPage();
+        y = marginY;
+      }
+
+      pdf.setFillColor(255, 255, 255);
+      pdf.rect(startX, y, tableWidth, rowHeight, 'F');
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(9);
+      pdf.setTextColor(15, 23, 42);
+
+      x = startX;
+      pdf.text(item.sabor, x + colWidths[0] / 2, y + 4, { align: 'center' });
+      x += colWidths[0];
+      item.valores.forEach((val, i) => {
+        pdf.text(String(val), x + colWidths[i + 1] / 2, y + 4, { align: 'center' });
+        x += colWidths[i + 1];
+      });
+      pdf.text(String(item.total), x + colWidths[8] / 2, y + 4, { align: 'center' });
+      y += rowHeight;
+    });
+
+    pdf.setFillColor(234, 88, 12);
+    pdf.rect(startX, y, tableWidth, headerHeight, 'F');
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(10);
+    pdf.setTextColor(255, 255, 255);
+    x = startX;
+    pdf.text('Totales', x + colWidths[0] / 2, y + 5.5, { align: 'center' });
+    x += colWidths[0];
+    totales.forEach((val, i) => {
+      pdf.text(String(val), x + colWidths[i + 1] / 2, y + 5.5, { align: 'center' });
+      x += colWidths[i + 1];
+    });
+    pdf.text(String(totalGeneral), x + colWidths[8] / 2, y + 5.5, { align: 'center' });
+
+    try {
+      pdf.addImage('/firma.png', 'PNG', pageWidth - 50, y + headerHeight + 2, 40, 20);
+    } catch (e) {
+      console.warn('No se pudo cargar la firma', e);
+    }
+
+    const pdfBlob = pdf.output('blob');
+    const blobUrl = URL.createObjectURL(pdfBlob);
+    window.open(blobUrl, '_blank');
   };
 
   const eliminarDia = (ordenId: string, diaIndex: number) => {
