@@ -748,26 +748,13 @@ export default function OrdenesSapModule({
                   Por Turno
                 </button>
               </div>
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
-                  >
-                    <CalendarIcon className="h-3.5 w-3.5 mr-2" />
-                    {fechaDiaADia ? format(fechaDiaADia, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar día"}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="p-0 rounded-2xl" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={fechaDiaADia}
-                    onSelect={setFechaDiaADia}
-                    locale={es}
-                    className="rounded-md"
-                  />
-                </PopoverContent>
-              </Popover>
+              <Calendar
+                mode="single"
+                selected={fechaDiaADia}
+                onSelect={setFechaDiaADia}
+                locale={es}
+                className="rounded-lg border border-slate-200 bg-white shadow-sm"
+              />
             </div>
           )}
         </div>
