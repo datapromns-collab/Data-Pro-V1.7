@@ -301,8 +301,8 @@ export default function OrdenesSapModule({
   onFechaChange?: (fecha: Date | undefined) => void;
 }) {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
-  const [activeSection, setActiveSection] = useState<'carga-prod' | 'dia-a-dia'>('carga-prod');
-  const [activeSubsection, setActiveSubsection] = useState<any>(null);
+  const [activeSection, setActiveSection] = useState<'carga-prod' | 'dia-a-dia' | 'prodt-semanal' | 'resumen-mensual'>('carga-prod');
+  const [activeSubsection, setActiveSubsection] = useState<'dia' | 'diurno' | 'nocturno' | null>(null);
   const [internalActiveLinea, setInternalActiveLinea] = useState<number | null>(1);
 
   const activeLinea = externalActiveLinea ?? internalActiveLinea;
@@ -391,6 +391,43 @@ export default function OrdenesSapModule({
     });
     return tabla;
   }, [fechaDiaADia, ordenes]);
+
+  const prodtSemanalTabla = useMemo(() => {
+    const tabla: Record<string, Record<number, number>> = {};
+    PRODUCT_LIST.forEach(sabor => {
+      tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    });
+    if (!selectedFecha) return tabla;
+    const semana = getISOWeek(selectedFecha);
+    ordenes.forEach(orden => {
+      if (orden.semana !== semana) return;
+      orden.dias.forEach(dia => {
+        const total = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
+        tabla[orden.sabor][orden.linea] = (tabla[orden.sabor][orden.linea] || 0) + total;
+      });
+    });
+    return tabla;
+  }, [selectedFecha, ordenes]);
+
+  const resumenMensualTabla = useMemo(() => {
+    const tabla: Record<string, Record<number, number>> = {};
+    PRODUCT_LIST.forEach(sabor => {
+      tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    });
+    if (!selectedFecha) return tabla;
+    const mes = selectedFecha.getMonth();
+    const anio = selectedFecha.getFullYear();
+    ordenes.forEach(orden => {
+      orden.dias.forEach(dia => {
+        const d = new Date(dia.fechaInicio + 'T12:00:00');
+        if (isNaN(d.getTime())) return;
+        if (d.getMonth() !== mes || d.getFullYear() !== anio) return;
+        const total = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
+        tabla[orden.sabor][orden.linea] = (tabla[orden.sabor][orden.linea] || 0) + total;
+      });
+    });
+    return tabla;
+  }, [selectedFecha, ordenes]);
 
   const tablaDiaADIAAuto = useMemo(() => {
     const tabla: Record<string, Record<number, number>> = {};
@@ -800,20 +837,32 @@ const exportarPDFdia = async () => {
     <div className="pb-10">
       <div className="space-y-3 mb-6 no-print">
         <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-            <button
-              onClick={() => setActiveSection('carga-prod')}
-              className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'carga-prod' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-            >
-              <Factory className="h-3.5 w-3.5" /> CARGA PRODT
-            </button>
-            <button
-              onClick={() => setActiveSection('dia-a-dia')}
-              className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'dia-a-dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-            >
-              <Factory className="h-3.5 w-3.5" /> DÍA A DÍA
-            </button>
-          </div>
+           <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+             <button
+               onClick={() => setActiveSection('carga-prod')}
+               className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'carga-prod' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+             >
+               <Factory className="h-3.5 w-3.5" /> CARGA PRODT
+             </button>
+             <button
+               onClick={() => setActiveSection('dia-a-dia')}
+               className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'dia-a-dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+             >
+               <Factory className="h-3.5 w-3.5" /> DÍA A DÍA
+             </button>
+             <button
+               onClick={() => setActiveSection('prodt-semanal')}
+               className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'prodt-semanal' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+             >
+               <Factory className="h-3.5 w-3.5" /> PRODT SEMANAL
+             </button>
+             <button
+               onClick={() => setActiveSection('resumen-mensual')}
+               className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'resumen-mensual' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+             >
+               <Factory className="h-3.5 w-3.5" /> RESUMEN MENSUAL
+             </button>
+           </div>
           {activeSection === 'carga-prod' && (
             <Popover>
               <PopoverTrigger asChild>
@@ -913,7 +962,7 @@ const exportarPDFdia = async () => {
           )}
         </div>
 
-        {['turno', 'diurno', 'nocturno'].includes(activeSubsection) && (
+        {['turno', 'dia', 'diurno', 'nocturno'].includes(activeSubsection || '') && (
           <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
             <button
               onClick={() => setActiveSubsection('diurno')}
@@ -1359,6 +1408,106 @@ const exportarPDFdia = async () => {
           </DialogFooter>
         </DialogContent>
        </Dialog>
+       
+       {activeSection === 'prodt-semanal' && (
+         <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+           <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-slate-100">
+             <div className="flex items-center gap-2">
+               <div className="w-2 h-2 rounded-full bg-sky-500" />
+               <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                 PRODT SEMANAL - Línea {activeLinea}
+               </h4>
+             </div>
+             <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+               {selectedFecha ? `Semana ${getISOWeek(selectedFecha)}` : ''}
+             </span>
+           </div>
+           <div className="p-4">
+             <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+               <table className="w-full border-collapse text-center">
+                 <thead>
+                   <tr className="bg-slate-100">
+                     <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
+                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {activeLinea}</th>
+                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Total</th>
+                   </tr>
+                 </thead>
+                  <tbody>
+                    {PRODUCT_LIST.map((sabor) => {
+                      const total = activeLinea ? prodtSemanalTabla[sabor]?.[activeLinea] || 0 : 0;
+                      return (
+                        <tr key={sabor} className="even:bg-slate-50/60">
+                          <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
+                          <td className="px-1 py-0.5 border-r border-b border-slate-100 text-[10px] font-black text-slate-900">{total}</td>
+                          <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100">{total}</td>
+                        </tr>
+                      );
+                    })}
+                    <tr className="bg-slate-100 font-black">
+                      <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
+                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200">
+                        {activeLinea ? PRODUCT_LIST.reduce((sum, sabor) => sum + (prodtSemanalTabla[sabor]?.[activeLinea] || 0), 0) : 0}
+                      </td>
+                      <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200">
+                        {activeLinea ? PRODUCT_LIST.reduce((sum, sabor) => sum + (prodtSemanalTabla[sabor]?.[activeLinea] || 0), 0) : 0}
+                      </td>
+                    </tr>
+                 </tbody>
+               </table>
+             </div>
+           </div>
+         </div>
+       )}
+
+       {activeSection === 'resumen-mensual' && (
+         <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+           <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-slate-100">
+             <div className="flex items-center gap-2">
+               <div className="w-2 h-2 rounded-full bg-sky-500" />
+               <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                 RESUMEN MENSUAL - Línea {activeLinea}
+               </h4>
+             </div>
+             <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+               {selectedFecha ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase() : ''}
+             </span>
+           </div>
+           <div className="p-4">
+             <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+               <table className="w-full border-collapse text-center">
+                 <thead>
+                   <tr className="bg-slate-100">
+                     <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
+                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {activeLinea}</th>
+                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Total</th>
+                   </tr>
+                 </thead>
+                  <tbody>
+                    {PRODUCT_LIST.map((sabor) => {
+                      const total = activeLinea ? resumenMensualTabla[sabor]?.[activeLinea] || 0 : 0;
+                      return (
+                        <tr key={sabor} className="even:bg-slate-50/60">
+                          <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
+                          <td className="px-1 py-0.5 border-r border-b border-slate-100 text-[10px] font-black text-slate-900">{total}</td>
+                          <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100">{total}</td>
+                        </tr>
+                      );
+                    })}
+                    <tr className="bg-slate-100 font-black">
+                      <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
+                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200">
+                        {activeLinea ? PRODUCT_LIST.reduce((sum, sabor) => sum + (resumenMensualTabla[sabor]?.[activeLinea] || 0), 0) : 0}
+                      </td>
+                      <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200">
+                        {activeLinea ? PRODUCT_LIST.reduce((sum, sabor) => sum + (resumenMensualTabla[sabor]?.[activeLinea] || 0), 0) : 0}
+                      </td>
+                    </tr>
+                  </tbody>
+               </table>
+             </div>
+           </div>
+         </div>
+       )}
       </div>
     </div>
   );
