@@ -635,7 +635,9 @@ export default function OrdenesSapModule({
         firstPage = false;
       }
 
-      pdf.save(`produccion-diaria-${format(fecha, 'yyyy-MM-dd')}.pdf`);
+      const pdfBlob = pdf.output('blob');
+      const blobUrl = URL.createObjectURL(pdfBlob);
+      window.open(blobUrl, '_blank');
     } catch (error) {
       console.error('Error generando PDF:', error);
     } finally {
