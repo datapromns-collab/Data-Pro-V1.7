@@ -483,30 +483,31 @@ export default function OrdenesSapModule({
   };
 
   const exportarPDF = async () => {
-    const container = document.createElement('div');
-    container.style.position = 'absolute';
-    container.style.left = '-9999px';
-    container.style.top = '0';
-    container.style.background = '#ffffff';
-    container.style.padding = '16px';
-    container.style.display = 'grid';
-    container.style.gridTemplateColumns = 'repeat(3, 1fr)';
-    container.style.gap = '14px';
-    container.style.width = '1400px';
-
     const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
     const weekNumber = selectedFecha ? getISOWeek(selectedFecha) : (ordenes[0]?.semana || getISOWeek(new Date()));
 
-    lineas.forEach((linea) => {
-      const ordenesLinea = ordenes.filter((o) => o.linea === linea);
-      if (ordenesLinea.length === 0) return;
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const pageHeight = pdf.internal.pageSize.getHeight();
+    const marginX = 8;
+    const marginY = 8;
+    const usableWidth = pageWidth - marginX * 2;
+    const firstPage = true;
 
-      const tarjeta = document.createElement('div');
-      tarjeta.style.border = '1px solid #e2e8f0';
-      tarjeta.style.borderRadius = '16px';
-      tarjeta.style.background = '#ffffff';
-      tarjeta.style.overflow = 'hidden';
-      tarjeta.style.minWidth = '0';
+    for (const linea of lineas) {
+      const ordenesLinea = ordenes.filter((o) => o.linea === linea);
+      if (ordenesLinea.length === 0) continue;
+
+      const card = document.createElement('div');
+      card.style.position = 'absolute';
+      card.style.left = '-9999px';
+      card.style.top = '0';
+      card.style.width = '1400px';
+      card.style.background = '#ffffff';
+      card.style.border = '1px solid #e2e8f0';
+      card.style.borderRadius = '16px';
+      card.style.overflow = 'hidden';
+      card.style.boxShadow = 'none';
 
       const titulo = document.createElement('div');
       titulo.style.padding = '6px 10px';
@@ -616,30 +617,28 @@ export default function OrdenesSapModule({
         cuerpo.appendChild(agregarBtn);
       });
 
-      tarjeta.appendChild(titulo);
-      tarjeta.appendChild(cuerpo);
-      container.appendChild(tarjeta);
-    });
+      card.appendChild(titulo);
+      card.appendChild(cuerpo);
+      document.body.appendChild(card);
 
-    document.body.appendChild(container);
+      const canvas = await html2canvas(card, {
+        scale: 2,
+        useCORS: true,
+        backgroundColor: '#ffffff',
+        logging: false,
+      });
 
-    const canvas = await html2canvas(container, {
-      scale: 2,
-      useCORS: true,
-      backgroundColor: '#ffffff',
-      logging: false,
-    });
+      document.body.removeChild(card);
 
-    document.body.removeChild(container);
+      const imgData = canvas.toDataURL('image/png');
+      const imgWidthMM = usableWidth;
+      const imgHeightMM = Math.min((imgWidthMM / canvas.width) * canvas.height, pageHeight - marginY * 2);
 
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF({
-      orientation: 'landscape',
-      unit: 'px',
-      format: [canvas.width, canvas.height],
-    });
+      pdf.addImage(imgData, 'PNG', marginX, marginY, imgWidthMM, imgHeightMM);
+      pdf.addPage();
+    }
 
-    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+    pdf.deletePage(pdf.getNumberOfPages());
     const blob = pdf.output('blob');
     const url = URL.createObjectURL(blob);
     const win = window.open(url, '_blank', 'width=900,height=700,left=100,top=100,resizable=yes,scrollbars=yes');
