@@ -642,7 +642,7 @@ export default function OrdenesSapModule({
     pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
     const blob = pdf.output('blob');
     const url = URL.createObjectURL(blob);
-    const win = window.open(url, '_blank');
+    const win = window.open(url, '_blank', 'width=900,height=700,left=100,top=100,resizable=yes,scrollbars=yes');
     if (win) {
       win.focus();
       setTimeout(() => {
