@@ -483,55 +483,60 @@ export default function OrdenesSapModule({
   };
 
   const exportarPDF = async () => {
-    const printArea = document.getElementById('ordenes-sap-export');
-    if (!printArea) return;
+    try {
+      const printArea = document.getElementById('ordenes-sap-export');
+      if (!printArea) return;
 
-    const style = document.createElement('style');
-    style.id = 'ordenes-sap-print-styles';
-    style.textContent = `
-      @media print {
-        body > *:not(#ordenes-sap-print-area) { display: none !important; }
-        #ordenes-sap-print-area {
-          position: absolute !important;
-          left: 0 !important;
-          top: 0 !important;
-          width: 100% !important;
-          background: #ffffff !important;
-          padding: 16px !important;
+      const style = document.createElement('style');
+      style.id = 'ordenes-sap-print-styles';
+      style.textContent = `
+        @media print {
+          body > *:not(#ordenes-sap-print-area) { display: none !important; }
+          #ordenes-sap-print-area {
+            position: absolute !important;
+            left: 0 !important;
+            top: 0 !important;
+            width: 100% !important;
+            background: #ffffff !important;
+            padding: 16px !important;
+          }
+          .ordenes-sap-print-card {
+            break-inside: avoid;
+            page-break-inside: avoid;
+            margin-bottom: 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            overflow: hidden;
+            background: #ffffff;
+          }
+          .ordenes-sap-hide-on-print { display: none !important; }
         }
-        .ordenes-sap-print-card {
-          break-inside: avoid;
-          page-break-inside: avoid;
-          margin-bottom: 16px;
-          border: 1px solid #e2e8f0;
-          border-radius: 16px;
-          overflow: hidden;
-          background: #ffffff;
-        }
-        .ordenes-sap-hide-on-print { display: none !important; }
-      }
-    `;
-    document.head.appendChild(style);
+      `;
+      document.head.appendChild(style);
 
-    const container = document.createElement('div');
-    container.id = 'ordenes-sap-print-area';
-    container.innerHTML = printArea.innerHTML;
-    document.body.appendChild(container);
+      const container = document.createElement('div');
+      container.id = 'ordenes-sap-print-area';
+      container.innerHTML = printArea.innerHTML;
+      document.body.appendChild(container);
 
-    const cards = printArea.querySelectorAll('[data-ordenes-sap-linea]');
-    Array.from(cards).forEach((el, idx) => {
-      (el as HTMLElement).classList.add('ordenes-sap-print-card');
-      container.insertBefore(el, container.children[idx] || null);
-    });
+      const cards = printArea.querySelectorAll('[data-ordenes-sap-linea]');
+      Array.from(cards).forEach((el, idx) => {
+        (el as HTMLElement).classList.add('ordenes-sap-print-card');
+        container.insertBefore(el, container.children[idx] || null);
+      });
 
-    const handleAfterPrint = () => {
-      style.remove();
-      container.remove();
-      window.removeEventListener('afterprint', handleAfterPrint);
-    };
-    window.addEventListener('afterprint', handleAfterPrint);
+      const handleAfterPrint = () => {
+        try { style.remove(); } catch (e) {}
+        try { container.remove(); } catch (e) {}
+        window.removeEventListener('afterprint', handleAfterPrint);
+      };
+      window.addEventListener('afterprint', handleAfterPrint);
 
-    window.print();
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      window.print();
+    } catch (e) {
+      console.error('Error al exportar PDF', e);
+    }
   };
 
   const exportarPDFdia = () => {
