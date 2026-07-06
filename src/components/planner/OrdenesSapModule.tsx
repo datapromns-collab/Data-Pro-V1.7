@@ -600,11 +600,11 @@ const exportarPDFdia = async () => {
     const pageWidth = pdf.internal.pageSize.getWidth();
     const marginX = 6;
     const marginY = 8;
-    const logoWidth = 50;
-    const logoHeight = 18;
+    const logoWidth = 60;
+    const logoHeight = 22;
     const tableWidth = colWidths.reduce((a, b) => a + b, 0);
     const startX = (pageWidth - tableWidth) / 2;
-    const startY = 38;
+    const startY = 55;
 
     try {
       pdf.addImage('/logo-izquierdo.png', 'PNG', marginX, marginY, logoWidth, logoHeight);
@@ -613,7 +613,7 @@ const exportarPDFdia = async () => {
       console.warn('No se pudieron cargar los logos', e);
     }
 
-    const titleY = marginY + logoHeight + 2;
+    const titleY = marginY + logoHeight / 2 + 2;
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(13);
     pdf.setTextColor(15, 23, 42);
@@ -621,9 +621,9 @@ const exportarPDFdia = async () => {
 
     pdf.setFont('helvetica', 'normal');
     pdf.setFontSize(11);
-    pdf.text(`Dia ${diaNombre}`, pageWidth / 2, titleY + 6, { align: 'center' });
-    pdf.text(`Fecha ${fechaStr}`, pageWidth / 2, titleY + 11, { align: 'center' });
-    pdf.text(`Mes ${mes}`, pageWidth / 2, titleY + 16, { align: 'center' });
+    pdf.text(`Dia ${diaNombre}`, pageWidth / 2, titleY + 7, { align: 'center' });
+    pdf.text(`Fecha ${fechaStr}`, pageWidth / 2, titleY + 13, { align: 'center' });
+    pdf.text(`Mes ${mes}`, pageWidth / 2, titleY + 19, { align: 'center' });
 
     let y = startY;
     let x = startX;
