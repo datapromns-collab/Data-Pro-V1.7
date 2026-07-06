@@ -1384,93 +1384,93 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                           </div>
                         </div>
 
-                        {/* UBB Table Container */}
-                        <div className="border border-slate-100 rounded-2xl overflow-hidden bg-white">
-                          <Table>
-                            <TableHeader>
-                              <TableRow className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
-                                <TableHead className="text-white font-black text-[11px] uppercase pl-6 w-1/3">Sabor</TableHead>
-                                <TableHead className="text-white font-black text-[11px] uppercase text-right w-1/6">UBB Inicial</TableHead>
-                                <TableHead className="text-white font-black text-[11px] uppercase text-right w-1/6">UBB Preparado</TableHead>
-                                <TableHead className="text-white font-black text-[11px] uppercase text-right w-1/6">UBB Final</TableHead>
-                                <TableHead className="text-white font-black text-[11px] uppercase text-right w-1/6 pr-6">Consumo</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {est.filteredRows.map((row) => (
-                                <TableRow key={row.sabor} className="hover:bg-slate-50 border-b border-slate-100">
-                                  <TableCell className="pl-6 py-2 text-xs font-bold text-slate-700">{row.sabor}</TableCell>
-                                  <TableCell className="py-2 text-right">
-                                    <Input
-                                      type="number"
-                                      value={row.ubbInicialStr}
-                                      onChange={(e) => handleInputChangeEst(row.sabor, 'ubbInicial', e.target.value)}
-                                      className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
-                                      placeholder="0"
-                                    />
-                                  </TableCell>
-                                  <TableCell className="py-2 text-right">
-                                    <Input
-                                      type="number"
-                                      value={row.ubbPreparadoStr}
-                                      onChange={(e) => handleInputChangeEst(row.sabor, 'ubbPreparado', e.target.value)}
-                                      className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
-                                      placeholder="0"
-                                    />
-                                  </TableCell>
-                                  <TableCell className="py-2 text-right">
-                                    <Input
-                                      type="number"
-                                      value={row.ubbFinalStr}
-                                      onChange={(e) => handleInputChangeEst(row.sabor, 'ubbFinal', e.target.value)}
-                                      className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
-                                      placeholder="0"
-                                    />
-                                  </TableCell>
-                                  <TableCell className="font-black text-xs text-right pr-6 py-3 text-slate-800">
-                                    <span className={cn(
-                                      "px-3 py-1.5 rounded-lg inline-block min-w-[70px] text-center font-black",
-                                      row.consumo > 0 ? "bg-emerald-50 text-emerald-700" :
-                                        row.consumo < 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-600"
-                                    )}>
-                                      {formatNumber(row.consumo)}
-                                    </span>
-                                  </TableCell>
-                                </TableRow>
-                              ))}
+                         {/* UBB Table Container */}
+                         <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
+                           <Table>
+                             <TableHeader>
+                               <TableRow className="bg-slate-200 hover:bg-slate-200 text-slate-900 border-none">
+                                 <TableHead className="text-slate-900 font-black text-[11px] uppercase pl-4 w-1/3 border-r border-slate-300">Sabor</TableHead>
+                                 <TableHead className="text-slate-900 font-black text-[11px] uppercase text-right w-1/6 border-r border-slate-300">UBB Inicial</TableHead>
+                                 <TableHead className="text-slate-900 font-black text-[11px] uppercase text-right w-1/6 border-r border-slate-300">UBB Preparado</TableHead>
+                                 <TableHead className="text-slate-900 font-black text-[11px] uppercase text-right w-1/6 border-r border-slate-300">UBB Final</TableHead>
+                                 <TableHead className="text-slate-900 font-black text-[11px] uppercase text-right w-1/6 pr-4 border-r border-slate-300">UBB Consumo</TableHead>
+                               </TableRow>
+                             </TableHeader>
+                             <TableBody>
+                               {est.filteredRows.map((row, idx) => (
+                                 <TableRow key={row.sabor} className={`hover:bg-slate-50 border-b border-r border-slate-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/60'}`}>
+                                   <TableCell className="pl-4 py-2 text-xs font-bold text-slate-700 border-r border-slate-200">{row.sabor}</TableCell>
+                                   <TableCell className="py-2 text-right border-r border-slate-200">
+                                     <Input
+                                       type="number"
+                                       value={row.ubbInicialStr}
+                                       onChange={(e) => handleInputChangeEst(row.sabor, 'ubbInicial', e.target.value)}
+                                       className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
+                                       placeholder="0"
+                                     />
+                                   </TableCell>
+                                   <TableCell className="py-2 text-right border-r border-slate-200">
+                                     <Input
+                                       type="number"
+                                       value={row.ubbPreparadoStr}
+                                       onChange={(e) => handleInputChangeEst(row.sabor, 'ubbPreparado', e.target.value)}
+                                       className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
+                                       placeholder="0"
+                                     />
+                                   </TableCell>
+                                   <TableCell className="py-2 text-right border-r border-slate-200">
+                                     <Input
+                                       type="number"
+                                       value={row.ubbFinalStr}
+                                       onChange={(e) => handleInputChangeEst(row.sabor, 'ubbFinal', e.target.value)}
+                                       className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
+                                       placeholder="0"
+                                     />
+                                   </TableCell>
+                                   <TableCell className="font-black text-xs text-right pr-4 py-3 text-slate-800 border-r border-slate-200">
+                                     <span className={cn(
+                                       "px-3 py-1.5 rounded-lg inline-block min-w-[70px] text-center font-black",
+                                       row.consumo > 0 ? "bg-emerald-50 text-emerald-700" :
+                                         row.consumo < 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-600"
+                                     )}>
+                                       {formatNumber(row.consumo)}
+                                     </span>
+                                   </TableCell>
+                                 </TableRow>
+                               ))}
 
-                              {est.filteredRows.length === 0 && (
-                                <TableRow>
-                                  <TableCell colSpan={5} className="text-center py-12 text-slate-400 font-bold uppercase text-xs">
-                                    No se encontraron sabores que coincidan con la búsqueda.
-                                  </TableCell>
-                                </TableRow>
-                              )}
+                               {est.filteredRows.length === 0 && (
+                                 <TableRow>
+                                   <TableCell colSpan={5} className="text-center py-12 text-slate-400 font-bold uppercase text-xs">
+                                     No se encontraron sabores que coincidan con la búsqueda.
+                                   </TableCell>
+                                 </TableRow>
+                               )}
 
-                              {/* Totales Footer Row */}
-                              <TableRow className="bg-[#4f81bd]/10 hover:bg-[#4f81bd]/10 border-t border-slate-200 font-bold">
-                                <TableCell className="pl-6 py-4 text-xs font-black text-slate-800 uppercase">
-                                  TOTAL GENERAL
-                                </TableCell>
-                                <TableCell className="text-right py-4 text-xs font-black text-slate-800">
-                                  {est.totals.inicial.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                                </TableCell>
-                                <TableCell className="text-right py-4 text-xs font-black text-slate-800">
-                                  {est.totals.preparado.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                                </TableCell>
-                                <TableCell className="text-right py-4 text-xs font-black text-slate-800">
-                                  {est.totals.final.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                                </TableCell>
-                                <TableCell className="text-right pr-6 py-4 text-xs font-black text-[#4f81bd]">
-                                  <span className="bg-[#4f81bd] text-white px-3 py-1.5 rounded-lg inline-block min-w-[70px] text-center font-black shadow-sm">
-                                    {est.totals.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                                  </span>
-                                </TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </div>
-                      </div>
+                               {/* Totales Footer Row */}
+                               <TableRow className="bg-slate-100 hover:bg-slate-100 border-t-2 border-slate-300 font-bold text-xs">
+                                 <TableCell className="pl-4 py-4 text-xs font-black text-slate-800 uppercase border-r border-slate-200">
+                                   TOTAL GENERAL
+                                 </TableCell>
+                                 <TableCell className="text-right py-4 text-xs font-black text-slate-800 border-r border-slate-200">
+                                   {est.totals.inicial.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                 </TableCell>
+                                 <TableCell className="text-right py-4 text-xs font-black text-slate-800 border-r border-slate-200">
+                                   {est.totals.preparado.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                 </TableCell>
+                                 <TableCell className="text-right py-4 text-xs font-black text-slate-800 border-r border-slate-200">
+                                   {est.totals.final.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                 </TableCell>
+                                 <TableCell className="text-right pr-4 py-4 text-xs font-black text-[#4f81bd] border-r border-slate-200">
+                                   <span className="bg-[#4f81bd] text-white px-3 py-1.5 rounded-lg inline-block min-w-[70px] text-center font-black shadow-sm">
+                                     {est.totals.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                   </span>
+                                 </TableCell>
+                               </TableRow>
+                             </TableBody>
+                           </Table>
+                         </div>
+                       </div>
 
                       {/* Sugar Table Header Controls */}
                       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 no-print">
@@ -1814,93 +1814,93 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                           </div>
                         </div>
 
-                        {/* UBB Table Container */}
-                        <div className="border border-slate-100 rounded-2xl overflow-hidden bg-white">
-                          <Table>
-                            <TableHeader>
-                              <TableRow className="bg-[#4f81bd] hover:bg-[#4f81bd] text-white border-none h-12">
-                                <TableHead className="text-white font-black text-[11px] uppercase pl-6 w-1/3">Sabor</TableHead>
-                                <TableHead className="text-white font-black text-[11px] uppercase text-right w-1/6">UBB Inicial</TableHead>
-                                <TableHead className="text-white font-black text-[11px] uppercase text-right w-1/6">UBB Preparado</TableHead>
-                                <TableHead className="text-white font-black text-[11px] uppercase text-right w-1/6">UBB Final</TableHead>
-                                <TableHead className="text-white font-black text-[11px] uppercase text-right w-1/6 pr-6">Consumo</TableHead>
-                              </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                              {prom.filteredRows.map((row) => (
-                                <TableRow key={row.sabor} className="hover:bg-slate-50 border-b border-slate-100">
-                                  <TableCell className="pl-6 py-2 text-xs font-bold text-slate-700">{row.sabor}</TableCell>
-                                  <TableCell className="py-2 text-right">
-                                    <Input
-                                      type="number"
-                                      value={row.ubbInicialStr}
-                                      onChange={(e) => handleInputChangeProm(row.sabor, 'ubbInicial', e.target.value)}
-                                      className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
-                                      placeholder="0"
-                                    />
-                                  </TableCell>
-                                  <TableCell className="py-2 text-right">
-                                    <Input
-                                      type="number"
-                                      value={row.ubbPreparadoStr}
-                                      onChange={(e) => handleInputChangeProm(row.sabor, 'ubbPreparado', e.target.value)}
-                                      className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
-                                      placeholder="0"
-                                    />
-                                  </TableCell>
-                                  <TableCell className="py-2 text-right">
-                                    <Input
-                                      type="number"
-                                      value={row.ubbFinalStr}
-                                      onChange={(e) => handleInputChangeProm(row.sabor, 'ubbFinal', e.target.value)}
-                                      className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
-                                      placeholder="0"
-                                    />
-                                  </TableCell>
-                                  <TableCell className="font-black text-xs text-right pr-6 py-3 text-slate-800">
-                                    <span className={cn(
-                                      "px-3 py-1.5 rounded-lg inline-block min-w-[70px] text-center font-black",
-                                      row.consumo > 0 ? "bg-emerald-50 text-emerald-700" :
-                                        row.consumo < 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-600"
-                                    )}>
-                                      {formatNumber(row.consumo)}
-                                    </span>
-                                  </TableCell>
-                                </TableRow>
-                              ))}
+                         {/* UBB Table Container */}
+                         <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
+                           <Table>
+                             <TableHeader>
+                               <TableRow className="bg-slate-200 hover:bg-slate-200 text-slate-900 border-none">
+                                 <TableHead className="text-slate-900 font-black text-[11px] uppercase pl-4 w-1/3 border-r border-slate-300">Sabor</TableHead>
+                                 <TableHead className="text-slate-900 font-black text-[11px] uppercase text-right w-1/6 border-r border-slate-300">UBB Inicial</TableHead>
+                                 <TableHead className="text-slate-900 font-black text-[11px] uppercase text-right w-1/6 border-r border-slate-300">UBB Preparado</TableHead>
+                                 <TableHead className="text-slate-900 font-black text-[11px] uppercase text-right w-1/6 border-r border-slate-300">UBB Final</TableHead>
+                                 <TableHead className="text-slate-900 font-black text-[11px] uppercase text-right w-1/6 pr-4 border-r border-slate-300">UBB Consumo</TableHead>
+                               </TableRow>
+                             </TableHeader>
+                             <TableBody>
+                               {prom.filteredRows.map((row, idx) => (
+                                 <TableRow key={row.sabor} className={`hover:bg-slate-50 border-b border-r border-slate-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/60'}`}>
+                                   <TableCell className="pl-4 py-2 text-xs font-bold text-slate-700 border-r border-slate-200">{row.sabor}</TableCell>
+                                   <TableCell className="py-2 text-right border-r border-slate-200">
+                                     <Input
+                                       type="number"
+                                       value={row.ubbInicialStr}
+                                       onChange={(e) => handleInputChangeProm(row.sabor, 'ubbInicial', e.target.value)}
+                                       className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
+                                       placeholder="0"
+                                     />
+                                   </TableCell>
+                                   <TableCell className="py-2 text-right border-r border-slate-200">
+                                     <Input
+                                       type="number"
+                                       value={row.ubbPreparadoStr}
+                                       onChange={(e) => handleInputChangeProm(row.sabor, 'ubbPreparado', e.target.value)}
+                                       className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
+                                       placeholder="0"
+                                     />
+                                   </TableCell>
+                                   <TableCell className="py-2 text-right border-r border-slate-200">
+                                     <Input
+                                       type="number"
+                                       value={row.ubbFinalStr}
+                                       onChange={(e) => handleInputChangeProm(row.sabor, 'ubbFinal', e.target.value)}
+                                       className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
+                                       placeholder="0"
+                                     />
+                                   </TableCell>
+                                   <TableCell className="font-black text-xs text-right pr-4 py-3 text-slate-800 border-r border-slate-200">
+                                     <span className={cn(
+                                       "px-3 py-1.5 rounded-lg inline-block min-w-[70px] text-center font-black",
+                                       row.consumo > 0 ? "bg-emerald-50 text-emerald-700" :
+                                         row.consumo < 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-600"
+                                     )}>
+                                       {formatNumber(row.consumo)}
+                                     </span>
+                                   </TableCell>
+                                 </TableRow>
+                               ))}
 
-                              {prom.filteredRows.length === 0 && (
-                                <TableRow>
-                                  <TableCell colSpan={5} className="text-center py-12 text-slate-400 font-bold uppercase text-xs">
-                                    No se encontraron sabores que coincidan con la búsqueda.
-                                  </TableCell>
-                                </TableRow>
-                              )}
+                               {prom.filteredRows.length === 0 && (
+                                 <TableRow>
+                                   <TableCell colSpan={5} className="text-center py-12 text-slate-400 font-bold uppercase text-xs">
+                                     No se encontraron sabores que coincidan con la búsqueda.
+                                   </TableCell>
+                                 </TableRow>
+                               )}
 
-                              {/* Totales Footer Row */}
-                              <TableRow className="bg-[#4f81bd]/10 hover:bg-[#4f81bd]/10 border-t border-slate-200 font-bold">
-                                <TableCell className="pl-6 py-4 text-xs font-black text-slate-800 uppercase">
-                                  TOTAL GENERAL
-                                </TableCell>
-                                <TableCell className="text-right py-4 text-xs font-black text-slate-800">
-                                  {prom.totals.inicial.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                                </TableCell>
-                                <TableCell className="text-right py-4 text-xs font-black text-slate-800">
-                                  {prom.totals.preparado.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                                </TableCell>
-                                <TableCell className="text-right py-4 text-xs font-black text-slate-800">
-                                  {prom.totals.final.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                                </TableCell>
-                                <TableCell className="text-right pr-6 py-4 text-xs font-black text-[#4f81bd]">
-                                  <span className="bg-[#4f81bd] text-white px-3 py-1.5 rounded-lg inline-block min-w-[70px] text-center font-black shadow-sm">
-                                    {prom.totals.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                                  </span>
-                                </TableCell>
-                              </TableRow>
-                            </TableBody>
-                          </Table>
-                        </div>
-                      </div>
+                               {/* Totales Footer Row */}
+                               <TableRow className="bg-slate-100 hover:bg-slate-100 border-t-2 border-slate-300 font-bold text-xs">
+                                 <TableCell className="pl-4 py-4 text-xs font-black text-slate-800 uppercase border-r border-slate-200">
+                                   TOTAL GENERAL
+                                 </TableCell>
+                                 <TableCell className="text-right py-4 text-xs font-black text-slate-800 border-r border-slate-200">
+                                   {prom.totals.inicial.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                 </TableCell>
+                                 <TableCell className="text-right py-4 text-xs font-black text-slate-800 border-r border-slate-200">
+                                   {prom.totals.preparado.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                 </TableCell>
+                                 <TableCell className="text-right py-4 text-xs font-black text-slate-800 border-r border-slate-200">
+                                   {prom.totals.final.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                 </TableCell>
+                                 <TableCell className="text-right pr-4 py-4 text-xs font-black text-[#4f81bd] border-r border-slate-200">
+                                   <span className="bg-[#4f81bd] text-white px-3 py-1.5 rounded-lg inline-block min-w-[70px] text-center font-black shadow-sm">
+                                     {prom.totals.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
+                                   </span>
+                                 </TableCell>
+                               </TableRow>
+                             </TableBody>
+                           </Table>
+                         </div>
+                       </div>
 
                        {/* Sugar Table Header Controls */}
                        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6 no-print">
