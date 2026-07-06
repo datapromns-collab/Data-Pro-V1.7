@@ -202,17 +202,6 @@ export function CorrelativoSelector({ activeLinea = 1, selectedFecha }: { active
   };
 
   const getCorrelativo = () => {
-    try {
-      const stored = localStorage.getItem(CORRELATIVO_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (parsed.fecha) {
-          return `L-${parsed.fecha}_${correlativoNumero}`;
-        }
-      }
-    } catch (e) {
-      console.error('Error parseando correlativo SAP desde localStorage', e);
-    }
     const hoy = new Date();
     const dia = String(hoy.getDate()).padStart(2, '0');
     const mes = String(hoy.getMonth() + 1).padStart(2, '0');
