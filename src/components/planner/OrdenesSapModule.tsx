@@ -483,163 +483,60 @@ export default function OrdenesSapModule({
   };
 
   const exportarPDF = async () => {
-    const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
-    const weekNumber = selectedFecha ? getISOWeek(selectedFecha) : (ordenes[0]?.semana || getISOWeek(new Date()));
+    const container = document.createElement('div');
+    container.style.position = 'absolute';
+    container.style.left = '-9999px';
+    container.style.top = '0';
+    container.style.background = '#ffffff';
+    container.style.display = 'block';
+    container.style.width = '1400px';
+    document.body.appendChild(container);
 
+    const tarjetasOriginales = document.querySelectorAll('[data-ordenes-sap-linea]');
     const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
     const marginX = 8;
     const marginY = 8;
     const usableWidth = pageWidth - marginX * 2;
-    const firstPage = true;
 
-    for (const linea of lineas) {
-      const ordenesLinea = ordenes.filter((o) => o.linea === linea);
-      if (ordenesLinea.length === 0) continue;
+    const clones: HTMLDivElement[] = [];
 
-      const card = document.createElement('div');
-      card.style.position = 'absolute';
-      card.style.left = '-9999px';
-      card.style.top = '0';
-      card.style.width = '1400px';
-      card.style.background = '#ffffff';
-      card.style.border = '1px solid #e2e8f0';
-      card.style.borderRadius = '16px';
-      card.style.overflow = 'hidden';
-      card.style.boxShadow = 'none';
+    for (const el of Array.from(tarjetasOriginales)) {
+      const linea = Number((el as HTMLElement).dataset.ordenesSapLinea || '0');
+      if (!linea) continue;
 
-      const titulo = document.createElement('div');
-      titulo.style.padding = '6px 10px';
-      titulo.style.borderBottom = '1px solid #e2e8f0';
-      titulo.style.display = 'flex';
-      titulo.style.alignItems = 'center';
-      titulo.style.justifyContent = 'space-between';
-      titulo.style.background = '#f8fafc';
-      titulo.innerHTML = `<span style="font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.08em; color: #0f172a;">Línea ${linea} - Semana ${weekNumber}</span>
-      <span style="font-size: 8px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; color: #dc2626;">Eliminar orden</span>`;
+      const clone = el.cloneNode(true) as HTMLDivElement;
+      clone.style.position = 'static';
+      clone.style.left = 'auto';
+      clone.style.top = 'auto';
+      clone.style.width = '100%';
+      clone.style.background = '#ffffff';
+      clone.style.boxShadow = 'none';
+      container.appendChild(clone);
+      clones.push(clone);
+    }
 
-      const cuerpo = document.createElement('div');
-      cuerpo.style.borderTop = '1px solid #e2e8f0';
-
-      ordenesLinea.forEach((orden) => {
-        const saborTitulo = document.createElement('div');
-        saborTitulo.style.padding = '5px 10px';
-        saborTitulo.style.borderBottom = '1px solid #e2e8f0';
-        saborTitulo.style.display = 'flex';
-        saborTitulo.style.alignItems = 'center';
-        saborTitulo.style.justifyContent = 'space-between';
-        saborTitulo.innerHTML = `<span style="font-size: 9px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em;">${orden.sabor} - SEMANA ${orden.semana}</span>`;
-
-        const tabla = document.createElement('div');
-        tabla.style.display = 'grid';
-        tabla.style.gridTemplateColumns = '78px 92px 1fr 78px 104px';
-
-        const headers = ['Fecha', 'Ticket', 'Cajas', 'Total día', 'N° Orden'];
-        headers.forEach((h) => {
-          const hcell = document.createElement('div');
-          hcell.style.cssText = 'padding: 4px; font-size: 8px; font-weight: 900; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; background: #f8fafc; color: #64748b;';
-          hcell.textContent = h;
-          tabla.appendChild(hcell);
-        });
-
-        (orden.dias || []).forEach((dia) => {
-          const totalDia = calcularTotalDia(dia);
-          const celdas = [
-            formatDate(dia.fechaInicio),
-            dia.ticket1 || '',
-            String(dia.cajas1 || 0),
-            String(totalDia),
-            orden.ordenNumero,
-          ];
-          celdas.forEach((texto) => {
-            const cell = document.createElement('div');
-            cell.style.cssText = 'padding: 3px 4px; font-size: 9px; font-weight: 700; border-bottom: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
-            cell.textContent = texto;
-            tabla.appendChild(cell);
-          });
-
-          const celdas2 = [
-            formatDate(dia.fechaInicio),
-            '',
-            String(dia.cajas2 || 0),
-            String(totalDia),
-            orden.ordenNumero,
-          ];
-          celdas2.forEach((texto) => {
-            const cell = document.createElement('div');
-            cell.style.cssText = 'padding: 3px 4px; font-size: 9px; font-weight: 700; border-bottom: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
-            cell.textContent = texto;
-            tabla.appendChild(cell);
-          });
-
-          const celdas3 = [
-            formatDate(dia.fechaInicio),
-            dia.ticket2 || '',
-            String(dia.cajas3 || 0),
-            String(totalDia),
-            orden.ordenNumero,
-          ];
-          celdas3.forEach((texto) => {
-            const cell = document.createElement('div');
-            cell.style.cssText = 'padding: 3px 4px; font-size: 9px; font-weight: 700; border-bottom: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
-            cell.textContent = texto;
-            tabla.appendChild(cell);
-          });
-
-          const celdas4 = [
-            formatDate(dia.fechaInicio),
-            '',
-            String(dia.cajas4 || 0),
-            String(totalDia),
-            orden.ordenNumero,
-          ];
-          celdas4.forEach((texto) => {
-            const cell = document.createElement('div');
-            cell.style.cssText = 'padding: 3px 4px; font-size: 9px; font-weight: 700; border-bottom: 1px solid #f1f5f9; border-right: 1px solid #f1f5f9; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;';
-            cell.textContent = texto;
-            tabla.appendChild(cell);
-          });
-        });
-
-        const totalOrden = (orden.dias || []).reduce((sum, d) => sum + calcularTotalDia(d), 0);
-        const totalCell = document.createElement('div');
-        totalCell.style.cssText = 'padding: 4px; font-size: 9px; font-weight: 900; border-bottom: 1px solid #e2e8f0; border-right: 1px solid #e2e8f0; color: #0f172a;';
-        totalCell.textContent = String(totalOrden);
-        tabla.appendChild(totalCell);
-
-        const agregarBtn = document.createElement('button');
-        agregarBtn.style.cssText = 'width: 100%; padding: 6px; border-top: 1px dashed #e2e8f0; background: transparent; font-size: 8px; font-weight: 900; text-transform: uppercase; letter-spacing: 0.06em; color: #94a3b8; cursor: default;';
-        agregarBtn.textContent = 'Agregar fecha';
-
-        cuerpo.appendChild(saborTitulo);
-        cuerpo.appendChild(tabla);
-        cuerpo.appendChild(agregarBtn);
-      });
-
-      card.appendChild(titulo);
-      card.appendChild(cuerpo);
-      document.body.appendChild(card);
-
-      const canvas = await html2canvas(card, {
+    for (const clone of clones) {
+      const canvas = await html2canvas(clone, {
         scale: 2,
         useCORS: true,
         backgroundColor: '#ffffff',
         logging: false,
       });
 
-      document.body.removeChild(card);
-
       const imgData = canvas.toDataURL('image/png');
       const imgWidthMM = usableWidth;
       const imgHeightMM = Math.min((imgWidthMM / canvas.width) * canvas.height, pageHeight - marginY * 2);
 
       pdf.addImage(imgData, 'PNG', marginX, marginY, imgWidthMM, imgHeightMM);
+      pdf.addPage();
     }
 
-    if (pdf.getNumberOfPages() > 0) {
-      pdf.deletePage(pdf.getNumberOfPages());
-    }
+    clones.forEach((c) => c.remove());
+    container.remove();
+
+    pdf.deletePage(pdf.getNumberOfPages());
     const blob = pdf.output('blob');
     const url = URL.createObjectURL(blob);
     const win = window.open(url, '_blank', 'width=900,height=700,left=100,top=100,resizable=yes,scrollbars=yes');
@@ -946,11 +843,11 @@ export default function OrdenesSapModule({
                         </div>
                       )}
 
-                      <div id="ordenes-sap-export" className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-3">
-                        {ordenesPorLinea.map((orden) => {
-                          const colorClass = SABOR_COLORS[orden.sabor] || FALLBACK_COLOR;
-                          return (
-                            <div key={orden.id} className="border border-slate-200 rounded-xl bg-white overflow-hidden">
+                       <div id="ordenes-sap-export" className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-3">
+                         {ordenesPorLinea.map((orden) => {
+                           const colorClass = SABOR_COLORS[orden.sabor] || FALLBACK_COLOR;
+                           return (
+                             <div key={orden.id} className="border border-slate-200 rounded-xl bg-white overflow-hidden" data-ordenes-sap-linea={orden.linea}>
                               <div className={`px-3 py-1.5 border-b border-slate-200 flex items-center justify-between ${colorClass}`}>
                                 <p className="text-[10px] font-black uppercase tracking-widest truncate">
                                   {orden.sabor} - SEMANA {orden.semana}
