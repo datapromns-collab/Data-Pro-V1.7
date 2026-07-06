@@ -643,9 +643,9 @@ export default function OrdenesSapModule({
     const tableStartY = titleY + 24;
     const lineas = [1, 2, 3, 4, 5, 6, 7];
     const headers = ['SABOR', ...lineas.map((n) => `Linea ${n}`), 'Totales'];
-    const colWidths = [72, 20, 20, 20, 20, 20, 20, 20, 26];
-    const tableWidth = colWidths.reduce((a, b) => a + b, 0);
-    const startX = (pageWidth - tableWidth) / 2;
+    const tableWidth = usableWidth;
+    const startX = marginX;
+    const colWidths = [72, 20, 20, 20, 20, 20, 20, 20, usableWidth - 72 - 20 * 7];
     const headerHeight = 8;
     const rowHeight = 5.5;
 
