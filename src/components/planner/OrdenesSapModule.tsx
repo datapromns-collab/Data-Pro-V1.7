@@ -358,6 +358,40 @@ export default function OrdenesSapModule({
   const [tablaTurnoEdits, setTablaTurnoEdits] = useState<Record<string, Record<string, Record<number, number>>>>({});
   const [ordenes, setOrdenes] = useState<OrdenSap[]>([]);
 
+  const tablaTurnoDiurnoAuto = useMemo(() => {
+    const tabla: Record<string, Record<number, number>> = {};
+    PRODUCT_LIST.forEach(sabor => {
+      tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    });
+    if (!fechaDiaADia) return tabla;
+    const fechaStr = format(fechaDiaADia, 'yyyy-MM-dd');
+    ordenes.forEach(orden => {
+      orden.dias.forEach(dia => {
+        if (dia.fechaInicio !== fechaStr) return;
+        const valor = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0);
+        tabla[orden.sabor][orden.linea] = (tabla[orden.sabor][orden.linea] || 0) + valor;
+      });
+    });
+    return tabla;
+  }, [fechaDiaADia, ordenes]);
+
+  const tablaTurnoNocturnoAuto = useMemo(() => {
+    const tabla: Record<string, Record<number, number>> = {};
+    PRODUCT_LIST.forEach(sabor => {
+      tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    });
+    if (!fechaDiaADia) return tabla;
+    const fechaStr = format(fechaDiaADia, 'yyyy-MM-dd');
+    ordenes.forEach(orden => {
+      orden.dias.forEach(dia => {
+        if (dia.fechaInicio !== fechaStr) return;
+        const valor = Number(dia.cajas4) || 0;
+        tabla[orden.sabor][orden.linea] = (tabla[orden.sabor][orden.linea] || 0) + valor;
+      });
+    });
+    return tabla;
+  }, [fechaDiaADia, ordenes]);
+
   const tablaDiaADIAAuto = useMemo(() => {
     const tabla: Record<string, Record<number, number>> = {};
 
@@ -1137,7 +1171,7 @@ const exportarPDFdia = async () => {
                           </thead>
                           <tbody>
                             {PRODUCT_LIST.map((sabor) => {
-                              const totalSabor = [1,2,3,4,5,6,7].reduce((sum, l) => sum + (tablaTurnoEdits['diurno']?.[sabor]?.[l] || 0), 0);
+                              const totalSabor = [1,2,3,4,5,6,7].reduce((sum, l) => sum + (tablaTurnoEdits['diurno']?.[sabor]?.[l] ?? (tablaTurnoDiurnoAuto[sabor]?.[l] || 0)), 0);
                               return (
                                 <tr key={sabor} className="even:bg-slate-50/60">
                                   <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
@@ -1146,7 +1180,7 @@ const exportarPDFdia = async () => {
                                       <input
                                         type="number"
                                         min="0"
-                                        value={(tablaTurnoEdits['diurno']?.[sabor]?.[linea] ?? 0)}
+                                        value={(tablaTurnoEdits['diurno']?.[sabor]?.[linea] ?? (tablaTurnoDiurnoAuto[sabor]?.[linea] || 0))}
                                         onChange={(e) => {
                                           const valor = Math.max(0, parseInt(e.target.value) || 0);
                                           setTablaTurnoEdits(prev => ({
@@ -1168,13 +1202,13 @@ const exportarPDFdia = async () => {
                             <tr className="bg-slate-100 font-black">
                               <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
                               {[1,2,3,4,5,6,7].map(linea => {
-                                const totalColumna = PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaTurnoEdits['diurno']?.[sabor]?.[linea] || 0), 0);
+                                const totalColumna = PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaTurnoEdits['diurno']?.[sabor]?.[linea] ?? (tablaTurnoDiurnoAuto[sabor]?.[linea] || 0)), 0);
                                 return (
                                   <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200">{totalColumna}</td>
                                 );
                               })}
                               <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200">
-                                {PRODUCT_LIST.reduce((sum, sabor) => sum + [1,2,3,4,5,6,7].reduce((s, l) => s + (tablaTurnoEdits['diurno']?.[sabor]?.[l] || 0), 0), 0)}
+                                {PRODUCT_LIST.reduce((sum, sabor) => sum + [1,2,3,4,5,6,7].reduce((s, l) => s + (tablaTurnoEdits['diurno']?.[sabor]?.[l] ?? (tablaTurnoDiurnoAuto[sabor]?.[l] || 0)), 0), 0)}
                               </td>
                             </tr>
                           </tbody>
@@ -1204,7 +1238,7 @@ const exportarPDFdia = async () => {
                           </thead>
                           <tbody>
                             {PRODUCT_LIST.map((sabor) => {
-                              const totalSabor = [1,2,3,4,5,6,7].reduce((sum, l) => sum + (tablaTurnoEdits['nocturno']?.[sabor]?.[l] || 0), 0);
+                              const totalSabor = [1,2,3,4,5,6,7].reduce((sum, l) => sum + (tablaTurnoEdits['nocturno']?.[sabor]?.[l] ?? (tablaTurnoNocturnoAuto[sabor]?.[l] || 0)), 0);
                               return (
                                 <tr key={sabor} className="even:bg-slate-50/60">
                                   <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
@@ -1213,7 +1247,7 @@ const exportarPDFdia = async () => {
                                       <input
                                         type="number"
                                         min="0"
-                                        value={(tablaTurnoEdits['nocturno']?.[sabor]?.[linea] ?? 0)}
+                                        value={(tablaTurnoEdits['nocturno']?.[sabor]?.[linea] ?? (tablaTurnoNocturnoAuto[sabor]?.[linea] || 0))}
                                         onChange={(e) => {
                                           const valor = Math.max(0, parseInt(e.target.value) || 0);
                                           setTablaTurnoEdits(prev => ({
@@ -1235,13 +1269,13 @@ const exportarPDFdia = async () => {
                             <tr className="bg-slate-100 font-black">
                               <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
                               {[1,2,3,4,5,6,7].map(linea => {
-                                const totalColumna = PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaTurnoEdits['nocturno']?.[sabor]?.[linea] || 0), 0);
+                                const totalColumna = PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaTurnoEdits['nocturno']?.[sabor]?.[linea] ?? (tablaTurnoNocturnoAuto[sabor]?.[linea] || 0)), 0);
                                 return (
                                   <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200">{totalColumna}</td>
                                 );
                               })}
                               <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200">
-                                {PRODUCT_LIST.reduce((sum, sabor) => sum + [1,2,3,4,5,6,7].reduce((s, l) => s + (tablaTurnoEdits['nocturno']?.[sabor]?.[l] || 0), 0), 0)}
+                                {PRODUCT_LIST.reduce((sum, sabor) => sum + [1,2,3,4,5,6,7].reduce((s, l) => s + (tablaTurnoEdits['nocturno']?.[sabor]?.[l] ?? (tablaTurnoNocturnoAuto[sabor]?.[l] || 0)), 0), 0)}
                               </td>
                             </tr>
                           </tbody>
