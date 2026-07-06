@@ -650,7 +650,6 @@ export default function OrdenesSapModule({
       }, 300);
     }
     setTimeout(() => URL.revokeObjectURL(url), 1000);
-    pdf.save(`Ordenes semana ${weekNumber}.pdf`);
   };
 
   const exportarPDFdia = () => {
