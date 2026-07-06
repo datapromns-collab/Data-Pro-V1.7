@@ -931,7 +931,7 @@ export default function OrdenesSapModule({
                     <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
                       <div className="w-2 h-2 rounded-full bg-sky-500" />
                       <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                        Día a día - Línea {activeLinea}
+                        {fechaDiaADia ? format(fechaDiaADia, "eeee d/M/yyyy", { locale: es }) : "Día a día - Línea " + activeLinea}
                       </h4>
                     </div>
                     <div className="p-4">
