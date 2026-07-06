@@ -625,13 +625,13 @@ export default function OrdenesSapModule({
 
     const blob = doc.output('blob');
     const url = URL.createObjectURL(blob);
-    const win = window.open(url, '_blank', 'width=900,height=700,left=100,top=100,resizable=yes,scrollbars=yes');
-    if (win) {
-      win.focus();
-      setTimeout(() => {
-        win.print();
-      }, 300);
+
+    const printWindow = window.open('', '_blank', 'width=900,height=700,left=100,top=100,resizable=yes,scrollbars=yes');
+    if (printWindow) {
+      printWindow.document.write(`<!DOCTYPE html><html><head><title>Imprimir Producción Diaria</title><style>body{margin:0;padding:0}iframe{border:none;width:100%;height:100%}</style></head><body><iframe src="${url}" type="application/pdf"></iframe><script>window.onload=function(){setTimeout(function(){window.print();},500)};</script></body></html>`);
+      printWindow.document.close();
     }
+
     setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
