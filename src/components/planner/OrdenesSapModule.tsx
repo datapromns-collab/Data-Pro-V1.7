@@ -502,6 +502,13 @@ export default function OrdenesSapModule({
           width: 100% !important;
           background: #ffffff !important;
           padding: 16px !important;
+          display: grid !important;
+          grid-template-columns: repeat(2, 1fr) !important;
+          gap: 16px !important;
+        }
+        #ordenes-sap-print-area > * {
+          break-inside: avoid;
+          page-break-inside: avoid;
         }
       }
     `;
