@@ -625,16 +625,37 @@ const exportarPDFdia = async () => {
     pdf.text(`Mes ${mes}`, pageWidth / 2, titleY + 16, { align: 'center' });
 
     let y = startY;
-    pdf.setFillColor(234, 88, 12);
-    pdf.rect(startX, y, tableWidth, headerHeight, 'F');
-    pdf.setFont('helvetica', 'bold');
-    pdf.setFontSize(10);
-    pdf.setTextColor(255, 255, 255);
     let x = startX;
-    headers.forEach((h, i) => {
-      pdf.text(h, x + colWidths[i] / 2, y + 5.5, { align: 'center' });
-      x += colWidths[i];
-    });
+    pdf.setDrawColor(0, 0, 0);
+    pdf.setLineWidth(0.15);
+
+    const drawHeader = () => {
+      pdf.setFillColor(234, 88, 12);
+      pdf.rect(startX, y, tableWidth, headerHeight, 'F');
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(10);
+      pdf.setTextColor(255, 255, 255);
+      let x = startX;
+      headers.forEach((h, i) => {
+        pdf.text(h, x + colWidths[i] / 2, y + 5.5, { align: 'center' });
+        x += colWidths[i];
+      });
+    };
+
+    const drawRowBorders = (rowY: number, height: number) => {
+      pdf.setDrawColor(0, 0, 0);
+      pdf.setLineWidth(0.15);
+      let cx = startX;
+      for (let i = 0; i <= colWidths.length; i++) {
+        pdf.line(cx, rowY, cx, rowY + height);
+        cx += colWidths[i] || 0;
+      }
+      pdf.line(startX, rowY, startX + tableWidth, rowY);
+      pdf.line(startX, rowY + height, startX + tableWidth, rowY + height);
+    };
+
+    drawHeader();
+    drawRowBorders(y, headerHeight);
 
     y += headerHeight;
     rows.forEach((item, idx) => {
@@ -657,6 +678,7 @@ const exportarPDFdia = async () => {
         x += colWidths[i + 1];
       });
       pdf.text(String(item.total), x + colWidths[8] / 2, y + 4, { align: 'center' });
+      drawRowBorders(y, rowHeight);
       y += rowHeight;
     });
 
@@ -673,6 +695,7 @@ const exportarPDFdia = async () => {
       x += colWidths[i + 1];
     });
     pdf.text(String(totalGeneral), x + colWidths[8] / 2, y + 5.5, { align: 'center' });
+    drawRowBorders(y, headerHeight);
 
     try {
       pdf.addImage('/firma.png', 'PNG', pageWidth - 50, y + headerHeight + 2, 40, 20);
