@@ -332,16 +332,39 @@ export default function OrdenesSapModule({
   const [sabor, setSabor] = useState('');
   const [ordenNumero, setOrdenNumero] = useState('');
   const [fechaInicio, setFechaInicio] = useState('');
-  const [tablaDiaADia, setTablaDiaADia] = useState<Record<string, Record<number, number>>>(() => {
-    const initial: Record<string, Record<number, number>> = {};
-    PRODUCT_LIST.forEach(sabor => {
-      initial[sabor] = {
-        1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0
-      };
-    });
-    return initial;
-  });
+  const [tablaDiaADIAEdits, setTablaDiaADIAEdits] = useState<Record<string, Record<number, number>>>({});
+  const [tablaDiaADia, setTablaDiaADia] = useState<Record<string, Record<number, number>>>({});
   const [ordenes, setOrdenes] = useState<OrdenSap[]>([]);
+
+
+  const tablaDiaADIAAuto = useMemo(() => {
+    const tabla: Record<string, Record<number, number>> = {};
+
+    if (!selectedFecha) {
+      PRODUCT_LIST.forEach(sabor => {
+        tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+      });
+      return tabla;
+    }
+
+    PRODUCT_LIST.forEach(sabor => {
+      tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    });
+
+    ordenes.forEach(orden => {
+      orden.dias.forEach(dia => {
+        if (dia.fechaInicio !== format(selectedFecha, 'yyyy-MM-dd')) return;
+        const total = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
+        tabla[orden.sabor][orden.linea] = (tabla[orden.sabor][orden.linea] || 0) + total;
+      });
+    });
+
+    return tabla;
+  }, [selectedFecha, ordenes]);
+
+  useEffect(() => {
+    setTablaDiaADia(tablaDiaADIAAuto);
+  }, [tablaDiaADIAAuto]);
 
 
   useEffect(() => {
@@ -955,11 +978,14 @@ export default function OrdenesSapModule({
                                       <input
                                         type="number"
                                         min="0"
-                                        value={tablaDiaADia[sabor]?.[linea] || 0}
-                                        onChange={(e) => setTablaDiaADia(prev => ({
-                                          ...prev,
-                                          [sabor]: { ...prev[sabor], [linea]: Math.max(0, parseInt(e.target.value) || 0) }
-                                        }))}
+                                        value={(tablaDiaADIAEdits[sabor]?.[linea] ?? tablaDiaADia[sabor]?.[linea] ?? 0)}
+                                        onChange={(e) => {
+                                          const valor = Math.max(0, parseInt(e.target.value) || 0);
+                                          setTablaDiaADIAEdits(prev => ({
+                                            ...prev,
+                                            [sabor]: { ...prev[sabor], [linea]: valor }
+                                          }));
+                                        }}
                                         className="h-7 w-full rounded-md border border-slate-100 bg-white text-center text-[10px] font-bold text-slate-700 hover:border-slate-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-none"
                                       />
                                     </td>
@@ -971,12 +997,12 @@ export default function OrdenesSapModule({
                             <tr className="bg-slate-100 font-black">
                               <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
                               {[1,2,3,4,5,6,7].map(linea => {
-                                const totalColumna = PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaDiaADia[sabor]?.[linea] || 0), 0);
+                                const totalColumna = PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaDiaADIAEdits[sabor]?.[linea] ?? tablaDiaADia[sabor]?.[linea] ?? 0), 0);
                                 return (
                                   <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200">{totalColumna}</td>
                                 );
                               })}
-                              <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200">{PRODUCT_LIST.reduce((sum, sabor) => sum + [1,2,3,4,5,6,7].reduce((s, l) => s + (tablaDiaADia[sabor]?.[l] || 0), 0), 0)}</td>
+                              <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200">{PRODUCT_LIST.reduce((sum, sabor) => sum + [1,2,3,4,5,6,7].reduce((s, l) => s + (tablaDiaADIAEdits[sabor]?.[l] ?? tablaDiaADia[sabor]?.[l] ?? 0), 0), 0)}</td>
                             </tr>
                           </tbody>
                         </table>
