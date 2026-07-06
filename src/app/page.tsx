@@ -217,6 +217,35 @@ export default function PlannerPage() {
   const [selectedLine, setSelectedLine] = useState('1');
   const [ordenesSapActiveLinea, setOrdenesSapActiveLinea] = useState<number>(1);
   const [selectedFechaSap, setSelectedFechaSap] = useState<Date | undefined>(undefined);
+  const [selectedFechaSapInitialized, setSelectedFechaSapInitialized] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('selected-fecha-sap');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed) {
+          setSelectedFechaSap(new Date(parsed));
+          return;
+        }
+      }
+    } catch (e) {
+      console.error('Error cargando selectedFechaSap desde localStorage', e);
+    } finally {
+      setSelectedFechaSapInitialized(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!selectedFechaSapInitialized || typeof window === 'undefined') return;
+    try {
+      if (selectedFechaSap) {
+        localStorage.setItem('selected-fecha-sap', JSON.stringify(selectedFechaSap));
+      }
+    } catch (e) {
+      console.error('Error guardando selectedFechaSap en localStorage', e);
+    }
+  }, [selectedFechaSap, selectedFechaSapInitialized]);
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
   const [printWorkingDate, setPrintWorkingDate] = useState<Date>(new Date());
@@ -357,7 +386,7 @@ export default function PlannerPage() {
     if (activeTab === 'paradas-lineas') {
       setParadasSubTab('informes-operacionales');
     }
-  }, [activeTab]);
+   }, [activeTab]);
 
   useEffect(() => {
     if (authLoaded && user && permissionsLoaded) {
