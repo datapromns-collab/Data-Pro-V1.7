@@ -538,11 +538,11 @@ export default function OrdenesSapModule({
     const tableStartY = titleY + 22;
     const lineas = [1, 2, 3, 4, 5, 6, 7];
     const headers = ['SABOR', ...lineas.map((n) => `Linea ${n}`), 'Totales'];
-    const colWidths = [74, 20, 20, 20, 20, 20, 20, 20, usableWidth - 74 - 20 * 7];
-    const tableWidth = usableWidth;
-    const startX = marginX;
-    const headerHeight = 7;
-    const rowHeight = 5;
+    const colWidths = [72, 20, 20, 20, 20, 20, 20, 20, 26];
+    const tableWidth = colWidths.reduce((a, b) => a + b, 0);
+    const startX = (pageWidth - tableWidth) / 2;
+    const headerHeight = 8;
+    const rowHeight = 5.5;
 
     doc.setFillColor(234, 88, 12);
     doc.rect(startX, tableStartY, tableWidth, headerHeight, 'F');
