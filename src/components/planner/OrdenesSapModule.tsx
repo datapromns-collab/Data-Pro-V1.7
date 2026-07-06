@@ -600,19 +600,20 @@ const exportarPDFdia = async () => {
     const pageWidth = pdf.internal.pageSize.getWidth();
     const marginX = 6;
     const marginY = 8;
-    const logoSize = 30;
+    const logoWidth = 50;
+    const logoHeight = 18;
     const tableWidth = colWidths.reduce((a, b) => a + b, 0);
     const startX = (pageWidth - tableWidth) / 2;
-    const startY = 52;
+    const startY = 38;
 
     try {
-      pdf.addImage('/logo-izquierdo.png', 'PNG', marginX, marginY, logoSize, logoSize);
-      pdf.addImage('/logo-derecho.png', 'PNG', pageWidth - marginX - logoSize, marginY, logoSize, logoSize);
+      pdf.addImage('/logo-izquierdo.png', 'PNG', marginX, marginY, logoWidth, logoHeight);
+      pdf.addImage('/logo-derecho.png', 'PNG', pageWidth - marginX - logoWidth, marginY, logoWidth, logoHeight);
     } catch (e) {
       console.warn('No se pudieron cargar los logos', e);
     }
 
-    const titleY = marginY + logoSize + 5;
+    const titleY = marginY + logoHeight + 2;
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(13);
     pdf.setTextColor(15, 23, 42);
