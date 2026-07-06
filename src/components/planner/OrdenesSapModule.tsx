@@ -527,42 +527,138 @@ export default function OrdenesSapModule({
     window.print();
   };
 
-  const exportarPDFdia = async () => {
-    const printArea = document.getElementById('tabla-dia-a-dia-export');
-    if (!printArea) return;
+  const exportarPDFdia = () => {
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4',
+    });
 
-    const overlay = document.createElement('div');
-    overlay.id = 'tabla-dia-a-dia-print-area';
-    overlay.innerHTML = printArea.innerHTML;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const marginX = 10;
+    const marginY = 8;
+    const usableWidth = pageWidth - marginX * 2;
 
-    const style = document.createElement('style');
-    style.id = 'tabla-dia-a-dia-print-styles';
-    style.textContent = `
-      @media print {
-        body > *:not(#tabla-dia-a-dia-print-area) { display: none !important; }
-        #tabla-dia-a-dia-print-area {
-          position: absolute !important;
-          left: 0 !important;
-          top: 0 !important;
-          width: 100% !important;
-          background: #ffffff !important;
-          padding: 16px !important;
-        }
+    const logoSize = 28;
+    doc.addImage('/logo-izquierdo.png', 'PNG', marginX, marginY, logoSize, logoSize);
+    doc.addImage('/logo-derecho.png', 'PNG', pageWidth - marginX - logoSize, marginY, logoSize, logoSize);
+
+    const titleY = marginY + logoSize / 2;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.setTextColor(15, 23, 42);
+    doc.text('Produccion diaria Por sabor y por linea', pageWidth / 2, titleY, { align: 'center' });
+
+    const fecha = fechaDiaADia || new Date();
+    const diaNombre = format(fecha, 'eeee', { locale: es }).toUpperCase();
+    const fechaStr = format(fecha, 'd/M/yyyy');
+    const mes = format(fecha, 'MMMM', { locale: es }).toUpperCase();
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(11);
+    doc.text(`Dia ${diaNombre}`, pageWidth / 2, titleY + 6, { align: 'center' });
+    doc.text(`Fecha ${fechaStr}`, pageWidth / 2, titleY + 12, { align: 'center' });
+    doc.text(`Mes ${mes}`, pageWidth / 2, titleY + 18, { align: 'center' });
+
+    const tableStartY = titleY + 24;
+    const lineas = [1, 2, 3, 4, 5, 6, 7];
+    const headers = ['SABOR', ...lineas.map((n) => `Linea ${n}`), 'Totales'];
+    const colWidths = [72, 20, 20, 20, 20, 20, 20, 20, 26];
+    const tableWidth = colWidths.reduce((a, b) => a + b, 0);
+    const startX = 0;
+    const headerHeight = 8;
+    const rowHeight = 5.5;
+
+    doc.setFillColor(234, 88, 12);
+    doc.rect(startX, tableStartY, tableWidth, headerHeight, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(255, 255, 255);
+    let x = startX;
+    headers.forEach((h, i) => {
+      doc.text(h, x + colWidths[i] / 2, tableStartY + 5.5, { align: 'center' });
+      x += colWidths[i];
+    });
+
+    const rows = PRODUCT_LIST.map((sabor) => {
+      const valores = lineas.map((linea) => tablaDiaADia[sabor]?.[linea] || 0);
+      const total = valores.reduce((a, b) => a + b, 0);
+      return { valores, total, row: [sabor, ...valores, total] };
+    });
+
+    const totales = lineas.map((linea) =>
+      PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaDiaADia[sabor]?.[linea] || 0), 0)
+    );
+    const totalGeneral = totales.reduce((a, b) => a + b, 0);
+    const totalRow = ['Totales', ...totales, totalGeneral];
+
+    let y = tableStartY + headerHeight;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(15, 23, 42);
+
+    rows.forEach((item, idx) => {
+      if (y + rowHeight > pageHeight - 30) {
+        doc.addPage();
+        y = marginY;
       }
-    `;
 
-    document.head.appendChild(style);
-    document.body.appendChild(overlay);
+      doc.setFillColor(idx % 2 === 0 ? 255 : 249, idx % 2 === 0 ? 255 : 250, idx % 2 === 0 ? 255 : 252);
+      doc.rect(startX, y, tableWidth, rowHeight, 'F');
 
-    const handleAfterPrint = () => {
-      style.remove();
-      overlay.remove();
-      window.removeEventListener('afterprint', handleAfterPrint);
-    };
-    window.addEventListener('afterprint', handleAfterPrint);
+      x = startX;
+      doc.setDrawColor(203, 213, 225);
+      doc.setLineWidth(0.2);
+      item.row.forEach((val, i) => {
+        const text = typeof val === 'number' ? String(val) : val;
+        const maxWidth = colWidths[i] - 2;
+        const lines = i === 0 && text.length > 12 ? [text.slice(0, 12)] : [text];
+        doc.setFont(i === 0 ? 'helvetica' : 'helvetica', i === 0 ? 'bold' : 'normal');
+        doc.setFontSize(i === 0 ? 8 : 9);
+        doc.text(lines, x + colWidths[i] / 2, y + 3.8, { align: 'center', maxWidth });
+        if (i < colWidths.length - 1) {
+          doc.line(startX + colWidths[i], y, startX + colWidths[i], y + rowHeight);
+        }
+        x += colWidths[i];
+      });
+      doc.line(startX, y, startX + tableWidth, y);
+      doc.line(startX, y + rowHeight, startX + tableWidth, y + rowHeight);
+      y += rowHeight;
+    });
 
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    window.print();
+    const totalRowY = y;
+    doc.setFillColor(234, 88, 12);
+    doc.rect(startX, totalRowY, tableWidth, headerHeight, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(255, 255, 255);
+    x = startX;
+    totalRow.forEach((val, i) => {
+      doc.text(String(val), x + colWidths[i] / 2, totalRowY + 5.5, { align: 'center' });
+      doc.line(startX + colWidths[i], totalRowY, startX + colWidths[i], totalRowY + headerHeight);
+      x += colWidths[i];
+    });
+    doc.line(startX, totalRowY, startX + tableWidth, totalRowY);
+    doc.line(startX, totalRowY + headerHeight, startX + tableWidth, totalRowY + headerHeight);
+
+    const firmaY = totalRowY + headerHeight + 10;
+    try {
+      doc.addImage('/firma.png', 'PNG', pageWidth - 50, firmaY, 40, 22);
+    } catch (e) {
+      console.warn('No se pudo cargar la firma', e);
+    }
+
+    const blob = doc.output('blob');
+    const url = URL.createObjectURL(blob);
+    const win = window.open(url, '_blank', 'width=900,height=700,left=100,top=100,resizable=yes,scrollbars=yes');
+    if (win) {
+      win.focus();
+      setTimeout(() => {
+        win.print();
+      }, 300);
+    }
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
   };
 
   const eliminarDia = (ordenId: string, diaIndex: number) => {
