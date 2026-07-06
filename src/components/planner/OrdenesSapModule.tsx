@@ -483,16 +483,9 @@ export default function OrdenesSapModule({
   };
 
   const exportarPDF = async () => {
-    const container = document.createElement('div');
-    container.style.position = 'absolute';
-    container.style.left = '-9999px';
-    container.style.top = '0';
-    container.style.background = '#ffffff';
-    container.style.display = 'block';
-    container.style.width = '1400px';
-    document.body.appendChild(container);
+    const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
+    const weekNumber = selectedFecha ? getISOWeek(selectedFecha) : (ordenes[0]?.semana || getISOWeek(new Date()));
 
-    const tarjetasOriginales = document.querySelectorAll('[data-ordenes-sap-linea]');
     const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
     const pageWidth = pdf.internal.pageSize.getWidth();
     const pageHeight = pdf.internal.pageSize.getHeight();
@@ -500,41 +493,106 @@ export default function OrdenesSapModule({
     const marginY = 8;
     const usableWidth = pageWidth - marginX * 2;
 
-    const clones: HTMLDivElement[] = [];
+    for (const linea of lineas) {
+      const ordenesLinea = ordenes.filter((o) => o.linea === linea);
+      if (ordenesLinea.length === 0) continue;
 
-    for (const el of Array.from(tarjetasOriginales)) {
-      const linea = Number((el as HTMLElement).dataset.ordenesSapLinea || '0');
-      if (!linea) continue;
+      let y = marginY;
 
-      const clone = el.cloneNode(true) as HTMLDivElement;
-      clone.style.position = 'static';
-      clone.style.left = 'auto';
-      clone.style.top = 'auto';
-      clone.style.width = '100%';
-      clone.style.background = '#ffffff';
-      clone.style.boxShadow = 'none';
-      container.appendChild(clone);
-      clones.push(clone);
-    }
+      pdf.setFillColor(248, 250, 252);
+      pdf.rect(marginX, y, usableWidth, 8, 'F');
+      pdf.setDrawColor(226, 232, 240);
+      pdf.rect(marginX, y, usableWidth, 8, 'D');
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(9);
+      pdf.setTextColor(15, 23, 42);
+      pdf.text(`Línea ${linea} - Semana ${weekNumber}`, marginX + 3, y + 5);
+      pdf.setTextColor(220, 38, 38);
+      pdf.text('Eliminar orden', marginX + usableWidth - 3, y + 5, { align: 'right' });
+      y += 8;
 
-    for (const clone of clones) {
-      const canvas = await html2canvas(clone, {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: '#ffffff',
-        logging: false,
+      ordenesLinea.forEach((orden) => {
+        if (y > pageHeight - 40) {
+          pdf.addPage();
+          y = marginY;
+        }
+
+        pdf.setFillColor(248, 250, 252);
+        pdf.rect(marginX, y, usableWidth, 6, 'F');
+        pdf.setDrawColor(226, 232, 240);
+        pdf.rect(marginX, y, usableWidth, 6, 'D');
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(9);
+        pdf.setTextColor(15, 23, 42);
+        pdf.text(`${orden.sabor} - SEMANA ${orden.semana}`, marginX + 3, y + 4);
+        y += 6;
+
+        const colWidths = [78, 92, usableWidth - 78 - 92 - 78 - 104, 78, 104];
+        const headerHeight = 6;
+        pdf.setFillColor(248, 250, 252);
+        pdf.rect(marginX, y, usableWidth, headerHeight, 'F');
+        pdf.setDrawColor(226, 232, 240);
+        pdf.rect(marginX, y, usableWidth, headerHeight, 'D');
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(8);
+        pdf.setTextColor(100, 116, 139);
+        const headers = ['Fecha', 'Ticket', 'Cajas', 'Total día', 'N° Orden'];
+        let x = marginX;
+        headers.forEach((h, i) => {
+          pdf.text(h, x + colWidths[i] / 2, y + 4, { align: 'center' });
+          x += colWidths[i];
+        });
+        y += headerHeight;
+
+        (orden.dias || []).forEach((dia) => {
+          const totalDia = calcularTotalDia(dia);
+          const rows = [
+            { fecha: formatDate(dia.fechaInicio), ticket: dia.ticket1 || '', cajas: String(dia.cajas1 || 0), total: String(totalDia), orden: orden.ordenNumero },
+            { fecha: formatDate(dia.fechaInicio), ticket: '', cajas: String(dia.cajas2 || 0), total: String(totalDia), orden: orden.ordenNumero },
+            { fecha: formatDate(dia.fechaInicio), ticket: dia.ticket2 || '', cajas: String(dia.cajas3 || 0), total: String(totalDia), orden: orden.ordenNumero },
+            { fecha: formatDate(dia.fechaInicio), ticket: '', cajas: String(dia.cajas4 || 0), total: String(totalDia), orden: orden.ordenNumero },
+          ];
+
+          rows.forEach((row) => {
+            const rowHeight = 5;
+            pdf.setDrawColor(241, 245, 249);
+            pdf.rect(marginX, y, usableWidth, rowHeight, 'D');
+            pdf.setFont('helvetica', 'normal');
+            pdf.setFontSize(9);
+            pdf.setTextColor(15, 23, 42);
+            x = marginX;
+            const values = [row.fecha, row.ticket, row.cajas, row.total, row.orden];
+            values.forEach((val, i) => {
+              pdf.text(val, x + colWidths[i] / 2, y + 3.5, { align: 'center' });
+              x += colWidths[i];
+            });
+            y += rowHeight;
+          });
+        });
+
+        const totalOrden = (orden.dias || []).reduce((sum, d) => sum + calcularTotalDia(d), 0);
+        pdf.setFillColor(248, 250, 252);
+        pdf.rect(marginX, y, usableWidth, 6, 'F');
+        pdf.setDrawColor(226, 232, 240);
+        pdf.rect(marginX, y, usableWidth, 6, 'D');
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(9);
+        pdf.setTextColor(15, 23, 42);
+        pdf.text(String(totalOrden), marginX + colWidths[0] + colWidths[1] + colWidths[2] / 2, y + 4, { align: 'center' });
+        y += 6;
+
+        pdf.setDrawColor(226, 232, 240);
+        pdf.setFillColor(248, 250, 252);
+        pdf.rect(marginX, y, usableWidth, 6, 'FD');
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(8);
+        pdf.setTextColor(148, 163, 184);
+        pdf.text('Agregar fecha', marginX + usableWidth / 2, y + 4, { align: 'center' });
+        y += 6;
       });
 
-      const imgData = canvas.toDataURL('image/png');
-      const imgWidthMM = usableWidth;
-      const imgHeightMM = Math.min((imgWidthMM / canvas.width) * canvas.height, pageHeight - marginY * 2);
-
-      pdf.addImage(imgData, 'PNG', marginX, marginY, imgWidthMM, imgHeightMM);
       pdf.addPage();
     }
-
-    clones.forEach((c) => c.remove());
-    container.remove();
 
     pdf.deletePage(pdf.getNumberOfPages());
     const blob = pdf.output('blob');
