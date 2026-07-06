@@ -535,11 +535,11 @@ export default function OrdenesSapModule({
 
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
-    const marginX = 6;
+    const marginX = 10;
     const marginY = 8;
     const usableWidth = pageWidth - marginX * 2;
 
-    const logoSize = 24;
+    const logoSize = 28;
     doc.addImage('/logo-izquierdo.png', 'PNG', marginX, marginY, logoSize, logoSize);
     doc.addImage('/logo-derecho.png', 'PNG', pageWidth - marginX - logoSize, marginY, logoSize, logoSize);
 
@@ -555,12 +555,12 @@ export default function OrdenesSapModule({
     const mes = format(fecha, 'MMMM', { locale: es }).toUpperCase();
 
     doc.setFont('helvetica', 'normal');
-    doc.setFontSize(10);
-    doc.text(`Dia ${diaNombre}`, pageWidth / 2, titleY + 5, { align: 'center' });
-    doc.text(`Fecha ${fechaStr}`, pageWidth / 2, titleY + 10, { align: 'center' });
-    doc.text(`Mes ${mes}`, pageWidth / 2, titleY + 15, { align: 'center' });
+    doc.setFontSize(11);
+    doc.text(`Dia ${diaNombre}`, pageWidth / 2, titleY + 6, { align: 'center' });
+    doc.text(`Fecha ${fechaStr}`, pageWidth / 2, titleY + 12, { align: 'center' });
+    doc.text(`Mes ${mes}`, pageWidth / 2, titleY + 18, { align: 'center' });
 
-    const tableStartY = titleY + 22;
+    const tableStartY = titleY + 24;
     const lineas = [1, 2, 3, 4, 5, 6, 7];
     const headers = ['SABOR', ...lineas.map((n) => `Linea ${n}`), 'Totales'];
     const colWidths = [72, 20, 20, 20, 20, 20, 20, 20, 26];
@@ -580,31 +580,21 @@ export default function OrdenesSapModule({
       x += colWidths[i];
     });
 
+    const tablaPDF = fechaDiaADia ? tablaDiaADia : (() => {
+      const t: Record<string, Record<number, number>> = {};
+      PRODUCT_LIST.forEach(sabor => { t[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 }; });
+      return t;
+    })();
+
     const rows = PRODUCT_LIST.map((sabor) => {
-      const valores = lineas.map((linea) => {
-        if (!fechaDiaADia) return 0;
-        return (ordenes || [])
-          .filter(o => o.sabor === sabor && o.linea === linea)
-          .reduce((sum, orden) => {
-            return sum + (orden.dias || [])
-              .filter(dia => dia.fechaInicio === format(fechaDiaADia, 'yyyy-MM-dd'))
-              .reduce((s, dia) => s + (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0), 0);
-          }, 0);
-      });
+      const valores = lineas.map((linea) => tablaPDF[sabor]?.[linea] || 0);
       const total = valores.reduce((a, b) => a + b, 0);
       return { valores, total, row: [sabor, ...valores, total] };
     });
 
-    const totales = lineas.map((linea) => {
-      if (!fechaDiaADia) return 0;
-      return PRODUCT_LIST.reduce((sum, sabor) => sum + (ordenes || [])
-        .filter(o => o.sabor === sabor && o.linea === linea)
-        .reduce((s, orden) => {
-          return s + (orden.dias || [])
-            .filter(dia => dia.fechaInicio === format(fechaDiaADia, 'yyyy-MM-dd'))
-            .reduce((ss, dia) => ss + (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0), 0);
-        }, 0), 0);
-    });
+    const totales = lineas.map((linea) =>
+      PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaPDF[sabor]?.[linea] || 0), 0)
+    );
     const totalGeneral = totales.reduce((a, b) => a + b, 0);
     const totalRow = ['Totales', ...totales, totalGeneral];
 
