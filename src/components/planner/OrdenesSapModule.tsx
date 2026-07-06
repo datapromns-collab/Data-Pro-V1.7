@@ -664,7 +664,8 @@ const exportarPDFdia = async () => {
         y = marginY;
       }
 
-      pdf.setFillColor(255, 255, 255);
+      const isLight = idx % 2 === 1;
+      pdf.setFillColor(isLight ? 255 : 255, isLight ? 242 : 255, isLight ? 230 : 255);
       pdf.rect(startX, y, tableWidth, rowHeight, 'F');
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(9);
