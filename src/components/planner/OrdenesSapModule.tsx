@@ -576,7 +576,7 @@ export default function OrdenesSapModule({
     const tableStartY = titleY + 24;
     const lineas = [1, 2, 3, 4, 5, 6, 7];
     const headers = ['SABOR', ...lineas.map((n) => `Linea ${n}`), 'Totales'];
-    const colWidths = [68, 22, 22, 22, 22, 22, 22, 22, 28];
+    const colWidths = [72, 20, 20, 20, 20, 20, 20, 20, 26];
     const tableWidth = colWidths.reduce((a, b) => a + b, 0);
     const startX = (pageWidth - tableWidth) / 2;
     const headerHeight = 8;
@@ -624,11 +624,18 @@ export default function OrdenesSapModule({
       doc.setLineWidth(0.2);
       item.row.forEach((val, i) => {
         const text = typeof val === 'number' ? String(val) : val;
-        doc.text(text, x + colWidths[i] / 2, y + 3.8, { align: 'center' });
-        doc.line(startX + colWidths[i], y, startX + colWidths[i], y + rowHeight);
+        const maxWidth = colWidths[i] - 2;
+        const lines = i === 0 && text.length > 12 ? [text.slice(0, 12)] : [text];
+        doc.setFont(i === 0 ? 'helvetica' : 'helvetica', i === 0 ? 'bold' : 'normal');
+        doc.setFontSize(i === 0 ? 8 : 9);
+        doc.text(lines, x + colWidths[i] / 2, y + 3.8, { align: 'center', maxWidth });
+        if (i < colWidths.length - 1) {
+          doc.line(startX + colWidths[i], y, startX + colWidths[i], y + rowHeight);
+        }
         x += colWidths[i];
       });
       doc.line(startX, y, startX + tableWidth, y);
+      doc.line(startX, y + rowHeight, startX + tableWidth, y + rowHeight);
       y += rowHeight;
     });
 
