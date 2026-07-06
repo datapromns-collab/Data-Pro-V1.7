@@ -653,6 +653,115 @@ export default function OrdenesSapModule({
     pdf.save(`Ordenes semana ${weekNumber}.pdf`);
   };
 
+  const exportarPDFdia = () => {
+    const doc = new jsPDF({
+      orientation: 'landscape',
+      unit: 'mm',
+      format: 'a4',
+    });
+
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const marginX = 10;
+    let y = 10;
+
+    const logoSize = 16;
+    doc.addImage('/logo-izquierdo.png', 'PNG', marginX, y, logoSize, logoSize);
+    doc.addImage('/logo-derecho.png', 'PNG', pageWidth - marginX - logoSize, y, logoSize, logoSize);
+    y += logoSize + 3;
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text('Produccion diaria Por sabor y por linea', pageWidth / 2, y, { align: 'center' });
+    y += 6;
+
+    const fecha = fechaDiaADia || new Date();
+    const diaNombre = format(fecha, 'eeee', { locale: es }).toUpperCase();
+    const fechaStr = format(fecha, 'd/M/yyyy');
+    const mes = format(fecha, 'MMMM', { locale: es }).toUpperCase();
+
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text(`Dia ${diaNombre}`, pageWidth / 2, y, { align: 'center' });
+    y += 5;
+    doc.text(`Fecha ${fechaStr}`, pageWidth / 2, y, { align: 'center' });
+    y += 5;
+    doc.text(`Mes ${mes}`, pageWidth / 2, y, { align: 'center' });
+    y += 6;
+
+    const lineas = [1, 2, 3, 4, 5, 6, 7];
+    const headers = ['SABOR', ...lineas.map((n) => `Linea ${n}`), 'Totales'];
+    const colWidths = [58, 20, 20, 20, 20, 20, 20, 20, 24];
+    const tableWidth = colWidths.reduce((a, b) => a + b, 0);
+    const startX = (pageWidth - tableWidth) / 2;
+
+    doc.setFillColor(235, 235, 235);
+    doc.rect(startX, y, tableWidth, 7, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    let x = startX;
+    headers.forEach((h, i) => {
+      doc.text(h, x + colWidths[i] / 2, y + 5, { align: 'center' });
+      x += colWidths[i];
+    });
+    y += 7;
+
+    const rows = PRODUCT_LIST.map((sabor) => {
+      const valores = lineas.map((linea) => tablaDiaADia[sabor]?.[linea] || 0);
+      const total = valores.reduce((a, b) => a + b, 0);
+      return { valores, total, row: [sabor, ...valores, total] };
+    });
+
+    const totales = lineas.map((linea) =>
+      PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaDiaADia[sabor]?.[linea] || 0), 0)
+    );
+    const totalGeneral = totales.reduce((a, b) => a + b, 0);
+    const totalRow = ['Totales', ...totales, totalGeneral];
+
+    rows.forEach((item) => {
+      x = startX;
+      item.row.forEach((val, i) => {
+        const text = typeof val === 'number' ? String(val) : val;
+        doc.setFont('helvetica', 'normal');
+        doc.setFontSize(8);
+        doc.text(text, x + colWidths[i] / 2, y + 4.5, { align: 'center' });
+        doc.setDrawColor(220, 220, 220);
+        doc.line(x, y, x, y + 6);
+        x += colWidths[i];
+      });
+      doc.setDrawColor(220, 220, 220);
+      doc.line(startX, y, startX + tableWidth, y);
+      y += 6;
+      if (y > pageHeight - 35) {
+        doc.addPage();
+        y = 15;
+      }
+    });
+
+    doc.setFillColor(235, 235, 235);
+    doc.rect(startX, y, tableWidth, 7, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    x = startX;
+    totalRow.forEach((val, i) => {
+      doc.text(String(val), x + colWidths[i] / 2, y + 5, { align: 'center' });
+      doc.setDrawColor(180, 180, 180);
+      doc.line(x, y, x, y + 7);
+      x += colWidths[i];
+    });
+    doc.setDrawColor(180, 180, 180);
+    doc.line(startX, y, startX + tableWidth, y + 7);
+    y += 12;
+
+    try {
+      doc.addImage('/firma.png', 'PNG', pageWidth - 45, y, 35, 18);
+    } catch (e) {
+      console.warn('No se pudo cargar la firma', e);
+    }
+
+    doc.save(`produccion-diaria-${format(fecha, 'yyyy-MM-dd')}.pdf`);
+  };
+
   const eliminarDia = (ordenId: string, diaIndex: number) => {
     setOrdenes(prev => prev.map(o => {
       if (o.id !== ordenId) return o;
@@ -950,11 +1059,21 @@ export default function OrdenesSapModule({
                   </div>
                 ) : activeSubsection === null || activeSubsection === 'dia' ? (
                   <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                    <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-                      <div className="w-2 h-2 rounded-full bg-sky-500" />
-                      <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                        {fechaDiaADia ? format(fechaDiaADia, "eeee d/M/yyyy", { locale: es }) : "Día a día - Línea " + activeLinea}
-                      </h4>
+                    <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-slate-100">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-sky-500" />
+                        <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                          {fechaDiaADia ? format(fechaDiaADia, "eeee d/M/yyyy", { locale: es }) : "Día a día - Línea " + activeLinea}
+                        </h4>
+                      </div>
+                      <Button
+                        size="sm"
+                        onClick={exportarPDFdia}
+                        className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                      >
+                        <Plus className="h-3 w-3" />
+                        Exportar PDF
+                      </Button>
                     </div>
                     <div className="p-4">
                       <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
