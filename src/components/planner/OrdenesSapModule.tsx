@@ -635,10 +635,11 @@ export default function OrdenesSapModule({
       const imgHeightMM = Math.min((imgWidthMM / canvas.width) * canvas.height, pageHeight - marginY * 2);
 
       pdf.addImage(imgData, 'PNG', marginX, marginY, imgWidthMM, imgHeightMM);
-      pdf.addPage();
     }
 
-    pdf.deletePage(pdf.getNumberOfPages());
+    if (pdf.getNumberOfPages() > 0) {
+      pdf.deletePage(pdf.getNumberOfPages());
+    }
     const blob = pdf.output('blob');
     const url = URL.createObjectURL(blob);
     const win = window.open(url, '_blank', 'width=900,height=700,left=100,top=100,resizable=yes,scrollbars=yes');
