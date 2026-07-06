@@ -617,17 +617,18 @@ export default function OrdenesSapModule({
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
     const marginX = 10;
-    let y = 10;
+    const marginY = 8;
+    const usableWidth = pageWidth - marginX * 2;
 
-    const logoSize = 16;
-    doc.addImage('/logo-izquierdo.png', 'PNG', marginX, y, logoSize, logoSize);
-    doc.addImage('/logo-derecho.png', 'PNG', pageWidth - marginX - logoSize, y, logoSize, logoSize);
-    y += logoSize + 3;
+    const logoSize = 28;
+    doc.addImage('/logo-izquierdo.png', 'PNG', marginX, marginY, logoSize, logoSize);
+    doc.addImage('/logo-derecho.png', 'PNG', pageWidth - marginX - logoSize, marginY, logoSize, logoSize);
 
+    const titleY = marginY + logoSize + 4;
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(11);
-    doc.text('Produccion diaria Por sabor y por linea', pageWidth / 2, y, { align: 'center' });
-    y += 6;
+    doc.setFontSize(12);
+    doc.setTextColor(15, 23, 42);
+    doc.text('Produccion diaria Por sabor y por linea', pageWidth / 2, titleY, { align: 'center' });
 
     const fecha = fechaDiaADia || new Date();
     const diaNombre = format(fecha, 'eeee', { locale: es }).toUpperCase();
@@ -635,30 +636,30 @@ export default function OrdenesSapModule({
     const mes = format(fecha, 'MMMM', { locale: es }).toUpperCase();
 
     doc.setFont('helvetica', 'normal');
-    doc.setFontSize(10);
-    doc.text(`Dia ${diaNombre}`, pageWidth / 2, y, { align: 'center' });
-    y += 5;
-    doc.text(`Fecha ${fechaStr}`, pageWidth / 2, y, { align: 'center' });
-    y += 5;
-    doc.text(`Mes ${mes}`, pageWidth / 2, y, { align: 'center' });
-    y += 6;
+    doc.setFontSize(11);
+    doc.text(`Dia ${diaNombre}`, pageWidth / 2, titleY + 6, { align: 'center' });
+    doc.text(`Fecha ${fechaStr}`, pageWidth / 2, titleY + 12, { align: 'center' });
+    doc.text(`Mes ${mes}`, pageWidth / 2, titleY + 18, { align: 'center' });
 
+    const tableStartY = titleY + 24;
     const lineas = [1, 2, 3, 4, 5, 6, 7];
     const headers = ['SABOR', ...lineas.map((n) => `Linea ${n}`), 'Totales'];
-    const colWidths = [58, 20, 20, 20, 20, 20, 20, 20, 24];
+    const colWidths = [68, 22, 22, 22, 22, 22, 22, 22, 28];
     const tableWidth = colWidths.reduce((a, b) => a + b, 0);
     const startX = (pageWidth - tableWidth) / 2;
+    const headerHeight = 8;
+    const rowHeight = 5.5;
 
-    doc.setFillColor(235, 235, 235);
-    doc.rect(startX, y, tableWidth, 7, 'F');
+    doc.setFillColor(234, 88, 12);
+    doc.rect(startX, tableStartY, tableWidth, headerHeight, 'F');
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
+    doc.setFontSize(9);
+    doc.setTextColor(255, 255, 255);
     let x = startX;
     headers.forEach((h, i) => {
-      doc.text(h, x + colWidths[i] / 2, y + 5, { align: 'center' });
+      doc.text(h, x + colWidths[i] / 2, tableStartY + 5.5, { align: 'center' });
       x += colWidths[i];
     });
-    y += 7;
 
     const rows = PRODUCT_LIST.map((sabor) => {
       const valores = lineas.map((linea) => tablaDiaADia[sabor]?.[linea] || 0);
@@ -672,43 +673,51 @@ export default function OrdenesSapModule({
     const totalGeneral = totales.reduce((a, b) => a + b, 0);
     const totalRow = ['Totales', ...totales, totalGeneral];
 
-    rows.forEach((item) => {
+    let y = tableStartY + headerHeight;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+    doc.setTextColor(15, 23, 42);
+
+    rows.forEach((item, idx) => {
+      if (y + rowHeight > pageHeight - 30) {
+        doc.addPage();
+        y = marginY;
+      }
+
+      doc.setFillColor(idx % 2 === 0 ? 255 : 249, idx % 2 === 0 ? 255 : 250, idx % 2 === 0 ? 255 : 252);
+      doc.rect(startX, y, tableWidth, rowHeight, 'F');
+
       x = startX;
+      doc.setDrawColor(203, 213, 225);
+      doc.setLineWidth(0.2);
       item.row.forEach((val, i) => {
         const text = typeof val === 'number' ? String(val) : val;
-        doc.setFont('helvetica', 'normal');
-        doc.setFontSize(8);
-        doc.text(text, x + colWidths[i] / 2, y + 4.5, { align: 'center' });
-        doc.setDrawColor(220, 220, 220);
-        doc.line(x, y, x, y + 6);
+        doc.text(text, x + colWidths[i] / 2, y + 3.8, { align: 'center' });
+        doc.line(startX + colWidths[i], y, startX + colWidths[i], y + rowHeight);
         x += colWidths[i];
       });
-      doc.setDrawColor(220, 220, 220);
       doc.line(startX, y, startX + tableWidth, y);
-      y += 6;
-      if (y > pageHeight - 35) {
-        doc.addPage();
-        y = 15;
-      }
+      y += rowHeight;
     });
 
-    doc.setFillColor(235, 235, 235);
-    doc.rect(startX, y, tableWidth, 7, 'F');
+    const totalRowY = y;
+    doc.setFillColor(234, 88, 12);
+    doc.rect(startX, totalRowY, tableWidth, headerHeight, 'F');
     doc.setFont('helvetica', 'bold');
-    doc.setFontSize(8);
+    doc.setFontSize(9);
+    doc.setTextColor(255, 255, 255);
     x = startX;
     totalRow.forEach((val, i) => {
-      doc.text(String(val), x + colWidths[i] / 2, y + 5, { align: 'center' });
-      doc.setDrawColor(180, 180, 180);
-      doc.line(x, y, x, y + 7);
+      doc.text(String(val), x + colWidths[i] / 2, totalRowY + 5.5, { align: 'center' });
+      doc.line(startX + colWidths[i], totalRowY, startX + colWidths[i], totalRowY + headerHeight);
       x += colWidths[i];
     });
-    doc.setDrawColor(180, 180, 180);
-    doc.line(startX, y, startX + tableWidth, y + 7);
-    y += 12;
+    doc.line(startX, totalRowY, startX + tableWidth, totalRowY);
+    doc.line(startX, totalRowY + headerHeight, startX + tableWidth, totalRowY + headerHeight);
 
+    const firmaY = totalRowY + headerHeight + 10;
     try {
-      doc.addImage('/firma.png', 'PNG', pageWidth - 45, y, 35, 18);
+      doc.addImage('/firma.png', 'PNG', pageWidth - 50, firmaY, 40, 22);
     } catch (e) {
       console.warn('No se pudo cargar la firma', e);
     }
