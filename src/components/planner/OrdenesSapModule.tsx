@@ -551,7 +551,7 @@ export default function OrdenesSapModule({
     doc.addImage('/logo-izquierdo.png', 'PNG', marginX, marginY, logoSize, logoSize);
     doc.addImage('/logo-derecho.png', 'PNG', pageWidth - marginX - logoSize, marginY, logoSize, logoSize);
 
-    const titleY = marginY + logoSize + 4;
+    const titleY = marginY + logoSize / 2;
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(12);
     doc.setTextColor(15, 23, 42);
