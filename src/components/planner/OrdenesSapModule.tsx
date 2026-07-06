@@ -337,35 +337,9 @@ export default function OrdenesSapModule({
   const [tablaDiaADia, setTablaDiaADia] = useState<Record<string, Record<number, number>>>({});
   const [ordenes, setOrdenes] = useState<OrdenSap[]>([]);
 
-
-  const tablaDiaADIAAuto = useMemo(() => {
-    const tabla: Record<string, Record<number, number>> = {};
-
-    if (!fechaDiaADia) {
-      PRODUCT_LIST.forEach(sabor => {
-        tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
-      });
-      return tabla;
-    }
-
-    PRODUCT_LIST.forEach(sabor => {
-      tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
-    });
-
-    ordenes.forEach(orden => {
-      orden.dias.forEach(dia => {
-        if (dia.fechaInicio !== format(fechaDiaADia, 'yyyy-MM-dd')) return;
-        const total = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
-        tabla[orden.sabor][orden.linea] = (tabla[orden.sabor][orden.linea] || 0) + total;
-      });
-    });
-
-    return tabla;
-  }, [fechaDiaADia, ordenes]);
-
   useEffect(() => {
-    setTablaDiaADia(tablaDiaADIAAuto);
-  }, [tablaDiaADIAAuto]);
+    setTablaDiaADia(tablaDiaADia === undefined ? {} : tablaDiaADia);
+  }, [fechaDiaADia]);
 
 
   useEffect(() => {
