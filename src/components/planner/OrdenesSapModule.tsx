@@ -704,9 +704,8 @@ const exportarPDFdia = async () => {
       console.warn('No se pudo cargar la firma', e);
     }
 
-    const pdfBlob = pdf.output('blob');
-    const blobUrl = URL.createObjectURL(pdfBlob);
-    window.open(blobUrl, '_blank');
+    const pdfNombre = `${format(fecha, 'd-M-yy')} ${diaNombre}.pdf`;
+    pdf.save(pdfNombre);
   };
 
   const eliminarDia = (ordenId: string, diaIndex: number) => {
