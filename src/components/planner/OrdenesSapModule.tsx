@@ -393,6 +393,7 @@ export default function OrdenesSapModule({
   const [tablaDiaADia, setTablaDiaADia] = useState<Record<string, Record<number, number>>>({});
   const [tablaTurnoEdits, setTablaTurnoEdits] = useState<Record<string, Record<string, Record<number, number>>>>({});
   const [tablaProdtSemanalEdits, setTablaProdtSemanalEdits] = useState<Record<string, Record<number, number>>>({});
+  const [tablaResumenMensualEdits, setTablaResumenMensualEdits] = useState<Record<string, Record<number, number>>>({});
   const [ordenes, setOrdenes] = useState<OrdenSap[]>([]);
 
   const tablaTurnoDiurnoAuto = useMemo(() => {
@@ -449,7 +450,7 @@ export default function OrdenesSapModule({
   const resumenMensualTabla = useMemo(() => {
     const tabla: Record<string, Record<number, number>> = {};
     PRODUCT_LIST.forEach(sabor => {
-      tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+      tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 };
     });
     if (!selectedFecha) return tabla;
     const mes = selectedFecha.getMonth();
@@ -1624,8 +1625,106 @@ const exportarPDFdia = async () => {
                         </span>
                       </div>
                       <div className="p-4">
-                        <div className="h-32 flex items-center justify-center text-slate-400">
-                          <p className="text-[10px] font-bold uppercase tracking-widest">Sección en desarrollo</p>
+                        <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                          <table className="w-full border-collapse text-center">
+                            <thead>
+                              <tr className="bg-slate-100">
+                                <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
+                                {[1,2,3,4].map(n => (
+                                  <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
+                                ))}
+                                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Total 2L</th>
+                                {[5,6,7,8].map(n => (
+                                  <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
+                                ))}
+                                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {PRODUCT_LIST.map((sabor) => {
+                                const l1 = tablaResumenMensualEdits[sabor]?.[1] ?? (resumenMensualTabla[sabor]?.[1] || 0);
+                                const l2 = tablaResumenMensualEdits[sabor]?.[2] ?? (resumenMensualTabla[sabor]?.[2] || 0);
+                                const l3 = tablaResumenMensualEdits[sabor]?.[3] ?? (resumenMensualTabla[sabor]?.[3] || 0);
+                                const l4 = tablaResumenMensualEdits[sabor]?.[4] ?? (resumenMensualTabla[sabor]?.[4] || 0);
+                                const l5 = tablaResumenMensualEdits[sabor]?.[5] ?? (resumenMensualTabla[sabor]?.[5] || 0);
+                                const l6 = tablaResumenMensualEdits[sabor]?.[6] ?? (resumenMensualTabla[sabor]?.[6] || 0);
+                                const l7 = tablaResumenMensualEdits[sabor]?.[7] ?? (resumenMensualTabla[sabor]?.[7] || 0);
+                                const l8 = tablaResumenMensualEdits[sabor]?.[8] ?? (resumenMensualTabla[sabor]?.[8] || 0);
+                                const total2L = l1 + l2 + l3 + l4;
+                                const totalSabor = l1 + l2 + l3 + l4 + l5 + l6 + l7 + l8;
+                                return (
+                                  <tr key={sabor} className="even:bg-slate-50/60">
+                                    <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
+                                    {[1,2,3,4].map(linea => (
+                                      <td key={linea} className="px-1 py-0.5 border-r border-b border-slate-100">
+                                        <input
+                                          type="number"
+                                          min="0"
+                                          value={(tablaResumenMensualEdits[sabor]?.[linea] ?? (resumenMensualTabla[sabor]?.[linea] || 0))}
+                                          onChange={(e) => {
+                                            const valor = Math.max(0, parseInt(e.target.value) || 0);
+                                            setTablaResumenMensualEdits(prev => ({
+                                              ...prev,
+                                              [sabor]: { ...prev[sabor], [linea]: valor }
+                                            }));
+                                          }}
+                                          className="h-7 w-full rounded-md border border-slate-100 bg-white text-center text-[10px] font-bold text-slate-700 hover:border-slate-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-none"
+                                        />
+                                      </td>
+                                    ))}
+                                    <td className="px-1 py-0.5 border-r border-b border-slate-100 text-center">
+                                      <span className="text-[10px] font-black text-slate-900">{total2L}</span>
+                                    </td>
+                                    {[5,6,7,8].map(linea => (
+                                      <td key={linea} className="px-1 py-0.5 border-r border-b border-slate-100">
+                                        <input
+                                          type="number"
+                                          min="0"
+                                          value={(tablaResumenMensualEdits[sabor]?.[linea] ?? (resumenMensualTabla[sabor]?.[linea] || 0))}
+                                          onChange={(e) => {
+                                            const valor = Math.max(0, parseInt(e.target.value) || 0);
+                                            setTablaResumenMensualEdits(prev => ({
+                                              ...prev,
+                                              [sabor]: { ...prev[sabor], [linea]: valor }
+                                            }));
+                                          }}
+                                          className="h-7 w-full rounded-md border border-slate-100 bg-white text-center text-[10px] font-bold text-slate-700 hover:border-slate-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-none"
+                                        />
+                                      </td>
+                                    ))}
+                                    <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100">{totalSabor}</td>
+                                  </tr>
+                                );
+                              })}
+                              <tr className="bg-slate-100 font-black">
+                                <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
+                                {[1,2,3,4].map(linea => {
+                                  const totalColumna = PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaResumenMensualEdits[sabor]?.[linea] ?? (resumenMensualTabla[sabor]?.[linea] || 0)), 0);
+                                  return (
+                                    <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200">{totalColumna}</td>
+                                  );
+                                })}
+                                <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200">
+                                  {PRODUCT_LIST.reduce((sum, sabor) => {
+                                    const l1 = tablaResumenMensualEdits[sabor]?.[1] ?? (resumenMensualTabla[sabor]?.[1] || 0);
+                                    const l2 = tablaResumenMensualEdits[sabor]?.[2] ?? (resumenMensualTabla[sabor]?.[2] || 0);
+                                    const l3 = tablaResumenMensualEdits[sabor]?.[3] ?? (resumenMensualTabla[sabor]?.[3] || 0);
+                                    const l4 = tablaResumenMensualEdits[sabor]?.[4] ?? (resumenMensualTabla[sabor]?.[4] || 0);
+                                    return sum + l1 + l2 + l3 + l4;
+                                  }, 0)}
+                                </td>
+                                {[5,6,7,8].map(linea => {
+                                  const totalColumna = PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaResumenMensualEdits[sabor]?.[linea] ?? (resumenMensualTabla[sabor]?.[linea] || 0)), 0);
+                                  return (
+                                    <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200">{totalColumna}</td>
+                                  );
+                                })}
+                                <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200">
+                                  {PRODUCT_LIST.reduce((sum, sabor) => sum + [1,2,3,4,5,6,7,8].reduce((s, l) => s + (tablaResumenMensualEdits[sabor]?.[l] ?? (resumenMensualTabla[sabor]?.[l] || 0)), 0), 0)}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
                         </div>
                       </div>
                     </div>
