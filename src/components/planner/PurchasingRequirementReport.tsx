@@ -114,7 +114,7 @@ export function PurchasingRequirementReport({
         if (code === 'EMP_0068' && presentation === "1.5Lts" && isJugo) { total += quantity * 12; return; }
 
         // Tapas Fallbacks
-        if (code === 'EMP_0095' && isFresh) { 
+        if (code === 'EMP_0105_N' && isFresh) { 
           total += quantity * (presentation === "2Lts" ? 6 : (presentation === "1Lt" ? 12 : 15)); 
           return; 
         }

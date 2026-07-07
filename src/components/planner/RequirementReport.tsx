@@ -170,7 +170,7 @@ export function RequirementReport({ tasks, weekStartDate, recipes, packagingReci
     }
 
     // Tapas Fallback
-    if (code === 'EMP_0095') {
+    if (code === 'EMP_0105_N') {
        return Math.round(tasks.filter(t => t.name === "GLUP FRESH" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
            const f = t.presentation === "2Lts" ? 6 : (t.presentation === "1Lt" ? 12 : 15);
            return acc + (t.quantity || 0) * f;

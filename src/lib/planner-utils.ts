@@ -353,9 +353,9 @@ export const DEFAULT_PACKAGING_RECIPES: Record<string, Record<string, Record<str
     "0.4Lts": { "EMP_0126": 15, "EMP_0105_N": 15, "EMP_0114": 0.0051, "EMP_0019": 0.0034905, "EMP_0130": 0.02283, "EMP_0078": 0.00036 }
   },
   "GLUP FRESH": {
-    "2Lts": { "EMP_0103": 6, "EMP_0095": 6, "EMP_0038": 0.00495, "EMP_0019": 0.006981, "EMP_0080": 0.03221, "EMP_0078": 0.000258 },
-    "1Lt": { "EMP_0120": 12, "EMP_0095": 12, "EMP_0117": 0.006684, "EMP_0019": 0.00716, "EMP_0080": 0.03338, "EMP_0078": 0.000276 },
-    "0.4Lts": { "EMP_0135": 15, "EMP_0095": 15, "EMP_0116": 0.00465, "EMP_0019": 0.0034905, "EMP_0130": 0.02283, "EMP_0078": 0.00036 }
+    "2Lts": { "EMP_0103": 6, "EMP_0105_N": 6, "EMP_0038": 0.00495, "EMP_0019": 0.006981, "EMP_0080": 0.03221, "EMP_0078": 0.000258 },
+    "1Lt": { "EMP_0120": 12, "EMP_0105_N": 12, "EMP_0117": 0.006684, "EMP_0019": 0.00716, "EMP_0080": 0.03338, "EMP_0078": 0.000276 },
+    "0.4Lts": { "EMP_0135": 15, "EMP_0105_N": 15, "EMP_0116": 0.00465, "EMP_0019": 0.0034905, "EMP_0130": 0.02283, "EMP_0078": 0.00036 }
   },
   "GLUP UVA": {
     "2Lts": { "EMP_0093": 6, "EMP_0105": 6, "EMP_0022": 0.005682, "EMP_0019": 0.006981, "EMP_0080": 0.03221, "EMP_0078": 0.000258 },
@@ -458,7 +458,7 @@ export const calculateRequirementFromSource = (
         total += quantity * 12;
         return;
       }
-      if (code === 'EMP_0095' && isFresh) {
+      if (code === 'EMP_0105_N' && isFresh) {
         total += quantity * (presentation === '2Lts' ? 6 : (presentation === '1Lt' ? 12 : 15));
         return;
       }
