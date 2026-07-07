@@ -866,7 +866,7 @@ const exportarPDFdia = async () => {
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(13);
     pdf.setTextColor(15, 23, 42);
-    pdf.text('SEMANA', pageWidth / 2, titleY, { align: 'center' });
+    pdf.text(`SEMANA ${semana}`, pageWidth / 2, titleY, { align: 'center' });
 
     let y = startY;
     let x = startX;
