@@ -1134,7 +1134,7 @@ const exportarPDFdia = async () => {
                       </div>
                     </div>
                   </div>
-                ) : activeSubsection === null || activeSubsection === 'dia' ? (
+                 ) : activeSection === 'dia-a-dia' && (activeSubsection === null || activeSubsection === 'dia') ? (
                   <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
                     <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-slate-100">
                       <div className="flex items-center gap-2">
