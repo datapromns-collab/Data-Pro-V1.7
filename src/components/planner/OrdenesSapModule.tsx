@@ -873,7 +873,7 @@ const exportarPDFdia = async () => {
     pdf.setLineWidth(0.15);
 
     const drawHeader = () => {
-      pdf.setFillColor(234, 88, 12);
+      pdf.setFillColor(30, 58, 138);
       pdf.rect(startX, y, tableWidth, headerHeight, 'F');
       pdf.setFont('helvetica', 'bold');
       pdf.setFontSize(10);
@@ -908,7 +908,7 @@ const exportarPDFdia = async () => {
       }
 
       const isLight = idx % 2 === 1;
-      pdf.setFillColor(isLight ? 240 : 255, isLight ? 248 : 255, isLight ? 255 : 255);
+      pdf.setFillColor(isLight ? 219 : 255, isLight ? 234 : 255, isLight ? 254 : 255);
       pdf.rect(startX, y, tableWidth, rowHeight, 'F');
       pdf.setFont('helvetica', 'normal');
       pdf.setFontSize(9);
@@ -926,7 +926,7 @@ const exportarPDFdia = async () => {
       y += rowHeight;
     });
 
-    pdf.setFillColor(234, 88, 12);
+    pdf.setFillColor(30, 58, 138);
     pdf.rect(startX, y, tableWidth, headerHeight, 'F');
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(10);
