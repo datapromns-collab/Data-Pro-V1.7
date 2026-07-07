@@ -303,6 +303,10 @@ export default function OrdenesSapModule({
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
   const [activeSection, setActiveSection] = useState<'carga-prod' | 'dia-a-dia' | 'prodt-semanal' | 'resumen-mensual'>('carga-prod');
   const [activeSubsection, setActiveSubsection] = useState<'dia' | 'diurno' | 'nocturno' | null>(null);
+
+  useEffect(() => {
+    setActiveSubsection(null);
+  }, [activeSection]);
   const [internalActiveLinea, setInternalActiveLinea] = useState<number | null>(1);
 
   const activeLinea = externalActiveLinea ?? internalActiveLinea;
