@@ -1615,27 +1615,21 @@ const exportarPDFdia = async () => {
                           </table>
                         </div>
                       </div>
+                     </div>
+                  ) : activeSection === 'resumen-mensual' ? (
+                    <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                      <div className="flex items-center justify-end gap-2 px-6 py-4 border-b border-slate-100">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                          {selectedFecha ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase() : ''}
+                        </span>
+                      </div>
+                      <div className="p-4">
+                        <div className="h-32 flex items-center justify-center text-slate-400">
+                          <p className="text-[10px] font-bold uppercase tracking-widest">Sección en desarrollo</p>
+                        </div>
+                      </div>
                     </div>
-                 ) : activeSection === 'resumen-mensual' ? (
-                   <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                     <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-slate-100">
-                       <div className="flex items-center gap-2">
-                         <div className="w-2 h-2 rounded-full bg-sky-500" />
-                         <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                           RESUMEN MENSUAL - LÃ­nea {activeLinea}
-                         </h4>
-                       </div>
-                       <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-                         {selectedFecha ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase() : ''}
-                       </span>
-                     </div>
-                     <div className="p-4">
-                       <div className="h-32 flex items-center justify-center text-slate-400">
-                         <p className="text-[10px] font-bold uppercase tracking-widest">SecciÃ³n en desarrollo</p>
-                       </div>
-                     </div>
-                   </div>
-                 ) : (
+                  ) : (
                    <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
                      <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
                        <div className="w-2 h-2 rounded-full bg-sky-500" />
