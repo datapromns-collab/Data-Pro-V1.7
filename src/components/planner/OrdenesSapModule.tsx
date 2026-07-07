@@ -1203,7 +1203,7 @@ const exportarPDFdia = async () => {
                     <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
                       <div className="w-2 h-2 rounded-full bg-sky-500" />
                       <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                        Diurno - Línea {activeLinea}
+                        Diurno - {fechaDiaADia ? format(fechaDiaADia, "eeee d/M/yyyy", { locale: es }) : 'Seleccione fecha'}
                       </h4>
                     </div>
                     <div className="p-4">
@@ -1270,7 +1270,7 @@ const exportarPDFdia = async () => {
                     <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
                       <div className="w-2 h-2 rounded-full bg-sky-500" />
                       <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                        Nocturno - Línea {activeLinea}
+                        Nocturno - {fechaDiaADia ? format(fechaDiaADia, "eeee d/M/yyyy", { locale: es }) : 'Seleccione fecha'}
                       </h4>
                     </div>
                     <div className="p-4">
