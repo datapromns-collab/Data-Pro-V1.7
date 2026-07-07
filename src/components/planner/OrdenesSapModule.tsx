@@ -327,6 +327,38 @@ export default function OrdenesSapModule({
   const [fechaInicio, setFechaInicio] = useState('');
   const [fechaDiaADia, setFechaDiaADia] = useState<Date | undefined>(undefined);
   const [fechaDiaADiaInicializada, setFechaDiaADiaInicializada] = useState(false);
+  const [selectedFechaProdtSemanal, setSelectedFechaProdtSemanal] = useState<Date | undefined>(undefined);
+  const [fechaProdtSemanalInicializada, setFechaProdtSemanalInicializada] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('selected-fecha-prodt-semanal');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed) {
+          setSelectedFechaProdtSemanal(new Date(parsed));
+          return;
+        }
+      }
+    } catch (e) {
+      console.error('Error cargando fecha de PRODT SEMANAL desde localStorage', e);
+    } finally {
+      setFechaProdtSemanalInicializada(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!fechaProdtSemanalInicializada || typeof window === 'undefined') return;
+    try {
+      if (selectedFechaProdtSemanal) {
+        localStorage.setItem('selected-fecha-prodt-semanal', JSON.stringify(selectedFechaProdtSemanal));
+      } else {
+        localStorage.removeItem('selected-fecha-prodt-semanal');
+      }
+    } catch (e) {
+      console.error('Error guardando fecha de PRODT SEMANAL en localStorage', e);
+    }
+  }, [selectedFechaProdtSemanal, fechaProdtSemanalInicializada]);
 
   useEffect(() => {
     try {
@@ -867,29 +899,51 @@ const exportarPDFdia = async () => {
                <Factory className="h-3.5 w-3.5" /> RESUMEN MENSUAL
              </button>
            </div>
-          {activeSection === 'carga-prod' && (
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
-                >
-                  <CalendarIcon className="h-3.5 w-3.5 mr-2" />
-                  {selectedFecha ? format(selectedFecha, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar semana"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="p-0 rounded-2xl" align="start">
-                <Calendar
-                  mode="single"
-                  selected={selectedFecha}
-                  onSelect={onFechaChange}
-                  locale={es}
-                  className="rounded-md"
-                />
-              </PopoverContent>
-            </Popover>
-          )}
-        </div>
+           {activeSection === 'carga-prod' && (
+             <Popover>
+               <PopoverTrigger asChild>
+                 <Button
+                   variant="outline"
+                   className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                 >
+                   <CalendarIcon className="h-3.5 w-3.5 mr-2" />
+                   {selectedFecha ? format(selectedFecha, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar semana"}
+                 </Button>
+               </PopoverTrigger>
+               <PopoverContent className="p-0 rounded-2xl" align="start">
+                 <Calendar
+                   mode="single"
+                   selected={selectedFecha}
+                   onSelect={onFechaChange}
+                   locale={es}
+                   className="rounded-md"
+                 />
+               </PopoverContent>
+             </Popover>
+           )}
+           {activeSection === 'prodt-semanal' && (
+             <Popover>
+               <PopoverTrigger asChild>
+                 <Button
+                   variant="outline"
+                   className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                 >
+                   <CalendarIcon className="h-3.5 w-3.5 mr-2" />
+                   {selectedFechaProdtSemanal ? format(selectedFechaProdtSemanal, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar semana"}
+                 </Button>
+               </PopoverTrigger>
+               <PopoverContent className="p-0 rounded-2xl" align="start">
+                 <Calendar
+                   mode="single"
+                   selected={selectedFechaProdtSemanal}
+                   onSelect={setSelectedFechaProdtSemanal}
+                   locale={es}
+                   className="rounded-md"
+                 />
+               </PopoverContent>
+             </Popover>
+           )}
+         </div>
 
         <div className="flex items-center justify-between gap-3">
           {activeSection === 'carga-prod' ? (
@@ -1350,21 +1404,59 @@ const exportarPDFdia = async () => {
                       </div>
                     </div>
                   </div>
-                ) : (
-                  <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                    <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-                      <div className="w-2 h-2 rounded-full bg-sky-500" />
-                      <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                        Por Turno - Línea {activeLinea}
-                      </h4>
-                    </div>
-                    <div className="p-4">
-                      <div className="h-32 flex items-center justify-center text-slate-400">
-                        <p className="text-[10px] font-bold uppercase tracking-widest">Seleccione turno</p>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                 ) : activeSection === 'prodt-semanal' ? (
+                   <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                     <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-slate-100">
+                       <div className="flex items-center gap-2">
+                         <div className="w-2 h-2 rounded-full bg-sky-500" />
+                         <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                           PRODT SEMANAL - Línea {activeLinea}
+                         </h4>
+                       </div>
+                       <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                         {selectedFechaProdtSemanal ? `Semana ${getISOWeek(selectedFechaProdtSemanal)}` : ''}
+                       </span>
+                     </div>
+                     <div className="p-4">
+                       <div className="h-32 flex items-center justify-center text-slate-400">
+                         <p className="text-[10px] font-bold uppercase tracking-widest">Sección en desarrollo</p>
+                       </div>
+                     </div>
+                   </div>
+                 ) : activeSection === 'resumen-mensual' ? (
+                   <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                     <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-slate-100">
+                       <div className="flex items-center gap-2">
+                         <div className="w-2 h-2 rounded-full bg-sky-500" />
+                         <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                           RESUMEN MENSUAL - Línea {activeLinea}
+                         </h4>
+                       </div>
+                       <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                         {selectedFecha ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase() : ''}
+                       </span>
+                     </div>
+                     <div className="p-4">
+                       <div className="h-32 flex items-center justify-center text-slate-400">
+                         <p className="text-[10px] font-bold uppercase tracking-widest">Sección en desarrollo</p>
+                       </div>
+                     </div>
+                   </div>
+                 ) : (
+                   <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                     <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                       <div className="w-2 h-2 rounded-full bg-sky-500" />
+                       <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                         Por Turno - Línea {activeLinea}
+                       </h4>
+                     </div>
+                     <div className="p-4">
+                       <div className="h-32 flex items-center justify-center text-slate-400">
+                         <p className="text-[10px] font-bold uppercase tracking-widest">Seleccione turno</p>
+                       </div>
+                     </div>
+                   </div>
+                 )}
               </div>
             )}
  
