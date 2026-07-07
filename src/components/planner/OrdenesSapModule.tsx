@@ -432,7 +432,7 @@ export default function OrdenesSapModule({
   const prodtSemanalTabla = useMemo(() => {
     const tabla: Record<string, Record<number, number>> = {};
     PRODUCT_LIST.forEach(sabor => {
-      tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+      tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 };
     });
     if (!selectedFechaProdtSemanal) return tabla;
     const semana = getISOWeek(selectedFechaProdtSemanal);
@@ -804,6 +804,151 @@ const exportarPDFdia = async () => {
     }
 
     const pdfNombre = `${format(fecha, 'd-M-yy')} ${diaNombre}.pdf`;
+    pdf.save(pdfNombre);
+  };
+
+  const exportarPDFProdtSemanal = async () => {
+    const fecha = selectedFechaProdtSemanal || new Date();
+    const semana = getISOWeek(fecha);
+    const fechaStr = format(fecha, 'd/M/yyyy');
+    const mes = format(fecha, 'MMMM', { locale: es }).toUpperCase();
+
+    const lineas = [1, 2, 3, 4, 5, 6, 7, 8];
+    const headers = ['SABOR', ...lineas.map((n) => `LINEA ${n}`), 'TOTAL'];
+    const colWidths = [90, 22, 22, 22, 22, 22, 22, 22, 22, 31];
+    const headerHeight = 7;
+    const rowHeight = 5.5;
+
+    const tablaPDF: Record<string, Record<number, number>> = {};
+    PRODUCT_LIST.forEach(sabor => {
+      tablaPDF[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 };
+    });
+
+    if (selectedFechaProdtSemanal) {
+      (ordenes || []).forEach(orden => {
+        if (orden.semana !== semana) return;
+        (orden.dias || []).forEach(dia => {
+          const total = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
+          tablaPDF[orden.sabor][orden.linea] = (tablaPDF[orden.sabor][orden.linea] || 0) + total;
+        });
+      });
+    }
+
+    const rows = PRODUCT_LIST.map((sabor) => {
+      const valores = lineas.map((linea) => tablaPDF[sabor]?.[linea] || 0);
+      const total = valores.reduce((a, b) => a + b, 0);
+      return { sabor, valores, total };
+    });
+
+    const totales = lineas.map((linea) =>
+      PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaPDF[sabor]?.[linea] || 0), 0)
+    );
+    const totalGeneral = totales.reduce((a, b) => a + b, 0);
+
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const marginX = 6;
+    const marginY = 8;
+    const logoWidth = 60;
+    const logoHeight = 22;
+    const tableWidth = colWidths.reduce((a, b) => a + b, 0);
+    const startX = (pageWidth - tableWidth) / 2;
+    const startY = 55;
+
+    try {
+      pdf.addImage('/logo-izquierdo.png', 'PNG', marginX, marginY, logoWidth, logoHeight);
+      pdf.addImage('/logo-derecho.png', 'PNG', pageWidth - marginX - logoWidth, marginY, logoWidth, logoHeight);
+    } catch (e) {
+      console.warn('No se pudieron cargar los logos', e);
+    }
+
+    const titleY = marginY + logoHeight / 2 + 2;
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(13);
+    pdf.setTextColor(15, 23, 42);
+    pdf.text('SEMANA', pageWidth / 2, titleY, { align: 'center' });
+
+    let y = startY;
+    let x = startX;
+    pdf.setDrawColor(0, 0, 0);
+    pdf.setLineWidth(0.15);
+
+    const drawHeader = () => {
+      pdf.setFillColor(234, 88, 12);
+      pdf.rect(startX, y, tableWidth, headerHeight, 'F');
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(10);
+      pdf.setTextColor(255, 255, 255);
+      let x = startX;
+      headers.forEach((h, i) => {
+        pdf.text(h, x + colWidths[i] / 2, y + 5.5, { align: 'center' });
+        x += colWidths[i];
+      });
+    };
+
+    const drawRowBorders = (rowY: number, height: number) => {
+      pdf.setDrawColor(0, 0, 0);
+      pdf.setLineWidth(0.15);
+      let cx = startX;
+      for (let i = 0; i <= colWidths.length; i++) {
+        pdf.line(cx, rowY, cx, rowY + height);
+        cx += colWidths[i] || 0;
+      }
+      pdf.line(startX, rowY, startX + tableWidth, rowY);
+      pdf.line(startX, rowY + height, startX + tableWidth, rowY + height);
+    };
+
+    drawHeader();
+    drawRowBorders(y, headerHeight);
+
+    y += headerHeight;
+    rows.forEach((item, idx) => {
+      if (y + rowHeight > pdf.internal.pageSize.getHeight() - marginY - 20) {
+        pdf.addPage();
+        y = marginY;
+      }
+
+      const isLight = idx % 2 === 1;
+      pdf.setFillColor(isLight ? 240 : 255, isLight ? 248 : 255, isLight ? 255 : 255);
+      pdf.rect(startX, y, tableWidth, rowHeight, 'F');
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(9);
+      pdf.setTextColor(15, 23, 42);
+
+      x = startX;
+      pdf.text(item.sabor, x + colWidths[0] / 2, y + 4, { align: 'center' });
+      x += colWidths[0];
+      item.valores.forEach((val, i) => {
+        pdf.text(String(val), x + colWidths[i + 1] / 2, y + 4, { align: 'center' });
+        x += colWidths[i + 1];
+      });
+      pdf.text(String(item.total), x + colWidths[8] / 2, y + 4, { align: 'center' });
+      drawRowBorders(y, rowHeight);
+      y += rowHeight;
+    });
+
+    pdf.setFillColor(234, 88, 12);
+    pdf.rect(startX, y, tableWidth, headerHeight, 'F');
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(10);
+    pdf.setTextColor(255, 255, 255);
+    x = startX;
+    pdf.text('TOTAL DE LA SEMANA', x + colWidths[0] / 2, y + 5.5, { align: 'center' });
+    x += colWidths[0];
+    totales.forEach((val, i) => {
+      pdf.text(String(val), x + colWidths[i + 1] / 2, y + 5.5, { align: 'center' });
+      x += colWidths[i + 1];
+    });
+    pdf.text(String(totalGeneral), x + colWidths[8] / 2, y + 5.5, { align: 'center' });
+    drawRowBorders(y, headerHeight);
+
+    y += headerHeight + 5;
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(12);
+    pdf.setTextColor(15, 23, 42);
+    pdf.text(`TOTAL SEMANA ${totalGeneral}`, startX + 20, y, { align: 'left' });
+
+    const pdfNombre = `SEMANA ${semana}.pdf`;
     pdf.save(pdfNombre);
   };
 
@@ -1407,6 +1552,14 @@ const exportarPDFdia = async () => {
                         <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
                           {selectedFechaProdtSemanal ? `Semana ${getISOWeek(selectedFechaProdtSemanal)}` : 'SEMANA'}
                         </span>
+                        <Button
+                          size="sm"
+                          onClick={exportarPDFProdtSemanal}
+                          className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                        >
+                          <FileDown className="h-3 w-3" />
+                          Exportar PDF
+                        </Button>
                       </div>
                       <div className="p-4">
                         <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
@@ -1414,7 +1567,7 @@ const exportarPDFdia = async () => {
                             <thead>
                               <tr className="bg-slate-100">
                                 <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
-                                {[1,2,3,4,5,6,7].map(n => (
+                                {[1,2,3,4,5,6,7,8].map(n => (
                                   <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
                                 ))}
                                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
@@ -1422,11 +1575,11 @@ const exportarPDFdia = async () => {
                             </thead>
                             <tbody>
                               {PRODUCT_LIST.map((sabor) => {
-                                const totalSabor = [1,2,3,4,5,6,7].reduce((sum, l) => sum + (tablaProdtSemanalEdits[sabor]?.[l] ?? (prodtSemanalTabla[sabor]?.[l] || 0)), 0);
+                                const totalSabor = [1,2,3,4,5,6,7,8].reduce((sum, l) => sum + (tablaProdtSemanalEdits[sabor]?.[l] ?? (prodtSemanalTabla[sabor]?.[l] || 0)), 0);
                                 return (
                                   <tr key={sabor} className="even:bg-slate-50/60">
                                     <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
-                                    {[1,2,3,4,5,6,7].map(linea => (
+                                    {[1,2,3,4,5,6,7,8].map(linea => (
                                       <td key={linea} className="px-1 py-0.5 border-r border-b border-slate-100">
                                         <input
                                           type="number"
@@ -1449,14 +1602,14 @@ const exportarPDFdia = async () => {
                               })}
                               <tr className="bg-slate-100 font-black">
                                 <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
-                                {[1,2,3,4,5,6,7].map(linea => {
+                                {[1,2,3,4,5,6,7,8].map(linea => {
                                   const totalColumna = PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaProdtSemanalEdits[sabor]?.[linea] ?? (prodtSemanalTabla[sabor]?.[linea] || 0)), 0);
                                   return (
                                     <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200">{totalColumna}</td>
                                   );
                                 })}
                                 <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200">
-                                  {PRODUCT_LIST.reduce((sum, sabor) => sum + [1,2,3,4,5,6,7].reduce((s, l) => s + (tablaProdtSemanalEdits[sabor]?.[l] ?? (prodtSemanalTabla[sabor]?.[l] || 0)), 0), 0)}
+                                  {PRODUCT_LIST.reduce((sum, sabor) => sum + [1,2,3,4,5,6,7,8].reduce((s, l) => s + (tablaProdtSemanalEdits[sabor]?.[l] ?? (prodtSemanalTabla[sabor]?.[l] || 0)), 0), 0)}
                                 </td>
                               </tr>
                             </tbody>
