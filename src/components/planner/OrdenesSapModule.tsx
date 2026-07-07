@@ -1017,18 +1017,14 @@ const exportarPDFdia = async () => {
                 </PopoverContent>
               </Popover>
             </div>
-          ) : (
+           ) : (
             <div className="flex items-center justify-between gap-3 w-full">
               <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-                {activeSection === 'prodt-semanal'
+                {activeSection === 'resumen-mensual'
                   ? selectedFecha
-                    ? `Semana ${getISOWeek(selectedFecha)}`
-                    : 'Seleccione semana'
-                  : activeSection === 'resumen-mensual'
-                    ? selectedFecha
-                      ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase()
-                      : 'Seleccione mes'
-                    : ''}
+                    ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase()
+                    : 'Seleccione mes'
+                  : ''}
               </span>
             </div>
           )}
