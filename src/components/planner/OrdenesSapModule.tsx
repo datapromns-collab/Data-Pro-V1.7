@@ -976,7 +976,7 @@ const exportarPDFdia = async () => {
           )}
         </div>
 
-        {activeSection === 'dia-a-dia' && activeSubsection !== null && (
+        {activeSection === 'dia-a-dia' && (activeSubsection === 'diurno' || activeSubsection === 'nocturno') && (
           <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
             <button
               onClick={() => setActiveSubsection('diurno')}
