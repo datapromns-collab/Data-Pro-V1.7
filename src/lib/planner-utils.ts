@@ -454,16 +454,24 @@ export const calculateRequirementFromSource = (
       if (code === 'EMP_0126' && presentation === '0.4Lts' && !isFresh && !isJugo) { total += quantity * 15; return; }
       if (code === 'EMP_0068' && presentation === '1.5Lts' && isJugo) { total += quantity * 12; return; }
 
-      if (code === 'EMP_0105_2' && presentation === '1Lt' && !isFresh && !isJugo) {
-        total += quantity * 12;
-        return;
-      }
       if (code === 'EMP_0105_N' && isFresh) {
         total += quantity * (presentation === '2Lts' ? 6 : (presentation === '1Lt' ? 12 : 15));
         return;
       }
       if (code === 'EMP_0105' && !isFresh && !isJugo && presentation !== '0.4Lts') {
         total += quantity * (presentation === '2Lts' ? 6 : 12);
+        return;
+      }
+      if (code === 'EMP_0105_2' && presentation === '1Lt' && !isFresh && !isJugo) {
+        total += quantity * 12;
+        return;
+      }
+      if (code === 'EMP_0095' && isJugo) {
+        total += quantity * 12;
+        return;
+      }
+      if (code === 'EMP_0105_N' && presentation === '0.4Lts' && !isFresh) {
+        total += quantity * 15;
         return;
       }
       if (code === 'EMP_0095' && isJugo) {

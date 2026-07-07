@@ -176,6 +176,12 @@ export function RequirementReport({ tasks, weekStartDate, recipes, packagingReci
            return acc + (t.quantity || 0) * f;
         }, 0));
     }
+    if (code === 'EMP_0105') {
+       return Math.round(tasks.filter(t => t.name !== "GLUP FRESH" && !t.name.startsWith("JUSTY") && !t.name.startsWith("VITA") && t.presentation !== "0.4Lts" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
+           const f = t.presentation === "2Lts" ? 6 : 12;
+           return acc + (t.quantity || 0) * f;
+        }, 0));
+    }
     if (code === 'EMP_0095') {
        return Math.round(tasks.filter(t => (t.name.startsWith("JUSTY") || t.name.startsWith("VITA")) && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
            const f = (t.presentation === "1.5Lts") ? 12 : 15;
