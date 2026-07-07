@@ -118,7 +118,18 @@ function usePlannerStoreInner() {
     }
 
     if (savedPkgRecipes) {
-      try { setCustomPackagingRecipes(JSON.parse(savedPkgRecipes)); } catch (e) {}
+      try {
+        const saved = JSON.parse(savedPkgRecipes) as Record<string, Record<string, Record<string, number>>>;
+        if (saved['GLUP FRESH']) {
+          Object.entries(saved['GLUP FRESH']).forEach(([pres, materials]) => {
+            if ((materials as any)['EMP_0095'] !== undefined) {
+              (materials as any)['EMP_0105_N'] = (materials as any)['EMP_0095'];
+              delete (materials as any)['EMP_0095'];
+            }
+          });
+        }
+        setCustomPackagingRecipes(saved);
+      } catch (e) {}
     }
 
     if (savedRawMat) {
