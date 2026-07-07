@@ -1411,7 +1411,7 @@ const exportarPDFdia = async () => {
                           </h4>
                         </div>
                         <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-                          {selectedFechaProdtSemanal ? `Semana ${getISOWeek(selectedFechaProdtSemanal)}` : ''}
+                          {selectedFechaProdtSemanal ? `Semana ${getISOWeek(selectedFechaProdtSemanal)}` : 'SEMANA'}
                         </span>
                       </div>
                       <div className="p-4">
