@@ -363,10 +363,10 @@ export const DEFAULT_PACKAGING_RECIPES: Record<string, Record<string, Record<str
     "0.4Lts": { "EMP_0126": 15, "EMP_0105_N": 15, "EMP_0112": 0.0048, "EMP_0019": 0.0034905, "EMP_0130": 0.02283, "EMP_0078": 0.00036 }
   },
   "JUSTY NARANJA": {
-    "1.5Lts": { "EMP_0068": 12, "EMP_0105_N": 12, "EMP_0048": 0.0108, "EMP_0019": 0.0111696, "EMP_0017": 0.03929, "EMP_0078": 0.000216 }
+    "1.5Lts": { "EMP_0068": 12, "EMP_0095": 12, "EMP_0048": 0.0108, "EMP_0019": 0.0111696, "EMP_0017": 0.03929, "EMP_0078": 0.000216 }
   },
   "JUSTY DURAZNO": {
-    "1.5Lts": { "EMP_0068": 12, "EMP_0105_N": 12, "EMP_0142": 0.0108, "EMP_0019": 0.0111696, "EMP_0017": 0.03929, "EMP_0078": 0.000216 }
+    "1.5Lts": { "EMP_0068": 12, "EMP_0095": 12, "EMP_0142": 0.0108, "EMP_0019": 0.0111696, "EMP_0017": 0.03929, "EMP_0078": 0.000216 }
   }
 };
 
@@ -466,8 +466,12 @@ export const calculateRequirementFromSource = (
         total += quantity * (presentation === '2Lts' ? 6 : 12);
         return;
       }
-      if (code === 'EMP_0105_N' && (isJugo || presentation === '0.4Lts')) {
-        total += quantity * (presentation === '1.5Lts' ? 12 : 15);
+      if (code === 'EMP_0095' && isJugo) {
+        total += quantity * 12;
+        return;
+      }
+      if (code === 'EMP_0105_N' && presentation === '0.4Lts' && !isFresh) {
+        total += quantity * 15;
         return;
       }
 

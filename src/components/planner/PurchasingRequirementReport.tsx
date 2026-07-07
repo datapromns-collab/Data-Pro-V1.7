@@ -118,6 +118,18 @@ export function PurchasingRequirementReport({
           total += quantity * (presentation === "2Lts" ? 6 : (presentation === "1Lt" ? 12 : 15)); 
           return; 
         }
+        if (code === 'EMP_0095' && isJugo) { 
+          total += quantity * 12; 
+          return; 
+        }
+        if (code === 'EMP_0105' && !isFresh && !isJugo && presentation !== '0.4Lts') { 
+          total += quantity * (presentation === "2Lts" ? 6 : 12); 
+          return; 
+        }
+        if (code === 'EMP_0105_N' && presentation === '0.4Lts' && !isFresh) { 
+          total += quantity * 15; 
+          return; 
+        }
         if (code === 'EMP_0105' && !isFresh && !isJugo && presentation !== "0.4Lts") { 
           total += quantity * (presentation === "2Lts" ? 6 : 12); 
           return; 
