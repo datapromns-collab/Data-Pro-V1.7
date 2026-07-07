@@ -1423,105 +1423,47 @@ const exportarPDFdia = async () => {
         </DialogContent>
        </Dialog>
        
-       {activeSection === 'prodt-semanal' && (
-         <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-           <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-slate-100">
-             <div className="flex items-center gap-2">
-               <div className="w-2 h-2 rounded-full bg-sky-500" />
-               <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                 PRODT SEMANAL - Línea {activeLinea}
-               </h4>
-             </div>
-             <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-               {selectedFecha ? `Semana ${getISOWeek(selectedFecha)}` : ''}
-             </span>
-           </div>
-           <div className="p-4">
-             <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-               <table className="w-full border-collapse text-center">
-                 <thead>
-                   <tr className="bg-slate-100">
-                     <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
-                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {activeLinea}</th>
-                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Total</th>
-                   </tr>
-                 </thead>
-                  <tbody>
-                    {PRODUCT_LIST.map((sabor) => {
-                      const total = activeLinea ? prodtSemanalTabla[sabor]?.[activeLinea] || 0 : 0;
-                      return (
-                        <tr key={sabor} className="even:bg-slate-50/60">
-                          <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
-                          <td className="px-1 py-0.5 border-r border-b border-slate-100 text-[10px] font-black text-slate-900">{total}</td>
-                          <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100">{total}</td>
-                        </tr>
-                      );
-                    })}
-                    <tr className="bg-slate-100 font-black">
-                      <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200">
-                        {activeLinea ? PRODUCT_LIST.reduce((sum, sabor) => sum + (prodtSemanalTabla[sabor]?.[activeLinea] || 0), 0) : 0}
-                      </td>
-                      <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200">
-                        {activeLinea ? PRODUCT_LIST.reduce((sum, sabor) => sum + (prodtSemanalTabla[sabor]?.[activeLinea] || 0), 0) : 0}
-                      </td>
-                    </tr>
-                 </tbody>
-               </table>
-             </div>
-           </div>
-         </div>
-       )}
+        {activeSection === 'prodt-semanal' && (
+          <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+            <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-sky-500" />
+                <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                  PRODT SEMANAL - Línea {activeLinea}
+                </h4>
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                {selectedFecha ? `Semana ${getISOWeek(selectedFecha)}` : ''}
+              </span>
+            </div>
+            <div className="p-4">
+              <div className="h-32 flex items-center justify-center text-slate-400">
+                <p className="text-[10px] font-bold uppercase tracking-widest">Sección en desarrollo</p>
+              </div>
+            </div>
+          </div>
+        )}
 
-       {activeSection === 'resumen-mensual' && (
-         <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-           <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-slate-100">
-             <div className="flex items-center gap-2">
-               <div className="w-2 h-2 rounded-full bg-sky-500" />
-               <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                 RESUMEN MENSUAL - Línea {activeLinea}
-               </h4>
-             </div>
-             <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-               {selectedFecha ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase() : ''}
-             </span>
-           </div>
-           <div className="p-4">
-             <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-               <table className="w-full border-collapse text-center">
-                 <thead>
-                   <tr className="bg-slate-100">
-                     <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
-                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {activeLinea}</th>
-                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Total</th>
-                   </tr>
-                 </thead>
-                  <tbody>
-                    {PRODUCT_LIST.map((sabor) => {
-                      const total = activeLinea ? resumenMensualTabla[sabor]?.[activeLinea] || 0 : 0;
-                      return (
-                        <tr key={sabor} className="even:bg-slate-50/60">
-                          <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
-                          <td className="px-1 py-0.5 border-r border-b border-slate-100 text-[10px] font-black text-slate-900">{total}</td>
-                          <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100">{total}</td>
-                        </tr>
-                      );
-                    })}
-                    <tr className="bg-slate-100 font-black">
-                      <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200">
-                        {activeLinea ? PRODUCT_LIST.reduce((sum, sabor) => sum + (resumenMensualTabla[sabor]?.[activeLinea] || 0), 0) : 0}
-                      </td>
-                      <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200">
-                        {activeLinea ? PRODUCT_LIST.reduce((sum, sabor) => sum + (resumenMensualTabla[sabor]?.[activeLinea] || 0), 0) : 0}
-                      </td>
-                    </tr>
-                  </tbody>
-               </table>
-             </div>
-           </div>
-         </div>
-       )}
+        {activeSection === 'resumen-mensual' && (
+          <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+            <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <div className="w-2 h-2 rounded-full bg-sky-500" />
+                <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                  RESUMEN MENSUAL - Línea {activeLinea}
+                </h4>
+              </div>
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                {selectedFecha ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase() : ''}
+              </span>
+            </div>
+            <div className="p-4">
+              <div className="h-32 flex items-center justify-center text-slate-400">
+                <p className="text-[10px] font-bold uppercase tracking-widest">Sección en desarrollo</p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
