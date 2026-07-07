@@ -853,7 +853,6 @@ const exportarPDFdia = async () => {
     const logoHeight = 22;
     const tableWidth = colWidths.reduce((a, b) => a + b, 0);
     const startX = (pageWidth - tableWidth) / 2;
-    const startY = 55;
 
     try {
       pdf.addImage('/logo-izquierdo.png', 'PNG', marginX, marginY, logoWidth, logoHeight);
@@ -868,7 +867,7 @@ const exportarPDFdia = async () => {
     pdf.setTextColor(15, 23, 42);
     pdf.text(`SEMANA ${semana}`, pageWidth / 2, titleY, { align: 'center' });
 
-    let y = startY;
+    let y = 45;
     let x = startX;
     pdf.setDrawColor(0, 0, 0);
     pdf.setLineWidth(0.15);
