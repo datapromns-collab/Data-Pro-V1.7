@@ -923,7 +923,7 @@ const exportarPDFdia = async () => {
                 </Button>
               </div>
             </>
-          ) : (
+          ) : activeSection === 'dia-a-dia' ? (
             <div className="flex items-center justify-between gap-3 w-full">
               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
                 <button
@@ -959,10 +959,24 @@ const exportarPDFdia = async () => {
                 </PopoverContent>
               </Popover>
             </div>
+          ) : (
+            <div className="flex items-center justify-between gap-3 w-full">
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                {activeSection === 'prodt-semanal'
+                  ? selectedFecha
+                    ? `Semana ${getISOWeek(selectedFecha)}`
+                    : 'Seleccione semana'
+                  : activeSection === 'resumen-mensual'
+                    ? selectedFecha
+                      ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase()
+                      : 'Seleccione mes'
+                    : ''}
+              </span>
+            </div>
           )}
         </div>
 
-        {['turno', 'dia', 'diurno', 'nocturno'].includes(activeSubsection || '') && (
+        {activeSection === 'dia-a-dia' && activeSubsection !== null && (
           <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
             <button
               onClick={() => setActiveSubsection('diurno')}
