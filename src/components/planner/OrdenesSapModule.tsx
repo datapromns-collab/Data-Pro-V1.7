@@ -23,13 +23,13 @@ const SABOR_COLORS: Record<string, string> = {
   "GLUP COLA": "bg-slate-200 text-slate-800",
   "GLUP FRESH": "bg-emerald-200 text-emerald-900",
   "GLUP UVA": "bg-violet-200 text-violet-900",
-  "GLUP PIÑA": "bg-amber-200 text-amber-900",
+  "GLUP PIÃ‘A": "bg-amber-200 text-amber-900",
   "GLUP NARANJA": "bg-orange-200 text-orange-900",
   "GLUP KOLITA": "bg-red-200 text-red-900",
   "GLUP MANZANA VERDE": "bg-lime-200 text-lime-900",
   "GLUP PONCHE": "bg-rose-200 text-rose-900",
   "GLUP CHICLE": "bg-pink-200 text-pink-900",
-  "GLUP PIÑA PARCHITA": "bg-fuchsia-200 text-fuchsia-900",
+  "GLUP PIÃ‘A PARCHITA": "bg-fuchsia-200 text-fuchsia-900",
   "GLUP MANZANA ROJA": "bg-amber-400 text-amber-900",
   "JUSTY NARANJA": "bg-orange-200 text-orange-900",
   "JUSTY DURAZNO": "bg-amber-200 text-amber-900",
@@ -113,15 +113,15 @@ const CORRELATIVO_KEY = 'correlativo-sap-v1';
 const TURNOS_KEY = 'turnos-sap-v1';
 
 const TURNOS_OPCIONES = [
-  'producción del día',
-  'restante del día',
-  'primera del día',
-  'segunda del día',
-  'tercera del día',
-  'cuarta del día',
-  'quinta del día',
-  'última del día',
-  'única del día',
+  'producciÃ³n del dÃ­a',
+  'restante del dÃ­a',
+  'primera del dÃ­a',
+  'segunda del dÃ­a',
+  'tercera del dÃ­a',
+  'cuarta del dÃ­a',
+  'quinta del dÃ­a',
+  'Ãºltima del dÃ­a',
+  'Ãºnica del dÃ­a',
 ];
 
 export function CorrelativoSelector({ activeLinea = 1, selectedFecha }: { activeLinea?: number; selectedFecha?: Date | undefined; }) {
@@ -188,7 +188,7 @@ export function CorrelativoSelector({ activeLinea = 1, selectedFecha }: { active
   };
 
   const getFechaParaTurno = (turno: string) => {
-    const turnosAyer = ['producción del día', 'restante del día'];
+    const turnosAyer = ['producciÃ³n del dÃ­a', 'restante del dÃ­a'];
     const useAyer = turnosAyer.includes(turno);
     const hoy = new Date();
     const fecha = new Date(hoy);
@@ -371,7 +371,7 @@ export default function OrdenesSapModule({
         }
       }
     } catch (e) {
-      console.error('Error cargando fecha de DÍA A DÍA desde localStorage', e);
+      console.error('Error cargando fecha de DÃA A DÃA desde localStorage', e);
     } finally {
       setFechaDiaADiaInicializada(true);
     }
@@ -386,7 +386,7 @@ export default function OrdenesSapModule({
         localStorage.removeItem('selected-fecha-dia-a-dia');
       }
     } catch (e) {
-      console.error('Error guardando fecha de DÍA A DÍA en localStorage', e);
+      console.error('Error guardando fecha de DÃA A DÃA en localStorage', e);
     }
   }, [fechaDiaADia, fechaDiaADiaInicializada]);
   const [tablaDiaADIAEdits, setTablaDiaADIAEdits] = useState<Record<string, Record<number, number>>>({});
@@ -506,7 +506,7 @@ export default function OrdenesSapModule({
         }
       }
     } catch (e) {
-      console.error('Error cargando órdenes SAP desde localStorage', e);
+      console.error('Error cargando Ã³rdenes SAP desde localStorage', e);
     }
   }, []);
 
@@ -514,7 +514,7 @@ export default function OrdenesSapModule({
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(ordenes));
     } catch (e) {
-      console.error('Error guardando órdenes SAP en localStorage', e);
+      console.error('Error guardando Ã³rdenes SAP en localStorage', e);
     }
   }, [ordenes]);
 
@@ -663,7 +663,7 @@ const exportarPDFdia = async () => {
     const fechaComparacion = format(fecha, 'yyyy-MM-dd');
 
     const lineas = [1, 2, 3, 4, 5, 6, 7];
-    const headers = ['SABOR', ...lineas.map((n) => `Línea ${n}`), 'Totales'];
+    const headers = ['SABOR', ...lineas.map((n) => `LÃ­nea ${n}`), 'Totales'];
     const colWidths = [90, 22, 22, 22, 22, 22, 22, 22, 31];
     const headerHeight = 7;
     const rowHeight = 5.5;
@@ -815,9 +815,9 @@ const exportarPDFdia = async () => {
 
     const lineas = [1, 2, 3, 4, 5, 6, 7, 8];
     const headers = ['SABOR', ...lineas.map((n) => `LINEA ${n}`), 'TOTAL'];
-    const colWidths = [90, 22, 22, 22, 22, 22, 22, 22, 22, 31];
-    const headerHeight = 7;
-    const rowHeight = 5.5;
+    const colWidths = [75, 18, 18, 18, 18, 18, 18, 18, 18, 25];
+    const headerHeight = 6;
+    const rowHeight = 5;
 
     const tablaPDF: Record<string, Record<number, number>> = {};
     PRODUCT_LIST.forEach(sabor => {
@@ -847,7 +847,7 @@ const exportarPDFdia = async () => {
 
     const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
     const pageWidth = pdf.internal.pageSize.getWidth();
-    const marginX = 6;
+    const marginX = 10;
     const marginY = 8;
     const logoWidth = 60;
     const logoHeight = 22;
@@ -982,7 +982,7 @@ const exportarPDFdia = async () => {
     const fechaComparacion = format(fecha, 'yyyy-MM-dd');
 
     const lineas = [1, 2, 3, 4, 5, 6, 7];
-    const headers = ['Sabor', ...lineas.map((n) => `Línea ${n}`), 'Totales'];
+    const headers = ['Sabor', ...lineas.map((n) => `LÃ­nea ${n}`), 'Totales'];
     const tablaExcel: Record<string, Record<number, number>> = {};
     PRODUCT_LIST.forEach(sabor => {
       tablaExcel[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
@@ -1010,7 +1010,7 @@ const exportarPDFdia = async () => {
     const wsData = [headers, ...rows, ['Totales', ...totales, totalGeneral]];
     const ws = XLSX.utils.aoa_to_sheet(wsData);
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Día a día');
+    XLSX.utils.book_append_sheet(wb, ws, 'DÃ­a a dÃ­a');
     XLSX.writeFile(wb, `dia-a-dia ${fechaStr} ${diaNombre}.xlsx`);
   };
 
@@ -1029,7 +1029,7 @@ const exportarPDFdia = async () => {
                onClick={() => setActiveSection('dia-a-dia')}
                className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'dia-a-dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
              >
-               <Factory className="h-3.5 w-3.5" /> DÍA A DÍA
+               <Factory className="h-3.5 w-3.5" /> DÃA A DÃA
              </button>
              <button
                onClick={() => setActiveSection('prodt-semanal')}
@@ -1102,7 +1102,7 @@ const exportarPDFdia = async () => {
                       onClick={() => !isActive && setActiveLinea(linea)}
                       className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${isActive ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                     >
-                      Línea {linea}
+                      LÃ­nea {linea}
                     </button>
                   );
                 })}
@@ -1133,7 +1133,7 @@ const exportarPDFdia = async () => {
                   onClick={() => setActiveSubsection('dia')}
                   className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSubsection === 'dia' || activeSubsection === null ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                 >
-                  Día
+                  DÃ­a
                 </button>
                 <button
                   onClick={() => setActiveSubsection('diurno')}
@@ -1149,7 +1149,7 @@ const exportarPDFdia = async () => {
                     className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
                   >
                     <CalendarIcon className="h-3.5 w-3.5 mr-2" />
-                    {fechaDiaADia ? format(fechaDiaADia, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar día"}
+                    {fechaDiaADia ? format(fechaDiaADia, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar dÃ­a"}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0 rounded-md" align="start">
@@ -1197,7 +1197,7 @@ const exportarPDFdia = async () => {
          {activeLinea === null && (
            <div className="bg-white rounded-[2.5rem] border border-slate-200 p-8">
              <div className="h-48 flex items-center justify-center text-slate-400">
-               <p className="text-[10px] font-bold uppercase tracking-widest">Seleccione una línea para ver los datos</p>
+               <p className="text-[10px] font-bold uppercase tracking-widest">Seleccione una lÃ­nea para ver los datos</p>
              </div>
            </div>
          )}
@@ -1209,13 +1209,13 @@ const exportarPDFdia = async () => {
                     <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
                       <div className="w-2 h-2 rounded-full bg-sky-500" />
                       <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                        Línea {activeLinea}
+                        LÃ­nea {activeLinea}
                       </h4>
                     </div>
                     <div className="p-4">
                       {ordenesPorLinea.length === 0 && (
                         <div className="h-32 flex items-center justify-center text-slate-400">
-                          <p className="text-[10px] font-bold uppercase tracking-widest">Sin órdenes registradas para esta línea</p>
+                          <p className="text-[10px] font-bold uppercase tracking-widest">Sin Ã³rdenes registradas para esta lÃ­nea</p>
                         </div>
                       )}
 
@@ -1253,8 +1253,8 @@ const exportarPDFdia = async () => {
                                     <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Fecha</div>
                                     <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Ticket</div>
                                     <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Cajas</div>
-                                    <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Total día</div>
-                                    <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">N° Orden</div>
+                                    <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">Total dÃ­a</div>
+                                    <div className="px-1 py-1 text-[9px] font-black text-slate-500 uppercase border-b border-r border-slate-200 bg-slate-50">NÂ° Orden</div>
 
                                     <div className="px-1 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-100 border-b border-slate-100 whitespace-nowrap">
                                       {formatDate(dia.fechaInicio)}
@@ -1271,7 +1271,7 @@ const exportarPDFdia = async () => {
                                     <div className="p-1 border-b border-slate-100">
                                       <div className="flex items-center gap-1">
                                         <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-1.5 flex-1 min-w-0" />
-                                        <button onClick={() => navigator.clipboard.writeText(orden.ordenNumero)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar número de orden">
+                                        <button onClick={() => navigator.clipboard.writeText(orden.ordenNumero)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar nÃºmero de orden">
                                           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
                                         </button>
                                       </div>
@@ -1335,7 +1335,7 @@ const exportarPDFdia = async () => {
                       <div className="flex items-center gap-2">
                         <div className="w-2 h-2 rounded-full bg-sky-500" />
                         <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                          {fechaDiaADia ? format(fechaDiaADia, "eeee d/M/yyyy", { locale: es }) : "Día a día - Línea " + activeLinea}
+                          {fechaDiaADia ? format(fechaDiaADia, "eeee d/M/yyyy", { locale: es }) : "DÃ­a a dÃ­a - LÃ­nea " + activeLinea}
                         </h4>
                       </div>
                       <div className="flex items-center gap-2">
@@ -1364,7 +1364,7 @@ const exportarPDFdia = async () => {
                             <tr className="bg-slate-100">
                               <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
                               {[1,2,3,4,5,6,7].map(n => (
-                                <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
+                                <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">LÃ­nea {n}</th>
                               ))}
                               <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
                             </tr>
@@ -1426,7 +1426,7 @@ const exportarPDFdia = async () => {
                             <tr className="bg-slate-100">
                               <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
                               {[1,2,3,4,5,6,7].map(n => (
-                                <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
+                                <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">LÃ­nea {n}</th>
                               ))}
                               <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
                             </tr>
@@ -1493,7 +1493,7 @@ const exportarPDFdia = async () => {
                             <tr className="bg-slate-100">
                               <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
                               {[1,2,3,4,5,6,7].map(n => (
-                                <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
+                                <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">LÃ­nea {n}</th>
                               ))}
                               <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
                             </tr>
@@ -1567,7 +1567,7 @@ const exportarPDFdia = async () => {
                               <tr className="bg-slate-100">
                                 <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
                                 {[1,2,3,4,5,6,7,8].map(n => (
-                                  <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
+                                  <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">LÃ­nea {n}</th>
                                 ))}
                                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
                               </tr>
@@ -1622,7 +1622,7 @@ const exportarPDFdia = async () => {
                        <div className="flex items-center gap-2">
                          <div className="w-2 h-2 rounded-full bg-sky-500" />
                          <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                           RESUMEN MENSUAL - Línea {activeLinea}
+                           RESUMEN MENSUAL - LÃ­nea {activeLinea}
                          </h4>
                        </div>
                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
@@ -1631,7 +1631,7 @@ const exportarPDFdia = async () => {
                      </div>
                      <div className="p-4">
                        <div className="h-32 flex items-center justify-center text-slate-400">
-                         <p className="text-[10px] font-bold uppercase tracking-widest">Sección en desarrollo</p>
+                         <p className="text-[10px] font-bold uppercase tracking-widest">SecciÃ³n en desarrollo</p>
                        </div>
                      </div>
                    </div>
@@ -1640,7 +1640,7 @@ const exportarPDFdia = async () => {
                      <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
                        <div className="w-2 h-2 rounded-full bg-sky-500" />
                        <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                         Por Turno - Línea {activeLinea}
+                         Por Turno - LÃ­nea {activeLinea}
                        </h4>
                      </div>
                      <div className="p-4">
@@ -1658,7 +1658,7 @@ const exportarPDFdia = async () => {
          <DialogContent className="sm:max-w-[520px] rounded-3xl">
           <DialogHeader>
             <DialogTitle className="font-headline text-xl text-slate-900">
-              Nueva Orden {dialogLinea ? `- Línea ${dialogLinea}` : ''}
+              Nueva Orden {dialogLinea ? `- LÃ­nea ${dialogLinea}` : ''}
             </DialogTitle>
           </DialogHeader>
 
@@ -1680,7 +1680,7 @@ const exportarPDFdia = async () => {
             </div>
 
             <div className="grid gap-2">
-              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">Número de Orden</Label>
+              <Label className="text-[10px] font-black text-slate-400 uppercase tracking-widest ml-1">NÃºmero de Orden</Label>
               <Input
                 value={ordenNumero}
                 onChange={(e) => setOrdenNumero(e.target.value)}
