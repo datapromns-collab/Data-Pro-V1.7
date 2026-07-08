@@ -963,34 +963,26 @@ const exportarPDFdia = async () => {
     const headerHeight = 6;
     const rowHeight = 5;
 
-    const tablaPDF: Record<string, Record<number, number>> = {};
-    PRODUCT_LIST.forEach(sabor => {
-      tablaPDF[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 };
-    });
-
-    if (selectedFecha) {
-      const mesSeleccionado = selectedFecha.getMonth();
-      const anioSeleccionado = selectedFecha.getFullYear();
-      (ordenes || []).forEach(orden => {
-        (orden.dias || []).forEach(dia => {
-          const d = new Date(dia.fechaInicio + 'T12:00:00');
-          if (isNaN(d.getTime())) return;
-          if (d.getMonth() !== mesSeleccionado || d.getFullYear() !== anioSeleccionado) return;
-          const total = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
-          tablaPDF[orden.sabor][orden.linea] = (tablaPDF[orden.sabor][orden.linea] || 0) + total;
-        });
-      });
-    }
-
     const rows = PRODUCT_LIST.map((sabor) => {
-      const valores = lineas.map((linea) => tablaPDF[sabor]?.[linea] || 0);
-      const total2L = valores.slice(0, 4).reduce((a, b) => a + b, 0);
-      const total = valores.reduce((a, b) => a + b, 0);
+      const l1 = tablaResumenMensualEdits[sabor]?.[1] ?? (resumenMensualTabla[sabor]?.[1] || 0);
+      const l2 = tablaResumenMensualEdits[sabor]?.[2] ?? (resumenMensualTabla[sabor]?.[2] || 0);
+      const l3 = tablaResumenMensualEdits[sabor]?.[3] ?? (resumenMensualTabla[sabor]?.[3] || 0);
+      const l4 = tablaResumenMensualEdits[sabor]?.[4] ?? (resumenMensualTabla[sabor]?.[4] || 0);
+      const l5 = tablaResumenMensualEdits[sabor]?.[5] ?? (resumenMensualTabla[sabor]?.[5] || 0);
+      const l6 = tablaResumenMensualEdits[sabor]?.[6] ?? (resumenMensualTabla[sabor]?.[6] || 0);
+      const l7 = tablaResumenMensualEdits[sabor]?.[7] ?? (resumenMensualTabla[sabor]?.[7] || 0);
+      const l8 = tablaResumenMensualEdits[sabor]?.[8] ?? (resumenMensualTabla[sabor]?.[8] || 0);
+      const valores = [l1, l2, l3, l4, l5, l6, l7, l8];
+      const total2L = l1 + l2 + l3 + l4;
+      const total = total2L + l5 + l6 + l7 + l8;
       return { sabor, valores, total2L, total };
     });
 
     const totales = lineas.map((linea) =>
-      PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaPDF[sabor]?.[linea] || 0), 0)
+      PRODUCT_LIST.reduce((sum, sabor) => {
+        const val = tablaResumenMensualEdits[sabor]?.[linea] ?? (resumenMensualTabla[sabor]?.[linea] || 0);
+        return sum + val;
+      }, 0)
     );
     const totalGeneral = totales.reduce((a, b) => a + b, 0);
     const total2LGeneral = totales.slice(0, 4).reduce((a, b) => a + b, 0);
