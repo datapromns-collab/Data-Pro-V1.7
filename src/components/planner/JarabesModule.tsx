@@ -26,7 +26,7 @@ import { cn } from '@/lib/utils';
 import { format, addDays, getWeek, startOfMonth } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { getWeekDays } from '@/lib/planner-utils';
-import { computePlannerMetrics, SUGAR_PER_UBB } from '@/lib/planner-metrics';
+import { computePlannerMetrics, SUGAR_PER_UBB, SABORES_ESTANDAR } from '@/lib/planner-metrics';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { ResponsiveContainer, ComposedChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar, Line } from 'recharts';
 
@@ -1386,89 +1386,28 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
                          {/* UBB Table Container */}
                          <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
-                           <Table>
-                             <TableHeader>
-                               <TableRow className="bg-slate-200 hover:bg-slate-200 text-slate-900 border-none">
-                                 <TableHead className="text-slate-900 font-black text-[11px] uppercase pl-4 w-1/3 border-r border-slate-300">Sabor</TableHead>
-                                 <TableHead className="text-slate-900 font-black text-[11px] uppercase text-right w-1/6 border-r border-slate-300">UBB Inicial</TableHead>
-                                 <TableHead className="text-slate-900 font-black text-[11px] uppercase text-right w-1/6 border-r border-slate-300">UBB Preparado</TableHead>
-                                 <TableHead className="text-slate-900 font-black text-[11px] uppercase text-right w-1/6 border-r border-slate-300">UBB Final</TableHead>
-                                 <TableHead className="text-slate-900 font-black text-[11px] uppercase text-right w-1/6 pr-4 border-r border-slate-300">UBB Consumo</TableHead>
-                               </TableRow>
-                             </TableHeader>
-                             <TableBody>
-                               {est.filteredRows.map((row, idx) => (
-                                 <TableRow key={row.sabor} className={`hover:bg-slate-50 border-b border-r border-slate-200 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/60'}`}>
-                                   <TableCell className="pl-4 py-2 text-xs font-bold text-slate-700 border-r border-slate-200">{row.sabor}</TableCell>
-                                   <TableCell className="py-2 text-right border-r border-slate-200">
-                                     <Input
-                                       type="number"
-                                       value={row.ubbInicialStr}
-                                       onChange={(e) => handleInputChangeEst(row.sabor, 'ubbInicial', e.target.value)}
-                                       className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
-                                       placeholder="0"
-                                     />
-                                   </TableCell>
-                                   <TableCell className="py-2 text-right border-r border-slate-200">
-                                     <Input
-                                       type="number"
-                                       value={row.ubbPreparadoStr}
-                                       onChange={(e) => handleInputChangeEst(row.sabor, 'ubbPreparado', e.target.value)}
-                                       className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
-                                       placeholder="0"
-                                     />
-                                   </TableCell>
-                                   <TableCell className="py-2 text-right border-r border-slate-200">
-                                     <Input
-                                       type="number"
-                                       value={row.ubbFinalStr}
-                                       onChange={(e) => handleInputChangeEst(row.sabor, 'ubbFinal', e.target.value)}
-                                       className="h-9 text-right font-bold text-xs bg-white border-slate-200 focus-visible:ring-primary focus-visible:border-primary w-28 ml-auto"
-                                       placeholder="0"
-                                     />
-                                   </TableCell>
-                                   <TableCell className="font-black text-xs text-right pr-4 py-3 text-slate-800 border-r border-slate-200">
-                                     <span className={cn(
-                                       "px-3 py-1.5 rounded-lg inline-block min-w-[70px] text-center font-black",
-                                       row.consumo > 0 ? "bg-emerald-50 text-emerald-700" :
-                                         row.consumo < 0 ? "bg-rose-50 text-rose-700" : "bg-slate-100 text-slate-600"
-                                     )}>
-                                       {formatNumber(row.consumo)}
-                                     </span>
-                                   </TableCell>
-                                 </TableRow>
+                           <table className="w-full border-collapse text-center">
+                             <thead>
+                               <tr className="bg-blue-700 text-white">
+                                 <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-1/3">Sabor</th>
+                                 <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-1/6">UBB Inicial</th>
+                                 <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-1/6">UBB Preparado</th>
+                                 <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-1/6">UBB Final</th>
+                                 <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-1/6">UBB Consumo</th>
+                               </tr>
+                             </thead>
+                             <tbody>
+                               {SABORES_ESTANDAR.map((sabor, idx) => (
+                                 <tr key={sabor} className={idx % 2 === 0 ? 'bg-blue-50' : 'bg-white'}>
+                                   <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">{sabor}</td>
+                                   <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                                   <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                                   <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                                   <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                                 </tr>
                                ))}
-
-                               {est.filteredRows.length === 0 && (
-                                 <TableRow>
-                                   <TableCell colSpan={5} className="text-center py-12 text-slate-400 font-bold uppercase text-xs">
-                                     No se encontraron sabores que coincidan con la búsqueda.
-                                   </TableCell>
-                                 </TableRow>
-                               )}
-
-                               {/* Totales Footer Row */}
-                               <TableRow className="bg-slate-100 hover:bg-slate-100 border-t-2 border-slate-300 font-bold text-xs">
-                                 <TableCell className="pl-4 py-4 text-xs font-black text-slate-800 uppercase border-r border-slate-200">
-                                   TOTAL GENERAL
-                                 </TableCell>
-                                 <TableCell className="text-right py-4 text-xs font-black text-slate-800 border-r border-slate-200">
-                                   {est.totals.inicial.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                                 </TableCell>
-                                 <TableCell className="text-right py-4 text-xs font-black text-slate-800 border-r border-slate-200">
-                                   {est.totals.preparado.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                                 </TableCell>
-                                 <TableCell className="text-right py-4 text-xs font-black text-slate-800 border-r border-slate-200">
-                                   {est.totals.final.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                                 </TableCell>
-                                 <TableCell className="text-right pr-4 py-4 text-xs font-black text-[#4f81bd] border-r border-slate-200">
-                                   <span className="bg-[#4f81bd] text-white px-3 py-1.5 rounded-lg inline-block min-w-[70px] text-center font-black shadow-sm">
-                                     {est.totals.consumo.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 })}
-                                   </span>
-                                 </TableCell>
-                               </TableRow>
-                             </TableBody>
-                           </Table>
+                             </tbody>
+                           </table>
                          </div>
                        </div>
 
