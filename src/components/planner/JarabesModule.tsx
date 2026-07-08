@@ -3,7 +3,11 @@
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Beaker, Pipette, Activity, FileSpreadsheet, TrendingUp, ScrollText } from 'lucide-react';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Beaker, Pipette, Activity, FileSpreadsheet, TrendingUp, ScrollText, CalendarIcon } from 'lucide-react';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
 
 const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
@@ -111,6 +115,7 @@ function UbbTable({ mode }: { mode: 'estandar' | 'promedio' }) {
 export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, weekStartDate }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; weekStartDate?: Date }) {
   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
   const [activeDisolucionTab, setActiveDisolucionTab] = useState<string>('disolucion');
+  const [selectedFecha, setSelectedFecha] = useState<Date | undefined>(undefined);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
@@ -144,18 +149,39 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
             <TabsContent value="disolucion" className="m-0 animate-in fade-in-50 duration-500">
               <Tabs value={activeInnerTab} onValueChange={setActiveInnerTab} defaultValue="estandar" className="w-full">
-                <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
-                  <TabsList className="bg-transparent h-auto p-0">
-                    <TabsTrigger value="estandar" className={tabsTriggerClass}>
-                      <FileSpreadsheet className="h-3.5 w-3.5" /> Estándar
-                    </TabsTrigger>
-                    <TabsTrigger value="promedio" className={tabsTriggerClass}>
-                      <TrendingUp className="h-3.5 w-3.5" /> Promedio
-                    </TabsTrigger>
-                    <TabsTrigger value="resumen" className={tabsTriggerClass}>
-                      <ScrollText className="h-3.5 w-3.5" /> Resumen
-                    </TabsTrigger>
-                  </TabsList>
+                <div className="flex items-center justify-between gap-3 bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 mb-6 no-print">
+                  <div className="flex items-center">
+                    <TabsList className="bg-transparent h-auto p-0">
+                      <TabsTrigger value="estandar" className={tabsTriggerClass}>
+                        <FileSpreadsheet className="h-3.5 w-3.5" /> Estándar
+                      </TabsTrigger>
+                      <TabsTrigger value="promedio" className={tabsTriggerClass}>
+                        <TrendingUp className="h-3.5 w-3.5" /> Promedio
+                      </TabsTrigger>
+                      <TabsTrigger value="resumen" className={tabsTriggerClass}>
+                        <ScrollText className="h-3.5 w-3.5" /> Resumen
+                      </TabsTrigger>
+                    </TabsList>
+                  </div>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                      >
+                        <CalendarIcon className="h-3.5 w-3.5 mr-2" />
+                        {selectedFecha ? format(selectedFecha, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar día"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0 rounded-md" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={selectedFecha}
+                        onSelect={setSelectedFecha}
+                        locale={es}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
 
                 <TabsContent value="estandar" className="m-0 animate-in fade-in-50 duration-500">
