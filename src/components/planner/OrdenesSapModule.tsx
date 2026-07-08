@@ -1104,6 +1104,57 @@ const exportarPDFdia = async () => {
     pdf.save(pdfNombre);
   };
 
+  const exportarExcelResumenMensual = () => {
+    const fecha = selectedFecha || new Date();
+    const mes = format(fecha, 'MMMM', { locale: es }).toUpperCase();
+    const anio = fecha.getFullYear();
+
+    const lineas = [1, 2, 3, 4, 5, 6, 7, 8];
+    const headers = ['SABOR', 'LINEA 1', 'LINEA 2', 'LINEA 3', 'LINEA 4', 'Total 2L', 'LINEA 5', 'LINEA 6', 'LINEA 7', 'LINEA 8', 'TOTAL'];
+
+    const rows = PRODUCT_LIST.map((sabor) => {
+      const l1 = tablaResumenMensualEdits[sabor]?.[1] ?? (resumenMensualTabla[sabor]?.[1] || 0);
+      const l2 = tablaResumenMensualEdits[sabor]?.[2] ?? (resumenMensualTabla[sabor]?.[2] || 0);
+      const l3 = tablaResumenMensualEdits[sabor]?.[3] ?? (resumenMensualTabla[sabor]?.[3] || 0);
+      const l4 = tablaResumenMensualEdits[sabor]?.[4] ?? (resumenMensualTabla[sabor]?.[4] || 0);
+      const l5 = tablaResumenMensualEdits[sabor]?.[5] ?? (resumenMensualTabla[sabor]?.[5] || 0);
+      const l6 = tablaResumenMensualEdits[sabor]?.[6] ?? (resumenMensualTabla[sabor]?.[6] || 0);
+      const l7 = tablaResumenMensualEdits[sabor]?.[7] ?? (resumenMensualTabla[sabor]?.[7] || 0);
+      const l8 = tablaResumenMensualEdits[sabor]?.[8] ?? (resumenMensualTabla[sabor]?.[8] || 0);
+      const total2L = l1 + l2 + l3 + l4;
+      const total = total2L + l5 + l6 + l7 + l8;
+      return [sabor, l1, l2, l3, l4, total2L, l5, l6, l7, l8, total];
+    });
+
+    const totales = lineas.map((linea) =>
+      PRODUCT_LIST.reduce((sum, sabor) => {
+        const val = tablaResumenMensualEdits[sabor]?.[linea] ?? (resumenMensualTabla[sabor]?.[linea] || 0);
+        return sum + val;
+      }, 0)
+    );
+    const totalGeneral = totales.reduce((a, b) => a + b, 0);
+    const total2LGeneral = totales.slice(0, 4).reduce((a, b) => a + b, 0);
+
+    const wsData = [
+      ['RESUMEN MENSUAL'],
+      [`MES DE ${mes} ${anio}`],
+      [],
+      headers,
+      ...rows,
+      ['TOTAL POR LINEA', ...totales.slice(0, 4), total2LGeneral, ...totales.slice(4), totalGeneral]
+    ];
+
+    const ws = XLSX.utils.aoa_to_sheet(wsData);
+    ws['!merges'] = [
+      { s: { r: 0, c: 0 }, e: { r: 0, c: headers.length - 1 } },
+      { s: { r: 1, c: 0 }, e: { r: 1, c: headers.length - 1 } }
+    ];
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Resumen Mensual');
+    XLSX.writeFile(wb, `Resumen Produccion ${mes} ${anio}.xlsx`);
+  };
+
   const exportarImagenResumenMensual = async () => {
     const fecha = selectedFecha || new Date();
     const mes = format(fecha, 'MMMM', { locale: es }).toUpperCase();
@@ -1852,22 +1903,30 @@ const exportarPDFdia = async () => {
                           <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
                             {selectedFecha ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase() : ''}
                           </span>
-                          <Button
-                            size="sm"
-                            onClick={exportarPDFResumenMensual}
-                            className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
-                          >
-                            <FileDown className="h-3 w-3" />
-                            Exportar PDF
-                          </Button>
-                          <Button
-                            size="sm"
-                            onClick={exportarImagenResumenMensual}
-                            className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
-                          >
-                            <Image className="h-3 w-3" />
-                            Exportar Imagen
-                          </Button>
+                           <Button
+                             size="sm"
+                             onClick={exportarPDFResumenMensual}
+                             className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                           >
+                             <FileDown className="h-3 w-3" />
+                             Exportar PDF
+                           </Button>
+                           <Button
+                             size="sm"
+                             onClick={exportarExcelResumenMensual}
+                             className="h-8 pl-3 pr-4 rounded-full bg-emerald-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-emerald-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                           >
+                             <FileSpreadsheet className="h-3 w-3" />
+                             Exportar Excel
+                           </Button>
+                           <Button
+                             size="sm"
+                             onClick={exportarImagenResumenMensual}
+                             className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                           >
+                             <Image className="h-3 w-3" />
+                             Exportar Imagen
+                           </Button>
                         </div>
                       <div className="p-4">
                         <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
