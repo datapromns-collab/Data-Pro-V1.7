@@ -5,7 +5,6 @@ import { useState, useEffect, useCallback } from 'react';
 export type ModuleId =
   | 'planning'
   | 'management'
-  | 'jarabes'
   | 'raw-materials'
   | 'recipes'
   | 'planta'
@@ -23,7 +22,6 @@ const STORAGE_KEY = 'planner_module_permissions';
 export const MODULE_LABELS: Record<ModuleId, string> = {
   planning: 'Planificación',
   management: 'Gestión',
-  jarabes: 'Jarabes',
   'raw-materials': 'Materia Prima',
   recipes: 'Recetas',
   planta: 'Planta',
@@ -36,7 +34,6 @@ export const MODULE_LABELS: Record<ModuleId, string> = {
 export const MODULE_COLORS: Record<ModuleId, string> = {
   planning: 'bg-emerald-500',
   management: 'bg-[#A67B5B]',
-  jarabes: 'bg-blue-500',
   'raw-materials': 'bg-amber-600',
   recipes: 'bg-emerald-600',
   planta: 'bg-slate-800',
@@ -49,7 +46,6 @@ export const MODULE_COLORS: Record<ModuleId, string> = {
 export const ALL_MODULES = [
   'planning',
   'management',
-  'jarabes',
   'raw-materials',
   'recipes',
   'planta',
@@ -61,10 +57,10 @@ export const ALL_MODULES = [
 
 const DEFAULT_PERMISSIONS: UserPermissions = {
   mds: ['planning', 'planta', 'logistica', 'ventas'],
-  'jaime.r': ['planning', 'management', 'jarabes', 'raw-materials', 'planta', 'logistica', 'ventas', 'purchasing'],
-  demon: ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'logistica', 'ventas', 'purchasing', 'ordenes-sap'],
-  'maria.mds': ['jarabes', 'raw-materials', 'planta'],
-  'alex.mds': ['jarabes', 'raw-materials', 'planta'],
+  'jaime.r': ['planning', 'management', 'raw-materials', 'planta', 'logistica', 'ventas', 'purchasing'],
+  demon: ['planning', 'management', 'raw-materials', 'recipes', 'planta', 'logistica', 'ventas', 'purchasing', 'ordenes-sap'],
+  'maria.mds': ['raw-materials', 'planta'],
+  'alex.mds': ['raw-materials', 'planta'],
   'anto.mds': ['purchasing', 'planta', 'logistica', 'ventas'],
 };
 

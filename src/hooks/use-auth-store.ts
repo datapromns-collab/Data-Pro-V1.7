@@ -17,7 +17,7 @@ const STORAGE_KEY = 'planner_auth_session';
  * 
  * 1. mds (STANDARD): 
  *    - Acceso: Planificación, Planta, Logística, Ventas.
- *    - Restricción: No ve Gestión, Jarabes, Materia Prima, Recetas ni Compras.
+ *    - Restricción: No ve Gestión, Materia Prima, Recetas ni Compras.
  * 
  * 2. jaime.r (ADMIN): 
  *    - Acceso: Todos los módulos excepto Recetas (específico para Yonny).
@@ -26,12 +26,12 @@ const STORAGE_KEY = 'planner_auth_session';
  *    - Acceso: Total absoluto (incluye el módulo Maestro de Recetas).
  * 
  * 4. maria.mds / alex.mds (INVENTORY): 
- *    - Acceso: Jarabes, Materia Prima y Planta.
+ *    - Acceso: Materia Prima y Planta.
  *    - Restricción: No ven Planificación, Compras, Logística ni Ventas.
  * 
  * 5. anto.mds (PURCHASING - Antonella Dos Santos): 
  *    - Acceso: Compras, Planta, Logística, Ventas.
- *    - Restricción: No ve Planificación, Jarabes ni Materia Prima. Redirección automática a Compras.
+ *    - Restricción: No ve Planificación ni Materia Prima. Redirección automática a Compras.
  */
 const VALID_USERS = [
   { id: 'mds', password: 'ad.157.', name: 'Multinacional de Sabores', role: 'STANDARD' as UserRole },
@@ -92,7 +92,6 @@ export function useAuthStore() {
     isRestrictedInventory,
     isInventory: user?.role === 'INVENTORY',
     isPurchasing: user?.role === 'PURCHASING',
-    isJarabes: isRestrictedInventory || user?.role === 'ADMIN',
     login,
     logout
   };
