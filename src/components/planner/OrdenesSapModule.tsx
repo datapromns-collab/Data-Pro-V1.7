@@ -1116,6 +1116,13 @@ const exportarPDFdia = async () => {
       }, 0);
     }, 0);
 
+    const lacquer = new FontFace('Lacquer', 'url(/fonts/Lacquer-Regular.ttf)');
+    const gagalin = new FontFace('Gagalin', 'url(/fonts/Gagalin-Regular.otf)');
+    const amoresa = new FontFace('Amoresa', 'url(/fonts/Amoresa-Regular.otf)');
+    await Promise.all([lacquer.load(), gagalin.load(), amoresa.load()]).then((fonts) => {
+      fonts.forEach((font) => document.fonts.add(font));
+    });
+
     const canvas = document.createElement('canvas');
     canvas.width = 1920;
     canvas.height = 1080;
@@ -1142,18 +1149,18 @@ const exportarPDFdia = async () => {
     ctx.fillStyle = '#000000';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.font = 'bold 110px Arial';
+    ctx.font = 'bold 110px Lacquer';
     ctx.fillText('PRODUCCION TOTAL', canvas.width / 2, canvas.height * 0.32);
 
-    ctx.font = '42px Arial';
+    ctx.font = '42px Gagalin';
     ctx.fillText(`MES DE ${mes} ${anio}`, canvas.width / 2, canvas.height * 0.42);
 
     const totalStr = total.toLocaleString('es-ES');
-    ctx.font = 'italic 140px "Times New Roman", serif';
+    ctx.font = 'italic 140px Amoresa';
     ctx.fillStyle = '#000000';
     ctx.fillText(totalStr, canvas.width / 2, canvas.height * 0.62);
 
-    ctx.font = 'italic 70px "Times New Roman", serif';
+    ctx.font = 'italic 70px Amoresa';
     ctx.fillText('Cajas', canvas.width / 2, canvas.height * 0.74);
 
     const logo = document.createElement('img');
