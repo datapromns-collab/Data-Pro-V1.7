@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { Factory, Plus, CalendarIcon, FileDown, FileSpreadsheet } from 'lucide-react';
+import { Factory, Plus, CalendarIcon, FileDown, FileSpreadsheet, Image } from 'lucide-react';
 import { useState, useMemo, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
@@ -1104,6 +1104,75 @@ const exportarPDFdia = async () => {
     pdf.save(pdfNombre);
   };
 
+  const exportarImagenResumenMensual = async () => {
+    const fecha = selectedFecha || new Date();
+    const mes = format(fecha, 'MMMM', { locale: es }).toUpperCase();
+    const anio = fecha.getFullYear();
+
+    const total = PRODUCT_LIST.reduce((sum, sabor) => {
+      return sum + [1, 2, 3, 4, 5, 6, 7, 8].reduce((s, l) => {
+        const val = tablaResumenMensualEdits[sabor]?.[l] ?? (resumenMensualTabla[sabor]?.[l] || 0);
+        return s + val;
+      }, 0);
+    }, 0);
+
+    const canvas = document.createElement('canvas');
+    canvas.width = 1920;
+    canvas.height = 1080;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, '#7c3aed');
+    gradient.addColorStop(0.5, '#ec4899');
+    gradient.addColorStop(1, '#f97316');
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.strokeStyle = '#22d3ee';
+    ctx.lineWidth = 35;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(canvas.width * 0.25, canvas.height * 0.15);
+    ctx.lineTo(canvas.width * 0.75, canvas.height * 0.85);
+    ctx.moveTo(canvas.width * 0.75, canvas.height * 0.15);
+    ctx.lineTo(canvas.width * 0.25, canvas.height * 0.85);
+    ctx.stroke();
+
+    ctx.fillStyle = '#000000';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.font = 'bold 110px Arial';
+    ctx.fillText('PRODUCCION TOTAL', canvas.width / 2, canvas.height * 0.32);
+
+    ctx.font = '42px Arial';
+    ctx.fillText(`MES DE ${mes} ${anio}`, canvas.width / 2, canvas.height * 0.42);
+
+    const totalStr = total.toLocaleString('es-ES');
+    ctx.font = 'italic 140px "Times New Roman", serif';
+    ctx.fillStyle = '#000000';
+    ctx.fillText(totalStr, canvas.width / 2, canvas.height * 0.62);
+
+    ctx.font = 'italic 70px "Times New Roman", serif';
+    ctx.fillText('Cajas', canvas.width / 2, canvas.height * 0.74);
+
+    const logo = document.createElement('img');
+    logo.crossOrigin = 'anonymous';
+    logo.src = '/Logo-MDS.png';
+    await new Promise<void>((resolve) => {
+      logo.onload = () => resolve();
+      logo.onerror = () => resolve();
+    });
+    const logoWidth = 220;
+    const logoHeight = 110;
+    ctx.drawImage(logo, canvas.width - logoWidth - 40, 40, logoWidth, logoHeight);
+
+    const link = document.createElement('a');
+    link.download = `Produccion Total ${mes} ${anio}.jpg`;
+    link.href = canvas.toDataURL('image/jpeg', 0.92);
+    link.click();
+  };
+
   const eliminarDia = (ordenId: string, diaIndex: number) => {
     setOrdenes(prev => prev.map(o => {
       if (o.id !== ordenId) return o;
@@ -1770,20 +1839,28 @@ const exportarPDFdia = async () => {
                       </div>
                      </div>
                    ) : activeSection === 'resumen-mensual' ? (
-                     <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                       <div className="flex items-center justify-end gap-2 px-6 py-4 border-b border-slate-100">
-                         <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-                           {selectedFecha ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase() : ''}
-                         </span>
-                         <Button
-                           size="sm"
-                           onClick={exportarPDFResumenMensual}
-                           className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
-                         >
-                           <FileDown className="h-3 w-3" />
-                           Exportar PDF
-                         </Button>
-                       </div>
+                      <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                        <div className="flex items-center justify-end gap-2 px-6 py-4 border-b border-slate-100">
+                          <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                            {selectedFecha ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase() : ''}
+                          </span>
+                          <Button
+                            size="sm"
+                            onClick={exportarPDFResumenMensual}
+                            className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                          >
+                            <FileDown className="h-3 w-3" />
+                            Exportar PDF
+                          </Button>
+                          <Button
+                            size="sm"
+                            onClick={exportarImagenResumenMensual}
+                            className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                          >
+                            <Image className="h-3 w-3" />
+                            Exportar Imagen
+                          </Button>
+                        </div>
                       <div className="p-4">
                         <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
                           <table className="w-full border-collapse text-center">
