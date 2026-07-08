@@ -1063,16 +1063,16 @@ const exportarPDFdia = async () => {
       x = startX;
       pdf.text(item.sabor, x + colWidths[0] / 2, y + 3.8, { align: 'center' });
       x += colWidths[0];
-      item.valores.forEach((val, i) => {
-        pdf.text(String(val), x + colWidths[i + 1] / 2, y + 3.8, { align: 'center' });
+      for (let i = 0; i < 4; i++) {
+        pdf.text(String(item.valores[i]), x + colWidths[i + 1] / 2, y + 3.8, { align: 'center' });
         x += colWidths[i + 1];
-      });
+      }
       pdf.text(String(item.total2L), x + colWidths[5] / 2, y + 3.8, { align: 'center' });
       x += colWidths[5];
-      item.valores.slice(4).forEach((val, i) => {
-        pdf.text(String(val), x + colWidths[i + 1] / 2, y + 3.8, { align: 'center' });
-        x += colWidths[i + 1];
-      });
+      for (let i = 0; i < 4; i++) {
+        pdf.text(String(item.valores[i + 4]), x + colWidths[i + 6] / 2, y + 3.8, { align: 'center' });
+        x += colWidths[i + 6];
+      }
       pdf.text(String(item.total), x + colWidths[10] / 2, y + 3.8, { align: 'center' });
       drawRowBorders(y, rowHeight);
       y += rowHeight;
