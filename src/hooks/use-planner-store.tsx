@@ -138,6 +138,13 @@ function usePlannerStoreInner() {
                 delete (materials as any)['EMP_0105_N'];
               }
             });
+          } else if (product !== 'GLUP FRESH') {
+            Object.entries(saved[product]).forEach(([pres, materials]) => {
+              if (pres === '1Lt' && (materials as any)['EMP_0105_2'] !== undefined && (materials as any)['EMP_0105'] === undefined) {
+                (materials as any)['EMP_0105'] = (materials as any)['EMP_0105_2'];
+                delete (materials as any)['EMP_0105_2'];
+              }
+            });
           }
         });
         
