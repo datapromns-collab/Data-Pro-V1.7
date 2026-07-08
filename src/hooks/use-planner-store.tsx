@@ -120,6 +120,7 @@ function usePlannerStoreInner() {
     if (savedPkgRecipes) {
       try {
         const saved = JSON.parse(savedPkgRecipes) as Record<string, Record<string, Record<string, number>>>;
+        console.log('[PACKAGING MIGRATION] Before:', JSON.stringify(saved, null, 2));
         
         if (saved['GLUP FRESH']) {
           Object.entries(saved['GLUP FRESH']).forEach(([pres, materials]) => {
@@ -148,8 +149,9 @@ function usePlannerStoreInner() {
           }
         });
         
+        console.log('[PACKAGING MIGRATION] After:', JSON.stringify(saved, null, 2));
         setCustomPackagingRecipes(saved);
-      } catch (e) {}
+      } catch (e) { console.error('[PACKAGING MIGRATION] Error:', e); }
     }
 
     if (savedRawMat) {
