@@ -253,6 +253,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                           <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-1/3">Sabor</th>
                           <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-1/6">UBB Inicial</th>
                           <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-1/6">UBB Preparado</th>
+                          <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-1/6">UBB Disponible</th>
                           <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-1/6">UBB Final</th>
                           <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-1/6">UBB Consumo</th>
                         </tr>
@@ -263,169 +264,169 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-white">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">GLUP FRESH</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-blue-50">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">GLUP UVA</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-white">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">GLUP PIÑA</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-blue-50">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">GLUP NARANJA</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-white">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">GLUP KOLITA</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-blue-50">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">GLUP MANZANA VERDE</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-white">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">GLUP PONCHE</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-blue-50">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">GLUP CHICLE</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-white">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">GLUP PIÑA PARCHITA</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-blue-50">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">GLUP MANZANA ROJA</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-white">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">JUSTY NARANJA</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-blue-50">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">JUSTY DURAZNO</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-white">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">JUSTY MANDARINA</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-blue-50">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">JUSTY SANDIA</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-white">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">JUSTY LIMON</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-blue-50">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">JUSTY TAMARINDO</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-white">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">JUSTY PERA</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-blue-50">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">JUSTY MANZANA</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-white">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">VITA TEA DURAZNO</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                         <tr className="bg-blue-50">
                           <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">VITA TEA LIMON</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                           <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-                         </tr>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                          <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+                        </tr>
                       </tbody>
                     </table>
                   </div>
