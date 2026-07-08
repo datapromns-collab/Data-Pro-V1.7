@@ -1123,7 +1123,6 @@ const exportarPDFdia = async () => {
     const wsData: any[] = [
       ['RESUMEN MENSUAL'],
       [`MES DE ${mes} ${anio}`],
-      [],
     ];
 
     lineas.forEach((linea) => {
@@ -1166,7 +1165,7 @@ const exportarPDFdia = async () => {
     ];
 
     lineas.forEach((_, index) => {
-      const headerRowIndex = 3 + index * (PRODUCT_LIST.length + 3);
+      const headerRowIndex = 2 + index * (PRODUCT_LIST.length + 2);
       merges.push({
         s: { r: headerRowIndex, c: 0 },
         e: { r: headerRowIndex, c: fechasMes.length }
