@@ -183,8 +183,8 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
             <TabsContent value="disolucion" className="m-0 animate-in fade-in-50 duration-500">
               <Tabs value={activeInnerTab} onValueChange={setActiveInnerTab} defaultValue="estandar" className="w-full">
-                <div className="flex items-center justify-between gap-3 bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 mb-6 no-print">
-                  <div className="flex items-center">
+                <div className="flex items-center justify-between gap-3 w-full mb-6 no-print">
+                  <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
                     <TabsList className="bg-transparent h-auto p-0">
                       <TabsTrigger value="estandar" className={tabsTriggerClass}>
                         <FileSpreadsheet className="h-3.5 w-3.5" /> Estándar
