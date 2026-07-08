@@ -1136,15 +1136,27 @@ const exportarPDFdia = async () => {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-    ctx.strokeStyle = '#22d3ee';
-    ctx.lineWidth = 35;
-    ctx.lineCap = 'round';
-    ctx.beginPath();
-    ctx.moveTo(canvas.width * 0.25, canvas.height * 0.15);
-    ctx.lineTo(canvas.width * 0.75, canvas.height * 0.85);
-    ctx.moveTo(canvas.width * 0.75, canvas.height * 0.15);
-    ctx.lineTo(canvas.width * 0.25, canvas.height * 0.85);
-    ctx.stroke();
+    const xblue = document.createElement('img');
+    xblue.crossOrigin = 'anonymous';
+    xblue.src = '/XBLUE.png';
+    await new Promise<void>((resolve) => {
+      xblue.onload = () => resolve();
+      xblue.onerror = () => resolve();
+    });
+    const xblueWidth = 700;
+    const xblueHeight = 700;
+    ctx.drawImage(xblue, canvas.width / 2 - xblueWidth / 2, canvas.height / 2 - xblueHeight / 2, xblueWidth, xblueHeight);
+
+    const logo = document.createElement('img');
+    logo.crossOrigin = 'anonymous';
+    logo.src = '/Logo-MDS.png';
+    await new Promise<void>((resolve) => {
+      logo.onload = () => resolve();
+      logo.onerror = () => resolve();
+    });
+    const logoWidth = 220;
+    const logoHeight = 110;
+    ctx.drawImage(logo, canvas.width - logoWidth - 40, 40, logoWidth, logoHeight);
 
     ctx.fillStyle = '#000000';
     ctx.textAlign = 'center';
@@ -1162,17 +1174,6 @@ const exportarPDFdia = async () => {
 
     ctx.font = 'italic 70px Amoresa';
     ctx.fillText('Cajas', canvas.width / 2, canvas.height * 0.74);
-
-    const logo = document.createElement('img');
-    logo.crossOrigin = 'anonymous';
-    logo.src = '/Logo-MDS.png';
-    await new Promise<void>((resolve) => {
-      logo.onload = () => resolve();
-      logo.onerror = () => resolve();
-    });
-    const logoWidth = 220;
-    const logoHeight = 110;
-    ctx.drawImage(logo, canvas.width - logoWidth - 40, 40, logoWidth, logoHeight);
 
     const link = document.createElement('a');
     link.download = `Produccion Total ${mes} ${anio}.jpg`;
