@@ -26,7 +26,7 @@ import { cn } from '@/lib/utils';
 import { format, addDays, getWeek, startOfMonth } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { getWeekDays } from '@/lib/planner-utils';
-import { computePlannerMetrics, SUGAR_PER_UBB } from '@/lib/planner-metrics';
+import { computePlannerMetrics, SUGAR_PER_UBB, SABORES_ESTANDAR, PROVEEDORES, TANQUES_SALAS } from '@/lib/planner-metrics';
 import { ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { ResponsiveContainer, ComposedChart, CartesianGrid, XAxis, YAxis, Tooltip, Bar, Line } from 'recharts';
 
@@ -145,40 +145,81 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     return result;
    };
 
+   const initializeDefaultData = () => {
+     const defaultUbbData: Record<string, { ubbInicial?: string; ubbPreparado?: string; ubbFinal?: string }> = {};
+     SABORES_ESTANDAR.forEach(sabor => {
+       defaultUbbData[sabor] = {
+         ubbInicial: (Math.floor(Math.random() * 100) + 1).toString(),
+         ubbPreparado: (Math.floor(Math.random() * 50) + 1).toString(),
+         ubbFinal: (Math.floor(Math.random() * 100) + 1).toString()
+       };
+     });
+
+     const defaultSugarData: Record<string, { invInicialSacos?: string; recepcionSacos?: string; invFinalSacos?: string }> = {};
+     PROVEEDORES.forEach(proveedor => {
+       defaultSugarData[proveedor] = {
+         invInicialSacos: (Math.floor(Math.random() * 20) + 1).toString(),
+         recepcionSacos: (Math.floor(Math.random() * 10) + 1).toString(),
+         invFinalSacos: (Math.floor(Math.random() * 15) + 1).toString()
+       };
+     });
+
+     const defaultTanksData: Record<string, { invInicialSacos?: string; invFinalSacos?: string }> = {};
+     TANQUES_SALAS.forEach(tanque => {
+       defaultTanksData[tanque] = {
+         invInicialSacos: (Math.floor(Math.random() * 30) + 1).toString(),
+         invFinalSacos: (Math.floor(Math.random() * 25) + 1).toString()
+       };
+     });
+
+     const savedUbb = loadDayDataWithCarryOver(selectedDate, 'ubb');
+     const savedSugar = loadDayDataWithCarryOver(selectedDate, 'sugar');
+     const savedTanks = loadDayDataWithCarryOver(selectedDate, 'tanks');
+
+     if (!Object.keys(savedUbb).length) {
+       localStorage.setItem(getKey('ubb', selectedDate), JSON.stringify(defaultUbbData));
+       setUbbDataEst(defaultUbbData);
+       setUbbDataProm(defaultUbbData);
+     } else {
+       setUbbDataEst(savedUbb);
+       setUbbDataProm(savedUbb);
+     }
+
+     if (!Object.keys(savedSugar).length) {
+       localStorage.setItem(getKey('sugar', selectedDate), JSON.stringify(defaultSugarData));
+       setSugarDataEst(defaultSugarData);
+       setSugarDataProm(defaultSugarData);
+     } else {
+       setSugarDataEst(savedSugar);
+       setSugarDataProm(savedSugar);
+     }
+
+     if (!Object.keys(savedTanks).length) {
+       localStorage.setItem(getKey('tanks', selectedDate), JSON.stringify(defaultTanksData));
+       setTanksDataEst(defaultTanksData);
+       setTanksDataProm(defaultTanksData);
+     } else {
+       setTanksDataEst(savedTanks);
+       setTanksDataProm(savedTanks);
+     }
+   };
+
    useEffect(() => {
       const loadEstData = () => {
         const savedUbb = loadDayDataWithCarryOver(selectedDate, 'ubb');
-        if (Object.keys(savedUbb).length) {
-          try {
-            setUbbDataEst(savedUbb);
-            setUbbDataProm(savedUbb);
-          } catch (e) { console.error('Error cargando datos UBB', e); }
-        } else {
-          setUbbDataEst({});
-          setUbbDataProm({});
-        }
-
         const savedSugar = loadDayDataWithCarryOver(selectedDate, 'sugar');
-        if (Object.keys(savedSugar).length) {
-          try {
-            setSugarDataEst(savedSugar);
-            setSugarDataProm(savedSugar);
-          } catch (e) { console.error('Error cargando datos azúcar', e); }
-        } else {
-          setSugarDataEst({});
-          setSugarDataProm({});
-        }
-
         const savedTanks = loadDayDataWithCarryOver(selectedDate, 'tanks');
-        if (Object.keys(savedTanks).length) {
-          try {
-            setTanksDataEst(savedTanks);
-            setTanksDataProm(savedTanks);
-          } catch (e) { console.error('Error cargando datos tanques', e); }
-         } else {
-           setTanksDataEst({});
-           setTanksDataProm({});
-         }
+
+        if (!Object.keys(savedUbb).length || !Object.keys(savedSugar).length || !Object.keys(savedTanks).length) {
+          initializeDefaultData();
+        } else {
+          setUbbDataEst(savedUbb);
+          setUbbDataProm(savedUbb);
+          setSugarDataEst(savedSugar);
+          setSugarDataProm(savedSugar);
+          setTanksDataEst(savedTanks);
+          setTanksDataProm(savedTanks);
+        }
       };
       loadEstData();
       setIsLoaded(true);
