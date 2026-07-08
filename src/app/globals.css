@@ -159,6 +159,11 @@
     margin-top: 0 !important;
     padding-top: 0 !important;
   }
+
+  #report > div:last-child table {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
 }
 
 .print-only {

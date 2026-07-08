@@ -1562,27 +1562,27 @@ export default function PlannerPage() {
                 margin-bottom: 0 !important;
                 padding-bottom: 0 !important;
               }
-              #report {
-                margin-top: 0 !important;
-                padding-top: 0 !important;
-                margin-bottom: 0 !important;
-                padding-bottom: 0 !important;
-              }
-              #report > div {
-                margin-top: 0 !important;
-                padding-top: 0 !important;
-                margin-bottom: 0 !important;
-                padding-bottom: 0 !important;
-              }
-              #report > div > div {
-                margin-top: 0 !important;
-                padding-top: 0 !important;
-                margin-bottom: 0 !important;
-                padding-bottom: 0 !important;
-              }
-              @page {
-                margin: 5mm !important;
-              }
+               #report {
+                 margin-top: 0 !important;
+                 padding-top: 0 !important;
+                 margin-bottom: 0 !important;
+                 padding-bottom: 0 !important;
+               }
+               #report > div:first-child {
+                 margin-bottom: 0 !important;
+                 padding-bottom: 0 !important;
+               }
+               #report > div:last-child {
+                 margin-top: 0 !important;
+                 padding-top: 0 !important;
+               }
+               #report > div:last-child table {
+                 margin-top: 0 !important;
+                 padding-top: 0 !important;
+               }
+               @page {
+                 margin: 5mm !important;
+               }
             }
           `}</style>
           {printMode === 'plan' && (
