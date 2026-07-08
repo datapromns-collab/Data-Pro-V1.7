@@ -59,6 +59,7 @@ import { PurchasingRequirementReport } from '@/components/planner/PurchasingRequ
 import { InventoryReport } from '@/components/planner/InventoryReport';
 import { PlanProduccionReport } from '@/components/planner/PlanProduccionReport';
 import { RequisicionReport } from '@/components/planner/RequisicionReport';
+import { JarabesModule } from '@/components/planner/JarabesModule';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
@@ -187,6 +188,7 @@ export default function PlannerPage() {
     isDemon,
     isRestrictedInventory,
     isInventory,
+    isJarabes,
     login,
     logout
   } = useAuthStore();
@@ -210,6 +212,8 @@ export default function PlannerPage() {
   const [activeTab, setActiveTab] = useState('gantt');
   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
   const [printMode, setPrintMode] = useState('');
+  const [jarabesPrintMode, setJarabesPrintMode] = useState('');
+  const [jarabesPrintHtml, setJarabesPrintHtml] = useState('');
   const [selectedLine, setSelectedLine] = useState('1');
   const [ordenesSapActiveLinea, setOrdenesSapActiveLinea] = useState<number>(1);
   const [selectedFechaSap, setSelectedFechaSap] = useState<Date | undefined>(undefined);
@@ -368,6 +372,7 @@ export default function PlannerPage() {
   const defaultTabForModule: Record<string, string> = {
     planning: 'gantt',
     management: 'admin-report',
+    jarabes: 'jarabes-view',
     'raw-materials': 'raw-material-view',
     recipes: 'recipes-editor',
     planta: 'paradas-lineas',
@@ -581,6 +586,66 @@ export default function PlannerPage() {
     }, 150);
   };
 
+  const handlePrintJarabes = (html: string) => {
+    setJarabesPrintMode('estandar');
+    setJarabesPrintHtml(html);
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+      setJarabesPrintMode('');
+      setJarabesPrintHtml('');
+    }, 150);
+  };
+
+  const handlePrintJarabesPromedio = (html: string) => {
+    setJarabesPrintMode('promedio');
+    setJarabesPrintHtml(html);
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+      setJarabesPrintMode('');
+      setJarabesPrintHtml('');
+    }, 150);
+  };
+
+  const handlePrintJarabesSemanalEst = (html: string) => {
+    setJarabesPrintMode('semanal-estandar');
+    setJarabesPrintHtml(html);
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+      setJarabesPrintMode('');
+      setJarabesPrintHtml('');
+    }, 150);
+  };
+
+  const handlePrintJarabesSemanalProm = (html: string) => {
+    setJarabesPrintMode('semanal-promedio');
+    setJarabesPrintHtml(html);
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+      setJarabesPrintMode('');
+      setJarabesPrintHtml('');
+    }, 150);
+  };
+
   const handleTaskClick = (task: ScheduledTask) => {
     setEditingTask(task);
     setIsDialogOpen(true);
@@ -676,18 +741,31 @@ export default function PlannerPage() {
                      </Button>
                    )}
 
-                   {hasAccess(user.id, 'management') && (
-                     <Button 
-                       variant="ghost" 
-                       onClick={() => { setActiveModule('management'); setActiveTab('admin-report'); }}
-                       className={sidebarButtonClass(activeModule === 'management', "bg-[#A67B5B] hover:bg-[#966B4B]", "shadow-[#A67B5B]/30")}
-                     >
-                       <div className={iconContainerClass(activeModule === 'management')}>
-                         <BarChart3 className="h-4 w-4" />
-                       </div>
-                       <span className="uppercase text-[10px] font-black tracking-tight">Gestión</span>
-                     </Button>
-                   )}
+                    {hasAccess(user.id, 'management') && (
+                      <Button 
+                        variant="ghost" 
+                        onClick={() => { setActiveModule('management'); setActiveTab('admin-report'); }}
+                        className={sidebarButtonClass(activeModule === 'management', "bg-[#A67B5B] hover:bg-[#966B4B]", "shadow-[#A67B5B]/30")}
+                      >
+                        <div className={iconContainerClass(activeModule === 'management')}>
+                          <BarChart3 className="h-4 w-4" />
+                        </div>
+                        <span className="uppercase text-[10px] font-black tracking-tight">Gestión</span>
+                      </Button>
+                    )}
+
+                    {hasAccess(user.id, 'jarabes') && (
+                      <Button 
+                        variant="ghost" 
+                        onClick={() => { setActiveModule('jarabes'); setActiveTab('jarabes-view'); }}
+                        className={sidebarButtonClass(activeModule === 'jarabes', "bg-blue-500 hover:bg-blue-600", "shadow-blue-400/30")}
+                      >
+                        <div className={iconContainerClass(activeModule === 'jarabes')}>
+                          <Droplets className="h-4 w-4" />
+                        </div>
+                        <span className="uppercase text-[10px] font-black tracking-tight">Jarabes</span>
+                      </Button>
+                    )}
 
                     {hasAccess(user.id, 'raw-materials') && (
                      <Button 
@@ -843,6 +921,7 @@ export default function PlannerPage() {
                 activeModule === 'management' ? "bg-[#A67B5B]/10 text-[#A67B5B]" :
                 activeModule === 'recipes' ? "bg-emerald-100 text-emerald-700" :
                  activeModule === 'raw-materials' ? "bg-amber-100 text-amber-700" :
+                 activeModule === 'jarabes' ? "bg-blue-100 text-blue-700" :
                  activeModule === 'planta' ? "bg-slate-100 text-slate-700" :
                  activeModule === 'logistica' ? "bg-orange-100 text-orange-700" :
                  activeModule === 'ventas' ? "bg-indigo-100 text-indigo-700" :
@@ -853,6 +932,7 @@ export default function PlannerPage() {
                 {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' :
                  activeModule === 'recipes' ? 'MÓDULO DE RECETAS' :
                  activeModule === 'raw-materials' ? 'MÓDULO DE MATERIA PRIMA' :
+                 activeModule === 'jarabes' ? 'MÓDULO DE JARABES' :
                  activeModule === 'planta' ? 'MÓDULO DE PLANTA' :
                  activeModule === 'logistica' ? 'MÓDULO DE LOGÍSTICA' :
                  activeModule === 'ventas' ? 'MÓDULO DE VENTAS' :
@@ -896,7 +976,7 @@ export default function PlannerPage() {
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <div className="flex flex-col gap-6 h-full">
               
-               {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && (
+               {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && activeModule !== 'jarabes' && (
                   <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1 shadow-none self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print h-11 shrink-0 gap-1 w-full justify-between">
                     {activeModule === 'planning' && (
                       <>
@@ -1065,7 +1145,16 @@ export default function PlannerPage() {
                       />
                     )}
                   </>
-                )}
+                 )}
+                 {activeModule === 'jarabes' && hasAccess(user.id, 'jarabes') && (
+                   <JarabesModule 
+                     onPrintStandard={handlePrintJarabes}
+                     onPrintPromedio={handlePrintJarabesPromedio}
+                     onPrintWeeklyStandard={handlePrintJarabesSemanalEst}
+                     onPrintWeeklyPromedio={handlePrintJarabesSemanalProm}
+                     weekStartDate={weekStartDate}
+                   />
+                 )}
                  {activeModule === 'raw-materials' && hasAccess(user.id, 'raw-materials') && (
                   <>
                     {activeTab === 'raw-material-view' && (
