@@ -122,10 +122,6 @@ export function PurchasingRequirementReport({
           total += quantity * (presentation === "2Lts" ? 6 : 12); 
           return; 
         }
-        if (code === 'EMP_0105_2' && presentation === "1Lt" && !isFresh && !isJugo) { 
-          total += quantity * 12; 
-          return; 
-        }
         if (code === 'EMP_0095' && isJugo) { 
           total += quantity * 12; 
           return; 
