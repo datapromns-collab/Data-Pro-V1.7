@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -21,8 +21,35 @@ const SABORES_UBB = [
 const inputCellClass = "border border-slate-200 px-1 py-0.5 text-[10px] text-slate-700";
 const inputClass = "w-full h-7 text-[10px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500";
 
-function UbbTable({ mode }: { mode: 'estandar' | 'promedio' }) {
+function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; selectedFecha?: Date }) {
+  const storageKey = selectedFecha ? `jarabes-ubb-${mode}-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   const [values, setValues] = useState<Record<string, { inicial: string; preparado: string; final: string }>>({});
+
+  useEffect(() => {
+    if (!storageKey) {
+      setValues({});
+      return;
+    }
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        setValues(JSON.parse(saved));
+      } else {
+        setValues({});
+      }
+    } catch {
+      setValues({});
+    }
+  }, [storageKey]);
+
+  useEffect(() => {
+    if (!storageKey) return;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(values));
+    } catch {
+      // ignore
+    }
+  }, [values, storageKey]);
 
   const handleChange = (sabor: string, field: 'inicial' | 'preparado' | 'final', raw: string) => {
     const cleaned = raw.replace(/[^0-9]/g, '');
@@ -38,6 +65,8 @@ function UbbTable({ mode }: { mode: 'estandar' | 'promedio' }) {
     const n = Number(val);
     return Number.isFinite(n) ? n : 0;
   };
+
+  const isEmpty = !selectedFecha || Object.keys(values).length === 0;
 
   return (
     <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
@@ -84,7 +113,7 @@ function UbbTable({ mode }: { mode: 'estandar' | 'promedio' }) {
                   />
                 </td>
                 <td className={inputCellClass}>
-                  <span className="block h-7 leading-7 text-[10px] font-bold text-slate-700">
+                  <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">
                     {disponible > 0 ? disponible : ''}
                   </span>
                 </td>
@@ -99,7 +128,7 @@ function UbbTable({ mode }: { mode: 'estandar' | 'promedio' }) {
                   />
                 </td>
                 <td className={inputCellClass}>
-                  <span className="block h-7 leading-7 text-[10px] font-black text-slate-700">
+                  <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">
                     {consumo > 0 ? consumo : ''}
                   </span>
                 </td>
@@ -108,6 +137,11 @@ function UbbTable({ mode }: { mode: 'estandar' | 'promedio' }) {
           })}
         </tbody>
       </table>
+      {isEmpty && (
+        <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-200 bg-white">
+          Sin datos para la fecha seleccionada
+        </div>
+      )}
     </div>
   );
 }
@@ -185,11 +219,11 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                 </div>
 
                 <TabsContent value="estandar" className="m-0 animate-in fade-in-50 duration-500">
-                  <UbbTable mode="estandar" />
+                  <UbbTable mode="estandar" selectedFecha={selectedFecha} />
                 </TabsContent>
 
                 <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500">
-                  <UbbTable mode="promedio" />
+                  <UbbTable mode="promedio" selectedFecha={selectedFecha} />
                 </TabsContent>
 
                 <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500">
