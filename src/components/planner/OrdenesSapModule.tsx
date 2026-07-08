@@ -1118,26 +1118,12 @@ const exportarPDFdia = async () => {
       return format(d, 'd/M/yyyy');
     });
 
-    const lineas = [1, 2, 3, 4, 5, 6, 7, 8];
+    const lineas = [1, 2, 3, 4, 5, 6, 7];
 
-    const wsData: any[] = [
-      ['RESUMEN MENSUAL'],
-      [`MES DE ${mes} ${anio}`],
-    ];
+    const wsData: any[] = [];
 
     lineas.forEach((linea) => {
-      wsData.push([`LINEA ${linea}`, ...fechasMes.map((fechaStr) => {
-        const total = PRODUCT_LIST.reduce((sum, sabor) => {
-          return sum + (ordenes || []).reduce((sumOrden, orden) => {
-            if (orden.linea !== linea) return sumOrden;
-            return sumOrden + (orden.dias || []).reduce((sumDia, dia) => {
-              if (dia.fechaInicio !== fechaStr) return sumDia;
-              return sumDia + (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
-            }, 0);
-          }, 0);
-        }, 0);
-        return total;
-      })]);
+      wsData.push([`Linea ${linea}`, ...fechasMes]);
 
       PRODUCT_LIST.forEach((sabor) => {
         const fila: any[] = [sabor];
@@ -1159,20 +1145,6 @@ const exportarPDFdia = async () => {
     });
 
     const ws = XLSX.utils.aoa_to_sheet(wsData);
-    const merges: any[] = [
-      { s: { r: 0, c: 0 }, e: { r: 0, c: fechasMes.length } },
-      { s: { r: 1, c: 0 }, e: { r: 1, c: fechasMes.length } },
-    ];
-
-    lineas.forEach((_, index) => {
-      const headerRowIndex = 2 + index * (PRODUCT_LIST.length + 2);
-      merges.push({
-        s: { r: headerRowIndex, c: 0 },
-        e: { r: headerRowIndex, c: fechasMes.length }
-      });
-    });
-
-    ws['!merges'] = merges;
 
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Resumen Mensual');
