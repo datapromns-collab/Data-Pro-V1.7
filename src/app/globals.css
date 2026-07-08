@@ -144,6 +144,21 @@
     page-break-inside: avoid !important;
     break-inside: avoid !important;
   }
+
+  #report {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+
+  #report > div:first-child {
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  #report > div:last-child {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
 }
 
 .print-only {
