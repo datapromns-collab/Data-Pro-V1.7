@@ -952,6 +952,166 @@ const exportarPDFdia = async () => {
     pdf.save(pdfNombre);
   };
 
+  const exportarPDFResumenMensual = async () => {
+    const fecha = selectedFecha || new Date();
+    const mes = format(fecha, 'MMMM', { locale: es }).toUpperCase();
+    const anio = fecha.getFullYear();
+
+    const lineas = [1, 2, 3, 4, 5, 6, 7, 8];
+    const headers = ['SABOR', 'LINEA 1', 'LINEA 2', 'LINEA 3', 'LINEA 4', 'Total 2L', 'LINEA 5', 'LINEA 6', 'LINEA 7', 'LINEA 8', 'TOTAL'];
+    const colWidths = [60, 18, 18, 18, 18, 20, 18, 18, 18, 18, 22];
+    const headerHeight = 6;
+    const rowHeight = 5;
+
+    const tablaPDF: Record<string, Record<number, number>> = {};
+    PRODUCT_LIST.forEach(sabor => {
+      tablaPDF[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 };
+    });
+
+    if (selectedFecha) {
+      const mesSeleccionado = selectedFecha.getMonth();
+      const anioSeleccionado = selectedFecha.getFullYear();
+      (ordenes || []).forEach(orden => {
+        (orden.dias || []).forEach(dia => {
+          const d = new Date(dia.fechaInicio + 'T12:00:00');
+          if (isNaN(d.getTime())) return;
+          if (d.getMonth() !== mesSeleccionado || d.getFullYear() !== anioSeleccionado) return;
+          const total = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
+          tablaPDF[orden.sabor][orden.linea] = (tablaPDF[orden.sabor][orden.linea] || 0) + total;
+        });
+      });
+    }
+
+    const rows = PRODUCT_LIST.map((sabor) => {
+      const valores = lineas.map((linea) => tablaPDF[sabor]?.[linea] || 0);
+      const total2L = valores.slice(0, 4).reduce((a, b) => a + b, 0);
+      const total = valores.reduce((a, b) => a + b, 0);
+      return { sabor, valores, total2L, total };
+    });
+
+    const totales = lineas.map((linea) =>
+      PRODUCT_LIST.reduce((sum, sabor) => sum + (tablaPDF[sabor]?.[linea] || 0), 0)
+    );
+    const totalGeneral = totales.reduce((a, b) => a + b, 0);
+    const total2LGeneral = totales.slice(0, 4).reduce((a, b) => a + b, 0);
+
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+    const pageWidth = pdf.internal.pageSize.getWidth();
+    const marginX = 10;
+    const marginY = 8;
+    const logoWidth = 60;
+    const logoHeight = 22;
+    const tableWidth = colWidths.reduce((a, b) => a + b, 0);
+    const startX = (pageWidth - tableWidth) / 2;
+
+    try {
+      pdf.addImage('/logo-izquierdo.png', 'PNG', marginX, marginY, logoWidth, logoHeight);
+      pdf.addImage('/logo-derecho.png', 'PNG', pageWidth - marginX - logoWidth, marginY, logoWidth, logoHeight);
+    } catch (e) {
+      console.warn('No se pudieron cargar los logos', e);
+    }
+
+    const titleY = marginY + logoHeight / 2 + 2;
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(13);
+    pdf.setTextColor(15, 23, 42);
+    pdf.text('Resumen Produccion mensual', pageWidth / 2, titleY, { align: 'center' });
+
+    pdf.setFont('helvetica', 'normal');
+    pdf.setFontSize(11);
+    pdf.text(`Mes ${mes}`, pageWidth / 2, titleY + 7, { align: 'center' });
+
+    let y = 45;
+    let x = startX;
+    pdf.setDrawColor(0, 0, 0);
+    pdf.setLineWidth(0.15);
+
+    const drawHeader = () => {
+      pdf.setFillColor(15, 23, 42);
+      pdf.rect(startX, y, tableWidth, headerHeight, 'F');
+      pdf.setFont('helvetica', 'bold');
+      pdf.setFontSize(9);
+      pdf.setTextColor(255, 255, 255);
+      let x = startX;
+      headers.forEach((h, i) => {
+        pdf.text(h, x + colWidths[i] / 2, y + 4, { align: 'center' });
+        x += colWidths[i];
+      });
+    };
+
+    const drawRowBorders = (rowY: number, height: number) => {
+      pdf.setDrawColor(0, 0, 0);
+      pdf.setLineWidth(0.15);
+      let cx = startX;
+      for (let i = 0; i <= colWidths.length; i++) {
+        pdf.line(cx, rowY, cx, rowY + height);
+        cx += colWidths[i] || 0;
+      }
+      pdf.line(startX, rowY, startX + tableWidth, rowY);
+      pdf.line(startX, rowY + height, startX + tableWidth, rowY + height);
+    };
+
+    drawHeader();
+    drawRowBorders(y, headerHeight);
+
+    y += headerHeight;
+    rows.forEach((item, idx) => {
+      if (y + rowHeight > pdf.internal.pageSize.getHeight() - marginY - 20) {
+        pdf.addPage();
+        y = marginY;
+      }
+
+      const isLight = idx % 2 === 1;
+      pdf.setFillColor(isLight ? 240 : 255, isLight ? 248 : 255, isLight ? 255 : 255);
+      pdf.rect(startX, y, tableWidth, rowHeight, 'F');
+      pdf.setFont('helvetica', 'normal');
+      pdf.setFontSize(9);
+      pdf.setTextColor(15, 23, 42);
+
+      x = startX;
+      pdf.text(item.sabor, x + colWidths[0] / 2, y + 3.8, { align: 'center' });
+      x += colWidths[0];
+      item.valores.forEach((val, i) => {
+        pdf.text(String(val), x + colWidths[i + 1] / 2, y + 3.8, { align: 'center' });
+        x += colWidths[i + 1];
+      });
+      pdf.text(String(item.total2L), x + colWidths[5] / 2, y + 3.8, { align: 'center' });
+      x += colWidths[5];
+      item.valores.slice(4).forEach((val, i) => {
+        pdf.text(String(val), x + colWidths[i + 1] / 2, y + 3.8, { align: 'center' });
+        x += colWidths[i + 1];
+      });
+      pdf.text(String(item.total), x + colWidths[10] / 2, y + 3.8, { align: 'center' });
+      drawRowBorders(y, rowHeight);
+      y += rowHeight;
+    });
+
+    pdf.setFillColor(15, 23, 42);
+    pdf.rect(startX, y, tableWidth, headerHeight, 'F');
+    pdf.setFont('helvetica', 'bold');
+    pdf.setFontSize(9);
+    pdf.setTextColor(255, 255, 255);
+    x = startX;
+    pdf.text('TOTAL POR LINEA', x + colWidths[0] / 2, y + 4, { align: 'center' });
+    x += colWidths[0];
+    lineas.forEach((linea, i) => {
+      pdf.text(String(totales[i]), x + colWidths[i + 1] / 2, y + 4, { align: 'center' });
+      x += colWidths[i + 1];
+    });
+    pdf.text(String(totalGeneral), x + colWidths[10] / 2, y + 4, { align: 'center' });
+    drawRowBorders(y, headerHeight);
+
+    y += headerHeight + 5;
+    try {
+      pdf.addImage('/firma.png', 'PNG', pageWidth - 50, y, 40, 20);
+    } catch (e) {
+      console.warn('No se pudo cargar la firma', e);
+    }
+
+    const pdfNombre = `Resumen Produccion ${mes} ${anio}.pdf`;
+    pdf.save(pdfNombre);
+  };
+
   const eliminarDia = (ordenId: string, diaIndex: number) => {
     setOrdenes(prev => prev.map(o => {
       if (o.id !== ordenId) return o;
@@ -1617,13 +1777,21 @@ const exportarPDFdia = async () => {
                         </div>
                       </div>
                      </div>
-                  ) : activeSection === 'resumen-mensual' ? (
-                    <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                      <div className="flex items-center justify-end gap-2 px-6 py-4 border-b border-slate-100">
-                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-                          {selectedFecha ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase() : ''}
-                        </span>
-                      </div>
+                   ) : activeSection === 'resumen-mensual' ? (
+                     <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                       <div className="flex items-center justify-end gap-2 px-6 py-4 border-b border-slate-100">
+                         <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                           {selectedFecha ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase() : ''}
+                         </span>
+                         <Button
+                           size="sm"
+                           onClick={exportarPDFResumenMensual}
+                           className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                         >
+                           <FileDown className="h-3 w-3" />
+                           Exportar PDF
+                         </Button>
+                       </div>
                       <div className="p-4">
                         <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
                           <table className="w-full border-collapse text-center">
