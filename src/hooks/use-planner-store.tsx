@@ -153,6 +153,31 @@ function usePlannerStoreInner() {
         setCustomPackagingRecipes(saved);
       } catch (e) { console.error('[PACKAGING MIGRATION] Error:', e); }
     }
+          });
+        }
+        
+        Object.keys(saved).forEach(product => {
+          if (product.startsWith('JUSTY') || product.startsWith('VITA')) {
+            Object.entries(saved[product]).forEach(([pres, materials]) => {
+              if ((materials as any)['EMP_0105_N'] !== undefined && (materials as any)['EMP_0105'] === undefined) {
+                (materials as any)['EMP_0095'] = (materials as any)['EMP_0105_N'];
+                delete (materials as any)['EMP_0105_N'];
+              }
+            });
+          } else if (product !== 'GLUP FRESH') {
+            Object.entries(saved[product]).forEach(([pres, materials]) => {
+              if (pres === '1Lt' && (materials as any)['EMP_0105_2'] !== undefined && (materials as any)['EMP_0105'] === undefined) {
+                (materials as any)['EMP_0105'] = (materials as any)['EMP_0105_2'];
+                delete (materials as any)['EMP_0105_2'];
+              }
+            });
+          }
+        });
+        
+        console.log('[PACKAGING MIGRATION] After:', JSON.stringify(saved, null, 2));
+        setCustomPackagingRecipes(saved);
+      } catch (e) { console.error('[PACKAGING MIGRATION] Error:', e); }
+    }
 
     if (savedRawMat) {
       try { setRawMaterialStock(JSON.parse(savedRawMat)); } catch (e) {}
