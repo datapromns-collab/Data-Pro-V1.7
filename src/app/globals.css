@@ -102,6 +102,11 @@
   main {
     display: none !important;
   }
+
+  body > div {
+    min-height: auto !important;
+    height: auto !important;
+  }
   
   .page-break-section {
     page-break-after: always !important;

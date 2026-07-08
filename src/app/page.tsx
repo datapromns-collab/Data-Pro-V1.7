@@ -1534,6 +1534,8 @@ export default function PlannerPage() {
               .print-only {
                 margin-top: 0 !important;
                 padding-top: 0 !important;
+                margin-bottom: 0 !important;
+                padding-bottom: 0 !important;
                 position: static !important;
                 flex: none !important;
                 min-height: auto !important;
@@ -1545,6 +1547,38 @@ export default function PlannerPage() {
               .print-only > div {
                 margin-top: 0 !important;
                 padding-top: 0 !important;
+                margin-bottom: 0 !important;
+                padding-bottom: 0 !important;
+              }
+              .print-only > div > div {
+                margin-top: 0 !important;
+                padding-top: 0 !important;
+                margin-bottom: 0 !important;
+                padding-bottom: 0 !important;
+              }
+              .print-only > div > div > div {
+                margin-top: 0 !important;
+                padding-top: 0 !important;
+                margin-bottom: 0 !important;
+                padding-bottom: 0 !important;
+              }
+              #report {
+                margin-top: 0 !important;
+                padding-top: 0 !important;
+                margin-bottom: 0 !important;
+                padding-bottom: 0 !important;
+              }
+              #report > div {
+                margin-top: 0 !important;
+                padding-top: 0 !important;
+                margin-bottom: 0 !important;
+                padding-bottom: 0 !important;
+              }
+              #report > div > div {
+                margin-top: 0 !important;
+                padding-top: 0 !important;
+                margin-bottom: 0 !important;
+                padding-bottom: 0 !important;
               }
               @page {
                 margin: 5mm !important;
