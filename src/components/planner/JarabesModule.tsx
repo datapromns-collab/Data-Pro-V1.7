@@ -608,50 +608,88 @@ function TanquesTable({ selectedFecha, realKgPerSack, theme = 'teal' }: { select
   );
 }
 
-function ResumenTable({ selectedFecha, theme = 'amber' }: { selectedFecha?: Date; theme?: 'amber' | 'gold' }) {
+function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50 }: { selectedFecha?: Date; theme?: 'amber' | 'gold'; kgPerSack?: number }) {
   const ubbStorageKey = selectedFecha ? `jarabes-ubb-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
+  const sugarStorageKey = selectedFecha ? `jarabes-sugar-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
+  const tanquesStorageKey = selectedFecha ? `jarabes-tanques-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   const [estandar, setEstandar] = useState<number>(0);
-  const [fisico, setFisico] = useState<string>('');
+  const [fisico, setFisico] = useState<number>(0);
 
   const headerBg = theme === 'gold' ? 'bg-yellow-600' : 'bg-slate-700';
   const headerBorder = theme === 'gold' ? 'border-yellow-600' : 'border-slate-700';
   const rowBg = theme === 'gold' ? 'bg-yellow-50' : 'bg-slate-50';
 
   useEffect(() => {
-    if (!ubbStorageKey) {
+    if (!selectedFecha || !ubbStorageKey) {
       setEstandar(0);
+      setFisico(0);
       return;
     }
+
     try {
-      const saved = localStorage.getItem(ubbStorageKey);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        let total = 0;
-        Object.keys(parsed).forEach((sabor) => {
-          const ubbFinal = Number(parsed[sabor]?.final) || 0;
-          const factor = AZUCAR_POR_SABOR[sabor] || 0;
-          total += ubbFinal * factor;
-        });
-        setEstandar(Math.round(total * 100) / 100);
-      } else {
-        setEstandar(0);
-      }
+      const ubbData = JSON.parse(localStorage.getItem(ubbStorageKey) || '{}');
+      const sugarData = JSON.parse(localStorage.getItem(sugarStorageKey!) || '{}');
+      const tanquesData = JSON.parse(localStorage.getItem(tanquesStorageKey!) || '{}');
+
+      let estandarTotal = 0;
+      Object.keys(ubbData).forEach((sabor) => {
+        const ubbFinal = Number(ubbData[sabor]?.final) || 0;
+        const factor = AZUCAR_POR_SABOR[sabor] || 0;
+        estandarTotal += ubbFinal * factor;
+      });
+      setEstandar(Math.round(estandarTotal * 100) / 100);
+
+      let disponibleSugarTotal = 0;
+      Object.keys(sugarData).forEach((proveedor) => {
+        const invInicialSacos = Number(sugarData[proveedor]?.invInicialSacos) || 0;
+        const recepcionSacos = Number(sugarData[proveedor]?.recepcionSacos) || 0;
+        disponibleSugarTotal += (invInicialSacos + recepcionSacos) * kgPerSack;
+      });
+
+      let inicialTanquesTotal = 0;
+      Object.keys(tanquesData).forEach((tanque) => {
+        const invInicialSacos = Number(tanquesData[tanque]?.invInicialSacos) || 0;
+        inicialTanquesTotal += invInicialSacos * kgPerSack;
+      });
+
+      let ubbInicialTotal = 0;
+      Object.keys(ubbData).forEach((sabor) => {
+        const ubbInicial = Number(ubbData[sabor]?.inicial) || 0;
+        const factor = AZUCAR_POR_SABOR[sabor] || 0;
+        ubbInicialTotal += ubbInicial * factor;
+      });
+
+      let finalSugarTotal = 0;
+      Object.keys(sugarData).forEach((proveedor) => {
+        const invFinalSacos = Number(sugarData[proveedor]?.invFinalSacos) || 0;
+        finalSugarTotal += invFinalSacos * kgPerSack;
+      });
+
+      let finalTanquesTotal = 0;
+      Object.keys(tanquesData).forEach((tanque) => {
+        const invFinalSacos = Number(tanquesData[tanque]?.invFinalSacos) || 0;
+        finalTanquesTotal += invFinalSacos * kgPerSack;
+      });
+
+      let ubbFinalTotal = 0;
+      Object.keys(ubbData).forEach((sabor) => {
+        const ubbFinal = Number(ubbData[sabor]?.final) || 0;
+        const factor = AZUCAR_POR_SABOR[sabor] || 0;
+        ubbFinalTotal += ubbFinal * factor;
+      });
+
+      const fisicoTotal = Math.round(
+        (disponibleSugarTotal + inicialTanquesTotal + ubbInicialTotal - finalSugarTotal - finalTanquesTotal - ubbFinalTotal) * 100
+      ) / 100;
+
+      setFisico(fisicoTotal);
     } catch {
       setEstandar(0);
+      setFisico(0);
     }
-  }, [ubbStorageKey]);
+  }, [ubbStorageKey, sugarStorageKey, tanquesStorageKey]);
 
-  const handleFisicoChange = (raw: string) => {
-    const cleaned = raw.replace(/[^0-9.]/g, '');
-    const parts = cleaned.split('.');
-    if (parts.length > 2) return;
-    const decimals = parts[1] || '';
-    const trimmed = decimals.length > 2 ? `${parts[0]}.${decimals.slice(0, 2)}` : cleaned;
-    setFisico(trimmed);
-  };
-
-  const fisicoNum = Number(fisico) || 0;
-  const diferencia = Math.round((fisicoNum - estandar) * 100) / 100;
+  const diferencia = Math.round((fisico - estandar) * 100) / 100;
   const porcentaje = estandar > 0 ? Math.round((diferencia / estandar) * 10000) / 100 : 0;
 
   const isEmpty = !selectedFecha || estandar === 0;
@@ -673,14 +711,9 @@ function ResumenTable({ selectedFecha, theme = 'amber' }: { selectedFecha?: Date
               {estandar > 0 ? estandar.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}
             </td>
             <td className={inputCellClass}>
-              <input
-                type="text"
-                inputMode="decimal"
-                value={fisico}
-                onChange={(e) => handleFisicoChange(e.target.value)}
-                className={inputClass}
-                placeholder="0"
-              />
+              <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">
+                {fisico > 0 ? fisico.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}
+              </span>
             </td>
             <td className={inputCellClass}>
               <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">
@@ -826,7 +859,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                     <UbbTable mode="estandar" selectedFecha={selectedFecha} />
                     <SugarTable selectedFecha={selectedFecha} mode="estandar" />
                     <TanquesTable selectedFecha={selectedFecha} />
-                    <ResumenTable selectedFecha={selectedFecha} />
+                    <ResumenTable selectedFecha={selectedFecha} kgPerSack={50} />
                   </div>
                 </TabsContent>
 
@@ -838,7 +871,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                     </div>
                     <SugarTable selectedFecha={selectedFecha} mode="promedio" realKgPerSack={realKgPerSack} />
                     <TanquesTable selectedFecha={selectedFecha} realKgPerSack={realKgPerSack} theme="gold" />
-                    <ResumenTable selectedFecha={selectedFecha} theme="gold" />
+                    <ResumenTable selectedFecha={selectedFecha} theme="gold" kgPerSack={realKgPerSack ?? 50} />
                   </div>
                 </TabsContent>
 
