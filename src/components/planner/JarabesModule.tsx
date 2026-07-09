@@ -222,12 +222,25 @@ function SugarTable({ selectedFecha }: { selectedFecha?: Date }) {
     }
   }, [values, storageKey]);
 
-  const handleChange = (proveedor: string, field: keyof SugarValues[string], raw: string) => {
+  const handleSacosChange = (proveedor: string, field: 'invInicialSacos' | 'recepcionSacos' | 'invFinalSacos', raw: string) => {
     const cleaned = raw.replace(/[^0-9]/g, '');
-    setValues(prev => ({
-      ...prev,
-      [proveedor]: { ...prev[proveedor], [field]: cleaned } as SugarValues[string]
-    }));
+    const sacos = Number(cleaned) || 0;
+    const kg = sacos * 50;
+
+    setValues(prev => {
+      const current = prev[proveedor] || { invInicialSacos: '', invInicialKg: '', recepcionSacos: '', recepcionKg: '', invFinalSacos: '', invFinalKg: '' };
+      const next = {
+        ...prev,
+        [proveedor]: {
+          ...current,
+          [field]: cleaned,
+          invInicialKg: field === 'invInicialSacos' ? String(kg) : current.invInicialKg,
+          recepcionKg: field === 'recepcionSacos' ? String(kg) : current.recepcionKg,
+          invFinalKg: field === 'invFinalSacos' ? String(kg) : current.invFinalKg,
+        }
+      };
+      return next;
+    });
   };
 
   const getNumber = (proveedor: string, field: keyof SugarValues[string]) => {
@@ -281,16 +294,16 @@ function SugarTable({ selectedFecha }: { selectedFecha?: Date }) {
               <tr key={proveedor} className={idx % 2 === 0 ? 'bg-yellow-50' : 'bg-white'}>
                 <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">{proveedor}</td>
                 <td className={inputCellClass}>
-                  <input type="text" inputMode="numeric" value={values[proveedor]?.invInicialSacos || ''} onChange={(e) => handleChange(proveedor, 'invInicialSacos', e.target.value)} className={inputClass} placeholder="0" />
+                  <input type="text" inputMode="numeric" value={values[proveedor]?.invInicialSacos || ''} onChange={(e) => handleSacosChange(proveedor, 'invInicialSacos', e.target.value)} className={inputClass} placeholder="0" />
                 </td>
                 <td className={inputCellClass}>
-                  <input type="text" inputMode="numeric" value={values[proveedor]?.invInicialKg || ''} onChange={(e) => handleChange(proveedor, 'invInicialKg', e.target.value)} className={inputClass} placeholder="0" />
+                  <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">{invInicialKg > 0 ? invInicialKg : ''}</span>
                 </td>
                 <td className={inputCellClass}>
-                  <input type="text" inputMode="numeric" value={values[proveedor]?.recepcionSacos || ''} onChange={(e) => handleChange(proveedor, 'recepcionSacos', e.target.value)} className={inputClass} placeholder="0" />
+                  <input type="text" inputMode="numeric" value={values[proveedor]?.recepcionSacos || ''} onChange={(e) => handleSacosChange(proveedor, 'recepcionSacos', e.target.value)} className={inputClass} placeholder="0" />
                 </td>
                 <td className={inputCellClass}>
-                  <input type="text" inputMode="numeric" value={values[proveedor]?.recepcionKg || ''} onChange={(e) => handleChange(proveedor, 'recepcionKg', e.target.value)} className={inputClass} placeholder="0" />
+                  <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">{recepcionKg > 0 ? recepcionKg : ''}</span>
                 </td>
                 <td className={inputCellClass}>
                   <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">{disponibleSacos > 0 ? disponibleSacos : ''}</span>
@@ -299,10 +312,10 @@ function SugarTable({ selectedFecha }: { selectedFecha?: Date }) {
                   <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">{disponibleKg > 0 ? disponibleKg : ''}</span>
                 </td>
                 <td className={inputCellClass}>
-                  <input type="text" inputMode="numeric" value={values[proveedor]?.invFinalSacos || ''} onChange={(e) => handleChange(proveedor, 'invFinalSacos', e.target.value)} className={inputClass} placeholder="0" />
+                  <input type="text" inputMode="numeric" value={values[proveedor]?.invFinalSacos || ''} onChange={(e) => handleSacosChange(proveedor, 'invFinalSacos', e.target.value)} className={inputClass} placeholder="0" />
                 </td>
                 <td className={inputCellClass}>
-                  <input type="text" inputMode="numeric" value={values[proveedor]?.invFinalKg || ''} onChange={(e) => handleChange(proveedor, 'invFinalKg', e.target.value)} className={inputClass} placeholder="0" />
+                  <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">{invFinalKg > 0 ? invFinalKg : ''}</span>
                 </td>
                 <td className={inputCellClass}>
                   <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">{consumoSacos > 0 ? consumoSacos : ''}</span>
