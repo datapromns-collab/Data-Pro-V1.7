@@ -585,6 +585,127 @@ function TanquesTable({ selectedFecha, realKgPerSack, theme = 'teal' }: { select
   );
 }
 
+function ResumenTable({ selectedFecha }: { selectedFecha?: Date }) {
+  const storageKey = selectedFecha ? `jarabes-resumen-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
+  type ResumenValues = Record<string, { estandar: string; fisico: string }>;
+  const [values, setValues] = useState<ResumenValues>({});
+
+  useEffect(() => {
+    if (!storageKey) {
+      setValues({});
+      return;
+    }
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        setValues(JSON.parse(saved));
+      } else {
+        setValues({});
+      }
+    } catch {
+      setValues({});
+    }
+  }, [storageKey]);
+
+  useEffect(() => {
+    if (!storageKey) return;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(values));
+    } catch {
+      // ignore
+    }
+  }, [values, storageKey]);
+
+  const handleChange = (item: string, field: 'estandar' | 'fisico', raw: string) => {
+    const cleaned = raw.replace(/[^0-9.]/g, '');
+    const parts = cleaned.split('.');
+    if (parts.length > 2) return;
+    const decimals = parts[1] || '';
+    const trimmed = decimals.length > 2 ? `${parts[0]}.${decimals.slice(0, 2)}` : cleaned;
+    setValues(prev => ({
+      ...prev,
+      [item]: { ...prev[item], [field]: trimmed }
+    }));
+  };
+
+  const getNumber = (item: string, field: 'estandar' | 'fisico') => {
+    const val = values[item]?.[field];
+    if (!val) return 0;
+    const n = Number(val);
+    return Number.isFinite(n) ? Math.round(n * 100) / 100 : 0;
+  };
+
+  const items = ['UBB', 'AZUCAR'];
+  const headerBg = 'bg-amber-600';
+  const headerBorder = 'border-amber-600';
+  const rowEvenBg = 'bg-amber-50';
+  const isEmpty = !selectedFecha || Object.keys(values).length === 0;
+
+  return (
+    <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
+      <table className="w-full border-collapse text-center">
+        <thead>
+          <tr className={`${headerBg} text-white`}>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-1/4`}>ESTANDAR</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-1/4`}>FISICO</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-1/4`}>DIFERENCIA</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-1/4`}>%</th>
+          </tr>
+        </thead>
+        <tbody>
+          {items.map((item, idx) => {
+            const estandar = getNumber(item, 'estandar');
+            const fisico = getNumber(item, 'fisico');
+            const diferencia = Math.round((fisico - estandar) * 100) / 100;
+            const porcentaje = estandar > 0 ? Math.round((diferencia / estandar) * 10000) / 100 : 0;
+
+            return (
+              <tr key={item} className={idx % 2 === 0 ? rowEvenBg : 'bg-white'}>
+                <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700">{item}</td>
+                <td className={inputCellClass}>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={values[item]?.estandar || ''}
+                    onChange={(e) => handleChange(item, 'estandar', e.target.value)}
+                    className={inputClass}
+                    placeholder="0"
+                  />
+                </td>
+                <td className={inputCellClass}>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={values[item]?.fisico || ''}
+                    onChange={(e) => handleChange(item, 'fisico', e.target.value)}
+                    className={inputClass}
+                    placeholder="0"
+                  />
+                </td>
+                <td className={inputCellClass}>
+                  <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">
+                    {diferencia !== 0 ? diferencia : ''}
+                  </span>
+                </td>
+                <td className={inputCellClass}>
+                  <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">
+                    {porcentaje !== 0 ? `${porcentaje}%` : ''}
+                  </span>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      {isEmpty && (
+        <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-200 bg-white">
+          Sin datos para la fecha seleccionada
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, weekStartDate }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; weekStartDate?: Date }) {
   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
   const [activeDisolucionTab, setActiveDisolucionTab] = useState<string>('disolucion');
@@ -707,6 +828,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                     <UbbTable mode="estandar" selectedFecha={selectedFecha} />
                     <SugarTable selectedFecha={selectedFecha} mode="estandar" />
                     <TanquesTable selectedFecha={selectedFecha} />
+                    <ResumenTable selectedFecha={selectedFecha} />
                   </div>
                 </TabsContent>
 
