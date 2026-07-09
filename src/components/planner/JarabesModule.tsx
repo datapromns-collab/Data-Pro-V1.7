@@ -192,10 +192,10 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
 }
 
 function SugarTable({ selectedFecha, mode = 'estandar' }: { selectedFecha?: Date; mode?: 'estandar' | 'promedio' }) {
-  const isGreen = mode === 'promedio';
-  const headerBg = isGreen ? 'bg-green-700' : 'bg-yellow-500';
-  const headerBorder = isGreen ? 'border-green-600' : 'border-yellow-600';
-  const rowEvenBg = isGreen ? 'bg-green-50' : 'bg-yellow-50';
+  const isPromedio = mode === 'promedio';
+  const headerBg = isPromedio ? 'bg-orange-600' : 'bg-yellow-500';
+  const headerBorder = isPromedio ? 'border-orange-600' : 'border-yellow-600';
+  const rowEvenBg = isPromedio ? 'bg-orange-50' : 'bg-yellow-50';
   type SugarValues = Record<string, { invInicialSacos: string; invInicialKg: string; recepcionSacos: string; recepcionKg: string; invFinalSacos: string; invFinalKg: string }>;
   const storageKey = selectedFecha ? `jarabes-sugar-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   const [values, setValues] = useState<SugarValues>({});
