@@ -102,6 +102,60 @@ function RealKgPerSackInput({ selectedFecha, value, onChange }: { selectedFecha?
   );
 }
 
+function CostoAzucarInput({ selectedFecha, onUpdate }: { selectedFecha?: Date; onUpdate?: () => void }) {
+  const storageKey = selectedFecha ? `jarabes-costo-azucar-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
+  const [value, setValue] = useState<string>('');
+
+  useEffect(() => {
+    if (!storageKey) {
+      setValue('');
+      return;
+    }
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) setValue(saved);
+      else setValue('');
+    } catch {
+      setValue('');
+    }
+  }, [storageKey]);
+
+  const handleChange = (raw: string) => {
+    const cleaned = raw.replace(/[^0-9.]/g, '');
+    const parts = cleaned.split('.');
+    if (parts.length > 2) return;
+    const decimals = parts[1] || '';
+    const trimmed = decimals.length > 2 ? `${parts[0]}.${decimals.slice(0, 2)}` : cleaned;
+    setValue(trimmed);
+
+    try {
+      if (trimmed) {
+        localStorage.setItem(storageKey!, trimmed);
+      } else {
+        localStorage.removeItem(storageKey!);
+      }
+    } catch {
+      // ignore
+    }
+
+    onUpdate?.();
+  };
+
+  return (
+    <div className="flex items-center gap-2 ml-auto">
+      <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 whitespace-nowrap">Costo Azúcar</label>
+      <input
+        type="text"
+        inputMode="decimal"
+        value={value}
+        onChange={(e) => handleChange(e.target.value)}
+        className="w-24 h-8 text-[10px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500"
+        placeholder="0.00"
+      />
+    </div>
+  );
+}
+
 function UbbTable({ mode, selectedFecha, onUpdate }: { mode: 'estandar' | 'promedio'; selectedFecha?: Date; onUpdate?: () => void }) {
   const isGreen = mode === 'promedio';
   const headerBg = isGreen ? 'bg-green-700' : 'bg-blue-700';
@@ -611,7 +665,7 @@ function TanquesTable({ selectedFecha, realKgPerSack, theme = 'teal', onUpdate }
   );
 }
 
-function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50, updateCounter = 0 }: { selectedFecha?: Date; theme?: 'amber' | 'gold'; kgPerSack?: number; updateCounter?: number }) {
+function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50, updateCounter = 0, costoAzucar }: { selectedFecha?: Date; theme?: 'amber' | 'gold'; kgPerSack?: number; updateCounter?: number; costoAzucar?: number }) {
   const ubbStorageKey = selectedFecha ? `jarabes-ubb-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   const sugarStorageKey = selectedFecha ? `jarabes-sugar-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   const tanquesStorageKey = selectedFecha ? `jarabes-tanques-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
@@ -766,22 +820,33 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
   });
 
   const [realKgPerSack, setRealKgPerSack] = useState<number | undefined>(undefined);
+  const [costoAzucar, setCostoAzucar] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     if (!selectedFecha) {
       setRealKgPerSack(undefined);
+      setCostoAzucar(undefined);
       return;
     }
     try {
-      const saved = localStorage.getItem(`jarabes-real-kg-per-sack-${format(selectedFecha, 'yyyy-MM-dd')}`);
-      if (saved) {
-        const parsed = Number(saved);
+      const savedKg = localStorage.getItem(`jarabes-real-kg-per-sack-${format(selectedFecha, 'yyyy-MM-dd')}`);
+      if (savedKg) {
+        const parsed = Number(savedKg);
         setRealKgPerSack(Number.isFinite(parsed) ? parsed : undefined);
       } else {
         setRealKgPerSack(undefined);
       }
+
+      const savedCosto = localStorage.getItem(`jarabes-costo-azucar-${format(selectedFecha, 'yyyy-MM-dd')}`);
+      if (savedCosto) {
+        const parsed = Number(savedCosto);
+        setCostoAzucar(Number.isFinite(parsed) ? parsed : undefined);
+      } else {
+        setCostoAzucar(undefined);
+      }
     } catch {
       setRealKgPerSack(undefined);
+      setCostoAzucar(undefined);
     }
   }, [selectedFecha]);
 
@@ -887,15 +952,18 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
                 <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500">
                   <Tabs value={activeResumenTab} onValueChange={setActiveResumenTab} defaultValue="semanal" className="w-full">
-                    <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
-                      <TabsList className="bg-transparent h-auto p-0">
-                        <TabsTrigger value="semanal" className={tabsTriggerClass}>
-                          <TrendingUp className="h-3.5 w-3.5" /> Semanal
-                        </TabsTrigger>
-                        <TabsTrigger value="mensual" className={tabsTriggerClass}>
-                          <ScrollText className="h-3.5 w-3.5" /> Mensual
-                        </TabsTrigger>
-                      </TabsList>
+                    <div className="flex items-center justify-between gap-3 w-full mb-6 no-print">
+                      <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                        <TabsList className="bg-transparent h-auto p-0">
+                          <TabsTrigger value="semanal" className={tabsTriggerClass}>
+                            <TrendingUp className="h-3.5 w-3.5" /> Semanal
+                          </TabsTrigger>
+                          <TabsTrigger value="mensual" className={tabsTriggerClass}>
+                            <ScrollText className="h-3.5 w-3.5" /> Mensual
+                          </TabsTrigger>
+                        </TabsList>
+                      </div>
+                      <CostoAzucarInput selectedFecha={selectedFecha} onUpdate={() => setUpdateCounter(c => c + 1)} />
                     </div>
 
                     <TabsContent value="semanal" className="m-0 animate-in fade-in-50 duration-500">
