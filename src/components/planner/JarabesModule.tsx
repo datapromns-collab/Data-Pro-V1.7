@@ -26,7 +26,7 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
   const headerBg = isGreen ? 'bg-green-700' : 'bg-blue-700';
   const headerBorder = isGreen ? 'border-green-600' : 'border-blue-600';
   const rowEvenBg = isGreen ? 'bg-green-50' : 'bg-blue-50';
-  const storageKey = selectedFecha ? `jarabes-ubb-${mode}-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
+  const storageKey = selectedFecha ? `jarabes-ubb-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   const [values, setValues] = useState<Record<string, { inicial: string; preparado: string; final: string }>>({});
 
   useEffect(() => {
@@ -52,7 +52,7 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
     if (selectedFecha) {
       const yesterday = new Date(selectedFecha);
       yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayKey = `jarabes-ubb-${mode}-${format(yesterday, 'yyyy-MM-dd')}`;
+      const yesterdayKey = `jarabes-ubb-${format(yesterday, 'yyyy-MM-dd')}`;
       const yesterdayData = localStorage.getItem(yesterdayKey);
 
       if (yesterdayData) {
@@ -83,7 +83,7 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
     }
 
     setValues({});
-  }, [storageKey, selectedFecha, mode]);
+  }, [storageKey, selectedFecha]);
 
   useEffect(() => {
     if (!storageKey) return;
