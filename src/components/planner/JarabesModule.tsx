@@ -191,7 +191,11 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
   );
 }
 
-function SugarTable({ selectedFecha }: { selectedFecha?: Date }) {
+function SugarTable({ selectedFecha, mode = 'estandar' }: { selectedFecha?: Date; mode?: 'estandar' | 'promedio' }) {
+  const isGreen = mode === 'promedio';
+  const headerBg = isGreen ? 'bg-green-700' : 'bg-yellow-500';
+  const headerBorder = isGreen ? 'border-green-600' : 'border-yellow-600';
+  const rowEvenBg = isGreen ? 'bg-green-50' : 'bg-yellow-50';
   type SugarValues = Record<string, { invInicialSacos: string; invInicialKg: string; recepcionSacos: string; recepcionKg: string; invFinalSacos: string; invFinalKg: string }>;
   const storageKey = selectedFecha ? `jarabes-sugar-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   const [values, setValues] = useState<SugarValues>({});
@@ -256,25 +260,25 @@ function SugarTable({ selectedFecha }: { selectedFecha?: Date }) {
     <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
       <table className="w-full border-collapse text-center">
         <thead>
-          <tr className="bg-yellow-500 text-white">
-            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest" rowSpan={2}>PROVEEDOR</th>
-            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest" colSpan={2}>INV. INICIAL DE AZUCAR REFINADA</th>
-            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest" colSpan={2}>RECEPCION DE AZUCAR</th>
-            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest" colSpan={2}>AZUCAR DISPONIBLE</th>
-            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest" colSpan={2}>INV. FINAL DE AZUCAR</th>
-            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest" colSpan={2}>CONSUMO TURNO</th>
+          <tr className={`${headerBg} text-white`}>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`} rowSpan={2}>PROVEEDOR</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`} colSpan={2}>INV. INICIAL DE AZUCAR REFINADA</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`} colSpan={2}>RECEPCION DE AZUCAR</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`} colSpan={2}>AZUCAR DISPONIBLE</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`} colSpan={2}>INV. FINAL DE AZUCAR</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`} colSpan={2}>CONSUMO TURNO</th>
           </tr>
-          <tr className="bg-yellow-500 text-white">
-            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">CANT. SACOS</th>
-            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">KG</th>
-            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">CANT. SACOS</th>
-            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">KG</th>
-            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">CANT. SACOS</th>
-            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">KG</th>
-            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">CANT. SACOS</th>
-            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">KG</th>
-            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">CANT. SACOS</th>
-            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">KG</th>
+          <tr className={`${headerBg} text-white`}>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`}>CANT. SACOS</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`}>KG</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`}>CANT. SACOS</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`}>KG</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`}>CANT. SACOS</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`}>KG</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`}>CANT. SACOS</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`}>KG</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`}>CANT. SACOS</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`}>KG</th>
           </tr>
         </thead>
         <tbody>
@@ -291,7 +295,7 @@ function SugarTable({ selectedFecha }: { selectedFecha?: Date }) {
             const consumoKg = Math.max(0, disponibleKg - invFinalKg);
 
             return (
-              <tr key={proveedor} className={idx % 2 === 0 ? 'bg-yellow-50' : 'bg-white'}>
+              <tr key={proveedor} className={idx % 2 === 0 ? rowEvenBg : 'bg-white'}>
                 <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">{proveedor}</td>
                 <td className={inputCellClass}>
                   <input type="text" inputMode="numeric" value={values[proveedor]?.invInicialSacos || ''} onChange={(e) => handleSacosChange(proveedor, 'invInicialSacos', e.target.value)} className={inputClass} placeholder="0" />
@@ -437,14 +441,14 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                 <TabsContent value="estandar" className="m-0 animate-in fade-in-50 duration-500">
                   <div className="space-y-6">
                     <UbbTable mode="estandar" selectedFecha={selectedFecha} />
-                    <SugarTable selectedFecha={selectedFecha} />
+                    <SugarTable selectedFecha={selectedFecha} mode="estandar" />
                   </div>
                 </TabsContent>
 
                 <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500">
                   <div className="space-y-6">
                     <UbbTable mode="promedio" selectedFecha={selectedFecha} />
-                    <SugarTable selectedFecha={selectedFecha} />
+                    <SugarTable selectedFecha={selectedFecha} mode="promedio" />
                   </div>
                 </TabsContent>
 
