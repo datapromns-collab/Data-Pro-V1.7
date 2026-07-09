@@ -745,6 +745,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
   const [activeDisolucionTab, setActiveDisolucionTab] = useState<string>('disolucion');
   const [activeResumenTab, setActiveResumenTab] = useState<string>('semanal');
   const [activeResumenSemanalTab, setActiveResumenSemanalTab] = useState<string>('r-estandar-sem');
+  const [activeResumenMensualTab, setActiveResumenMensualTab] = useState<string>('r-estandar-mes');
   const [updateCounter, setUpdateCounter] = useState<number>(0);
   const [selectedFecha, setSelectedFecha] = useState<Date | undefined>(() => {
     try {
@@ -899,7 +900,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
                           <TabsList className="bg-transparent h-auto p-0">
                             <TabsTrigger value="r-estandar-sem" className={tabsTriggerClass}>
-                              <FileSpreadsheet className="h-3.5 w-3.5" /> R estanda sem
+                              <FileSpreadsheet className="h-3.5 w-3.5" /> R estandar sem
                             </TabsTrigger>
                             <TabsTrigger value="r-promedio-sem" className={tabsTriggerClass}>
                               <TrendingUp className="h-3.5 w-3.5" /> R promedio sem
@@ -909,7 +910,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
                         <TabsContent value="r-estandar-sem" className="m-0 animate-in fade-in-50 duration-500">
                           <div className="border border-dashed border-slate-200 rounded-[2rem] bg-white/50 p-12 flex items-center justify-center min-h-[300px]">
-                            <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Sección R estanda sem en desarrollo</p>
+                            <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Sección R estandar sem en desarrollo</p>
                           </div>
                         </TabsContent>
 
@@ -922,9 +923,30 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                     </TabsContent>
 
                     <TabsContent value="mensual" className="m-0 animate-in fade-in-50 duration-500">
-                      <div className="border border-dashed border-slate-200 rounded-[2rem] bg-white/50 p-12 flex items-center justify-center min-h-[300px]">
-                        <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Sección Resumen Mensual en desarrollo</p>
-                      </div>
+                      <Tabs value={activeResumenMensualTab} onValueChange={setActiveResumenMensualTab} defaultValue="r-estandar-mes" className="w-full">
+                        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
+                          <TabsList className="bg-transparent h-auto p-0">
+                            <TabsTrigger value="r-estandar-mes" className={tabsTriggerClass}>
+                              <FileSpreadsheet className="h-3.5 w-3.5" /> R estandar mes
+                            </TabsTrigger>
+                            <TabsTrigger value="r-promedio-mes" className={tabsTriggerClass}>
+                              <TrendingUp className="h-3.5 w-3.5" /> R promedio mes
+                            </TabsTrigger>
+                          </TabsList>
+                        </div>
+
+                        <TabsContent value="r-estandar-mes" className="m-0 animate-in fade-in-50 duration-500">
+                          <div className="border border-dashed border-slate-200 rounded-[2rem] bg-white/50 p-12 flex items-center justify-center min-h-[300px]">
+                            <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Sección R estandar mes en desarrollo</p>
+                          </div>
+                        </TabsContent>
+
+                        <TabsContent value="r-promedio-mes" className="m-0 animate-in fade-in-50 duration-500">
+                          <div className="border border-dashed border-slate-200 rounded-[2rem] bg-white/50 p-12 flex items-center justify-center min-h-[300px]">
+                            <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Sección R promedio mes en desarrollo</p>
+                          </div>
+                        </TabsContent>
+                      </Tabs>
                     </TabsContent>
                   </Tabs>
                 </TabsContent>
