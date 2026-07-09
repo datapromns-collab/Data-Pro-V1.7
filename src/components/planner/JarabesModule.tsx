@@ -34,17 +34,56 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
       setValues({});
       return;
     }
-    try {
-      const saved = localStorage.getItem(storageKey);
-      if (saved) {
-        setValues(JSON.parse(saved));
-      } else {
-        setValues({});
+
+    const savedRaw = localStorage.getItem(storageKey);
+
+    if (savedRaw !== null) {
+      try {
+        const parsed = JSON.parse(savedRaw);
+        if (Object.keys(parsed).length > 0) {
+          setValues(parsed);
+          return;
+        }
+      } catch {
+        // ignore
       }
-    } catch {
-      setValues({});
     }
-  }, [storageKey]);
+
+    if (selectedFecha) {
+      const yesterday = new Date(selectedFecha);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayKey = `jarabes-ubb-${mode}-${format(yesterday, 'yyyy-MM-dd')}`;
+      const yesterdayData = localStorage.getItem(yesterdayKey);
+
+      if (yesterdayData) {
+        try {
+          const yesterdayParsed = JSON.parse(yesterdayData);
+          const initialValues: Record<string, { inicial: string; preparado: string; final: string }> = {};
+
+          Object.keys(yesterdayParsed).forEach((sabor) => {
+            const finalValue = yesterdayParsed[sabor]?.final;
+            if (finalValue && Number(finalValue) > 0) {
+              initialValues[sabor] = {
+                inicial: finalValue,
+                preparado: '',
+                final: ''
+              };
+            }
+          });
+
+          if (Object.keys(initialValues).length > 0) {
+            setValues(initialValues);
+            localStorage.setItem(storageKey, JSON.stringify(initialValues));
+            return;
+          }
+        } catch {
+          // ignore
+        }
+      }
+    }
+
+    setValues({});
+  }, [storageKey, selectedFecha, mode]);
 
   useEffect(() => {
     if (!storageKey) return;
