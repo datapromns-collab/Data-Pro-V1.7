@@ -102,7 +102,7 @@ function RealKgPerSackInput({ selectedFecha, value, onChange }: { selectedFecha?
   );
 }
 
-function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; selectedFecha?: Date }) {
+function UbbTable({ mode, selectedFecha, onUpdate }: { mode: 'estandar' | 'promedio'; selectedFecha?: Date; onUpdate?: () => void }) {
   const isGreen = mode === 'promedio';
   const headerBg = isGreen ? 'bg-green-700' : 'bg-blue-700';
   const headerBorder = isGreen ? 'border-green-600' : 'border-blue-600';
@@ -170,10 +170,11 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
     if (!storageKey) return;
     try {
       localStorage.setItem(storageKey, JSON.stringify(values));
+      onUpdate?.();
     } catch {
       // ignore
     }
-  }, [values, storageKey]);
+  }, [values, storageKey, onUpdate]);
 
   const handleChange = (sabor: string, field: 'inicial' | 'preparado' | 'final', raw: string) => {
     const cleaned = raw.replace(/[^0-9.]/g, '');
@@ -274,7 +275,7 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
   );
 }
 
-function SugarTable({ selectedFecha, mode = 'estandar', realKgPerSack }: { selectedFecha?: Date; mode?: 'estandar' | 'promedio'; realKgPerSack?: number }) {
+function SugarTable({ selectedFecha, mode = 'estandar', realKgPerSack, onUpdate }: { selectedFecha?: Date; mode?: 'estandar' | 'promedio'; realKgPerSack?: number; onUpdate?: () => void }) {
   const isPromedio = mode === 'promedio';
   const headerBg = isPromedio ? 'bg-orange-600' : 'bg-yellow-500';
   const headerBorder = isPromedio ? 'border-orange-600' : 'border-yellow-600';
@@ -345,10 +346,11 @@ function SugarTable({ selectedFecha, mode = 'estandar', realKgPerSack }: { selec
     if (!storageKey) return;
     try {
       localStorage.setItem(storageKey, JSON.stringify(values));
+      onUpdate?.();
     } catch {
       // ignore
     }
-  }, [values, storageKey]);
+  }, [values, storageKey, onUpdate]);
 
   const handleSacosChange = (proveedor: string, field: 'invInicialSacos' | 'recepcionSacos' | 'invFinalSacos', raw: string) => {
     const cleaned = raw.replace(/[^0-9]/g, '');
@@ -458,7 +460,7 @@ function SugarTable({ selectedFecha, mode = 'estandar', realKgPerSack }: { selec
   );
 }
 
-function TanquesTable({ selectedFecha, realKgPerSack, theme = 'teal' }: { selectedFecha?: Date; realKgPerSack?: number; theme?: 'teal' | 'gold' }) {
+function TanquesTable({ selectedFecha, realKgPerSack, theme = 'teal', onUpdate }: { selectedFecha?: Date; realKgPerSack?: number; theme?: 'teal' | 'gold'; onUpdate?: () => void }) {
   const storageKey = selectedFecha ? `jarabes-tanques-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   type TanquesValues = Record<string, { invInicialSacos: string; invFinalSacos: string }>;
   const [values, setValues] = useState<TanquesValues>({});
@@ -524,10 +526,11 @@ function TanquesTable({ selectedFecha, realKgPerSack, theme = 'teal' }: { select
     if (!storageKey) return;
     try {
       localStorage.setItem(storageKey, JSON.stringify(values));
+      onUpdate?.();
     } catch {
       // ignore
     }
-  }, [values, storageKey]);
+  }, [values, storageKey, onUpdate]);
 
   const handleSacosChange = (tanque: string, field: 'invInicialSacos' | 'invFinalSacos', raw: string) => {
     const cleaned = raw.replace(/[^0-9]/g, '');
@@ -608,7 +611,7 @@ function TanquesTable({ selectedFecha, realKgPerSack, theme = 'teal' }: { select
   );
 }
 
-function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50 }: { selectedFecha?: Date; theme?: 'amber' | 'gold'; kgPerSack?: number }) {
+function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50, updateCounter = 0 }: { selectedFecha?: Date; theme?: 'amber' | 'gold'; kgPerSack?: number; updateCounter?: number }) {
   const ubbStorageKey = selectedFecha ? `jarabes-ubb-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   const sugarStorageKey = selectedFecha ? `jarabes-sugar-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   const tanquesStorageKey = selectedFecha ? `jarabes-tanques-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
@@ -687,7 +690,7 @@ function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50 }: { sele
       setEstandar(0);
       setFisico(0);
     }
-  }, [ubbStorageKey, sugarStorageKey, tanquesStorageKey]);
+  }, [ubbStorageKey, sugarStorageKey, tanquesStorageKey, kgPerSack, updateCounter]);
 
   const diferencia = Math.round((fisico - estandar) * 100) / 100;
   const porcentaje = estandar > 0 ? Math.round((diferencia / estandar) * 10000) / 100 : 0;
@@ -742,6 +745,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
   const [activeDisolucionTab, setActiveDisolucionTab] = useState<string>('disolucion');
   const [activeResumenTab, setActiveResumenTab] = useState<string>('semanal');
   const [activeResumenSemanalTab, setActiveResumenSemanalTab] = useState<string>('r-estandar-sem');
+  const [updateCounter, setUpdateCounter] = useState<number>(0);
   const [selectedFecha, setSelectedFecha] = useState<Date | undefined>(() => {
     try {
       const saved = localStorage.getItem('jarabes-selected-fecha');
@@ -858,22 +862,22 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
 
                 <TabsContent value="estandar" className="m-0 animate-in fade-in-50 duration-500">
                   <div className="space-y-6">
-                    <UbbTable mode="estandar" selectedFecha={selectedFecha} />
-                    <SugarTable selectedFecha={selectedFecha} mode="estandar" />
-                    <TanquesTable selectedFecha={selectedFecha} />
-                    <ResumenTable selectedFecha={selectedFecha} kgPerSack={50} />
+                    <UbbTable mode="estandar" selectedFecha={selectedFecha} onUpdate={() => setUpdateCounter(c => c + 1)} />
+                    <SugarTable selectedFecha={selectedFecha} mode="estandar" onUpdate={() => setUpdateCounter(c => c + 1)} />
+                    <TanquesTable selectedFecha={selectedFecha} onUpdate={() => setUpdateCounter(c => c + 1)} />
+                    <ResumenTable selectedFecha={selectedFecha} kgPerSack={50} updateCounter={updateCounter} />
                   </div>
                 </TabsContent>
 
                 <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500">
                   <div className="space-y-6">
-                    <UbbTable mode="promedio" selectedFecha={selectedFecha} />
+                    <UbbTable mode="promedio" selectedFecha={selectedFecha} onUpdate={() => setUpdateCounter(c => c + 1)} />
                     <div className="flex justify-end">
                       <RealKgPerSackInput selectedFecha={selectedFecha} value={realKgPerSack} onChange={setRealKgPerSack} />
                     </div>
-                    <SugarTable selectedFecha={selectedFecha} mode="promedio" realKgPerSack={realKgPerSack} />
-                    <TanquesTable selectedFecha={selectedFecha} realKgPerSack={realKgPerSack} theme="gold" />
-                    <ResumenTable selectedFecha={selectedFecha} theme="gold" kgPerSack={realKgPerSack ?? 50} />
+                    <SugarTable selectedFecha={selectedFecha} mode="promedio" realKgPerSack={realKgPerSack} onUpdate={() => setUpdateCounter(c => c + 1)} />
+                    <TanquesTable selectedFecha={selectedFecha} realKgPerSack={realKgPerSack} theme="gold" onUpdate={() => setUpdateCounter(c => c + 1)} />
+                    <ResumenTable selectedFecha={selectedFecha} theme="gold" kgPerSack={realKgPerSack ?? 50} updateCounter={updateCounter} />
                   </div>
                 </TabsContent>
 
