@@ -585,10 +585,14 @@ function TanquesTable({ selectedFecha, realKgPerSack, theme = 'teal' }: { select
   );
 }
 
-function ResumenTable({ selectedFecha }: { selectedFecha?: Date }) {
+function ResumenTable({ selectedFecha, theme = 'amber' }: { selectedFecha?: Date; theme?: 'amber' | 'gold' }) {
   const storageKey = selectedFecha ? `jarabes-resumen-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   type ResumenValues = Record<string, { estandar: string; fisico: string }>;
   const [values, setValues] = useState<ResumenValues>({});
+
+  const headerBg = theme === 'gold' ? 'bg-yellow-600' : 'bg-amber-600';
+  const headerBorder = theme === 'gold' ? 'border-yellow-600' : 'border-amber-600';
+  const rowEvenBg = theme === 'gold' ? 'bg-yellow-50' : 'bg-amber-50';
 
   useEffect(() => {
     if (!storageKey) {
@@ -636,9 +640,6 @@ function ResumenTable({ selectedFecha }: { selectedFecha?: Date }) {
   };
 
   const items = ['UBB', 'AZUCAR'];
-  const headerBg = 'bg-amber-600';
-  const headerBorder = 'border-amber-600';
-  const rowEvenBg = 'bg-amber-50';
   const isEmpty = !selectedFecha || Object.keys(values).length === 0;
 
   return (
@@ -840,6 +841,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                     </div>
                     <SugarTable selectedFecha={selectedFecha} mode="promedio" realKgPerSack={realKgPerSack} />
                     <TanquesTable selectedFecha={selectedFecha} realKgPerSack={realKgPerSack} theme="gold" />
+                    <ResumenTable selectedFecha={selectedFecha} theme="gold" />
                   </div>
                 </TabsContent>
 
