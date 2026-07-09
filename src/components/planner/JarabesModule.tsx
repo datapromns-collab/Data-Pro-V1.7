@@ -590,9 +590,9 @@ function ResumenTable({ selectedFecha, theme = 'amber' }: { selectedFecha?: Date
   type ResumenValues = Record<string, { estandar: string; fisico: string }>;
   const [values, setValues] = useState<ResumenValues>({});
 
-  const headerBg = theme === 'gold' ? 'bg-yellow-600' : 'bg-amber-600';
-  const headerBorder = theme === 'gold' ? 'border-yellow-600' : 'border-amber-600';
-  const rowEvenBg = theme === 'gold' ? 'bg-yellow-50' : 'bg-amber-50';
+  const headerBg = 'bg-slate-700';
+  const headerBorder = 'border-slate-700';
+  const rowEvenBg = 'bg-slate-100';
 
   useEffect(() => {
     if (!storageKey) {
