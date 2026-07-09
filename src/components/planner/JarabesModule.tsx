@@ -19,6 +19,7 @@ const SABORES_UBB = [
 ];
 
 const SUGAR_PROVEEDORES = ['PORTUGUESA', 'PASTORA', 'MONTALBAN', 'IMPORTADA 1'];
+const TANQUES_SALAS = ['JARABE SIMPLE', 'KITS PREP.', 'Sala 1', 'sala 2'];
 
 const inputCellClass = "border border-slate-200 px-1 py-0.5 text-[10px] text-slate-700";
 const inputClass = "w-full h-7 text-[10px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500";
@@ -434,6 +435,156 @@ function SugarTable({ selectedFecha, mode = 'estandar', realKgPerSack }: { selec
   );
 }
 
+function TanquesTable({ selectedFecha, realKgPerSack }: { selectedFecha?: Date; realKgPerSack?: number }) {
+  const storageKey = selectedFecha ? `jarabes-tanques-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
+  type TanquesValues = Record<string, { invInicialSacos: string; invFinalSacos: string }>;
+  const [values, setValues] = useState<TanquesValues>({});
+
+  const kgPerSack = realKgPerSack ?? 50;
+
+  useEffect(() => {
+    if (!storageKey) {
+      setValues({});
+      return;
+    }
+
+    const savedRaw = localStorage.getItem(storageKey);
+
+    if (savedRaw !== null) {
+      try {
+        const parsed = JSON.parse(savedRaw);
+        if (Object.keys(parsed).length > 0) {
+          setValues(parsed);
+          return;
+        }
+      } catch {
+        // ignore
+      }
+    }
+
+    if (selectedFecha) {
+      const yesterday = new Date(selectedFecha);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayKey = `jarabes-tanques-${format(yesterday, 'yyyy-MM-dd')}`;
+      const yesterdayData = localStorage.getItem(yesterdayKey);
+
+      if (yesterdayData) {
+        try {
+          const yesterdayParsed = JSON.parse(yesterdayData);
+          const initialValues: TanquesValues = {};
+
+          Object.keys(yesterdayParsed).forEach((tanque) => {
+            const invFinalSacos = yesterdayParsed[tanque]?.invFinalSacos;
+            if (invFinalSacos && Number(invFinalSacos) > 0) {
+              initialValues[tanque] = {
+                invInicialSacos: invFinalSacos,
+                invFinalSacos: '',
+              };
+            }
+          });
+
+          if (Object.keys(initialValues).length > 0) {
+            setValues(initialValues);
+            localStorage.setItem(storageKey, JSON.stringify(initialValues));
+            return;
+          }
+        } catch {
+          // ignore
+        }
+      }
+    }
+
+    setValues({});
+  }, [storageKey, selectedFecha]);
+
+  useEffect(() => {
+    if (!storageKey) return;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(values));
+    } catch {
+      // ignore
+    }
+  }, [values, storageKey]);
+
+  const handleSacosChange = (tanque: string, field: 'invInicialSacos' | 'invFinalSacos', raw: string) => {
+    const cleaned = raw.replace(/[^0-9]/g, '');
+    setValues(prev => {
+      const current = prev[tanque] || { invInicialSacos: '', invFinalSacos: '' };
+      return {
+        ...prev,
+        [tanque]: {
+          ...current,
+          [field]: cleaned,
+        }
+      };
+    });
+  };
+
+  const getNumber = (tanque: string, field: keyof TanquesValues[string]) => {
+    const val = values[tanque]?.[field];
+    if (!val) return 0;
+    const n = Number(val);
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  const isEmpty = !selectedFecha || Object.keys(values).length === 0;
+
+  const headerBg = 'bg-teal-600';
+  const headerBorder = 'border-teal-600';
+  const rowEvenBg = 'bg-teal-50';
+
+  return (
+    <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
+      <table className="w-full border-collapse text-center">
+        <thead>
+          <tr className={`${headerBg} text-white`}>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`} rowSpan={2}>PROVEEDOR</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`} colSpan={2}>INV. INICIAL DE AZUCAR REFINADA</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`} colSpan={2}>INV. FINAL DE AZUCAR</th>
+          </tr>
+          <tr className={`${headerBg} text-white`}>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`}>CANT. SACOS</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`}>KG</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`}>CANT. SACOS</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest`}>KG</th>
+          </tr>
+        </thead>
+        <tbody>
+          {TANQUES_SALAS.map((tanque, idx) => {
+            const invInicialSacos = getNumber(tanque, 'invInicialSacos');
+            const invFinalSacos = getNumber(tanque, 'invFinalSacos');
+            const invInicialKg = Math.round(invInicialSacos * kgPerSack * 100) / 100;
+            const invFinalKg = Math.round(invFinalSacos * kgPerSack * 100) / 100;
+
+            return (
+              <tr key={tanque} className={idx % 2 === 0 ? rowEvenBg : 'bg-white'}>
+                <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">{tanque}</td>
+                <td className={inputCellClass}>
+                  <input type="text" inputMode="numeric" value={values[tanque]?.invInicialSacos || ''} onChange={(e) => handleSacosChange(tanque, 'invInicialSacos', e.target.value)} className={inputClass} placeholder="0" />
+                </td>
+                <td className={inputCellClass}>
+                  <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">{invInicialKg > 0 ? invInicialKg : ''}</span>
+                </td>
+                <td className={inputCellClass}>
+                  <input type="text" inputMode="numeric" value={values[tanque]?.invFinalSacos || ''} onChange={(e) => handleSacosChange(tanque, 'invFinalSacos', e.target.value)} className={inputClass} placeholder="0" />
+                </td>
+                <td className={inputCellClass}>
+                  <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">{invFinalKg > 0 ? invFinalKg : ''}</span>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      {isEmpty && (
+        <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-200 bg-white">
+          Sin datos para la fecha seleccionada
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, weekStartDate }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; weekStartDate?: Date }) {
   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
   const [activeDisolucionTab, setActiveDisolucionTab] = useState<string>('disolucion');
@@ -555,6 +706,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                   <div className="space-y-6">
                     <UbbTable mode="estandar" selectedFecha={selectedFecha} />
                     <SugarTable selectedFecha={selectedFecha} mode="estandar" />
+                    <TanquesTable selectedFecha={selectedFecha} realKgPerSack={realKgPerSack} />
                   </div>
                 </TabsContent>
 
