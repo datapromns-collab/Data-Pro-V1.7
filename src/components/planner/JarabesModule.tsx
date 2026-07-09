@@ -152,10 +152,14 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
   }, [values, storageKey]);
 
   const handleChange = (sabor: string, field: 'inicial' | 'preparado' | 'final', raw: string) => {
-    const cleaned = raw.replace(/[^0-9]/g, '');
+    const cleaned = raw.replace(/[^0-9.]/g, '');
+    const parts = cleaned.split('.');
+    if (parts.length > 2) return;
+    const decimals = parts[1] || '';
+    const trimmed = decimals.length > 2 ? `${parts[0]}.${decimals.slice(0, 2)}` : cleaned;
     setValues(prev => ({
       ...prev,
-      [sabor]: { ...prev[sabor], [field]: cleaned }
+      [sabor]: { ...prev[sabor], [field]: trimmed }
     }));
   };
 
@@ -163,7 +167,7 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
     const val = values[sabor]?.[field];
     if (!val) return 0;
     const n = Number(val);
-    return Number.isFinite(n) ? n : 0;
+    return Number.isFinite(n) ? Math.round(n * 100) / 100 : 0;
   };
 
   const isEmpty = !selectedFecha || Object.keys(values).length === 0;
@@ -195,7 +199,7 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
                 <td className={inputCellClass}>
                   <input
                     type="text"
-                    inputMode="numeric"
+                    inputMode="decimal"
                     value={values[sabor]?.inicial || ''}
                     onChange={(e) => handleChange(sabor, 'inicial', e.target.value)}
                     className={inputClass}
@@ -205,7 +209,7 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
                 <td className={inputCellClass}>
                   <input
                     type="text"
-                    inputMode="numeric"
+                    inputMode="decimal"
                     value={values[sabor]?.preparado || ''}
                     onChange={(e) => handleChange(sabor, 'preparado', e.target.value)}
                     className={inputClass}
@@ -220,7 +224,7 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
                 <td className={inputCellClass}>
                   <input
                     type="text"
-                    inputMode="numeric"
+                    inputMode="decimal"
                     value={values[sabor]?.final || ''}
                     onChange={(e) => handleChange(sabor, 'final', e.target.value)}
                     className={inputClass}
