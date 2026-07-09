@@ -639,7 +639,6 @@ function ResumenTable({ selectedFecha, theme = 'amber' }: { selectedFecha?: Date
     return Number.isFinite(n) ? Math.round(n * 100) / 100 : 0;
   };
 
-  const items = ['UBB', 'AZUCAR'];
   const isEmpty = !selectedFecha || Object.keys(values).length === 0;
 
   return (
@@ -654,48 +653,12 @@ function ResumenTable({ selectedFecha, theme = 'amber' }: { selectedFecha?: Date
           </tr>
         </thead>
         <tbody>
-          {items.map((item, idx) => {
-            const estandar = getNumber(item, 'estandar');
-            const fisico = getNumber(item, 'fisico');
-            const diferencia = Math.round((fisico - estandar) * 100) / 100;
-            const porcentaje = estandar > 0 ? Math.round((diferencia / estandar) * 10000) / 100 : 0;
-
-            return (
-              <tr key={item} className={idx % 2 === 0 ? rowEvenBg : 'bg-white'}>
-                <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700">{item}</td>
-                <td className={inputCellClass}>
-                  <input
-                    type="text"
-                    inputMode="decimal"
-                    value={values[item]?.estandar || ''}
-                    onChange={(e) => handleChange(item, 'estandar', e.target.value)}
-                    className={inputClass}
-                    placeholder="0"
-                  />
-                </td>
-                <td className={inputCellClass}>
-                  <input
-                    type="text"
-                    inputMode="decimal"
-                    value={values[item]?.fisico || ''}
-                    onChange={(e) => handleChange(item, 'fisico', e.target.value)}
-                    className={inputClass}
-                    placeholder="0"
-                  />
-                </td>
-                <td className={inputCellClass}>
-                  <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">
-                    {diferencia !== 0 ? diferencia : ''}
-                  </span>
-                </td>
-                <td className={inputCellClass}>
-                  <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">
-                    {porcentaje !== 0 ? `${porcentaje}%` : ''}
-                  </span>
-                </td>
-              </tr>
-            );
-          })}
+          <tr className={rowEvenBg === 'bg-slate-100' ? 'bg-slate-50' : 'bg-white'}>
+            <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+            <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+            <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+            <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+          </tr>
         </tbody>
       </table>
       {isEmpty && (
