@@ -692,7 +692,7 @@ function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50 }: { sele
   const diferencia = Math.round((fisico - estandar) * 100) / 100;
   const porcentaje = estandar > 0 ? Math.round((diferencia / estandar) * 10000) / 100 : 0;
 
-  const isEmpty = !selectedFecha || estandar === 0;
+  const showEmptyMessage = !selectedFecha;
 
   return (
     <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
@@ -708,27 +708,27 @@ function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50 }: { sele
         <tbody>
           <tr className={rowBg}>
             <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
-              {estandar > 0 ? estandar.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}
+              {estandar.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </td>
             <td className={inputCellClass}>
               <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">
-                {fisico > 0 ? fisico.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}
+                {fisico.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </td>
             <td className={inputCellClass}>
               <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">
-                {diferencia !== 0 ? diferencia.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}
+                {diferencia.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
               </span>
             </td>
             <td className={inputCellClass}>
               <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">
-                {porcentaje !== 0 ? `${porcentaje}%` : ''}
+                {porcentaje !== 0 ? `${porcentaje}%` : '0%'}
               </span>
             </td>
           </tr>
         </tbody>
       </table>
-      {isEmpty && (
+      {showEmptyMessage && (
         <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-200 bg-white">
           Sin datos para la fecha seleccionada
         </div>
