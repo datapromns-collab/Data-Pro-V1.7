@@ -149,7 +149,32 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
 export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, weekStartDate }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; weekStartDate?: Date }) {
   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
   const [activeDisolucionTab, setActiveDisolucionTab] = useState<string>('disolucion');
-  const [selectedFecha, setSelectedFecha] = useState<Date | undefined>(undefined);
+  const [selectedFecha, setSelectedFecha] = useState<Date | undefined>(() => {
+    try {
+      const saved = localStorage.getItem('jarabes-selected-fecha');
+      if (saved) {
+        const parsed = new Date(saved);
+        if (!Number.isNaN(parsed.getTime())) {
+          return parsed;
+        }
+      }
+    } catch {
+      // ignore
+    }
+    return undefined;
+  });
+
+  useEffect(() => {
+    if (!selectedFecha) {
+      localStorage.removeItem('jarabes-selected-fecha');
+      return;
+    }
+    try {
+      localStorage.setItem('jarabes-selected-fecha', selectedFecha.toISOString());
+    } catch {
+      // ignore
+    }
+  }, [selectedFecha]);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700">
