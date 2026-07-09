@@ -22,6 +22,10 @@ const inputCellClass = "border border-slate-200 px-1 py-0.5 text-[10px] text-sla
 const inputClass = "w-full h-7 text-[10px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500";
 
 function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; selectedFecha?: Date }) {
+  const isGreen = mode === 'promedio';
+  const headerBg = isGreen ? 'bg-green-700' : 'bg-blue-700';
+  const headerBorder = isGreen ? 'border-green-600' : 'border-blue-600';
+  const rowEvenBg = isGreen ? 'bg-green-50' : 'bg-blue-50';
   const storageKey = selectedFecha ? `jarabes-ubb-${mode}-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   const [values, setValues] = useState<Record<string, { inicial: string; preparado: string; final: string }>>({});
 
@@ -72,13 +76,13 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
     <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
       <table className="w-full border-collapse text-center">
         <thead>
-          <tr className="bg-blue-700 text-white">
-            <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[25%]">Sabor</th>
-            <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[15%]">UBB Inicial</th>
-            <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[15%]">UBB Preparado</th>
-            <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[15%]">UBB Disponible</th>
-            <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[15%]">UBB Final</th>
-            <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[20%]">UBB Consumo</th>
+          <tr className={`${headerBg} text-white`}>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[25%]`}>Sabor</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[15%]`}>UBB Inicial</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[15%]`}>UBB Preparado</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[15%]`}>UBB Disponible</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[15%]`}>UBB Final</th>
+            <th className={`border ${headerBorder} px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[20%]`}>UBB Consumo</th>
           </tr>
         </thead>
         <tbody>
@@ -90,7 +94,7 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
             const consumo = Math.max(0, disponible - final);
 
             return (
-              <tr key={sabor} className={idx % 2 === 0 ? 'bg-blue-50' : 'bg-white'}>
+              <tr key={sabor} className={idx % 2 === 0 ? rowEvenBg : 'bg-white'}>
                 <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">{sabor}</td>
                 <td className={inputCellClass}>
                   <input
