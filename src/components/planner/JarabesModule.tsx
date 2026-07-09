@@ -706,7 +706,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                   <div className="space-y-6">
                     <UbbTable mode="estandar" selectedFecha={selectedFecha} />
                     <SugarTable selectedFecha={selectedFecha} mode="estandar" />
-                    <TanquesTable selectedFecha={selectedFecha} realKgPerSack={realKgPerSack} />
+                    <TanquesTable selectedFecha={selectedFecha} />
                   </div>
                 </TabsContent>
 
