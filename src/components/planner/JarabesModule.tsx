@@ -20,6 +20,29 @@ const SABORES_UBB = [
 
 const SUGAR_PROVEEDORES = ['PORTUGUESA', 'PASTORA', 'MONTALBAN', 'IMPORTADA 1'];
 const TANQUES_SALAS = ['JARABE SIMPLE', 'KITS PREP.', 'Sala 1', 'sala 2'];
+const AZUCAR_POR_SABOR: Record<string, number> = {
+  'GLUP COLA': 1925,
+  'GLUP FRESH': 1904.41,
+  'GLUP UVA': 1025,
+  'GLUP PIÑA': 1175.85,
+  'GLUP NARANJA': 1031,
+  'GLUP KOLITA': 666.46,
+  'GLUP MANZANA VERDE': 624.70,
+  'GLUP PONCHE': 0,
+  'GLUP CHICLE': 0,
+  'GLUP PIÑA PARCHITA': 1799.17,
+  'GLUP MANZANA ROJA': 1352.05,
+  'JUSTY NARANJA': 110,
+  'JUSTY DURAZNO': 137.50,
+  'JUSTY MANDARINA': 122.50,
+  'JUSTY SANDIA': 122.50,
+  'JUSTY LIMON': 0,
+  'JUSTY TAMARINDO': 122.50,
+  'JUSTY PERA': 0,
+  'JUSTY MANZANA': 0,
+  'VITA TEA DURAZNO': 101,
+  'VITA TEA LIMON': 97,
+};
 
 const inputCellClass = "border border-slate-200 px-1 py-0.5 text-[10px] text-slate-700";
 const inputClass = "w-full h-7 text-[10px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500";
@@ -586,60 +609,52 @@ function TanquesTable({ selectedFecha, realKgPerSack, theme = 'teal' }: { select
 }
 
 function ResumenTable({ selectedFecha, theme = 'amber' }: { selectedFecha?: Date; theme?: 'amber' | 'gold' }) {
-  const storageKey = selectedFecha ? `jarabes-resumen-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
-  type ResumenValues = Record<string, { estandar: string; fisico: string }>;
-  const [values, setValues] = useState<ResumenValues>({});
+  const ubbStorageKey = selectedFecha ? `jarabes-ubb-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
+  const [estandar, setEstandar] = useState<number>(0);
+  const [fisico, setFisico] = useState<string>('');
 
-  const headerBg = 'bg-slate-700';
-  const headerBorder = 'border-slate-700';
-  const rowEvenBg = 'bg-slate-100';
+  const headerBg = theme === 'gold' ? 'bg-yellow-600' : 'bg-slate-700';
+  const headerBorder = theme === 'gold' ? 'border-yellow-600' : 'border-slate-700';
+  const rowBg = theme === 'gold' ? 'bg-yellow-50' : 'bg-slate-50';
 
   useEffect(() => {
-    if (!storageKey) {
-      setValues({});
+    if (!ubbStorageKey) {
+      setEstandar(0);
       return;
     }
     try {
-      const saved = localStorage.getItem(storageKey);
+      const saved = localStorage.getItem(ubbStorageKey);
       if (saved) {
-        setValues(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        let total = 0;
+        Object.keys(parsed).forEach((sabor) => {
+          const ubbFinal = Number(parsed[sabor]?.final) || 0;
+          const factor = AZUCAR_POR_SABOR[sabor] || 0;
+          total += ubbFinal * factor;
+        });
+        setEstandar(Math.round(total * 100) / 100);
       } else {
-        setValues({});
+        setEstandar(0);
       }
     } catch {
-      setValues({});
+      setEstandar(0);
     }
-  }, [storageKey]);
+  }, [ubbStorageKey]);
 
-  useEffect(() => {
-    if (!storageKey) return;
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(values));
-    } catch {
-      // ignore
-    }
-  }, [values, storageKey]);
-
-  const handleChange = (item: string, field: 'estandar' | 'fisico', raw: string) => {
+  const handleFisicoChange = (raw: string) => {
     const cleaned = raw.replace(/[^0-9.]/g, '');
     const parts = cleaned.split('.');
     if (parts.length > 2) return;
     const decimals = parts[1] || '';
     const trimmed = decimals.length > 2 ? `${parts[0]}.${decimals.slice(0, 2)}` : cleaned;
-    setValues(prev => ({
-      ...prev,
-      [item]: { ...prev[item], [field]: trimmed }
-    }));
+    setFisico(trimmed);
   };
 
-  const getNumber = (item: string, field: 'estandar' | 'fisico') => {
-    const val = values[item]?.[field];
-    if (!val) return 0;
-    const n = Number(val);
-    return Number.isFinite(n) ? Math.round(n * 100) / 100 : 0;
-  };
+  const fisicoNum = Number(fisico) || 0;
+  const diferencia = Math.round((fisicoNum - estandar) * 100) / 100;
+  const porcentaje = estandar > 0 ? Math.round((diferencia / estandar) * 10000) / 100 : 0;
 
-  const isEmpty = !selectedFecha || Object.keys(values).length === 0;
+  const isEmpty = !selectedFecha || estandar === 0;
 
   return (
     <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
@@ -653,11 +668,30 @@ function ResumenTable({ selectedFecha, theme = 'amber' }: { selectedFecha?: Date
           </tr>
         </thead>
         <tbody>
-          <tr className={rowEvenBg === 'bg-slate-100' ? 'bg-slate-50' : 'bg-white'}>
-            <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-            <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-            <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
-            <td className="border border-slate-200 px-2 py-1 text-[10px] text-slate-700">&nbsp;</td>
+          <tr className={rowBg}>
+            <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+              {estandar > 0 ? estandar.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}
+            </td>
+            <td className={inputCellClass}>
+              <input
+                type="text"
+                inputMode="decimal"
+                value={fisico}
+                onChange={(e) => handleFisicoChange(e.target.value)}
+                className={inputClass}
+                placeholder="0"
+              />
+            </td>
+            <td className={inputCellClass}>
+              <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">
+                {diferencia !== 0 ? diferencia.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}
+              </span>
+            </td>
+            <td className={inputCellClass}>
+              <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">
+                {porcentaje !== 0 ? `${porcentaje}%` : ''}
+              </span>
+            </td>
           </tr>
         </tbody>
       </table>
