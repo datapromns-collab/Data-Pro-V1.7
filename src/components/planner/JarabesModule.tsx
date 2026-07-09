@@ -18,6 +18,8 @@ const SABORES_UBB = [
   'JUSTY TAMARINDO', 'JUSTY PERA', 'JUSTY MANZANA', 'VITA TEA DURAZNO', 'VITA TEA LIMON'
 ];
 
+const SUGAR_PROVEEDORES = ['PORTUGUESA', 'PASTORA', 'MONTALBAN', 'IMPORTADA 1'];
+
 const inputCellClass = "border border-slate-200 px-1 py-0.5 text-[10px] text-slate-700";
 const inputClass = "w-full h-7 text-[10px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500";
 
@@ -189,6 +191,139 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
   );
 }
 
+function SugarTable({ selectedFecha }: { selectedFecha?: Date }) {
+  type SugarValues = Record<string, { invInicialSacos: string; invInicialKg: string; recepcionSacos: string; recepcionKg: string; invFinalSacos: string; invFinalKg: string }>;
+  const storageKey = selectedFecha ? `jarabes-sugar-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
+  const [values, setValues] = useState<SugarValues>({});
+
+  useEffect(() => {
+    if (!storageKey) {
+      setValues({});
+      return;
+    }
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) {
+        setValues(JSON.parse(saved));
+      } else {
+        setValues({});
+      }
+    } catch {
+      setValues({});
+    }
+  }, [storageKey]);
+
+  useEffect(() => {
+    if (!storageKey) return;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(values));
+    } catch {
+      // ignore
+    }
+  }, [values, storageKey]);
+
+  const handleChange = (proveedor: string, field: keyof SugarValues[string], raw: string) => {
+    const cleaned = raw.replace(/[^0-9]/g, '');
+    setValues(prev => ({
+      ...prev,
+      [proveedor]: { ...prev[proveedor], [field]: cleaned } as SugarValues[string]
+    }));
+  };
+
+  const getNumber = (proveedor: string, field: keyof SugarValues[string]) => {
+    const val = values[proveedor]?.[field];
+    if (!val) return 0;
+    const n = Number(val);
+    return Number.isFinite(n) ? n : 0;
+  };
+
+  const isEmpty = !selectedFecha || Object.keys(values).length === 0;
+
+  return (
+    <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
+      <table className="w-full border-collapse text-center">
+        <thead>
+          <tr className="bg-yellow-500 text-white">
+            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest" rowSpan={2}>PROVEEDOR</th>
+            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest" colSpan={2}>INV. INICIAL DE AZUCAR REFINADA</th>
+            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest" colSpan={2}>RECEPCION DE AZUCAR</th>
+            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest" colSpan={2}>AZUCAR DISPONIBLE</th>
+            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest" colSpan={2}>INV. FINAL DE AZUCAR</th>
+            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest" colSpan={2}>CONSUMO TURNO</th>
+          </tr>
+          <tr className="bg-yellow-500 text-white">
+            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">CANT. SACOS</th>
+            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">KG</th>
+            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">CANT. SACOS</th>
+            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">KG</th>
+            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">CANT. SACOS</th>
+            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">KG</th>
+            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">CANT. SACOS</th>
+            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">KG</th>
+            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">CANT. SACOS</th>
+            <th className="border border-yellow-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest">KG</th>
+          </tr>
+        </thead>
+        <tbody>
+          {SUGAR_PROVEEDORES.map((proveedor, idx) => {
+            const invInicialSacos = getNumber(proveedor, 'invInicialSacos');
+            const invInicialKg = getNumber(proveedor, 'invInicialKg');
+            const recepcionSacos = getNumber(proveedor, 'recepcionSacos');
+            const recepcionKg = getNumber(proveedor, 'recepcionKg');
+            const invFinalSacos = getNumber(proveedor, 'invFinalSacos');
+            const invFinalKg = getNumber(proveedor, 'invFinalKg');
+            const disponibleSacos = invInicialSacos + recepcionSacos;
+            const disponibleKg = invInicialKg + recepcionKg;
+            const consumoSacos = Math.max(0, disponibleSacos - invFinalSacos);
+            const consumoKg = Math.max(0, disponibleKg - invFinalKg);
+
+            return (
+              <tr key={proveedor} className={idx % 2 === 0 ? 'bg-yellow-50' : 'bg-white'}>
+                <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700 text-left">{proveedor}</td>
+                <td className={inputCellClass}>
+                  <input type="text" inputMode="numeric" value={values[proveedor]?.invInicialSacos || ''} onChange={(e) => handleChange(proveedor, 'invInicialSacos', e.target.value)} className={inputClass} placeholder="0" />
+                </td>
+                <td className={inputCellClass}>
+                  <input type="text" inputMode="numeric" value={values[proveedor]?.invInicialKg || ''} onChange={(e) => handleChange(proveedor, 'invInicialKg', e.target.value)} className={inputClass} placeholder="0" />
+                </td>
+                <td className={inputCellClass}>
+                  <input type="text" inputMode="numeric" value={values[proveedor]?.recepcionSacos || ''} onChange={(e) => handleChange(proveedor, 'recepcionSacos', e.target.value)} className={inputClass} placeholder="0" />
+                </td>
+                <td className={inputCellClass}>
+                  <input type="text" inputMode="numeric" value={values[proveedor]?.recepcionKg || ''} onChange={(e) => handleChange(proveedor, 'recepcionKg', e.target.value)} className={inputClass} placeholder="0" />
+                </td>
+                <td className={inputCellClass}>
+                  <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">{disponibleSacos > 0 ? disponibleSacos : ''}</span>
+                </td>
+                <td className={inputCellClass}>
+                  <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">{disponibleKg > 0 ? disponibleKg : ''}</span>
+                </td>
+                <td className={inputCellClass}>
+                  <input type="text" inputMode="numeric" value={values[proveedor]?.invFinalSacos || ''} onChange={(e) => handleChange(proveedor, 'invFinalSacos', e.target.value)} className={inputClass} placeholder="0" />
+                </td>
+                <td className={inputCellClass}>
+                  <input type="text" inputMode="numeric" value={values[proveedor]?.invFinalKg || ''} onChange={(e) => handleChange(proveedor, 'invFinalKg', e.target.value)} className={inputClass} placeholder="0" />
+                </td>
+                <td className={inputCellClass}>
+                  <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">{consumoSacos > 0 ? consumoSacos : ''}</span>
+                </td>
+                <td className={inputCellClass}>
+                  <span className="flex items-center justify-center h-7 text-[10px] font-black text-slate-700">{consumoKg > 0 ? consumoKg : ''}</span>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+      {isEmpty && (
+        <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-200 bg-white">
+          Sin datos para la fecha seleccionada
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, weekStartDate }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; weekStartDate?: Date }) {
   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
   const [activeDisolucionTab, setActiveDisolucionTab] = useState<string>('disolucion');
@@ -287,7 +422,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                 </div>
 
                 <TabsContent value="estandar" className="m-0 animate-in fade-in-50 duration-500">
-                  <UbbTable mode="estandar" selectedFecha={selectedFecha} />
+                  <div className="space-y-6">
+                    <UbbTable mode="estandar" selectedFecha={selectedFecha} />
+                    <SugarTable selectedFecha={selectedFecha} />
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500">
