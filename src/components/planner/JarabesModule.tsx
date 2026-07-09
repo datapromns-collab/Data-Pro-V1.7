@@ -429,7 +429,10 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                 </TabsContent>
 
                 <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500">
-                  <UbbTable mode="promedio" selectedFecha={selectedFecha} />
+                  <div className="space-y-6">
+                    <UbbTable mode="promedio" selectedFecha={selectedFecha} />
+                    <SugarTable selectedFecha={selectedFecha} />
+                  </div>
                 </TabsContent>
 
                 <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500">
