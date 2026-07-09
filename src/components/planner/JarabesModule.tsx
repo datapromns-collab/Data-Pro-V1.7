@@ -435,7 +435,7 @@ function SugarTable({ selectedFecha, mode = 'estandar', realKgPerSack }: { selec
   );
 }
 
-function TanquesTable({ selectedFecha, realKgPerSack }: { selectedFecha?: Date; realKgPerSack?: number }) {
+function TanquesTable({ selectedFecha, realKgPerSack, theme = 'teal' }: { selectedFecha?: Date; realKgPerSack?: number; theme?: 'teal' | 'gold' }) {
   const storageKey = selectedFecha ? `jarabes-tanques-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   type TanquesValues = Record<string, { invInicialSacos: string; invFinalSacos: string }>;
   const [values, setValues] = useState<TanquesValues>({});
@@ -529,9 +529,9 @@ function TanquesTable({ selectedFecha, realKgPerSack }: { selectedFecha?: Date; 
 
   const isEmpty = !selectedFecha || Object.keys(values).length === 0;
 
-  const headerBg = 'bg-teal-600';
-  const headerBorder = 'border-teal-600';
-  const rowEvenBg = 'bg-teal-50';
+  const headerBg = theme === 'gold' ? 'bg-yellow-600' : 'bg-teal-600';
+  const headerBorder = theme === 'gold' ? 'border-yellow-600' : 'border-teal-600';
+  const rowEvenBg = theme === 'gold' ? 'bg-yellow-50' : 'bg-teal-50';
 
   return (
     <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
@@ -717,6 +717,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                       <RealKgPerSackInput selectedFecha={selectedFecha} value={realKgPerSack} onChange={setRealKgPerSack} />
                     </div>
                     <SugarTable selectedFecha={selectedFecha} mode="promedio" realKgPerSack={realKgPerSack} />
+                    <TanquesTable selectedFecha={selectedFecha} realKgPerSack={realKgPerSack} theme="gold" />
                   </div>
                 </TabsContent>
 
