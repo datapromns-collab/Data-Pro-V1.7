@@ -23,47 +23,54 @@ const SUGAR_PROVEEDORES = ['PORTUGUESA', 'PASTORA', 'MONTALBAN', 'IMPORTADA 1'];
 const inputCellClass = "border border-slate-200 px-1 py-0.5 text-[10px] text-slate-700";
 const inputClass = "w-full h-7 text-[10px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500";
 
-function RealKgPerSackInput({ selectedFecha }: { selectedFecha?: Date }) {
+function RealKgPerSackInput({ selectedFecha, value, onChange }: { selectedFecha?: Date; value?: number; onChange?: (value: number | undefined) => void }) {
   const storageKey = selectedFecha ? `jarabes-real-kg-per-sack-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
-  const [value, setValue] = useState<string>('');
+  const [localValue, setLocalValue] = useState<string>('');
 
   useEffect(() => {
     if (!storageKey) {
-      setValue('');
+      setLocalValue('');
       return;
     }
     try {
       const saved = localStorage.getItem(storageKey);
-      if (saved) setValue(saved);
+      if (saved) setLocalValue(saved);
+      else setLocalValue('');
     } catch {
-      // ignore
+      setLocalValue('');
     }
   }, [storageKey]);
 
-  useEffect(() => {
-    if (!storageKey) return;
+  const handleChange = (raw: string) => {
+    const cleaned = raw.replace(/[^0-9.]/g, '');
+    const parts = cleaned.split('.');
+    if (parts.length > 2) return;
+    const decimals = parts[1] || '';
+    const trimmed = decimals.length > 2 ? `${parts[0]}.${decimals.slice(0, 2)}` : cleaned;
+    setLocalValue(trimmed);
+
+    const num = Number(trimmed);
+    onChange?.(Number.isFinite(num) && trimmed !== '' ? num : undefined);
+
     try {
-      if (value) {
-        localStorage.setItem(storageKey, value);
+      if (trimmed) {
+        localStorage.setItem(storageKey!, trimmed);
       } else {
-        localStorage.removeItem(storageKey);
+        localStorage.removeItem(storageKey!);
       }
     } catch {
       // ignore
     }
-  }, [value, storageKey]);
+  };
 
   return (
     <div className="flex items-center gap-2 ml-auto">
       <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 whitespace-nowrap">KG por Saco Real</label>
       <input
         type="text"
-        inputMode="numeric"
-        value={value}
-        onChange={(e) => {
-          const cleaned = e.target.value.replace(/[^0-9]/g, '');
-          setValue(cleaned);
-        }}
+        inputMode="decimal"
+        value={localValue}
+        onChange={(e) => handleChange(e.target.value)}
         className="w-20 h-8 text-[10px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
         placeholder="50"
       />
@@ -239,14 +246,16 @@ function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; sele
   );
 }
 
-function SugarTable({ selectedFecha, mode = 'estandar' }: { selectedFecha?: Date; mode?: 'estandar' | 'promedio' }) {
+function SugarTable({ selectedFecha, mode = 'estandar', realKgPerSack }: { selectedFecha?: Date; mode?: 'estandar' | 'promedio'; realKgPerSack?: number }) {
   const isPromedio = mode === 'promedio';
   const headerBg = isPromedio ? 'bg-orange-600' : 'bg-yellow-500';
   const headerBorder = isPromedio ? 'border-orange-600' : 'border-yellow-600';
   const rowEvenBg = isPromedio ? 'bg-orange-50' : 'bg-yellow-50';
-  type SugarValues = Record<string, { invInicialSacos: string; invInicialKg: string; recepcionSacos: string; recepcionKg: string; invFinalSacos: string; invFinalKg: string }>;
+  type SugarValues = Record<string, { invInicialSacos: string; recepcionSacos: string; invFinalSacos: string }>;
   const storageKey = selectedFecha ? `jarabes-sugar-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   const [values, setValues] = useState<SugarValues>({});
+
+  const kgPerSack = realKgPerSack ?? 50;
 
   useEffect(() => {
     if (!storageKey) {
@@ -256,7 +265,16 @@ function SugarTable({ selectedFecha, mode = 'estandar' }: { selectedFecha?: Date
     try {
       const saved = localStorage.getItem(storageKey);
       if (saved) {
-        setValues(JSON.parse(saved));
+        const parsed = JSON.parse(saved);
+        const normalized: SugarValues = {};
+        Object.keys(parsed).forEach((proveedor) => {
+          normalized[proveedor] = {
+            invInicialSacos: parsed[proveedor]?.invInicialSacos ?? '',
+            recepcionSacos: parsed[proveedor]?.recepcionSacos ?? '',
+            invFinalSacos: parsed[proveedor]?.invFinalSacos ?? '',
+          };
+        });
+        setValues(normalized);
       } else {
         setValues({});
       }
@@ -276,22 +294,15 @@ function SugarTable({ selectedFecha, mode = 'estandar' }: { selectedFecha?: Date
 
   const handleSacosChange = (proveedor: string, field: 'invInicialSacos' | 'recepcionSacos' | 'invFinalSacos', raw: string) => {
     const cleaned = raw.replace(/[^0-9]/g, '');
-    const sacos = Number(cleaned) || 0;
-    const kg = sacos * 50;
-
     setValues(prev => {
-      const current = prev[proveedor] || { invInicialSacos: '', invInicialKg: '', recepcionSacos: '', recepcionKg: '', invFinalSacos: '', invFinalKg: '' };
-      const next = {
+      const current = prev[proveedor] || { invInicialSacos: '', recepcionSacos: '', invFinalSacos: '' };
+      return {
         ...prev,
         [proveedor]: {
           ...current,
           [field]: cleaned,
-          invInicialKg: field === 'invInicialSacos' ? String(kg) : current.invInicialKg,
-          recepcionKg: field === 'recepcionSacos' ? String(kg) : current.recepcionKg,
-          invFinalKg: field === 'invFinalSacos' ? String(kg) : current.invFinalKg,
         }
       };
-      return next;
     });
   };
 
@@ -332,15 +343,15 @@ function SugarTable({ selectedFecha, mode = 'estandar' }: { selectedFecha?: Date
         <tbody>
           {SUGAR_PROVEEDORES.map((proveedor, idx) => {
             const invInicialSacos = getNumber(proveedor, 'invInicialSacos');
-            const invInicialKg = getNumber(proveedor, 'invInicialKg');
             const recepcionSacos = getNumber(proveedor, 'recepcionSacos');
-            const recepcionKg = getNumber(proveedor, 'recepcionKg');
             const invFinalSacos = getNumber(proveedor, 'invFinalSacos');
-            const invFinalKg = getNumber(proveedor, 'invFinalKg');
+            const invInicialKg = Math.round(invInicialSacos * kgPerSack * 100) / 100;
+            const recepcionKg = Math.round(recepcionSacos * kgPerSack * 100) / 100;
+            const invFinalKg = Math.round(invFinalSacos * kgPerSack * 100) / 100;
             const disponibleSacos = invInicialSacos + recepcionSacos;
-            const disponibleKg = invInicialKg + recepcionKg;
+            const disponibleKg = Math.round((invInicialKg + recepcionKg) * 100) / 100;
             const consumoSacos = Math.max(0, disponibleSacos - invFinalSacos);
-            const consumoKg = Math.max(0, disponibleKg - invFinalKg);
+            const consumoKg = Math.round(Math.max(0, disponibleKg - invFinalKg) * 100) / 100;
 
             return (
               <tr key={proveedor} className={idx % 2 === 0 ? rowEvenBg : 'bg-white'}>
@@ -406,6 +417,26 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     }
     return undefined;
   });
+
+  const [realKgPerSack, setRealKgPerSack] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    if (!selectedFecha) {
+      setRealKgPerSack(undefined);
+      return;
+    }
+    try {
+      const saved = localStorage.getItem(`jarabes-real-kg-per-sack-${format(selectedFecha, 'yyyy-MM-dd')}`);
+      if (saved) {
+        const parsed = Number(saved);
+        setRealKgPerSack(Number.isFinite(parsed) ? parsed : undefined);
+      } else {
+        setRealKgPerSack(undefined);
+      }
+    } catch {
+      setRealKgPerSack(undefined);
+    }
+  }, [selectedFecha]);
 
   useEffect(() => {
     if (!selectedFecha) {
@@ -497,9 +528,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                   <div className="space-y-6">
                     <UbbTable mode="promedio" selectedFecha={selectedFecha} />
                     <div className="flex justify-end">
-                      <RealKgPerSackInput selectedFecha={selectedFecha} />
+                      <RealKgPerSackInput selectedFecha={selectedFecha} value={realKgPerSack} onChange={setRealKgPerSack} />
                     </div>
-                    <SugarTable selectedFecha={selectedFecha} mode="promedio" />
+                    <SugarTable selectedFecha={selectedFecha} mode="promedio" realKgPerSack={realKgPerSack} />
                   </div>
                 </TabsContent>
 
