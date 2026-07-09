@@ -23,6 +23,54 @@ const SUGAR_PROVEEDORES = ['PORTUGUESA', 'PASTORA', 'MONTALBAN', 'IMPORTADA 1'];
 const inputCellClass = "border border-slate-200 px-1 py-0.5 text-[10px] text-slate-700";
 const inputClass = "w-full h-7 text-[10px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500";
 
+function RealKgPerSackInput({ selectedFecha }: { selectedFecha?: Date }) {
+  const storageKey = selectedFecha ? `jarabes-real-kg-per-sack-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
+  const [value, setValue] = useState<string>('');
+
+  useEffect(() => {
+    if (!storageKey) {
+      setValue('');
+      return;
+    }
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) setValue(saved);
+    } catch {
+      // ignore
+    }
+  }, [storageKey]);
+
+  useEffect(() => {
+    if (!storageKey) return;
+    try {
+      if (value) {
+        localStorage.setItem(storageKey, value);
+      } else {
+        localStorage.removeItem(storageKey);
+      }
+    } catch {
+      // ignore
+    }
+  }, [value, storageKey]);
+
+  return (
+    <div className="flex items-center gap-2 ml-auto">
+      <label className="text-[10px] font-black uppercase tracking-widest text-slate-600 whitespace-nowrap">KG por Saco Real</label>
+      <input
+        type="text"
+        inputMode="numeric"
+        value={value}
+        onChange={(e) => {
+          const cleaned = e.target.value.replace(/[^0-9]/g, '');
+          setValue(cleaned);
+        }}
+        className="w-20 h-8 text-[10px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-orange-500 focus:border-orange-500"
+        placeholder="50"
+      />
+    </div>
+  );
+}
+
 function UbbTable({ mode, selectedFecha }: { mode: 'estandar' | 'promedio'; selectedFecha?: Date }) {
   const isGreen = mode === 'promedio';
   const headerBg = isGreen ? 'bg-green-700' : 'bg-blue-700';
@@ -448,6 +496,9 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                 <TabsContent value="promedio" className="m-0 animate-in fade-in-50 duration-500">
                   <div className="space-y-6">
                     <UbbTable mode="promedio" selectedFecha={selectedFecha} />
+                    <div className="flex justify-end">
+                      <RealKgPerSackInput selectedFecha={selectedFecha} />
+                    </div>
                     <SugarTable selectedFecha={selectedFecha} mode="promedio" />
                   </div>
                 </TabsContent>
