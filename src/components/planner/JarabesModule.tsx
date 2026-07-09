@@ -266,26 +266,56 @@ function SugarTable({ selectedFecha, mode = 'estandar', realKgPerSack }: { selec
       setValues({});
       return;
     }
-    try {
-      const saved = localStorage.getItem(storageKey);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        const normalized: SugarValues = {};
-        Object.keys(parsed).forEach((proveedor) => {
-          normalized[proveedor] = {
-            invInicialSacos: parsed[proveedor]?.invInicialSacos ?? '',
-            recepcionSacos: parsed[proveedor]?.recepcionSacos ?? '',
-            invFinalSacos: parsed[proveedor]?.invFinalSacos ?? '',
-          };
-        });
-        setValues(normalized);
-      } else {
-        setValues({});
+
+    const savedRaw = localStorage.getItem(storageKey);
+
+    if (savedRaw !== null) {
+      try {
+        const parsed = JSON.parse(savedRaw);
+        if (Object.keys(parsed).length > 0) {
+          setValues(parsed);
+          return;
+        }
+      } catch {
+        // ignore
       }
-    } catch {
-      setValues({});
     }
-  }, [storageKey]);
+
+    if (selectedFecha) {
+      const yesterday = new Date(selectedFecha);
+      yesterday.setDate(yesterday.getDate() - 1);
+      const yesterdayKey = `jarabes-sugar-${format(yesterday, 'yyyy-MM-dd')}`;
+      const yesterdayData = localStorage.getItem(yesterdayKey);
+
+      if (yesterdayData) {
+        try {
+          const yesterdayParsed = JSON.parse(yesterdayData);
+          const initialValues: SugarValues = {};
+
+          Object.keys(yesterdayParsed).forEach((proveedor) => {
+            const invFinalSacos = yesterdayParsed[proveedor]?.invFinalSacos;
+            if (invFinalSacos && Number(invFinalSacos) > 0) {
+              initialValues[proveedor] = {
+                invInicialSacos: invFinalSacos,
+                recepcionSacos: '',
+                invFinalSacos: '',
+              };
+            }
+          });
+
+          if (Object.keys(initialValues).length > 0) {
+            setValues(initialValues);
+            localStorage.setItem(storageKey, JSON.stringify(initialValues));
+            return;
+          }
+        } catch {
+          // ignore
+        }
+      }
+    }
+
+    setValues({});
+  }, [storageKey, selectedFecha]);
 
   useEffect(() => {
     if (!storageKey) return;
