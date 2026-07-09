@@ -636,9 +636,12 @@ function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50, updateCo
 
       let estandarTotal = 0;
       Object.keys(ubbData).forEach((sabor) => {
+        const ubbInicial = Number(ubbData[sabor]?.inicial) || 0;
+        const ubbPreparado = Number(ubbData[sabor]?.preparado) || 0;
         const ubbFinal = Number(ubbData[sabor]?.final) || 0;
+        const ubbConsumo = Math.max(0, (ubbInicial + ubbPreparado) - ubbFinal);
         const factor = AZUCAR_POR_SABOR[sabor] || 0;
-        estandarTotal += ubbFinal * factor;
+        estandarTotal += ubbConsumo * factor;
       });
       setEstandar(Math.round(estandarTotal * 100) / 100);
 
