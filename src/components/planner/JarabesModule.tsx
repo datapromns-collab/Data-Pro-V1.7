@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -8,6 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Beaker, Pipette, Activity, FileSpreadsheet, TrendingUp, ScrollText, CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
+import { getWeekDays } from '@/lib/planner-utils';
 
 const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
@@ -797,6 +798,153 @@ function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50, updateCo
   );
 }
 
+function computeResumenForDate(fecha: Date, kgPerSack: number) {
+  const ubbKey = `jarabes-ubb-${format(fecha, 'yyyy-MM-dd')}`;
+  const sugarKey = `jarabes-sugar-${format(fecha, 'yyyy-MM-dd')}`;
+  const tanquesKey = `jarabes-tanques-${format(fecha, 'yyyy-MM-dd')}`;
+
+  try {
+    const ubbData = JSON.parse(localStorage.getItem(ubbKey) || '{}');
+    const sugarData = JSON.parse(localStorage.getItem(sugarKey) || '{}');
+    const tanquesData = JSON.parse(localStorage.getItem(tanquesKey) || '{}');
+
+    let estandarTotal = 0;
+    Object.keys(ubbData).forEach((sabor) => {
+      const ubbInicial = Number(ubbData[sabor]?.inicial) || 0;
+      const ubbPreparado = Number(ubbData[sabor]?.preparado) || 0;
+      const ubbFinal = Number(ubbData[sabor]?.final) || 0;
+      const ubbConsumo = Math.max(0, (ubbInicial + ubbPreparado) - ubbFinal);
+      const factor = AZUCAR_POR_SABOR[sabor] || 0;
+      estandarTotal += ubbConsumo * factor;
+    });
+
+    let disponibleSugarTotal = 0;
+    Object.keys(sugarData).forEach((proveedor) => {
+      const invInicialSacos = Number(sugarData[proveedor]?.invInicialSacos) || 0;
+      const recepcionSacos = Number(sugarData[proveedor]?.recepcionSacos) || 0;
+      disponibleSugarTotal += (invInicialSacos + recepcionSacos) * kgPerSack;
+    });
+
+    let inicialTanquesTotal = 0;
+    Object.keys(tanquesData).forEach((tanque) => {
+      const invInicialSacos = Number(tanquesData[tanque]?.invInicialSacos) || 0;
+      inicialTanquesTotal += invInicialSacos * kgPerSack;
+    });
+
+    let ubbInicialTotal = 0;
+    Object.keys(ubbData).forEach((sabor) => {
+      const ubbInicial = Number(ubbData[sabor]?.inicial) || 0;
+      const factor = AZUCAR_POR_SABOR[sabor] || 0;
+      ubbInicialTotal += ubbInicial * factor;
+    });
+
+    let finalSugarTotal = 0;
+    Object.keys(sugarData).forEach((proveedor) => {
+      const invFinalSacos = Number(sugarData[proveedor]?.invFinalSacos) || 0;
+      finalSugarTotal += invFinalSacos * kgPerSack;
+    });
+
+    let finalTanquesTotal = 0;
+    Object.keys(tanquesData).forEach((tanque) => {
+      const invFinalSacos = Number(tanquesData[tanque]?.invFinalSacos) || 0;
+      finalTanquesTotal += invFinalSacos * kgPerSack;
+    });
+
+    let ubbFinalTotal = 0;
+    Object.keys(ubbData).forEach((sabor) => {
+      const ubbFinal = Number(ubbData[sabor]?.final) || 0;
+      const factor = AZUCAR_POR_SABOR[sabor] || 0;
+      ubbFinalTotal += ubbFinal * factor;
+    });
+
+    const fisicoTotal = Math.round(
+      (disponibleSugarTotal + inicialTanquesTotal + ubbInicialTotal - finalSugarTotal - finalTanquesTotal - ubbFinalTotal) * 100
+    ) / 100;
+
+    const diferencia = Math.round((fisicoTotal - estandarTotal) * 100) / 100;
+    const porcentaje = estandarTotal > 0 ? Math.round((diferencia / estandarTotal) * 10000) / 100 : 0;
+
+    return {
+      estandar: Math.round(estandarTotal * 100) / 100,
+      fisico: fisicoTotal,
+      diferencia,
+      porcentaje,
+    };
+  } catch {
+    return { estandar: 0, fisico: 0, diferencia: 0, porcentaje: 0 };
+  }
+}
+
+const DIAS_SEMANA = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
+
+function REstandarSemTable({ weekStartDate, costoAzucar }: { weekStartDate?: Date; costoAzucar?: number }) {
+  const weekDays = useMemo(() => (weekStartDate ? getWeekDays(weekStartDate) : []), [weekStartDate]);
+
+  const rows = useMemo(() => {
+    return weekDays.map((fecha, idx) => {
+      const resumen = computeResumenForDate(fecha, 50);
+      const merma = costoAzucar ? Math.round(resumen.diferencia * costoAzucar * 100) / 100 : 0;
+      return {
+        fecha: format(fecha, 'd/M/yyyy'),
+        dia: DIAS_SEMANA[idx],
+        estandar: resumen.estandar,
+        fisico: resumen.fisico,
+        diferencia: resumen.diferencia,
+        porcentaje: resumen.porcentaje,
+        merma,
+      };
+    });
+  }, [weekDays, costoAzucar]);
+
+  const isEmpty = weekDays.length === 0;
+
+  return (
+    <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
+      <table className="w-full border-collapse text-center">
+        <thead>
+          <tr className="bg-blue-700 text-white">
+            <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Fecha</th>
+            <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Día</th>
+            <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Estandar</th>
+            <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Fisico</th>
+            <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Diferencia</th>
+            <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">%</th>
+            <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Merma $</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, idx) => (
+            <tr key={row.fecha} className={idx % 2 === 0 ? 'bg-blue-50' : 'bg-white'}>
+              <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700">{row.fecha}</td>
+              <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700">{row.dia}</td>
+              <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                {row.estandar.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </td>
+              <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                {row.fisico.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </td>
+              <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                {row.diferencia.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </td>
+              <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                {row.porcentaje !== 0 ? `${row.porcentaje}%` : '0%'}
+              </td>
+              <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                {row.merma !== 0 ? row.merma.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {isEmpty && (
+        <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-200 bg-white">
+          Sin datos para la semana seleccionada
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, weekStartDate }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; weekStartDate?: Date }) {
   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
   const [activeDisolucionTab, setActiveDisolucionTab] = useState<string>('disolucion');
@@ -980,9 +1128,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                         </div>
 
                         <TabsContent value="r-estandar-sem" className="m-0 animate-in fade-in-50 duration-500">
-                          <div className="border border-dashed border-slate-200 rounded-[2rem] bg-white/50 p-12 flex items-center justify-center min-h-[300px]">
-                            <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Sección R estandar sem en desarrollo</p>
-                          </div>
+                          <REstandarSemTable weekStartDate={weekStartDate} costoAzucar={costoAzucar} />
                         </TabsContent>
 
                         <TabsContent value="r-promedio-sem" className="m-0 animate-in fade-in-50 duration-500">
