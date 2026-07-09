@@ -877,8 +877,8 @@ function computeResumenForDate(fecha: Date, kgPerSack: number) {
 
 const DIAS_SEMANA = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
 
-function REstandarSemTable({ weekStartDate, costoAzucar }: { weekStartDate?: Date; costoAzucar?: number }) {
-  const weekDays = useMemo(() => (weekStartDate ? getWeekDays(weekStartDate) : []), [weekStartDate]);
+function REstandarSemTable({ selectedFecha, costoAzucar }: { selectedFecha?: Date; costoAzucar?: number }) {
+  const weekDays = useMemo(() => (selectedFecha ? getWeekDays(selectedFecha) : []), [selectedFecha]);
 
   const rows = useMemo(() => {
     return weekDays.map((fecha, idx) => {
@@ -1128,7 +1128,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                         </div>
 
                         <TabsContent value="r-estandar-sem" className="m-0 animate-in fade-in-50 duration-500">
-                          <REstandarSemTable weekStartDate={weekStartDate} costoAzucar={costoAzucar} />
+                          <REstandarSemTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} />
                         </TabsContent>
 
                         <TabsContent value="r-promedio-sem" className="m-0 animate-in fade-in-50 duration-500">
