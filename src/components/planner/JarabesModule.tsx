@@ -740,6 +740,7 @@ function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50 }: { sele
 export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, weekStartDate }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; weekStartDate?: Date }) {
   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
   const [activeDisolucionTab, setActiveDisolucionTab] = useState<string>('disolucion');
+  const [activeResumenTab, setActiveResumenTab] = useState<string>('semanal');
   const [selectedFecha, setSelectedFecha] = useState<Date | undefined>(() => {
     try {
       const saved = localStorage.getItem('jarabes-selected-fecha');
@@ -876,9 +877,30 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                 </TabsContent>
 
                 <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500">
-                  <div className="border border-dashed border-slate-200 rounded-[2rem] bg-white/50 p-12 flex items-center justify-center min-h-[300px]">
-                    <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Sección Resumen en desarrollo</p>
-                  </div>
+                  <Tabs value={activeResumenTab} onValueChange={setActiveResumenTab} defaultValue="semanal" className="w-full">
+                    <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
+                      <TabsList className="bg-transparent h-auto p-0">
+                        <TabsTrigger value="semanal" className={tabsTriggerClass}>
+                          <TrendingUp className="h-3.5 w-3.5" /> Semanal
+                        </TabsTrigger>
+                        <TabsTrigger value="mensual" className={tabsTriggerClass}>
+                          <ScrollText className="h-3.5 w-3.5" /> Mensual
+                        </TabsTrigger>
+                      </TabsList>
+                    </div>
+
+                    <TabsContent value="semanal" className="m-0 animate-in fade-in-50 duration-500">
+                      <div className="border border-dashed border-slate-200 rounded-[2rem] bg-white/50 p-12 flex items-center justify-center min-h-[300px]">
+                        <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Sección Resumen Semanal en desarrollo</p>
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="mensual" className="m-0 animate-in fade-in-50 duration-500">
+                      <div className="border border-dashed border-slate-200 rounded-[2rem] bg-white/50 p-12 flex items-center justify-center min-h-[300px]">
+                        <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Sección Resumen Mensual en desarrollo</p>
+                      </div>
+                    </TabsContent>
+                  </Tabs>
                 </TabsContent>
               </Tabs>
             </TabsContent>
