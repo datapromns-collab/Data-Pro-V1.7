@@ -983,6 +983,10 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
       </div>
 
       {!isEmpty && (
+        <div className="h-4 print:h-8"></div>
+      )}
+
+      {!isEmpty && (
         <div className="border border-yellow-400 rounded-xl overflow-hidden bg-white">
           <table className="w-full border-collapse text-center">
             <thead>
@@ -993,7 +997,7 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
                 <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Fisico</th>
                 <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Diferencia</th>
                 <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">%</th>
-                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Merma $</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Merma $</th>
               </tr>
             </thead>
             <tbody>
@@ -1022,7 +1026,7 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
         </div>
       )}
 
-      <div className="h-8 print:h-16"></div>
+      <div className="print-spacer h-4"></div>
 
       {!isEmpty && (
         <div className="border border-slate-300 rounded-xl overflow-hidden bg-white p-4">
@@ -1162,6 +1166,10 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, onPrintWeeklyPromedio }
           </div>
         )}
       </div>
+
+      {!isEmpty && (
+        <div className="print-spacer h-4"></div>
+      )}
 
       {!isEmpty && (
         <div className="border border-yellow-400 rounded-xl overflow-hidden bg-white">

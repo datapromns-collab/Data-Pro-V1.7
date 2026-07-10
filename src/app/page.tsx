@@ -1530,60 +1530,67 @@ export default function PlannerPage() {
 
         <div className="print-only w-full bg-white">
           <style>{`
-            @media print {
-              .print-only {
-                margin-top: 0 !important;
-                padding-top: 0 !important;
-                margin-bottom: 0 !important;
-                padding-bottom: 0 !important;
-                position: static !important;
-                flex: none !important;
-                min-height: auto !important;
-                display: block !important;
-                width: 100% !important;
-                left: 0 !important;
-                right: 0 !important;
-              }
-              .print-only > div {
-                margin-top: 0 !important;
-                padding-top: 0 !important;
-                margin-bottom: 0 !important;
-                padding-bottom: 0 !important;
-              }
-              .print-only > div > div {
-                margin-top: 0 !important;
-                padding-top: 0 !important;
-                margin-bottom: 0 !important;
-                padding-bottom: 0 !important;
-              }
-              .print-only > div > div > div {
-                margin-top: 0 !important;
-                padding-top: 0 !important;
-                margin-bottom: 0 !important;
-                padding-bottom: 0 !important;
-              }
-               #report {
+             @media print {
+               .print-only {
+                 margin-top: 0 !important;
+                 padding-top: 0 !important;
+                 margin-bottom: 0 !important;
+                 padding-bottom: 0 !important;
+                 position: static !important;
+                 flex: none !important;
+                 min-height: auto !important;
+                 display: block !important;
+                 width: 100% !important;
+                 left: 0 !important;
+                 right: 0 !important;
+               }
+               .print-only > div:not(.print-spacer) {
                  margin-top: 0 !important;
                  padding-top: 0 !important;
                  margin-bottom: 0 !important;
                  padding-bottom: 0 !important;
                }
-               #report > div:first-child {
+               .print-only > div:not(.print-spacer) > div:not(.print-spacer) {
+                 margin-top: 0 !important;
+                 padding-top: 0 !important;
                  margin-bottom: 0 !important;
                  padding-bottom: 0 !important;
                }
-               #report > div:last-child {
+               .print-only > div:not(.print-spacer) > div:not(.print-spacer) > div:not(.print-spacer) {
                  margin-top: 0 !important;
                  padding-top: 0 !important;
+                 margin-bottom: 0 !important;
+                 padding-bottom: 0 !important;
                }
-               #report > div:last-child table {
+               .print-spacer {
                  margin-top: 0 !important;
                  padding-top: 0 !important;
+                 margin-bottom: 0 !important;
+                 padding-bottom: 0 !important;
+                 height: 32px !important;
                }
-               @page {
-                 margin: 5mm !important;
-               }
-            }
+                #report {
+                  margin-top: 0 !important;
+                  padding-top: 0 !important;
+                  margin-bottom: 0 !important;
+                  padding-bottom: 0 !important;
+                }
+                #report > div:first-child {
+                  margin-bottom: 0 !important;
+                  padding-bottom: 0 !important;
+                }
+                #report > div:last-child {
+                  margin-top: 0 !important;
+                  padding-top: 0 !important;
+                }
+                #report > div:last-child table {
+                  margin-top: 0 !important;
+                  padding-top: 0 !important;
+                }
+                @page {
+                  margin: 5mm !important;
+                }
+             }
           `}</style>
           {printMode === 'plan' && (
             LINES.map((lineName, i) => (
