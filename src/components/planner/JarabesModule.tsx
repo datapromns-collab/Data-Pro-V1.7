@@ -1219,7 +1219,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
     } catch {
       // ignore
     }
-    return undefined;
+    return new Date();
   });
 
   const [realKgPerSack, setRealKgPerSack] = useState<number | undefined>(undefined);
@@ -1325,7 +1325,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                       <Calendar
                         mode="single"
                         selected={selectedFecha}
-                        onSelect={setSelectedFecha}
+                        onSelect={(date) => date && setSelectedFecha(date)}
                         locale={es}
                       />
                     </PopoverContent>
