@@ -98,9 +98,13 @@ const mockOrdenesTrabajo: any[] = [
     solicitante: 'Juan Carlos',
     linea: 'Línea 1',
     maquina: 'Llenadora',
+    aviso: 'AV-001',
     fechaParada: '2026-06-29',
     inicioMtto: '08:00',
     finMtto: '10:30',
+    inicioParada: '07:45',
+    finParada: '10:45',
+    tMtto: '150',
     tipoParada: 'MECÁNICO',
     mtto: 'CORRECTIVO',
     falla: 'Fuga en sellos',
@@ -119,9 +123,13 @@ const mockOrdenesTrabajo: any[] = [
     solicitante: 'María González',
     linea: 'Línea 3',
     maquina: 'Etiquetadora',
+    aviso: 'AV-002',
     fechaParada: '2026-06-29',
     inicioMtto: '14:00',
     finMtto: '15:00',
+    inicioParada: '13:50',
+    finParada: '15:10',
+    tMtto: '80',
     tipoParada: 'ELÉCTRICO',
     mtto: 'CORRECTIVO',
     falla: 'Falla sensor',
@@ -282,9 +290,13 @@ export default function PlannerPage() {
     solicitante: '',
     linea: 'Línea 1',
     maquina: '',
+    aviso: '',
     fechaParada: format(new Date(), 'yyyy-MM-dd'),
     inicioMtto: '',
     finMtto: '',
+    inicioParada: '',
+    finParada: '',
+    tMtto: '',
     tipoParada: 'MECÁNICO',
     mtto: 'CORRECTIVO',
     falla: '',
@@ -1457,26 +1469,30 @@ export default function PlannerPage() {
                                     <div className="min-w-[1800px]">
                                       <Table>
                                      <TableHeader>
-                                       <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">F-ORDEN</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">ORDEN</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">F-EMISION</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SEM</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">TUR</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SOLICITANTE</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">LINEA</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MAQUINA</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">F-PARADA</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">I-MTTO</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">F-MTTO</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">PARADA</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">FALLA</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO/ESP</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCION FALLA</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">ACCION MTTO</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">OBSERVACIONES</TableHead>
-                                       </TableRow>
+                                        <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">FECHA</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">ORDEN</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">E-FECHA</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SERV</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">TUR</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SOLICITANTE</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">LINEA</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">AVISO</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MAQUINA</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">E-PARADA</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">E-MTTO</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">E-MTTO</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">E-PARADA</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">T-MTTO</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">E-PARADA</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">PARADA?</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">FALLA</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO/ESP</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCION DE LA FALLA POR EL SOLICITANTE</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCION DE LA ACCION DE MANTENIMIENTO</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">OBSERVACIONES</TableHead>
+                                        </TableRow>
                                      </TableHeader>
                                       <TableBody>
                                         {ordenesTrabajo
@@ -1486,26 +1502,30 @@ export default function PlannerPage() {
                                             return matchLine && matchDate;
                                           })
                                           .map((row) => (
-                                         <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
-                                           <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fechaOrden}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] font-mono font-bold text-slate-900 whitespace-nowrap">{row.orden}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fechaEmision}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {row.semana}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{row.turno}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] font-semibold text-slate-800 whitespace-nowrap">{row.solicitante}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap">{row.linea}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.maquina}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.fechaParada}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.inicioMtto}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.finMtto}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.tipoParada}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.mtto}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[120px] truncate" title={row.falla}>{row.falla}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.mttoEsp}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.descripcionFalla}>{row.descripcionFalla}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.descripcionAccion}>{row.descripcionAccion}</TableCell>
-                                           <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[180px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
-                                         </TableRow>
+                                          <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
+                                            <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fechaOrden}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] font-mono font-bold text-slate-900 whitespace-nowrap">{row.orden}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fechaEmision}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {row.semana}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{row.turno}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] font-semibold text-slate-800 whitespace-nowrap">{row.solicitante}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap">{row.linea}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.aviso}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.maquina}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.fechaParada}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.inicioMtto}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.finMtto}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.inicioParada}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.tMtto}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.finParada}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.tipoParada}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.mtto}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[120px] truncate" title={row.falla}>{row.falla}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.mttoEsp}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.descripcionFalla}>{row.descripcionFalla}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.descripcionAccion}>{row.descripcionAccion}</TableCell>
+                                            <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[180px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
+                                          </TableRow>
                                        ))}
                                         {ordenesTrabajo.filter((r) => {
                                           const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
@@ -1513,7 +1533,7 @@ export default function PlannerPage() {
                                           return matchLine && matchDate;
                                         }).length === 0 && (
                                          <TableRow>
-                                           <TableCell colSpan={18} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
+                                           <TableCell colSpan={22} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
                                              Sin registros para el filtro seleccionado
                                            </TableCell>
                                          </TableRow>
@@ -1933,24 +1953,40 @@ export default function PlannerPage() {
                     {LINES.map((l) => <option key={l} value={l}>{l}</option>)}
                   </select>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Máquina</label>
-                  <select value={ordenFormData.maquina} onChange={(e) => setOrdenFormData({...ordenFormData, maquina: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
-                    {EQUIPOS.map((e) => <option key={e} value={e}>{e}</option>)}
-                  </select>
-                </div>
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Máquina</label>
+                   <select value={ordenFormData.maquina} onChange={(e) => setOrdenFormData({...ordenFormData, maquina: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                     {EQUIPOS.map((e) => <option key={e} value={e}>{e}</option>)}
+                   </select>
+                 </div>
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Aviso</label>
+                   <Input value={ordenFormData.aviso} onChange={(e) => setOrdenFormData({...ordenFormData, aviso: e.target.value})} className="h-9 text-[11px]" placeholder="AV-XXX" />
+                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fecha Parada</label>
                   <Input type="date" value={ordenFormData.fechaParada} onChange={(e) => setOrdenFormData({...ordenFormData, fechaParada: e.target.value})} className="h-9 text-[11px]" />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Mantenimiento</label>
-                  <Input type="time" value={ordenFormData.inicioMtto} onChange={(e) => setOrdenFormData({...ordenFormData, inicioMtto: e.target.value})} className="h-9 text-[11px]" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Mantenimiento</label>
-                  <Input type="time" value={ordenFormData.finMtto} onChange={(e) => setOrdenFormData({...ordenFormData, finMtto: e.target.value})} className="h-9 text-[11px]" />
-                </div>
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Mantenimiento</label>
+                   <Input type="time" value={ordenFormData.inicioMtto} onChange={(e) => setOrdenFormData({...ordenFormData, inicioMtto: e.target.value})} className="h-9 text-[11px]" />
+                 </div>
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Mantenimiento</label>
+                   <Input type="time" value={ordenFormData.finMtto} onChange={(e) => setOrdenFormData({...ordenFormData, finMtto: e.target.value})} className="h-9 text-[11px]" />
+                 </div>
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Parada</label>
+                   <Input type="time" value={ordenFormData.inicioParada} onChange={(e) => setOrdenFormData({...ordenFormData, inicioParada: e.target.value})} className="h-9 text-[11px]" />
+                 </div>
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">T-MTTO</label>
+                   <Input type="text" value={ordenFormData.tMtto} onChange={(e) => setOrdenFormData({...ordenFormData, tMtto: e.target.value})} className="h-9 text-[11px]" placeholder="min" />
+                 </div>
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Parada</label>
+                   <Input type="time" value={ordenFormData.finParada} onChange={(e) => setOrdenFormData({...ordenFormData, finParada: e.target.value})} className="h-9 text-[11px]" />
+                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Tipo de Parada</label>
                   <select value={ordenFormData.tipoParada} onChange={(e) => setOrdenFormData({...ordenFormData, tipoParada: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
@@ -2021,17 +2057,21 @@ export default function PlannerPage() {
                     turno: 'T1',
                     solicitante: '',
                     linea: 'Línea 1',
-                    maquina: '',
-                    fechaParada: format(new Date(), 'yyyy-MM-dd'),
-                    inicioMtto: '',
-                    finMtto: '',
-                    tipoParada: 'MECÁNICO',
-                    mtto: 'CORRECTIVO',
-                    falla: '',
-                    mttoEsp: 'MTTO',
-                    descripcionFalla: '',
-                    descripcionAccion: '',
-                    observaciones: '',
+                     maquina: '',
+                     aviso: '',
+                     fechaParada: format(new Date(), 'yyyy-MM-dd'),
+                     inicioMtto: '',
+                     finMtto: '',
+                     inicioParada: '',
+                     finParada: '',
+                     tMtto: '',
+                     tipoParada: 'MECÁNICO',
+                     mtto: 'CORRECTIVO',
+                     falla: '',
+                     mttoEsp: 'MTTO',
+                     descripcionFalla: '',
+                     descripcionAccion: '',
+                     observaciones: '',
                   });
                 }
                 setIsPlantaDialogOpen(false);
