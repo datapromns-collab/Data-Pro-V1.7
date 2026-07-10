@@ -1754,7 +1754,12 @@ export default function PlannerPage() {
                 </div>
                )}
              </>
-           )}
+            )}
+          {jarabesPrintMode && (
+            <div className="p-0">
+              <div dangerouslySetInnerHTML={{ __html: jarabesPrintHtml }} />
+            </div>
+          )}
         </div>
 
         <TaskDialog 

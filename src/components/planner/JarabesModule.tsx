@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -878,8 +878,9 @@ function computeResumenForDate(fecha: Date, kgPerSack: number) {
 
 const DIAS_SEMANA = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
 
-function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number }) {
+function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintWeeklyStandard }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; onPrintWeeklyStandard?: (html: string) => void }) {
   const weekDays = useMemo(() => (selectedFecha ? getWeekDays(selectedFecha) : []), [selectedFecha]);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const rows = useMemo(() => {
     return weekDays.map((fecha, idx) => {
@@ -915,8 +916,19 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack }: { sele
 
   const isEmpty = weekDays.length === 0;
 
+  const handlePrint = () => {
+    if (!containerRef.current || !onPrintWeeklyStandard) return;
+    const html = containerRef.current.innerHTML;
+    onPrintWeeklyStandard(html);
+  };
+
   return (
-    <div className="space-y-3">
+    <div ref={containerRef} className="space-y-3">
+      <div className="flex justify-end">
+        <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
+          Imprimir PDF
+        </Button>
+      </div>
       <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
         <table className="w-full border-collapse text-center">
           <thead>
@@ -1034,8 +1046,9 @@ function getRealKgPerSackForDate(fecha: Date): number {
   return 50;
 }
 
-function RPromedioSemTable({ selectedFecha, costoAzucar }: { selectedFecha?: Date; costoAzucar?: number }) {
+function RPromedioSemTable({ selectedFecha, costoAzucar, onPrintWeeklyPromedio }: { selectedFecha?: Date; costoAzucar?: number; onPrintWeeklyPromedio?: (html: string) => void }) {
   const weekDays = useMemo(() => (selectedFecha ? getWeekDays(selectedFecha) : []), [selectedFecha]);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const rows = useMemo(() => {
     return weekDays.map((fecha, idx) => {
@@ -1071,8 +1084,19 @@ function RPromedioSemTable({ selectedFecha, costoAzucar }: { selectedFecha?: Dat
 
   const isEmpty = weekDays.length === 0;
 
+  const handlePrint = () => {
+    if (!containerRef.current || !onPrintWeeklyPromedio) return;
+    const html = containerRef.current.innerHTML;
+    onPrintWeeklyPromedio(html);
+  };
+
   return (
-    <div className="space-y-3">
+    <div ref={containerRef} className="space-y-3">
+      <div className="flex justify-end">
+        <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
+          Imprimir PDF
+        </Button>
+      </div>
       <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
         <table className="w-full border-collapse text-center">
           <thead>
@@ -1359,11 +1383,11 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                         </div>
 
                         <TabsContent value="r-estandar-sem" className="m-0 animate-in fade-in-50 duration-500">
-                          <REstandarSemTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} />
+                          <REstandarSemTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} onPrintWeeklyStandard={onPrintWeeklyStandard} />
                         </TabsContent>
 
                         <TabsContent value="r-promedio-sem" className="m-0 animate-in fade-in-50 duration-500">
-                          <RPromedioSemTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} />
+                          <RPromedioSemTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} onPrintWeeklyPromedio={onPrintWeeklyPromedio} />
                         </TabsContent>
                       </Tabs>
                     </TabsContent>
