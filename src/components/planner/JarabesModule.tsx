@@ -998,7 +998,9 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
             </thead>
             <tbody>
               <tr className="bg-yellow-100">
-                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700" colSpan={2}>TOTAL SEMANA</td>
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700" colSpan={2}>
+                  TOTAL SEMANA {selectedFecha ? format(selectedFecha, 'I', { locale: es }) : ''}
+                </td>
                 <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
                   {totals.estandar.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </td>
@@ -1175,7 +1177,9 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, onPrintWeeklyPromedio }
             </thead>
             <tbody>
               <tr className="bg-yellow-100">
-                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700" colSpan={2}>TOTAL SEMANA</td>
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700" colSpan={2}>
+                  TOTAL SEMANA {selectedFecha ? format(selectedFecha, 'I', { locale: es }) : ''}
+                </td>
                 <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
                   {totals.estandar.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </td>
