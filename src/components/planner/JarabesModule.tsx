@@ -8,7 +8,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Beaker, Pipette, Activity, FileSpreadsheet, TrendingUp, ScrollText, CalendarIcon } from 'lucide-react';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { getWeekDays } from '@/lib/planner-utils';
+import { getWeekDays, getWeeksInMonth } from '@/lib/planner-utils';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line, ComposedChart } from 'recharts';
 
 const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
@@ -1222,6 +1222,141 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, onPrintWeeklyPromedio }
   );
 }
 
+function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number }) {
+  const weeks = useMemo(() => (selectedFecha ? getWeeksInMonth(selectedFecha) : []), [selectedFecha]);
+
+  const rows = useMemo(() => {
+    return weeks.map((week, idx) => {
+      const weekStart = week[0];
+      const semanaNumero = format(weekStart, 'I', { locale: es });
+      const dayKgPerSack = realKgPerSack ?? 50;
+
+      let totalEstandar = 0;
+      let totalFisico = 0;
+      week.forEach(fecha => {
+        const resumen = computeResumenForDate(fecha, dayKgPerSack);
+        totalEstandar += resumen.estandar;
+        totalFisico += resumen.fisico;
+      });
+
+      totalEstandar = Math.round(totalEstandar * 100) / 100;
+      totalFisico = Math.round(totalFisico * 100) / 100;
+      const diferencia = Math.round((totalFisico - totalEstandar) * 100) / 100;
+      const porcentaje = totalEstandar > 0 ? Math.round((diferencia / totalEstandar) * 10000) / 100 : 0;
+      const merma = costoAzucar ? Math.round(diferencia * costoAzucar * 100) / 100 : 0;
+
+      return {
+        semana: semanaNumero,
+        estandar: totalEstandar,
+        fisico: totalFisico,
+        diferencia,
+        porcentaje,
+        merma,
+      };
+    });
+  }, [weeks, costoAzucar, realKgPerSack]);
+
+  const totals = useMemo(() => {
+    const totalEstandar = rows.reduce((sum, r) => sum + r.estandar, 0);
+    const totalFisico = rows.reduce((sum, r) => sum + r.fisico, 0);
+    const totalDiferencia = Math.round((totalFisico - totalEstandar) * 100) / 100;
+    const totalPorcentaje = totalEstandar > 0 ? Math.round((totalDiferencia / totalEstandar) * 10000) / 100 : 0;
+    const totalMerma = costoAzucar ? Math.round(totalDiferencia * costoAzucar * 100) / 100 : 0;
+    return {
+      estandar: Math.round(totalEstandar * 100) / 100,
+      fisico: Math.round(totalFisico * 100) / 100,
+      diferencia: totalDiferencia,
+      porcentaje: totalPorcentaje,
+      merma: totalMerma,
+    };
+  }, [rows, costoAzucar]);
+
+  const isEmpty = weeks.length === 0;
+
+  return (
+    <div className="space-y-3">
+      <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
+        <table className="w-full border-collapse text-center">
+          <thead>
+            <tr className="bg-blue-700 text-white">
+              <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Semana</th>
+              <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Estandar</th>
+              <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Fisico</th>
+              <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Diferencia</th>
+              <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">%</th>
+              <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Merma $</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, idx) => (
+              <tr key={row.semana} className={idx % 2 === 0 ? 'bg-blue-50' : 'bg-white'}>
+                <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700">{row.semana}</td>
+                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                  {row.estandar.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </td>
+                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                  {row.fisico.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </td>
+                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                  {row.diferencia.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </td>
+                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                  {row.porcentaje !== 0 ? `${row.porcentaje}%` : '0%'}
+                </td>
+                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                  {row.merma !== 0 ? row.merma.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+        {isEmpty && (
+          <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-200 bg-white">
+            Sin datos para el mes seleccionado
+          </div>
+        )}
+      </div>
+
+      {!isEmpty && (
+        <div className="border border-yellow-400 rounded-xl overflow-hidden bg-white">
+          <table className="w-full border-collapse text-center">
+            <thead>
+              <tr className="bg-yellow-500 text-white">
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Semana</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Estandar</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Fisico</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Diferencia</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">%</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Merma $</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="bg-yellow-100">
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700" colSpan={1}>TOTAL MES</td>
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                  {totals.estandar.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </td>
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                  {totals.fisico.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </td>
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                  {totals.diferencia.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                </td>
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                  {totals.porcentaje !== 0 ? `${totals.porcentaje}%` : '0%'}
+                </td>
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                  {totals.merma !== 0 ? totals.merma.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, weekStartDate }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; weekStartDate?: Date }) {
   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
   const [activeDisolucionTab, setActiveDisolucionTab] = useState<string>('disolucion');
@@ -1421,9 +1556,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                         </div>
 
                         <TabsContent value="r-estandar-mes" className="m-0 animate-in fade-in-50 duration-500">
-                          <div className="border border-dashed border-slate-200 rounded-[2rem] bg-white/50 p-12 flex items-center justify-center min-h-[300px]">
-                            <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Sección R estandar mes en desarrollo</p>
-                          </div>
+                          <REstandarMesTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} realKgPerSack={realKgPerSack} />
                         </TabsContent>
 
                         <TabsContent value="r-promedio-mes" className="m-0 animate-in fade-in-50 duration-500">

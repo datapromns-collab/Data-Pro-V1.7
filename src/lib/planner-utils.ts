@@ -1,4 +1,4 @@
-import { addMinutes, format, isBefore, isAfter, startOfWeek, addDays, setHours, setMinutes } from 'date-fns';
+import { addMinutes, format, isBefore, isAfter, startOfWeek, addDays, setHours, setMinutes, startOfMonth, endOfMonth, isSameMonth } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { ScheduledTask } from './types';
 
@@ -373,6 +373,28 @@ export const DEFAULT_PACKAGING_RECIPES: Record<string, Record<string, Record<str
 export const getWeekDays = (baseDate: Date) => {
   const start = startOfWeek(baseDate, { weekStartsOn: 1 });
   return Array.from({ length: 7 }).map((_, i) => addDays(start, i));
+};
+
+export const getWeeksInMonth = (baseDate: Date) => {
+  const monthStart = startOfMonth(baseDate);
+  const monthEnd = endOfMonth(baseDate);
+  const firstWeekStart = startOfWeek(monthStart, { weekStartsOn: 1 });
+  const weeks: Date[][] = [];
+
+  let currentStart = firstWeekStart;
+  while (currentStart <= monthEnd || weeks.length === 0) {
+    const week = Array.from({ length: 7 }).map((_, i) => addDays(currentStart, i));
+    const hasDaysInMonth = week.some(day => isSameMonth(day, baseDate));
+    if (hasDaysInMonth) {
+      weeks.push(week);
+    }
+    currentStart = addDays(currentStart, 7);
+    if (weeks.length > 0 && currentStart > monthEnd && week.every(day => !isSameMonth(day, baseDate))) {
+      break;
+    }
+  }
+
+  return weeks;
 };
 
 export const isDayShift = (date: Date) => {
