@@ -646,6 +646,36 @@ export default function PlannerPage() {
     }, 150);
   };
 
+  const handlePrintJarabesMensualEst = (html: string) => {
+    setJarabesPrintMode('mensual-estandar');
+    setJarabesPrintHtml(html);
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+      setJarabesPrintMode('');
+      setJarabesPrintHtml('');
+    }, 150);
+  };
+
+  const handlePrintJarabesMensualProm = (html: string) => {
+    setJarabesPrintMode('mensual-promedio');
+    setJarabesPrintHtml(html);
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+      setJarabesPrintMode('');
+      setJarabesPrintHtml('');
+    }, 150);
+  };
+
   const handleTaskClick = (task: ScheduledTask) => {
     setEditingTask(task);
     setIsDialogOpen(true);
@@ -1146,15 +1176,17 @@ export default function PlannerPage() {
                     )}
                   </>
                  )}
-                 {activeModule === 'jarabes' && hasAccess(user.id, 'jarabes') && (
-                   <JarabesModule 
-                     onPrintStandard={handlePrintJarabes}
-                     onPrintPromedio={handlePrintJarabesPromedio}
-                     onPrintWeeklyStandard={handlePrintJarabesSemanalEst}
-                     onPrintWeeklyPromedio={handlePrintJarabesSemanalProm}
-                     weekStartDate={weekStartDate}
-                   />
-                 )}
+                  {activeModule === 'jarabes' && hasAccess(user.id, 'jarabes') && (
+                    <JarabesModule 
+                      onPrintStandard={handlePrintJarabes}
+                      onPrintPromedio={handlePrintJarabesPromedio}
+                      onPrintWeeklyStandard={handlePrintJarabesSemanalEst}
+                      onPrintWeeklyPromedio={handlePrintJarabesSemanalProm}
+                      onPrintMonthlyStandard={handlePrintJarabesMensualEst}
+                      onPrintMonthlyPromedio={handlePrintJarabesMensualProm}
+                      weekStartDate={weekStartDate}
+                    />
+                  )}
                  {activeModule === 'raw-materials' && hasAccess(user.id, 'raw-materials') && (
                   <>
                     {activeTab === 'raw-material-view' && (

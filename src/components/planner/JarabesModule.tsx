@@ -1234,8 +1234,9 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, onPrintWeeklyPromedio }
   );
 }
 
-function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number }) {
+function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintMonthlyStandard }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; onPrintMonthlyStandard?: (html: string) => void }) {
   const weeks = useMemo(() => (selectedFecha ? getWeeksInMonth(selectedFecha) : []), [selectedFecha]);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const rows = useMemo(() => {
     return weeks.map((week, idx) => {
@@ -1285,8 +1286,26 @@ function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack }: { sele
 
   const isEmpty = weeks.length === 0;
 
+  const handlePrint = () => {
+    if (!containerRef.current || !onPrintMonthlyStandard) return;
+    const html = containerRef.current.innerHTML;
+    onPrintMonthlyStandard(html);
+  };
+
+  const mesNombre = selectedFecha ? format(selectedFecha, 'MMMM', { locale: es }) : '';
+
   return (
-    <div className="space-y-3">
+    <div ref={containerRef} className="space-y-3">
+      <div className="flex justify-end">
+        <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
+          Imprimir PDF
+        </Button>
+      </div>
+
+      <div className="print-only">
+        <h1 className="text-center text-lg font-black text-slate-900 uppercase tracking-widest mb-1">Resumen de Azucar Mensual</h1>
+        <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-3">Mes {mesNombre.toUpperCase()}</p>
+      </div>
       <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
         <table className="w-full border-collapse text-center">
           <thead>
@@ -1391,8 +1410,9 @@ function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack }: { sele
   );
 }
 
-function RPromedioMesTable({ selectedFecha, costoAzucar }: { selectedFecha?: Date; costoAzucar?: number }) {
+function RPromedioMesTable({ selectedFecha, costoAzucar, onPrintMonthlyPromedio }: { selectedFecha?: Date; costoAzucar?: number; onPrintMonthlyPromedio?: (html: string) => void }) {
   const weeks = useMemo(() => (selectedFecha ? getWeeksInMonth(selectedFecha) : []), [selectedFecha]);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const rows = useMemo(() => {
     return weeks.map((week) => {
@@ -1442,8 +1462,26 @@ function RPromedioMesTable({ selectedFecha, costoAzucar }: { selectedFecha?: Dat
 
   const isEmpty = weeks.length === 0;
 
+  const handlePrint = () => {
+    if (!containerRef.current || !onPrintMonthlyPromedio) return;
+    const html = containerRef.current.innerHTML;
+    onPrintMonthlyPromedio(html);
+  };
+
+  const mesNombre = selectedFecha ? format(selectedFecha, 'MMMM', { locale: es }) : '';
+
   return (
-    <div className="space-y-3">
+    <div ref={containerRef} className="space-y-3">
+      <div className="flex justify-end">
+        <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
+          Imprimir PDF
+        </Button>
+      </div>
+
+      <div className="print-only">
+        <h1 className="text-center text-lg font-black text-slate-900 uppercase tracking-widest mb-1">Resumen de Azucar Mensual</h1>
+        <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-3">Mes {mesNombre.toUpperCase()}</p>
+      </div>
       <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
         <table className="w-full border-collapse text-center">
           <thead>
@@ -1548,7 +1586,7 @@ function RPromedioMesTable({ selectedFecha, costoAzucar }: { selectedFecha?: Dat
   );
 }
 
-export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, weekStartDate }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; weekStartDate?: Date }) {
+export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, onPrintMonthlyStandard, onPrintMonthlyPromedio, weekStartDate }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; onPrintMonthlyStandard?: (html: string) => void; onPrintMonthlyPromedio?: (html: string) => void; weekStartDate?: Date }) {
   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
   const [activeDisolucionTab, setActiveDisolucionTab] = useState<string>('disolucion');
   const [activeResumenTab, setActiveResumenTab] = useState<string>('semanal');
@@ -1747,11 +1785,11 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                         </div>
 
                         <TabsContent value="r-estandar-mes" className="m-0 animate-in fade-in-50 duration-500">
-                          <REstandarMesTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} realKgPerSack={realKgPerSack} />
+                          <REstandarMesTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} realKgPerSack={realKgPerSack} onPrintMonthlyStandard={onPrintMonthlyStandard} />
                         </TabsContent>
 
                         <TabsContent value="r-promedio-mes" className="m-0 animate-in fade-in-50 duration-500">
-                          <RPromedioMesTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} />
+                          <RPromedioMesTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} onPrintMonthlyPromedio={onPrintMonthlyPromedio} />
                         </TabsContent>
                       </Tabs>
                     </TabsContent>
