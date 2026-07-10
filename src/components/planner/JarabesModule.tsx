@@ -104,7 +104,7 @@ function RealKgPerSackInput({ selectedFecha, value, onChange }: { selectedFecha?
   );
 }
 
-function CostoAzucarInput({ selectedFecha, onUpdate }: { selectedFecha?: Date; onUpdate?: () => void }) {
+function CostoAzucarInput({ selectedFecha, onUpdate, onChange }: { selectedFecha?: Date; onUpdate?: () => void; onChange?: (value: number | undefined) => void }) {
   const storageKey = selectedFecha ? `jarabes-costo-azucar-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   const [value, setValue] = useState<string>('');
 
@@ -139,6 +139,9 @@ function CostoAzucarInput({ selectedFecha, onUpdate }: { selectedFecha?: Date; o
     } catch {
       // ignore
     }
+
+    const num = Number(trimmed);
+    onChange?.(trimmed && Number.isFinite(num) ? num : undefined);
 
     onUpdate?.();
   };
@@ -1063,7 +1066,7 @@ function getRealKgPerSackForDate(fecha: Date): number {
   return 50;
 }
 
-function RPromedioSemTable({ selectedFecha, costoAzucar, onPrintWeeklyPromedio }: { selectedFecha?: Date; costoAzucar?: number; onPrintWeeklyPromedio?: (html: string) => void }) {
+function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCounter, onPrintWeeklyPromedio }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; updateCounter?: number; onPrintWeeklyPromedio?: (html: string) => void }) {
   const weekDays = useMemo(() => (selectedFecha ? getWeekDays(selectedFecha) : []), [selectedFecha]);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -1082,7 +1085,7 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, onPrintWeeklyPromedio }
         merma,
       };
     });
-  }, [weekDays, costoAzucar]);
+  }, [weekDays, costoAzucar, realKgPerSack, updateCounter]);
 
   const totals = useMemo(() => {
     const totalEstandar = rows.reduce((sum, r) => sum + r.estandar, 0);
@@ -1414,7 +1417,7 @@ function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintM
   );
 }
 
-function RPromedioMesTable({ selectedFecha, costoAzucar, onPrintMonthlyPromedio }: { selectedFecha?: Date; costoAzucar?: number; onPrintMonthlyPromedio?: (html: string) => void }) {
+function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCounter, onPrintMonthlyPromedio }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; updateCounter?: number; onPrintMonthlyPromedio?: (html: string) => void }) {
   const weeks = useMemo(() => (selectedFecha ? getWeeksInMonth(selectedFecha) : []), [selectedFecha]);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -1447,7 +1450,7 @@ function RPromedioMesTable({ selectedFecha, costoAzucar, onPrintMonthlyPromedio 
         merma,
       };
     });
-  }, [weeks, costoAzucar]);
+  }, [weeks, costoAzucar, realKgPerSack, updateCounter]);
 
   const totals = useMemo(() => {
     const totalEstandar = rows.reduce((sum, r) => sum + r.estandar, 0);
@@ -1753,7 +1756,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                           </TabsTrigger>
                         </TabsList>
                       </div>
-                      <CostoAzucarInput selectedFecha={selectedFecha} onUpdate={() => setUpdateCounter(c => c + 1)} />
+                      <CostoAzucarInput selectedFecha={selectedFecha} onChange={setCostoAzucar} onUpdate={() => setUpdateCounter(c => c + 1)} />
                     </div>
 
                     <TabsContent value="semanal" className="m-0 animate-in fade-in-50 duration-500">
@@ -1774,7 +1777,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                         </TabsContent>
 
                         <TabsContent value="r-promedio-sem" className="m-0 animate-in fade-in-50 duration-500">
-                          <RPromedioSemTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} onPrintWeeklyPromedio={onPrintWeeklyPromedio} />
+                          <RPromedioSemTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} realKgPerSack={realKgPerSack} updateCounter={updateCounter} onPrintWeeklyPromedio={onPrintWeeklyPromedio} />
                         </TabsContent>
                       </Tabs>
                     </TabsContent>
@@ -1797,7 +1800,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                         </TabsContent>
 
                         <TabsContent value="r-promedio-mes" className="m-0 animate-in fade-in-50 duration-500">
-                          <RPromedioMesTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} onPrintMonthlyPromedio={onPrintMonthlyPromedio} />
+                          <RPromedioMesTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} realKgPerSack={realKgPerSack} updateCounter={updateCounter} onPrintMonthlyPromedio={onPrintMonthlyPromedio} />
                         </TabsContent>
                       </Tabs>
                     </TabsContent>
