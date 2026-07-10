@@ -877,12 +877,13 @@ function computeResumenForDate(fecha: Date, kgPerSack: number) {
 
 const DIAS_SEMANA = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
 
-function REstandarSemTable({ selectedFecha, costoAzucar }: { selectedFecha?: Date; costoAzucar?: number }) {
+function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number }) {
   const weekDays = useMemo(() => (selectedFecha ? getWeekDays(selectedFecha) : []), [selectedFecha]);
 
   const rows = useMemo(() => {
     return weekDays.map((fecha, idx) => {
-      const resumen = computeResumenForDate(fecha, 50);
+      const dayKgPerSack = realKgPerSack ?? 50;
+      const resumen = computeResumenForDate(fecha, dayKgPerSack);
       const merma = costoAzucar ? Math.round(resumen.diferencia * costoAzucar * 100) / 100 : 0;
       return {
         fecha: format(fecha, 'd/M/yyyy'),
@@ -894,7 +895,7 @@ function REstandarSemTable({ selectedFecha, costoAzucar }: { selectedFecha?: Dat
         merma,
       };
     });
-  }, [weekDays, costoAzucar]);
+  }, [weekDays, costoAzucar, realKgPerSack]);
 
   const isEmpty = weekDays.length === 0;
 
@@ -915,6 +916,89 @@ function REstandarSemTable({ selectedFecha, costoAzucar }: { selectedFecha?: Dat
         <tbody>
           {rows.map((row, idx) => (
             <tr key={row.fecha} className={idx % 2 === 0 ? 'bg-blue-50' : 'bg-white'}>
+              <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700">{row.fecha}</td>
+              <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700">{row.dia}</td>
+              <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                {row.estandar.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </td>
+              <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                {row.fisico.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </td>
+              <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                {row.diferencia.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              </td>
+              <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                {row.porcentaje !== 0 ? `${row.porcentaje}%` : '0%'}
+              </td>
+              <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                {row.merma !== 0 ? row.merma.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      {isEmpty && (
+        <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-widest text-slate-400 border-t border-slate-200 bg-white">
+          Sin datos para la semana seleccionada
+        </div>
+      )}
+    </div>
+  );
+}
+
+function getRealKgPerSackForDate(fecha: Date): number {
+  const storageKey = `jarabes-real-kg-per-sack-${format(fecha, 'yyyy-MM-dd')}`;
+  try {
+    const saved = localStorage.getItem(storageKey);
+    if (saved) {
+      const parsed = Number(saved);
+      if (Number.isFinite(parsed) && parsed > 0) return parsed;
+    }
+  } catch {
+    // ignore
+  }
+  return 50;
+}
+
+function RPromedioSemTable({ selectedFecha, costoAzucar }: { selectedFecha?: Date; costoAzucar?: number }) {
+  const weekDays = useMemo(() => (selectedFecha ? getWeekDays(selectedFecha) : []), [selectedFecha]);
+
+  const rows = useMemo(() => {
+    return weekDays.map((fecha, idx) => {
+      const dayKgPerSack = getRealKgPerSackForDate(fecha);
+      const resumen = computeResumenForDate(fecha, dayKgPerSack);
+      const merma = costoAzucar ? Math.round(resumen.diferencia * costoAzucar * 100) / 100 : 0;
+      return {
+        fecha: format(fecha, 'd/M/yyyy'),
+        dia: DIAS_SEMANA[idx],
+        estandar: resumen.estandar,
+        fisico: resumen.fisico,
+        diferencia: resumen.diferencia,
+        porcentaje: resumen.porcentaje,
+        merma,
+      };
+    });
+  }, [weekDays, costoAzucar]);
+
+  const isEmpty = weekDays.length === 0;
+
+  return (
+    <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
+      <table className="w-full border-collapse text-center">
+        <thead>
+          <tr className="bg-emerald-700 text-white">
+            <th className="border border-emerald-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Fecha</th>
+            <th className="border border-emerald-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Día</th>
+            <th className="border border-emerald-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Estandar</th>
+            <th className="border border-emerald-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Fisico</th>
+            <th className="border border-emerald-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Diferencia</th>
+            <th className="border border-emerald-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">%</th>
+            <th className="border border-emerald-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Merma $</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, idx) => (
+            <tr key={row.fecha} className={idx % 2 === 0 ? 'bg-emerald-50' : 'bg-white'}>
               <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700">{row.fecha}</td>
               <td className="border border-slate-200 px-2 py-1 text-[10px] font-bold text-slate-700">{row.dia}</td>
               <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
@@ -1132,9 +1216,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                         </TabsContent>
 
                         <TabsContent value="r-promedio-sem" className="m-0 animate-in fade-in-50 duration-500">
-                          <div className="border border-dashed border-slate-200 rounded-[2rem] bg-white/50 p-12 flex items-center justify-center min-h-[300px]">
-                            <p className="text-xs font-bold uppercase tracking-widest text-slate-400">Sección R promedio sem en desarrollo</p>
-                          </div>
+                          <RPromedioSemTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} />
                         </TabsContent>
                       </Tabs>
                     </TabsContent>
