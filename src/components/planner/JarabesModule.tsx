@@ -1022,8 +1022,10 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
         </div>
       )}
 
+      <div className="h-8 print:h-16"></div>
+
       {!isEmpty && (
-        <div className="mt-4 print:mt-8 border border-slate-300 rounded-xl overflow-hidden bg-white p-4">
+        <div className="border border-slate-300 rounded-xl overflow-hidden bg-white p-4">
           <ResponsiveContainer width="100%" height={260}>
             <ComposedChart data={rows.map(r => ({ dia: r.dia, estandar: r.estandar, fisico: r.fisico, porcentaje: r.porcentaje }))}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -1201,8 +1203,10 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, onPrintWeeklyPromedio }
         </div>
       )}
 
+      <div className="h-8 print:h-16"></div>
+
       {!isEmpty && (
-        <div className="mt-4 print:mt-8 border border-slate-300 rounded-xl overflow-hidden bg-white p-4">
+        <div className="border border-slate-300 rounded-xl overflow-hidden bg-white p-4">
           <ResponsiveContainer width="100%" height={260}>
             <ComposedChart data={rows.map(r => ({ dia: r.dia, estandar: r.estandar, fisico: r.fisico, porcentaje: r.porcentaje }))}>
               <CartesianGrid strokeDasharray="3 3" />
