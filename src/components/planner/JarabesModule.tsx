@@ -926,7 +926,7 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
   };
 
   return (
-    <div ref={containerRef} className="space-y-3">
+    <div ref={containerRef} className="space-y-4 print:space-y-8">
       <div className="flex justify-end">
         <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
           Imprimir PDF
@@ -1023,7 +1023,7 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
       )}
 
       {!isEmpty && (
-        <div className="mt-3 border border-slate-300 rounded-xl overflow-hidden bg-white p-4">
+        <div className="mt-4 print:mt-8 border border-slate-300 rounded-xl overflow-hidden bg-white p-4">
           <ResponsiveContainer width="100%" height={260}>
             <ComposedChart data={rows.map(r => ({ dia: r.dia, estandar: r.estandar, fisico: r.fisico, porcentaje: r.porcentaje }))}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -1202,7 +1202,7 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, onPrintWeeklyPromedio }
       )}
 
       {!isEmpty && (
-        <div className="mt-3 border border-slate-300 rounded-xl overflow-hidden bg-white p-4">
+        <div className="mt-4 print:mt-8 border border-slate-300 rounded-xl overflow-hidden bg-white p-4">
           <ResponsiveContainer width="100%" height={260}>
             <ComposedChart data={rows.map(r => ({ dia: r.dia, estandar: r.estandar, fisico: r.fisico, porcentaje: r.porcentaje }))}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -1211,8 +1211,8 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, onPrintWeeklyPromedio }
               <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 10 }} domain={[-0.5, 0.7]} />
               <Tooltip formatter={(value: any, name: any) => [typeof value === 'number' ? value.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : value, name === 'porcentaje' ? `${value}%` : name]} />
               <Legend wrapperStyle={{ fontSize: 10 }} />
-              <Bar yAxisId="left" dataKey="estandar" fill="#2563eb" name="ESTANDAR" barSize={18} />
-              <Bar yAxisId="left" dataKey="fisico" fill="#16a34a" name="FISICO" barSize={18} />
+              <Bar yAxisId="left" dataKey="estandar" fill="#16a34a" name="ESTANDAR" barSize={18} />
+              <Bar yAxisId="left" dataKey="fisico" fill="#2563eb" name="FISICO" barSize={18} />
               <Line yAxisId="right" type="monotone" dataKey="porcentaje" stroke="#dc2626" name="%" strokeWidth={2} />
             </ComposedChart>
           </ResponsiveContainer>
