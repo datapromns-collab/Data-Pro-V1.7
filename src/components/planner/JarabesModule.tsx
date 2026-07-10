@@ -916,6 +916,9 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
 
   const isEmpty = weekDays.length === 0;
 
+  const semanaNumero = selectedFecha ? format(selectedFecha, 'w', { locale: es }) : '';
+  const mesNombre = selectedFecha ? format(selectedFecha, 'MMMM', { locale: es }) : '';
+
   const handlePrint = () => {
     if (!containerRef.current || !onPrintWeeklyStandard) return;
     const html = containerRef.current.innerHTML;
@@ -928,6 +931,12 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
         <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
           Imprimir PDF
         </Button>
+      </div>
+
+      <div className="print-only">
+        <h1 className="text-center text-lg font-black text-slate-900 uppercase tracking-widest mb-1">Resumen de Azucar Semanal</h1>
+        <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-1">Semana {semanaNumero}</p>
+        <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-3">Mes {mesNombre.toUpperCase()}</p>
       </div>
       <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
         <table className="w-full border-collapse text-center">
@@ -1084,6 +1093,9 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, onPrintWeeklyPromedio }
 
   const isEmpty = weekDays.length === 0;
 
+  const semanaNumero = selectedFecha ? format(selectedFecha, 'w', { locale: es }) : '';
+  const mesNombre = selectedFecha ? format(selectedFecha, 'MMMM', { locale: es }) : '';
+
   const handlePrint = () => {
     if (!containerRef.current || !onPrintWeeklyPromedio) return;
     const html = containerRef.current.innerHTML;
@@ -1096,6 +1108,12 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, onPrintWeeklyPromedio }
         <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
           Imprimir PDF
         </Button>
+      </div>
+
+      <div className="print-only">
+        <h1 className="text-center text-lg font-black text-slate-900 uppercase tracking-widest mb-1">Resumen de Azucar Semanal</h1>
+        <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-1">Semana {semanaNumero}</p>
+        <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-3">Mes {mesNombre.toUpperCase()}</p>
       </div>
       <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
         <table className="w-full border-collapse text-center">
