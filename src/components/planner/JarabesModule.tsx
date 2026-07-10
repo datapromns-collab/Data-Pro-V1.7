@@ -271,8 +271,8 @@ function UbbTable({ mode, selectedFecha, onUpdate }: { mode: 'estandar' | 'prome
             const inicial = getNumber(sabor, 'inicial');
             const preparado = getNumber(sabor, 'preparado');
             const final = getNumber(sabor, 'final');
-            const disponible = inicial + preparado;
-            const consumo = Math.max(0, disponible - final);
+            const disponible = Math.round((inicial + preparado) * 100) / 100;
+            const consumo = Math.round(Math.max(0, disponible - final) * 100) / 100;
 
             return (
               <tr key={sabor} className={idx % 2 === 0 ? rowEvenBg : 'bg-white'}>
