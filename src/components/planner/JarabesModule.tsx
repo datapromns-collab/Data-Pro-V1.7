@@ -915,7 +915,7 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack }: { sele
   const isEmpty = weekDays.length === 0;
 
   return (
-    <div className="space-y-0">
+    <div className="space-y-3">
       <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
         <table className="w-full border-collapse text-center">
           <thead>
@@ -961,35 +961,35 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack }: { sele
       </div>
 
       {!isEmpty && (
-        <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
+        <div className="border border-yellow-400 rounded-xl overflow-hidden bg-white">
           <table className="w-full border-collapse text-center">
             <thead>
-              <tr className="bg-blue-900 text-white">
-                <th className="border border-blue-800 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Fecha</th>
-                <th className="border border-blue-800 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Día</th>
-                <th className="border border-blue-800 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Estandar</th>
-                <th className="border border-blue-800 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Fisico</th>
-                <th className="border border-blue-800 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Diferencia</th>
-                <th className="border border-blue-800 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">%</th>
-                <th className="border border-blue-800 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Merma $</th>
+              <tr className="bg-yellow-500 text-white">
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Fecha</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Día</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Estandar</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Fisico</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Diferencia</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">%</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Merma $</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="bg-blue-100">
-                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700" colSpan={2}>TOTAL SEMANA</td>
-                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+              <tr className="bg-yellow-100">
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700" colSpan={2}>TOTAL SEMANA</td>
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
                   {totals.estandar.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </td>
-                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
                   {totals.fisico.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </td>
-                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
                   {totals.diferencia.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </td>
-                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
                   {totals.porcentaje !== 0 ? `${totals.porcentaje}%` : '0%'}
                 </td>
-                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
                   {totals.merma !== 0 ? totals.merma.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
                 </td>
               </tr>
@@ -1053,7 +1053,7 @@ function RPromedioSemTable({ selectedFecha, costoAzucar }: { selectedFecha?: Dat
   const isEmpty = weekDays.length === 0;
 
   return (
-    <div className="space-y-0">
+    <div className="space-y-3">
       <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
         <table className="w-full border-collapse text-center">
           <thead>
@@ -1099,35 +1099,35 @@ function RPromedioSemTable({ selectedFecha, costoAzucar }: { selectedFecha?: Dat
       </div>
 
       {!isEmpty && (
-        <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
+        <div className="border border-yellow-400 rounded-xl overflow-hidden bg-white">
           <table className="w-full border-collapse text-center">
             <thead>
-              <tr className="bg-emerald-900 text-white">
-                <th className="border border-emerald-800 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Fecha</th>
-                <th className="border border-emerald-800 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Día</th>
-                <th className="border border-emerald-800 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Estandar</th>
-                <th className="border border-emerald-800 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Fisico</th>
-                <th className="border border-emerald-800 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Diferencia</th>
-                <th className="border border-emerald-800 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">%</th>
-                <th className="border border-emerald-800 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Merma $</th>
+              <tr className="bg-yellow-500 text-white">
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Fecha</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Día</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Estandar</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Fisico</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Diferencia</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">%</th>
+                <th className="border border-yellow-400 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Merma $</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="bg-emerald-100">
-                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700" colSpan={2}>TOTAL SEMANA</td>
-                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+              <tr className="bg-yellow-100">
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700" colSpan={2}>TOTAL SEMANA</td>
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
                   {totals.estandar.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </td>
-                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
                   {totals.fisico.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </td>
-                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
                   {totals.diferencia.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </td>
-                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
                   {totals.porcentaje !== 0 ? `${totals.porcentaje}%` : '0%'}
                 </td>
-                <td className="border border-slate-200 px-2 py-1 text-[10px] font-black text-slate-700">
+                <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
                   {totals.merma !== 0 ? totals.merma.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0.00'}
                 </td>
               </tr>
