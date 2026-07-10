@@ -1311,25 +1311,18 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                       </TabsTrigger>
                     </TabsList>
                   </div>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
-                      >
-                        <CalendarIcon className="h-3.5 w-3.5 mr-2" />
-                        {selectedFecha ? format(selectedFecha, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar día"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0 rounded-md" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={selectedFecha}
-                        onSelect={(date) => date && setSelectedFecha(date)}
-                        locale={es}
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <input
+                    type="date"
+                    value={selectedFecha ? format(selectedFecha, 'yyyy-MM-dd') : ''}
+                    onChange={(e) => {
+                      const raw = e.target.value;
+                      if (!raw) return;
+                      const [year, month, day] = raw.split('-').map(Number);
+                      const date = new Date(year, month - 1, day);
+                      setSelectedFecha(date);
+                    }}
+                    className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                  />
                 </div>
 
                 <TabsContent value="estandar" className="m-0 animate-in fade-in-50 duration-500">
