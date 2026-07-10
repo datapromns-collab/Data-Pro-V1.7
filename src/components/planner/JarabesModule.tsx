@@ -1349,6 +1349,10 @@ function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintM
       </div>
 
       {!isEmpty && (
+        <div className="print-spacer h-4"></div>
+      )}
+
+      {!isEmpty && (
         <div className="border border-yellow-400 rounded-xl overflow-hidden bg-white">
           <table className="w-full border-collapse text-center">
             <thead>
@@ -1523,6 +1527,10 @@ function RPromedioMesTable({ selectedFecha, costoAzucar, onPrintMonthlyPromedio 
           </div>
         )}
       </div>
+
+      {!isEmpty && (
+        <div className="print-spacer h-4"></div>
+      )}
 
       {!isEmpty && (
         <div className="border border-slate-400 rounded-xl overflow-hidden bg-white">
