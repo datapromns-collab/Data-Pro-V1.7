@@ -667,16 +667,16 @@ function TanquesTable({ selectedFecha, realKgPerSack, theme = 'teal', onUpdate }
   );
 }
 
-function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50, updateCounter = 0, costoAzucar }: { selectedFecha?: Date; theme?: 'amber' | 'gold'; kgPerSack?: number; updateCounter?: number; costoAzucar?: number }) {
+function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50, updateCounter = 0, costoAzucar }: { selectedFecha?: Date; theme?: 'amber' | 'gold' | 'gray'; kgPerSack?: number; updateCounter?: number; costoAzucar?: number }) {
   const ubbStorageKey = selectedFecha ? `jarabes-ubb-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   const sugarStorageKey = selectedFecha ? `jarabes-sugar-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   const tanquesStorageKey = selectedFecha ? `jarabes-tanques-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
   const [estandar, setEstandar] = useState<number>(0);
   const [fisico, setFisico] = useState<number>(0);
 
-  const headerBg = theme === 'gold' ? 'bg-yellow-600' : 'bg-slate-700';
-  const headerBorder = theme === 'gold' ? 'border-yellow-600' : 'border-slate-700';
-  const rowBg = theme === 'gold' ? 'bg-yellow-50' : 'bg-slate-50';
+  const headerBg = theme === 'gold' ? 'bg-yellow-600' : theme === 'gray' ? 'bg-slate-500' : 'bg-slate-700';
+  const headerBorder = theme === 'gold' ? 'border-yellow-600' : theme === 'gray' ? 'border-slate-400' : 'border-slate-700';
+  const rowBg = theme === 'gold' ? 'bg-yellow-50' : theme === 'gray' ? 'bg-slate-50' : 'bg-slate-50';
 
   useEffect(() => {
     if (!selectedFecha || !ubbStorageKey) {
@@ -1325,7 +1325,7 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
                     </div>
                     <SugarTable selectedFecha={selectedFecha} mode="promedio" realKgPerSack={realKgPerSack} onUpdate={() => setUpdateCounter(c => c + 1)} />
                     <TanquesTable selectedFecha={selectedFecha} realKgPerSack={realKgPerSack} theme="gold" onUpdate={() => setUpdateCounter(c => c + 1)} />
-                    <ResumenTable selectedFecha={selectedFecha} theme="gold" kgPerSack={realKgPerSack ?? 50} updateCounter={updateCounter} />
+                    <ResumenTable selectedFecha={selectedFecha} theme="gray" kgPerSack={realKgPerSack ?? 50} updateCounter={updateCounter} />
                   </div>
                 </TabsContent>
 
