@@ -9,6 +9,7 @@ import { Beaker, Pipette, Activity, FileSpreadsheet, TrendingUp, ScrollText, Cal
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { getWeekDays } from '@/lib/planner-utils';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line, ComposedChart } from 'recharts';
 
 const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
@@ -997,6 +998,24 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack }: { sele
           </table>
         </div>
       )}
+
+      {!isEmpty && (
+        <div className="mt-3 border border-slate-300 rounded-xl overflow-hidden bg-white p-4">
+          <ResponsiveContainer width="100%" height={260}>
+            <ComposedChart data={rows.map(r => ({ dia: r.dia, estandar: r.estandar, fisico: r.fisico, porcentaje: r.porcentaje }))}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="dia" tick={{ fontSize: 10 }} />
+              <YAxis yAxisId="left" tick={{ fontSize: 10 }} />
+              <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 10 }} domain={[-0.5, 0.7]} />
+              <Tooltip formatter={(value: any, name: any) => [typeof value === 'number' ? value.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : value, name === 'porcentaje' ? `${value}%` : name]} />
+              <Legend wrapperStyle={{ fontSize: 10 }} />
+              <Bar yAxisId="left" dataKey="estandar" fill="#2563eb" name="ESTANDAR" barSize={18} />
+              <Bar yAxisId="left" dataKey="fisico" fill="#16a34a" name="FISICO" barSize={18} />
+              <Line yAxisId="right" type="monotone" dataKey="porcentaje" stroke="#dc2626" name="%" strokeWidth={2} />
+            </ComposedChart>
+          </ResponsiveContainer>
+        </div>
+      )}
     </div>
   );
 }
@@ -1133,6 +1152,24 @@ function RPromedioSemTable({ selectedFecha, costoAzucar }: { selectedFecha?: Dat
               </tr>
             </tbody>
           </table>
+        </div>
+      )}
+
+      {!isEmpty && (
+        <div className="mt-3 border border-slate-300 rounded-xl overflow-hidden bg-white p-4">
+          <ResponsiveContainer width="100%" height={260}>
+            <ComposedChart data={rows.map(r => ({ dia: r.dia, estandar: r.estandar, fisico: r.fisico, porcentaje: r.porcentaje }))}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="dia" tick={{ fontSize: 10 }} />
+              <YAxis yAxisId="left" tick={{ fontSize: 10 }} />
+              <YAxis yAxisId="right" orientation="right" tick={{ fontSize: 10 }} domain={[-0.5, 0.7]} />
+              <Tooltip formatter={(value: any, name: any) => [typeof value === 'number' ? value.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : value, name === 'porcentaje' ? `${value}%` : name]} />
+              <Legend wrapperStyle={{ fontSize: 10 }} />
+              <Bar yAxisId="left" dataKey="estandar" fill="#2563eb" name="ESTANDAR" barSize={18} />
+              <Bar yAxisId="left" dataKey="fisico" fill="#16a34a" name="FISICO" barSize={18} />
+              <Line yAxisId="right" type="monotone" dataKey="porcentaje" stroke="#dc2626" name="%" strokeWidth={2} />
+            </ComposedChart>
+          </ResponsiveContainer>
         </div>
       )}
     </div>
