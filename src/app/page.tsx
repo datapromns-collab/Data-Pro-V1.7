@@ -86,6 +86,7 @@ const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Lín
 const TIPOS_PARADA = ["MECÁNICO", "ELÉCTRICO", "PROCESO", "CAMBIO DE PRODUCTO", "CAMBIO DE FORMATO", "MANTENIMIENTO PREVENTIVO", "FALLA DE MATERIA PRIMA"];
 const ZONAS = ["Llenado", "Etiquetado", "Empaque", "Preforma", "Soplado", "Lavado CIP", "Almacén", "General"];
 const EQUIPOS = ["Llenadora", "Etiquetadora", "Empacadora", "Sopladora", "CIP", "Tanque CIP", "Transportador", "Montacargas"];
+const EQUIPOS_INFORME_OPERACIONAL = ["CHILLER", "SOPLADORA", "TRANSPORTADOR AÉREO", "MIXER", "LLENADORA", "TAPADORA", "SECADOR DE BOTELLAS", "ETIQUETADORA", "CODIFICADOR", "TRANSPORTADOR DE BOTELLAS", "ENFARDADORA", "TRANSPORTADOR DE CAJAS", "PALETIZADORA", "ENVOLVEDORA"];
 
 const mockOrdenesTrabajo: any[] = [
   {
@@ -1873,12 +1874,12 @@ export default function PlannerPage() {
                     {LINES.map((l) => <option key={l} value={l}>{l}</option>)}
                   </select>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Equipo</label>
-                  <select value={plantaFormData.equipo} onChange={(e) => setPlantaFormData({...plantaFormData, equipo: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
-                    {EQUIPOS.map((e) => <option key={e} value={e}>{e}</option>)}
-                  </select>
-                </div>
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Equipo</label>
+                   <select value={plantaFormData.equipo} onChange={(e) => setPlantaFormData({...plantaFormData, equipo: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                     {EQUIPOS_INFORME_OPERACIONAL.map((e) => <option key={e} value={e}>{e}</option>)}
+                   </select>
+                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Tipo de Parada</label>
                   <select value={plantaFormData.tipoParada} onChange={(e) => setPlantaFormData({...plantaFormData, tipoParada: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
@@ -1959,7 +1960,7 @@ export default function PlannerPage() {
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Máquina</label>
                     <select value={ordenFormData.maquina} onChange={(e) => setOrdenFormData({...ordenFormData, maquina: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
-                      {EQUIPOS.map((e) => <option key={e} value={e}>{e}</option>)}
+                      {EQUIPOS_INFORME_OPERACIONAL.map((e) => <option key={e} value={e}>{e}</option>)}
                     </select>
                   </div>
                  <div className="space-y-2">
