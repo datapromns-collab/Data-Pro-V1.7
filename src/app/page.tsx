@@ -84,6 +84,7 @@ import { cn } from '@/lib/utils';
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7", "Línea 8"];
 
 const TIPOS_PARADA = ["MECÁNICO", "ELÉCTRICO", "PROCESO", "CAMBIO DE PRODUCTO", "CAMBIO DE FORMATO", "MANTENIMIENTO PREVENTIVO", "FALLA DE MATERIA PRIMA"];
+const TIPOS_PARADA_INFORME_OPERACIONAL = ["PROGRAMADA", "AVERÍA", "OPERACIONAL", "AUSENTISMO", "FALLA DE E/E", "ADECUACIONES", "SALA DE MÁQUINAS", "SALA DE JARABE", "PTAB", "INSUMOS", "CALIDAD"];
 const ZONAS = ["Llenado", "Etiquetado", "Empaque", "Preforma", "Soplado", "Lavado CIP", "Almacén", "General"];
 const EQUIPOS = ["Llenadora", "Etiquetadora", "Empacadora", "Sopladora", "CIP", "Tanque CIP", "Transportador", "Montacargas"];
 const EQUIPOS_INFORME_OPERACIONAL = ["CHILLER", "SOPLADORA", "TRANSPORTADOR AÉREO", "MIXER", "LLENADORA", "TAPADORA", "SECADOR DE BOTELLAS", "ETIQUETADORA", "CODIFICADOR", "TRANSPORTADOR DE BOTELLAS", "ENFARDADORA", "TRANSPORTADOR DE CAJAS", "PALETIZADORA", "ENVOLVEDORA"];
@@ -1882,9 +1883,9 @@ export default function PlannerPage() {
                  </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Tipo de Parada</label>
-                  <select value={plantaFormData.tipoParada} onChange={(e) => setPlantaFormData({...plantaFormData, tipoParada: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
-                    {TIPOS_PARADA.map((t) => <option key={t} value={t}>{t}</option>)}
-                  </select>
+                   <select value={plantaFormData.tipoParada} onChange={(e) => setPlantaFormData({...plantaFormData, tipoParada: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                     {TIPOS_PARADA_INFORME_OPERACIONAL.map((t) => <option key={t} value={t}>{t}</option>)}
+                   </select>
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Zona</label>
@@ -2031,15 +2032,15 @@ export default function PlannerPage() {
               <Button onClick={() => {
                 if (paradasSubTab === 'informes-operacionales') {
                   setInformesOperacionales([...informesOperacionales, { ...plantaFormData, id: Date.now() }]);
-                   setPlantaFormData({
-                     fecha: format(new Date(), 'yyyy-MM-dd'),
-                     semana: getISOWeek(new Date()),
-                     turno: 'DIURNO',
-                     operador: '',
-                    linea: 'Línea 1',
-                    equipo: '',
-                    tipoParada: 'MECÁNICO',
-                    inicioParada: '',
+                    setPlantaFormData({
+                      fecha: format(new Date(), 'yyyy-MM-dd'),
+                      semana: getISOWeek(new Date()),
+                      turno: 'DIURNO',
+                      operador: '',
+                     linea: 'Línea 1',
+                     equipo: '',
+                     tipoParada: 'PROGRAMADA',
+                     inicioParada: '',
                     finParada: '',
                     totalMin: '',
                     zona: 'Llenado',
@@ -2065,7 +2066,7 @@ export default function PlannerPage() {
                      inicioParada: '',
                      finParada: '',
                      tMtto: '',
-                     tipoParada: 'MECÁNICO',
+    tipoParada: 'PROGRAMADA',
                      mtto: 'CORRECTIVO',
                      falla: '',
                      mttoEsp: 'MTTO',
