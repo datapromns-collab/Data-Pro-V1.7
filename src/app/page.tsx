@@ -217,12 +217,29 @@ export default function PlannerPage() {
 
   const { toast } = useToast();
 
+  const toMin = (t: string) => {
+    if (!t) return null;
+    const [h, m] = t.split(':').map(Number);
+    if (Number.isNaN(h) || Number.isNaN(m)) return null;
+    return h * 60 + m;
+  };
+
+  const seSolapan = (aInicio: string, aFin: string, bInicio: string, bFin: string) => {
+    const ai = toMin(aInicio);
+    const af = toMin(aFin);
+    const bi = toMin(bInicio);
+    const bf = toMin(bFin);
+    if (ai === null || af === null || bi === null || bf === null) return false;
+    return ai < bf && af > bi;
+  };
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPlantaDialogOpen, setIsPlantaDialogOpen] = useState(false);
   const [informesOperacionales, setInformesOperacionales] = useState<any[]>([]);
   const [ordenesTrabajo, setOrdenesTrabajo] = useState<any[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<any>({});
+  const [errorValidacion, setErrorValidacion] = useState<string>('');
   const [activeModule, setActiveModule] = useState('planning');
   const [activeTab, setActiveTab] = useState('gantt');
   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
@@ -1444,28 +1461,38 @@ export default function PlannerPage() {
                                                <TableCell className="px-2 py-2"><Input value={editForm.linea || ''} onChange={(e) => setEditForm({...editForm, linea: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                <TableCell className="px-2 py-2"><Input value={editForm.equipo || ''} onChange={(e) => setEditForm({...editForm, equipo: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                <TableCell className="px-2 py-2"><Input value={editForm.tipoParada || ''} onChange={(e) => setEditForm({...editForm, tipoParada: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                               <TableCell className="px-2 py-2"><Input type="time" value={editForm.inicioParada || ''} onChange={(e) => setEditForm({...editForm, inicioParada: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                               <TableCell className="px-2 py-2"><Input type="time" value={editForm.finParada || ''} onChange={(e) => setEditForm({...editForm, finParada: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                               <TableCell className="px-2 py-2"><Input type="number" value={editForm.totalMin ?? ''} onChange={(e) => setEditForm({...editForm, totalMin: e.target.value})} className="h-8 text-[10px] w-20" /></TableCell>
+                                                <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="time" value={editForm.inicioParada || ''} onChange={(e) => setEditForm({...editForm, inicioParada: e.target.value})} className="h-8 text-[10px] w-24" /></TableCell>
+                                                <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="time" value={editForm.finParada || ''} onChange={(e) => setEditForm({...editForm, finParada: e.target.value})} className="h-8 text-[10px] w-24" /></TableCell>
+                                                <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" value={editForm.totalMin ?? ''} readOnly className="h-8 text-[10px] w-16 bg-slate-100" /></TableCell>
                                                <TableCell className="px-2 py-2"><Input value={editForm.zona || ''} onChange={(e) => setEditForm({...editForm, zona: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                <TableCell className="px-2 py-2 max-w-[180px]"><Input value={editForm.falla || ''} onChange={(e) => setEditForm({...editForm, falla: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
                                                <TableCell className="px-2 py-2"><Input value={editForm.orden || ''} onChange={(e) => setEditForm({...editForm, orden: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                <TableCell className="px-2 py-2 max-w-[200px]"><Input value={editForm.observaciones || ''} onChange={(e) => setEditForm({...editForm, observaciones: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
-                                               <TableCell className="px-2 py-2 flex items-center gap-1">
-                                                 <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
-                                                    const [h1, m1] = (editForm.inicioParada || '00:00').split(':').map(Number);
-                                                    const [h2, m2] = (editForm.finParada || '00:00').split(':').map(Number);
-                                                   let inicio = h1 * 60 + m1;
-                                                   let fin = h2 * 60 + m2;
-                                                   let diff = fin - inicio;
-                                                   if (diff < 0) diff += 1440;
-                                                   const updated = { ...editForm, totalMin: String(diff) };
-                                                   setInformesOperacionales(prev => prev.map(r => r.id === row.id ? updated : r));
-                                                   setEditingId(null);
-                                                   setEditForm({});
-                                                 }}><Check className="h-3.5 w-3.5" /></Button>
-                                                 <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => { setEditingId(null); setEditForm({}); }}><X className="h-3.5 w-3.5" /></Button>
-                                               </TableCell>
+                                                <TableCell className="px-2 py-2 flex items-center gap-1">
+                                                  <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
+                                                     if (!editForm.inicioParada || !editForm.finParada) {
+                                                       setErrorValidacion('Ingrese hora de inicio y fin de la parada.');
+                                                       return;
+                                                     }
+                                                     const duplicado = informesOperacionales.find(r => r.id !== row.id && r.fecha === editForm.fecha && r.linea === editForm.linea && seSolapan(r.inicioParada, r.finParada, editForm.inicioParada, editForm.finParada));
+                                                     if (duplicado) {
+                                                       setErrorValidacion('Ya existe una parada registrada en esta fecha, línea y horario que se solapa.');
+                                                       return;
+                                                     }
+                                                     const [h1, m1] = (editForm.inicioParada || '00:00').split(':').map(Number);
+                                                     const [h2, m2] = (editForm.finParada || '00:00').split(':').map(Number);
+                                                    let inicio = h1 * 60 + m1;
+                                                    let fin = h2 * 60 + m2;
+                                                    let diff = fin - inicio;
+                                                    if (diff < 0) diff += 1440;
+                                                    const updated = { ...editForm, totalMin: String(diff) };
+                                                    setInformesOperacionales(prev => prev.map(r => r.id === row.id ? updated : r));
+                                                    setEditingId(null);
+                                                    setEditForm({});
+                                                    setErrorValidacion('');
+                                                  }}><Check className="h-3.5 w-3.5" /></Button>
+                                                  <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => { setEditingId(null); setEditForm({}); setErrorValidacion(''); }}><X className="h-3.5 w-3.5" /></Button>
+                                                </TableCell>
                                              </>
                                            ) : (
                                              <>
@@ -1476,9 +1503,9 @@ export default function PlannerPage() {
                                                <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap">{row.linea}</TableCell>
                                                <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.equipo}</TableCell>
                                                <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.tipoParada}</TableCell>
-                                               <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.inicioParada}</TableCell>
-                                               <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.finParada}</TableCell>
-                                               <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums">{row.totalMin} min</TableCell>
+                                                <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums whitespace-nowrap">{row.inicioParada}</TableCell>
+                                                <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums whitespace-nowrap">{row.finParada}</TableCell>
+                                                <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums whitespace-nowrap">{row.totalMin} min</TableCell>
                                                <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.zona}</TableCell>
                                                <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.falla}>{row.falla}</TableCell>
                                                <TableCell className="px-2 py-2 text-[11px] font-mono text-slate-600 whitespace-nowrap">{row.orden}</TableCell>
@@ -1908,9 +1935,15 @@ export default function PlannerPage() {
               <DialogDescription>
                 Formulario para registrar datos en la subsección activa.
               </DialogDescription>
-            </DialogHeader>
+             </DialogHeader>
 
-            {paradasSubTab === 'informes-operacionales' ? (
+             {errorValidacion && (
+               <div className="text-red-600 text-[11px] font-bold uppercase tracking-wider bg-red-50 border border-red-200 rounded-md px-3 py-2">
+                 {errorValidacion}
+               </div>
+             )}
+
+             {paradasSubTab === 'informes-operacionales' ? (
               <div className="grid grid-cols-2 gap-4 py-4">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fecha</label>
@@ -2089,26 +2122,36 @@ export default function PlannerPage() {
               <Button variant="outline" onClick={() => setIsPlantaDialogOpen(false)} className="rounded-xl">
                 Cancelar
               </Button>
-              <Button onClick={() => {
-                if (paradasSubTab === 'informes-operacionales') {
-                  setInformesOperacionales([...informesOperacionales, { ...plantaFormData, id: Date.now() }]);
-                    setPlantaFormData({
-                      fecha: format(new Date(), 'yyyy-MM-dd'),
-                      semana: getISOWeek(new Date()),
-                      turno: 'DIURNO',
-                      operador: '',
-                     linea: 'Línea 1',
-                     equipo: '',
-                     tipoParada: 'PROGRAMADA',
-                     inicioParada: '',
-                    finParada: '',
-                    totalMin: '',
-                    zona: 'Llenado',
-                    falla: '',
-                    orden: '',
-                    observaciones: '',
-                  });
-                } else {
+               <Button onClick={() => {
+                 if (paradasSubTab === 'informes-operacionales') {
+                   if (!plantaFormData.inicioParada || !plantaFormData.finParada) {
+                     setErrorValidacion('Ingrese hora de inicio y fin de la parada.');
+                     return;
+                   }
+                   const duplicado = informesOperacionales.find(r => r.fecha === plantaFormData.fecha && r.linea === plantaFormData.linea && seSolapan(r.inicioParada, r.finParada, plantaFormData.inicioParada, plantaFormData.finParada));
+                   if (duplicado) {
+                     setErrorValidacion('Ya existe una parada registrada en esta fecha, línea y horario que se solapa.');
+                     return;
+                   }
+                   setInformesOperacionales([...informesOperacionales, { ...plantaFormData, id: Date.now() }]);
+                     setPlantaFormData({
+                       fecha: format(new Date(), 'yyyy-MM-dd'),
+                       semana: getISOWeek(new Date()),
+                       turno: 'DIURNO',
+                       operador: '',
+                      linea: 'Línea 1',
+                      equipo: '',
+                      tipoParada: 'PROGRAMADA',
+                      inicioParada: '',
+                     finParada: '',
+                     totalMin: '',
+                     zona: 'Llenado',
+                     falla: '',
+                     orden: '',
+                     observaciones: '',
+                   });
+                   setErrorValidacion('');
+                 } else {
                   setOrdenesTrabajo([...ordenesTrabajo, { ...ordenFormData, id: Date.now() }]);
                   setOrdenFormData({
                     fechaOrden: format(new Date(), 'yyyy-MM-dd'),
