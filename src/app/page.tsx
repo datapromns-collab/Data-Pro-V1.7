@@ -1887,12 +1887,10 @@ export default function PlannerPage() {
                      {TIPOS_PARADA_INFORME_OPERACIONAL.map((t) => <option key={t} value={t}>{t}</option>)}
                    </select>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Zona</label>
-                  <select value={plantaFormData.zona} onChange={(e) => setPlantaFormData({...plantaFormData, zona: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
-                    {ZONAS.map((z) => <option key={z} value={z}>{z}</option>)}
-                  </select>
-                </div>
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Zona</label>
+                   <Input value={plantaFormData.zona} onChange={(e) => setPlantaFormData({...plantaFormData, zona: e.target.value})} className="h-9 text-[11px]" placeholder="Ingrese zona" />
+                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Parada</label>
                   <Input type="time" value={plantaFormData.inicioParada} onChange={(e) => setPlantaFormData({...plantaFormData, inicioParada: e.target.value})} className="h-9 text-[11px]" />
