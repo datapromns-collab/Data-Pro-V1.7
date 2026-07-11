@@ -1476,7 +1476,7 @@ export default function PlannerPage() {
                                                      }
                                                      const duplicado = informesOperacionales.find(r => r.id !== row.id && r.fecha === editForm.fecha && r.linea === editForm.linea && seSolapan(r.inicioParada, r.finParada, editForm.inicioParada, editForm.finParada));
                                                      if (duplicado) {
-                                                       setErrorValidacion('Ya existe una parada registrada en esta fecha, línea y horario que se solapa.');
+                                                       setErrorValidacion(`Ya existe una parada registrada en esta fecha y línea de ${duplicado.inicioParada} a ${duplicado.finParada}.`);
                                                        return;
                                                      }
                                                      const [h1, m1] = (editForm.inicioParada || '00:00').split(':').map(Number);
@@ -2130,7 +2130,7 @@ export default function PlannerPage() {
                    }
                    const duplicado = informesOperacionales.find(r => r.fecha === plantaFormData.fecha && r.linea === plantaFormData.linea && seSolapan(r.inicioParada, r.finParada, plantaFormData.inicioParada, plantaFormData.finParada));
                    if (duplicado) {
-                     setErrorValidacion('Ya existe una parada registrada en esta fecha, línea y horario que se solapa.');
+                     setErrorValidacion(`Ya existe una parada registrada en esta fecha y línea de ${duplicado.inicioParada} a ${duplicado.finParada}.`);
                      return;
                    }
                    setInformesOperacionales([...informesOperacionales, { ...plantaFormData, id: Date.now() }]);
