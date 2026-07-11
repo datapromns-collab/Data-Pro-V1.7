@@ -1367,24 +1367,9 @@ export default function PlannerPage() {
                                       </div>
                                     </div>
                                   </PopoverContent>
-                                </Popover>
-                                <Input 
-                                  type="date" 
-                                  value={paradaFiltroFecha} 
-                                  onChange={(e) => setParadaFiltroFecha(e.target.value)}
-                                  className="h-9 text-[11px] w-44 bg-white"
-                                  placeholder="Filtrar fecha"
-                                />
-                                {paradaFiltroFecha && (
-                                  <button 
-                                    onClick={() => setParadaFiltroFecha('')}
-                                    className="h-9 px-3 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50"
-                                  >
-                                    Limpiar
-                                  </button>
-                                )}
-                               </div>
-                           </div>
+                                 </Popover>
+                                </div>
+                            </div>
                             {(isAdmin || hasAccess(user.id, 'planta')) && (
                              <button
                                onClick={() => setIsPlantaDialogOpen(true)}
@@ -1401,26 +1386,41 @@ export default function PlannerPage() {
                           <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                             {paradasSubTab === 'informes-operacionales' && (
                               <div className="flex flex-col h-full gap-3">
-                                <div className="flex items-center gap-3 no-print">
-                                  <Select value={paradaFiltroLinea} onValueChange={setParadaFiltroLinea}>
-                                    <SelectTrigger className="h-9 w-44 text-[10px] font-bold uppercase tracking-wider rounded-lg border-slate-200">
-                                      <SelectValue placeholder="Todas las líneas" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      <SelectItem value="all">Todas las líneas</SelectItem>
-                                      {LINES.map((l) => (
-                                        <SelectItem key={l} value={l}>{l}</SelectItem>
-                                      ))}
-                                    </SelectContent>
-                                  </Select>
-                                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                     {informesOperacionales.filter((r) => {
-                                       const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
-                                       const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
-                                       return matchLine && matchDate;
-                                     }).length} registros
-                                  </span>
-                                </div>
+                                 <div className="flex items-center gap-3 no-print">
+                                   <Select value={paradaFiltroLinea} onValueChange={setParadaFiltroLinea}>
+                                     <SelectTrigger className="h-9 w-44 text-[10px] font-bold uppercase tracking-wider rounded-lg border-slate-200">
+                                       <SelectValue placeholder="Todas las líneas" />
+                                     </SelectTrigger>
+                                     <SelectContent>
+                                       <SelectItem value="all">Todas las líneas</SelectItem>
+                                       {LINES.map((l) => (
+                                         <SelectItem key={l} value={l}>{l}</SelectItem>
+                                       ))}
+                                     </SelectContent>
+                                   </Select>
+                                   <Input 
+                                     type="date" 
+                                     value={paradaFiltroFecha} 
+                                     onChange={(e) => setParadaFiltroFecha(e.target.value)}
+                                     className="h-9 text-[11px] w-44 bg-white"
+                                     placeholder="Filtrar fecha"
+                                   />
+                                   {paradaFiltroFecha && (
+                                     <button 
+                                       onClick={() => setParadaFiltroFecha('')}
+                                       className="h-9 px-3 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50"
+                                     >
+                                       Limpiar
+                                     </button>
+                                   )}
+                                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                      {informesOperacionales.filter((r) => {
+                                        const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
+                                        const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
+                                        return matchLine && matchDate;
+                                      }).length} registros
+                                   </span>
+                                 </div>
                                  <div className="rounded-lg border border-slate-200 overflow-x-auto overflow-y-auto max-h-[60vh]">
                                    <div className="min-w-[1200px]">
                                      <Table>
