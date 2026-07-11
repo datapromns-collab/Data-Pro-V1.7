@@ -1444,8 +1444,8 @@ export default function PlannerPage() {
                                                <TableCell className="px-2 py-2"><Input value={editForm.linea || ''} onChange={(e) => setEditForm({...editForm, linea: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                <TableCell className="px-2 py-2"><Input value={editForm.equipo || ''} onChange={(e) => setEditForm({...editForm, equipo: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                <TableCell className="px-2 py-2"><Input value={editForm.tipoParada || ''} onChange={(e) => setEditForm({...editForm, tipoParada: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                               <TableCell className="px-2 py-2"><Input type="time" value={editForm.inicio || ''} onChange={(e) => setEditForm({...editForm, inicio: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                               <TableCell className="px-2 py-2"><Input type="time" value={editForm.fin || ''} onChange={(e) => setEditForm({...editForm, fin: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                               <TableCell className="px-2 py-2"><Input type="time" value={editForm.inicioParada || ''} onChange={(e) => setEditForm({...editForm, inicioParada: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                               <TableCell className="px-2 py-2"><Input type="time" value={editForm.finParada || ''} onChange={(e) => setEditForm({...editForm, finParada: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                <TableCell className="px-2 py-2"><Input type="number" value={editForm.totalMin ?? ''} onChange={(e) => setEditForm({...editForm, totalMin: e.target.value})} className="h-8 text-[10px] w-20" /></TableCell>
                                                <TableCell className="px-2 py-2"><Input value={editForm.zona || ''} onChange={(e) => setEditForm({...editForm, zona: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                <TableCell className="px-2 py-2 max-w-[180px]"><Input value={editForm.falla || ''} onChange={(e) => setEditForm({...editForm, falla: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
@@ -1453,8 +1453,8 @@ export default function PlannerPage() {
                                                <TableCell className="px-2 py-2 max-w-[200px]"><Input value={editForm.observaciones || ''} onChange={(e) => setEditForm({...editForm, observaciones: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
                                                <TableCell className="px-2 py-2 flex items-center gap-1">
                                                  <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
-                                                   const [h1, m1] = (editForm.inicio || '00:00').split(':').map(Number);
-                                                   const [h2, m2] = (editForm.fin || '00:00').split(':').map(Number);
+                                                    const [h1, m1] = (editForm.inicioParada || '00:00').split(':').map(Number);
+                                                    const [h2, m2] = (editForm.finParada || '00:00').split(':').map(Number);
                                                    let inicio = h1 * 60 + m1;
                                                    let fin = h2 * 60 + m2;
                                                    let diff = fin - inicio;
@@ -1476,8 +1476,8 @@ export default function PlannerPage() {
                                                <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap">{row.linea}</TableCell>
                                                <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.equipo}</TableCell>
                                                <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.tipoParada}</TableCell>
-                                               <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.inicio}</TableCell>
-                                               <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.fin}</TableCell>
+                                               <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.inicioParada}</TableCell>
+                                               <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.finParada}</TableCell>
                                                <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums">{row.totalMin} min</TableCell>
                                                <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.zona}</TableCell>
                                                <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.falla}>{row.falla}</TableCell>
