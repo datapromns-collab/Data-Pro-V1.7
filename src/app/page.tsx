@@ -1470,21 +1470,21 @@ export default function PlannerPage() {
                                       <Table>
                                      <TableHeader>
                                         <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
-                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">FECHA</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">I-FECHA</TableHead>
                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">ORDEN</TableHead>
-                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">E-FECHA</TableHead>
-                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SERV</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">F-FECHA</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Sem &lt;</TableHead>
                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">TUR</TableHead>
                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SOLICITANTE</TableHead>
                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">LINEA</TableHead>
                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">AVISO</TableHead>
                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MAQUINA</TableHead>
-                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">E-PARADA</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">I-PARADA</TableHead>
                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">E-MTTO</TableHead>
                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">E-MTTO</TableHead>
-                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">E-PARADA</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">I-PARADA</TableHead>
                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">T-MTTO</TableHead>
-                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">E-PARADA</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">I-PARADA</TableHead>
                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">PARADA?</TableHead>
                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO</TableHead>
                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">FALLA</TableHead>
