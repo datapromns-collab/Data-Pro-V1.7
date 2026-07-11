@@ -278,6 +278,33 @@ export default function PlannerPage() {
       console.error('Error guardando selectedFechaSap en localStorage', e);
     }
   }, [selectedFechaSap, selectedFechaSapInitialized]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const storedInformes = localStorage.getItem('planta-informes-operacionales');
+      if (storedInformes) {
+        setInformesOperacionales(JSON.parse(storedInformes));
+      }
+      const storedOrdenes = localStorage.getItem('planta-ordenes-trabajo');
+      if (storedOrdenes) {
+        setOrdenesTrabajo(JSON.parse(storedOrdenes));
+      }
+    } catch (e) {
+      console.error('Error cargando datos de planta desde localStorage', e);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.setItem('planta-informes-operacionales', JSON.stringify(informesOperacionales));
+      localStorage.setItem('planta-ordenes-trabajo', JSON.stringify(ordenesTrabajo));
+    } catch (e) {
+      console.error('Error guardando datos de planta en localStorage', e);
+    }
+  }, [informesOperacionales, ordenesTrabajo]);
+
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
   const [printWorkingDate, setPrintWorkingDate] = useState<Date>(new Date());
