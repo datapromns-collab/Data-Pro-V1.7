@@ -268,7 +268,7 @@ export default function PlannerPage() {
   const [plantaFormData, setPlantaFormData] = useState({
     fecha: format(new Date(), 'yyyy-MM-dd'),
     semana: getISOWeek(new Date()),
-    turno: 'T1',
+    turno: 'DIURNO',
     operador: '',
     linea: 'Línea 1',
     equipo: '',
@@ -1856,14 +1856,13 @@ export default function PlannerPage() {
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Semana</label>
                   <Input type="number" value={plantaFormData.semana} onChange={(e) => setPlantaFormData({...plantaFormData, semana: parseInt(e.target.value) || 0})} className="h-9 text-[11px]" />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Turno</label>
-                  <select value={plantaFormData.turno} onChange={(e) => setPlantaFormData({...plantaFormData, turno: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
-                    <option value="T1">T1</option>
-                    <option value="T2">T2</option>
-                    <option value="T3">T3</option>
-                  </select>
-                </div>
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Turno</label>
+                   <select value={plantaFormData.turno} onChange={(e) => setPlantaFormData({...plantaFormData, turno: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                     <option value="DIURNO">DIURNO</option>
+                     <option value="NOCTURNO">NOCTURNO</option>
+                   </select>
+                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Operador</label>
                   <Input value={plantaFormData.operador} onChange={(e) => setPlantaFormData({...plantaFormData, operador: e.target.value})} className="h-9 text-[11px]" />
@@ -2031,11 +2030,11 @@ export default function PlannerPage() {
               <Button onClick={() => {
                 if (paradasSubTab === 'informes-operacionales') {
                   setInformesOperacionales([...informesOperacionales, { ...plantaFormData, id: Date.now() }]);
-                  setPlantaFormData({
-                    fecha: format(new Date(), 'yyyy-MM-dd'),
-                    semana: getISOWeek(new Date()),
-                    turno: 'T1',
-                    operador: '',
+                   setPlantaFormData({
+                     fecha: format(new Date(), 'yyyy-MM-dd'),
+                     semana: getISOWeek(new Date()),
+                     turno: 'DIURNO',
+                     operador: '',
                     linea: 'Línea 1',
                     equipo: '',
                     tipoParada: 'MECÁNICO',
