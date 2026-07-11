@@ -31,7 +31,10 @@ import {
   TrendingUp,
   Droplets,
   AlertTriangle,
-  Wrench
+  Wrench,
+  Pencil,
+  Check,
+  X
 } from 'lucide-react';
 import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
@@ -218,6 +221,8 @@ export default function PlannerPage() {
   const [isPlantaDialogOpen, setIsPlantaDialogOpen] = useState(false);
   const [informesOperacionales, setInformesOperacionales] = useState<any[]>([]);
   const [ordenesTrabajo, setOrdenesTrabajo] = useState<any[]>([]);
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editForm, setEditForm] = useState<any>({});
   const [activeModule, setActiveModule] = useState('planning');
   const [activeTab, setActiveTab] = useState('gantt');
   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
@@ -1418,40 +1423,80 @@ export default function PlannerPage() {
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Falla</TableHead>
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Orden</TableHead>
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Observaciones</TableHead>
-                                      </TableRow>
-                                    </TableHeader>
-                                    <TableBody>
-                                       {informesOperacionales
-                                         .filter((r) => {
-                                           const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
-                                           const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
-                                           return matchLine && matchDate;
-                                         })
-                                         .map((row) => (
-                                        <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
-                                          <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fecha}</TableCell>
-                                          <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {row.semana}</TableCell>
-                                          <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{row.turno}</TableCell>
-                                          <TableCell className="px-2 py-2 text-[11px] font-semibold text-slate-800 whitespace-nowrap">{row.operador}</TableCell>
-                                          <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap">{row.linea}</TableCell>
-                                          <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.equipo}</TableCell>
-                                          <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.tipoParada}</TableCell>
-                                          <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.inicio}</TableCell>
-                                          <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.fin}</TableCell>
-                                          <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums">{row.totalMin} min</TableCell>
-                                          <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.zona}</TableCell>
-                                          <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.falla}>{row.falla}</TableCell>
-                                          <TableCell className="px-2 py-2 text-[11px] font-mono text-slate-600 whitespace-nowrap">{row.orden}</TableCell>
-                                          <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[200px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
-                                        </TableRow>
-                                      ))}
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 w-16">Acciones</TableHead>
+                                       </TableRow>
+                                     </TableHeader>
+                                     <TableBody>
+                                        {informesOperacionales
+                                          .filter((r) => {
+                                            const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
+                                            const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
+                                            return matchLine && matchDate;
+                                          })
+                                          .map((row) => (
+                                         <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
+                                           {editingId === row.id ? (
+                                             <>
+                                               <TableCell className="px-2 py-2"><Input type="date" value={editForm.fecha || ''} onChange={(e) => setEditForm({...editForm, fecha: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                               <TableCell className="px-2 py-2"><Input type="number" value={editForm.semana ?? ''} onChange={(e) => setEditForm({...editForm, semana: parseInt(e.target.value) || 0})} className="h-8 text-[10px] w-16" /></TableCell>
+                                               <TableCell className="px-2 py-2"><Input value={editForm.turno || ''} onChange={(e) => setEditForm({...editForm, turno: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                               <TableCell className="px-2 py-2"><Input value={editForm.operador || ''} onChange={(e) => setEditForm({...editForm, operador: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                               <TableCell className="px-2 py-2"><Input value={editForm.linea || ''} onChange={(e) => setEditForm({...editForm, linea: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                               <TableCell className="px-2 py-2"><Input value={editForm.equipo || ''} onChange={(e) => setEditForm({...editForm, equipo: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                               <TableCell className="px-2 py-2"><Input value={editForm.tipoParada || ''} onChange={(e) => setEditForm({...editForm, tipoParada: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                               <TableCell className="px-2 py-2"><Input type="time" value={editForm.inicio || ''} onChange={(e) => setEditForm({...editForm, inicio: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                               <TableCell className="px-2 py-2"><Input type="time" value={editForm.fin || ''} onChange={(e) => setEditForm({...editForm, fin: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                               <TableCell className="px-2 py-2"><Input type="number" value={editForm.totalMin ?? ''} onChange={(e) => setEditForm({...editForm, totalMin: e.target.value})} className="h-8 text-[10px] w-20" /></TableCell>
+                                               <TableCell className="px-2 py-2"><Input value={editForm.zona || ''} onChange={(e) => setEditForm({...editForm, zona: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                               <TableCell className="px-2 py-2 max-w-[180px]"><Input value={editForm.falla || ''} onChange={(e) => setEditForm({...editForm, falla: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
+                                               <TableCell className="px-2 py-2"><Input value={editForm.orden || ''} onChange={(e) => setEditForm({...editForm, orden: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                               <TableCell className="px-2 py-2 max-w-[200px]"><Input value={editForm.observaciones || ''} onChange={(e) => setEditForm({...editForm, observaciones: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
+                                               <TableCell className="px-2 py-2 flex items-center gap-1">
+                                                 <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
+                                                   const [h1, m1] = (editForm.inicio || '00:00').split(':').map(Number);
+                                                   const [h2, m2] = (editForm.fin || '00:00').split(':').map(Number);
+                                                   let inicio = h1 * 60 + m1;
+                                                   let fin = h2 * 60 + m2;
+                                                   let diff = fin - inicio;
+                                                   if (diff < 0) diff += 1440;
+                                                   const updated = { ...editForm, totalMin: String(diff) };
+                                                   setInformesOperacionales(prev => prev.map(r => r.id === row.id ? updated : r));
+                                                   setEditingId(null);
+                                                   setEditForm({});
+                                                 }}><Check className="h-3.5 w-3.5" /></Button>
+                                                 <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => { setEditingId(null); setEditForm({}); }}><X className="h-3.5 w-3.5" /></Button>
+                                               </TableCell>
+                                             </>
+                                           ) : (
+                                             <>
+                                               <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fecha}</TableCell>
+                                               <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {row.semana}</TableCell>
+                                               <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{row.turno}</TableCell>
+                                               <TableCell className="px-2 py-2 text-[11px] font-semibold text-slate-800 whitespace-nowrap">{row.operador}</TableCell>
+                                               <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap">{row.linea}</TableCell>
+                                               <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.equipo}</TableCell>
+                                               <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.tipoParada}</TableCell>
+                                               <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.inicio}</TableCell>
+                                               <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.fin}</TableCell>
+                                               <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums">{row.totalMin} min</TableCell>
+                                               <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.zona}</TableCell>
+                                               <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.falla}>{row.falla}</TableCell>
+                                               <TableCell className="px-2 py-2 text-[11px] font-mono text-slate-600 whitespace-nowrap">{row.orden}</TableCell>
+                                               <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[200px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
+                                               <TableCell className="px-2 py-2 flex items-center">
+                                                 <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingId(row.id); setEditForm(row); }}><Pencil className="h-3.5 w-3.5" /></Button>
+                                               </TableCell>
+                                             </>
+                                           )}
+                                         </TableRow>
+                                       ))}
                                         {informesOperacionales.filter((r) => {
                                           const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
                                           const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
                                           return matchLine && matchDate;
                                         }).length === 0 && (
                                         <TableRow>
-                                          <TableCell colSpan={14} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
+                                           <TableCell colSpan={15} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
                                             Sin registros para el filtro seleccionado
                                           </TableCell>
                                         </TableRow>
