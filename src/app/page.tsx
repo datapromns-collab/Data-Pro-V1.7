@@ -308,6 +308,23 @@ export default function PlannerPage() {
     observaciones: '',
   });
 
+  useEffect(() => {
+    if (paradasSubTab !== 'informes-operacionales') return;
+    if (!plantaFormData.inicioParada || !plantaFormData.finParada) {
+      setPlantaFormData(prev => ({ ...prev, totalMin: '' }));
+      return;
+    }
+    const toMin = (t: string) => {
+      const [h, m] = t.split(':').map(Number);
+      return h * 60 + m;
+    };
+    let inicio = toMin(plantaFormData.inicioParada);
+    let fin = toMin(plantaFormData.finParada);
+    let diff = fin - inicio;
+    if (diff < 0) diff += 1440;
+    setPlantaFormData(prev => ({ ...prev, totalMin: String(diff) }));
+  }, [plantaFormData.inicioParada, plantaFormData.finParada, paradasSubTab]);
+
   const weeksForYear = useMemo(() => {
     const weeks: { isoWeek: number; start: Date; end: Date }[] = [];
     const year = plantaWeekStartDate.getFullYear();
@@ -1899,10 +1916,10 @@ export default function PlannerPage() {
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Parada</label>
                   <Input type="time" value={plantaFormData.finParada} onChange={(e) => setPlantaFormData({...plantaFormData, finParada: e.target.value})} className="h-9 text-[11px]" />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Total (min)</label>
-                  <Input type="number" value={plantaFormData.totalMin} onChange={(e) => setPlantaFormData({...plantaFormData, totalMin: e.target.value})} className="h-9 text-[11px]" />
-                </div>
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Total (min)</label>
+                   <Input type="number" value={plantaFormData.totalMin} readOnly className="h-9 text-[11px] bg-slate-100" />
+                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Orden</label>
                   <Input value={plantaFormData.orden} onChange={(e) => setPlantaFormData({...plantaFormData, orden: e.target.value})} className="h-9 text-[11px]" />
