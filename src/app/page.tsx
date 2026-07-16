@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import Image from "next/image";
 import { 
   Plus, 
@@ -17,7 +17,6 @@ import {
   ShieldCheck,
   User as UserIcon,
   BarChart3,
-  PackageCheck,
   CheckCircle2,
   Calendar as CalendarIcon,
   FlaskConical,
@@ -31,6 +30,7 @@ import {
   TrendingUp,
   Droplets,
   AlertTriangle,
+  Activity,
   Wrench,
   Pencil,
   Check,
@@ -41,6 +41,7 @@ import { ProductionGantt } from '@/components/planner/ProductionGantt';
 import { TaskDialog } from '@/components/planner/TaskDialog';
 import { Calculator } from '@/components/planner/Calculator';
 import { KeyboardShortcuts } from '@/components/planner/KeyboardShortcuts';
+import { useRemoteCollection } from '@/hooks/use-remote-collection';
 import { RequirementSection } from '@/components/planner/RequirementSection';
 import { RequirementReport } from '@/components/planner/RequirementReport';
 import { SummaryReport } from '@/components/planner/SummaryReport';
@@ -53,6 +54,7 @@ import { ComplianceReport } from '@/components/planner/ComplianceReport';
 import { MonthlyComplianceReport } from '@/components/planner/MonthlyComplianceReport';
 import { RecipeEditor } from '@/components/planner/RecipeEditor';
 import OrdenesSapModule, { CorrelativoSelector } from '@/components/planner/OrdenesSapModule';
+import SeguimientoPanel from '@/components/planner/SeguimientoPanel';
 import { PackagingRecipeEditor } from '@/components/planner/PackagingRecipeEditor';
 import { RawMaterialModule } from '@/components/planner/RawMaterialModule';
 import { RawMaterialReport } from '@/components/planner/RawMaterialReport';
@@ -68,6 +70,8 @@ import { usePlannerStore } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
 import { usePermissionsStore, MODULE_LABELS, MODULE_COLORS } from '@/hooks/use-permissions-store';
 import { PermisosModule } from '@/components/planner/PermisosModule';
+import { MessagesCenter } from '@/components/planner/MessagesCenter';
+import { FcmManager } from '@/components/FcmManager';
 import { Toaster } from '@/components/ui/toaster';
 import { SidebarProvider, Sidebar, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
@@ -209,9 +213,9 @@ export default function PlannerPage() {
   const {
     permissions,
     isLoaded: permissionsLoaded,
-    toggleModuleForUser,
     hasAccess,
-    resetToDefaults,
+    hasManagementAccess,
+    hasReadOnlyModule,
     allModules
   } = usePermissionsStore();
 
@@ -235,8 +239,34 @@ export default function PlannerPage() {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPlantaDialogOpen, setIsPlantaDialogOpen] = useState(false);
-  const [informesOperacionales, setInformesOperacionales] = useState<any[]>([]);
-  const [ordenesTrabajo, setOrdenesTrabajo] = useState<any[]>([]);
+  const informesOperacionalesStore = useRemoteCollection<any[]>('planta-informes-operacionales', []);
+  const ordenesTrabajoStore = useRemoteCollection<any[]>('planta-ordenes-trabajo', []);
+  const informesOperacionales = informesOperacionalesStore.data;
+  const setInformesOperacionales = informesOperacionalesStore.setData;
+  const ordenesTrabajo = ordenesTrabajoStore.data;
+  const setOrdenesTrabajo = ordenesTrabajoStore.setData;
+  const migracionPlantaHechaRef = useRef(false);
+  useEffect(() => {
+    if (migracionPlantaHechaRef.current) return;
+    if (!informesOperacionalesStore.isLoaded || !ordenesTrabajoStore.isLoaded) return;
+    migracionPlantaHechaRef.current = true;
+    const migrar = (ns: string, store: { data: any[]; setData: (d: any[]) => void }) => {
+      try {
+        const raw = localStorage.getItem(ns);
+        if (!raw) return;
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr) && arr.length > 0 && store.data.length === 0) {
+          store.setData(arr);
+        }
+        localStorage.removeItem(ns);
+      } catch {
+        // ignore
+      }
+    };
+    migrar('planta-informes-operacionales', informesOperacionalesStore);
+    migrar('planta-ordenes-trabajo', ordenesTrabajoStore);
+  }, [informesOperacionalesStore, ordenesTrabajoStore]);
+
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<any>({});
   const [errorValidacion, setErrorValidacion] = useState<string>('');
@@ -250,6 +280,7 @@ export default function PlannerPage() {
   const [ordenesSapActiveLinea, setOrdenesSapActiveLinea] = useState<number>(1);
   const [selectedFechaSap, setSelectedFechaSap] = useState<Date | undefined>(undefined);
   const [selectedFechaSapInitialized, setSelectedFechaSapInitialized] = useState(false);
+  const [seguimientoVista, setSeguimientoVista] = useState<'enfardadora' | 'etiquetadora'>('enfardadora');
 
   useEffect(() => {
     try {
@@ -278,32 +309,6 @@ export default function PlannerPage() {
       console.error('Error guardando selectedFechaSap en localStorage', e);
     }
   }, [selectedFechaSap, selectedFechaSapInitialized]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    try {
-      const storedInformes = localStorage.getItem('planta-informes-operacionales');
-      if (storedInformes) {
-        setInformesOperacionales(JSON.parse(storedInformes));
-      }
-      const storedOrdenes = localStorage.getItem('planta-ordenes-trabajo');
-      if (storedOrdenes) {
-        setOrdenesTrabajo(JSON.parse(storedOrdenes));
-      }
-    } catch (e) {
-      console.error('Error cargando datos de planta desde localStorage', e);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    try {
-      localStorage.setItem('planta-informes-operacionales', JSON.stringify(informesOperacionales));
-      localStorage.setItem('planta-ordenes-trabajo', JSON.stringify(ordenesTrabajo));
-    } catch (e) {
-      console.error('Error guardando datos de planta en localStorage', e);
-    }
-  }, [informesOperacionales, ordenesTrabajo]);
 
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
@@ -492,6 +497,41 @@ export default function PlannerPage() {
       t.startTime <= weekEnd
     );
   }, [tasks, selectedLine, weekStartDate, weekEnd]);
+
+  const allowedProdTabs = useMemo(() => {
+    const tabs: ('dia-a-dia' | 'weekly' | 'monthly')[] = [];
+    if (user) {
+      if (hasManagementAccess(user.id, 'produccion-diaria')) tabs.push('dia-a-dia');
+      if (hasManagementAccess(user.id, 'control-semanal')) tabs.push('weekly');
+      if (hasManagementAccess(user.id, 'resumen-mensual')) tabs.push('monthly');
+    }
+    return tabs;
+  }, [user, hasManagementAccess]);
+
+  const mgmtOnlyProduccionDiaria = useMemo(() => {
+    if (!user) return false;
+    return (
+      hasManagementAccess(user.id, 'produccion-diaria') &&
+      !hasManagementAccess(user.id, 'control-semanal') &&
+      !hasManagementAccess(user.id, 'resumen-mensual') &&
+      !hasManagementAccess(user.id, 'cumplimiento')
+    );
+  }, [user, hasManagementAccess]);
+
+  const mgmtAllowsControl = useMemo(() => {
+    if (!user) return false;
+    return hasManagementAccess(user.id, 'control-semanal') || hasManagementAccess(user.id, 'resumen-mensual');
+  }, [user, hasManagementAccess]);
+
+  const mgmtAllowsCumplimiento = useMemo(() => {
+    if (!user) return false;
+    return hasManagementAccess(user.id, 'cumplimiento');
+  }, [user, hasManagementAccess]);
+
+  const seguimientoReadOnly = useMemo(() => {
+    if (!user) return false;
+    return hasReadOnlyModule(user.id, 'seguimiento');
+  }, [user, hasReadOnlyModule]);
 
   const handlePrintPlan = () => {
     setPrintMode('plan');
@@ -968,6 +1008,19 @@ export default function PlannerPage() {
                     </Button>
                     )}
 
+                    {hasAccess(user.id, 'seguimiento') && (
+                    <Button 
+                      variant="ghost" 
+                      onClick={() => { setActiveModule('seguimiento'); setActiveTab('seguimiento'); }}
+                      className={sidebarButtonClass(activeModule === 'seguimiento', "bg-purple-600 hover:bg-purple-700", "shadow-purple-200/30")}
+                    >
+                      <div className={iconContainerClass(activeModule === 'seguimiento')}>
+                        <Activity className="h-4 w-4" />
+                      </div>
+                      <span className="uppercase text-[10px] font-black tracking-tight">Seguimiento</span>
+                    </Button>
+                    )}
+
                     {isDemon && (
                     <Button 
                       variant="ghost" 
@@ -980,22 +1033,13 @@ export default function PlannerPage() {
                       <span className="uppercase text-[10px] font-black tracking-tight">Permisos</span>
                     </Button>
                     )}
-                 </div>
-               </section>
+                   </div>
 
-              {isAdmin && activeModule === 'management' && (
-                <Button 
-                  variant="default" 
-                  size="lg" 
-                  onClick={() => setIsEntryDialogOpen(true)} 
-                  className="px-2 w-full gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-black uppercase text-xs tracking-widest rounded-2xl shadow-md shadow-emerald-200 transition-none active:scale-100 active:transform-none"
-                >
-                  <PackageCheck className="h-4 w-4" /> Cargar Producción
-                </Button>
-              )}
-            </div>
+                </section>
 
-            <div className="mt-auto pt-6 border-t border-slate-100 space-y-4 pb-6">
+                </div>
+
+                <div className="mt-auto pt-6 border-t border-slate-100 space-y-4 pb-6">
               <div className="flex items-center gap-3 px-2">
                 <div className="h-10 w-10 rounded-xl bg-slate-100 flex items-center justify-center text-primary border border-slate-200">
                   <UserIcon className="h-5 w-5" />
@@ -1036,8 +1080,9 @@ export default function PlannerPage() {
                  activeModule === 'logistica' ? "bg-orange-100 text-orange-700" :
                  activeModule === 'ventas' ? "bg-indigo-100 text-indigo-700" :
                  activeModule === 'purchasing' ? "bg-blue-100 text-blue-700" :
-                 activeModule === 'permissions' ? "bg-violet-100 text-violet-700" :
-                 activeModule === 'ordenes-sap' ? "px-8 py-2 bg-sky-100 text-sky-700" : "bg-emerald-50 text-emerald-600"
+                  activeModule === 'permissions' ? "bg-violet-100 text-violet-700" :
+                  activeModule === 'seguimiento' ? "px-8 py-2 bg-purple-100 text-purple-700" :
+                  activeModule === 'ordenes-sap' ? "px-8 py-2 bg-sky-100 text-sky-700" : "bg-emerald-50 text-emerald-600"
               )}>
                 {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' :
                  activeModule === 'recipes' ? 'MÓDULO DE RECETAS' :
@@ -1047,11 +1092,14 @@ export default function PlannerPage() {
                  activeModule === 'logistica' ? 'MÓDULO DE LOGÍSTICA' :
                  activeModule === 'ventas' ? 'MÓDULO DE VENTAS' :
                  activeModule === 'purchasing' ? 'MÓDULO DE COMPRAS' :
-                 activeModule === 'ordenes-sap' ? 'MÓDULO DE ORDENES SAP' :
-                 activeModule === 'permissions' ? 'MÓDULO DE PERMISOS' : 'MÓDULO DE PLANIFICACIÓN'}
+                  activeModule === 'ordenes-sap' ? 'MÓDULO DE ORDENES SAP' :
+                  activeModule === 'seguimiento' ? `MÓDULO DE SEGUIMIENTO - ${seguimientoVista === 'etiquetadora' ? 'ETIQUETADORA' : 'ENFARDADORA'}` :
+                  activeModule === 'permissions' ? 'MÓDULO DE PERMISOS' : 'MÓDULO DE PLANIFICACIÓN'}
               </div>
             </div>
              <div className="flex items-center gap-2 justify-end">
+                 {user && <MessagesCenter user={user} isAdmin={isAdmin} />}
+                 <FcmManager userId={user?.id} />
                 {activeModule === 'ordenes-sap' && <CorrelativoSelector activeLinea={ordenesSapActiveLinea} selectedFecha={selectedFechaSap} />}
                 {activeModule === 'planning' && (
                  <>
@@ -1086,7 +1134,7 @@ export default function PlannerPage() {
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <div className="flex flex-col gap-6 h-full">
               
-               {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && activeModule !== 'jarabes' && (
+               {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && activeModule !== 'jarabes' && activeModule !== 'ordenes-sap' && activeModule !== 'seguimiento' && (
                   <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1 shadow-none self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print h-11 shrink-0 gap-1 w-full justify-between">
                     {activeModule === 'planning' && (
                       <>
@@ -1162,20 +1210,33 @@ export default function PlannerPage() {
                     {activeModule === 'management' ? (
                       <div className="flex items-center gap-0.5">
                         <div className="w-px h-5 bg-slate-300/60 mx-1 flex-shrink-0" />
-                        <button 
-                          onClick={() => setActiveTab('admin-report')}
-                          className={cn(navTabClass(activeTab === 'admin-report'))}
-                        >
-                          <BarChart3 className="h-3.5 w-3.5" />
-                          Control Producción
-                        </button>
-                        <button 
-                          onClick={() => setActiveTab('compliance-report')}
-                          className={cn(navTabClass(activeTab === 'compliance-report'))}
-                        >
-                          <CheckCircle2 className="h-3.5 w-3.5" />
-                          Cumplimiento
-                        </button>
+                        {mgmtOnlyProduccionDiaria && (
+                          <button 
+                            onClick={() => setActiveTab('admin-report')}
+                            className={cn(navTabClass(activeTab === 'admin-report'))}
+                          >
+                            <BarChart3 className="h-3.5 w-3.5" />
+                            Producción Diaria
+                          </button>
+                        )}
+                        {mgmtAllowsControl && (
+                          <button 
+                            onClick={() => setActiveTab('admin-report')}
+                            className={cn(navTabClass(activeTab === 'admin-report'))}
+                          >
+                            <BarChart3 className="h-3.5 w-3.5" />
+                            Control Producción
+                          </button>
+                        )}
+                        {mgmtAllowsCumplimiento && (
+                          <button 
+                            onClick={() => setActiveTab('compliance-report')}
+                            className={cn(navTabClass(activeTab === 'compliance-report'))}
+                          >
+                            <CheckCircle2 className="h-3.5 w-3.5" />
+                            Cumplimiento
+                          </button>
+                        )}
                       </div>
                     ) : activeModule === 'recipes' ? (
                       <div className="flex items-center gap-0.5">
@@ -1230,32 +1291,33 @@ export default function PlannerPage() {
                      )}
                    </div>
                  )}
-                {activeModule === 'management' && hasAccess(user.id, 'management') && (
-                  <>
-                    {activeTab === 'admin-report' && (
-                      <AdminReportTool 
-                        view="production"
-                        tasks={tasks} 
-                        weekStartDate={weekStartDate} 
-                        realProduction={realProduction}
-                        updateRealProduction={updateRealProduction}
-                        onPrintWeeklyControl={handlePrintWeeklyControl}
-                        onPrintMonthly={handlePrintMonthly}
-                      />
-                    )}
-                    {activeTab === 'compliance-report' && (
-                      <AdminReportTool 
-                        view="compliance"
-                        tasks={tasks} 
-                        weekStartDate={weekStartDate} 
-                        realProduction={realProduction} 
-                        updateRealProduction={updateRealProduction}
-                        onPrintCompliance={handlePrintCompliance}
-                        onPrintMonthlyCompliance={handlePrintMonthlyCompliance}
-                      />
-                    )}
-                  </>
-                 )}
+                 {activeModule === 'management' && hasAccess(user.id, 'management') && (
+                   <>
+                     {activeTab === 'admin-report' && (
+                       <AdminReportTool 
+                         view="production"
+                         tasks={tasks} 
+                         weekStartDate={weekStartDate} 
+                         realProduction={realProduction}
+                         updateRealProduction={updateRealProduction}
+                         onPrintWeeklyControl={handlePrintWeeklyControl}
+                         onPrintMonthly={handlePrintMonthly}
+                         allowedProductionTabs={allowedProdTabs}
+                       />
+                     )}
+                     {activeTab === 'compliance-report' && mgmtAllowsCumplimiento && (
+                       <AdminReportTool 
+                         view="compliance"
+                         tasks={tasks} 
+                         weekStartDate={weekStartDate} 
+                         realProduction={realProduction}
+                         updateRealProduction={updateRealProduction}
+                         onPrintCompliance={handlePrintCompliance}
+                         onPrintMonthlyCompliance={handlePrintMonthlyCompliance}
+                       />
+                     )}
+                   </>
+                  )}
                   {activeModule === 'jarabes' && hasAccess(user.id, 'jarabes') && (
                     <JarabesModule 
                       onPrintStandard={handlePrintJarabes}
@@ -1464,7 +1526,7 @@ export default function PlannerPage() {
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">F-Parada</TableHead>
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">T-Parada</TableHead>
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Zona</TableHead>
-                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Falla</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Motivo de Parada</TableHead>
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Orden</TableHead>
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Observaciones</TableHead>
                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 w-16">Acciones</TableHead>
@@ -1691,7 +1753,8 @@ export default function PlannerPage() {
                      onPrintResumen={handlePrintResumen}
                    />
                  )}
-                   {activeModule === 'ordenes-sap' && hasAccess(user.id, 'ordenes-sap') && <OrdenesSapModule activeLinea={ordenesSapActiveLinea} onLineaChange={setOrdenesSapActiveLinea} selectedFecha={selectedFechaSap} onFechaChange={setSelectedFechaSap} />}
+                    {activeModule === 'ordenes-sap' && hasAccess(user.id, 'ordenes-sap') && <OrdenesSapModule activeLinea={ordenesSapActiveLinea} onLineaChange={setOrdenesSapActiveLinea} selectedFecha={selectedFechaSap} onFechaChange={setSelectedFechaSap} />}
+                    {activeModule === 'seguimiento' && hasAccess(user.id, 'seguimiento') && <SeguimientoPanel onVistaChange={setSeguimientoVista} readOnly={seguimientoReadOnly} />}
                  {activeModule === 'permissions' && <PermisosModule />}
               </div>
             </div>
@@ -2030,7 +2093,7 @@ export default function PlannerPage() {
                   <Input value={plantaFormData.orden} onChange={(e) => setPlantaFormData({...plantaFormData, orden: e.target.value})} className="h-9 text-[11px]" />
                 </div>
                 <div className="space-y-2 col-span-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Falla</label>
+                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Motivo de Parada</label>
                   <Input value={plantaFormData.falla} onChange={(e) => setPlantaFormData({...plantaFormData, falla: e.target.value})} className="h-9 text-[11px]" />
                 </div>
                 <div className="space-y-2 col-span-2">

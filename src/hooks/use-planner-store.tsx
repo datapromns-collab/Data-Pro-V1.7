@@ -1,9 +1,13 @@
 'use client';
 
-import { useState, useEffect, useCallback, createContext, useContext, ReactNode } from 'react';
+import { useState, useEffect, useCallback, createContext, useContext, ReactNode, useRef } from 'react';
 import { ScheduledTask } from '@/lib/types';
 import { startOfWeek, addDays, format, parseISO } from 'date-fns';
 import { RECIPES, CONSUMABLES_RECIPES, DEFAULT_PACKAGING_RECIPES } from '@/lib/planner-utils';
+import { loadPlannerData, savePlannerData } from '@/lib/json-db';
+
+const STORAGE_KEY_TIMESTAMP = 'planner_last_update_v1';
+const STORAGE_KEY_REMOTE_TIMESTAMP = 'planner_remote_last_update_v1';
 
 const STORAGE_KEY_TASKS = 'planner_tasks_v2';
 const STORAGE_KEY_CONFIG = 'planner_config_v2';
@@ -36,6 +40,9 @@ export interface RawMaterialStock {
   dailyPhysical: Record<string, number>;
 }
 
+type NestedRecord = Record<string, Record<string, number>>;
+type DeepNestedRecord = Record<string, Record<string, Record<string, number>>>;
+
 function usePlannerStoreInner() {
   const [tasks, setTasks] = useState<ScheduledTask[]>([]);
   const [weekStartDate, setWeekStartDate] = useState<Date>(() => {
@@ -46,28 +53,76 @@ function usePlannerStoreInner() {
   const [lineSpeeds, setLineSpeeds] = useState<Record<string, number>>({
     "1": 0, "2": 0, "3": 0, "4": 0, "5": 0, "6": 0, "7": 0, "8": 0
   });
-  const [realProduction, setRealProduction] = useState<Record<string, Record<string, Record<string, number>>>>({});
-  const [customRecipes, setCustomRecipes] = useState<Record<string, Record<string, number>>>(RECIPES);
-  const [customPackagingRecipes, setCustomPackagingRecipes] = useState<Record<string, Record<string, Record<string, number>>>>(DEFAULT_PACKAGING_RECIPES);
+  const [realProduction, setRealProduction] = useState<DeepNestedRecord>({});
+  const [customRecipes, setCustomRecipes] = useState<NestedRecord>(RECIPES);
+  const [customPackagingRecipes, setCustomPackagingRecipes] = useState<Record<string, Record<string, Record<string, number>> > >(DEFAULT_PACKAGING_RECIPES);
   const [rawMaterialStock, setRawMaterialStock] = useState<Record<string, RawMaterialStock>>({});
-  const [manualUBB, setManualUBB] = useState<Record<string, Record<string, number>>>({});
+  const [manualUBB, setManualUBB] = useState<NestedRecord>({});
   const [initialUBBTanks, setInitialUBBTanks] = useState<Record<string, number>>({});
   const [finalUBBTanks, setFinalUBBTanks] = useState<Record<string, number>>({});
-  const [initialUBBTanksDaily, setInitialUBBTanksDaily] = useState<Record<string, Record<string, number>>>({});
-  const [finalUBBTanksDaily, setFinalUBBTanksDaily] = useState<Record<string, Record<string, number>>>({});
-  const [salesProjection, setSalesProjection] = useState<Record<string, Record<string, number>>>({});
-  const [finishedProductInventory, setFinishedProductInventory] = useState<Record<string, Record<string, number>>>({});
-  const [productionPlan, setProductionPlan] = useState<Record<string, Record<string, number>>>({});
+  const [initialUBBTanksDaily, setInitialUBBTanksDaily] = useState<NestedRecord>({});
+  const [finalUBBTanksDaily, setFinalUBBTanksDaily] = useState<NestedRecord>({});
+  const [salesProjection, setSalesProjection] = useState<NestedRecord>({});
+  const [finishedProductInventory, setFinishedProductInventory] = useState<NestedRecord>({});
+  const [productionPlan, setProductionPlan] = useState<NestedRecord>({});
   const [logisticsInventory, setLogisticsInventory] = useState<Record<string, number>>({});
   const [plantInventory, setPlantInventory] = useState<Record<string, number>>({});
-  const [salesProjectionAW, setSalesProjectionAW] = useState<Record<string, Record<string, number>>>({});
-  const [finishedProductInventoryAW, setFinishedProductInventoryAW] = useState<Record<string, Record<string, number>>>({});
-  const [productionPlanAW, setProductionPlanAW] = useState<Record<string, Record<string, number>>>({});
+  const [salesProjectionAW, setSalesProjectionAW] = useState<NestedRecord>({});
+  const [finishedProductInventoryAW, setFinishedProductInventoryAW] = useState<NestedRecord>({});
+  const [productionPlanAW, setProductionPlanAW] = useState<NestedRecord>({});
   const [logisticsInventoryAW, setLogisticsInventoryAW] = useState<Record<string, number>>({});
   const [plantInventoryAW, setPlantInventoryAW] = useState<Record<string, number>>({});
   const [isLoaded, setIsLoaded] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [deletedTaskIds, setDeletedTaskIds] = useState<string[]>([]);
 
+  const deletedTaskIdsRef = useRef<string[]>([]);
   useEffect(() => {
+    deletedTaskIdsRef.current = deletedTaskIds;
+  }, [deletedTaskIds]);
+
+  const clearSaveError = useCallback(() => setSaveError(null), []);
+
+  const loadFromLocalStorage = useCallback(() => {
+    const savedAuto = localStorage.getItem('planner_autosave_v1');
+    if (savedAuto) {
+      try {
+        const parsed = JSON.parse(savedAuto);
+        if (parsed.tasks) {
+          setTasks(parsed.tasks.map((t: any) => ({
+            ...t,
+            startTime: new Date(t.startTime),
+            endTime: new Date(t.endTime)
+          })));
+        }
+        if (parsed.config) {
+          if (parsed.config.weekStartDate) setWeekStartDate(new Date(parsed.config.weekStartDate));
+          if (parsed.config.lineSpeeds) setLineSpeeds(parsed.config.lineSpeeds);
+        }
+        if (parsed.realProduction) setRealProduction(parsed.realProduction);
+        if (parsed.customRecipes) setCustomRecipes(parsed.customRecipes);
+        if (parsed.customPackagingRecipes) setCustomPackagingRecipes(parsed.customPackagingRecipes);
+        if (parsed.rawMaterialStock) setRawMaterialStock(parsed.rawMaterialStock);
+        if (parsed.manualUBB) setManualUBB(parsed.manualUBB);
+        if (parsed.initialUBBTanks) setInitialUBBTanks(parsed.initialUBBTanks);
+        if (parsed.finalUBBTanks) setFinalUBBTanks(parsed.finalUBBTanks);
+        if (parsed.initialUBBTanksDaily) setInitialUBBTanksDaily(parsed.initialUBBTanksDaily);
+        if (parsed.finalUBBTanksDaily) setFinalUBBTanksDaily(parsed.finalUBBTanksDaily);
+        if (parsed.salesProjection) setSalesProjection(parsed.salesProjection);
+        if (parsed.finishedProductInventory) setFinishedProductInventory(parsed.finishedProductInventory);
+        if (parsed.productionPlan) setProductionPlan(parsed.productionPlan);
+        if (parsed.logisticsInventory) setLogisticsInventory(parsed.logisticsInventory);
+        if (parsed.plantInventory) setPlantInventory(parsed.plantInventory);
+        if (parsed.salesProjectionAW) setSalesProjectionAW(parsed.salesProjectionAW);
+        if (parsed.finishedProductInventoryAW) setFinishedProductInventoryAW(parsed.finishedProductInventoryAW);
+        if (parsed.productionPlanAW) setProductionPlanAW(parsed.productionPlanAW);
+        if (parsed.logisticsInventoryAW) setLogisticsInventoryAW(parsed.logisticsInventoryAW);
+        if (parsed.plantInventoryAW) setPlantInventoryAW(parsed.plantInventoryAW);
+        if (parsed.deletedTaskIds) setDeletedTaskIds(parsed.deletedTaskIds);
+        return;
+      } catch (e) {}
+    }
+
     const savedTasks = localStorage.getItem(STORAGE_KEY_TASKS);
     const savedConfig = localStorage.getItem(STORAGE_KEY_CONFIG);
     const savedRealProd = localStorage.getItem(STORAGE_KEY_REAL_PROD);
@@ -120,8 +175,6 @@ function usePlannerStoreInner() {
     if (savedPkgRecipes) {
       try {
         const saved = JSON.parse(savedPkgRecipes) as Record<string, Record<string, Record<string, number>>>;
-        console.log('[PACKAGING MIGRATION] Before:', JSON.stringify(saved, null, 2));
-        
         if (saved['GLUP FRESH']) {
           Object.entries(saved['GLUP FRESH']).forEach(([pres, materials]) => {
             if ((materials as any)['EMP_0095'] !== undefined) {
@@ -149,7 +202,6 @@ function usePlannerStoreInner() {
           }
         });
         
-        console.log('[PACKAGING MIGRATION] After:', JSON.stringify(saved, null, 2));
         setCustomPackagingRecipes(saved);
       } catch (e) { console.error('[PACKAGING MIGRATION] Error:', e); }
     }
@@ -217,35 +269,336 @@ function usePlannerStoreInner() {
     if (savedPlantInvAW) {
       try { setPlantInventoryAW(JSON.parse(savedPlantInvAW)); } catch (e) {}
     }
-
-    setIsLoaded(true);
   }, []);
 
-  useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem(STORAGE_KEY_TASKS, JSON.stringify(tasks));
-      localStorage.setItem(STORAGE_KEY_CONFIG, JSON.stringify({ weekStartDate, lineSpeeds }));
-      localStorage.setItem(STORAGE_KEY_REAL_PROD, JSON.stringify(realProduction));
-      localStorage.setItem(STORAGE_KEY_RECIPES, JSON.stringify(customRecipes));
-      localStorage.setItem(STORAGE_KEY_PACKAGING_RECIPES, JSON.stringify(customPackagingRecipes));
-      localStorage.setItem(STORAGE_KEY_RAW_MAT, JSON.stringify(rawMaterialStock));
-      localStorage.setItem(STORAGE_KEY_UBB, JSON.stringify(manualUBB));
-      localStorage.setItem(STORAGE_KEY_INITIAL_UBB_TANKS, JSON.stringify(initialUBBTanks));
-      localStorage.setItem(STORAGE_KEY_FINAL_UBB_TANKS, JSON.stringify(finalUBBTanks));
-      localStorage.setItem(STORAGE_KEY_INITIAL_UBB_DAILY, JSON.stringify(initialUBBTanksDaily));
-      localStorage.setItem(STORAGE_KEY_FINAL_UBB_DAILY, JSON.stringify(finalUBBTanksDaily));
-      localStorage.setItem(STORAGE_KEY_SALES_PROJECTION, JSON.stringify(salesProjection));
-      localStorage.setItem(STORAGE_KEY_FIN_PROD_INV, JSON.stringify(finishedProductInventory));
-      localStorage.setItem(STORAGE_KEY_PRODUCTION_PLAN, JSON.stringify(productionPlan));
-      localStorage.setItem(STORAGE_KEY_LOGISTICS_INV, JSON.stringify(logisticsInventory));
-      localStorage.setItem(STORAGE_KEY_PLANT_INV, JSON.stringify(plantInventory));
-      localStorage.setItem(STORAGE_KEY_SALES_PROJECTION_AW, JSON.stringify(salesProjectionAW));
-      localStorage.setItem(STORAGE_KEY_FIN_PROD_INV_AW, JSON.stringify(finishedProductInventoryAW));
-      localStorage.setItem(STORAGE_KEY_PRODUCTION_PLAN_AW, JSON.stringify(productionPlanAW));
-      localStorage.setItem(STORAGE_KEY_LOGISTICS_INV_AW, JSON.stringify(logisticsInventoryAW));
-      localStorage.setItem(STORAGE_KEY_PLANT_INV_AW, JSON.stringify(plantInventoryAW));
+  const applyRemoteToState = useCallback((remote: any, authoritative = false) => {
+    if (!remote) return;
+    if (remote.tasks) {
+      const remoteDeleted = new Set<string>([
+        ...(remote.deletedTaskIds ?? []),
+        ...deletedTaskIdsRef.current,
+      ]);
+      setTasks(prev => {
+        const remoteIds = new Set<string>();
+        const remoteMap = new Map<string, any>();
+        (remote.tasks as any[]).forEach(t => {
+          if (!t || !t.id) return;
+          remoteIds.add(t.id);
+          remoteMap.set(t.id, {
+            ...t,
+            startTime: new Date(t.startTime),
+            endTime: new Date(t.endTime),
+          });
+        });
+        const byId = new Map<string, any>();
+        if (authoritative) {
+          remoteMap.forEach((v, k) => byId.set(k, v));
+          prev.forEach(t => {
+            if (t && t.id && !remoteIds.has(t.id) && !remoteDeleted.has(t.id)) byId.set(t.id, t);
+          });
+        } else {
+          prev.forEach(t => { if (t && t.id) byId.set(t.id, t); });
+          remoteMap.forEach((v, k) => byId.set(k, v));
+        }
+        return Array.from(byId.values()).filter(t => !remoteDeleted.has(t.id));
+      });
     }
-  }, [tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily, salesProjection, finishedProductInventory, productionPlan, logisticsInventory, plantInventory, salesProjectionAW, finishedProductInventoryAW, productionPlanAW, logisticsInventoryAW, plantInventoryAW, isLoaded]);
+    if (remote.deletedTaskIds) {
+      setDeletedTaskIds(prev => Array.from(new Set([...prev, ...remote.deletedTaskIds])));
+    }
+    if (remote.config) {
+      setWeekStartDate(prev => remote.config.weekStartDate ? new Date(remote.config.weekStartDate) : prev);
+      setLineSpeeds(prev => ({ ...prev, ...(remote.config.lineSpeeds ?? {}) }));
+    }
+    setRealProduction(prev => ({ ...prev, ...(remote.realProduction ?? {}) }));
+    setCustomRecipes(prev => ({ ...prev, ...(remote.customRecipes ?? {}) }));
+    setCustomPackagingRecipes(prev => ({ ...prev, ...(remote.customPackagingRecipes ?? {}) }));
+    setRawMaterialStock(prev => ({ ...prev, ...(remote.rawMaterialStock ?? {}) }));
+    setManualUBB(prev => ({ ...prev, ...(remote.manualUBB ?? {}) }));
+    setInitialUBBTanks(prev => ({ ...prev, ...(remote.initialUBBTanks ?? {}) }));
+    setFinalUBBTanks(prev => ({ ...prev, ...(remote.finalUBBTanks ?? {}) }));
+    setInitialUBBTanksDaily(prev => ({ ...prev, ...(remote.initialUBBTanksDaily ?? {}) }));
+    setFinalUBBTanksDaily(prev => ({ ...prev, ...(remote.finalUBBTanksDaily ?? {}) }));
+    setSalesProjection(prev => ({ ...prev, ...(remote.salesProjection ?? {}) }));
+    setFinishedProductInventory(prev => ({ ...prev, ...(remote.finishedProductInventory ?? {}) }));
+    setProductionPlan(prev => ({ ...prev, ...(remote.productionPlan ?? {}) }));
+    setLogisticsInventory(prev => ({ ...prev, ...(remote.logisticsInventory ?? {}) }));
+    setPlantInventory(prev => ({ ...prev, ...(remote.plantInventory ?? {}) }));
+    setSalesProjectionAW(prev => ({ ...prev, ...(remote.salesProjectionAW ?? {}) }));
+    setFinishedProductInventoryAW(prev => ({ ...prev, ...(remote.finishedProductInventoryAW ?? {}) }));
+    setProductionPlanAW(prev => ({ ...prev, ...(remote.productionPlanAW ?? {}) }));
+    setLogisticsInventoryAW(prev => ({ ...prev, ...(remote.logisticsInventoryAW ?? {}) }));
+    setPlantInventoryAW(prev => ({ ...prev, ...(remote.plantInventoryAW ?? {}) }));
+  }, []);
+
+  const refreshFromServer = useCallback(async () => {
+    try {
+      const remote = await loadPlannerData();
+      console.log('[PlannerStore] refreshFromServer', {
+        hasRemote: !!remote,
+        taskCount: remote?.tasks?.length ?? 0,
+        remoteUpdatedAt: (remote as any)?._meta?.updatedAt,
+      });
+      if (!remote) return;
+
+      const remoteMeta = (remote as any)?._meta;
+      applyRemoteToState(remote);
+      if (remoteMeta?.updatedAt) {
+        localStorage.setItem(STORAGE_KEY_REMOTE_TIMESTAMP, remoteMeta.updatedAt);
+      }
+    } catch (error) {
+      console.warn('[PlannerStore] Failed to refresh from server', error);
+    }
+  }, [applyRemoteToState]);
+
+  const plannerDataChangedRef = useRef<(() => void) | null>(null);
+  const prevPlannerSnapshotRef = useRef<string>('');
+
+  const setPlannerDataChanged = useCallback((fn: (() => void) | null) => {
+    plannerDataChangedRef.current = fn;
+  }, []);
+
+  const computePlannerSnapshot = useCallback(() => JSON.stringify({
+    tasks,
+    config: { weekStartDate: weekStartDate.toISOString(), lineSpeeds },
+    realProduction,
+    customRecipes,
+    customPackagingRecipes,
+    rawMaterialStock,
+    manualUBB,
+    initialUBBTanks,
+    finalUBBTanks,
+    initialUBBTanksDaily,
+    finalUBBTanksDaily,
+    salesProjection,
+    finishedProductInventory,
+    productionPlan,
+    logisticsInventory,
+    plantInventory,
+    salesProjectionAW,
+    finishedProductInventoryAW,
+    productionPlanAW,
+    logisticsInventoryAW,
+    plantInventoryAW,
+    deletedTaskIds,
+  }), [tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily, salesProjection, finishedProductInventory, productionPlan, logisticsInventory, plantInventory, salesProjectionAW, finishedProductInventoryAW, productionPlanAW, logisticsInventoryAW, plantInventoryAW, deletedTaskIds]);
+
+  const lastPersistedSnapshotRef = useRef<string>('');
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    const current = computePlannerSnapshot();
+    const prev = prevPlannerSnapshotRef.current;
+    if (prev && prev !== current) {
+      plannerDataChangedRef.current?.();
+    }
+    prevPlannerSnapshotRef.current = current;
+  }, [isLoaded, computePlannerSnapshot]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function hydrate() {
+      const savedAuto = localStorage.getItem('planner_autosave_v1');
+      const savedTimestamp = localStorage.getItem(STORAGE_KEY_TIMESTAMP);
+
+      if (savedAuto) {
+        try {
+          const parsed = JSON.parse(savedAuto);
+          if (!cancelled) {
+            if (parsed.tasks) {
+              setTasks(parsed.tasks.map((t: any) => ({
+                ...t,
+                startTime: new Date(t.startTime),
+                endTime: new Date(t.endTime),
+              })));
+            }
+            if (parsed.config) {
+              if (parsed.config.weekStartDate) setWeekStartDate(new Date(parsed.config.weekStartDate));
+              if (parsed.config.lineSpeeds) setLineSpeeds(parsed.config.lineSpeeds);
+            }
+            if (parsed.realProduction) setRealProduction(parsed.realProduction);
+            if (parsed.customRecipes) setCustomRecipes(parsed.customRecipes);
+            if (parsed.customPackagingRecipes) setCustomPackagingRecipes(parsed.customPackagingRecipes);
+            if (parsed.rawMaterialStock) setRawMaterialStock(parsed.rawMaterialStock);
+            if (parsed.manualUBB) setManualUBB(parsed.manualUBB);
+            if (parsed.initialUBBTanks) setInitialUBBTanks(parsed.initialUBBTanks);
+            if (parsed.finalUBBTanks) setFinalUBBTanks(parsed.finalUBBTanks);
+            if (parsed.initialUBBTanksDaily) setInitialUBBTanksDaily(parsed.initialUBBTanksDaily);
+            if (parsed.finalUBBTanksDaily) setFinalUBBTanksDaily(parsed.finalUBBTanksDaily);
+            if (parsed.salesProjection) setSalesProjection(parsed.salesProjection);
+            if (parsed.finishedProductInventory) setFinishedProductInventory(parsed.finishedProductInventory);
+            if (parsed.productionPlan) setProductionPlan(parsed.productionPlan);
+            if (parsed.logisticsInventory) setLogisticsInventory(parsed.logisticsInventory);
+            if (parsed.plantInventory) setPlantInventory(parsed.plantInventory);
+            if (parsed.salesProjectionAW) setSalesProjectionAW(parsed.salesProjectionAW);
+            if (parsed.finishedProductInventoryAW) setFinishedProductInventoryAW(parsed.finishedProductInventoryAW);
+            if (parsed.productionPlanAW) setProductionPlanAW(parsed.productionPlanAW);
+            if (parsed.logisticsInventoryAW) setLogisticsInventoryAW(parsed.logisticsInventoryAW);
+            if (parsed.plantInventoryAW) setPlantInventoryAW(parsed.plantInventoryAW);
+            if (parsed.deletedTaskIds) setDeletedTaskIds(parsed.deletedTaskIds);
+          }
+        } catch (e) {
+          if (!cancelled) loadFromLocalStorage();
+        }
+      } else {
+        loadFromLocalStorage();
+      }
+
+      try {
+        const remote = await loadPlannerData();
+        console.log('[PlannerStore] Remote loaded', {
+          hasRemote: !!remote,
+          taskCount: remote?.tasks?.length ?? 0,
+          remoteUpdatedAt: (remote as any)?._meta?.updatedAt,
+          remoteMeta: (remote as any)?._meta,
+          remoteKeys: remote ? Object.keys(remote).slice(0, 20) : [],
+        });
+        if (!cancelled && remote) {
+          const remoteMeta = (remote as any)?._meta;
+          applyRemoteToState(remote, true);
+          if (remoteMeta?.updatedAt) {
+            localStorage.setItem(STORAGE_KEY_REMOTE_TIMESTAMP, remoteMeta.updatedAt);
+          }
+        }
+      } catch (error) {
+        if (!cancelled) {
+          console.warn('[PlannerStore] Remote load failed, keeping local data', error);
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoaded(true);
+          saveToLocalStorage();
+        }
+      }
+    }
+
+    hydrate();
+    return () => {
+      cancelled = true;
+    };
+  }, [loadFromLocalStorage, applyRemoteToState]);
+
+  const saveToLocalStorage = useCallback(() => {
+    const plan = {
+      tasks,
+      config: { weekStartDate: weekStartDate.toISOString(), lineSpeeds },
+      realProduction,
+      customRecipes,
+      customPackagingRecipes,
+      rawMaterialStock,
+      manualUBB,
+      initialUBBTanks,
+      finalUBBTanks,
+      initialUBBTanksDaily,
+      finalUBBTanksDaily,
+      salesProjection,
+      finishedProductInventory,
+      productionPlan,
+      logisticsInventory,
+      plantInventory,
+      salesProjectionAW,
+      finishedProductInventoryAW,
+      productionPlanAW,
+      logisticsInventoryAW,
+      plantInventoryAW,
+      deletedTaskIds,
+    };
+    localStorage.setItem('planner_autosave_v1', JSON.stringify(plan));
+    localStorage.setItem(STORAGE_KEY_TIMESTAMP, new Date().toISOString());
+  }, [tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily, salesProjection, finishedProductInventory, productionPlan, logisticsInventory, plantInventory, salesProjectionAW, finishedProductInventoryAW, productionPlanAW, logisticsInventoryAW, plantInventoryAW, deletedTaskIds]);
+
+  const saveToLocalStorageRef = useRef(saveToLocalStorage);
+  saveToLocalStorageRef.current = saveToLocalStorage;
+
+  const initPersistedRef = useRef(false);
+  useEffect(() => {
+    if (!isLoaded || initPersistedRef.current) return;
+    initPersistedRef.current = true;
+    lastPersistedSnapshotRef.current = computePlannerSnapshot();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    const snapshot = computePlannerSnapshot();
+    if (snapshot === lastPersistedSnapshotRef.current) {
+      return;
+    }
+
+    const plan = {
+      tasks,
+      config: { weekStartDate: weekStartDate.toISOString(), lineSpeeds },
+      realProduction,
+      customRecipes,
+      customPackagingRecipes,
+      rawMaterialStock,
+      manualUBB,
+      initialUBBTanks,
+      finalUBBTanks,
+      initialUBBTanksDaily,
+      finalUBBTanksDaily,
+      salesProjection,
+      finishedProductInventory,
+      productionPlan,
+      logisticsInventory,
+      plantInventory,
+      salesProjectionAW,
+      finishedProductInventoryAW,
+      productionPlanAW,
+      logisticsInventoryAW,
+      plantInventoryAW,
+      deletedTaskIds,
+      _meta: { updatedAt: new Date().toISOString() },
+    };
+
+    const timer = setTimeout(async () => {
+      console.log('[PlannerStore] autosave start', { taskCount: tasks.length });
+      try {
+        await savePlannerData(plan);
+        const remote = await loadPlannerData();
+        const remoteUpdatedAt = (remote as any)?._meta?.updatedAt;
+        if (remoteUpdatedAt) {
+          localStorage.setItem(STORAGE_KEY_REMOTE_TIMESTAMP, remoteUpdatedAt);
+        }
+        lastPersistedSnapshotRef.current = snapshot;
+        console.log('[PlannerStore] autosave success', { remoteUpdatedAt });
+      } catch (error) {
+        console.warn('[PlannerStore] Remote save failed, saving to localStorage', error);
+        saveToLocalStorageRef.current();
+        setSaveError(error instanceof Error ? error.message : 'Error desconocido al guardar');
+      }
+    }, 100);
+
+    return () => clearTimeout(timer);
+  }, [isLoaded, computePlannerSnapshot, tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily, salesProjection, finishedProductInventory, productionPlan, logisticsInventory, plantInventory, salesProjectionAW, finishedProductInventoryAW, productionPlanAW, logisticsInventoryAW, plantInventoryAW, deletedTaskIds]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    saveToLocalStorageRef.current();
+  }, [isLoaded, tasks, weekStartDate, lineSpeeds, realProduction, customRecipes, customPackagingRecipes, rawMaterialStock, manualUBB, initialUBBTanks, finalUBBTanks, initialUBBTanksDaily, finalUBBTanksDaily, salesProjection, finishedProductInventory, productionPlan, logisticsInventory, plantInventory, salesProjectionAW, finishedProductInventoryAW, productionPlanAW, logisticsInventoryAW, plantInventoryAW, deletedTaskIds]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    const handleVisibility = () => {
+      console.log('[PlannerStore] visibilitychange -> refreshFromServer');
+      if (document.visibilityState === 'visible') {
+        refreshFromServer();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibility);
+    return () => document.removeEventListener('visibilitychange', handleVisibility);
+  }, [isLoaded, refreshFromServer]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    console.log('[PlannerStore] refresh interval started');
+    const interval = setInterval(() => {
+      console.log('[PlannerStore] refresh interval -> refreshFromServer');
+      refreshFromServer();
+    }, 15000);
+    return () => clearInterval(interval);
+  }, [isLoaded, refreshFromServer]);
 
   const addTask = useCallback((taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
     const colors = ['#587593', '#47CCB0', '#6366f1', '#ec4899', '#f59e0b', '#10b981', '#ef4444'];
@@ -255,6 +608,7 @@ function usePlannerStoreInner() {
       color: colors[Math.floor(Math.random() * colors.length)],
     };
     setTasks(prev => [...prev, newTask]);
+    setDeletedTaskIds(prev => prev.filter(x => x !== newTask.id));
   }, []);
 
   const updateTask = useCallback((id: string, taskData: Omit<ScheduledTask, 'id' | 'color'>) => {
@@ -262,16 +616,34 @@ function usePlannerStoreInner() {
   }, []);
 
   const removeTask = useCallback((id: string) => {
-    setTasks(prev => prev.filter(t => t.id !== id));
+    console.log('[PlannerStore] removeTask called', { id });
+    setTasks(prev => {
+      const next = prev.filter(t => t.id !== id);
+      console.log('[PlannerStore] removeTask result', { before: prev.length, after: next.length });
+      return next;
+    });
+    setDeletedTaskIds(prev => prev.includes(id) ? prev : [...prev, id]);
   }, []);
 
   const clearAll = useCallback((lineId?: string, startDate?: Date, endDate?: Date) => {
-    setTasks(prev => prev.filter(t => {
+    console.log('[PlannerStore] clearAll called', { lineId, startDate: startDate?.toISOString(), endDate: endDate?.toISOString() });
+    const toRemove = tasks.filter(t => {
       const matchLine = lineId ? t.lineId === lineId : true;
       const matchDate = startDate && endDate ? t.endTime >= startDate && t.startTime <= endDate : true;
       return matchLine && matchDate;
-    }));
-  }, []);
+    });
+    setTasks(prev => {
+      const before = prev.length;
+      const next = prev.filter(t => !toRemove.includes(t));
+      console.log('[PlannerStore] clearAll result', { before, after: next.length });
+      return next;
+    });
+    setDeletedTaskIds(prev => {
+      const nextSet = new Set(prev);
+      toRemove.forEach(t => { if (t.id) nextSet.add(t.id); });
+      return Array.from(nextSet);
+    });
+  }, [tasks]);
 
   const updateLineSpeed = useCallback((lineId: string, speed: number) => {
     setLineSpeeds(prev => ({ ...prev, [lineId]: speed }));
@@ -299,7 +671,7 @@ function usePlannerStoreInner() {
 
   const updatePackagingRecipe = useCallback((product: string, presentation: string, materialCode: string, value: number) => {
     setCustomPackagingRecipes(prev => {
-      const next = { ...prev };
+      const next = { ...prev } as Record<string, Record<string, Record<string, number>>>;
       if (!next[product]) next[product] = {};
       if (!next[product][presentation]) next[product][presentation] = {};
       next[product][presentation][materialCode] = value;
@@ -535,6 +907,8 @@ function usePlannerStoreInner() {
     setLogisticsInventoryAW,
     plantInventoryAW,
     setPlantInventoryAW,
+    deletedTaskIds,
+    setDeletedTaskIds,
     isLoaded,
     setIsLoaded,
     addTask,
@@ -569,6 +943,9 @@ function usePlannerStoreInner() {
     updateProductionPlanAW,
     updateLogisticsInventoryAW,
     updatePlantInventoryAW,
+    setPlannerDataChanged,
+    saveError,
+    clearSaveError,
   };
 }
 

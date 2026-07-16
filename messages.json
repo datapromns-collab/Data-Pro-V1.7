@@ -1,0 +1,114 @@
+{
+  "messages": [
+    {
+      "id": "2026-07-16T14:30:07.962Z-ddo7xn3",
+      "title": "Modificación PDP",
+      "message": "Modificación lineas 1,2,3,4 para el trabajo del sábado diurno y nocturno",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-07-16T14:30:07.962Z"
+    },
+    {
+      "id": "2026-07-16T14:30:07.962Z-1372dg5",
+      "title": "Modificación PDP",
+      "message": "Modificación lineas 1,2,3,4 para el trabajo del sábado diurno y nocturno",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-07-16T14:30:07.962Z"
+    },
+    {
+      "id": "2026-07-16T14:30:07.962Z-m8munyx",
+      "title": "Modificación PDP",
+      "message": "Modificación lineas 1,2,3,4 para el trabajo del sábado diurno y nocturno",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodtj.mds",
+      "read": true,
+      "createdAt": "2026-07-16T14:30:07.962Z"
+    },
+    {
+      "id": "2026-07-16T14:30:07.962Z-xkgnxr7",
+      "title": "Modificación PDP",
+      "message": "Modificación lineas 1,2,3,4 para el trabajo del sábado diurno y nocturno",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "procj.mds",
+      "read": false,
+      "createdAt": "2026-07-16T14:30:07.962Z"
+    },
+    {
+      "id": "2026-07-16T14:30:07.962Z-cyye735",
+      "title": "Modificación PDP",
+      "message": "Modificación lineas 1,2,3,4 para el trabajo del sábado diurno y nocturno",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-07-16T14:30:07.962Z"
+    },
+    {
+      "id": "2026-07-16T14:30:07.962Z-m3eehuv",
+      "title": "Modificación PDP",
+      "message": "Modificación lineas 1,2,3,4 para el trabajo del sábado diurno y nocturno",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt.mds",
+      "read": false,
+      "createdAt": "2026-07-16T14:30:07.962Z"
+    },
+    {
+      "id": "2026-07-16T14:30:07.962Z-p0qzjf4",
+      "title": "Modificación PDP",
+      "message": "Modificación lineas 1,2,3,4 para el trabajo del sábado diurno y nocturno",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-07-16T14:30:07.962Z"
+    },
+    {
+      "id": "2026-07-16T14:30:07.962Z-oy6708q",
+      "title": "Modificación PDP",
+      "message": "Modificación lineas 1,2,3,4 para el trabajo del sábado diurno y nocturno",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "g.tec.mds",
+      "read": false,
+      "createdAt": "2026-07-16T14:30:07.962Z"
+    },
+    {
+      "id": "2026-07-16T14:30:07.962Z-fcni43u",
+      "title": "Modificación PDP",
+      "message": "Modificación lineas 1,2,3,4 para el trabajo del sábado diurno y nocturno",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "enf.mds",
+      "read": false,
+      "createdAt": "2026-07-16T14:30:07.962Z"
+    },
+    {
+      "id": "2026-07-16T14:30:07.962Z-xb2zddd",
+      "title": "Modificación PDP",
+      "message": "Modificación lineas 1,2,3,4 para el trabajo del sábado diurno y nocturno",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "etq.mds",
+      "read": false,
+      "createdAt": "2026-07-16T14:30:07.962Z"
+    }
+  ]
+}

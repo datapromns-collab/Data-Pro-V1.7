@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useRef } from 'react';
+import React, { useState, useEffect, useMemo, useRef, createContext, useContext, useCallback } from 'react';
+import { useRemoteCollection } from '@/hooks/use-remote-collection';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -49,23 +50,207 @@ const AZUCAR_POR_SABOR: Record<string, number> = {
 const inputCellClass = "border border-slate-200 px-1 py-0.5 text-[10px] text-slate-700";
 const inputClass = "w-full h-7 text-[10px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500";
 
-function RealKgPerSackInput({ selectedFecha, value, onChange }: { selectedFecha?: Date; value?: number; onChange?: (value: number | undefined) => void }) {
-  const storageKey = selectedFecha ? `jarabes-real-kg-per-sack-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
-  const [localValue, setLocalValue] = useState<string>('');
+// ---------------------------------------------------------------------------
+// Almacén compartido de Jarabes (servidor) - reemplaza el uso de localStorage
+// para que los datos cargados por un usuario los vean todos los usuarios.
+// ---------------------------------------------------------------------------
+type UbbRow = { inicial: string; preparado: string; final: string };
+type SugarRow = { invInicialSacos: string; recepcionSacos: string; invFinalSacos: string };
+type TanquesRow = { invInicialSacos: string; invFinalSacos: string };
 
+interface JarabesData {
+  ubb: Record<string, Record<string, UbbRow>>;
+  sugar: Record<string, Record<string, SugarRow>>;
+  tanques: Record<string, Record<string, TanquesRow>>;
+  realKgPerSack: Record<string, string>;
+  costoAzucar: Record<string, string>;
+}
+
+const EMPTY_JARABES_DATA: JarabesData = {
+  ubb: {},
+  sugar: {},
+  tanques: {},
+  realKgPerSack: {},
+  costoAzucar: {},
+};
+
+interface JarabesContextValue {
+  data: JarabesData;
+  isLoaded: boolean;
+  setData: (updater: JarabesData | ((prev: JarabesData) => JarabesData)) => void;
+}
+
+const JarabesContext = createContext<JarabesContextValue | null>(null);
+
+function useJarabes(): JarabesContextValue {
+  const ctx = useContext(JarabesContext);
+  if (!ctx) throw new Error('useJarabes debe usarse dentro de <JarabesProvider>');
+  return ctx;
+}
+
+const dk = (fecha: Date) => format(fecha, 'yyyy-MM-dd');
+
+function normalizeJarabesData(raw: any): JarabesData {
+  const d = raw && typeof raw === 'object' ? raw : {};
+  return {
+    ubb: d.ubb && typeof d.ubb === 'object' ? d.ubb : {},
+    sugar: d.sugar && typeof d.sugar === 'object' ? d.sugar : {},
+    tanques: d.tanques && typeof d.tanques === 'object' ? d.tanques : {},
+    realKgPerSack: d.realKgPerSack && typeof d.realKgPerSack === 'object' ? d.realKgPerSack : {},
+    costoAzucar: d.costoAzucar && typeof d.costoAzucar === 'object' ? d.costoAzucar : {},
+  };
+}
+
+function JarabesProvider({ children }: { children: React.ReactNode }) {
+  const store = useRemoteCollection<JarabesData>('jarabes', EMPTY_JARABES_DATA);
+  const migratedRef = useRef(false);
+
+  const data = useMemo(() => normalizeJarabesData(store.data), [store.data]);
+
+  // Migración única desde localStorage al servidor (solo si el remoto está vacío)
   useEffect(() => {
-    if (!storageKey) {
-      setLocalValue('');
+    if (migratedRef.current) return;
+    if (!store.isLoaded || typeof window === 'undefined') return;
+    const hasRemote =
+      Object.keys(data.ubb).length > 0 ||
+      Object.keys(data.sugar).length > 0 ||
+      Object.keys(data.tanques).length > 0 ||
+      Object.keys(data.realKgPerSack).length > 0 ||
+      Object.keys(data.costoAzucar).length > 0;
+    if (hasRemote) {
+      migratedRef.current = true;
       return;
     }
     try {
-      const saved = localStorage.getItem(storageKey);
-      if (saved) setLocalValue(saved);
-      else setLocalValue('');
-    } catch {
-      setLocalValue('');
+      const migrated: JarabesData = { ubb: {}, sugar: {}, tanques: {}, realKgPerSack: {}, costoAzucar: {} };
+      let found = false;
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (!key) continue;
+        let m: RegExpMatchArray | null;
+        if ((m = key.match(/^jarabes-ubb-(\d{4}-\d{2}-\d{2})$/))) {
+          try { migrated.ubb[m[1]] = JSON.parse(localStorage.getItem(key) || '{}'); found = true; } catch {}
+        } else if ((m = key.match(/^jarabes-sugar-(\d{4}-\d{2}-\d{2})$/))) {
+          try { migrated.sugar[m[1]] = JSON.parse(localStorage.getItem(key) || '{}'); found = true; } catch {}
+        } else if ((m = key.match(/^jarabes-tanques-(\d{4}-\d{2}-\d{2})$/))) {
+          try { migrated.tanques[m[1]] = JSON.parse(localStorage.getItem(key) || '{}'); found = true; } catch {}
+        } else if ((m = key.match(/^jarabes-real-kg-per-sack-(\d{4}-\d{2}-\d{2})$/))) {
+          const v = localStorage.getItem(key); if (v) { migrated.realKgPerSack[m[1]] = v; found = true; }
+        } else if ((m = key.match(/^jarabes-costo-azucar-(\d{4}-\d{2}-\d{2})$/))) {
+          const v = localStorage.getItem(key); if (v) { migrated.costoAzucar[m[1]] = v; found = true; }
+        }
+      }
+      if (found) {
+        store.setData((prev) => ({ ...normalizeJarabesData(prev), ...migrated }));
+      }
+    } catch (e) {
+      console.error('Error migrando datos de jarabes al servidor', e);
     }
-  }, [storageKey]);
+    migratedRef.current = true;
+  }, [store.isLoaded, data, store]);
+
+  const value = useMemo<JarabesContextValue>(() => ({
+    data,
+    isLoaded: store.isLoaded,
+    setData: (updater) => {
+      store.setData((prev) => {
+        const base = normalizeJarabesData(prev);
+        return typeof updater === 'function' ? (updater as (p: JarabesData) => JarabesData)(base) : updater;
+      });
+    },
+  }), [data, store]);
+
+  return <JarabesContext.Provider value={value}>{children}</JarabesContext.Provider>;
+}
+
+function computeResumenForDateData(data: JarabesData, fecha: Date, kgPerSack: number) {
+  const key = dk(fecha);
+  const ubbData = data.ubb[key] || {};
+  const sugarData = data.sugar[key] || {};
+  const tanquesData = data.tanques[key] || {};
+
+  let estandarTotal = 0;
+  Object.keys(ubbData).forEach((sabor) => {
+    const ubbInicial = Number(ubbData[sabor]?.inicial) || 0;
+    const ubbPreparado = Number(ubbData[sabor]?.preparado) || 0;
+    const ubbFinal = Number(ubbData[sabor]?.final) || 0;
+    const ubbConsumo = Math.max(0, (ubbInicial + ubbPreparado) - ubbFinal);
+    const factor = AZUCAR_POR_SABOR[sabor] || 0;
+    estandarTotal += ubbConsumo * factor;
+  });
+
+  let disponibleSugarTotal = 0;
+  Object.keys(sugarData).forEach((proveedor) => {
+    const invInicialSacos = Number(sugarData[proveedor]?.invInicialSacos) || 0;
+    const recepcionSacos = Number(sugarData[proveedor]?.recepcionSacos) || 0;
+    disponibleSugarTotal += (invInicialSacos + recepcionSacos) * kgPerSack;
+  });
+
+  let inicialTanquesTotal = 0;
+  Object.keys(tanquesData).forEach((tanque) => {
+    const invInicialSacos = Number(tanquesData[tanque]?.invInicialSacos) || 0;
+    inicialTanquesTotal += invInicialSacos * kgPerSack;
+  });
+
+  let ubbInicialTotal = 0;
+  Object.keys(ubbData).forEach((sabor) => {
+    const ubbInicial = Number(ubbData[sabor]?.inicial) || 0;
+    const factor = AZUCAR_POR_SABOR[sabor] || 0;
+    ubbInicialTotal += ubbInicial * factor;
+  });
+
+  let finalSugarTotal = 0;
+  Object.keys(sugarData).forEach((proveedor) => {
+    const invFinalSacos = Number(sugarData[proveedor]?.invFinalSacos) || 0;
+    finalSugarTotal += invFinalSacos * kgPerSack;
+  });
+
+  let finalTanquesTotal = 0;
+  Object.keys(tanquesData).forEach((tanque) => {
+    const invFinalSacos = Number(tanquesData[tanque]?.invFinalSacos) || 0;
+    finalTanquesTotal += invFinalSacos * kgPerSack;
+  });
+
+  let ubbFinalTotal = 0;
+  Object.keys(ubbData).forEach((sabor) => {
+    const ubbFinal = Number(ubbData[sabor]?.final) || 0;
+    const factor = AZUCAR_POR_SABOR[sabor] || 0;
+    ubbFinalTotal += ubbFinal * factor;
+  });
+
+  const fisicoTotal = Math.round(
+    (disponibleSugarTotal + inicialTanquesTotal + ubbInicialTotal - finalSugarTotal - finalTanquesTotal - ubbFinalTotal) * 100
+  ) / 100;
+
+  const estandar = Math.round(estandarTotal * 100) / 100;
+  const diferencia = Math.round((fisicoTotal - estandar) * 100) / 100;
+  const porcentaje = estandar > 0 ? Math.round((diferencia / estandar) * 10000) / 100 : 0;
+
+  return { estandar, fisico: fisicoTotal, diferencia, porcentaje };
+}
+
+function getRealKgPerSackForDateData(data: JarabesData, fecha: Date): number {
+  const saved = data.realKgPerSack[dk(fecha)];
+  if (saved) {
+    const parsed = Number(saved);
+    if (Number.isFinite(parsed) && parsed > 0) return parsed;
+  }
+  return 50;
+}
+
+function RealKgPerSackInput({ selectedFecha, value, onChange }: { selectedFecha?: Date; value?: number; onChange?: (value: number | undefined) => void }) {
+  const { data, setData } = useJarabes();
+  const dateKey = selectedFecha ? dk(selectedFecha) : null;
+  const [localValue, setLocalValue] = useState<string>('');
+
+  useEffect(() => {
+    if (!dateKey) {
+      setLocalValue('');
+      return;
+    }
+    const saved = data.realKgPerSack[dateKey];
+    setLocalValue(saved || '');
+  }, [dateKey, data.realKgPerSack]);
 
   const handleChange = (raw: string) => {
     const cleaned = raw.replace(/[^0-9.]/g, '');
@@ -78,15 +263,13 @@ function RealKgPerSackInput({ selectedFecha, value, onChange }: { selectedFecha?
     const num = Number(trimmed);
     onChange?.(Number.isFinite(num) && trimmed !== '' ? num : undefined);
 
-    try {
-      if (trimmed) {
-        localStorage.setItem(storageKey!, trimmed);
-      } else {
-        localStorage.removeItem(storageKey!);
-      }
-    } catch {
-      // ignore
-    }
+    if (!dateKey) return;
+    setData((prev) => {
+      const next = { ...prev.realKgPerSack };
+      if (trimmed) next[dateKey] = trimmed;
+      else delete next[dateKey];
+      return { ...prev, realKgPerSack: next };
+    });
   };
 
   return (
@@ -105,22 +288,18 @@ function RealKgPerSackInput({ selectedFecha, value, onChange }: { selectedFecha?
 }
 
 function CostoAzucarInput({ selectedFecha, onUpdate, onChange }: { selectedFecha?: Date; onUpdate?: () => void; onChange?: (value: number | undefined) => void }) {
-  const storageKey = selectedFecha ? `jarabes-costo-azucar-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
+  const { data, setData } = useJarabes();
+  const dateKey = selectedFecha ? dk(selectedFecha) : null;
   const [value, setValue] = useState<string>('');
 
   useEffect(() => {
-    if (!storageKey) {
+    if (!dateKey) {
       setValue('');
       return;
     }
-    try {
-      const saved = localStorage.getItem(storageKey);
-      if (saved) setValue(saved);
-      else setValue('');
-    } catch {
-      setValue('');
-    }
-  }, [storageKey]);
+    const saved = data.costoAzucar[dateKey];
+    setValue(saved || '');
+  }, [dateKey, data.costoAzucar]);
 
   const handleChange = (raw: string) => {
     const cleaned = raw.replace(/[^0-9.]/g, '');
@@ -130,14 +309,13 @@ function CostoAzucarInput({ selectedFecha, onUpdate, onChange }: { selectedFecha
     const trimmed = decimals.length > 2 ? `${parts[0]}.${decimals.slice(0, 2)}` : cleaned;
     setValue(trimmed);
 
-    try {
-      if (trimmed) {
-        localStorage.setItem(storageKey!, trimmed);
-      } else {
-        localStorage.removeItem(storageKey!);
-      }
-    } catch {
-      // ignore
+    if (dateKey) {
+      setData((prev) => {
+        const next = { ...prev.costoAzucar };
+        if (trimmed) next[dateKey] = trimmed;
+        else delete next[dateKey];
+        return { ...prev, costoAzucar: next };
+      });
     }
 
     const num = Number(trimmed);
@@ -166,74 +344,58 @@ function UbbTable({ mode, selectedFecha, onUpdate }: { mode: 'estandar' | 'prome
   const headerBg = isGreen ? 'bg-green-700' : 'bg-blue-700';
   const headerBorder = isGreen ? 'border-green-600' : 'border-blue-600';
   const rowEvenBg = isGreen ? 'bg-green-50' : 'bg-blue-50';
-  const storageKey = selectedFecha ? `jarabes-ubb-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
-  const [values, setValues] = useState<Record<string, { inicial: string; preparado: string; final: string }>>({});
+  const { data, setData } = useJarabes();
+  const dateKey = selectedFecha ? dk(selectedFecha) : null;
+  const [values, setValues] = useState<Record<string, UbbRow>>({});
+  const dirtyRef = useRef(false);
+  const onUpdateRef = useRef(onUpdate);
+  onUpdateRef.current = onUpdate;
 
   useEffect(() => {
-    if (!storageKey) {
+    dirtyRef.current = false;
+  }, [dateKey]);
+
+  useEffect(() => {
+    if (!dateKey) {
       setValues({});
       return;
     }
+    if (dirtyRef.current) return;
 
-    const savedRaw = localStorage.getItem(storageKey);
-
-    if (savedRaw !== null) {
-      try {
-        const parsed = JSON.parse(savedRaw);
-        if (Object.keys(parsed).length > 0) {
-          setValues(parsed);
-          return;
-        }
-      } catch {
-        // ignore
-      }
+    const existing = data.ubb[dateKey];
+    if (existing && Object.keys(existing).length > 0) {
+      setValues(existing);
+      return;
     }
 
     if (selectedFecha) {
       const yesterday = new Date(selectedFecha);
       yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayKey = `jarabes-ubb-${format(yesterday, 'yyyy-MM-dd')}`;
-      const yesterdayData = localStorage.getItem(yesterdayKey);
-
-      if (yesterdayData) {
-        try {
-          const yesterdayParsed = JSON.parse(yesterdayData);
-          const initialValues: Record<string, { inicial: string; preparado: string; final: string }> = {};
-
-          Object.keys(yesterdayParsed).forEach((sabor) => {
-            const finalValue = yesterdayParsed[sabor]?.final;
-            if (finalValue && Number(finalValue) > 0) {
-              initialValues[sabor] = {
-                inicial: finalValue,
-                preparado: '',
-                final: ''
-              };
-            }
-          });
-
-          if (Object.keys(initialValues).length > 0) {
-            setValues(initialValues);
-            localStorage.setItem(storageKey, JSON.stringify(initialValues));
-            return;
+      const yesterdayParsed = data.ubb[dk(yesterday)];
+      if (yesterdayParsed && Object.keys(yesterdayParsed).length > 0) {
+        const initialValues: Record<string, UbbRow> = {};
+        Object.keys(yesterdayParsed).forEach((sabor) => {
+          const finalValue = yesterdayParsed[sabor]?.final;
+          if (finalValue && Number(finalValue) > 0) {
+            initialValues[sabor] = { inicial: finalValue, preparado: '', final: '' };
           }
-        } catch {
-          // ignore
+        });
+        if (Object.keys(initialValues).length > 0) {
+          setValues(initialValues);
+          setData((prev) => ({ ...prev, ubb: { ...prev.ubb, [dateKey]: initialValues } }));
+          return;
         }
       }
     }
 
     setValues({});
-  }, [storageKey, selectedFecha]);
+  }, [dateKey, data.ubb, selectedFecha, setData]);
 
-  useEffect(() => {
-    if (!storageKey) return;
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(values));
-      onUpdate?.();
-    } catch {
-      // ignore
-    }
-  }, [values, storageKey, onUpdate]);
+  const persist = (next: Record<string, UbbRow>) => {
+    if (!dateKey) return;
+    setData((prev) => ({ ...prev, ubb: { ...prev.ubb, [dateKey]: next } }));
+    onUpdateRef.current?.();
+  };
 
   const handleChange = (sabor: string, field: 'inicial' | 'preparado' | 'final', raw: string) => {
     const cleaned = raw.replace(/[^0-9.]/g, '');
@@ -241,10 +403,10 @@ function UbbTable({ mode, selectedFecha, onUpdate }: { mode: 'estandar' | 'prome
     if (parts.length > 2) return;
     const decimals = parts[1] || '';
     const trimmed = decimals.length > 2 ? `${parts[0]}.${decimals.slice(0, 2)}` : cleaned;
-    setValues(prev => ({
-      ...prev,
-      [sabor]: { ...prev[sabor], [field]: trimmed }
-    }));
+    dirtyRef.current = true;
+    const next = { ...values, [sabor]: { ...values[sabor], [field]: trimmed } as UbbRow };
+    setValues(next);
+    persist(next);
   };
 
   const getNumber = (sabor: string, field: 'inicial' | 'preparado' | 'final') => {
@@ -339,90 +501,69 @@ function SugarTable({ selectedFecha, mode = 'estandar', realKgPerSack, onUpdate 
   const headerBg = isPromedio ? 'bg-orange-600' : 'bg-yellow-500';
   const headerBorder = isPromedio ? 'border-orange-600' : 'border-yellow-600';
   const rowEvenBg = isPromedio ? 'bg-orange-50' : 'bg-yellow-50';
-  type SugarValues = Record<string, { invInicialSacos: string; recepcionSacos: string; invFinalSacos: string }>;
-  const storageKey = selectedFecha ? `jarabes-sugar-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
+  type SugarValues = Record<string, SugarRow>;
+  const { data, setData } = useJarabes();
+  const dateKey = selectedFecha ? dk(selectedFecha) : null;
   const [values, setValues] = useState<SugarValues>({});
+  const dirtyRef = useRef(false);
+  const onUpdateRef = useRef(onUpdate);
+  onUpdateRef.current = onUpdate;
 
   const kgPerSack = realKgPerSack ?? 50;
 
   useEffect(() => {
-    if (!storageKey) {
+    dirtyRef.current = false;
+  }, [dateKey]);
+
+  useEffect(() => {
+    if (!dateKey) {
       setValues({});
       return;
     }
+    if (dirtyRef.current) return;
 
-    const savedRaw = localStorage.getItem(storageKey);
-
-    if (savedRaw !== null) {
-      try {
-        const parsed = JSON.parse(savedRaw);
-        if (Object.keys(parsed).length > 0) {
-          setValues(parsed);
-          return;
-        }
-      } catch {
-        // ignore
-      }
+    const existing = data.sugar[dateKey];
+    if (existing && Object.keys(existing).length > 0) {
+      setValues(existing);
+      return;
     }
 
     if (selectedFecha) {
       const yesterday = new Date(selectedFecha);
       yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayKey = `jarabes-sugar-${format(yesterday, 'yyyy-MM-dd')}`;
-      const yesterdayData = localStorage.getItem(yesterdayKey);
-
-      if (yesterdayData) {
-        try {
-          const yesterdayParsed = JSON.parse(yesterdayData);
-          const initialValues: SugarValues = {};
-
-          Object.keys(yesterdayParsed).forEach((proveedor) => {
-            const invFinalSacos = yesterdayParsed[proveedor]?.invFinalSacos;
-            if (invFinalSacos && Number(invFinalSacos) > 0) {
-              initialValues[proveedor] = {
-                invInicialSacos: invFinalSacos,
-                recepcionSacos: '',
-                invFinalSacos: '',
-              };
-            }
-          });
-
-          if (Object.keys(initialValues).length > 0) {
-            setValues(initialValues);
-            localStorage.setItem(storageKey, JSON.stringify(initialValues));
-            return;
+      const yesterdayParsed = data.sugar[dk(yesterday)];
+      if (yesterdayParsed && Object.keys(yesterdayParsed).length > 0) {
+        const initialValues: SugarValues = {};
+        Object.keys(yesterdayParsed).forEach((proveedor) => {
+          const invFinalSacos = yesterdayParsed[proveedor]?.invFinalSacos;
+          if (invFinalSacos && Number(invFinalSacos) > 0) {
+            initialValues[proveedor] = { invInicialSacos: invFinalSacos, recepcionSacos: '', invFinalSacos: '' };
           }
-        } catch {
-          // ignore
+        });
+        if (Object.keys(initialValues).length > 0) {
+          setValues(initialValues);
+          setData((prev) => ({ ...prev, sugar: { ...prev.sugar, [dateKey]: initialValues } }));
+          return;
         }
       }
     }
 
     setValues({});
-  }, [storageKey, selectedFecha]);
+  }, [dateKey, data.sugar, selectedFecha, setData]);
 
-  useEffect(() => {
-    if (!storageKey) return;
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(values));
-      onUpdate?.();
-    } catch {
-      // ignore
-    }
-  }, [values, storageKey, onUpdate]);
+  const persist = (next: SugarValues) => {
+    if (!dateKey) return;
+    setData((prev) => ({ ...prev, sugar: { ...prev.sugar, [dateKey]: next } }));
+    onUpdateRef.current?.();
+  };
 
   const handleSacosChange = (proveedor: string, field: 'invInicialSacos' | 'recepcionSacos' | 'invFinalSacos', raw: string) => {
     const cleaned = raw.replace(/[^0-9]/g, '');
-    setValues(prev => {
-      const current = prev[proveedor] || { invInicialSacos: '', recepcionSacos: '', invFinalSacos: '' };
-      return {
-        ...prev,
-        [proveedor]: {
-          ...current,
-          [field]: cleaned,
-        }
-      };
-    });
+    dirtyRef.current = true;
+    const current = values[proveedor] || { invInicialSacos: '', recepcionSacos: '', invFinalSacos: '' };
+    const next = { ...values, [proveedor]: { ...current, [field]: cleaned } };
+    setValues(next);
+    persist(next);
   };
 
   const getNumber = (proveedor: string, field: keyof SugarValues[string]) => {
@@ -520,89 +661,69 @@ function SugarTable({ selectedFecha, mode = 'estandar', realKgPerSack, onUpdate 
 }
 
 function TanquesTable({ selectedFecha, realKgPerSack, theme = 'teal', onUpdate }: { selectedFecha?: Date; realKgPerSack?: number; theme?: 'teal' | 'gold'; onUpdate?: () => void }) {
-  const storageKey = selectedFecha ? `jarabes-tanques-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
-  type TanquesValues = Record<string, { invInicialSacos: string; invFinalSacos: string }>;
+  const { data, setData } = useJarabes();
+  const dateKey = selectedFecha ? dk(selectedFecha) : null;
+  type TanquesValues = Record<string, TanquesRow>;
   const [values, setValues] = useState<TanquesValues>({});
+  const dirtyRef = useRef(false);
+  const onUpdateRef = useRef(onUpdate);
+  onUpdateRef.current = onUpdate;
 
   const kgPerSack = realKgPerSack ?? 50;
 
   useEffect(() => {
-    if (!storageKey) {
+    dirtyRef.current = false;
+  }, [dateKey]);
+
+  useEffect(() => {
+    if (!dateKey) {
       setValues({});
       return;
     }
+    if (dirtyRef.current) return;
 
-    const savedRaw = localStorage.getItem(storageKey);
-
-    if (savedRaw !== null) {
-      try {
-        const parsed = JSON.parse(savedRaw);
-        if (Object.keys(parsed).length > 0) {
-          setValues(parsed);
-          return;
-        }
-      } catch {
-        // ignore
-      }
+    const existing = data.tanques[dateKey];
+    if (existing && Object.keys(existing).length > 0) {
+      setValues(existing);
+      return;
     }
 
     if (selectedFecha) {
       const yesterday = new Date(selectedFecha);
       yesterday.setDate(yesterday.getDate() - 1);
-      const yesterdayKey = `jarabes-tanques-${format(yesterday, 'yyyy-MM-dd')}`;
-      const yesterdayData = localStorage.getItem(yesterdayKey);
-
-      if (yesterdayData) {
-        try {
-          const yesterdayParsed = JSON.parse(yesterdayData);
-          const initialValues: TanquesValues = {};
-
-          Object.keys(yesterdayParsed).forEach((tanque) => {
-            const invFinalSacos = yesterdayParsed[tanque]?.invFinalSacos;
-            if (invFinalSacos && Number(invFinalSacos) > 0) {
-              initialValues[tanque] = {
-                invInicialSacos: invFinalSacos,
-                invFinalSacos: '',
-              };
-            }
-          });
-
-          if (Object.keys(initialValues).length > 0) {
-            setValues(initialValues);
-            localStorage.setItem(storageKey, JSON.stringify(initialValues));
-            return;
+      const yesterdayParsed = data.tanques[dk(yesterday)];
+      if (yesterdayParsed && Object.keys(yesterdayParsed).length > 0) {
+        const initialValues: TanquesValues = {};
+        Object.keys(yesterdayParsed).forEach((tanque) => {
+          const invFinalSacos = yesterdayParsed[tanque]?.invFinalSacos;
+          if (invFinalSacos && Number(invFinalSacos) > 0) {
+            initialValues[tanque] = { invInicialSacos: invFinalSacos, invFinalSacos: '' };
           }
-        } catch {
-          // ignore
+        });
+        if (Object.keys(initialValues).length > 0) {
+          setValues(initialValues);
+          setData((prev) => ({ ...prev, tanques: { ...prev.tanques, [dateKey]: initialValues } }));
+          return;
         }
       }
     }
 
     setValues({});
-  }, [storageKey, selectedFecha]);
+  }, [dateKey, data.tanques, selectedFecha, setData]);
 
-  useEffect(() => {
-    if (!storageKey) return;
-    try {
-      localStorage.setItem(storageKey, JSON.stringify(values));
-      onUpdate?.();
-    } catch {
-      // ignore
-    }
-  }, [values, storageKey, onUpdate]);
+  const persist = (next: TanquesValues) => {
+    if (!dateKey) return;
+    setData((prev) => ({ ...prev, tanques: { ...prev.tanques, [dateKey]: next } }));
+    onUpdateRef.current?.();
+  };
 
   const handleSacosChange = (tanque: string, field: 'invInicialSacos' | 'invFinalSacos', raw: string) => {
     const cleaned = raw.replace(/[^0-9]/g, '');
-    setValues(prev => {
-      const current = prev[tanque] || { invInicialSacos: '', invFinalSacos: '' };
-      return {
-        ...prev,
-        [tanque]: {
-          ...current,
-          [field]: cleaned,
-        }
-      };
-    });
+    dirtyRef.current = true;
+    const current = values[tanque] || { invInicialSacos: '', invFinalSacos: '' };
+    const next = { ...values, [tanque]: { ...current, [field]: cleaned } };
+    setValues(next);
+    persist(next);
   };
 
   const getNumber = (tanque: string, field: keyof TanquesValues[string]) => {
@@ -671,9 +792,7 @@ function TanquesTable({ selectedFecha, realKgPerSack, theme = 'teal', onUpdate }
 }
 
 function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50, updateCounter = 0, costoAzucar }: { selectedFecha?: Date; theme?: 'amber' | 'gold' | 'gray'; kgPerSack?: number; updateCounter?: number; costoAzucar?: number }) {
-  const ubbStorageKey = selectedFecha ? `jarabes-ubb-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
-  const sugarStorageKey = selectedFecha ? `jarabes-sugar-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
-  const tanquesStorageKey = selectedFecha ? `jarabes-tanques-${format(selectedFecha, 'yyyy-MM-dd')}` : null;
+  const { data } = useJarabes();
   const [estandar, setEstandar] = useState<number>(0);
   const [fisico, setFisico] = useState<number>(0);
 
@@ -682,77 +801,15 @@ function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50, updateCo
   const rowBg = theme === 'gold' ? 'bg-yellow-50' : theme === 'gray' ? 'bg-slate-50' : 'bg-slate-50';
 
   useEffect(() => {
-    if (!selectedFecha || !ubbStorageKey) {
+    if (!selectedFecha) {
       setEstandar(0);
       setFisico(0);
       return;
     }
-
-    try {
-      const ubbData = JSON.parse(localStorage.getItem(ubbStorageKey) || '{}');
-      const sugarData = JSON.parse(localStorage.getItem(sugarStorageKey!) || '{}');
-      const tanquesData = JSON.parse(localStorage.getItem(tanquesStorageKey!) || '{}');
-
-      let estandarTotal = 0;
-      Object.keys(ubbData).forEach((sabor) => {
-        const ubbInicial = Number(ubbData[sabor]?.inicial) || 0;
-        const ubbPreparado = Number(ubbData[sabor]?.preparado) || 0;
-        const ubbFinal = Number(ubbData[sabor]?.final) || 0;
-        const ubbConsumo = Math.max(0, (ubbInicial + ubbPreparado) - ubbFinal);
-        const factor = AZUCAR_POR_SABOR[sabor] || 0;
-        estandarTotal += ubbConsumo * factor;
-      });
-      setEstandar(Math.round(estandarTotal * 100) / 100);
-
-      let disponibleSugarTotal = 0;
-      Object.keys(sugarData).forEach((proveedor) => {
-        const invInicialSacos = Number(sugarData[proveedor]?.invInicialSacos) || 0;
-        const recepcionSacos = Number(sugarData[proveedor]?.recepcionSacos) || 0;
-        disponibleSugarTotal += (invInicialSacos + recepcionSacos) * kgPerSack;
-      });
-
-      let inicialTanquesTotal = 0;
-      Object.keys(tanquesData).forEach((tanque) => {
-        const invInicialSacos = Number(tanquesData[tanque]?.invInicialSacos) || 0;
-        inicialTanquesTotal += invInicialSacos * kgPerSack;
-      });
-
-      let ubbInicialTotal = 0;
-      Object.keys(ubbData).forEach((sabor) => {
-        const ubbInicial = Number(ubbData[sabor]?.inicial) || 0;
-        const factor = AZUCAR_POR_SABOR[sabor] || 0;
-        ubbInicialTotal += ubbInicial * factor;
-      });
-
-      let finalSugarTotal = 0;
-      Object.keys(sugarData).forEach((proveedor) => {
-        const invFinalSacos = Number(sugarData[proveedor]?.invFinalSacos) || 0;
-        finalSugarTotal += invFinalSacos * kgPerSack;
-      });
-
-      let finalTanquesTotal = 0;
-      Object.keys(tanquesData).forEach((tanque) => {
-        const invFinalSacos = Number(tanquesData[tanque]?.invFinalSacos) || 0;
-        finalTanquesTotal += invFinalSacos * kgPerSack;
-      });
-
-      let ubbFinalTotal = 0;
-      Object.keys(ubbData).forEach((sabor) => {
-        const ubbFinal = Number(ubbData[sabor]?.final) || 0;
-        const factor = AZUCAR_POR_SABOR[sabor] || 0;
-        ubbFinalTotal += ubbFinal * factor;
-      });
-
-      const fisicoTotal = Math.round(
-        (disponibleSugarTotal + inicialTanquesTotal + ubbInicialTotal - finalSugarTotal - finalTanquesTotal - ubbFinalTotal) * 100
-      ) / 100;
-
-      setFisico(fisicoTotal);
-    } catch {
-      setEstandar(0);
-      setFisico(0);
-    }
-  }, [ubbStorageKey, sugarStorageKey, tanquesStorageKey, kgPerSack, updateCounter]);
+    const resumen = computeResumenForDateData(data, selectedFecha, kgPerSack);
+    setEstandar(resumen.estandar);
+    setFisico(resumen.fisico);
+  }, [data, selectedFecha, kgPerSack, updateCounter]);
 
   const diferencia = Math.round((fisico - estandar) * 100) / 100;
   const porcentaje = estandar > 0 ? Math.round((diferencia / estandar) * 10000) / 100 : 0;
@@ -802,93 +859,17 @@ function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50, updateCo
   );
 }
 
-function computeResumenForDate(fecha: Date, kgPerSack: number) {
-  const ubbKey = `jarabes-ubb-${format(fecha, 'yyyy-MM-dd')}`;
-  const sugarKey = `jarabes-sugar-${format(fecha, 'yyyy-MM-dd')}`;
-  const tanquesKey = `jarabes-tanques-${format(fecha, 'yyyy-MM-dd')}`;
-
-  try {
-    const ubbData = JSON.parse(localStorage.getItem(ubbKey) || '{}');
-    const sugarData = JSON.parse(localStorage.getItem(sugarKey) || '{}');
-    const tanquesData = JSON.parse(localStorage.getItem(tanquesKey) || '{}');
-
-    let estandarTotal = 0;
-    Object.keys(ubbData).forEach((sabor) => {
-      const ubbInicial = Number(ubbData[sabor]?.inicial) || 0;
-      const ubbPreparado = Number(ubbData[sabor]?.preparado) || 0;
-      const ubbFinal = Number(ubbData[sabor]?.final) || 0;
-      const ubbConsumo = Math.max(0, (ubbInicial + ubbPreparado) - ubbFinal);
-      const factor = AZUCAR_POR_SABOR[sabor] || 0;
-      estandarTotal += ubbConsumo * factor;
-    });
-
-    let disponibleSugarTotal = 0;
-    Object.keys(sugarData).forEach((proveedor) => {
-      const invInicialSacos = Number(sugarData[proveedor]?.invInicialSacos) || 0;
-      const recepcionSacos = Number(sugarData[proveedor]?.recepcionSacos) || 0;
-      disponibleSugarTotal += (invInicialSacos + recepcionSacos) * kgPerSack;
-    });
-
-    let inicialTanquesTotal = 0;
-    Object.keys(tanquesData).forEach((tanque) => {
-      const invInicialSacos = Number(tanquesData[tanque]?.invInicialSacos) || 0;
-      inicialTanquesTotal += invInicialSacos * kgPerSack;
-    });
-
-    let ubbInicialTotal = 0;
-    Object.keys(ubbData).forEach((sabor) => {
-      const ubbInicial = Number(ubbData[sabor]?.inicial) || 0;
-      const factor = AZUCAR_POR_SABOR[sabor] || 0;
-      ubbInicialTotal += ubbInicial * factor;
-    });
-
-    let finalSugarTotal = 0;
-    Object.keys(sugarData).forEach((proveedor) => {
-      const invFinalSacos = Number(sugarData[proveedor]?.invFinalSacos) || 0;
-      finalSugarTotal += invFinalSacos * kgPerSack;
-    });
-
-    let finalTanquesTotal = 0;
-    Object.keys(tanquesData).forEach((tanque) => {
-      const invFinalSacos = Number(tanquesData[tanque]?.invFinalSacos) || 0;
-      finalTanquesTotal += invFinalSacos * kgPerSack;
-    });
-
-    let ubbFinalTotal = 0;
-    Object.keys(ubbData).forEach((sabor) => {
-      const ubbFinal = Number(ubbData[sabor]?.final) || 0;
-      const factor = AZUCAR_POR_SABOR[sabor] || 0;
-      ubbFinalTotal += ubbFinal * factor;
-    });
-
-    const fisicoTotal = Math.round(
-      (disponibleSugarTotal + inicialTanquesTotal + ubbInicialTotal - finalSugarTotal - finalTanquesTotal - ubbFinalTotal) * 100
-    ) / 100;
-
-    const diferencia = Math.round((fisicoTotal - estandarTotal) * 100) / 100;
-    const porcentaje = estandarTotal > 0 ? Math.round((diferencia / estandarTotal) * 10000) / 100 : 0;
-
-    return {
-      estandar: Math.round(estandarTotal * 100) / 100,
-      fisico: fisicoTotal,
-      diferencia,
-      porcentaje,
-    };
-  } catch {
-    return { estandar: 0, fisico: 0, diferencia: 0, porcentaje: 0 };
-  }
-}
-
 const DIAS_SEMANA = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
 
 function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintWeeklyStandard }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; onPrintWeeklyStandard?: (html: string) => void }) {
+  const { data } = useJarabes();
   const weekDays = useMemo(() => (selectedFecha ? getWeekDays(selectedFecha) : []), [selectedFecha]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const rows = useMemo(() => {
     return weekDays.map((fecha, idx) => {
       const dayKgPerSack = realKgPerSack ?? 50;
-      const resumen = computeResumenForDate(fecha, dayKgPerSack);
+      const resumen = computeResumenForDateData(data, fecha, dayKgPerSack);
       const merma = costoAzucar ? Math.round(resumen.diferencia * costoAzucar * 100) / 100 : 0;
       return {
         fecha: format(fecha, 'd/M/yyyy'),
@@ -900,7 +881,7 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
         merma,
       };
     });
-  }, [weekDays, costoAzucar, realKgPerSack]);
+  }, [weekDays, costoAzucar, realKgPerSack, data]);
 
   const totals = useMemo(() => {
     const totalEstandar = rows.reduce((sum, r) => sum + r.estandar, 0);
@@ -1052,28 +1033,15 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
   );
 }
 
-function getRealKgPerSackForDate(fecha: Date): number {
-  const storageKey = `jarabes-real-kg-per-sack-${format(fecha, 'yyyy-MM-dd')}`;
-  try {
-    const saved = localStorage.getItem(storageKey);
-    if (saved) {
-      const parsed = Number(saved);
-      if (Number.isFinite(parsed) && parsed > 0) return parsed;
-    }
-  } catch {
-    // ignore
-  }
-  return 50;
-}
-
 function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCounter, onPrintWeeklyPromedio }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; updateCounter?: number; onPrintWeeklyPromedio?: (html: string) => void }) {
+  const { data } = useJarabes();
   const weekDays = useMemo(() => (selectedFecha ? getWeekDays(selectedFecha) : []), [selectedFecha]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const rows = useMemo(() => {
     return weekDays.map((fecha, idx) => {
-      const dayKgPerSack = getRealKgPerSackForDate(fecha);
-      const resumen = computeResumenForDate(fecha, dayKgPerSack);
+      const dayKgPerSack = getRealKgPerSackForDateData(data, fecha);
+      const resumen = computeResumenForDateData(data, fecha, dayKgPerSack);
       const merma = costoAzucar ? Math.round(resumen.diferencia * costoAzucar * 100) / 100 : 0;
       return {
         fecha: format(fecha, 'd/M/yyyy'),
@@ -1085,7 +1053,7 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
         merma,
       };
     });
-  }, [weekDays, costoAzucar, realKgPerSack, updateCounter]);
+  }, [weekDays, costoAzucar, realKgPerSack, updateCounter, data]);
 
   const totals = useMemo(() => {
     const totalEstandar = rows.reduce((sum, r) => sum + r.estandar, 0);
@@ -1238,6 +1206,7 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
 }
 
 function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintMonthlyStandard }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; onPrintMonthlyStandard?: (html: string) => void }) {
+  const { data } = useJarabes();
   const weeks = useMemo(() => (selectedFecha ? getWeeksInMonth(selectedFecha) : []), [selectedFecha]);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -1250,7 +1219,7 @@ function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintM
       let totalEstandar = 0;
       let totalFisico = 0;
       week.forEach(fecha => {
-        const resumen = computeResumenForDate(fecha, dayKgPerSack);
+        const resumen = computeResumenForDateData(data, fecha, dayKgPerSack);
         totalEstandar += resumen.estandar;
         totalFisico += resumen.fisico;
       });
@@ -1270,7 +1239,7 @@ function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintM
         merma,
       };
     });
-  }, [weeks, costoAzucar, realKgPerSack]);
+  }, [weeks, costoAzucar, realKgPerSack, data]);
 
   const totals = useMemo(() => {
     const totalEstandar = rows.reduce((sum, r) => sum + r.estandar, 0);
@@ -1418,6 +1387,7 @@ function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintM
 }
 
 function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCounter, onPrintMonthlyPromedio }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; updateCounter?: number; onPrintMonthlyPromedio?: (html: string) => void }) {
+  const { data } = useJarabes();
   const weeks = useMemo(() => (selectedFecha ? getWeeksInMonth(selectedFecha) : []), [selectedFecha]);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -1429,8 +1399,8 @@ function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
       let totalEstandar = 0;
       let totalFisico = 0;
       week.forEach(fecha => {
-        const dayKgPerSack = getRealKgPerSackForDate(fecha);
-        const resumen = computeResumenForDate(fecha, dayKgPerSack);
+        const dayKgPerSack = getRealKgPerSackForDateData(data, fecha);
+        const resumen = computeResumenForDateData(data, fecha, dayKgPerSack);
         totalEstandar += resumen.estandar;
         totalFisico += resumen.fisico;
       });
@@ -1450,7 +1420,7 @@ function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
         merma,
       };
     });
-  }, [weeks, costoAzucar, realKgPerSack, updateCounter]);
+  }, [weeks, costoAzucar, realKgPerSack, updateCounter, data]);
 
   const totals = useMemo(() => {
     const totalEstandar = rows.reduce((sum, r) => sum + r.estandar, 0);
@@ -1597,7 +1567,16 @@ function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
   );
 }
 
-export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, onPrintMonthlyStandard, onPrintMonthlyPromedio, weekStartDate }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; onPrintMonthlyStandard?: (html: string) => void; onPrintMonthlyPromedio?: (html: string) => void; weekStartDate?: Date }) {
+export function JarabesModule(props: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; onPrintMonthlyStandard?: (html: string) => void; onPrintMonthlyPromedio?: (html: string) => void; weekStartDate?: Date }) {
+  return (
+    <JarabesProvider>
+      <JarabesModuleInner {...props} />
+    </JarabesProvider>
+  );
+}
+
+function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, onPrintMonthlyStandard, onPrintMonthlyPromedio, weekStartDate }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; onPrintMonthlyStandard?: (html: string) => void; onPrintMonthlyPromedio?: (html: string) => void; weekStartDate?: Date }) {
+  const { data } = useJarabes();
   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
   const [activeDisolucionTab, setActiveDisolucionTab] = useState<string>('disolucion');
   const [activeResumenTab, setActiveResumenTab] = useState<string>('semanal');
@@ -1628,27 +1607,23 @@ export function JarabesModule({ onPrintStandard, onPrintPromedio, onPrintWeeklyS
       setCostoAzucar(undefined);
       return;
     }
-    try {
-      const savedKg = localStorage.getItem(`jarabes-real-kg-per-sack-${format(selectedFecha, 'yyyy-MM-dd')}`);
-      if (savedKg) {
-        const parsed = Number(savedKg);
-        setRealKgPerSack(Number.isFinite(parsed) ? parsed : undefined);
-      } else {
-        setRealKgPerSack(undefined);
-      }
-
-      const savedCosto = localStorage.getItem(`jarabes-costo-azucar-${format(selectedFecha, 'yyyy-MM-dd')}`);
-      if (savedCosto) {
-        const parsed = Number(savedCosto);
-        setCostoAzucar(Number.isFinite(parsed) ? parsed : undefined);
-      } else {
-        setCostoAzucar(undefined);
-      }
-    } catch {
+    const key = dk(selectedFecha);
+    const savedKg = data.realKgPerSack[key];
+    if (savedKg) {
+      const parsed = Number(savedKg);
+      setRealKgPerSack(Number.isFinite(parsed) ? parsed : undefined);
+    } else {
       setRealKgPerSack(undefined);
+    }
+
+    const savedCosto = data.costoAzucar[key];
+    if (savedCosto) {
+      const parsed = Number(savedCosto);
+      setCostoAzucar(Number.isFinite(parsed) ? parsed : undefined);
+    } else {
       setCostoAzucar(undefined);
     }
-  }, [selectedFecha]);
+  }, [selectedFecha, data.realKgPerSack, data.costoAzucar]);
 
   useEffect(() => {
     if (!selectedFecha) {

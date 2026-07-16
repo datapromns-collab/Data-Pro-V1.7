@@ -6,11 +6,11 @@
     "node": ">=18.x"
   },
   "scripts": {
-    "dev": "next dev --turbopack -p 9003",
+    "dev": "next dev --turbopack -H 0.0.0.0 -p 9004",
     "genkit:dev": "genkit start -- tsx src/ai/dev.ts",
     "genkit:watch": "genkit start -- tsx --watch src/ai/dev.ts",
     "build": "next build",
-    "start": "next start",
+    "start": "next start -H 0.0.0.0 -p 9004",
     "lint": "next lint",
     "typecheck": "tsc --noEmit"
   },
@@ -50,6 +50,7 @@
     "genkit": "^1.28.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
     "lucide-react": "^0.475.0",
     "next": "^15.5.19",
     "patch-package": "^8.0.0",

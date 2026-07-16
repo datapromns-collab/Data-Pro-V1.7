@@ -16,6 +16,7 @@ import { es } from 'date-fns/locale';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
+import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
 
 const STORAGE_KEY = 'ordenes-sap-v1';
 
@@ -301,8 +302,10 @@ export default function OrdenesSapModule({
   onFechaChange?: (fecha: Date | undefined) => void;
 }) {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
-  const [activeSection, setActiveSection] = useState<'carga-prod' | 'dia-a-dia' | 'prodt-semanal' | 'resumen-mensual'>('carga-prod');
+  const [activeSection, setActiveSection] = useState<'carga-prod' | 'creador-ordenes' | 'dia-a-dia' | 'prodt-semanal' | 'resumen-mensual'>('carga-prod');
   const [activeSubsection, setActiveSubsection] = useState<'dia' | 'diurno' | 'nocturno' | null>(null);
+  // Estado independiente para la sección "Creador de Órdenes" (no afecta a las demás secciones)
+  const [creadorSubsection, setCreadorSubsection] = useState<'fijas' | 'ordenes'>('fijas');
 
   useEffect(() => {
     setActiveSubsection(null);
@@ -329,6 +332,400 @@ export default function OrdenesSapModule({
   const [fechaDiaADiaInicializada, setFechaDiaADiaInicializada] = useState(false);
   const [selectedFechaProdtSemanal, setSelectedFechaProdtSemanal] = useState<Date | undefined>(undefined);
   const [fechaProdtSemanalInicializada, setFechaProdtSemanalInicializada] = useState(false);
+  const [ordenComponentes, setOrdenComponentes] = useState<Record<string, { codigo: string; descripcion: string }>>({
+    'Jarabe T': { codigo: '', descripcion: '' },
+    'Bebida': { codigo: '', descripcion: '' },
+    'Env': { codigo: '', descripcion: '' },
+    'Etq': { codigo: '', descripcion: '' },
+    'Caj': { codigo: '', descripcion: '' },
+    'Prodt': { codigo: '', descripcion: '' },
+  });
+  // Línea seleccionada en la subsección "Ordenes" del Creador de Órdenes (independiente)
+  const [ordenLineaSeleccionada, setOrdenLineaSeleccionada] = useState<string>('');
+  // Sabor seleccionado en la subsección "Ordenes" del Creador de Órdenes (independiente)
+  const [ordenSaborSeleccionado, setOrdenSaborSeleccionado] = useState<string>('');
+  // Valor manual de "Orden I" (tercera tabla). "Orden F" se calcula automáticamente.
+  const [ordenInicial, setOrdenInicial] = useState<string>('');
+  const ordenSaboresList = [
+    'GLUP COLA',
+    'GLUP FRESH',
+    'GLUP UVA',
+    'GLUP PIÑA',
+    'GLUP NARANJA',
+    'GLUP KOLITA',
+    'GLUP MANZANA',
+    'GLUP PONCHE',
+    'GLUP CHICLE',
+    'GLUP MANZANA ROJA',
+    'GLUP PIÑA PARCHITA',
+    'JUSTY NARANJA',
+    'JUSTY DURAZNO',
+    'JUSTY PERA',
+    'JUSTY MANZANA',
+    'JUSTY TAMARINDO',
+    'VITA TEA LIMON',
+    'VITA TEA DURAZNO',
+  ];
+
+  // Datos de la fila "Jarabe T" (segunda tabla). Depende solo del sabor (igual para todas las líneas).
+  const JARABE_T_POR_SABOR: Record<string, { codigo: string; descripcion: string }> = {
+    'GLUP COLA': { codigo: 'JARA-00002', descripcion: 'JARABE TERMINADO GLUP COLA NEGRA' },
+    'GLUP UVA': { codigo: 'JARA-00003', descripcion: 'JARABE TERMINADO GLUP UVA' },
+    'GLUP KOLITA': { codigo: 'JARA-00004', descripcion: 'JARABE TERMINADO GLUP KOLITA' },
+    'GLUP NARANJA': { codigo: 'JARA-00005', descripcion: 'JARABE TERMINADO GLUP  NARANJA' },
+    'GLUP FRESH': { codigo: 'JARA-00006', descripcion: 'JARABE TERMINADO GLUP FRESH' },
+    'GLUP PIÑA': { codigo: 'JARA-00007', descripcion: 'JARABE TERMINADO GLUP PIÑA' },
+    'GLUP PONCHE': { codigo: 'JARA-00008', descripcion: 'JARABE TERMINADO GLUP PONCHE DE FRUTAS' },
+    'GLUP CHICLE': { codigo: 'JARA-00009', descripcion: 'JARABE TERMINADO GLUP CHICLE BOMBA' },
+    'GLUP MANZANA': { codigo: 'JARA-00010', descripcion: 'JARABE TERMINADO GLUP MANZANA VERDE' },
+    'GLUP MANZANA ROJA': { codigo: 'JARA-00011', descripcion: 'JARABE TERMINADO GLUP MANZANA ROJA' },
+    'GLUP PIÑA PARCHITA': { codigo: 'JARA-00012', descripcion: 'JARABE TERMINADO GLUP PIÑA PARCHITA' },
+  };
+
+  // Datos de la fila "Bebida" (segunda tabla). Depende solo del sabor (igual para todas las líneas).
+  const BEBIDA_POR_SABOR: Record<string, { codigo: string; descripcion: string }> = {
+    'GLUP COLA': { codigo: 'BEBT_0001', descripcion: 'BEBIDA TERMINADA GLUP COLA NEGRA' },
+    'GLUP UVA': { codigo: 'BEBT_0002', descripcion: 'BEBIDA TERMINADA GLUP UVA' },
+    'GLUP NARANJA': { codigo: 'BEBT_0003', descripcion: 'BEBIDA TERMINADA GLUP NARANJA' },
+    'GLUP PIÑA': { codigo: 'BEBT_0004', descripcion: 'BEBIDA TERMINADA GLUP PIÑA' },
+    'GLUP FRESH': { codigo: 'BEBT_0005', descripcion: 'BEBIDA TERMINADA GLUP FRESH' },
+    'GLUP KOLITA': { codigo: 'BEBT_0006', descripcion: 'BEBIDA TERMINADA GLUP KOLITA' },
+    'JUSTY NARANJA': { codigo: 'BEBT_0008', descripcion: 'BEBIDA TERMINADA JUSTY NARANJA' },
+    'GLUP PONCHE': { codigo: 'BEBT_0011', descripcion: 'BEBIDA TERMINADA GLUP PONCHE DE FRUTAS' },
+    'GLUP CHICLE': { codigo: 'BEBT_0012', descripcion: 'BEBIDA TERMINADA GLUP CHICLE BOMBA' },
+    'GLUP MANZANA': { codigo: 'BEBT_0013', descripcion: 'BEBIDA TERMINADA GLUP MANZANA VERDE' },
+    'VITA TEA DURAZNO': { codigo: 'BEBT_0040', descripcion: 'BEBIDA TERMINADA  VITA TEA  (DURAZNO)' },
+    'VITA TEA LIMON': { codigo: 'BEBT_0041', descripcion: 'BEBIDA TERMINADA  VITA TEA  (LIMON)' },
+    'GLUP MANZANA ROJA': { codigo: 'BEBT_0042', descripcion: 'BEBIDA TERMINADA GLUP MANZANA ROJA' },
+    'GLUP PIÑA PARCHITA': { codigo: 'BEBT_0043', descripcion: 'BEBIDA TERMINADA GLUP PIÑA PARCHITA' },
+    'JUSTY DURAZNO': { codigo: 'BEBT_0044', descripcion: 'BEBIDA TERMINADA JUSTY DURAZNO' },
+    'JUSTY PERA': { codigo: 'BEBT_0049', descripcion: 'BEBIDA TERMINADA JUSTY PERA' },
+    'JUSTY MANZANA': { codigo: 'BEBT_0048', descripcion: 'BEBIDA TERMINADA JUSTY MANZANA' },
+    'JUSTY TAMARINDO': { codigo: 'BEBT_0047', descripcion: 'BEBIDA TERMINADA JUSTY TAMARINDO' },
+  };
+
+  // Datos de la fila "Env" (segunda tabla). Depende de la LÍNEA y del SABOR.
+  const ENV_POR_LINEA_SABOR: Record<string, Record<string, { codigo: string; descripcion: string }>> = {
+    '1': {
+      'GLUP COLA': { codigo: 'ENV-00001', descripcion: 'BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS' },
+      'GLUP UVA': { codigo: 'ENV-00005', descripcion: 'BOTELLA ENVASADA GLUP UVA  2.0.LTS' },
+      'GLUP PIÑA': { codigo: 'ENV-00009', descripcion: 'BOTELLA ENVASADA GLUP PIÑA 2.0.LTS' },
+      'GLUP FRESH': { codigo: 'ENV-00013', descripcion: 'BOTELLA ENVASADA GLUP FRESH 2.0.LTS' },
+      'GLUP KOLITA': { codigo: 'ENV-00017', descripcion: 'BOTELLA ENVASADA GLUP KOLITA 2.0.LTS' },
+      'GLUP NARANJA': { codigo: 'ENV-00021', descripcion: 'BOTELLA ENVASADA GLUP NARANJA 2.0 LTS' },
+      'GLUP MANZANA': { codigo: 'ENV-00053', descripcion: 'BOTELLA ENVASADA GLUP MANZANA VERDE  2.0.LTS' },
+      'GLUP MANZANA ROJA': { codigo: 'ENV-00085', descripcion: 'BOTELLA ENVASADA MANZANA ROJA 2.0 L (LINEA 1)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'ENV-00089', descripcion: 'BOTELLA ENVASADA PIÑA PARCHITA 2.0 L (LINEA 1)' },
+    },
+    '2': {
+      'GLUP COLA': { codigo: 'ENV-00038', descripcion: 'BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (EN LINEA 2)' },
+      'GLUP UVA': { codigo: 'ENV-00039', descripcion: 'BOTELLA ENVASADA GLUP UVA  2.0.LTS  (EN LINEA 2)' },
+      'GLUP KOLITA': { codigo: 'ENV-00040', descripcion: 'BOTELLA ENVASADA GLUP KOLITA 2.0.LTS  (EN LINEA 2)' },
+      'GLUP NARANJA': { codigo: 'ENV-00041', descripcion: 'BOTELLA ENVASADA GLUP NARANJA 2.0 LTS  (EN LINEA 2)' },
+      'GLUP PIÑA': { codigo: 'ENV-00042', descripcion: 'BOTELLA ENVASADA GLUP PIÑA 2.0.LTS  (EN LINEA 2)' },
+      'GLUP FRESH': { codigo: 'ENV-00043', descripcion: 'BOTELLA ENVASADA GLUP FRESH 2.0.LTS  (EN LINEA 2)' },
+      'GLUP MANZANA': { codigo: 'ENV-00046', descripcion: 'BOTELLA ENVASADA GLUP MANZANA VERDE  2.0.LTS  (LINEA 2)' },
+      'GLUP MANZANA ROJA': { codigo: 'ENV-00086', descripcion: 'BOTELLA ENVASADA MANZANA ROJA 2.0 L (LINEA 2)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'ENV-00090', descripcion: 'BOTELLA ENVASADA PIÑA PARCHITA 2.0 L (LINEA 2)' },
+    },
+    '3': {
+      'GLUP COLA': { codigo: 'ENV-00063', descripcion: 'BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)' },
+      'GLUP UVA': { codigo: 'ENV-00064', descripcion: 'BOTELLA ENVASADA GLUP UVA 2L (LINEA 3)' },
+      'GLUP KOLITA': { codigo: 'ENV-00065', descripcion: 'BOTELLA ENVASADA GLUP KOLITA 2L (LINEA 3)' },
+      'GLUP FRESH': { codigo: 'ENV-00066', descripcion: 'BOTELLA ENVASADA GLUP FRESH 2L (LINEA 3)' },
+      'GLUP MANZANA': { codigo: 'ENV-00067', descripcion: 'BOTELLA ENVASADA GLUP MANZANA VERDE 2L (LINEA 3)' },
+      'GLUP PIÑA': { codigo: 'ENV-00083', descripcion: 'BOTELLA ENVASADA PIÑA 2.0 L (LINEA 3)' },
+      'GLUP MANZANA ROJA': { codigo: 'ENV-00087', descripcion: 'BOTELLA ENVASADA MANZANA ROJA 2.0 L (LINEA 3)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'ENV-00091', descripcion: 'BOTELLA ENVASADA PIÑA PARCHITA 2.0 L (LINEA 3)' },
+      'GLUP NARANJA': { codigo: 'ENV-00093', descripcion: 'BOTELLA ENVASADA GLUP NARANJA 2.0 LTS  (EN LINEA 3)' },
+    },
+    '4': {
+      'GLUP COLA': { codigo: 'ENV-00054', descripcion: 'BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)' },
+      'GLUP UVA': { codigo: 'ENV-00055', descripcion: 'BOTELLA ENVASADA GLUP UVA  2.0.LTS(LINEA 4)' },
+      'GLUP KOLITA': { codigo: 'ENV-00056', descripcion: 'BOTELLA ENVASADA GLUP KOLITA 2.0.LTS (LINEA 4)' },
+      'GLUP FRESH': { codigo: 'ENV-00057', descripcion: 'BOTELLA ENVASADA GLUP FRESH 2.0.LTS(LINEA 4)' },
+      'GLUP MANZANA': { codigo: 'ENV-00058', descripcion: 'BOTELLA ENVASADA GLUP MANZANA VERDE  2.0.LTS  (LINEA 4)' },
+      'GLUP PIÑA': { codigo: 'ENV-00084', descripcion: 'BOTELLA ENVASADA PIÑA 2.0 L (LINEA 4)' },
+      'GLUP MANZANA ROJA': { codigo: 'ENV-00088', descripcion: 'BOTELLA ENVASADA MANZANA ROJA 2.0 L (LINEA 4)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'ENV-00092', descripcion: 'BOTELLA ENVASADA PIÑA PARCHITA 2.0 L (LINEA 4)' },
+      'GLUP NARANJA': { codigo: 'ENV-00094', descripcion: 'BOTELLA ENVASADA GLUP NARANJA 2.0 LTS  (EN LINEA 4)' },
+    },
+    '5': {
+      'JUSTY NARANJA': { codigo: 'ENV-00027', descripcion: 'BOTELLA ENVASADA JUSTY NARANJA  1.5 LTS' },
+      'JUSTY DURAZNO': { codigo: 'ENV-00095', descripcion: 'BOTELLA ENVASADA JUSTY DURAZNO 1.5 LTS' },
+      'JUSTY MANDARINA': { codigo: 'ENV-00105', descripcion: 'BOTELLA ENVASADA JUSTY MANDARINA 1.5 LTS' },
+      'JUSTY SANDIA': { codigo: 'ENV-00104', descripcion: 'BOTELLA ENVASADA JUSTY SANDIA 1.5 LTS' },
+      'JUSTY TAMARINDO': { codigo: 'ENV-00106', descripcion: 'BOTELLA ENVASADA JUSTY TAMARINDO 1.5 LTS' },
+      'VITA TEA DURAZNO': { codigo: 'ENV-00033', descripcion: 'BOTELLA ENVASADA  VITA TEA  (DURAZNO)  1.5 LTS' },
+      'VITA TEA LIMON': { codigo: 'ENV-00034', descripcion: 'BOTELLA ENVASADA  VITA TEA  (LIMON)  1.5 LTS' },
+      'JUSTY PERA': { codigo: 'ENV-00108', descripcion: 'BOTELLA ENVASADA JUSTY PERA 1.5 LTS' },
+      'JUSTY MANZANA': { codigo: 'ENV-00107', descripcion: 'BOTELLA ENVASADA JUSTY MANZANA 1.5 LTS' },
+    },
+    '6': {
+      'GLUP COLA': { codigo: 'ENV-00048', descripcion: 'BOTELLA ENVASADA GLUP COLA NEGRA 400 ML (LINEA 6)' },
+      'GLUP UVA': { codigo: 'ENV-00059', descripcion: 'BOTELLA ENVASADA GLUP UVA 400 ML (LINEA 6)' },
+      'GLUP FRESH': { codigo: 'ENV-00060', descripcion: 'BOTELLA ENVASADA GLUP FRESH 400 ML (LINEA 6)' },
+      'GLUP KOLITA': { codigo: 'ENV-00061', descripcion: 'BOTELLA ENVASADA GLUP KOLITA 400 ML (LINEA 6)' },
+      'GLUP MANZANA': { codigo: 'ENV-00062', descripcion: 'BOTELLA ENVASADA GLUP MANZANA VERDE 400 ML (LINEA 6)' },
+      'GLUP PIÑA': { codigo: 'ENV-00096', descripcion: 'BOTELLA ENVASADA GLUP PIÑA 400 ML (LINEA 6)' },
+      'GLUP NARANJA': { codigo: 'ENV-00097', descripcion: 'BOTELLA ENVASADA GLUP NARANJA 400 ML (LINEA 6)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'ENV-00098', descripcion: 'BOTELLA ENVASADA GLUP PIÑA PARCHITA 400 ML (LINEA 6)' },
+      'GLUP MANZANA ROJA': { codigo: 'ENV-00099', descripcion: 'BOTELLA ENVASADA GLUP MANZANA ROJA 400 ML (LINEA 6)' },
+    },
+    '7': {
+      'GLUP COLA': { codigo: 'ENV-00078', descripcion: 'BOTELLA ENVASADA GLUP COLA NEGRA 1.0 L (LINEA 7)' },
+      'GLUP UVA': { codigo: 'ENV-00079', descripcion: 'BOTELLA ENVASADA GLUP UVA 1.0 L (LINEA 7)' },
+      'GLUP KOLITA': { codigo: 'ENV-00080', descripcion: 'BOTELLA ENVASADA GLUP KOLITA 1.0 L (LINEA 7)' },
+      'GLUP FRESH': { codigo: 'ENV-00081', descripcion: 'BOTELLA ENVASADA GLUP FRESH 1.0 L (LINEA 7)' },
+      'GLUP MANZANA': { codigo: 'ENV-00082', descripcion: 'BOTELLA ENVASADA GLUP MANZANA VERDE 1.0 L (LINEA 7)' },
+      'GLUP PIÑA': { codigo: 'ENV-00100', descripcion: 'BOTELLA ENVASADA GLUP PIÑA 1.0 L (LINEA 7)' },
+      'GLUP NARANJA': { codigo: 'ENV-00101', descripcion: 'BOTELLA ENVASADA GLUP NARANJA 1.0 L (LINEA 7)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'ENV-00102', descripcion: 'BOTELLA ENVASADA GLUP PIÑA PARCHITA 1.0 L (LINEA 7)' },
+      'GLUP MANZANA ROJA': { codigo: 'ENV-00103', descripcion: 'BOTELLA ENVASADA GLUP MANZANA ROJA 1.0 L (LINEA 7)' },
+    },
+  };
+
+  // Datos de la fila "Etq" (segunda tabla). Depende de la LÍNEA y del SABOR.
+  const ETQ_POR_LINEA_SABOR: Record<string, Record<string, { codigo: string; descripcion: string }>> = {
+    '1': {
+      'GLUP COLA': { codigo: 'ETQ-00001', descripcion: 'BOTELLA ETIQUETADA GLUP COLA NEGRA 2.LTS' },
+      'GLUP UVA': { codigo: 'ETQ-00005', descripcion: 'BOTELLA ETIQUETADA GLUP UVA  2.0.LTS' },
+      'GLUP PIÑA': { codigo: 'ETQ-00009', descripcion: 'BOTELLA ETIQUETADA GLUP PIÑA 2.0.LTS' },
+      'GLUP FRESH': { codigo: 'ETQ-00013', descripcion: 'BOTELLA ETIQUETADA GLUP FRESH 2.0.LTS' },
+      'GLUP KOLITA': { codigo: 'ETQ-00017', descripcion: 'BOTELLA ETIQUETADA GLUP KOLITA 2.0.LTS' },
+      'GLUP NARANJA': { codigo: 'ETQ-00020', descripcion: 'BOTELLA ETIQUETADA GLUP NARANJA 2.0 LTS' },
+      'GLUP MANZANA': { codigo: 'ETQ-00054', descripcion: 'BOTELLA ETIQUETADA GLUP MANZANA VERDE  2.0.LTS' },
+      'GLUP MANZANA ROJA': { codigo: 'ETQ-00086', descripcion: 'BOTELLA ETIQUETADA GLUP MANZANA ROJA 2.0 L(LINEA 1)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'ETQ-00090', descripcion: 'BOTELLA ETIQUETADA GLUP PIÑA PARCHITA 2.0 L(LINEA 1)' },
+    },
+    '2': {
+      'GLUP COLA': { codigo: 'ETQ-00039', descripcion: 'BOTELLA ETIQUETADA GLUP COLA NEGRA 2.LTS (EN LINEA 2)' },
+      'GLUP UVA': { codigo: 'ETQ-00040', descripcion: 'BOTELLA ETIQUETADA GLUP UVA  2.0.LTS  (EN LINEA 2)' },
+      'GLUP KOLITA': { codigo: 'ETQ-00041', descripcion: 'BOTELLA ETIQUETADA GLUP KOLITA 2.0.LTS  (EN LINEA 2)' },
+      'GLUP NARANJA': { codigo: 'ETQ-00042', descripcion: 'BOTELLA ETIQUETADA GLUP NARANJA 2.0 LTS  (EN LINEA 2)' },
+      'GLUP PIÑA': { codigo: 'ETQ-00043', descripcion: 'BOTELLA ETIQUETADA GLUP PIÑA 2.0.LTS  (EN LINEA 2)' },
+      'GLUP FRESH': { codigo: 'ETQ-00044', descripcion: 'BOTELLA ETIQUETADA GLUP FRESH 2.0.LTS  (EN LINEA 2)' },
+      'GLUP MANZANA': { codigo: 'ETQ-00047', descripcion: 'BOTELLA ETIQUETADA GLUP MANZANA VERDE  2.0.LTS  (EN LINEA 2)' },
+      'GLUP MANZANA ROJA': { codigo: 'ETQ-00087', descripcion: 'BOTELLA ETIQUETADA GLUP MANZANA ROJA 2.0 L(LINEA 2)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'ETQ-00091', descripcion: 'BOTELLA ETIQUETADA GLUP PIÑA PARCHITA 2.0 L(LINEA 2)' },
+    },
+    '3': {
+      'GLUP COLA': { codigo: 'ETQ-00064', descripcion: 'BOTELLA ETIQUETADA GLUP COLA NEGRA 2 L(LINEA 3)' },
+      'GLUP UVA': { codigo: 'ETQ-00065', descripcion: 'BOTELLA ETIQUETADA GLUP UVA 2 L(LINEA 3)' },
+      'GLUP KOLITA': { codigo: 'ETQ-00066', descripcion: 'BOTELLA ETIQUETADA GLUP KOLITA 2 L(LINEA 3)' },
+      'GLUP MANZANA': { codigo: 'ETQ-00067', descripcion: 'BOTELLA ETIQUETADA GLUP MANZANA VERDE 2 L(LINEA 3)' },
+      'GLUP FRESH': { codigo: 'ETQ-00068', descripcion: 'BOTELLA ETIQUETADA GLUP FRESH 2 L(LINEA 3)' },
+      'GLUP PIÑA': { codigo: 'ETQ-00084', descripcion: 'BOTELLA ETIQUETADA GLUP PIÑA 2.0 L(LINEA 3)' },
+      'GLUP MANZANA ROJA': { codigo: 'ETQ-00088', descripcion: 'BOTELLA ETIQUETADA GLUP MANZANA ROJA 2.0 L(LINEA 3)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'ETQ-00092', descripcion: 'BOTELLA ETIQUETADA GLUP PIÑA PARCHITA 2.0 L(LINEA 3)' },
+      'GLUP NARANJA': { codigo: 'ETQ-00094', descripcion: 'BOTELLA ETIQUETADA GLUP NARANJA 2.0 LTS  (EN LINEA 3)' },
+    },
+    '4': {
+      'GLUP COLA': { codigo: 'ETQ-00055', descripcion: 'BOTELLA ETIQUETADA GLUP COLA NEGRA 2.LTS (LINEA 4)' },
+      'GLUP UVA': { codigo: 'ETQ-00056', descripcion: 'BOTELLA ETIQUETADA GLUP UVA  2.0.LTS(LINEA 4)' },
+      'GLUP KOLITA': { codigo: 'ETQ-00057', descripcion: 'BOTELLA ETIQUETADA GLUP KOLITA 2.0.LTS(LINEA 4)' },
+      'GLUP FRESH': { codigo: 'ETQ-00058', descripcion: 'BOTELLA ETIQUETADA GLUP FRESH 2.0.LTS(LINEA 4)' },
+      'GLUP MANZANA': { codigo: 'ETQ-00059', descripcion: 'BOTELLA ETIQUETADA GLUP MANZANA VERDE  2.0.LTS  (LINEA 4)' },
+      'GLUP PIÑA': { codigo: 'ETQ-00085', descripcion: 'BOTELLA ETIQUETADA GLUP PIÑA 2.0 L(LINEA 4)' },
+      'GLUP MANZANA ROJA': { codigo: 'ETQ-00089', descripcion: 'BOTELLA ETIQUETADA GLUP MANZANA ROJA 2.0 L(LINEA 4)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'ETQ-00093', descripcion: 'BOTELLA ETIQUETADA GLUP PIÑA PARCHITA 2.0 L(LINEA 4)' },
+      'GLUP NARANJA': { codigo: 'ETQ-00095', descripcion: 'BOTELLA ETIQUETADA GLUP NARANJA 2.0 LTS  (EN LINEA 4)' },
+    },
+    '5': {
+      'JUSTY NARANJA': { codigo: 'ETQ-00025', descripcion: 'BOTELLA ETIQUETADA  JUSTY NARANJA 1.5 LTS' },
+      'JUSTY DURAZNO': { codigo: 'ETQ-00096', descripcion: 'BOTELLA ETIQUETADA JUSTY DURAZNO 1.5 LTS' },
+      'JUSTY MANDARINA': { codigo: 'ETQ-00106', descripcion: 'BOTELLA ETIQUETADA JUSTY MANDARINA 1.5 LTS' },
+      'JUSTY SANDIA': { codigo: 'ETQ-00105', descripcion: 'BOTELLA ETIQUETADA JUSTY SANDIA 1.5 LTS' },
+      'JUSTY TAMARINDO': { codigo: 'ETQ-00107', descripcion: 'BOTELLA ETIQUETADA JUSTY TAMARINDO 1.5 LTS' },
+      'VITA TEA DURAZNO': { codigo: 'ETQ-00032', descripcion: 'BOTELLA ETIQUETADA  VITA TEA  (DURAZNO) 1.5 LTS' },
+      'VITA TEA LIMON': { codigo: 'ETQ-00033', descripcion: 'BOTELLA ETIQUETADA  VITA TEA  (LIMON)  1.5 LTS' },
+      'JUSTY PERA': { codigo: 'ETQ-00109', descripcion: 'BOTELLA ETIQUETADA JUSTY PERA 1.5 LTS' },
+      'JUSTY MANZANA': { codigo: 'ETQ-00108', descripcion: 'BOTELLA ETIQUETADA JUSTY MANZANA 1.5 LTS' },
+    },
+    '6': {
+      'GLUP COLA': { codigo: 'ETQ-00049', descripcion: 'BOTELLA ETIQUETADA GLUP COLA NEGRA  400 ML(LINEA 6)' },
+      'GLUP UVA': { codigo: 'ETQ-00060', descripcion: 'BOTELLA ETIQUETADA GLUP UVA  400 ML(LINEA 6)' },
+      'GLUP FRESH': { codigo: 'ETQ-00061', descripcion: 'BOTELLA ETIQUETADA GLUP FRESH 400 ML(LINEA 6)' },
+      'GLUP KOLITA': { codigo: 'ETQ-00062', descripcion: 'BOTELLA ETIQUETADA GLUP KOLITA 400 ML(LINEA 6)' },
+      'GLUP MANZANA': { codigo: 'ETQ-00063', descripcion: 'BOTELLA ETIQUETADA GLUP MANZANA VERDE 400 ML(LINEA 6)' },
+      'GLUP PIÑA': { codigo: 'ETQ-00097', descripcion: 'BOTELLA ETIQUETADA GLUP PIÑA 400 ML(LINEA 6)' },
+      'GLUP NARANJA': { codigo: 'ETQ-00098', descripcion: 'BOTELLA ETIQUETADA GLUP NARANJA 400 ML(LINEA 6)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'ETQ-00099', descripcion: 'BOTELLA ETIQUETADA GLUP PIÑA PARCHITA 400 ML(LINEA 6)' },
+      'GLUP MANZANA ROJA': { codigo: 'ETQ-00100', descripcion: 'BOTELLA ETIQUETADA GLUP MANZANA ROJA 400 ML(LINEA 6)' },
+    },
+    '7': {
+      'GLUP COLA': { codigo: 'ETQ-00079', descripcion: 'BOTELLA ETIQUETADA GLUP COLA NEGRA 1.0 L(LINEA 7)' },
+      'GLUP UVA': { codigo: 'ETQ-00080', descripcion: 'BOTELLA ETIQUETADA GLUP UVA 1.0 L(LINEA 7)' },
+      'GLUP KOLITA': { codigo: 'ETQ-00081', descripcion: 'BOTELLA ETIQUETADA GLUP KOLITA 1.0 L(LINEA 7)' },
+      'GLUP FRESH': { codigo: 'ETQ-00082', descripcion: 'BOTELLA ETIQUETADA GLUP FRESH 1.0 L(LINEA 7)' },
+      'GLUP MANZANA': { codigo: 'ETQ-00083', descripcion: 'BOTELLA ETIQUETADA GLUP MANZANA VERDE 1.0 L(LINEA 7)' },
+      'GLUP PIÑA': { codigo: 'ETQ-00101', descripcion: 'BOTELLA ETIQUETADA GLUP PIÑA 1.0 L(LINEA 7)' },
+      'GLUP NARANJA': { codigo: 'ETQ-00102', descripcion: 'BOTELLA ETIQUETADA GLUP NARANJA 1.0 L(LINEA 7)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'ETQ-00103', descripcion: 'BOTELLA ETIQUETADA GLUP PIÑA PARCHITA 1.0 L(LINEA 7)' },
+      'GLUP MANZANA ROJA': { codigo: 'ETQ-00104', descripcion: 'BOTELLA ETIQUETADA GLUP MANZANA ROJA 1.0 L(LINEA 7)' },
+    },
+  };
+
+  // Datos de la fila "Caj" (segunda tabla). Depende de la LÍNEA y del SABOR.
+  const CAJ_POR_LINEA_SABOR: Record<string, Record<string, { codigo: string; descripcion: string }>> = {
+    '1': {
+      'GLUP COLA': { codigo: 'CAJ-00001', descripcion: 'CAJA EMPACADA GLUP! COLA NEGRA 2.0 LTS' },
+      'GLUP UVA': { codigo: 'CAJ-00005', descripcion: 'CAJA EMPACADA GLUP! UVA  2.0 LTS' },
+      'GLUP PIÑA': { codigo: 'CAJ-00009', descripcion: 'CAJA EMPACADA GLUP! PIÑA   2.0 LTS' },
+      'GLUP KOLITA': { codigo: 'CAJ-00013', descripcion: 'CAJA EMPACADA GLUP! KOLITA  2.0 LTS' },
+      'GLUP FRESH': { codigo: 'CAJ-00017', descripcion: 'CAJA EMPACADA GLUP! FRESH   2.0 LTS' },
+      'GLUP NARANJA': { codigo: 'CAJ-00021', descripcion: 'CAJA EMPACADA GLUP! NARANJA   2.0 LTS' },
+      'GLUP MANZANA': { codigo: 'CAJ-00062', descripcion: 'CAJA EMPACADA GLUP! MANZANA VERDE  2.0 LTS' },
+      'GLUP MANZANA ROJA': { codigo: 'CAJ-00101', descripcion: 'CAJA EMPACADA GLUP! MANZANA ROJA 2.0L (LINEA 1)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'CAJ-00105', descripcion: 'CAJA EMPACADA GLUP! PIÑA PARCHITA 2.0L (LINEA 1)' },
+    },
+    '2': {
+      'GLUP COLA': { codigo: 'CAJ-00047', descripcion: 'CAJA EMPACADA GLUP! COLA NEGRA 2.0 LTS (EN LINEA 2)' },
+      'GLUP UVA': { codigo: 'CAJ-00048', descripcion: 'CAJA EMPACADA GLUP! UVA  2.0 LTS  (EN LINEA 2)' },
+      'GLUP KOLITA': { codigo: 'CAJ-00049', descripcion: 'CAJA EMPACADA GLUP! KOLITA  2.0 LTS  (EN LINEA 2)' },
+      'GLUP NARANJA': { codigo: 'CAJ-00050', descripcion: 'CAJA EMPACADA GLUP! NARANJA   2.0 LTS  (EN LINEA 2)' },
+      'GLUP PIÑA': { codigo: 'CAJ-00051', descripcion: 'CAJA EMPACADA GLUP! PIÑA   2.0 LTS  (EN LINEA 2)' },
+      'GLUP FRESH': { codigo: 'CAJ-00052', descripcion: 'CAJA EMPACADA GLUP! FRESH   2.0 LTS  (EN LINEA 2)' },
+      'GLUP MANZANA': { codigo: 'CAJ-00055', descripcion: 'CAJA EMPACADA GLUP! MANZANA VERDE  2.0 LTS  (EN LINEA 2)' },
+      'GLUP MANZANA ROJA': { codigo: 'CAJ-00102', descripcion: 'CAJA EMPACADA GLUP! MANZANA ROJA 2.0L (LINEA 2)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'CAJ-00106', descripcion: 'CAJA EMPACADA GLUP! PIÑA PARCHITA 2.0L (LINEA 2)' },
+    },
+    '3': {
+      'GLUP COLA': { codigo: 'CAJ-00072', descripcion: 'CAJA EMPACADA GLUP! COLA NEGRA 2L (LINEA 3)' },
+      'GLUP UVA': { codigo: 'CAJ-00073', descripcion: 'CAJA EMPACADA GLUP! UVA 2L (LINEA 3)' },
+      'GLUP KOLITA': { codigo: 'CAJ-00074', descripcion: 'CAJA EMPACADA GLUP! KOLITA 2L (LINEA 3)' },
+      'GLUP MANZANA': { codigo: 'CAJ-00076', descripcion: 'CAJA EMPACADA GLUP! MANZANA VERDE 2L (LINEA 3)' },
+      'GLUP FRESH': { codigo: 'CAJ-00077', descripcion: 'CAJA EMPACADA GLUP! FRESH 2L (LINEA 3)' },
+      'GLUP PIÑA': { codigo: 'CAJ-00099', descripcion: 'CAJA EMPACADA GLUP! PIÑA 2.0L (LINEA 3)' },
+      'GLUP MANZANA ROJA': { codigo: 'CAJ-00103', descripcion: 'CAJA EMPACADA GLUP! MANZANA ROJA 2.0L (LINEA 3)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'CAJ-00107', descripcion: 'CAJA EMPACADA GLUP! PIÑA PARCHITA 2.0L (LINEA 3)' },
+      'GLUP NARANJA': { codigo: 'CAJ-00109', descripcion: 'CAJA EMPACADA GLUP! NARANJA 2.0 LTS  (EN LINEA 3)' },
+    },
+    '4': {
+      'GLUP COLA': { codigo: 'CAJ-00063', descripcion: 'CAJA EMPACADA GLUP! COLA NEGRA 2.0 LTS (LINEA 4)' },
+      'GLUP UVA': { codigo: 'CAJ-00064', descripcion: 'CAJA EMPACADA GLUP! UVA  2.0 LTS (LINEA 4)' },
+      'GLUP KOLITA': { codigo: 'CAJ-00065', descripcion: 'CAJA EMPACADA GLUP! KOLITA  2.0 LTS (LINEA 4)' },
+      'GLUP FRESH': { codigo: 'CAJ-00066', descripcion: 'CAJA EMPACADA GLUP! FRESH   2.0 LTS (LINEA 4)' },
+      'GLUP MANZANA': { codigo: 'CAJ-00067', descripcion: 'CAJA EMPACADA GLUP! MANZANA VERDE  2.0 LTS  (LINEA 4)' },
+      'GLUP PIÑA': { codigo: 'CAJ-00100', descripcion: 'CAJA EMPACADA GLUP! PIÑA 2.0L (LINEA 4)' },
+      'GLUP MANZANA ROJA': { codigo: 'CAJ-00104', descripcion: 'CAJA EMPACADA GLUP! MANZANA ROJA 2.0L (LINEA 4)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'CAJ-00108', descripcion: 'CAJA EMPACADA GLUP! PIÑA PARCHITA 2.0L (LINEA 4)' },
+      'GLUP NARANJA': { codigo: 'CAJ-00110', descripcion: 'CAJA EMPACADA GLUP! NARANJA 2.0 LTS  (EN LINEA 4)' },
+    },
+    '5': {
+      'JUSTY NARANJA': { codigo: 'CAJ-00035', descripcion: 'CAJA EMPACADA JUSTY NARANJA 1.5Lts' },
+      'JUSTY DURAZNO': { codigo: 'CAJ-00111', descripcion: 'CAJA EMPACADA JUSTY DURAZNO 1.5LT' },
+      'JUSTY MANDARINA': { codigo: 'CAJ-00121', descripcion: 'CAJA EMPACADA JUSTY MANDARINA 1.5LT' },
+      'JUSTY SANDIA': { codigo: 'CAJ-00120', descripcion: 'CAJA EMPACADA JUSTY SANDIA 1.5LT' },
+      'JUSTY TAMARINDO': { codigo: 'CAJ-00122', descripcion: 'CAJA EMPACADA JUSTY TAMARINDO 1.5LT' },
+      'VITA TEA DURAZNO': { codigo: 'CAJ-00043', descripcion: 'CAJA EMPACADA  VITA TEA  (DURAZNO) 1.5Lts' },
+      'VITA TEA LIMON': { codigo: 'CAJ-00044', descripcion: 'CAJA EMPACADA  VITA TEA  (LIMON) 1.5Lts' },
+      'JUSTY PERA': { codigo: 'CAJ-00124', descripcion: 'CAJA EMPACADA JUSTY PERA 1.5LT' },
+      'JUSTY MANZANA': { codigo: 'CAJ-00123', descripcion: 'CAJA EMPACADA JUSTY MANZANA 1.5LT' },
+    },
+    '6': {
+      'GLUP COLA': { codigo: 'CAJ-00084', descripcion: 'CAJA EMPACADA GLUP! COLA NEGRA 400 ML X 15BOT (LINEA 6)' },
+      'GLUP UVA': { codigo: 'CAJ-00085', descripcion: 'CAJA EMPACADA GLUP! UVA 400 ML X 15BOT (LINEA 6)' },
+      'GLUP KOLITA': { codigo: 'CAJ-00086', descripcion: 'CAJA EMPACADA GLUP! KOLITA 400 ML X 15BOT (LINEA 6)' },
+      'GLUP FRESH': { codigo: 'CAJ-00087', descripcion: 'CAJA EMPACADA GLUP! FRESH 400 ML X 15BOT (LINEA 6)' },
+      'GLUP MANZANA': { codigo: 'CAJ-00088', descripcion: 'CAJA EMPACADA GLUP! MANZANA VERDE 400 ML X 15BOT (LINEA 6)' },
+      'GLUP PIÑA': { codigo: 'CAJ-00112', descripcion: 'CAJA EMPACADA GLUP! PIÑA 400 ML X 15BOT (LINEA 6)' },
+      'GLUP NARANJA': { codigo: 'CAJ-00113', descripcion: 'CAJA EMPACADA GLUP! NARANJA 400 ML X 15BOT (LINEA 6)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'CAJ-00114', descripcion: 'CAJA EMPACADA GLUP! PIÑA PARCHITA 400 ML X 15BOT (LINEA 6)' },
+      'GLUP MANZANA ROJA': { codigo: 'CAJ-00115', descripcion: 'CAJA EMPACADA GLUP! MANZANA ROJA 400 ML X 15BOT (LINEA 6)' },
+    },
+    '7': {
+      'GLUP COLA': { codigo: 'CAJ-00094', descripcion: 'CAJA EMPACADA GLUP! COLA NEGRA 1.0Lts (LINEA 7)' },
+      'GLUP UVA': { codigo: 'CAJ-00095', descripcion: 'CAJA EMPACADA GLUP! UVA 1.0Lts (LINEA 7)' },
+      'GLUP KOLITA': { codigo: 'CAJ-00096', descripcion: 'CAJA EMPACADA GLUP! KOLITA 1.0Lts (LINEA 7)' },
+      'GLUP FRESH': { codigo: 'CAJ-00097', descripcion: 'CAJA EMPACADA GLUP! FRESH 1.0Lts (LINEA 7)' },
+      'GLUP MANZANA': { codigo: 'CAJ-00098', descripcion: 'CAJA EMPACADA GLUP! MANZANA VERDE 1.0Lts (LINEA 7)' },
+      'GLUP PIÑA': { codigo: 'CAJ-00116', descripcion: 'CAJA EMPACADA GLUP! PIÑA 1.0Lts (LINEA 7)' },
+      'GLUP NARANJA': { codigo: 'CAJ-00117', descripcion: 'CAJA EMPACADA GLUP! NARANJA 1.0Lts (LINEA 7)' },
+      'GLUP PIÑA PARCHITA': { codigo: 'CAJ-00118', descripcion: 'CAJA EMPACADA GLUP! PIÑA PARCHITA 1.0Lts (LINEA 7)' },
+      'GLUP MANZANA ROJA': { codigo: 'CAJ-00119', descripcion: 'CAJA EMPACADA GLUP! MANZANA ROJA 1.0Lts (LINEA 7)' },
+    },
+  };
+
+  // Datos de la fila "Prodt" (segunda tabla). Depende de la LÍNEA y del SABOR.
+  // Para líneas 1-4 los valores son los mismos (solo cambian por sabor).
+  const PRODT_1A4_POR_SABOR: Record<string, { codigo: string; descripcion: string }> = {
+    'GLUP COLA': { codigo: 'PRODT-0007', descripcion: 'GLUP! COLA NEGRA  CAJA X 6BOT X 2.0LTS' },
+    'GLUP UVA': { codigo: 'PRODT-0008', descripcion: 'GLUP! UVA  CAJA X 6BOT X 2.0LTS' },
+    'GLUP KOLITA': { codigo: 'PRODT-0009', descripcion: 'GLUP! KOLITA  CAJA X 6BOT X 2.0LTS' },
+    'GLUP PIÑA': { codigo: 'PRODT-0010', descripcion: 'GLUP! PIÑA  CAJA X 6BOT X 2.0LTS' },
+    'GLUP NARANJA': { codigo: 'PRODT-0011', descripcion: 'GLUP! NARANJA  CAJA X 6BOT X 2.0LTS' },
+    'GLUP FRESH': { codigo: 'PRODT-0012', descripcion: 'GLUP! FRESH  CAJA X 6BOT X 2.0LTS' },
+    'GLUP PONCHE': { codigo: 'PRODT-0048', descripcion: 'GLUP! PONCHE DE FRUTAS CAJA X 6BOT X 2LTS' },
+    'GLUP MANZANA': { codigo: 'PRODT-0049', descripcion: 'GLUP! MANZANA VERDE CAJA X 6BOT X 2.0 LTS' },
+    'GLUP CHICLE': { codigo: 'PRODT-0050', descripcion: 'GLUP! CHICLE BOMBA CAJA X 6BOT X 2LTS' },
+    'GLUP MANZANA ROJA': { codigo: 'PRODT-0097', descripcion: 'GLUP! MAZANA ROJA CAJA X 6BOT X 2.0LTS' },
+    'GLUP PIÑA PARCHITA': { codigo: 'PRODT-0098', descripcion: 'GLUP! PIÑA PARCHITA CAJA X 6BOT X 2.0LTS' },
+  };
+
+  const PRODT_POR_LINEA_SABOR: Record<string, Record<string, { codigo: string; descripcion: string }>> = {
+    '1': PRODT_1A4_POR_SABOR,
+    '2': PRODT_1A4_POR_SABOR,
+    '3': PRODT_1A4_POR_SABOR,
+    '4': PRODT_1A4_POR_SABOR,
+    '5': {
+      'JUSTY NARANJA': { codigo: 'PRODT-0014', descripcion: 'JUSTY NARANJA CAJA X 12BOT X 1.5LTS' },
+      'JUSTY DURAZNO': { codigo: 'PRODT-0100', descripcion: 'JUSTY DURAZNO CAJA X 12BOT X 1.5LTS' },
+      'JUSTY MANDARINA': { codigo: 'PRODT-0102', descripcion: 'JUSTY MANDARINA CAJA X 12BOT X 1.5LTS' },
+      'JUSTY SANDIA': { codigo: 'PRODT-0101', descripcion: 'JUSTY SANDIA CAJA X 12BOT X 1.5LTS' },
+      'JUSTY TAMARINDO': { codigo: 'PRODT-0103', descripcion: 'JUSTY TAMARINDO CAJA X 12BOT X 1.5LTS' },
+      'VITA TEA DURAZNO': { codigo: 'PRODT-0026', descripcion: 'VITA TEA DURAZNO 1,5 LT' },
+      'VITA TEA LIMON': { codigo: 'PRODT-0025', descripcion: 'VITA TEA LIMON 1,5 LT' },
+      'JUSTY PERA': { codigo: 'PRODT-0115', descripcion: 'JUSTY PERA CAJA X 12BOT X 1.5LTS' },
+      'JUSTY MANZANA': { codigo: 'PRODT-0116', descripcion: 'JUSTY MANZANA CAJA X 12BOT X 1.5LTS' },
+    },
+    '6': {
+      'GLUP COLA': { codigo: 'PRODT-0092', descripcion: 'GLUP! COLA NEGRA CAJA X 15 BOT X 0.400LTS' },
+      'GLUP UVA': { codigo: 'PRODT-0093', descripcion: 'GLUP! UVA  CAJA X 15BOT X 0.400LTS' },
+      'GLUP KOLITA': { codigo: 'PRODT-0094', descripcion: 'GLUP! KOLITA  CAJA X 15BOT X 0.400LTS' },
+      'GLUP FRESH': { codigo: 'PRODT-0095', descripcion: 'GLUP! FRESH CAJA X 15BOT X 0.400LTS' },
+      'GLUP MANZANA': { codigo: 'PRODT-0096', descripcion: 'GLUP! MANZANA VERDE CAJA X 15BOT X 0.400LTS' },
+      'GLUP PIÑA': { codigo: 'PRODT-0108', descripcion: 'GLUP! PIÑA CAJA X 15BOT X 0.400LTS' },
+      'GLUP NARANJA': { codigo: 'PRODT-0109', descripcion: 'GLUP! NARANJA CAJA X 15BOT X 0.400LTS' },
+      'GLUP PIÑA PARCHITA': { codigo: 'PRODT-0110', descripcion: 'GLUP! PIÑA PARCHITA CAJA X 15BOT X 0.400LTS' },
+      'GLUP MANZANA ROJA': { codigo: 'PRODT-0111', descripcion: 'GLUP! MANZANA ROJA CAJA X 15BOT X 0.400LTS' },
+    },
+    '7': {
+      'GLUP COLA': { codigo: 'PRODT-0082', descripcion: 'GLUP! COLA NEGRA CAJA X 12BOT X 1LTS' },
+      'GLUP UVA': { codigo: 'PRODT-0084', descripcion: 'GLUP! UVA  CAJA X 12BOT X 1.0LTS' },
+      'GLUP FRESH': { codigo: 'PRODT-0086', descripcion: 'GLUP! FRESH CAJA X 12BOT X 1.0LTS' },
+      'GLUP KOLITA': { codigo: 'PRODT-0088', descripcion: 'GLUP! KOLITA  CAJA X 12BOT X 1.0LTS' },
+      'GLUP MANZANA': { codigo: 'PRODT-0090', descripcion: 'GLUP! MANZANA VERDE CAJA X 12BOT X 1.0LTS' },
+      'GLUP PIÑA': { codigo: 'PRODT-0104', descripcion: 'GLUP! PIÑA CAJA X 12BOT X 1.0LTS' },
+      'GLUP NARANJA': { codigo: 'PRODT-0105', descripcion: 'GLUP! NARANJA CAJA X 12BOT X 1.0LTS' },
+      'GLUP PIÑA PARCHITA': { codigo: 'PRODT-0106', descripcion: 'GLUP! PIÑA PARCHITA CAJA X 12BOT X 1.0LTS' },
+      'GLUP MANZANA ROJA': { codigo: 'PRODT-0107', descripcion: 'GLUP! MANZANA ROJA CAJA X 12BOT X 1.0LTS' },
+    },
+  };
+
+  // Llenado automático de las filas de la segunda tabla según línea y sabor seleccionados.
+  useEffect(() => {
+    // "Jarabe T" no aplica para la línea 5
+    const datosJarabe = ordenLineaSeleccionada === '5'
+      ? { codigo: '', descripcion: '' }
+      : (JARABE_T_POR_SABOR[ordenSaborSeleccionado] || { codigo: '', descripcion: '' });
+    const datosBebida = (ordenLineaSeleccionada === '5' && !(ordenSaborSeleccionado.startsWith('JUSTY') || ordenSaborSeleccionado.startsWith('VITA TEA')))
+      ? { codigo: '', descripcion: '' }
+      : (BEBIDA_POR_SABOR[ordenSaborSeleccionado] || { codigo: '', descripcion: '' });
+    const datosEnv = ENV_POR_LINEA_SABOR[ordenLineaSeleccionada]?.[ordenSaborSeleccionado] || { codigo: '', descripcion: '' };
+    const datosEtq = ETQ_POR_LINEA_SABOR[ordenLineaSeleccionada]?.[ordenSaborSeleccionado] || { codigo: '', descripcion: '' };
+    const datosCaj = CAJ_POR_LINEA_SABOR[ordenLineaSeleccionada]?.[ordenSaborSeleccionado] || { codigo: '', descripcion: '' };
+    const datosProdt = PRODT_POR_LINEA_SABOR[ordenLineaSeleccionada]?.[ordenSaborSeleccionado] || { codigo: '', descripcion: '' };
+    setOrdenComponentes(prev => ({
+      ...prev,
+      'Jarabe T': { codigo: datosJarabe.codigo, descripcion: datosJarabe.descripcion },
+      'Bebida': { codigo: datosBebida.codigo, descripcion: datosBebida.descripcion },
+      'Env': { codigo: datosEnv.codigo, descripcion: datosEnv.descripcion },
+      'Etq': { codigo: datosEtq.codigo, descripcion: datosEtq.descripcion },
+      'Caj': { codigo: datosCaj.codigo, descripcion: datosCaj.descripcion },
+      'Prodt': { codigo: datosProdt.codigo, descripcion: datosProdt.descripcion },
+    }));
+  }, [ordenSaborSeleccionado, ordenLineaSeleccionada]);
 
   useEffect(() => {
     try {
@@ -394,7 +791,7 @@ export default function OrdenesSapModule({
   const [tablaTurnoEdits, setTablaTurnoEdits] = useState<Record<string, Record<string, Record<number, number>>>>({});
   const [tablaProdtSemanalEdits, setTablaProdtSemanalEdits] = useState<Record<string, Record<number, number>>>({});
   const [tablaResumenMensualEdits, setTablaResumenMensualEdits] = useState<Record<string, Record<number, number>>>({});
-  const [ordenes, setOrdenes] = useState<OrdenSap[]>([]);
+  const { ordenes, setOrdenes } = useOrdenesSap();
 
   const tablaTurnoDiurnoAuto = useMemo(() => {
     const tabla: Record<string, Record<number, number>> = {};
@@ -499,20 +896,6 @@ export default function OrdenesSapModule({
 
   useEffect(() => {
     try {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored) {
-        const parsed = JSON.parse(stored) as OrdenSap[];
-        if (Array.isArray(parsed)) {
-          setOrdenes(parsed);
-        }
-      }
-    } catch (e) {
-      console.error('Error cargando órdenes SAP desde localStorage', e);
-    }
-  }, []);
-
-  useEffect(() => {
-    try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(ordenes));
     } catch (e) {
       console.error('Error guardando órdenes SAP en localStorage', e);
@@ -524,6 +907,8 @@ export default function OrdenesSapModule({
     const base = ordenes.filter(o => o.linea === activeLinea);
     if (!selectedFecha) return base;
     const semanaSeleccionada = getISOWeek(selectedFecha);
+    const coincide = base.some(o => o.semana === semanaSeleccionada);
+    if (!coincide) return base;
     return base.filter(o => o.semana === semanaSeleccionada);
   }, [ordenes, activeLinea, selectedFecha]);
 
@@ -1303,6 +1688,12 @@ const exportarPDFdia = async () => {
                <Factory className="h-3.5 w-3.5" /> CARGA PRODT
              </button>
              <button
+               onClick={() => setActiveSection('creador-ordenes')}
+               className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'creador-ordenes' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+             >
+               <Factory className="h-3.5 w-3.5" /> CREADOR DE ORDENES
+             </button>
+             <button
                onClick={() => setActiveSection('dia-a-dia')}
                className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'dia-a-dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
              >
@@ -1367,6 +1758,7 @@ const exportarPDFdia = async () => {
            )}
          </div>
 
+        {activeSection !== 'creador-ordenes' && (
         <div className="flex items-center justify-between gap-3">
           {activeSection === 'carga-prod' ? (
             <>
@@ -1447,10 +1839,11 @@ const exportarPDFdia = async () => {
                     ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase()
                     : 'Seleccione mes'
                   : ''}
-              </span>
-            </div>
-          )}
-        </div>
+               </span>
+             </div>
+           )}
+         </div>
+        )}
 
         {activeSection === 'dia-a-dia' && (activeSubsection === 'diurno' || activeSubsection === 'nocturno') && (
           <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
@@ -1470,8 +1863,220 @@ const exportarPDFdia = async () => {
         )}
       </div>
 
-       <div>
-         {activeLinea === null && (
+        <div>
+         {/* Sección independiente: Creador de Órdenes (no depende de la línea seleccionada ni afecta a las demás secciones) */}
+         {activeSection === 'creador-ordenes' && (
+           <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
+             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-4">
+               <button
+                 onClick={() => setCreadorSubsection('fijas')}
+                 className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${creadorSubsection === 'fijas' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+               >
+                 Fijas
+               </button>
+               <button
+                 onClick={() => setCreadorSubsection('ordenes')}
+                 className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${creadorSubsection === 'ordenes' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+               >
+                 Ordenes
+               </button>
+             </div>
+
+              {creadorSubsection === 'fijas' ? (
+                <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                  <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                    <div className="w-2 h-2 rounded-full bg-sky-500" />
+                    <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">Fijas</h4>
+                  </div>
+                  <div className="p-4">
+                    <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                      <table className="w-full border-collapse text-center">
+                        <thead>
+                          <tr className="bg-slate-100">
+                            <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Nombre</th>
+                            <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Código</th>
+                            <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Descripción</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr className="even:bg-slate-50/60">
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">Agua F</td>
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">
+                              <div className="flex items-center justify-center gap-1.5">
+                                <span>AGUA-00005</span>
+                                <button onClick={() => navigator.clipboard.writeText('AGUA-00005')} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                </button>
+                              </div>
+                            </td>
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-b border-slate-100 text-left">AGUA CRUDA FILTRADA ( JUSTY - GLUP - TEA )</td>
+                          </tr>
+                          <tr className="even:bg-slate-50/60">
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">Agua P</td>
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">
+                              <div className="flex items-center justify-center gap-1.5">
+                                <span>AGUA-00004</span>
+                                <button onClick={() => navigator.clipboard.writeText('AGUA-00004')} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                </button>
+                              </div>
+                            </td>
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-b border-slate-100 text-left">AGUA DE PROCESOS</td>
+                          </tr>
+                          <tr className="even:bg-slate-50/60">
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">Agua SU</td>
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">
+                              <div className="flex items-center justify-center gap-1.5">
+                                <span>AGUA-00003</span>
+                                <button onClick={() => navigator.clipboard.writeText('AGUA-00003')} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                </button>
+                              </div>
+                            </td>
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-b border-slate-100 text-left">AGUA SUAVIZADA</td>
+                          </tr>
+                          <tr className="even:bg-slate-50/60">
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">Agua SER</td>
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">
+                              <div className="flex items-center justify-center gap-1.5">
+                                <span>AGUA-00002</span>
+                                <button onClick={() => navigator.clipboard.writeText('AGUA-00002')} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                </button>
+                              </div>
+                            </td>
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-b border-slate-100 text-left">AGUA DE SERVICIOS</td>
+                          </tr>
+                          <tr className="even:bg-slate-50/60">
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">Jarabe S</td>
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">
+                              <div className="flex items-center justify-center gap-1.5">
+                                <span>JARA-00001</span>
+                                <button onClick={() => navigator.clipboard.writeText('JARA-00001')} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                </button>
+                              </div>
+                            </td>
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-b border-slate-100 text-left">JARABE SIMPLE</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                  <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                    <div className="w-2 h-2 rounded-full bg-sky-500" />
+                    <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">Ordenes</h4>
+                  </div>
+                  <div className="p-4">
+                    <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                      <table className="w-full border-collapse text-center">
+                        <thead>
+                          <tr className="bg-slate-100">
+                            <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Linea</th>
+                            <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Sabor</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">
+                              <Select value={ordenLineaSeleccionada} onValueChange={setOrdenLineaSeleccionada}>
+                                <SelectTrigger className="h-7 w-full rounded-md border-slate-100 bg-white text-center text-[10px] font-bold text-slate-700 hover:border-slate-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-none">
+                                  <SelectValue placeholder="Seleccione línea" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+                                    <SelectItem key={n} value={String(n)} className="font-bold">
+                                      Línea {n}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </td>
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-b border-slate-100">
+                              <Select value={ordenSaborSeleccionado} onValueChange={setOrdenSaborSeleccionado}>
+                                <SelectTrigger className="h-7 w-full rounded-md border-slate-100 bg-white text-center text-[10px] font-bold text-slate-700 hover:border-slate-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-none">
+                                  <SelectValue placeholder="Seleccione sabor" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  {ordenSaboresList.map((s) => (
+                                    <SelectItem key={s} value={s} className="font-bold">
+                                      {s}
+                                    </SelectItem>
+                                  ))}
+                                </SelectContent>
+                              </Select>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                      <table className="w-full border-collapse text-center">
+                        <thead>
+                          <tr className="bg-slate-100">
+                            <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Nombre</th>
+                            <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">codigo</th>
+                            <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">descripcion</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {Object.entries(ordenComponentes).map(([nombre, values]) => (
+                            <tr key={nombre} className="even:bg-slate-50/60">
+                              <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">{nombre}</td>
+                              <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">
+                                <div className="flex items-center justify-center gap-1.5">
+                                  <span>{values.codigo}</span>
+                                  <button onClick={() => navigator.clipboard.writeText(values.codigo)} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                                  </button>
+                                </div>
+                              </td>
+                              <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-b border-slate-100 text-left">{values.descripcion}</td>
+                            </tr>
+                           ))}
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                      <table className="w-full border-collapse text-center">
+                        <thead>
+                          <tr className="bg-slate-100">
+                            <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Orden I</th>
+                            <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Orden F</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td className="px-2 py-1 border-r border-b border-slate-100">
+                              <input
+                                type="number"
+                                value={ordenInicial}
+                                onChange={(e) => setOrdenInicial(e.target.value)}
+                                placeholder="Orden I"
+                                className="h-7 w-full rounded-md border border-slate-100 bg-white text-center text-[10px] font-bold text-slate-700 hover:border-slate-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-none"
+                              />
+                            </td>
+                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-b border-slate-100">
+                              {ordenInicial.trim() !== '' && !isNaN(Number(ordenInicial))
+                                ? Number(ordenInicial) + (ordenLineaSeleccionada === '5' ? 4 : 5)
+                                : ''}
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              )}
+           </div>
+         )}
+
+         {activeSection !== 'creador-ordenes' && activeLinea === null && (
            <div className="bg-white rounded-[2.5rem] border border-slate-200 p-8">
              <div className="h-48 flex items-center justify-center text-slate-400">
                 <p className="text-[10px] font-bold uppercase tracking-widest">Seleccione una línea para ver los datos</p>
@@ -1479,7 +2084,7 @@ const exportarPDFdia = async () => {
            </div>
          )}
 
-          {activeLinea && (
+          {activeSection !== 'creador-ordenes' && activeLinea && (
               <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
                 {activeSection === 'carga-prod' ? (
                   <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">

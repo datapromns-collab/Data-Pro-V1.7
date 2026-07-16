@@ -1,12 +1,12 @@
 "use client";
 
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { getWeekDays, PRODUCT_LIST, ALL_LINES_SUMMARY } from '@/lib/planner-utils';
+import { getWeekDays, getWeeksInMonth, PRODUCT_LIST, ALL_LINES_SUMMARY } from '@/lib/planner-utils';
 import { format, startOfDay, addDays, setHours, setMinutes, parseISO, startOfMonth, endOfMonth, isWithinInterval, eachDayOfInterval } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { BarChart3, Package, Layers, FileDown, FileStack, CheckCircle2, FileSpreadsheet, CalendarDays, TrendingUp } from 'lucide-react';
@@ -16,6 +16,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ChartConfig, ChartContainer, ChartTooltipContent } from '@/components/ui/chart';
 import { Bar, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer, Line, ComposedChart } from 'recharts';
 import { cn } from '@/lib/utils';
+import DiaADiaSection from '@/components/planner/DiaADiaSection';
+import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
 
 interface AdminReportToolProps {
   view: 'production' | 'compliance';
@@ -27,10 +29,12 @@ interface AdminReportToolProps {
   onPrintWeeklyControl?: () => void;
   onPrintCompliance?: () => void;
   onPrintMonthlyCompliance?: (month: string, year: string) => void;
+  allowedProductionTabs?: ('dia-a-dia' | 'weekly' | 'monthly')[];
 }
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const DAYS_NAMES = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
+const CURRENT_YEAR = new Date().getFullYear();
 
 const chartConfig = {
   planned: {
@@ -56,14 +60,49 @@ export function AdminReportTool({
   onPrintMonthly, 
   onPrintWeeklyControl, 
   onPrintCompliance,
-  onPrintMonthlyCompliance
+  onPrintMonthlyCompliance,
+  allowedProductionTabs
 }: AdminReportToolProps) {
-  const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
-  
+  const [weekSelectorMonth, setWeekSelectorMonth] = useState(format(weekStartDate, 'yyyy-MM'));
+  const [selectedWeekStart, setSelectedWeekStart] = useState(format(weekStartDate, 'yyyy-MM-dd'));
+
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
-  const [productionSubTab, setProductionTab] = useState('weekly');
+  const [productionSubTab, setProductionTab] = useState('dia-a-dia');
   const [complianceSubTab, setComplianceTab] = useState('weekly');
+
+  const weeklyWeekStart = useMemo(() => parseISO(selectedWeekStart), [selectedWeekStart]);
+  const weekDays = useMemo(
+    () => productionSubTab === 'weekly' ? getWeekDays(weeklyWeekStart) : getWeekDays(weekStartDate),
+    [productionSubTab, weeklyWeekStart, weekStartDate]
+  );
+
+  const weekOptions = useMemo(() => {
+    const [y, m] = weekSelectorMonth.split('-').map(Number);
+    const base = new Date(y, m - 1, 15);
+    return getWeeksInMonth(base).map(week => {
+      const start = week[0];
+      const end = week[6];
+      const value = format(start, 'yyyy-MM-dd');
+      const label = `${format(start, 'd/M', { locale: es })} - ${format(end, 'd/M', { locale: es })}`;
+      return { value, label };
+    });
+  }, [weekSelectorMonth]);
+
+  useEffect(() => {
+    setWeekSelectorMonth(format(weekStartDate, 'yyyy-MM'));
+    setSelectedWeekStart(format(weekStartDate, 'yyyy-MM-dd'));
+  }, [weekStartDate]);
+
+  const allowedTabs = allowedProductionTabs && allowedProductionTabs.length > 0
+    ? allowedProductionTabs
+    : (['dia-a-dia', 'weekly', 'monthly'] as const);
+
+  useEffect(() => {
+    if (!allowedTabs.includes(productionSubTab as any)) {
+      setProductionTab(allowedTabs[0]);
+    }
+  }, [allowedTabs, productionSubTab]);
 
   const getFlavorScheduledQty = (lineId: string, flavor: string, day: Date) => {
     const dayStart = setMinutes(setHours(startOfDay(day), 7), 0);
@@ -111,25 +150,48 @@ export function AdminReportTool({
       }, 0);
   };
 
+  const { ordenes: ordenesSap } = useOrdenesSap();
+
+  const realProductionAuto = useMemo(() => {
+    const result: Record<string, Record<string, Record<string, number>>> = {};
+    ordenesSap.forEach(orden => {
+      const lineId = String(orden.linea);
+      orden.dias.forEach(dia => {
+        const dateKey = dia.fechaInicio;
+        const total =
+          (Number(dia.cajas1) || 0) +
+          (Number(dia.cajas2) || 0) +
+          (Number(dia.cajas3) || 0) +
+          (Number(dia.cajas4) || 0);
+        if (total <= 0 || !dateKey) return;
+        if (!result[lineId]) result[lineId] = {};
+        if (!result[lineId][orden.sabor]) result[lineId][orden.sabor] = {};
+        result[lineId][orden.sabor][dateKey] =
+          (result[lineId][orden.sabor][dateKey] || 0) + total;
+      });
+    });
+    return result;
+  }, [ordenesSap]);
+
   const lineData = useMemo(() => {
     return LINES.map(lineId => {
       const flavors = PRODUCT_LIST.map(flavor => {
         const dailyData = weekDays.map(day => {
           const dateKey = format(day, 'yyyy-MM-dd');
           const scheduled = getFlavorScheduledQty(lineId, flavor, day);
-          const real = realProduction[lineId]?.[flavor]?.[dateKey] || 0;
+          const real = realProductionAuto[lineId]?.[flavor]?.[dateKey] || 0;
           return { day, dateKey, scheduled, real };
         });
         
         const weeklyTotalReal = dailyData.reduce((a, b) => a + (b.real || 0), 0);
         return { flavor, dailyData, weeklyTotalReal };
       });
-
+      
       const lineWeeklyTotal = flavors.reduce((acc, f) => acc + f.weeklyTotalReal, 0);
-
+      
       return { lineId, flavors, lineWeeklyTotal };
     });
-  }, [tasks, weekDays, realProduction]);
+  }, [tasks, weekDays, realProductionAuto]);
 
   const monthlyComplianceData = useMemo(() => {
     const yearNum = parseInt(selectedYear);
@@ -148,7 +210,7 @@ export function AdminReportTool({
         totalPlanned += getLineDailyPlanned(lineId, day);
         PRODUCT_LIST.forEach(product => {
           const dateKey = format(day, 'yyyy-MM-dd');
-          totalReal += realProduction[lineId]?.[product]?.[dateKey] || 0;
+          totalReal += realProductionAuto[lineId]?.[product]?.[dateKey] || 0;
         });
       });
 
@@ -162,7 +224,7 @@ export function AdminReportTool({
         compliance: parseFloat(compliance.toFixed(2))
       };
     });
-  }, [tasks, realProduction, selectedMonth, selectedYear]);
+  }, [tasks, realProductionAuto, selectedMonth, selectedYear]);
 
   const totalCratesWeek = useMemo(() => 
     lineData.reduce((acc, l) => acc + l.lineWeeklyTotal, 0),
@@ -178,26 +240,61 @@ export function AdminReportTool({
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 no-print">
               <TabsList className="bg-transparent h-auto p-0">
-                <TabsTrigger value="weekly" className={tabsTriggerClass}>
-                  <CalendarDays className="h-3.5 w-3.5" /> Control Semanal
-                </TabsTrigger>
-                <TabsTrigger value="monthly" className={tabsTriggerClass}>
-                  <FileSpreadsheet className="h-3.5 w-3.5" /> Resumen Mensual
-                </TabsTrigger>
+                {allowedTabs.includes('dia-a-dia') && (
+                  <TabsTrigger value="dia-a-dia" className={tabsTriggerClass}>
+                    <CalendarDays className="h-3.5 w-3.5" /> Producción Diaria
+                  </TabsTrigger>
+                )}
+                {allowedTabs.includes('weekly') && (
+                  <TabsTrigger value="weekly" className={tabsTriggerClass}>
+                    <CalendarDays className="h-3.5 w-3.5" /> Control Semanal
+                  </TabsTrigger>
+                )}
+                {allowedTabs.includes('monthly') && (
+                  <TabsTrigger value="monthly" className={tabsTriggerClass}>
+                    <FileSpreadsheet className="h-3.5 w-3.5" /> Resumen Mensual
+                  </TabsTrigger>
+                )}
               </TabsList>
             </div>
 
             <div className="flex items-center gap-2">
               {productionSubTab === 'weekly' ? (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={onPrintWeeklyControl}
-                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
-                >
-                  <FileStack className="h-4 w-4" />
-                  Exportar Reporte Semanal
-                </Button>
+                <>
+                  <Select value={weekSelectorMonth} onValueChange={setWeekSelectorMonth}>
+                    <SelectTrigger className="w-40 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array.from({ length: 12 }).map((_, i) => (
+                        <SelectItem key={i} value={`${format(new Date(), 'yyyy')}-${(i + 1).toString().padStart(2, '0')}`} className="font-bold uppercase text-[9px]">
+                          {format(new Date(CURRENT_YEAR, i, 1), 'MMMM yyyy', { locale: es }).toUpperCase()}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={selectedWeekStart} onValueChange={setSelectedWeekStart}>
+                    <SelectTrigger className="w-44 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {weekOptions.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value} className="font-bold uppercase text-[9px]">
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={onPrintWeeklyControl}
+                    className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
+                  >
+                    <FileStack className="h-4 w-4" />
+                    Exportar Reporte Semanal
+                  </Button>
+                </>
               ) : (
                 <>
                   <Select value={selectedMonth} onValueChange={setSelectedMonth}>
@@ -207,7 +304,7 @@ export function AdminReportTool({
                     <SelectContent>
                       {Array.from({ length: 12 }).map((_, i) => (
                         <SelectItem key={i} value={(i + 1).toString().padStart(2, '0')} className="font-bold uppercase text-[9px]">
-                          {format(new Date(2024, i, 1), 'MMMM', { locale: es }).toUpperCase()}
+                          {format(new Date(CURRENT_YEAR, i, 1), 'MMMM', { locale: es }).toUpperCase()}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -232,6 +329,10 @@ export function AdminReportTool({
               )}
             </div>
           </div>
+
+          <TabsContent value="dia-a-dia" className="m-0 animate-in fade-in-50 duration-500">
+            <DiaADiaSection />
+          </TabsContent>
 
           <TabsContent value="weekly" className="space-y-4 m-0 animate-in fade-in-50 duration-500">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -305,13 +406,9 @@ export function AdminReportTool({
                               </TableCell>
                               {row.dailyData.map((dayEntry, qIdx) => (
                                 <TableCell key={qIdx} className="p-0 text-center border-r border-slate-100">
-                                  <Input 
-                                    type="number"
-                                    value={dayEntry.real || ''}
-                                    onChange={(e) => updateRealProduction(line.lineId, row.flavor, dayEntry.dateKey, Number(e.target.value))}
-                                    className="w-full h-8 text-center font-bold text-[10px] border-none bg-transparent focus:ring-1 focus:ring-primary/20 rounded-none tabular-nums placeholder:text-slate-100"
-                                    placeholder="0"
-                                  />
+                                  <span className="block w-full h-8 leading-8 font-bold text-[10px] tabular-nums text-slate-700">
+                                    {dayEntry.real > 0 ? dayEntry.real.toLocaleString('es-ES') : '0'}
+                                  </span>
                                 </TableCell>
                               ))}
                               <TableCell className="text-center font-black text-[10px] text-slate-900 tabular-nums bg-slate-50/30 py-0">
@@ -325,7 +422,7 @@ export function AdminReportTool({
                             <TableCell className="font-black text-[9px] text-slate-900 uppercase border-r border-slate-200 px-2 py-0">TOTALES</TableCell>
                             {weekDays.map((day, idx) => {
                               const dateKey = format(day, 'yyyy-MM-dd');
-                              const dayTotal = line.flavors.reduce((acc, f) => acc + (realProduction[line.lineId]?.[f.flavor]?.[dateKey] || 0), 0);
+                              const dayTotal = line.flavors.reduce((acc, f) => acc + (realProductionAuto[line.lineId]?.[f.flavor]?.[dateKey] || 0), 0);
                               return (
                                 <TableCell key={idx} className="text-center font-black text-[10px] text-slate-900 tabular-nums border-r border-slate-200 py-0">
                                   {dayTotal > 0 ? dayTotal.toLocaleString('es-ES') : '0'}
@@ -353,7 +450,7 @@ export function AdminReportTool({
                   <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest mt-0.5">Visión ejecutiva de Planta</p>
                 </div>
                 <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20 px-3 py-1 font-black uppercase text-[9px]">
-                  {format(new Date(parseInt(selectedYear) || 2024, (parseInt(selectedMonth) || 1) - 1), 'MMMM yyyy', { locale: es })}
+                  {format(new Date(parseInt(selectedYear) || CURRENT_YEAR, (parseInt(selectedMonth) || 1) - 1), 'MMMM yyyy', { locale: es })}
                 </Badge>
               </div>
 
@@ -379,7 +476,7 @@ export function AdminReportTool({
                       
                       const lineValsFiltered = ALL_LINES_SUMMARY.map(l => {
                         let lineProd = 0;
-                        const data = realProduction[l]?.[flavor] || {};
+                         const data = realProductionAuto[l]?.[flavor] || {};
                         Object.entries(data).forEach(([dateKey, qty]) => {
                           const date = parseISO(dateKey);
                           if (isWithinInterval(date, { start: monthStart, end: monthEnd })) lineProd += qty;
@@ -421,7 +518,7 @@ export function AdminReportTool({
                         const monthEnd = endOfMonth(monthStart);
                         let colTotal = 0;
                         PRODUCT_LIST.forEach(f => {
-                          const data = realProduction[l]?.[f] || {};
+                          const data = realProductionAuto[l]?.[f] || {};
                           Object.entries(data).forEach(([dateKey, qty]) => {
                             const date = parseISO(dateKey);
                             if (isWithinInterval(date, { start: monthStart, end: monthEnd })) colTotal += qty;
@@ -439,7 +536,7 @@ export function AdminReportTool({
                           const monthStart = startOfMonth(new Date(parseInt(selectedYear), parseInt(selectedMonth) - 1));
                           const monthEnd = endOfMonth(monthStart);
                           PRODUCT_LIST.forEach(f => {
-                            const data = realProduction[l]?.[f] || {};
+                            const data = realProductionAuto[l]?.[f] || {};
                             Object.entries(data).forEach(([dateKey, qty]) => {
                               const date = parseISO(dateKey);
                               if (isWithinInterval(date, { start: monthStart, end: monthEnd })) lineTotal += qty;
@@ -453,7 +550,7 @@ export function AdminReportTool({
                         const monthEnd = endOfMonth(monthStart);
                         let colTotal = 0;
                         PRODUCT_LIST.forEach(f => {
-                          const data = realProduction[l]?.[f] || {};
+                          const data = realProductionAuto[l]?.[f] || {};
                           Object.entries(data).forEach(([dateKey, qty]) => {
                             const date = parseISO(dateKey);
                             if (isWithinInterval(date, { start: monthStart, end: monthEnd })) colTotal += qty;
@@ -471,7 +568,7 @@ export function AdminReportTool({
                           const monthStart = startOfMonth(new Date(parseInt(selectedYear), parseInt(selectedMonth) - 1));
                           const monthEnd = endOfMonth(monthStart);
                           PRODUCT_LIST.forEach(f => {
-                            const data = realProduction[l]?.[f] || {};
+                            const data = realProductionAuto[l]?.[f] || {};
                             Object.entries(data).forEach(([dateKey, qty]) => {
                               const date = parseISO(dateKey);
                               if (isWithinInterval(date, { start: monthStart, end: monthEnd })) lineTotal += qty;
@@ -523,7 +620,7 @@ export function AdminReportTool({
                     <SelectContent>
                       {Array.from({ length: 12 }).map((_, i) => (
                         <SelectItem key={i} value={(i + 1).toString().padStart(2, '0')} className="font-bold uppercase text-[9px]">
-                          {format(new Date(2024, i, 1), 'MMMM', { locale: es }).toUpperCase()}
+                          {format(new Date(CURRENT_YEAR, i, 1), 'MMMM', { locale: es }).toUpperCase()}
                         </SelectItem>
                       ))}
                     </SelectContent>
@@ -555,7 +652,7 @@ export function AdminReportTool({
                 const dateKey = format(day, 'yyyy-MM-dd');
                 const planned = getLineDailyPlanned(lineId, day);
                 const real = PRODUCT_LIST.reduce((acc, flavor) => 
-                  acc + (realProduction[lineId]?.[flavor]?.[dateKey] || 0), 0);
+                  acc + (realProductionAuto[lineId]?.[flavor]?.[dateKey] || 0), 0);
                 const compliance = planned > 0 ? (real / planned) * 100 : (real > 0 ? 100 : 0);
                 return { day, planned, real, compliance };
               });

@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -75,7 +75,9 @@ export function TaskDialog({
 
   const { toast } = useToast();
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
-  
+
+  const prevIsOpenRef = useRef(false);
+
   const isSpecialTask = useMemo(() => {
     const specials = ['CS', 'CIP', 'PASIVACIÓN', 'MTTO', 'PARADA', 'CP', 'PRUEBA DE MATERIAL', 'OTROS'];
     return specials.includes(name) || CIP_OPTIONS.includes(name);
@@ -87,8 +89,14 @@ export function TaskDialog({
     return PRODUCT_FACTORS[prodName]?.[presentation] || 0;
   }, [name, cipSubOption, presentation]);
 
+  const weekDaysForInit = weekDays;
+  const lineSpeedsForInit = lineSpeeds;
+  const allTasksForInit = allTasks;
+
   useEffect(() => {
-    if (isOpen) {
+    const wasOpen = prevIsOpenRef.current;
+    prevIsOpenRef.current = isOpen;
+    if (isOpen && (!wasOpen || initialTask)) {
       if (initialTask) {
         const isCIPOption = CIP_OPTIONS.includes(initialTask.name);
         setName(isCIPOption ? 'CIP' : initialTask.name);
@@ -101,8 +109,8 @@ export function TaskDialog({
         setQuantity(initialTask.quantity || 0);
         setDuration(initialTask.durationHours);
         
-        const dayIdx = weekDays.findIndex(d => 
-          d.getDate() === initialTask.startTime.getDate() && 
+        const dayIdx = weekDaysForInit.findIndex(d =>
+          d.getDate() === initialTask.startTime.getDate() &&
           d.getMonth() === initialTask.startTime.getMonth()
         );
         setSelectedDayIdx(dayIdx !== -1 ? dayIdx.toString() : '0');
@@ -114,17 +122,17 @@ export function TaskDialog({
         setCipSubOption('');
         setPresentation('');
         setTanks(0);
-        setLoadPerHour(lineSpeeds[defaultLineId] || 0);
+        setLoadPerHour(lineSpeedsForInit[defaultLineId] || 0);
         setQuantity(0);
         setDuration(0);
-        
-        const lineTasks = allTasks.filter(t => t.lineId === defaultLineId);
-        const nextTime = lineTasks.length > 0 
-          ? [...lineTasks].sort((a, b) => b.endTime.getTime() - a.endTime.getTime())[0].endTime 
-          : setMinutes(setHours(weekDays[0], 7), 0);
 
-        const dayIdx = weekDays.findIndex(d => 
-          d.getDate() === nextTime.getDate() && 
+        const lineTasks = allTasksForInit.filter(t => t.lineId === defaultLineId);
+        const nextTime = lineTasks.length > 0
+          ? [...lineTasks].sort((a, b) => b.endTime.getTime() - a.endTime.getTime())[0].endTime
+          : setMinutes(setHours(weekDaysForInit[0], 7), 0);
+
+        const dayIdx = weekDaysForInit.findIndex(d =>
+          d.getDate() === nextTime.getDate() &&
           d.getMonth() === nextTime.getMonth()
         );
         setSelectedDayIdx(dayIdx !== -1 ? dayIdx.toString() : '0');
@@ -132,7 +140,7 @@ export function TaskDialog({
       }
       setLastEdited(null);
     }
-  }, [isOpen, initialTask, defaultLineId, weekDays, lineSpeeds, allTasks]);
+  }, [isOpen, initialTask, defaultLineId]);
 
   // Efecto 1: Tanques <-> Cantidad
   useEffect(() => {

@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
-import { FirebaseClientProvider } from '@/firebase';
-import { FirebaseErrorListener } from '@/components/FirebaseErrorListener';
 import { PlannerProvider } from '@/hooks/use-planner-store';
 
 const inter = Inter({
@@ -21,8 +19,8 @@ export const metadata: Metadata = {
   title: 'Data Pro - Planificación Eficiente',
   description: 'Sistema de planificación semanal profesional con monitoreo de turnos e IA.',
   icons: {
-    icon: '/logo.svg',
-    apple: '/logo.svg',
+    icon: '/ico.png',
+    apple: '/ico.png',
   },
   other: {
     'mobile-web-app-capable': 'yes',
@@ -44,12 +42,10 @@ export default function RootLayout({
   return (
     <html lang="es" className={`${inter.variable} ${spaceGrotesk.variable}`}>
       <body className="font-body antialiased">
-        <FirebaseClientProvider>
-          <FirebaseErrorListener />
-          <PlannerProvider>
-            {children}
-          </PlannerProvider>
-        </FirebaseClientProvider>
+        <PlannerProvider>
+          {children}
+        </PlannerProvider>
+        <div id="notifications-portal" />
       </body>
     </html>
   );
