@@ -2010,9 +2010,10 @@ export default function PlannerPage() {
           initialTask={editingTask} 
           defaultLineId={selectedLine} 
           weekStartDate={weekStartDate} 
-          allTasks={tasks} 
-          lineSpeeds={lineSpeeds} 
+          allTasks={tasks}
+          lineSpeeds={lineSpeeds}
           readOnly={!isAdmin}
+          onWeekChange={setWeekStartDate}
         />
 
         <Dialog open={isPlantaDialogOpen} onOpenChange={setIsPlantaDialogOpen}>

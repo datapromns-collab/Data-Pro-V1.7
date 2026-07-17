@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { setHours, setMinutes, isBefore, isAfter } from 'date-fns';
+import { setHours, setMinutes, isBefore, isAfter, startOfWeek } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -45,6 +45,7 @@ interface TaskDialogProps {
   allTasks: ScheduledTask[];
   lineSpeeds: Record<string, number>;
   readOnly?: boolean;
+  onWeekChange?: (date: Date) => void;
 }
 
 export function TaskDialog({ 
@@ -57,7 +58,8 @@ export function TaskDialog({
   weekStartDate, 
   allTasks,
   lineSpeeds,
-  readOnly = false
+  readOnly = false,
+  onWeekChange
 }: TaskDialogProps) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
@@ -93,10 +95,43 @@ export function TaskDialog({
   const lineSpeedsForInit = lineSpeeds;
   const allTasksForInit = allTasks;
 
+  const initDoneRef = useRef(false);
+
+  const positionNewTask = (lineId: string) => {
+    const lineTasks = allTasksForInit.filter(t => t.lineId === lineId);
+    const nextTime = lineTasks.length > 0
+      ? [...lineTasks].sort((a, b) => b.endTime.getTime() - a.endTime.getTime())[0].endTime
+      : setMinutes(setHours(weekDaysForInit[0], 7), 0);
+
+    const dayIdx = weekDaysForInit.findIndex(d =>
+      d.getDate() === nextTime.getDate() &&
+      d.getMonth() === nextTime.getMonth()
+    );
+
+    if (dayIdx === -1 && onWeekChange && lineTasks.length > 0) {
+      // La última tarea de la línea cae fuera de la semana visible:
+      // movemos la vista a la semana de esa tarea para mantener la
+      // continuidad de fecha y hora (igual que en el resto de líneas).
+      onWeekChange(startOfWeek(nextTime, { weekStartsOn: 1 }));
+      return;
+    }
+    setSelectedDayIdx(dayIdx !== -1 ? dayIdx.toString() : '0');
+    setSelectedTime(formatTime(nextTime));
+  };
+
   useEffect(() => {
     const wasOpen = prevIsOpenRef.current;
     prevIsOpenRef.current = isOpen;
-    if (isOpen && (!wasOpen || initialTask)) {
+
+    // Al cerrar, reseteamos para la próxima apertura.
+    if (!isOpen) {
+      initDoneRef.current = false;
+      return;
+    }
+
+    // Primera apertura: inicialización completa de campos.
+    if (!initDoneRef.current) {
+      initDoneRef.current = true;
       if (initialTask) {
         const isCIPOption = CIP_OPTIONS.includes(initialTask.name);
         setName(isCIPOption ? 'CIP' : initialTask.name);
@@ -108,7 +143,7 @@ export function TaskDialog({
         setLoadPerHour(initialTask.loadPerHour || 0);
         setQuantity(initialTask.quantity || 0);
         setDuration(initialTask.durationHours);
-        
+
         const dayIdx = weekDaysForInit.findIndex(d =>
           d.getDate() === initialTask.startTime.getDate() &&
           d.getMonth() === initialTask.startTime.getMonth()
@@ -125,22 +160,18 @@ export function TaskDialog({
         setLoadPerHour(lineSpeedsForInit[defaultLineId] || 0);
         setQuantity(0);
         setDuration(0);
-
-        const lineTasks = allTasksForInit.filter(t => t.lineId === defaultLineId);
-        const nextTime = lineTasks.length > 0
-          ? [...lineTasks].sort((a, b) => b.endTime.getTime() - a.endTime.getTime())[0].endTime
-          : setMinutes(setHours(weekDaysForInit[0], 7), 0);
-
-        const dayIdx = weekDaysForInit.findIndex(d =>
-          d.getDate() === nextTime.getDate() &&
-          d.getMonth() === nextTime.getMonth()
-        );
-        setSelectedDayIdx(dayIdx !== -1 ? dayIdx.toString() : '0');
-        setSelectedTime(formatTime(nextTime));
+        positionNewTask(defaultLineId);
       }
       setLastEdited(null);
+      return;
     }
-  }, [isOpen, initialTask, defaultLineId]);
+
+    // Apertura ya inicializada: si la semana cambió (p. ej. ajuste de
+    // continuidad fuera de semana), recalculamos solo la posición.
+    if (!initialTask) {
+      positionNewTask(defaultLineId);
+    }
+  }, [isOpen, initialTask, defaultLineId, weekStartDate]);
 
   // Efecto 1: Tanques <-> Cantidad
   useEffect(() => {
