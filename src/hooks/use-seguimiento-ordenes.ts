@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRemoteCollection } from '@/hooks/use-remote-collection';
 
 export interface SeguimientoOrdenLinea {
   id: string;
@@ -24,30 +25,13 @@ export type LineaKey = 'linea-1' | 'linea-2' | 'linea-3' | 'linea-4' | 'linea-5'
 
 const LINE_KEYS: LineaKey[] = ['linea-1', 'linea-2', 'linea-3', 'linea-4', 'linea-5', 'linea-6', 'linea-7'];
 
-function storageKey(linea: LineaKey) {
-  return `seguimiento-ordenes-${linea}-v1`;
-}
+type SeguimientoEstado = Record<LineaKey, SeguimientoOrdenLinea[]>;
 
-function loadLocal(linea: LineaKey): SeguimientoOrdenLinea[] {
-  if (typeof window === 'undefined') return [];
-  try {
-    const raw = localStorage.getItem(storageKey(linea));
-    const parsed = raw ? JSON.parse(raw) : null;
-    return Array.isArray(parsed) ? parsed : [];
-  } catch {
-    return [];
-  }
-}
+// Clave antigua de localStorage (por si quedan datos previos para migrar)
+const LEGACY_PREFIX = 'seguimiento-ordenes-';
+const LEGACY_SUFFIX = '-v1';
 
-function persistLocal(linea: LineaKey, data: SeguimientoOrdenLinea[]) {
-  try {
-    localStorage.setItem(storageKey(linea), JSON.stringify(data));
-  } catch {
-    // ignore quota / private mode errors
-  }
-}
-
-function emptyState(): Record<LineaKey, SeguimientoOrdenLinea[]> {
+function emptyState(): SeguimientoEstado {
   return {
     'linea-1': [],
     'linea-2': [],
@@ -59,33 +43,65 @@ function emptyState(): Record<LineaKey, SeguimientoOrdenLinea[]> {
   };
 }
 
+function loadLegacy(linea: LineaKey): SeguimientoOrdenLinea[] | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem(`${LEGACY_PREFIX}${linea}${LEGACY_SUFFIX}`);
+    const parsed = raw ? JSON.parse(raw) : null;
+    return Array.isArray(parsed) ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
 export function useSeguimientoOrdenes(linea: LineaKey) {
-  const [state, setState] = useState<Record<LineaKey, SeguimientoOrdenLinea[]>>(() => {
-    const base = emptyState();
-    LINE_KEYS.forEach((k) => {
-      base[k] = loadLocal(k);
-    });
-    return base;
-  });
+  // Persistencia compartida en servidor (mismo mecanismo que el módulo de Jarabes)
+  const remoto = useRemoteCollection<SeguimientoEstado>('seguimiento-ordenes', emptyState());
 
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [migrated, setMigrated] = useState(false);
 
+  // Migración única desde localStorage al almacenamiento compartido (servidor)
   useEffect(() => {
-    LINE_KEYS.forEach((k) => persistLocal(k, state[k]));
-    setIsLoaded(true);
-  }, [state]);
+    if (migrated || !remoto.isLoaded) return;
+    const legacy: Partial<SeguimientoEstado> = {};
+    let hayDatos = false;
+    LINE_KEYS.forEach((k) => {
+      const datos = loadLegacy(k);
+      if (datos) {
+        legacy[k] = datos;
+        hayDatos = true;
+      }
+    });
+    if (hayDatos) {
+      remoto.setData((prev) => ({ ...prev, ...legacy }));
+      LINE_KEYS.forEach((k) => {
+        try {
+          localStorage.removeItem(`${LEGACY_PREFIX}${k}${LEGACY_SUFFIX}`);
+        } catch {
+          // ignore
+        }
+      });
+    }
+    setMigrated(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [remoto.isLoaded, migrated]);
+
+  const state = (remoto.data && typeof remoto.data === 'object' ? remoto.data : emptyState()) as SeguimientoEstado;
 
   const setData = useCallback(
     (updater: SeguimientoOrdenLinea[] | ((prev: SeguimientoOrdenLinea[]) => SeguimientoOrdenLinea[])) => {
-      setState((prev) => ({
-        ...prev,
-        [linea]: typeof updater === 'function' ? (updater as Function)(prev[linea]) : updater,
-      }));
+      remoto.setData((prev) => {
+        const base = prev && typeof prev === 'object' ? prev : emptyState();
+        return {
+          ...base,
+          [linea]: typeof updater === 'function' ? (updater as Function)(base[linea] ?? []) : updater,
+        };
+      });
     },
-    [linea]
+    [linea, remoto]
   );
 
-  const data = state[linea];
+  const data = state[linea] ?? [];
 
   const addRow = (row: Omit<SeguimientoOrdenLinea, 'id'>) => {
     const newRow: SeguimientoOrdenLinea = {
@@ -104,7 +120,7 @@ export function useSeguimientoOrdenes(linea: LineaKey) {
     setData((prev) => prev.filter((r) => r.id !== id));
   };
 
-  return { data, setData, addRow, updateRow, deleteRow, isLoaded };
+  return { data, setData, addRow, updateRow, deleteRow, isLoaded: remoto.isLoaded };
 }
 
 export interface SeguimientoOrdenLineaConLinea extends SeguimientoOrdenLinea {
