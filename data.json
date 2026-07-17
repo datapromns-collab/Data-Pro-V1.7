@@ -2756,7 +2756,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-07-17T22:10:52.798Z"
+    "updatedAt": "2026-07-17T22:14:43.390Z"
   },
   "ordenesSap": [
     {
@@ -9251,6 +9251,15 @@
         "descripcionAccion": "",
         "observaciones": ""
       }
+    ],
+    "seguimiento-ordenes": [
+      {},
+      {},
+      {},
+      {},
+      {},
+      {},
+      {}
     ]
   },
   "cacheVersion": 0,
@@ -9270,6 +9279,7 @@
         "2e2d231d-5d18-4af7-a1b2-4ea9e77cdeaa"
       ]
     },
-    "seguimiento-enfardadora": {}
+    "seguimiento-enfardadora": {},
+    "seguimiento-ordenes": {}
   }
 }

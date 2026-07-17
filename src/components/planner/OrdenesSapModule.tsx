@@ -17,6 +17,16 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
+import {
+  SeguimientoLinea1Table,
+  SeguimientoLinea2Table,
+  SeguimientoLinea3Table,
+  SeguimientoLinea4Table,
+  SeguimientoLinea5Table,
+  SeguimientoLinea6Table,
+  SeguimientoLinea7Table,
+} from '@/components/seguimiento/seguimiento-linea1-table';
+import { SeguimientoResumenSemanaTable } from '@/components/seguimiento/seguimiento-resumen-semana-table';
 
 const STORAGE_KEY = 'ordenes-sap-v1';
 
@@ -334,6 +344,7 @@ export default function OrdenesSapModule({
   const [fechaDiaADiaInicializada, setFechaDiaADiaInicializada] = useState(false);
   const [selectedFechaProdtSemanal, setSelectedFechaProdtSemanal] = useState<Date | undefined>(undefined);
   const [fechaProdtSemanalInicializada, setFechaProdtSemanalInicializada] = useState(false);
+  const [selectedFechaSeguimiento, setSelectedFechaSeguimiento] = useState<Date | undefined>(undefined);
   const [ordenComponentes, setOrdenComponentes] = useState<Record<string, { codigo: string; descripcion: string }>>({
     'Jarabe T': { codigo: '', descripcion: '' },
     'Bebida': { codigo: '', descripcion: '' },
@@ -2087,36 +2098,61 @@ const exportarPDFdia = async () => {
           {/* Sección independiente: Seguimiento de Órdenes (no depende de la línea seleccionada ni afecta a las demás secciones) */}
           {activeSection === 'seguimiento-ordenes' && (
             <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
-              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-4 flex-wrap gap-1 overflow-x-auto">
-                {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+              <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
+                <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit flex-wrap gap-1 overflow-x-auto">
+                  {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+                    <button
+                      key={n}
+                      onClick={() => setSeguimientoSubsection(n)}
+                      className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoSubsection === n ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                    >
+                      Línea {n}
+                    </button>
+                  ))}
                   <button
-                    key={n}
-                    onClick={() => setSeguimientoSubsection(n)}
-                    className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoSubsection === n ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                  >
-                    Línea {n}
-                  </button>
-                ))}
-                <button
-                  onClick={() => setSeguimientoSubsection('resumen')}
-                  className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoSubsection === 'resumen' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                >
-                  Resumen Semana
-                </button>
+                    onClick={() => setSeguimientoSubsection('resumen')}
+                    className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoSubsection === 'resumen' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                    >
+                      Resumen Semana
+                    </button>
+                  </div>
+
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <Button
+                      variant="outline"
+                      className="h-11 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                    >
+                      <CalendarIcon className="h-3.5 w-3.5 mr-2" />
+                      {selectedFechaSeguimiento ? `Semana ${getISOWeek(selectedFechaSeguimiento)} · ${format(selectedFechaSeguimiento, "d 'de' MMM, yyyy", { locale: es })}` : "Seleccionar semana"}
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent className="p-0 rounded-2xl" align="end">
+                    <Calendar
+                      mode="single"
+                      selected={selectedFechaSeguimiento}
+                      onSelect={setSelectedFechaSeguimiento}
+                      locale={es}
+                      className="rounded-md"
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
 
-              <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-                  <div className="w-2 h-2 rounded-full bg-sky-500" />
-                  <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                    {seguimientoSubsection === 'resumen' ? 'Resumen Semana' : `Línea ${seguimientoSubsection}`}
-                  </h4>
-                </div>
-                <div className="p-4">
-                  <div className="h-40 flex items-center justify-center text-slate-400">
-                    <p className="text-[10px] font-bold uppercase tracking-widest">Contenido en blanco - por definir</p>
-                  </div>
-                </div>
+              <div className="flex flex-col gap-4">
+                {seguimientoSubsection === 'resumen' ? (
+                  <SeguimientoResumenSemanaTable />
+                ) : (
+                  [
+                    SeguimientoLinea1Table,
+                    SeguimientoLinea2Table,
+                    SeguimientoLinea3Table,
+                    SeguimientoLinea4Table,
+                    SeguimientoLinea5Table,
+                    SeguimientoLinea6Table,
+                    SeguimientoLinea7Table,
+                  ][(seguimientoSubsection as number) - 1]()
+                )}
               </div>
             </div>
           )}
