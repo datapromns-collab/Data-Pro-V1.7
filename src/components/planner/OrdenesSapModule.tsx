@@ -1681,8 +1681,8 @@ const exportarPDFdia = async () => {
   return (
     <div className="pb-10">
       <div className="space-y-3 mb-6 no-print">
-        <div className="flex items-center justify-between gap-3">
-           <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+           <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-full sm:w-auto">
              <button
                onClick={() => setActiveSection('carga-prod')}
                className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'carga-prod' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
@@ -1767,10 +1767,10 @@ const exportarPDFdia = async () => {
          </div>
 
         {activeSection !== 'creador-ordenes' && (
-        <div className="flex items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
           {activeSection === 'carga-prod' ? (
             <>
-              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+              <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200">
                 {lineas.map((linea) => {
                   const isActive = activeLinea === linea;
                   return (
@@ -1804,8 +1804,8 @@ const exportarPDFdia = async () => {
               </div>
             </>
           ) : activeSection === 'dia-a-dia' ? (
-            <div className="flex items-center justify-between gap-3 w-full">
-              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+            <div className="flex flex-wrap items-center justify-between gap-3 w-full">
+              <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200">
                 <button
                   onClick={() => setActiveSubsection('dia')}
                   className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSubsection === 'dia' || activeSubsection === null ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
@@ -1854,7 +1854,7 @@ const exportarPDFdia = async () => {
         )}
 
         {activeSection === 'dia-a-dia' && (activeSubsection === 'diurno' || activeSubsection === 'nocturno') && (
-          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
+          <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-fit">
             <button
               onClick={() => setActiveSubsection('diurno')}
               className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSubsection === 'diurno' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
@@ -1875,7 +1875,7 @@ const exportarPDFdia = async () => {
          {/* Sección independiente: Creador de Órdenes (no depende de la línea seleccionada ni afecta a las demás secciones) */}
          {activeSection === 'creador-ordenes' && (
            <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
-             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-4">
+              <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-fit mb-4">
                <button
                  onClick={() => setCreadorSubsection('fijas')}
                  className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${creadorSubsection === 'fijas' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
