@@ -302,10 +302,12 @@ export default function OrdenesSapModule({
   onFechaChange?: (fecha: Date | undefined) => void;
 }) {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
-  const [activeSection, setActiveSection] = useState<'carga-prod' | 'creador-ordenes' | 'dia-a-dia' | 'prodt-semanal' | 'resumen-mensual'>('carga-prod');
+  const [activeSection, setActiveSection] = useState<'carga-prod' | 'creador-ordenes' | 'seguimiento-ordenes' | 'dia-a-dia' | 'prodt-semanal' | 'resumen-mensual'>('carga-prod');
   const [activeSubsection, setActiveSubsection] = useState<'dia' | 'diurno' | 'nocturno' | null>(null);
   // Estado independiente para la sección "Creador de Órdenes" (no afecta a las demás secciones)
   const [creadorSubsection, setCreadorSubsection] = useState<'fijas' | 'ordenes'>('fijas');
+  // Estado independiente para la sección "Seguimiento de Órdenes" (no afecta a las demás secciones)
+  const [seguimientoSubsection, setSeguimientoSubsection] = useState<number | 'resumen'>(1);
 
   useEffect(() => {
     setActiveSubsection(null);
@@ -1691,10 +1693,16 @@ const exportarPDFdia = async () => {
                onClick={() => setActiveSection('creador-ordenes')}
                className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'creador-ordenes' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
              >
-               <Factory className="h-3.5 w-3.5" /> CREADOR DE ORDENES
-             </button>
-             <button
-               onClick={() => setActiveSection('dia-a-dia')}
+                <Factory className="h-3.5 w-3.5" /> CREADOR DE ORDENES
+              </button>
+              <button
+                onClick={() => setActiveSection('seguimiento-ordenes')}
+                className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'seguimiento-ordenes' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+              >
+                <Factory className="h-3.5 w-3.5" /> SEGUIMIENTO ORDENES
+              </button>
+              <button
+                onClick={() => setActiveSection('dia-a-dia')}
                className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'dia-a-dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
              >
                <Factory className="h-3.5 w-3.5" /> DÍA A DÍA
@@ -2074,9 +2082,46 @@ const exportarPDFdia = async () => {
                 </div>
               )}
            </div>
-         )}
+          )}
 
-         {activeSection !== 'creador-ordenes' && activeLinea === null && (
+          {/* Sección independiente: Seguimiento de Órdenes (no depende de la línea seleccionada ni afecta a las demás secciones) */}
+          {activeSection === 'seguimiento-ordenes' && (
+            <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
+              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-4 flex-wrap gap-1 overflow-x-auto">
+                {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+                  <button
+                    key={n}
+                    onClick={() => setSeguimientoSubsection(n)}
+                    className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoSubsection === n ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                  >
+                    Línea {n}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setSeguimientoSubsection('resumen')}
+                  className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoSubsection === 'resumen' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                >
+                  Resumen Semana
+                </button>
+              </div>
+
+              <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                  <div className="w-2 h-2 rounded-full bg-sky-500" />
+                  <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                    {seguimientoSubsection === 'resumen' ? 'Resumen Semana' : `Línea ${seguimientoSubsection}`}
+                  </h4>
+                </div>
+                <div className="p-4">
+                  <div className="h-40 flex items-center justify-center text-slate-400">
+                    <p className="text-[10px] font-bold uppercase tracking-widest">Contenido en blanco - por definir</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeSection !== 'creador-ordenes' && activeSection !== 'seguimiento-ordenes' && activeLinea === null && (
            <div className="bg-white rounded-[2.5rem] border border-slate-200 p-8">
              <div className="h-48 flex items-center justify-center text-slate-400">
                 <p className="text-[10px] font-bold uppercase tracking-widest">Seleccione una línea para ver los datos</p>
@@ -2084,7 +2129,7 @@ const exportarPDFdia = async () => {
            </div>
          )}
 
-          {activeSection !== 'creador-ordenes' && activeLinea && (
+           {activeSection !== 'creador-ordenes' && activeSection !== 'seguimiento-ordenes' && activeLinea && (
               <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
                 {activeSection === 'carga-prod' ? (
                   <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
