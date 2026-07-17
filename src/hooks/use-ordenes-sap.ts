@@ -42,21 +42,17 @@ export function useOrdenesSap() {
       const remote = await loadOrdenesSapData();
       if (remote && Array.isArray(remote)) {
         setOrdenesState((prev) => {
-          if (dirtyRef.current) return prev;
           const map = new Map<string, OrdenSap>();
-          remote.forEach((o) => {
-            if (o && o.id) map.set(o.id, o);
-          });
+          // Local primero para no perder ediciones no guardadas del usuario actual
           prev.forEach((o) => {
             if (o && o.id) map.set(o.id, o);
           });
+          // Remoto: agrega órdenes de otros usuarios/dispositivos que local aún no tiene
+          remote.forEach((o) => {
+            if (o && o.id && !map.has(o.id)) map.set(o.id, o);
+          });
           const merged = Array.from(map.values());
           persistLocal(merged);
-          if (!migratedRef.current && remote.length === 0 && hadLocalData.current && merged.length > 0) {
-            saveOrdenesSapData(merged).catch((err) =>
-              console.warn('[ordenesSap] migration to server failed', err)
-            );
-          }
           return merged;
         });
       }
@@ -95,6 +91,24 @@ export function useOrdenesSap() {
     []
   );
 
+  const flush = useCallback(() => {
+    if (saveTimer.current) {
+      clearTimeout(saveTimer.current);
+      saveTimer.current = null;
+      const snapshot = ordenesRef.current;
+      persistLocal(snapshot);
+      dirtyRef.current = false;
+      saveOrdenesSapData(snapshot).catch((err) =>
+        console.warn('[ordenesSap] flush save failed, kept local copy', err)
+      );
+    }
+  }, []);
+
+  const ordenesRef = useRef<OrdenSap[]>(ordenes);
+  useEffect(() => {
+    ordenesRef.current = ordenes;
+  }, [ordenes]);
+
   useEffect(() => {
     refresh();
     const interval = setInterval(refresh, POLL_INTERVAL);
@@ -105,6 +119,7 @@ export function useOrdenesSap() {
     return () => {
       clearInterval(interval);
       document.removeEventListener('visibilitychange', onVisible);
+      flush();
     };
   }, [refresh]);
 

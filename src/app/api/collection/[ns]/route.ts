@@ -20,11 +20,24 @@ function ensureDb() {
     const data = JSON.parse(fs.readFileSync(DB_PATH, 'utf8'));
     let changed = false;
     if (!data.collections) { data.collections = {}; changed = true; }
+    if (!data.deletedIds) { data.deletedIds = {}; changed = true; }
     if (typeof data.cacheVersion !== 'number') { data.cacheVersion = 0; changed = true; }
     if (changed) fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf8');
   } catch {
     // ignore
   }
+}
+
+function getDeletedIds(db: any, ns: string): Record<string, string[]> {
+  if (db.deletedIds && db.deletedIds[ns] && typeof db.deletedIds[ns] === 'object') {
+    return db.deletedIds[ns];
+  }
+  return {};
+}
+
+function setDeletedIds(db: any, ns: string, value: Record<string, string[]>) {
+  db.deletedIds = db.deletedIds || {};
+  db.deletedIds[ns] = value;
 }
 
 function readDb(): any {
@@ -36,24 +49,28 @@ function writeDb(data: any) {
   fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf8');
 }
 
-function mergeCollection(existing: any, incoming: any): any {
-  if (Array.isArray(incoming)) {
-    if (Array.isArray(existing) && existing.length > 0 && existing[0] && existing[0].id != null) {
-      const map = new Map<string, any>();
-      existing.forEach((item: any) => map.set(String(item.id), item));
-      incoming.forEach((item: any) => map.set(String(item.id), item));
-      return Array.from(map.values());
-    }
-    return incoming;
+function toArray(value: any): any[] {
+  if (Array.isArray(value)) return value;
+  if (value && typeof value === 'object') {
+    const values = Object.values(value).filter((v) => v && typeof v === 'object');
+    if (values.length > 0) return values;
   }
-  if (incoming && typeof incoming === 'object' && !Array.isArray(incoming)) {
-    const out = { ...(existing && typeof existing === 'object' ? existing : {}) };
-    Object.keys(incoming).forEach((k) => {
-      out[k] = mergeCollection(out[k], incoming[k]);
-    });
-    return out;
+  return [];
+}
+
+function mergeCollection(existing: any, incoming: any): any[] {
+  const existingArr = toArray(existing);
+  const incomingArr = toArray(incoming);
+  if (incomingArr.length === 0) return existingArr;
+  if (existingArr.length === 0) return incomingArr;
+  const first = existingArr[0];
+  if (first && first.id != null) {
+    const map = new Map<string, any>();
+    existingArr.forEach((item: any) => map.set(String(item.id), item));
+    incomingArr.forEach((item: any) => map.set(String(item.id), item));
+    return Array.from(map.values());
   }
-  return incoming;
+  return incomingArr;
 }
 
 function mergeDeletedIds(existing: Record<string, string[]> | undefined, incoming: Record<string, string[]> | undefined): Record<string, string[]> {
@@ -68,31 +85,27 @@ function mergeDeletedIds(existing: Record<string, string[]> | undefined, incomin
   return out;
 }
 
-function applyDeletedIds(data: any, deletedIds: Record<string, string[]> | undefined): any {
+function applyDeletedIds(data: any[], deletedIds: Record<string, string[]> | undefined): any[] {
   if (!deletedIds || typeof deletedIds !== 'object') return data;
-  if (Array.isArray(data)) return data;
-  const result = { ...data };
+  let result = data;
   Object.keys(deletedIds).forEach((key) => {
     const ids = deletedIds[key];
-    if (Array.isArray(ids) && Array.isArray(result[key])) {
+    if (Array.isArray(ids) && Array.isArray(result)) {
       const set = new Set(ids.map((id) => String(id)));
-      result[key] = result[key].filter((item: any) => item && String(item.id ?? item) !== undefined && !set.has(String(item.id ?? item)));
+      result = result.filter((item: any) => item && String(item.id ?? item) !== undefined && !set.has(String(item.id ?? item)));
     }
   });
   return result;
 }
 
-function collectDeletedIds(data: any, deletedIds: Record<string, string[]>) {
-  if (!data || typeof data !== 'object') return;
-  Object.keys(data).forEach((key) => {
-    const value = (data as any)[key];
-    if (Array.isArray(value) && value.length > 0 && value[0] && value[0].id != null) {
-      const incomingIds = value.map((item: any) => String(item.id ?? item));
-      const existing = Array.isArray(deletedIds[key]) ? deletedIds[key] : [];
-      const intersection = existing.filter((id) => incomingIds.includes(id));
-      if (intersection.length > 0) deletedIds[key] = intersection;
-    }
-  });
+function collectDeletedIds(data: any[], deletedIds: Record<string, string[]>) {
+  if (!Array.isArray(data)) return;
+  if (data.length > 0 && data[0] && data[0].id != null) {
+    const incomingIds = data.map((item: any) => String(item.id ?? item));
+    const existing = Array.isArray(deletedIds['*']) ? deletedIds['*'] : [];
+    const intersection = existing.filter((id) => incomingIds.includes(id));
+    if (intersection.length > 0) deletedIds['*'] = intersection;
+  }
 }
 
 function sanitizeNs(ns: string): string | null {
@@ -116,16 +129,13 @@ export async function GET(request: Request) {
   if (!ns) return new Response(JSON.stringify({ error: 'invalid namespace' }), { status: 400 });
   ensureDb();
   const db = readDb();
-  let col = (db.collections && db.collections[ns]) ?? null;
-  if (col && typeof col === 'object') {
-    const deleted = col._deletedIds;
-    if (deleted && typeof deleted === 'object') {
-      col = applyDeletedIds(col, deleted);
-    }
-  }
+  const raw = (db.collections && db.collections[ns]) ?? [];
+  const arr = toArray(raw);
+  const deletedIds = getDeletedIds(db, ns);
+  const col = applyDeletedIds(arr, deletedIds);
   return new Response(JSON.stringify(col), {
     status: 200,
-    headers: { 'content-type': 'application/json' },
+    headers: { 'content-type': 'application/json; charset=utf-8' },
   });
 }
 
@@ -137,14 +147,22 @@ export async function POST(request: Request) {
     const db = readDb();
     db.collections = db.collections || {};
     const incoming = await request.json();
-    const incomingData = { ...(incoming ?? {}) };
-    delete incomingData._deletedIds;
-    const merged = mergeCollection(db.collections[ns] ?? {}, incomingData);
-    const deletedIds = mergeDeletedIds(db.collections[ns]?._deletedIds, incoming?._deletedIds);
+    const incomingItems = incoming && Array.isArray(incoming.items) ? incoming.items : incoming;
+    const incomingArr = toArray(incomingItems);
+    const incomingData = incomingArr.map((item: any) => {
+      const copy = { ...item };
+      delete copy._deletedIds;
+      return copy;
+    });
+    const current = toArray(db.collections[ns]);
+    const merged = mergeCollection(current, incomingData);
+    const existingDeleted = getDeletedIds(db, ns);
+    const incomingDel = Array.isArray(incoming?._deletedIds) ? { '*': incoming!._deletedIds } : incoming?._deletedIds;
+    const deletedIds = mergeDeletedIds(existingDeleted, incomingDel);
     collectDeletedIds(incomingData, deletedIds);
-    merged._deletedIds = deletedIds;
     const result = applyDeletedIds(merged, deletedIds);
     db.collections[ns] = result;
+    setDeletedIds(db, ns, deletedIds);
     writeDb(db);
     return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'content-type': 'application/json' } });
   } catch (error) {

@@ -60,6 +60,7 @@ export type ModuleId =
   | 'raw-materials'
   | 'recipes'
   | 'planta'
+  | 'planta-admin'
   | 'logistica'
   | 'ventas'
   | 'purchasing'
@@ -82,6 +83,7 @@ export const MODULE_LABELS: Record<ModuleId, string> = {
   'raw-materials': 'Materia Prima',
   recipes: 'Recetas',
   planta: 'Planta',
+  'planta-admin': 'Planta (Admin)',
   logistica: 'Logística',
   ventas: 'Ventas',
   purchasing: 'Compras',
@@ -96,6 +98,7 @@ export const MODULE_COLORS: Record<ModuleId, string> = {
   'raw-materials': 'bg-amber-600',
   recipes: 'bg-emerald-600',
   planta: 'bg-slate-800',
+  'planta-admin': 'bg-slate-900',
   logistica: 'bg-orange-600',
   ventas: 'bg-indigo-600',
   purchasing: 'bg-blue-600',
@@ -110,6 +113,7 @@ export const ALL_MODULES = [
   'raw-materials',
   'recipes',
   'planta',
+  'planta-admin',
   'logistica',
   'ventas',
   'purchasing',
@@ -121,14 +125,14 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   mds: ['planning', 'planta', 'logistica', 'ventas'],
   'jaime.r': ['planning', 'management', 'jarabes', 'raw-materials', 'planta', 'logistica', 'ventas', 'purchasing', 'seguimiento'],
   demon: ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'logistica', 'ventas', 'purchasing', 'ordenes-sap', 'seguimiento'],
-  'maria.mds': ['jarabes', 'raw-materials', 'planta', 'planning', 'management'],
-  'alex.mds': ['jarabes', 'raw-materials', 'planta', 'planning', 'management'],
+  'maria.mds': ['jarabes', 'raw-materials', 'planta', 'planta-admin', 'planning', 'management'],
+  'alex.mds': ['jarabes', 'raw-materials', 'planta', 'planta-admin', 'planning', 'management'],
   'anto.mds': ['purchasing', 'planta', 'logistica', 'ventas'],
-  'prodtj.mds': ['planning'],
+  'prodtj.mds': ['planning', 'planta'],
   'procj.mds': ['planning'],
   'cald.mds': ['planning'],
   'prodt.mds': ['planning'],
-  'proc.mds': ['planning'],
+  'proc.mds': ['planning', 'planta'],
   'g.tec.mds': ['planning', 'seguimiento', 'management'],
   'enf.mds': ['planning', 'seguimiento', 'management'],
   'etq.mds': ['planning', 'seguimiento', 'management'],
@@ -247,6 +251,20 @@ export function usePermissionsStore() {
     return merged.includes(module);
   }, [permissions]);
 
+  const hasPlantaAdminAccess = useCallback((userId: string): boolean => {
+    const saved = permissions[userId] ?? [];
+    const defaults = DEFAULT_PERMISSIONS[userId] ?? [];
+    const merged = Array.from(new Set([...defaults, ...saved]));
+    return merged.includes('planta-admin');
+  }, [permissions]);
+
+  const hasPlantaWriteAccess = useCallback((userId: string): boolean => {
+    const saved = permissions[userId] ?? [];
+    const defaults = DEFAULT_PERMISSIONS[userId] ?? [];
+    const merged = Array.from(new Set([...defaults, ...saved]));
+    return merged.includes('planta');
+  }, [permissions]);
+
   const hasPlanningReadAccess = useCallback((userId: string, section: PlanningSection): boolean => {
     const current = planningPermissions[userId] ?? DEFAULT_PLANNING_PERMISSIONS[userId] ?? { read: [], write: [] };
     return current.read.includes(section);
@@ -286,6 +304,8 @@ export function usePermissionsStore() {
     toggleModuleForUser,
     togglePlanningPermission,
     hasAccess,
+    hasPlantaAdminAccess,
+    hasPlantaWriteAccess,
     hasPlanningReadAccess,
     hasPlanningWriteAccess,
     hasManagementAccess,

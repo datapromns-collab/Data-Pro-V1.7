@@ -1,10 +1,27 @@
-'use client';
+﻿'use client';
 
 import { useState, useEffect, useCallback, createContext, useContext, ReactNode, useRef } from 'react';
 import { ScheduledTask } from '@/lib/types';
 import { startOfWeek, addDays, format, parseISO } from 'date-fns';
 import { RECIPES, CONSUMABLES_RECIPES, DEFAULT_PACKAGING_RECIPES } from '@/lib/planner-utils';
 import { loadPlannerData, savePlannerData } from '@/lib/json-db';
+
+// Serialización de fechas que PRESERVA la hora local del navegador.
+// toISOString() (UTC, con "Z") hace que al reconvertir con new Date() el
+// navegador reste el offset de zona horaria y la fecha "salte" de día en cada
+// ciclo de guardado/lectura (autorefresh). Guardamos componentes locales sin
+// "Z" para que la fecha seleccionada se mantenga exacta.
+function toLocalISO(d: Date): string {
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}.${String(d.getMilliseconds()).padStart(3, '0')}`;
+}
+
+function fromLocalISO(value: any): Date {
+  if (value instanceof Date) return value;
+  // Si trae "Z" (UTC) o offset, new Date lo interpreta correctamente; si no,
+  // lo toma como hora local. Ambos casos se respetan sin re-convertir.
+  return new Date(value);
+}
 
 const STORAGE_KEY_TIMESTAMP = 'planner_last_update_v1';
 const STORAGE_KEY_REMOTE_TIMESTAMP = 'planner_remote_last_update_v1';
@@ -96,7 +113,7 @@ function usePlannerStoreInner() {
           })));
         }
         if (parsed.config) {
-          if (parsed.config.weekStartDate) setWeekStartDate(new Date(parsed.config.weekStartDate));
+          if (parsed.config.weekStartDate) setWeekStartDate(fromLocalISO(parsed.config.weekStartDate));
           if (parsed.config.lineSpeeds) setLineSpeeds(parsed.config.lineSpeeds);
         }
         if (parsed.realProduction) setRealProduction(parsed.realProduction);
@@ -159,7 +176,7 @@ function usePlannerStoreInner() {
     if (savedConfig) {
       try {
         const config = JSON.parse(savedConfig);
-        if (config.weekStartDate) setWeekStartDate(new Date(config.weekStartDate));
+        if (config.weekStartDate) setWeekStartDate(fromLocalISO(config.weekStartDate));
         if (config.lineSpeeds) setLineSpeeds(config.lineSpeeds);
       } catch (e) {}
     }
@@ -307,7 +324,8 @@ function usePlannerStoreInner() {
       setDeletedTaskIds(prev => Array.from(new Set([...prev, ...remote.deletedTaskIds])));
     }
     if (remote.config) {
-      setWeekStartDate(prev => remote.config.weekStartDate ? new Date(remote.config.weekStartDate) : prev);
+      // Semana seleccionada es preferencia del usuario/local; NO se pisa desde
+      // el servidor para que se mantenga siempre en la fecha que eligió.
       setLineSpeeds(prev => ({ ...prev, ...(remote.config.lineSpeeds ?? {}) }));
     }
     setRealProduction(prev => ({ ...prev, ...(remote.realProduction ?? {}) }));
@@ -360,7 +378,7 @@ function usePlannerStoreInner() {
 
   const computePlannerSnapshot = useCallback(() => JSON.stringify({
     tasks,
-    config: { weekStartDate: weekStartDate.toISOString(), lineSpeeds },
+    config: { weekStartDate: toLocalISO(weekStartDate), lineSpeeds },
     realProduction,
     customRecipes,
     customPackagingRecipes,
@@ -414,7 +432,7 @@ function usePlannerStoreInner() {
               })));
             }
             if (parsed.config) {
-              if (parsed.config.weekStartDate) setWeekStartDate(new Date(parsed.config.weekStartDate));
+              if (parsed.config.weekStartDate) setWeekStartDate(fromLocalISO(parsed.config.weekStartDate));
               if (parsed.config.lineSpeeds) setLineSpeeds(parsed.config.lineSpeeds);
             }
             if (parsed.realProduction) setRealProduction(parsed.realProduction);
@@ -482,7 +500,7 @@ function usePlannerStoreInner() {
   const saveToLocalStorage = useCallback(() => {
     const plan = {
       tasks,
-      config: { weekStartDate: weekStartDate.toISOString(), lineSpeeds },
+      config: { weekStartDate: toLocalISO(weekStartDate), lineSpeeds },
       realProduction,
       customRecipes,
       customPackagingRecipes,
@@ -528,7 +546,7 @@ function usePlannerStoreInner() {
 
     const plan = {
       tasks,
-      config: { weekStartDate: weekStartDate.toISOString(), lineSpeeds },
+      config: { weekStartDate: toLocalISO(weekStartDate), lineSpeeds },
       realProduction,
       customRecipes,
       customPackagingRecipes,
@@ -967,3 +985,4 @@ export function usePlannerStore() {
   }
   return ctx;
 }
+
