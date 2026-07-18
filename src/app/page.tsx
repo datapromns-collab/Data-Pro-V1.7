@@ -310,6 +310,7 @@ export default function PlannerPage() {
       }));
   }, [informesOperacionales]);
 
+  const [editingRows, setEditingRows] = useState<Record<string | number, any>>({});
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<any>({});
   const [errorValidacion, setErrorValidacion] = useState<string>('');
@@ -1593,73 +1594,73 @@ export default function PlannerPage() {
                                             const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
                                             return matchLine && matchDate;
                                           })
-                                          .map((row) => (
-                                         <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
-                                           {editingId === row.id ? (
-                                             <>
-                                               <TableCell className="px-2 py-2"><Input type="date" value={editForm.fecha || ''} onChange={(e) => setEditForm({...editForm, fecha: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                               <TableCell className="px-2 py-2"><Input type="number" value={editForm.semana ?? ''} onChange={(e) => setEditForm({...editForm, semana: parseInt(e.target.value) || 0})} className="h-8 text-[10px] w-16" /></TableCell>
-                                               <TableCell className="px-2 py-2"><Input value={editForm.turno || ''} onChange={(e) => setEditForm({...editForm, turno: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                               <TableCell className="px-2 py-2"><Input value={editForm.operador || ''} onChange={(e) => setEditForm({...editForm, operador: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                               <TableCell className="px-2 py-2"><Input value={editForm.linea || ''} onChange={(e) => setEditForm({...editForm, linea: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                               <TableCell className="px-2 py-2"><Input value={editForm.equipo || ''} onChange={(e) => setEditForm({...editForm, equipo: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                               <TableCell className="px-2 py-2"><Input value={editForm.tipoParada || ''} onChange={(e) => setEditForm({...editForm, tipoParada: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                                <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="time" value={editForm.inicioParada || ''} onChange={(e) => setEditForm({...editForm, inicioParada: e.target.value})} className="h-8 text-[10px] w-24" /></TableCell>
-                                                <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="time" value={editForm.finParada || ''} onChange={(e) => setEditForm({...editForm, finParada: e.target.value})} className="h-8 text-[10px] w-24" /></TableCell>
-                                                <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" value={editForm.totalMin ?? ''} readOnly className="h-8 text-[10px] w-16 bg-slate-100" /></TableCell>
-                                               <TableCell className="px-2 py-2"><Input value={editForm.zona || ''} onChange={(e) => setEditForm({...editForm, zona: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                               <TableCell className="px-2 py-2 max-w-[180px]"><Input value={editForm.falla || ''} onChange={(e) => setEditForm({...editForm, falla: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
-                                               <TableCell className="px-2 py-2"><Input value={editForm.orden || ''} onChange={(e) => setEditForm({...editForm, orden: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                               <TableCell className="px-2 py-2 max-w-[200px]"><Input value={editForm.observaciones || ''} onChange={(e) => setEditForm({...editForm, observaciones: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
-                                                <TableCell className="px-2 py-2 flex items-center gap-1">
-                                                  <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
-                                                     if (!editForm.inicioParada || !editForm.finParada) {
-                                                       setErrorValidacion('Ingrese hora de inicio y fin de la parada.');
-                                                       return;
-                                                     }
-                                                     const duplicado = informesOperacionales.find(r => r.id !== row.id && r.fecha === editForm.fecha && r.linea === editForm.linea && seSolapan(r.inicioParada, r.finParada, editForm.inicioParada, editForm.finParada));
-                                                     if (duplicado) {
-                                                       setErrorValidacion(`Ya existe una parada registrada en esta fecha y línea de ${duplicado.inicioParada} a ${duplicado.finParada}.`);
-                                                       return;
-                                                     }
-                                                     const [h1, m1] = (editForm.inicioParada || '00:00').split(':').map(Number);
-                                                     const [h2, m2] = (editForm.finParada || '00:00').split(':').map(Number);
-                                                    let inicio = h1 * 60 + m1;
-                                                    let fin = h2 * 60 + m2;
-                                                    let diff = fin - inicio;
-                                                    if (diff < 0) diff += 1440;
-                                                    const updated = { ...editForm, totalMin: String(diff) };
-                                                    setInformesOperacionales(prev => prev.map(r => r.id === row.id ? updated : r));
-                                                    setEditingId(null);
-                                                    setEditForm({});
-                                                    setErrorValidacion('');
-                                                  }}><Check className="h-3.5 w-3.5" /></Button>
-                                                  <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => { setEditingId(null); setEditForm({}); setErrorValidacion(''); }}><X className="h-3.5 w-3.5" /></Button>
-                                                </TableCell>
-                                             </>
-                                           ) : (
-                                             <>
-                                               <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fecha}</TableCell>
-                                               <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {row.semana}</TableCell>
-                                               <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{row.turno}</TableCell>
-                                               <TableCell className="px-2 py-2 text-[11px] font-semibold text-slate-800 whitespace-nowrap">{row.operador}</TableCell>
-                                               <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap">{row.linea}</TableCell>
-                                               <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.equipo}</TableCell>
-                                               <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.tipoParada}</TableCell>
-                                                <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums whitespace-nowrap">{row.inicioParada}</TableCell>
-                                                <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums whitespace-nowrap">{row.finParada}</TableCell>
-                                                <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums whitespace-nowrap">{row.totalMin} min</TableCell>
-                                               <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.zona}</TableCell>
-                                               <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.falla}>{row.falla}</TableCell>
-                                               <TableCell className="px-2 py-2 text-[11px] font-mono text-slate-600 whitespace-nowrap">{row.orden}</TableCell>
-                                               <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[200px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
-                                                <TableCell className="px-2 py-2 flex items-center gap-1">
-                                                  <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingId(row.id); setEditForm(row); }}><Pencil className="h-3.5 w-3.5" /></Button>
-                                                  <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => { setInformesOperacionales(prev => prev.filter(r => r.id !== row.id)); setEditingId(null); setEditForm({}); }}><Trash2 className="h-3.5 w-3.5" /></Button>
-                                                </TableCell>
-                                             </>
-                                           )}
-                                         </TableRow>
+                                           .map((row) => (
+                                          <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
+                                            {editingId === row.id ? (
+                                              <>
+                                                <TableCell className="px-2 py-2"><Input type="date" value={editForm.fecha || ''} onChange={(e) => setEditForm({...editForm, fecha: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input type="number" value={editForm.semana ?? ''} onChange={(e) => setEditForm({...editForm, semana: parseInt(e.target.value) || 0})} className="h-8 text-[10px] w-16" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={editForm.turno || ''} onChange={(e) => setEditForm({...editForm, turno: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={editForm.operador || ''} onChange={(e) => setEditForm({...editForm, operador: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={editForm.linea || ''} onChange={(e) => setEditForm({...editForm, linea: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={editForm.equipo || ''} onChange={(e) => setEditForm({...editForm, equipo: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={editForm.tipoParada || ''} onChange={(e) => setEditForm({...editForm, tipoParada: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                                 <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="time" value={editForm.inicioParada || ''} onChange={(e) => setEditForm({...editForm, inicioParada: e.target.value})} className="h-8 text-[10px] w-24" /></TableCell>
+                                                 <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="time" value={editForm.finParada || ''} onChange={(e) => setEditForm({...editForm, finParada: e.target.value})} className="h-8 text-[10px] w-24" /></TableCell>
+                                                 <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" value={editForm.totalMin ?? ''} readOnly className="h-8 text-[10px] w-16 bg-slate-100" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={editForm.zona || ''} onChange={(e) => setEditForm({...editForm, zona: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2 max-w-[180px]"><Input value={editForm.falla || ''} onChange={(e) => setEditForm({...editForm, falla: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={editForm.orden || ''} onChange={(e) => setEditForm({...editForm, orden: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2 max-w-[200px]"><Input value={editForm.observaciones || ''} onChange={(e) => setEditForm({...editForm, observaciones: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
+                                                 <TableCell className="px-2 py-2 flex items-center gap-1">
+                                                   <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
+                                                      if (!editForm.inicioParada || !editForm.finParada) {
+                                                        setErrorValidacion('Ingrese hora de inicio y fin de la parada.');
+                                                        return;
+                                                      }
+                                                      const duplicado = informesOperacionales.find(r => r.id !== row.id && r.fecha === editForm.fecha && r.linea === editForm.linea && seSolapan(r.inicioParada, r.finParada, editForm.inicioParada, editForm.finParada));
+                                                      if (duplicado) {
+                                                        setErrorValidacion(`Ya existe una parada registrada en esta fecha y línea de ${duplicado.inicioParada} a ${duplicado.finParada}.`);
+                                                        return;
+                                                      }
+                                                      const [h1, m1] = (editForm.inicioParada || '00:00').split(':').map(Number);
+                                                      const [h2, m2] = (editForm.finParada || '00:00').split(':').map(Number);
+                                                     let inicio = h1 * 60 + m1;
+                                                     let fin = h2 * 60 + m2;
+                                                     let diff = fin - inicio;
+                                                     if (diff < 0) diff += 1440;
+                                                     const updated = { ...editForm, totalMin: String(diff) };
+                                                     setInformesOperacionales(prev => prev.map(r => r.id === row.id ? updated : r));
+                                                     setEditingId(null);
+                                                     setEditForm({});
+                                                     setErrorValidacion('');
+                                                   }}><Check className="h-3.5 w-3.5" /></Button>
+                                                   <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => { setEditingId(null); setEditForm({}); setErrorValidacion(''); }}><X className="h-3.5 w-3.5" /></Button>
+                                                 </TableCell>
+                                              </>
+                                            ) : (
+                                              <>
+                                                <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fecha}</TableCell>
+                                                <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {row.semana}</TableCell>
+                                                <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{row.turno}</TableCell>
+                                                <TableCell className="px-2 py-2 text-[11px] font-semibold text-slate-800 whitespace-nowrap">{row.operador}</TableCell>
+                                                <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap">{row.linea}</TableCell>
+                                                <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.equipo}</TableCell>
+                                                <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.tipoParada}</TableCell>
+                                                 <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums whitespace-nowrap">{row.inicioParada}</TableCell>
+                                                 <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums whitespace-nowrap">{row.finParada}</TableCell>
+                                                 <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums whitespace-nowrap">{row.totalMin} min</TableCell>
+                                                <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.zona}</TableCell>
+                                                <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.falla}>{row.falla}</TableCell>
+                                                <TableCell className="px-2 py-2 text-[11px] font-mono text-slate-600 whitespace-nowrap">{row.orden}</TableCell>
+                                                <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[200px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
+                                                 <TableCell className="px-2 py-2 flex items-center gap-1">
+                                                   <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingId(row.id); setEditForm(row); }}><Pencil className="h-3.5 w-3.5" /></Button>
+                                                   <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => { setInformesOperacionales(prev => prev.filter(r => r.id !== row.id)); setEditingId(null); setEditForm({}); }}><Trash2 className="h-3.5 w-3.5" /></Button>
+                                                 </TableCell>
+                                              </>
+                                            )}
+                                          </TableRow>
                                        ))}
                                         {informesOperacionales.filter((r) => {
                                           const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
@@ -1726,54 +1727,66 @@ export default function PlannerPage() {
                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO / ESP</TableHead>
                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCION DE LA FALLA POR EL SOLICITANTE</TableHead>
                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCION DE LA ACCION DE MANTENIMIENTO</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">OBSERVACIONES</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">OBSERVACIONES</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 w-16">Acciones</TableHead>
                                          </TableRow>
                                      </TableHeader>
-                                       <TableBody>
-                                         {ordenesTrabajoCargadas
-                                           .filter((r) => {
-                                             const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
-                                             const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
-                                             return matchLine && matchDate;
-                                           })
-                                           .map((row) => (
-                                          <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
-                                            <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fechaOrden}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] font-mono font-bold text-slate-900 whitespace-nowrap">{row.orden}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fechaEmision}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {row.semana}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{row.turno}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] font-semibold text-slate-800 whitespace-nowrap">{row.solicitante}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap">{row.linea}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.aviso}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.maquina}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.fechaParada}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.inicioMtto}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.finMtto}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.inicioParada}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{row.tMtto}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.finParada}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.tipoParada}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.mtto}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[120px] truncate" title={row.falla}>{row.falla}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.mttoEsp}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.descripcionFalla}>{row.descripcionFalla}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.descripcionAccion}>{row.descripcionAccion}</TableCell>
-                                            <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[180px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
-                                          </TableRow>
-                                       ))}
-                                         {ordenesTrabajoCargadas.filter((r) => {
-                                           const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
-                                           const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
-                                           return matchLine && matchDate;
-                                         }).length === 0 && (
-                                         <TableRow>
-                                           <TableCell colSpan={22} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
-                                             Sin registros para el filtro seleccionado
-                                           </TableCell>
-                                         </TableRow>
-                                       )}
-                                      </TableBody>
+                                        <TableBody>
+                                          {ordenesTrabajoCargadas
+                                            .filter((r) => {
+                                              const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
+                                              const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
+                                              return matchLine && matchDate;
+                                            })
+                                            .map((row) => {
+                                              const rowEdit = editingRows[row.id] || row;
+                                              return (
+                                            <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
+                                                <TableCell className="px-2 py-2"><Input type="date" value={rowEdit.fechaOrden || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, fechaOrden: e.target.value}})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={rowEdit.orden || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, orden: e.target.value}})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input type="date" value={rowEdit.fechaEmision || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, fechaEmision: e.target.value}})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input type="number" value={rowEdit.semana ?? ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, semana: parseInt(e.target.value) || 0}})} className="h-8 text-[10px] w-16" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={rowEdit.turno || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, turno: e.target.value}})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={rowEdit.solicitante || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, solicitante: e.target.value}})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={rowEdit.linea || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, linea: e.target.value}})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={rowEdit.aviso || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, aviso: e.target.value}})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={rowEdit.maquina || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, maquina: e.target.value}})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input type="date" value={rowEdit.fechaParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, fechaParada: e.target.value}})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.inicioMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioMtto: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.finMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finMtto: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.inicioParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioParada: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={rowEdit.tMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, tMtto: e.target.value}})} className="h-8 text-[10px] w-16" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.finParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finParada: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={rowEdit.tipoParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, tipoParada: e.target.value}})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={rowEdit.mtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, mtto: e.target.value}})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={rowEdit.falla || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, falla: e.target.value}})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={rowEdit.mttoEsp || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, mttoEsp: e.target.value}})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionFalla || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionFalla: e.target.value}})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionAccion || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionAccion: e.target.value}})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2"><Input value={rowEdit.observaciones || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, observaciones: e.target.value}})} className="h-8 text-[10px]" /></TableCell>
+                                                <TableCell className="px-2 py-2 flex items-center gap-1">
+                                                  <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
+                                                    const originalId = typeof row.id === 'string' && row.id.startsWith('io-') ? parseInt(row.id.replace('io-', '')) : row.id;
+                                                    const updated = { ...rowEdit, id: originalId };
+                                                    setInformesOperacionales(prev => prev.map(r => r.id === originalId ? updated : r));
+                                                    setEditingRows(prev => { const next = {...prev}; delete next[row.id]; return next; });
+                                                  }}><Check className="h-3.5 w-3.5" /></Button>
+                                                </TableCell>
+                                            </TableRow>
+                                              );
+                                            })}
+                                          {ordenesTrabajoCargadas.filter((r) => {
+                                            const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
+                                            const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
+                                            return matchLine && matchDate;
+                                          }).length === 0 && (
+                                            <TableRow>
+                                              <TableCell colSpan={23} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
+                                                Sin registros para el filtro seleccionado
+                                              </TableCell>
+                                            </TableRow>
+                                          )}
+                                       </TableBody>
                                     </Table>
                                    </div>
                                  </div>

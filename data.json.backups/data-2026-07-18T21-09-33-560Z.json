@@ -5327,7 +5327,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-18T17:56:17.514Z"
+    "updatedAt": "2026-07-18T21:06:09.838Z"
   },
   "ordenesSap": [
     {
@@ -7228,8 +7228,8 @@
         },
         {
           "fechaInicio": "2026-07-18",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17417",
+          "cajas1": 5305,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -7259,8 +7259,8 @@
         },
         {
           "fechaInicio": "2026-07-18",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17454",
+          "cajas1": 9600,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -7290,8 +7290,8 @@
         },
         {
           "fechaInicio": "2026-07-18",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17366",
+          "cajas1": 16480,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -7321,8 +7321,8 @@
         },
         {
           "fechaInicio": "2026-07-18",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17502",
+          "cajas1": 12400,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -7352,8 +7352,8 @@
         },
         {
           "fechaInicio": "2026-07-18",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17239",
+          "cajas1": 4750,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -7383,8 +7383,28 @@
         },
         {
           "fechaInicio": "2026-07-18",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17321",
+          "cajas1": 5822,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1784408170025",
+      "linea": 2,
+      "sabor": "GLUP PIÑA",
+      "ordenNumero": "62393",
+      "semana": 29,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-18",
+          "ticket1": "17417",
+          "cajas1": 6320,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -9279,7 +9299,7 @@
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
                 "externalStopsMin": "0",
-                "scheduledBoxes": "",
+                "scheduledBoxes": "2000",
                 "producedBoxes": "",
                 "efficiencyLine": "0.00"
               },
@@ -10188,7 +10208,7 @@
                 "designCapacity": "60",
                 "realSpeed": "32",
                 "scheduledHours": "11.5",
-                "scheduledStops": "37050",
+                "scheduledStops": "31590",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "300",
