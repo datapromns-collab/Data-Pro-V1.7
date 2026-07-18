@@ -10188,7 +10188,7 @@
                 "designCapacity": "60",
                 "realSpeed": "32",
                 "scheduledHours": "11.5",
-                "scheduledStops": "29250",
+                "scheduledStops": "37310",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "300",
@@ -11915,22 +11915,6 @@
         "fecha": "2026-07-16",
         "semana": 29,
         "turno": "DIURNO",
-        "operador": "",
-        "linea": "Línea 6",
-        "equipo": "SOPLADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "8:00",
-        "finParada": "9:00",
-        "totalMin": "60",
-        "falla": "FALTA DE PREFORMAS",
-        "orden": "",
-        "observaciones": "",
-        "id": "id-mrnzoo8i-1ta553gt"
-      },
-      {
-        "fecha": "2026-07-16",
-        "semana": 29,
-        "turno": "DIURNO",
         "operador": "fds",
         "linea": "Línea 1",
         "equipo": "SOPLADORA",
@@ -12036,7 +12020,8 @@
         "id-mrnvzeyl-x79bt1y5",
         "id-mrnw0j4d-df1vpinx",
         "27075259-1875-4e28-9cff-154d4c225816",
-        "id-mrnznnix-ulvhgn2h"
+        "id-mrnznnix-ulvhgn2h",
+        "id-mrnzoo8i-1ta553gt"
       ]
     },
     "planta-ordenes-trabajo": {
