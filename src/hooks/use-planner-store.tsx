@@ -567,6 +567,11 @@ function usePlannerStoreInner() {
     prevPlannerSnapshotRef.current = current;
   }, [isLoaded, computePlannerSnapshot]);
 
+  const loadFromLocalStorageRef = useRef(loadFromLocalStorage);
+  loadFromLocalStorageRef.current = loadFromLocalStorage;
+  const applyRemoteToStateRef = useRef(applyRemoteToState);
+  applyRemoteToStateRef.current = applyRemoteToState;
+
   useEffect(() => {
     let cancelled = false;
 
@@ -609,17 +614,17 @@ function usePlannerStoreInner() {
             localStorage.removeItem(STORAGE_KEY_PRODUCTION_PLAN_AW);
           }
         } catch (e) {
-          if (!cancelled) loadFromLocalStorage();
+          if (!cancelled) loadFromLocalStorageRef.current();
         }
       } else {
-        loadFromLocalStorage();
+        loadFromLocalStorageRef.current();
       }
 
       try {
         const remote = await loadPlannerData();
         if (!cancelled && remote) {
           const remoteMeta = (remote as any)?._meta;
-          applyRemoteToState(remote, true);
+          applyRemoteToStateRef.current(remote, true);
           if (remoteMeta?.updatedAt) {
             localStorage.setItem(STORAGE_KEY_REMOTE_TIMESTAMP, remoteMeta.updatedAt);
           }
@@ -639,7 +644,7 @@ function usePlannerStoreInner() {
     return () => {
       cancelled = true;
     };
-  }, [loadFromLocalStorage, applyRemoteToState]);
+  }, []);
 
   const saveToLocalStorage = useCallback(() => {
     const plan = {

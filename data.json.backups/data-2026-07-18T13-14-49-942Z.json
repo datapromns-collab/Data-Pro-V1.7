@@ -4980,7 +4980,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-18T13:10:40.376Z"
+    "updatedAt": "2026-07-18T13:14:39.111Z"
   },
   "ordenesSap": [
     {
@@ -10770,12 +10770,12 @@
                 "designCapacity": "60",
                 "realSpeed": "32",
                 "scheduledHours": "12.5",
-                "scheduledStops": "0",
+                "scheduledStops": "60",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
                 "externalStopsMin": "0",
-                "scheduledBoxes": "",
+                "scheduledBoxes": "13800",
                 "producedBoxes": "5600",
                 "efficiencyLine": "0.00"
               },

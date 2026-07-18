@@ -4980,7 +4980,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-18T13:16:53.269Z"
+    "updatedAt": "2026-07-18T13:15:57.976Z"
   },
   "ordenesSap": [
     {
@@ -9701,16 +9701,6 @@
           "equipment": "TRANSPORTADOR DE CAJAS",
           "stopType": "AVERÍA",
           "turno": "Nocturno"
-        },
-        {
-          "id": "stop-1784380589696",
-          "lineId": "L1",
-          "startTime": "2026-07-16T11:37:00.000Z",
-          "endTime": "2026-07-16T14:00:00.000Z",
-          "reason": "parada por P.T.A.B",
-          "equipment": "LLENADORA",
-          "stopType": "AVERÍA",
-          "turno": "Diurno"
         }
       ],
       "efficiencyStore": {
@@ -9764,7 +9754,7 @@
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
-                "externalStopsMin": "143",
+                "externalStopsMin": "0",
                 "scheduledBoxes": "",
                 "producedBoxes": "",
                 "efficiencyLine": "0.00"

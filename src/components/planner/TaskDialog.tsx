@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { setHours, setMinutes, isBefore, isAfter, startOfWeek } from 'date-fns';
+import { setHours, setMinutes, isBefore, isAfter, startOfWeek, addDays } from 'date-fns';
 import { cn } from '@/lib/utils';
 import { Textarea } from '@/components/ui/textarea';
 
@@ -108,14 +108,12 @@ export function TaskDialog({
       d.getMonth() === nextTime.getMonth()
     );
 
-    if (dayIdx === -1 && onWeekChange && lineTasks.length > 0) {
-      // La última tarea de la línea cae fuera de la semana visible:
-      // movemos la vista a la semana de esa tarea para mantener la
-      // continuidad de fecha y hora (igual que en el resto de líneas).
-      onWeekChange(startOfWeek(nextTime, { weekStartsOn: 1 }));
+    if (dayIdx === -1) {
+      setSelectedDayIdx('0');
+      setSelectedTime('07:00');
       return;
     }
-    setSelectedDayIdx(dayIdx !== -1 ? dayIdx.toString() : '0');
+    setSelectedDayIdx(dayIdx.toString());
     setSelectedTime(formatTime(nextTime));
   };
 
