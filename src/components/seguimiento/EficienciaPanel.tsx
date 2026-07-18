@@ -28,7 +28,7 @@ interface EficienciaPanelProps {
 }
 
 export default function EficienciaPanel({ storageKey, dateStorageKey = DATE_STORAGE_KEY, fixedCapacityStorageKey, readOnly = false }: EficienciaPanelProps) {
-  const { data, setData } = useSeguimiento();
+  const { data, setData, patchData } = useSeguimiento();
   const efficiencyStore = data.efficiencyStore;
   const fixedCapacities = data.fixedCapacities;
 
@@ -36,6 +36,10 @@ export default function EficienciaPanel({ storageKey, dateStorageKey = DATE_STOR
   const [hasHydrated, setHasHydrated] = useState(false);
   const [baseDate, setBaseDate] = useState<Date | null>(null);
   const saveTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const activeWeekDataRef = useRef(activeWeekData);
+  activeWeekDataRef.current = activeWeekData;
+  const initialHydratedRef = useRef(false);
+  const editedWeeksRef = useRef<Set<string>>(new Set());
 
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -58,11 +62,51 @@ export default function EficienciaPanel({ storageKey, dateStorageKey = DATE_STOR
 
   useEffect(() => {
     if (!baseDate) return;
-
     const timer = setTimeout(() => {
       const weekId = getWeekId(baseDate);
+      const serverWeekData = efficiencyStore[weekId] || {};
 
-      let currentWeekData: Record<string, WeeklyLineData> = { ...(efficiencyStore[weekId] || {}) };
+      if (!initialHydratedRef.current) {
+        initialHydratedRef.current = true;
+        let currentWeekData: Record<string, WeeklyLineData> = { ...serverWeekData };
+
+        PRODUCTION_LINES.forEach((line) => {
+          if (!currentWeekData[line.id]) {
+            currentWeekData[line.id] = { diurno: emptyWeekData(), nocturno: emptyWeekData() };
+          }
+
+          ['diurno', 'nocturno'].forEach((shift) => {
+            const shiftKey = shift as 'diurno' | 'nocturno';
+            if (!currentWeekData[line.id][shiftKey]) {
+              currentWeekData[line.id][shiftKey] = emptyWeekData();
+            }
+
+            DAYS.forEach((day) => {
+              if (!currentWeekData[line.id][shiftKey][day]) {
+                currentWeekData[line.id][shiftKey][day] = emptyDayData();
+              }
+              if (fixedCapacities[line.id]) {
+                currentWeekData[line.id][shiftKey][day].designCapacity = fixedCapacities[line.id];
+              }
+            });
+          });
+        });
+
+        setActiveWeekData(currentWeekData);
+        setHasHydrated(true);
+        return;
+      }
+
+      const localWeekData = activeWeekDataRef.current;
+      const localCurrentWeek = localWeekData[weekId] || {};
+      const hasLocalChanges = editedWeeksRef.current.has(weekId) && JSON.stringify(localCurrentWeek) !== JSON.stringify(serverWeekData);
+      if (hasLocalChanges) {
+        setHasHydrated(true);
+        return;
+      }
+
+      editedWeeksRef.current.delete(weekId);
+      let currentWeekData: Record<string, WeeklyLineData> = { ...serverWeekData };
 
       PRODUCTION_LINES.forEach((line) => {
         if (!currentWeekData[line.id]) {
@@ -121,24 +165,6 @@ export default function EficienciaPanel({ storageKey, dateStorageKey = DATE_STOR
     if (baseDate) handleDateChange(addDays(baseDate, 7));
   };
 
-  useEffect(() => {
-    if (readOnly) return;
-    if (hasHydrated && baseDate && Object.keys(activeWeekData).length > 0) {
-      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
-
-      saveTimeoutRef.current = setTimeout(() => {
-        const weekId = getWeekId(baseDate);
-        setData((prev) => ({
-          ...prev,
-          efficiencyStore: { ...prev.efficiencyStore, [weekId]: activeWeekData },
-        }));
-      }, 500);
-    }
-    return () => {
-      if (saveTimeoutRef.current) clearTimeout(saveTimeoutRef.current);
-    };
-  }, [activeWeekData, hasHydrated, baseDate, setData, readOnly]);
-
   const handleUpdate = useCallback((lineId: string, shift: string, day: DayOfWeek, metric: EfficiencyMetric, value: string) => {
     if (readOnly) return;
     if (metric === 'designCapacity' || metric === 'efficiencyLine') return;
@@ -151,7 +177,7 @@ export default function EficienciaPanel({ storageKey, dateStorageKey = DATE_STOR
       const dayData = shiftData[day];
       if (!dayData || dayData[metric] === value) return prev;
 
-      return {
+      const updated = {
         ...prev,
         [lineId]: {
           ...lineData,
@@ -164,8 +190,19 @@ export default function EficienciaPanel({ storageKey, dateStorageKey = DATE_STOR
           }
         }
       };
+
+      if (baseDate) {
+        const weekId = getWeekId(baseDate);
+        editedWeeksRef.current.add(weekId);
+        patchData((prevData) => ({
+          ...prevData,
+          efficiencyStore: { ...prevData.efficiencyStore, [weekId]: updated },
+        }));
+      }
+
+      return updated;
     });
-  }, []);
+  }, [baseDate, patchData, readOnly]);
 
   const summaryData = useMemo(() => {
     if (!hasHydrated) return {};

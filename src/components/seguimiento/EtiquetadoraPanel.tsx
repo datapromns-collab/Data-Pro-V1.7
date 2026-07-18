@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef, createContext } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Calendar as CalendarIcon, Activity, TrendingUp, Settings } from "lucide-react";
 import {
@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { format, addDays, subDays, isWithinInterval, startOfDay, setHours, setMinutes, getHours } from "date-fns";
+import { format, addDays, isWithinInterval, startOfDay, setHours, setMinutes } from "date-fns";
 import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { PRODUCTION_LINES } from "@/lib/hpv2-mock-data";
@@ -35,9 +35,13 @@ import { LineStopTable } from "@/components/seguimiento/line-stop-table";
 import { StopEvent, EfficiencyStore, FixedCapacityStore } from "@/lib/hpv2-types";
 import EficienciaPanel from "./EficienciaPanel";
 import CapacidadesPanel from "./CapacidadesPanel";
-import { useRemoteCollection } from "@/hooks/use-remote-collection";
-import { EQUIPOS, TIPOS, DAYS, computeEfficiencyStore } from "@/lib/hpv2-efficiency-sync";
-import { SeguimientoContext, useSeguimiento, SeguimientoEnfardadoraData } from "./EnfardadoraPanel";
+import { EQUIPOS, TIPOS, computeEfficiencyStore } from "@/lib/hpv2-efficiency-sync";
+import {
+  SeguimientoPanelData,
+  createSeguimientoPanelContext,
+  useSeguimientoPanelContext,
+  createSeguimientoProvider,
+} from "./seguimiento-shared";
 
 const NS = 'seguimiento-etiquetadora';
 
@@ -49,13 +53,21 @@ const STORAGE_KEYS = {
 
 const DATE_STORAGE_KEY = 'eficiencia_etiquetadora_selected_date_v1';
 
-const EMPTY_DATA: SeguimientoEnfardadoraData = {
+export interface SeguimientoEtiquetadoraData extends SeguimientoPanelData {}
+
+const EMPTY_DATA: SeguimientoEtiquetadoraData = {
   stops: [],
   efficiencyStore: {},
   fixedCapacities: {},
 };
 
-function migrateFromLocalStorage(prev: SeguimientoEnfardadoraData): SeguimientoEnfardadoraData {
+const SeguimientoContext = createSeguimientoPanelContext<SeguimientoEtiquetadoraData>();
+
+export function useSeguimiento(): ReturnType<typeof useSeguimientoPanelContext<SeguimientoEtiquetadoraData>> {
+  return useSeguimientoPanelContext<SeguimientoEtiquetadoraData>(SeguimientoContext);
+}
+
+function migrateFromLocalStorage(prev: SeguimientoEtiquetadoraData): SeguimientoEtiquetadoraData {
   let next = prev;
   let found = false;
 
@@ -64,7 +76,7 @@ function migrateFromLocalStorage(prev: SeguimientoEnfardadoraData): SeguimientoE
     try {
       const stops = JSON.parse(stopsRaw) as StopEvent[];
       if (Array.isArray(stops)) { next = { ...next, stops }; found = true; }
-    } catch (e) { /* ignore */ }
+    } catch { /* ignore */ }
   }
 
   const efficiencyRaw = localStorage.getItem(STORAGE_KEYS.efficiency);
@@ -75,7 +87,7 @@ function migrateFromLocalStorage(prev: SeguimientoEnfardadoraData): SeguimientoE
         next = { ...next, efficiencyStore: { ...next.efficiencyStore, ...efficiencyStore } };
         found = true;
       }
-    } catch (e) { /* ignore */ }
+    } catch { /* ignore */ }
   }
 
   const capacidadesRaw = localStorage.getItem(STORAGE_KEYS.capacidades);
@@ -86,7 +98,7 @@ function migrateFromLocalStorage(prev: SeguimientoEnfardadoraData): SeguimientoE
         next = { ...next, fixedCapacities: { ...next.fixedCapacities, ...fixedCapacities } };
         found = true;
       }
-    } catch (e) { /* ignore */ }
+    } catch { /* ignore */ }
   }
 
   if (found) {
@@ -94,35 +106,21 @@ function migrateFromLocalStorage(prev: SeguimientoEnfardadoraData): SeguimientoE
       localStorage.removeItem(STORAGE_KEYS.stops);
       localStorage.removeItem(STORAGE_KEYS.efficiency);
       localStorage.removeItem(STORAGE_KEYS.capacidades);
-    } catch (e) { /* ignore */ }
+    } catch { /* ignore */ }
   }
 
   return next;
 }
 
-function SeguimientoEtiquetadoraProvider({ children }: { children: React.ReactNode }) {
-  const store = useRemoteCollection<SeguimientoEnfardadoraData>(NS, EMPTY_DATA);
-  const migratedRef = useRef(false);
+const SeguimientoEtiquetadoraProvider = createSeguimientoProvider<SeguimientoEtiquetadoraData>({
+  ctx: SeguimientoContext,
+  namespace: NS,
+  initial: EMPTY_DATA,
+  storageKeys: STORAGE_KEYS,
+  migrate: migrateFromLocalStorage,
+});
 
-  useEffect(() => {
-    if (store.isLoaded && !migratedRef.current) {
-      migratedRef.current = true;
-      const isEmpty = store.data.stops.length === 0 &&
-        Object.keys(store.data.efficiencyStore).length === 0 &&
-        Object.keys(store.data.fixedCapacities).length === 0;
-      if (isEmpty) {
-        const migrated = migrateFromLocalStorage(store.data);
-        if (migrated !== store.data) store.setData((prev) => ({ ...prev, ...migrated }));
-      }
-    }
-  }, [store.isLoaded, store.data, store.setData]);
-
-  return (
-    <SeguimientoContext.Provider value={{ data: store.data, setData: store.setData }}>
-      {children}
-    </SeguimientoContext.Provider>
-  );
-}
+export { SeguimientoContext };
 
 type EtiquetadoraTab = 'paradas' | 'eficiencia' | 'capacidades';
 
@@ -136,6 +134,7 @@ export default function EtiquetadoraPanel({ readOnly = false }: { readOnly?: boo
 
 function EtiquetadoraInner({ readOnly = false }: { readOnly?: boolean }) {
   const [activeTab, setActiveTab] = useState<EtiquetadoraTab>('paradas');
+  const { data, setData } = useSeguimiento();
 
   const tabs = [
     { id: 'paradas' as EtiquetadoraTab, label: 'Control de Paradas', icon: Activity },

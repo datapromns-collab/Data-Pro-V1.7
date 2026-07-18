@@ -22,12 +22,16 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
 
   const scheduleSave = useCallback((next: T) => {
     if (timerRef.current) clearTimeout(timerRef.current);
+    try {
+      localStorage.setItem(cacheKey, JSON.stringify(next));
+    } catch {
+      // ignore
+    }
     timerRef.current = setTimeout(async () => {
       try {
         const payload = Array.isArray(next)
           ? { items: next, _deletedIds: Array.from(deletedRef.current) }
           : next;
-        localStorage.setItem(cacheKey, JSON.stringify(next));
         await fetch(`/api/collection/${encodeURIComponent(namespace)}`, {
           method: 'POST',
           headers: { 'content-type': 'application/json' },
@@ -60,10 +64,14 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
         const delta = typeof patch === 'function' ? (patch as (p: T) => Partial<T>)(prev) : patch;
         const next = { ...(prev as object), ...(delta as object) } as T;
         pendingRef.current = true;
+        try {
+          localStorage.setItem(cacheKey, JSON.stringify(next));
+        } catch {
+          // ignore
+        }
         if (timerRef.current) clearTimeout(timerRef.current);
         timerRef.current = setTimeout(async () => {
           try {
-            localStorage.setItem(cacheKey, JSON.stringify(next));
             await fetch(`/api/collection/${encodeURIComponent(namespace)}`, {
               method: 'POST',
               headers: { 'content-type': 'application/json' },
@@ -99,6 +107,16 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
     });
   }, [deletedKey, scheduleSave]);
 
+  const removeKey = useCallback((key: string) => {
+    setData((prev) => {
+      const next = { ...(prev as any) };
+      delete next[key];
+      pendingRef.current = true;
+      scheduleSave(next);
+      return next as T;
+    });
+  }, [scheduleSave]);
+
   const load = useCallback(async () => {
     const isFirst = firstLoadRef.current;
     try {
@@ -131,14 +149,23 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
         const remote = Array.isArray(remoteRaw)
           ? remoteRaw
           : remoteRaw && typeof remoteRaw === 'object'
-            ? Object.values(remoteRaw).filter((v) => v && typeof v === 'object')
+            ? remoteRaw
             : remoteRaw;
         if (remote && typeof remote === 'object') {
           setData((prev) => {
             if (pendingRef.current) return prev;
             if (Array.isArray(prev) && !Array.isArray(remote)) return prev;
             if (Array.isArray(remote) && Array.isArray(prev)) return applyDeleted(remote) as T;
-            return { ...prev, ...remote };
+            if (Array.isArray(remote)) return applyDeleted(remote) as T;
+            const remoteObj = remote as Record<string, any>;
+            const merged = { ...(prev as Record<string, any>) };
+            for (const key of Object.keys(remoteObj)) {
+              const value = remoteObj[key];
+              if (Array.isArray(value) && value.length === 0) continue;
+              if (value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) continue;
+              merged[key] = value;
+            }
+            return merged as T;
           });
         }
       }
@@ -168,5 +195,5 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
     };
   }, [isLoaded, load]);
 
-  return { data, setData: setDataSynced, patchData, removeItem, isLoaded };
+  return { data, setData: setDataSynced, patchData, removeItem, removeKey, isLoaded };
 }

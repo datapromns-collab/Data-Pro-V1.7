@@ -257,11 +257,16 @@ export async function POST(request: Request) {
       result = applyDeletedIds(merged, deletedIds);
       setDeletedIds(db, ns, deletedIds);
     } else if (incomingItems && typeof incomingItems === 'object') {
-      // Payload es un objeto estructurado (ej. { stops, efficiencyStore, ... } o { "linea-1": [...] }).
-      // Se preserva su forma y se mezcla campo a campo con lo existente.
       const base = cleanExisting(ns, current);
       const incomingClean = sanitizeObjectKeys(ns, incomingItems);
-      result = { ...base, ...incomingClean };
+      const merged: any = { ...base };
+      for (const key of Object.keys(incomingClean)) {
+        const value = incomingClean[key];
+        if (Array.isArray(value) && value.length === 0) continue;
+        if (value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) continue;
+        merged[key] = value;
+      }
+      result = merged;
       const existingDeleted = getDeletedIds(db, ns);
       const deletedIds = mergeDeletedIds(existingDeleted, incomingDeleted);
       setDeletedIds(db, ns, deletedIds);

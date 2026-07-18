@@ -175,27 +175,21 @@ export interface SeguimientoOrdenLineaConLinea extends SeguimientoOrdenLinea {
   linea: string;
 }
 
-export function useSeguimientoResumen() {
-  const linea1 = useSeguimientoOrdenes('linea-1');
-  const linea2 = useSeguimientoOrdenes('linea-2');
-  const linea3 = useSeguimientoOrdenes('linea-3');
-  const linea4 = useSeguimientoOrdenes('linea-4');
-  const linea5 = useSeguimientoOrdenes('linea-5');
-  const linea6 = useSeguimientoOrdenes('linea-6');
-  const linea7 = useSeguimientoOrdenes('linea-7');
+export function useSeguimientoResumenOptimizado() {
+  const remoto = useRemoteCollection<SeguimientoEstado>('seguimiento-ordenes', emptyState());
+  const remotoAuto = useRemoteCollection<SeguimientoAutoEstado>('seguimiento-ordenes-auto', emptyAutoState());
 
   const mapLinea = (linea: LineaKey, label: string, rows: SeguimientoOrdenLinea[]): SeguimientoOrdenLineaConLinea[] =>
     rows.map((r) => ({ ...r, linea: label }));
 
-  const data: SeguimientoOrdenLineaConLinea[] = [
-    ...mapLinea('linea-1', 'Línea 1', linea1.data),
-    ...mapLinea('linea-2', 'Línea 2', linea2.data),
-    ...mapLinea('linea-3', 'Línea 3', linea3.data),
-    ...mapLinea('linea-4', 'Línea 4', linea4.data),
-    ...mapLinea('linea-5', 'Línea 5', linea5.data),
-    ...mapLinea('linea-6', 'Línea 6', linea6.data),
-    ...mapLinea('linea-7', 'Línea 7', linea7.data),
-  ];
+  const data: SeguimientoOrdenLineaConLinea[] = LINE_KEYS.flatMap((linea) =>
+    mapLinea(linea, `Línea ${linea.replace('linea-', '')}`, (remoto.data && typeof remoto.data === 'object' ? remoto.data : emptyState())[linea] ?? [])
+  );
 
-  return { data };
+  return {
+    data,
+    isLoaded: remoto.isLoaded,
+    getLineaData: (linea: LineaKey) => ((remoto.data && typeof remoto.data === 'object' ? remoto.data : emptyState())[linea] ?? []) as SeguimientoOrdenLinea[],
+    getAutoOverrides: (linea: LineaKey) => ((remotoAuto.data && typeof remotoAuto.data === 'object' ? remotoAuto.data : emptyAutoState())[linea] ?? {}) as SeguimientoAutoOverrides,
+  };
 }

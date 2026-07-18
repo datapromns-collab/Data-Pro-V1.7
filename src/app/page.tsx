@@ -252,6 +252,7 @@ export default function PlannerPage() {
   const ordenesTrabajo = ordenesTrabajoStore.data;
   const setOrdenesTrabajo = ordenesTrabajoStore.setData;
   const migracionPlantaHechaRef = useRef(false);
+
   useEffect(() => {
     if (migracionPlantaHechaRef.current) return;
     if (!informesOperacionalesStore.isLoaded || !ordenesTrabajoStore.isLoaded) return;
@@ -272,6 +273,46 @@ export default function PlannerPage() {
     migrar('planta-informes-operacionales', informesOperacionalesStore);
     migrar('planta-ordenes-trabajo', ordenesTrabajoStore);
   }, [informesOperacionalesStore, ordenesTrabajoStore]);
+
+  const ordenesTrabajoCargadas = useMemo(() => {
+    const ordenesManuales = ordenesTrabajo || [];
+    const ordenesManualesExistentes = new Set(
+      ordenesManuales.map((o) => String(o.orden || '').trim()).filter(Boolean)
+    );
+    const desdeInformes = (informesOperacionales || [])
+      .filter((r) => {
+        const orden = r.orden && String(r.orden).trim() !== '';
+        const fecha = r.fecha && String(r.fecha).trim() !== '';
+        return orden && fecha && !ordenesManualesExistentes.has(String(r.orden).trim());
+      })
+      .map((r) => ({
+        id: `io-${r.id}`,
+        fechaOrden: r.fecha || '',
+        orden: r.orden || '',
+        fechaEmision: '',
+        semana: r.semana || '',
+        turno: r.turno || '',
+        solicitante: '',
+        linea: r.linea || '',
+        aviso: '',
+        maquina: r.equipo || '',
+        fechaParada: '',
+        inicioMtto: '',
+        finMtto: '',
+        inicioParada: '',
+        tMtto: '',
+        finParada: '',
+        tipoParada: '',
+        mtto: '',
+        falla: '',
+        mttoEsp: '',
+        descripcionFalla: '',
+        descripcionAccion: '',
+        observaciones: r.observaciones || '',
+        _desdeInforme: true,
+      }));
+    return [...ordenesManuales, ...desdeInformes];
+  }, [ordenesTrabajo, informesOperacionales]);
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<any>({});
@@ -1651,11 +1692,11 @@ export default function PlannerPage() {
                                       </SelectContent>
                                     </Select>
                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                       {ordenesTrabajo.filter((r) => {
-                                         const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
-                                         const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
-                                         return matchLine && matchDate;
-                                       }).length} registros
+                                        {ordenesTrabajoCargadas.filter((r) => {
+                                          const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
+                                          const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
+                                          return matchLine && matchDate;
+                                        }).length} registros
                                     </span>
                                   </div>
                                   <div className="rounded-lg border border-slate-200 overflow-x-auto overflow-y-auto max-h-[60vh]">
@@ -1687,14 +1728,14 @@ export default function PlannerPage() {
                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">OBSERVACIONES</TableHead>
                                          </TableRow>
                                      </TableHeader>
-                                      <TableBody>
-                                        {ordenesTrabajo
-                                          .filter((r) => {
-                                            const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
-                                            const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
-                                            return matchLine && matchDate;
-                                          })
-                                          .map((row) => (
+                                       <TableBody>
+                                         {ordenesTrabajoCargadas
+                                           .filter((r) => {
+                                             const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
+                                             const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
+                                             return matchLine && matchDate;
+                                           })
+                                           .map((row) => (
                                           <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
                                             <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fechaOrden}</TableCell>
                                             <TableCell className="px-2 py-2 text-[11px] font-mono font-bold text-slate-900 whitespace-nowrap">{row.orden}</TableCell>
@@ -1720,11 +1761,11 @@ export default function PlannerPage() {
                                             <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[180px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
                                           </TableRow>
                                        ))}
-                                        {ordenesTrabajo.filter((r) => {
-                                          const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
-                                          const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
-                                          return matchLine && matchDate;
-                                        }).length === 0 && (
+                                         {ordenesTrabajoCargadas.filter((r) => {
+                                           const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
+                                           const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
+                                           return matchLine && matchDate;
+                                         }).length === 0 && (
                                          <TableRow>
                                            <TableCell colSpan={22} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
                                              Sin registros para el filtro seleccionado

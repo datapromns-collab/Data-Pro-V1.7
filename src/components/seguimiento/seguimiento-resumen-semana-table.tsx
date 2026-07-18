@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Trash2 } from 'lucide-react';
-import { useSeguimientoResumen, SeguimientoOrdenLineaConLinea } from '@/hooks/use-seguimiento-ordenes';
+import { useSeguimientoResumenOptimizado, SeguimientoOrdenLineaConLinea } from '@/hooks/use-seguimiento-ordenes';
 import type { SeguimientoOrdenFuente } from '@/components/seguimiento/seguimiento-linea1-table';
 
 const LINE_LABELS: Record<number, string> = {
@@ -21,7 +21,7 @@ export function SeguimientoResumenSemanaTable({
 }: {
   filasAuto?: Record<number, SeguimientoOrdenFuente[]>;
 }) {
-  const { data } = useSeguimientoResumen();
+  const { data } = useSeguimientoResumenOptimizado();
 
   // Combina, de forma ordenada de línea 1 a 7, las filas automáticas (derivadas de
   // "Carga Prodt") y las filas manuales registradas en cada tabla de línea.
