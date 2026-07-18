@@ -7,7 +7,25 @@ import { Button } from '@/components/ui/button';
 import { Trash2 } from 'lucide-react';
 import { SeguimientoOrdenLinea, LineaKey, useSeguimientoOrdenes } from '@/hooks/use-seguimiento-ordenes';
 
-export function SeguimientoLineaTable({ linea, label }: { linea: LineaKey; label: string }) {
+export interface SeguimientoOrdenFuente {
+  id: string;
+  sabor: string;
+  codigoProducto: string;
+  fechaInicio: string;
+  fechaFin: string;
+  numeroOrden: string;
+  cajasCompletadas: number;
+}
+
+export function SeguimientoLineaTable({
+  linea,
+  label,
+  filasAuto = [],
+}: {
+  linea: LineaKey;
+  label: string;
+  filasAuto?: SeguimientoOrdenFuente[];
+}) {
   const { data, updateRow, deleteRow } = useSeguimientoOrdenes(linea);
 
   const handleUpdate = (id: string, updates: Partial<SeguimientoOrdenLinea>) => {
@@ -23,7 +41,8 @@ export function SeguimientoLineaTable({ linea, label }: { linea: LineaKey; label
   };
 
   const totales = useMemo(() => {
-    return data.reduce(
+    // Solo se suman las filas manuales (las automáticas ya traen sus propios totales en cajasCompletadas)
+    const manuales = data.reduce(
       (acc, row) => {
         acc.cajasPlanificadas += Number(row.cajasPlanificadas) || 0;
         acc.cajasCompletadas += Number(row.cajasCompletadas) || 0;
@@ -37,7 +56,32 @@ export function SeguimientoLineaTable({ linea, label }: { linea: LineaKey; label
       },
       { cajasPlanificadas: 0, cajasCompletadas: 0, diferencia: 0, jarabeRequerido: 0, jarabeReal: 0, diferencia2: 0, botellasT: 0, ubb: 0 }
     );
-  }, [data]);
+
+    const autoCajas = filasAuto.reduce((sum, f) => sum + (Number(f.cajasCompletadas) || 0), 0);
+
+    return {
+      ...manuales,
+      cajasCompletadas: manuales.cajasCompletadas + autoCajas,
+    };
+  }, [data, filasAuto]);
+
+  const headers = [
+    'Sabor',
+    'Código de producto',
+    'Fecha de inicio',
+    'Fecha de finalización',
+    'Número de orden',
+    'Cajas Planificadas',
+    'Cajas completadas',
+    'Diferencia',
+    'Jarabe requerido',
+    'Jarabe Real',
+    'Diferencia2',
+    'Producto',
+    'Botellas T',
+    'UBB',
+    '',
+  ];
 
   return (
     <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
@@ -46,28 +90,17 @@ export function SeguimientoLineaTable({ linea, label }: { linea: LineaKey; label
           <div className="w-2 h-2 rounded-full bg-sky-500" />
           <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">{label}</h4>
         </div>
+        {filasAuto.length > 0 && (
+          <span className="text-[9px] font-black uppercase tracking-widest text-emerald-600 bg-emerald-50 border border-emerald-200 rounded-full px-3 py-1">
+            Auto · Carga Prodt
+          </span>
+        )}
       </div>
       <div className="p-2 sm:p-4 overflow-x-auto">
         <Table className="border-separate border-spacing-0">
           <TableHeader>
             <TableRow className="hover:bg-transparent">
-              {[
-                'Sabor',
-                'Código de producto',
-                'Fecha de inicio',
-                'Fecha de finalización',
-                'Número de orden',
-                'Cajas Planificadas',
-                'Cajas completadas',
-                'Diferencia',
-                'Jarabe requerido',
-                'Jarabe Real',
-                'Diferencia2',
-                'Producto',
-                'Botellas T',
-                'UBB',
-                '',
-              ].map((h, i) => (
+              {headers.map((h, i) => (
                 <TableHead
                   key={i}
                   className={`text-[10px] font-black uppercase tracking-widest text-slate-500 h-11 first:rounded-l-xl last:rounded-r-xl ${
@@ -80,7 +113,7 @@ export function SeguimientoLineaTable({ linea, label }: { linea: LineaKey; label
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data.length === 0 ? (
+            {data.length === 0 && filasAuto.length === 0 ? (
               <TableRow className="hover:bg-transparent">
                 <TableCell colSpan={15} className="text-center py-16">
                   <div className="flex flex-col items-center gap-2 text-slate-400">
@@ -92,95 +125,116 @@ export function SeguimientoLineaTable({ linea, label }: { linea: LineaKey; label
                 </TableCell>
               </TableRow>
             ) : (
-              data.map((row) => (
-                <TableRow key={row.id} className="group hover:bg-sky-50/60 transition-colors">
-                  <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 pl-5 border-b border-slate-100">{row.sabor}</TableCell>
-                  <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100">{row.codigoProducto}</TableCell>
-                  <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100">{row.fechaInicio}</TableCell>
-                  <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100">{row.fechaFin}</TableCell>
-                  <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 border-b border-slate-100">{row.numeroOrden}</TableCell>
-                  <TableCell className="py-2 border-b border-slate-100">
-                    <Input
-                      type="number"
-                      value={row.cajasPlanificadas || ''}
-                      onChange={(e) => {
-                        const val = Number(e.target.value) || 0;
-                        const dif = recalcDiferencia(val, row.cajasCompletadas);
-                        handleUpdate(row.id, { cajasPlanificadas: val, diferencia: dif });
-                      }}
-                      className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
-                    />
-                  </TableCell>
-                  <TableCell className="py-2 border-b border-slate-100">
-                    <Input
-                      type="number"
-                      value={row.cajasCompletadas || ''}
-                      onChange={(e) => {
-                        const val = Number(e.target.value) || 0;
-                        const dif = recalcDiferencia(row.cajasPlanificadas, val);
-                        handleUpdate(row.id, { cajasCompletadas: val, diferencia: dif });
-                      }}
-                      className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
-                    />
-                  </TableCell>
-                  <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{row.diferencia}</TableCell>
-                  <TableCell className="py-2 border-b border-slate-100">
-                    <Input
-                      type="number"
-                      value={row.jarabeRequerido || ''}
-                      onChange={(e) => {
-                        const val = Number(e.target.value) || 0;
-                        const dif2 = recalcDiferencia2(val, row.jarabeReal);
-                        handleUpdate(row.id, { jarabeRequerido: val, diferencia2: dif2 });
-                      }}
-                      className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
-                    />
-                  </TableCell>
-                  <TableCell className="py-2 border-b border-slate-100">
-                    <Input
-                      type="number"
-                      value={row.jarabeReal || ''}
-                      onChange={(e) => {
-                        const val = Number(e.target.value) || 0;
-                        const dif2 = recalcDiferencia2(row.jarabeRequerido, val);
-                        handleUpdate(row.id, { jarabeReal: val, diferencia2: dif2 });
-                      }}
-                      className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
-                    />
-                  </TableCell>
-                  <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{row.diferencia2}</TableCell>
-                  <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100">{row.producto}</TableCell>
-                  <TableCell className="py-2 border-b border-slate-100">
-                    <Input
-                      type="number"
-                      value={row.botellasT || ''}
-                      onChange={(e) => handleUpdate(row.id, { botellasT: Number(e.target.value) || 0 })}
-                      className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
-                    />
-                  </TableCell>
-                  <TableCell className="py-2 border-b border-slate-100">
-                    <Input
-                      type="number"
-                      value={row.ubb || ''}
-                      onChange={(e) => handleUpdate(row.id, { ubb: Number(e.target.value) || 0 })}
-                      className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
-                    />
-                  </TableCell>
-                  <TableCell className="py-2.5 border-b border-slate-100 text-right pr-4">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="h-7 w-7 p-0 text-slate-300 hover:text-red-600 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-opacity"
-                      onClick={() => deleteRow(row.id)}
-                    >
-                      <Trash2 className="h-3.5 w-3.5" />
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              ))
+              <>
+                {filasAuto.map((row) => (
+                  <TableRow key={`auto-${row.id}`} className="group bg-emerald-50/40 hover:bg-emerald-50/70 transition-colors">
+                    <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 pl-5 border-b border-slate-100">{row.sabor}</TableCell>
+                    <TableCell className="text-[11px] font-medium text-slate-700 py-2.5 border-b border-slate-100">{row.codigoProducto || '—'}</TableCell>
+                    <TableCell className="text-[11px] font-medium text-slate-700 py-2.5 border-b border-slate-100">{row.fechaInicio}</TableCell>
+                    <TableCell className="text-[11px] font-medium text-slate-700 py-2.5 border-b border-slate-100">{row.fechaFin}</TableCell>
+                    <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 border-b border-slate-100">{row.numeroOrden}</TableCell>
+                    <TableCell className="text-[11px] font-medium text-slate-400 py-2.5 border-b border-slate-100 text-center">—</TableCell>
+                    <TableCell className="text-[11px] font-black text-emerald-700 py-2.5 border-b border-slate-100 text-center">{row.cajasCompletadas}</TableCell>
+                    <TableCell className="text-[11px] font-black text-slate-400 py-2.5 border-b border-slate-100 text-center">—</TableCell>
+                    <TableCell className="text-[11px] font-medium text-slate-400 py-2.5 border-b border-slate-100 text-center">—</TableCell>
+                    <TableCell className="text-[11px] font-medium text-slate-400 py-2.5 border-b border-slate-100 text-center">—</TableCell>
+                    <TableCell className="text-[11px] font-black text-slate-400 py-2.5 border-b border-slate-100 text-center">—</TableCell>
+                    <TableCell className="text-[11px] font-medium text-slate-400 py-2.5 border-b border-slate-100">—</TableCell>
+                    <TableCell className="text-[11px] font-medium text-slate-400 py-2.5 border-b border-slate-100 text-center">—</TableCell>
+                    <TableCell className="text-[11px] font-medium text-slate-400 py-2.5 border-b border-slate-100 text-center">—</TableCell>
+                    <TableCell className="py-2.5 border-b border-slate-100 text-right pr-4" />
+                  </TableRow>
+                ))}
+                {data.map((row) => (
+                  <TableRow key={row.id} className="group hover:bg-sky-50/60 transition-colors">
+                    <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 pl-5 border-b border-slate-100">{row.sabor}</TableCell>
+                    <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100">{row.codigoProducto}</TableCell>
+                    <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100">{row.fechaInicio}</TableCell>
+                    <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100">{row.fechaFin}</TableCell>
+                    <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 border-b border-slate-100">{row.numeroOrden}</TableCell>
+                    <TableCell className="py-2 border-b border-slate-100">
+                      <Input
+                        type="number"
+                        value={row.cajasPlanificadas || ''}
+                        onChange={(e) => {
+                          const val = Number(e.target.value) || 0;
+                          const dif = recalcDiferencia(val, row.cajasCompletadas);
+                          handleUpdate(row.id, { cajasPlanificadas: val, diferencia: dif });
+                        }}
+                        className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
+                      />
+                    </TableCell>
+                    <TableCell className="py-2 border-b border-slate-100">
+                      <Input
+                        type="number"
+                        value={row.cajasCompletadas || ''}
+                        onChange={(e) => {
+                          const val = Number(e.target.value) || 0;
+                          const dif = recalcDiferencia(row.cajasPlanificadas, val);
+                          handleUpdate(row.id, { cajasCompletadas: val, diferencia: dif });
+                        }}
+                        className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
+                      />
+                    </TableCell>
+                    <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{row.diferencia}</TableCell>
+                    <TableCell className="py-2 border-b border-slate-100">
+                      <Input
+                        type="number"
+                        value={row.jarabeRequerido || ''}
+                        onChange={(e) => {
+                          const val = Number(e.target.value) || 0;
+                          const dif2 = recalcDiferencia2(val, row.jarabeReal);
+                          handleUpdate(row.id, { jarabeRequerido: val, diferencia2: dif2 });
+                        }}
+                        className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
+                      />
+                    </TableCell>
+                    <TableCell className="py-2 border-b border-slate-100">
+                      <Input
+                        type="number"
+                        value={row.jarabeReal || ''}
+                        onChange={(e) => {
+                          const val = Number(e.target.value) || 0;
+                          const dif2 = recalcDiferencia2(row.jarabeRequerido, val);
+                          handleUpdate(row.id, { jarabeReal: val, diferencia2: dif2 });
+                        }}
+                        className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
+                      />
+                    </TableCell>
+                    <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{row.diferencia2}</TableCell>
+                    <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100">{row.producto}</TableCell>
+                    <TableCell className="py-2 border-b border-slate-100">
+                      <Input
+                        type="number"
+                        value={row.botellasT || ''}
+                        onChange={(e) => handleUpdate(row.id, { botellasT: Number(e.target.value) || 0 })}
+                        className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
+                      />
+                    </TableCell>
+                    <TableCell className="py-2 border-b border-slate-100">
+                      <Input
+                        type="number"
+                        value={row.ubb || ''}
+                        onChange={(e) => handleUpdate(row.id, { ubb: Number(e.target.value) || 0 })}
+                        className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
+                      />
+                    </TableCell>
+                    <TableCell className="py-2.5 border-b border-slate-100 text-right pr-4">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="h-7 w-7 p-0 text-slate-300 hover:text-red-600 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-opacity"
+                        onClick={() => deleteRow(row.id)}
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </>
             )}
           </TableBody>
-          {data.length > 0 && (
+          {(data.length > 0 || filasAuto.length > 0) && (
             <TableFooter>
               <TableRow className="hover:bg-transparent bg-transparent">
                 <TableCell colSpan={5} className="text-right font-black text-[10px] uppercase tracking-widest text-slate-700 py-4 pl-5 border-t-2 border-slate-200">TOTALES</TableCell>

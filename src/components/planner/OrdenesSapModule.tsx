@@ -18,6 +18,7 @@ import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
 import {
+  SeguimientoLineaTable,
   SeguimientoLinea1Table,
   SeguimientoLinea2Table,
   SeguimientoLinea3Table,
@@ -25,6 +26,7 @@ import {
   SeguimientoLinea5Table,
   SeguimientoLinea6Table,
   SeguimientoLinea7Table,
+  type SeguimientoOrdenFuente,
 } from '@/components/seguimiento/seguimiento-linea1-table';
 import { SeguimientoResumenSemanaTable } from '@/components/seguimiento/seguimiento-resumen-semana-table';
 
@@ -1689,6 +1691,62 @@ const exportarPDFdia = async () => {
     XLSX.writeFile(wb, `dia-a-dia ${fechaStr} ${diaNombre}.xlsx`);
   };
 
+  // Filas automáticas del Seguimiento de Órdenes derivadas de "Carga Prodt".
+  // Se llenan: Sabor, Fecha de inicio (primera fecha), Fecha de finalización (última fecha),
+  // Número de orden y Cajas completadas (total de cajas de la orden).
+  const filasAutoSeguimiento = useMemo<Record<number, SeguimientoOrdenFuente[]>>(() => {
+    const mapa: Record<number, SeguimientoOrdenFuente[]> = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [] };
+    const semanaFiltro = selectedFechaSeguimiento ? getISOWeek(selectedFechaSeguimiento) : null;
+
+    (ordenes || []).forEach((orden) => {
+      if (semanaFiltro !== null && orden.semana !== semanaFiltro) return;
+      const dias = orden.dias || [];
+      if (dias.length === 0) return;
+
+      const fechas = dias.map((d) => d.fechaInicio).filter(Boolean).sort();
+      const fechaInicioRaw = fechas[0];
+      const fechaFinRaw = fechas[fechas.length - 1];
+
+      const formatearFechaDMY = (raw: string) => {
+        if (!raw) return '';
+        const [year, month, day] = raw.split('-');
+        if (!year || !month || !day) return raw;
+        return `${Number(day)}/${Number(month)}/${year}`;
+      };
+
+      const fechaInicio = formatearFechaDMY(fechaInicioRaw);
+      const fechaFin = formatearFechaDMY(fechaFinRaw);
+
+      const cajasTotales = dias.reduce(
+        (sum, d) =>
+          sum +
+          ((Number(d.cajas1) || 0) +
+            (Number(d.cajas2) || 0) +
+            (Number(d.cajas3) || 0) +
+            (Number(d.cajas4) || 0)),
+        0
+      );
+
+      if (!mapa[orden.linea]) mapa[orden.linea] = [];
+
+      // Código de producto: mismas condiciones de línea + sabor que la fila "Prodt"
+      // del Creador de Órdenes (PRODT_POR_LINEA_SABOR).
+      const datosProdt = PRODT_POR_LINEA_SABOR[String(orden.linea)]?.[orden.sabor] || { codigo: '', descripcion: '' };
+
+      mapa[orden.linea].push({
+        id: `auto-${orden.id}`,
+        sabor: orden.sabor,
+        codigoProducto: datosProdt.codigo,
+        fechaInicio,
+        fechaFin,
+        numeroOrden: orden.ordenNumero,
+        cajasCompletadas: cajasTotales,
+      });
+    });
+
+    return mapa;
+  }, [ordenes, selectedFechaSeguimiento]);
+
   return (
     <div className="pb-10">
       <div className="space-y-3 mb-6 no-print">
@@ -2095,6 +2153,8 @@ const exportarPDFdia = async () => {
            </div>
           )}
 
+          {/* Filas automáticas del Seguimiento de Órdenes derivadas de "Carga Prodt" */}
+
           {/* Sección independiente: Seguimiento de Órdenes (no depende de la línea seleccionada ni afecta a las demás secciones) */}
           {activeSection === 'seguimiento-ordenes' && (
             <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
@@ -2143,15 +2203,20 @@ const exportarPDFdia = async () => {
                 {seguimientoSubsection === 'resumen' ? (
                   <SeguimientoResumenSemanaTable />
                 ) : (
-                  [
-                    SeguimientoLinea1Table,
-                    SeguimientoLinea2Table,
-                    SeguimientoLinea3Table,
-                    SeguimientoLinea4Table,
-                    SeguimientoLinea5Table,
-                    SeguimientoLinea6Table,
-                    SeguimientoLinea7Table,
-                  ][(seguimientoSubsection as number) - 1]()
+                  (() => {
+                    const lineaNum = seguimientoSubsection as number;
+                    const filasAuto = filasAutoSeguimiento[lineaNum] ?? [];
+                    const keyMap: Record<number, 'linea-1' | 'linea-2' | 'linea-3' | 'linea-4' | 'linea-5' | 'linea-6' | 'linea-7'> = {
+                      1: 'linea-1',
+                      2: 'linea-2',
+                      3: 'linea-3',
+                      4: 'linea-4',
+                      5: 'linea-5',
+                      6: 'linea-6',
+                      7: 'linea-7',
+                    };
+                    return <SeguimientoLineaTable linea={keyMap[lineaNum]} label={`Línea ${lineaNum}`} filasAuto={filasAuto} />;
+                  })()
                 )}
               </div>
             </div>
