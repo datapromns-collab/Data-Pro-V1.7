@@ -194,6 +194,16 @@ function cleanExisting(ns: string, existing: any): any {
   return sanitizeObjectKeys(ns, existing);
 }
 
+function deepMerge(target: any, source: any): any {
+  if (!source || typeof source !== 'object' || Array.isArray(source)) return source;
+  if (!target || typeof target !== 'object' || Array.isArray(target)) return { ...source };
+  const result: any = { ...target };
+  for (const key of Object.keys(source)) {
+    result[key] = deepMerge(result[key], source[key]);
+  }
+  return result;
+}
+
 function getNsFromUrl(request: Request): string | null {
   try {
     const url = new URL(request.url);
@@ -264,7 +274,7 @@ export async function POST(request: Request) {
         const value = incomingClean[key];
         if (Array.isArray(value) && value.length === 0) continue;
         if (value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) continue;
-        merged[key] = value;
+        merged[key] = deepMerge(base[key], value);
       }
       result = merged;
       const existingDeleted = getDeletedIds(db, ns);

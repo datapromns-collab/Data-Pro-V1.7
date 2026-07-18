@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-07-13T00:00:00.000",
+      "weekStartDate": "2026-07-20T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -5327,7 +5327,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-18T13:42:42.212Z"
+    "updatedAt": "2026-07-18T17:56:17.514Z"
   },
   "ordenesSap": [
     {
@@ -9110,16 +9110,6 @@
           "turno": "Nocturno"
         },
         {
-          "id": "stop-1784388514465",
-          "lineId": "L1",
-          "startTime": "2026-07-15T14:00:00.000Z",
-          "endTime": "2026-07-15T14:20:00.000Z",
-          "reason": "parada",
-          "equipment": "ENFARDADORA",
-          "stopType": "INSUMOS",
-          "turno": "Diurno"
-        },
-        {
           "id": "stop-1784389392721",
           "lineId": "L1",
           "startTime": "2026-07-16T14:00:00.000Z",
@@ -9168,7 +9158,7 @@
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
-                "externalStopsMin": "20",
+                "externalStopsMin": "0",
                 "scheduledBoxes": "",
                 "producedBoxes": "",
                 "efficiencyLine": "0.00"
@@ -10078,7 +10068,7 @@
                 "designCapacity": "60",
                 "realSpeed": "32",
                 "scheduledHours": "11.5",
-                "scheduledStops": "13390",
+                "scheduledStops": "15990",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "300",

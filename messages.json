@@ -1,26 +1,15 @@
 {
   "messages": [
     {
-      "id": "2026-07-18T13:53:22.527Z-t3bhdua",
-      "title": "PDP S30",
-      "message": "la planificación de la semana 30 ya fue enviada por correo",
+      "id": "2026-07-18T17:39:12.857Z-hubw1b7",
+      "title": "Progreso",
+      "message": "Aproveche la reconstrucción para establecer una mejor estructura para la función por turno",
       "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
+      "recipient": "alex.mds",
       "read": false,
-      "createdAt": "2026-07-18T13:53:22.527Z"
-    },
-    {
-      "id": "2026-07-18T13:53:22.527Z-dq6yqq4",
-      "title": "PDP S30",
-      "message": "la planificación de la semana 30 ya fue enviada por correo",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": false,
-      "createdAt": "2026-07-18T13:53:22.527Z"
+      "createdAt": "2026-07-18T17:39:12.857Z"
     },
     {
       "id": "2026-07-18T13:53:22.527Z-efnmr5j",
@@ -54,6 +43,28 @@
       "recipient": "alex.mds",
       "read": false,
       "createdAt": "2026-07-18T13:47:27.461Z"
+    },
+    {
+      "id": "2026-07-18T13:53:22.527Z-t3bhdua",
+      "title": "PDP S30",
+      "message": "la planificación de la semana 30 ya fue enviada por correo",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-07-18T13:53:22.527Z"
+    },
+    {
+      "id": "2026-07-18T13:53:22.527Z-dq6yqq4",
+      "title": "PDP S30",
+      "message": "la planificación de la semana 30 ya fue enviada por correo",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-07-18T13:53:22.527Z"
     },
     {
       "id": "2026-07-18T13:53:22.527Z-22lp20x",

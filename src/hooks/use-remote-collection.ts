@@ -4,6 +4,16 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 
 const POLL_INTERVAL = 15000;
 
+function deepMerge(target: any, source: any): any {
+  if (!source || typeof source !== 'object' || Array.isArray(source)) return source;
+  if (!target || typeof target !== 'object' || Array.isArray(target)) return { ...source };
+  const result: any = { ...target };
+  for (const key of Object.keys(source)) {
+    result[key] = deepMerge(result[key], source[key]);
+  }
+  return result;
+}
+
 export function useRemoteCollection<T = any>(namespace: string, initial: T) {
   const [data, setData] = useState<T>(initial);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -163,7 +173,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
               const value = remoteObj[key];
               if (Array.isArray(value) && value.length === 0) continue;
               if (value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) continue;
-              merged[key] = value;
+              merged[key] = deepMerge(merged[key], value);
             }
             return merged as T;
           });

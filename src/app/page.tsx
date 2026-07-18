@@ -42,7 +42,8 @@ import {
   Check,
   X
 } from 'lucide-react';
-import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
+import { PRODUCT_LIST } from '@/lib/planner-utils';
+import ProducidasTable from '@/components/planner/ProducidasTable';import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
 import { TaskDialog } from '@/components/planner/TaskDialog';
 import { Calculator } from '@/components/planner/Calculator';
@@ -275,15 +276,11 @@ export default function PlannerPage() {
   }, [informesOperacionalesStore, ordenesTrabajoStore]);
 
   const ordenesTrabajoCargadas = useMemo(() => {
-    const ordenesManuales = ordenesTrabajo || [];
-    const ordenesManualesExistentes = new Set(
-      ordenesManuales.map((o) => String(o.orden || '').trim()).filter(Boolean)
-    );
-    const desdeInformes = (informesOperacionales || [])
+    return (informesOperacionales || [])
       .filter((r) => {
         const orden = r.orden && String(r.orden).trim() !== '';
         const fecha = r.fecha && String(r.fecha).trim() !== '';
-        return orden && fecha && !ordenesManualesExistentes.has(String(r.orden).trim());
+        return orden && fecha;
       })
       .map((r) => ({
         id: `io-${r.id}`,
@@ -311,8 +308,7 @@ export default function PlannerPage() {
         observaciones: r.observaciones || '',
         _desdeInforme: true,
       }));
-    return [...ordenesManuales, ...desdeInformes];
-  }, [ordenesTrabajo, informesOperacionales]);
+  }, [informesOperacionales]);
 
   const [editingId, setEditingId] = useState<number | null>(null);
   const [editForm, setEditForm] = useState<any>({});
@@ -321,6 +317,11 @@ export default function PlannerPage() {
   const [activeTab, setActiveTab] = useState('gantt');
   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
   const [produccionSubTab, setProduccionSubTab] = useState('planificadas');
+  const [planificadasSubTab, setPlanificadasSubTab] = useState('porturno');
+  const [planificadasTurnoSubTab, setPlanificadasTurnoSubTab] = useState('diurno');
+  const [producidasSubTab, setProducidasSubTab] = useState('porturno');
+  const [producidasTurnoSubTab, setProducidasTurnoSubTab] = useState('diurno');
+  const [produccionFecha, setProduccionFecha] = useState<Date | undefined>(new Date());
   const [reporteSubTab, setReporteSubTab] = useState('diario');
   const [turnoSubTab, setTurnoSubTab] = useState('diurno');
   const [printMode, setPrintMode] = useState('');
@@ -1570,7 +1571,7 @@ export default function PlannerPage() {
                                       <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Fecha</TableHead>
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Sem</TableHead>
-                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Tur</TableHead>
+                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Turno</TableHead>
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Operador</TableHead>
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Línea</TableHead>
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Equipo</TableHead>
@@ -1708,7 +1709,7 @@ export default function PlannerPage() {
                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">ORDEN</TableHead>
                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">F-FECHA</TableHead>
                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SEM</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">TUR</TableHead>
+                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">TURNO</TableHead>
                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SOLICITANTE</TableHead>
                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">LÍNEA</TableHead>
                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">AVISO</TableHead>
@@ -1781,42 +1782,262 @@ export default function PlannerPage() {
                                 </div>
                              </div>
                          )}
-                        {activeTab === 'produccion' && (
-                          <>
-                            <div className="flex items-center justify-between gap-2 mb-4 no-print">
-                              <div className="flex items-center gap-3">
-                               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                                 {['planificadas', 'producidas'].map((subTab) => (
-                                   <button
-                                     key={subTab}
-                                     onClick={() => setProduccionSubTab(subTab)}
-                                     className={cn(
-                                       "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                       produccionSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                     )}
-                                   >
-                                     {subTab === 'planificadas' && <ClipboardList className="h-3.5 w-3.5" />}
-                                     {subTab === 'planificadas' ? 'Planificadas' : 'Producidas'}
-                                     {subTab === 'producidas' && <CheckCircle2 className="h-3.5 w-3.5" />}
-                                   </button>
-                                 ))}
+                         {activeTab === 'produccion' && (
+                           <>
+                             <div className="flex items-center justify-between gap-2 mb-4 no-print">
+                               <div className="flex items-center gap-3">
+                                <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                  {['planificadas', 'producidas'].map((subTab) => (
+                                    <button
+                                      key={subTab}
+                                      onClick={() => setProduccionSubTab(subTab)}
+                                      className={cn(
+                                        "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                        produccionSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                      )}
+                                    >
+                                      {subTab === 'planificadas' && <ClipboardList className="h-3.5 w-3.5" />}
+                                      {subTab === 'planificadas' ? 'Planificadas' : 'Producidas'}
+                                      {subTab === 'producidas' && <CheckCircle2 className="h-3.5 w-3.5" />}
+                                    </button>
+                                  ))}
+                                </div>
                                </div>
-                              </div>
+                               <input
+                                 type="date"
+                                 value={produccionFecha ? format(produccionFecha, 'yyyy-MM-dd') : ''}
+                                 onChange={(e) => {
+                                   const raw = e.target.value;
+                                   if (!raw) return;
+                                   const [year, month, day] = raw.split('-').map(Number);
+                                   const date = new Date(year, month - 1, day);
+                                   setProduccionFecha(date);
+                                 }}
+                                 className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                               />
                              </div>
-                            <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                             {produccionSubTab === 'planificadas' && (
+                               <div className="flex items-center gap-3 mb-4 no-print">
+                                 <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                   {['porturno', 'diario'].map((subTab) => (
+                                     <button
+                                       key={subTab}
+                                       onClick={() => setPlanificadasSubTab(subTab)}
+                                       className={cn(
+                                         "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                         planificadasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                       )}
+                                     >
+                                       {subTab === 'porturno' && <Clock className="h-3.5 w-3.5" />}
+                                       {subTab === 'porturno' ? 'Por Turno' : 'Diario'}
+                                       {subTab === 'diario' && <CalendarIcon className="h-3.5 w-3.5" />}
+                                     </button>
+                                   ))}
+                                 </div>
+                               </div>
+                             )}
+                             {produccionSubTab === 'producidas' && (
+                               <div className="flex items-center gap-3 mb-4 no-print">
+                                 <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                   {['porturno', 'diarioa'].map((subTab) => (
+                                     <button
+                                       key={subTab}
+                                       onClick={() => setProducidasSubTab(subTab)}
+                                       className={cn(
+                                         "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                         producidasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                       )}
+                                     >
+                                       {subTab === 'porturno' && <Clock className="h-3.5 w-3.5" />}
+                                       {subTab === 'porturno' ? 'Por Turno' : 'Diaria'}
+                                       {subTab === 'diarioa' && <CalendarIcon className="h-3.5 w-3.5" />}
+                                     </button>
+                                   ))}
+                                 </div>
+                               </div>
+                             )}
+                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                               <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
-                                {produccionSubTab === 'planificadas' && (
-                                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                                    <ClipboardList className="h-12 w-12 mb-4 opacity-20" />
-                                    Planificadas en Desarrollo
-                                  </div>
-                                )}
-                                {produccionSubTab === 'producidas' && (
-                                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                                    <CheckCircle2 className="h-12 w-12 mb-4 opacity-20" />
-                                    Producidas en Desarrollo
-                                  </div>
-                                )}
+                                 {produccionSubTab === 'planificadas' && (
+                                   planificadasSubTab === 'porturno' ? (
+                                     <div className="flex flex-col gap-3 h-full">
+                                       <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start">
+                                         {['diurno', 'nocturno'].map((subTab) => (
+                                           <button
+                                             key={subTab}
+                                             onClick={() => setPlanificadasTurnoSubTab(subTab)}
+                                             className={cn(
+                                               "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                               planificadasTurnoSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                             )}
+                                           >
+                                             {subTab === 'diurno' && <Sun className="h-3.5 w-3.5" />}
+                                             {subTab === 'diurno' ? 'Diurno' : 'Nocturno'}
+                                             {subTab === 'nocturno' && <Moon className="h-3.5 w-3.5" />}
+                                           </button>
+                                         ))}
+                                       </div>
+                                        {planificadasTurnoSubTab === 'diurno' && (
+                                          <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                                            <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                                              <div className="w-2 h-2 rounded-full bg-sky-500" />
+                                              <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                                                Diurno - Planificadas
+                                              </h4>
+                                            </div>
+                                            <div className="p-4">
+                                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                <table className="w-full border-collapse text-center">
+                                                  <thead>
+                                                    <tr className="bg-slate-100">
+                                                      <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
+                                                      {[1,2,3,4,5,6,7].map(n => (
+                                                        <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
+                                                      ))}
+                                                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    {PRODUCT_LIST.map((sabor) => (
+                                                      <tr key={sabor} className="even:bg-slate-50/60">
+                                                        <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
+                                                        {[1,2,3,4,5,6,7].map(linea => (
+                                                          <td key={linea} className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums"></td>
+                                                        ))}
+                                                        <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums"></td>
+                                                      </tr>
+                                                    ))}
+                                                    <tr className="bg-slate-100 font-black">
+                                                      <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
+                                                      {[1,2,3,4,5,6,7].map(linea => (
+                                                        <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums"></td>
+                                                      ))}
+                                                      <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums"></td>
+                                                    </tr>
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        )}
+                                        {planificadasTurnoSubTab === 'nocturno' && (
+                                          <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                                            <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                                              <div className="w-2 h-2 rounded-full bg-sky-500" />
+                                              <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                                                Nocturno - Planificadas
+                                              </h4>
+                                            </div>
+                                            <div className="p-4">
+                                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                <table className="w-full border-collapse text-center">
+                                                  <thead>
+                                                    <tr className="bg-slate-100">
+                                                      <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
+                                                      {[1,2,3,4,5,6,7].map(n => (
+                                                        <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
+                                                      ))}
+                                                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    {PRODUCT_LIST.map((sabor) => (
+                                                      <tr key={sabor} className="even:bg-slate-50/60">
+                                                        <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
+                                                        {[1,2,3,4,5,6,7].map(linea => (
+                                                          <td key={linea} className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums"></td>
+                                                        ))}
+                                                        <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums"></td>
+                                                      </tr>
+                                                    ))}
+                                                    <tr className="bg-slate-100 font-black">
+                                                      <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
+                                                      {[1,2,3,4,5,6,7].map(linea => (
+                                                        <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums"></td>
+                                                      ))}
+                                                      <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums"></td>
+                                                    </tr>
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        )}
+                                     </div>
+                                    ) : (
+                                       <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                                         <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                                           <div className="w-2 h-2 rounded-full bg-sky-500" />
+                                           <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                                             Diario - Planificadas
+                                           </h4>
+                                         </div>
+                                         <div className="p-4">
+                                           <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                             <table className="w-full border-collapse text-center">
+                                               <thead>
+                                                 <tr className="bg-slate-100">
+                                                   <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
+                                                   {[1,2,3,4,5,6,7].map(n => (
+                                                     <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
+                                                   ))}
+                                                   <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
+                                                 </tr>
+                                               </thead>
+                                               <tbody>
+                                                 {PRODUCT_LIST.map((sabor) => (
+                                                   <tr key={sabor} className="even:bg-slate-50/60">
+                                                     <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
+                                                     {[1,2,3,4,5,6,7].map(linea => (
+                                                       <td key={linea} className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums"></td>
+                                                     ))}
+                                                     <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums"></td>
+                                                   </tr>
+                                                 ))}
+                                                 <tr className="bg-slate-100 font-black">
+                                                   <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
+                                                   {[1,2,3,4,5,6,7].map(linea => (
+                                                     <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums"></td>
+                                                   ))}
+                                                   <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums"></td>
+                                                 </tr>
+                                               </tbody>
+                                             </table>
+                                           </div>
+                                         </div>
+                                       </div>
+                                     )
+                                  )}
+                                  {produccionSubTab === 'producidas' && (
+                                    producidasSubTab === 'porturno' ? (
+                                      <div className="flex flex-col gap-3 h-full">
+                                        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start">
+                                          {['diurno', 'nocturno'].map((subTab) => (
+                                            <button
+                                              key={subTab}
+                                              onClick={() => setProducidasTurnoSubTab(subTab)}
+                                              className={cn(
+                                                "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                                producidasTurnoSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                              )}
+                                            >
+                                              {subTab === 'diurno' && <Sun className="h-3.5 w-3.5" />}
+                                              {subTab === 'diurno' ? 'Diurno' : 'Nocturno'}
+                                              {subTab === 'nocturno' && <Moon className="h-3.5 w-3.5" />}
+                                            </button>
+                                          ))}
+                                        </div>
+                                         {producidasTurnoSubTab === 'diurno' && (
+                                           <ProducidasTable titulo="Diurno - Producidas" />
+                                         )}
+                                         {producidasTurnoSubTab === 'nocturno' && (
+                                           <ProducidasTable titulo="Nocturno - Producidas" />
+                                         )}
+                                      </div>
+                                     ) : (
+                                       <ProducidasTable titulo="Diaria - Producidas" />
+                                     )
+                                  )}
                               </div>
                             </div>
                           </>
