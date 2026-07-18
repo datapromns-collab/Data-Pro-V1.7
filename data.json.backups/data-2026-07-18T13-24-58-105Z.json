@@ -3844,6 +3844,176 @@
             "endTime": "2026-07-25T09:00:00.000Z",
             "id": "54okw1euv",
             "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 230000,
+            "durationHours": 92,
+            "presentation": "2Lts",
+            "tanks": 25.86,
+            "startTime": "2026-07-20T11:00:00.000Z",
+            "endTime": "2026-07-24T07:00:00.000Z",
+            "id": "gl4erjq06",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-07-24T03:00:00.000Z",
+            "endTime": "2026-07-24T05:00:00.000Z",
+            "id": "jugkjcmog",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 70000,
+            "durationHours": 28,
+            "presentation": "2Lts",
+            "tanks": 7.87,
+            "startTime": "2026-07-24T05:00:00.000Z",
+            "endTime": "2026-07-25T09:00:00.000Z",
+            "id": "4xoyzsehl",
+            "color": "#587593"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 134400,
+            "durationHours": 48,
+            "presentation": "2Lts",
+            "tanks": 15.58,
+            "startTime": "2026-07-20T11:00:00.000Z",
+            "endTime": "2026-07-22T11:00:00.000Z",
+            "id": "4tm4067jy",
+            "color": "#ef4444"
+          },
+          {
+            "name": "CS",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-07-22T11:00:00.000Z",
+            "endTime": "2026-07-22T11:30:00.000Z",
+            "id": "ozbzwd3pk",
+            "color": "#ef4444"
+          },
+          {
+            "name": "GLUP PIÑA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 72625,
+            "durationHours": 25.9375,
+            "presentation": "2Lts",
+            "tanks": 10,
+            "startTime": "2026-07-22T11:30:00.000Z",
+            "endTime": "2026-07-23T13:26:15.000Z",
+            "id": "c2dvy53ph",
+            "color": "#10b981"
+          },
+          {
+            "name": "CS",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-07-23T13:27:00.000Z",
+            "endTime": "2026-07-23T13:57:00.000Z",
+            "id": "aqggsycw9",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP UVA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 71125,
+            "durationHours": 25.401785714285715,
+            "presentation": "2Lts",
+            "tanks": 10,
+            "startTime": "2026-07-23T13:57:00.000Z",
+            "endTime": "2026-07-24T15:21:06.428Z",
+            "id": "v71j9aduv",
+            "color": "#6366f1"
+          },
+          {
+            "name": "MTTO",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 10.5,
+            "startTime": "2026-07-24T10:00:00.000Z",
+            "endTime": "2026-07-24T20:30:00.000Z",
+            "id": "tud5rx4cv",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-07-24T20:30:00.000Z",
+            "endTime": "2026-07-24T22:30:00.000Z",
+            "id": "n7c50oye4",
+            "color": "#587593"
+          },
+          {
+            "name": "GLUP UVA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 14985,
+            "durationHours": 5.351785714285715,
+            "presentation": "2Lts",
+            "tanks": 2.11,
+            "startTime": "2026-07-24T22:30:00.000Z",
+            "endTime": "2026-07-25T03:51:06.428Z",
+            "id": "dk4jz1txv",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "4",
+            "loadPerHour": 2800,
+            "quantity": 207200,
+            "durationHours": 74,
+            "presentation": "2Lts",
+            "tanks": 24.02,
+            "startTime": "2026-07-20T11:00:00.000Z",
+            "endTime": "2026-07-23T13:00:00.000Z",
+            "id": "itrgjqdnf",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "4",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-07-23T13:00:00.000Z",
+            "endTime": "2026-07-23T15:00:00.000Z",
+            "id": "26l1ev4mw",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "4",
+            "loadPerHour": 2800,
+            "quantity": 117600,
+            "durationHours": 42,
+            "presentation": "2Lts",
+            "tanks": 13.63,
+            "startTime": "2026-07-23T15:00:00.000Z",
+            "endTime": "2026-07-25T09:00:00.000Z",
+            "id": "3xjidai6i",
+            "color": "#ec4899"
           }
         ],
         "realProduction": {
@@ -4980,7 +5150,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-18T13:15:58.962Z"
+    "updatedAt": "2026-07-18T13:24:55.006Z"
   },
   "ordenesSap": [
     {
@@ -9701,6 +9871,56 @@
           "equipment": "TRANSPORTADOR DE CAJAS",
           "stopType": "AVERÍA",
           "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1784380589696",
+          "lineId": "L1",
+          "startTime": "2026-07-16T11:37:00.000Z",
+          "endTime": "2026-07-16T14:00:00.000Z",
+          "reason": "parada por P.T.A.B",
+          "equipment": "LLENADORA",
+          "stopType": "PTAB",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1784380667672",
+          "lineId": "L1",
+          "startTime": "2026-07-16T14:10:00.000Z",
+          "endTime": "2026-07-16T15:05:00.000Z",
+          "reason": "parada por P.T.A.B",
+          "equipment": "LLENADORA",
+          "stopType": "PTAB",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1784380758024",
+          "lineId": "L1",
+          "startTime": "2026-07-16T15:15:00.000Z",
+          "endTime": "2026-07-16T16:48:00.000Z",
+          "reason": "parada por P.T.A.B",
+          "equipment": "LLENADORA",
+          "stopType": "PTAB",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1784380804656",
+          "lineId": "L1",
+          "startTime": "2026-07-16T17:20:00.000Z",
+          "endTime": "2026-07-16T21:15:00.000Z",
+          "reason": "parada por P.T.A.B",
+          "equipment": "LLENADORA",
+          "stopType": "PTAB",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1784381013080",
+          "lineId": "L1",
+          "startTime": "2026-07-16T13:10:00.000Z",
+          "endTime": "2026-07-16T13:20:00.000Z",
+          "reason": "falla electrica general ",
+          "equipment": "ENFARDADORA",
+          "stopType": "FALLA DE E/E",
+          "turno": "Diurno"
         }
       ],
       "efficiencyStore": {
@@ -9753,10 +9973,10 @@
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
-                "electricFailureStopsMin": "0",
-                "externalStopsMin": "0",
-                "scheduledBoxes": "",
-                "producedBoxes": "",
+                "electricFailureStopsMin": "10",
+                "externalStopsMin": "526",
+                "scheduledBoxes": "17250",
+                "producedBoxes": "1140",
                 "efficiencyLine": "0.00"
               },
               "viernes": {

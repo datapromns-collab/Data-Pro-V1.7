@@ -334,6 +334,7 @@ function usePlannerStoreInner() {
   });
 
   const loadFromLocalStorage = useCallback(() => {
+    let loadedFromWeeks = false;
     const savedWeeks = localStorage.getItem(STORAGE_KEY_WEEKS);
     if (savedWeeks) {
       try {
@@ -343,6 +344,7 @@ function usePlannerStoreInner() {
           normalized[wk] = legacyToWeeklyData(data);
         }
         setWeeklyData(normalized);
+        loadedFromWeeks = true;
         return;
       } catch (e) {}
     }
@@ -421,7 +423,7 @@ function usePlannerStoreInner() {
     }
 
     const savedConfig = localStorage.getItem(STORAGE_KEY_CONFIG);
-    if (savedConfig) {
+    if (savedConfig && !loadedFromWeeks) {
       try {
         const config = JSON.parse(savedConfig);
         if (config.weekStartDate) setWeekStartDate(fromLocalISO(config.weekStartDate));
@@ -647,14 +649,46 @@ function usePlannerStoreInner() {
   }, []);
 
   const saveToLocalStorage = useCallback(() => {
-    const plan = {
-      weeks: weeklyData,
+    const basePlan = {
       config: { weekStartDate: toLocalISO(weekStartDate), lineSpeeds },
       customRecipes,
       customPackagingRecipes,
     };
-    localStorage.setItem(STORAGE_KEY_WEEKS, JSON.stringify(plan));
-    localStorage.setItem(STORAGE_KEY_TIMESTAMP, new Date().toISOString());
+
+    const trySave = (payload: Record<string, any>) => {
+      try {
+        const raw = JSON.stringify(payload);
+        localStorage.setItem(STORAGE_KEY_WEEKS, raw);
+        localStorage.setItem(STORAGE_KEY_TIMESTAMP, new Date().toISOString());
+      } catch (error) {
+        const message = error instanceof Error ? error.message : '';
+        const isQuota = message.includes('QuotaExceededError') || message.includes('exceeded the quota');
+        if (!isQuota) {
+          console.warn('[PlannerStore] localStorage save failed', error);
+          return;
+        }
+
+        try {
+          const limited = { ...payload };
+          const weeks = { ...(limited.weeks || {}) };
+          const sortedKeys = Object.keys(weeks).sort((a, b) => b.localeCompare(a));
+          for (let i = 4; i < sortedKeys.length; i++) {
+            delete weeks[sortedKeys[i]];
+          }
+          limited.weeks = weeks;
+          const raw = JSON.stringify(limited);
+          localStorage.setItem(STORAGE_KEY_WEEKS, raw);
+          localStorage.setItem(STORAGE_KEY_TIMESTAMP, new Date().toISOString());
+        } catch (e) {
+          console.warn('[PlannerStore] localStorage save failed after truncation', e);
+        }
+      }
+    };
+
+    trySave({
+      weeks: weeklyData,
+      ...basePlan,
+    });
   }, [weeklyData, weekStartDate, lineSpeeds, customRecipes, customPackagingRecipes]);
 
   const saveToLocalStorageRef = useRef(saveToLocalStorage);
@@ -702,7 +736,11 @@ function usePlannerStoreInner() {
 
   useEffect(() => {
     if (!isLoaded) return;
-    saveToLocalStorageRef.current();
+    try {
+      saveToLocalStorageRef.current();
+    } catch (error) {
+      console.warn('[PlannerStore] localStorage save failed', error);
+    }
   }, [isLoaded, weeklyData, weekStartDate, lineSpeeds, customRecipes, customPackagingRecipes]);
 
   useEffect(() => {
