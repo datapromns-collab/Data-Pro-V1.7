@@ -32,6 +32,7 @@ import {
   AlertTriangle,
   Activity,
   Wrench,
+  Clock,
   CalendarDays,
   CalendarRange,
   RefreshCw,
@@ -276,6 +277,8 @@ export default function PlannerPage() {
   const [activeModule, setActiveModule] = useState('planning');
   const [activeTab, setActiveTab] = useState('gantt');
   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
+  const [produccionSubTab, setProduccionSubTab] = useState('planificadas');
+  const [reporteSubTab, setReporteSubTab] = useState('diario');
   const [printMode, setPrintMode] = useState('');
   const [jarabesPrintMode, setJarabesPrintMode] = useState('');
   const [jarabesPrintHtml, setJarabesPrintHtml] = useState('');
@@ -1386,7 +1389,7 @@ export default function PlannerPage() {
                           {['paradas-lineas', 'produccion', 'reporte', 'resumen-semanal', 'resumen-mensual', 'ciclos'].map((tab) => (
                             <button
                               key={tab}
-                              onClick={() => { setActiveTab(tab); if (tab === 'paradas-lineas') setParadasSubTab('informes-operacionales'); }}
+                              onClick={() => { setActiveTab(tab); if (tab === 'paradas-lineas') setParadasSubTab('informes-operacionales'); if (tab === 'produccion') setProduccionSubTab('planificadas'); if (tab === 'reporte') setReporteSubTab('diario'); }}
                               className={cn(
                                 "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                 activeTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
@@ -1732,13 +1735,88 @@ export default function PlannerPage() {
                                )}
                                 </div>
                              </div>
+                         )}
+                        {activeTab === 'produccion' && (
+                          <>
+                            <div className="flex items-center justify-between gap-2 mb-4 no-print">
+                              <div className="flex items-center gap-3">
+                               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                 {['planificadas', 'producidas'].map((subTab) => (
+                                   <button
+                                     key={subTab}
+                                     onClick={() => setProduccionSubTab(subTab)}
+                                     className={cn(
+                                       "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                       produccionSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                     )}
+                                   >
+                                     {subTab === 'planificadas' && <ClipboardList className="h-3.5 w-3.5" />}
+                                     {subTab === 'planificadas' ? 'Planificadas' : 'Producidas'}
+                                     {subTab === 'producidas' && <CheckCircle2 className="h-3.5 w-3.5" />}
+                                   </button>
+                                 ))}
+                               </div>
+                              </div>
+                             </div>
+                            <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                              <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                                {produccionSubTab === 'planificadas' && (
+                                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                    <ClipboardList className="h-12 w-12 mb-4 opacity-20" />
+                                    Planificadas en Desarrollo
+                                  </div>
+                                )}
+                                {produccionSubTab === 'producidas' && (
+                                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                    <CheckCircle2 className="h-12 w-12 mb-4 opacity-20" />
+                                    Producidas en Desarrollo
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </>
                         )}
-                       {activeTab === 'reporte' && (
-                         <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                           <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100" />
-                         </div>
-                       )}
-                       {activeTab === 'resumen-semanal' && (
+                        {activeTab === 'reporte' && (
+                          <>
+                            <div className="flex items-center justify-between gap-2 mb-4 no-print">
+                              <div className="flex items-center gap-3">
+                               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                 {['diario', 'por-turno'].map((subTab) => (
+                                   <button
+                                     key={subTab}
+                                     onClick={() => setReporteSubTab(subTab)}
+                                     className={cn(
+                                       "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                       reporteSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                     )}
+                                   >
+                                     {subTab === 'diario' && <CalendarIcon className="h-3.5 w-3.5" />}
+                                     {subTab === 'diario' ? 'Diario' : 'Por Turno'}
+                                     {subTab === 'por-turno' && <Clock className="h-3.5 w-3.5" />}
+                                   </button>
+                                 ))}
+                               </div>
+                              </div>
+                             </div>
+                            <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                              <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                                {reporteSubTab === 'diario' && (
+                                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                    <CalendarIcon className="h-12 w-12 mb-4 opacity-20" />
+                                    Diario en Desarrollo
+                                  </div>
+                                )}
+                                {reporteSubTab === 'por-turno' && (
+                                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                    <Clock className="h-12 w-12 mb-4 opacity-20" />
+                                    Por Turno en Desarrollo
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          </>
+                        )}
+                        {activeTab === 'resumen-semanal' && (
                          <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                            <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
                              <CalendarDays className="h-12 w-12 mb-4 opacity-20" />
