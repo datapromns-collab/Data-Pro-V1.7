@@ -179,6 +179,8 @@ function deepMerge(current: any, incoming: any): any {
   return merged;
 }
 
+const STORAGE_KEY_SELECTED_DATE = 'planner_selected_date_v1';
+
 function usePlannerStoreInner() {
   const [weeklyData, setWeeklyData] = useState<Record<string, WeeklyData>>({});
   const [weekStartDate, setWeekStartDate] = useState<Date>(() => {
@@ -193,6 +195,21 @@ function usePlannerStoreInner() {
   const [customPackagingRecipes, setCustomPackagingRecipes] = useState<Record<string, Record<string, Record<string, number>>>>(DEFAULT_PACKAGING_RECIPES);
   const [isLoaded, setIsLoaded] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const saved = localStorage.getItem(STORAGE_KEY_SELECTED_DATE);
+    if (saved) {
+      try {
+        const parsed = new Date(saved);
+        if (!Number.isNaN(parsed.getTime())) {
+          const d = new Date(parsed);
+          d.setHours(0, 0, 0, 0);
+          setWeekStartDate(startOfWeek(d, { weekStartsOn: 1 }));
+        }
+      } catch (e) {}
+    }
+  }, []);
 
   const weekKey = getWeekKey(weekStartDate);
   const week = weeklyData[weekKey] ?? emptyWeek();
@@ -426,11 +443,10 @@ function usePlannerStoreInner() {
     if (savedConfig && !loadedFromWeeks) {
       try {
         const config = JSON.parse(savedConfig);
-        if (config.weekStartDate) setWeekStartDate(fromLocalISO(config.weekStartDate));
         if (config.lineSpeeds) setLineSpeeds(config.lineSpeeds);
       } catch (e) {}
     }
-  }, [weekKey, setLineSpeeds, setWeekStartDate]);
+  }, [weekKey, setLineSpeeds]);
 
   const applyRemoteToState = useCallback((remote: any, authoritative = false) => {
     if (!remote) return;
@@ -490,7 +506,7 @@ function usePlannerStoreInner() {
         return next;
       });
     } else if (remote.tasks !== undefined || weeklyDataFields.some((f) => remote[f] !== undefined)) {
-      const targetWeekKey = remote.config?.weekStartDate ? getWeekKey(new Date(remote.config.weekStartDate)) : weekKey;
+      const targetWeekKey = weekKey;
       const migratedWeek: WeeklyData = {
         tasks: (remote.tasks || []).map((t: any) => ({
           ...t,
@@ -742,6 +758,15 @@ function usePlannerStoreInner() {
       console.warn('[PlannerStore] localStorage save failed', error);
     }
   }, [isLoaded, weeklyData, weekStartDate, lineSpeeds, customRecipes, customPackagingRecipes]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    try {
+      localStorage.setItem(STORAGE_KEY_SELECTED_DATE, toLocalISO(weekStartDate));
+    } catch (error) {
+      console.warn('[PlannerStore] selected date save failed', error);
+    }
+  }, [isLoaded, weekStartDate]);
 
   useEffect(() => {
     if (!isLoaded) return;

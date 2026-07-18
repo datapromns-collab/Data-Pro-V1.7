@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-07-20T00:00:00.000",
+      "weekStartDate": "2026-07-13T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -4038,6 +4038,19 @@
             "endTime": "2026-07-21T13:00:00.000Z",
             "id": "5ogj4hm3w",
             "color": "#10b981"
+          },
+          {
+            "name": "JUSTY NARANJA",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-07-21T13:00:00.000Z",
+            "endTime": "2026-07-22T13:00:00.000Z",
+            "id": "pwfjiiv7l",
+            "color": "#f59e0b"
           }
         ],
         "realProduction": {
@@ -5168,13 +5181,20 @@
           "7h9l4z74q",
           "m019vix5a",
           "ult4f3myf",
-          "km3kc98p2"
+          "km3kc98p2",
+          "ndcea98aa",
+          "dsa50ymze",
+          "jvpohj004",
+          "dxyho6f2c",
+          "7y7mns37q",
+          "kqoj4gfvr",
+          "24uhsflxj"
         ]
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-18T13:29:46.864Z"
+    "updatedAt": "2026-07-18T13:39:12.159Z"
   },
   "ordenesSap": [
     {
