@@ -42,7 +42,6 @@ export const emptyWeekData = (): Record<DayOfWeek, EfficiencyDayData> => ({
 });
 
 const resetStops = (day: EfficiencyDayData): void => {
-  day.scheduledStops = '0';
   day.operationalStopsMin = '0';
   day.breakdownStopsMin = '0';
   day.electricFailureStopsMin = '0';
@@ -110,7 +109,8 @@ export function computeEfficiencyStore(
     const dayData = store[weekId][lineId][shift][dayName];
 
     if (stop.stopType === "PROGRAMADA") {
-      dayData.scheduledStops = (parseFloat(dayData.scheduledStops || '0') + duration).toString();
+      const existing = parseFloat(dayData.scheduledStops || '0');
+      dayData.scheduledStops = (existing + duration).toString();
     } else if (stop.stopType === "FALLA DE E/E") {
       dayData.electricFailureStopsMin = (parseFloat(dayData.electricFailureStopsMin || '0') + duration).toString();
     } else if (stop.equipment === equipmentType && stop.stopType === "OPERACIONAL") {
