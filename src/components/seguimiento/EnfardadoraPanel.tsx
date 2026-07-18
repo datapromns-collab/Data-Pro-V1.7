@@ -299,7 +299,8 @@ function ParadasControl({ readOnly = false }: { readOnly?: boolean }) {
     const stopStart = new Date(stop.startTime);
     const startLimit = setMinutes(setHours(startOfDay(prodDate), 7), 0);
     const endLimit = addDays(startLimit, 1);
-    return isWithinInterval(stopStart, { start: startLimit, end: endLimit });
+    const stopLocal = new Date(stopStart.getTime() + stopStart.getTimezoneOffset() * 60000);
+    return isWithinInterval(stopLocal, { start: startLimit, end: endLimit });
   };
 
   const handlePreviewDaily = () => {

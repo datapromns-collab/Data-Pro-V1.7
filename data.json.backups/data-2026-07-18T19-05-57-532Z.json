@@ -9118,6 +9118,126 @@
           "equipment": "ENFARDADORA",
           "stopType": "OPERACIONAL",
           "turno": "Diurno"
+        },
+        {
+          "id": "stop-1784036591052",
+          "lineId": "L1",
+          "startTime": "2026-07-13T11:00:00.000Z",
+          "endTime": "2026-07-13T13:10:00.000Z",
+          "reason": "parada por monoblock",
+          "equipment": "LLENADORA",
+          "stopType": "AVERÍA",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1784148776150",
+          "lineId": "L3",
+          "startTime": "2026-07-14T22:30:00.000Z",
+          "endTime": "2026-07-14T23:40:00.000Z",
+          "reason": "falla electrica general",
+          "equipment": "ENFARDADORA",
+          "stopType": "FALLA DE E/E",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1784148811774",
+          "lineId": "L3",
+          "startTime": "2026-07-15T00:10:00.000Z",
+          "endTime": "2026-07-15T00:58:00.000Z",
+          "reason": "parada por llenadora",
+          "equipment": "LLENADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1784148847846",
+          "lineId": "L3",
+          "startTime": "2026-07-15T01:11:00.000Z",
+          "endTime": "2026-07-15T01:25:00.000Z",
+          "reason": "parada por sopladora",
+          "equipment": "SOPLADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1784148874549",
+          "lineId": "L3",
+          "startTime": "2026-07-15T01:38:00.000Z",
+          "endTime": "2026-07-15T01:43:00.000Z",
+          "reason": "parada por paletizadora",
+          "equipment": "PALETIZADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1784148905254",
+          "lineId": "L3",
+          "startTime": "2026-07-15T01:57:00.000Z",
+          "endTime": "2026-07-15T02:19:00.000Z",
+          "reason": "parada por paletizadora",
+          "equipment": "PALETIZADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1784148961526",
+          "lineId": "L3",
+          "startTime": "2026-07-15T04:59:00.000Z",
+          "endTime": "2026-07-15T05:06:00.000Z",
+          "reason": "parada por sopladora",
+          "equipment": "SOPLADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1784148985533",
+          "lineId": "L3",
+          "startTime": "2026-07-15T05:41:00.000Z",
+          "endTime": "2026-07-15T06:19:00.000Z",
+          "reason": "parada por sopladora",
+          "equipment": "SOPLADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1784149009326",
+          "lineId": "L3",
+          "startTime": "2026-07-15T07:42:00.000Z",
+          "endTime": "2026-07-15T07:49:00.000Z",
+          "reason": "parada por paletizadora",
+          "equipment": "PALETIZADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1784149245190",
+          "lineId": "L6",
+          "startTime": "2026-07-14T22:30:00.000Z",
+          "endTime": "2026-07-14T23:40:00.000Z",
+          "reason": "falla electrica general",
+          "equipment": "ENFARDADORA",
+          "stopType": "FALLA DE E/E",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1784149273110",
+          "lineId": "L6",
+          "startTime": "2026-07-15T00:10:00.000Z",
+          "endTime": "2026-07-15T02:25:00.000Z",
+          "reason": "parada por llenadora",
+          "equipment": "LLENADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1784401431519",
+          "lineId": "L1",
+          "startTime": "2026-07-15T16:00:00.000Z",
+          "endTime": "2026-07-15T16:10:00.000Z",
+          "reason": "PARADA",
+          "equipment": "ENFARDADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Diurno"
         }
       ],
       "efficiencyStore": {
@@ -9132,7 +9252,7 @@
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "310",
-                "externalStopsMin": "48",
+                "externalStopsMin": "178",
                 "scheduledBoxes": "17250",
                 "producedBoxes": "3914",
                 "efficiencyLine": "0.00"
@@ -9146,8 +9266,8 @@
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "240",
                 "externalStopsMin": "20",
-                "scheduledBoxes": "",
-                "producedBoxes": "",
+                "scheduledBoxes": "1000",
+                "producedBoxes": "500",
                 "efficiencyLine": "0.00"
               },
               "miércoles": {
@@ -9155,7 +9275,7 @@
                 "realSpeed": "30",
                 "scheduledHours": "11.5",
                 "scheduledStops": "0",
-                "operationalStopsMin": "0",
+                "operationalStopsMin": "10",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
                 "externalStopsMin": "0",
@@ -9173,7 +9293,7 @@
                 "electricFailureStopsMin": "0",
                 "externalStopsMin": "0",
                 "scheduledBoxes": "",
-                "producedBoxes": "1000",
+                "producedBoxes": "",
                 "efficiencyLine": "0.00"
               },
               "viernes": {
@@ -9613,8 +9733,8 @@
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
-                "electricFailureStopsMin": "0",
-                "externalStopsMin": "0",
+                "electricFailureStopsMin": "70",
+                "externalStopsMin": "141",
                 "scheduledBoxes": "",
                 "producedBoxes": "",
                 "efficiencyLine": "0.00"
@@ -10068,7 +10188,7 @@
                 "designCapacity": "60",
                 "realSpeed": "32",
                 "scheduledHours": "11.5",
-                "scheduledStops": "16250",
+                "scheduledStops": "29640",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "300",
@@ -10177,8 +10297,8 @@
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
-                "electricFailureStopsMin": "0",
-                "externalStopsMin": "0",
+                "electricFailureStopsMin": "70",
+                "externalStopsMin": "135",
                 "scheduledBoxes": "",
                 "producedBoxes": "",
                 "efficiencyLine": "0.00"

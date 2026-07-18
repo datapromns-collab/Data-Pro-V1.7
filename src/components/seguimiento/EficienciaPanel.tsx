@@ -194,15 +194,26 @@ export default function EficienciaPanel({ storageKey, dateStorageKey = DATE_STOR
       if (baseDate) {
         const weekId = getWeekId(baseDate);
         editedWeeksRef.current.add(weekId);
-        patchData((prevData) => ({
-          ...prevData,
-          efficiencyStore: { ...prevData.efficiencyStore, [weekId]: updated },
-        }));
       }
 
       return updated;
     });
-  }, [baseDate, patchData, readOnly]);
+  }, [baseDate, readOnly]);
+
+  useEffect(() => {
+    if (readOnly) return;
+    if (!hasHydrated || !baseDate || Object.keys(activeWeekData).length === 0) return;
+
+    const timer = setTimeout(() => {
+      const weekId = getWeekId(baseDate);
+      patchData((prevData) => ({
+        ...prevData,
+        efficiencyStore: { ...prevData.efficiencyStore, [weekId]: activeWeekData },
+      }));
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [activeWeekData, hasHydrated, baseDate, patchData, readOnly]);
 
   const summaryData = useMemo(() => {
     if (!hasHydrated) return {};
