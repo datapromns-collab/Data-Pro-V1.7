@@ -3,6 +3,14 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 
 const POLL_INTERVAL = 15000;
+const PENDING_KEY = (namespace: string) => `rc_pending_${namespace}`;
+
+type PendingOperation = {
+  id: string;
+  payload: any;
+  timestamp: number;
+  retries: number;
+};
 
 function deepMerge(target: any, source: any): any {
   if (!source || typeof source !== 'object' || Array.isArray(source)) return source;
@@ -14,6 +22,25 @@ function deepMerge(target: any, source: any): any {
   return result;
 }
 
+function loadPendingQueue<T>(namespace: string): PendingOperation[] {
+  try {
+    const raw = localStorage.getItem(PENDING_KEY(namespace));
+    if (!raw) return [];
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+function savePendingQueue(namespace: string, queue: PendingOperation[]) {
+  try {
+    localStorage.setItem(PENDING_KEY(namespace), JSON.stringify(queue.slice(-20)));
+  } catch {
+    // ignore
+  }
+}
+
 export function useRemoteCollection<T = any>(namespace: string, initial: T) {
   const [data, setData] = useState<T>(initial);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -23,6 +50,8 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
   const pendingRef = useRef(false);
   const deletedRef = useRef<Set<string>>(new Set());
   const firstLoadRef = useRef(true);
+  const queueRef = useRef<PendingOperation[]>([]);
+  const sendingRef = useRef(false);
 
   const applyDeleted = useCallback((items: any[]): any[] => {
     if (!Array.isArray(items) || deletedRef.current.size === 0) return items;
@@ -30,39 +59,82 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
     return items.filter((it) => !(it && set.has(String(it.id))));
   }, []);
 
-  const scheduleSave = useCallback((next: T) => {
-    if (timerRef.current) clearTimeout(timerRef.current);
+  const persistLocal = useCallback((next: T) => {
     try {
       localStorage.setItem(cacheKey, JSON.stringify(next));
     } catch {
       // ignore
     }
-    timerRef.current = setTimeout(async () => {
-      try {
-        const payload = Array.isArray(next)
-          ? { items: next, _deletedIds: Array.from(deletedRef.current) }
-          : next;
-        await fetch(`/api/collection/${encodeURIComponent(namespace)}`, {
-          method: 'POST',
-          headers: { 'content-type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-      } catch {
-        // ignore
-      } finally {
-        pendingRef.current = false;
-      }
+  }, [cacheKey]);
+
+  const enqueue = useCallback((payload: any) => {
+    const item: PendingOperation = {
+      id: `op_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
+      payload,
+      timestamp: Date.now(),
+      retries: 0,
+    };
+    queueRef.current = [...queueRef.current, item];
+    savePendingQueue(namespace, queueRef.current);
+  }, [namespace]);
+
+  const sendToServer = useCallback(async (payload: any) => {
+    const res = await fetch(`/api/collection/${encodeURIComponent(namespace)}`, {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return res;
+  }, [namespace]);
+
+  const flushQueue = useCallback(async () => {
+    if (sendingRef.current) return;
+    sendingRef.current = true;
+    try {
+      const queue = queueRef.current;
+      if (queue.length === 0) return;
+      const latest = queue[queue.length - 1];
+      await sendToServer(latest.payload);
+      queueRef.current = [];
+      savePendingQueue(namespace, []);
+      pendingRef.current = false;
+    } catch {
+      pendingRef.current = true;
+    } finally {
+      sendingRef.current = false;
+    }
+  }, [sendToServer]);
+
+  const scheduleSave = useCallback((next: T, payload?: any) => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    persistLocal(next);
+    const finalPayload = payload ?? (Array.isArray(next)
+      ? { items: next, _deletedIds: Array.from(deletedRef.current) }
+      : next);
+    enqueue(finalPayload);
+    pendingRef.current = true;
+    timerRef.current = setTimeout(() => {
+      flushQueue();
     }, 150);
-  }, [namespace, cacheKey]);
+  }, [persistLocal, enqueue, flushQueue]);
 
   const setDataSynced = useCallback((updater: T | ((prev: T) => T)) => {
     setData((prev) => {
       const next = typeof updater === 'function' ? (updater as (p: T) => T)(prev) : updater;
+      persistLocal(next);
+      const payload = Array.isArray(next)
+        ? { items: next, _deletedIds: Array.from(deletedRef.current) }
+        : next;
+      enqueue(payload);
       pendingRef.current = true;
-      scheduleSave(next);
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => {
+        flushQueue();
+      }, 150);
       return next;
     });
-  }, [scheduleSave]);
+  }, [persistLocal, enqueue, flushQueue]);
 
   // Igual que setData pero envia al servidor SOLO las claves indicadas en `patch`
   // (delta), sin sobrescribir el estado completo. El servidor hace merge por clave,
@@ -73,30 +145,17 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
       setData((prev) => {
         const delta = typeof patch === 'function' ? (patch as (p: T) => Partial<T>)(prev) : patch;
         const next = { ...(prev as object), ...(delta as object) } as T;
+        persistLocal(next);
+        enqueue(delta);
         pendingRef.current = true;
-        try {
-          localStorage.setItem(cacheKey, JSON.stringify(next));
-        } catch {
-          // ignore
-        }
         if (timerRef.current) clearTimeout(timerRef.current);
-        timerRef.current = setTimeout(async () => {
-          try {
-            await fetch(`/api/collection/${encodeURIComponent(namespace)}`, {
-              method: 'POST',
-              headers: { 'content-type': 'application/json' },
-              body: JSON.stringify(delta),
-            });
-          } catch {
-            // ignore
-          } finally {
-            pendingRef.current = false;
-          }
+        timerRef.current = setTimeout(() => {
+          flushQueue();
         }, 150);
         return next;
       });
     },
-    [namespace, cacheKey]
+    [persistLocal, enqueue, flushQueue]
   );
 
   const removeItem = useCallback((id: string) => {
@@ -109,23 +168,34 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
     setData((prev) => {
       if (Array.isArray(prev)) {
         const next = prev.filter((it: any) => String(it?.id) !== String(id)) as unknown as T;
+        const payload = { items: next, _deletedIds: Array.from(deletedRef.current) };
+        persistLocal(next);
+        enqueue(payload);
         pendingRef.current = true;
-        scheduleSave(next);
+        if (timerRef.current) clearTimeout(timerRef.current);
+        timerRef.current = setTimeout(() => {
+          flushQueue();
+        }, 150);
         return next;
       }
       return prev;
     });
-  }, [deletedKey, scheduleSave]);
+  }, [deletedKey, persistLocal, enqueue, flushQueue]);
 
   const removeKey = useCallback((key: string) => {
     setData((prev) => {
       const next = { ...(prev as any) };
       delete next[key];
+      persistLocal(next);
+      enqueue(next);
       pendingRef.current = true;
-      scheduleSave(next);
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => {
+        flushQueue();
+      }, 150);
       return next as T;
     });
-  }, [scheduleSave]);
+  }, [persistLocal, enqueue, flushQueue]);
 
   const load = useCallback(async () => {
     const isFirst = firstLoadRef.current;
@@ -148,6 +218,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
             return { ...prev, ...parsed };
           });
         }
+        queueRef.current = loadPendingQueue(namespace);
       }
     } catch {
       // ignore
@@ -184,7 +255,10 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
     }
     firstLoadRef.current = false;
     setIsLoaded(true);
-  }, [namespace, cacheKey, deletedKey, applyDeleted]);
+    if (queueRef.current.length > 0) {
+      flushQueue();
+    }
+  }, [namespace, cacheKey, deletedKey, applyDeleted, flushQueue]);
 
   useEffect(() => {
     load();
