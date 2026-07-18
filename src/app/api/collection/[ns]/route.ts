@@ -4,6 +4,55 @@ import fs from 'fs';
 const DB_PATH = path.join(process.cwd(), 'data.json');
 const MAX_BACKUPS = 10;
 
+function createRotatingBackup(dbPath: string) {
+  const backupDir = dbPath + '.backups';
+  try {
+    if (!fs.existsSync(backupDir)) {
+      fs.mkdirSync(backupDir, { recursive: true });
+    }
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const backupPath = path.join(backupDir, `data-${timestamp}.json`);
+    if (fs.existsSync(dbPath)) {
+      fs.copyFileSync(dbPath, backupPath);
+      const files = fs.readdirSync(backupDir)
+        .filter((f) => f.startsWith('data-') && f.endsWith('.json'))
+        .sort();
+      while (files.length > MAX_BACKUPS) {
+        const oldest = files.shift();
+        if (oldest) {
+          fs.unlinkSync(path.join(backupDir, oldest));
+        }
+      }
+    }
+  } catch {
+    // ignore backup failures
+  }
+}
+
+function recoverFromBackup(dbPath: string): boolean {
+  const backupDir = dbPath + '.backups';
+  if (!fs.existsSync(backupDir)) return false;
+  const files = fs.readdirSync(backupDir)
+    .filter((f) => f.startsWith('data-') && f.endsWith('.json'))
+    .sort()
+    .reverse();
+  for (const file of files) {
+    const backupPath = path.join(backupDir, file);
+    try {
+      const raw = fs.readFileSync(backupPath, 'utf8');
+      const data = JSON.parse(raw);
+      if (data && typeof data === 'object' && data.collections && typeof data.collections === 'object') {
+        fs.copyFileSync(backupPath, dbPath);
+        console.warn('[COLLECTION] Recovered data.json from backup', backupPath);
+        return true;
+      }
+    } catch {
+      continue;
+    }
+  }
+  return false;
+}
+
 function ensureDb() {
   if (!fs.existsSync(DB_PATH)) {
     const initial = {
@@ -22,9 +71,13 @@ function ensureDb() {
     if (!data.collections) { data.collections = {}; changed = true; }
     if (!data.deletedIds) { data.deletedIds = {}; changed = true; }
     if (typeof data.cacheVersion !== 'number') { data.cacheVersion = 0; changed = true; }
-    if (changed) fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf8');
+    if (changed) {
+      createRotatingBackup(DB_PATH);
+      fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf8');
+    }
   } catch {
-    // ignore
+    // Archivo corrupto: intentar recuperar desde el ultimo respaldo
+    recoverFromBackup(DB_PATH);
   }
 }
 
@@ -46,6 +99,7 @@ function readDb(): any {
 }
 
 function writeDb(data: any) {
+  createRotatingBackup(DB_PATH);
   fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf8');
 }
 
@@ -112,6 +166,34 @@ function sanitizeNs(ns: string): string | null {
   return /^[a-z0-9-]+$/i.test(ns) ? ns : null;
 }
 
+// Claves válidas por namespace. Si se define, el merge por objeto solo acepta
+// estas claves y descarta cualquier entrada numérica o basura acumulada.
+const VALID_KEYS: Record<string, string[]> = {
+  'seguimiento-ordenes': ['linea-1', 'linea-2', 'linea-3', 'linea-4', 'linea-5', 'linea-6', 'linea-7'],
+  'seguimiento-ordenes-auto': ['linea-1', 'linea-2', 'linea-3', 'linea-4', 'linea-5', 'linea-6', 'linea-7'],
+  'seguimiento-enfardadora': ['stops', 'efficiencyStore', 'fixedCapacities', '_deletedIds'],
+  'seguimiento-etiquetadora': ['stops', 'efficiencyStore', 'fixedCapacities', '_deletedIds'],
+};
+
+function sanitizeObjectKeys(ns: string, obj: any): any {
+  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) return obj;
+  const valid = VALID_KEYS[ns];
+  if (!valid) return obj;
+  const allowed = new Set(valid);
+  const out: any = {};
+  for (const key of Object.keys(obj)) {
+    if (allowed.has(key)) out[key] = obj[key];
+  }
+  return out;
+}
+
+// Limpia basura (claves numericas u otras no validas) de una coleccion existente.
+function cleanExisting(ns: string, existing: any): any {
+  if (!existing || typeof existing !== 'object') return existing;
+  if (Array.isArray(existing)) return existing;
+  return sanitizeObjectKeys(ns, existing);
+}
+
 function getNsFromUrl(request: Request): string | null {
   try {
     const url = new URL(request.url);
@@ -130,10 +212,16 @@ export async function GET(request: Request) {
   ensureDb();
   const db = readDb();
   const raw = (db.collections && db.collections[ns]) ?? [];
-  const arr = toArray(raw);
-  const deletedIds = getDeletedIds(db, ns);
-  const col = applyDeletedIds(arr, deletedIds);
-  return new Response(JSON.stringify(col), {
+  if (Array.isArray(raw)) {
+    const deletedIds = getDeletedIds(db, ns);
+    const col = applyDeletedIds(raw, deletedIds);
+    return new Response(JSON.stringify(col), {
+      status: 200,
+      headers: { 'content-type': 'application/json; charset=utf-8' },
+    });
+  }
+  const cleaned = cleanExisting(ns, raw ?? {});
+  return new Response(JSON.stringify(cleaned ?? {}), {
     status: 200,
     headers: { 'content-type': 'application/json; charset=utf-8' },
   });
@@ -148,21 +236,40 @@ export async function POST(request: Request) {
     db.collections = db.collections || {};
     const incoming = await request.json();
     const incomingItems = incoming && Array.isArray(incoming.items) ? incoming.items : incoming;
-    const incomingArr = toArray(incomingItems);
-    const incomingData = incomingArr.map((item: any) => {
-      const copy = { ...item };
-      delete copy._deletedIds;
-      return copy;
-    });
-    const current = toArray(db.collections[ns]);
-    const merged = mergeCollection(current, incomingData);
-    const existingDeleted = getDeletedIds(db, ns);
-    const incomingDel = Array.isArray(incoming?._deletedIds) ? { '*': incoming!._deletedIds } : incoming?._deletedIds;
-    const deletedIds = mergeDeletedIds(existingDeleted, incomingDel);
-    collectDeletedIds(incomingData, deletedIds);
-    const result = applyDeletedIds(merged, deletedIds);
+    const incomingDeleted = Array.isArray(incoming?._deletedIds)
+      ? { '*': incoming!._deletedIds }
+      : (incoming?._deletedIds ?? {});
+
+    let result: any;
+    const current = db.collections[ns];
+
+    if (Array.isArray(incomingItems)) {
+      const incomingData = incomingItems.map((item: any) => {
+        const copy = { ...item };
+        delete copy._deletedIds;
+        return copy;
+      });
+      const currentArr = Array.isArray(current) ? current : [];
+      const merged = mergeCollection(currentArr, incomingData);
+      const existingDeleted = getDeletedIds(db, ns);
+      const deletedIds = mergeDeletedIds(existingDeleted, incomingDeleted);
+      collectDeletedIds(incomingData, deletedIds);
+      result = applyDeletedIds(merged, deletedIds);
+      setDeletedIds(db, ns, deletedIds);
+    } else if (incomingItems && typeof incomingItems === 'object') {
+      // Payload es un objeto estructurado (ej. { stops, efficiencyStore, ... } o { "linea-1": [...] }).
+      // Se preserva su forma y se mezcla campo a campo con lo existente.
+      const base = cleanExisting(ns, current);
+      const incomingClean = sanitizeObjectKeys(ns, incomingItems);
+      result = { ...base, ...incomingClean };
+      const existingDeleted = getDeletedIds(db, ns);
+      const deletedIds = mergeDeletedIds(existingDeleted, incomingDeleted);
+      setDeletedIds(db, ns, deletedIds);
+    } else {
+      result = current ?? [];
+    }
+
     db.collections[ns] = result;
-    setDeletedIds(db, ns, deletedIds);
     writeDb(db);
     return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'content-type': 'application/json' } });
   } catch (error) {

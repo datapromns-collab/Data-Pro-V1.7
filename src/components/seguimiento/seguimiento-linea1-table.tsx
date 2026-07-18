@@ -26,18 +26,20 @@ export function SeguimientoLineaTable({
   label: string;
   filasAuto?: SeguimientoOrdenFuente[];
 }) {
-  const { data, updateRow, deleteRow } = useSeguimientoOrdenes(linea);
+  const { data, updateRow, deleteRow, autoOverrides, updateAutoOverride } = useSeguimientoOrdenes(linea);
 
   const handleUpdate = (id: string, updates: Partial<SeguimientoOrdenLinea>) => {
     updateRow(id, updates);
   };
 
+  // Diferencia = Cajas completadas - Cajas Planificadas
   const recalcDiferencia = (planificadas: number, completadas: number) => {
-    return (Number(planificadas) || 0) - (Number(completadas) || 0);
+    return (Number(completadas) || 0) - (Number(planificadas) || 0);
   };
 
+  // Diferencia2 = Jarabe Real - Jarabe requerido
   const recalcDiferencia2 = (requerido: number, real: number) => {
-    return (Number(requerido) || 0) - (Number(real) || 0);
+    return (Number(real) || 0) - (Number(requerido) || 0);
   };
 
   const totales = useMemo(() => {
@@ -57,13 +59,24 @@ export function SeguimientoLineaTable({
       { cajasPlanificadas: 0, cajasCompletadas: 0, diferencia: 0, jarabeRequerido: 0, jarabeReal: 0, diferencia2: 0, botellasT: 0, ubb: 0 }
     );
 
-    const autoCajas = filasAuto.reduce((sum, f) => sum + (Number(f.cajasCompletadas) || 0), 0);
+    const autoCajasCompletadas = filasAuto.reduce((sum, f) => sum + (Number(f.cajasCompletadas) || 0), 0);
+    const autoCajasPlanificadas = filasAuto.reduce((sum, f) => sum + (Number(autoOverrides[f.id]?.cajasPlanificadas) || 0), 0);
+    const autoJarabeReal = filasAuto.reduce((sum, f) => sum + (Number(autoOverrides[f.id]?.jarabeReal) || 0), 0);
+    const autoUbb = filasAuto.reduce((sum, f) => sum + (Number(autoOverrides[f.id]?.ubb) || 0), 0);
+    // Diferencia = Cajas completadas - Cajas Planificadas | Diferencia2 = Jarabe Real - Jarabe requerido
+    const autoDiferencia = filasAuto.reduce((sum, f) => sum + ((Number(f.cajasCompletadas) || 0) - (Number(autoOverrides[f.id]?.cajasPlanificadas) || 0)), 0);
+    const autoDiferencia2 = filasAuto.reduce((sum, f) => sum + (Number(autoOverrides[f.id]?.jarabeReal) || 0), 0);
 
     return {
       ...manuales,
-      cajasCompletadas: manuales.cajasCompletadas + autoCajas,
+      cajasPlanificadas: manuales.cajasPlanificadas + autoCajasPlanificadas,
+      cajasCompletadas: manuales.cajasCompletadas + autoCajasCompletadas,
+      diferencia: manuales.diferencia + autoDiferencia,
+      jarabeReal: manuales.jarabeReal + autoJarabeReal,
+      diferencia2: manuales.diferencia2 + autoDiferencia2,
+      ubb: manuales.ubb + autoUbb,
     };
-  }, [data, filasAuto]);
+  }, [data, filasAuto, autoOverrides]);
 
   const headers = [
     'Sabor',
@@ -126,25 +139,60 @@ export function SeguimientoLineaTable({
               </TableRow>
             ) : (
               <>
-                {filasAuto.map((row) => (
+                {filasAuto.map((row) => {
+                  const ov = autoOverrides[row.id] ?? {};
+                  const planificadas = Number(ov.cajasPlanificadas) || 0;
+                  const jarabeReal = Number(ov.jarabeReal) || 0;
+                  const difCajas = (Number(row.cajasCompletadas) || 0) - planificadas;
+                  const difJarabe = jarabeReal - 0; // Jarabe requerido no aplica en filas automáticas
+                  return (
                   <TableRow key={`auto-${row.id}`} className="group bg-emerald-50/40 hover:bg-emerald-50/70 transition-colors">
                     <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 pl-5 border-b border-slate-100">{row.sabor}</TableCell>
                     <TableCell className="text-[11px] font-medium text-slate-700 py-2.5 border-b border-slate-100">{row.codigoProducto || '—'}</TableCell>
                     <TableCell className="text-[11px] font-medium text-slate-700 py-2.5 border-b border-slate-100">{row.fechaInicio}</TableCell>
                     <TableCell className="text-[11px] font-medium text-slate-700 py-2.5 border-b border-slate-100">{row.fechaFin}</TableCell>
                     <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 border-b border-slate-100">{row.numeroOrden}</TableCell>
-                    <TableCell className="text-[11px] font-medium text-slate-400 py-2.5 border-b border-slate-100 text-center">—</TableCell>
+                    <TableCell className="py-2 border-b border-slate-100">
+                      <Input
+                        type="number"
+                        value={ov.cajasPlanificadas || ''}
+                        onChange={(e) => updateAutoOverride(row.id, { cajasPlanificadas: Number(e.target.value) || 0 })}
+                        className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-white/70 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
+                      />
+                    </TableCell>
                     <TableCell className="text-[11px] font-black text-emerald-700 py-2.5 border-b border-slate-100 text-center">{row.cajasCompletadas}</TableCell>
-                    <TableCell className="text-[11px] font-black text-slate-400 py-2.5 border-b border-slate-100 text-center">—</TableCell>
+                    <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{difCajas}</TableCell>
                     <TableCell className="text-[11px] font-medium text-slate-400 py-2.5 border-b border-slate-100 text-center">—</TableCell>
+                    <TableCell className="py-2 border-b border-slate-100">
+                      <Input
+                        type="number"
+                        value={ov.jarabeReal || ''}
+                        onChange={(e) => updateAutoOverride(row.id, { jarabeReal: Number(e.target.value) || 0 })}
+                        className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-white/70 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
+                      />
+                    </TableCell>
+                    <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{difJarabe}</TableCell>
+                    <TableCell className="py-2 border-b border-slate-100">
+                      <Input
+                        type="text"
+                        value={ov.producto ?? ''}
+                        onChange={(e) => updateAutoOverride(row.id, { producto: e.target.value })}
+                        className="h-7 w-24 text-[11px] font-semibold rounded-md border-transparent bg-white/70 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all"
+                      />
+                    </TableCell>
                     <TableCell className="text-[11px] font-medium text-slate-400 py-2.5 border-b border-slate-100 text-center">—</TableCell>
-                    <TableCell className="text-[11px] font-black text-slate-400 py-2.5 border-b border-slate-100 text-center">—</TableCell>
-                    <TableCell className="text-[11px] font-medium text-slate-400 py-2.5 border-b border-slate-100">—</TableCell>
-                    <TableCell className="text-[11px] font-medium text-slate-400 py-2.5 border-b border-slate-100 text-center">—</TableCell>
-                    <TableCell className="text-[11px] font-medium text-slate-400 py-2.5 border-b border-slate-100 text-center">—</TableCell>
+                    <TableCell className="py-2 border-b border-slate-100">
+                      <Input
+                        type="number"
+                        value={ov.ubb || ''}
+                        onChange={(e) => updateAutoOverride(row.id, { ubb: Number(e.target.value) || 0 })}
+                        className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-white/70 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
+                      />
+                    </TableCell>
                     <TableCell className="py-2.5 border-b border-slate-100 text-right pr-4" />
                   </TableRow>
-                ))}
+                  );
+                })}
                 {data.map((row) => (
                   <TableRow key={row.id} className="group hover:bg-sky-50/60 transition-colors">
                     <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 pl-5 border-b border-slate-100">{row.sabor}</TableCell>

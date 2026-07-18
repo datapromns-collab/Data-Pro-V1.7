@@ -50,6 +50,37 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
     });
   }, [scheduleSave]);
 
+  // Igual que setData pero envia al servidor SOLO las claves indicadas en `patch`
+  // (delta), sin sobrescribir el estado completo. El servidor hace merge por clave,
+  // de modo que cambios concurrentes en otras lineas/claves no se pierden.
+  // Acepta un objeto parcial o un updater basado en el estado previo local.
+  const patchData = useCallback(
+    (patch: Partial<T> | ((prev: T) => Partial<T>)) => {
+      setData((prev) => {
+        const delta = typeof patch === 'function' ? (patch as (p: T) => Partial<T>)(prev) : patch;
+        const next = { ...(prev as object), ...(delta as object) } as T;
+        pendingRef.current = true;
+        if (timerRef.current) clearTimeout(timerRef.current);
+        timerRef.current = setTimeout(async () => {
+          try {
+            localStorage.setItem(cacheKey, JSON.stringify(next));
+            await fetch(`/api/collection/${encodeURIComponent(namespace)}`, {
+              method: 'POST',
+              headers: { 'content-type': 'application/json' },
+              body: JSON.stringify(delta),
+            });
+          } catch {
+            // ignore
+          } finally {
+            pendingRef.current = false;
+          }
+        }, 150);
+        return next;
+      });
+    },
+    [namespace, cacheKey]
+  );
+
   const removeItem = useCallback((id: string) => {
     deletedRef.current.add(String(id));
     try {
@@ -137,5 +168,5 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
     };
   }, [isLoaded, load]);
 
-  return { data, setData: setDataSynced, removeItem, isLoaded };
+  return { data, setData: setDataSynced, patchData, removeItem, isLoaded };
 }

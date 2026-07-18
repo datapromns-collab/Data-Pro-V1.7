@@ -2201,7 +2201,7 @@ const exportarPDFdia = async () => {
 
               <div className="flex flex-col gap-4">
                 {seguimientoSubsection === 'resumen' ? (
-                  <SeguimientoResumenSemanaTable />
+                  <SeguimientoResumenSemanaTable filasAuto={filasAutoSeguimiento} />
                 ) : (
                   (() => {
                     const lineaNum = seguimientoSubsection as number;

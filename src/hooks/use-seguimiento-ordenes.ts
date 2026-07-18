@@ -23,6 +23,19 @@ export interface SeguimientoOrdenLinea {
 
 export type LineaKey = 'linea-1' | 'linea-2' | 'linea-3' | 'linea-4' | 'linea-5' | 'linea-6' | 'linea-7';
 
+// Valores de llenado manual asociados a las filas AUTOMÁTICAS (derivadas de Carga Prodt).
+// Se guardan aparte, indexados por el id de la fila automática.
+export interface SeguimientoAutoOverride {
+  cajasPlanificadas: number;
+  jarabeReal: number;
+  producto: string;
+  ubb: number;
+}
+
+export type SeguimientoAutoOverrides = Record<string, Partial<SeguimientoAutoOverride>>;
+
+type SeguimientoAutoEstado = Record<LineaKey, SeguimientoAutoOverrides>;
+
 const LINE_KEYS: LineaKey[] = ['linea-1', 'linea-2', 'linea-3', 'linea-4', 'linea-5', 'linea-6', 'linea-7'];
 
 type SeguimientoEstado = Record<LineaKey, SeguimientoOrdenLinea[]>;
@@ -43,6 +56,18 @@ function emptyState(): SeguimientoEstado {
   };
 }
 
+function emptyAutoState(): SeguimientoAutoEstado {
+  return {
+    'linea-1': {},
+    'linea-2': {},
+    'linea-3': {},
+    'linea-4': {},
+    'linea-5': {},
+    'linea-6': {},
+    'linea-7': {},
+  };
+}
+
 function loadLegacy(linea: LineaKey): SeguimientoOrdenLinea[] | null {
   if (typeof window === 'undefined') return null;
   try {
@@ -57,6 +82,8 @@ function loadLegacy(linea: LineaKey): SeguimientoOrdenLinea[] | null {
 export function useSeguimientoOrdenes(linea: LineaKey) {
   // Persistencia compartida en servidor (mismo mecanismo que el módulo de Jarabes)
   const remoto = useRemoteCollection<SeguimientoEstado>('seguimiento-ordenes', emptyState());
+  // Overrides manuales de las filas automáticas (Cajas Planificadas, Jarabe Real, Producto, UBB)
+  const remotoAuto = useRemoteCollection<SeguimientoAutoEstado>('seguimiento-ordenes-auto', emptyAutoState());
 
   const [migrated, setMigrated] = useState(false);
 
@@ -90,12 +117,13 @@ export function useSeguimientoOrdenes(linea: LineaKey) {
 
   const setData = useCallback(
     (updater: SeguimientoOrdenLinea[] | ((prev: SeguimientoOrdenLinea[]) => SeguimientoOrdenLinea[])) => {
-      remoto.setData((prev) => {
+      // Enviamos SOLO la linea modificada (delta) basada en el estado previo local,
+      // para no pisar cambios concurrentes de otras lineas en el servidor.
+      remoto.patchData((prev: SeguimientoEstado) => {
         const base = prev && typeof prev === 'object' ? prev : emptyState();
         return {
-          ...base,
           [linea]: typeof updater === 'function' ? (updater as Function)(base[linea] ?? []) : updater,
-        };
+        } as Partial<SeguimientoEstado>;
       });
     },
     [linea, remoto]
@@ -120,7 +148,27 @@ export function useSeguimientoOrdenes(linea: LineaKey) {
     setData((prev) => prev.filter((r) => r.id !== id));
   };
 
-  return { data, setData, addRow, updateRow, deleteRow, isLoaded: remoto.isLoaded };
+  // Overrides manuales de filas automáticas
+  const autoState = (remotoAuto.data && typeof remotoAuto.data === 'object' ? remotoAuto.data : emptyAutoState()) as SeguimientoAutoEstado;
+  const autoOverrides = autoState[linea] ?? {};
+
+  const updateAutoOverride = useCallback(
+    (autoId: string, updates: Partial<SeguimientoAutoOverride>) => {
+      remotoAuto.patchData((prev: SeguimientoAutoEstado) => {
+        const base = prev && typeof prev === 'object' ? prev : emptyAutoState();
+        const lineaMap = base[linea] ?? {};
+        return {
+          [linea]: {
+            ...lineaMap,
+            [autoId]: { ...(lineaMap[autoId] ?? {}), ...updates },
+          },
+        } as Partial<SeguimientoAutoEstado>;
+      });
+    },
+    [linea, remotoAuto]
+  );
+
+  return { data, setData, addRow, updateRow, deleteRow, autoOverrides, updateAutoOverride, isLoaded: remoto.isLoaded };
 }
 
 export interface SeguimientoOrdenLineaConLinea extends SeguimientoOrdenLinea {

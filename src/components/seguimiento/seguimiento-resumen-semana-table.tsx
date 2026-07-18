@@ -3,23 +3,79 @@
 import { useMemo } from 'react';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Trash2 } from 'lucide-react';
-import { useSeguimientoResumen } from '@/hooks/use-seguimiento-ordenes';
+import { useSeguimientoResumen, SeguimientoOrdenLineaConLinea } from '@/hooks/use-seguimiento-ordenes';
+import type { SeguimientoOrdenFuente } from '@/components/seguimiento/seguimiento-linea1-table';
 
-export function SeguimientoResumenSemanaTable() {
+const LINE_LABELS: Record<number, string> = {
+  1: 'Línea 1',
+  2: 'Línea 2',
+  3: 'Línea 3',
+  4: 'Línea 4',
+  5: 'Línea 5',
+  6: 'Línea 6',
+  7: 'Línea 7',
+};
+
+export function SeguimientoResumenSemanaTable({
+  filasAuto = {},
+}: {
+  filasAuto?: Record<number, SeguimientoOrdenFuente[]>;
+}) {
   const { data } = useSeguimientoResumen();
+
+  // Combina, de forma ordenada de línea 1 a 7, las filas automáticas (derivadas de
+  // "Carga Prodt") y las filas manuales registradas en cada tabla de línea.
+  const combinadas = useMemo<SeguimientoOrdenLineaConLinea[]>(() => {
+    const resultado: SeguimientoOrdenLineaConLinea[] = [];
+
+    for (let linea = 1; linea <= 7; linea++) {
+      const label = LINE_LABELS[linea];
+
+      // 1) Filas automáticas de esta línea (Carga Prodt)
+      (filasAuto[linea] ?? []).forEach((f) => {
+        resultado.push({
+          id: f.id,
+          linea: label,
+          sabor: f.sabor,
+          codigoProducto: f.codigoProducto,
+          fechaInicio: f.fechaInicio,
+          fechaFin: f.fechaFin,
+          numeroOrden: f.numeroOrden,
+          cajasPlanificadas: 0,
+          cajasCompletadas: f.cajasCompletadas,
+          diferencia: 0,
+          jarabeRequerido: 0,
+          jarabeReal: 0,
+          diferencia2: 0,
+          producto: '',
+          botellasT: 0,
+          ubb: 0,
+        });
+      });
+
+      // 2) Filas manuales de esta línea
+      data.filter((r) => r.linea === label).forEach((r) => resultado.push(r));
+    }
+
+    return resultado;
+  }, [data, filasAuto]);
 
   const rows = useMemo(
     () =>
-      data.map((r) => {
+      combinadas.map((r) => {
         const plan = Number(r.cajasPlanificadas) || 0;
         const comp = Number(r.cajasCompletadas) || 0;
         const req = Number(r.jarabeRequerido) || 0;
         const real = Number(r.jarabeReal) || 0;
+        // Diferencia = Cajas completadas - Cajas Planificadas
+        const diferencia = comp - plan;
+        // Diferencia2 = Jarabe Real - Jarabe requerido
+        const diferencia2 = real - req;
         const jarabeReqCompletadas = plan > 0 ? (req / plan) * comp : 0;
         const porcentajeJarabe = req > 0 ? (real / req) * 100 : 0;
-        return { ...r, jarabeReqCompletadas, porcentajeJarabe };
+        return { ...r, diferencia, diferencia2, jarabeReqCompletadas, porcentajeJarabe };
       }),
-    [data]
+    [combinadas]
   );
 
   const totales = useMemo(() => {
