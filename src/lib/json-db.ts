@@ -1,9 +1,6 @@
-export interface PlannerData {
+export interface WeeklyData {
   tasks: any[];
-  config: { weekStartDate: string; lineSpeeds: Record<string, number> };
   realProduction: Record<string, any>;
-  customRecipes: Record<string, Record<string, number>>;
-  customPackagingRecipes: Record<string, Record<string, Record<string, number>>>;
   rawMaterialStock: Record<string, any>;
   manualUBB: Record<string, Record<string, number>>;
   initialUBBTanks: Record<string, number>;
@@ -21,6 +18,13 @@ export interface PlannerData {
   logisticsInventoryAW: Record<string, number>;
   plantInventoryAW: Record<string, number>;
   deletedTaskIds: string[];
+}
+
+export interface PlannerData {
+  config: { weekStartDate: string; lineSpeeds: Record<string, number> };
+  customRecipes: Record<string, Record<string, number>>;
+  customPackagingRecipes: Record<string, Record<string, Record<string, number>>>;
+  weeks: Record<string, WeeklyData>;
 }
 
 export interface OrdenSapDia {
@@ -72,8 +76,6 @@ export async function loadPlannerData(): Promise<PlannerData | null> {
     const res = await fetchWithRetry(API_URL);
     if (!res.ok) throw new Error('API error');
     const json = await res.json();
-    console.log('[JSON_DB] loadPlannerData keys:', Object.keys(json));
-    console.log('[JSON_DB] loadPlannerData _meta:', (json as any)?._meta);
     return json.planner ?? json;
   } catch (error) {
     console.warn('[JSON_DB] Fallback to localStorage', error);
@@ -85,23 +87,15 @@ export async function savePlannerData(data: Partial<PlannerData>): Promise<void>
   try {
     const { _meta: _ignoredMeta, ...plannerData } = data as any;
     const payload = { planner: plannerData, _meta: { updatedAt: new Date().toISOString() } };
-    const body = JSON.stringify(payload);
-    console.log('[JSON_DB] Saving payload size:', body.length, 'keys:', Object.keys(data));
-    console.log('[JSON_DB] Saving tasks count:', Array.isArray(data.tasks) ? data.tasks.length : 'n/a');
-    if (data.tasks && Array.isArray(data.tasks)) {
-      console.log('[JSON_DB] Saving task ids:', data.tasks.map((t: any) => t.id).slice(0, 10));
-    }
     const res = await fetchWithRetry(API_URL, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body,
+      body: JSON.stringify(payload),
     });
     if (!res.ok) {
       const text = await res.text();
       throw new Error(`HTTP ${res.status}: ${text}`);
     }
-    const responseText = await res.text();
-    console.log('[JSON_DB] Save success', { responseText, status: res.status });
   } catch (error) {
     console.warn('[JSON_DB] Save failed', error);
     throw error;

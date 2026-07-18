@@ -11,33 +11,25 @@ function cleanupTemp() {
   }
 }
 
+function getWeekKey(date: Date): string {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  const day = d.getDay();
+  const diff = d.getDate() - day + (day === 0 ? -6 : 1);
+  const monday = new Date(d.setDate(diff));
+  const pad = (n: number) => String(n).padStart(2, '0');
+  return `${monday.getFullYear()}-${pad(monday.getMonth() + 1)}-${pad(monday.getDate())}`;
+}
+
 function ensureDb() {
   cleanupTemp();
   if (!fs.existsSync(DB_PATH)) {
     const initial = {
       planner: {
-        tasks: [],
         config: { weekStartDate: new Date().toISOString(), lineSpeeds: {} },
-        realProduction: {},
         customRecipes: {},
         customPackagingRecipes: {},
-        rawMaterialStock: {},
-        manualUBB: {},
-        initialUBBTanks: {},
-        finalUBBTanks: {},
-        initialUBBTanksDaily: {},
-        finalUBBTanksDaily: {},
-        salesProjection: {},
-        finishedProductInventory: {},
-        productionPlan: {},
-        logisticsInventory: {},
-        plantInventory: {},
-        salesProjectionAW: {},
-        finishedProductInventoryAW: {},
-        productionPlanAW: {},
-        logisticsInventoryAW: {},
-        plantInventoryAW: {},
-        deletedTaskIds: [],
+        weeks: {},
       },
       ordenesSap: [],
       notifications: [],
@@ -50,28 +42,57 @@ function ensureDb() {
       let migrated = false;
       if (!data.planner) {
         data.planner = {
-          tasks: [],
           config: { weekStartDate: new Date().toISOString(), lineSpeeds: {} },
-          realProduction: {},
           customRecipes: {},
           customPackagingRecipes: {},
-          rawMaterialStock: {},
-          manualUBB: {},
-          initialUBBTanks: {},
-          finalUBBTanks: {},
-          initialUBBTanksDaily: {},
-          finalUBBTanksDaily: {},
-          salesProjection: {},
-          finishedProductInventory: {},
-          productionPlan: {},
-          logisticsInventory: {},
-          plantInventory: {},
-          salesProjectionAW: {},
-          finishedProductInventoryAW: {},
-          productionPlanAW: {},
-          logisticsInventoryAW: {},
-          plantInventoryAW: {},
+          weeks: {},
         };
+        migrated = true;
+      }
+      if (data.planner && !data.planner.weeks && data.planner.tasks) {
+        const targetWeekKey = getWeekKey(new Date(data.planner.config?.weekStartDate || new Date()));
+        data.planner.weeks = {
+          [targetWeekKey]: {
+            tasks: data.planner.tasks,
+            realProduction: data.planner.realProduction || {},
+            rawMaterialStock: data.planner.rawMaterialStock || {},
+            manualUBB: data.planner.manualUBB || {},
+            initialUBBTanks: data.planner.initialUBBTanks || {},
+            finalUBBTanks: data.planner.finalUBBTanks || {},
+            initialUBBTanksDaily: data.planner.initialUBBTanksDaily || {},
+            finalUBBTanksDaily: data.planner.finalUBBTanksDaily || {},
+            salesProjection: data.planner.salesProjection || {},
+            finishedProductInventory: data.planner.finishedProductInventory || {},
+            productionPlan: data.planner.productionPlan || {},
+            logisticsInventory: data.planner.logisticsInventory || {},
+            plantInventory: data.planner.plantInventory || {},
+            salesProjectionAW: data.planner.salesProjectionAW || {},
+            finishedProductInventoryAW: data.planner.finishedProductInventoryAW || {},
+            productionPlanAW: data.planner.productionPlanAW || {},
+            logisticsInventoryAW: data.planner.logisticsInventoryAW || {},
+            plantInventoryAW: data.planner.plantInventoryAW || {},
+            deletedTaskIds: data.planner.deletedTaskIds || [],
+          },
+        };
+        delete data.planner.tasks;
+        delete data.planner.realProduction;
+        delete data.planner.rawMaterialStock;
+        delete data.planner.manualUBB;
+        delete data.planner.initialUBBTanks;
+        delete data.planner.finalUBBTanks;
+        delete data.planner.initialUBBTanksDaily;
+        delete data.planner.finalUBBTanksDaily;
+        delete data.planner.salesProjection;
+        delete data.planner.finishedProductInventory;
+        delete data.planner.productionPlan;
+        delete data.planner.logisticsInventory;
+        delete data.planner.plantInventory;
+        delete data.planner.salesProjectionAW;
+        delete data.planner.finishedProductInventoryAW;
+        delete data.planner.productionPlanAW;
+        delete data.planner.logisticsInventoryAW;
+        delete data.planner.plantInventoryAW;
+        delete data.planner.deletedTaskIds;
         migrated = true;
       }
       if (!data.ordenesSap) {
@@ -160,24 +181,61 @@ function writeJsonAtomically(dbPath: string, payload: Record<string, any>) {
 function deepMerge(current: any, incoming: any): any {
   if (incoming == null) return current;
   if (Array.isArray(current) && Array.isArray(incoming)) {
-    const currentById = new Map(current.map((item: any) => [item.id ?? item, item]));
+    const currentById = new Map(current.map((item: any) => [item?.id ?? item, item]));
     incoming.forEach((item: any) => {
-      const key = item.id ?? item;
-      currentById.set(key, item);
+      const key = item?.id ?? item;
+      if (key != null) currentById.set(key, item);
     });
     return Array.from(currentById.values());
   }
-  if (Array.isArray(incoming)) {
-    return incoming;
-  }
-  if (typeof incoming !== 'object' || Array.isArray(incoming)) {
-    return incoming;
-  }
+  if (Array.isArray(incoming)) return incoming;
+  if (typeof incoming !== 'object' || Array.isArray(incoming)) return incoming;
   const merged = { ...(current ?? {}) };
   Object.keys(incoming).forEach((key) => {
     merged[key] = deepMerge(merged[key], incoming[key]);
   });
   return merged;
+}
+
+function deepMergeWeeklyData(current: any, incoming: any): any {
+  if (!incoming) return current;
+  const next = { ...current };
+  const weekFields = [
+    'realProduction', 'rawMaterialStock', 'manualUBB',
+    'initialUBBTanks', 'finalUBBTanks', 'initialUBBTanksDaily', 'finalUBBTanksDaily',
+    'salesProjection', 'finishedProductInventory', 'productionPlan',
+    'logisticsInventory', 'plantInventory',
+    'salesProjectionAW', 'finishedProductInventoryAW', 'productionPlanAW',
+    'logisticsInventoryAW', 'plantInventoryAW',
+  ];
+  weekFields.forEach((field) => {
+    if ((incoming as any)[field] != null) {
+      (next as any)[field] = deepMerge((current as any)?.[field], (incoming as any)[field]);
+    }
+  });
+  if (incoming.tasks) {
+    const remoteIds = new Set<string>();
+    const remoteMap = new Map<string, any>();
+    (incoming.tasks as any[]).forEach((t: any) => {
+      if (!t || !t.id) return;
+      remoteIds.add(t.id);
+      remoteMap.set(t.id, {
+        ...t,
+        startTime: new Date(t.startTime),
+        endTime: new Date(t.endTime),
+      });
+    });
+    const byId = new Map<string, any>();
+    (current.tasks || []).forEach((t: any) => {
+      if (t && t.id && !remoteIds.has(t.id)) byId.set(t.id, t);
+    });
+    remoteMap.forEach((v, k) => byId.set(k, v));
+    next.tasks = Array.from(byId.values());
+  }
+  if (incoming.deletedTaskIds) {
+    next.deletedTaskIds = Array.from(new Set([...(current.deletedTaskIds || []), ...(incoming.deletedTaskIds || [])]));
+  }
+  return next;
 }
 
 export async function GET() {
@@ -219,6 +277,15 @@ export async function GET() {
   }
 }
 
+const flatWeeklyFields = [
+  'tasks', 'realProduction', 'rawMaterialStock', 'manualUBB',
+  'initialUBBTanks', 'finalUBBTanks', 'initialUBBTanksDaily', 'finalUBBTanksDaily',
+  'salesProjection', 'finishedProductInventory', 'productionPlan',
+  'logisticsInventory', 'plantInventory',
+  'salesProjectionAW', 'finishedProductInventoryAW', 'productionPlanAW',
+  'logisticsInventoryAW', 'plantInventoryAW', 'deletedTaskIds',
+];
+
 export async function POST(request: Request) {
   let body: any = {};
   try {
@@ -236,40 +303,73 @@ export async function POST(request: Request) {
     }
     const mergedPlanner = existing.planner ?? {};
 
-    const keysToMerge = [
-      'tasks', 'config', 'realProduction', 'customRecipes', 'customPackagingRecipes',
-      'rawMaterialStock', 'manualUBB', 'initialUBBTanks', 'finalUBBTanks',
-      'initialUBBTanksDaily', 'finalUBBTanksDaily', 'salesProjection',
-      'finishedProductInventory', 'productionPlan', 'logisticsInventory',
-      'plantInventory', 'salesProjectionAW', 'finishedProductInventoryAW',
-      'productionPlanAW', 'logisticsInventoryAW', 'plantInventoryAW', 'deletedTaskIds'
-    ];
-
     const merged: Record<string, any> = { ...mergedPlanner };
+
     if (incomingPlanner) {
-      keysToMerge.forEach((key) => {
-        const incoming = incomingPlanner[key];
-        if (incoming == null) return;
-        if (key === 'tasks') {
-          const cur = Array.isArray(merged[key]) ? merged[key] : [];
-          const inc = Array.isArray(incoming) ? incoming : [];
-          const byId = new Map<string | number, any>();
-          cur.forEach((item: any) => { const k = item?.id ?? item; if (k != null) byId.set(k, item); });
-          inc.forEach((item: any) => { const k = item?.id ?? item; if (k != null) byId.set(k, item); });
-          merged[key] = Array.from(byId.values());
-        } else if (key === 'deletedTaskIds') {
-          const cur = Array.isArray(merged[key]) ? merged[key] : [];
-          const inc = Array.isArray(incoming) ? incoming : [];
-          merged[key] = Array.from(new Set([...cur, ...inc]));
-        } else {
-          merged[key] = deepMerge(merged[key], incoming);
+      if (incomingPlanner.weeks) {
+        const currentWeeks = merged.weeks || {};
+        const mergedWeeks = { ...currentWeeks };
+        for (const [wk, data] of Object.entries(incomingPlanner.weeks)) {
+          if (mergedWeeks[wk]) {
+            mergedWeeks[wk] = deepMergeWeeklyData(mergedWeeks[wk], data);
+          } else {
+            mergedWeeks[wk] = data;
+          }
         }
-      });
+        merged.weeks = mergedWeeks;
+      }
+
+      const hasFlatFields = flatWeeklyFields.some((f) => incomingPlanner[f] !== undefined);
+      if (hasFlatFields) {
+        const targetWeekKey = getWeekKey(new Date(incomingPlanner.config?.weekStartDate || existing.planner?.config?.weekStartDate || new Date()));
+        if (!merged.weeks) merged.weeks = {};
+        if (!merged.weeks[targetWeekKey]) merged.weeks[targetWeekKey] = {};
+        const targetWeek = merged.weeks[targetWeekKey];
+        flatWeeklyFields.forEach((field) => {
+          if (field === 'config' || incomingPlanner[field] === undefined) return;
+          if (field === 'tasks') {
+            const cur = Array.isArray(targetWeek[field]) ? targetWeek[field] : [];
+            const inc = Array.isArray(incomingPlanner[field]) ? incomingPlanner[field] : [];
+            const byId = new Map<string | number, any>();
+            cur.forEach((item: any) => { const k = item?.id ?? item; if (k != null) byId.set(k, item); });
+            inc.forEach((item: any) => { const k = item?.id ?? item; if (k != null) byId.set(k, item); });
+            targetWeek[field] = Array.from(byId.values());
+          } else if (field === 'deletedTaskIds') {
+            const cur = Array.isArray(targetWeek[field]) ? targetWeek[field] : [];
+            const inc = Array.isArray(incomingPlanner[field]) ? incomingPlanner[field] : [];
+            targetWeek[field] = Array.from(new Set([...cur, ...inc]));
+          } else {
+            targetWeek[field] = deepMerge(targetWeek[field], incomingPlanner[field]);
+          }
+        });
+      }
+
+      if (incomingPlanner.config) {
+        merged.config = { ...(merged.config || {}), ...incomingPlanner.config };
+      }
+      if (incomingPlanner.customRecipes) {
+        merged.customRecipes = deepMerge(merged.customRecipes, incomingPlanner.customRecipes);
+      }
+      if (incomingPlanner.customPackagingRecipes) {
+        merged.customPackagingRecipes = deepMerge(merged.customPackagingRecipes, incomingPlanner.customPackagingRecipes);
+      }
     }
 
-    const deletedSet = new Set(Array.isArray(merged.deletedTaskIds) ? merged.deletedTaskIds : []);
-    if (deletedSet.size > 0 && Array.isArray(merged.tasks)) {
-      merged.tasks = merged.tasks.filter((t: any) => !t || !deletedSet.has(t.id));
+    if (merged.weeks) {
+      const deletedSet = new Set<string>();
+      for (const wk of Object.keys(merged.weeks)) {
+        const weekDeleted = merged.weeks[wk]?.deletedTaskIds || [];
+        weekDeleted.forEach((id: string) => deletedSet.add(id));
+      }
+      if (deletedSet.size > 0) {
+        for (const wk of Object.keys(merged.weeks)) {
+          const tasks = Array.isArray(merged.weeks[wk]?.tasks) ? merged.weeks[wk].tasks : [];
+          merged.weeks[wk] = {
+            ...merged.weeks[wk],
+            tasks: tasks.filter((t: any) => !t || !deletedSet.has(t.id)),
+          };
+        }
+      }
     }
 
     const payload: Record<string, any> = { ...existing };
