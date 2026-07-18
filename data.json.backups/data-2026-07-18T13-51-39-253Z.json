@@ -4058,10 +4058,10 @@
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 10.5,
-            "startTime": "2026-07-23T10:00:00.000Z",
-            "endTime": "2026-07-23T20:30:00.000Z",
-            "id": "jvpohj004",
-            "color": "#587593"
+            "startTime": "2026-07-22T10:00:00.000Z",
+            "endTime": "2026-07-22T20:30:00.000Z",
+            "id": "ri531x0qv",
+            "color": "#10b981"
           },
           {
             "name": "CIP 3P ALCALINO",
@@ -4069,22 +4069,22 @@
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 2,
-            "startTime": "2026-07-23T20:30:00.000Z",
+            "startTime": "2026-07-22T20:30:00.000Z",
+            "endTime": "2026-07-22T22:30:00.000Z",
+            "id": "qokm87s67",
+            "color": "#ec4899"
+          },
+          {
+            "name": "JUSTY NARANJA",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-07-22T22:30:00.000Z",
             "endTime": "2026-07-23T22:30:00.000Z",
-            "id": "dxyho6f2c",
-            "color": "#587593"
-          },
-          {
-            "name": "JUSTY NARANJA",
-            "lineId": "5",
-            "loadPerHour": 1210,
-            "quantity": 29040,
-            "durationHours": 24,
-            "presentation": "1.5Lts",
-            "tanks": 26.14,
-            "startTime": "2026-07-23T22:30:00.000Z",
-            "endTime": "2026-07-24T22:30:00.000Z",
-            "id": "7y7mns37q",
+            "id": "x4frnm6f6",
             "color": "#ef4444"
           },
           {
@@ -4093,10 +4093,10 @@
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 2,
-            "startTime": "2026-07-24T22:30:00.000Z",
-            "endTime": "2026-07-25T00:30:00.000Z",
-            "id": "kqoj4gfvr",
-            "color": "#ef4444"
+            "startTime": "2026-07-23T22:30:00.000Z",
+            "endTime": "2026-07-24T00:30:00.000Z",
+            "id": "z9my7xw7e",
+            "color": "#6366f1"
           },
           {
             "name": "JUSTY NARANJA",
@@ -4106,10 +4106,84 @@
             "durationHours": 24,
             "presentation": "1.5Lts",
             "tanks": 26.14,
-            "startTime": "2026-07-25T00:30:00.000Z",
-            "endTime": "2026-07-26T00:30:00.000Z",
-            "id": "24uhsflxj",
+            "startTime": "2026-07-24T00:30:00.000Z",
+            "endTime": "2026-07-25T00:30:00.000Z",
+            "id": "pbt9v7408",
             "color": "#ef4444"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-07-25T00:30:00.000Z",
+            "endTime": "2026-07-25T02:30:00.000Z",
+            "id": "z8zkmlcas",
+            "color": "#ec4899"
+          },
+          {
+            "name": "JUSTY NARANJA",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 33880,
+            "durationHours": 28,
+            "presentation": "1.5Lts",
+            "tanks": 30.49,
+            "startTime": "2026-07-25T02:30:00.000Z",
+            "endTime": "2026-07-26T06:30:00.000Z",
+            "id": "wc2hhxi8z",
+            "color": "#587593"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "6",
+            "loadPerHour": 1200,
+            "quantity": 28800,
+            "durationHours": 24,
+            "presentation": "0.4Lts",
+            "tanks": 1.67,
+            "startTime": "2026-07-20T11:00:00.000Z",
+            "endTime": "2026-07-21T11:00:00.000Z",
+            "id": "gvv681q6a",
+            "color": "#587593"
+          },
+          {
+            "name": "CS",
+            "lineId": "6",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-07-21T11:00:00.000Z",
+            "endTime": "2026-07-21T11:30:00.000Z",
+            "id": "53fkj8yzg",
+            "color": "#ec4899"
+          },
+          {
+            "name": "GLUP MANZANA ROJA",
+            "lineId": "6",
+            "loadPerHour": 1200,
+            "quantity": 16095,
+            "durationHours": 13.4125,
+            "presentation": "0.4Lts",
+            "tanks": 1,
+            "startTime": "2026-07-21T11:30:00.000Z",
+            "endTime": "2026-07-22T00:54:45.000Z",
+            "id": "a6v5f9yz2",
+            "color": "#ef4444"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 51750,
+            "durationHours": 20.7,
+            "presentation": "1Lt",
+            "tanks": 6,
+            "startTime": "2026-07-21T11:00:00.000Z",
+            "endTime": "2026-07-22T07:42:00.000Z",
+            "id": "vo7d5mgm4",
+            "color": "#47CCB0"
           }
         ],
         "realProduction": {
@@ -5242,13 +5316,18 @@
           "ult4f3myf",
           "km3kc98p2",
           "ndcea98aa",
-          "dsa50ymze"
+          "dsa50ymze",
+          "jvpohj004",
+          "dxyho6f2c",
+          "7y7mns37q",
+          "kqoj4gfvr",
+          "24uhsflxj"
         ]
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-18T13:38:42.193Z"
+    "updatedAt": "2026-07-18T13:42:42.212Z"
   },
   "ordenesSap": [
     {
@@ -10019,6 +10098,26 @@
           "equipment": "ENFARDADORA",
           "stopType": "FALLA DE E/E",
           "turno": "Diurno"
+        },
+        {
+          "id": "stop-1784382615407",
+          "lineId": "L1",
+          "startTime": "2026-07-16T18:15:00.000Z",
+          "endTime": "2026-07-16T18:30:00.000Z",
+          "reason": "falla energia electrica",
+          "equipment": "ENFARDADORA",
+          "stopType": "FALLA DE E/E",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1784382651343",
+          "lineId": "L1",
+          "startTime": "2026-07-16T18:40:00.000Z",
+          "endTime": "2026-07-16T20:40:00.000Z",
+          "reason": "falla electrica general",
+          "equipment": "ENFARDADORA",
+          "stopType": "FALLA DE E/E",
+          "turno": "Diurno"
         }
       ],
       "efficiencyStore": {
@@ -10071,7 +10170,7 @@
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
-                "electricFailureStopsMin": "10",
+                "electricFailureStopsMin": "145",
                 "externalStopsMin": "526",
                 "scheduledBoxes": "17250",
                 "producedBoxes": "1140",

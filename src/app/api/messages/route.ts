@@ -104,9 +104,21 @@ export async function POST(request: Request) {
       createdAt: now,
     }));
     db.messages = [...db.messages, ...created];
-    if (db.messages.length > MAX_MESSAGES) {
-      db.messages = db.messages.slice(db.messages.length - MAX_MESSAGES);
+    db.messages.sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+    const byRecipient = new Map<string, Message[]>();
+    for (const m of db.messages) {
+      const key = m.recipient === 'all' ? '*' : m.recipient;
+      const list = byRecipient.get(key) ?? [];
+      list.push(m);
+      byRecipient.set(key, list);
     }
+    const trimmed: Message[] = [];
+    for (const list of byRecipient.values()) {
+      trimmed.push(...list.slice(0, MAX_MESSAGES));
+    }
+    db.messages = trimmed;
     writeDb(db);
 
     try {

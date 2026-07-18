@@ -1,114 +1,125 @@
 {
   "messages": [
     {
-      "id": "2026-07-17T21:17:28.169Z-l5qwa9d",
-      "title": "Importante",
-      "message": "ya se restauraron los datos completos de la planificación de la semana 29, estaremos avisan cuando se recuperen los datos de la planificación de la semana 30.",
+      "id": "2026-07-18T13:51:32.033Z-6gft88r",
+      "title": "Falla electrica",
+      "message": "por falla eléctrica se perdió parte del avance realizado el el modulo de planta, ya estoy trabajando para ponerme al día",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-07-18T13:51:32.033Z"
+    },
+    {
+      "id": "2026-07-18T13:47:27.461Z-f0ulfq3",
+      "title": "PDP semana 30",
+      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-07-17T21:17:28.169Z"
+      "read": false,
+      "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
-      "id": "2026-07-17T21:17:28.169Z-r0o83ov",
-      "title": "Importante",
-      "message": "ya se restauraron los datos completos de la planificación de la semana 29, estaremos avisan cuando se recuperen los datos de la planificación de la semana 30.",
+      "id": "2026-07-18T13:47:27.461Z-0ribwe8",
+      "title": "PDP semana 30",
+      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "anto.mds",
       "read": false,
-      "createdAt": "2026-07-17T21:17:28.169Z"
+      "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
-      "id": "2026-07-17T21:17:28.169Z-jryq9q2",
-      "title": "Importante",
-      "message": "ya se restauraron los datos completos de la planificación de la semana 29, estaremos avisan cuando se recuperen los datos de la planificación de la semana 30.",
+      "id": "2026-07-18T13:47:27.461Z-or9otoo",
+      "title": "PDP semana 30",
+      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodtj.mds",
       "read": false,
-      "createdAt": "2026-07-17T21:17:28.169Z"
+      "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
-      "id": "2026-07-17T21:17:28.169Z-t7wfw9o",
-      "title": "Importante",
-      "message": "ya se restauraron los datos completos de la planificación de la semana 29, estaremos avisan cuando se recuperen los datos de la planificación de la semana 30.",
+      "id": "2026-07-18T13:47:27.461Z-7rzd402",
+      "title": "PDP semana 30",
+      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-07-17T21:17:28.169Z"
+      "read": false,
+      "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
-      "id": "2026-07-17T21:17:28.169Z-qmc4tru",
-      "title": "Importante",
-      "message": "ya se restauraron los datos completos de la planificación de la semana 29, estaremos avisan cuando se recuperen los datos de la planificación de la semana 30.",
+      "id": "2026-07-18T13:47:27.461Z-brabhvc",
+      "title": "PDP semana 30",
+      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "cald.mds",
       "read": false,
-      "createdAt": "2026-07-17T21:17:28.169Z"
+      "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
-      "id": "2026-07-17T21:17:28.169Z-pt0vqh2",
-      "title": "Importante",
-      "message": "ya se restauraron los datos completos de la planificación de la semana 29, estaremos avisan cuando se recuperen los datos de la planificación de la semana 30.",
+      "id": "2026-07-18T13:47:27.461Z-qen5ctm",
+      "title": "PDP semana 30",
+      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-07-17T21:17:28.169Z"
+      "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
-      "id": "2026-07-17T21:17:28.169Z-fi1q6yq",
-      "title": "Importante",
-      "message": "ya se restauraron los datos completos de la planificación de la semana 29, estaremos avisan cuando se recuperen los datos de la planificación de la semana 30.",
+      "id": "2026-07-18T13:47:27.461Z-sb8ivfk",
+      "title": "PDP semana 30",
+      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "proc.mds",
       "read": false,
-      "createdAt": "2026-07-17T21:17:28.169Z"
+      "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
-      "id": "2026-07-17T21:17:28.169Z-fvqfga7",
-      "title": "Importante",
-      "message": "ya se restauraron los datos completos de la planificación de la semana 29, estaremos avisan cuando se recuperen los datos de la planificación de la semana 30.",
+      "id": "2026-07-18T13:47:27.461Z-swtor2t",
+      "title": "PDP semana 30",
+      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "g.tec.mds",
       "read": false,
-      "createdAt": "2026-07-17T21:17:28.169Z"
+      "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
-      "id": "2026-07-17T21:17:28.169Z-0454a0k",
-      "title": "Importante",
-      "message": "ya se restauraron los datos completos de la planificación de la semana 29, estaremos avisan cuando se recuperen los datos de la planificación de la semana 30.",
+      "id": "2026-07-18T13:47:27.461Z-bkj8bsf",
+      "title": "PDP semana 30",
+      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "enf.mds",
       "read": true,
-      "createdAt": "2026-07-17T21:17:28.169Z"
+      "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
-      "id": "2026-07-17T21:17:28.169Z-lfcnacs",
-      "title": "Importante",
-      "message": "ya se restauraron los datos completos de la planificación de la semana 29, estaremos avisan cuando se recuperen los datos de la planificación de la semana 30.",
+      "id": "2026-07-18T13:47:27.461Z-pwc31wd",
+      "title": "PDP semana 30",
+      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "etq.mds",
       "read": false,
-      "createdAt": "2026-07-17T21:17:28.169Z"
+      "createdAt": "2026-07-18T13:47:27.461Z"
     }
   ]
 }
