@@ -1,6 +1,39 @@
 {
   "messages": [
     {
+      "id": "2026-07-18T13:53:22.527Z-t3bhdua",
+      "title": "PDP S30",
+      "message": "la planificación de la semana 30 ya fue enviada por correo",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-07-18T13:53:22.527Z"
+    },
+    {
+      "id": "2026-07-18T13:53:22.527Z-dq6yqq4",
+      "title": "PDP S30",
+      "message": "la planificación de la semana 30 ya fue enviada por correo",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-07-18T13:53:22.527Z"
+    },
+    {
+      "id": "2026-07-18T13:53:22.527Z-efnmr5j",
+      "title": "PDP S30",
+      "message": "la planificación de la semana 30 ya fue enviada por correo",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-07-18T13:53:22.527Z"
+    },
+    {
       "id": "2026-07-18T13:51:32.033Z-6gft88r",
       "title": "Falla electrica",
       "message": "por falla eléctrica se perdió parte del avance realizado el el modulo de planta, ya estoy trabajando para ponerme al día",
@@ -23,6 +56,17 @@
       "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
+      "id": "2026-07-18T13:53:22.527Z-22lp20x",
+      "title": "PDP S30",
+      "message": "la planificación de la semana 30 ya fue enviada por correo",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-07-18T13:53:22.527Z"
+    },
+    {
       "id": "2026-07-18T13:47:27.461Z-0ribwe8",
       "title": "PDP semana 30",
       "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
@@ -32,6 +76,17 @@
       "recipient": "anto.mds",
       "read": false,
       "createdAt": "2026-07-18T13:47:27.461Z"
+    },
+    {
+      "id": "2026-07-18T13:53:22.527Z-6w0u7mz",
+      "title": "PDP S30",
+      "message": "la planificación de la semana 30 ya fue enviada por correo",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodtj.mds",
+      "read": false,
+      "createdAt": "2026-07-18T13:53:22.527Z"
     },
     {
       "id": "2026-07-18T13:47:27.461Z-or9otoo",
@@ -45,6 +100,17 @@
       "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
+      "id": "2026-07-18T13:53:22.527Z-1x0nbqm",
+      "title": "PDP S30",
+      "message": "la planificación de la semana 30 ya fue enviada por correo",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "procj.mds",
+      "read": false,
+      "createdAt": "2026-07-18T13:53:22.527Z"
+    },
+    {
       "id": "2026-07-18T13:47:27.461Z-7rzd402",
       "title": "PDP semana 30",
       "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
@@ -54,6 +120,17 @@
       "recipient": "procj.mds",
       "read": false,
       "createdAt": "2026-07-18T13:47:27.461Z"
+    },
+    {
+      "id": "2026-07-18T13:53:22.527Z-i6nqvqe",
+      "title": "PDP S30",
+      "message": "la planificación de la semana 30 ya fue enviada por correo",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-07-18T13:53:22.527Z"
     },
     {
       "id": "2026-07-18T13:47:27.461Z-brabhvc",
@@ -67,6 +144,17 @@
       "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
+      "id": "2026-07-18T13:53:22.527Z-pkk71z0",
+      "title": "PDP S30",
+      "message": "la planificación de la semana 30 ya fue enviada por correo",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt.mds",
+      "read": false,
+      "createdAt": "2026-07-18T13:53:22.527Z"
+    },
+    {
       "id": "2026-07-18T13:47:27.461Z-qen5ctm",
       "title": "PDP semana 30",
       "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
@@ -76,6 +164,17 @@
       "recipient": "prodt.mds",
       "read": false,
       "createdAt": "2026-07-18T13:47:27.461Z"
+    },
+    {
+      "id": "2026-07-18T13:53:22.527Z-hqqnx95",
+      "title": "PDP S30",
+      "message": "la planificación de la semana 30 ya fue enviada por correo",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-07-18T13:53:22.527Z"
     },
     {
       "id": "2026-07-18T13:47:27.461Z-sb8ivfk",
@@ -89,6 +188,17 @@
       "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
+      "id": "2026-07-18T13:53:22.527Z-j0cw7eq",
+      "title": "PDP S30",
+      "message": "la planificación de la semana 30 ya fue enviada por correo",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "g.tec.mds",
+      "read": false,
+      "createdAt": "2026-07-18T13:53:22.527Z"
+    },
+    {
       "id": "2026-07-18T13:47:27.461Z-swtor2t",
       "title": "PDP semana 30",
       "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
@@ -100,6 +210,17 @@
       "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
+      "id": "2026-07-18T13:53:22.527Z-irygk9t",
+      "title": "PDP S30",
+      "message": "la planificación de la semana 30 ya fue enviada por correo",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "enf.mds",
+      "read": true,
+      "createdAt": "2026-07-18T13:53:22.527Z"
+    },
+    {
       "id": "2026-07-18T13:47:27.461Z-bkj8bsf",
       "title": "PDP semana 30",
       "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
@@ -109,6 +230,17 @@
       "recipient": "enf.mds",
       "read": true,
       "createdAt": "2026-07-18T13:47:27.461Z"
+    },
+    {
+      "id": "2026-07-18T13:53:22.527Z-5nrvp2l",
+      "title": "PDP S30",
+      "message": "la planificación de la semana 30 ya fue enviada por correo",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "etq.mds",
+      "read": false,
+      "createdAt": "2026-07-18T13:53:22.527Z"
     },
     {
       "id": "2026-07-18T13:47:27.461Z-pwc31wd",

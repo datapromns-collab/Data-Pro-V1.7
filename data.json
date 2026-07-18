@@ -10118,6 +10118,76 @@
           "equipment": "ENFARDADORA",
           "stopType": "FALLA DE E/E",
           "turno": "Diurno"
+        },
+        {
+          "id": "stop-1784382747063",
+          "lineId": "L4",
+          "startTime": "2026-07-16T12:02:00.000Z",
+          "endTime": "2026-07-16T12:06:00.000Z",
+          "reason": "parada por etiquetadora",
+          "equipment": "ETIQUETADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1784382962807",
+          "lineId": "L4",
+          "startTime": "2026-07-16T12:45:00.000Z",
+          "endTime": "2026-07-16T12:48:00.000Z",
+          "reason": "parada por etiquetadora",
+          "equipment": "ETIQUETADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1784383006886",
+          "lineId": "L4",
+          "startTime": "2026-07-16T14:20:00.000Z",
+          "endTime": "2026-07-16T14:31:00.000Z",
+          "reason": "parada por llenadora",
+          "equipment": "LLENADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1784383046878",
+          "lineId": "L4",
+          "startTime": "2026-07-16T14:38:00.000Z",
+          "endTime": "2026-07-16T14:42:00.000Z",
+          "reason": "parada por paletizadora",
+          "equipment": "PALETIZADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1784383083102",
+          "lineId": "L4",
+          "startTime": "2026-07-16T15:58:00.000Z",
+          "endTime": "2026-07-16T16:06:00.000Z",
+          "reason": "parada por llenadora",
+          "equipment": "LLENADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1784383111886",
+          "lineId": "L4",
+          "startTime": "2026-07-16T17:22:00.000Z",
+          "endTime": "2026-07-16T17:29:00.000Z",
+          "reason": "parada por llenadora",
+          "equipment": "LLENADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1784383199222",
+          "lineId": "L4",
+          "startTime": "2026-07-16T13:10:00.000Z",
+          "endTime": "2026-07-16T13:20:00.000Z",
+          "reason": "falla electrica general",
+          "equipment": "ENFARDADORA",
+          "stopType": "FALLA DE E/E",
+          "turno": "Diurno"
         }
       ],
       "efficiencyStore": {
@@ -10734,8 +10804,8 @@
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
-                "electricFailureStopsMin": "0",
-                "externalStopsMin": "0",
+                "electricFailureStopsMin": "10",
+                "externalStopsMin": "37",
                 "scheduledBoxes": "",
                 "producedBoxes": "",
                 "efficiencyLine": "0.00"
