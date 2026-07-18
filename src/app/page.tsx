@@ -97,6 +97,10 @@ import { cn } from '@/lib/utils';
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7", "Línea 8"];
 
+const PARADA_OPCIONES = ["si", "no"];
+const MTTO_OPCIONES = ["preventivo", "correctivo", "predictivo", "correctivo planificado", "sin especificar"];
+const FALLA_OPCIONES = ["electrica", "electronica", "neumatica", "mecanica", "operativa", "material", "instrumentacion", "multiple", "programable"];
+
 const TIPOS_PARADA = ["MECÁNICO", "ELÉCTRICO", "PROCESO", "CAMBIO DE PRODUCTO", "CAMBIO DE FORMATO", "MANTENIMIENTO PREVENTIVO", "FALLA DE MATERIA PRIMA"];
 const TIPOS_PARADA_INFORME_OPERACIONAL = ["PROGRAMADA", "AVERÍA", "OPERACIONAL", "AUSENTISMO", "FALLA DE E/E", "ADECUACIONES", "SALA DE MÁQUINAS", "SALA DE JARABE", "PTAB", "INSUMOS", "CALIDAD"];
 const ZONAS = ["Llenado", "Etiquetado", "Empaque", "Preforma", "Soplado", "Lavado CIP", "Almacén", "General"];
@@ -1740,7 +1744,7 @@ export default function PlannerPage() {
                                             })
                                             .map((row) => {
                                               const rowEdit = editingRows[row.id] || row;
-                                              const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','inicioParada','finParada','tMtto','tipoParada','mttoEsp','descripcionFalla','descripcionAccion','observaciones']);
+                                              const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','inicioParada','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones']);
                                               const editable = (campo: string) => camposEditables.has(campo);
                                               return (
                                             <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
@@ -1759,9 +1763,30 @@ export default function PlannerPage() {
                                                 {editable('inicioParada') ? <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.inicioParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioParada: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{rowEdit.inicioParada}</TableCell>}
                                                 {editable('tMtto') ? <TableCell className="px-2 py-2"><Input value={rowEdit.tMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, tMtto: e.target.value}})} className="h-8 text-[10px] w-16" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{rowEdit.tMtto}</TableCell>}
                                                 {editable('finParada') ? <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.finParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finParada: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{rowEdit.finParada}</TableCell>}
-                                                <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.tipoParada}</TableCell>
-                                                <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.mtto}</TableCell>
-                                                <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[120px] truncate" title={rowEdit.falla}>{rowEdit.falla}</TableCell>
+                                                 {editable('tipoParada') ? <TableCell className="px-2 py-2">
+                                                   <Select value={rowEdit.tipoParada || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, tipoParada: v}})}>
+                                                     <SelectTrigger className="h-8 text-[10px] w-28"><SelectValue placeholder="PARADA?" /></SelectTrigger>
+                                                     <SelectContent>
+                                                       {PARADA_OPCIONES.map((op) => <SelectItem key={op} value={op}>{op}</SelectItem>)}
+                                                     </SelectContent>
+                                                   </Select>
+                                                 </TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.tipoParada}</TableCell>}
+                                                 {editable('mtto') ? <TableCell className="px-2 py-2">
+                                                   <Select value={rowEdit.mtto || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, mtto: v}})}>
+                                                     <SelectTrigger className="h-8 text-[10px] w-36"><SelectValue placeholder="MTTO" /></SelectTrigger>
+                                                     <SelectContent>
+                                                       {MTTO_OPCIONES.map((op) => <SelectItem key={op} value={op}>{op}</SelectItem>)}
+                                                     </SelectContent>
+                                                   </Select>
+                                                 </TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.mtto}</TableCell>}
+                                                 {editable('falla') ? <TableCell className="px-2 py-2">
+                                                   <Select value={rowEdit.falla || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, falla: v}})}>
+                                                     <SelectTrigger className="h-8 text-[10px] w-36"><SelectValue placeholder="FALLA" /></SelectTrigger>
+                                                     <SelectContent>
+                                                       {FALLA_OPCIONES.map((op) => <SelectItem key={op} value={op}>{op}</SelectItem>)}
+                                                     </SelectContent>
+                                                   </Select>
+                                                 </TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[120px] truncate" title={rowEdit.falla}>{rowEdit.falla}</TableCell>}
                                                 {editable('mttoEsp') ? <TableCell className="px-2 py-2"><Input value={rowEdit.mttoEsp || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, mttoEsp: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{rowEdit.mttoEsp}</TableCell>}
                                                 {editable('descripcionFalla') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionFalla || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionFalla: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={rowEdit.descripcionFalla}>{rowEdit.descripcionFalla}</TableCell>}
                                                 {editable('descripcionAccion') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionAccion || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionAccion: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={rowEdit.descripcionAccion}>{rowEdit.descripcionAccion}</TableCell>}
