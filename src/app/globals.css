@@ -193,11 +193,18 @@
   display: none;
 }
 
-/* Tabla de órdenes de trabajo: scroll fluido y barras delgadas */
+/* Tabla de órdenes de trabajo: scroll fluido y barras delgadas (un solo scroll) */
 .tabla-ordenes-scroll {
   scrollbar-width: thin;
   scrollbar-color: #94a3b8 transparent;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+}
+
+.tabla-ordenes-scroll > div,
+.tabla-ordenes-scroll > table {
+  width: max-content;
 }
 
 .tabla-ordenes-scroll::-webkit-scrollbar {

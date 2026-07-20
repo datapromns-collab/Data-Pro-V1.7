@@ -1872,11 +1872,11 @@ export default function PlannerPage() {
                                           </TableCell>
                                         </TableRow>
                                       )}
-                                         </TableBody>
-                                      </Table>
+                                          </TableBody>
+                                         </Table>
                                       </div>
                                    </div>
-                                 </div>
+                                </div>
                               )}
                               {paradasSubTab === 'ordenes-trabajo' && (
                                 <div className="flex flex-col h-full gap-3">
@@ -1912,9 +1912,8 @@ export default function PlannerPage() {
                                         }).length} registros
                                     </span>
                                   </div>
-                                  <div className="rounded-lg border border-slate-200 overflow-auto max-h-[62vh] tabla-ordenes-scroll" style={{ scrollBehavior: 'smooth' }}>
-                                       <div className="min-w-[2200px]">
-                                      <Table>
+                                  <div className="rounded-lg border border-slate-200 overflow-auto max-h-[62vh] tabla-ordenes-scroll overscroll-contain" style={{ scrollBehavior: 'smooth' }}>
+                                       <Table className="min-w-[2200px] w-max">
                                      <TableHeader className="sticky top-0 z-30">
                                          <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 sticky left-0 z-40 bg-[#1a3d6b]">I-FECHA</TableHead>
@@ -2034,15 +2033,14 @@ export default function PlannerPage() {
                                                </TableCell>
                                              </TableRow>
                                            )}
-                                        </TableBody>
-                                       </Table>
-                                       </div>
+                                         </TableBody>
+                                         </Table>
+                                      </div>
                                     </div>
-                                  </div>
                                   )}
-                               </div>
-                             </div>
-                           )}
+                                </div>
+                              </div>
+                            )}
                          {activeTab === 'produccion' && (
                            <>
                              <div className="flex items-center justify-between gap-2 mb-4 no-print">
