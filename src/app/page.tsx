@@ -42,7 +42,7 @@ import {
   Check,
   X
 } from 'lucide-react';
-import { PRODUCT_LIST } from '@/lib/planner-utils';
+import { PRODUCT_LIST, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, PRODUCTION_START_HOUR } from '@/lib/planner-utils';
 import ProducidasTable from '@/components/planner/ProducidasTable';import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
 import { TaskDialog } from '@/components/planner/TaskDialog';
@@ -326,7 +326,18 @@ export default function PlannerPage() {
   const [planificadasTurnoSubTab, setPlanificadasTurnoSubTab] = useState('diurno');
   const [producidasSubTab, setProducidasSubTab] = useState('porturno');
   const [producidasTurnoSubTab, setProducidasTurnoSubTab] = useState('diurno');
-  const [produccionFecha, setProduccionFecha] = useState<Date | undefined>(new Date());
+  const [produccionFecha, setProduccionFecha] = useState<Date | undefined>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('selected-produccion-fecha');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed) return new Date(parsed);
+        }
+      } catch (e) {}
+    }
+    return new Date();
+  });
   const [reporteSubTab, setReporteSubTab] = useState('diario');
   const [turnoSubTab, setTurnoSubTab] = useState('diurno');
   const [printMode, setPrintMode] = useState('');
@@ -337,6 +348,75 @@ export default function PlannerPage() {
   const [selectedFechaSap, setSelectedFechaSap] = useState<Date | undefined>(undefined);
   const [selectedFechaSapInitialized, setSelectedFechaSapInitialized] = useState(false);
   const [seguimientoVista, setSeguimientoVista] = useState<'enfardadora' | 'etiquetadora'>('enfardadora');
+
+  const PROD_DAY_START_HOUR = 7;
+  const PROD_DAY_END_NEXT_HOUR = 7;
+
+  const repartirTurno = (task: ScheduledTask, fecha: Date) => {
+    const prodDayStart = new Date(fecha);
+    prodDayStart.setHours(PROD_DAY_START_HOUR, 0, 0, 0);
+    const prodDayEnd = new Date(prodDayStart);
+    prodDayEnd.setDate(prodDayEnd.getDate() + 1);
+    prodDayEnd.setHours(PROD_DAY_END_NEXT_HOUR, 0, 0, 0);
+
+    const totalTaskDuration = task.endTime.getTime() - task.startTime.getTime();
+    if (totalTaskDuration <= 0) return { diurno: 0, nocturno: 0 };
+
+    const currentStart = task.startTime < prodDayStart ? prodDayStart : task.startTime;
+    const currentEnd = task.endTime > prodDayEnd ? prodDayEnd : task.endTime;
+    if (currentStart >= currentEnd) return { diurno: 0, nocturno: 0 };
+
+    const qty = Number(task.quantity) || 0;
+    const splitTime = new Date(prodDayStart);
+    splitTime.setHours(SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, 0, 0);
+
+    let diurno = 0;
+    let nocturno = 0;
+    if (currentStart < splitTime) {
+      const dEnd = currentEnd < splitTime ? currentEnd : splitTime;
+      diurno = ((dEnd.getTime() - currentStart.getTime()) / totalTaskDuration) * qty;
+    }
+    if (currentEnd > splitTime) {
+      const nStart = currentStart > splitTime ? currentStart : splitTime;
+      nocturno = ((currentEnd.getTime() - nStart.getTime()) / totalTaskDuration) * qty;
+    }
+
+    return { diurno, nocturno };
+  };
+
+  const sumarTablaTurno = (turno: 'diurno' | 'nocturno') => {
+    const fecha = produccionFecha || new Date();
+    const tabla: Record<string, Record<number, number>> = {};
+    PRODUCT_LIST.forEach(sabor => {
+      tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    });
+    tasks.forEach(task => {
+      const sabor = String(task.name || '').trim();
+      const linea = Number(task.lineId);
+      if (!sabor || !linea || linea < 1 || linea > 7) return;
+      const { diurno, nocturno } = repartirTurno(task, fecha);
+      const valor = turno === 'diurno' ? diurno : nocturno;
+      if (valor > 0) {
+        tabla[sabor][linea] = (tabla[sabor][linea] || 0) + Math.round(valor);
+      }
+    });
+    return tabla;
+  };
+
+  const planificadasTablaDiario = useMemo(() => sumarTablaTurno('diurno'), [produccionFecha, tasks]);
+  const planificadasTabla = useMemo(() => sumarTablaTurno('nocturno'), [produccionFecha, tasks]);
+  const planificadasTablaTotal = useMemo(() => {
+    const diurno = sumarTablaTurno('diurno');
+    const nocturno = sumarTablaTurno('nocturno');
+    const tabla: Record<string, Record<number, number>> = {};
+    PRODUCT_LIST.forEach(sabor => {
+      tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+      [1, 2, 3, 4, 5, 6, 7].forEach(linea => {
+        tabla[sabor][linea] = (diurno[sabor]?.[linea] || 0) + (nocturno[sabor]?.[linea] || 0);
+      });
+    });
+    return tabla;
+  }, [produccionFecha, tasks]);
 
   useEffect(() => {
     try {
@@ -365,6 +445,17 @@ export default function PlannerPage() {
       console.error('Error guardando selectedFechaSap en localStorage', e);
     }
   }, [selectedFechaSap, selectedFechaSapInitialized]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      if (produccionFecha) {
+        localStorage.setItem('selected-produccion-fecha', JSON.stringify(produccionFecha));
+      }
+    } catch (e) {
+      console.error('Error guardando selectedProduccionFecha en localStorage', e);
+    }
+  }, [produccionFecha]);
 
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
@@ -1937,115 +2028,127 @@ export default function PlannerPage() {
                                                       <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
                                                     </tr>
                                                   </thead>
-                                                  <tbody>
-                                                    {PRODUCT_LIST.map((sabor) => (
-                                                      <tr key={sabor} className="even:bg-slate-50/60">
-                                                        <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
-                                                        {[1,2,3,4,5,6,7].map(linea => (
-                                                          <td key={linea} className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums"></td>
-                                                        ))}
-                                                        <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums"></td>
+                                                <tbody>
+                                                      {PRODUCT_LIST.map((sabor) => {
+                                                        const rowTotal = [1,2,3,4,5,6,7].reduce((sum, linea) => sum + (planificadasTablaDiario[sabor]?.[linea] || 0), 0);
+                                                        return (
+                                                        <tr key={sabor} className="even:bg-slate-50/60">
+                                                          <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
+                                                          {[1,2,3,4,5,6,7].map(linea => (
+                                                            <td key={linea} className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{planificadasTablaDiario[sabor]?.[linea] || ''}</td>
+                                                          ))}
+                                                          <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{rowTotal || ''}</td>
+                                                        </tr>
+                                                        );
+                                                      })}
+                                                      <tr className="bg-slate-100 font-black">
+                                                        <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
+                                                        {[1,2,3,4,5,6,7].map(linea => {
+                                                          const totalLinea = PRODUCT_LIST.reduce((sum, sabor) => sum + (planificadasTablaDiario[sabor]?.[linea] || 0), 0);
+                                                          return <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalLinea || ''}</td>;
+                                                        })}
+                                                        <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{PRODUCT_LIST.reduce((sum, sabor) => sum + [1,2,3,4,5,6,7].reduce((s, l) => s + (planificadasTablaDiario[sabor]?.[l] || 0), 0), 0) || ''}</td>
                                                       </tr>
-                                                    ))}
-                                                    <tr className="bg-slate-100 font-black">
-                                                      <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
-                                                      {[1,2,3,4,5,6,7].map(linea => (
-                                                        <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums"></td>
-                                                      ))}
-                                                      <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums"></td>
-                                                    </tr>
                                                   </tbody>
                                                 </table>
                                               </div>
                                             </div>
                                           </div>
                                         )}
-                                        {planificadasTurnoSubTab === 'nocturno' && (
-                                          <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                                            <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-                                              <div className="w-2 h-2 rounded-full bg-sky-500" />
-                                              <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                                                Nocturno - Planificadas
-                                              </h4>
-                                            </div>
-                                            <div className="p-4">
-                                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                                <table className="w-full border-collapse text-center">
-                                                  <thead>
-                                                    <tr className="bg-slate-100">
-                                                      <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
-                                                      {[1,2,3,4,5,6,7].map(n => (
-                                                        <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
-                                                      ))}
-                                                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
-                                                    </tr>
-                                                  </thead>
-                                                  <tbody>
-                                                    {PRODUCT_LIST.map((sabor) => (
-                                                      <tr key={sabor} className="even:bg-slate-50/60">
-                                                        <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
-                                                        {[1,2,3,4,5,6,7].map(linea => (
-                                                          <td key={linea} className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums"></td>
-                                                        ))}
-                                                        <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums"></td>
-                                                      </tr>
-                                                    ))}
-                                                    <tr className="bg-slate-100 font-black">
-                                                      <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
-                                                      {[1,2,3,4,5,6,7].map(linea => (
-                                                        <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums"></td>
-                                                      ))}
-                                                      <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums"></td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        )}
+                                         {planificadasTurnoSubTab === 'nocturno' && (
+                                           <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                                             <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                                               <div className="w-2 h-2 rounded-full bg-sky-500" />
+                                               <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                                                 Nocturno - Planificadas
+                                               </h4>
+                                             </div>
+                                             <div className="p-4">
+                                               <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                 <table className="w-full border-collapse text-center">
+                                                   <thead>
+                                                     <tr className="bg-slate-100">
+                                                       <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
+                                                       {[1,2,3,4,5,6,7].map(n => (
+                                                         <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
+                                                       ))}
+                                                       <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
+                                                     </tr>
+                                                   </thead>
+                                                <tbody>
+                                                       {PRODUCT_LIST.map((sabor) => {
+                                                         const rowTotal = [1,2,3,4,5,6,7].reduce((sum, linea) => sum + (planificadasTabla[sabor]?.[linea] || 0), 0);
+                                                         return (
+                                                         <tr key={sabor} className="even:bg-slate-50/60">
+                                                           <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
+                                                           {[1,2,3,4,5,6,7].map(linea => (
+                                                             <td key={linea} className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{planificadasTabla[sabor]?.[linea] || ''}</td>
+                                                           ))}
+                                                           <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{rowTotal || ''}</td>
+                                                         </tr>
+                                                         );
+                                                       })}
+                                                       <tr className="bg-slate-100 font-black">
+                                                         <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
+                                                         {[1,2,3,4,5,6,7].map(linea => {
+                                                           const totalLinea = PRODUCT_LIST.reduce((sum, sabor) => sum + (planificadasTabla[sabor]?.[linea] || 0), 0);
+                                                           return <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalLinea || ''}</td>;
+                                                         })}
+                                                         <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{PRODUCT_LIST.reduce((sum, sabor) => sum + [1,2,3,4,5,6,7].reduce((s, l) => s + (planificadasTabla[sabor]?.[l] || 0), 0), 0) || ''}</td>
+                                                       </tr>
+                                                   </tbody>
+                                                 </table>
+                                               </div>
+                                             </div>
+                                           </div>
+                                         )}
                                      </div>
                                     ) : (
-                                       <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                                         <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-                                           <div className="w-2 h-2 rounded-full bg-sky-500" />
-                                           <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                                             Diario - Planificadas
-                                           </h4>
-                                         </div>
-                                         <div className="p-4">
-                                           <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                             <table className="w-full border-collapse text-center">
-                                               <thead>
-                                                 <tr className="bg-slate-100">
-                                                   <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
-                                                   {[1,2,3,4,5,6,7].map(n => (
-                                                     <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
-                                                   ))}
-                                                   <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
-                                                 </tr>
-                                               </thead>
-                                               <tbody>
-                                                 {PRODUCT_LIST.map((sabor) => (
-                                                   <tr key={sabor} className="even:bg-slate-50/60">
-                                                     <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
-                                                     {[1,2,3,4,5,6,7].map(linea => (
-                                                       <td key={linea} className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums"></td>
-                                                     ))}
-                                                     <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums"></td>
-                                                   </tr>
-                                                 ))}
-                                                 <tr className="bg-slate-100 font-black">
-                                                   <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
-                                                   {[1,2,3,4,5,6,7].map(linea => (
-                                                     <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums"></td>
-                                                   ))}
-                                                   <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums"></td>
-                                                 </tr>
-                                               </tbody>
-                                             </table>
-                                           </div>
-                                         </div>
-                                       </div>
+                                        <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                                          <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                                            <div className="w-2 h-2 rounded-full bg-sky-500" />
+                                            <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                                              Diario - Planificadas
+                                            </h4>
+                                          </div>
+                                          <div className="p-4">
+                                            <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                              <table className="w-full border-collapse text-center">
+                                                <thead>
+                                                  <tr className="bg-slate-100">
+                                                    <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
+                                                    {[1,2,3,4,5,6,7].map(n => (
+                                                      <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
+                                                    ))}
+                                                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                      {PRODUCT_LIST.map((sabor) => {
+                                                        const rowTotal = [1,2,3,4,5,6,7].reduce((sum, linea) => sum + (planificadasTablaTotal[sabor]?.[linea] || 0), 0);
+                                                        return (
+                                                        <tr key={sabor} className="even:bg-slate-50/60">
+                                                          <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
+                                                          {[1,2,3,4,5,6,7].map(linea => (
+                                                            <td key={linea} className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{planificadasTablaTotal[sabor]?.[linea] || ''}</td>
+                                                          ))}
+                                                          <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{rowTotal || ''}</td>
+                                                        </tr>
+                                                        );
+                                                      })}
+                                                      <tr className="bg-slate-100 font-black">
+                                                        <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
+                                                        {[1,2,3,4,5,6,7].map(linea => {
+                                                          const totalLinea = PRODUCT_LIST.reduce((sum, sabor) => sum + (planificadasTablaTotal[sabor]?.[linea] || 0), 0);
+                                                          return <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalLinea || ''}</td>;
+                                                        })}
+                                                        <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{PRODUCT_LIST.reduce((sum, sabor) => sum + [1,2,3,4,5,6,7].reduce((s, l) => s + (planificadasTablaTotal[sabor]?.[l] || 0), 0), 0) || ''}</td>
+                                                      </tr>
+                                                </tbody>
+                                              </table>
+                                            </div>
+                                          </div>
+                                        </div>
                                      )
                                   )}
                                   {produccionSubTab === 'producidas' && (

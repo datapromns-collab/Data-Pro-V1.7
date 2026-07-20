@@ -5327,7 +5327,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-18T21:06:09.838Z"
+    "updatedAt": "2026-07-20T11:32:42.164Z"
   },
   "ordenesSap": [
     {
@@ -7261,12 +7261,12 @@
           "fechaInicio": "2026-07-18",
           "ticket1": "17454",
           "cajas1": 9600,
-          "ticket2": "",
+          "ticket2": "17455",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 320,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 14650
         }
       ]
     },
@@ -10208,7 +10208,7 @@
                 "designCapacity": "60",
                 "realSpeed": "32",
                 "scheduledHours": "11.5",
-                "scheduledStops": "43810",
+                "scheduledStops": "44200",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "300",
