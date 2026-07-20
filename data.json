@@ -11935,18 +11935,18 @@
         "fecha": "2026-07-20",
         "semana": 30,
         "turno": "DIURNO",
-        "operador": "d6515",
+        "operador": "jhtrgsd",
         "linea": "Línea 1",
         "equipo": "",
-        "tipoParada": "MECÁNICO",
-        "inicioParada": "20:00",
-        "finParada": "23:02",
-        "totalMin": "182",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "19:05",
+        "finParada": "20:00",
+        "totalMin": "55",
         "zona": "Llenado",
         "falla": "",
-        "orden": "g251256",
+        "orden": "athgbetrb354668",
         "observaciones": "",
-        "id": 1784552003625
+        "id": 1784553585913
       }
     ],
     "planta-ordenes-trabajo": [
@@ -12043,7 +12043,8 @@
         "27075259-1875-4e28-9cff-154d4c225816",
         "id-mrnznnix-ulvhgn2h",
         "id-mrnzoo8i-1ta553gt",
-        "274f6505-c448-4c2f-93ac-4e49846fbfc6"
+        "274f6505-c448-4c2f-93ac-4e49846fbfc6",
+        "1784552003625"
       ]
     },
     "planta-ordenes-trabajo": {

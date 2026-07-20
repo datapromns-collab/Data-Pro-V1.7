@@ -922,8 +922,9 @@ export default function OrdenesSapModule({
     const base = ordenes.filter(o => o.linea === activeLinea);
     if (!selectedFecha) return base;
     const semanaSeleccionada = getISOWeek(selectedFecha);
-    const coincide = base.some(o => o.semana === semanaSeleccionada);
-    if (!coincide) return base;
+    // Separa estrictamente por semana ISO: solo se muestran las órdenes
+    // de la semana seleccionada. Las demás quedan guardadas y se muestran
+    // al volver a seleccionar su semana correspondiente.
     return base.filter(o => o.semana === semanaSeleccionada);
   }, [ordenes, activeLinea, selectedFecha]);
 
