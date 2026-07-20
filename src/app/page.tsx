@@ -98,7 +98,36 @@ import { cn } from '@/lib/utils';
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7", "Línea 8"];
 
 const normalizarHora = (valor: string): string => {
-  let v = valor.replace(/[^0-9]/g, '').slice(0, 4);
+  if (!valor) return '';
+  const s = String(valor).trim();
+
+  const extraerDeFecha = (str: string): string | null => {
+    const match = str.match(/(\d{1,2})[:\s](\d{1,2})(?::(\d{1,2}))?/);
+    if (match) {
+      let h = Math.min(Math.max(parseInt(match[1], 10), 0), 23);
+      const m = Math.min(Math.max(parseInt(match[2], 10), 0), 59);
+      const ampm = str.match(/\s*(am|pm|a\.m\.|p\.m\.)\s*$/i);
+      if (ampm) {
+        const isPm = /p/i.test(ampm[1]);
+        if (isPm && h < 12) h += 12;
+        if (!isPm && h === 12) h = 0;
+      }
+      return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+    }
+    return null;
+  };
+
+  const desdeFecha = extraerDeFecha(s);
+  if (desdeFecha) return desdeFecha;
+
+  const soloDigitos = s.replace(/[^0-9]/g, '');
+  if (soloDigitos.length >= 8) {
+    const hh = Math.min(Math.max(parseInt(soloDigitos.slice(0, 2), 10), 0), 23);
+    const mm = Math.min(Math.max(parseInt(soloDigitos.slice(2, 4), 10), 0), 59);
+    return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+  }
+
+  let v = soloDigitos.slice(0, 4);
   if (v.length >= 3) {
     const h = parseInt(v.slice(0, 2), 10);
     const m = parseInt(v.slice(2), 10);
@@ -271,6 +300,7 @@ export default function PlannerPage() {
   const ordenesTrabajoStore = useRemoteCollection<any[]>('planta-ordenes-trabajo', []);
   const informesOperacionales = informesOperacionalesStore.data;
   const setInformesOperacionales = informesOperacionalesStore.setData;
+  const removeInformeOperacional = informesOperacionalesStore.removeItem;
   const ordenesTrabajo = ordenesTrabajoStore.data;
   const setOrdenesTrabajo = ordenesTrabajoStore.setData;
   const migracionPlantaHechaRef = useRef(false);
@@ -317,9 +347,9 @@ export default function PlannerPage() {
         fechaParada: '',
         inicioMtto: '',
         finMtto: '',
-        inicioParada: '',
+        inicioParada: normalizarHora(r.inicioParada || ''),
         tMtto: '',
-        finParada: '',
+        finParada: normalizarHora(r.finParada || ''),
         tipoParada: '',
         mtto: '',
         falla: '',
@@ -1678,11 +1708,11 @@ export default function PlannerPage() {
                                       }).length} registros
                                    </span>
                                  </div>
-                                 <div className="rounded-lg border border-slate-200 overflow-x-auto overflow-y-auto max-h-[60vh]">
-                                   <div className="min-w-[1200px]">
-                                     <Table>
-                                    <TableHeader>
-                                      <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
+                                  <div className="rounded-lg border border-slate-200 overflow-auto max-h-[62vh] tabla-ordenes-scroll" style={{ scrollBehavior: 'smooth' }}>
+                                    <div className="min-w-[1200px]">
+                                      <Table>
+                                     <TableHeader className="sticky top-0 z-30">
+                                       <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Fecha</TableHead>
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Sem</TableHead>
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Turno</TableHead>
@@ -1717,8 +1747,8 @@ export default function PlannerPage() {
                                                 <TableCell className="px-2 py-2"><Input value={editForm.linea || ''} onChange={(e) => setEditForm({...editForm, linea: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                 <TableCell className="px-2 py-2"><Input value={editForm.equipo || ''} onChange={(e) => setEditForm({...editForm, equipo: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                 <TableCell className="px-2 py-2"><Input value={editForm.tipoParada || ''} onChange={(e) => setEditForm({...editForm, tipoParada: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                                 <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="time" value={editForm.inicioParada || ''} onChange={(e) => setEditForm({...editForm, inicioParada: e.target.value})} className="h-8 text-[10px] w-24" /></TableCell>
-                                                 <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="time" value={editForm.finParada || ''} onChange={(e) => setEditForm({...editForm, finParada: e.target.value})} className="h-8 text-[10px] w-24" /></TableCell>
+                                                  <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={editForm.inicioParada || ''} onChange={(e) => setEditForm({...editForm, inicioParada: normalizarHora(e.target.value)})} className="h-8 text-[10px] w-24" /></TableCell>
+                                                  <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={editForm.finParada || ''} onChange={(e) => setEditForm({...editForm, finParada: normalizarHora(e.target.value)})} className="h-8 text-[10px] w-24" /></TableCell>
                                                   <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" value={editForm.totalMin ?? ''} readOnly className="h-8 text-[10px] w-16 bg-slate-100" /></TableCell>
                                                  <TableCell className="px-2 py-2 max-w-[180px]"><Input value={editForm.falla || ''} onChange={(e) => setEditForm({...editForm, falla: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
                                                 <TableCell className="px-2 py-2"><Input value={editForm.orden || ''} onChange={(e) => setEditForm({...editForm, orden: e.target.value})} className="h-8 text-[10px]" /></TableCell>
@@ -1758,15 +1788,15 @@ export default function PlannerPage() {
                                                 <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap">{row.linea}</TableCell>
                                                 <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.equipo}</TableCell>
                                                 <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.tipoParada}</TableCell>
-                                                 <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums whitespace-nowrap">{row.inicioParada}</TableCell>
-                                                 <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums whitespace-nowrap">{row.finParada}</TableCell>
+                                                  <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums whitespace-nowrap">{normalizarHora(row.inicioParada)}</TableCell>
+                                                  <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums whitespace-nowrap">{normalizarHora(row.finParada)}</TableCell>
                                                   <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums whitespace-nowrap">{row.totalMin} min</TableCell>
                                                  <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.falla}>{row.falla}</TableCell>
                                                 <TableCell className="px-2 py-2 text-[11px] font-mono text-slate-600 whitespace-nowrap">{row.orden}</TableCell>
                                                 <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[200px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
                                                  <TableCell className="px-2 py-2 flex items-center gap-1">
                                                    <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingId(row.id); setEditForm(row); }}><Pencil className="h-3.5 w-3.5" /></Button>
-                                                   <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => { setInformesOperacionales(prev => prev.filter(r => r.id !== row.id)); setEditingId(null); setEditForm({}); }}><Trash2 className="h-3.5 w-3.5" /></Button>
+                                                    <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => { removeInformeOperacional(row.id); setEditingId(null); setEditForm({}); }}><Trash2 className="h-3.5 w-3.5" /></Button>
                                                  </TableCell>
                                               </>
                                             )}
@@ -1823,7 +1853,7 @@ export default function PlannerPage() {
                                         }).length} registros
                                     </span>
                                   </div>
-                                  <div className="rounded-lg border border-slate-200 overflow-hidden overflow-auto max-h-[62vh] tabla-ordenes-scroll" style={{ scrollBehavior: 'smooth' }}>
+                                  <div className="rounded-lg border border-slate-200 overflow-auto max-h-[62vh] tabla-ordenes-scroll" style={{ scrollBehavior: 'smooth' }}>
                                       <div className="min-w-[1700px]">
                                       <Table>
                                      <TableHeader className="sticky top-0 z-30">
@@ -1879,11 +1909,11 @@ export default function PlannerPage() {
                                                  {editable('aviso') ? <TableCell className="px-2 py-2"><Input value={rowEdit.aviso || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, aviso: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.aviso}</TableCell>}
                                                  <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.maquina}</TableCell>
                                                   {editable('fechaParada') ? <TableCell className="px-2 py-2"><Input type="date" value={rowEdit.fechaParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, fechaParada: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{rowEdit.fechaParada}</TableCell>}
-                                                 {editable('inicioMtto') ? <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.inicioMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioMtto: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{rowEdit.inicioMtto}</TableCell>}
-                                                 {editable('finMtto') ? <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.finMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finMtto: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{rowEdit.finMtto}</TableCell>}
-                                                 {editable('inicioParada') ? <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.inicioParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioParada: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{rowEdit.inicioParada}</TableCell>}
-                                                 {editable('tMtto') ? <TableCell className="px-2 py-2"><Input value={rowEdit.tMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, tMtto: e.target.value}})} className="h-8 text-[10px] w-16" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{rowEdit.tMtto}</TableCell>}
-                                                 {editable('finParada') ? <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.finParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finParada: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{rowEdit.finParada}</TableCell>}
+                                                  {editable('inicioMtto') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={rowEdit.inicioMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioMtto: normalizarHora(e.target.value)}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{normalizarHora(rowEdit.inicioMtto)}</TableCell>}
+                                                  {editable('finMtto') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={rowEdit.finMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finMtto: normalizarHora(e.target.value)}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{normalizarHora(rowEdit.finMtto)}</TableCell>}
+                                                   {editable('inicioParada') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={rowEdit.inicioParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioParada: normalizarHora(e.target.value)}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{normalizarHora(rowEdit.inicioParada)}</TableCell>}
+                                                  {editable('tMtto') ? <TableCell className="px-2 py-2"><Input value={rowEdit.tMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, tMtto: e.target.value}})} className="h-8 text-[10px] w-16" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{rowEdit.tMtto}</TableCell>}
+                                                   {editable('finParada') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={rowEdit.finParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finParada: normalizarHora(e.target.value)}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{normalizarHora(rowEdit.finParada)}</TableCell>}
                                                   {editable('tipoParada') ? <TableCell className="px-2 py-2">
                                                     <Select value={rowEdit.tipoParada || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, tipoParada: v}})}>
                                                       <SelectTrigger className="h-8 text-[10px] w-28"><SelectValue placeholder="PARADA?" /></SelectTrigger>
@@ -2722,26 +2752,26 @@ export default function PlannerPage() {
                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fecha Parada</label>
                    <Input type="date" value={ordenFormData.fechaParada} onChange={(e) => setOrdenFormData({...ordenFormData, fechaParada: e.target.value})} className="h-9 text-[11px]" />
                  </div>
-                 <div className="space-y-2">
-                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Mantenimiento</label>
-                   <Input type="time" value={ordenFormData.inicioMtto} onChange={(e) => setOrdenFormData({...ordenFormData, inicioMtto: e.target.value})} className="h-9 text-[11px]" />
-                 </div>
-                 <div className="space-y-2">
-                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Mantenimiento</label>
-                   <Input type="time" value={ordenFormData.finMtto} onChange={(e) => setOrdenFormData({...ordenFormData, finMtto: e.target.value})} className="h-9 text-[11px]" />
-                 </div>
-                 <div className="space-y-2">
-                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Parada</label>
-                   <Input type="time" value={ordenFormData.inicioParada} onChange={(e) => setOrdenFormData({...ordenFormData, inicioParada: e.target.value})} className="h-9 text-[11px]" />
-                 </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Mantenimiento</label>
+                    <Input type="text" inputMode="numeric" placeholder="HH:MM" value={ordenFormData.inicioMtto} onChange={(e) => setOrdenFormData({...ordenFormData, inicioMtto: normalizarHora(e.target.value)})} className="h-9 text-[11px]" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Mantenimiento</label>
+                    <Input type="text" inputMode="numeric" placeholder="HH:MM" value={ordenFormData.finMtto} onChange={(e) => setOrdenFormData({...ordenFormData, finMtto: normalizarHora(e.target.value)})} className="h-9 text-[11px]" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Parada</label>
+                    <Input type="text" inputMode="numeric" placeholder="HH:MM" value={ordenFormData.inicioParada} onChange={(e) => setOrdenFormData({...ordenFormData, inicioParada: normalizarHora(e.target.value)})} className="h-9 text-[11px]" />
+                  </div>
                  <div className="space-y-2">
                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">T-MTTO</label>
                    <Input type="text" value={ordenFormData.tMtto} onChange={(e) => setOrdenFormData({...ordenFormData, tMtto: e.target.value})} className="h-9 text-[11px]" placeholder="min" />
                  </div>
-                 <div className="space-y-2">
-                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Parada</label>
-                   <Input type="time" value={ordenFormData.finParada} onChange={(e) => setOrdenFormData({...ordenFormData, finParada: e.target.value})} className="h-9 text-[11px]" />
-                 </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Parada</label>
+                    <Input type="text" inputMode="numeric" placeholder="HH:MM" value={ordenFormData.finParada} onChange={(e) => setOrdenFormData({...ordenFormData, finParada: normalizarHora(e.target.value)})} className="h-9 text-[11px]" />
+                  </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Tipo de Parada</label>
                   <select value={ordenFormData.tipoParada} onChange={(e) => setOrdenFormData({...ordenFormData, tipoParada: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">

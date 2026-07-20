@@ -5327,7 +5327,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-20T11:52:57.697Z"
+    "updatedAt": "2026-07-20T11:55:39.579Z"
   },
   "ordenesSap": [
     {
@@ -7359,7 +7359,7 @@
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 6155
         }
       ]
     },
@@ -11946,6 +11946,23 @@
         "orden": "52001",
         "observaciones": "",
         "id": "274f6505-c448-4c2f-93ac-4e49846fbfc6"
+      },
+      {
+        "fecha": "2026-07-20",
+        "semana": 30,
+        "turno": "DIURNO",
+        "operador": "d6515",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "MECÁNICO",
+        "inicioParada": "20:00",
+        "finParada": "23:02",
+        "totalMin": "182",
+        "zona": "Llenado",
+        "falla": "",
+        "orden": "g251256",
+        "observaciones": "",
+        "id": 1784552003625
       }
     ],
     "planta-ordenes-trabajo": [
