@@ -97,6 +97,23 @@ import { cn } from '@/lib/utils';
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7", "Línea 8"];
 
+const normalizarHora = (valor: string): string => {
+  let v = valor.replace(/[^0-9]/g, '').slice(0, 4);
+  if (v.length >= 3) {
+    const h = parseInt(v.slice(0, 2), 10);
+    const m = parseInt(v.slice(2), 10);
+    const hh = Math.min(Math.max(h, 0), 23);
+    const mm = Math.min(Math.max(m, 0), 59);
+    return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+  }
+  if (v.length === 1 || v.length === 2) {
+    const h = parseInt(v, 10);
+    if (h > 23) return '23';
+    return v;
+  }
+  return '';
+};
+
 const PARADA_OPCIONES = ["si", "no"];
 const MTTO_OPCIONES = ["preventivo", "correctivo", "predictivo", "correctivo planificado", "sin especificar"];
 const FALLA_OPCIONES = ["electrica", "electronica", "neumatica", "mecanica", "operativa", "material", "instrumentacion", "multiple", "programable"];
@@ -466,6 +483,7 @@ export default function PlannerPage() {
   const [emitDate, setEmitDate] = useState('');
   const [paradaFiltroLinea, setParadaFiltroLinea] = useState('all');
   const [ordenFiltroLinea, setOrdenFiltroLinea] = useState('all');
+  const [ordenBusqueda, setOrdenBusqueda] = useState('');
   const [paradaFiltroFecha, setParadaFiltroFecha] = useState('');
   const [plantaWeekStartDate, setPlantaWeekStartDate] = useState(new Date());
   const [plantaFormData, setPlantaFormData] = useState({
@@ -1765,15 +1783,15 @@ export default function PlannerPage() {
                                           </TableCell>
                                         </TableRow>
                                       )}
-                                      </TableBody>
-                                    </Table>
-                                    </div>
-                                  </div>
-                                </div>
+                                         </TableBody>
+                                      </Table>
+                                      </div>
+                                   </div>
+                                 </div>
                               )}
                               {paradasSubTab === 'ordenes-trabajo' && (
                                 <div className="flex flex-col h-full gap-3">
-                                  <div className="flex items-center gap-3 no-print">
+                                  <div className="flex flex-wrap items-center gap-3 no-print">
                                     <Select value={ordenFiltroLinea} onValueChange={setOrdenFiltroLinea}>
                                       <SelectTrigger className="h-9 w-44 text-[10px] font-bold uppercase tracking-wider rounded-lg border-slate-200">
                                         <SelectValue placeholder="Todas las líneas" />
@@ -1785,131 +1803,149 @@ export default function PlannerPage() {
                                         ))}
                                       </SelectContent>
                                     </Select>
-                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                    <Input
+                                      value={ordenBusqueda}
+                                      onChange={(e) => setOrdenBusqueda(e.target.value)}
+                                      placeholder="Buscar orden, solicitante, falla, máquina..."
+                                      className="h-9 text-[11px] w-72"
+                                    />
+                                    {ordenBusqueda && (
+                                      <button onClick={() => setOrdenBusqueda('')} className="h-9 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider text-slate-500 hover:bg-slate-100">Limpiar</button>
+                                    )}
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider ml-auto">
                                         {ordenesTrabajoCargadas.filter((r) => {
                                           const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
                                           const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
-                                          return matchLine && matchDate;
+                                          const q = ordenBusqueda.trim().toLowerCase();
+                                          const matchQ = !q || [r.orden, r.solicitante, r.falla, r.maquina, r.aviso, r.observaciones, r.descripcionFalla, r.descripcionAccion]
+                                            .filter(Boolean).some((v) => String(v).toLowerCase().includes(q));
+                                          return matchLine && matchDate && matchQ;
                                         }).length} registros
                                     </span>
                                   </div>
-                                  <div className="rounded-lg border border-slate-200 overflow-x-auto overflow-y-auto max-h-[60vh]">
-                                    <div className="min-w-[1800px]">
+                                  <div className="rounded-lg border border-slate-200 overflow-hidden overflow-auto max-h-[62vh] tabla-ordenes-scroll" style={{ scrollBehavior: 'smooth' }}>
+                                      <div className="min-w-[1700px]">
                                       <Table>
-                                     <TableHeader>
+                                     <TableHeader className="sticky top-0 z-30">
                                          <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">I-FECHA</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">ORDEN</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">F-FECHA</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SEM</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">TURNO</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SOLICITANTE</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">LÍNEA</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">AVISO</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MÁQUINA</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">I-PARADA</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">I-MTTO</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">F-MTTO</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">F-PARADA</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">T-MTTO</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">T-PARADA</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">PARADA?</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">FALLA</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO / ESP</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCION DE LA FALLA POR EL SOLICITANTE</TableHead>
-                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCION DE LA ACCION DE MANTENIMIENTO</TableHead>
-                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">OBSERVACIONES</TableHead>
-                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 w-16">Acciones</TableHead>
-                                         </TableRow>
-                                     </TableHeader>
-                                        <TableBody>
-                                          {ordenesTrabajoCargadas
-                                            .filter((r) => {
-                                              const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
-                                              const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
-                                              return matchLine && matchDate;
-                                            })
-                                            .map((row) => {
-                                              const rowEdit = editingRows[row.id] || row;
-                                              const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','inicioParada','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones','fechaParada']);
-                                              const editable = (campo: string) => camposEditables.has(campo);
-                                              return (
-                                            <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
-                                                <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{rowEdit.fechaOrden}</TableCell>
-                                                <TableCell className="px-2 py-2 text-[11px] font-mono font-bold text-slate-900 whitespace-nowrap">{rowEdit.orden}</TableCell>
-                                                {editable('fechaEmision') ? <TableCell className="px-2 py-2"><Input type="date" value={rowEdit.fechaEmision || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, fechaEmision: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{rowEdit.fechaEmision}</TableCell>}
-                                                <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {rowEdit.semana}</TableCell>
-                                                <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{rowEdit.turno}</TableCell>
-                                                {editable('solicitante') ? <TableCell className="px-2 py-2"><Input value={rowEdit.solicitante || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, solicitante: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] font-semibold text-slate-800 whitespace-nowrap">{rowEdit.solicitante}</TableCell>}
-                                                <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap">{rowEdit.linea}</TableCell>
-                                                {editable('aviso') ? <TableCell className="px-2 py-2"><Input value={rowEdit.aviso || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, aviso: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.aviso}</TableCell>}
-                                                <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.maquina}</TableCell>
-                                                 {editable('fechaParada') ? <TableCell className="px-2 py-2"><Input type="date" value={rowEdit.fechaParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, fechaParada: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{rowEdit.fechaParada}</TableCell>}
-                                                {editable('inicioMtto') ? <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.inicioMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioMtto: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{rowEdit.inicioMtto}</TableCell>}
-                                                {editable('finMtto') ? <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.finMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finMtto: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{rowEdit.finMtto}</TableCell>}
-                                                {editable('inicioParada') ? <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.inicioParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioParada: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{rowEdit.inicioParada}</TableCell>}
-                                                {editable('tMtto') ? <TableCell className="px-2 py-2"><Input value={rowEdit.tMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, tMtto: e.target.value}})} className="h-8 text-[10px] w-16" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{rowEdit.tMtto}</TableCell>}
-                                                {editable('finParada') ? <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.finParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finParada: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{rowEdit.finParada}</TableCell>}
-                                                 {editable('tipoParada') ? <TableCell className="px-2 py-2">
-                                                   <Select value={rowEdit.tipoParada || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, tipoParada: v}})}>
-                                                     <SelectTrigger className="h-8 text-[10px] w-28"><SelectValue placeholder="PARADA?" /></SelectTrigger>
-                                                     <SelectContent>
-                                                       {PARADA_OPCIONES.map((op) => <SelectItem key={op} value={op}>{op}</SelectItem>)}
-                                                     </SelectContent>
-                                                   </Select>
-                                                 </TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.tipoParada}</TableCell>}
-                                                 {editable('mtto') ? <TableCell className="px-2 py-2">
-                                                   <Select value={rowEdit.mtto || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, mtto: v}})}>
-                                                     <SelectTrigger className="h-8 text-[10px] w-36"><SelectValue placeholder="MTTO" /></SelectTrigger>
-                                                     <SelectContent>
-                                                       {MTTO_OPCIONES.map((op) => <SelectItem key={op} value={op}>{op}</SelectItem>)}
-                                                     </SelectContent>
-                                                   </Select>
-                                                 </TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.mtto}</TableCell>}
-                                                 {editable('falla') ? <TableCell className="px-2 py-2">
-                                                   <Select value={rowEdit.falla || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, falla: v}})}>
-                                                     <SelectTrigger className="h-8 text-[10px] w-36"><SelectValue placeholder="FALLA" /></SelectTrigger>
-                                                     <SelectContent>
-                                                       {FALLA_OPCIONES.map((op) => <SelectItem key={op} value={op}>{op}</SelectItem>)}
-                                                     </SelectContent>
-                                                   </Select>
-                                                 </TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[120px] truncate" title={rowEdit.falla}>{rowEdit.falla}</TableCell>}
-                                                {editable('mttoEsp') ? <TableCell className="px-2 py-2"><Input value={rowEdit.mttoEsp || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, mttoEsp: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{rowEdit.mttoEsp}</TableCell>}
-                                                {editable('descripcionFalla') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionFalla || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionFalla: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={rowEdit.descripcionFalla}>{rowEdit.descripcionFalla}</TableCell>}
-                                                {editable('descripcionAccion') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionAccion || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionAccion: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={rowEdit.descripcionAccion}>{rowEdit.descripcionAccion}</TableCell>}
-                                                {editable('observaciones') ? <TableCell className="px-2 py-2"><Input value={rowEdit.observaciones || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, observaciones: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[180px] truncate" title={rowEdit.observaciones}>{rowEdit.observaciones}</TableCell>}
-                                                <TableCell className="px-2 py-2 flex items-center gap-1">
-                                                  <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
-                                                    const originalId = typeof row.id === 'string' && row.id.startsWith('io-') ? parseInt(row.id.replace('io-', '')) : row.id;
-                                                    const updated = { ...rowEdit, id: originalId };
-                                                    setInformesOperacionales(prev => prev.map(r => r.id === originalId ? updated : r));
-                                                    setEditingRows(prev => { const next = {...prev}; delete next[row.id]; return next; });
-                                                  }}><Check className="h-3.5 w-3.5" /></Button>
-                                                </TableCell>
-                                            </TableRow>
-                                              );
-                                            })}
-                                          {ordenesTrabajoCargadas.filter((r) => {
-                                            const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
-                                            const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
-                                            return matchLine && matchDate;
-                                          }).length === 0 && (
-                                            <TableRow>
-                                              <TableCell colSpan={23} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
-                                                Sin registros para el filtro seleccionado
-                                              </TableCell>
-                                            </TableRow>
-                                          )}
-                                       </TableBody>
-                                    </Table>
-                                   </div>
-                                 </div>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 sticky left-0 z-40 bg-[#1a3d6b]">I-FECHA</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 sticky left-[72px] z-40 bg-[#1a3d6b]">ORDEN</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">F-FECHA</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SEM</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">TURNO</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">SOLICITANTE</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 sticky left-[150px] z-40 bg-[#1a3d6b]">LÍNEA</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">AVISO</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MÁQUINA</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">I-PARADA</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">I-MTTO</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">F-MTTO</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">F-PARADA</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">T-MTTO</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">T-PARADA</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">PARADA?</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">FALLA</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO / ESP</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCION DE LA FALLA POR EL SOLICITANTE</TableHead>
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCION DE LA ACCION DE MANTENIMIENTO</TableHead>
+                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">OBSERVACIONES</TableHead>
+                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 w-16">Acciones</TableHead>
+                                          </TableRow>
+                                      </TableHeader>
+                                         <TableBody>
+                                           {ordenesTrabajoCargadas
+                                             .filter((r) => {
+                                               const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
+                                               const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
+                                               const q = ordenBusqueda.trim().toLowerCase();
+                                               const matchQ = !q || [r.orden, r.solicitante, r.falla, r.maquina, r.aviso, r.observaciones, r.descripcionFalla, r.descripcionAccion]
+                                                 .filter(Boolean).some((v) => String(v).toLowerCase().includes(q));
+                                               return matchLine && matchDate && matchQ;
+                                             })
+                                             .map((row) => {
+                                               const rowEdit = editingRows[row.id] || row;
+                                               const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','inicioParada','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones','fechaParada']);
+                                               const editable = (campo: string) => camposEditables.has(campo);
+                                               return (
+                                             <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
+                                                 <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap sticky left-0 z-20 bg-white even:bg-slate-50/60">{rowEdit.fechaOrden}</TableCell>
+                                                 <TableCell className="px-2 py-2 text-[11px] font-mono font-bold text-slate-900 whitespace-nowrap sticky left-[72px] z-20 bg-white even:bg-slate-50/60">{rowEdit.orden}</TableCell>
+                                                 {editable('fechaEmision') ? <TableCell className="px-2 py-2"><Input type="date" value={rowEdit.fechaEmision || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, fechaEmision: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{rowEdit.fechaEmision}</TableCell>}
+                                                 <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {rowEdit.semana}</TableCell>
+                                                 <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{rowEdit.turno}</TableCell>
+                                                 {editable('solicitante') ? <TableCell className="px-2 py-2"><Input value={rowEdit.solicitante || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, solicitante: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] font-semibold text-slate-800 whitespace-nowrap">{rowEdit.solicitante}</TableCell>}
+                                                 <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap sticky left-[150px] z-20 bg-white even:bg-slate-50/60">{rowEdit.linea}</TableCell>
+                                                 {editable('aviso') ? <TableCell className="px-2 py-2"><Input value={rowEdit.aviso || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, aviso: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.aviso}</TableCell>}
+                                                 <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.maquina}</TableCell>
+                                                  {editable('fechaParada') ? <TableCell className="px-2 py-2"><Input type="date" value={rowEdit.fechaParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, fechaParada: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{rowEdit.fechaParada}</TableCell>}
+                                                 {editable('inicioMtto') ? <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.inicioMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioMtto: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{rowEdit.inicioMtto}</TableCell>}
+                                                 {editable('finMtto') ? <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.finMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finMtto: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{rowEdit.finMtto}</TableCell>}
+                                                 {editable('inicioParada') ? <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.inicioParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioParada: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{rowEdit.inicioParada}</TableCell>}
+                                                 {editable('tMtto') ? <TableCell className="px-2 py-2"><Input value={rowEdit.tMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, tMtto: e.target.value}})} className="h-8 text-[10px] w-16" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{rowEdit.tMtto}</TableCell>}
+                                                 {editable('finParada') ? <TableCell className="px-2 py-2"><Input type="time" value={rowEdit.finParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finParada: e.target.value}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{rowEdit.finParada}</TableCell>}
+                                                  {editable('tipoParada') ? <TableCell className="px-2 py-2">
+                                                    <Select value={rowEdit.tipoParada || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, tipoParada: v}})}>
+                                                      <SelectTrigger className="h-8 text-[10px] w-28"><SelectValue placeholder="PARADA?" /></SelectTrigger>
+                                                      <SelectContent>
+                                                        {PARADA_OPCIONES.map((op) => <SelectItem key={op} value={op}>{op}</SelectItem>)}
+                                                      </SelectContent>
+                                                    </Select>
+                                                  </TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.tipoParada}</TableCell>}
+                                                  {editable('mtto') ? <TableCell className="px-2 py-2">
+                                                    <Select value={rowEdit.mtto || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, mtto: v}})}>
+                                                      <SelectTrigger className="h-8 text-[10px] w-36"><SelectValue placeholder="MTTO" /></SelectTrigger>
+                                                      <SelectContent>
+                                                        {MTTO_OPCIONES.map((op) => <SelectItem key={op} value={op}>{op}</SelectItem>)}
+                                                      </SelectContent>
+                                                    </Select>
+                                                  </TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.mtto}</TableCell>}
+                                                  {editable('falla') ? <TableCell className="px-2 py-2">
+                                                    <Select value={rowEdit.falla || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, falla: v}})}>
+                                                      <SelectTrigger className="h-8 text-[10px] w-36"><SelectValue placeholder="FALLA" /></SelectTrigger>
+                                                      <SelectContent>
+                                                        {FALLA_OPCIONES.map((op) => <SelectItem key={op} value={op}>{op}</SelectItem>)}
+                                                      </SelectContent>
+                                                    </Select>
+                                                  </TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[120px] truncate" title={rowEdit.falla}>{rowEdit.falla}</TableCell>}
+                                                 {editable('mttoEsp') ? <TableCell className="px-2 py-2"><Input value={rowEdit.mttoEsp || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, mttoEsp: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{rowEdit.mttoEsp}</TableCell>}
+                                                 {editable('descripcionFalla') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionFalla || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionFalla: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={rowEdit.descripcionFalla}>{rowEdit.descripcionFalla}</TableCell>}
+                                                 {editable('descripcionAccion') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionAccion || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionAccion: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={rowEdit.descripcionAccion}>{rowEdit.descripcionAccion}</TableCell>}
+                                                 {editable('observaciones') ? <TableCell className="px-2 py-2"><Input value={rowEdit.observaciones || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, observaciones: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[180px] truncate" title={rowEdit.observaciones}>{rowEdit.observaciones}</TableCell>}
+                                                 <TableCell className="px-2 py-2 flex items-center gap-1">
+                                                   <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
+                                                     const originalId = typeof row.id === 'string' && row.id.startsWith('io-') ? parseInt(row.id.replace('io-', '')) : row.id;
+                                                     const updated = { ...rowEdit, id: originalId };
+                                                     setInformesOperacionales(prev => prev.map(r => r.id === originalId ? updated : r));
+                                                     setEditingRows(prev => { const next = {...prev}; delete next[row.id]; return next; });
+                                                   }}><Check className="h-3.5 w-3.5" /></Button>
+                                                 </TableCell>
+                                             </TableRow>
+                                               );
+                                             })}
+                                           {ordenesTrabajoCargadas.filter((r) => {
+                                             const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
+                                             const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
+                                             const q = ordenBusqueda.trim().toLowerCase();
+                                             const matchQ = !q || [r.orden, r.solicitante, r.falla, r.maquina, r.aviso, r.observaciones, r.descripcionFalla, r.descripcionAccion]
+                                               .filter(Boolean).some((v) => String(v).toLowerCase().includes(q));
+                                             return matchLine && matchDate && matchQ;
+                                           }).length === 0 && (
+                                             <TableRow>
+                                               <TableCell colSpan={23} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
+                                                 Sin registros para el filtro seleccionado
+                                               </TableCell>
+                                             </TableRow>
+                                           )}
+                                        </TableBody>
+                                       </Table>
+                                       </div>
+                                    </div>
+                                  </div>
+                                  )}
                                </div>
-                               )}
-                                </div>
                              </div>
-                         )}
+                           )}
                          {activeTab === 'produccion' && (
                            <>
                              <div className="flex items-center justify-between gap-2 mb-4 no-print">
@@ -2613,11 +2649,11 @@ export default function PlannerPage() {
                  </div>
                  <div className="space-y-2">
                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Parada</label>
-                  <Input type="time" value={plantaFormData.inicioParada} onChange={(e) => setPlantaFormData({...plantaFormData, inicioParada: e.target.value})} className="h-9 text-[11px]" />
+                  <Input type="text" inputMode="numeric" placeholder="HH:MM" value={plantaFormData.inicioParada} onChange={(e) => setPlantaFormData({...plantaFormData, inicioParada: normalizarHora(e.target.value)})} className="h-9 text-[11px]" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Parada</label>
-                  <Input type="time" value={plantaFormData.finParada} onChange={(e) => setPlantaFormData({...plantaFormData, finParada: e.target.value})} className="h-9 text-[11px]" />
+                  <Input type="text" inputMode="numeric" placeholder="HH:MM" value={plantaFormData.finParada} onChange={(e) => setPlantaFormData({...plantaFormData, finParada: normalizarHora(e.target.value)})} className="h-9 text-[11px]" />
                 </div>
                  <div className="space-y-2">
                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Total (min)</label>

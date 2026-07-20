@@ -192,3 +192,40 @@
 .print-only {
   display: none;
 }
+
+/* Tabla de órdenes de trabajo: scroll fluido y barras delgadas */
+.tabla-ordenes-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #94a3b8 transparent;
+  -webkit-overflow-scrolling: touch;
+}
+
+.tabla-ordenes-scroll::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.tabla-ordenes-scroll::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 9999px;
+}
+
+.tabla-ordenes-scroll::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 9999px;
+  border: 2px solid #f1f5f9;
+}
+
+.tabla-ordenes-scroll::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Sombras de indicación de scroll horizontal/vertical */
+.tabla-ordenes-scroll {
+  background:
+    linear-gradient(to right, #ffffff 30%, rgba(255, 255, 255, 0)) left center / 24px 100% no-repeat,
+    linear-gradient(to left, #ffffff 30%, rgba(255, 255, 255, 0)) right center / 24px 100% no-repeat,
+    linear-gradient(to bottom, #ffffff 30%, rgba(255, 255, 255, 0)) top center / 100% 24px no-repeat,
+    linear-gradient(to top, #ffffff 30%, rgba(255, 255, 255, 0)) bottom center / 100% 24px no-repeat;
+  background-attachment: local, local, local, local;
+}
