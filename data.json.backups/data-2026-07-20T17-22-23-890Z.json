@@ -12052,30 +12052,36 @@
     },
     "planta-informes-operacionales": [
       {
-        "id": 1784554694921,
-        "fechaOrden": "2026-07-20",
-        "orden": "5555",
-        "fechaEmision": "",
+        "fecha": "2026-07-20",
         "semana": 30,
         "turno": "DIURNO",
-        "solicitante": "",
+        "operador": "",
         "linea": "Línea 1",
+        "equipo": "llenadora",
+        "tipoParada": "MECÁNICO",
+        "inicioParada": "20:00",
+        "finParada": "21:00",
+        "totalMin": "60",
+        "zona": "Llenado",
+        "falla": "",
+        "orden": "5005",
+        "observaciones": "",
+        "id": 1784566101946,
+        "fechaEmision": "2026-07-20",
+        "solicitante": "",
         "aviso": "",
-        "maquina": "",
-        "fechaParada": "",
+        "maquina": "llenadora",
+        "fechaParada": "2026-07-20",
         "inicioMtto": "",
         "finMtto": "",
-        "inicioParada": "",
         "tMtto": "",
-        "finParada": "",
-        "tipoParada": "",
         "mtto": "",
-        "falla": "",
         "mttoEsp": "",
         "descripcionFalla": "",
         "descripcionAccion": "",
-        "observaciones": "",
-        "_desdeInforme": true
+        "otFechaParada": "",
+        "otInicioParada": "",
+        "otFinParada": ""
       }
     ],
     "planta-ordenes-trabajo": [
@@ -12178,7 +12184,8 @@
         "274f6505-c448-4c2f-93ac-4e49846fbfc6",
         "1784552003625",
         "1784553585913",
-        "1784554339534"
+        "1784554339534",
+        "1784554694921"
       ]
     },
     "planta-ordenes-trabajo": {

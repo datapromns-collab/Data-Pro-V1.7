@@ -5327,7 +5327,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-20T15:17:18.840Z"
+    "updatedAt": "2026-07-20T15:17:35.607Z"
   },
   "ordenesSap": [
     {
@@ -12057,16 +12057,48 @@
         "turno": "DIURNO",
         "operador": "",
         "linea": "Línea 1",
-        "equipo": "",
+        "equipo": "llenadora",
         "tipoParada": "MECÁNICO",
         "inicioParada": "20:00",
         "finParada": "21:00",
         "totalMin": "60",
         "zona": "Llenado",
         "falla": "",
+        "orden": "5005",
+        "observaciones": "544",
+        "id": 1784566101946,
+        "fechaEmision": "2026-07-20",
+        "solicitante": "",
+        "aviso": "",
+        "maquina": "llenadora",
+        "fechaParada": "2026-07-20",
+        "inicioMtto": "",
+        "finMtto": "",
+        "tMtto": "",
+        "mtto": "",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "otFechaParada": "",
+        "otInicioParada": "",
+        "otFinParada": ""
+      },
+      {
+        "fecha": "2026-07-20",
+        "semana": 30,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "MECÁNICO",
+        "inicioParada": "16:00",
+        "finParada": "17:00",
+        "totalMin": "60",
+        "zona": "Llenado",
+        "falla": "",
         "orden": "5555",
         "observaciones": "",
-        "id": 1784554694921
+        "id": 1784568143186
       }
     ],
     "planta-ordenes-trabajo": [
@@ -12085,8 +12117,8 @@
         "inicioMtto": "",
         "finMtto": "",
         "inicioParada": "",
-        "finParada": "",
         "tMtto": "",
+        "finParada": "",
         "tipoParada": "",
         "mtto": "",
         "falla": "",
@@ -12110,8 +12142,8 @@
         "inicioMtto": "",
         "finMtto": "",
         "inicioParada": "",
-        "finParada": "",
         "tMtto": "",
+        "finParada": "",
         "tipoParada": "",
         "mtto": "",
         "falla": "",
@@ -12169,7 +12201,8 @@
         "274f6505-c448-4c2f-93ac-4e49846fbfc6",
         "1784552003625",
         "1784553585913",
-        "1784554339534"
+        "1784554339534",
+        "1784554694921"
       ]
     },
     "planta-ordenes-trabajo": {

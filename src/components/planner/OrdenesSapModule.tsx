@@ -1516,10 +1516,10 @@ const exportarPDFdia = async () => {
     const diasEnMes = new Date(anioActual, mesActual + 1, 0).getDate();
     const fechasMes = Array.from({ length: diasEnMes }, (_, i) => {
       const d = new Date(anioActual, mesActual, i + 1);
-      return format(d, 'd/M/yyyy');
+      return format(d, 'yyyy-MM-dd');
     });
 
-    const lineas = [1, 2, 3, 4, 5, 6, 7];
+    const lineas = [1, 2, 3, 4, 5, 6, 7, 8];
 
     const wsData: any[] = [];
 
