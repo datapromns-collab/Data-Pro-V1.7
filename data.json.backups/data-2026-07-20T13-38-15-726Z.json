@@ -11930,25 +11930,7 @@
       "fixedCapacities": {},
       "_deletedIds": {}
     },
-    "planta-informes-operacionales": [
-      {
-        "fecha": "2026-07-20",
-        "semana": 30,
-        "turno": "DIURNO",
-        "operador": "d6515",
-        "linea": "Línea 1",
-        "equipo": "",
-        "tipoParada": "MECÁNICO",
-        "inicioParada": "20:00",
-        "finParada": "23:02",
-        "totalMin": "182",
-        "zona": "Llenado",
-        "falla": "",
-        "orden": "g251256",
-        "observaciones": "",
-        "id": 1784552003625
-      }
-    ],
+    "planta-informes-operacionales": [],
     "planta-ordenes-trabajo": [
       {
         "id": "orden-sync-52001",
@@ -12043,7 +12025,10 @@
         "27075259-1875-4e28-9cff-154d4c225816",
         "id-mrnznnix-ulvhgn2h",
         "id-mrnzoo8i-1ta553gt",
-        "274f6505-c448-4c2f-93ac-4e49846fbfc6"
+        "274f6505-c448-4c2f-93ac-4e49846fbfc6",
+        "1784552003625",
+        "1784553585913",
+        "1784554339534"
       ]
     },
     "planta-ordenes-trabajo": {

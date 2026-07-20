@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-07-20T00:00:00.000",
+      "weekStartDate": "2026-07-13T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -826,12 +826,12 @@
             "name": "GLUP UVA",
             "lineId": "3",
             "loadPerHour": 2800,
-            "quantity": 132076,
-            "durationHours": 47.17,
+            "quantity": 132068,
+            "durationHours": 47.167142857142856,
             "presentation": "2Lts",
             "tanks": 18.57,
             "startTime": "2026-07-17T09:50:00.000Z",
-            "endTime": "2026-07-19T09:00:12.000Z",
+            "endTime": "2026-07-19T09:00:01.714Z",
             "id": "f2fzqsry7",
             "color": "#ef4444"
           },
@@ -1158,12 +1158,12 @@
             "name": "GLUP KOLITA",
             "lineId": "2",
             "loadPerHour": 2500,
-            "quantity": 106925,
-            "durationHours": 42.77,
+            "quantity": 106919,
+            "durationHours": 42.7676,
             "presentation": "2Lts",
             "tanks": 12.02,
             "startTime": "2026-07-16T16:14:00.000Z",
-            "endTime": "2026-07-18T11:00:12.000Z",
+            "endTime": "2026-07-18T11:00:03.360Z",
             "id": "fahpo1ud4",
             "color": "#6366f1"
           },
@@ -5327,7 +5327,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-20T11:55:39.579Z"
+    "updatedAt": "2026-07-20T13:44:50.122Z"
   },
   "ordenesSap": [
     {
@@ -11932,37 +11932,21 @@
     },
     "planta-informes-operacionales": [
       {
-        "fecha": "2026-07-16",
-        "semana": 29,
-        "turno": "DIURNO",
-        "operador": "fds",
-        "linea": "Línea 1",
-        "equipo": "SOPLADORA",
-        "tipoParada": "AVERÍA",
-        "inicioParada": "20:00",
-        "finParada": "20:10",
-        "totalMin": "10",
-        "falla": "fnz",
-        "orden": "52001",
-        "observaciones": "",
-        "id": "274f6505-c448-4c2f-93ac-4e49846fbfc6"
-      },
-      {
         "fecha": "2026-07-20",
         "semana": 30,
         "turno": "DIURNO",
-        "operador": "d6515",
+        "operador": "",
         "linea": "Línea 1",
         "equipo": "",
         "tipoParada": "MECÁNICO",
         "inicioParada": "20:00",
-        "finParada": "23:02",
-        "totalMin": "182",
+        "finParada": "21:00",
+        "totalMin": "60",
         "zona": "Llenado",
         "falla": "",
-        "orden": "g251256",
+        "orden": "5555",
         "observaciones": "",
-        "id": 1784552003625
+        "id": 1784554694921
       }
     ],
     "planta-ordenes-trabajo": [
@@ -12058,7 +12042,11 @@
         "id-mrnw0j4d-df1vpinx",
         "27075259-1875-4e28-9cff-154d4c225816",
         "id-mrnznnix-ulvhgn2h",
-        "id-mrnzoo8i-1ta553gt"
+        "id-mrnzoo8i-1ta553gt",
+        "274f6505-c448-4c2f-93ac-4e49846fbfc6",
+        "1784552003625",
+        "1784553585913",
+        "1784554339534"
       ]
     },
     "planta-ordenes-trabajo": {

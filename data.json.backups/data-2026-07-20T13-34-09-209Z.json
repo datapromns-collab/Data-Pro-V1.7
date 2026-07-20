@@ -11932,20 +11932,30 @@
     },
     "planta-informes-operacionales": [
       {
-        "fecha": "2026-07-16",
-        "semana": 29,
+        "id": 1784554339534,
+        "fechaOrden": "2026-07-20",
+        "orden": "5512",
+        "fechaEmision": "",
+        "semana": 30,
         "turno": "DIURNO",
-        "operador": "fds",
+        "solicitante": "",
         "linea": "Línea 1",
-        "equipo": "SOPLADORA",
-        "tipoParada": "AVERÍA",
+        "aviso": "",
+        "maquina": "SOPLADORA",
+        "fechaParada": "",
+        "inicioMtto": "",
+        "finMtto": "",
         "inicioParada": "20:00",
-        "finParada": "20:10",
-        "totalMin": "10",
-        "falla": "fnz",
-        "orden": "52001",
+        "tMtto": "",
+        "finParada": "",
+        "tipoParada": "",
+        "mtto": "",
+        "falla": "",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
         "observaciones": "",
-        "id": "274f6505-c448-4c2f-93ac-4e49846fbfc6"
+        "_desdeInforme": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -12041,7 +12051,10 @@
         "id-mrnw0j4d-df1vpinx",
         "27075259-1875-4e28-9cff-154d4c225816",
         "id-mrnznnix-ulvhgn2h",
-        "id-mrnzoo8i-1ta553gt"
+        "id-mrnzoo8i-1ta553gt",
+        "274f6505-c448-4c2f-93ac-4e49846fbfc6",
+        "1784552003625",
+        "1784553585913"
       ]
     },
     "planta-ordenes-trabajo": {

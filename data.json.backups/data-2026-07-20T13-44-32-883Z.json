@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-07-20T00:00:00.000",
+      "weekStartDate": "2026-07-13T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -5327,7 +5327,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-20T11:55:39.579Z"
+    "updatedAt": "2026-07-20T13:39:20.193Z"
   },
   "ordenesSap": [
     {
@@ -11932,20 +11932,21 @@
     },
     "planta-informes-operacionales": [
       {
-        "fecha": "2026-07-16",
-        "semana": 29,
+        "fecha": "2026-07-20",
+        "semana": 30,
         "turno": "DIURNO",
-        "operador": "fds",
+        "operador": "",
         "linea": "Línea 1",
-        "equipo": "SOPLADORA",
-        "tipoParada": "AVERÍA",
+        "equipo": "",
+        "tipoParada": "MECÁNICO",
         "inicioParada": "20:00",
-        "finParada": "20:10",
-        "totalMin": "10",
-        "falla": "fnz",
-        "orden": "52001",
+        "finParada": "21:00",
+        "totalMin": "60",
+        "zona": "Llenado",
+        "falla": "",
+        "orden": "5555",
         "observaciones": "",
-        "id": "274f6505-c448-4c2f-93ac-4e49846fbfc6"
+        "id": 1784554694921
       }
     ],
     "planta-ordenes-trabajo": [
@@ -12041,7 +12042,11 @@
         "id-mrnw0j4d-df1vpinx",
         "27075259-1875-4e28-9cff-154d4c225816",
         "id-mrnznnix-ulvhgn2h",
-        "id-mrnzoo8i-1ta553gt"
+        "id-mrnzoo8i-1ta553gt",
+        "274f6505-c448-4c2f-93ac-4e49846fbfc6",
+        "1784552003625",
+        "1784553585913",
+        "1784554339534"
       ]
     },
     "planta-ordenes-trabajo": {

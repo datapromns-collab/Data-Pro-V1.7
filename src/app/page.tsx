@@ -143,6 +143,65 @@ const normalizarHora = (valor: string): string => {
   return '';
 };
 
+const hora = (valor: string): string => {
+  if (!valor) return '';
+  return normalizarHora(String(valor));
+};
+
+const diferenciaMinutos = (inicio: string, fin: string): number | null => {
+  const a = normalizarHora(inicio || '');
+  const b = normalizarHora(fin || '');
+  if (!a || !b) return null;
+  const [h1, m1] = a.split(':').map(Number);
+  const [h2, m2] = b.split(':').map(Number);
+  const diff = (h2 * 60 + m2) - (h1 * 60 + m1);
+  if (diff < 0) return null;
+  return diff;
+};
+
+const parseFecha = (fecha: string): Date | null => {
+  if (!fecha) return null;
+  const partes = String(fecha).split('-').map(Number);
+  if (partes.length !== 3 || partes.some((p) => isNaN(p))) return null;
+  const [y, mo, d] = partes;
+  const date = new Date(y, mo - 1, d);
+  return isNaN(date.getTime()) ? null : date;
+};
+
+const diasEntre = (fechaInicio: string, fechaFin: string): number | null => {
+  const a = parseFecha(fechaInicio);
+  const b = parseFecha(fechaFin);
+  if (!a || !b) return null;
+  const diffMs = b.getTime() - a.getTime();
+  return Math.round(diffMs / 86400000);
+};
+
+const minutosTranscurridos = (fechaInicio: string, horaInicio: string, fechaFin: string, horaFin: string): number | null => {
+  if (!horaInicio || !horaFin) return null;
+  const hInicio = normalizarHora(horaInicio);
+  const hFin = normalizarHora(horaFin);
+  if (!hInicio || !hFin) return null;
+  const [hi, mi] = hInicio.split(':').map(Number);
+  const [hf, mf] = hFin.split(':').map(Number);
+  let diff = (hf * 60 + mf) - (hi * 60 + mi);
+  const dias = diasEntre(fechaInicio, fechaFin);
+  if (dias === null) return diff < 0 ? null : diff;
+  if (dias < 0) return null;
+  if (dias > 0) diff += dias * 1440;
+  else if (diff < 0) return null;
+  return diff;
+};
+
+const minutosAHorasDecimal = (minutos: number): string => {
+  const horas = minutos / 60;
+  return horas.toFixed(2).replace('.', ',');
+};
+
+const tiempoTranscurrido = (fechaInicio: string, horaInicio: string, fechaFin: string, horaFin: string): string => {
+  const diff = minutosTranscurridos(fechaInicio, horaInicio, fechaFin, horaFin);
+  return diff === null ? '' : minutosAHorasDecimal(diff);
+};
+
 const PARADA_OPCIONES = ["si", "no"];
 const MTTO_OPCIONES = ["preventivo", "correctivo", "predictivo", "correctivo planificado", "sin especificar"];
 const FALLA_OPCIONES = ["electrica", "electronica", "neumatica", "mecanica", "operativa", "material", "instrumentacion", "multiple", "programable"];
@@ -347,9 +406,9 @@ export default function PlannerPage() {
         fechaParada: '',
         inicioMtto: '',
         finMtto: '',
-        inicioParada: normalizarHora(r.inicioParada || ''),
+        inicioParada: '',
         tMtto: '',
-        finParada: normalizarHora(r.finParada || ''),
+        finParada: '',
         tipoParada: '',
         mtto: '',
         falla: '',
@@ -1854,7 +1913,7 @@ export default function PlannerPage() {
                                     </span>
                                   </div>
                                   <div className="rounded-lg border border-slate-200 overflow-auto max-h-[62vh] tabla-ordenes-scroll" style={{ scrollBehavior: 'smooth' }}>
-                                      <div className="min-w-[1700px]">
+                                       <div className="min-w-[2200px]">
                                       <Table>
                                      <TableHeader className="sticky top-0 z-30">
                                          <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
@@ -1872,17 +1931,17 @@ export default function PlannerPage() {
                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">F-MTTO</TableHead>
                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">F-PARADA</TableHead>
                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">T-MTTO</TableHead>
-                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">T-PARADA</TableHead>
-                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">PARADA?</TableHead>
-                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO</TableHead>
-                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">FALLA</TableHead>
-                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO / ESP</TableHead>
-                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCION DE LA FALLA POR EL SOLICITANTE</TableHead>
-                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCION DE LA ACCION DE MANTENIMIENTO</TableHead>
-                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">OBSERVACIONES</TableHead>
-                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 w-16">Acciones</TableHead>
-                                          </TableRow>
-                                      </TableHeader>
+                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">T-PARADA</TableHead>
+                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">PARADA?</TableHead>
+                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO</TableHead>
+                                              <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">FALLA</TableHead>
+                                              <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO / ESP</TableHead>
+                                              <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCIÓN DE LA FALLA POR EL SOLICITANTE</TableHead>
+                                              <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCIÓN DE LA ACCIÓN DE MANTENIMIENTO</TableHead>
+                                              <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">OBSERVACIONES</TableHead>
+                                               <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 w-16">Acciones</TableHead>
+                                           </TableRow>
+                                       </TableHeader>
                                          <TableBody>
                                            {ordenesTrabajoCargadas
                                              .filter((r) => {
@@ -1896,8 +1955,10 @@ export default function PlannerPage() {
                                              .map((row) => {
                                                const rowEdit = editingRows[row.id] || row;
                                                const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','inicioParada','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones','fechaParada']);
-                                               const editable = (campo: string) => camposEditables.has(campo);
-                                               return (
+                                                const editable = (campo: string) => camposEditables.has(campo);
+                                                  const tMttoCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioMtto, rowEdit.fechaParada, rowEdit.finMtto);
+                                                  const tParadaCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioParada, rowEdit.fechaParada, rowEdit.finParada);
+                                                return (
                                              <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
                                                  <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap sticky left-0 z-20 bg-white even:bg-slate-50/60">{rowEdit.fechaOrden}</TableCell>
                                                  <TableCell className="px-2 py-2 text-[11px] font-mono font-bold text-slate-900 whitespace-nowrap sticky left-[72px] z-20 bg-white even:bg-slate-50/60">{rowEdit.orden}</TableCell>
@@ -1908,41 +1969,47 @@ export default function PlannerPage() {
                                                  <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap sticky left-[150px] z-20 bg-white even:bg-slate-50/60">{rowEdit.linea}</TableCell>
                                                  {editable('aviso') ? <TableCell className="px-2 py-2"><Input value={rowEdit.aviso || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, aviso: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.aviso}</TableCell>}
                                                  <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.maquina}</TableCell>
-                                                  {editable('fechaParada') ? <TableCell className="px-2 py-2"><Input type="date" value={rowEdit.fechaParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, fechaParada: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{rowEdit.fechaParada}</TableCell>}
-                                                  {editable('inicioMtto') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={rowEdit.inicioMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioMtto: normalizarHora(e.target.value)}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{normalizarHora(rowEdit.inicioMtto)}</TableCell>}
-                                                  {editable('finMtto') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={rowEdit.finMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finMtto: normalizarHora(e.target.value)}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{normalizarHora(rowEdit.finMtto)}</TableCell>}
-                                                   {editable('inicioParada') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={rowEdit.inicioParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioParada: normalizarHora(e.target.value)}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{normalizarHora(rowEdit.inicioParada)}</TableCell>}
-                                                  {editable('tMtto') ? <TableCell className="px-2 py-2"><Input value={rowEdit.tMtto || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, tMtto: e.target.value}})} className="h-8 text-[10px] w-16" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{rowEdit.tMtto}</TableCell>}
-                                                   {editable('finParada') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={rowEdit.finParada || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finParada: normalizarHora(e.target.value)}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{normalizarHora(rowEdit.finParada)}</TableCell>}
-                                                  {editable('tipoParada') ? <TableCell className="px-2 py-2">
-                                                    <Select value={rowEdit.tipoParada || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, tipoParada: v}})}>
-                                                      <SelectTrigger className="h-8 text-[10px] w-28"><SelectValue placeholder="PARADA?" /></SelectTrigger>
-                                                      <SelectContent>
-                                                        {PARADA_OPCIONES.map((op) => <SelectItem key={op} value={op}>{op}</SelectItem>)}
-                                                      </SelectContent>
-                                                    </Select>
-                                                  </TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.tipoParada}</TableCell>}
-                                                  {editable('mtto') ? <TableCell className="px-2 py-2">
-                                                    <Select value={rowEdit.mtto || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, mtto: v}})}>
-                                                      <SelectTrigger className="h-8 text-[10px] w-36"><SelectValue placeholder="MTTO" /></SelectTrigger>
-                                                      <SelectContent>
-                                                        {MTTO_OPCIONES.map((op) => <SelectItem key={op} value={op}>{op}</SelectItem>)}
-                                                      </SelectContent>
-                                                    </Select>
-                                                  </TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.mtto}</TableCell>}
-                                                  {editable('falla') ? <TableCell className="px-2 py-2">
-                                                    <Select value={rowEdit.falla || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, falla: v}})}>
-                                                      <SelectTrigger className="h-8 text-[10px] w-36"><SelectValue placeholder="FALLA" /></SelectTrigger>
-                                                      <SelectContent>
-                                                        {FALLA_OPCIONES.map((op) => <SelectItem key={op} value={op}>{op}</SelectItem>)}
-                                                      </SelectContent>
-                                                    </Select>
-                                                  </TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[120px] truncate" title={rowEdit.falla}>{rowEdit.falla}</TableCell>}
-                                                 {editable('mttoEsp') ? <TableCell className="px-2 py-2"><Input value={rowEdit.mttoEsp || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, mttoEsp: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{rowEdit.mttoEsp}</TableCell>}
-                                                 {editable('descripcionFalla') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionFalla || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionFalla: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={rowEdit.descripcionFalla}>{rowEdit.descripcionFalla}</TableCell>}
-                                                 {editable('descripcionAccion') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionAccion || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionAccion: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={rowEdit.descripcionAccion}>{rowEdit.descripcionAccion}</TableCell>}
-                                                 {editable('observaciones') ? <TableCell className="px-2 py-2"><Input value={rowEdit.observaciones || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, observaciones: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[180px] truncate" title={rowEdit.observaciones}>{rowEdit.observaciones}</TableCell>}
-                                                 <TableCell className="px-2 py-2 flex items-center gap-1">
+                                                    {editable('inicioParada') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={hora(rowEdit.inicioParada) || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioParada: normalizarHora(e.target.value)}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{hora(rowEdit.inicioParada)}</TableCell>}
+                                                    {editable('inicioMtto') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={hora(rowEdit.inicioMtto) || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioMtto: normalizarHora(e.target.value)}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{hora(rowEdit.inicioMtto)}</TableCell>}
+                                                   {editable('finMtto') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={hora(rowEdit.finMtto) || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finMtto: normalizarHora(e.target.value)}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{hora(rowEdit.finMtto)}</TableCell>}
+                                                    {editable('finParada') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={hora(rowEdit.finParada) || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finParada: normalizarHora(e.target.value)}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{hora(rowEdit.finParada)}</TableCell>}
+                                                    <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums">{tMttoCalc || rowEdit.tMtto}</TableCell>
+                                                     <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums">{tParadaCalc || rowEdit.tParada}</TableCell>
+                                                     <TableCell className="px-2 py-2">
+                                                       <Select value={rowEdit.tipoParada || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, tipoParada: v}})}>
+                                                         <SelectTrigger className="h-8 text-[10px] w-24 border-slate-200">
+                                                           <SelectValue placeholder="PARADA?" />
+                                                         </SelectTrigger>
+                                                         <SelectContent>
+                                                           {PARADA_OPCIONES.map((o) => (<SelectItem key={o} value={o} className="text-[10px] capitalize">{o}</SelectItem>))}
+                                                         </SelectContent>
+                                                       </Select>
+                                                     </TableCell>
+                                                     <TableCell className="px-2 py-2">
+                                                       <Select value={rowEdit.mtto || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, mtto: v}})}>
+                                                         <SelectTrigger className="h-8 text-[10px] w-40 border-slate-200">
+                                                           <SelectValue placeholder="MTTO" />
+                                                         </SelectTrigger>
+                                                         <SelectContent>
+                                                           {MTTO_OPCIONES.map((o) => (<SelectItem key={o} value={o} className="text-[10px] capitalize">{o}</SelectItem>))}
+                                                         </SelectContent>
+                                                       </Select>
+                                                     </TableCell>
+                                                     <TableCell className="px-2 py-2">
+                                                       <Select value={rowEdit.falla || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, falla: v}})}>
+                                                         <SelectTrigger className="h-8 text-[10px] w-36 border-slate-200">
+                                                           <SelectValue placeholder="FALLA" />
+                                                         </SelectTrigger>
+                                                         <SelectContent>
+                                                           {FALLA_OPCIONES.map((o) => (<SelectItem key={o} value={o} className="text-[10px] capitalize">{o}</SelectItem>))}
+                                                         </SelectContent>
+                                                        </Select>
+                                                      </TableCell>
+                                                      <TableCell className="px-2 py-2"><Input value={rowEdit.mttoEsp || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, mttoEsp: e.target.value}})} className="h-8 text-[10px] w-28" placeholder="MTTO / ESP" /></TableCell>
+                                                      <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionFalla || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionFalla: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Desc. falla" /></TableCell>
+                                                      <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionAccion || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionAccion: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Desc. acción" /></TableCell>
+                                                      <TableCell className="px-2 py-2"><Input value={rowEdit.observaciones || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, observaciones: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Observaciones" /></TableCell>
+                                                   <TableCell className="px-2 py-2 flex items-center gap-1">
                                                    <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
                                                      const originalId = typeof row.id === 'string' && row.id.startsWith('io-') ? parseInt(row.id.replace('io-', '')) : row.id;
                                                      const updated = { ...rowEdit, id: originalId };
