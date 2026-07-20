@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-07-13T00:00:00.000",
+      "weekStartDate": "2026-07-20T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -1158,12 +1158,12 @@
             "name": "GLUP KOLITA",
             "lineId": "2",
             "loadPerHour": 2500,
-            "quantity": 106919,
-            "durationHours": 42.7676,
+            "quantity": 106917,
+            "durationHours": 42.7668,
             "presentation": "2Lts",
             "tanks": 12.02,
             "startTime": "2026-07-16T16:14:00.000Z",
-            "endTime": "2026-07-18T11:00:03.360Z",
+            "endTime": "2026-07-18T11:00:00.480Z",
             "id": "fahpo1ud4",
             "color": "#6366f1"
           },
@@ -5327,7 +5327,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-20T13:44:49.817Z"
+    "updatedAt": "2026-07-20T15:17:18.840Z"
   },
   "ordenesSap": [
     {
@@ -7411,6 +7411,126 @@
           "cajas3": 720,
           "ticket4": "",
           "cajas4": 14521
+        }
+      ]
+    },
+    {
+      "id": "1-1784559843506",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "62404",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-20",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1784560092485",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "62410",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-20",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1784560205593",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62416",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-20",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1784560322091",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62422",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-20",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1784560416755",
+      "linea": 5,
+      "sabor": "JUSTY NARANJA",
+      "ordenNumero": "62427",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-20",
+          "ticket1": "17241",
+          "cajas1": 800,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1784560534859",
+      "linea": 6,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62433",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-20",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -12023,6 +12143,9 @@
         },
         "auto-1-1784323686130": {
           "cajasPlanificadas": 69000
+        },
+        "auto-1-1784559843506": {
+          "cajasPlanificadas": 36000
         }
       },
       "linea-2": {},

@@ -43,7 +43,7 @@ import {
   X
 } from 'lucide-react';
 import { PRODUCT_LIST, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, PRODUCTION_START_HOUR } from '@/lib/planner-utils';
-import ProducidasTable from '@/components/planner/ProducidasTable';import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
+import ProducidasTable, { ProducidasTabla, nuevaTabla, sumarTablas } from '@/components/planner/ProducidasTable';import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
 import { ProductionGantt } from '@/components/planner/ProductionGantt';
 import { TaskDialog } from '@/components/planner/TaskDialog';
 import { Calculator } from '@/components/planner/Calculator';
@@ -211,6 +211,7 @@ const TIPOS_PARADA_INFORME_OPERACIONAL = ["PROGRAMADA", "AVERÍA", "OPERACIONAL"
 const ZONAS = ["Llenado", "Etiquetado", "Empaque", "Preforma", "Soplado", "Lavado CIP", "Almacén", "General"];
 const EQUIPOS = ["Llenadora", "Etiquetadora", "Empacadora", "Sopladora", "CIP", "Tanque CIP", "Transportador", "Montacargas"];
 const EQUIPOS_INFORME_OPERACIONAL = ["CHILLER", "SOPLADORA", "TRANSPORTADOR AÉREO", "MIXER", "LLENADORA", "TAPADORA", "SECADOR DE BOTELLAS", "ETIQUETADORA", "CODIFICADOR", "TRANSPORTADOR DE BOTELLAS", "ENFARDADORA", "TRANSPORTADOR DE CAJAS", "PALETIZADORA", "ENVOLVEDORA"];
+const TURNOS_INFORME_OPERACIONAL = ["DIURNO", "NOCTURNO"];
 
 const mockOrdenesTrabajo: any[] = [
   {
@@ -386,39 +387,32 @@ export default function PlannerPage() {
   }, [informesOperacionalesStore, ordenesTrabajoStore]);
 
   const ordenesTrabajoCargadas = useMemo(() => {
-    return (informesOperacionales || [])
-      .filter((r) => {
-        const orden = r.orden && String(r.orden).trim() !== '';
-        const fecha = r.fecha && String(r.fecha).trim() !== '';
-        return orden && fecha;
-      })
-      .map((r) => ({
-        id: `io-${r.id}`,
-        fechaOrden: r.fecha || '',
-        orden: r.orden || '',
-        fechaEmision: '',
-        semana: r.semana || '',
-        turno: r.turno || '',
-        solicitante: '',
-        linea: r.linea || '',
-        aviso: '',
-        maquina: r.equipo || '',
-        fechaParada: '',
-        inicioMtto: '',
-        finMtto: '',
-        inicioParada: '',
-        tMtto: '',
-        finParada: '',
-        tipoParada: '',
-        mtto: '',
-        falla: '',
-        mttoEsp: '',
-        descripcionFalla: '',
-        descripcionAccion: '',
-        observaciones: r.observaciones || '',
-        _desdeInforme: true,
-      }));
-  }, [informesOperacionales]);
+    return (ordenesTrabajo || []).map((r) => ({
+      id: r.id,
+      fechaOrden: r.fechaOrden || '',
+      orden: r.orden || '',
+      fechaEmision: r.fechaEmision || '',
+      semana: r.semana || '',
+      turno: r.turno || '',
+      solicitante: r.solicitante || '',
+      linea: r.linea || '',
+      aviso: r.aviso || '',
+      maquina: r.maquina || '',
+      fechaParada: r.fechaParada || '',
+      inicioMtto: r.inicioMtto || '',
+      finMtto: r.finMtto || '',
+      inicioParada: r.inicioParada || '',
+      tMtto: r.tMtto || '',
+      finParada: r.finParada || '',
+      tipoParada: r.tipoParada || '',
+      mtto: r.mtto || '',
+      falla: r.falla || '',
+      mttoEsp: r.mttoEsp || '',
+      descripcionFalla: r.descripcionFalla || '',
+      descripcionAccion: r.descripcionAccion || '',
+      observaciones: r.observaciones || '',
+    }));
+  }, [ordenesTrabajo]);
 
   const [editingRows, setEditingRows] = useState<Record<string | number, any>>({});
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -432,6 +426,8 @@ export default function PlannerPage() {
   const [planificadasTurnoSubTab, setPlanificadasTurnoSubTab] = useState('diurno');
   const [producidasSubTab, setProducidasSubTab] = useState('porturno');
   const [producidasTurnoSubTab, setProducidasTurnoSubTab] = useState('diurno');
+  const [producidasDiurno, setProducidasDiurno] = useState<ProducidasTabla>(() => nuevaTabla());
+  const [producidasNocturno, setProducidasNocturno] = useState<ProducidasTabla>(() => nuevaTabla());
   const [produccionFecha, setProduccionFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -571,6 +567,8 @@ export default function PlannerPage() {
   const [editingTask, setEditingTask] = useState<ScheduledTask | null>(null);
   const [emitDate, setEmitDate] = useState('');
   const [paradaFiltroLinea, setParadaFiltroLinea] = useState('all');
+  const [paradaFiltroTurno, setParadaFiltroTurno] = useState('all');
+  const [paradaFiltroEquipo, setParadaFiltroEquipo] = useState('all');
   const [ordenFiltroLinea, setOrdenFiltroLinea] = useState('all');
   const [ordenBusqueda, setOrdenBusqueda] = useState('');
   const [paradaFiltroFecha, setParadaFiltroFecha] = useState('');
@@ -1751,20 +1749,44 @@ export default function PlannerPage() {
                                      className="h-9 text-[11px] w-44 bg-white"
                                      placeholder="Filtrar fecha"
                                    />
-                                   {paradaFiltroFecha && (
-                                     <button 
-                                       onClick={() => setParadaFiltroFecha('')}
-                                       className="h-9 px-3 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50"
-                                     >
-                                       Limpiar
-                                     </button>
-                                   )}
-                                   <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                      {informesOperacionales.filter((r) => {
-                                        const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
-                                        const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
-                                        return matchLine && matchDate;
-                                      }).length} registros
+                                    {paradaFiltroFecha && (
+                                      <button 
+                                        onClick={() => setParadaFiltroFecha('')}
+                                        className="h-9 px-3 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50"
+                                      >
+                                        Limpiar
+                                      </button>
+                                    )}
+                                    <Select value={paradaFiltroTurno} onValueChange={setParadaFiltroTurno}>
+                                      <SelectTrigger className="h-9 w-32 text-[10px] font-bold uppercase tracking-wider rounded-lg border-slate-200">
+                                        <SelectValue placeholder="Todos los turnos" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value="all">Todos los turnos</SelectItem>
+                                        {TURNOS_INFORME_OPERACIONAL.map((t) => (
+                                          <SelectItem key={t} value={t}>{t}</SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                    <Select value={paradaFiltroEquipo} onValueChange={setParadaFiltroEquipo}>
+                                      <SelectTrigger className="h-9 w-56 text-[10px] font-bold uppercase tracking-wider rounded-lg border-slate-200">
+                                        <SelectValue placeholder="Todos los equipos" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value="all">Todos los equipos</SelectItem>
+                                        {EQUIPOS_INFORME_OPERACIONAL.map((e) => (
+                                          <SelectItem key={e} value={e}>{e}</SelectItem>
+                                        ))}
+                                      </SelectContent>
+                                    </Select>
+                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                       {informesOperacionales.filter((r) => {
+                                         const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
+                                         const matchTurno = paradaFiltroTurno === 'all' || r.turno === paradaFiltroTurno;
+                                         const matchEquipo = paradaFiltroEquipo === 'all' || r.equipo === paradaFiltroEquipo;
+                                         const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
+                                         return matchLine && matchTurno && matchEquipo && matchDate;
+                                       }).length} registros
                                    </span>
                                  </div>
                                   <div className="rounded-lg border border-slate-200 overflow-auto max-h-[62vh] tabla-ordenes-scroll" style={{ scrollBehavior: 'smooth' }}>
@@ -1792,8 +1814,10 @@ export default function PlannerPage() {
                                         {informesOperacionales
                                           .filter((r) => {
                                             const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
+                                            const matchTurno = paradaFiltroTurno === 'all' || r.turno === paradaFiltroTurno;
+                                            const matchEquipo = paradaFiltroEquipo === 'all' || r.equipo === paradaFiltroEquipo;
                                             const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
-                                            return matchLine && matchDate;
+                                            return matchLine && matchTurno && matchEquipo && matchDate;
                                           })
                                            .map((row) => (
                                           <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
@@ -2009,12 +2033,15 @@ export default function PlannerPage() {
                                                       <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionAccion || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionAccion: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Desc. acción" /></TableCell>
                                                       <TableCell className="px-2 py-2"><Input value={rowEdit.observaciones || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, observaciones: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Observaciones" /></TableCell>
                                                    <TableCell className="px-2 py-2 flex items-center gap-1">
-                                                   <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
-                                                     const originalId = typeof row.id === 'string' && row.id.startsWith('io-') ? parseInt(row.id.replace('io-', '')) : row.id;
-                                                     const updated = { ...rowEdit, id: originalId };
-                                                     setInformesOperacionales(prev => prev.map(r => r.id === originalId ? updated : r));
-                                                     setEditingRows(prev => { const next = {...prev}; delete next[row.id]; return next; });
-                                                   }}><Check className="h-3.5 w-3.5" /></Button>
+                                                    <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
+                                                      const originalId = typeof row.id === 'string' && row.id.startsWith('io-') ? parseInt(row.id.replace('io-', '')) : row.id;
+                                                      const updated = { ...rowEdit, id: originalId };
+                                                      setOrdenesTrabajo(prev => {
+                                                        const existe = prev.some(r => r.id === originalId);
+                                                        return existe ? prev.map(r => r.id === originalId ? updated : r) : [...prev, updated];
+                                                      });
+                                                      setEditingRows(prev => { const next = {...prev}; delete next[row.id]; return next; });
+                                                    }}><Check className="h-3.5 w-3.5" /></Button>
                                                  </TableCell>
                                              </TableRow>
                                                );
@@ -2298,15 +2325,15 @@ export default function PlannerPage() {
                                             </button>
                                           ))}
                                         </div>
-                                         {producidasTurnoSubTab === 'diurno' && (
-                                           <ProducidasTable titulo="Diurno - Producidas" />
-                                         )}
-                                         {producidasTurnoSubTab === 'nocturno' && (
-                                           <ProducidasTable titulo="Nocturno - Producidas" />
-                                         )}
-                                      </div>
+                                          {producidasTurnoSubTab === 'diurno' && (
+                                            <ProducidasTable titulo="Diurno - Producidas" value={producidasDiurno} onChange={setProducidasDiurno} />
+                                          )}
+                                          {producidasTurnoSubTab === 'nocturno' && (
+                                            <ProducidasTable titulo="Nocturno - Producidas" value={producidasNocturno} onChange={setProducidasNocturno} />
+                                          )}
+                                       </div>
                                      ) : (
-                                       <ProducidasTable titulo="Diaria - Producidas" />
+                                        <ProducidasTable titulo="Diaria - Producidas" value={sumarTablas(producidasDiurno, producidasNocturno)} readOnly />
                                      )
                                   )}
                               </div>

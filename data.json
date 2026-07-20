@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-07-13T00:00:00.000",
+      "weekStartDate": "2026-07-20T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -5327,7 +5327,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-20T13:44:55.866Z"
+    "updatedAt": "2026-07-20T15:17:35.607Z"
   },
   "ordenesSap": [
     {
@@ -7411,6 +7411,126 @@
           "cajas3": 720,
           "ticket4": "",
           "cajas4": 14521
+        }
+      ]
+    },
+    {
+      "id": "1-1784559843506",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "62404",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-20",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1784560092485",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "62410",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-20",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1784560205593",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62416",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-20",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1784560322091",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62422",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-20",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1784560416755",
+      "linea": 5,
+      "sabor": "JUSTY NARANJA",
+      "ordenNumero": "62427",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-20",
+          "ticket1": "17241",
+          "cajas1": 800,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1784560534859",
+      "linea": 6,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62433",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-20",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -11932,21 +12052,30 @@
     },
     "planta-informes-operacionales": [
       {
-        "fecha": "2026-07-20",
+        "id": 1784554694921,
+        "fechaOrden": "2026-07-20",
+        "orden": "5555",
+        "fechaEmision": "",
         "semana": 30,
         "turno": "DIURNO",
-        "operador": "",
+        "solicitante": "",
         "linea": "Línea 1",
-        "equipo": "",
-        "tipoParada": "MECÁNICO",
-        "inicioParada": "20:00",
-        "finParada": "21:00",
-        "totalMin": "60",
-        "zona": "Llenado",
+        "aviso": "",
+        "maquina": "",
+        "fechaParada": "",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "",
+        "tMtto": "",
+        "finParada": "",
+        "tipoParada": "",
+        "mtto": "",
         "falla": "",
-        "orden": "5555",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
         "observaciones": "",
-        "id": 1784554694921
+        "_desdeInforme": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -11965,8 +12094,8 @@
         "inicioMtto": "",
         "finMtto": "",
         "inicioParada": "",
-        "finParada": "",
         "tMtto": "",
+        "finParada": "",
         "tipoParada": "",
         "mtto": "",
         "falla": "",
@@ -11990,8 +12119,8 @@
         "inicioMtto": "",
         "finMtto": "",
         "inicioParada": "",
-        "finParada": "",
         "tMtto": "",
+        "finParada": "",
         "tipoParada": "",
         "mtto": "",
         "falla": "",
@@ -12023,6 +12152,9 @@
         },
         "auto-1-1784323686130": {
           "cajasPlanificadas": 69000
+        },
+        "auto-1-1784559843506": {
+          "cajasPlanificadas": 36000
         }
       },
       "linea-2": {},

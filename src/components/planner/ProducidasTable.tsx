@@ -5,12 +5,12 @@ import { PRODUCT_LIST } from "@/lib/planner-utils";
 
 const LINEAS = [1, 2, 3, 4, 5, 6, 7];
 
-type Celda = number | "";
-type Fila = Record<number, Celda>;
-type Tabla = Record<string, Fila>;
+export type Celda = number | "";
+export type Fila = Record<number, Celda>;
+export type ProducidasTabla = Record<string, Fila>;
 
-function nuevaTabla(): Tabla {
-  const tabla: Tabla = {};
+function nuevaTabla(): ProducidasTabla {
+  const tabla: ProducidasTabla = {};
   PRODUCT_LIST.forEach((sabor) => {
     tabla[sabor] = {};
     LINEAS.forEach((l) => {
@@ -20,15 +20,40 @@ function nuevaTabla(): Tabla {
   return tabla;
 }
 
-export default function ProducidasTable({ titulo }: { titulo: string }) {
-  const [tabla, setTabla] = useState<Tabla>(() => nuevaTabla());
+function sumarTablas(a: ProducidasTabla, b: ProducidasTabla): ProducidasTabla {
+  const resultado = nuevaTabla();
+  PRODUCT_LIST.forEach((sabor) => {
+    LINEAS.forEach((l) => {
+      resultado[sabor][l] =
+        (Number(a[sabor]?.[l]) || 0) + (Number(b[sabor]?.[l]) || 0);
+    });
+  });
+  return resultado;
+}
+
+export default function ProducidasTable({
+  titulo,
+  value,
+  onChange,
+  readOnly = false,
+}: {
+  titulo: string;
+  value?: ProducidasTabla;
+  onChange?: (tabla: ProducidasTabla) => void;
+  readOnly?: boolean;
+}) {
+  const [tablaInterna, setTablaInterna] = useState<ProducidasTabla>(() => nuevaTabla());
+  const tabla = value ?? tablaInterna;
 
   const actualizar = (sabor: string, linea: number, valor: string) => {
     const num = valor === "" ? "" : Number(valor);
-    setTabla((prev) => ({
-      ...prev,
-      [sabor]: { ...prev[sabor], [linea]: Number.isNaN(num as number) ? "" : num },
-    }));
+    const limpio = Number.isNaN(num as number) ? "" : num;
+    const siguiente: ProducidasTabla = {
+      ...tabla,
+      [sabor]: { ...tabla[sabor], [linea]: limpio },
+    };
+    if (onChange) onChange(siguiente);
+    else setTablaInterna(siguiente);
   };
 
   const totalSabor = (sabor: string) =>
@@ -66,9 +91,10 @@ export default function ProducidasTable({ titulo }: { titulo: string }) {
                       <input
                         type="number"
                         min={0}
+                        readOnly={readOnly}
                         value={tabla[sabor]?.[linea] ?? ""}
                         onChange={(e) => actualizar(sabor, linea, e.target.value)}
-                        className="w-full min-w-[48px] bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-sky-50 rounded px-1 py-0.5"
+                        className="w-full min-w-[48px] bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-sky-50 rounded px-1 py-0.5 disabled:bg-transparent disabled:opacity-100"
                       />
                     </td>
                   ))}
@@ -89,3 +115,5 @@ export default function ProducidasTable({ titulo }: { titulo: string }) {
     </div>
   );
 }
+
+export { nuevaTabla, sumarTablas, LINEAS };
