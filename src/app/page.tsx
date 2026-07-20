@@ -1674,9 +1674,8 @@ export default function PlannerPage() {
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Tipo de Parada</TableHead>
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">I-Parada</TableHead>
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">F-Parada</TableHead>
-                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">T-Parada</TableHead>
-                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Zona</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Motivo de Parada</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">T-Parada</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Motivo de Parada</TableHead>
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Orden</TableHead>
                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Observaciones</TableHead>
                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 w-16">Acciones</TableHead>
@@ -1702,9 +1701,8 @@ export default function PlannerPage() {
                                                 <TableCell className="px-2 py-2"><Input value={editForm.tipoParada || ''} onChange={(e) => setEditForm({...editForm, tipoParada: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                  <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="time" value={editForm.inicioParada || ''} onChange={(e) => setEditForm({...editForm, inicioParada: e.target.value})} className="h-8 text-[10px] w-24" /></TableCell>
                                                  <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="time" value={editForm.finParada || ''} onChange={(e) => setEditForm({...editForm, finParada: e.target.value})} className="h-8 text-[10px] w-24" /></TableCell>
-                                                 <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" value={editForm.totalMin ?? ''} readOnly className="h-8 text-[10px] w-16 bg-slate-100" /></TableCell>
-                                                <TableCell className="px-2 py-2"><Input value={editForm.zona || ''} onChange={(e) => setEditForm({...editForm, zona: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                                <TableCell className="px-2 py-2 max-w-[180px]"><Input value={editForm.falla || ''} onChange={(e) => setEditForm({...editForm, falla: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
+                                                  <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" value={editForm.totalMin ?? ''} readOnly className="h-8 text-[10px] w-16 bg-slate-100" /></TableCell>
+                                                 <TableCell className="px-2 py-2 max-w-[180px]"><Input value={editForm.falla || ''} onChange={(e) => setEditForm({...editForm, falla: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
                                                 <TableCell className="px-2 py-2"><Input value={editForm.orden || ''} onChange={(e) => setEditForm({...editForm, orden: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                 <TableCell className="px-2 py-2 max-w-[200px]"><Input value={editForm.observaciones || ''} onChange={(e) => setEditForm({...editForm, observaciones: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
                                                  <TableCell className="px-2 py-2 flex items-center gap-1">
@@ -1744,9 +1742,8 @@ export default function PlannerPage() {
                                                 <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.tipoParada}</TableCell>
                                                  <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums whitespace-nowrap">{row.inicioParada}</TableCell>
                                                  <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums whitespace-nowrap">{row.finParada}</TableCell>
-                                                 <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums whitespace-nowrap">{row.totalMin} min</TableCell>
-                                                <TableCell className="px-2 py-2 text-[11px] text-slate-600 whitespace-nowrap">{row.zona}</TableCell>
-                                                <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.falla}>{row.falla}</TableCell>
+                                                  <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums whitespace-nowrap">{row.totalMin} min</TableCell>
+                                                 <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.falla}>{row.falla}</TableCell>
                                                 <TableCell className="px-2 py-2 text-[11px] font-mono text-slate-600 whitespace-nowrap">{row.orden}</TableCell>
                                                 <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[200px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
                                                  <TableCell className="px-2 py-2 flex items-center gap-1">
@@ -2613,13 +2610,9 @@ export default function PlannerPage() {
                    <select value={plantaFormData.tipoParada} onChange={(e) => setPlantaFormData({...plantaFormData, tipoParada: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
                      {TIPOS_PARADA_INFORME_OPERACIONAL.map((t) => <option key={t} value={t}>{t}</option>)}
                    </select>
-                </div>
-                 <div className="space-y-2">
-                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Zona</label>
-                   <Input value={plantaFormData.zona} onChange={(e) => setPlantaFormData({...plantaFormData, zona: e.target.value})} className="h-9 text-[11px]" placeholder="Ingrese zona" />
                  </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Parada</label>
+                 <div className="space-y-2">
+                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Parada</label>
                   <Input type="time" value={plantaFormData.inicioParada} onChange={(e) => setPlantaFormData({...plantaFormData, inicioParada: e.target.value})} className="h-9 text-[11px]" />
                 </div>
                 <div className="space-y-2">
