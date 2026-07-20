@@ -168,6 +168,14 @@ const parseFecha = (fecha: string): Date | null => {
   return isNaN(date.getTime()) ? null : date;
 };
 
+const formatearFecha = (fecha: string): string => {
+  const date = parseFecha(fecha);
+  if (!date) return fecha || '';
+  const d = String(date.getDate()).padStart(2, '0');
+  const m = String(date.getMonth() + 1).padStart(2, '0');
+  return `${d}/${m}/${date.getFullYear()}`;
+};
+
 const diasEntre = (fechaInicio: string, fechaFin: string): number | null => {
   const a = parseFecha(fechaInicio);
   const b = parseFecha(fechaFin);
@@ -364,55 +372,109 @@ export default function PlannerPage() {
   const ordenesTrabajo = ordenesTrabajoStore.data;
   const setOrdenesTrabajo = ordenesTrabajoStore.setData;
   const migracionPlantaHechaRef = useRef(false);
+  const informesOperacionalesRef = useRef(informesOperacionales);
+  informesOperacionalesRef.current = informesOperacionales;
 
   useEffect(() => {
     if (migracionPlantaHechaRef.current) return;
     if (!informesOperacionalesStore.isLoaded || !ordenesTrabajoStore.isLoaded) return;
     migracionPlantaHechaRef.current = true;
-    const migrar = (ns: string, store: { data: any[]; setData: (d: any[]) => void }) => {
+    const migrarInformes = (ns: string) => {
       try {
         const raw = localStorage.getItem(ns);
         if (!raw) return;
         const arr = JSON.parse(raw);
-        if (Array.isArray(arr) && arr.length > 0 && store.data.length === 0) {
-          store.setData(arr);
+        if (Array.isArray(arr) && arr.length > 0 && informesOperacionalesRef.current.length === 0) {
+          informesOperacionalesStore.setData(arr);
         }
         localStorage.removeItem(ns);
       } catch {
         // ignore
       }
     };
-    migrar('planta-informes-operacionales', informesOperacionalesStore);
-    migrar('planta-ordenes-trabajo', ordenesTrabajoStore);
+    const migrarOrdenesAInformes = (ns: string) => {
+      try {
+        const raw = localStorage.getItem(ns);
+        if (!raw) return;
+        const arr = JSON.parse(raw);
+        if (Array.isArray(arr) && arr.length > 0) {
+          const convertidas = arr
+            .filter((o: any) => o.orden && String(o.orden).trim() !== '')
+            .map((o: any) => ({
+              id: o.id ?? Date.now() + Math.random(),
+              fecha: o.fechaOrden || format(new Date(), 'yyyy-MM-dd'),
+              semana: o.semana || '',
+              turno: o.turno || '',
+              operador: '',
+              linea: o.linea || 'Línea 1',
+              equipo: o.maquina || '',
+              tipoParada: o.tipoParada || 'PROGRAMADA',
+              inicioParada: o.inicioParada || '',
+              finParada: o.finParada || '',
+              totalMin: o.tMtto || '',
+              zona: '',
+              falla: o.falla || '',
+              orden: o.orden || '',
+              aviso: o.aviso || '',
+              maquina: o.maquina || '',
+              solicitante: o.solicitante || '',
+              fechaEmision: o.fechaEmision || '',
+              fechaParada: o.fechaParada || '',
+              inicioMtto: o.inicioMtto || '',
+              finMtto: o.finMtto || '',
+              tMtto: o.tMtto || '',
+              mtto: o.mtto || '',
+              mttoEsp: o.mttoEsp || '',
+              descripcionFalla: o.descripcionFalla || '',
+              descripcionAccion: o.descripcionAccion || '',
+              observaciones: o.observaciones || '',
+            }));
+          if (convertidas.length > 0) {
+            informesOperacionalesStore.setData([...informesOperacionales, ...convertidas]);
+          }
+        }
+        localStorage.removeItem(ns);
+      } catch {
+        // ignore
+      }
+    };
+    migrarInformes('planta-informes-operacionales');
+    migrarOrdenesAInformes('planta-ordenes-trabajo');
   }, [informesOperacionalesStore, ordenesTrabajoStore]);
 
   const ordenesTrabajoCargadas = useMemo(() => {
-    return (ordenesTrabajo || []).map((r) => ({
-      id: r.id,
-      fechaOrden: r.fechaOrden || '',
-      orden: r.orden || '',
-      fechaEmision: r.fechaEmision || '',
-      semana: r.semana || '',
-      turno: r.turno || '',
-      solicitante: r.solicitante || '',
-      linea: r.linea || '',
-      aviso: r.aviso || '',
-      maquina: r.maquina || '',
-      fechaParada: r.fechaParada || '',
-      inicioMtto: r.inicioMtto || '',
-      finMtto: r.finMtto || '',
-      inicioParada: r.inicioParada || '',
-      tMtto: r.tMtto || '',
-      finParada: r.finParada || '',
-      tipoParada: r.tipoParada || '',
-      mtto: r.mtto || '',
-      falla: r.falla || '',
-      mttoEsp: r.mttoEsp || '',
-      descripcionFalla: r.descripcionFalla || '',
-      descripcionAccion: r.descripcionAccion || '',
-      observaciones: r.observaciones || '',
-    }));
-  }, [ordenesTrabajo]);
+    return (informesOperacionales || [])
+      .filter((r) => {
+        const orden = r.orden && String(r.orden).trim() !== '';
+        const fecha = r.fecha && String(r.fecha).trim() !== '';
+        return orden && fecha;
+      })
+      .map((r) => ({
+        id: r.id,
+        fechaOrden: r.fecha || '',
+        orden: r.orden || '',
+        fechaEmision: r.fechaEmision || r.fecha || '',
+        semana: r.semana || '',
+        turno: r.turno || '',
+        solicitante: r.solicitante || '',
+        linea: r.linea || '',
+        aviso: r.aviso || '',
+        maquina: r.maquina || r.equipo || '',
+        fechaParada: r.fechaParada || r.fecha || '',
+        inicioMtto: r.inicioMtto || '',
+        finMtto: r.finMtto || '',
+        inicioParada: r.inicioParada || '',
+        tMtto: r.tMtto || '',
+        finParada: r.finParada || '',
+        tipoParada: r.tipoParada || '',
+        mtto: r.mtto || '',
+        falla: r.falla || '',
+        mttoEsp: r.mttoEsp || '',
+        descripcionFalla: r.descripcionFalla || '',
+        descripcionAccion: r.descripcionAccion || '',
+        observaciones: r.observaciones || '',
+      }));
+  }, [informesOperacionales]);
 
   const [editingRows, setEditingRows] = useState<Record<string | number, any>>({});
   const [editingId, setEditingId] = useState<number | null>(null);
@@ -1842,19 +1904,19 @@ export default function PlannerPage() {
                                                         setErrorValidacion('Ingrese hora de inicio y fin de la parada.');
                                                         return;
                                                       }
-                                                      const duplicado = informesOperacionales.find(r => r.id !== row.id && r.fecha === editForm.fecha && r.linea === editForm.linea && seSolapan(r.inicioParada, r.finParada, editForm.inicioParada, editForm.finParada));
+                                                      const duplicado = informesOperacionales.find(r => String(r.id) !== String(row.id) && r.fecha === editForm.fecha && r.linea === editForm.linea && seSolapan(r.inicioParada, r.finParada, editForm.inicioParada, editForm.finParada));
                                                       if (duplicado) {
                                                         setErrorValidacion(`Ya existe una parada registrada en esta fecha y línea de ${duplicado.inicioParada} a ${duplicado.finParada}.`);
                                                         return;
                                                       }
                                                       const [h1, m1] = (editForm.inicioParada || '00:00').split(':').map(Number);
                                                       const [h2, m2] = (editForm.finParada || '00:00').split(':').map(Number);
-                                                     let inicio = h1 * 60 + m1;
-                                                     let fin = h2 * 60 + m2;
-                                                     let diff = fin - inicio;
-                                                     if (diff < 0) diff += 1440;
-                                                     const updated = { ...editForm, totalMin: String(diff) };
-                                                     setInformesOperacionales(prev => prev.map(r => r.id === row.id ? updated : r));
+                                                      let inicio = h1 * 60 + m1;
+                                                      let fin = h2 * 60 + m2;
+                                                      let diff = fin - inicio;
+                                                      if (diff < 0) diff += 1440;
+                                                      const updated = { ...editForm, totalMin: String(diff) };
+                                                      setInformesOperacionales(prev => prev.map(r => String(r.id) === String(row.id) ? updated : r));
                                                      setEditingId(null);
                                                      setEditForm({});
                                                      setErrorValidacion('');
@@ -1864,7 +1926,7 @@ export default function PlannerPage() {
                                               </>
                                             ) : (
                                               <>
-                                                <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{row.fecha}</TableCell>
+                                                 <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{formatearFecha(row.fecha)}</TableCell>
                                                 <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {row.semana}</TableCell>
                                                 <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{row.turno}</TableCell>
                                                 <TableCell className="px-2 py-2 text-[11px] font-semibold text-slate-800 whitespace-nowrap">{row.operador}</TableCell>
@@ -1983,7 +2045,7 @@ export default function PlannerPage() {
                                                   const tParadaCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioParada, rowEdit.fechaParada, rowEdit.finParada);
                                                 return (
                                              <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
-                                                 <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap sticky left-0 z-20 bg-white even:bg-slate-50/60">{rowEdit.fechaOrden}</TableCell>
+                                                  <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap sticky left-0 z-20 bg-white even:bg-slate-50/60">{formatearFecha(rowEdit.fechaOrden)}</TableCell>
                                                  <TableCell className="px-2 py-2 text-[11px] font-mono font-bold text-slate-900 whitespace-nowrap sticky left-[72px] z-20 bg-white even:bg-slate-50/60">{rowEdit.orden}</TableCell>
                                                  {editable('fechaEmision') ? <TableCell className="px-2 py-2"><Input type="date" value={rowEdit.fechaEmision || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, fechaEmision: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{rowEdit.fechaEmision}</TableCell>}
                                                  <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {rowEdit.semana}</TableCell>
@@ -2033,15 +2095,33 @@ export default function PlannerPage() {
                                                       <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionAccion || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionAccion: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Desc. acción" /></TableCell>
                                                       <TableCell className="px-2 py-2"><Input value={rowEdit.observaciones || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, observaciones: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Observaciones" /></TableCell>
                                                    <TableCell className="px-2 py-2 flex items-center gap-1">
-                                                    <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
-                                                      const originalId = typeof row.id === 'string' && row.id.startsWith('io-') ? parseInt(row.id.replace('io-', '')) : row.id;
-                                                      const updated = { ...rowEdit, id: originalId };
-                                                      setOrdenesTrabajo(prev => {
-                                                        const existe = prev.some(r => r.id === originalId);
-                                                        return existe ? prev.map(r => r.id === originalId ? updated : r) : [...prev, updated];
-                                                      });
-                                                      setEditingRows(prev => { const next = {...prev}; delete next[row.id]; return next; });
-                                                    }}><Check className="h-3.5 w-3.5" /></Button>
+                                                     <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
+                                                       const originalId = row.id;
+                                                       setInformesOperacionales(prev => prev.map(r => {
+                                                         if (String(r.id) !== String(originalId)) return r;
+                                                         return {
+                                                           ...r,
+                                                           fechaEmision: rowEdit.fechaEmision || r.fecha || '',
+                                                           solicitante: rowEdit.solicitante || r.solicitante || '',
+                                                           aviso: rowEdit.aviso || r.aviso || '',
+                                                           maquina: rowEdit.maquina || r.maquina || '',
+                                                           fechaParada: rowEdit.fechaParada || r.fecha || '',
+                                                           inicioMtto: rowEdit.inicioMtto || '',
+                                                           finMtto: rowEdit.finMtto || '',
+                                                           inicioParada: rowEdit.inicioParada || '',
+                                                           tMtto: rowEdit.tMtto || '',
+                                                           finParada: rowEdit.finParada || '',
+                                                           tipoParada: rowEdit.tipoParada || '',
+                                                           mtto: rowEdit.mtto || '',
+                                                           falla: rowEdit.falla || '',
+                                                           mttoEsp: rowEdit.mttoEsp || '',
+                                                           descripcionFalla: rowEdit.descripcionFalla || '',
+                                                           descripcionAccion: rowEdit.descripcionAccion || '',
+                                                           observaciones: rowEdit.observaciones || '',
+                                                         };
+                                                       }));
+                                                       setEditingRows(prev => { const next = {...prev}; delete next[row.id]; return next; });
+                                                     }}><Check className="h-3.5 w-3.5" /></Button>
                                                  </TableCell>
                                              </TableRow>
                                                );
@@ -2934,33 +3014,61 @@ export default function PlannerPage() {
                      observaciones: '',
                    });
                    setErrorValidacion('');
-                 } else {
-                  setOrdenesTrabajo([...ordenesTrabajo, { ...ordenFormData, id: Date.now() }]);
-                  setOrdenFormData({
-                    fechaOrden: format(new Date(), 'yyyy-MM-dd'),
-                    orden: '',
-                    fechaEmision: format(new Date(), 'yyyy-MM-dd'),
-                    semana: getISOWeek(new Date()),
-                    turno: 'T1',
-                    solicitante: '',
-                    linea: 'Línea 1',
-                     maquina: '',
-                     aviso: '',
-                     fechaParada: format(new Date(), 'yyyy-MM-dd'),
-                     inicioMtto: '',
-                     finMtto: '',
-                     inicioParada: '',
-                     finParada: '',
-                     tMtto: '',
-    tipoParada: 'PROGRAMADA',
-                     mtto: 'CORRECTIVO',
-                     falla: '',
-                     mttoEsp: 'MTTO',
-                     descripcionFalla: '',
-                     descripcionAccion: '',
-                     observaciones: '',
-                  });
-                }
+                  } else {
+                    setInformesOperacionales([...informesOperacionales, {
+                      id: Date.now(),
+                      fecha: ordenFormData.fechaOrden || format(new Date(), 'yyyy-MM-dd'),
+                      semana: ordenFormData.semana || '',
+                      turno: ordenFormData.turno || '',
+                      operador: '',
+                      linea: ordenFormData.linea || 'Línea 1',
+                      equipo: ordenFormData.maquina || '',
+                      tipoParada: ordenFormData.tipoParada || 'PROGRAMADA',
+                      inicioParada: ordenFormData.inicioParada || '',
+                      finParada: ordenFormData.finParada || '',
+                      totalMin: ordenFormData.tMtto || '',
+                      zona: '',
+                      falla: ordenFormData.falla || '',
+                      orden: ordenFormData.orden || '',
+                      aviso: ordenFormData.aviso || '',
+                      maquina: ordenFormData.maquina || '',
+                      solicitante: ordenFormData.solicitante || '',
+                      fechaEmision: ordenFormData.fechaEmision || '',
+                      fechaParada: ordenFormData.fechaParada || '',
+                      inicioMtto: ordenFormData.inicioMtto || '',
+                      finMtto: ordenFormData.finMtto || '',
+                      tMtto: ordenFormData.tMtto || '',
+                      mtto: ordenFormData.mtto || '',
+                      mttoEsp: ordenFormData.mttoEsp || '',
+                      descripcionFalla: ordenFormData.descripcionFalla || '',
+                      descripcionAccion: ordenFormData.descripcionAccion || '',
+                      observaciones: ordenFormData.observaciones || '',
+                    }]);
+                    setOrdenFormData({
+                      fechaOrden: format(new Date(), 'yyyy-MM-dd'),
+                      orden: '',
+                      fechaEmision: format(new Date(), 'yyyy-MM-dd'),
+                      semana: getISOWeek(new Date()),
+                      turno: 'T1',
+                      solicitante: '',
+                      linea: 'Línea 1',
+                      maquina: '',
+                      aviso: '',
+                      fechaParada: format(new Date(), 'yyyy-MM-dd'),
+                      inicioMtto: '',
+                      finMtto: '',
+                      inicioParada: '',
+                      finParada: '',
+                      tMtto: '',
+                      tipoParada: 'PROGRAMADA',
+                      mtto: 'CORRECTIVO',
+                      falla: '',
+                      mttoEsp: 'MTTO',
+                      descripcionFalla: '',
+                      descripcionAccion: '',
+                      observaciones: '',
+                    });
+                  }
                 setIsPlantaDialogOpen(false);
                 toast({ title: 'Registro guardado exitosamente' });
               }} className="rounded-xl bg-slate-800 text-white hover:bg-slate-900">

@@ -5327,7 +5327,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-20T15:15:35.403Z"
+    "updatedAt": "2026-07-20T15:17:35.607Z"
   },
   "ordenesSap": [
     {
@@ -7503,8 +7503,8 @@
       "dias": [
         {
           "fechaInicio": "2026-07-20",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17241",
+          "cajas1": 800,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -12052,21 +12052,30 @@
     },
     "planta-informes-operacionales": [
       {
-        "fecha": "2026-07-20",
+        "id": 1784554694921,
+        "fechaOrden": "2026-07-20",
+        "orden": "5555",
+        "fechaEmision": "",
         "semana": 30,
         "turno": "DIURNO",
-        "operador": "",
+        "solicitante": "",
         "linea": "Línea 1",
-        "equipo": "",
-        "tipoParada": "MECÁNICO",
-        "inicioParada": "20:00",
-        "finParada": "21:00",
-        "totalMin": "60",
-        "zona": "Llenado",
+        "aviso": "",
+        "maquina": "",
+        "fechaParada": "",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "",
+        "tMtto": "",
+        "finParada": "",
+        "tipoParada": "",
+        "mtto": "",
         "falla": "",
-        "orden": "5555",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
         "observaciones": "",
-        "id": 1784554694921
+        "_desdeInforme": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -12085,8 +12094,8 @@
         "inicioMtto": "",
         "finMtto": "",
         "inicioParada": "",
-        "finParada": "",
         "tMtto": "",
+        "finParada": "",
         "tipoParada": "",
         "mtto": "",
         "falla": "",
@@ -12110,8 +12119,8 @@
         "inicioMtto": "",
         "finMtto": "",
         "inicioParada": "",
-        "finParada": "",
         "tMtto": "",
+        "finParada": "",
         "tipoParada": "",
         "mtto": "",
         "falla": "",

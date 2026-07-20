@@ -5327,7 +5327,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-20T15:13:37.347Z"
+    "updatedAt": "2026-07-20T15:17:35.607Z"
   },
   "ordenesSap": [
     {
@@ -7499,6 +7499,26 @@
       "linea": 5,
       "sabor": "JUSTY NARANJA",
       "ordenNumero": "62427",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-20",
+          "ticket1": "17241",
+          "cajas1": 800,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1784560534859",
+      "linea": 6,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62433",
       "semana": 30,
       "dias": [
         {
@@ -12030,25 +12050,7 @@
       "fixedCapacities": {},
       "_deletedIds": {}
     },
-    "planta-informes-operacionales": [
-      {
-        "fecha": "2026-07-20",
-        "semana": 30,
-        "turno": "DIURNO",
-        "operador": "",
-        "linea": "Línea 1",
-        "equipo": "",
-        "tipoParada": "MECÁNICO",
-        "inicioParada": "20:00",
-        "finParada": "21:00",
-        "totalMin": "60",
-        "zona": "Llenado",
-        "falla": "",
-        "orden": "5555",
-        "observaciones": "",
-        "id": 1784554694921
-      }
-    ],
+    "planta-informes-operacionales": [],
     "planta-ordenes-trabajo": [
       {
         "id": "orden-sync-52001",
@@ -12065,8 +12067,8 @@
         "inicioMtto": "",
         "finMtto": "",
         "inicioParada": "",
-        "finParada": "",
         "tMtto": "",
+        "finParada": "",
         "tipoParada": "",
         "mtto": "",
         "falla": "",
@@ -12090,8 +12092,8 @@
         "inicioMtto": "",
         "finMtto": "",
         "inicioParada": "",
-        "finParada": "",
         "tMtto": "",
+        "finParada": "",
         "tipoParada": "",
         "mtto": "",
         "falla": "",
@@ -12149,7 +12151,8 @@
         "274f6505-c448-4c2f-93ac-4e49846fbfc6",
         "1784552003625",
         "1784553585913",
-        "1784554339534"
+        "1784554339534",
+        "1784554694921"
       ]
     },
     "planta-ordenes-trabajo": {
