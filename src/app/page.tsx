@@ -2587,24 +2587,46 @@ export default function PlannerPage() {
                                         </button>
                                       ))}
                                     </div>
-                                      {turnoSubTab === 'diurno' && (
+                                       {turnoSubTab === 'diurno' && (
+                                         <>
+                                         <ReporteTurnoTabla 
+                                           informesOperacionales={informesOperacionales || []}
+                                           tasks={tasks}
+                                           realProduction={realProduction}
+                                           lineSpeeds={lineSpeeds}
+                                           turno="DIURNO"
+                                         />
+                                         <div className="mt-3">
+                                           <TablaResumenPorLinea 
+                                             informesOperacionales={informesOperacionales || []}
+                                             tasks={tasks}
+                                             realProduction={realProduction}
+                                             lineSpeeds={lineSpeeds}
+                                             fecha={reporteDiarioFecha}
+                                           />
+                                         </div>
+                                         </>
+                                       )}
+                                      {turnoSubTab === 'nocturno' && (
+                                        <>
                                         <ReporteTurnoTabla 
                                           informesOperacionales={informesOperacionales || []}
                                           tasks={tasks}
                                           realProduction={realProduction}
                                           lineSpeeds={lineSpeeds}
-                                          turno="DIURNO"
+                                          turno="NOCTURNO"
                                         />
+                                        <div className="mt-3">
+                                          <TablaResumenPorLinea 
+                                            informesOperacionales={informesOperacionales || []}
+                                            tasks={tasks}
+                                            realProduction={realProduction}
+                                            lineSpeeds={lineSpeeds}
+                                            fecha={reporteDiarioFecha}
+                                          />
+                                        </div>
+                                        </>
                                       )}
-                                     {turnoSubTab === 'nocturno' && (
-                                       <ReporteTurnoTabla 
-                                         informesOperacionales={informesOperacionales || []}
-                                         tasks={tasks}
-                                         realProduction={realProduction}
-                                         lineSpeeds={lineSpeeds}
-                                         turno="NOCTURNO"
-                                       />
-                                     )}
                                   </div>
                                 )}
                               </div>
