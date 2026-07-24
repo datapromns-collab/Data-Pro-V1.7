@@ -1040,6 +1040,8 @@ function usePlannerStoreInner() {
     setTasks,
     weekStartDate,
     setWeekStartDate,
+    weeklyData,
+    setWeeklyData,
     lineSpeeds,
     setLineSpeeds,
     realProduction,

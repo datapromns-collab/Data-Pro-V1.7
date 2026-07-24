@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-07-27T00:00:00.000",
+      "weekStartDate": "2026-07-23T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -663,19 +663,6 @@
     "weeks": {
       "2026-07-13": {
         "tasks": [
-          {
-            "name": "GLUP FRESH",
-            "lineId": "1",
-            "loadPerHour": 1500,
-            "quantity": 70500,
-            "durationHours": 47,
-            "presentation": "2Lts",
-            "tanks": 8.17,
-            "startTime": "2026-07-13T11:00:00.000Z",
-            "endTime": "2026-07-15T10:00:00.000Z",
-            "id": "nksfabh5i",
-            "color": "#6366f1"
-          },
           {
             "name": "GLUP NARANJA",
             "lineId": "3",
@@ -2755,7 +2742,8 @@
           "kwy97jtmj",
           "7h9l4z74q",
           "m019vix5a",
-          "ult4f3myf"
+          "ult4f3myf",
+          "nksfabh5i"
         ]
       },
       "weeks": {
@@ -2855,19 +2843,6 @@
             "startTime": "2026-07-20T11:00:00.000Z",
             "endTime": "2026-07-23T15:00:00.000Z",
             "id": "j40sg61dk",
-            "color": "#6366f1"
-          },
-          {
-            "name": "GLUP FRESH",
-            "lineId": "1",
-            "loadPerHour": 1500,
-            "quantity": 70500,
-            "durationHours": 47,
-            "presentation": "2Lts",
-            "tanks": 8.17,
-            "startTime": "2026-07-13T11:00:00.000Z",
-            "endTime": "2026-07-15T10:00:00.000Z",
-            "id": "nksfabh5i",
             "color": "#6366f1"
           },
           {
@@ -5918,7 +5893,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-24T13:26:41.084Z"
+    "updatedAt": "2026-07-24T15:36:20.626Z"
   },
   "ordenesSap": [
     {
@@ -14652,10 +14627,6 @@
         "mttoEsp": "",
         "descripcionFalla": "",
         "descripcionAccion": ""
-      },
-      {
-        "id": "1",
-        "nombre": "prueba"
       }
     ],
     "planta-ordenes-trabajo": [
@@ -14762,7 +14733,8 @@
         "1784552003625",
         "1784553585913",
         "1784554339534",
-        "1784554694921"
+        "1784554694921",
+        "1"
       ]
     },
     "planta-ordenes-trabajo": {
@@ -14776,5 +14748,6 @@
     "seguimiento-ordenes-auto": {},
     "seguimiento-etiquetadora": {},
     "planta-produccion-producidas": {}
-  }
+  },
+  "_deletedOrdenesSapIds": []
 }

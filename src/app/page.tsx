@@ -89,8 +89,9 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { WeeklyData } from '@/lib/json-db';
 import { ScheduledTask } from '@/lib/types';
-import { format, getISOWeek, addDays } from 'date-fns';
+import { format, getISOWeek, addDays, addMonths, subMonths, startOfWeek, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -278,6 +279,7 @@ export default function PlannerPage() {
   const { 
     tasks, 
     weekStartDate, 
+    weeklyData,
     lineSpeeds,
     realProduction,
     customRecipes,
@@ -489,6 +491,7 @@ export default function PlannerPage() {
   const [planificadasTurnoSubTab, setPlanificadasTurnoSubTab] = useState('diurno');
   const [producidasSubTab, setProducidasSubTab] = useState('porturno');
   const [producidasTurnoSubTab, setProducidasTurnoSubTab] = useState('diurno');
+  const [produccionMes, setProduccionMes] = useState<Date>(() => startOfMonth(new Date()));
   const producidasStore = useRemoteCollection<{ diurno: ProducidasTabla; nocturno: ProducidasTabla }>('planta-produccion-producidas', {
     diurno: nuevaTabla(),
     nocturno: nuevaTabla(),
@@ -571,13 +574,14 @@ export default function PlannerPage() {
     return { diurno, nocturno };
   };
 
-  const sumarTablaTurno = (turno: 'diurno' | 'nocturno') => {
+  const sumarTablaTurno = (turno: 'diurno' | 'nocturno', tareasPersonalizadas?: ScheduledTask[]) => {
+    const tareas = tareasPersonalizadas || tasks;
     const fecha = produccionFecha || new Date();
     const tabla: Record<string, Record<number, number>> = {};
     PRODUCT_LIST.forEach(sabor => {
       tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
     });
-    tasks.forEach(task => {
+    tareas.forEach(task => {
       const sabor = String(task.name || '').trim();
       const linea = Number(task.lineId);
       if (!sabor || !linea || linea < 1 || linea > 7) return;
@@ -590,20 +594,153 @@ export default function PlannerPage() {
     return tabla;
   };
 
-  const planificadasTablaDiario = useMemo(() => sumarTablaTurno('diurno'), [produccionFecha, tasks]);
-  const planificadasTabla = useMemo(() => sumarTablaTurno('nocturno'), [produccionFecha, tasks]);
+  const getPlanificadasPorDia = (tareas: ScheduledTask[]) => {
+    const mapa: Record<
+      string,
+      Record<
+        string,
+        Record<
+          number,
+          {
+            diurno: number;
+            nocturno: number;
+          }
+        >
+      >
+    > = {};
+
+    tareas.forEach(task => {
+      const sabor = String(task.name || '').trim();
+      const linea = Number(task.lineId);
+      if (!sabor || !linea || linea < 1 || linea > 7) return;
+
+      const start = new Date(task.startTime);
+      const end = new Date(task.endTime);
+      const qty = Number(task.quantity) || 0;
+      if (qty <= 0 || isNaN(start.getTime()) || isNaN(end.getTime())) return;
+
+      const cursor = new Date(start);
+      while (cursor < end) {
+        const diaStart = new Date(cursor);
+        diaStart.setHours(0, 0, 0, 0);
+        const diaEnd = new Date(diaStart);
+        diaEnd.setDate(diaEnd.getDate() + 1);
+
+        const prodDayStart = new Date(diaStart);
+        prodDayStart.setHours(7, 0, 0, 0);
+        const prodDayEnd = new Date(prodDayStart);
+        prodDayEnd.setDate(prodDayEnd.getDate() + 1);
+        prodDayEnd.setHours(7, 0, 0, 0);
+
+        const taskStartInDay = cursor < prodDayStart ? prodDayStart : cursor;
+        const taskEndInDay = end > prodDayEnd ? prodDayEnd : end;
+        if (taskStartInDay < taskEndInDay && taskEndInDay > prodDayStart && taskStartInDay < prodDayEnd) {
+          const totalDuration = end.getTime() - start.getTime();
+          const dayDuration = Math.min(end.getTime(), prodDayEnd.getTime()) - Math.max(start.getTime(), prodDayStart.getTime());
+          const proporcion = totalDuration > 0 ? dayDuration / totalDuration : 0;
+          const qtyDia = qty * proporcion;
+
+          const splitTime = new Date(prodDayStart);
+          splitTime.setHours(SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, 0, 0);
+
+          let diurnoDia = 0;
+          let nocturnoDia = 0;
+          const effectiveStart = taskStartInDay < prodDayStart ? prodDayStart : taskStartInDay;
+          const effectiveEnd = taskEndInDay > prodDayEnd ? prodDayEnd : taskEndInDay;
+
+          if (effectiveStart < splitTime) {
+            const dEnd = effectiveEnd < splitTime ? effectiveEnd : splitTime;
+            diurnoDia = ((dEnd.getTime() - effectiveStart.getTime()) / totalDuration) * qty;
+          }
+          if (effectiveEnd > splitTime) {
+            const nStart = effectiveStart > splitTime ? effectiveStart : splitTime;
+            nocturnoDia = ((effectiveEnd.getTime() - nStart.getTime()) / totalDuration) * qty;
+          }
+
+          const diaKey = format(diaStart, 'yyyy-MM-dd');
+          if (!mapa[diaKey]) mapa[diaKey] = {};
+          if (!mapa[diaKey][sabor]) mapa[diaKey][sabor] = {} as any;
+          if (!mapa[diaKey][sabor][linea]) mapa[diaKey][sabor][linea] = { diurno: 0, nocturno: 0 };
+          mapa[diaKey][sabor][linea].diurno += diurnoDia;
+          mapa[diaKey][sabor][linea].nocturno += nocturnoDia;
+        }
+
+        cursor.setDate(cursor.getDate() + 1);
+        cursor.setHours(0, 0, 0, 0);
+      }
+    });
+
+    return mapa;
+  };
+
+  const getTareasDelMes = (fechaMes: Date, data: Record<string, WeeklyData>): ScheduledTask[] => {
+    const mes = fechaMes.getMonth();
+    const anio = fechaMes.getFullYear();
+    const tareas: ScheduledTask[] = [];
+    const seen = new Set<string>();
+    Object.values(data).forEach(week => {
+      week.tasks.forEach(task => {
+        const taskMonth = task.startTime.getMonth();
+        const taskYear = task.startTime.getFullYear();
+        if (taskMonth !== mes || taskYear !== anio) return;
+        const key = `${task.startTime.getTime()}|${task.endTime.getTime()}|${task.name}|${task.lineId}|${task.quantity}`;
+        if (seen.has(key)) return;
+        seen.add(key);
+        tareas.push(task);
+      });
+    });
+    return tareas;
+  };
+
+  const tareasDelMesPlanta = useMemo(() => getTareasDelMes(produccionMes, weeklyData || {}), [
+    produccionMes,
+    weeklyData,
+  ]);
+
+  const planificadasPorDia = useMemo(() => getPlanificadasPorDia(tareasDelMesPlanta), [tareasDelMesPlanta]);
+
+  const planificadasTablaDiario = useMemo(() => {
+    const tabla: Record<string, Record<number, number>> = {};
+    PRODUCT_LIST.forEach(sabor => {
+      tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    });
+    Object.values(planificadasPorDia).forEach(porSabor => {
+      Object.entries(porSabor).forEach(([sabor, porLinea]) => {
+        Object.entries(porLinea).forEach(([lineaStr, valores]) => {
+          const linea = Number(lineaStr);
+          tabla[sabor][linea] = (tabla[sabor][linea] || 0) + Math.round(valores.diurno);
+        });
+      });
+    });
+    return tabla;
+  }, [planificadasPorDia]);
+
+  const planificadasTabla = useMemo(() => {
+    const tabla: Record<string, Record<number, number>> = {};
+    PRODUCT_LIST.forEach(sabor => {
+      tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    });
+    Object.values(planificadasPorDia).forEach(porSabor => {
+      Object.entries(porSabor).forEach(([sabor, porLinea]) => {
+        Object.entries(porLinea).forEach(([lineaStr, valores]) => {
+          const linea = Number(lineaStr);
+          tabla[sabor][linea] = (tabla[sabor][linea] || 0) + Math.round(valores.nocturno);
+        });
+      });
+    });
+    return tabla;
+  }, [planificadasPorDia]);
+
   const planificadasTablaTotal = useMemo(() => {
-    const diurno = sumarTablaTurno('diurno');
-    const nocturno = sumarTablaTurno('nocturno');
     const tabla: Record<string, Record<number, number>> = {};
     PRODUCT_LIST.forEach(sabor => {
       tabla[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
       [1, 2, 3, 4, 5, 6, 7].forEach(linea => {
-        tabla[sabor][linea] = (diurno[sabor]?.[linea] || 0) + (nocturno[sabor]?.[linea] || 0);
+        tabla[sabor][linea] = (planificadasTablaDiario[sabor]?.[linea] || 0) + (planificadasTabla[sabor]?.[linea] || 0);
       });
     });
     return tabla;
-  }, [produccionFecha, tasks]);
+  }, [planificadasTablaDiario, planificadasTabla]);
 
   useEffect(() => {
     try {
@@ -639,8 +776,10 @@ export default function PlannerPage() {
       if (produccionFecha) {
         localStorage.setItem('selected-produccion-fecha', JSON.stringify(produccionFecha));
       }
+      if (!produccionFecha) return;
+      setProduccionMes(startOfMonth(produccionFecha));
     } catch (e) {
-      console.error('Error guardando selectedProduccionFecha en localStorage', e);
+      console.error('Error guardando selectedProduccionFecha o syncing produccionMes', e);
     }
   }, [produccionFecha]);
 
@@ -2232,28 +2371,28 @@ export default function PlannerPage() {
                                    setProduccionFecha(date);
                                  }}
                                  className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
-                               />
-                             </div>
-                             {produccionSubTab === 'planificadas' && (
-                               <div className="flex items-center gap-3 mb-4 no-print">
-                                 <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                                   {['porturno', 'diario'].map((subTab) => (
-                                     <button
-                                       key={subTab}
-                                       onClick={() => setPlanificadasSubTab(subTab)}
-                                       className={cn(
-                                         "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                         planificadasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                       )}
-                                     >
-                                       {subTab === 'porturno' && <Clock className="h-3.5 w-3.5" />}
-                                       {subTab === 'porturno' ? 'Por Turno' : 'Diario'}
-                                       {subTab === 'diario' && <CalendarIcon className="h-3.5 w-3.5" />}
-                                     </button>
-                                   ))}
+                                />
+                              </div>
+                              {produccionSubTab === 'planificadas' && (
+                                <div className="flex items-center gap-3 mb-4 no-print flex-wrap">
+                                  <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                    {['porturno', 'diario'].map((subTab) => (
+                                      <button
+                                        key={subTab}
+                                        onClick={() => setPlanificadasSubTab(subTab)}
+                                        className={cn(
+                                          "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                          planificadasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                        )}
+                                      >
+                                        {subTab === 'porturno' && <Clock className="h-3.5 w-3.5" />}
+                                        {subTab === 'porturno' ? 'Por Turno' : 'Diario'}
+                                        {subTab === 'diario' && <CalendarIcon className="h-3.5 w-3.5" />}
+                                      </button>
+                                    ))}
+                                   </div>
                                  </div>
-                               </div>
-                             )}
+                               )}
                              {produccionSubTab === 'producidas' && (
                                <div className="flex items-center gap-3 mb-4 no-print">
                                  <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
@@ -2295,147 +2434,51 @@ export default function PlannerPage() {
                                            </button>
                                          ))}
                                        </div>
-                                        {planificadasTurnoSubTab === 'diurno' && (
-                                          <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                                            <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-                                              <div className="w-2 h-2 rounded-full bg-sky-500" />
-                                              <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                                                Diurno - Planificadas
-                                              </h4>
-                                            </div>
-                                            <div className="p-4">
-                                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                                <table className="w-full border-collapse text-center">
-                                                  <thead>
-                                                    <tr className="bg-slate-100">
-                                                      <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
-                                                      {[1,2,3,4,5,6,7].map(n => (
-                                                        <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
-                                                      ))}
-                                                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
-                                                    </tr>
-                                                  </thead>
-                                                <tbody>
-                                                      {PRODUCT_LIST.map((sabor) => {
-                                                        const rowTotal = [1,2,3,4,5,6,7].reduce((sum, linea) => sum + (planificadasTablaDiario[sabor]?.[linea] || 0), 0);
-                                                        return (
-                                                        <tr key={sabor} className="even:bg-slate-50/60">
-                                                          <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
-                                                          {[1,2,3,4,5,6,7].map(linea => (
-                                                            <td key={linea} className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{planificadasTablaDiario[sabor]?.[linea] || ''}</td>
-                                                          ))}
-                                                          <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{rowTotal || ''}</td>
-                                                        </tr>
-                                                        );
-                                                      })}
-                                                      <tr className="bg-slate-100 font-black">
-                                                        <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
-                                                        {[1,2,3,4,5,6,7].map(linea => {
-                                                          const totalLinea = PRODUCT_LIST.reduce((sum, sabor) => sum + (planificadasTablaDiario[sabor]?.[linea] || 0), 0);
-                                                          return <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalLinea || ''}</td>;
-                                                        })}
-                                                        <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{PRODUCT_LIST.reduce((sum, sabor) => sum + [1,2,3,4,5,6,7].reduce((s, l) => s + (planificadasTablaDiario[sabor]?.[l] || 0), 0), 0) || ''}</td>
-                                                      </tr>
-                                                  </tbody>
-                                                </table>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        )}
-                                         {planificadasTurnoSubTab === 'nocturno' && (
+                                         {planificadasTurnoSubTab === 'diurno' && (
                                            <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
                                              <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
                                                <div className="w-2 h-2 rounded-full bg-sky-500" />
                                                <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                                                 Nocturno - Planificadas
+                                                 Diurno - Planificadas
                                                </h4>
                                              </div>
                                              <div className="p-4">
                                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                                 <table className="w-full border-collapse text-center">
-                                                   <thead>
-                                                     <tr className="bg-slate-100">
-                                                       <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
-                                                       {[1,2,3,4,5,6,7].map(n => (
-                                                         <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
-                                                       ))}
-                                                       <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
-                                                     </tr>
-                                                   </thead>
-                                                <tbody>
-                                                       {PRODUCT_LIST.map((sabor) => {
-                                                         const rowTotal = [1,2,3,4,5,6,7].reduce((sum, linea) => sum + (planificadasTabla[sabor]?.[linea] || 0), 0);
-                                                         return (
-                                                         <tr key={sabor} className="even:bg-slate-50/60">
-                                                           <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
-                                                           {[1,2,3,4,5,6,7].map(linea => (
-                                                             <td key={linea} className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{planificadasTabla[sabor]?.[linea] || ''}</td>
-                                                           ))}
-                                                           <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{rowTotal || ''}</td>
-                                                         </tr>
-                                                         );
-                                                       })}
-                                                       <tr className="bg-slate-100 font-black">
-                                                         <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
-                                                         {[1,2,3,4,5,6,7].map(linea => {
-                                                           const totalLinea = PRODUCT_LIST.reduce((sum, sabor) => sum + (planificadasTabla[sabor]?.[linea] || 0), 0);
-                                                           return <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalLinea || ''}</td>;
-                                                         })}
-                                                         <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{PRODUCT_LIST.reduce((sum, sabor) => sum + [1,2,3,4,5,6,7].reduce((s, l) => s + (planificadasTabla[sabor]?.[l] || 0), 0), 0) || ''}</td>
-                                                       </tr>
-                                                   </tbody>
-                                                 </table>
+                                                 <PlanificadasPorDiaTable datosPorDia={planificadasPorDia} fecha={produccionFecha || new Date()} turno="diurno" />
                                                </div>
                                              </div>
                                            </div>
                                          )}
+                                          {planificadasTurnoSubTab === 'nocturno' && (
+                                            <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                                              <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                                                <div className="w-2 h-2 rounded-full bg-sky-500" />
+                                                <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                                                  Nocturno - Planificadas
+                                                </h4>
+                                              </div>
+                                              <div className="p-4">
+                                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                  <PlanificadasPorDiaTable datosPorDia={planificadasPorDia} fecha={produccionFecha || new Date()} turno="nocturno" />
+                                                </div>
+                                              </div>
+                                            </div>
+                                          )}
                                      </div>
                                     ) : (
-                                        <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                                          <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-                                            <div className="w-2 h-2 rounded-full bg-sky-500" />
-                                            <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                                              Diario - Planificadas
-                                            </h4>
-                                          </div>
-                                          <div className="p-4">
-                                            <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                              <table className="w-full border-collapse text-center">
-                                                <thead>
-                                                  <tr className="bg-slate-100">
-                                                    <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36">Sabor</th>
-                                                    {[1,2,3,4,5,6,7].map(n => (
-                                                      <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
-                                                    ))}
-                                                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
-                                                  </tr>
-                                                </thead>
-                                                <tbody>
-                                                      {PRODUCT_LIST.map((sabor) => {
-                                                        const rowTotal = [1,2,3,4,5,6,7].reduce((sum, linea) => sum + (planificadasTablaTotal[sabor]?.[linea] || 0), 0);
-                                                        return (
-                                                        <tr key={sabor} className="even:bg-slate-50/60">
-                                                          <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
-                                                          {[1,2,3,4,5,6,7].map(linea => (
-                                                            <td key={linea} className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{planificadasTablaTotal[sabor]?.[linea] || ''}</td>
-                                                          ))}
-                                                          <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{rowTotal || ''}</td>
-                                                        </tr>
-                                                        );
-                                                      })}
-                                                      <tr className="bg-slate-100 font-black">
-                                                        <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
-                                                        {[1,2,3,4,5,6,7].map(linea => {
-                                                          const totalLinea = PRODUCT_LIST.reduce((sum, sabor) => sum + (planificadasTablaTotal[sabor]?.[linea] || 0), 0);
-                                                          return <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalLinea || ''}</td>;
-                                                        })}
-                                                        <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{PRODUCT_LIST.reduce((sum, sabor) => sum + [1,2,3,4,5,6,7].reduce((s, l) => s + (planificadasTablaTotal[sabor]?.[l] || 0), 0), 0) || ''}</td>
-                                                      </tr>
-                                                </tbody>
-                                              </table>
+                                         <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                                           <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                                             <div className="w-2 h-2 rounded-full bg-sky-500" />
+                                             <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                                               Diario - Planificadas
+                                             </h4>
+                                           </div>
+                                            <div className="p-4">
+                                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                <PlanificadasPorDiaTable datosPorDia={planificadasPorDia} fecha={produccionFecha || new Date()} turno="diario" />
+                                              </div>
                                             </div>
                                           </div>
-                                        </div>
                                      )
                                   )}
                                   {produccionSubTab === 'producidas' && (
@@ -3494,6 +3537,129 @@ function TablaResumenPorLinea({ informesOperacionales, tasks, realProduction, li
                   <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{row.disponibilidad}</td>
                 </tr>
               ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function PlanificadasPorDiaTable({ datosPorDia, fecha, turno }: { datosPorDia: any; fecha: Date; turno: 'diurno' | 'nocturno' | 'diario' }) {
+  const diaKey = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
+  const diaData = (datosPorDia as Record<string, any>)?.[diaKey];
+
+  const valoresTD: Record<string, Record<number, number>> = {};
+  const valoresTN: Record<string, Record<number, number>> = {};
+  PRODUCT_LIST.forEach(sabor => {
+    valoresTD[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+    valoresTN[sabor] = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+  });
+  if (diaData) {
+    Object.entries(diaData as Record<string, any>).forEach(([sabor, porLinea]) => {
+      (Object.entries(porLinea) as [string, any][]).forEach(([lineaStr, valoresDia]) => {
+        const linea = Number(lineaStr);
+        valoresTD[sabor][linea] = Math.round(Number((valoresDia as any)?.diurno || 0));
+        valoresTN[sabor][linea] = Math.round(Number((valoresDia as any)?.nocturno || 0));
+      });
+    });
+  }
+
+  const totalesPorLinea: Record<number, number> = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0 };
+  const totalGeneral = PRODUCT_LIST.reduce((acc, sabor) => {
+    return acc + [1, 2, 3, 4, 5, 6, 7].reduce((rowAcc, linea) => {
+      const total = (valoresTD[sabor]?.[linea] || 0) + (valoresTN[sabor]?.[linea] || 0);
+      totalesPorLinea[linea] += total;
+      return rowAcc + total;
+    }, 0);
+  }, 0);
+
+  const esDiario = turno === 'diario';
+  const esNocturno = turno === 'nocturno';
+
+  return (
+    <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+      <div className="p-4">
+        <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+          <table className="w-full border-collapse text-center" style={{ minWidth: esDiario ? 1400 : 1200 }}>
+            <thead>
+              <tr className="bg-slate-100">
+                <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36 text-left">Sabor</th>
+              {esDiario ? (
+                <>
+                  {[1,2,3,4,5,6,7].map(n => (
+                    <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Total Línea {n}</th>
+                  ))}
+                  <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[60px]">Total</th>
+                </>
+              ) : (
+                  <>
+                    {[1,2,3,4,5,6,7].map(n => (
+                      <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
+                    ))}
+                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Total</th>
+                  </>
+                )}
+              </tr>
+            </thead>
+             <tbody>
+              {PRODUCT_LIST.map((sabor) => {
+                const rowTotalTD = [1,2,3,4,5,6,7].reduce((sum, linea) => sum + (valoresTD[sabor]?.[linea] || 0), 0);
+                const rowTotalTN = [1,2,3,4,5,6,7].reduce((sum, linea) => sum + (valoresTN[sabor]?.[linea] || 0), 0);
+                const rowTotal = esNocturno ? rowTotalTN : rowTotalTD + rowTotalTN;
+                return (
+                  <tr key={sabor} className="even:bg-slate-50/60">
+                    <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{sabor}</td>
+                    {esDiario ? (
+                      <>
+                        {[1,2,3,4,5,6,7].map(linea => (
+                          <td key={`total-${linea}`} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{(valoresTD[sabor]?.[linea] || 0) + (valoresTN[sabor]?.[linea] || 0) || ''}</td>
+                        ))}
+                        <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{rowTotal || ''}</td>
+                      </>
+                    ) : esNocturno ? (
+                      <>
+                        {[1,2,3,4,5,6,7].map(linea => (
+                          <td key={linea} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{valoresTN[sabor]?.[linea] || ''}</td>
+                        ))}
+                        <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{rowTotalTN || ''}</td>
+                      </>
+                    ) : (
+                      <>
+                        {[1,2,3,4,5,6,7].map(linea => (
+                          <td key={linea} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{valoresTD[sabor]?.[linea] || ''}</td>
+                        ))}
+                        <td className="px-2 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{rowTotalTD || ''}</td>
+                      </>
+                    )}
+                  </tr>
+                );
+              })}
+              <tr className="bg-slate-100 font-black">
+                <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200">Totales</td>
+                {esDiario ? (
+                  <>
+                    {[1,2,3,4,5,6,7].map(linea => (
+                      <td key={`total-${linea}`} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalesPorLinea[linea] || ''}</td>
+                    ))}
+                    <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{totalGeneral || ''}</td>
+                  </>
+                ) : esNocturno ? (
+                  <>
+                    {[1,2,3,4,5,6,7].map(linea => (
+                      <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalesPorLinea[linea] || ''}</td>
+                    ))}
+                    <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{totalGeneral || ''}</td>
+                  </>
+                ) : (
+                  <>
+                    {[1,2,3,4,5,6,7].map(linea => (
+                      <td key={linea} className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalesPorLinea[linea] || ''}</td>
+                    ))}
+                    <td className="px-2 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{totalGeneral || ''}</td>
+                  </>
+                )}
+              </tr>
             </tbody>
           </table>
         </div>

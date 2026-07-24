@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-07-20T00:00:00.000",
+      "weekStartDate": "2026-07-13T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -663,19 +663,6 @@
     "weeks": {
       "2026-07-13": {
         "tasks": [
-          {
-            "name": "GLUP FRESH",
-            "lineId": "1",
-            "loadPerHour": 1500,
-            "quantity": 70500,
-            "durationHours": 47,
-            "presentation": "2Lts",
-            "tanks": 8.17,
-            "startTime": "2026-07-13T11:00:00.000Z",
-            "endTime": "2026-07-15T10:00:00.000Z",
-            "id": "nksfabh5i",
-            "color": "#6366f1"
-          },
           {
             "name": "GLUP NARANJA",
             "lineId": "3",
@@ -1626,6 +1613,19 @@
             "endTime": "2026-07-19T07:00:00.000Z",
             "id": "k214qme1j",
             "color": "#10b981"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 70500,
+            "durationHours": 47,
+            "presentation": "2Lts",
+            "tanks": 8.17,
+            "startTime": "2026-07-13T11:00:00.000Z",
+            "endTime": "2026-07-15T10:00:00.000Z",
+            "id": "eds2tvxuf",
+            "color": "#6366f1"
           }
         ],
         "realProduction": {
@@ -2755,7 +2755,8 @@
           "kwy97jtmj",
           "7h9l4z74q",
           "m019vix5a",
-          "ult4f3myf"
+          "ult4f3myf",
+          "nksfabh5i"
         ]
       },
       "weeks": {
@@ -2855,19 +2856,6 @@
             "startTime": "2026-07-20T11:00:00.000Z",
             "endTime": "2026-07-23T15:00:00.000Z",
             "id": "j40sg61dk",
-            "color": "#6366f1"
-          },
-          {
-            "name": "GLUP FRESH",
-            "lineId": "1",
-            "loadPerHour": 1500,
-            "quantity": 70500,
-            "durationHours": 47,
-            "presentation": "2Lts",
-            "tanks": 8.17,
-            "startTime": "2026-07-13T11:00:00.000Z",
-            "endTime": "2026-07-15T10:00:00.000Z",
-            "id": "nksfabh5i",
             "color": "#6366f1"
           },
           {
@@ -5918,7 +5906,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-24T14:38:36.576Z"
+    "updatedAt": "2026-07-24T15:36:38.431Z"
   },
   "ordenesSap": [
     {
