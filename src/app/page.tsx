@@ -489,12 +489,34 @@ export default function PlannerPage() {
   const [planificadasTurnoSubTab, setPlanificadasTurnoSubTab] = useState('diurno');
   const [producidasSubTab, setProducidasSubTab] = useState('porturno');
   const [producidasTurnoSubTab, setProducidasTurnoSubTab] = useState('diurno');
-  const [producidasDiurno, setProducidasDiurno] = useState<ProducidasTabla>(() => nuevaTabla());
-  const [producidasNocturno, setProducidasNocturno] = useState<ProducidasTabla>(() => nuevaTabla());
+  const producidasStore = useRemoteCollection<{ diurno: ProducidasTabla; nocturno: ProducidasTabla }>('planta-produccion-producidas', {
+    diurno: nuevaTabla(),
+    nocturno: nuevaTabla(),
+  });
+  const producidasDiurno = producidasStore.data.diurno || nuevaTabla();
+  const producidasNocturno = producidasStore.data.nocturno || nuevaTabla();
+  const setProducidasDiurno = (val: ProducidasTabla) => {
+    producidasStore.setData((prev) => ({ ...prev, diurno: val }));
+  };
+  const setProducidasNocturno = (val: ProducidasTabla) => {
+    producidasStore.setData((prev) => ({ ...prev, nocturno: val }));
+  };
   const [produccionFecha, setProduccionFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
       try {
         const stored = localStorage.getItem('selected-produccion-fecha');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed) return new Date(parsed);
+        }
+      } catch (e) {}
+    }
+    return new Date();
+  });
+  const [reporteDiarioFecha, setReporteDiarioFecha] = useState<Date | undefined>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('selected-reporte-diario-fecha');
         if (stored) {
           const parsed = JSON.parse(stored);
           if (parsed) return new Date(parsed);
@@ -621,6 +643,17 @@ export default function PlannerPage() {
       console.error('Error guardando selectedProduccionFecha en localStorage', e);
     }
   }, [produccionFecha]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      if (reporteDiarioFecha) {
+        localStorage.setItem('selected-reporte-diario-fecha', JSON.stringify(reporteDiarioFecha));
+      }
+    } catch (e) {
+      console.error('Error guardando selectedReporteDiarioFecha en localStorage', e);
+    }
+  }, [reporteDiarioFecha]);
 
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
@@ -2463,14 +2496,83 @@ export default function PlannerPage() {
                              </div>
                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                               <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
-                                {reporteSubTab === 'diario' && (
-                                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                                    <CalendarIcon className="h-12 w-12 mb-4 opacity-20" />
-                                    Diario en Desarrollo
-                                  </div>
-                                )}
-                                {reporteSubTab === 'por-turno' && (
-                                  <div className="flex flex-col gap-3 h-full">
+                                 {reporteSubTab === 'diario' && (
+                                   <div className="flex flex-col gap-3">
+                                     <div className="flex items-center justify-between gap-2 mb-4 no-print">
+                                       <div className="flex items-center gap-3">
+                                         <input
+                                           type="date"
+                                           value={reporteDiarioFecha ? format(reporteDiarioFecha, 'yyyy-MM-dd') : ''}
+                                           onChange={(e) => {
+                                             const raw = e.target.value;
+                                             if (!raw) return;
+                                             const [year, month, day] = raw.split('-').map(Number);
+                                             const date = new Date(year, month - 1, day);
+                                             setReporteDiarioFecha(date);
+                                           }}
+                                           className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                                         />
+                                       </div>
+                                     </div>
+                                     <ReporteTurnoTabla 
+                                       informesOperacionales={informesOperacionales || []}
+                                       tasks={tasks}
+                                       realProduction={realProduction}
+                                       lineSpeeds={lineSpeeds}
+                                       turno="DIARIO"
+                                       fecha={reporteDiarioFecha}
+                                     />
+                                      {(() => {
+                                        const row = calcularTotalesDiario(informesOperacionales || [], tasks, realProduction, lineSpeeds, reporteDiarioFecha);
+                                        return (
+                                          <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
+                                            <div className="p-4">
+                                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
+                                                  <thead>
+                                                    <tr className="bg-slate-100">
+                                                      <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">TOTAL</th>
+                                                      <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">GLOBAL</th>
+                                                      <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">% Cumplimiento</th>
+                                                      <th colSpan={9} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Disponibilidad de Máquinas</th>
+                                                    </tr>
+                                                    <tr className="bg-slate-100">
+                                                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                                                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TN</th>
+                                                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                                                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TN</th>
+                                                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                                                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">TN</th>
+                                                      <th colSpan={9} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200"></th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    <tr className="even:bg-slate-50/60">
+                                                      <td colSpan={2} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalPlanificadoTD}</td>
+                                                      <td colSpan={2} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalAlcanceTD}</td>
+                                                      <td colSpan={2} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTD}</td>
+                                                      <td colSpan={9} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{row.disponibilidadGlobal}</td>
+                                                    </tr>
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        );
+                                      })()}
+                                      <div className="mt-3">
+                                        <TablaResumenPorLinea 
+                                          informesOperacionales={informesOperacionales || []}
+                                          tasks={tasks}
+                                          realProduction={realProduction}
+                                          lineSpeeds={lineSpeeds}
+                                          fecha={reporteDiarioFecha}
+                                        />
+                                      </div>
+                                   </div>
+                                   )}
+                                   {reporteSubTab === 'por-turno' && (
+                                   <div className="flex flex-col gap-3 h-full">
                                     <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start">
                                       {['diurno', 'nocturno'].map((subTab) => (
                                         <button
@@ -2485,18 +2587,24 @@ export default function PlannerPage() {
                                         </button>
                                       ))}
                                     </div>
-                                    {turnoSubTab === 'diurno' && (
-                                      <div className="flex flex-col items-center justify-center flex-1 text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-white/50">
-                                        <Sun className="h-12 w-12 mb-4 opacity-20" />
-                                        Diurno en Desarrollo
-                                      </div>
-                                    )}
-                                    {turnoSubTab === 'nocturno' && (
-                                      <div className="flex flex-col items-center justify-center flex-1 text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-white/50">
-                                        <Moon className="h-12 w-12 mb-4 opacity-20" />
-                                        Nocturno en Desarrollo
-                                      </div>
-                                    )}
+                                      {turnoSubTab === 'diurno' && (
+                                        <ReporteTurnoTabla 
+                                          informesOperacionales={informesOperacionales || []}
+                                          tasks={tasks}
+                                          realProduction={realProduction}
+                                          lineSpeeds={lineSpeeds}
+                                          turno="DIURNO"
+                                        />
+                                      )}
+                                     {turnoSubTab === 'nocturno' && (
+                                       <ReporteTurnoTabla 
+                                         informesOperacionales={informesOperacionales || []}
+                                         tasks={tasks}
+                                         realProduction={realProduction}
+                                         lineSpeeds={lineSpeeds}
+                                         turno="NOCTURNO"
+                                       />
+                                     )}
                                   </div>
                                 )}
                               </div>
@@ -3109,5 +3217,400 @@ export default function PlannerPage() {
         <Toaster />
       </div>
     </SidebarProvider>
+  );
+}
+
+function TablaResumenReporteDiario({ informesOperacionales, tasks, realProduction, lineSpeeds, fecha }: any) {
+  const row = calcularTotalesDiario(informesOperacionales || [], tasks, realProduction, lineSpeeds, fecha);
+  return (
+    <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+      <div className="p-4">
+        <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+          <table className="w-full border-collapse text-center" style={{ minWidth: 1200 }}>
+            <thead>
+              <tr className="bg-slate-100">
+                <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">TOTAL</th>
+                <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">GLOBAL</th>
+                <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">% Cumplimiento</th>
+                <th colSpan={9} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Disponibilidad de Máquinas</th>
+              </tr>
+              <tr className="bg-slate-100">
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TN</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TN</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">TN</th>
+                <th colSpan={9} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="even:bg-slate-50/60">
+                <td colSpan={2} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalPlanificadoTD}</td>
+                <td colSpan={2} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalAlcanceTD}</td>
+                <td colSpan={2} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTD}</td>
+                <td colSpan={9} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{row.disponibilidadGlobal}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+function minutosAHoras(minutos: number): string {
+  const h = Math.floor(minutos / 60);
+  const m = minutos % 60;
+  return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+}
+
+function clasificarParada(tipo: string): string {
+  const t = String(tipo || '').toUpperCase();
+  if (t.includes('PROGRAMADA')) return 'programadas';
+  if (t.includes('AVERÍA') || t.includes('FALLA')) return 'averia';
+  if (t.includes('OPERACIONAL')) return 'operacionales';
+  if (t.includes('AUSENTISMO')) return 'ausentismo';
+  if (t.includes('ADECUACIONES')) return 'adecuaciones';
+  if (t.includes('SERVICIO') || t.includes('MANTENIMIENTO')) return 'servicios';
+  if (t.includes('EXTERNA') || t.includes('EXTERNO')) return 'externas';
+  return 'operacionales';
+}
+
+function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, fecha?: Date) {
+  const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
+  const informeDelDia = (informesOperacionales || []).filter((r: any) => String(r.fecha || '') === targetDate);
+  const tareasLinea = (tasks || []).filter((t: any) => String(t.lineId || '') !== '');
+  const lineas = ['Línea 1', 'Línea 2', 'Línea 3', 'Línea 4', 'Línea 5', 'Línea 6', 'Línea 7'];
+
+  let totalPlanificadoTD = 0;
+  let totalAlcanceTD = 0;
+  let totalDisponibilidad = 0;
+  let countDisponibilidad = 0;
+
+  lineas.forEach((lineaNombre, idx) => {
+    const lineaNum = idx + 1;
+    const paradasLinea = informeDelDia.filter((r: any) => r.linea === lineaNombre);
+    const totalParadaMin = paradasLinea.reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0);
+    const porTipo: Record<string, number> = { programadas: 0, averia: 0, operacionales: 0, ausentismo: 0, adecuaciones: 0, servicios: 0, externas: 0 };
+    paradasLinea.forEach((r: any) => {
+      const k = clasificarParada(r.tipoParada);
+      porTipo[k] = (porTipo[k] || 0) + (Number(r.totalMin) || 0);
+    });
+    const tareas = tareasLinea.filter((t: any) => t.lineId === String(lineaNum));
+    const planificadoTD = tareas.reduce((acc: number, t: any) => acc + (Number(t.quantity) || 0), 0);
+    const alcanceTD = Number(realProduction?.[lineaNum] || 0);
+    const disponibilidad = Math.max(0, 480 - totalParadaMin);
+
+    totalPlanificadoTD += planificadoTD;
+    totalAlcanceTD += alcanceTD;
+    totalDisponibilidad += disponibilidad;
+    countDisponibilidad += 1;
+  });
+
+  const cumplimientoTD = totalPlanificadoTD > 0 ? ((totalAlcanceTD / totalPlanificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
+  const disponibilidadGlobal = countDisponibilidad > 0 ? (totalDisponibilidad / countDisponibilidad / 480 * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
+
+  return {
+    totalPlanificadoTD: String(totalPlanificadoTD),
+    totalAlcanceTD: String(totalAlcanceTD),
+    cumplimientoTD,
+    disponibilidadGlobal,
+  };
+}
+
+
+function useReportData(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, turno: 'DIURNO' | 'NOCTURNO' | 'DIARIO' = 'DIURNO', fecha?: Date) {
+  return useMemo(() => {
+    const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
+    const informeDelDia = (informesOperacionales || []).filter((r: any) => String(r.fecha || '') === targetDate && (turno === 'DIARIO' || String(r.turno || '').toUpperCase() === turno));
+    const tareasLinea = (tasks || []).filter((t: any) => String(t.lineId || '') !== '');
+
+    const lineas = ['Línea 1', 'Línea 2', 'Línea 3', 'Línea 4', 'Línea 5', 'Línea 6', 'Línea 7'];
+    return lineas.map((lineaNombre, idx) => {
+      const lineaNum = idx + 1;
+      const paradasLinea = informeDelDia.filter((r: any) => r.linea === lineaNombre);
+      const totalParadaMin = paradasLinea.reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0);
+      const porTipo: Record<string, number> = { programadas: 0, averia: 0, operacionales: 0, ausentismo: 0, adecuaciones: 0, servicios: 0, externas: 0 };
+      paradasLinea.forEach((r: any) => {
+        const k = clasificarParada(r.tipoParada);
+        porTipo[k] = (porTipo[k] || 0) + (Number(r.totalMin) || 0);
+      });
+      const programadas = minutosAHoras(porTipo.programadas || 0);
+      const averia = minutosAHoras(porTipo.averia || 0);
+      const operacionales = minutosAHoras(porTipo.operacionales || 0);
+      const ausentismo = minutosAHoras(porTipo.ausentismo || 0);
+      const adecuaciones = minutosAHoras(porTipo.adecuaciones || 0);
+      const servicios = minutosAHoras(porTipo.servicios || 0);
+      const externas = minutosAHoras(porTipo.externas || 0);
+      const horasPagadas = minutosAHoras(totalParadaMin);
+      const tareas = tareasLinea.filter((t: any) => t.lineId === String(lineaNum));
+      const planificadoTD = tareas.reduce((acc: number, t: any) => acc + (Number(t.quantity) || 0), 0);
+      const alcanceTD = Number(realProduction?.[lineaNum] || 0);
+      const cumplimientoTD = planificadoTD > 0 ? ((alcanceTD / planificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
+      const velocidad = Number(lineSpeeds?.[lineaNum] || 0);
+      const cajasH = velocidad;
+      const tiempoMuerto = minutosAHoras(Math.max(0, totalParadaMin - (porTipo.programadas || 0)));
+      const horasProgramadas = '08:00';
+      const relacion = totalParadaMin > 0 ? ((porTipo.programadas / totalParadaMin) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
+      const disponibilidad = minutosAHoras(Math.max(0, 480 - totalParadaMin));
+      const horasEfectivas = minutosAHoras(Math.max(0, 480 - totalParadaMin - (porTipo.operacionales || 0)));
+      const produccionTeorica = cajasH * (480 / 60);
+
+      return {
+        linea: lineaNombre,
+        planificadoTD: String(planificadoTD),
+        planificadoTN: '0',
+        alcanceTD: String(alcanceTD),
+        alcanceTN: '0',
+        cumplimientoTD,
+        cumplimientoTN: '0,00%',
+        pnc: '0',
+        velocidad: String(velocidad),
+        cajasH: String(cajasH),
+        horasPagadas,
+        horasProgramadas,
+        paradasProgramadas: programadas,
+        relacion,
+        servicios,
+        ausentismo,
+        externas,
+        adecuaciones,
+        averia,
+        operacionales,
+        horasPerdidasPNC: '0,00',
+        disponibilidad,
+        produccionTeorica: Number.isFinite(produccionTeorica) ? produccionTeorica.toFixed(0) : '0',
+        horasEfectivas,
+        tiempoMuertoInexplicable: tiempoMuerto,
+      };
+    });
+  }, [informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha]);
+}
+
+function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, fecha?: Date) {
+  const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
+  const informeDelDia = (informesOperacionales || []).filter((r: any) => String(r.fecha || '') === targetDate);
+  const tareasLinea = (tasks || []).filter((t: any) => String(t.lineId || '') !== '');
+  const lineas = ['Línea 1', 'Línea 2', 'Línea 3', 'Línea 4', 'Línea 5', 'Línea 6', 'Línea 7'];
+
+  return lineas.map((lineaNombre, idx) => {
+    const lineaNum = idx + 1;
+    const paradasLinea = informeDelDia.filter((r: any) => r.linea === lineaNombre);
+    const totalParadaMin = paradasLinea.reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0);
+    const porTipo: Record<string, number> = { programadas: 0, averia: 0, operacionales: 0, ausentismo: 0, adecuaciones: 0, servicios: 0, externas: 0 };
+    paradasLinea.forEach((r: any) => {
+      const k = clasificarParada(r.tipoParada);
+      porTipo[k] = (porTipo[k] || 0) + (Number(r.totalMin) || 0);
+    });
+    const tareas = tareasLinea.filter((t: any) => t.lineId === String(lineaNum));
+    const planificado = tareas.reduce((acc: number, t: any) => acc + (Number(t.quantity) || 0), 0);
+    const alcance = Number(realProduction?.[lineaNum] || 0);
+    const cumplimiento = planificado > 0 ? ((alcance / planificado) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
+    const velocidad = Number(lineSpeeds?.[lineaNum] || 0);
+    const produccionTeorica = velocidad * (480 / 60);
+    const diferenciaTeoricaReal = Number.isFinite(produccionTeorica) ? String(Math.max(0, Math.round(produccionTeorica - alcance))) : '0';
+    const ot = Math.round(porTipo.operacionales + porTipo.averia);
+    const adecuaciones = Math.round(porTipo.adecuaciones);
+    const tiempoMuerto = Math.round(Math.max(0, totalParadaMin - (porTipo.programadas || 0)));
+    const ausentismo = Math.round(porTipo.ausentismo);
+    const disponibilidad = totalParadaMin > 0 ? ((480 - totalParadaMin) / 480 * 100).toFixed(2).replace('.', ',') + '%' : '100,00%';
+
+    return {
+      linea: lineaNombre,
+      planificado: String(planificado),
+      alcance: String(alcance),
+      cumplimiento,
+      produccionTeorica: Number.isFinite(produccionTeorica) ? produccionTeorica.toFixed(0) : '0',
+      diferenciaTeoricaReal,
+      ot: String(ot),
+      adecuaciones: String(adecuaciones),
+      tiempoMuerto: String(tiempoMuerto),
+      ausentismo: String(ausentismo),
+      disponibilidad,
+    };
+  });
+}
+
+function TablaResumenPorLinea({ informesOperacionales, tasks, realProduction, lineSpeeds, fecha }: any) {
+  const datos = getResumenPorLinea(informesOperacionales, tasks, realProduction, lineSpeeds, fecha);
+
+  return (
+    <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+      <div className="p-4">
+        <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+          <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
+            <thead>
+              <tr className="bg-slate-100">
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Planificado</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Alcance</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Cumplimiento</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Producción Teórica</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Diferencia Teórica-Real</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">OT</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Adecuaciones</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Tiempo Muerto</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Ausentismo</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[80px]">Disponibilidad de Máquina</th>
+              </tr>
+            </thead>
+            <tbody>
+              {datos.map((row, idx) => (
+                <tr key={row.linea} className={idx % 2 === 0 ? 'even:bg-slate-50/60' : ''}>
+                  <td className="px-1 py-0.5 text-[10px] font-bold text-slate-900 border-r border-b border-slate-100 text-left">{row.linea}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.planificado}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.alcance}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimiento}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.produccionTeorica}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.diferenciaTeoricaReal}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.ot}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.adecuaciones}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.tiempoMuerto}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.ausentismo}</td>
+                  <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{row.disponibilidad}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineSpeeds, turno = 'DIURNO', fecha }: any) {
+  const data = useReportData(informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha);
+  const formatCell = (v: any) => v ?? '0';
+  const totalPlanificadoTD = data.reduce((acc: number, r: any) => acc + (Number(r.planificadoTD) || 0), 0);
+  const totalPlanificadoTN = data.reduce((acc: number, r: any) => acc + (Number(r.planificadoTN) || 0), 0);
+  const totalAlcanceTD = data.reduce((acc: number, r: any) => acc + (Number(r.alcanceTD) || 0), 0);
+  const totalAlcanceTN = data.reduce((acc: number, r: any) => acc + (Number(r.alcanceTN) || 0), 0);
+  const cumplimientoTD = totalPlanificadoTD > 0 ? ((totalAlcanceTD / totalPlanificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
+  const cumplimientoTN = totalPlanificadoTN > 0 ? ((totalAlcanceTN / totalPlanificadoTN) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
+  const disponibilidades = data.map((r: any) => {
+    const val = String(r.disponibilidad || '').replace(',', '.');
+    const num = parseFloat(val);
+    return Number.isFinite(num) ? num : 0;
+  });
+  const disponibilidadGlobal = disponibilidades.length > 0 ? (disponibilidades.reduce((a, b) => a + b, 0) / disponibilidades.length).toFixed(2).replace('.', ',') + '%' : '0,00%';
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+        <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+          <div className="w-2 h-2 rounded-full bg-sky-500" />
+          <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+            Reporte {turno === 'DIARIO' ? 'Diario' : turno === 'DIURNO' ? 'por Turno - Diurno' : 'por Turno - Nocturno'}
+          </h4>
+        </div>
+        <div className="p-4">
+          <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+            <table className="w-full border-collapse text-center" style={{ minWidth: 2200 }}>
+              <thead>
+                <tr className="bg-slate-100">
+                  <th rowSpan={2} className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36 text-left">Ubicación</th>
+                  <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Planificado</th>
+                  <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Alcance</th>
+                  <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">% Cumplimiento</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">PNC</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Velocidad (BPM)</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Cajas/H</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Horas Pagadas</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Horas Programadas</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas Programadas (hrs)</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Relación Hrs Prog./Paradas Programadas</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por Servicios (hrs)</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por Ausentismo (hrs)</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas Externas (hrs)</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por Adecuaciones (hrs)</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por Avería (OT) (hrs)</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas Operacionales (hrs)</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Horas Perdidas Según PNC</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Disponibilidad Real (hrs)</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Producción Teórica (Cajas)</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Horas Efectivas de Producción</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[70px]">Tiempo Muerto (Inexplicable) (hrs)</th>
+                </tr>
+                <tr className="bg-slate-100">
+                  <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                  <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TN</th>
+                  <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                  <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TN</th>
+                  <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                  <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">TN</th>
+                </tr>
+              </thead>
+              <tbody>
+                {data.map((row: any) => (
+                  <tr key={row.linea} className="even:bg-slate-50/60">
+                    <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{row.linea}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.planificadoTD)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.planificadoTN)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.alcanceTD)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.alcanceTN)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.cumplimientoTD)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-b border-slate-100 text-center tabular-nums">{formatCell(row.cumplimientoTN)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.pnc)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.velocidad)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.cajasH)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.horasPagadas)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.horasProgramadas)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.paradasProgramadas)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.relacion)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.servicios)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.ausentismo)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.externas)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.adecuaciones)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.averia)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.operacionales)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.horasPerdidasPNC)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.disponibilidad)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.produccionTeorica)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.horasEfectivas)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-b border-slate-100 text-center tabular-nums">{formatCell(row.tiempoMuertoInexplicable)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      {(turno === 'DIURNO' || turno === 'NOCTURNO') && (
+        <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible mt-3">
+          <div className="p-4">
+            <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+              <table className="w-full border-collapse text-center" style={{ minWidth: 2200 }}>
+                <thead>
+                  <tr className="bg-slate-100">
+                    <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">TOTAL</th>
+                    <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">GLOBAL</th>
+                    <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">% Cumplimiento</th>
+                    <th colSpan={9} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Disponibilidad de Máquinas</th>
+                  </tr>
+                  <tr className="bg-slate-100">
+                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TN</th>
+                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TN</th>
+                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">TN</th>
+                    <th colSpan={9} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr className="even:bg-slate-50/60">
+                    <td colSpan={2} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalPlanificadoTD}</td>
+                    <td colSpan={2} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalAlcanceTD}</td>
+                    <td colSpan={2} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTD}</td>
+                    <td colSpan={9} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{disponibilidadGlobal}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }

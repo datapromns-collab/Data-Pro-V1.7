@@ -102,27 +102,27 @@ export async function savePlannerData(data: Partial<PlannerData>): Promise<void>
   }
 }
 
-export async function loadOrdenesSapData(): Promise<OrdenSap[] | null> {
+export async function loadOrdenesSapData(): Promise<{ ordenes: OrdenSap[]; deletedIds: string[] } | null> {
   try {
     const res = await fetchWithRetry(API_URL);
     if (!res.ok) throw new Error('API error');
     const json = await res.json();
-    if (Array.isArray(json.ordenesSap)) {
-      return json.ordenesSap;
-    }
-    return null;
+    return {
+      ordenes: Array.isArray(json.ordenesSap) ? json.ordenesSap : [],
+      deletedIds: Array.isArray(json._deletedOrdenesSapIds) ? json._deletedOrdenesSapIds : [],
+    };
   } catch (error) {
     console.warn('[JSON_DB] Fallback to localStorage for ordenesSap', error);
     return null;
   }
 }
 
-export async function saveOrdenesSapData(data: OrdenSap[]): Promise<boolean> {
+export async function saveOrdenesSapData(ordenes: OrdenSap[], deletedIds: string[]): Promise<boolean> {
   try {
     const res = await fetchWithRetry(API_URL, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify({ ordenesSap: data }),
+      body: JSON.stringify({ ordenesSap: ordenes, _deletedOrdenesSapIds: deletedIds }),
     });
     return res.ok;
   } catch (error) {

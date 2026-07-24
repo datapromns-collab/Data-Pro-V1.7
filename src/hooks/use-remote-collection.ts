@@ -103,6 +103,11 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
       pendingRef.current = true;
     } finally {
       sendingRef.current = false;
+      if (queueRef.current.length > 0) {
+        timerRef.current = setTimeout(() => {
+          flushQueue();
+        }, 150);
+      }
     }
   }, [sendToServer]);
 

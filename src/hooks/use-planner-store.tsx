@@ -195,6 +195,7 @@ function usePlannerStoreInner() {
   const [customPackagingRecipes, setCustomPackagingRecipes] = useState<Record<string, Record<string, Record<string, number>>>>(DEFAULT_PACKAGING_RECIPES);
   const [isLoaded, setIsLoaded] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const pendingRef = useRef(false);
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -448,8 +449,10 @@ function usePlannerStoreInner() {
     }
   }, [weekKey, setLineSpeeds]);
 
-  const applyRemoteToState = useCallback((remote: any, authoritative = false) => {
+   const applyRemoteToState = useCallback((remote: any, authoritative = false) => {
     if (!remote) return;
+
+    const hasPendingSave = !authoritative && pendingRef.current;
 
     if (remote.weeks) {
       setWeeklyData((prev) => {
@@ -462,40 +465,28 @@ function usePlannerStoreInner() {
           ]);
 
           const mergedNonTasks: any = { ...localWeek };
-          weeklyDataFields.forEach((field) => {
-            if ((remoteWeek as any)[field] != null) {
-              mergedNonTasks[field] = deepMerge((localWeek as any)[field], (remoteWeek as any)[field]);
-            }
-          });
+          if (!hasPendingSave) {
+            weeklyDataFields.forEach((field) => {
+              if ((remoteWeek as any)[field] != null) {
+                mergedNonTasks[field] = deepMerge((localWeek as any)[field], (remoteWeek as any)[field]);
+              }
+            });
+          }
 
           const byId = new Map<string, any>();
-          if (authoritative) {
-            ((remoteWeek as any).tasks || []).forEach((t: any) => {
-              if (!t || !t.id) return;
+          (localWeek.tasks || []).forEach((t: any) => {
+            if (t && t.id) byId.set(t.id, t);
+          });
+          ((remoteWeek as any).tasks || []).forEach((t: any) => {
+            if (!t || !t.id) return;
+            if (!byId.has(t.id)) {
               byId.set(t.id, {
                 ...t,
                 startTime: new Date(t.startTime),
                 endTime: new Date(t.endTime),
               });
-            });
-            (localWeek.tasks || []).forEach((t: any) => {
-              if (t && t.id && !byId.has(t.id)) byId.set(t.id, t);
-            });
-          } else {
-            (localWeek.tasks || []).forEach((t: any) => {
-              if (t && t.id) byId.set(t.id, t);
-            });
-            ((remoteWeek as any).tasks || []).forEach((t: any) => {
-              if (!t || !t.id) return;
-              if (!byId.has(t.id)) {
-                byId.set(t.id, {
-                  ...t,
-                  startTime: new Date(t.startTime),
-                  endTime: new Date(t.endTime),
-                });
-              }
-            });
-          }
+            }
+          });
           const mergedTasks = Array.from(byId.values()).filter((t: any) => !remoteDeleted.has(t.id));
           next[wk] = {
             ...mergedNonTasks,
@@ -733,6 +724,7 @@ function usePlannerStoreInner() {
     };
 
     const timer = setTimeout(async () => {
+      pendingRef.current = true;
       try {
         await savePlannerData(plan);
         const remote = await loadPlannerData();
@@ -744,6 +736,8 @@ function usePlannerStoreInner() {
       } catch (error) {
         saveToLocalStorageRef.current();
         setSaveError(error instanceof Error ? error.message : 'Error desconocido al guardar');
+      } finally {
+        pendingRef.current = false;
       }
     }, 100);
 

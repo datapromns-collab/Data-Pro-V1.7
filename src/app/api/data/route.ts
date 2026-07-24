@@ -103,6 +103,10 @@ function ensureDb() {
         data.notifications = [];
         migrated = true;
       }
+      if (!data._deletedOrdenesSapIds) {
+        data._deletedOrdenesSapIds = [];
+        migrated = true;
+      }
       if (migrated) {
         createRotatingBackup(DB_PATH);
         fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf8');
@@ -245,8 +249,9 @@ export async function GET() {
     const data = JSON.parse(raw);
     const plannerWithMeta = {
       ...data.planner,
-      ordenesSap: data.ordenesSap ?? [],
-      notifications: data.notifications ?? [],
+      ordenesSap: Array.isArray(data.ordenesSap) ? data.ordenesSap : [],
+      _deletedOrdenesSapIds: Array.isArray(data._deletedOrdenesSapIds) ? data._deletedOrdenesSapIds : [],
+      notifications: Array.isArray(data.notifications) ? data.notifications : [],
       _meta: data._meta,
     };
     return new Response(JSON.stringify(plannerWithMeta), {
@@ -376,7 +381,6 @@ export async function POST(request: Request) {
     payload.planner = merged;
     payload._meta = { ...(existing._meta ?? {}), updatedAt: now };
     if (body.ordenesSap !== undefined) {
-      const currentOrdenes = Array.isArray(existing.ordenesSap) ? existing.ordenesSap : [];
       const incomingOrdenes = Array.isArray(body.ordenesSap) ? body.ordenesSap : [];
       if (!validateOrdenesSap(incomingOrdenes)) {
         return new Response(JSON.stringify({ error: 'Invalid ordenesSap schema' }), {
@@ -384,16 +388,17 @@ export async function POST(request: Request) {
           headers: { 'content-type': 'application/json' },
         });
       }
+      const incomingDeleted = Array.isArray(body._deletedOrdenesSapIds) ? body._deletedOrdenesSapIds : [];
+      const currentOrdenes = Array.isArray(existing.ordenesSap) ? existing.ordenesSap : [];
       const byId = new Map<string | number, any>();
-      currentOrdenes.forEach((item: any) => {
-        const key = item.id ?? item;
-        byId.set(key, item);
-      });
-      incomingOrdenes.forEach((item: any) => {
-        const key = item.id ?? item;
-        byId.set(key, item);
-      });
-      payload.ordenesSap = Array.from(byId.values());
+      currentOrdenes.forEach((item: any) => { byId.set(item.id, item); });
+      incomingOrdenes.forEach((item: any) => { byId.set(item.id, item); });
+      let mergedOrdenes = Array.from(byId.values());
+      const existingDeleted = Array.isArray(existing._deletedOrdenesSapIds) ? existing._deletedOrdenesSapIds : [];
+      const deletedIds = Array.from(new Set([...existingDeleted, ...incomingDeleted]));
+      const incomingIds = new Set(incomingOrdenes.map((o: any) => o.id));
+      payload.ordenesSap = mergedOrdenes.filter((o: any) => !deletedIds.includes(o.id));
+      payload._deletedOrdenesSapIds = deletedIds.filter((id: string) => !incomingIds.has(id));
     }
 
     createRotatingBackup(DB_PATH);

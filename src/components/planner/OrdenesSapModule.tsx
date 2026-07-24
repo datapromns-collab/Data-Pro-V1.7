@@ -806,7 +806,7 @@ export default function OrdenesSapModule({
   const [tablaTurnoEdits, setTablaTurnoEdits] = useState<Record<string, Record<string, Record<number, number>>>>({});
   const [tablaProdtSemanalEdits, setTablaProdtSemanalEdits] = useState<Record<string, Record<number, number>>>({});
   const [tablaResumenMensualEdits, setTablaResumenMensualEdits] = useState<Record<string, Record<number, number>>>({});
-  const { ordenes, setOrdenes } = useOrdenesSap();
+  const { ordenes, setOrdenes, eliminarOrden, eliminarDia } = useOrdenesSap();
 
   const tablaTurnoDiurnoAuto = useMemo(() => {
     const tabla: Record<string, Record<number, number>> = {};
@@ -1487,10 +1487,16 @@ const exportarPDFdia = async () => {
     x = startX;
     pdf.text('TOTAL POR LINEA', x + colWidths[0] / 2, y + 4, { align: 'center' });
     x += colWidths[0];
-    lineas.forEach((linea, i) => {
+    for (let i = 0; i < 4; i++) {
       pdf.text(String(totales[i]), x + colWidths[i + 1] / 2, y + 4, { align: 'center' });
       x += colWidths[i + 1];
-    });
+    }
+    pdf.text(String(total2LGeneral), x + colWidths[5] / 2, y + 4, { align: 'center' });
+    x += colWidths[5];
+    for (let i = 0; i < 4; i++) {
+      pdf.text(String(totales[i + 4]), x + colWidths[i + 6] / 2, y + 4, { align: 'center' });
+      x += colWidths[i + 6];
+    }
     pdf.text(String(totalGeneral), x + colWidths[10] / 2, y + 4, { align: 'center' });
     drawRowBorders(y, headerHeight);
 
@@ -1518,15 +1524,39 @@ const exportarPDFdia = async () => {
       const d = new Date(anioActual, mesActual, i + 1);
       return format(d, 'yyyy-MM-dd');
     });
+    const fechasMesDisplay = fechasMes.map((f) => format(new Date(f + 'T12:00:00'), 'dd/MM/yyyy'));
 
     const lineas = [1, 2, 3, 4, 5, 6, 7, 8];
+
+    const saboresResumen = [
+      'GLUP COLA',
+      'GLUP FRESH',
+      'GLUP UVA',
+      'GLUP PIÑA',
+      'GLUP NARANJA',
+      'GLUP KOLITA',
+      'GLUP MANZANA VERDE',
+      'GLUP PONCHE',
+      'GLUP CHICLE',
+      'GLUP PIÑA PARCHITA',
+      'GLUP MANZANA ROJA',
+      'JUSTY NARANJA',
+      'JUSTY DURAZNO',
+      'JUSTY PERA',
+      'JUSTY MANZANA',
+      'JUSTY LIMON',
+      'JUSTY TAMARINDO',
+      'VITA TEA DURAZNO',
+      'VITA TEA LIMON',
+    ];
+    const saboresExportar = PRODUCT_LIST.filter((s) => saboresResumen.includes(s));
 
     const wsData: any[] = [];
 
     lineas.forEach((linea) => {
-      wsData.push([`Linea ${linea}`, ...fechasMes]);
+      wsData.push([`Linea ${linea}`, ...fechasMesDisplay]);
 
-      PRODUCT_LIST.forEach((sabor) => {
+      saboresExportar.forEach((sabor) => {
         const fila: any[] = [sabor];
         fechasMes.forEach((fechaStr) => {
           const total = (ordenes || []).reduce((sum, orden) => {
@@ -1627,20 +1657,6 @@ const exportarPDFdia = async () => {
     link.download = `Produccion Total ${mes} ${anio}.jpg`;
     link.href = canvas.toDataURL('image/jpeg', 0.92);
     link.click();
-  };
-
-  const eliminarDia = (ordenId: string, diaIndex: number) => {
-    setOrdenes(prev => prev.map(o => {
-      if (o.id !== ordenId) return o;
-      return {
-        ...o,
-        dias: o.dias.filter((_, i) => i !== diaIndex),
-      };
-    }));
-  };
-
-  const eliminarOrden = (ordenId: string) => {
-    setOrdenes(prev => prev.filter(o => o.id !== ordenId));
   };
 
   const calcularTotalDia = (dia: OrdenSap['dias'][0]) => {
