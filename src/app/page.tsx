@@ -518,6 +518,12 @@ export default function PlannerPage() {
   const setPncNocturno = (val: ProducidasTabla) => {
     pncStore.setData((prev) => ({ ...prev, nocturno: val }));
   };
+  const [pncTd, setPncTd] = useState<{ producto: string; cantidad: string }[]>(() =>
+    Array.from({ length: 7 }, () => ({ producto: '', cantidad: '' }))
+  );
+  const [pncTn, setPncTn] = useState<{ producto: string; cantidad: string }[]>(() =>
+    Array.from({ length: 7 }, () => ({ producto: '', cantidad: '' }))
+  );
   const [produccionFecha, setProduccionFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -2544,12 +2550,180 @@ export default function PlannerPage() {
                                          <ProducidasTable titulo="Diaria - Producidas" value={sumarTablas(producidasDiurno, producidasNocturno)} readOnly />
                                       )
                                    )}
-                                     {produccionSubTab === 'pnc' && (
-                                       <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                                         <AlertTriangle className="h-12 w-12 mb-4 opacity-20" />
-                                         PNC en Desarrollo
-                                       </div>
-                                     )}
+                                      {produccionSubTab === 'pnc' && (
+                                        <>
+                                          {pncSubTab === 'td' ? (
+                                            <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                                              <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                                                <div className="w-2 h-2 rounded-full bg-amber-500" />
+                                                <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                                                  TD - PNC
+                                                </h4>
+                                              </div>
+                                              <div className="p-4">
+                                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                  <table className="w-full border-collapse text-center">
+                                                    <thead>
+                                                      <tr className="bg-slate-100">
+                                                        <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-40 text-left">Ubicación</th>
+                                                        <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[200px]">Producto</th>
+                                                        <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">Cantidad</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      {pncTd.map((row, idx) => (
+                                                        <tr key={idx} className="even:bg-slate-50/60">
+                                                          <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
+                                                            Línea {idx + 1}
+                                                          </td>
+                                                           <td className="px-2 py-1 border-r border-b border-slate-100">
+                                                             <select
+                                                               value={row.producto}
+                                                               onChange={(e) => {
+                                                                 const next = [...pncTd];
+                                                                 next[idx] = { ...next[idx], producto: e.target.value };
+                                                                 setPncTd(next);
+                                                               }}
+                                                               className="w-full bg-transparent text-center text-[10px] text-slate-700 outline-none focus:bg-sky-50 rounded px-1 py-0.5"
+                                                             >
+                                                               <option value="">Producto</option>
+                                                               {PRODUCT_LIST.map((sabor) => (
+                                                                 <option key={sabor} value={sabor}>{sabor}</option>
+                                                               ))}
+                                                             </select>
+                                                           </td>
+                                                          <td className="px-2 py-1 border-b border-slate-100">
+                                                            <input
+                                                              type="text"
+                                                              value={row.cantidad}
+                                                              onChange={(e) => {
+                                                                const next = [...pncTd];
+                                                                next[idx] = { ...next[idx], cantidad: e.target.value };
+                                                                setPncTd(next);
+                                                              }}
+                                                              className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-sky-50 rounded px-1 py-0.5"
+                                                              placeholder="0"
+                                                            />
+                                                          </td>
+                                                        </tr>
+                                                      ))}
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          ) : pncSubTab === 'tn' ? (
+                                            <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                                              <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                                                <div className="w-2 h-2 rounded-full bg-amber-500" />
+                                                <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                                                  TN - PNC
+                                                </h4>
+                                              </div>
+                                              <div className="p-4">
+                                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                  <table className="w-full border-collapse text-center">
+                                                    <thead>
+                                                      <tr className="bg-slate-100">
+                                                        <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-40 text-left">Ubicación</th>
+                                                        <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[200px]">Producto</th>
+                                                        <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">Cantidad</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      {pncTn.map((row, idx) => (
+                                                        <tr key={idx} className="even:bg-slate-50/60">
+                                                          <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
+                                                            Línea {idx + 1}
+                                                          </td>
+                                                           <td className="px-2 py-1 border-r border-b border-slate-100">
+                                                             <select
+                                                               value={row.producto}
+                                                               onChange={(e) => {
+                                                                 const next = [...pncTn];
+                                                                 next[idx] = { ...next[idx], producto: e.target.value };
+                                                                 setPncTn(next);
+                                                               }}
+                                                               className="w-full bg-transparent text-center text-[10px] text-slate-700 outline-none focus:bg-sky-50 rounded px-1 py-0.5"
+                                                             >
+                                                               <option value="">Producto</option>
+                                                               {PRODUCT_LIST.map((sabor) => (
+                                                                 <option key={sabor} value={sabor}>{sabor}</option>
+                                                               ))}
+                                                             </select>
+                                                           </td>
+                                                          <td className="px-2 py-1 border-b border-slate-100">
+                                                            <input
+                                                              type="text"
+                                                              value={row.cantidad}
+                                                              onChange={(e) => {
+                                                                const next = [...pncTn];
+                                                                next[idx] = { ...next[idx], cantidad: e.target.value };
+                                                                setPncTn(next);
+                                                              }}
+                                                              className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-sky-50 rounded px-1 py-0.5"
+                                                              placeholder="0"
+                                                            />
+                                                          </td>
+                                                        </tr>
+                                                      ))}
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </div>
+                                            </div>
+                                           ) : pncSubTab === 'tt' ? (
+                                             <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                                               <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+                                                 <div className="w-2 h-2 rounded-full bg-amber-500" />
+                                                 <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                                                   TT - PNC
+                                                 </h4>
+                                               </div>
+                                               <div className="p-4">
+                                                 <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                   <table className="w-full border-collapse text-center">
+                                                     <thead>
+                                                       <tr className="bg-slate-100">
+                                                         <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-40 text-left">Ubicación</th>
+                                                         <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">Cantidad</th>
+                                                       </tr>
+                                                     </thead>
+                                                      <tbody>
+                                                        {pncTd.map((tdRow, idx) => {
+                                                          const tdCant = Number(tdRow.cantidad || 0);
+                                                          const tnCant = Number(pncTn[idx]?.cantidad || 0);
+                                                          const total = tdCant + tnCant;
+                                                          return (
+                                                            <tr key={idx} className="even:bg-slate-50/60">
+                                                              <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
+                                                                Línea {idx + 1}
+                                                              </td>
+                                                              <td className="px-2 py-1 border-b border-slate-100">
+                                                                <input
+                                                                  type="text"
+                                                                  readOnly
+                                                                  value={String(total)}
+                                                                  className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-sky-50 rounded px-1 py-0.5"
+                                                                  placeholder="0"
+                                                                />
+                                                              </td>
+                                                            </tr>
+                                                          );
+                                                        })}
+                                                      </tbody>
+                                                   </table>
+                                                 </div>
+                                               </div>
+                                             </div>
+                                           ) : (
+                                            <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                              <AlertTriangle className="h-12 w-12 mb-4 opacity-20" />
+                                              PNC en Desarrollo
+                                            </div>
+                                          )}
+                                        </>
+                                      )}
                               </div>
                             </div>
                           </>
