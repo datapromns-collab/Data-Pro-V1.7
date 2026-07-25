@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-07-27T00:00:00.000",
+      "weekStartDate": "2026-07-20T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -663,19 +663,6 @@
     "weeks": {
       "2026-07-13": {
         "tasks": [
-          {
-            "name": "GLUP FRESH",
-            "lineId": "1",
-            "loadPerHour": 1500,
-            "quantity": 70500,
-            "durationHours": 47,
-            "presentation": "2Lts",
-            "tanks": 8.17,
-            "startTime": "2026-07-13T11:00:00.000Z",
-            "endTime": "2026-07-15T10:00:00.000Z",
-            "id": "nksfabh5i",
-            "color": "#6366f1"
-          },
           {
             "name": "GLUP NARANJA",
             "lineId": "3",
@@ -1626,6 +1613,19 @@
             "endTime": "2026-07-19T07:00:00.000Z",
             "id": "k214qme1j",
             "color": "#10b981"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 70500,
+            "durationHours": 47,
+            "presentation": "2Lts",
+            "tanks": 8.17,
+            "startTime": "2026-07-13T11:00:00.000Z",
+            "endTime": "2026-07-15T10:00:00.000Z",
+            "id": "eds2tvxuf",
+            "color": "#6366f1"
           }
         ],
         "realProduction": {
@@ -2755,7 +2755,8 @@
           "kwy97jtmj",
           "7h9l4z74q",
           "m019vix5a",
-          "ult4f3myf"
+          "ult4f3myf",
+          "nksfabh5i"
         ]
       },
       "weeks": {
@@ -2855,19 +2856,6 @@
             "startTime": "2026-07-20T11:00:00.000Z",
             "endTime": "2026-07-23T15:00:00.000Z",
             "id": "j40sg61dk",
-            "color": "#6366f1"
-          },
-          {
-            "name": "GLUP FRESH",
-            "lineId": "1",
-            "loadPerHour": 1500,
-            "quantity": 70500,
-            "durationHours": 47,
-            "presentation": "2Lts",
-            "tanks": 8.17,
-            "startTime": "2026-07-13T11:00:00.000Z",
-            "endTime": "2026-07-15T10:00:00.000Z",
-            "id": "nksfabh5i",
             "color": "#6366f1"
           },
           {
@@ -3844,19 +3832,6 @@
             "color": "#10b981"
           },
           {
-            "name": "GLUP KOLITA",
-            "lineId": "2",
-            "loadPerHour": 2500,
-            "quantity": 130000,
-            "durationHours": 52,
-            "presentation": "2Lts",
-            "tanks": 14.61,
-            "startTime": "2026-07-24T05:00:00.000Z",
-            "endTime": "2026-07-26T09:00:00.000Z",
-            "id": "4xoyzsehl",
-            "color": "#587593"
-          },
-          {
             "name": "GLUP FRESH",
             "lineId": "7",
             "loadPerHour": 2500,
@@ -3991,12 +3966,12 @@
             "name": "GLUP COLA",
             "lineId": "7",
             "loadPerHour": 2500,
-            "quantity": 181975,
-            "durationHours": 72.79,
+            "quantity": 181960,
+            "durationHours": 72.784,
             "presentation": "1Lt",
             "tanks": 21.1,
             "startTime": "2026-07-22T08:13:00.000Z",
-            "endTime": "2026-07-25T09:00:24.000Z",
+            "endTime": "2026-07-25T09:00:02.400Z",
             "id": "gaonfq3tz",
             "color": "#10b981"
           },
@@ -4338,6 +4313,67 @@
             "startTime": "2026-07-23T17:00:00.000Z",
             "endTime": "2026-07-26T09:00:00.000Z",
             "id": "x4nazg9iv",
+            "color": "#ec4899"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 7500,
+            "durationHours": 3,
+            "presentation": "2Lts",
+            "tanks": 0.84,
+            "startTime": "2026-07-24T05:00:00.000Z",
+            "endTime": "2026-07-24T08:00:00.000Z",
+            "id": "qnsl4gcg0",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-07-24T08:00:00.000Z",
+            "endTime": "2026-07-24T08:30:00.000Z",
+            "id": "3dp9s55rz",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP MANZANA ROJA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 32190,
+            "durationHours": 12.876,
+            "presentation": "2Lts",
+            "tanks": 4,
+            "startTime": "2026-07-24T08:30:00.000Z",
+            "endTime": "2026-07-24T21:22:33.600Z",
+            "id": "rfwyq6p3v",
+            "color": "#587593"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-07-24T21:23:00.000Z",
+            "endTime": "2026-07-24T21:53:00.000Z",
+            "id": "s3fbz9omt",
+            "color": "#6366f1"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 8895,
+            "durationHours": 3.558,
+            "presentation": "2Lts",
+            "tanks": 1,
+            "startTime": "2026-07-24T21:53:00.000Z",
+            "endTime": "2026-07-25T01:26:28.800Z",
+            "id": "d79bobvnn",
             "color": "#ec4899"
           }
         ],
@@ -5548,7 +5584,10 @@
           "kabliwgv5",
           "trw2cohx8",
           "kq86bft97",
-          "54okw1euv"
+          "54okw1euv",
+          "4xoyzsehl",
+          "15exsw0r6",
+          "64lroz33q"
         ]
       },
       "2026-07-27": {
@@ -5918,7 +5957,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-24T15:35:02.916Z"
+    "updatedAt": "2026-07-25T12:01:56.769Z"
   },
   "ordenesSap": [
     {
@@ -6106,7 +6145,7 @@
           "ticket1": "",
           "cajas1": 0,
           "ticket2": "17312",
-          "cajas2": 0,
+          "cajas2": -1,
           "ticket3": "",
           "cajas3": 800,
           "ticket4": "",
@@ -6126,7 +6165,7 @@
           "ticket1": "17313",
           "cajas1": 5280,
           "ticket2": "17314",
-          "cajas2": 0,
+          "cajas2": 294,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -8512,6 +8551,252 @@
           "cajas3": 400,
           "ticket4": "",
           "cajas4": 24720
+        }
+      ]
+    },
+    {
+      "id": "2-1784918918158",
+      "linea": 2,
+      "sabor": "GLUP MANZANA ROJA",
+      "ordenNumero": "62533",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-23",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17426",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 6000
+        },
+        {
+          "fechaInicio": "2026-07-24",
+          "ticket1": "17427",
+          "cajas1": 12960,
+          "ticket2": "17428",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 6240,
+          "ticket4": "",
+          "cajas4": 6719
+        }
+      ]
+    },
+    {
+      "id": "3-1784919232530",
+      "linea": 3,
+      "sabor": "GLUP MANZANA VERDE",
+      "ordenNumero": "62539",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-23",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17375",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 7889
+        }
+      ]
+    },
+    {
+      "id": "6-1784919799312",
+      "linea": 6,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "62545",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-23",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17329",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 10400
+        },
+        {
+          "fechaInicio": "2026-07-24",
+          "ticket1": "17330",
+          "cajas1": 7051,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1784920067592",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62551",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-23",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17275",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 14167
+        },
+        {
+          "fechaInicio": "2026-07-24",
+          "ticket1": "17276",
+          "cajas1": 2840,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1784920493810",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "62498",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-24",
+          "ticket1": "17464",
+          "cajas1": 8800,
+          "ticket2": "17465",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 3760,
+          "ticket4": "",
+          "cajas4": 9931
+        },
+        {
+          "fechaInicio": "2026-07-25",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1784920515472",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62504",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-24",
+          "ticket1": "17512",
+          "cajas1": 13600,
+          "ticket2": "17513",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 11120,
+          "ticket4": "",
+          "cajas4": 19440
+        },
+        {
+          "fechaInicio": "2026-07-25",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1784920656856",
+      "linea": 5,
+      "sabor": "JUSTY NARANJA",
+      "ordenNumero": "62556",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-24",
+          "ticket1": "17249",
+          "cajas1": 3550,
+          "ticket2": "17250",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 1750,
+          "ticket4": "",
+          "cajas4": 5500
+        },
+        {
+          "fechaInicio": "2026-07-25",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1784980471033",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "62562",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-24",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17428",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 6720
+        }
+      ]
+    },
+    {
+      "id": "3-1784980695447",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62568",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-24",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17376",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 3600
         }
       ]
     }
@@ -14741,7 +15026,389 @@
       "linea-7": {}
     },
     "planta-produccion-producidas": {
-      "test": "value"
+      "test": "value",
+      "diurno": {
+        "GLUP COLA": {
+          "1": 0,
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP FRESH": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP UVA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP PIÑA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP NARANJA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP KOLITA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP MANZANA VERDE": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP PONCHE": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP CHICLE": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP PIÑA PARCHITA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP MANZANA ROJA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "JUSTY NARANJA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "JUSTY DURAZNO": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "JUSTY MANDARINA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "JUSTY SANDIA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "JUSTY LIMON": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "JUSTY TAMARINDO": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "JUSTY MANZANA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "JUSTY PERA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "VITA TEA DURAZNO": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "VITA TEA LIMON": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        }
+      },
+      "nocturno": {
+        "GLUP COLA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP FRESH": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP UVA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP PIÑA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP NARANJA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP KOLITA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP MANZANA VERDE": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP PONCHE": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP CHICLE": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP PIÑA PARCHITA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "GLUP MANZANA ROJA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "JUSTY NARANJA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "JUSTY DURAZNO": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "JUSTY MANDARINA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "JUSTY SANDIA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "JUSTY LIMON": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "JUSTY TAMARINDO": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "JUSTY MANZANA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "JUSTY PERA": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "VITA TEA DURAZNO": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        },
+        "VITA TEA LIMON": {
+          "1": "",
+          "2": "",
+          "3": "",
+          "4": "",
+          "5": "",
+          "6": "",
+          "7": ""
+        }
+      }
     }
   },
   "cacheVersion": 0,

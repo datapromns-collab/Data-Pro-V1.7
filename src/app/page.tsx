@@ -3331,6 +3331,20 @@ function minutosAHoras(minutos: number): string {
   return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
 }
 
+function horasAMinutos(horas: string): number {
+  if (!horas) return 0;
+  const parts = String(horas).split(':');
+  if (parts.length === 2) {
+    return (Number(parts[0]) || 0) * 60 + (Number(parts[1]) || 0);
+  }
+  return 0;
+}
+
+function sumarHoras(...valores: string[]): string {
+  const totalMinutos = valores.reduce((acc, v) => acc + horasAMinutos(v), 0);
+  return minutosAHoras(totalMinutos);
+}
+
 function clasificarParada(tipo: string): string {
   const t = String(tipo || '').toUpperCase();
   if (t.includes('PROGRAMADA')) return 'programadas';
@@ -3478,7 +3492,8 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
     const diferenciaTeoricaReal = Number.isFinite(produccionTeorica) ? String(Math.max(0, Math.round(produccionTeorica - alcance))) : '0';
     const ot = Math.round(porTipo.operacionales + porTipo.averia);
     const adecuaciones = Math.round(porTipo.adecuaciones);
-    const tiempoMuerto = Math.round(Math.max(0, totalParadaMin - (porTipo.programadas || 0)));
+    const tiempoMuertoMin = Math.round(Math.max(0, totalParadaMin - (porTipo.programadas || 0)));
+    const tiempoMuerto = minutosAHoras(tiempoMuertoMin);
     const ausentismo = Math.round(porTipo.ausentismo);
     const disponibilidad = totalParadaMin > 0 ? ((480 - totalParadaMin) / 480 * 100).toFixed(2).replace('.', ',') + '%' : '100,00%';
 
@@ -3491,7 +3506,7 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
       diferenciaTeoricaReal,
       ot: String(ot),
       adecuaciones: String(adecuaciones),
-      tiempoMuerto: String(tiempoMuerto),
+      tiempoMuerto,
       ausentismo: String(ausentismo),
       disponibilidad,
     };
@@ -3710,7 +3725,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Relación Hrs Prog./Paradas Programadas</th>
                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por Servicios (hrs)</th>
                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por Ausentismo (hrs)</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas Externas (hrs)</th>
+                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por fallas electricas (hrs)</th>
                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por Adecuaciones (hrs)</th>
                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por Avería (OT) (hrs)</th>
                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas Operacionales (hrs)</th>
@@ -3755,10 +3770,55 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.horasPerdidasPNC)}</td>
                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.disponibilidad)}</td>
                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.produccionTeorica)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.horasEfectivas)}</td>
+                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-b border-slate-100 text-center tabular-nums">{formatCell(row.horasEfectivas)}</td>
                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-b border-slate-100 text-center tabular-nums">{formatCell(row.tiempoMuertoInexplicable)}</td>
                   </tr>
                 ))}
+                {data.length > 0 && (() => {
+                  const totalHorasPagadas = sumarHoras(...data.map((r: any) => r.horasPagadas || '0'));
+                  const totalHorasProgramadas = sumarHoras(...data.map((r: any) => r.horasProgramadas || '0'));
+                  const totalParadasProgramadas = sumarHoras(...data.map((r: any) => r.paradasProgramadas || '0'));
+                  const totalServicios = sumarHoras(...data.map((r: any) => r.servicios || '0'));
+                  const totalAusentismo = sumarHoras(...data.map((r: any) => r.ausentismo || '0'));
+                  const totalExternas = sumarHoras(...data.map((r: any) => r.externas || '0'));
+                  const totalAdecuaciones = sumarHoras(...data.map((r: any) => r.adecuaciones || '0'));
+                  const totalAveria = sumarHoras(...data.map((r: any) => r.averia || '0'));
+                  const totalOperacionales = sumarHoras(...data.map((r: any) => r.operacionales || '0'));
+                  const totalHorasPerdidasPNC = data.reduce((acc: number, r: any) => acc + Number.parseFloat(String(r.horasPerdidasPNC || '0').replace(',', '.')), 0).toFixed(2).replace('.', ',');
+                  const disponibilidades = data.map((r: any) => { const v = String(r.disponibilidad || '').replace(',', '.'); const n = parseFloat(v); return Number.isFinite(n) ? n : 0; });
+                  const totalDisponibilidadPromedio = disponibilidades.length > 0 ? (disponibilidades.reduce((a, b) => a + b, 0) / disponibilidades.length).toFixed(2).replace('.', ',') + '%' : '0,00%';
+                  const totalProduccionTeorica = data.reduce((acc: number, r: any) => acc + Number(r.produccionTeorica || 0), 0);
+                  const totalHorasEfectivas = sumarHoras(...data.map((r: any) => r.horasEfectivas || '0'));
+                  const totalTiempoMuerto = sumarHoras(...data.map((r: any) => r.tiempoMuertoInexplicable || '0'));
+                  return (
+                    <tr className="bg-slate-100 font-black">
+                      <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200 w-36 text-left">TOTAL</td>
+                      <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
+                      <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
+                      <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
+                      <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
+                      <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
+                      <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-b border-slate-200 text-center"></td>
+                      <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
+                      <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
+                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasPagadas}</td>
+                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasProgramadas}</td>
+                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalParadasProgramadas}</td>
+                      <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
+                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalServicios}</td>
+                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAusentismo}</td>
+                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalExternas}</td>
+                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAdecuaciones}</td>
+                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAveria}</td>
+                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalOperacionales}</td>
+                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasPerdidasPNC}</td>
+                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalDisponibilidadPromedio}</td>
+                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalProduccionTeorica}</td>
+                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasEfectivas}</td>
+                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{totalTiempoMuerto}</td>
+                    </tr>
+                  );
+                })()}
               </tbody>
             </table>
           </div>
