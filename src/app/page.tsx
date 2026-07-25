@@ -494,36 +494,6 @@ export default function PlannerPage() {
   const [pncSubTab, setPncSubTab] = useState('td');
   const [ttSubTab, setTtSubTab] = useState('porturno');
   const [produccionMes, setProduccionMes] = useState<Date>(() => startOfMonth(new Date()));
-  const producidasStore = useRemoteCollection<{ diurno: ProducidasTabla; nocturno: ProducidasTabla }>('planta-produccion-producidas', {
-    diurno: nuevaTabla(),
-    nocturno: nuevaTabla(),
-  });
-  const producidasDiurno = producidasStore.data.diurno || nuevaTabla();
-  const producidasNocturno = producidasStore.data.nocturno || nuevaTabla();
-  const setProducidasDiurno = (val: ProducidasTabla) => {
-    producidasStore.setData((prev) => ({ ...prev, diurno: val }));
-  };
-  const setProducidasNocturno = (val: ProducidasTabla) => {
-    producidasStore.setData((prev) => ({ ...prev, nocturno: val }));
-  };
-  const pncStore = useRemoteCollection<{ diurno: ProducidasTabla; nocturno: ProducidasTabla }>('planta-pnc', {
-    diurno: nuevaTabla(),
-    nocturno: nuevaTabla(),
-  });
-  const pncDiurno = pncStore.data.diurno || nuevaTabla();
-  const pncNocturno = pncStore.data.nocturno || nuevaTabla();
-  const setPncDiurno = (val: ProducidasTabla) => {
-    pncStore.setData((prev) => ({ ...prev, diurno: val }));
-  };
-  const setPncNocturno = (val: ProducidasTabla) => {
-    pncStore.setData((prev) => ({ ...prev, nocturno: val }));
-  };
-  const [pncTd, setPncTd] = useState<{ producto: string; cantidad: string }[]>(() =>
-    Array.from({ length: 7 }, () => ({ producto: '', cantidad: '' }))
-  );
-  const [pncTn, setPncTn] = useState<{ producto: string; cantidad: string }[]>(() =>
-    Array.from({ length: 7 }, () => ({ producto: '', cantidad: '' }))
-  );
   const [produccionFecha, setProduccionFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -536,6 +506,42 @@ export default function PlannerPage() {
     }
     return new Date();
   });
+  const produccionFechaKey = produccionFecha ? format(produccionFecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
+  const producidasStore = useRemoteCollection<Record<string, { diurno: ProducidasTabla; nocturno: ProducidasTabla }>>('planta-produccion-producidas', {});
+  const producidasDia = producidasStore.data[produccionFechaKey] || { diurno: nuevaTabla(), nocturno: nuevaTabla() };
+  const producidasDiurno = producidasDia.diurno;
+  const producidasNocturno = producidasDia.nocturno;
+  const setProducidasDiurno = (val: ProducidasTabla) => {
+    producidasStore.setData((prev) => ({
+      ...prev,
+      [produccionFechaKey]: { ...(prev[produccionFechaKey] || { diurno: nuevaTabla(), nocturno: nuevaTabla() }), diurno: val }
+    }));
+  };
+  const setProducidasNocturno = (val: ProducidasTabla) => {
+    producidasStore.setData((prev) => ({
+      ...prev,
+      [produccionFechaKey]: { ...(prev[produccionFechaKey] || { diurno: nuevaTabla(), nocturno: nuevaTabla() }), nocturno: val }
+    }));
+  };
+  const pncStore = useRemoteCollection<Record<string, { td: { producto: string; cantidad: string }[]; tn: { producto: string; cantidad: string }[] }>>('planta-pnc', {});
+  const pncDia = pncStore.data[produccionFechaKey] || {
+    td: Array.from({ length: 7 }, () => ({ producto: '', cantidad: '' })),
+    tn: Array.from({ length: 7 }, () => ({ producto: '', cantidad: '' }))
+  };
+  const pncTd = pncDia.td;
+  const pncTn = pncDia.tn;
+  const setPncTd = (val: { producto: string; cantidad: string }[]) => {
+    pncStore.setData((prev) => ({
+      ...prev,
+      [produccionFechaKey]: { ...(prev[produccionFechaKey] || { td: [], tn: [] }), td: val }
+    }));
+  };
+  const setPncTn = (val: { producto: string; cantidad: string }[]) => {
+    pncStore.setData((prev) => ({
+      ...prev,
+      [produccionFechaKey]: { ...(prev[produccionFechaKey] || { td: [], tn: [] }), tn: val }
+    }));
+  };
   const [reporteDiarioFecha, setReporteDiarioFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
       try {
