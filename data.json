@@ -14948,6 +14948,23 @@
         "mttoEsp": "",
         "descripcionFalla": "",
         "descripcionAccion": ""
+      },
+      {
+        "fecha": "2026-07-20",
+        "semana": 30,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "LLENADORA",
+        "tipoParada": "PTAB",
+        "inicioParada": "22:00",
+        "finParada": "23:00",
+        "totalMin": "60",
+        "zona": "Llenado",
+        "falla": "",
+        "orden": "",
+        "observaciones": "",
+        "id": 1785014920340
       }
     ],
     "planta-ordenes-trabajo": [
