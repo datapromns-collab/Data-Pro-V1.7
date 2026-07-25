@@ -491,6 +491,7 @@ export default function PlannerPage() {
   const [planificadasTurnoSubTab, setPlanificadasTurnoSubTab] = useState('diurno');
   const [producidasSubTab, setProducidasSubTab] = useState('porturno');
   const [producidasTurnoSubTab, setProducidasTurnoSubTab] = useState('diurno');
+  const [pncSubTab, setPncSubTab] = useState('td');
   const [produccionMes, setProduccionMes] = useState<Date>(() => startOfMonth(new Date()));
   const producidasStore = useRemoteCollection<{ diurno: ProducidasTabla; nocturno: ProducidasTabla }>('planta-produccion-producidas', {
     diurno: nuevaTabla(),
@@ -503,6 +504,18 @@ export default function PlannerPage() {
   };
   const setProducidasNocturno = (val: ProducidasTabla) => {
     producidasStore.setData((prev) => ({ ...prev, nocturno: val }));
+  };
+  const pncStore = useRemoteCollection<{ diurno: ProducidasTabla; nocturno: ProducidasTabla }>('planta-pnc', {
+    diurno: nuevaTabla(),
+    nocturno: nuevaTabla(),
+  });
+  const pncDiurno = pncStore.data.diurno || nuevaTabla();
+  const pncNocturno = pncStore.data.nocturno || nuevaTabla();
+  const setPncDiurno = (val: ProducidasTabla) => {
+    pncStore.setData((prev) => ({ ...prev, diurno: val }));
+  };
+  const setPncNocturno = (val: ProducidasTabla) => {
+    pncStore.setData((prev) => ({ ...prev, nocturno: val }));
   };
   const [produccionFecha, setProduccionFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
@@ -2344,20 +2357,21 @@ export default function PlannerPage() {
                              <div className="flex items-center justify-between gap-2 mb-4 no-print">
                                <div className="flex items-center gap-3">
                                 <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                                  {['planificadas', 'producidas'].map((subTab) => (
-                                    <button
-                                      key={subTab}
-                                      onClick={() => setProduccionSubTab(subTab)}
-                                      className={cn(
-                                        "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                        produccionSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                      )}
-                                    >
-                                      {subTab === 'planificadas' && <ClipboardList className="h-3.5 w-3.5" />}
-                                      {subTab === 'planificadas' ? 'Planificadas' : 'Producidas'}
-                                      {subTab === 'producidas' && <CheckCircle2 className="h-3.5 w-3.5" />}
-                                    </button>
-                                  ))}
+                                   {['planificadas', 'producidas', 'pnc'].map((subTab) => (
+                                     <button
+                                       key={subTab}
+                                       onClick={() => setProduccionSubTab(subTab)}
+                                       className={cn(
+                                         "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                         produccionSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                       )}
+                                     >
+                                       {subTab === 'planificadas' && <ClipboardList className="h-3.5 w-3.5" />}
+                                       {subTab === 'planificadas' ? 'Planificadas' : subTab === 'producidas' ? 'Producidas' : 'PNC'}
+                                       {subTab === 'producidas' && <CheckCircle2 className="h-3.5 w-3.5" />}
+                                       {subTab === 'pnc' && <AlertTriangle className="h-3.5 w-3.5" />}
+                                     </button>
+                                   ))}
                                 </div>
                                </div>
                                <input
@@ -2481,36 +2495,58 @@ export default function PlannerPage() {
                                           </div>
                                      )
                                   )}
-                                  {produccionSubTab === 'producidas' && (
-                                    producidasSubTab === 'porturno' ? (
-                                      <div className="flex flex-col gap-3 h-full">
-                                        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start">
-                                          {['diurno', 'nocturno'].map((subTab) => (
+                                   {produccionSubTab === 'producidas' && (
+                                     producidasSubTab === 'porturno' ? (
+                                       <div className="flex flex-col gap-3 h-full">
+                                         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start">
+                                           {['diurno', 'nocturno'].map((subTab) => (
+                                             <button
+                                               key={subTab}
+                                               onClick={() => setProducidasTurnoSubTab(subTab)}
+                                               className={cn(
+                                                 "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                                 producidasTurnoSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                               )}
+                                             >
+                                               {subTab === 'diurno' && <Sun className="h-3.5 w-3.5" />}
+                                               {subTab === 'diurno' ? 'Diurno' : 'Nocturno'}
+                                               {subTab === 'nocturno' && <Moon className="h-3.5 w-3.5" />}
+                                             </button>
+                                           ))}
+                                         </div>
+                                           {producidasTurnoSubTab === 'diurno' && (
+                                             <ProducidasTable titulo="Diurno - Producidas" value={producidasDiurno} onChange={setProducidasDiurno} />
+                                           )}
+                                           {producidasTurnoSubTab === 'nocturno' && (
+                                             <ProducidasTable titulo="Nocturno - Producidas" value={producidasNocturno} onChange={setProducidasNocturno} />
+                                           )}
+                                        </div>
+                                      ) : (
+                                         <ProducidasTable titulo="Diaria - Producidas" value={sumarTablas(producidasDiurno, producidasNocturno)} readOnly />
+                                      )
+                                   )}
+                                    {produccionSubTab === 'pnc' && (
+                                      <>
+                                        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start mb-4 no-print">
+                                          {['td', 'tn'].map((subTab) => (
                                             <button
                                               key={subTab}
-                                              onClick={() => setProducidasTurnoSubTab(subTab)}
+                                              onClick={() => setPncSubTab(subTab)}
                                               className={cn(
                                                 "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                                producidasTurnoSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                                pncSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                               )}
                                             >
-                                              {subTab === 'diurno' && <Sun className="h-3.5 w-3.5" />}
-                                              {subTab === 'diurno' ? 'Diurno' : 'Nocturno'}
-                                              {subTab === 'nocturno' && <Moon className="h-3.5 w-3.5" />}
+                                              {subTab === 'td' ? 'TD' : 'TN'}
                                             </button>
                                           ))}
                                         </div>
-                                          {producidasTurnoSubTab === 'diurno' && (
-                                            <ProducidasTable titulo="Diurno - Producidas" value={producidasDiurno} onChange={setProducidasDiurno} />
-                                          )}
-                                          {producidasTurnoSubTab === 'nocturno' && (
-                                            <ProducidasTable titulo="Nocturno - Producidas" value={producidasNocturno} onChange={setProducidasNocturno} />
-                                          )}
-                                       </div>
-                                     ) : (
-                                        <ProducidasTable titulo="Diaria - Producidas" value={sumarTablas(producidasDiurno, producidasNocturno)} readOnly />
-                                     )
-                                  )}
+                                        <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                          <AlertTriangle className="h-12 w-12 mb-4 opacity-20" />
+                                          PNC en Desarrollo
+                                        </div>
+                                      </>
+                                    )}
                               </div>
                             </div>
                           </>
