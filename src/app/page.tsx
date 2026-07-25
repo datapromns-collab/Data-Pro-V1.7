@@ -40,7 +40,8 @@ import {
   RefreshCw,
   Pencil,
   Check,
-  X
+  X,
+  Save
 } from 'lucide-react';
 import { PRODUCT_LIST, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, PRODUCTION_START_HOUR } from '@/lib/planner-utils';
 import ProducidasTable, { ProducidasTabla, nuevaTabla, sumarTablas } from '@/components/planner/ProducidasTable';import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
@@ -199,11 +200,6 @@ const minutosTranscurridos = (fechaInicio: string, horaInicio: string, fechaFin:
   if (dias > 0) diff += dias * 1440;
   else if (diff < 0) return null;
   return diff;
-};
-
-const minutosAHorasDecimal = (minutos: number): string => {
-  const horas = minutos / 60;
-  return horas.toFixed(2).replace('.', ',');
 };
 
 const tiempoTranscurrido = (fechaInicio: string, horaInicio: string, fechaFin: string, horaFin: string): string => {
@@ -541,6 +537,14 @@ export default function PlannerPage() {
       ...prev,
       [produccionFechaKey]: { ...(prev[produccionFechaKey] || { td: [], tn: [] }), tn: val }
     }));
+  };
+  const velocidadesStore = useRemoteCollection<Record<string, string[]>>('planta-velocidades-bpm', {});
+  const velocidadesDia = velocidadesStore.data[produccionFechaKey] || Array.from({ length: 7 }, () => '');
+  const setVelocidadesDia = (val: string[]) => {
+    velocidadesStore.setData((prev) => ({ ...prev, [produccionFechaKey]: val }));
+  };
+  const guardarVelocidadesBPM = () => {
+    alert('Velocidades BPM guardadas correctamente');
   };
   const [reporteDiarioFecha, setReporteDiarioFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
@@ -1800,11 +1804,11 @@ export default function PlannerPage() {
                            <Trash2 className="h-3.5 w-3.5" />
                            Limpiar Plan
                          </button>
-                       </div>
-                     )}
-                   </div>
-                 )}
-                 {activeModule === 'management' && hasAccess(user.id, 'management') && (
+                                    </div>
+                                  )}
+                                </div>
+                              )}
+                              {activeModule === 'management' && hasAccess(user.id, 'management') && (
                    <>
                      {activeTab === 'admin-report' && (
                        <AdminReportTool 
@@ -2738,22 +2742,22 @@ export default function PlannerPage() {
                           <>
                              <div className="flex items-center justify-between gap-2 mb-4 no-print">
                                <div className="flex items-center gap-3">
-                                <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                                  {['diario', 'por-turno'].map((subTab) => (
-                                    <button
-                                      key={subTab}
-                                      onClick={() => setReporteSubTab(subTab)}
-                                      className={cn(
-                                        "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                        reporteSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                      )}
-                                    >
-                                      {subTab === 'diario' && <CalendarIcon className="h-3.5 w-3.5" />}
-                                      {subTab === 'diario' ? 'Diario' : 'Por Turno'}
-                                      {subTab === 'por-turno' && <Clock className="h-3.5 w-3.5" />}
-                                    </button>
-                                  ))}
-                                </div>
+                                 <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                   {['diario', 'por-turno', 'velocidades-bpm'].map((subTab) => (
+                                     <button
+                                       key={subTab}
+                                       onClick={() => setReporteSubTab(subTab)}
+                                       className={cn(
+                                         "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                         reporteSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                       )}
+                                     >
+                                       {subTab === 'diario' && <CalendarIcon className="h-3.5 w-3.5" />}
+                                       {subTab === 'diario' ? 'Diario' : subTab === 'por-turno' ? 'Por Turno' : 'Velocidades BPM'}
+                                       {subTab === 'por-turno' && <Clock className="h-3.5 w-3.5" />}
+                                     </button>
+                                   ))}
+                                 </div>
                                </div>
                                 {(reporteSubTab === 'diario' || reporteSubTab === 'por-turno') && (
                                  <div className="flex items-center">
@@ -2786,6 +2790,8 @@ export default function PlannerPage() {
                                         planificadasPorDia={planificadasPorDia}
                                         producidasDiurno={producidasDiurno}
                                         producidasNocturno={producidasNocturno}
+                                        pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
+                                        velocidadesDia={velocidadesDia}
                                       />
                                         {(() => {
                                            const row = calcularTotalesDiario(informesOperacionales || [], tasks, realProduction, lineSpeeds, reporteDiarioFecha, planificadasPorDia);
@@ -2857,17 +2863,19 @@ export default function PlannerPage() {
                                     </div>
                                        {turnoSubTab === 'diurno' && (
                                          <>
-                                          <ReporteTurnoTabla 
-                                            informesOperacionales={informesOperacionales || []}
-                                            tasks={tasks}
-                                            realProduction={realProduction}
-                                            lineSpeeds={lineSpeeds}
-                                            turno="DIURNO"
-                                            fecha={reporteDiarioFecha}
-                                            planificadasPorDia={planificadasPorDia}
-                                            producidasDiurno={producidasDiurno}
-                                            producidasNocturno={producidasNocturno}
-                                          />
+                                            <ReporteTurnoTabla 
+                                              informesOperacionales={informesOperacionales || []}
+                                              tasks={tasks}
+                                              realProduction={realProduction}
+                                              lineSpeeds={lineSpeeds}
+                                              turno="DIURNO"
+                                              fecha={reporteDiarioFecha}
+                                              planificadasPorDia={planificadasPorDia}
+                                              producidasDiurno={producidasDiurno}
+                                              producidasNocturno={producidasNocturno}
+                                              pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
+                                              velocidadesDia={velocidadesDia}
+                                            />
                                          <div className="mt-3">
                                             <TablaResumenPorLinea 
                                               informesOperacionales={informesOperacionales || []}
@@ -2884,17 +2892,19 @@ export default function PlannerPage() {
                                        )}
                                       {turnoSubTab === 'nocturno' && (
                                         <>
-                                         <ReporteTurnoTabla 
-                                           informesOperacionales={informesOperacionales || []}
-                                           tasks={tasks}
-                                           realProduction={realProduction}
-                                           lineSpeeds={lineSpeeds}
-                                           turno="NOCTURNO"
-                                           fecha={reporteDiarioFecha}
-                                           planificadasPorDia={planificadasPorDia}
-                                           producidasDiurno={producidasDiurno}
-                                           producidasNocturno={producidasNocturno}
-                                         />
+                                          <ReporteTurnoTabla 
+                                            informesOperacionales={informesOperacionales || []}
+                                            tasks={tasks}
+                                            realProduction={realProduction}
+                                            lineSpeeds={lineSpeeds}
+                                            turno="NOCTURNO"
+                                            fecha={reporteDiarioFecha}
+                                            planificadasPorDia={planificadasPorDia}
+                                            producidasDiurno={producidasDiurno}
+                                            producidasNocturno={producidasNocturno}
+                                            pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
+                                            velocidadesDia={velocidadesDia}
+                                          />
                                         <div className="mt-3">
                                            <TablaResumenPorLinea 
                                              informesOperacionales={informesOperacionales || []}
@@ -2908,10 +2918,64 @@ export default function PlannerPage() {
                                            />
                                         </div>
                                         </>
-                                      )}
-                                  </div>
-                                )}
-                              </div>
+                                       )}
+                                   </div>
+                                 )}
+                                 {reporteSubTab === 'velocidades-bpm' && (
+                                   <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                                      <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-slate-100">
+                                        <div className="flex items-center gap-2">
+                                          <div className="w-2 h-2 rounded-full bg-sky-500" />
+                                          <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                                            Velocidades BPM
+                                          </h4>
+                                        </div>
+                                        <button
+                                          onClick={guardarVelocidadesBPM}
+                                          className="inline-flex items-center gap-1.5 h-8 px-4 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-sky-500 text-white hover:bg-sky-600 active:scale-95"
+                                        >
+                                          <Save className="h-3.5 w-3.5" />
+                                          Guardar
+                                        </button>
+                                      </div>
+                                     <div className="p-4">
+                                       <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                         <table className="w-full border-collapse text-center">
+                                           <thead>
+                                             <tr className="bg-slate-100">
+                                               <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-40 text-left">Línea</th>
+                                               <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[120px]">BPM</th>
+                                             </tr>
+                                           </thead>
+                                           <tbody>
+                                             {velocidadesDia.map((bpm, idx) => (
+                                               <tr key={idx} className="even:bg-slate-50/60">
+                                                 <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
+                                                   Línea {idx + 1}
+                                                 </td>
+                                                 <td className="px-2 py-1 border-b border-slate-100">
+                                                   <input
+                                                     type="text"
+                                                     inputMode="numeric"
+                                                     value={bpm}
+                                                     onChange={(e) => {
+                                                       const next = [...velocidadesDia];
+                                                       next[idx] = e.target.value;
+                                                       setVelocidadesDia(next);
+                                                     }}
+                                                     className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-sky-50 rounded px-1 py-0.5"
+                                                     placeholder="0"
+                                                   />
+                                                 </td>
+                                               </tr>
+                                             ))}
+                                           </tbody>
+                                         </table>
+                                       </div>
+                                     </div>
+                                   </div>
+                                 )}
+                               </div>
                             </div>
                           </>
                         )}
@@ -3570,6 +3634,10 @@ function minutosAHoras(minutos: number): string {
   return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
 }
 
+function minutosAHorasDecimal(minutos: number): string {
+  return (minutos / 60).toFixed(2).replace('.', ',');
+}
+
 function horasAMinutos(horas: string): number {
   if (!horas) return 0;
   const parts = String(horas).split(':');
@@ -3582,6 +3650,15 @@ function horasAMinutos(horas: string): number {
 function sumarHoras(...valores: string[]): string {
   const totalMinutos = valores.reduce((acc, v) => acc + horasAMinutos(v), 0);
   return minutosAHoras(totalMinutos);
+}
+
+function sumarHorasDecimal(...valores: string[]): string {
+  const totalMinutos = valores.reduce((acc: number, v) => {
+    if (!v) return acc;
+    const num = parseFloat(String(v).replace(',', '.'));
+    return acc + (Number.isFinite(num) ? num * 60 : 0);
+  }, 0);
+  return minutosAHorasDecimal(totalMinutos);
 }
 
 function clasificarParada(tipo: string): string {
@@ -3643,7 +3720,7 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
 }
 
 
-function useReportData(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, turno: 'DIURNO' | 'NOCTURNO' | 'DIARIO' = 'DIURNO', fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, producidasDiurno?: any, producidasNocturno?: any) {
+function useReportData(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, turno: 'DIURNO' | 'NOCTURNO' | 'DIARIO' = 'DIURNO', fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, producidasDiurno?: any, producidasNocturno?: any, pncPorLinea?: (number | string)[], velocidadesDia?: string[]) {
   return useMemo(() => {
     const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
     const informeDelDia = (informesOperacionales || []).filter((r: any) => String(r.fecha || '') === targetDate && (turno === 'DIARIO' || String(r.turno || '').toUpperCase() === turno));
@@ -3660,14 +3737,14 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
         const k = clasificarParada(r.tipoParada);
         porTipo[k] = (porTipo[k] || 0) + (Number(r.totalMin) || 0);
       });
-      const programadas = minutosAHoras(porTipo.programadas || 0);
-      const averia = minutosAHoras(porTipo.averia || 0);
-      const operacionales = minutosAHoras(porTipo.operacionales || 0);
-      const ausentismo = minutosAHoras(porTipo.ausentismo || 0);
-      const adecuaciones = minutosAHoras(porTipo.adecuaciones || 0);
-      const servicios = minutosAHoras(porTipo.servicios || 0);
-      const externas = minutosAHoras(porTipo.externas || 0);
-      const horasPagadas = minutosAHoras(totalParadaMin);
+      const programadas = minutosAHorasDecimal(porTipo.programadas || 0);
+      const averia = minutosAHorasDecimal(porTipo.averia || 0);
+      const operacionales = minutosAHorasDecimal(porTipo.operacionales || 0);
+      const ausentismo = minutosAHorasDecimal(porTipo.ausentismo || 0);
+      const adecuaciones = minutosAHorasDecimal(porTipo.adecuaciones || 0);
+      const servicios = minutosAHorasDecimal(porTipo.servicios || 0);
+      const externas = minutosAHorasDecimal(porTipo.externas || 0);
+      const horasPagadas = minutosAHorasDecimal(totalParadaMin);
       const tareas = tareasLinea.filter((t: any) => t.lineId === String(lineaNum));
       const planificadoTD = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.diurno || 0), 0));
       const planificadoTN = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.nocturno || 0), 0));
@@ -3675,13 +3752,13 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
       const alcanceTN = producidasNocturno ? Number(Object.values(producidasNocturno).reduce((acc: number, fila: any) => acc + (Number(fila?.[lineaNum]) || 0), 0)) : 0;
       const cumplimientoTD = planificadoTD > 0 ? ((alcanceTD / planificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
       const cumplimientoTN = planificadoTN > 0 ? ((alcanceTN / planificadoTN) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
-      const velocidad = Number(lineSpeeds?.[lineaNum] || 0);
-      const cajasH = velocidad;
-      const tiempoMuerto = minutosAHoras(Math.max(0, totalParadaMin - (porTipo.programadas || 0)));
+      const velocidad = Number(velocidadesDia?.[idx] || lineSpeeds?.[lineaNum] || 0);
+      const cajasH = Number(lineSpeeds?.[lineaNum] || 0);
+      const tiempoMuerto = minutosAHorasDecimal(Math.max(0, totalParadaMin - (porTipo.programadas || 0)));
       const horasProgramadas = '08:00';
       const relacion = totalParadaMin > 0 ? ((porTipo.programadas / totalParadaMin) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
-      const disponibilidad = minutosAHoras(Math.max(0, 480 - totalParadaMin));
-      const horasEfectivas = minutosAHoras(Math.max(0, 480 - totalParadaMin - (porTipo.operacionales || 0)));
+      const disponibilidad = minutosAHorasDecimal(Math.max(0, 480 - totalParadaMin));
+      const horasEfectivas = minutosAHorasDecimal(Math.max(0, 480 - totalParadaMin - (porTipo.operacionales || 0)));
       const produccionTeorica = cajasH * (480 / 60);
 
       return {
@@ -3692,7 +3769,7 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
         alcanceTN: String(alcanceTN),
         cumplimientoTD,
         cumplimientoTN,
-        pnc: '0',
+        pnc: pncPorLinea ? String(pncPorLinea[idx] ?? 0) : '0',
         velocidad: String(velocidad),
         cajasH: String(cajasH),
         horasPagadas,
@@ -3712,7 +3789,7 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
         tiempoMuertoInexplicable: tiempoMuerto,
       };
     });
-  }, [informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno]);
+  }, [informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia]);
 }
 
 function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, producidasDiurno?: any, producidasNocturno?: any) {
@@ -3740,8 +3817,7 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
     const diferenciaTeoricaReal = Number.isFinite(produccionTeorica) ? String(Math.max(0, Math.round(produccionTeorica - alcance))) : '0';
     const ot = Math.round(porTipo.operacionales + porTipo.averia);
     const adecuaciones = Math.round(porTipo.adecuaciones);
-    const tiempoMuertoMin = Math.round(Math.max(0, totalParadaMin - (porTipo.programadas || 0)));
-    const tiempoMuerto = minutosAHoras(tiempoMuertoMin);
+    const tiempoMuerto = minutosAHorasDecimal(Math.round(Math.max(0, totalParadaMin - (porTipo.programadas || 0))));
     const ausentismo = Math.round(porTipo.ausentismo);
     const disponibilidad = totalParadaMin > 0 ? ((480 - totalParadaMin) / 480 * 100).toFixed(2).replace('.', ',') + '%' : '100,00%';
 
@@ -3931,8 +4007,8 @@ function PlanificadasPorDiaTable({ datosPorDia, fecha, turno }: { datosPorDia: a
   );
 }
 
-function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineSpeeds, turno = 'DIURNO', fecha, planificadasPorDia, producidasDiurno, producidasNocturno }: any) {
-  const data = useReportData(informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno);
+function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineSpeeds, turno = 'DIURNO', fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia }: any) {
+  const data = useReportData(informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia);
   const formatCell = (v: any) => v ?? '0';
   const totalPlanificadoTD = data.reduce((acc: number, r: any) => acc + (Number(r.planificadoTD) || 0), 0);
   const totalPlanificadoTN = data.reduce((acc: number, r: any) => acc + (Number(r.planificadoTN) || 0), 0);
@@ -4026,18 +4102,18 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                   const totalHorasPagadas = sumarHoras(...data.map((r: any) => r.horasPagadas || '0'));
                   const totalHorasProgramadas = sumarHoras(...data.map((r: any) => r.horasProgramadas || '0'));
                   const totalParadasProgramadas = sumarHoras(...data.map((r: any) => r.paradasProgramadas || '0'));
-                  const totalServicios = sumarHoras(...data.map((r: any) => r.servicios || '0'));
-                  const totalAusentismo = sumarHoras(...data.map((r: any) => r.ausentismo || '0'));
-                  const totalExternas = sumarHoras(...data.map((r: any) => r.externas || '0'));
-                  const totalAdecuaciones = sumarHoras(...data.map((r: any) => r.adecuaciones || '0'));
-                  const totalAveria = sumarHoras(...data.map((r: any) => r.averia || '0'));
-                  const totalOperacionales = sumarHoras(...data.map((r: any) => r.operacionales || '0'));
+                  const totalServicios = sumarHorasDecimal(...data.map((r: any) => r.servicios || '0'));
+                  const totalAusentismo = sumarHorasDecimal(...data.map((r: any) => r.ausentismo || '0'));
+                  const totalExternas = sumarHorasDecimal(...data.map((r: any) => r.externas || '0'));
+                  const totalAdecuaciones = sumarHorasDecimal(...data.map((r: any) => r.adecuaciones || '0'));
+                  const totalAveria = sumarHorasDecimal(...data.map((r: any) => r.averia || '0'));
+                  const totalOperacionales = sumarHorasDecimal(...data.map((r: any) => r.operacionales || '0'));
                   const totalHorasPerdidasPNC = data.reduce((acc: number, r: any) => acc + Number.parseFloat(String(r.horasPerdidasPNC || '0').replace(',', '.')), 0).toFixed(2).replace('.', ',');
                   const disponibilidades = data.map((r: any) => { const v = String(r.disponibilidad || '').replace(',', '.'); const n = parseFloat(v); return Number.isFinite(n) ? n : 0; });
                   const totalDisponibilidadPromedio = disponibilidades.length > 0 ? (disponibilidades.reduce((a, b) => a + b, 0) / disponibilidades.length).toFixed(2).replace('.', ',') + '%' : '0,00%';
                   const totalProduccionTeorica = data.reduce((acc: number, r: any) => acc + Number(r.produccionTeorica || 0), 0);
-                  const totalHorasEfectivas = sumarHoras(...data.map((r: any) => r.horasEfectivas || '0'));
-                  const totalTiempoMuerto = sumarHoras(...data.map((r: any) => r.tiempoMuertoInexplicable || '0'));
+                  const totalHorasEfectivas = sumarHorasDecimal(...data.map((r: any) => r.horasEfectivas || '0'));
+                  const totalTiempoMuerto = sumarHorasDecimal(...data.map((r: any) => r.tiempoMuertoInexplicable || '0'));
                   return (
                     <tr className="bg-slate-100 font-black">
                       <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200 w-36 text-left">TOTAL</td>

@@ -5957,7 +5957,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-25T12:52:15.414Z"
+    "updatedAt": "2026-07-25T21:04:57.180Z"
   },
   "ordenesSap": [
     {
@@ -8684,17 +8684,6 @@
           "cajas3": 3760,
           "ticket4": "",
           "cajas4": 9931
-        },
-        {
-          "fechaInicio": "2026-07-25",
-          "ticket1": "",
-          "cajas1": 0,
-          "ticket2": "",
-          "cajas2": 0,
-          "ticket3": "",
-          "cajas3": 0,
-          "ticket4": "",
-          "cajas4": 0
         }
       ]
     },
@@ -8718,8 +8707,8 @@
         },
         {
           "fechaInicio": "2026-07-25",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17514",
+          "cajas1": 5680,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -8749,8 +8738,8 @@
         },
         {
           "fechaInicio": "2026-07-25",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17551",
+          "cajas1": 2300,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -8777,6 +8766,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 6720
+        },
+        {
+          "fechaInicio": "2026-07-25",
+          "ticket1": "17429",
+          "cajas1": 1969,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -8797,6 +8797,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 3600
+        },
+        {
+          "fechaInicio": "2026-07-25",
+          "ticket1": "17377",
+          "cajas1": 6640,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
