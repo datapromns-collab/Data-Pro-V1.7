@@ -2517,103 +2517,103 @@ export default function PlannerPage() {
                         )}
                         {activeTab === 'reporte' && (
                           <>
-                            <div className="flex items-center justify-between gap-2 mb-4 no-print">
-                              <div className="flex items-center gap-3">
-                               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                                 {['diario', 'por-turno'].map((subTab) => (
-                                   <button
-                                     key={subTab}
-                                     onClick={() => setReporteSubTab(subTab)}
-                                     className={cn(
-                                       "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                       reporteSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                     )}
-                                   >
-                                     {subTab === 'diario' && <CalendarIcon className="h-3.5 w-3.5" />}
-                                     {subTab === 'diario' ? 'Diario' : 'Por Turno'}
-                                     {subTab === 'por-turno' && <Clock className="h-3.5 w-3.5" />}
-                                   </button>
-                                 ))}
+                             <div className="flex items-center justify-between gap-2 mb-4 no-print">
+                               <div className="flex items-center gap-3">
+                                <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                  {['diario', 'por-turno'].map((subTab) => (
+                                    <button
+                                      key={subTab}
+                                      onClick={() => setReporteSubTab(subTab)}
+                                      className={cn(
+                                        "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                        reporteSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                      )}
+                                    >
+                                      {subTab === 'diario' && <CalendarIcon className="h-3.5 w-3.5" />}
+                                      {subTab === 'diario' ? 'Diario' : 'Por Turno'}
+                                      {subTab === 'por-turno' && <Clock className="h-3.5 w-3.5" />}
+                                    </button>
+                                  ))}
+                                </div>
                                </div>
+                                {(reporteSubTab === 'diario' || reporteSubTab === 'por-turno') && (
+                                 <div className="flex items-center">
+                                   <input
+                                     type="date"
+                                     value={reporteDiarioFecha ? format(reporteDiarioFecha, 'yyyy-MM-dd') : ''}
+                                     onChange={(e) => {
+                                       const raw = e.target.value;
+                                       if (!raw) return;
+                                       const [year, month, day] = raw.split('-').map(Number);
+                                       const date = new Date(year, month - 1, day);
+                                       setReporteDiarioFecha(date);
+                                     }}
+                                     className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                                   />
+                                 </div>
+                               )}
                               </div>
-                             </div>
                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                              <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
-                                 {reporteSubTab === 'diario' && (
-                                   <div className="flex flex-col gap-3">
-                                     <div className="flex items-center justify-between gap-2 mb-4 no-print">
-                                       <div className="flex items-center gap-3">
-                                         <input
-                                           type="date"
-                                           value={reporteDiarioFecha ? format(reporteDiarioFecha, 'yyyy-MM-dd') : ''}
-                                           onChange={(e) => {
-                                             const raw = e.target.value;
-                                             if (!raw) return;
-                                             const [year, month, day] = raw.split('-').map(Number);
-                                             const date = new Date(year, month - 1, day);
-                                             setReporteDiarioFecha(date);
-                                           }}
-                                           className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                                <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                                    {reporteSubTab === 'diario' && (
+                                      <div className="flex flex-col gap-3">
+                                       <ReporteTurnoTabla 
+                                         informesOperacionales={informesOperacionales || []}
+                                         tasks={tasks}
+                                         realProduction={realProduction}
+                                         lineSpeeds={lineSpeeds}
+                                         turno="DIARIO"
+                                         fecha={reporteDiarioFecha}
+                                       />
+                                        {(() => {
+                                          const row = calcularTotalesDiario(informesOperacionales || [], tasks, realProduction, lineSpeeds, reporteDiarioFecha);
+                                         return (
+                                           <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
+                                             <div className="p-4">
+                                               <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                 <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
+                                                   <thead>
+                                                     <tr className="bg-slate-100">
+                                                       <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">TOTAL</th>
+                                                       <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">GLOBAL</th>
+                                                       <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">% Cumplimiento</th>
+                                                       <th colSpan={9} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Disponibilidad de Máquinas</th>
+                                                     </tr>
+                                                     <tr className="bg-slate-100">
+                                                       <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                                                       <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TN</th>
+                                                       <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                                                       <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TN</th>
+                                                       <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                                                       <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">TN</th>
+                                                       <th colSpan={9} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200"></th>
+                                                     </tr>
+                                                   </thead>
+                                                   <tbody>
+                                                     <tr className="even:bg-slate-50/60">
+                                                       <td colSpan={2} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalPlanificadoTD}</td>
+                                                       <td colSpan={2} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalAlcanceTD}</td>
+                                                       <td colSpan={2} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTD}</td>
+                                                       <td colSpan={9} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{row.disponibilidadGlobal}</td>
+                                                     </tr>
+                                                   </tbody>
+                                                 </table>
+                                               </div>
+                                             </div>
+                                           </div>
+                                         );
+                                       })()}
+                                       <div className="mt-3">
+                                         <TablaResumenPorLinea 
+                                           informesOperacionales={informesOperacionales || []}
+                                           tasks={tasks}
+                                           realProduction={realProduction}
+                                           lineSpeeds={lineSpeeds}
+                                           fecha={reporteDiarioFecha}
                                          />
                                        </div>
-                                     </div>
-                                     <ReporteTurnoTabla 
-                                       informesOperacionales={informesOperacionales || []}
-                                       tasks={tasks}
-                                       realProduction={realProduction}
-                                       lineSpeeds={lineSpeeds}
-                                       turno="DIARIO"
-                                       fecha={reporteDiarioFecha}
-                                     />
-                                      {(() => {
-                                        const row = calcularTotalesDiario(informesOperacionales || [], tasks, realProduction, lineSpeeds, reporteDiarioFecha);
-                                        return (
-                                          <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
-                                            <div className="p-4">
-                                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                                <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
-                                                  <thead>
-                                                    <tr className="bg-slate-100">
-                                                      <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">TOTAL</th>
-                                                      <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">GLOBAL</th>
-                                                      <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">% Cumplimiento</th>
-                                                      <th colSpan={9} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Disponibilidad de Máquinas</th>
-                                                    </tr>
-                                                    <tr className="bg-slate-100">
-                                                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
-                                                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TN</th>
-                                                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
-                                                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TN</th>
-                                                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
-                                                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">TN</th>
-                                                      <th colSpan={9} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200"></th>
-                                                    </tr>
-                                                  </thead>
-                                                  <tbody>
-                                                    <tr className="even:bg-slate-50/60">
-                                                      <td colSpan={2} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalPlanificadoTD}</td>
-                                                      <td colSpan={2} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalAlcanceTD}</td>
-                                                      <td colSpan={2} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTD}</td>
-                                                      <td colSpan={9} className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{row.disponibilidadGlobal}</td>
-                                                    </tr>
-                                                  </tbody>
-                                                </table>
-                                              </div>
-                                            </div>
-                                          </div>
-                                        );
-                                      })()}
-                                      <div className="mt-3">
-                                        <TablaResumenPorLinea 
-                                          informesOperacionales={informesOperacionales || []}
-                                          tasks={tasks}
-                                          realProduction={realProduction}
-                                          lineSpeeds={lineSpeeds}
-                                          fecha={reporteDiarioFecha}
-                                        />
-                                      </div>
-                                   </div>
-                                   )}
+                                    </div>
+                                    )}
                                    {reporteSubTab === 'por-turno' && (
                                    <div className="flex flex-col gap-3 h-full">
                                     <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start">
