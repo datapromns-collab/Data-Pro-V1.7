@@ -492,6 +492,7 @@ export default function PlannerPage() {
   const [producidasSubTab, setProducidasSubTab] = useState('porturno');
   const [producidasTurnoSubTab, setProducidasTurnoSubTab] = useState('diurno');
   const [pncSubTab, setPncSubTab] = useState('td');
+  const [ttSubTab, setTtSubTab] = useState('porturno');
   const [produccionMes, setProduccionMes] = useState<Date>(() => startOfMonth(new Date()));
   const producidasStore = useRemoteCollection<{ diurno: ProducidasTabla; nocturno: ProducidasTabla }>('planta-produccion-producidas', {
     diurno: nuevaTabla(),
@@ -2354,39 +2355,57 @@ export default function PlannerPage() {
                             )}
                          {activeTab === 'produccion' && (
                            <>
-                             <div className="flex items-center justify-between gap-2 mb-4 no-print">
-                               <div className="flex items-center gap-3">
-                                <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                                   {['planificadas', 'producidas', 'pnc'].map((subTab) => (
-                                     <button
-                                       key={subTab}
-                                       onClick={() => setProduccionSubTab(subTab)}
-                                       className={cn(
-                                         "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                         produccionSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                       )}
-                                     >
-                                       {subTab === 'planificadas' && <ClipboardList className="h-3.5 w-3.5" />}
-                                       {subTab === 'planificadas' ? 'Planificadas' : subTab === 'producidas' ? 'Producidas' : 'PNC'}
-                                       {subTab === 'producidas' && <CheckCircle2 className="h-3.5 w-3.5" />}
-                                       {subTab === 'pnc' && <AlertTriangle className="h-3.5 w-3.5" />}
-                                     </button>
-                                   ))}
-                                </div>
+                               <div className="flex flex-col gap-2 mb-4 no-print">
+                                 <div className="flex items-center justify-between gap-2">
+                                   <div className="flex items-center gap-3">
+                                    <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                       {['planificadas', 'producidas', 'pnc'].map((subTab) => (
+                                         <button
+                                           key={subTab}
+                                           onClick={() => setProduccionSubTab(subTab)}
+                                           className={cn(
+                                             "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                             produccionSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                           )}
+                                         >
+                                           {subTab === 'planificadas' && <ClipboardList className="h-3.5 w-3.5" />}
+                                           {subTab === 'planificadas' ? 'Planificadas' : subTab === 'producidas' ? 'Producidas' : 'PNC'}
+                                           {subTab === 'producidas' && <CheckCircle2 className="h-3.5 w-3.5" />}
+                                           {subTab === 'pnc' && <AlertTriangle className="h-3.5 w-3.5" />}
+                                         </button>
+                                       ))}
+                                    </div>
+                                   </div>
+                                   <input
+                                     type="date"
+                                     value={produccionFecha ? format(produccionFecha, 'yyyy-MM-dd') : ''}
+                                     onChange={(e) => {
+                                       const raw = e.target.value;
+                                       if (!raw) return;
+                                       const [year, month, day] = raw.split('-').map(Number);
+                                       const date = new Date(year, month - 1, day);
+                                       setProduccionFecha(date);
+                                     }}
+                                     className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                                    />
+                                 </div>
+                                  {produccionSubTab === 'pnc' && (
+                                    <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start no-print">
+                                      {['td', 'tn', 'tt'].map((subTab) => (
+                                        <button
+                                          key={subTab}
+                                          onClick={() => setPncSubTab(subTab)}
+                                          className={cn(
+                                            "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                            pncSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                          )}
+                                        >
+                                          {subTab === 'td' ? 'TD' : subTab === 'tn' ? 'TN' : 'TT'}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  )}
                                </div>
-                               <input
-                                 type="date"
-                                 value={produccionFecha ? format(produccionFecha, 'yyyy-MM-dd') : ''}
-                                 onChange={(e) => {
-                                   const raw = e.target.value;
-                                   if (!raw) return;
-                                   const [year, month, day] = raw.split('-').map(Number);
-                                   const date = new Date(year, month - 1, day);
-                                   setProduccionFecha(date);
-                                 }}
-                                 className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
-                                />
-                              </div>
                               {produccionSubTab === 'planificadas' && (
                                 <div className="flex items-center gap-3 mb-4 no-print flex-wrap">
                                   <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
@@ -2525,28 +2544,12 @@ export default function PlannerPage() {
                                          <ProducidasTable titulo="Diaria - Producidas" value={sumarTablas(producidasDiurno, producidasNocturno)} readOnly />
                                       )
                                    )}
-                                    {produccionSubTab === 'pnc' && (
-                                      <>
-                                        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start mb-4 no-print">
-                                          {['td', 'tn'].map((subTab) => (
-                                            <button
-                                              key={subTab}
-                                              onClick={() => setPncSubTab(subTab)}
-                                              className={cn(
-                                                "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                                pncSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                              )}
-                                            >
-                                              {subTab === 'td' ? 'TD' : 'TN'}
-                                            </button>
-                                          ))}
-                                        </div>
-                                        <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                                          <AlertTriangle className="h-12 w-12 mb-4 opacity-20" />
-                                          PNC en Desarrollo
-                                        </div>
-                                      </>
-                                    )}
+                                     {produccionSubTab === 'pnc' && (
+                                       <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                         <AlertTriangle className="h-12 w-12 mb-4 opacity-20" />
+                                         PNC en Desarrollo
+                                       </div>
+                                     )}
                               </div>
                             </div>
                           </>
