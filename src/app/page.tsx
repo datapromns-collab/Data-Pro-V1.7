@@ -3745,6 +3745,8 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
       const servicios = minutosAHorasDecimal(porTipo.servicios || 0);
       const externas = minutosAHorasDecimal(porTipo.externas || 0);
       const horasPagadas = minutosAHorasDecimal(totalParadaMin);
+      const horasProgramadas = minutosAHorasDecimal(480);
+      const paradasProgramadas = minutosAHorasDecimal(porTipo.programadas || 0);
       const tareas = tareasLinea.filter((t: any) => t.lineId === String(lineaNum));
       const planificadoTD = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.diurno || 0), 0));
       const planificadoTN = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.nocturno || 0), 0));
@@ -3755,7 +3757,6 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
       const velocidad = Number(velocidadesDia?.[idx] || lineSpeeds?.[lineaNum] || 0);
       const cajasH = Number(lineSpeeds?.[lineaNum] || 0);
       const tiempoMuerto = minutosAHorasDecimal(Math.max(0, totalParadaMin - (porTipo.programadas || 0)));
-      const horasProgramadas = '08:00';
       const relacion = totalParadaMin > 0 ? ((porTipo.programadas / totalParadaMin) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
       const disponibilidad = minutosAHorasDecimal(Math.max(0, 480 - totalParadaMin));
       const horasEfectivas = minutosAHorasDecimal(Math.max(0, 480 - totalParadaMin - (porTipo.operacionales || 0)));
@@ -3774,7 +3775,7 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
         cajasH: String(cajasH),
         horasPagadas,
         horasProgramadas,
-        paradasProgramadas: programadas,
+        paradasProgramadas,
         relacion,
         servicios,
         ausentismo,
@@ -4100,8 +4101,8 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                 ))}
                 {data.length > 0 && (() => {
                   const totalHorasPagadas = sumarHoras(...data.map((r: any) => r.horasPagadas || '0'));
-                  const totalHorasProgramadas = sumarHoras(...data.map((r: any) => r.horasProgramadas || '0'));
-                  const totalParadasProgramadas = sumarHoras(...data.map((r: any) => r.paradasProgramadas || '0'));
+                  const totalHorasProgramadas = sumarHorasDecimal(...data.map((r: any) => r.horasProgramadas || '0'));
+                  const totalParadasProgramadas = sumarHorasDecimal(...data.map((r: any) => r.paradasProgramadas || '0'));
                   const totalServicios = sumarHorasDecimal(...data.map((r: any) => r.servicios || '0'));
                   const totalAusentismo = sumarHorasDecimal(...data.map((r: any) => r.ausentismo || '0'));
                   const totalExternas = sumarHorasDecimal(...data.map((r: any) => r.externas || '0'));
