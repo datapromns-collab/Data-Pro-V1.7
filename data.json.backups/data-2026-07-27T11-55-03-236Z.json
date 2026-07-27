@@ -5957,7 +5957,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-25T21:02:37.548Z"
+    "updatedAt": "2026-07-27T11:55:03.002Z"
   },
   "ordenesSap": [
     {
@@ -8708,13 +8708,13 @@
         {
           "fechaInicio": "2026-07-25",
           "ticket1": "17514",
-          "cajas1": 568,
-          "ticket2": "",
+          "cajas1": 5680,
+          "ticket2": "17515",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3920,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 27966
         }
       ]
     },
@@ -8738,14 +8738,14 @@
         },
         {
           "fechaInicio": "2026-07-25",
-          "ticket1": "",
-          "cajas1": 0,
-          "ticket2": "",
+          "ticket1": "17551",
+          "cajas1": 2300,
+          "ticket2": "17552",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1550,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 155
         }
       ]
     },
@@ -8802,7 +8802,27 @@
           "fechaInicio": "2026-07-25",
           "ticket1": "17377",
           "cajas1": 6640,
-          "ticket2": "",
+          "ticket2": "17378",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 3440,
+          "ticket4": "",
+          "cajas4": 23164
+        }
+      ]
+    },
+    {
+      "id": "2-1785153299342",
+      "linea": 2,
+      "sabor": "GLUP NARANJA",
+      "ordenNumero": "62574",
+      "semana": 30,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-25",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "1",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
@@ -14948,6 +14968,23 @@
         "mttoEsp": "",
         "descripcionFalla": "",
         "descripcionAccion": ""
+      },
+      {
+        "fecha": "2026-07-20",
+        "semana": 30,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "LLENADORA",
+        "tipoParada": "PTAB",
+        "inicioParada": "22:00",
+        "finParada": "23:00",
+        "totalMin": "60",
+        "zona": "Llenado",
+        "falla": "",
+        "orden": "",
+        "observaciones": "",
+        "id": 1785014920340
       }
     ],
     "planta-ordenes-trabajo": [

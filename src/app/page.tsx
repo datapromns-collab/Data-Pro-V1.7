@@ -543,8 +543,24 @@ export default function PlannerPage() {
   const setVelocidadesDia = (val: string[]) => {
     velocidadesStore.setData((prev) => ({ ...prev, [produccionFechaKey]: val }));
   };
+  const hrsPagadasStore = useRemoteCollection<Record<string, string[]>>('planta-hrs-pagadas', {});
+  const hrsPagadasDia = hrsPagadasStore.data[produccionFechaKey] || Array.from({ length: 7 }, () => '');
+  const setHrsPagadasDia = (val: string[]) => {
+    hrsPagadasStore.setData((prev) => ({ ...prev, [produccionFechaKey]: val }));
+  };
+  const hrsProgramadasStore = useRemoteCollection<Record<string, string[]>>('planta-hrs-programadas', {});
+  const hrsProgramadasDia = hrsProgramadasStore.data[produccionFechaKey] || Array.from({ length: 7 }, () => '');
+  const setHrsProgramadasDia = (val: string[]) => {
+    hrsProgramadasStore.setData((prev) => ({ ...prev, [produccionFechaKey]: val }));
+  };
   const guardarVelocidadesBPM = () => {
     alert('Velocidades BPM guardadas correctamente');
+  };
+  const guardarHrsPagadas = () => {
+    alert('Hrs Pagadas guardadas correctamente');
+  };
+  const guardarHrsProgramadas = () => {
+    alert('Hrs Programadas guardadas correctamente');
   };
   const [reporteDiarioFecha, setReporteDiarioFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
@@ -2753,7 +2769,7 @@ export default function PlannerPage() {
                                        )}
                                      >
                                        {subTab === 'diario' && <CalendarIcon className="h-3.5 w-3.5" />}
-                                       {subTab === 'diario' ? 'Diario' : subTab === 'por-turno' ? 'Por Turno' : 'Velocidades BPM'}
+                                        {subTab === 'diario' ? 'Diario' : subTab === 'por-turno' ? 'Por Turno' : 'Data'}
                                        {subTab === 'por-turno' && <Clock className="h-3.5 w-3.5" />}
                                      </button>
                                    ))}
@@ -2780,19 +2796,21 @@ export default function PlannerPage() {
                                 <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                     {reporteSubTab === 'diario' && (
                                       <div className="flex flex-col gap-3">
-                                      <ReporteTurnoTabla 
-                                        informesOperacionales={informesOperacionales || []}
-                                        tasks={tasks}
-                                        realProduction={realProduction}
-                                        lineSpeeds={lineSpeeds}
-                                        turno="DIARIO"
-                                        fecha={reporteDiarioFecha}
-                                        planificadasPorDia={planificadasPorDia}
-                                        producidasDiurno={producidasDiurno}
-                                        producidasNocturno={producidasNocturno}
-                                        pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
-                                        velocidadesDia={velocidadesDia}
-                                      />
+                                       <ReporteTurnoTabla 
+                                         informesOperacionales={informesOperacionales || []}
+                                         tasks={tasks}
+                                         realProduction={realProduction}
+                                         lineSpeeds={lineSpeeds}
+                                         turno="DIARIO"
+                                         fecha={reporteDiarioFecha}
+                                         planificadasPorDia={planificadasPorDia}
+                                         producidasDiurno={producidasDiurno}
+                                         producidasNocturno={producidasNocturno}
+                                         pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
+                                         velocidadesDia={velocidadesDia}
+                                         hrsPagadasDia={hrsPagadasDia}
+                                         hrsProgramadasDia={hrsProgramadasDia}
+                                       />
                                         {(() => {
                                            const row = calcularTotalesDiario(informesOperacionales || [], tasks, realProduction, lineSpeeds, reporteDiarioFecha, planificadasPorDia, producidasDiurno, producidasNocturno);
                                           return (
@@ -2862,19 +2880,21 @@ export default function PlannerPage() {
                                     </div>
                                        {turnoSubTab === 'diurno' && (
                                          <>
-                                            <ReporteTurnoTabla 
-                                              informesOperacionales={informesOperacionales || []}
-                                              tasks={tasks}
-                                              realProduction={realProduction}
-                                              lineSpeeds={lineSpeeds}
-                                              turno="DIURNO"
-                                              fecha={reporteDiarioFecha}
-                                              planificadasPorDia={planificadasPorDia}
-                                              producidasDiurno={producidasDiurno}
-                                              producidasNocturno={producidasNocturno}
-                                              pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
-                                              velocidadesDia={velocidadesDia}
-                                            />
+                                             <ReporteTurnoTabla 
+                                               informesOperacionales={informesOperacionales || []}
+                                               tasks={tasks}
+                                               realProduction={realProduction}
+                                               lineSpeeds={lineSpeeds}
+                                               turno="DIURNO"
+                                               fecha={reporteDiarioFecha}
+                                               planificadasPorDia={planificadasPorDia}
+                                               producidasDiurno={producidasDiurno}
+                                               producidasNocturno={producidasNocturno}
+                                               pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
+                                               velocidadesDia={velocidadesDia}
+                                               hrsPagadasDia={hrsPagadasDia}
+                                               hrsProgramadasDia={hrsProgramadasDia}
+                                             />
                                          <div className="mt-3">
                                             <TablaResumenPorLinea 
                                               informesOperacionales={informesOperacionales || []}
@@ -2891,19 +2911,21 @@ export default function PlannerPage() {
                                        )}
                                       {turnoSubTab === 'nocturno' && (
                                         <>
-                                          <ReporteTurnoTabla 
-                                            informesOperacionales={informesOperacionales || []}
-                                            tasks={tasks}
-                                            realProduction={realProduction}
-                                            lineSpeeds={lineSpeeds}
-                                            turno="NOCTURNO"
-                                            fecha={reporteDiarioFecha}
-                                            planificadasPorDia={planificadasPorDia}
-                                            producidasDiurno={producidasDiurno}
-                                            producidasNocturno={producidasNocturno}
-                                            pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
-                                            velocidadesDia={velocidadesDia}
-                                          />
+                                           <ReporteTurnoTabla 
+                                             informesOperacionales={informesOperacionales || []}
+                                             tasks={tasks}
+                                             realProduction={realProduction}
+                                             lineSpeeds={lineSpeeds}
+                                             turno="NOCTURNO"
+                                             fecha={reporteDiarioFecha}
+                                             planificadasPorDia={planificadasPorDia}
+                                             producidasDiurno={producidasDiurno}
+                                             producidasNocturno={producidasNocturno}
+                                             pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
+                                             velocidadesDia={velocidadesDia}
+                                             hrsPagadasDia={hrsPagadasDia}
+                                             hrsProgramadasDia={hrsProgramadasDia}
+                                           />
                                         <div className="mt-3">
                                            <TablaResumenPorLinea 
                                              informesOperacionales={informesOperacionales || []}
@@ -2937,42 +2959,168 @@ export default function PlannerPage() {
                                           Guardar
                                         </button>
                                       </div>
-                                     <div className="p-4">
-                                       <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                         <table className="w-full border-collapse text-center">
-                                           <thead>
-                                             <tr className="bg-slate-100">
-                                               <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-40 text-left">Línea</th>
-                                               <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[120px]">BPM</th>
-                                             </tr>
-                                           </thead>
-                                           <tbody>
-                                             {velocidadesDia.map((bpm, idx) => (
-                                               <tr key={idx} className="even:bg-slate-50/60">
-                                                 <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
-                                                   Línea {idx + 1}
-                                                 </td>
-                                                 <td className="px-2 py-1 border-b border-slate-100">
-                                                   <input
-                                                     type="text"
-                                                     inputMode="numeric"
-                                                     value={bpm}
-                                                     onChange={(e) => {
-                                                       const next = [...velocidadesDia];
-                                                       next[idx] = e.target.value;
-                                                       setVelocidadesDia(next);
-                                                     }}
-                                                     className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-sky-50 rounded px-1 py-0.5"
-                                                     placeholder="0"
-                                                   />
-                                                 </td>
-                                               </tr>
-                                             ))}
-                                           </tbody>
-                                         </table>
-                                       </div>
-                                     </div>
-                                   </div>
+                                      <div className="p-4">
+                                        <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                          <table className="w-full border-collapse text-center">
+                                            <thead>
+                                              <tr className="bg-slate-100">
+                                                <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-40 text-left">Línea</th>
+                                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[120px]">BPM</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {velocidadesDia.map((bpm, idx) => (
+                                                <tr key={idx} className="even:bg-slate-50/60">
+                                                  <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
+                                                    Línea {idx + 1}
+                                                  </td>
+                                                  <td className="px-2 py-1 border-b border-slate-100">
+                                                    <input
+                                                      type="text"
+                                                      inputMode="numeric"
+                                                      value={bpm}
+                                                      onChange={(e) => {
+                                                        const next = [...velocidadesDia];
+                                                        next[idx] = e.target.value;
+                                                        setVelocidadesDia(next);
+                                                      }}
+                                                      className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-sky-50 rounded px-1 py-0.5"
+                                                      placeholder="0"
+                                                    />
+                                                  </td>
+                                                </tr>
+                                              ))}
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </div>
+                                      <div className="px-4 pb-4">
+                                        <div className="flex items-center justify-between gap-2 mb-2">
+                                          <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                                            <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                                              Hrs Pagadas
+                                            </h4>
+                                          </div>
+                                          <div className="flex items-center gap-2">
+                                            <input
+                                              type="date"
+                                              value={reporteDiarioFecha ? format(reporteDiarioFecha, 'yyyy-MM-dd') : ''}
+                                              onChange={(e) => {
+                                                const raw = e.target.value;
+                                                if (!raw) return;
+                                                const [year, month, day] = raw.split('-').map(Number);
+                                                setReporteDiarioFecha(new Date(year, month - 1, day));
+                                              }}
+                                              className="h-8 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                                            />
+                                            <button
+                                              onClick={guardarHrsPagadas}
+                                              className="inline-flex items-center gap-1.5 h-8 px-4 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-emerald-500 text-white hover:bg-emerald-600 active:scale-95"
+                                            >
+                                              <Save className="h-3.5 w-3.5" />
+                                              Guardar
+                                            </button>
+                                          </div>
+                                        </div>
+                                        <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                          <table className="w-full border-collapse text-center">
+                                            <thead>
+                                              <tr className="bg-slate-100">
+                                                <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-40 text-left">Línea</th>
+                                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">Hrs PG</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {hrsPagadasDia.map((hrs, idx) => (
+                                                <tr key={idx} className="even:bg-slate-50/60">
+                                                  <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
+                                                    Línea {idx + 1}
+                                                  </td>
+                                                  <td className="px-2 py-1 border-b border-slate-100">
+                                                    <input
+                                                      type="text"
+                                                      inputMode="numeric"
+                                                      value={hrs}
+                                                      onChange={(e) => {
+                                                        const next = [...hrsPagadasDia];
+                                                        next[idx] = e.target.value;
+                                                        setHrsPagadasDia(next);
+                                                      }}
+                                                      className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-emerald-50 rounded px-1 py-0.5"
+                                                      placeholder="0"
+                                                    />
+                                                  </td>
+                                                </tr>
+                                              ))}
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </div>
+                                      <div className="px-4 pb-4">
+                                        <div className="flex items-center justify-between gap-2 mb-2">
+                                          <div className="flex items-center gap-2">
+                                            <div className="w-2 h-2 rounded-full bg-purple-500" />
+                                            <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+                                              Hrs Programadas
+                                            </h4>
+                                          </div>
+                                          <div className="flex items-center gap-2">
+                                            <input
+                                              type="date"
+                                              value={reporteDiarioFecha ? format(reporteDiarioFecha, 'yyyy-MM-dd') : ''}
+                                              onChange={(e) => {
+                                                const raw = e.target.value;
+                                                if (!raw) return;
+                                                const [year, month, day] = raw.split('-').map(Number);
+                                                setReporteDiarioFecha(new Date(year, month - 1, day));
+                                              }}
+                                              className="h-8 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                                            />
+                                            <button
+                                              onClick={guardarHrsProgramadas}
+                                              className="inline-flex items-center gap-1.5 h-8 px-4 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-purple-500 text-white hover:bg-purple-600 active:scale-95"
+                                            >
+                                              <Save className="h-3.5 w-3.5" />
+                                              Guardar
+                                            </button>
+                                          </div>
+                                        </div>
+                                        <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                          <table className="w-full border-collapse text-center">
+                                            <thead>
+                                              <tr className="bg-slate-100">
+                                                <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-40 text-left">Línea</th>
+                                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">Hrs PG</th>
+                                              </tr>
+                                            </thead>
+                                            <tbody>
+                                              {hrsProgramadasDia.map((hrs, idx) => (
+                                                <tr key={idx} className="even:bg-slate-50/60">
+                                                  <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
+                                                    Línea {idx + 1}
+                                                  </td>
+                                                  <td className="px-2 py-1 border-b border-slate-100">
+                                                    <input
+                                                      type="text"
+                                                      inputMode="numeric"
+                                                      value={hrs}
+                                                      onChange={(e) => {
+                                                        const next = [...hrsProgramadasDia];
+                                                        next[idx] = e.target.value;
+                                                        setHrsProgramadasDia(next);
+                                                      }}
+                                                      className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-purple-50 rounded px-1 py-0.5"
+                                                      placeholder="0"
+                                                    />
+                                                  </td>
+                                                </tr>
+                                              ))}
+                                            </tbody>
+                                          </table>
+                                        </div>
+                                      </div>
+                                    </div>
                                  )}
                                </div>
                             </div>
@@ -3733,7 +3881,7 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
 }
 
 
-function useReportData(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, turno: 'DIURNO' | 'NOCTURNO' | 'DIARIO' = 'DIURNO', fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, producidasDiurno?: any, producidasNocturno?: any, pncPorLinea?: (number | string)[], velocidadesDia?: string[]) {
+function useReportData(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, turno: 'DIURNO' | 'NOCTURNO' | 'DIARIO' = 'DIURNO', fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, producidasDiurno?: any, producidasNocturno?: any, pncPorLinea?: (number | string)[], velocidadesDia?: string[], hrsPagadasDia?: string[], hrsProgramadasDia?: string[]) {
   return useMemo(() => {
     const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
     const informeDelDia = (informesOperacionales || []).filter((r: any) => String(r.fecha || '') === targetDate && (turno === 'DIARIO' || String(r.turno || '').toUpperCase() === turno));
@@ -3758,8 +3906,8 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
       const servicios = minutosAHorasDecimal(paradasLinea.filter((r: any) => serviciosTipoParada.includes(String(r.tipoParada || '').toUpperCase())).reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
       const ausentismo = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'AUSENTISMO').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
       const externas = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'FALLA DE E/E').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
-      const horasPagadas = minutosAHorasDecimal(totalParadaMin);
-      const horasProgramadas = minutosAHorasDecimal(480);
+       const horasPagadas = hrsPagadasDia && hrsPagadasDia[idx] ? hrsPagadasDia[idx] : minutosAHorasDecimal(totalParadaMin);
+       const horasProgramadas = hrsProgramadasDia && hrsProgramadasDia[idx] ? hrsProgramadasDia[idx] : minutosAHorasDecimal(480);
       const paradasProgramadas = minutosAHorasDecimal(porTipo.programadas || 0);
       const tareas = tareasLinea.filter((t: any) => t.lineId === String(lineaNum));
       const planificadoTD = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.diurno || 0), 0));
@@ -3768,7 +3916,7 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
       const alcanceTN = producidasNocturno ? Number(Object.values(producidasNocturno).reduce((acc: number, fila: any) => acc + (Number(fila?.[lineaNum]) || 0), 0)) : 0;
       const cumplimientoTD = planificadoTD > 0 ? ((alcanceTD / planificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
       const cumplimientoTN = planificadoTN > 0 ? ((alcanceTN / planificadoTN) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
-      const velocidad = Number(velocidadesDia?.[idx] || lineSpeeds?.[lineaNum] || 0);
+      const velocidad = Number(velocidadesDia ? velocidadesDia[idx] || 0 : lineSpeeds?.[lineaNum] || 0);
       const cajasH = Number(lineSpeeds?.[lineaNum] || 0);
       const tiempoMuerto = minutosAHorasDecimal(Math.max(0, totalParadaMin - (porTipo.programadas || 0)));
       const relacion = totalParadaMin > 0 ? ((porTipo.programadas / totalParadaMin) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
@@ -4022,8 +4170,8 @@ function PlanificadasPorDiaTable({ datosPorDia, fecha, turno }: { datosPorDia: a
   );
 }
 
-function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineSpeeds, turno = 'DIURNO', fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia }: any) {
-  const data = useReportData(informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia);
+function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineSpeeds, turno = 'DIURNO', fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia, hrsPagadasDia, hrsProgramadasDia }: any) {
+   const data = useReportData(informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia, hrsPagadasDia, hrsProgramadasDia);
   const formatCell = (v: any) => v ?? '0';
   const totalPlanificadoTD = data.reduce((acc: number, r: any) => acc + (Number(r.planificadoTD) || 0), 0);
   const totalPlanificadoTN = data.reduce((acc: number, r: any) => acc + (Number(r.planificadoTN) || 0), 0);
