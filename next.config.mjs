@@ -5,6 +5,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const nextConfig = {
   outputFileTracingRoot: __dirname,
+  allowedDevOrigins: ['10.0.0.239', 'http://localhost:3000', 'http://localhost:3001'],
   images: {
     remotePatterns: [
       {

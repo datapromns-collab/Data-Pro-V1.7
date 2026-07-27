@@ -4375,6 +4375,17 @@
             "endTime": "2026-07-25T01:26:28.800Z",
             "id": "d79bobvnn",
             "color": "#ec4899"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-07-25T01:27:00.000Z",
+            "endTime": "2026-07-25T01:57:00.000Z",
+            "id": "hs3cy35n1",
+            "color": "#ec4899"
           }
         ],
         "realProduction": {
@@ -5957,7 +5968,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-27T11:55:03.231Z"
+    "updatedAt": "2026-07-27T14:38:56.456Z"
   },
   "ordenesSap": [
     {
@@ -8822,12 +8833,12 @@
           "fechaInicio": "2026-07-25",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "17",
+          "ticket2": "17430",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 14022
         }
       ]
     }

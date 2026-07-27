@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-07-20T00:00:00.000",
+      "weekStartDate": "2026-07-27T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -4375,6 +4375,30 @@
             "endTime": "2026-07-25T01:26:28.800Z",
             "id": "d79bobvnn",
             "color": "#ec4899"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-07-25T01:27:00.000Z",
+            "endTime": "2026-07-25T01:57:00.000Z",
+            "id": "hs3cy35n1",
+            "color": "#ec4899"
+          },
+          {
+            "name": "GLUP NARANJA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 77500,
+            "durationHours": 31,
+            "presentation": "2Lts",
+            "tanks": 10.9,
+            "startTime": "2026-07-25T01:57:00.000Z",
+            "endTime": "2026-07-26T08:57:00.000Z",
+            "id": "f8fchpo9j",
+            "color": "#f59e0b"
           }
         ],
         "realProduction": {
@@ -5957,7 +5981,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-27T11:54:59.562Z"
+    "updatedAt": "2026-07-27T18:58:20.031Z"
   },
   "ordenesSap": [
     {
@@ -8820,6 +8844,26 @@
       "dias": [
         {
           "fechaInicio": "2026-07-25",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17430",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 14022
+        }
+      ]
+    },
+    {
+      "id": "1-1785178699799",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "62585",
+      "semana": 31,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-27",
           "ticket1": "",
           "cajas1": 0,
           "ticket2": "",
@@ -11865,7 +11909,7 @@
                 "designCapacity": "60",
                 "realSpeed": "32",
                 "scheduledHours": "11.5",
-                "scheduledStops": "76180",
+                "scheduledStops": "76310",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "300",

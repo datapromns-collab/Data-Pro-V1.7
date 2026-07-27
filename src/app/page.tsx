@@ -548,10 +548,20 @@ export default function PlannerPage() {
   const setHrsPagadasDia = (val: string[]) => {
     hrsPagadasStore.setData((prev) => ({ ...prev, [produccionFechaKey]: val }));
   };
+  const hrsPagadasDtStore = useRemoteCollection<Record<string, { td: string[], tn: string[] }>>('planta-hrs-pagadas-dt', {});
+  const hrsPagadasDt = hrsPagadasDtStore.data[produccionFechaKey] || { td: Array.from({ length: 7 }, () => ''), tn: Array.from({ length: 7 }, () => '') };
+  const setHrsPagadasDt = (turno: 'td' | 'tn', val: string[]) => {
+    hrsPagadasDtStore.setData((prev) => ({ ...prev, [produccionFechaKey]: { ...(prev[produccionFechaKey] || { td: Array.from({ length: 7 }, () => ''), tn: Array.from({ length: 7 }, () => '') }), [turno]: val } }));
+  };
   const hrsProgramadasStore = useRemoteCollection<Record<string, string[]>>('planta-hrs-programadas', {});
   const hrsProgramadasDia = hrsProgramadasStore.data[produccionFechaKey] || Array.from({ length: 7 }, () => '');
   const setHrsProgramadasDia = (val: string[]) => {
     hrsProgramadasStore.setData((prev) => ({ ...prev, [produccionFechaKey]: val }));
+  };
+  const hrsProgramadasDtStore = useRemoteCollection<Record<string, { td: string[], tn: string[] }>>('planta-hrs-programadas-dt', {});
+  const hrsProgramadasDt = hrsProgramadasDtStore.data[produccionFechaKey] || { td: Array.from({ length: 7 }, () => ''), tn: Array.from({ length: 7 }, () => '') };
+  const setHrsProgramadasDt = (turno: 'td' | 'tn', val: string[]) => {
+    hrsProgramadasDtStore.setData((prev) => ({ ...prev, [produccionFechaKey]: { ...(prev[produccionFechaKey] || { td: Array.from({ length: 7 }, () => ''), tn: Array.from({ length: 7 }, () => '') }), [turno]: val } }));
   };
   const guardarVelocidadesBPM = () => {
     alert('Velocidades BPM guardadas correctamente');
@@ -561,6 +571,12 @@ export default function PlannerPage() {
   };
   const guardarHrsProgramadas = () => {
     alert('Hrs Programadas guardadas correctamente');
+  };
+  const guardarHrsPagadasDt = (turno: 'td' | 'tn') => {
+    alert(`Hrs Pagadas ${turno.toUpperCase()} guardadas correctamente`);
+  };
+  const guardarHrsProgramadasDt = (turno: 'td' | 'tn') => {
+    alert(`Hrs Programadas ${turno.toUpperCase()} guardadas correctamente`);
   };
   const [reporteDiarioFecha, setReporteDiarioFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
@@ -575,7 +591,11 @@ export default function PlannerPage() {
     return new Date();
   });
   const [reporteSubTab, setReporteSubTab] = useState('diario');
-  const [turnoSubTab, setTurnoSubTab] = useState('diurno');
+  const [resumenSemanalSubTab, setResumenSemanalSubTab] = useState('resumen');
+  const [resumenSemanalWeekStartDate, setResumenSemanalWeekStartDate] = useState(new Date());
+  const [ptSubTab, setPtSubTab] = useState('TDiurno');
+  const [turnoSubTab, setTurnoSubTab] = useState<'diurno' | 'nocturno' | 'dt'>('diurno');
+  const [dtSubTab, setDtSubTab] = useState<'td' | 'tn'>('td');
   const [printMode, setPrintMode] = useState('');
   const [jarabesPrintMode, setJarabesPrintMode] = useState('');
   const [jarabesPrintHtml, setJarabesPrintHtml] = useState('');
@@ -927,6 +947,22 @@ export default function PlannerPage() {
     }
     return weeks;
   }, [plantaWeekStartDate]);
+
+  const weeksForYearResumen = useMemo(() => {
+    const weeks: { isoWeek: number; start: Date; end: Date }[] = [];
+    const year = resumenSemanalWeekStartDate.getFullYear();
+    const d = new Date(year, 0, 1);
+    let week = 1;
+    while (d.getFullYear() === year) {
+      const start = new Date(d);
+      const end = new Date(d);
+      end.setDate(end.getDate() + 6);
+      weeks.push({ isoWeek: week, start: new Date(start), end: new Date(end) });
+      d.setDate(d.getDate() + 7);
+      week++;
+    }
+    return weeks;
+  }, [resumenSemanalWeekStartDate]);
 
   const globalSalesProjection = useMemo(() => {
     const result: Record<string, Record<string, number>> = {};
@@ -1564,9 +1600,9 @@ export default function PlannerPage() {
                         <Shield className="h-4 w-4" />
                       </div>
                       <span className="uppercase text-[10px] font-black tracking-tight">Permisos</span>
-                    </Button>
-                    )}
-                   </div>
+                     </Button>
+                                          )}
+                                       </div>
 
                 </section>
 
@@ -1916,7 +1952,7 @@ export default function PlannerPage() {
                           {['paradas-lineas', 'produccion', 'reporte', 'resumen-semanal', 'resumen-mensual', 'ciclos'].map((tab) => (
                             <button
                               key={tab}
-                              onClick={() => { setActiveTab(tab); if (tab === 'paradas-lineas') setParadasSubTab('informes-operacionales'); if (tab === 'produccion') setProduccionSubTab('planificadas'); if (tab === 'reporte') setReporteSubTab('diario'); }}
+                              onClick={() => { setActiveTab(tab); if (tab === 'paradas-lineas') setParadasSubTab('informes-operacionales'); if (tab === 'produccion') setProduccionSubTab('planificadas'); if (tab === 'reporte') setReporteSubTab('diario'); if (tab === 'resumen-semanal') { setResumenSemanalSubTab('resumen'); setPtSubTab('TDiurno'); setResumenSemanalWeekStartDate(new Date()); } }}
                               className={cn(
                                 "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
                                 activeTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
@@ -2794,23 +2830,23 @@ export default function PlannerPage() {
                               </div>
                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                                 <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
-                                    {reporteSubTab === 'diario' && (
-                                      <div className="flex flex-col gap-3">
-                                       <ReporteTurnoTabla 
-                                         informesOperacionales={informesOperacionales || []}
-                                         tasks={tasks}
-                                         realProduction={realProduction}
-                                         lineSpeeds={lineSpeeds}
-                                         turno="DIARIO"
-                                         fecha={reporteDiarioFecha}
-                                         planificadasPorDia={planificadasPorDia}
-                                         producidasDiurno={producidasDiurno}
-                                         producidasNocturno={producidasNocturno}
-                                         pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
-                                         velocidadesDia={velocidadesDia}
-                                         hrsPagadasDia={hrsPagadasDia}
-                                         hrsProgramadasDia={hrsProgramadasDia}
-                                       />
+                                     {reporteSubTab === 'diario' && (
+                                       <div className="flex flex-col gap-3">
+                                        <ReporteTurnoTabla 
+                                          informesOperacionales={informesOperacionales || []}
+                                          tasks={tasks}
+                                          realProduction={realProduction}
+                                          lineSpeeds={lineSpeeds}
+                                          turno="DIARIO"
+                                          fecha={reporteDiarioFecha}
+                                          planificadasPorDia={planificadasPorDia}
+                                          producidasDiurno={producidasDiurno}
+                                          producidasNocturno={producidasNocturno}
+                                          pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
+                                          velocidadesDia={velocidadesDia}
+                                          hrsPagadasDia={(() => { const a = hrsPagadasDt.td; const b = hrsPagadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
+                                          hrsProgramadasDia={(() => { const a = hrsProgramadasDt.td; const b = hrsProgramadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
+                                        />
                                         {(() => {
                                            const row = calcularTotalesDiario(informesOperacionales || [], tasks, realProduction, lineSpeeds, reporteDiarioFecha, planificadasPorDia, producidasDiurno, producidasNocturno);
                                           return (
@@ -2862,87 +2898,87 @@ export default function PlannerPage() {
                                        </div>
                                     </div>
                                     )}
-                                   {reporteSubTab === 'por-turno' && (
-                                   <div className="flex flex-col gap-3 h-full">
-                                    <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start">
-                                      {['diurno', 'nocturno'].map((subTab) => (
-                                        <button
-                                          key={subTab}
-                                          onClick={() => setTurnoSubTab(subTab)}
-                                          className={cn(
-                                            "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                            turnoSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                          )}
-                                        >
-                                          {subTab === 'diurno' ? 'Diurno' : 'Nocturno'}
-                                        </button>
-                                      ))}
-                                    </div>
-                                       {turnoSubTab === 'diurno' && (
-                                         <>
+                                    {reporteSubTab === 'por-turno' && (
+                                    <div className="flex flex-col gap-3 h-full">
+                                      <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start">
+                                         {(['diurno', 'nocturno'] as const).map((subTab) => (
+                                           <button
+                                             key={subTab}
+                                             onClick={() => setTurnoSubTab(subTab)}
+                                            className={cn(
+                                              "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                              turnoSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                            )}
+                                          >
+                                            {subTab === 'diurno' ? 'Diurno' : 'Nocturno'}
+                                          </button>
+                                        ))}
+                                      </div>
+                                        {turnoSubTab === 'diurno' && (
+                                          <>
+                                              <ReporteTurnoTabla 
+                                                informesOperacionales={informesOperacionales || []}
+                                                tasks={tasks}
+                                                realProduction={realProduction}
+                                                lineSpeeds={lineSpeeds}
+                                                turno="DIURNO"
+                                                fecha={reporteDiarioFecha}
+                                                planificadasPorDia={planificadasPorDia}
+                                                producidasDiurno={producidasDiurno}
+                                                producidasNocturno={producidasNocturno}
+                                                pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
+                                                velocidadesDia={velocidadesDia}
+                                                 hrsPagadasDia={hrsPagadasDt.td}
+                                                 hrsProgramadasDia={hrsProgramadasDt.td}
+                                              />
+                                          <div className="mt-3">
+                                             <TablaResumenPorLinea 
+                                               informesOperacionales={informesOperacionales || []}
+                                               tasks={tasks}
+                                               realProduction={realProduction}
+                                               lineSpeeds={lineSpeeds}
+                                               fecha={reporteDiarioFecha}
+                                               planificadasPorDia={planificadasPorDia}
+                                               producidasDiurno={producidasDiurno}
+                                               producidasNocturno={producidasNocturno}
+                                             />
+                                          </div>
+                                          </>
+                                        )}
+                                        {turnoSubTab === 'nocturno' && (
+                                          <>
                                              <ReporteTurnoTabla 
                                                informesOperacionales={informesOperacionales || []}
                                                tasks={tasks}
                                                realProduction={realProduction}
                                                lineSpeeds={lineSpeeds}
-                                               turno="DIURNO"
+                                               turno="NOCTURNO"
                                                fecha={reporteDiarioFecha}
                                                planificadasPorDia={planificadasPorDia}
                                                producidasDiurno={producidasDiurno}
                                                producidasNocturno={producidasNocturno}
                                                pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
                                                velocidadesDia={velocidadesDia}
-                                               hrsPagadasDia={hrsPagadasDia}
-                                               hrsProgramadasDia={hrsProgramadasDia}
+                                                hrsPagadasDia={hrsPagadasDt.tn}
+                                                hrsProgramadasDia={hrsProgramadasDt.tn}
                                              />
-                                         <div className="mt-3">
-                                            <TablaResumenPorLinea 
-                                              informesOperacionales={informesOperacionales || []}
-                                              tasks={tasks}
-                                              realProduction={realProduction}
-                                              lineSpeeds={lineSpeeds}
-                                              fecha={reporteDiarioFecha}
-                                              planificadasPorDia={planificadasPorDia}
-                                              producidasDiurno={producidasDiurno}
-                                              producidasNocturno={producidasNocturno}
-                                            />
-                                         </div>
-                                         </>
-                                       )}
-                                      {turnoSubTab === 'nocturno' && (
-                                        <>
-                                           <ReporteTurnoTabla 
-                                             informesOperacionales={informesOperacionales || []}
-                                             tasks={tasks}
-                                             realProduction={realProduction}
-                                             lineSpeeds={lineSpeeds}
-                                             turno="NOCTURNO"
-                                             fecha={reporteDiarioFecha}
-                                             planificadasPorDia={planificadasPorDia}
-                                             producidasDiurno={producidasDiurno}
-                                             producidasNocturno={producidasNocturno}
-                                             pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
-                                             velocidadesDia={velocidadesDia}
-                                             hrsPagadasDia={hrsPagadasDia}
-                                             hrsProgramadasDia={hrsProgramadasDia}
-                                           />
-                                        <div className="mt-3">
-                                           <TablaResumenPorLinea 
-                                             informesOperacionales={informesOperacionales || []}
-                                             tasks={tasks}
-                                             realProduction={realProduction}
-                                             lineSpeeds={lineSpeeds}
-                                             fecha={reporteDiarioFecha}
-                                             planificadasPorDia={planificadasPorDia}
-                                             producidasDiurno={producidasDiurno}
-                                             producidasNocturno={producidasNocturno}
-                                           />
-                                        </div>
-                                        </>
-                                       )}
-                                   </div>
-                                 )}
-                                 {reporteSubTab === 'velocidades-bpm' && (
+                                          <div className="mt-3">
+                                             <TablaResumenPorLinea 
+                                               informesOperacionales={informesOperacionales || []}
+                                               tasks={tasks}
+                                               realProduction={realProduction}
+                                               lineSpeeds={lineSpeeds}
+                                               fecha={reporteDiarioFecha}
+                                               planificadasPorDia={planificadasPorDia}
+                                               producidasDiurno={producidasDiurno}
+                                               producidasNocturno={producidasNocturno}
+                                             />
+                                          </div>
+                                          </>
+                                         )}
+                                      </div>
+                                     )}
+                                  {reporteSubTab === 'velocidades-bpm' && (
                                    <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
                                       <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-slate-100">
                                         <div className="flex items-center gap-2">
@@ -2995,44 +3031,54 @@ export default function PlannerPage() {
                                         </div>
                                       </div>
                                       <div className="px-4 pb-4">
-                                        <div className="flex items-center justify-between gap-2 mb-2">
+                                         <div className="flex items-center justify-between gap-2 mb-2">
                                           <div className="flex items-center gap-2">
                                             <div className="w-2 h-2 rounded-full bg-emerald-500" />
                                             <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
                                               Hrs Pagadas
                                             </h4>
                                           </div>
-                                          <div className="flex items-center gap-2">
-                                            <input
-                                              type="date"
-                                              value={reporteDiarioFecha ? format(reporteDiarioFecha, 'yyyy-MM-dd') : ''}
-                                              onChange={(e) => {
-                                                const raw = e.target.value;
-                                                if (!raw) return;
-                                                const [year, month, day] = raw.split('-').map(Number);
-                                                setReporteDiarioFecha(new Date(year, month - 1, day));
-                                              }}
-                                              className="h-8 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
-                                            />
-                                            <button
-                                              onClick={guardarHrsPagadas}
-                                              className="inline-flex items-center gap-1.5 h-8 px-4 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-emerald-500 text-white hover:bg-emerald-600 active:scale-95"
-                                            >
-                                              <Save className="h-3.5 w-3.5" />
-                                              Guardar
-                                            </button>
-                                          </div>
+                                           <div className="flex items-center gap-2">
+                                             <input
+                                               type="date"
+                                               value={produccionFecha ? format(produccionFecha, 'yyyy-MM-dd') : ''}
+                                               onChange={(e) => {
+                                                 const raw = e.target.value;
+                                                 if (!raw) return;
+                                                 const [year, month, day] = raw.split('-').map(Number);
+                                                 setProduccionFecha(new Date(year, month - 1, day));
+                                               }}
+                                               className="h-8 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                                             />
+                                             <button
+                                               onClick={() => {
+                                                 const suma = hrsPagadasDt.td.map((v, idx) => {
+                                                   const a = Number(v) || 0;
+                                                   const b = Number(hrsPagadasDt.tn[idx]) || 0;
+                                                   return String(a + b);
+                                                 });
+                                                 setHrsPagadasDia(suma);
+                                                 guardarHrsPagadas();
+                                               }}
+                                               className="inline-flex items-center gap-1.5 h-8 px-4 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-emerald-500 text-white hover:bg-emerald-600 active:scale-95"
+                                             >
+                                               <Save className="h-3.5 w-3.5" />
+                                               Guardar
+                                             </button>
+                                           </div>
                                         </div>
                                         <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
                                           <table className="w-full border-collapse text-center">
                                             <thead>
                                               <tr className="bg-slate-100">
                                                 <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-40 text-left">Línea</th>
+                                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[120px]">TD</th>
+                                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[120px]">TN</th>
                                                 <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">Hrs PG</th>
                                               </tr>
                                             </thead>
                                             <tbody>
-                                              {hrsPagadasDia.map((hrs, idx) => (
+                                              {hrsPagadasDt.td.map((hrs, idx) => (
                                                 <tr key={idx} className="even:bg-slate-50/60">
                                                   <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
                                                     Línea {idx + 1}
@@ -3041,15 +3087,32 @@ export default function PlannerPage() {
                                                     <input
                                                       type="text"
                                                       inputMode="numeric"
-                                                      value={hrs}
+                                                      value={hrsPagadasDt.td[idx] || ''}
                                                       onChange={(e) => {
-                                                        const next = [...hrsPagadasDia];
+                                                        const next = [...hrsPagadasDt.td];
                                                         next[idx] = e.target.value;
-                                                        setHrsPagadasDia(next);
+                                                        setHrsPagadasDt('td', next);
                                                       }}
                                                       className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-emerald-50 rounded px-1 py-0.5"
                                                       placeholder="0"
                                                     />
+                                                  </td>
+                                                  <td className="px-2 py-1 border-b border-slate-100">
+                                                    <input
+                                                      type="text"
+                                                      inputMode="numeric"
+                                                      value={hrsPagadasDt.tn[idx] || ''}
+                                                      onChange={(e) => {
+                                                        const next = [...hrsPagadasDt.tn];
+                                                        next[idx] = e.target.value;
+                                                        setHrsPagadasDt('tn', next);
+                                                      }}
+                                                      className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-emerald-50 rounded px-1 py-0.5"
+                                                      placeholder="0"
+                                                    />
+                                                  </td>
+                                                  <td className="px-2 py-1 border-b border-slate-100 font-bold text-slate-900">
+                                                    {(() => { const a = Number(hrsPagadasDt.td[idx]) || 0; const b = Number(hrsPagadasDt.tn[idx]) || 0; return String(a + b); })()}
                                                   </td>
                                                 </tr>
                                               ))}
@@ -3065,37 +3128,47 @@ export default function PlannerPage() {
                                               Hrs Programadas
                                             </h4>
                                           </div>
-                                          <div className="flex items-center gap-2">
-                                            <input
-                                              type="date"
-                                              value={reporteDiarioFecha ? format(reporteDiarioFecha, 'yyyy-MM-dd') : ''}
-                                              onChange={(e) => {
-                                                const raw = e.target.value;
-                                                if (!raw) return;
-                                                const [year, month, day] = raw.split('-').map(Number);
-                                                setReporteDiarioFecha(new Date(year, month - 1, day));
-                                              }}
-                                              className="h-8 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
-                                            />
-                                            <button
-                                              onClick={guardarHrsProgramadas}
-                                              className="inline-flex items-center gap-1.5 h-8 px-4 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-purple-500 text-white hover:bg-purple-600 active:scale-95"
-                                            >
-                                              <Save className="h-3.5 w-3.5" />
-                                              Guardar
-                                            </button>
-                                          </div>
+                                           <div className="flex items-center gap-2">
+                                             <input
+                                               type="date"
+                                               value={produccionFecha ? format(produccionFecha, 'yyyy-MM-dd') : ''}
+                                               onChange={(e) => {
+                                                 const raw = e.target.value;
+                                                 if (!raw) return;
+                                                 const [year, month, day] = raw.split('-').map(Number);
+                                                 setProduccionFecha(new Date(year, month - 1, day));
+                                               }}
+                                               className="h-8 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                                             />
+                                             <button
+                                               onClick={() => {
+                                                 const suma = hrsProgramadasDt.td.map((v, idx) => {
+                                                   const a = Number(v) || 0;
+                                                   const b = Number(hrsProgramadasDt.tn[idx]) || 0;
+                                                   return String(a + b);
+                                                 });
+                                                 setHrsProgramadasDia(suma);
+                                                 guardarHrsProgramadas();
+                                               }}
+                                               className="inline-flex items-center gap-1.5 h-8 px-4 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-purple-500 text-white hover:bg-purple-600 active:scale-95"
+                                             >
+                                               <Save className="h-3.5 w-3.5" />
+                                               Guardar
+                                             </button>
+                                           </div>
                                         </div>
                                         <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
                                           <table className="w-full border-collapse text-center">
                                             <thead>
                                               <tr className="bg-slate-100">
                                                 <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-40 text-left">Línea</th>
+                                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[120px]">TD</th>
+                                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[120px]">TN</th>
                                                 <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">Hrs PG</th>
                                               </tr>
                                             </thead>
                                             <tbody>
-                                              {hrsProgramadasDia.map((hrs, idx) => (
+                                              {hrsProgramadasDt.td.map((hrs, idx) => (
                                                 <tr key={idx} className="even:bg-slate-50/60">
                                                   <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
                                                     Línea {idx + 1}
@@ -3104,15 +3177,32 @@ export default function PlannerPage() {
                                                     <input
                                                       type="text"
                                                       inputMode="numeric"
-                                                      value={hrs}
+                                                      value={hrsProgramadasDt.td[idx] || ''}
                                                       onChange={(e) => {
-                                                        const next = [...hrsProgramadasDia];
+                                                        const next = [...hrsProgramadasDt.td];
                                                         next[idx] = e.target.value;
-                                                        setHrsProgramadasDia(next);
+                                                        setHrsProgramadasDt('td', next);
                                                       }}
                                                       className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-purple-50 rounded px-1 py-0.5"
                                                       placeholder="0"
                                                     />
+                                                  </td>
+                                                  <td className="px-2 py-1 border-b border-slate-100">
+                                                    <input
+                                                      type="text"
+                                                      inputMode="numeric"
+                                                      value={hrsProgramadasDt.tn[idx] || ''}
+                                                      onChange={(e) => {
+                                                        const next = [...hrsProgramadasDt.tn];
+                                                        next[idx] = e.target.value;
+                                                        setHrsProgramadasDt('tn', next);
+                                                      }}
+                                                      className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-purple-50 rounded px-1 py-0.5"
+                                                      placeholder="0"
+                                                    />
+                                                  </td>
+                                                  <td className="px-2 py-1 border-b border-slate-100 font-bold text-slate-900">
+                                                    {(() => { const a = Number(hrsProgramadasDt.td[idx]) || 0; const b = Number(hrsProgramadasDt.tn[idx]) || 0; return String(a + b); })()}
                                                   </td>
                                                 </tr>
                                               ))}
@@ -3127,13 +3217,111 @@ export default function PlannerPage() {
                           </>
                         )}
                         {activeTab === 'resumen-semanal' && (
-                         <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                           <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                             <CalendarDays className="h-12 w-12 mb-4 opacity-20" />
-                             Resumen Semanal en Desarrollo
-                           </div>
-                         </div>
-                       )}
+                          <div className="flex-1 flex flex-col">
+                            <div className="flex items-center gap-3 mb-4 no-print">
+                              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                {['resumen', 'pt'].map((subTab) => (
+                                  <button
+                                    key={subTab}
+                                    onClick={() => setResumenSemanalSubTab(subTab)}
+                                    className={cn(
+                                      "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                      resumenSemanalSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                    )}
+                                  >
+                                    {subTab === 'resumen' ? 'Resumen' : 'PT'}
+                                  </button>
+                                ))}
+                              </div>
+                              <div className="ml-auto">
+                                <Popover>
+                                  <PopoverTrigger asChild>
+                                    <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                                      <CalendarIcon className="h-3.5 w-3.5 text-primary" />
+                                      Semana {getISOWeek(resumenSemanalWeekStartDate)}
+                                    </button>
+                                  </PopoverTrigger>
+                                  <PopoverContent className="p-0 w-72" align="end">
+                                    <div className="flex flex-col p-2">
+                                      <div className="flex items-center justify-between mb-2">
+                                        <button onClick={() => {
+                                          const d = new Date(resumenSemanalWeekStartDate);
+                                          d.setFullYear(d.getFullYear() - 1);
+                                          setResumenSemanalWeekStartDate(d);
+                                        }} className="h-7 px-2 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50">← Año</button>
+                                        <span className="text-[11px] font-black text-slate-700">{resumenSemanalWeekStartDate.getFullYear()}</span>
+                                        <button onClick={() => {
+                                          const d = new Date(resumenSemanalWeekStartDate);
+                                          d.setFullYear(d.getFullYear() + 1);
+                                          setResumenSemanalWeekStartDate(d);
+                                        }} className="h-7 px-2 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50">Año →</button>
+                                      </div>
+                                      <div className="max-h-64 overflow-auto rounded-lg border border-slate-200">
+                                        {weeksForYearResumen.map((week) => (
+                                          <button
+                                            key={week.isoWeek}
+                                            onClick={() => setResumenSemanalWeekStartDate(week.start)}
+                                            className={cn(
+                                              "w-full text-left px-3 py-2 text-[11px] border-b border-slate-100 last:border-0 flex items-center justify-between",
+                                              getISOWeek(resumenSemanalWeekStartDate) === week.isoWeek ? "bg-slate-800 text-white" : "hover:bg-slate-50"
+                                            )}
+                                          >
+                                            <span className="font-bold">Sem {week.isoWeek}</span>
+                                            <span className="text-[10px] opacity-70">{format(week.start, 'dd MMM', { locale: es })} - {format(week.end, 'dd MMM', { locale: es })}</span>
+                                          </button>
+                                        ))}
+                                      </div>
+                                    </div>
+                                  </PopoverContent>
+                                </Popover>
+                              </div>
+                            </div>
+                            <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                              {resumenSemanalSubTab === 'resumen' && (
+                                <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                  <CalendarDays className="h-12 w-12 mb-4 opacity-20" />
+                                  Resumen en Desarrollo
+                                </div>
+                              )}
+                              {resumenSemanalSubTab === 'pt' && (
+                                <div className="flex-1 flex flex-col">
+                                  <div className="flex items-center gap-3 mb-4 no-print">
+                                    <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                      {['TDiurno', 'TNocturno'].map((subTab) => (
+                                        <button
+                                          key={subTab}
+                                          onClick={() => setPtSubTab(subTab)}
+                                          className={cn(
+                                            "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                            ptSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                          )}
+                                        >
+                                          {subTab === 'TDiurno' && <Sun className="h-3.5 w-3.5" />}
+                                          {subTab === 'TDiurno' ? 'T Diurno' : 'T Nocturno'}
+                                          {subTab === 'TNocturno' && <Moon className="h-3.5 w-3.5" />}
+                                        </button>
+                                      ))}
+                                    </div>
+                                  </div>
+                                  <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                                    {ptSubTab === 'TDiurno' && (
+                                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                        <Sun className="h-12 w-12 mb-4 opacity-20" />
+                                        T Diurno en Desarrollo
+                                      </div>
+                                    )}
+                                    {ptSubTab === 'TNocturno' && (
+                                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                        <Moon className="h-12 w-12 mb-4 opacity-20" />
+                                        T Nocturno en Desarrollo
+                                      </div>
+                                    )}
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
                        {activeTab === 'resumen-mensual' && (
                          <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                            <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
@@ -3906,8 +4094,8 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
       const servicios = minutosAHorasDecimal(paradasLinea.filter((r: any) => serviciosTipoParada.includes(String(r.tipoParada || '').toUpperCase())).reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
       const ausentismo = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'AUSENTISMO').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
       const externas = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'FALLA DE E/E').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
-       const horasPagadas = hrsPagadasDia && hrsPagadasDia[idx] ? hrsPagadasDia[idx] : minutosAHorasDecimal(totalParadaMin);
-       const horasProgramadas = hrsProgramadasDia && hrsProgramadasDia[idx] ? hrsProgramadasDia[idx] : minutosAHorasDecimal(480);
+       const horasPagadas = hrsPagadasDia && hrsPagadasDia[idx] ? hrsPagadasDia[idx] : '0';
+       const horasProgramadas = hrsProgramadasDia && hrsProgramadasDia[idx] ? hrsProgramadasDia[idx] : '0';
       const paradasProgramadas = minutosAHorasDecimal(porTipo.programadas || 0);
       const tareas = tareasLinea.filter((t: any) => t.lineId === String(lineaNum));
       const planificadoTD = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.diurno || 0), 0));
@@ -4173,179 +4361,201 @@ function PlanificadasPorDiaTable({ datosPorDia, fecha, turno }: { datosPorDia: a
 function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineSpeeds, turno = 'DIURNO', fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia, hrsPagadasDia, hrsProgramadasDia }: any) {
    const data = useReportData(informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia, hrsPagadasDia, hrsProgramadasDia);
   const formatCell = (v: any) => v ?? '0';
+  const esDiurno = turno === 'DIURNO';
+  const esNocturno = turno === 'NOCTURNO';
   const totalPlanificadoTD = data.reduce((acc: number, r: any) => acc + (Number(r.planificadoTD) || 0), 0);
   const totalPlanificadoTN = data.reduce((acc: number, r: any) => acc + (Number(r.planificadoTN) || 0), 0);
-  const totalAlcanceTD = data.reduce((acc: number, r: any) => acc + (Number(r.alcanceTD) || 0), 0);
-  const totalAlcanceTN = data.reduce((acc: number, r: any) => acc + (Number(r.alcanceTN) || 0), 0);
-  const cumplimientoTD = totalPlanificadoTD > 0 ? ((totalAlcanceTD / totalPlanificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
-  const cumplimientoTN = totalPlanificadoTN > 0 ? ((totalAlcanceTN / totalPlanificadoTN) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
-  const disponibilidades = data.map((r: any) => {
-    const val = String(r.disponibilidad || '').replace(',', '.');
-    const num = parseFloat(val);
-    return Number.isFinite(num) ? num : 0;
-  });
-  const disponibilidadGlobal = disponibilidades.length > 0 ? (disponibilidades.reduce((a, b) => a + b, 0) / disponibilidades.length).toFixed(2).replace('.', ',') + '%' : '0,00%';
-  return (
-    <div className="flex flex-col gap-3">
-      <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-        <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-          <div className="w-2 h-2 rounded-full bg-sky-500" />
-          <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-            Reporte {turno === 'DIARIO' ? 'Diario' : turno === 'DIURNO' ? 'por Turno - Diurno' : 'por Turno - Nocturno'}
-          </h4>
-        </div>
-        <div className="p-4">
-          <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-            <table className="w-full border-collapse text-center" style={{ minWidth: 2200 }}>
-              <thead>
-                <tr className="bg-slate-100">
-                  <th rowSpan={2} className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36 text-left">Ubicación</th>
-                  <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Planificado</th>
-                  <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Alcance</th>
-                  <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">% Cumplimiento</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">PNC</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Velocidad (BPM)</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Cajas/H</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Horas Pagadas</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Horas Programadas</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas Programadas (hrs)</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Relación Hrs Prog./Paradas Programadas</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por Servicios (hrs)</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por Ausentismo (hrs)</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por fallas electricas (hrs)</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por Adecuaciones (hrs)</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por Avería (OT) (hrs)</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas Operacionales (hrs)</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Horas Perdidas Según PNC</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Disponibilidad Real (hrs)</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Producción Teórica (Cajas)</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Horas Efectivas de Producción</th>
-                  <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[70px]">Tiempo Muerto (Inexplicable) (hrs)</th>
-                </tr>
-                <tr className="bg-slate-100">
-                  <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
-                  <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TN</th>
-                  <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
-                  <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TN</th>
-                  <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
-                  <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">TN</th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.map((row: any) => (
-                  <tr key={row.linea} className="even:bg-slate-50/60">
-                    <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{row.linea}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.planificadoTD)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.planificadoTN)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.alcanceTD)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.alcanceTN)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.cumplimientoTD)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-b border-slate-100 text-center tabular-nums">{formatCell(row.cumplimientoTN)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.pnc)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.velocidad)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.cajasH)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.horasPagadas)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.horasProgramadas)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.paradasProgramadas)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.relacion)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.servicios)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.ausentismo)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.externas)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.adecuaciones)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.averia)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.operacionales)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.horasPerdidasPNC)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.disponibilidad)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.produccionTeorica)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-b border-slate-100 text-center tabular-nums">{formatCell(row.horasEfectivas)}</td>
-                    <td className="px-1 py-0.5 text-[10px] text-slate-700 border-b border-slate-100 text-center tabular-nums">{formatCell(row.tiempoMuertoInexplicable)}</td>
-                  </tr>
-                ))}
-                {data.length > 0 && (() => {
-                  const totalHorasPagadas = sumarHoras(...data.map((r: any) => r.horasPagadas || '0'));
-                  const totalHorasProgramadas = sumarHorasDecimal(...data.map((r: any) => r.horasProgramadas || '0'));
-                  const totalParadasProgramadas = sumarHorasDecimal(...data.map((r: any) => r.paradasProgramadas || '0'));
-                  const totalServicios = sumarHorasDecimal(...data.map((r: any) => r.servicios || '0'));
-                  const totalAusentismo = sumarHorasDecimal(...data.map((r: any) => r.ausentismo || '0'));
-                  const totalExternas = sumarHorasDecimal(...data.map((r: any) => r.externas || '0'));
-                  const totalAdecuaciones = sumarHorasDecimal(...data.map((r: any) => r.adecuaciones || '0'));
-                  const totalAveria = sumarHorasDecimal(...data.map((r: any) => r.averia || '0'));
-                  const totalOperacionales = sumarHorasDecimal(...data.map((r: any) => r.operacionales || '0'));
-                  const totalHorasPerdidasPNC = data.reduce((acc: number, r: any) => acc + Number.parseFloat(String(r.horasPerdidasPNC || '0').replace(',', '.')), 0).toFixed(2).replace('.', ',');
-                  const disponibilidades = data.map((r: any) => { const v = String(r.disponibilidad || '').replace(',', '.'); const n = parseFloat(v); return Number.isFinite(n) ? n : 0; });
-                  const totalDisponibilidadPromedio = disponibilidades.length > 0 ? (disponibilidades.reduce((a, b) => a + b, 0) / disponibilidades.length).toFixed(2).replace('.', ',') + '%' : '0,00%';
-                  const totalProduccionTeorica = data.reduce((acc: number, r: any) => acc + Number(r.produccionTeorica || 0), 0);
-                  const totalHorasEfectivas = sumarHorasDecimal(...data.map((r: any) => r.horasEfectivas || '0'));
-                  const totalTiempoMuerto = sumarHorasDecimal(...data.map((r: any) => r.tiempoMuertoInexplicable || '0'));
-                  return (
-                    <tr className="bg-slate-100 font-black">
-                      <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200 w-36 text-left">TOTAL</td>
-                     <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalPlanificadoTD}</td>
-                     <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalPlanificadoTN}</td>
-                     <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAlcanceTD}</td>
-                     <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAlcanceTN}</td>
-                     <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{cumplimientoTD}</td>
-                     <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{cumplimientoTN}</td>
-                      <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
-                      <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums"></td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasPagadas}</td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasProgramadas}</td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalParadasProgramadas}</td>
-                      <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalServicios}</td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAusentismo}</td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalExternas}</td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAdecuaciones}</td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAveria}</td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalOperacionales}</td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasPerdidasPNC}</td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalDisponibilidadPromedio}</td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalProduccionTeorica}</td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasEfectivas}</td>
-                      <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{totalTiempoMuerto}</td>
-                    </tr>
-                  );
-                })()}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-      {(turno === 'DIURNO' || turno === 'NOCTURNO') && (
-        <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible mt-3">
-          <div className="p-4">
-            <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-              <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
-                <thead>
-                  <tr className="bg-slate-100">
-                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">TOTAL TD</th>
-                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">TOTAL TN</th>
-                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">GLOBAL TD</th>
-                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">GLOBAL TN</th>
-                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TD</th>
-                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TN</th>
-                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">DISPONIBILIDAD TD</th>
-                    <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[80px]">DISPONIBILIDAD TN</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="even:bg-slate-50/60">
-                    <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalPlanificadoTD}</td>
-                    <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalPlanificadoTN ?? '0'}</td>
-                    <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalAlcanceTD}</td>
-                    <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalAlcanceTN ?? '0'}</td>
-                    <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTD}</td>
-                    <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTN}</td>
-                    <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{disponibilidadGlobal}</td>
-                    <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{disponibilidadGlobal}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
+   const totalAlcanceTD = data.reduce((acc: number, r: any) => acc + (Number(r.alcanceTD) || 0), 0);
+   const totalAlcanceTN = data.reduce((acc: number, r: any) => acc + (Number(r.alcanceTN) || 0), 0);
+   const cumplimientoTD = totalPlanificadoTD > 0 ? ((totalAlcanceTD / totalPlanificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
+   const cumplimientoTN = totalPlanificadoTN > 0 ? ((totalAlcanceTN / totalPlanificadoTN) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
+   const disponibilidades = data.map((r: any) => {
+     const val = String(r.disponibilidad || '').replace(',', '.');
+     const num = parseFloat(val);
+     return Number.isFinite(num) ? num : 0;
+   });
+   const disponibilidadGlobal = disponibilidades.length > 0 ? (disponibilidades.reduce((a, b) => a + b, 0) / disponibilidades.length).toFixed(2).replace('.', ',') + '%' : '0,00%';
+   return (
+     <div className="flex flex-col gap-3">
+       <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+         <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+           <div className="w-2 h-2 rounded-full bg-sky-500" />
+           <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
+             Reporte {turno === 'DIARIO' ? 'Diario' : turno === 'DIURNO' ? 'por Turno - Diurno' : 'por Turno - Nocturno'}
+           </h4>
+         </div>
+         <div className="p-4">
+           <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+             <table className="w-full border-collapse text-center" style={{ minWidth: esDiurno || esNocturno ? 1800 : 2200 }}>
+               <thead>
+                 <tr className="bg-slate-100">
+                   <th rowSpan={2} className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36 text-left">Ubicación</th>
+                   {!esDiurno && !esNocturno && <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Planificado</th>}
+                   {!esDiurno && !esNocturno && <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Alcance</th>}
+                   {!esDiurno && !esNocturno && <th colSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">% Cumplimiento</th>}
+                   {esDiurno && <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Planificado TD</th>}
+                   {esDiurno && <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Alcance TD</th>}
+                   {esDiurno && <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">% Cumplimiento TD</th>}
+                   {esNocturno && <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Planificado TN</th>}
+                   {esNocturno && <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Alcance TN</th>}
+                   {esNocturno && <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">% Cumplimiento TN</th>}
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">PNC</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Velocidad (BPM)</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Cajas/H</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Horas Pagadas</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Horas Programadas</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas Programadas (hrs)</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Relación Hrs Prog./Paradas Programadas</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por Servicios (hrs)</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por Ausentismo (hrs)</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por fallas electricas (hrs)</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por Adecuaciones (hrs)</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas por Avería (OT) (hrs)</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Paradas Operacionales (hrs)</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Horas Perdidas Según PNC</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Disponibilidad Real (hrs)</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Producción Teórica (Cajas)</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[70px]">Horas Efectivas de Producción</th>
+                   <th rowSpan={2} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[70px]">Tiempo Muerto (Inexplicable) (hrs)</th>
+                 </tr>
+                 {!esDiurno && !esNocturno && (
+                 <tr className="bg-slate-100">
+                   <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                   <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TN</th>
+                   <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                   <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TN</th>
+                   <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px]">TD</th>
+                   <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">TN</th>
+                 </tr>
+                 )}
+               </thead>
+               <tbody>
+                 {data.map((row: any) => (
+                   <tr key={row.linea} className="even:bg-slate-50/60">
+                     <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-0.5 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">{row.linea}</td>
+                     {!esDiurno && !esNocturno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.planificadoTD)}</td>}
+                     {!esDiurno && !esNocturno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.planificadoTN)}</td>}
+                     {esDiurno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.planificadoTD)}</td>}
+                     {esNocturno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.planificadoTN)}</td>}
+                     {!esDiurno && !esNocturno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.alcanceTD)}</td>}
+                     {!esDiurno && !esNocturno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.alcanceTN)}</td>}
+                     {esDiurno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.alcanceTD)}</td>}
+                     {esNocturno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.alcanceTN)}</td>}
+                     {!esDiurno && !esNocturno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.cumplimientoTD)}</td>}
+                     {!esDiurno && !esNocturno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-b border-slate-100 text-center tabular-nums">{formatCell(row.cumplimientoTN)}</td>}
+                     {esDiurno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.cumplimientoTD)}</td>}
+                     {esNocturno && <td className="px-1 py-0.5 text-[10px] text-slate-700 border-b border-slate-100 text-center tabular-nums">{formatCell(row.cumplimientoTN)}</td>}
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.pnc)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.velocidad)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.cajasH)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.horasPagadas)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.horasProgramadas)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.paradasProgramadas)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.relacion)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.servicios)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.ausentismo)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.externas)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.adecuaciones)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.averia)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.operacionales)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.horasPerdidasPNC)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.disponibilidad)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.produccionTeorica)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-b border-slate-100 text-center tabular-nums">{formatCell(row.horasEfectivas)}</td>
+                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-b border-slate-100 text-center tabular-nums">{formatCell(row.tiempoMuertoInexplicable)}</td>
+                   </tr>
+                 ))}
+                 {data.length > 0 && (() => {
+                   const totalHorasPagadas = sumarHoras(...data.map((r: any) => r.horasPagadas || '0'));
+                   const totalHorasProgramadas = sumarHorasDecimal(...data.map((r: any) => r.horasProgramadas || '0'));
+                   const totalParadasProgramadas = sumarHorasDecimal(...data.map((r: any) => r.paradasProgramadas || '0'));
+                   const totalServicios = sumarHorasDecimal(...data.map((r: any) => r.servicios || '0'));
+                   const totalAusentismo = sumarHorasDecimal(...data.map((r: any) => r.ausentismo || '0'));
+                   const totalExternas = sumarHorasDecimal(...data.map((r: any) => r.externas || '0'));
+                   const totalAdecuaciones = sumarHorasDecimal(...data.map((r: any) => r.adecuaciones || '0'));
+                   const totalAveria = sumarHorasDecimal(...data.map((r: any) => r.averia || '0'));
+                   const totalOperacionales = sumarHorasDecimal(...data.map((r: any) => r.operacionales || '0'));
+                   const totalHorasPerdidasPNC = data.reduce((acc: number, r: any) => acc + Number.parseFloat(String(r.horasPerdidasPNC || '0').replace(',', '.')), 0).toFixed(2).replace('.', ',');
+                   const disponibilidades = data.map((r: any) => { const v = String(r.disponibilidad || '').replace(',', '.'); const n = parseFloat(v); return Number.isFinite(n) ? n : 0; });
+                   const totalDisponibilidadPromedio = disponibilidades.length > 0 ? (disponibilidades.reduce((a, b) => a + b, 0) / disponibilidades.length).toFixed(2).replace('.', ',') + '%' : '0,00%';
+                   const totalProduccionTeorica = data.reduce((acc: number, r: any) => acc + Number(r.produccionTeorica || 0), 0);
+                   const totalHorasEfectivas = sumarHorasDecimal(...data.map((r: any) => r.horasEfectivas || '0'));
+                   const totalTiempoMuerto = sumarHorasDecimal(...data.map((r: any) => r.tiempoMuertoInexplicable || '0'));
+                   return (
+                     <tr className="bg-slate-100 font-black">
+                       <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200 w-36 text-left">TOTAL</td>
+                       {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalPlanificadoTD}</td>}
+                       {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalPlanificadoTN}</td>}
+                       {esDiurno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalPlanificadoTD}</td>}
+                       {esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalPlanificadoTN}</td>}
+                       {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAlcanceTD}</td>}
+                       {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAlcanceTN}</td>}
+                       {esDiurno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAlcanceTD}</td>}
+                       {esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAlcanceTN}</td>}
+                       {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{cumplimientoTD}</td>}
+                       {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{cumplimientoTN}</td>}
+                       {esDiurno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{cumplimientoTD}</td>}
+                       {esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{cumplimientoTN}</td>}
+                       <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
+                       <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums"></td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasPagadas}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasProgramadas}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalParadasProgramadas}</td>
+                       <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalServicios}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAusentismo}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalExternas}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAdecuaciones}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalAveria}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalOperacionales}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasPerdidasPNC}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalDisponibilidadPromedio}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalProduccionTeorica}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasEfectivas}</td>
+                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{totalTiempoMuerto}</td>
+                     </tr>
+                   );
+                 })()}
+               </tbody>
+             </table>
+           </div>
+         </div>
+       </div>
+       {(turno === 'DIURNO' || turno === 'NOCTURNO') && (
+         <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible mt-3">
+           <div className="p-4">
+             <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+               <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
+                 <thead>
+                   <tr className="bg-slate-100">
+                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">TOTAL TD</th>
+                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">TOTAL TN</th>
+                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">GLOBAL TD</th>
+                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">GLOBAL TN</th>
+                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TD</th>
+                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TN</th>
+                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">DISPONIBILIDAD TD</th>
+                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[80px]">DISPONIBILIDAD TN</th>
+                   </tr>
+                 </thead>
+                 <tbody>
+                   <tr className="even:bg-slate-50/60">
+                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalPlanificadoTD}</td>
+                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalPlanificadoTN ?? '0'}</td>
+                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalAlcanceTD}</td>
+                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalAlcanceTN ?? '0'}</td>
+                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTD}</td>
+                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTN}</td>
+                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{disponibilidadGlobal}</td>
+                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{disponibilidadGlobal}</td>
+                   </tr>
+                 </tbody>
+               </table>
+             </div>
+           </div>
+         </div>
+       )}
+     </div>
+   );
+ }
