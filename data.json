@@ -5992,6 +5992,54 @@
             "endTime": "2026-08-01T09:00:00.000Z",
             "id": "afmv957h7",
             "color": "#6366f1"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-07-28T17:30:00.000Z",
+            "endTime": "2026-07-28T18:00:00.000Z",
+            "id": "0zi7ve655",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP NARANJA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 21338,
+            "durationHours": 8.5352,
+            "presentation": "2Lts",
+            "tanks": 3,
+            "startTime": "2026-07-28T18:00:00.000Z",
+            "endTime": "2026-07-29T02:32:06.720Z",
+            "id": "fymbjj77r",
+            "color": "#ec4899"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-07-29T02:33:00.000Z",
+            "endTime": "2026-07-29T03:03:00.000Z",
+            "id": "0b9q154yc",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 17375,
+            "durationHours": 6.95,
+            "presentation": "2Lts",
+            "tanks": 1.95,
+            "startTime": "2026-07-29T03:03:00.000Z",
+            "endTime": "2026-07-29T10:00:00.000Z",
+            "id": "epff7mbqk",
+            "color": "#6366f1"
           }
         ],
         "realProduction": {},
@@ -6020,7 +6068,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-28T13:55:53.655Z"
+    "updatedAt": "2026-07-28T17:08:36.417Z"
   },
   "ordenesSap": [
     {
@@ -11378,6 +11426,56 @@
           "equipment": "ETIQUETADORA",
           "stopType": "OPERACIONAL",
           "turno": "Diurno"
+        },
+        {
+          "id": "stop-1785247948036",
+          "lineId": "L4",
+          "startTime": "2026-07-27T21:30:00.000Z",
+          "endTime": "2026-07-27T22:00:00.000Z",
+          "reason": "PARADA POR ETIQUETADORA",
+          "equipment": "ETIQUETADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1785247981724",
+          "lineId": "L4",
+          "startTime": "2026-07-27T22:05:00.000Z",
+          "endTime": "2026-07-27T22:30:00.000Z",
+          "reason": "PARADA POR ETIQUETADORA",
+          "equipment": "ETIQUETADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1785248301445",
+          "lineId": "L6",
+          "startTime": "2026-07-27T11:00:00.000Z",
+          "endTime": "2026-07-27T22:30:00.000Z",
+          "reason": "PARADA POR MANTENIMIENTO PROGRAMADO",
+          "equipment": "ENFARDADORA",
+          "stopType": "PROGRAMADA",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1785248352862",
+          "lineId": "L2",
+          "startTime": "2026-07-27T11:00:00.000Z",
+          "endTime": "2026-07-27T22:30:00.000Z",
+          "reason": "PARADA POR FALTA DE AGUA PTAB",
+          "equipment": "ENFARDADORA",
+          "stopType": "PTAB",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1785248391518",
+          "lineId": "L7",
+          "startTime": "2026-07-27T11:00:00.000Z",
+          "endTime": "2026-07-27T22:30:00.000Z",
+          "reason": "PARADA POR AVERIA EN LLENADORA",
+          "equipment": "LLENADORA",
+          "stopType": "AVERÍA",
+          "turno": "Diurno"
         }
       ],
       "efficiencyStore": {
@@ -12328,7 +12426,7 @@
                 "designCapacity": "60",
                 "realSpeed": "32",
                 "scheduledHours": "11.5",
-                "scheduledStops": "174330",
+                "scheduledStops": "196690",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "300",
@@ -14210,21 +14308,21 @@
             "diurno": {
               "lunes": {
                 "designCapacity": "43",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "43",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
-                "externalStopsMin": "0",
-                "scheduledBoxes": "",
-                "producedBoxes": "",
+                "externalStopsMin": "690",
+                "scheduledBoxes": "27500",
+                "producedBoxes": "0",
                 "efficiencyLine": "0.00"
               },
               "martes": {
                 "designCapacity": "43",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "43",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14236,8 +14334,8 @@
               },
               "miércoles": {
                 "designCapacity": "43",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "43",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14249,8 +14347,8 @@
               },
               "jueves": {
                 "designCapacity": "43",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "43",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14262,8 +14360,8 @@
               },
               "viernes": {
                 "designCapacity": "43",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "43",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14275,8 +14373,8 @@
               },
               "sábado": {
                 "designCapacity": "43",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "43",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14586,21 +14684,21 @@
             "diurno": {
               "lunes": {
                 "designCapacity": "55",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "55",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "315",
-                "externalStopsMin": "214",
-                "scheduledBoxes": "",
-                "producedBoxes": "",
+                "externalStopsMin": "269",
+                "scheduledBoxes": "32200",
+                "producedBoxes": "1520",
                 "efficiencyLine": "0.00"
               },
               "martes": {
                 "designCapacity": "55",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "55",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14612,8 +14710,8 @@
               },
               "miércoles": {
                 "designCapacity": "55",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "55",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14625,8 +14723,8 @@
               },
               "jueves": {
                 "designCapacity": "55",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "55",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14638,8 +14736,8 @@
               },
               "viernes": {
                 "designCapacity": "55",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "55",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14651,8 +14749,8 @@
               },
               "sábado": {
                 "designCapacity": "55",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "55",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14776,7 +14874,7 @@
                 "designCapacity": "60",
                 "realSpeed": "31",
                 "scheduledHours": "11.5",
-                "scheduledStops": "13855",
+                "scheduledStops": "28475",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "336",
@@ -14962,21 +15060,21 @@
             "diurno": {
               "lunes": {
                 "designCapacity": "60",
-                "realSpeed": "",
-                "scheduledHours": "",
-                "scheduledStops": "0",
+                "realSpeed": "32",
+                "scheduledHours": "11.5",
+                "scheduledStops": "85560",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
                 "externalStopsMin": "0",
-                "scheduledBoxes": "",
-                "producedBoxes": "",
+                "scheduledBoxes": "0",
+                "producedBoxes": "0",
                 "efficiencyLine": "0.00"
               },
               "martes": {
                 "designCapacity": "60",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "32",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14988,8 +15086,8 @@
               },
               "miércoles": {
                 "designCapacity": "60",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "32",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -15001,8 +15099,8 @@
               },
               "jueves": {
                 "designCapacity": "60",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "32",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -15014,8 +15112,8 @@
               },
               "viernes": {
                 "designCapacity": "60",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "32",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -15027,8 +15125,8 @@
               },
               "sábado": {
                 "designCapacity": "60",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "32",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -15150,21 +15248,21 @@
             "diurno": {
               "lunes": {
                 "designCapacity": "50",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "50",
+                "scheduledHours": "12",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
-                "externalStopsMin": "0",
-                "scheduledBoxes": "",
-                "producedBoxes": "",
+                "externalStopsMin": "690",
+                "scheduledBoxes": "0",
+                "producedBoxes": "0",
                 "efficiencyLine": "0.00"
               },
               "martes": {
                 "designCapacity": "50",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "50",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -15176,8 +15274,8 @@
               },
               "miércoles": {
                 "designCapacity": "50",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "50",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -15189,8 +15287,8 @@
               },
               "jueves": {
                 "designCapacity": "50",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "50",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -15202,8 +15300,8 @@
               },
               "viernes": {
                 "designCapacity": "50",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "50",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -15215,8 +15313,8 @@
               },
               "sábado": {
                 "designCapacity": "50",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "50",
+                "scheduledHours": "11.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",

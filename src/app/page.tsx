@@ -675,6 +675,15 @@ export default function PlannerPage() {
       >
     > = {};
 
+    const getProdDayStart = (date: Date) => {
+      const d = new Date(date);
+      d.setHours(0, 0, 0, 0);
+      if (date.getHours() < PROD_DAY_START_HOUR) {
+        d.setDate(d.getDate() - 1);
+      }
+      return d;
+    };
+
     tareas.forEach(task => {
       const sabor = String(task.name || '').trim();
       const linea = Number(task.lineId);
@@ -685,45 +694,40 @@ export default function PlannerPage() {
       const qty = Number(task.quantity) || 0;
       if (qty <= 0 || isNaN(start.getTime()) || isNaN(end.getTime())) return;
 
-      const cursor = new Date(start);
-      while (cursor < end) {
-        const diaStart = new Date(cursor);
-        diaStart.setHours(0, 0, 0, 0);
-        const diaEnd = new Date(diaStart);
-        diaEnd.setDate(diaEnd.getDate() + 1);
+      const totalDuration = end.getTime() - start.getTime();
+      if (totalDuration <= 0) return;
 
-        const prodDayStart = new Date(diaStart);
-        prodDayStart.setHours(7, 0, 0, 0);
-        const prodDayEnd = new Date(prodDayStart);
-        prodDayEnd.setDate(prodDayEnd.getDate() + 1);
-        prodDayEnd.setHours(7, 0, 0, 0);
+      const prodDayStart = getProdDayStart(start);
+      const prodDayEnd = getProdDayStart(end);
+      let currentDay = new Date(prodDayStart);
 
-        const taskStartInDay = cursor < prodDayStart ? prodDayStart : cursor;
-        const taskEndInDay = end > prodDayEnd ? prodDayEnd : end;
-        if (taskStartInDay < taskEndInDay && taskEndInDay > prodDayStart && taskStartInDay < prodDayEnd) {
-          const totalDuration = end.getTime() - start.getTime();
-          const dayDuration = Math.min(end.getTime(), prodDayEnd.getTime()) - Math.max(start.getTime(), prodDayStart.getTime());
-          const proporcion = totalDuration > 0 ? dayDuration / totalDuration : 0;
-          const qtyDia = qty * proporcion;
+      while (currentDay <= prodDayEnd) {
+        const dayStart = new Date(currentDay);
+        dayStart.setHours(PROD_DAY_START_HOUR, 0, 0, 0);
+        const dayEnd = new Date(dayStart);
+        dayEnd.setDate(dayEnd.getDate() + 1);
+        dayEnd.setHours(PROD_DAY_END_NEXT_HOUR, 0, 0, 0);
 
-          const splitTime = new Date(prodDayStart);
+        const taskStartInDay = start < dayStart ? dayStart : start;
+        const taskEndInDay = end > dayEnd ? dayEnd : end;
+
+        if (taskStartInDay < taskEndInDay) {
+          const splitTime = new Date(dayStart);
           splitTime.setHours(SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, 0, 0);
 
           let diurnoDia = 0;
           let nocturnoDia = 0;
-          const effectiveStart = taskStartInDay < prodDayStart ? prodDayStart : taskStartInDay;
-          const effectiveEnd = taskEndInDay > prodDayEnd ? prodDayEnd : taskEndInDay;
 
-          if (effectiveStart < splitTime) {
-            const dEnd = effectiveEnd < splitTime ? effectiveEnd : splitTime;
-            diurnoDia = ((dEnd.getTime() - effectiveStart.getTime()) / totalDuration) * qty;
+          if (taskStartInDay < splitTime) {
+            const dEnd = taskEndInDay < splitTime ? taskEndInDay : splitTime;
+            diurnoDia = ((dEnd.getTime() - taskStartInDay.getTime()) / totalDuration) * qty;
           }
-          if (effectiveEnd > splitTime) {
-            const nStart = effectiveStart > splitTime ? effectiveStart : splitTime;
-            nocturnoDia = ((effectiveEnd.getTime() - nStart.getTime()) / totalDuration) * qty;
+          if (taskEndInDay > splitTime) {
+            const nStart = taskStartInDay > splitTime ? taskStartInDay : splitTime;
+            nocturnoDia = ((taskEndInDay.getTime() - nStart.getTime()) / totalDuration) * qty;
           }
 
-          const diaKey = format(diaStart, 'yyyy-MM-dd');
+          const diaKey = format(currentDay, 'yyyy-MM-dd');
           if (!mapa[diaKey]) mapa[diaKey] = {};
           if (!mapa[diaKey][sabor]) mapa[diaKey][sabor] = {} as any;
           if (!mapa[diaKey][sabor][linea]) mapa[diaKey][sabor][linea] = { diurno: 0, nocturno: 0 };
@@ -731,8 +735,7 @@ export default function PlannerPage() {
           mapa[diaKey][sabor][linea].nocturno += nocturnoDia;
         }
 
-        cursor.setDate(cursor.getDate() + 1);
-        cursor.setHours(0, 0, 0, 0);
+        currentDay.setDate(currentDay.getDate() + 1);
       }
     });
 
@@ -742,14 +745,30 @@ export default function PlannerPage() {
   const getTareasDelMes = (fechaMes: Date, data: Record<string, WeeklyData>): ScheduledTask[] => {
     const mes = fechaMes.getMonth();
     const anio = fechaMes.getFullYear();
+    const monthStart = new Date(anio, mes, 1);
+    const monthEnd = new Date(anio, mes + 1, 1);
+
+    const getProdDayStart = (date: Date) => {
+      const d = new Date(date);
+      d.setHours(0, 0, 0, 0);
+      if (date.getHours() < PROD_DAY_START_HOUR) {
+        d.setDate(d.getDate() - 1);
+      }
+      return d;
+    };
+
     const tareas: ScheduledTask[] = [];
     const seen = new Set<string>();
     Object.values(data).forEach(week => {
       week.tasks.forEach(task => {
-        const taskMonth = task.startTime.getMonth();
-        const taskYear = task.startTime.getFullYear();
-        if (taskMonth !== mes || taskYear !== anio) return;
-        const key = `${task.startTime.getTime()}|${task.endTime.getTime()}|${task.name}|${task.lineId}|${task.quantity}`;
+        const start = new Date(task.startTime);
+        const end = new Date(task.endTime);
+        const taskProdStart = getProdDayStart(start);
+        const taskProdEnd = getProdDayStart(end);
+
+        if (taskProdEnd < monthStart || taskProdStart >= monthEnd) return;
+
+        const key = `${start.getTime()}|${end.getTime()}|${task.name}|${task.lineId}|${task.quantity}`;
         if (seen.has(key)) return;
         seen.add(key);
         tareas.push(task);
