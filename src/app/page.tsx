@@ -3216,112 +3216,112 @@ export default function PlannerPage() {
                             </div>
                           </>
                         )}
-                        {activeTab === 'resumen-semanal' && (
-                          <div className="flex-1 flex flex-col">
-                            <div className="flex items-center gap-3 mb-4 no-print">
-                              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                                {['resumen', 'pt'].map((subTab) => (
-                                  <button
-                                    key={subTab}
-                                    onClick={() => setResumenSemanalSubTab(subTab)}
-                                    className={cn(
-                                      "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                      resumenSemanalSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                    )}
-                                  >
-                                    {subTab === 'resumen' ? 'Resumen' : 'PT'}
-                                  </button>
-                                ))}
-                              </div>
-                              <div className="ml-auto">
-                                <Popover>
-                                  <PopoverTrigger asChild>
-                                    <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
-                                      <CalendarIcon className="h-3.5 w-3.5 text-primary" />
-                                      Semana {getISOWeek(resumenSemanalWeekStartDate)}
-                                    </button>
-                                  </PopoverTrigger>
-                                  <PopoverContent className="p-0 w-72" align="end">
-                                    <div className="flex flex-col p-2">
-                                      <div className="flex items-center justify-between mb-2">
-                                        <button onClick={() => {
-                                          const d = new Date(resumenSemanalWeekStartDate);
-                                          d.setFullYear(d.getFullYear() - 1);
-                                          setResumenSemanalWeekStartDate(d);
-                                        }} className="h-7 px-2 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50">← Año</button>
-                                        <span className="text-[11px] font-black text-slate-700">{resumenSemanalWeekStartDate.getFullYear()}</span>
-                                        <button onClick={() => {
-                                          const d = new Date(resumenSemanalWeekStartDate);
-                                          d.setFullYear(d.getFullYear() + 1);
-                                          setResumenSemanalWeekStartDate(d);
-                                        }} className="h-7 px-2 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50">Año →</button>
-                                      </div>
-                                      <div className="max-h-64 overflow-auto rounded-lg border border-slate-200">
-                                        {weeksForYearResumen.map((week) => (
-                                          <button
-                                            key={week.isoWeek}
-                                            onClick={() => setResumenSemanalWeekStartDate(week.start)}
-                                            className={cn(
-                                              "w-full text-left px-3 py-2 text-[11px] border-b border-slate-100 last:border-0 flex items-center justify-between",
-                                              getISOWeek(resumenSemanalWeekStartDate) === week.isoWeek ? "bg-slate-800 text-white" : "hover:bg-slate-50"
-                                            )}
-                                          >
-                                            <span className="font-bold">Sem {week.isoWeek}</span>
-                                            <span className="text-[10px] opacity-70">{format(week.start, 'dd MMM', { locale: es })} - {format(week.end, 'dd MMM', { locale: es })}</span>
-                                          </button>
-                                        ))}
-                                      </div>
-                                    </div>
-                                  </PopoverContent>
-                                </Popover>
-                              </div>
-                            </div>
-                            <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                              {resumenSemanalSubTab === 'resumen' && (
-                                <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                                  <CalendarDays className="h-12 w-12 mb-4 opacity-20" />
-                                  Resumen en Desarrollo
-                                </div>
-                              )}
-                              {resumenSemanalSubTab === 'pt' && (
-                                <div className="flex-1 flex flex-col">
-                                  <div className="flex items-center gap-3 mb-4 no-print">
-                                    <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                                      {['TDiurno', 'TNocturno'].map((subTab) => (
-                                        <button
-                                          key={subTab}
-                                          onClick={() => setPtSubTab(subTab)}
-                                          className={cn(
-                                            "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                            ptSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                          )}
-                                        >
-                                          {subTab === 'TDiurno' && <Sun className="h-3.5 w-3.5" />}
-                                          {subTab === 'TDiurno' ? 'T Diurno' : 'T Nocturno'}
-                                          {subTab === 'TNocturno' && <Moon className="h-3.5 w-3.5" />}
-                                        </button>
-                                      ))}
-                                    </div>
+                         {activeTab === 'resumen-semanal' && (
+                           <div className="flex-1 flex flex-col">
+                             <div className="flex items-center gap-3 mb-4 no-print">
+                               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                 {['resumen', 'pt'].map((subTab) => (
+                                   <button
+                                     key={subTab}
+                                     onClick={() => setResumenSemanalSubTab(subTab)}
+                                     className={cn(
+                                       "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                       resumenSemanalSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                     )}
+                                   >
+                                     {subTab === 'resumen' ? 'Resumen' : 'PT'}
+                                   </button>
+                                 ))}
+                               </div>
+                               <div className="ml-auto">
+                                 <Popover>
+                                   <PopoverTrigger asChild>
+                                     <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                                       <CalendarIcon className="h-3.5 w-3.5 text-primary" />
+                                       Semana {getISOWeek(resumenSemanalWeekStartDate)}
+                                     </button>
+                                   </PopoverTrigger>
+                                   <PopoverContent className="p-0 w-72" align="end">
+                                     <div className="flex flex-col p-2">
+                                       <div className="flex items-center justify-between mb-2">
+                                         <button onClick={() => {
+                                           const d = new Date(resumenSemanalWeekStartDate);
+                                           d.setFullYear(d.getFullYear() - 1);
+                                           setResumenSemanalWeekStartDate(d);
+                                         }} className="h-7 px-2 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50">← Año</button>
+                                         <span className="text-[11px] font-black text-slate-700">{resumenSemanalWeekStartDate.getFullYear()}</span>
+                                         <button onClick={() => {
+                                           const d = new Date(resumenSemanalWeekStartDate);
+                                           d.setFullYear(d.getFullYear() + 1);
+                                           setResumenSemanalWeekStartDate(d);
+                                         }} className="h-7 px-2 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50">Año →</button>
+                                       </div>
+                                       <div className="max-h-64 overflow-auto rounded-lg border border-slate-200">
+                                         {weeksForYearResumen.map((week) => (
+                                           <button
+                                             key={week.isoWeek}
+                                             onClick={() => setResumenSemanalWeekStartDate(week.start)}
+                                             className={cn(
+                                               "w-full text-left px-3 py-2 text-[11px] border-b border-slate-100 last:border-0 flex items-center justify-between",
+                                               getISOWeek(resumenSemanalWeekStartDate) === week.isoWeek ? "bg-slate-800 text-white" : "hover:bg-slate-50"
+                                             )}
+                                           >
+                                             <span className="font-bold">Sem {week.isoWeek}</span>
+                                             <span className="text-[10px] opacity-70">{format(week.start, 'dd MMM', { locale: es })} - {format(week.end, 'dd MMM', { locale: es })}</span>
+                                           </button>
+                                         ))}
+                                       </div>
+                                     </div>
+                                   </PopoverContent>
+                                 </Popover>
+                               </div>
+                             </div>
+                              <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                                {resumenSemanalSubTab === 'resumen' && (
+                                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                    <CalendarDays className="h-12 w-12 mb-4 opacity-20" />
+                                    Resumen en Desarrollo
                                   </div>
-                                  <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                                    {ptSubTab === 'TDiurno' && (
-                                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                                        <Sun className="h-12 w-12 mb-4 opacity-20" />
-                                        T Diurno en Desarrollo
-                                      </div>
-                                    )}
-                                    {ptSubTab === 'TNocturno' && (
-                                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                                        <Moon className="h-12 w-12 mb-4 opacity-20" />
-                                        T Nocturno en Desarrollo
-                                      </div>
-                                    )}
-                                  </div>
-                                </div>
-                              )}
-                            </div>
-                          </div>
-                        )}
+                                )}
+                                {resumenSemanalSubTab === 'pt' && (
+                                 <div className="flex-1 flex flex-col">
+                                   <div className="flex items-center gap-3 mb-4 no-print">
+                                     <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                       {['TDiurno', 'TNocturno'].map((subTab) => (
+                                         <button
+                                           key={subTab}
+                                           onClick={() => setPtSubTab(subTab)}
+                                           className={cn(
+                                             "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                             ptSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                           )}
+                                         >
+                                           {subTab === 'TDiurno' && <Sun className="h-3.5 w-3.5" />}
+                                           {subTab === 'TDiurno' ? 'T Diurno' : 'T Nocturno'}
+                                           {subTab === 'TNocturno' && <Moon className="h-3.5 w-3.5" />}
+                                         </button>
+                                       ))}
+                                     </div>
+                                   </div>
+                                   <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                                     {ptSubTab === 'TDiurno' && (
+                                       <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                         <Sun className="h-12 w-12 mb-4 opacity-20" />
+                                         T Diurno en Desarrollo
+                                       </div>
+                                     )}
+                                     {ptSubTab === 'TNocturno' && (
+                                       <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                         <Moon className="h-12 w-12 mb-4 opacity-20" />
+                                         T Nocturno en Desarrollo
+                                       </div>
+                                     )}
+                                   </div>
+                                 </div>
+                               )}
+                             </div>
+                           </div>
+                         )}
                        {activeTab === 'resumen-mensual' && (
                          <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                            <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
@@ -3923,8 +3923,8 @@ export default function PlannerPage() {
   );
 }
 
-function TablaResumenReporteDiario({ informesOperacionales, tasks, realProduction, lineSpeeds, fecha, planificadasPorDia, producidasDiurno, producidasNocturno }: any) {
-  const row = calcularTotalesDiario(informesOperacionales || [], tasks, realProduction, lineSpeeds, fecha, planificadasPorDia, producidasDiurno, producidasNocturno);
+function TablaResumenReporteDiario({ informesOperacionales, tasks, realProduction, lineSpeeds, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, semanaFechas }: any) {
+  const row = calcularTotalesDiario(informesOperacionales || [], tasks, realProduction, lineSpeeds, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, semanaFechas);
   return (
     <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
       <div className="p-4">
@@ -4007,12 +4007,29 @@ function clasificarParada(tipo: string): string {
   return 'operacionales';
 }
 
-function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, producidasDiurno?: any, producidasNocturno?: any) {
-  const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
-  const informeDelDia = (informesOperacionales || []).filter((r: any) => String(r.fecha || '') === targetDate);
+function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, producidasDiurno?: any, producidasNocturno?: any, semanaFechas?: string[]) {
+  let informeDelDia: any[] = [];
+  let diaPlanificada: any = {};
+  if (semanaFechas && semanaFechas.length > 0) {
+    informeDelDia = (informesOperacionales || []).filter((r: any) => semanaFechas.includes(String(r.fecha || '')));
+    semanaFechas.forEach(f => {
+      const dia = planificadasPorDia?.[f] || {};
+      Object.entries(dia).forEach(([sabor, porLinea]: [string, any]) => {
+        if (!diaPlanificada[sabor]) diaPlanificada[sabor] = {};
+        Object.entries(porLinea).forEach(([lineaStr, valores]: [string, any]) => {
+          if (!diaPlanificada[sabor][lineaStr]) diaPlanificada[sabor][lineaStr] = { diurno: 0, nocturno: 0 };
+          diaPlanificada[sabor][lineaStr].diurno += valores.diurno || 0;
+          diaPlanificada[sabor][lineaStr].nocturno += valores.nocturno || 0;
+        });
+      });
+    });
+  } else {
+    const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
+    informeDelDia = (informesOperacionales || []).filter((r: any) => String(r.fecha || '') === targetDate);
+    diaPlanificada = planificadasPorDia?.[targetDate] || {};
+  }
   const tareasLinea = (tasks || []).filter((t: any) => String(t.lineId || '') !== '');
   const lineas = ['Línea 1', 'Línea 2', 'Línea 3', 'Línea 4', 'Línea 5', 'Línea 6', 'Línea 7'];
-  const diaPlanificada = planificadasPorDia?.[targetDate] || {};
 
   let totalPlanificadoTD = 0;
   let totalPlanificadoTN = 0;
@@ -4069,12 +4086,29 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
 }
 
 
-function useReportData(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, turno: 'DIURNO' | 'NOCTURNO' | 'DIARIO' = 'DIURNO', fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, producidasDiurno?: any, producidasNocturno?: any, pncPorLinea?: (number | string)[], velocidadesDia?: string[], hrsPagadasDia?: string[], hrsProgramadasDia?: string[]) {
+function useReportData(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, turno: 'DIURNO' | 'NOCTURNO' | 'DIARIO' = 'DIURNO', fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, producidasDiurno?: any, producidasNocturno?: any, pncPorLinea?: (number | string)[], velocidadesDia?: string[], hrsPagadasDia?: string[], hrsProgramadasDia?: string[], semanaFechas?: string[]) {
   return useMemo(() => {
-    const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
-    const informeDelDia = (informesOperacionales || []).filter((r: any) => String(r.fecha || '') === targetDate && (turno === 'DIARIO' || String(r.turno || '').toUpperCase() === turno));
+    let informeDelDia: any[] = [];
+    let diaPlanificada: any = {};
+    if (semanaFechas && semanaFechas.length > 0) {
+      informeDelDia = (informesOperacionales || []).filter((r: any) => semanaFechas.includes(String(r.fecha || '')));
+      semanaFechas.forEach(f => {
+        const dia = planificadasPorDia?.[f] || {};
+        Object.entries(dia).forEach(([sabor, porLinea]: [string, any]) => {
+          if (!diaPlanificada[sabor]) diaPlanificada[sabor] = {};
+          Object.entries(porLinea).forEach(([lineaStr, valores]: [string, any]) => {
+            if (!diaPlanificada[sabor][lineaStr]) diaPlanificada[sabor][lineaStr] = { diurno: 0, nocturno: 0 };
+            diaPlanificada[sabor][lineaStr].diurno += valores.diurno || 0;
+            diaPlanificada[sabor][lineaStr].nocturno += valores.nocturno || 0;
+          });
+        });
+      });
+    } else {
+      const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
+      informeDelDia = (informesOperacionales || []).filter((r: any) => String(r.fecha || '') === targetDate && (turno === 'DIARIO' || String(r.turno || '').toUpperCase() === turno));
+      diaPlanificada = planificadasPorDia?.[targetDate] || {};
+    }
     const tareasLinea = (tasks || []).filter((t: any) => String(t.lineId || '') !== '');
-    const diaPlanificada = planificadasPorDia?.[targetDate] || {};
 
     const lineas = ['Línea 1', 'Línea 2', 'Línea 3', 'Línea 4', 'Línea 5', 'Línea 6', 'Línea 7'];
     return lineas.map((lineaNombre, idx) => {
@@ -4140,15 +4174,32 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
         tiempoMuertoInexplicable: tiempoMuerto,
       };
     });
-  }, [informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia]);
+  }, [informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia, semanaFechas]);
 }
 
-function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, producidasDiurno?: any, producidasNocturno?: any) {
-  const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
-  const informeDelDia = (informesOperacionales || []).filter((r: any) => String(r.fecha || '') === targetDate);
+function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, producidasDiurno?: any, producidasNocturno?: any, semanaFechas?: string[]) {
+  let informeDelDia: any[] = [];
+  let diaPlanificada: any = {};
+  if (semanaFechas && semanaFechas.length > 0) {
+    informeDelDia = (informesOperacionales || []).filter((r: any) => semanaFechas.includes(String(r.fecha || '')));
+    semanaFechas.forEach(f => {
+      const dia = planificadasPorDia?.[f] || {};
+      Object.entries(dia).forEach(([sabor, porLinea]: [string, any]) => {
+        if (!diaPlanificada[sabor]) diaPlanificada[sabor] = {};
+        Object.entries(porLinea).forEach(([lineaStr, valores]: [string, any]) => {
+          if (!diaPlanificada[sabor][lineaStr]) diaPlanificada[sabor][lineaStr] = { diurno: 0, nocturno: 0 };
+          diaPlanificada[sabor][lineaStr].diurno += valores.diurno || 0;
+          diaPlanificada[sabor][lineaStr].nocturno += valores.nocturno || 0;
+        });
+      });
+    });
+  } else {
+    const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
+    informeDelDia = (informesOperacionales || []).filter((r: any) => String(r.fecha || '') === targetDate);
+    diaPlanificada = planificadasPorDia?.[targetDate] || {};
+  }
   const tareasLinea = (tasks || []).filter((t: any) => String(t.lineId || '') !== '');
   const lineas = ['Línea 1', 'Línea 2', 'Línea 3', 'Línea 4', 'Línea 5', 'Línea 6', 'Línea 7'];
-  const diaPlanificada = planificadasPorDia?.[targetDate] || {};
 
   return lineas.map((lineaNombre, idx) => {
     const lineaNum = idx + 1;
@@ -4188,8 +4239,8 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
   });
 }
 
-function TablaResumenPorLinea({ informesOperacionales, tasks, realProduction, lineSpeeds, fecha, planificadasPorDia, producidasDiurno, producidasNocturno }: any) {
-  const datos = getResumenPorLinea(informesOperacionales, tasks, realProduction, lineSpeeds, fecha, planificadasPorDia, producidasDiurno, producidasNocturno);
+function TablaResumenPorLinea({ informesOperacionales, tasks, realProduction, lineSpeeds, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, semanaFechas }: any) {
+  const datos = getResumenPorLinea(informesOperacionales, tasks, realProduction, lineSpeeds, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, semanaFechas);
 
   return (
     <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
