@@ -5691,30 +5691,6 @@
             "color": "#ef4444"
           },
           {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "3",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-07-31T11:00:00.000Z",
-            "endTime": "2026-07-31T13:00:00.000Z",
-            "id": "w4vrzdwrg",
-            "color": "#ef4444"
-          },
-          {
-            "name": "GLUP COLA",
-            "lineId": "3",
-            "loadPerHour": 2800,
-            "quantity": 56000,
-            "durationHours": 20,
-            "presentation": "2Lts",
-            "tanks": 6.49,
-            "startTime": "2026-07-31T13:00:00.000Z",
-            "endTime": "2026-08-01T09:00:00.000Z",
-            "id": "jt6uzykut",
-            "color": "#6366f1"
-          },
-          {
             "name": "GLUP COLA",
             "lineId": "4",
             "loadPerHour": 2800,
@@ -5897,19 +5873,6 @@
           },
           {
             "name": "GLUP UVA",
-            "lineId": "6",
-            "loadPerHour": 1200,
-            "quantity": 28450,
-            "durationHours": 23.708333333333332,
-            "presentation": "0.4Lts",
-            "tanks": 2,
-            "startTime": "2026-07-28T11:00:00.000Z",
-            "endTime": "2026-07-29T10:42:30.000Z",
-            "id": "rzyf723vf",
-            "color": "#47CCB0"
-          },
-          {
-            "name": "GLUP UVA",
             "lineId": "7",
             "loadPerHour": 2500,
             "quantity": 14225,
@@ -6029,6 +5992,54 @@
             "endTime": "2026-08-01T09:00:00.000Z",
             "id": "grnt0175d",
             "color": "#ec4899"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-07-30T02:45:00.000Z",
+            "endTime": "2026-07-30T04:45:00.000Z",
+            "id": "82rs43ahf",
+            "color": "#ef4444"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 146300,
+            "durationHours": 52.25,
+            "presentation": "2Lts",
+            "tanks": 16.96,
+            "startTime": "2026-07-30T04:45:00.000Z",
+            "endTime": "2026-08-01T09:00:00.000Z",
+            "id": "94b0q4gn8",
+            "color": "#ef4444"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "6",
+            "loadPerHour": 1200,
+            "quantity": 17250,
+            "durationHours": 14.375,
+            "presentation": "0.4Lts",
+            "tanks": 1,
+            "startTime": "2026-07-28T11:00:00.000Z",
+            "endTime": "2026-07-29T01:22:30.000Z",
+            "id": "tq6imbqyw",
+            "color": "#10b981"
+          },
+          {
+            "name": "CS",
+            "lineId": "6",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-07-29T01:23:00.000Z",
+            "endTime": "2026-07-29T01:53:00.000Z",
+            "id": "ewwqgo3dr",
+            "color": "#ec4899"
           }
         ],
         "realProduction": {},
@@ -6060,13 +6071,16 @@
           "0zi7ve655",
           "fymbjj77r",
           "0b9q154yc",
-          "gghq1zeou"
+          "gghq1zeou",
+          "w4vrzdwrg",
+          "jt6uzykut",
+          "rzyf723vf"
         ]
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-29T15:04:15.936Z"
+    "updatedAt": "2026-07-29T21:19:49.694Z"
   },
   "ordenesSap": [
     {
@@ -9134,6 +9148,106 @@
           "cajas4": 0
         }
       ]
+    },
+    {
+      "id": "1-1785349102112",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "62621",
+      "semana": 31,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-29",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1785349327004",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "62632",
+      "semana": 31,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-29",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1785349562500",
+      "linea": 3,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "62638",
+      "semana": 31,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-29",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1785350032954",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62644",
+      "semana": 31,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-29",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1785350607506",
+      "linea": 5,
+      "sabor": "JUSTY DURAZNO",
+      "ordenNumero": "62649",
+      "semana": 31,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-29",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
     }
   ],
   "notifications": [],
@@ -11599,6 +11713,106 @@
           "equipment": "ENFARDADORA",
           "stopType": "INSUMOS",
           "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1785344054773",
+          "lineId": "L1",
+          "startTime": "2026-07-28T03:30:00.000Z",
+          "endTime": "2026-07-28T03:44:00.000Z",
+          "reason": "FILM ATASCADO ENTRE MESA DE ELEVACION Y MESA DE EMP",
+          "equipment": "ENFARDADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1785344088508",
+          "lineId": "L1",
+          "startTime": "2026-07-28T00:00:00.000Z",
+          "endTime": "2026-07-28T00:10:00.000Z",
+          "reason": "PARADA POR PALETIZADORA",
+          "equipment": "PALETIZADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1785345826487",
+          "lineId": "L1",
+          "startTime": "2026-07-27T10:30:00.000Z",
+          "endTime": "2026-07-27T10:35:00.000Z",
+          "reason": "PARADA POR ETIQUETADORA",
+          "equipment": "ETIQUETADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1785346154679",
+          "lineId": "L2",
+          "startTime": "2026-07-27T22:31:00.000Z",
+          "endTime": "2026-07-27T10:59:00.000Z",
+          "reason": "PARADA POR DEFICIT DE AGUA PTAB",
+          "equipment": "LLENADORA",
+          "stopType": "PTAB",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1785346255902",
+          "lineId": "L7",
+          "startTime": "2026-07-27T09:28:00.000Z",
+          "endTime": "2026-07-27T09:33:00.000Z",
+          "reason": "SALTO DE BOTELLAS POR BOTELLA MAL TAPADA",
+          "equipment": "ENFARDADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1785346303062",
+          "lineId": "L7",
+          "startTime": "2026-07-27T07:34:00.000Z",
+          "endTime": "2026-07-27T08:04:00.000Z",
+          "reason": "PARADA POR MONOBLOCK",
+          "equipment": "LLENADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1785346330470",
+          "lineId": "L7",
+          "startTime": "2026-07-27T09:48:00.000Z",
+          "endTime": "2026-07-27T09:53:00.000Z",
+          "reason": "PARADA POR ETIQUETADORA",
+          "equipment": "ETIQUETADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1785346355302",
+          "lineId": "L7",
+          "startTime": "2026-07-27T10:40:00.000Z",
+          "endTime": "2026-07-27T10:50:00.000Z",
+          "reason": "PARADA POR MONOBLOCK",
+          "equipment": "LLENADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1785346495366",
+          "lineId": "L4",
+          "startTime": "2026-07-27T22:30:00.000Z",
+          "endTime": "2026-07-28T00:00:00.000Z",
+          "reason": "PARADA POR ETIQUETADORA",
+          "equipment": "ETIQUETADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1785346534974",
+          "lineId": "L4",
+          "startTime": "2026-07-28T02:11:00.000Z",
+          "endTime": "2026-07-27T10:59:00.000Z",
+          "reason": "PARADA POR SALA DE MAQUINA (PTAB)",
+          "equipment": "LLENADORA",
+          "stopType": "PTAB",
+          "turno": "Nocturno"
         }
       ],
       "efficiencyStore": {
@@ -12549,7 +12763,7 @@
                 "designCapacity": "60",
                 "realSpeed": "32",
                 "scheduledHours": "11.5",
-                "scheduledStops": "290420",
+                "scheduledStops": "366340",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "300",
@@ -13286,11 +13500,11 @@
                 "designCapacity": "45",
                 "realSpeed": "",
                 "scheduledHours": "",
-                "scheduledStops": "4620",
+                "scheduledStops": "25920",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
-                "externalStopsMin": "0",
+                "externalStopsMin": "5",
                 "scheduledBoxes": "",
                 "producedBoxes": "",
                 "efficiencyLine": "0.00"
@@ -14227,10 +14441,10 @@
                 "realSpeed": "",
                 "scheduledHours": "",
                 "scheduledStops": "0",
-                "operationalStopsMin": "0",
+                "operationalStopsMin": "5",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
-                "externalStopsMin": "0",
+                "externalStopsMin": "45",
                 "scheduledBoxes": "",
                 "producedBoxes": "",
                 "efficiencyLine": "0.00"
@@ -14524,21 +14738,21 @@
             "nocturno": {
               "lunes": {
                 "designCapacity": "45",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "30",
+                "scheduledHours": "12.5",
                 "scheduledStops": "564",
-                "operationalStopsMin": "0",
+                "operationalStopsMin": "14",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
-                "externalStopsMin": "0",
-                "scheduledBoxes": "",
-                "producedBoxes": "",
+                "externalStopsMin": "10",
+                "scheduledBoxes": "18750",
+                "producedBoxes": "17116",
                 "efficiencyLine": "0.00"
               },
               "martes": {
                 "designCapacity": "45",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "30",
+                "scheduledHours": "12.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14550,8 +14764,8 @@
               },
               "miércoles": {
                 "designCapacity": "45",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "30",
+                "scheduledHours": "12.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14563,8 +14777,8 @@
               },
               "jueves": {
                 "designCapacity": "45",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "30",
+                "scheduledHours": "12.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14576,8 +14790,8 @@
               },
               "viernes": {
                 "designCapacity": "45",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "30",
+                "scheduledHours": "12.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14589,8 +14803,8 @@
               },
               "sábado": {
                 "designCapacity": "45",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "30",
+                "scheduledHours": "12.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14712,21 +14926,21 @@
             "nocturno": {
               "lunes": {
                 "designCapacity": "43",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "43",
+                "scheduledHours": "12.5",
                 "scheduledStops": "1632",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
-                "externalStopsMin": "0",
-                "scheduledBoxes": "",
-                "producedBoxes": "",
+                "externalStopsMin": "-692",
+                "scheduledBoxes": "31250",
+                "producedBoxes": "0",
                 "efficiencyLine": "0.00"
               },
               "martes": {
                 "designCapacity": "43",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "43",
+                "scheduledHours": "12.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14738,8 +14952,8 @@
               },
               "miércoles": {
                 "designCapacity": "43",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "43",
+                "scheduledHours": "12.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14751,8 +14965,8 @@
               },
               "jueves": {
                 "designCapacity": "43",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "43",
+                "scheduledHours": "12.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14764,8 +14978,8 @@
               },
               "viernes": {
                 "designCapacity": "43",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "43",
+                "scheduledHours": "12.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -14777,8 +14991,8 @@
               },
               "sábado": {
                 "designCapacity": "43",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "43",
+                "scheduledHours": "12.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -15001,7 +15215,7 @@
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "315",
-                "externalStopsMin": "269",
+                "externalStopsMin": "359",
                 "scheduledBoxes": "32200",
                 "producedBoxes": "1520",
                 "efficiencyLine": "0.00"
@@ -15094,7 +15308,7 @@
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
-                "externalStopsMin": "0",
+                "externalStopsMin": "-912",
                 "scheduledBoxes": "",
                 "producedBoxes": "",
                 "efficiencyLine": "0.00"
@@ -15185,7 +15399,7 @@
                 "designCapacity": "60",
                 "realSpeed": "31",
                 "scheduledHours": "11.5",
-                "scheduledStops": "89760",
+                "scheduledStops": "139400",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "336",
@@ -15373,7 +15587,7 @@
                 "designCapacity": "60",
                 "realSpeed": "32",
                 "scheduledHours": "11.5",
-                "scheduledStops": "583050",
+                "scheduledStops": "986010",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
@@ -15652,21 +15866,21 @@
             "nocturno": {
               "lunes": {
                 "designCapacity": "50",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "50",
+                "scheduledHours": "12.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
                 "externalStopsMin": "0",
-                "scheduledBoxes": "",
-                "producedBoxes": "",
+                "scheduledBoxes": "10012",
+                "producedBoxes": "5815",
                 "efficiencyLine": "0.00"
               },
               "martes": {
                 "designCapacity": "50",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "50",
+                "scheduledHours": "12.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -15678,8 +15892,8 @@
               },
               "miércoles": {
                 "designCapacity": "50",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "50",
+                "scheduledHours": "12.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -15691,8 +15905,8 @@
               },
               "jueves": {
                 "designCapacity": "50",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "50",
+                "scheduledHours": "12.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -15704,8 +15918,8 @@
               },
               "viernes": {
                 "designCapacity": "50",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "50",
+                "scheduledHours": "12.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -15717,8 +15931,8 @@
               },
               "sábado": {
                 "designCapacity": "50",
-                "realSpeed": "",
-                "scheduledHours": "",
+                "realSpeed": "50",
+                "scheduledHours": "12.5",
                 "scheduledStops": "0",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
@@ -18528,7 +18742,25 @@
       "fixedCapacities": {},
       "_deletedIds": {}
     },
-    "planta-informes-operacionales": [],
+    "planta-informes-operacionales": [
+      {
+        "fecha": "2026-07-29",
+        "semana": 31,
+        "turno": "DIURNO",
+        "operador": "PEDRO MORGADO",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:00",
+        "finParada": "07:02",
+        "totalMin": "2",
+        "zona": "Llenado",
+        "falla": "FALLA DE PISTÓN DE COMPACTACIÓN LATERAL",
+        "orden": "",
+        "observaciones": "",
+        "id": 1785358876155
+      }
+    ],
     "planta-ordenes-trabajo": [
       {
         "id": "orden-sync-52001",
@@ -19382,6 +19614,390 @@
             "7": ""
           }
         }
+      },
+      "2026-07-27": {
+        "diurno": {
+          "GLUP COLA": {
+            "1": "",
+            "2": "",
+            "3": 7760,
+            "4": 1520,
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP FRESH": {
+            "1": 6560,
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP UVA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP KOLITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA VERDE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PONCHE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP CHICLE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA PARCHITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": 2700,
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANDARINA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY SANDIA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY TAMARINDO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANZANA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY PERA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          }
+        },
+        "nocturno": {
+          "GLUP COLA": {
+            "1": "",
+            "2": "",
+            "3": 26480,
+            "4": 4800,
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP FRESH": {
+            "1": 17120,
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP UVA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": 5772
+          },
+          "GLUP PIÑA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP KOLITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA VERDE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PONCHE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP CHICLE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA PARCHITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": 11400,
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANDARINA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY SANDIA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY TAMARINDO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANZANA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY PERA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          }
+        }
       }
     },
     "planta-pnc": {
@@ -19480,7 +20096,8 @@
         "1",
         "1784566101946",
         "1784568143186",
-        "1785014920340"
+        "1785014920340",
+        "1785358753845"
       ]
     },
     "planta-ordenes-trabajo": {
