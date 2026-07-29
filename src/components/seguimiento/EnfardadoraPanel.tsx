@@ -215,7 +215,7 @@ function ParadasControl({ readOnly = false }: { readOnly?: boolean }) {
   }, [data.stops, hasHydrated, syncToEfficiency]);
 
   useEffect(() => {
-    if (hasHydrated && date) {
+    if (hasHydrated && date instanceof Date && !isNaN(date.getTime())) {
       localStorage.setItem('eficiencia_enfardadoras_selected_date_v1', date.toISOString());
     }
   }, [date, hasHydrated]);
@@ -254,20 +254,26 @@ function ParadasControl({ readOnly = false }: { readOnly?: boolean }) {
     const startTimestamp = setMinutes(setHours(startOfDay(startCalendarDate), startH), startM);
     const endTimestamp = setMinutes(setHours(startOfDay(endCalendarDate), endH), endM);
 
+    console.log('[ENF] submit', { editingStop: !!editingStop, selectedLine, startTimestamp: startTimestamp.toISOString(), endTimestamp: endTimestamp.toISOString(), date: date.toISOString() });
+
     if (editingStop) {
-      setData((prev) => ({
-        ...prev,
-        stops: prev.stops.map((s) => s.id === editingStop.id ? {
-          ...s,
-          lineId: selectedLine,
-          startTime: startTimestamp.toISOString(),
-          endTime: endTimestamp.toISOString(),
-          reason,
-          equipment: selectedEquipment,
-          stopType: selectedStopType,
-          turno,
-        } : s),
-      }));
+      setData((prev) => {
+        const next = {
+          ...prev,
+          stops: prev.stops.map((s) => s.id === editingStop.id ? {
+            ...s,
+            lineId: selectedLine,
+            startTime: startTimestamp.toISOString(),
+            endTime: endTimestamp.toISOString(),
+            reason,
+            equipment: selectedEquipment,
+            stopType: selectedStopType,
+            turno,
+          } : s),
+        };
+        console.log('[ENF] edit setData', { stopsCount: next.stops.length });
+        return next;
+      });
     } else {
       const newStop: StopEvent = {
         id: `stop-${Date.now()}`,
@@ -279,7 +285,11 @@ function ParadasControl({ readOnly = false }: { readOnly?: boolean }) {
         stopType: selectedStopType,
         turno,
       };
-      setData((prev) => ({ ...prev, stops: [...prev.stops, newStop] }));
+      setData((prev) => {
+        const next = { ...prev, stops: [...prev.stops, newStop] };
+        console.log('[ENF] new setData', { stopsCount: next.stops.length });
+        return next;
+      });
     }
     setIsOpen(false);
     setEditingStop(null);

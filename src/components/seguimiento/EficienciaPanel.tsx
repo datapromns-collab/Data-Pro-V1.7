@@ -52,7 +52,10 @@ export default function EficienciaPanel({ storageKey, dateStorageKey = DATE_STOR
   useEffect(() => {
     const savedDate = localStorage.getItem(dateStorageKey);
     if (savedDate) {
-      setBaseDate(new Date(savedDate));
+      const parsed = new Date(savedDate);
+      if (parsed instanceof Date && !isNaN(parsed.getTime())) {
+        setBaseDate(parsed);
+      }
     } else {
       const today = new Date();
       setBaseDate(today);
@@ -151,7 +154,7 @@ export default function EficienciaPanel({ storageKey, dateStorageKey = DATE_STOR
   }, [baseDate]);
 
   const handleDateChange = (newDate: Date | undefined) => {
-    if (newDate) {
+    if (newDate instanceof Date && !isNaN(newDate.getTime())) {
       setBaseDate(newDate);
       localStorage.setItem(dateStorageKey, newDate.toISOString());
     }

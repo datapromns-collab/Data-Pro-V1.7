@@ -80,11 +80,13 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
   }, [namespace]);
 
   const sendToServer = useCallback(async (payload: any) => {
+    console.log('[RC] sendToServer', namespace, 'payload keys', typeof payload === 'object' && payload ? Object.keys(payload).slice(0, 5) : typeof payload);
     const res = await fetch(`/api/collection/${encodeURIComponent(namespace)}`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(payload),
     });
+    console.log('[RC] sendToServer result', namespace, 'status', res.status);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     return res;
   }, [namespace]);
@@ -93,20 +95,29 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
     if (sendingRef.current) return;
     sendingRef.current = true;
     try {
-      const queue = queueRef.current;
-      if (queue.length === 0) return;
-      const latest = queue[queue.length - 1];
-      if (latest.retries >= MAX_RETRIES) {
-        queueRef.current = [];
+      while (queueRef.current.length > 0) {
+        const current = queueRef.current[0];
+        if (current.retries >= MAX_RETRIES) {
+          queueRef.current.shift();
+          continue;
+        }
+        current.retries += 1;
+        try {
+          await sendToServer(current.payload);
+          queueRef.current.shift();
+        } catch {
+          if (queueRef.current.length > 1) {
+            const next = queueRef.current[1];
+            queueRef.current[1] = { ...next, payload: { ...(next.payload as object), ...(current.payload as object) } };
+          }
+          queueRef.current.shift();
+          break;
+        }
+      }
+      if (queueRef.current.length === 0) {
         savePendingQueue(namespace, []);
         pendingRef.current = false;
-        return;
       }
-      latest.retries += 1;
-      await sendToServer(latest.payload);
-      queueRef.current = [];
-      savePendingQueue(namespace, []);
-      pendingRef.current = false;
     } catch {
       pendingRef.current = true;
     } finally {
@@ -117,7 +128,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
         }, 150);
       }
     }
-  }, [sendToServer]);
+  }, [sendToServer, savePendingQueue, namespace]);
 
   const scheduleSave = useCallback((next: T, payload?: any) => {
     if (timerRef.current) clearTimeout(timerRef.current);
@@ -135,6 +146,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
   const setDataSynced = useCallback((updater: T | ((prev: T) => T)) => {
     setData((prev) => {
       const next = typeof updater === 'function' ? (updater as (p: T) => T)(prev) : updater;
+      console.log('[RC] setData', namespace, 'type', Array.isArray(next) ? 'array' : 'object', 'keys', Array.isArray(next) ? next.length : Object.keys(next as Record<string, any>).slice(0, 5));
       persistLocal(next);
       const payload = Array.isArray(next)
         ? { items: next, _deletedIds: Array.from(deletedRef.current) }
@@ -158,6 +170,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
       setData((prev) => {
         const delta = typeof patch === 'function' ? (patch as (p: T) => Partial<T>)(prev) : patch;
         const next = { ...(prev as object), ...(delta as object) } as T;
+        console.log('[RC] patchData', namespace, 'delta keys', typeof delta === 'object' && delta ? Object.keys(delta as Record<string, any>).slice(0, 5) : 'none');
         persistLocal(next);
         enqueue(delta);
         pendingRef.current = true;
@@ -238,9 +251,10 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
     }
     try {
       const res = await fetch(`/api/collection/${encodeURIComponent(namespace)}`, { cache: 'no-store' });
+      console.log('[RC] GET', namespace, 'status', res.status);
       if (res.ok) {
         const remoteRaw = await res.json();
-        console.log('[RC] load', namespace, 'status', res.status, 'keys', Array.isArray(remoteRaw) ? remoteRaw.length : Object.keys(remoteRaw).slice(0, 5));
+        console.log('[RC] GET raw', namespace, 'keys', Array.isArray(remoteRaw) ? remoteRaw.length : Object.keys(remoteRaw).slice(0, 5));
         const remote = Array.isArray(remoteRaw)
           ? remoteRaw
           : remoteRaw && typeof remoteRaw === 'object'
@@ -248,7 +262,10 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
             : remoteRaw;
         if (remote && typeof remote === 'object') {
           setData((prev) => {
-            if (pendingRef.current) return prev;
+            if (pendingRef.current) {
+              console.log('[RC] GET skip because pending', namespace);
+              return prev;
+            }
             if (Array.isArray(prev) && !Array.isArray(remote)) return prev;
             if (Array.isArray(remote) && Array.isArray(prev)) return applyDeleted(remote) as T;
             if (Array.isArray(remote)) return applyDeleted(remote) as T;
@@ -260,15 +277,15 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
               if (value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) continue;
               merged[key] = deepMerge(merged[key], value);
             }
-            console.log('[RC] merged', namespace, 'stops?', !!merged?.stops, 'keys', Object.keys(merged).slice(0, 5));
+            console.log('[RC] GET merged', namespace, 'keys', Object.keys(merged).slice(0, 5));
             return merged as T;
           });
         }
       } else {
-        console.log('[RC] load failed', namespace, 'status', res.status);
+        console.log('[RC] GET failed', namespace, 'status', res.status);
       }
     } catch (error) {
-      console.log('[RC] load error', namespace, error);
+      console.log('[RC] GET error', namespace, error);
     }
     firstLoadRef.current = false;
     setIsLoaded(true);

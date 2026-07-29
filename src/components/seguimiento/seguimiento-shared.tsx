@@ -51,7 +51,8 @@ export function createSeguimientoProvider<T extends SeguimientoPanelData = Segui
       console.log('[PROVIDER]', namespace, 'data', store.data, 'isLoaded', store.isLoaded);
     }, [store.data, store.isLoaded, namespace]);
 
-    if (typeof window !== "undefined" && !migratedRef.current && !localStorage.getItem(legacyMigrationKey)) {
+    useEffect(() => {
+      if (!store.isLoaded || migratedRef.current || typeof window === 'undefined') return;
       migratedRef.current = true;
 
       const hasLocalData = storageKeys
@@ -67,7 +68,10 @@ export function createSeguimientoProvider<T extends SeguimientoPanelData = Segui
       if (hasLocalData) {
         const migrated = migrate ? migrate(store.data) : store.data;
         if (migrated !== store.data) {
+          console.log('[PROVIDER] migrating', namespace, 'from localStorage');
           store.patchData(migrated);
+        } else {
+          console.log('[PROVIDER] no migration needed', namespace);
         }
 
         if (storageKeys) {
@@ -79,6 +83,8 @@ export function createSeguimientoProvider<T extends SeguimientoPanelData = Segui
             }
           });
         }
+      } else {
+        console.log('[PROVIDER] no local data', namespace);
       }
 
       try {
@@ -86,7 +92,7 @@ export function createSeguimientoProvider<T extends SeguimientoPanelData = Segui
       } catch {
         // ignore
       }
-    }
+    }, [store.isLoaded, store.data, store.patchData, namespace, storageKeys, migrate, legacyMigrationKey]);
 
     return (
       <ctx.Provider value={{ data: store.data, setData: store.setData, patchData: store.patchData, isLoaded: store.isLoaded }}>

@@ -6066,7 +6066,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-29T12:29:50.217Z"
+    "updatedAt": "2026-07-29T15:04:15.936Z"
   },
   "ordenesSap": [
     {
@@ -9090,6 +9090,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 13416
+        },
+        {
+          "fechaInicio": "2026-07-29",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -9110,6 +9121,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 19280
+        },
+        {
+          "fechaInicio": "2026-07-29",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -12527,7 +12549,7 @@
                 "designCapacity": "60",
                 "realSpeed": "32",
                 "scheduledHours": "11.5",
-                "scheduledStops": "257270",
+                "scheduledStops": "289900",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "300",
@@ -13264,7 +13286,7 @@
                 "designCapacity": "45",
                 "realSpeed": "",
                 "scheduledHours": "",
-                "scheduledStops": "0",
+                "scheduledStops": "4620",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
@@ -15163,7 +15185,7 @@
                 "designCapacity": "60",
                 "realSpeed": "31",
                 "scheduledHours": "11.5",
-                "scheduledStops": "68085",
+                "scheduledStops": "89420",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "336",
@@ -15351,7 +15373,7 @@
                 "designCapacity": "60",
                 "realSpeed": "32",
                 "scheduledHours": "11.5",
-                "scheduledStops": "407100",
+                "scheduledStops": "580290",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
@@ -17054,16 +17076,131 @@
     },
     "jarabes": {
       "ubb": {
-        "2026-07-13": {}
+        "2026-07-13": {},
+        "2026-07-14": {},
+        "2026-07-27": {
+          "GLUP COLA": {
+            "inicial": "45.47",
+            "preparado": "42",
+            "final": "58.50"
+          },
+          "GLUP FRESH": {
+            "inicial": "6",
+            "preparado": "12",
+            "final": "0.52"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "40",
+            "preparado": "240",
+            "final": "17"
+          },
+          "GLUP UVA": {
+            "preparado": "22",
+            "final": "12.15"
+          }
+        },
+        "2026-07-28": {
+          "GLUP COLA": {
+            "inicial": "58.50",
+            "preparado": "48",
+            "final": "72.8"
+          },
+          "GLUP FRESH": {
+            "inicial": "0.52",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "17",
+            "preparado": "280",
+            "final": "28"
+          },
+          "GLUP UVA": {
+            "inicial": "12.15",
+            "preparado": "33",
+            "final": "33"
+          },
+          "GLUP NARANJA": {
+            "preparado": "33",
+            "final": "1.6"
+          },
+          "GLUP KOLITA": {
+            "preparado": "18",
+            "final": "18"
+          }
+        }
       },
       "sugar": {
-        "2026-07-13": {}
+        "2026-07-13": {},
+        "2026-07-14": {},
+        "2026-07-27": {
+          "PORTUGUESA": {
+            "invInicialSacos": "7920",
+            "recepcionSacos": "5120",
+            "invFinalSacos": "10000"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2400"
+          }
+        },
+        "2026-07-28": {
+          "PORTUGUESA": {
+            "invInicialSacos": "10000",
+            "recepcionSacos": "2840",
+            "invFinalSacos": "9400"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2400"
+          }
+        }
       },
       "tanques": {
-        "2026-07-13": {}
+        "2026-07-13": {},
+        "2026-07-14": {},
+        "2026-07-27": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "289",
+            "invFinalSacos": "376"
+          },
+          "Sala 1": {
+            "invInicialSacos": "1162",
+            "invFinalSacos": "931"
+          },
+          "sala 2": {
+            "invInicialSacos": "",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-07-28": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "376",
+            "invFinalSacos": "314"
+          },
+          "Sala 1": {
+            "invInicialSacos": "931",
+            "invFinalSacos": "226"
+          }
+        }
       },
-      "realKgPerSack": {},
-      "costoAzucar": {},
+      "realKgPerSack": {
+        "2026-07-27": "50.29",
+        "2026-07-28": "50.29"
+      },
+      "costoAzucar": {
+        "2026-07-28": "1.43"
+      },
       "_deletedIds": {}
     },
     "seguimiento-etiquetadora": {
@@ -18391,88 +18528,7 @@
       "fixedCapacities": {},
       "_deletedIds": {}
     },
-    "planta-informes-operacionales": [
-      {
-        "fecha": "2026-07-20",
-        "semana": 30,
-        "turno": "DIURNO",
-        "operador": "",
-        "linea": "Línea 1",
-        "equipo": "llenadora",
-        "tipoParada": "MECÁNICO",
-        "inicioParada": "20:00",
-        "finParada": "21:00",
-        "totalMin": "60",
-        "zona": "Llenado",
-        "falla": "",
-        "orden": "5005",
-        "observaciones": "544",
-        "id": 1784566101946,
-        "fechaEmision": "2026-07-20",
-        "solicitante": "",
-        "aviso": "",
-        "maquina": "llenadora",
-        "fechaParada": "2026-07-20",
-        "inicioMtto": "19:00",
-        "finMtto": "20:00",
-        "tMtto": "",
-        "mtto": "",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
-        "otFechaParada": "",
-        "otInicioParada": "18:00",
-        "otFinParada": "21:00"
-      },
-      {
-        "fecha": "2026-07-20",
-        "semana": 30,
-        "turno": "DIURNO",
-        "operador": "",
-        "linea": "Línea 1",
-        "equipo": "",
-        "tipoParada": "MECÁNICO",
-        "inicioParada": "16:00",
-        "finParada": "17:00",
-        "totalMin": "60",
-        "zona": "Llenado",
-        "falla": "",
-        "orden": "5555",
-        "observaciones": "",
-        "id": 1784568143186,
-        "fechaEmision": "2026-07-20",
-        "solicitante": "",
-        "aviso": "",
-        "maquina": "",
-        "otFechaParada": "",
-        "inicioMtto": "",
-        "finMtto": "",
-        "otInicioParada": "",
-        "tMtto": "",
-        "otFinParada": "",
-        "mtto": "",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": ""
-      },
-      {
-        "fecha": "2026-07-20",
-        "semana": 30,
-        "turno": "DIURNO",
-        "operador": "",
-        "linea": "Línea 2",
-        "equipo": "LLENADORA",
-        "tipoParada": "PTAB",
-        "inicioParada": "22:00",
-        "finParada": "23:00",
-        "totalMin": "60",
-        "zona": "Llenado",
-        "falla": "",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785014920340
-      }
-    ],
+    "planta-informes-operacionales": [],
     "planta-ordenes-trabajo": [
       {
         "id": "orden-sync-52001",
@@ -19421,7 +19477,10 @@
         "1784553585913",
         "1784554339534",
         "1784554694921",
-        "1"
+        "1",
+        "1784566101946",
+        "1784568143186",
+        "1785014920340"
       ]
     },
     "planta-ordenes-trabajo": {
@@ -19439,7 +19498,8 @@
     "planta-hrs-pagadas": {},
     "planta-hrs-programadas-dt": {},
     "planta-velocidades-bpm": {},
-    "planta-hrs-pagadas-dt": {}
+    "planta-hrs-pagadas-dt": {},
+    "jarabes": {}
   },
   "_deletedOrdenesSapIds": []
 }

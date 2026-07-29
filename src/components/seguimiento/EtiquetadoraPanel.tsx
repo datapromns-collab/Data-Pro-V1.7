@@ -206,7 +206,7 @@ function ParadasControl({ readOnly = false }: { readOnly?: boolean }) {
   }, [data.stops, hasHydrated, syncToEfficiency]);
 
   useEffect(() => {
-    if (hasHydrated && date) {
+    if (hasHydrated && date instanceof Date && !isNaN(date.getTime())) {
       localStorage.setItem(DATE_STORAGE_KEY, date.toISOString());
     }
   }, [date, hasHydrated]);
