@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table";
 import { StopEvent } from "@/lib/hpv2-types";
 import { format, differenceInMinutes } from "date-fns";
+import { getTurnoForDate } from "@/lib/hpv2-efficiency-sync";
 import { Button } from "@/components/ui/button";
 import { Edit, Trash2 } from "lucide-react";
 
@@ -26,7 +27,11 @@ interface LineStopTableProps {
 
 export function LineStopTable({ lineName, stops, onEdit, onDelete, readOnly = false }: LineStopTableProps) {
   const sortedStops = useMemo(() => {
-    return [...stops].sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
+    return [...stops].map(stop => {
+      const start = new Date(stop.startTime);
+      const turno = getTurnoForDate(start);
+      return { ...stop, turno };
+    }).sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
   }, [stops]);
 
   const totalMinutes = sortedStops.reduce((acc, stop) => {

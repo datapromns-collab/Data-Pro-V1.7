@@ -41,6 +41,20 @@ export const emptyWeekData = (): Record<DayOfWeek, EfficiencyDayData> => ({
   domingo: emptyDayData(),
 });
 
+const getStartMinutes = (date: Date) => date.getHours() * 60 + date.getMinutes();
+
+export const getTurnoForDate = (date: Date): 'Diurno' | 'Nocturno' => {
+  const minutes = getStartMinutes(date);
+  return minutes >= 420 && minutes <= 1110 ? 'Diurno' : 'Nocturno';
+};
+
+export const getProductionDateForDate = (date: Date): Date => {
+  const minutes = getStartMinutes(date);
+  if (minutes >= 420 && minutes <= 1110) return date;
+  if (date.getHours() < 7) return subDays(date, 1);
+  return date;
+};
+
 const resetStops = (day: EfficiencyDayData): void => {
   day.operationalStopsMin = '0';
   day.breakdownStopsMin = '0';
@@ -64,8 +78,7 @@ export function computeEfficiencyStore(
   const affectedWeeks = new Set<string>();
   stops.forEach((stop) => {
     const start = new Date(stop.startTime);
-    let productionDate = start;
-    if (getHours(start) < 7) productionDate = subDays(start, 1);
+    const productionDate = getProductionDateForDate(start);
     affectedWeeks.add(weekIdForDate(productionDate));
   });
 
@@ -84,12 +97,11 @@ export function computeEfficiencyStore(
 
   stops.forEach((stop) => {
     const start = new Date(stop.startTime);
-    let productionDate = start;
-    if (getHours(start) < 7) productionDate = subDays(start, 1);
+    const productionDate = getProductionDateForDate(start);
 
     const weekId = weekIdForDate(productionDate);
     const dayName = format(productionDate, 'eeee', { locale: es }).toLowerCase() as DayOfWeek;
-    const shift = stop.turno.toLowerCase() as 'diurno' | 'nocturno';
+    const shift = getTurnoForDate(start).toLowerCase() as 'diurno' | 'nocturno';
     const lineId = stop.lineId;
     const duration = differenceInMinutes(new Date(stop.endTime), start);
 

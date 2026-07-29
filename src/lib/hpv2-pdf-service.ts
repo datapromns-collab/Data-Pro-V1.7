@@ -3,6 +3,7 @@ import autoTable from 'jspdf-autotable';
 import { format, differenceInMinutes, subDays, startOfWeek, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { StopEvent, ProductionLine, EfficiencyDayData, DayOfWeek, EfficiencyMetric } from './hpv2-types';
+import { getTurnoForDate } from './hpv2-efficiency-sync';
 
 const COLORS = {
   primary: [0, 38, 62],    // #00263E
@@ -64,12 +65,13 @@ export function generateDailyReport(date: Date, stops: StopEvent[], lines: Produ
       const start = new Date(stop.startTime);
       const end = new Date(stop.endTime);
       const durationHours = differenceInMinutes(end, start) / 60;
+      const turno = getTurnoForDate(start);
       return [
         format(start, "HH:mm"),
         format(end, "HH:mm"),
         durationHours.toFixed(2),
         stop.reason,
-        stop.turno,
+        turno,
         stop.equipment,
         stop.stopType
       ];

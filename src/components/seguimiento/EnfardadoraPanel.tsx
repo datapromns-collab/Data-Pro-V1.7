@@ -37,7 +37,7 @@ import { generateDailyReport, generateWeeklyReport } from "@/lib/hpv2-pdf-servic
 import jsPDF from "jspdf";
 import EficienciaPanel from "./EficienciaPanel";
 import CapacidadesPanel from "./CapacidadesPanel";
-import { EQUIPOS, TIPOS, DAYS, computeEfficiencyStore } from "@/lib/hpv2-efficiency-sync";
+import { EQUIPOS, TIPOS, DAYS, computeEfficiencyStore, getTurnoForDate, getProductionDateForDate } from "@/lib/hpv2-efficiency-sync";
 import {
   SeguimientoPanelData,
   createSeguimientoPanelContext,
@@ -185,6 +185,10 @@ function ParadasControl({ readOnly = false }: { readOnly?: boolean }) {
   const [selectedEquipment, setSelectedEquipment] = useState<string>("");
   const [selectedStopType, setSelectedStopType] = useState<string>("");
 
+  useEffect(() => {
+    console.log('[ENF] ParadasControl data', { stopsCount: data?.stops?.length, hasHydrated, date: date?.toISOString() });
+  }, [data?.stops, hasHydrated, date]);
+
   const syncToEfficiency = useCallback((allStops: StopEvent[]) => {
     setData((prev) => ({
       ...prev,
@@ -242,13 +246,10 @@ function ParadasControl({ readOnly = false }: { readOnly?: boolean }) {
     const [endH, endM] = endTimeStr.split(':').map(Number);
 
     const startMinutesTotal = startH * 60 + startM;
-    const turno = (startMinutesTotal >= 420 && startMinutesTotal < 1110) ? "Diurno" : "Nocturno";
+    const turno = getTurnoForDate(new Date(0, 0, 0, startH, startM));
 
     let startCalendarDate = date;
-    if (startH < 7) startCalendarDate = addDays(date, 1);
-
     let endCalendarDate = date;
-    if (endH < 7) endCalendarDate = addDays(date, 1);
 
     const startTimestamp = setMinutes(setHours(startOfDay(startCalendarDate), startH), startM);
     const endTimestamp = setMinutes(setHours(startOfDay(endCalendarDate), endH), endM);
@@ -297,10 +298,9 @@ function ParadasControl({ readOnly = false }: { readOnly?: boolean }) {
 
   const isStopInProductionDay = (stop: StopEvent, prodDate: Date) => {
     const stopStart = new Date(stop.startTime);
-    const startLimit = setMinutes(setHours(startOfDay(prodDate), 7), 0);
-    const endLimit = addDays(startLimit, 1);
-    const stopLocal = new Date(stopStart.getTime() + stopStart.getTimezoneOffset() * 60000);
-    return isWithinInterval(stopLocal, { start: startLimit, end: endLimit });
+    const stopDay = startOfDay(stopStart);
+    const selectedDay = startOfDay(prodDate);
+    return stopDay.getTime() === selectedDay.getTime();
   };
 
   const handlePreviewDaily = () => {
@@ -519,6 +519,7 @@ function ParadasControl({ readOnly = false }: { readOnly?: boolean }) {
             date &&
             isStopInProductionDay(s, date)
           );
+          console.log('[ENF] render line', line.id, 'lineStops', lineStops.length, 'all stops', data.stops.length, 'date', date?.toISOString());
           return (
               <LineStopTable
                 key={line.id}

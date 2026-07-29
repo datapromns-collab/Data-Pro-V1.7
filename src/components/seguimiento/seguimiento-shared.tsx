@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext } from "react";
+import { createContext, useContext, useEffect } from "react";
 import { useRemoteCollection } from "@/hooks/use-remote-collection";
 import { StopEvent, EfficiencyStore, FixedCapacityStore } from "@/lib/hpv2-types";
 
@@ -46,6 +46,10 @@ export function createSeguimientoProvider<T extends SeguimientoPanelData = Segui
     const store = useRemoteCollection<T>(namespace, initial);
     const migratedRef = { current: false } as { current: boolean };
     const legacyMigrationKey = `seguimiento-migrated-${namespace}`;
+
+    useEffect(() => {
+      console.log('[PROVIDER]', namespace, 'data', store.data, 'isLoaded', store.isLoaded);
+    }, [store.data, store.isLoaded, namespace]);
 
     if (typeof window !== "undefined" && !migratedRef.current && !localStorage.getItem(legacyMigrationKey)) {
       migratedRef.current = true;

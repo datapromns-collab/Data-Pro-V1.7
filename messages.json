@@ -1,6 +1,17 @@
 {
   "messages": [
     {
+      "id": "2026-07-28T21:50:24.056Z-z61vaz9",
+      "title": "Modificación PDP L2",
+      "message": "disponible PDP L2 modificado",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-07-28T21:50:24.056Z"
+    },
+    {
       "id": "2026-07-23T22:24:07.654Z-yajohy2",
       "title": "PDP S31",
       "message": "Ya se encuentra disponible el PDP de la semana 31",
@@ -45,6 +56,17 @@
       "createdAt": "2026-07-18T13:53:22.527Z"
     },
     {
+      "id": "2026-07-28T21:50:24.056Z-h5rl9dr",
+      "title": "Modificación PDP L2",
+      "message": "disponible PDP L2 modificado",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-07-28T21:50:24.056Z"
+    },
+    {
       "id": "2026-07-23T22:24:07.654Z-4jc7klh",
       "title": "PDP S31",
       "message": "Ya se encuentra disponible el PDP de la semana 31",
@@ -87,6 +109,17 @@
       "recipient": "maria.mds",
       "read": false,
       "createdAt": "2026-07-18T13:53:22.527Z"
+    },
+    {
+      "id": "2026-07-28T21:50:24.056Z-fdmr1ma",
+      "title": "Modificación PDP L2",
+      "message": "disponible PDP L2 modificado",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-07-28T21:50:24.056Z"
     },
     {
       "id": "2026-07-23T22:24:07.654Z-qt069d4",
@@ -166,6 +199,17 @@
       "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
+      "id": "2026-07-28T21:50:24.056Z-o2y86z2",
+      "title": "Modificación PDP L2",
+      "message": "disponible PDP L2 modificado",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-07-28T21:50:24.056Z"
+    },
+    {
       "id": "2026-07-23T22:24:07.654Z-7xpzkt4",
       "title": "PDP S31",
       "message": "Ya se encuentra disponible el PDP de la semana 31",
@@ -221,6 +265,17 @@
       "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
+      "id": "2026-07-28T21:50:24.056Z-6du6577",
+      "title": "Modificación PDP L2",
+      "message": "disponible PDP L2 modificado",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodtj.mds",
+      "read": false,
+      "createdAt": "2026-07-28T21:50:24.056Z"
+    },
+    {
       "id": "2026-07-23T22:24:07.654Z-t7h00va",
       "title": "PDP S31",
       "message": "Ya se encuentra disponible el PDP de la semana 31",
@@ -274,6 +329,17 @@
       "recipient": "prodtj.mds",
       "read": true,
       "createdAt": "2026-07-18T13:47:27.461Z"
+    },
+    {
+      "id": "2026-07-28T21:50:24.056Z-a91klpn",
+      "title": "Modificación PDP L2",
+      "message": "disponible PDP L2 modificado",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "procj.mds",
+      "read": false,
+      "createdAt": "2026-07-28T21:50:24.056Z"
     },
     {
       "id": "2026-07-23T22:24:07.654Z-yu7db1w",
@@ -342,6 +408,17 @@
       "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
+      "id": "2026-07-28T21:50:24.056Z-8lim3kf",
+      "title": "Modificación PDP L2",
+      "message": "disponible PDP L2 modificado",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-07-28T21:50:24.056Z"
+    },
+    {
       "id": "2026-07-23T22:24:07.654Z-dzw10rn",
       "title": "PDP S31",
       "message": "Ya se encuentra disponible el PDP de la semana 31",
@@ -395,6 +472,17 @@
       "recipient": "cald.mds",
       "read": false,
       "createdAt": "2026-07-18T13:47:27.461Z"
+    },
+    {
+      "id": "2026-07-28T21:50:24.056Z-jmk3smp",
+      "title": "Modificación PDP L2",
+      "message": "disponible PDP L2 modificado",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt.mds",
+      "read": false,
+      "createdAt": "2026-07-28T21:50:24.056Z"
     },
     {
       "id": "2026-07-23T22:24:07.654Z-16b05tg",
@@ -452,6 +540,17 @@
       "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
+      "id": "2026-07-28T21:50:24.056Z-pfwzf7o",
+      "title": "Modificación PDP L2",
+      "message": "disponible PDP L2 modificado",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-07-28T21:50:24.056Z"
+    },
+    {
       "id": "2026-07-23T22:24:07.654Z-wdjclyq",
       "title": "PDP S31",
       "message": "Ya se encuentra disponible el PDP de la semana 31",
@@ -505,6 +604,17 @@
       "recipient": "proc.mds",
       "read": false,
       "createdAt": "2026-07-18T13:47:27.461Z"
+    },
+    {
+      "id": "2026-07-28T21:50:24.056Z-e534m9q",
+      "title": "Modificación PDP L2",
+      "message": "disponible PDP L2 modificado",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "g.tec.mds",
+      "read": false,
+      "createdAt": "2026-07-28T21:50:24.056Z"
     },
     {
       "id": "2026-07-23T22:24:07.654Z-v13wjr9",
@@ -562,6 +672,17 @@
       "createdAt": "2026-07-18T13:47:27.461Z"
     },
     {
+      "id": "2026-07-28T21:50:24.056Z-mjp6rsn",
+      "title": "Modificación PDP L2",
+      "message": "disponible PDP L2 modificado",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "enf.mds",
+      "read": true,
+      "createdAt": "2026-07-28T21:50:24.056Z"
+    },
+    {
       "id": "2026-07-23T22:24:07.654Z-h46qcm8",
       "title": "PDP S31",
       "message": "Ya se encuentra disponible el PDP de la semana 31",
@@ -615,6 +736,17 @@
       "recipient": "enf.mds",
       "read": true,
       "createdAt": "2026-07-18T13:47:27.461Z"
+    },
+    {
+      "id": "2026-07-28T21:50:24.056Z-xemhqr2",
+      "title": "Modificación PDP L2",
+      "message": "disponible PDP L2 modificado",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "etq.mds",
+      "read": false,
+      "createdAt": "2026-07-28T21:50:24.056Z"
     },
     {
       "id": "2026-07-23T22:24:07.654Z-o1euero",

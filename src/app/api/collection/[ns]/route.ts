@@ -267,7 +267,7 @@ export async function POST(request: Request) {
       result = applyDeletedIds(merged, deletedIds);
       setDeletedIds(db, ns, deletedIds);
     } else if (incomingItems && typeof incomingItems === 'object') {
-      const base = cleanExisting(ns, current);
+      const base = cleanExisting(ns, current) || {};
       const incomingClean = sanitizeObjectKeys(ns, incomingItems);
       const merged: any = { ...base };
       for (const key of Object.keys(incomingClean)) {

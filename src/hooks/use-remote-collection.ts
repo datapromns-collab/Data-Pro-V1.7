@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 
 const POLL_INTERVAL = 15000;
 const PENDING_KEY = (namespace: string) => `rc_pending_${namespace}`;
+const MAX_RETRIES = 3;
 
 type PendingOperation = {
   id: string;
@@ -95,6 +96,13 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
       const queue = queueRef.current;
       if (queue.length === 0) return;
       const latest = queue[queue.length - 1];
+      if (latest.retries >= MAX_RETRIES) {
+        queueRef.current = [];
+        savePendingQueue(namespace, []);
+        pendingRef.current = false;
+        return;
+      }
+      latest.retries += 1;
       await sendToServer(latest.payload);
       queueRef.current = [];
       savePendingQueue(namespace, []);
@@ -232,6 +240,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
       const res = await fetch(`/api/collection/${encodeURIComponent(namespace)}`, { cache: 'no-store' });
       if (res.ok) {
         const remoteRaw = await res.json();
+        console.log('[RC] load', namespace, 'status', res.status, 'keys', Array.isArray(remoteRaw) ? remoteRaw.length : Object.keys(remoteRaw).slice(0, 5));
         const remote = Array.isArray(remoteRaw)
           ? remoteRaw
           : remoteRaw && typeof remoteRaw === 'object'
@@ -251,12 +260,15 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
               if (value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) continue;
               merged[key] = deepMerge(merged[key], value);
             }
+            console.log('[RC] merged', namespace, 'stops?', !!merged?.stops, 'keys', Object.keys(merged).slice(0, 5));
             return merged as T;
           });
         }
+      } else {
+        console.log('[RC] load failed', namespace, 'status', res.status);
       }
-    } catch {
-      // ignore
+    } catch (error) {
+      console.log('[RC] load error', namespace, error);
     }
     firstLoadRef.current = false;
     setIsLoaded(true);
