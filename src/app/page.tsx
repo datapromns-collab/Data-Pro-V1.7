@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
 import Image from "next/image";
 import { 
   Plus, 
@@ -102,6 +102,19 @@ const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Lín
 const normalizarHora = (valor: string): string => {
   if (!valor) return '';
   const s = String(valor).trim();
+  const soloDigitos = s.replace(/[^0-9]/g, '');
+
+  if (soloDigitos.length >= 4) {
+    const hh = Math.min(Math.max(parseInt(soloDigitos.slice(0, 2), 10), 0), 23);
+    const mm = Math.min(Math.max(parseInt(soloDigitos.slice(2, 4), 10), 0), 59);
+    return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+  }
+
+  if (soloDigitos.length === 3) {
+    const hh = Math.min(Math.max(parseInt(soloDigitos.slice(0, 2), 10), 0), 23);
+    const mm = Math.min(Math.max(parseInt(soloDigitos.slice(2), 10), 0), 59);
+    return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+  }
 
   const extraerDeFecha = (str: string): string | null => {
     const match = str.match(/(\d{1,2})[:\s](\d{1,2})(?::(\d{1,2}))?/);
@@ -122,27 +135,17 @@ const normalizarHora = (valor: string): string => {
   const desdeFecha = extraerDeFecha(s);
   if (desdeFecha) return desdeFecha;
 
-  const soloDigitos = s.replace(/[^0-9]/g, '');
-  if (soloDigitos.length >= 8) {
-    const hh = Math.min(Math.max(parseInt(soloDigitos.slice(0, 2), 10), 0), 23);
-    const mm = Math.min(Math.max(parseInt(soloDigitos.slice(2, 4), 10), 0), 59);
-    return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
+  if (soloDigitos.length <= 2) {
+    const h = Math.min(Math.max(parseInt(soloDigitos, 10), 0), 23);
+    return String(h).padStart(2, '0');
   }
 
-  let v = soloDigitos.slice(0, 4);
-  if (v.length >= 3) {
-    const h = parseInt(v.slice(0, 2), 10);
-    const m = parseInt(v.slice(2), 10);
-    const hh = Math.min(Math.max(h, 0), 23);
-    const mm = Math.min(Math.max(m, 0), 59);
-    return `${String(hh).padStart(2, '0')}:${String(mm).padStart(2, '0')}`;
-  }
-  if (v.length === 1 || v.length === 2) {
-    const h = parseInt(v, 10);
-    if (h > 23) return '23';
-    return v;
-  }
   return '';
+};
+
+const onChangeHora = (setter: (val: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+  const digits = e.target.value.replace(/[^0-9]/g, '').slice(0, 4);
+  setter(digits.length >= 3 ? `${digits.slice(0, 2)}:${digits.slice(2)}` : digits);
 };
 
 const hora = (valor: string): string => {
@@ -2166,8 +2169,8 @@ export default function PlannerPage() {
                                                 <TableCell className="px-2 py-2"><Input value={editForm.linea || ''} onChange={(e) => setEditForm({...editForm, linea: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                 <TableCell className="px-2 py-2"><Input value={editForm.equipo || ''} onChange={(e) => setEditForm({...editForm, equipo: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                 <TableCell className="px-2 py-2"><Input value={editForm.tipoParada || ''} onChange={(e) => setEditForm({...editForm, tipoParada: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                                  <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={editForm.inicioParada || ''} onChange={(e) => setEditForm({...editForm, inicioParada: normalizarHora(e.target.value)})} className="h-8 text-[10px] w-24" /></TableCell>
-                                                  <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={editForm.finParada || ''} onChange={(e) => setEditForm({...editForm, finParada: normalizarHora(e.target.value)})} className="h-8 text-[10px] w-24" /></TableCell>
+                                                   <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={editForm.inicioParada || ''} onChange={onChangeHora((v) => setEditForm({...editForm, inicioParada: v}))} className="h-8 text-[10px] w-24" /></TableCell>
+                                                   <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={editForm.finParada || ''} onChange={onChangeHora((v) => setEditForm({...editForm, finParada: v}))} className="h-8 text-[10px] w-24" /></TableCell>
                                                   <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" value={editForm.totalMin ?? ''} readOnly className="h-8 text-[10px] w-16 bg-slate-100" /></TableCell>
                                                  <TableCell className="px-2 py-2 max-w-[180px]"><Input value={editForm.falla || ''} onChange={(e) => setEditForm({...editForm, falla: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
                                                 <TableCell className="px-2 py-2"><Input value={editForm.orden || ''} onChange={(e) => setEditForm({...editForm, orden: e.target.value})} className="h-8 text-[10px]" /></TableCell>
@@ -2329,10 +2332,10 @@ export default function PlannerPage() {
                                                  <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap sticky left-[150px] z-20 bg-white even:bg-slate-50/60">{rowEdit.linea}</TableCell>
                                                  {editable('aviso') ? <TableCell className="px-2 py-2"><Input value={rowEdit.aviso || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, aviso: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.aviso}</TableCell>}
                                                  <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.maquina}</TableCell>
-                                                    {editable('inicioParada') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={hora(rowEdit.inicioParada) || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioParada: normalizarHora(e.target.value)}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{hora(rowEdit.inicioParada)}</TableCell>}
-                                                    {editable('inicioMtto') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={hora(rowEdit.inicioMtto) || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioMtto: normalizarHora(e.target.value)}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{hora(rowEdit.inicioMtto)}</TableCell>}
-                                                   {editable('finMtto') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={hora(rowEdit.finMtto) || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finMtto: normalizarHora(e.target.value)}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{hora(rowEdit.finMtto)}</TableCell>}
-                                                    {editable('finParada') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" value={hora(rowEdit.finParada) || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finParada: normalizarHora(e.target.value)}})} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{hora(rowEdit.finParada)}</TableCell>}
+                                                     {editable('inicioParada') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={hora(rowEdit.inicioParada) || ''} onChange={onChangeHora((v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioParada: v}}))} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{hora(rowEdit.inicioParada)}</TableCell>}
+                                                     {editable('inicioMtto') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={hora(rowEdit.inicioMtto) || ''} onChange={onChangeHora((v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioMtto: v}}))} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{hora(rowEdit.inicioMtto)}</TableCell>}
+                                                    {editable('finMtto') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={hora(rowEdit.finMtto) || ''} onChange={onChangeHora((v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finMtto: v}}))} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{hora(rowEdit.finMtto)}</TableCell>}
+                                                     {editable('finParada') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={hora(rowEdit.finParada) || ''} onChange={onChangeHora((v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finParada: v}}))} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{hora(rowEdit.finParada)}</TableCell>}
                                                     <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums">{tMttoCalc || rowEdit.tMtto}</TableCell>
                                                      <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums">{tParadaCalc || rowEdit.tParada}</TableCell>
                                                       <TableCell className="px-2 py-2">
@@ -3700,11 +3703,11 @@ export default function PlannerPage() {
                  </div>
                  <div className="space-y-2">
                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Parada</label>
-                  <Input type="text" inputMode="numeric" placeholder="HH:MM" value={plantaFormData.inicioParada} onChange={(e) => setPlantaFormData({...plantaFormData, inicioParada: normalizarHora(e.target.value)})} className="h-9 text-[11px]" />
+                   <Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={plantaFormData.inicioParada} onChange={onChangeHora((v) => setPlantaFormData({...plantaFormData, inicioParada: v}))} className="h-9 text-[11px]" />
                 </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Parada</label>
-                  <Input type="text" inputMode="numeric" placeholder="HH:MM" value={plantaFormData.finParada} onChange={(e) => setPlantaFormData({...plantaFormData, finParada: normalizarHora(e.target.value)})} className="h-9 text-[11px]" />
+                   <Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={plantaFormData.finParada} onChange={onChangeHora((v) => setPlantaFormData({...plantaFormData, finParada: v}))} className="h-9 text-[11px]" />
                 </div>
                  <div className="space-y-2">
                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Total (min)</label>
@@ -3775,15 +3778,15 @@ export default function PlannerPage() {
                  </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Mantenimiento</label>
-                    <Input type="text" inputMode="numeric" placeholder="HH:MM" value={ordenFormData.inicioMtto} onChange={(e) => setOrdenFormData({...ordenFormData, inicioMtto: normalizarHora(e.target.value)})} className="h-9 text-[11px]" />
+                     <Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={ordenFormData.inicioMtto} onChange={onChangeHora((v) => setOrdenFormData({...ordenFormData, inicioMtto: v}))} className="h-9 text-[11px]" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Mantenimiento</label>
-                    <Input type="text" inputMode="numeric" placeholder="HH:MM" value={ordenFormData.finMtto} onChange={(e) => setOrdenFormData({...ordenFormData, finMtto: normalizarHora(e.target.value)})} className="h-9 text-[11px]" />
+                     <Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={ordenFormData.finMtto} onChange={onChangeHora((v) => setOrdenFormData({...ordenFormData, finMtto: v}))} className="h-9 text-[11px]" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Parada</label>
-                    <Input type="text" inputMode="numeric" placeholder="HH:MM" value={ordenFormData.inicioParada} onChange={(e) => setOrdenFormData({...ordenFormData, inicioParada: normalizarHora(e.target.value)})} className="h-9 text-[11px]" />
+                     <Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={ordenFormData.inicioParada} onChange={onChangeHora((v) => setOrdenFormData({...ordenFormData, inicioParada: v}))} className="h-9 text-[11px]" />
                   </div>
                  <div className="space-y-2">
                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">T-MTTO</label>
@@ -3791,7 +3794,7 @@ export default function PlannerPage() {
                  </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Parada</label>
-                    <Input type="text" inputMode="numeric" placeholder="HH:MM" value={ordenFormData.finParada} onChange={(e) => setOrdenFormData({...ordenFormData, finParada: normalizarHora(e.target.value)})} className="h-9 text-[11px]" />
+                     <Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={ordenFormData.finParada} onChange={onChangeHora((v) => setOrdenFormData({...ordenFormData, finParada: v}))} className="h-9 text-[11px]" />
                   </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Tipo de Parada</label>
