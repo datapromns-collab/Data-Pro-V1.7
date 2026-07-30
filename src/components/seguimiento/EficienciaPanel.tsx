@@ -16,7 +16,7 @@ import { startOfWeek, addDays, subDays, format, endOfWeek } from "date-fns";
 import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
 import { useSeguimiento } from "./EnfardadoraPanel";
-import { DAYS, emptyDayData, emptyWeekData } from "@/lib/hpv2-efficiency-sync";
+import { DAYS, emptyDayData, emptyWeekData, computeEfficiencyStore } from "@/lib/hpv2-efficiency-sync";
 
 const DATE_STORAGE_KEY = 'eficiencia_enfardadoras_selected_date_v1';
 
@@ -40,6 +40,7 @@ export default function EficienciaPanel({ storageKey, dateStorageKey = DATE_STOR
   activeWeekDataRef.current = activeWeekData;
   const initialHydratedRef = useRef(false);
   const editedWeeksRef = useRef<Set<string>>(new Set());
+  const lastProcessedRef = useRef<{ baseDate: string | null; snapshot: string }>({ baseDate: null, snapshot: '' });
 
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
@@ -65,6 +66,18 @@ export default function EficienciaPanel({ storageKey, dateStorageKey = DATE_STOR
 
   useEffect(() => {
     if (!baseDate) return;
+    const weekId = getWeekId(baseDate);
+    const currentKey = `${baseDate.toISOString()}|${weekId}`;
+    const currentSnapshot = JSON.stringify({
+      store: efficiencyStore[weekId],
+      caps: fixedCapacities,
+    });
+    const last = lastProcessedRef.current;
+    if (last.baseDate === currentKey && last.snapshot === currentSnapshot) {
+      return;
+    }
+    lastProcessedRef.current = { baseDate: currentKey, snapshot: currentSnapshot };
+
     const timer = setTimeout(() => {
       const weekId = getWeekId(baseDate);
       const serverWeekData = efficiencyStore[weekId] || {};
@@ -171,7 +184,7 @@ export default function EficienciaPanel({ storageKey, dateStorageKey = DATE_STOR
     }, 0);
 
     return () => clearTimeout(timer);
-  }, [baseDate, efficiencyStore, fixedCapacities]);
+  }, [baseDate]);
 
   const weekRange = useMemo(() => {
     if (!baseDate) return "";

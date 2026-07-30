@@ -185,9 +185,12 @@ function ParadasControl({ readOnly = false }: { readOnly?: boolean }) {
   const [selectedEquipment, setSelectedEquipment] = useState<string>("");
   const [selectedStopType, setSelectedStopType] = useState<string>("");
 
+  const stopsSnapshotRef = useRef<string>('');
+  const [stopsVersion, setStopsVersion] = useState(0);
+
   useEffect(() => {
-    console.log('[ENF] ParadasControl data', { stopsCount: data?.stops?.length, hasHydrated, date: date?.toISOString() });
-  }, [data?.stops, hasHydrated, date]);
+    console.log('[ENF] ParadasControl data', { stopsCount: data?.stops?.length, hasHydrated, date: date?.toISOString(), stopsVersion });
+  }, [data?.stops, hasHydrated, date, stopsVersion]);
 
   const syncToEfficiency = useCallback((allStops: StopEvent[]) => {
     setData((prev) => ({
@@ -209,10 +212,18 @@ function ParadasControl({ readOnly = false }: { readOnly?: boolean }) {
   }, []);
 
   useEffect(() => {
-    if (hasHydrated) {
+    const snapshot = JSON.stringify(data.stops);
+    if (snapshot !== stopsSnapshotRef.current) {
+      stopsSnapshotRef.current = snapshot;
+      setStopsVersion((v) => v + 1);
+    }
+  }, [data.stops]);
+
+  useEffect(() => {
+    if (hasHydrated && stopsVersion > 0) {
       syncToEfficiency(data.stops);
     }
-  }, [data.stops, hasHydrated, syncToEfficiency]);
+  }, [hasHydrated, stopsVersion, syncToEfficiency, data.stops]);
 
   useEffect(() => {
     if (hasHydrated && date instanceof Date && !isNaN(date.getTime())) {

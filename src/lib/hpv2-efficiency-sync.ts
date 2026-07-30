@@ -95,6 +95,8 @@ export function computeEfficiencyStore(
     }
   });
 
+  const seen = new Set<string>();
+  let duplicateCount = 0;
   stops.forEach((stop) => {
     const start = new Date(stop.startTime);
     const productionDate = getProductionDateForDate(start);
@@ -120,6 +122,13 @@ export function computeEfficiencyStore(
 
     const dayData = store[weekId][lineId][shift][dayName];
 
+    const key = `${lineId}|${weekId}|${shift}|${dayName}|${stop.stopType}|${start.toISOString()}|${new Date(stop.endTime).toISOString()}`;
+    if (seen.has(key)) {
+      duplicateCount += 1;
+      return;
+    }
+    seen.add(key);
+
     if (stop.stopType === "PROGRAMADA") {
       const existing = parseFloat(dayData.scheduledStops || '0');
       dayData.scheduledStops = (existing + duration).toString();
@@ -133,6 +142,10 @@ export function computeEfficiencyStore(
       dayData.externalStopsMin = (parseFloat(dayData.externalStopsMin || '0') + duration).toString();
     }
   });
+
+  if (duplicateCount > 0) {
+    console.info('[EFFICIENCY] duplicate stops skipped', duplicateCount);
+  }
 
   return store;
 }
