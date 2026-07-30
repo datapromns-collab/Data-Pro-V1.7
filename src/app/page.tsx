@@ -2793,7 +2793,17 @@ export default function PlannerPage() {
                                                           const tdCant = Number(tdRow.cantidad || 0);
                                                           const tnCant = Number(pncTn[idx]?.cantidad || 0);
                                                           const total = tdCant + tnCant;
-                                                          return (
+   const { toast } = useToast();
+   useEffect(() => {
+     if (tiempoMuertoDesbordado) {
+       toast({
+         title: 'Error desbordamiento de tiempo',
+         description: 'Disponibilidad Real (hrs) no puede ser menor que Horas Efectivas de Producción.',
+         variant: 'destructive',
+       });
+     }
+   }, [tiempoMuertoDesbordado, toast]);
+   return (
                                                             <tr key={idx} className="even:bg-slate-50/60">
                                                               <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
                                                                 Línea {idx + 1}
@@ -4195,36 +4205,48 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
         })();
         const disponibilidad = disponibilidadNum.toFixed(2).replace('.', ',');
         const produccionTeoricaNum = cajasH * disponibilidadNum;
-      const horasEfectivas = minutosAHorasDecimal(Math.max(0, 480 - totalParadaMin - (porTipo.operacionales || 0)));
-      const produccionTeorica = cajasH * (480 / 60);
+        const horasEfectivasStr = (() => {
+          const cajasHNum = Number(cajasH) || 0;
+          if (cajasHNum <= 0) return '0,00';
+          const td = Number(alcanceTD || 0);
+          const tn = Number(alcanceTN || 0);
+          const alcance = turno === 'DIARIO' ? td + tn : turno === 'DIURNO' ? td : tn;
+          return (alcance / cajasHNum).toFixed(2).replace('.', ',');
+        })();
+        const horasEfectivasNum = Number.parseFloat(String(horasEfectivasStr || '0').replace(',', '.')) || 0;
+        const tiempoMuertoInexplicableRaw = disponibilidadNum - horasEfectivasNum;
+        const tiempoMuertoInexplicableNum = Math.max(0, tiempoMuertoInexplicableRaw);
+        const tiempoMuertoInexplicable = tiempoMuertoInexplicableNum.toFixed(2).replace('.', ',');
+        const produccionTeorica = cajasH * (480 / 60);
 
-      return {
-        linea: lineaNombre,
-        planificadoTD: String(Math.round(planificadoTD)),
-        planificadoTN: String(Math.round(planificadoTN)),
-        alcanceTD: String(alcanceTD),
-        alcanceTN: String(alcanceTN),
-        cumplimientoTD,
-        cumplimientoTN,
-        pnc: pncPorLinea ? String(pncPorLinea[idx] ?? 0) : '0',
-        velocidad: String(velocidad),
-        cajasH: String(cajasH),
-        horasPagadas,
-        horasProgramadas,
-        paradasProgramadas,
-        relacion,
-        servicios,
-        ausentismo,
-        externas,
-        adecuaciones,
-        averia,
-        operacionales,
-        disponibilidad,
-        produccionTeorica: Number.isFinite(produccionTeoricaNum) ? String(Math.round(produccionTeoricaNum)) : '0',
-        horasEfectivas,
-        horasPerdidasPNC,
-        tiempoMuertoInexplicable: tiempoMuerto,
-      };
+        return {
+          linea: lineaNombre,
+          planificadoTD: String(Math.round(planificadoTD)),
+          planificadoTN: String(Math.round(planificadoTN)),
+          alcanceTD: String(alcanceTD),
+          alcanceTN: String(alcanceTN),
+          cumplimientoTD,
+          cumplimientoTN,
+          pnc: pncPorLinea ? String(pncPorLinea[idx] ?? 0) : '0',
+          velocidad: String(velocidad),
+          cajasH: String(cajasH),
+          horasPagadas,
+          horasProgramadas,
+          paradasProgramadas,
+          relacion,
+          servicios,
+          ausentismo,
+          externas,
+          adecuaciones,
+          averia,
+          operacionales,
+          disponibilidad,
+          produccionTeorica: Number.isFinite(produccionTeoricaNum) ? String(Math.round(produccionTeoricaNum)) : '0',
+          horasEfectivas: horasEfectivasStr,
+          horasPerdidasPNC,
+          tiempoMuertoInexplicable,
+          tiempoMuertoInexplicableRaw,
+        };
     });
   }, [informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia, semanaFechas]);
 }
@@ -4463,21 +4485,22 @@ function PlanificadasPorDiaTable({ datosPorDia, fecha, turno }: { datosPorDia: a
 
 function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineSpeeds, turno = 'DIURNO', fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia, hrsPagadasDia, hrsProgramadasDia }: any) {
    const data = useReportData(informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia, hrsPagadasDia, hrsProgramadasDia);
-  const formatCell = (v: any) => v ?? '0';
-  const esDiurno = turno === 'DIURNO';
-  const esNocturno = turno === 'NOCTURNO';
-  const totalPlanificadoTD = data.reduce((acc: number, r: any) => acc + (Number(r.planificadoTD) || 0), 0);
-  const totalPlanificadoTN = data.reduce((acc: number, r: any) => acc + (Number(r.planificadoTN) || 0), 0);
-   const totalAlcanceTD = data.reduce((acc: number, r: any) => acc + (Number(r.alcanceTD) || 0), 0);
-   const totalAlcanceTN = data.reduce((acc: number, r: any) => acc + (Number(r.alcanceTN) || 0), 0);
-   const cumplimientoTD = totalPlanificadoTD > 0 ? ((totalAlcanceTD / totalPlanificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
-   const cumplimientoTN = totalPlanificadoTN > 0 ? ((totalAlcanceTN / totalPlanificadoTN) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
-   const disponibilidades = data.map((r: any) => {
+   const formatCell = (v: any) => v ?? '0';
+   const esDiurno = turno === 'DIURNO';
+   const esNocturno = turno === 'NOCTURNO';
+   const totalPlanificadoTD = data.reduce((acc: number, r: any) => acc + (Number(r.planificadoTD) || 0), 0);
+   const totalPlanificadoTN = data.reduce((acc: number, r: any) => acc + (Number(r.planificadoTN) || 0), 0);
+    const totalAlcanceTD = data.reduce((acc: number, r: any) => acc + (Number(r.alcanceTD) || 0), 0);
+    const totalAlcanceTN = data.reduce((acc: number, r: any) => acc + (Number(r.alcanceTN) || 0), 0);
+    const cumplimientoTD = totalPlanificadoTD > 0 ? ((totalAlcanceTD / totalPlanificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
+    const cumplimientoTN = totalPlanificadoTN > 0 ? ((totalAlcanceTN / totalPlanificadoTN) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
+    const disponibilidades = data.map((r: any) => {
      const val = String(r.disponibilidad || '').replace(',', '.');
      const num = parseFloat(val);
      return Number.isFinite(num) ? num : 0;
    });
    const disponibilidadGlobal = disponibilidades.length > 0 ? (disponibilidades.reduce((a, b) => a + b, 0) / disponibilidades.length).toFixed(2).replace('.', ',') + '%' : '0,00%';
+   const tiempoMuertoDesbordado = data.some((r: any) => Number.parseFloat(String(r.tiempoMuertoInexplicableRaw ?? '0').replace(',', '.')) < 0);
    return (
      <div className="flex flex-col gap-3">
        <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">

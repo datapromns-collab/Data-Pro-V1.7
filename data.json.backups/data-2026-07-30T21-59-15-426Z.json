@@ -6684,7 +6684,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-30T21:37:34.876Z"
+    "updatedAt": "2026-07-30T21:59:12.052Z"
   },
   "ordenesSap": [
     {
@@ -9719,6 +9719,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 3822
+        },
+        {
+          "fechaInicio": "2026-07-30",
+          "ticket1": "17281",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -9773,8 +9784,8 @@
         },
         {
           "fechaInicio": "2026-07-30",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17434",
+          "cajas1": 6000,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -9804,8 +9815,8 @@
         },
         {
           "fechaInicio": "2026-07-30",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17385",
+          "cajas1": 4491,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -9832,6 +9843,17 @@
           "cajas3": 1520,
           "ticket4": "",
           "cajas4": 1680
+        },
+        {
+          "fechaInicio": "2026-07-30",
+          "ticket1": "17520",
+          "cajas1": 1520,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -9855,8 +9877,8 @@
         },
         {
           "fechaInicio": "2026-07-30",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17560",
+          "cajas1": 3700,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -9886,8 +9908,8 @@
         },
         {
           "fechaInicio": "2026-07-30",
-          "ticket1": "174",
-          "cajas1": 0,
+          "ticket1": "17472",
+          "cajas1": 4880,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -9914,6 +9936,17 @@
           "cajas3": 1760,
           "ticket4": "",
           "cajas4": 4640
+        },
+        {
+          "fechaInicio": "2026-07-30",
+          "ticket1": "17333",
+          "cajas1": 4320,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
