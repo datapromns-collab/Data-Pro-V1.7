@@ -6684,7 +6684,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-30T19:58:08.514Z"
+    "updatedAt": "2026-07-30T21:38:05.934Z"
   },
   "ordenesSap": [
     {
@@ -9886,7 +9886,7 @@
         },
         {
           "fechaInicio": "2026-07-30",
-          "ticket1": "",
+          "ticket1": "17472",
           "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
@@ -12391,6 +12391,46 @@
           "equipment": "ENFARDADORA",
           "stopType": "PROGRAMADA",
           "turno": "Diurno"
+        },
+        {
+          "id": "stop-1785446503979",
+          "lineId": "L5",
+          "startTime": "2026-07-28T11:00:00.000Z",
+          "endTime": "2026-07-28T22:00:00.000Z",
+          "reason": "GBJF",
+          "equipment": "ENFARDADORA",
+          "stopType": "INSUMOS",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1785446697826",
+          "lineId": "L3",
+          "startTime": "2026-07-28T11:00:00.000Z",
+          "endTime": "2026-07-28T22:00:00.000Z",
+          "reason": "BOTELLA",
+          "equipment": "ENFARDADORA",
+          "stopType": "INSUMOS",
+          "turno": "Diurno"
+        },
+        {
+          "id": "stop-1785446748930",
+          "lineId": "L3",
+          "startTime": "2026-07-28T05:00:00.000Z",
+          "endTime": "2026-07-28T10:00:00.000Z",
+          "reason": "PARADA",
+          "equipment": "ENFARDADORA",
+          "stopType": "PROGRAMADA",
+          "turno": "Nocturno"
+        },
+        {
+          "id": "stop-1785446909530",
+          "lineId": "L4",
+          "startTime": "2026-07-28T05:00:00.000Z",
+          "endTime": "2026-07-28T10:00:00.000Z",
+          "reason": "PARADA PRO",
+          "equipment": "ENFARDADORA",
+          "stopType": "OPERACIONAL",
+          "turno": "Nocturno"
         }
       ],
       "efficiencyStore": {
@@ -15618,7 +15658,7 @@
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
-                "externalStopsMin": "0",
+                "externalStopsMin": "660",
                 "scheduledBoxes": "",
                 "producedBoxes": "",
                 "efficiencyLine": "0.00"
@@ -15694,7 +15734,7 @@
                 "designCapacity": "55",
                 "realSpeed": "",
                 "scheduledHours": "",
-                "scheduledStops": "0",
+                "scheduledStops": "300",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
@@ -15883,7 +15923,7 @@
                 "realSpeed": "",
                 "scheduledHours": "",
                 "scheduledStops": "0",
-                "operationalStopsMin": "0",
+                "operationalStopsMin": "300",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
                 "externalStopsMin": "0",
@@ -15994,7 +16034,7 @@
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
-                "externalStopsMin": "0",
+                "externalStopsMin": "660",
                 "scheduledBoxes": "",
                 "producedBoxes": "",
                 "efficiencyLine": "0.00"

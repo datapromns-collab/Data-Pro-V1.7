@@ -4168,8 +4168,10 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
       const externas = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'FALLA DE E/E').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
        const horasPagadas = hrsPagadasDia && hrsPagadasDia[idx] ? hrsPagadasDia[idx] : '0';
        const horasProgramadas = hrsProgramadasDia && hrsProgramadasDia[idx] ? hrsProgramadasDia[idx] : '0';
-      const paradasProgramadas = minutosAHorasDecimal(porTipo.programadas || 0);
-      const tareas = tareasLinea.filter((t: any) => t.lineId === String(lineaNum));
+       const paradasProgramadas = minutosAHorasDecimal(porTipo.programadas || 0);
+       const pncVal = Number(pncPorLinea ? pncPorLinea[idx] ?? 0 : 0);
+       const horasPerdidasPNC = pncVal > 0 && cajasH > 0 ? (pncVal / cajasH).toFixed(2).replace('.', ',') : '0,00';
+       const tareas = tareasLinea.filter((t: any) => t.lineId === String(lineaNum));
       const planificadoTD = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.diurno || 0), 0));
       const planificadoTN = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.nocturno || 0), 0));
       const alcanceTD = producidasDiurno ? Number(Object.values(producidasDiurno).reduce((acc: number, fila: any) => acc + (Number(fila?.[lineaNum]) || 0), 0)) : Number(realProduction?.[lineaNum] || 0);
@@ -4179,8 +4181,20 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
       const velocidad = Number(velocidadesDia ? velocidadesDia[idx] || 0 : lineSpeeds?.[lineaNum] || 0);
       const cajasH = Number(lineSpeeds?.[lineaNum] || 0);
       const tiempoMuerto = minutosAHorasDecimal(Math.max(0, totalParadaMin - (porTipo.programadas || 0)));
-      const relacion = totalParadaMin > 0 ? ((porTipo.programadas / totalParadaMin) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
-      const disponibilidad = minutosAHorasDecimal(Math.max(0, 480 - totalParadaMin));
+        const relacion = (() => {
+          const toNum = (v: any) => Number.parseFloat(String(v || '0').replace(',', '.')) || 0;
+          return Math.max(0, toNum(horasProgramadas) + toNum(paradasProgramadas) - toNum(horasPagadas)).toFixed(2).replace('.', ',');
+        })();
+        const relacionNum = Number.parseFloat(String(relacion || '0').replace(',', '.')) || 0;
+        const disponibilidadNum = (() => {
+          const toNum = (v: any) => Number.parseFloat(String(v || '0').replace(',', '.')) || 0;
+          const horasProgramadasNum = toNum(horasProgramadas);
+          const horasPerdidasNum = toNum(horasPerdidasPNC || '0,00');
+          const totalRestar = relacionNum + toNum(servicios) + toNum(ausentismo) + toNum(externas) + toNum(adecuaciones) + toNum(averia) + toNum(operacionales) + horasPerdidasNum;
+          return Math.max(0, horasProgramadasNum - totalRestar);
+        })();
+        const disponibilidad = disponibilidadNum.toFixed(2).replace('.', ',');
+        const produccionTeoricaNum = cajasH * disponibilidadNum;
       const horasEfectivas = minutosAHorasDecimal(Math.max(0, 480 - totalParadaMin - (porTipo.operacionales || 0)));
       const produccionTeorica = cajasH * (480 / 60);
 
@@ -4206,12 +4220,9 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
         averia,
         operacionales,
         disponibilidad,
-        produccionTeorica: Number.isFinite(produccionTeorica) ? produccionTeorica.toFixed(0) : '0',
+        produccionTeorica: Number.isFinite(produccionTeoricaNum) ? String(Math.round(produccionTeoricaNum)) : '0',
         horasEfectivas,
-        horasPerdidasPNC: (() => {
-          const pncVal = Number(pncPorLinea ? pncPorLinea[idx] ?? 0 : 0);
-          return pncVal > 0 && cajasH > 0 ? (pncVal / cajasH).toFixed(2).replace('.', ',') : '0,00';
-        })(),
+        horasPerdidasPNC,
         tiempoMuertoInexplicable: tiempoMuerto,
       };
     });
