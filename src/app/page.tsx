@@ -4215,8 +4215,9 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
         })();
         const horasEfectivasNum = Number.parseFloat(String(horasEfectivasStr || '0').replace(',', '.')) || 0;
         const tiempoMuertoInexplicableRaw = disponibilidadNum - horasEfectivasNum;
-        const tiempoMuertoInexplicableNum = Math.max(0, tiempoMuertoInexplicableRaw);
-        const tiempoMuertoInexplicable = tiempoMuertoInexplicableNum.toFixed(2).replace('.', ',');
+        const tiempoMuertoInexplicable = tiempoMuertoInexplicableRaw.toFixed(2).replace('.', ',');
+        const tiempoMuertoInexplicableNum = tiempoMuertoInexplicableRaw;
+
         const produccionTeorica = cajasH * (480 / 60);
 
         return {
@@ -4246,6 +4247,7 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
           horasPerdidasPNC,
           tiempoMuertoInexplicable,
           tiempoMuertoInexplicableRaw,
+          tiempoMuertoNegativo: tiempoMuertoInexplicableRaw < 0,
         };
     });
   }, [informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia, semanaFechas]);
@@ -4588,7 +4590,21 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                      <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.disponibilidad)}</td>
                      <td className="px-1 py-0.5 text-[10px] text-slate-700 border-r border-b border-slate-100 text-center tabular-nums">{formatCell(row.produccionTeorica)}</td>
                      <td className="px-1 py-0.5 text-[10px] text-slate-700 border-b border-slate-100 text-center tabular-nums">{formatCell(row.horasEfectivas)}</td>
-                     <td className="px-1 py-0.5 text-[10px] text-slate-700 border-b border-slate-100 text-center tabular-nums">{formatCell(row.tiempoMuertoInexplicable)}</td>
+                      <td className="px-1 py-0.5 text-[10px] border-b border-slate-100 text-center tabular-nums">
+                        {row.tiempoMuertoNegativo ? (
+                          <span className="flex items-center justify-center gap-1 text-red-600 font-bold">
+                            <AlertTriangle className="h-3 w-3" />
+                            {formatCell(row.tiempoMuertoInexplicable)}
+                          </span>
+                        ) : Number.parseFloat(String(row.tiempoMuertoInexplicable || '0').replace(',', '.')) >= 2 ? (
+                          <span className="flex items-center justify-center gap-1 text-slate-700">
+                            <AlertTriangle className="h-3 w-3 text-red-600" />
+                            {formatCell(row.tiempoMuertoInexplicable)}
+                          </span>
+                        ) : (
+                          <span className="text-slate-700">{formatCell(row.tiempoMuertoInexplicable)}</span>
+                        )}
+                      </td>
                    </tr>
                  ))}
                  {data.length > 0 && (() => {
@@ -4606,7 +4622,13 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                    const totalDisponibilidadPromedio = disponibilidades.length > 0 ? (disponibilidades.reduce((a, b) => a + b, 0) / disponibilidades.length).toFixed(2).replace('.', ',') + '%' : '0,00%';
                    const totalProduccionTeorica = data.reduce((acc: number, r: any) => acc + Number(r.produccionTeorica || 0), 0);
                    const totalHorasEfectivas = sumarHorasDecimal(...data.map((r: any) => r.horasEfectivas || '0'));
-                   const totalTiempoMuerto = sumarHorasDecimal(...data.map((r: any) => r.tiempoMuertoInexplicable || '0'));
+                    const totalTiempoMuerto = (() => {
+                      const totalMin = data.reduce((acc: number, r: any) => {
+                        const raw = Number.parseFloat(String(r.tiempoMuertoInexplicableRaw ?? '0').replace(',', '.')) || 0;
+                        return acc + raw;
+                      }, 0);
+                      return (totalMin).toFixed(2).replace('.', ',');
+                    })();
                    return (
                      <tr className="bg-slate-100 font-black">
                        <td className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-r border-b border-slate-200 w-36 text-left">TOTAL</td>
