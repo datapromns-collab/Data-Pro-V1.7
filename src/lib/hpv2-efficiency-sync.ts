@@ -56,6 +56,7 @@ export const getProductionDateForDate = (date: Date): Date => {
 };
 
 const resetStops = (day: EfficiencyDayData): void => {
+  day.scheduledStops = '0';
   day.operationalStopsMin = '0';
   day.breakdownStopsMin = '0';
   day.electricFailureStopsMin = '0';
