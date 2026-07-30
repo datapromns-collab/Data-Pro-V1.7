@@ -170,7 +170,7 @@ export default function EficienciaPanel({ storageKey, dateStorageKey = DATE_STOR
 
   const handleUpdate = useCallback((lineId: string, shift: string, day: DayOfWeek, metric: EfficiencyMetric, value: string) => {
     if (readOnly) return;
-    if (metric === 'designCapacity' || metric === 'efficiencyLine') return;
+    if (metric === 'designCapacity' || metric === 'scheduledStops' || metric === 'efficiencyLine') return;
 
     setActiveWeekData((prev) => {
       const lineData = prev[lineId];

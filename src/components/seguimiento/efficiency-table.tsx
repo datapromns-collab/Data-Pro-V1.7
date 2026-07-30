@@ -76,7 +76,7 @@ const EfficiencyRow = memo(function EfficiencyRow({
             type={isResultRow ? "text" : "number"}
             value={isResultRow ? dayEfficiencies[day] + '%' : data[day][metric.id]}
             onChange={(e) => onUpdate(lineId, variant, day, metric.id, e.target.value)}
-            readOnly={metric.id === 'designCapacity' || metric.id === 'operationalStopsMin' || metric.id === 'breakdownStopsMin' || metric.id === 'electricFailureStopsMin' || metric.id === 'externalStopsMin' || isResultRow || isResumen}
+            readOnly={metric.id === 'designCapacity' || metric.id === 'scheduledStops' || metric.id === 'operationalStopsMin' || metric.id === 'breakdownStopsMin' || metric.id === 'electricFailureStopsMin' || metric.id === 'externalStopsMin' || isResultRow || isResumen}
             className={cn(
               "h-8 text-[11px] text-center border-none bg-transparent focus-visible:ring-1",
               (metric.id === 'designCapacity' || isResultRow) ? "font-bold text-primary" : "",

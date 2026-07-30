@@ -6117,7 +6117,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-30T11:44:28.615Z"
+    "updatedAt": "2026-07-30T11:56:19.788Z"
   },
   "ordenesSap": [
     {
@@ -9146,12 +9146,12 @@
           "fechaInicio": "2026-07-29",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "",
+          "ticket2": "17280",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 3822
         }
       ]
     },
@@ -9279,6 +9279,17 @@
           "fechaInicio": "2026-07-29",
           "ticket1": "17558",
           "cajas1": 1700,
+          "ticket2": "17559",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 1800,
+          "ticket4": "",
+          "cajas4": 6250
+        },
+        {
+          "fechaInicio": "2026-07-30",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -9330,12 +9341,12 @@
           "fechaInicio": "2026-07-29",
           "ticket1": "17331",
           "cajas1": 480,
-          "ticket2": "",
+          "ticket2": "17332",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1760,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 4640
         }
       ]
     }
@@ -12753,7 +12764,7 @@
                 "designCapacity": "60",
                 "realSpeed": "32",
                 "scheduledHours": "11.5",
-                "scheduledStops": "300040",
+                "scheduledStops": "307060",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "300",
@@ -15389,7 +15400,7 @@
                 "designCapacity": "60",
                 "realSpeed": "31",
                 "scheduledHours": "11.5",
-                "scheduledStops": "2040",
+                "scheduledStops": "6630",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "336",
@@ -15577,7 +15588,7 @@
                 "designCapacity": "60",
                 "realSpeed": "32",
                 "scheduledHours": "11.5",
-                "scheduledStops": "16560",
+                "scheduledStops": "53820",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
