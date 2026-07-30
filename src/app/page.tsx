@@ -2221,7 +2221,13 @@ export default function PlannerPage() {
                                                     {user?.id !== 'prodtj.mds' && (
                                                       <>
                                                         <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingId(row.id); setEditForm(row); }}><Pencil className="h-3.5 w-3.5" /></Button>
-                                                        <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => { removeInformeOperacional(row.id); setEditingId(null); setEditForm({}); }}><Trash2 className="h-3.5 w-3.5" /></Button>
+                                                         <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => {
+                                                           if (window.confirm('¿Eliminar este registro?')) {
+                                                             removeInformeOperacional(row.id);
+                                                             setEditingId(null);
+                                                             setEditForm({});
+                                                           }
+                                                         }}><Trash2 className="h-3.5 w-3.5" /></Button>
                                                       </>
                                                     )}
                                                   </TableCell>
@@ -4199,10 +4205,13 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
         adecuaciones,
         averia,
         operacionales,
-        horasPerdidasPNC: '0,00',
         disponibilidad,
         produccionTeorica: Number.isFinite(produccionTeorica) ? produccionTeorica.toFixed(0) : '0',
         horasEfectivas,
+        horasPerdidasPNC: (() => {
+          const pncVal = Number(pncPorLinea ? pncPorLinea[idx] ?? 0 : 0);
+          return pncVal > 0 && cajasH > 0 ? (pncVal / cajasH).toFixed(2).replace('.', ',') : '0,00';
+        })(),
         tiempoMuertoInexplicable: tiempoMuerto,
       };
     });
