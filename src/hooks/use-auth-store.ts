@@ -26,8 +26,8 @@ const STORAGE_KEY = 'planner_auth_session';
  *    - Restricción: No ven Planificación, Compras, Logística ni Ventas.
  * 
  * 4. anto.mds (PURCHASING - Antonella Dos Santos): 
- *    - Acceso: Compras, Planta, Logística, Ventas.
- *    - Restricción: No ve Planificación, Jarabes ni Materia Prima. Redirección automática a Compras.
+ *    - Acceso: Compras, Planta, Logística, Ventas y Planificación en solo lectura.
+ *    - Restricción: No ve Jarabes ni Materia Prima. Redirección automática a Compras.
  * 
  * 5. prodtj.mds (STANDARD - Jefes de Producción): 
  *    - Acceso: Planificación en solo lectura.
