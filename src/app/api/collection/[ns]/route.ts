@@ -195,8 +195,20 @@ function cleanExisting(ns: string, existing: any): any {
 }
 
 function deepMerge(target: any, source: any): any {
-  if (!source || typeof source !== 'object' || Array.isArray(source)) return source;
-  if (!target || typeof target !== 'object' || Array.isArray(target)) return { ...source };
+  if (Array.isArray(source)) {
+    if (!Array.isArray(target)) return source;
+    const first = target[0];
+    if (first && first.id != null) {
+      const map = new Map<string, any>();
+      target.forEach((item: any) => { if (item && item.id != null) map.set(String(item.id), item); });
+      source.forEach((item: any) => { if (item && item.id != null) map.set(String(item.id), item); });
+      return Array.from(map.values());
+    }
+    return source;
+  }
+  if (!source || typeof source !== 'object') return source;
+  if (Array.isArray(target)) return source;
+  if (!target || typeof target !== 'object') return { ...source };
   const result: any = { ...target };
   for (const key of Object.keys(source)) {
     result[key] = deepMerge(result[key], source[key]);

@@ -102,14 +102,47 @@ export default function EficienciaPanel({ storageKey, dateStorageKey = DATE_STOR
 
       const localWeekData = activeWeekDataRef.current;
       const localCurrentWeek = localWeekData[weekId] || {};
-      const hasLocalChanges = editedWeeksRef.current.has(weekId) && JSON.stringify(localCurrentWeek) !== JSON.stringify(serverWeekData);
-      if (hasLocalChanges) {
+      const hasLocalEdits = editedWeeksRef.current.has(weekId);
+      const serverSnapshot = JSON.stringify(serverWeekData);
+      const localSnapshot = JSON.stringify(localCurrentWeek);
+
+      if (hasLocalEdits && serverSnapshot === localSnapshot) {
         setHasHydrated(true);
         return;
       }
 
+      let targetWeekData: Record<string, WeeklyLineData> = { ...serverWeekData };
+
+      if (hasLocalEdits && serverSnapshot !== localSnapshot) {
+        const STOP_FIELDS = new Set([
+          'scheduledStops',
+          'operationalStopsMin',
+          'breakdownStopsMin',
+          'electricFailureStopsMin',
+          'externalStopsMin',
+        ]);
+        const weekData = JSON.parse(JSON.stringify(serverWeekData)) as Record<string, any>;
+        const localWeek = localCurrentWeek as Record<string, any>;
+        PRODUCTION_LINES.forEach((line) => {
+          if (!weekData[line.id] || !localWeek[line.id]) return;
+          const shiftTypes = ['diurno', 'nocturno'] as const;
+          shiftTypes.forEach((shift) => {
+            DAYS.forEach((day) => {
+              const localDay = localWeek[line.id]?.[shift]?.[day];
+              if (!localDay) return;
+              Object.keys(localDay).forEach((field) => {
+                if (!STOP_FIELDS.has(field) && localDay[field] !== undefined && localDay[field] !== '') {
+                  weekData[line.id][shift][day][field] = localDay[field];
+                }
+              });
+            });
+          });
+        });
+        targetWeekData = weekData;
+      }
+
       editedWeeksRef.current.delete(weekId);
-      let currentWeekData: Record<string, WeeklyLineData> = { ...serverWeekData };
+      const currentWeekData: Record<string, WeeklyLineData> = { ...targetWeekData };
 
       PRODUCTION_LINES.forEach((line) => {
         if (!currentWeekData[line.id]) {

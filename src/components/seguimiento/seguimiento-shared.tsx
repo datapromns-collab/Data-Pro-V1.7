@@ -52,7 +52,13 @@ export function createSeguimientoProvider<T extends SeguimientoPanelData = Segui
     }, [store.data, store.isLoaded, namespace]);
 
     useEffect(() => {
-      if (!store.isLoaded || migratedRef.current || typeof window === 'undefined') return;
+      if (typeof window !== 'undefined') {
+        try {
+          if (localStorage.getItem(legacyMigrationKey) === '1') return;
+        } catch { /* ignore */ }
+      }
+
+      if (!store.isLoaded || migratedRef.current) return;
       migratedRef.current = true;
 
       const hasLocalData = storageKeys

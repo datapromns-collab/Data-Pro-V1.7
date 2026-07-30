@@ -216,6 +216,7 @@ const FALLA_OPCIONES = ["electrica", "electronica", "neumatica", "mecanica", "op
 
 const TIPOS_PARADA = ["MECÁNICO", "ELÉCTRICO", "PROCESO", "CAMBIO DE PRODUCTO", "CAMBIO DE FORMATO", "MANTENIMIENTO PREVENTIVO", "FALLA DE MATERIA PRIMA"];
 const TIPOS_PARADA_INFORME_OPERACIONAL = ["PROGRAMADA", "AVERÍA", "OPERACIONAL", "AUSENTISMO", "FALLA DE E/E", "ADECUACIONES", "SALA DE MÁQUINAS", "SALA DE JARABE", "PTAB", "INSUMOS", "CALIDAD"];
+const EQUIPO_ACTIVO_POR_TIPO = new Set(["AVERÍA", "OPERACIONAL", "INSUMOS"]);
 const ZONAS = ["Llenado", "Etiquetado", "Empaque", "Preforma", "Soplado", "Lavado CIP", "Almacén", "General"];
 const EQUIPOS = ["Llenadora", "Etiquetadora", "Empacadora", "Sopladora", "CIP", "Tanque CIP", "Transportador", "Montacargas"];
 const EQUIPOS_INFORME_OPERACIONAL = ["CHILLER", "SOPLADORA", "TRANSPORTADOR AÉREO", "MIXER", "LLENADORA", "TAPADORA", "SECADOR DE BOTELLAS", "ETIQUETADORA", "CODIFICADOR", "TRANSPORTADOR DE BOTELLAS", "ENFARDADORA", "TRANSPORTADOR DE CAJAS", "PALETIZADORA", "ENVOLVEDORA"];
@@ -3689,15 +3690,16 @@ export default function PlannerPage() {
                     {LINES.map((l) => <option key={l} value={l}>{l}</option>)}
                   </select>
                 </div>
-                 <div className="space-y-2">
-                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Equipo</label>
-                   <select value={plantaFormData.equipo} onChange={(e) => setPlantaFormData({...plantaFormData, equipo: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
-                     {EQUIPOS_INFORME_OPERACIONAL.map((e) => <option key={e} value={e}>{e}</option>)}
-                   </select>
-                 </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Equipo</label>
+                    <select value={plantaFormData.equipo} onChange={(e) => setPlantaFormData({...plantaFormData, equipo: e.target.value})} disabled={!EQUIPO_ACTIVO_POR_TIPO.has(plantaFormData.tipoParada)} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full disabled:opacity-50 disabled:cursor-not-allowed">
+                      <option value="">—</option>
+                      {EQUIPOS_INFORME_OPERACIONAL.map((e) => <option key={e} value={e}>{e}</option>)}
+                    </select>
+                  </div>
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Tipo de Parada</label>
-                   <select value={plantaFormData.tipoParada} onChange={(e) => setPlantaFormData({...plantaFormData, tipoParada: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                    <select value={plantaFormData.tipoParada} onChange={(e) => setPlantaFormData({...plantaFormData, tipoParada: e.target.value, equipo: EQUIPO_ACTIVO_POR_TIPO.has(e.target.value) ? plantaFormData.equipo : ''})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
                      {TIPOS_PARADA_INFORME_OPERACIONAL.map((t) => <option key={t} value={t}>{t}</option>)}
                    </select>
                  </div>

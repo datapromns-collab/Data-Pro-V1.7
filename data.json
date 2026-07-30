@@ -12764,7 +12764,7 @@
                 "designCapacity": "60",
                 "realSpeed": "32",
                 "scheduledHours": "11.5",
-                "scheduledStops": "307450",
+                "scheduledStops": "308360",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "300",
@@ -15400,7 +15400,7 @@
                 "designCapacity": "60",
                 "realSpeed": "31",
                 "scheduledHours": "11.5",
-                "scheduledStops": "6885",
+                "scheduledStops": "7480",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "336",
@@ -15588,7 +15588,7 @@
                 "designCapacity": "60",
                 "realSpeed": "32",
                 "scheduledHours": "11.5",
-                "scheduledStops": "55890",
+                "scheduledStops": "60720",
                 "operationalStopsMin": "0",
                 "breakdownStopsMin": "0",
                 "electricFailureStopsMin": "0",
@@ -17343,6 +17343,37 @@
             "preparado": "18",
             "final": "18"
           }
+        },
+        "2026-07-29": {
+          "GLUP COLA": {
+            "inicial": "72.8",
+            "preparado": "12",
+            "final": "73.92"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "28",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "33",
+            "preparado": "33",
+            "final": "28.62"
+          },
+          "GLUP NARANJA": {
+            "inicial": "1.6",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "18",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "preparado": "12",
+            "final": "5.56"
+          }
         }
       },
       "sugar": {
@@ -17370,6 +17401,18 @@
             "invInicialSacos": "2400",
             "recepcionSacos": "",
             "invFinalSacos": "2400"
+          }
+        },
+        "2026-07-29": {
+          "PORTUGUESA": {
+            "invInicialSacos": "9400",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
           }
         }
       },
@@ -17406,6 +17449,20 @@
           "Sala 1": {
             "invInicialSacos": "931",
             "invFinalSacos": "226"
+          }
+        },
+        "2026-07-29": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": ""
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "314",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "226",
+            "invFinalSacos": ""
           }
         }
       },
@@ -18743,25 +18800,7 @@
       "fixedCapacities": {},
       "_deletedIds": {}
     },
-    "planta-informes-operacionales": [
-      {
-        "fecha": "2026-07-29",
-        "semana": 31,
-        "turno": "DIURNO",
-        "operador": "PEDRO MORGADO",
-        "linea": "Línea 1",
-        "equipo": "PALETIZADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "07:00",
-        "finParada": "07:02",
-        "totalMin": "2",
-        "zona": "Llenado",
-        "falla": "FALLA DE PISTÓN DE COMPACTACIÓN LATERAL",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785358876155
-      }
-    ],
+    "planta-informes-operacionales": [],
     "planta-ordenes-trabajo": [
       {
         "id": "orden-sync-52001",
@@ -20098,7 +20137,8 @@
         "1784566101946",
         "1784568143186",
         "1785014920340",
-        "1785358753845"
+        "1785358753845",
+        "1785358876155"
       ]
     },
     "planta-ordenes-trabajo": {

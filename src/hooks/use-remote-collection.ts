@@ -42,6 +42,29 @@ function savePendingQueue(namespace: string, queue: PendingOperation[]) {
   }
 }
 
+function deepMergeQueuePayload(a: any, b: any): any {
+  if (!a || !b || typeof a !== 'object' || typeof b !== 'object') return a ?? b;
+  const result: any = { ...a };
+  for (const key of Object.keys(b)) {
+    if (key === '_deletedIds') {
+      result[key] = Array.from(new Set([...(a[key] || []), ...(b[key] || [])]));
+      continue;
+    }
+    const aVal = a[key];
+    const bVal = b[key];
+    if (Array.isArray(aVal) && Array.isArray(bVal)) {
+      result[key] = deepMerge(aVal, bVal);
+      continue;
+    }
+    if (bVal && typeof bVal === 'object' && !Array.isArray(bVal)) {
+      result[key] = deepMergeQueuePayload(aVal, bVal);
+      continue;
+    }
+    result[key] = bVal;
+  }
+  return result;
+}
+
 export function useRemoteCollection<T = any>(namespace: string, initial: T) {
   const [data, setData] = useState<T>(initial);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -107,8 +130,11 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
           queueRef.current.shift();
         } catch {
           if (queueRef.current.length > 1) {
-            const next = queueRef.current[1];
-            queueRef.current[1] = { ...next, payload: { ...(next.payload as object), ...(current.payload as object) } };
+            const nextPayload = queueRef.current[1].payload;
+            queueRef.current[1] = {
+              ...queueRef.current[1],
+              payload: deepMergeQueuePayload(nextPayload, current.payload),
+            };
           }
           queueRef.current.shift();
           break;
