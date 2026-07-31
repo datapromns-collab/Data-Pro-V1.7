@@ -1973,7 +1973,7 @@ export default function PlannerPage() {
                    <>
                       <div className="flex items-center gap-2 mb-2 no-print">
                        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                           {(user?.id === 'prodtj.mds' ? ['paradas-lineas', 'produccion', 'reporte', 'resumen-semanal', 'resumen-mensual'] : ['paradas-lineas', 'produccion', 'reporte', 'resumen-semanal', 'resumen-mensual', 'ciclos']).map((tab) => (
+                            {(user?.id === 'prodtj.mds' || user?.id === 'prodt.mds' ? ['paradas-lineas', 'produccion', 'reporte', 'resumen-semanal', 'resumen-mensual'] : ['paradas-lineas', 'produccion', 'reporte', 'resumen-semanal', 'resumen-mensual', 'ciclos']).map((tab) => (
                             <button
                               key={tab}
                               onClick={() => { setActiveTab(tab); if (tab === 'paradas-lineas') setParadasSubTab('informes-operacionales'); if (tab === 'produccion') setProduccionSubTab('planificadas'); if (tab === 'reporte') setReporteSubTab('diario'); if (tab === 'resumen-semanal') { setResumenSemanalSubTab('resumen'); setPtSubTab('TDiurno'); setResumenSemanalWeekStartDate(new Date()); } }}
@@ -2841,7 +2841,7 @@ export default function PlannerPage() {
                              <div className="flex items-center justify-between gap-2 mb-4 no-print">
                                <div className="flex items-center gap-3">
                                   <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                                    {['diario', 'por-turno', ...(user?.id === 'prodtj.mds' ? [] : ['velocidades-bpm'])].map((subTab) => (
+                                     {['diario', 'por-turno', ...((user?.id === 'prodtj.mds' || user?.id === 'prodt.mds') ? [] : ['velocidades-bpm'])].map((subTab) => (
                                      <button
                                        key={subTab}
                                        onClick={() => setReporteSubTab(subTab)}
@@ -3024,7 +3024,7 @@ export default function PlannerPage() {
                                          )}
                                       </div>
                                      )}
-                                   {reporteSubTab === 'velocidades-bpm' && user?.id !== 'prodtj.mds' && (
+                                    {reporteSubTab === 'velocidades-bpm' && user?.id !== 'prodtj.mds' && user?.id !== 'prodt.mds' && (
                                    <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
                                       <div className="flex items-center justify-between gap-2 px-6 py-4 border-b border-slate-100">
                                         <div className="flex items-center gap-2">
@@ -3376,7 +3376,7 @@ export default function PlannerPage() {
                            </div>
                          </div>
                        )}
-                        {activeTab === 'ciclos' && user?.id !== 'prodtj.mds' && (
+                         {activeTab === 'ciclos' && user?.id !== 'prodtj.mds' && user?.id !== 'prodt.mds' && (
                          <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                            <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
                              <RefreshCw className="h-12 w-12 mb-4 opacity-20" />
@@ -4178,8 +4178,9 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
        const horasPagadas = hrsPagadasDia && hrsPagadasDia[idx] ? hrsPagadasDia[idx] : '0';
        const horasProgramadas = hrsProgramadasDia && hrsProgramadasDia[idx] ? hrsProgramadasDia[idx] : '0';
        const paradasProgramadas = minutosAHorasDecimal(porTipo.programadas || 0);
-       const pncVal = Number(pncPorLinea ? pncPorLinea[idx] ?? 0 : 0);
-       const horasPerdidasPNC = pncVal > 0 && cajasH > 0 ? (pncVal / cajasH).toFixed(2).replace('.', ',') : '0,00';
+        const pncVal = Number(pncPorLinea ? pncPorLinea[idx] ?? 0 : 0);
+        const cajasH = Number(lineSpeeds?.[lineaNum] || 0);
+        const horasPerdidasPNC = pncVal > 0 && cajasH > 0 ? (pncVal / cajasH).toFixed(2).replace('.', ',') : '0,00';
        const tareas = tareasLinea.filter((t: any) => t.lineId === String(lineaNum));
       const planificadoTD = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.diurno || 0), 0));
       const planificadoTN = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.nocturno || 0), 0));
@@ -4187,9 +4188,8 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
       const alcanceTN = producidasNocturno ? Number(Object.values(producidasNocturno).reduce((acc: number, fila: any) => acc + (Number(fila?.[lineaNum]) || 0), 0)) : 0;
       const cumplimientoTD = planificadoTD > 0 ? ((alcanceTD / planificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
       const cumplimientoTN = planificadoTN > 0 ? ((alcanceTN / planificadoTN) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
-      const velocidad = Number(velocidadesDia ? velocidadesDia[idx] || 0 : lineSpeeds?.[lineaNum] || 0);
-      const cajasH = Number(lineSpeeds?.[lineaNum] || 0);
-      const tiempoMuerto = minutosAHorasDecimal(Math.max(0, totalParadaMin - (porTipo.programadas || 0)));
+       const velocidad = Number(velocidadesDia ? velocidadesDia[idx] || 0 : lineSpeeds?.[lineaNum] || 0);
+       const tiempoMuerto = minutosAHorasDecimal(Math.max(0, totalParadaMin - (porTipo.programadas || 0)));
         const relacion = (() => {
           const toNum = (v: any) => Number.parseFloat(String(v || '0').replace(',', '.')) || 0;
           return Math.max(0, toNum(horasProgramadas) + toNum(paradasProgramadas) - toNum(horasPagadas)).toFixed(2).replace('.', ',');
