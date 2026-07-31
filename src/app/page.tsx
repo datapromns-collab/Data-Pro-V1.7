@@ -543,10 +543,13 @@ export default function PlannerPage() {
       [produccionFechaKey]: { ...(prev[produccionFechaKey] || { td: [], tn: [] }), tn: val }
     }));
   };
-  const velocidadesStore = useRemoteCollection<Record<string, string[]>>('planta-velocidades-bpm', {});
-  const velocidadesDia = velocidadesStore.data[produccionFechaKey] || Array.from({ length: 7 }, () => '');
-  const setVelocidadesDia = (val: string[]) => {
-    velocidadesStore.setData((prev) => ({ ...prev, [produccionFechaKey]: val }));
+  const velocidadesDtStore = useRemoteCollection<Record<string, { td: string[], tn: string[] }>>('planta-velocidades-bpm', {});
+  const velocidadesDtRaw = velocidadesDtStore.data[produccionFechaKey];
+  const velocidadesDt = velocidadesDtRaw && typeof velocidadesDtRaw === 'object' && !Array.isArray(velocidadesDtRaw) && Array.isArray(velocidadesDtRaw.td) && velocidadesDtRaw.td.length >= 7
+    ? velocidadesDtRaw
+    : { td: Array.from({ length: 7 }, () => ''), tn: Array.from({ length: 7 }, () => '') };
+  const setVelocidadesDt = (turno: 'td' | 'tn', val: string[]) => {
+    velocidadesDtStore.setData((prev) => ({ ...prev, [produccionFechaKey]: { ...(prev[produccionFechaKey] || { td: Array.from({ length: 7 }, () => ''), tn: Array.from({ length: 7 }, () => '') }), [turno]: val } }));
   };
   const hrsPagadasStore = useRemoteCollection<Record<string, string[]>>('planta-hrs-pagadas', {});
   const hrsPagadasDia = hrsPagadasStore.data[produccionFechaKey] || Array.from({ length: 7 }, () => '');
@@ -554,7 +557,10 @@ export default function PlannerPage() {
     hrsPagadasStore.setData((prev) => ({ ...prev, [produccionFechaKey]: val }));
   };
   const hrsPagadasDtStore = useRemoteCollection<Record<string, { td: string[], tn: string[] }>>('planta-hrs-pagadas-dt', {});
-  const hrsPagadasDt = hrsPagadasDtStore.data[produccionFechaKey] || { td: Array.from({ length: 7 }, () => ''), tn: Array.from({ length: 7 }, () => '') };
+  const hrsPagadasDtRaw = hrsPagadasDtStore.data[produccionFechaKey];
+  const hrsPagadasDt = hrsPagadasDtRaw && typeof hrsPagadasDtRaw === 'object' && !Array.isArray(hrsPagadasDtRaw) && Array.isArray(hrsPagadasDtRaw.td)
+    ? hrsPagadasDtRaw
+    : { td: Array.from({ length: 7 }, () => ''), tn: Array.from({ length: 7 }, () => '') };
   const setHrsPagadasDt = (turno: 'td' | 'tn', val: string[]) => {
     hrsPagadasDtStore.setData((prev) => ({ ...prev, [produccionFechaKey]: { ...(prev[produccionFechaKey] || { td: Array.from({ length: 7 }, () => ''), tn: Array.from({ length: 7 }, () => '') }), [turno]: val } }));
   };
@@ -564,7 +570,10 @@ export default function PlannerPage() {
     hrsProgramadasStore.setData((prev) => ({ ...prev, [produccionFechaKey]: val }));
   };
   const hrsProgramadasDtStore = useRemoteCollection<Record<string, { td: string[], tn: string[] }>>('planta-hrs-programadas-dt', {});
-  const hrsProgramadasDt = hrsProgramadasDtStore.data[produccionFechaKey] || { td: Array.from({ length: 7 }, () => ''), tn: Array.from({ length: 7 }, () => '') };
+  const hrsProgramadasDtRaw = hrsProgramadasDtStore.data[produccionFechaKey];
+  const hrsProgramadasDt = hrsProgramadasDtRaw && typeof hrsProgramadasDtRaw === 'object' && !Array.isArray(hrsProgramadasDtRaw) && Array.isArray(hrsProgramadasDtRaw.td)
+    ? hrsProgramadasDtRaw
+    : { td: Array.from({ length: 7 }, () => ''), tn: Array.from({ length: 7 }, () => '') };
   const setHrsProgramadasDt = (turno: 'td' | 'tn', val: string[]) => {
     hrsProgramadasDtStore.setData((prev) => ({ ...prev, [produccionFechaKey]: { ...(prev[produccionFechaKey] || { td: Array.from({ length: 7 }, () => ''), tn: Array.from({ length: 7 }, () => '') }), [turno]: val } }));
   };
@@ -2889,7 +2898,7 @@ export default function PlannerPage() {
                                           producidasDiurno={producidasDiurno}
                                           producidasNocturno={producidasNocturno}
                                           pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
-                                          velocidadesDia={velocidadesDia}
+                                           velocidadesDt={velocidadesDt}
                                           hrsPagadasDia={(() => { const a = hrsPagadasDt.td; const b = hrsPagadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
                                           hrsProgramadasDia={(() => { const a = hrsProgramadasDt.td; const b = hrsProgramadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
                                         />
@@ -2902,7 +2911,7 @@ export default function PlannerPage() {
                                                   <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
                                                     <thead>
                                                       <tr className="bg-slate-100">
-                                                        <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">TOTAL TD</th>
+                                                        <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">BPM</th>
                                                         <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">TOTAL TN</th>
                                                         <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">GLOBAL TD</th>
                                                         <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">GLOBAL TN</th>
@@ -2973,7 +2982,7 @@ export default function PlannerPage() {
                                                 producidasDiurno={producidasDiurno}
                                                 producidasNocturno={producidasNocturno}
                                                 pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
-                                                velocidadesDia={velocidadesDia}
+                                                velocidadesDt={velocidadesDt}
                                                  hrsPagadasDia={hrsPagadasDt.td}
                                                  hrsProgramadasDia={hrsProgramadasDt.td}
                                               />
@@ -3004,7 +3013,7 @@ export default function PlannerPage() {
                                                producidasDiurno={producidasDiurno}
                                                producidasNocturno={producidasNocturno}
                                                pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
-                                               velocidadesDia={velocidadesDia}
+                                               velocidadesDt={velocidadesDt}
                                                 hrsPagadasDia={hrsPagadasDt.tn}
                                                 hrsProgramadasDia={hrsProgramadasDt.tn}
                                              />
@@ -3033,45 +3042,65 @@ export default function PlannerPage() {
                                             Velocidades BPM
                                           </h4>
                                         </div>
-                                        <button
-                                          onClick={guardarVelocidadesBPM}
-                                          className="inline-flex items-center gap-1.5 h-8 px-4 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-sky-500 text-white hover:bg-sky-600 active:scale-95"
-                                        >
-                                          <Save className="h-3.5 w-3.5" />
-                                          Guardar
-                                        </button>
+                                        <div className="flex items-center gap-2">
+                                          <input
+                                            type="date"
+                                            value={produccionFecha ? format(produccionFecha, 'yyyy-MM-dd') : ''}
+                                            onChange={(e) => {
+                                              const raw = e.target.value;
+                                              if (!raw) return;
+                                              const [year, month, day] = raw.split('-').map(Number);
+                                              setProduccionFecha(new Date(year, month - 1, day));
+                                            }}
+                                            className="h-8 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                                          />
+                                          <button
+                                            onClick={() => {
+                                               const suma = (velocidadesDt?.td || []).map((v, idx) => {
+                                                const a = Number(v) || 0;
+                                                const b = Number(velocidadesDt.tn[idx]) || 0;
+                                                return String(a + b);
+                                               });
+                                               guardarVelocidadesBPM();
+                                            }}
+                                            className="inline-flex items-center gap-1.5 h-8 px-4 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-sky-500 text-white hover:bg-sky-600 active:scale-95"
+                                          >
+                                            <Save className="h-3.5 w-3.5" />
+                                            Guardar
+                                          </button>
+                                        </div>
                                       </div>
                                       <div className="p-4">
                                         <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
                                           <table className="w-full border-collapse text-center">
                                             <thead>
-                                              <tr className="bg-slate-100">
-                                                <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-40 text-left">Línea</th>
-                                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[120px]">BPM</th>
-                                              </tr>
+                                               <tr className="bg-slate-100">
+                                                 <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-40 text-left">Línea</th>
+                                                 <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[120px]">BPM</th>
+                                               </tr>
                                             </thead>
                                             <tbody>
-                                              {velocidadesDia.map((bpm, idx) => (
-                                                <tr key={idx} className="even:bg-slate-50/60">
-                                                  <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
-                                                    Línea {idx + 1}
-                                                  </td>
-                                                  <td className="px-2 py-1 border-b border-slate-100">
-                                                    <input
-                                                      type="text"
-                                                      inputMode="numeric"
-                                                      value={bpm}
-                                                      onChange={(e) => {
-                                                        const next = [...velocidadesDia];
-                                                        next[idx] = e.target.value;
-                                                        setVelocidadesDia(next);
-                                                      }}
-                                                      className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-sky-50 rounded px-1 py-0.5"
-                                                      placeholder="0"
-                                                    />
-                                                  </td>
-                                                </tr>
-                                              ))}
+                                               {(velocidadesDt?.td || []).map((bpm, idx) => (
+                                                 <tr key={idx} className="even:bg-slate-50/60">
+                                                   <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
+                                                     Línea {idx + 1}
+                                                   </td>
+                                                   <td className="px-2 py-1 border-b border-slate-100">
+                                                     <input
+                                                       type="text"
+                                                       inputMode="numeric"
+                                                       value={(velocidadesDt?.td?.[idx]) || ''}
+                                                        onChange={(e) => {
+                                                          const next = [...(velocidadesDt?.td || [])];
+                                                         next[idx] = e.target.value;
+                                                         setVelocidadesDt('td', next);
+                                                       }}
+                                                       className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-sky-50 rounded px-1 py-0.5"
+                                                       placeholder="0"
+                                                     />
+                                                   </td>
+                                                 </tr>
+                                               ))}
                                             </tbody>
                                           </table>
                                         </div>
@@ -3979,7 +4008,7 @@ function TablaResumenReporteDiario({ informesOperacionales, tasks, realProductio
           <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
             <thead>
               <tr className="bg-slate-100">
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">TOTAL TD</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">BPM</th>
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">TOTAL TN</th>
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">GLOBAL TD</th>
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">GLOBAL TN</th>
@@ -4133,7 +4162,7 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
 }
 
 
-function useReportData(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, turno: 'DIURNO' | 'NOCTURNO' | 'DIARIO' = 'DIURNO', fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, producidasDiurno?: any, producidasNocturno?: any, pncPorLinea?: (number | string)[], velocidadesDia?: string[], hrsPagadasDia?: string[], hrsProgramadasDia?: string[], semanaFechas?: string[]) {
+ function useReportData(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, turno: 'DIURNO' | 'NOCTURNO' | 'DIARIO' = 'DIURNO', fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, producidasDiurno?: any, producidasNocturno?: any, pncPorLinea?: (number | string)[], velocidadesDt?: { td: string[], tn: string[] }, hrsPagadasDia?: string[], hrsProgramadasDia?: string[], semanaFechas?: string[]) {
   return useMemo(() => {
     let informeDelDia: any[] = [];
     let diaPlanificada: any = {};
@@ -4175,10 +4204,10 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
       const servicios = minutosAHorasDecimal(paradasLinea.filter((r: any) => serviciosTipoParada.includes(String(r.tipoParada || '').toUpperCase())).reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
       const ausentismo = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'AUSENTISMO').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
       const externas = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'FALLA DE E/E').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
-       const horasPagadas = hrsPagadasDia && hrsPagadasDia[idx] ? hrsPagadasDia[idx] : '0';
-       const horasProgramadas = hrsProgramadasDia && hrsProgramadasDia[idx] ? hrsProgramadasDia[idx] : '0';
+        const horasPagadas = (hrsPagadasDia || [])[idx] || '0';
+        const horasProgramadas = (hrsProgramadasDia || [])[idx] || '0';
        const paradasProgramadas = minutosAHorasDecimal(porTipo.programadas || 0);
-        const pncVal = Number(pncPorLinea ? pncPorLinea[idx] ?? 0 : 0);
+         const pncVal = Number((pncPorLinea || [])[idx] ?? 0);
         const cajasH = Number(lineSpeeds?.[lineaNum] || 0);
         const horasPerdidasPNC = pncVal > 0 && cajasH > 0 ? (pncVal / cajasH).toFixed(2).replace('.', ',') : '0,00';
        const tareas = tareasLinea.filter((t: any) => t.lineId === String(lineaNum));
@@ -4188,7 +4217,10 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
       const alcanceTN = producidasNocturno ? Number(Object.values(producidasNocturno).reduce((acc: number, fila: any) => acc + (Number(fila?.[lineaNum]) || 0), 0)) : 0;
       const cumplimientoTD = planificadoTD > 0 ? ((alcanceTD / planificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
       const cumplimientoTN = planificadoTN > 0 ? ((alcanceTN / planificadoTN) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
-       const velocidad = Number(velocidadesDia ? velocidadesDia[idx] || 0 : lineSpeeds?.[lineaNum] || 0);
+        const tdVal = (velocidadesDt?.td?.[idx]) ?? '';
+        const tnVal = (velocidadesDt?.tn?.[idx]) ?? '';
+        const raw = turno === 'DIARIO' ? String((Number(tdVal) || 0) + (Number(tnVal) || 0)) : turno === 'DIURNO' ? tdVal : tnVal;
+        const velocidad = Number(raw || '') || lineSpeeds?.[lineaNum] || 0;
        const tiempoMuerto = minutosAHorasDecimal(Math.max(0, totalParadaMin - (porTipo.programadas || 0)));
         const relacion = (() => {
           const toNum = (v: any) => Number.parseFloat(String(v || '0').replace(',', '.')) || 0;
@@ -4249,7 +4281,7 @@ function useReportData(informesOperacionales: any[], tasks: any[], realProductio
           tiempoMuertoNegativo: tiempoMuertoInexplicableRaw < 0,
         };
     });
-  }, [informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia, semanaFechas]);
+  }, [informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDt, semanaFechas]);
 }
 
 function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, producidasDiurno?: any, producidasNocturno?: any, semanaFechas?: string[]) {
@@ -4484,8 +4516,8 @@ function PlanificadasPorDiaTable({ datosPorDia, fecha, turno }: { datosPorDia: a
   );
 }
 
-function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineSpeeds, turno = 'DIURNO', fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia, hrsPagadasDia, hrsProgramadasDia }: any) {
-   const data = useReportData(informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDia, hrsPagadasDia, hrsProgramadasDia);
+function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineSpeeds, turno = 'DIURNO', fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDt, hrsPagadasDia, hrsProgramadasDia }: any) {
+   const data = useReportData(informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDt, hrsPagadasDia, hrsProgramadasDia);
    const formatCell = (v: any) => v ?? '0';
    const esDiurno = turno === 'DIURNO';
    const esNocturno = turno === 'NOCTURNO';
@@ -4684,7 +4716,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
                  <thead>
                    <tr className="bg-slate-100">
-                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">TOTAL TD</th>
+                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">BPM</th>
                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">TOTAL TN</th>
                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">GLOBAL TD</th>
                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">GLOBAL TN</th>

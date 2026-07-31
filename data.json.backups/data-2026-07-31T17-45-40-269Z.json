@@ -6685,7 +6685,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-31T13:58:58.268Z"
+    "updatedAt": "2026-07-31T17:45:40.020Z"
   },
   "ordenesSap": [
     {
@@ -10056,6 +10056,26 @@
         {
           "fechaInicio": "2026-07-31",
           "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1785519925156",
+      "linea": 7,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "62679",
+      "semana": 31,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-31",
+          "ticket1": "1728",
           "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
@@ -20200,6 +20220,40 @@
         "orden": "",
         "observaciones": "",
         "id": 1785418190316
+      },
+      {
+        "fecha": "2026-07-28",
+        "semana": 31,
+        "turno": "DIURNO",
+        "operador": "FULANO",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "07:00",
+        "finParada": "09:00",
+        "totalMin": "120",
+        "zona": "Llenado",
+        "falla": "FALLA ELÉCTRICA",
+        "orden": "",
+        "observaciones": "",
+        "id": 1785508515291
+      },
+      {
+        "fecha": "2026-07-28",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "JUANITO",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "05:00",
+        "finParada": "07:00",
+        "totalMin": "120",
+        "zona": "Llenado",
+        "falla": "CIP 3 PASOS",
+        "orden": "",
+        "observaciones": "",
+        "id": 1785509131922
       }
     ],
     "planta-ordenes-trabajo": [
@@ -21524,15 +21578,24 @@
         "",
         ""
       ],
-      "2026-07-27": [
-        "150",
-        "250",
-        "280",
-        "280",
-        "242",
-        "300",
-        "500"
-      ]
+      "2026-07-27": {
+        "0": "150",
+        "1": "250",
+        "2": "280",
+        "3": "280",
+        "4": "242",
+        "5": "300",
+        "6": "500",
+        "td": [
+          "20",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
+        ]
+      }
     },
     "planta-hrs-pagadas-dt": {
       "2026-07-20": {
