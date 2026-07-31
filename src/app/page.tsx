@@ -2177,31 +2177,35 @@ export default function PlannerPage() {
                                                  <TableCell className="px-2 py-2 max-w-[180px]"><Input value={editForm.falla || ''} onChange={(e) => setEditForm({...editForm, falla: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
                                                 <TableCell className="px-2 py-2"><Input value={editForm.orden || ''} onChange={(e) => setEditForm({...editForm, orden: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                 <TableCell className="px-2 py-2 max-w-[200px]"><Input value={editForm.observaciones || ''} onChange={(e) => setEditForm({...editForm, observaciones: e.target.value})} className="h-8 text-[10px] w-full" /></TableCell>
-                                                 <TableCell className="px-2 py-2 flex items-center gap-1">
-                                                   <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
-                                                      if (!editForm.inicioParada || !editForm.finParada) {
-                                                        setErrorValidacion('Ingrese hora de inicio y fin de la parada.');
-                                                        return;
-                                                      }
-                                                      const duplicado = informesOperacionales.find(r => String(r.id) !== String(row.id) && r.fecha === editForm.fecha && r.linea === editForm.linea && seSolapan(r.inicioParada, r.finParada, editForm.inicioParada, editForm.finParada));
-                                                      if (duplicado) {
-                                                        setErrorValidacion(`Ya existe una parada registrada en esta fecha y línea de ${duplicado.inicioParada} a ${duplicado.finParada}.`);
-                                                        return;
-                                                      }
-                                                      const [h1, m1] = (editForm.inicioParada || '00:00').split(':').map(Number);
-                                                      const [h2, m2] = (editForm.finParada || '00:00').split(':').map(Number);
-                                                      let inicio = h1 * 60 + m1;
-                                                      let fin = h2 * 60 + m2;
-                                                      let diff = fin - inicio;
-                                                      if (diff < 0) diff += 1440;
-                                                      const updated = { ...editForm, totalMin: String(diff) };
-                                                      setInformesOperacionales(prev => prev.map(r => String(r.id) === String(row.id) ? updated : r));
-                                                     setEditingId(null);
-                                                     setEditForm({});
-                                                     setErrorValidacion('');
-                                                   }}><Check className="h-3.5 w-3.5" /></Button>
-                                                   <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => { setEditingId(null); setEditForm({}); setErrorValidacion(''); }}><X className="h-3.5 w-3.5" /></Button>
-                                                 </TableCell>
+                                                  <TableCell className="px-2 py-2 flex items-center gap-1">
+                                                    {user?.id !== 'prodtj.mds' && (
+                                                      <>
+                                                        <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
+                                                           if (!editForm.inicioParada || !editForm.finParada) {
+                                                             setErrorValidacion('Ingrese hora de inicio y fin de la parada.');
+                                                             return;
+                                                           }
+                                                           const duplicado = informesOperacionales.find(r => String(r.id) !== String(row.id) && r.fecha === editForm.fecha && r.linea === editForm.linea && seSolapan(r.inicioParada, r.finParada, editForm.inicioParada, editForm.finParada));
+                                                           if (duplicado) {
+                                                             setErrorValidacion(`Ya existe una parada registrada en esta fecha y línea de ${duplicado.inicioParada} a ${duplicado.finParada}.`);
+                                                             return;
+                                                           }
+                                                           const [h1, m1] = (editForm.inicioParada || '00:00').split(':').map(Number);
+                                                           const [h2, m2] = (editForm.finParada || '00:00').split(':').map(Number);
+                                                           let inicio = h1 * 60 + m1;
+                                                           let fin = h2 * 60 + m2;
+                                                           let diff = fin - inicio;
+                                                           if (diff < 0) diff += 1440;
+                                                           const updated = { ...editForm, totalMin: String(diff) };
+                                                           setInformesOperacionales(prev => prev.map(r => String(r.id) === String(row.id) ? updated : r));
+                                                           setEditingId(null);
+                                                           setEditForm({});
+                                                           setErrorValidacion('');
+                                                         }}><Check className="h-3.5 w-3.5" /></Button>
+                                                        <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => { setEditingId(null); setEditForm({}); setErrorValidacion(''); }}><X className="h-3.5 w-3.5" /></Button>
+                                                      </>
+                                                    )}
+                                                  </TableCell>
                                               </>
                                             ) : (
                                               <>
@@ -2328,7 +2332,7 @@ export default function PlannerPage() {
                                              })
                                              .map((row) => {
                                                 const rowEdit = editingRows[row.id] || row;
-                                                const enEdicion = !filasNoEditables[row.id];
+                                                 const enEdicion = !filasNoEditables[row.id] && user?.id !== 'prodtj.mds';
                                                 const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','inicioParada','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones','fechaParada']);
                                                  const editable = (campo: string) => enEdicion && camposEditables.has(campo);
                                                   const tMttoCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioMtto, rowEdit.fechaParada, rowEdit.finMtto);
