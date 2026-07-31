@@ -2055,7 +2055,7 @@ export default function PlannerPage() {
                                  </Popover>
                                 </div>
                             </div>
-                             {(isAdmin || (hasAccess(user.id, 'planta') && user?.id !== 'prodtj.mds')) && paradasSubTab !== 'ordenes-trabajo' && (
+                              {(isAdmin || (hasAccess(user.id, 'planta') && user?.id !== 'prodtj.mds')) && (paradasSubTab !== 'ordenes-trabajo' || user?.id === 'prodt.mds') && (
                              <button
                                onClick={() => setIsPlantaDialogOpen(true)}
                                className="inline-flex items-center gap-1.5 h-9 pl-4 pr-5 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-slate-800 text-white shadow-sm hover:bg-slate-900 active:scale-95"
@@ -2332,7 +2332,7 @@ export default function PlannerPage() {
                                              })
                                              .map((row) => {
                                                 const rowEdit = editingRows[row.id] || row;
-                                                 const enEdicion = !filasNoEditables[row.id] && user?.id !== 'prodtj.mds' && user?.id !== 'prodt.mds';
+                                                  const enEdicion = !filasNoEditables[row.id] && user?.id !== 'prodtj.mds';
                                                 const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','inicioParada','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones','fechaParada']);
                                                  const editable = (campo: string) => enEdicion && camposEditables.has(campo);
                                                   const tMttoCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioMtto, rowEdit.fechaParada, rowEdit.finMtto);
@@ -2432,8 +2432,8 @@ export default function PlannerPage() {
                                                       }}><Check className="h-3.5 w-3.5" /></Button>
                                                      ) : (
                                                        <>
-                                                         {user?.id !== 'prodtj.mds' && (
-                                                           <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingRows(prev => ({...prev, [row.id]: {...row}})); setFilasNoEditables(prev => { const next = {...prev}; delete next[row.id]; return next; }); }}><Pencil className="h-3.5 w-3.5" /></Button>
+                                                          {user?.id !== 'prodtj.mds' && user?.id !== 'prodt.mds' && (
+                                                            <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingRows(prev => ({...prev, [row.id]: {...row}})); setFilasNoEditables(prev => { const next = {...prev}; delete next[row.id]; return next; }); }}><Pencil className="h-3.5 w-3.5" /></Button>
                                                          )}
                                                        </>
                                                      )}
