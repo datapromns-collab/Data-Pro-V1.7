@@ -90,6 +90,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { WeeklyData } from '@/lib/json-db';
 import { ScheduledTask } from '@/lib/types';
 import { format, getISOWeek, addDays, addMonths, subMonths, startOfWeek, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
@@ -2789,21 +2790,11 @@ export default function PlannerPage() {
                                                        </tr>
                                                      </thead>
                                                       <tbody>
-                                                        {pncTd.map((tdRow, idx) => {
-                                                          const tdCant = Number(tdRow.cantidad || 0);
-                                                          const tnCant = Number(pncTn[idx]?.cantidad || 0);
-                                                          const total = tdCant + tnCant;
-   const { toast } = useToast();
-   useEffect(() => {
-     if (tiempoMuertoDesbordado) {
-       toast({
-         title: 'Error desbordamiento de tiempo',
-         description: 'Disponibilidad Real (hrs) no puede ser menor que Horas Efectivas de Producción.',
-         variant: 'destructive',
-       });
-     }
-   }, [tiempoMuertoDesbordado, toast]);
-   return (
+                                                         {pncTd.map((tdRow, idx) => {
+                                                           const tdCant = Number(tdRow.cantidad || 0);
+                                                           const tnCant = Number(pncTn[idx]?.cantidad || 0);
+                                                           const total = tdCant + tnCant;
+                                                             return (
                                                             <tr key={idx} className="even:bg-slate-50/60">
                                                               <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
                                                                 Línea {idx + 1}
@@ -4593,7 +4584,15 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                       <td className="px-1 py-0.5 text-[10px] border-b border-slate-100 text-center tabular-nums">
                         {row.tiempoMuertoNegativo ? (
                           <span className="flex items-center justify-center gap-1 text-red-600 font-bold">
-                            <AlertTriangle className="h-3 w-3" />
+                            <Tooltip>
+                              <TooltipTrigger>
+                                <AlertTriangle className="h-3 w-3" />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Error desbordamiento de tiempo</p>
+                                <p className="text-[10px]">Disponibilidad Real (hrs) no puede ser menor a 0</p>
+                              </TooltipContent>
+                            </Tooltip>
                             {formatCell(row.tiempoMuertoInexplicable)}
                           </span>
                         ) : Number.parseFloat(String(row.tiempoMuertoInexplicable || '0').replace(',', '.')) >= 2 ? (

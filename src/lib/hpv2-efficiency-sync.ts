@@ -1,4 +1,4 @@
-import { format, subDays, getHours, startOfWeek, differenceInMinutes } from "date-fns";
+import { format, subDays, getHours, startOfWeek, differenceInMinutes, startOfDay } from "date-fns";
 import { es } from "date-fns/locale";
 import { StopEvent, EfficiencyStore, DayOfWeek, EfficiencyDayData, WeeklyLineData } from "./hpv2-types";
 
@@ -79,7 +79,7 @@ export function computeEfficiencyStore(
   const affectedWeeks = new Set<string>();
   stops.forEach((stop) => {
     const start = new Date(stop.startTime);
-    const productionDate = getProductionDateForDate(start);
+    const productionDate = startOfDay(start);
     affectedWeeks.add(weekIdForDate(productionDate));
   });
 
@@ -100,7 +100,7 @@ export function computeEfficiencyStore(
   let duplicateCount = 0;
   stops.forEach((stop) => {
     const start = new Date(stop.startTime);
-    const productionDate = getProductionDateForDate(start);
+    const productionDate = startOfDay(start);
 
     const weekId = weekIdForDate(productionDate);
     const dayName = format(productionDate, 'eeee', { locale: es }).toLowerCase() as DayOfWeek;

@@ -137,7 +137,7 @@ export default function EnfardadoraPanel({ readOnly = false }: { readOnly?: bool
 
 function EnfardadoraInner({ readOnly = false }: { readOnly?: boolean }) {
   const [activeTab, setActiveTab] = useState<EnfardadoraTab>('paradas');
-  const { data, setData } = useSeguimiento();
+  const { data, setData, patchData } = useSeguimiento();
 
   const tabs = [
     { id: 'paradas' as EnfardadoraTab, label: 'Control de Paradas', icon: Activity },
@@ -167,7 +167,7 @@ function EnfardadoraInner({ readOnly = false }: { readOnly?: boolean }) {
 
       <div className="animate-in fade-in-50 duration-300">
         {activeTab === 'paradas' && <ParadasControl readOnly={readOnly} />}
-        {activeTab === 'eficiencia' && <EficienciaPanel readOnly={readOnly} />}
+        {activeTab === 'eficiencia' && <EficienciaPanel readOnly={readOnly} data={data} setData={setData} patchData={patchData} dateStorageKey="eficiencia_enfardadoras_selected_date_v1" />}
         {activeTab === 'capacidades' && <CapacidadesPanel readOnly={readOnly} />}
       </div>
     </div>

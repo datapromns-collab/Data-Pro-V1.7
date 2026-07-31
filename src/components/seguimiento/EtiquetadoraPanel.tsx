@@ -134,7 +134,7 @@ export default function EtiquetadoraPanel({ readOnly = false }: { readOnly?: boo
 
 function EtiquetadoraInner({ readOnly = false }: { readOnly?: boolean }) {
   const [activeTab, setActiveTab] = useState<EtiquetadoraTab>('paradas');
-  const { data, setData } = useSeguimiento();
+  const { data, setData, patchData } = useSeguimiento();
 
   const tabs = [
     { id: 'paradas' as EtiquetadoraTab, label: 'Control de Paradas', icon: Activity },
@@ -164,7 +164,7 @@ function EtiquetadoraInner({ readOnly = false }: { readOnly?: boolean }) {
 
       <div className="animate-in fade-in-50 duration-300">
         {activeTab === 'paradas' && <ParadasControl readOnly={readOnly} />}
-        {activeTab === 'eficiencia' && <EficienciaPanel readOnly={readOnly} />}
+        {activeTab === 'eficiencia' && <EficienciaPanel readOnly={readOnly} data={data} setData={setData} patchData={patchData} dateStorageKey="eficiencia_etiquetadora_selected_date_v1" />}
         {activeTab === 'capacidades' && <CapacidadesPanel readOnly={readOnly} />}
       </div>
     </div>
@@ -238,13 +238,8 @@ function ParadasControl({ readOnly = false }: { readOnly?: boolean }) {
     const startMinutesTotal = startH * 60 + startM;
     const turno = (startMinutesTotal >= 420 && startMinutesTotal < 1110) ? "Diurno" : "Nocturno";
 
-    let startCalendarDate = date;
-    if (startH < 7) startCalendarDate = addDays(date, 1);
-    let endCalendarDate = date;
-    if (endH < 7) endCalendarDate = addDays(date, 1);
-
-    const startTimestamp = setMinutes(setHours(startOfDay(startCalendarDate), startH), startM);
-    const endTimestamp = setMinutes(setHours(startOfDay(endCalendarDate), endH), endM);
+    const startTimestamp = setMinutes(setHours(startOfDay(date), startH), startM);
+    const endTimestamp = setMinutes(setHours(startOfDay(date), endH), endM);
 
     if (editingStop) {
       setData((prev) => ({

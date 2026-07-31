@@ -15,20 +15,21 @@ import jsPDF from "jspdf";
 import { startOfWeek, addDays, subDays, format, endOfWeek } from "date-fns";
 import { es } from "date-fns/locale";
 import { cn } from "@/lib/utils";
-import { useSeguimiento } from "./EnfardadoraPanel";
 import { DAYS, emptyDayData, emptyWeekData, computeEfficiencyStore } from "@/lib/hpv2-efficiency-sync";
 
 const DATE_STORAGE_KEY = 'eficiencia_enfardadoras_selected_date_v1';
 
 interface EficienciaPanelProps {
+  data: { stops: any[]; efficiencyStore: any; fixedCapacities: any };
+  setData: (updater: any) => void;
+  patchData: (patch: any) => void;
   storageKey?: string;
   dateStorageKey?: string;
   fixedCapacityStorageKey?: string;
   readOnly?: boolean;
 }
 
-export default function EficienciaPanel({ storageKey, dateStorageKey = DATE_STORAGE_KEY, fixedCapacityStorageKey, readOnly = false }: EficienciaPanelProps) {
-  const { data, setData, patchData } = useSeguimiento();
+export default function EficienciaPanel({ data, setData, patchData, storageKey, dateStorageKey = DATE_STORAGE_KEY, fixedCapacityStorageKey, readOnly = false }: EficienciaPanelProps & { data: { stops: any[]; efficiencyStore: any; fixedCapacities: any }; setData: (updater: any) => void; patchData: (patch: any) => void }) {
   const efficiencyStore = data.efficiencyStore;
   const fixedCapacities = data.fixedCapacities;
 
@@ -255,7 +256,7 @@ export default function EficienciaPanel({ storageKey, dateStorageKey = DATE_STOR
 
     const timer = setTimeout(() => {
       const weekId = getWeekId(baseDate);
-      patchData((prevData) => ({
+      patchData((prevData: any) => ({
         ...prevData,
         efficiencyStore: { ...prevData.efficiencyStore, [weekId]: activeWeekData },
       }));
