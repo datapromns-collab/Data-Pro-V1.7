@@ -6685,7 +6685,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-07-31T17:45:40.259Z"
+    "updatedAt": "2026-08-01T10:55:15.838Z"
   },
   "ordenesSap": [
     {
@@ -9796,7 +9796,7 @@
         },
         {
           "fechaInicio": "2026-07-31",
-          "ticket1": "",
+          "ticket1": "1743",
           "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
@@ -9939,6 +9939,17 @@
           "cajas3": 2080,
           "ticket4": "",
           "cajas4": 17360
+        },
+        {
+          "fechaInicio": "2026-07-31",
+          "ticket1": "17474",
+          "cajas1": 8320,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -10076,7 +10087,7 @@
         {
           "fechaInicio": "2026-07-31",
           "ticket1": "17283",
-          "cajas1": 0,
+          "cajas1": 6318,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
