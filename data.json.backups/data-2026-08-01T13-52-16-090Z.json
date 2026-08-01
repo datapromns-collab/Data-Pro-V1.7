@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-03T00:00:00.000",
+      "weekStartDate": "2026-07-27T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -5811,19 +5811,6 @@
             "color": "#ef4444"
           },
           {
-            "name": "JUSTY DURAZNO",
-            "lineId": "5",
-            "loadPerHour": 1210,
-            "quantity": 29040,
-            "durationHours": 24,
-            "presentation": "1.5Lts",
-            "tanks": 26.14,
-            "startTime": "2026-07-31T19:00:00.000Z",
-            "endTime": "2026-08-01T19:00:00.000Z",
-            "id": "jgvp3u2ay",
-            "color": "#587593"
-          },
-          {
             "name": "MTTO",
             "lineId": "6",
             "loadPerHour": 0,
@@ -6142,18 +6129,6 @@
             "color": "#10b981"
           },
           {
-            "name": "OTROS",
-            "description": "inventario fin de mes",
-            "lineId": "5",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 5,
-            "startTime": "2026-08-01T09:00:00.000Z",
-            "endTime": "2026-08-01T14:00:00.000Z",
-            "id": "k4o52kqqz",
-            "color": "#10b981"
-          },
-          {
             "name": "CS",
             "lineId": "7",
             "loadPerHour": 0,
@@ -6237,6 +6212,19 @@
             "endTime": "2026-07-30T22:30:00.000Z",
             "id": "cx6imgmn9",
             "color": "#f59e0b"
+          },
+          {
+            "name": "JUSTY DURAZNO",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 16940,
+            "durationHours": 14,
+            "presentation": "1.5Lts",
+            "tanks": 15.25,
+            "startTime": "2026-07-31T19:00:00.000Z",
+            "endTime": "2026-08-01T09:00:00.000Z",
+            "id": "qrd9yvhvl",
+            "color": "#6366f1"
           }
         ],
         "realProduction": {},
@@ -6278,7 +6266,9 @@
           "abyz6ld7a",
           "3q00wwiqb",
           "si2434kij",
-          "afmv957h7"
+          "afmv957h7",
+          "jgvp3u2ay",
+          "k4o52kqqz"
         ]
       },
       "2026-08-03": {
@@ -6685,7 +6675,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-01T11:27:11.466Z"
+    "updatedAt": "2026-08-01T13:52:12.592Z"
   },
   "ordenesSap": [
     {
@@ -6873,7 +6863,7 @@
           "ticket1": "",
           "cajas1": 0,
           "ticket2": "17312",
-          "cajas2": -1,
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 800,
           "ticket4": "",
@@ -9798,12 +9788,12 @@
           "fechaInicio": "2026-07-31",
           "ticket1": "17436",
           "cajas1": 8880,
-          "ticket2": "",
+          "ticket2": "17437",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 13812
         }
       ]
     },
@@ -9871,12 +9861,12 @@
           "fechaInicio": "2026-07-31",
           "ticket1": "17522",
           "cajas1": 13840,
-          "ticket2": "",
+          "ticket2": "17523",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 10549
         }
       ]
     },
@@ -9913,12 +9903,12 @@
           "fechaInicio": "2026-07-31",
           "ticket1": "17562",
           "cajas1": 5500,
-          "ticket2": "",
+          "ticket2": "17563",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 6771
         }
       ]
     },
@@ -9955,12 +9945,12 @@
           "fechaInicio": "2026-07-31",
           "ticket1": "17474",
           "cajas1": 8320,
-          "ticket2": "",
+          "ticket2": "17475",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 9376
         }
       ]
     },
@@ -10100,7 +10090,7 @@
           "ticket1": "17283",
           "cajas1": 6318,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 2157,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -10119,7 +10109,7 @@
           "fechaInicio": "2026-07-31",
           "ticket1": "17335",
           "cajas1": 1440,
-          "ticket2": "",
+          "ticket2": "17336",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,

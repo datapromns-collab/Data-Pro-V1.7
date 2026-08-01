@@ -6675,7 +6675,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-01T11:36:39.494Z"
+    "updatedAt": "2026-08-01T13:52:16.305Z"
   },
   "ordenesSap": [
     {
@@ -6863,7 +6863,7 @@
           "ticket1": "",
           "cajas1": 0,
           "ticket2": "17312",
-          "cajas2": -1,
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 800,
           "ticket4": "",
@@ -9788,12 +9788,12 @@
           "fechaInicio": "2026-07-31",
           "ticket1": "17436",
           "cajas1": 8880,
-          "ticket2": "",
+          "ticket2": "17437",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 13812
         }
       ]
     },
@@ -9861,12 +9861,12 @@
           "fechaInicio": "2026-07-31",
           "ticket1": "17522",
           "cajas1": 13840,
-          "ticket2": "",
+          "ticket2": "17523",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 10549
         }
       ]
     },
@@ -9903,12 +9903,12 @@
           "fechaInicio": "2026-07-31",
           "ticket1": "17562",
           "cajas1": 5500,
-          "ticket2": "",
+          "ticket2": "17563",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 6771
         }
       ]
     },
@@ -9945,12 +9945,12 @@
           "fechaInicio": "2026-07-31",
           "ticket1": "17474",
           "cajas1": 8320,
-          "ticket2": "",
+          "ticket2": "17475",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 9376
         }
       ]
     },
@@ -10109,12 +10109,12 @@
           "fechaInicio": "2026-07-31",
           "ticket1": "17335",
           "cajas1": 1440,
-          "ticket2": "",
+          "ticket2": "17336",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8091
         }
       ]
     }
