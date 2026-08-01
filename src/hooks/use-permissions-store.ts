@@ -133,6 +133,7 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   'cald.mds': ['planning'],
   'prodt.mds': ['planning', 'planta'],
   'prodt1.mds': ['planning', 'planta'],
+  'prodt2.mds': ['planning', 'planta'],
   'proc.mds': ['planning', 'planta'],
   'g.tec.mds': ['planning', 'seguimiento', 'management'],
   'enf.mds': ['planning', 'seguimiento', 'management'],
