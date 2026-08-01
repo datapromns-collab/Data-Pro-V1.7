@@ -923,6 +923,7 @@ export default function PlannerPage() {
     falla: '',
     orden: '',
     observaciones: '',
+    usuario: '',
   });
   const [ordenFormData, setOrdenFormData] = useState({
     fechaOrden: format(new Date(), 'yyyy-MM-dd'),
@@ -947,6 +948,7 @@ export default function PlannerPage() {
     descripcionFalla: '',
     descripcionAccion: '',
     observaciones: '',
+    usuario: '',
   });
 
   useEffect(() => {
@@ -2145,22 +2147,25 @@ export default function PlannerPage() {
                                     <div className="min-w-[1200px]">
                                       <Table>
                                      <TableHeader className="sticky top-0 z-30">
-                                       <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
-                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Fecha</TableHead>
-                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Sem</TableHead>
-                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Turno</TableHead>
-                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Operador</TableHead>
-                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Línea</TableHead>
-                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Equipo</TableHead>
-                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Tipo de Parada</TableHead>
-                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">I-Parada</TableHead>
-                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">F-Parada</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">T-Parada</TableHead>
-                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Motivo de Parada</TableHead>
-                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Orden</TableHead>
-                                        <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Observaciones</TableHead>
-                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 w-16">Acciones</TableHead>
-                                       </TableRow>
+                                        <TableRow className="bg-[#1a3d6b] hover:bg-[#1a3d6b] text-white border-none">
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Fecha</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Sem</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Turno</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Operador</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Línea</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Equipo</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Tipo de Parada</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">I-Parada</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">F-Parada</TableHead>
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">T-Parada</TableHead>
+                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Motivo de Parada</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Orden</TableHead>
+                                         <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Observaciones</TableHead>
+                                          {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
+                                            <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Usuario</TableHead>
+                                          )}
+                                          <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 w-16">Acciones</TableHead>
+                                        </TableRow>
                                      </TableHeader>
                                      <TableBody>
                                         {informesOperacionales
@@ -2257,9 +2262,9 @@ export default function PlannerPage() {
                                           return matchLine && matchDate;
                                         }).length === 0 && (
                                         <TableRow>
-                                           <TableCell colSpan={15} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
-                                            Sin registros para el filtro seleccionado
-                                          </TableCell>
+                                           <TableCell colSpan={(user?.id === 'alex.mds' || user?.id === 'maria.mds') ? 16 : 15} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
+                                             Sin registros para el filtro seleccionado
+                                           </TableCell>
                                         </TableRow>
                                       )}
                                           </TableBody>
@@ -2326,10 +2331,13 @@ export default function PlannerPage() {
                                               <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">FALLA</TableHead>
                                               <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO / ESP</TableHead>
                                               <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCIÓN DE LA FALLA POR EL SOLICITANTE</TableHead>
-                                              <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCIÓN DE LA ACCIÓN DE MANTENIMIENTO</TableHead>
-                                              <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">OBSERVACIONES</TableHead>
-                                               <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 w-16">Acciones</TableHead>
-                                           </TableRow>
+                                               <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCIÓN DE LA ACCIÓN DE MANTENIMIENTO</TableHead>
+                                               <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">OBSERVACIONES</TableHead>
+                                                {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
+                                                  <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">Usuario</TableHead>
+                                                )}
+                                                <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 w-16">Acciones</TableHead>
+                                            </TableRow>
                                        </TableHeader>
                                          <TableBody>
                                            {ordenesTrabajoCargadas
@@ -2410,8 +2418,11 @@ export default function PlannerPage() {
                                                        {editable('mttoEsp') ? <TableCell className="px-2 py-2"><Input value={rowEdit.mttoEsp || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, mttoEsp: e.target.value}})} className="h-8 text-[10px] w-28" placeholder="MTTO / ESP" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600">{rowEdit.mttoEsp}</TableCell>}
                                                        {editable('descripcionFalla') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionFalla || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionFalla: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Desc. falla" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.descripcionFalla}>{rowEdit.descripcionFalla}</TableCell>}
                                                        {editable('descripcionAccion') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionAccion || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionAccion: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Desc. acción" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.descripcionAccion}>{rowEdit.descripcionAccion}</TableCell>}
-                                                       {editable('observaciones') ? <TableCell className="px-2 py-2"><Input value={rowEdit.observaciones || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, observaciones: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Observaciones" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.observaciones}>{rowEdit.observaciones}</TableCell>}
-                                                  <TableCell className="px-2 py-2 flex items-center gap-1">
+                                                        {editable('observaciones') ? <TableCell className="px-2 py-2"><Input value={rowEdit.observaciones || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, observaciones: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Observaciones" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.observaciones}>{rowEdit.observaciones}</TableCell>}
+                                                        {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
+                                                          <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.usuario || ''}</TableCell>
+                                                        )}
+                                                   <TableCell className="px-2 py-2 flex items-center gap-1">
                                                     {enEdicion ? (
                                                       <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
                                                         const originalId = row.id;
@@ -2459,13 +2470,13 @@ export default function PlannerPage() {
                                              const matchQ = !q || [r.orden, r.solicitante, r.falla, r.maquina, r.aviso, r.observaciones, r.descripcionFalla, r.descripcionAccion]
                                                .filter(Boolean).some((v) => String(v).toLowerCase().includes(q));
                                              return matchLine && matchDate && matchQ;
-                                           }).length === 0 && (
-                                             <TableRow>
-                                               <TableCell colSpan={23} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
-                                                 Sin registros para el filtro seleccionado
-                                               </TableCell>
-                                             </TableRow>
-                                           )}
+                                            }).length === 0 && (
+                                              <TableRow>
+                                                <TableCell colSpan={(user?.id === 'alex.mds' || user?.id === 'maria.mds') ? 24 : 23} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
+                                                  Sin registros para el filtro seleccionado
+                                                </TableCell>
+                                              </TableRow>
+                                            )}
                                          </TableBody>
                                          </Table>
                                       </div>
@@ -3712,33 +3723,33 @@ export default function PlannerPage() {
                </div>
              )}
 
-             {paradasSubTab === 'informes-operacionales' ? (
-              <div className="grid grid-cols-2 gap-4 py-4">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fecha</label>
-                  <Input type="date" value={plantaFormData.fecha} onChange={(e) => setPlantaFormData({...plantaFormData, fecha: e.target.value})} className="h-9 text-[11px]" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Semana</label>
-                  <Input type="number" value={plantaFormData.semana} onChange={(e) => setPlantaFormData({...plantaFormData, semana: parseInt(e.target.value) || 0})} className="h-9 text-[11px]" />
-                </div>
-                 <div className="space-y-2">
-                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Turno</label>
-                   <select value={plantaFormData.turno} onChange={(e) => setPlantaFormData({...plantaFormData, turno: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
-                     <option value="DIURNO">DIURNO</option>
-                     <option value="NOCTURNO">NOCTURNO</option>
-                   </select>
-                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Operador</label>
-                  <Input value={plantaFormData.operador} onChange={(e) => setPlantaFormData({...plantaFormData, operador: e.target.value})} className="h-9 text-[11px]" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Línea</label>
-                  <select value={plantaFormData.linea} onChange={(e) => setPlantaFormData({...plantaFormData, linea: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
-                    {LINES.map((l) => <option key={l} value={l}>{l}</option>)}
-                  </select>
-                </div>
+              {paradasSubTab === 'informes-operacionales' ? (
+                <div className="grid grid-cols-2 gap-4 py-4">
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fecha</label>
+                    <Input type="date" value={plantaFormData.fecha} onChange={(e) => setPlantaFormData({...plantaFormData, fecha: e.target.value})} className="h-9 text-[11px]" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Semana</label>
+                    <Input type="number" value={plantaFormData.semana} onChange={(e) => setPlantaFormData({...plantaFormData, semana: parseInt(e.target.value) || 0})} className="h-9 text-[11px]" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Turno</label>
+                    <select value={plantaFormData.turno} onChange={(e) => setPlantaFormData({...plantaFormData, turno: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                      <option value="DIURNO">DIURNO</option>
+                      <option value="NOCTURNO">NOCTURNO</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Operador</label>
+                    <Input value={plantaFormData.operador} onChange={(e) => setPlantaFormData({...plantaFormData, operador: e.target.value})} className="h-9 text-[11px]" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Línea</label>
+                    <select value={plantaFormData.linea} onChange={(e) => setPlantaFormData({...plantaFormData, linea: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                      {LINES.map((l) => <option key={l} value={l}>{l}</option>)}
+                    </select>
+                  </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Equipo</label>
                     <select value={plantaFormData.equipo} onChange={(e) => setPlantaFormData({...plantaFormData, equipo: e.target.value})} disabled={!EQUIPO_ACTIVO_POR_TIPO.has(plantaFormData.tipoParada)} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full disabled:opacity-50 disabled:cursor-not-allowed">
@@ -3746,38 +3757,41 @@ export default function PlannerPage() {
                       {EQUIPOS_INFORME_OPERACIONAL.map((e) => <option key={e} value={e}>{e}</option>)}
                     </select>
                   </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Tipo de Parada</label>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Tipo de Parada</label>
                     <select value={plantaFormData.tipoParada} onChange={(e) => setPlantaFormData({...plantaFormData, tipoParada: e.target.value, equipo: EQUIPO_ACTIVO_POR_TIPO.has(e.target.value) ? plantaFormData.equipo : ''})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
-                     {TIPOS_PARADA_INFORME_OPERACIONAL.map((t) => <option key={t} value={t}>{t}</option>)}
-                   </select>
-                 </div>
-                 <div className="space-y-2">
-                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Parada</label>
-                   <Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={plantaFormData.inicioParada} onChange={onChangeHora((v) => setPlantaFormData({...plantaFormData, inicioParada: v}))} className="h-9 text-[11px]" />
+                      {TIPOS_PARADA_INFORME_OPERACIONAL.map((t) => <option key={t} value={t}>{t}</option>)}
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Parada</label>
+                    <Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={plantaFormData.inicioParada} onChange={onChangeHora((v) => setPlantaFormData({...plantaFormData, inicioParada: v}))} className="h-9 text-[11px]" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Parada</label>
+                    <Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={plantaFormData.finParada} onChange={onChangeHora((v) => setPlantaFormData({...plantaFormData, finParada: v}))} className="h-9 text-[11px]" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Total (min)</label>
+                    <Input type="number" value={plantaFormData.totalMin} readOnly className="h-9 text-[11px] bg-slate-100" />
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Orden</label>
+                    <Input value={plantaFormData.orden} onChange={(e) => setPlantaFormData({...plantaFormData, orden: e.target.value})} className="h-9 text-[11px]" />
+                  </div>
+                  <div className="space-y-2 col-span-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Motivo de Parada</label>
+                    <Input value={plantaFormData.falla} onChange={(e) => setPlantaFormData({...plantaFormData, falla: e.target.value})} className="h-9 text-[11px]" />
+                  </div>
+                  <div className="space-y-2 col-span-2">
+                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Observaciones</label>
+                    <textarea value={plantaFormData.observaciones} onChange={(e) => setPlantaFormData({...plantaFormData, observaciones: e.target.value})} className="h-20 text-[11px] border border-slate-200 rounded-md px-3 py-2 w-full resize-none"></textarea>
+                  </div>
+                  <div className="col-span-2">
+                    <input type="hidden" value={user?.name || ''} onChange={(e) => setPlantaFormData({...plantaFormData, usuario: e.target.value})} />
+                  </div>
                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Parada</label>
-                   <Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={plantaFormData.finParada} onChange={onChangeHora((v) => setPlantaFormData({...plantaFormData, finParada: v}))} className="h-9 text-[11px]" />
-                </div>
-                 <div className="space-y-2">
-                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Total (min)</label>
-                   <Input type="number" value={plantaFormData.totalMin} readOnly className="h-9 text-[11px] bg-slate-100" />
-                 </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Orden</label>
-                  <Input value={plantaFormData.orden} onChange={(e) => setPlantaFormData({...plantaFormData, orden: e.target.value})} className="h-9 text-[11px]" />
-                </div>
-                <div className="space-y-2 col-span-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Motivo de Parada</label>
-                  <Input value={plantaFormData.falla} onChange={(e) => setPlantaFormData({...plantaFormData, falla: e.target.value})} className="h-9 text-[11px]" />
-                </div>
-                <div className="space-y-2 col-span-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Observaciones</label>
-                  <textarea value={plantaFormData.observaciones} onChange={(e) => setPlantaFormData({...plantaFormData, observaciones: e.target.value})} className="h-20 text-[11px] border border-slate-200 rounded-md px-3 py-2 w-full resize-none" />
-                </div>
-              </div>
-            ) : (
+              ) : (
               <div className="grid grid-cols-2 gap-4 py-4">
                 <div className="space-y-2">
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fecha Orden</label>
@@ -3877,12 +3891,15 @@ export default function PlannerPage() {
                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Acción Mantenimiento</label>
                   <textarea value={ordenFormData.descripcionAccion} onChange={(e) => setOrdenFormData({...ordenFormData, descripcionAccion: e.target.value})} className="h-20 text-[11px] border border-slate-200 rounded-md px-3 py-2 w-full resize-none" />
                 </div>
-                <div className="space-y-2 col-span-2">
-                  <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Observaciones</label>
-                  <textarea value={ordenFormData.observaciones} onChange={(e) => setOrdenFormData({...ordenFormData, observaciones: e.target.value})} className="h-20 text-[11px] border border-slate-200 rounded-md px-3 py-2 w-full resize-none" />
-                </div>
-              </div>
-            )}
+                 <div className="space-y-2 col-span-2">
+                   <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Observaciones</label>
+                   <textarea value={ordenFormData.observaciones} onChange={(e) => setOrdenFormData({...ordenFormData, observaciones: e.target.value})} className="h-20 text-[11px] border border-slate-200 rounded-md px-3 py-2 w-full resize-none" />
+                 </div>
+                 <div className="col-span-2">
+                   <input type="hidden" value={user?.name || ''} onChange={(e) => setOrdenFormData({...ordenFormData, usuario: e.target.value})} />
+                 </div>
+               </div>
+             )}
 
             <DialogFooter>
               <Button variant="outline" onClick={() => setIsPlantaDialogOpen(false)} className="rounded-xl">
@@ -3899,7 +3916,7 @@ export default function PlannerPage() {
                      setErrorValidacion(`Ya existe una parada registrada en esta fecha y línea de ${duplicado.inicioParada} a ${duplicado.finParada}.`);
                      return;
                    }
-                   setInformesOperacionales([...informesOperacionales, { ...plantaFormData, id: Date.now() }]);
+                    setInformesOperacionales([...informesOperacionales, { ...plantaFormData, id: Date.now(), usuario: user?.name || '' }]);
                      setPlantaFormData({
                        fecha: format(new Date(), 'yyyy-MM-dd'),
                        semana: getISOWeek(new Date()),
@@ -3918,35 +3935,36 @@ export default function PlannerPage() {
                    });
                    setErrorValidacion('');
                   } else {
-                    setInformesOperacionales([...informesOperacionales, {
-                      id: Date.now(),
-                      fecha: ordenFormData.fechaOrden || format(new Date(), 'yyyy-MM-dd'),
-                      semana: ordenFormData.semana || '',
-                      turno: ordenFormData.turno || '',
-                      operador: '',
-                      linea: ordenFormData.linea || 'Línea 1',
-                      equipo: ordenFormData.maquina || '',
-                      tipoParada: ordenFormData.tipoParada || 'PROGRAMADA',
-                      inicioParada: ordenFormData.inicioParada || '',
-                      finParada: ordenFormData.finParada || '',
-                      totalMin: ordenFormData.tMtto || '',
-                      zona: '',
-                      falla: ordenFormData.falla || '',
-                      orden: ordenFormData.orden || '',
-                      aviso: ordenFormData.aviso || '',
-                      maquina: ordenFormData.maquina || '',
-                      solicitante: ordenFormData.solicitante || '',
-                      fechaEmision: ordenFormData.fechaEmision || '',
-                      fechaParada: ordenFormData.fechaParada || '',
-                      inicioMtto: ordenFormData.inicioMtto || '',
-                      finMtto: ordenFormData.finMtto || '',
-                      tMtto: ordenFormData.tMtto || '',
-                      mtto: ordenFormData.mtto || '',
-                      mttoEsp: ordenFormData.mttoEsp || '',
-                      descripcionFalla: ordenFormData.descripcionFalla || '',
-                      descripcionAccion: ordenFormData.descripcionAccion || '',
-                      observaciones: ordenFormData.observaciones || '',
-                    }]);
+                     setInformesOperacionales([...informesOperacionales, {
+                       id: Date.now(),
+                       fecha: ordenFormData.fechaOrden || format(new Date(), 'yyyy-MM-dd'),
+                       semana: ordenFormData.semana || '',
+                       turno: ordenFormData.turno || '',
+                       operador: '',
+                       linea: ordenFormData.linea || 'Línea 1',
+                       equipo: ordenFormData.maquina || '',
+                       tipoParada: ordenFormData.tipoParada || 'PROGRAMADA',
+                       inicioParada: ordenFormData.inicioParada || '',
+                       finParada: ordenFormData.finParada || '',
+                       totalMin: ordenFormData.tMtto || '',
+                       zona: '',
+                       falla: ordenFormData.falla || '',
+                       orden: ordenFormData.orden || '',
+                       aviso: ordenFormData.aviso || '',
+                       maquina: ordenFormData.maquina || '',
+                       solicitante: ordenFormData.solicitante || '',
+                       fechaEmision: ordenFormData.fechaEmision || '',
+                       fechaParada: ordenFormData.fechaParada || '',
+                       inicioMtto: ordenFormData.inicioMtto || '',
+                       finMtto: ordenFormData.finMtto || '',
+                       tMtto: ordenFormData.tMtto || '',
+                       mtto: ordenFormData.mtto || '',
+                       mttoEsp: ordenFormData.mttoEsp || '',
+                       descripcionFalla: ordenFormData.descripcionFalla || '',
+                       descripcionAccion: ordenFormData.descripcionAccion || '',
+                       observaciones: ordenFormData.observaciones || '',
+                       usuario: user?.name || '',
+                     }]);
                     setOrdenFormData({
                       fechaOrden: format(new Date(), 'yyyy-MM-dd'),
                       orden: '',
