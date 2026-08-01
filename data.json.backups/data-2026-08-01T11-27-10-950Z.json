@@ -6685,7 +6685,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-01T10:56:27.446Z"
+    "updatedAt": "2026-08-01T11:27:10.638Z"
   },
   "ordenesSap": [
     {
@@ -9797,7 +9797,7 @@
         {
           "fechaInicio": "2026-07-31",
           "ticket1": "17436",
-          "cajas1": 888,
+          "cajas1": 8880,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -9869,8 +9869,8 @@
         },
         {
           "fechaInicio": "2026-07-31",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17522",
+          "cajas1": 13840,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -9908,6 +9908,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 6600
+        },
+        {
+          "fechaInicio": "2026-07-31",
+          "ticket1": "17562",
+          "cajas1": 5500,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -10004,8 +10015,8 @@
         },
         {
           "fechaInicio": "2026-07-31",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17387",
+          "cajas1": 7360,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -10035,8 +10046,8 @@
         },
         {
           "fechaInicio": "2026-07-31",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17335",
+          "cajas1": 5322,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -10066,8 +10077,8 @@
         },
         {
           "fechaInicio": "2026-07-31",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17283",
+          "cajas1": 2,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -10088,6 +10099,26 @@
           "fechaInicio": "2026-07-31",
           "ticket1": "17283",
           "cajas1": 6318,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1785583383434",
+      "linea": 6,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "62685",
+      "semana": 31,
+      "dias": [
+        {
+          "fechaInicio": "2026-07-31",
+          "ticket1": "17335",
+          "cajas1": 1440,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
