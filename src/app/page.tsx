@@ -2237,8 +2237,11 @@ export default function PlannerPage() {
                                                   <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums whitespace-nowrap">{row.totalMin} min</TableCell>
                                                  <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[180px] truncate" title={row.falla}>{row.falla}</TableCell>
                                                 <TableCell className="px-2 py-2 text-[11px] font-mono text-slate-600 whitespace-nowrap">{row.orden}</TableCell>
-                                                <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[200px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
-                                                  <TableCell className="px-2 py-2 flex items-center gap-1">
+                                                 <TableCell className="px-2 py-2 text-[11px] text-slate-500 max-w-[200px] truncate" title={row.observaciones}>{row.observaciones}</TableCell>
+                                                 {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
+                                                   <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.usuario || ''}</TableCell>
+                                                 )}
+                                                   <TableCell className="px-2 py-2 flex items-center gap-1">
                                                      {user?.id !== 'prodtj.mds' && user?.id !== 'prodt.mds' && user?.id !== 'prodt1.mds' && user?.id !== 'prodt2.mds' && (
                                                        <>
                                                          <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingId(row.id); setEditForm(row); }}><Pencil className="h-3.5 w-3.5" /></Button>
@@ -2419,9 +2422,9 @@ export default function PlannerPage() {
                                                        {editable('descripcionFalla') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionFalla || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionFalla: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Desc. falla" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.descripcionFalla}>{rowEdit.descripcionFalla}</TableCell>}
                                                        {editable('descripcionAccion') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionAccion || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionAccion: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Desc. acción" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.descripcionAccion}>{rowEdit.descripcionAccion}</TableCell>}
                                                         {editable('observaciones') ? <TableCell className="px-2 py-2"><Input value={rowEdit.observaciones || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, observaciones: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Observaciones" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.observaciones}>{rowEdit.observaciones}</TableCell>}
-                                                        {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
-                                                          <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.usuario || ''}</TableCell>
-                                                        )}
+                                                         {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
+                                                           <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.usuario || ''}</TableCell>
+                                                         )}
                                                    <TableCell className="px-2 py-2 flex items-center gap-1">
                                                     {enEdicion ? (
                                                       <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
