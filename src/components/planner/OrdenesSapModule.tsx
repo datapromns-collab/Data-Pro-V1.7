@@ -849,9 +849,14 @@ export default function OrdenesSapModule({
     });
     if (!selectedFechaProdtSemanal) return tabla;
     const semana = getISOWeek(selectedFechaProdtSemanal);
+    const mes = selectedFechaProdtSemanal.getMonth();
+    const anio = selectedFechaProdtSemanal.getFullYear();
     ordenes.forEach(orden => {
       if (orden.semana !== semana) return;
       orden.dias.forEach(dia => {
+        const d = new Date(dia.fechaInicio + 'T12:00:00');
+        if (isNaN(d.getTime())) return;
+        if (d.getMonth() !== mes || d.getFullYear() !== anio) return;
         const total = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
         tabla[orden.sabor][orden.linea] = (tabla[orden.sabor][orden.linea] || 0) + total;
       });
@@ -922,10 +927,16 @@ export default function OrdenesSapModule({
     const base = ordenes.filter(o => o.linea === activeLinea);
     if (!selectedFecha) return base;
     const semanaSeleccionada = getISOWeek(selectedFecha);
-    // Separa estrictamente por semana ISO: solo se muestran las órdenes
-    // de la semana seleccionada. Las demás quedan guardadas y se muestran
-    // al volver a seleccionar su semana correspondiente.
-    return base.filter(o => o.semana === semanaSeleccionada);
+    const mesSeleccionado = selectedFecha.getMonth();
+    const anioSeleccionado = selectedFecha.getFullYear();
+    return base.filter(o => {
+      if (o.semana !== semanaSeleccionada) return false;
+      return (o.dias || []).some(dia => {
+        const d = new Date(dia.fechaInicio + 'T12:00:00');
+        if (isNaN(d.getTime())) return false;
+        return d.getMonth() === mesSeleccionado && d.getFullYear() === anioSeleccionado;
+      });
+    });
   }, [ordenes, activeLinea, selectedFecha]);
 
   const semanasDisponibles = useMemo(() => {
@@ -1227,9 +1238,14 @@ const exportarPDFdia = async () => {
     });
 
     if (selectedFechaProdtSemanal) {
+      const mesPDF = selectedFechaProdtSemanal.getMonth();
+      const anioPDF = selectedFechaProdtSemanal.getFullYear();
       (ordenes || []).forEach(orden => {
         if (orden.semana !== semana) return;
         (orden.dias || []).forEach(dia => {
+          const d = new Date(dia.fechaInicio + 'T12:00:00');
+          if (isNaN(d.getTime())) return;
+          if (d.getMonth() !== mesPDF || d.getFullYear() !== anioPDF) return;
           const total = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
           tablaPDF[orden.sabor][orden.linea] = (tablaPDF[orden.sabor][orden.linea] || 0) + total;
         });
@@ -1267,7 +1283,7 @@ const exportarPDFdia = async () => {
     pdf.setFont('helvetica', 'bold');
     pdf.setFontSize(13);
     pdf.setTextColor(15, 23, 42);
-    pdf.text(`SEMANA ${semana}`, pageWidth / 2, titleY, { align: 'center' });
+    pdf.text(`SEMANA ${semana} - ${mes}`, pageWidth / 2, titleY, { align: 'center' });
 
     let y = 45;
     let x = startX;
@@ -2265,10 +2281,17 @@ const exportarPDFdia = async () => {
                       )}
 
                        <div id="ordenes-sap-export" className="grid grid-cols-1 xl:grid-cols-2 2xl:grid-cols-3 gap-3">
-                         {ordenesPorLinea.map((orden) => {
-                           const colorClass = SABOR_COLORS[orden.sabor] || FALLBACK_COLOR;
-                           return (
-                             <div key={orden.id} className="border border-slate-200 rounded-xl bg-white overflow-hidden" data-ordenes-sap-linea={orden.linea}>
+                              {ordenesPorLinea.map((orden) => {
+                                const colorClass = SABOR_COLORS[orden.sabor] || FALLBACK_COLOR;
+                                const diasFiltrados = selectedFecha
+                                  ? orden.dias.filter(dia => {
+                                      const d = new Date(dia.fechaInicio + 'T12:00:00');
+                                      if (isNaN(d.getTime())) return false;
+                                      return d.getMonth() === selectedFecha.getMonth() && d.getFullYear() === selectedFecha.getFullYear();
+                                    })
+                                  : orden.dias;
+                                return (
+                                  <div key={orden.id} className="border border-slate-200 rounded-xl bg-white overflow-hidden" data-ordenes-sap-linea={orden.linea}>
                               <div className={`px-3 py-1.5 border-b border-slate-200 flex items-center justify-between ${colorClass}`}>
                                 <p className="text-[10px] font-black uppercase tracking-widest truncate">
                                   {orden.sabor} - SEMANA {orden.semana}
@@ -2280,7 +2303,7 @@ const exportarPDFdia = async () => {
                                   Eliminar orden
                                 </button>
                               </div>
-                              {orden.dias.map((dia, diaIndex) => (
+                               {diasFiltrados.map((dia, diaIndex) => (
                                 <div key={diaIndex}>
                                   <div className="flex items-center justify-between px-3 py-1 bg-slate-50 border-b border-slate-100">
                                     <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">
@@ -2355,7 +2378,7 @@ const exportarPDFdia = async () => {
                             <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
                             <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
                             <div className="p-1 border-r border-slate-100 border-b border-slate-100 font-black text-slate-900">
-                              {orden.dias.reduce((sum, d) => sum + calcularTotalDia(d), 0)}
+                               {diasFiltrados.reduce((sum, d) => sum + calcularTotalDia(d), 0)}
                             </div>
                             <div className="p-1 border-r border-slate-100 border-b border-slate-100"></div>
                             <div className="p-1 border-b border-slate-100"></div>

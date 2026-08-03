@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-07-27T00:00:00.000",
+      "weekStartDate": "2026-08-03T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -6225,6 +6225,31 @@
             "endTime": "2026-08-01T09:00:00.000Z",
             "id": "qrd9yvhvl",
             "color": "#6366f1"
+          },
+          {
+            "name": "OTROS",
+            "description": "inventario fin de mes",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 5,
+            "startTime": "2026-08-01T09:00:00.000Z",
+            "endTime": "2026-08-01T14:00:00.000Z",
+            "id": "wqbccvt0l",
+            "color": "#ec4899"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 15000,
+            "durationHours": 6,
+            "presentation": "1Lt",
+            "tanks": 1.74,
+            "startTime": "2026-08-02T03:00:00.000Z",
+            "endTime": "2026-08-02T09:00:00.000Z",
+            "id": "mnzqqp20s",
+            "color": "#6366f1"
           }
         ],
         "realProduction": {},
@@ -6309,54 +6334,6 @@
             "endTime": "2026-08-08T09:00:00.000Z",
             "id": "i7a3fhrxe",
             "color": "#ec4899"
-          },
-          {
-            "name": "GLUP KOLITA",
-            "lineId": "2",
-            "loadPerHour": 2500,
-            "quantity": 117500,
-            "durationHours": 47,
-            "presentation": "2Lts",
-            "tanks": 13.21,
-            "startTime": "2026-08-03T11:00:00.000Z",
-            "endTime": "2026-08-05T10:00:00.000Z",
-            "id": "z01m2zmbw",
-            "color": "#ec4899"
-          },
-          {
-            "name": "MTTO",
-            "lineId": "2",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 10.5,
-            "startTime": "2026-08-05T10:00:00.000Z",
-            "endTime": "2026-08-05T20:30:00.000Z",
-            "id": "80pzs7in4",
-            "color": "#ef4444"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "2",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-08-05T20:30:00.000Z",
-            "endTime": "2026-08-05T22:30:00.000Z",
-            "id": "0viaezofz",
-            "color": "#587593"
-          },
-          {
-            "name": "GLUP UVA",
-            "lineId": "2",
-            "loadPerHour": 2500,
-            "quantity": 142250,
-            "durationHours": 56.9,
-            "presentation": "2Lts",
-            "tanks": 20,
-            "startTime": "2026-08-05T22:30:00.000Z",
-            "endTime": "2026-08-08T07:24:00.000Z",
-            "id": "4g0g0wgo8",
-            "color": "#f59e0b"
           },
           {
             "name": "GLUP COLA",
@@ -6614,17 +6591,89 @@
             "color": "#f59e0b"
           },
           {
+            "name": "GLUP NARANJA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 26885,
+            "durationHours": 10.754,
+            "presentation": "2Lts",
+            "tanks": 3.78,
+            "startTime": "2026-08-03T11:00:00.000Z",
+            "endTime": "2026-08-03T21:45:14.400Z",
+            "id": "oxcokgvgo",
+            "color": "#587593"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-08-03T21:46:00.000Z",
+            "endTime": "2026-08-03T22:16:00.000Z",
+            "id": "t0vntst2w",
+            "color": "#ef4444"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 89325,
+            "durationHours": 35.73,
+            "presentation": "2Lts",
+            "tanks": 10.04,
+            "startTime": "2026-08-03T22:16:00.000Z",
+            "endTime": "2026-08-05T09:59:48.000Z",
+            "id": "o2qjgx69j",
+            "color": "#ec4899"
+          },
+          {
+            "name": "MTTO",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 10.5,
+            "startTime": "2026-08-05T10:00:00.000Z",
+            "endTime": "2026-08-05T20:30:00.000Z",
+            "id": "htwoey09j",
+            "color": "#ef4444"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-08-05T20:30:00.000Z",
+            "endTime": "2026-08-05T22:30:00.000Z",
+            "id": "u0pevv0fk",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP UVA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 146250,
+            "durationHours": 58.5,
+            "presentation": "2Lts",
+            "tanks": 20.56,
+            "startTime": "2026-08-05T22:30:00.000Z",
+            "endTime": "2026-08-08T09:00:00.000Z",
+            "id": "2gla4ldby",
+            "color": "#f59e0b"
+          },
+          {
             "name": "GLUP COLA",
             "lineId": "7",
             "loadPerHour": 2500,
-            "quantity": 180000,
-            "durationHours": 72,
+            "quantity": 67500,
+            "durationHours": 27,
             "presentation": "1Lt",
-            "tanks": 20.87,
+            "tanks": 7.83,
             "startTime": "2026-08-03T11:00:00.000Z",
-            "endTime": "2026-08-06T11:00:00.000Z",
-            "id": "4s347glwo",
-            "color": "#f59e0b"
+            "endTime": "2026-08-04T14:00:00.000Z",
+            "id": "tby8vg0ms",
+            "color": "#10b981"
           },
           {
             "name": "CIP 3P ALCALINO",
@@ -6632,10 +6681,10 @@
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 2,
-            "startTime": "2026-08-06T11:00:00.000Z",
-            "endTime": "2026-08-06T13:00:00.000Z",
-            "id": "6xizlypks",
-            "color": "#ef4444"
+            "startTime": "2026-08-04T14:00:00.000Z",
+            "endTime": "2026-08-04T16:00:00.000Z",
+            "id": "tni3xxrka",
+            "color": "#10b981"
           },
           {
             "name": "GLUP FRESH",
@@ -6645,9 +6694,81 @@
             "durationHours": 13.8,
             "presentation": "1Lt",
             "tanks": 4,
-            "startTime": "2026-08-06T13:00:00.000Z",
-            "endTime": "2026-08-07T02:48:00.000Z",
-            "id": "f78aqe3ua",
+            "startTime": "2026-08-04T16:00:00.000Z",
+            "endTime": "2026-08-05T05:48:00.000Z",
+            "id": "qulgmh2c9",
+            "color": "#6366f1"
+          },
+          {
+            "name": "CS",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-08-05T05:48:00.000Z",
+            "endTime": "2026-08-05T06:18:00.000Z",
+            "id": "912051lmc",
+            "color": "#ec4899"
+          },
+          {
+            "name": "GLUP PIÑA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 14525,
+            "durationHours": 5.81,
+            "presentation": "1Lt",
+            "tanks": 2,
+            "startTime": "2026-08-05T06:18:00.000Z",
+            "endTime": "2026-08-05T12:06:36.000Z",
+            "id": "axawcrlsv",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "CS",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-08-05T12:07:00.000Z",
+            "endTime": "2026-08-05T12:37:00.000Z",
+            "id": "4bj11lhi2",
+            "color": "#587593"
+          },
+          {
+            "name": "GLUP NARANJA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 14225,
+            "durationHours": 5.69,
+            "presentation": "1Lt",
+            "tanks": 2,
+            "startTime": "2026-08-05T12:37:00.000Z",
+            "endTime": "2026-08-05T18:18:24.000Z",
+            "id": "ft10chrrv",
+            "color": "#6366f1"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-08-05T18:19:00.000Z",
+            "endTime": "2026-08-05T20:19:00.000Z",
+            "id": "vig8ihqwx",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 151700,
+            "durationHours": 60.68,
+            "presentation": "1Lt",
+            "tanks": 17.59,
+            "startTime": "2026-08-05T20:19:00.000Z",
+            "endTime": "2026-08-08T08:59:48.000Z",
+            "id": "4t27lo9m8",
             "color": "#ef4444"
           }
         ],
@@ -6669,13 +6790,20 @@
         "logisticsInventoryAW": {},
         "plantInventoryAW": {},
         "deletedTaskIds": [
-          "7ezzt4ac1"
+          "7ezzt4ac1",
+          "z01m2zmbw",
+          "80pzs7in4",
+          "0viaezofz",
+          "4g0g0wgo8",
+          "4s347glwo",
+          "f78aqe3ua",
+          "6xizlypks"
         ]
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-01T13:52:16.305Z"
+    "updatedAt": "2026-08-03T14:07:45.118Z"
   },
   "ordenesSap": [
     {
@@ -10115,6 +10243,126 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 8091
+        }
+      ]
+    },
+    {
+      "id": "2-1785616920426",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "62702",
+      "semana": 31,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-01",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17438",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 3360,
+          "ticket4": "",
+          "cajas4": 3028
+        }
+      ]
+    },
+    {
+      "id": "2-1785616931433",
+      "linea": 2,
+      "sabor": "GLUP NARANJA",
+      "ordenNumero": "62708",
+      "semana": 31,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-01",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17438",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 15466
+        }
+      ]
+    },
+    {
+      "id": "3-1785616943143",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62714",
+      "semana": 31,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-01",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17388",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 2080,
+          "ticket4": "",
+          "cajas4": 5680
+        }
+      ]
+    },
+    {
+      "id": "4-1785616953194",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62720",
+      "semana": 31,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-01",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17524",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 2720,
+          "ticket4": "",
+          "cajas4": 24479
+        }
+      ]
+    },
+    {
+      "id": "1-1785755471311",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "62696",
+      "semana": 31,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-01",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17476",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 300,
+          "ticket4": "",
+          "cajas4": 16590
+        }
+      ]
+    },
+    {
+      "id": "7-1785756950894",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62726",
+      "semana": 31,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-01",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17284",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 13548
         }
       ]
     }
@@ -18407,6 +18655,45 @@
             "preparado": "18",
             "final": "6.52"
           }
+        },
+        "2026-07-31": {
+          "GLUP COLA": {
+            "inicial": "65.74",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "23",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "6.95",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "32.87",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "6.52",
+            "preparado": "",
+            "final": ""
+          }
+        },
+        "2026-07-01": {
+          "GLUP COLA": {
+            "inicial": "17.38",
+            "preparado": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "8.50"
+          },
+          "GLUP KOLITA": {
+            "inicial": "33.45"
+          }
         }
       },
       "sugar": {
@@ -18458,6 +18745,18 @@
             "invInicialSacos": "2400",
             "recepcionSacos": "",
             "invFinalSacos": "2400"
+          }
+        },
+        "2026-07-31": {
+          "PORTUGUESA": {
+            "invInicialSacos": "10040",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
           }
         }
       },
@@ -18522,6 +18821,20 @@
           "Sala 1": {
             "invInicialSacos": "",
             "invFinalSacos": "240"
+          }
+        },
+        "2026-07-31": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": ""
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "344",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "240",
+            "invFinalSacos": ""
           }
         }
       },
@@ -19861,433 +20174,7 @@
       "fixedCapacities": {},
       "_deletedIds": {}
     },
-    "planta-informes-operacionales": [
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "DIURNO",
-        "operador": "PEDRO MORGADO",
-        "linea": "Línea 1",
-        "equipo": "PALETIZADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "07:25",
-        "finParada": "07:36",
-        "totalMin": "11",
-        "zona": "Llenado",
-        "falla": "FALLA DE PISTÓN DE COMPACTACIÓN",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785414190166
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "DIURNO",
-        "operador": "IVAN PEREZ",
-        "linea": "Línea 1",
-        "equipo": "TAPADORA",
-        "tipoParada": "AVERÍA",
-        "inicioParada": "07:43",
-        "finParada": "07:54",
-        "totalMin": "11",
-        "zona": "Llenado",
-        "falla": "AJUSTE DE CHUCK #10",
-        "orden": "9159",
-        "observaciones": "",
-        "id": 1785414573668
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "DIURNO",
-        "operador": "PEDRO MORGADO",
-        "linea": "Línea 1",
-        "equipo": "PALETIZADORA",
-        "tipoParada": "AVERÍA",
-        "inicioParada": "08:43",
-        "finParada": "08:55",
-        "totalMin": "12",
-        "zona": "Llenado",
-        "falla": "FALLA DE COMPACTADORES DE CAJA",
-        "orden": "9160",
-        "observaciones": "",
-        "id": 1785415183096
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "DIURNO",
-        "operador": "IVAN PÉREZ",
-        "linea": "Línea 1",
-        "equipo": "ETIQUETADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "08:24",
-        "finParada": "08:29",
-        "totalMin": "5",
-        "zona": "Llenado",
-        "falla": "SIN ESPECIFICAR",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785415259439
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "DIURNO",
-        "operador": "IVAN PÉREZ",
-        "linea": "Línea 1",
-        "equipo": "LLENADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "09:05",
-        "finParada": "09:17",
-        "totalMin": "12",
-        "zona": "Llenado",
-        "falla": "AJUSTE DE VÁLVULA #53 Y CAMBIO DE RESORTE PINZA DE TRANSFERENCIA ENTRADA LLENADORA",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785415351871
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "DIURNO",
-        "operador": "IVAN PÉREZ",
-        "linea": "Línea 1",
-        "equipo": "",
-        "tipoParada": "FALLA DE E/E",
-        "inicioParada": "09:23",
-        "finParada": "14:45",
-        "totalMin": "322",
-        "zona": "Llenado",
-        "falla": "FALLA ELÉCTRICA",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785415572542
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "DIURNO",
-        "operador": "IVAN PÉREZ",
-        "linea": "Línea 1",
-        "equipo": "",
-        "tipoParada": "ADECUACIONES",
-        "inicioParada": "14:45",
-        "finParada": "14:55",
-        "totalMin": "10",
-        "zona": "Llenado",
-        "falla": "ADECUACIONES PARA EL ARRANQUE",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785415633951
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "DIURNO",
-        "operador": "IVAN PÉREZ",
-        "linea": "Línea 1",
-        "equipo": "LLENADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "15:05",
-        "finParada": "15:15",
-        "totalMin": "10",
-        "zona": "Llenado",
-        "falla": "CAMBIO DE GOMA DEFLECTORA VALVULA #53",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785415689630
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "DIURNO",
-        "operador": "IVAN PÉREZ",
-        "linea": "Línea 1",
-        "equipo": "ENFARDADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "16:25",
-        "finParada": "16:33",
-        "totalMin": "8",
-        "zona": "Llenado",
-        "falla": "SIN ESPECIFICAR",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785415811823
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "DIURNO",
-        "operador": "IVAN PÉREZ",
-        "linea": "Línea 1",
-        "equipo": "SOPLADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "16:49",
-        "finParada": "16:55",
-        "totalMin": "6",
-        "zona": "Llenado",
-        "falla": "FONDO MOLDE",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785415847510
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "DIURNO",
-        "operador": "IVAN PÉREZ",
-        "linea": "Línea 1",
-        "equipo": "",
-        "tipoParada": "FALLA DE E/E",
-        "inicioParada": "17:13",
-        "finParada": "17:39",
-        "totalMin": "26",
-        "zona": "Llenado",
-        "falla": "FALLA ELÉCTRICA / VARIACIÓN DE VOLTAJE",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785415957655
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "DIURNO",
-        "operador": "IVAN PÉREZ",
-        "linea": "Línea 1",
-        "equipo": "PALETIZADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "17:40",
-        "finParada": "17:54",
-        "totalMin": "14",
-        "zona": "Llenado",
-        "falla": "SIN ESPECIFICAR",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785416031310
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "NOCTURNO",
-        "operador": "FAIBERT MATTEY",
-        "linea": "Línea 1",
-        "equipo": "",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "19:41",
-        "finParada": "19:45",
-        "totalMin": "4",
-        "zona": "Llenado",
-        "falla": "ACUMULACIÓN HACIA ENFARDADORA",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785416298630
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "NOCTURNO",
-        "operador": "JON TORRES",
-        "linea": "Línea 1",
-        "equipo": "PALETIZADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "20:05",
-        "finParada": "20:14",
-        "totalMin": "9",
-        "zona": "Llenado",
-        "falla": "PALETA DEFECTUOSA ATORADA EN TRANSP. DE RODILLO",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785416369910
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "NOCTURNO",
-        "operador": "FAIBERT MATTEY",
-        "linea": "Línea 1",
-        "equipo": "SOPLADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "20:18",
-        "finParada": "20:21",
-        "totalMin": "3",
-        "zona": "Llenado",
-        "falla": "FALLA EN LECTURA DE SALIDA DE BOTELLA MOLDE #1",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785416608317
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "NOCTURNO",
-        "operador": "LEYBERGLER SILVA",
-        "linea": "Línea 1",
-        "equipo": "ENFARDADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "23:38",
-        "finParada": "23:46",
-        "totalMin": "8",
-        "zona": "Llenado",
-        "falla": "FILM ATASCADO ENTRE CINTA DE ELEVACIÓN Y MESA DE EMP",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785416736028
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "NOCTURNO",
-        "operador": "FAIBERT MATTEY",
-        "linea": "Línea 1",
-        "equipo": "ETIQUETADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "00:49",
-        "finParada": "00:53",
-        "totalMin": "4",
-        "zona": "Llenado",
-        "falla": "SIN ESPECIFICAR",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785416910693
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "NOCTURNO",
-        "operador": "FAIBERT MATTEY",
-        "linea": "Línea 1",
-        "equipo": "",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "01:21",
-        "finParada": "01:25",
-        "totalMin": "4",
-        "zona": "Llenado",
-        "falla": "ACUMULACIÓN HASTA ENFARDADORA",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785417138565
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "NOCTURNO",
-        "operador": "FAIBERT MATTEY",
-        "linea": "Línea 1",
-        "equipo": "",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "02:11",
-        "finParada": "02:16",
-        "totalMin": "5",
-        "zona": "Llenado",
-        "falla": "ACUMULACIÓN HASTA ENFARDADORA",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785417183419
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "NOCTURNO",
-        "operador": "FAIBERT MATTEY",
-        "linea": "Línea 1",
-        "equipo": "SOPLADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "02:17",
-        "finParada": "02:19",
-        "totalMin": "2",
-        "zona": "Llenado",
-        "falla": "FALLA EN REFRIGERACIÓN DE FONDO MOLDE",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785417331300
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "NOCTURNO",
-        "operador": "FAIBERT MATTEY",
-        "linea": "Línea 1",
-        "equipo": "",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "05:31",
-        "finParada": "05:36",
-        "totalMin": "5",
-        "zona": "Llenado",
-        "falla": "ACUMULACIÓN HASTA ETIQUETADORA",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785417417646
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "NOCTURNO",
-        "operador": "FAIBERT MATTEY",
-        "linea": "Línea 1",
-        "equipo": "SOPLADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "05:57",
-        "finParada": "06:03",
-        "totalMin": "6",
-        "zona": "Llenado",
-        "falla": "MALA ENTREGA MOLDE #4",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785417479222
-      },
-      {
-        "fecha": "2026-07-27",
-        "semana": 31,
-        "turno": "NOCTURNO",
-        "operador": "FAIBERT MATTEY",
-        "linea": "Línea 1",
-        "equipo": "ENFARDADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "06:20",
-        "finParada": "06:25",
-        "totalMin": "5",
-        "zona": "Llenado",
-        "falla": "SIN ESPECIFICAR",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785418190316
-      },
-      {
-        "fecha": "2026-07-28",
-        "semana": 31,
-        "turno": "DIURNO",
-        "operador": "FULANO",
-        "linea": "Línea 1",
-        "equipo": "",
-        "tipoParada": "FALLA DE E/E",
-        "inicioParada": "07:00",
-        "finParada": "09:00",
-        "totalMin": "120",
-        "zona": "Llenado",
-        "falla": "FALLA ELÉCTRICA",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785508515291
-      },
-      {
-        "fecha": "2026-07-28",
-        "semana": 31,
-        "turno": "NOCTURNO",
-        "operador": "JUANITO",
-        "linea": "Línea 1",
-        "equipo": "",
-        "tipoParada": "PROGRAMADA",
-        "inicioParada": "05:00",
-        "finParada": "07:00",
-        "totalMin": "120",
-        "zona": "Llenado",
-        "falla": "CIP 3 PASOS",
-        "orden": "",
-        "observaciones": "",
-        "id": 1785509131922
-      }
-    ],
+    "planta-informes-operacionales": [],
     "planta-ordenes-trabajo": [
       {
         "id": "orden-sync-52001",
@@ -21704,7 +21591,32 @@
         "1785014920340",
         "1785358753845",
         "1785358876155",
-        "1785413793661"
+        "1785413793661",
+        "1785414190166",
+        "1785414573668",
+        "1785415183096",
+        "1785415259439",
+        "1785415351871",
+        "1785415572542",
+        "1785415633951",
+        "1785415689630",
+        "1785415811823",
+        "1785415847510",
+        "1785415957655",
+        "1785416031310",
+        "1785416298630",
+        "1785416369910",
+        "1785416608317",
+        "1785416736028",
+        "1785416910693",
+        "1785417138565",
+        "1785417183419",
+        "1785417331300",
+        "1785417417646",
+        "1785417479222",
+        "1785418190316",
+        "1785508515291",
+        "1785509131922"
       ]
     },
     "planta-ordenes-trabajo": {
@@ -21727,6 +21639,7 @@
     "planta-hrs-programadas": {}
   },
   "_deletedOrdenesSapIds": [
-    "1-1785349102112"
+    "1-1785349102112",
+    "1-1785616908590"
   ]
 }
