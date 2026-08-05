@@ -19016,8 +19016,8 @@
         },
         "2026-07-30": {
           "PORTUGUESA": {
-            "invInicialSacos": "7680",
-            "recepcionSacos": "",
+            "invInicialSacos": "10800",
+            "recepcionSacos": "3280",
             "invFinalSacos": "10040"
           },
           "IMPORTADA 1": {
