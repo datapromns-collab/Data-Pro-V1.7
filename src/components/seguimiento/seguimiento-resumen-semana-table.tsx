@@ -16,6 +16,16 @@ const LINE_LABELS: Record<number, string> = {
   7: 'Línea 7',
 };
 
+const getLineMultiplier = (linea: string): number => {
+  const match = linea.match(/Línea (\d+)/);
+  if (!match) return 6;
+  const n = parseInt(match[1], 10);
+  if (n >= 1 && n <= 4) return 6;
+  if (n === 5 || n === 7) return 12;
+  if (n === 6) return 15;
+  return 6;
+};
+
 export function SeguimientoResumenSemanaTable({
   filasAuto = {},
 }: {
@@ -73,7 +83,8 @@ export function SeguimientoResumenSemanaTable({
         const diferencia2 = real - req;
         const jarabeReqCompletadas = plan > 0 ? (req / plan) * comp : 0;
         const porcentajeJarabe = req > 0 ? (real / req) * 100 : 0;
-        return { ...r, diferencia, diferencia2, jarabeReqCompletadas, porcentajeJarabe };
+        const botellasT = comp * getLineMultiplier(r.linea) + (Number(r.producto) || 0);
+        return { ...r, diferencia, diferencia2, jarabeReqCompletadas, porcentajeJarabe, botellasT };
       }),
     [combinadas]
   );

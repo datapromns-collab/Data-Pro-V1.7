@@ -42,6 +42,14 @@ export function SeguimientoLineaTable({
     return (Number(real) || 0) - (Number(requerido) || 0);
   };
 
+  const getLineMultiplier = (linea: LineaKey): number => {
+    const n = parseInt(linea.replace('linea-', ''), 10);
+    if (n >= 1 && n <= 4) return 6;
+    if (n === 5 || n === 7) return 12;
+    if (n === 6) return 15;
+    return 6;
+  };
+
   const totales = useMemo(() => {
     // Solo se suman las filas manuales (las automáticas ya traen sus propios totales en cajasCompletadas)
     const manuales = data.reduce(
@@ -52,7 +60,7 @@ export function SeguimientoLineaTable({
         acc.jarabeRequerido += Number(row.jarabeRequerido) || 0;
         acc.jarabeReal += Number(row.jarabeReal) || 0;
         acc.diferencia2 += Number(row.diferencia2) || 0;
-        acc.botellasT += Number(row.botellasT) || 0;
+        acc.botellasT += (Number(row.cajasCompletadas) || 0) * getLineMultiplier(linea) + (Number(row.producto) || 0);
         acc.ubb += Number(row.ubb) || 0;
         return acc;
       },
@@ -66,6 +74,10 @@ export function SeguimientoLineaTable({
     // Diferencia = Cajas completadas - Cajas Planificadas | Diferencia2 = Jarabe Real - Jarabe requerido
     const autoDiferencia = filasAuto.reduce((sum, f) => sum + ((Number(f.cajasCompletadas) || 0) - (Number(autoOverrides[f.id]?.cajasPlanificadas) || 0)), 0);
     const autoDiferencia2 = filasAuto.reduce((sum, f) => sum + (Number(autoOverrides[f.id]?.jarabeReal) || 0), 0);
+    const autoBotellasT = filasAuto.reduce((sum, f) => {
+      const overrideProducto = Number(autoOverrides[f.id]?.producto) || 0;
+      return sum + ((Number(f.cajasCompletadas) || 0) * getLineMultiplier(linea) + overrideProducto);
+    }, 0);
 
     return {
       ...manuales,
@@ -75,6 +87,7 @@ export function SeguimientoLineaTable({
       jarabeReal: manuales.jarabeReal + autoJarabeReal,
       diferencia2: manuales.diferencia2 + autoDiferencia2,
       ubb: manuales.ubb + autoUbb,
+      botellasT: manuales.botellasT + autoBotellasT,
     };
   }, [data, filasAuto, autoOverrides]);
 
@@ -178,13 +191,13 @@ export function SeguimientoLineaTable({
                         value={ov.producto ?? ''}
                         onChange={(e) => updateAutoOverride(row.id, { producto: e.target.value })}
                         className="h-7 w-24 text-[11px] font-semibold rounded-md border-transparent bg-white/70 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all"
-                      />
-                    </TableCell>
-                    <TableCell className="text-[11px] font-medium text-slate-400 py-2.5 border-b border-slate-100 text-center">—</TableCell>
-                    <TableCell className="py-2 border-b border-slate-100">
-                      <Input
-                        type="number"
-                        value={ov.ubb || ''}
+                       />
+                     </TableCell>
+                     <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{(Number(row.cajasCompletadas) || 0) * getLineMultiplier(linea) + (Number(ov.producto) || 0)}</TableCell>
+                     <TableCell className="py-2 border-b border-slate-100">
+                       <Input
+                         type="number"
+                         value={ov.ubb || ''}
                         onChange={(e) => updateAutoOverride(row.id, { ubb: Number(e.target.value) || 0 })}
                         className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-white/70 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
                       />
@@ -251,14 +264,7 @@ export function SeguimientoLineaTable({
                     </TableCell>
                     <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{row.diferencia2}</TableCell>
                     <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100">{row.producto}</TableCell>
-                    <TableCell className="py-2 border-b border-slate-100">
-                      <Input
-                        type="number"
-                        value={row.botellasT || ''}
-                        onChange={(e) => handleUpdate(row.id, { botellasT: Number(e.target.value) || 0 })}
-                        className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
-                      />
-                    </TableCell>
+                     <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{(Number(row.cajasCompletadas) || 0) * getLineMultiplier(linea) + (Number(row.producto) || 0)}</TableCell>
                     <TableCell className="py-2 border-b border-slate-100">
                       <Input
                         type="number"

@@ -20706,32 +20706,37 @@
         },
         "auto-1-1785755471311": {
           "cajasPlanificadas": 28500,
-          "producto": ""
+          "producto": "108"
         }
       },
       "linea-2": {
         "auto-2-1785616931433": {
-          "cajasPlanificadas": 47500
+          "cajasPlanificadas": 47500,
+          "producto": "18"
         },
         "auto-2-1785616920426": {
-          "cajasPlanificadas": 6500
+          "cajasPlanificadas": 6500,
+          "producto": "47"
         }
       },
       "linea-3": {
         "auto-3-1785616943143": {
-          "cajasPlanificadas": 53200
+          "cajasPlanificadas": 53200,
+          "producto": "50"
         }
       },
       "linea-4": {
         "auto-4-1785616953194": {
-          "cajasPlanificadas": 53200
+          "cajasPlanificadas": 53200,
+          "producto": "142"
         }
       },
       "linea-5": {},
       "linea-6": {},
       "linea-7": {
         "auto-7-1785756950894": {
-          "cajasPlanificadas": 15000
+          "cajasPlanificadas": 15000,
+          "producto": "2391"
         }
       }
     },
