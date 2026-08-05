@@ -123,8 +123,7 @@ export function SeguimientoResumenSemanaTable({
         const real = Number(r.jarabeReal) || 0;
         // Diferencia = Cajas completadas - Cajas Planificadas
         const diferencia = comp - plan;
-        // Diferencia2 = Jarabe Real - Jarabe requerido
-        const diferencia2 = real - req;
+        const diferencia2 = req;
         const jarabeReqCompletadas = plan > 0 ? (req / plan) * comp : 0;
         const porcentajeJarabe = req > 0 ? (real / req) * 100 : 0;
         const botellasT = comp * getLineMultiplier(r.linea) + (Number(r.producto) || 0);
@@ -233,7 +232,7 @@ export function SeguimientoResumenSemanaTable({
                   <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{row.diferencia}</TableCell>
                   <TableCell className="text-[11px] font-semibold text-slate-900 py-2.5 border-b border-slate-100 text-center">{row.jarabeRequerido.toFixed(1)}</TableCell>
                   <TableCell className="text-[11px] font-semibold text-slate-900 py-2.5 border-b border-slate-100 text-center">{row.jarabeReal}</TableCell>
-                  <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{row.diferencia2}</TableCell>
+                  <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{row.diferencia2.toFixed(1)}</TableCell>
                   <TableCell className="text-[11px] font-black text-sky-700 py-2.5 border-b border-slate-100 text-center">{row.porcentajeJarabe.toFixed(1)}%</TableCell>
                   <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100">{row.producto}</TableCell>
                   <TableCell className="text-[11px] font-semibold text-slate-900 py-2.5 border-b border-slate-100 text-center">{row.botellasT}</TableCell>
@@ -251,7 +250,7 @@ export function SeguimientoResumenSemanaTable({
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.diferencia}</TableCell>
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.jarabeRequerido.toFixed(1)}</TableCell>
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.jarabeReal}</TableCell>
-                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.diferencia2}</TableCell>
+                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.diferencia2.toFixed(1)}</TableCell>
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">
                   {totales.jarabeRequerido > 0 ? ((totales.jarabeReal / totales.jarabeRequerido) * 100).toFixed(1) : '0.0'}%
                 </TableCell>
