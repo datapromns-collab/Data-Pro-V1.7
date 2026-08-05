@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-07-30T00:00:00.000",
+      "weekStartDate": "2026-08-03T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -6833,7 +6833,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-05T17:00:25.127Z"
+    "updatedAt": "2026-08-05T22:06:57.294Z"
   },
   "ordenesSap": [
     {
@@ -10424,6 +10424,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 6640
+        },
+        {
+          "fechaInicio": "2026-08-05",
+          "ticket1": "17481",
+          "cajas1": 8160,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -10486,6 +10497,17 @@
           "cajas3": 240,
           "ticket4": "",
           "cajas4": 24240
+        },
+        {
+          "fechaInicio": "2026-08-05",
+          "ticket1": "17393",
+          "cajas1": 12880,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -10517,6 +10539,17 @@
           "cajas3": 240,
           "ticket4": "",
           "cajas4": 22320
+        },
+        {
+          "fechaInicio": "2026-08-05",
+          "ticket1": "17529",
+          "cajas1": 10480,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -10599,6 +10632,17 @@
           "cajas3": 150,
           "ticket4": "",
           "cajas4": 8200
+        },
+        {
+          "fechaInicio": "2026-08-05",
+          "ticket1": "17568",
+          "cajas1": 3100,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -10619,6 +10663,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 1920
+        },
+        {
+          "fechaInicio": "2026-08-05",
+          "ticket1": "17442",
+          "cajas1": 4960,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -10639,6 +10694,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 16458
+        },
+        {
+          "fechaInicio": "2026-08-05",
+          "ticket1": "17288",
+          "cajas1": 5850,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -10649,6 +10715,26 @@
       "ordenNumero": "66666",
       "semana": 32,
       "dias": []
+    },
+    {
+      "id": "6-1785967611297",
+      "linea": 6,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62790",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-05",
+          "ticket1": "17341",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
     }
   ],
   "notifications": [],
@@ -20814,7 +20900,8 @@
         "auto-1-1785755471311": {
           "cajasPlanificadas": 28500,
           "producto": "108",
-          "jarabeReal": 3451
+          "jarabeReal": 34510,
+          "ubb": 12
         }
       },
       "linea-2": {

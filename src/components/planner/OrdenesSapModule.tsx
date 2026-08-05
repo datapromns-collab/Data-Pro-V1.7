@@ -846,11 +846,16 @@ export default function OrdenesSapModule({
   const { getAutoOverrides } = useSeguimientoResumenOptimizado();
 
   const autoOverridesFlat = useMemo(() => {
-    const out: Record<string, { cajasPlanificadas?: number; producto?: string }> = {};
+    const out: Record<string, { cajasPlanificadas?: number; producto?: string; jarabeReal?: number; ubb?: number }> = {};
     for (let n = 1; n <= 7; n++) {
       const key = `linea-${n}` as any;
       Object.entries(getAutoOverrides(key) || {}).forEach(([id, ov]) => {
-        out[id] = { cajasPlanificadas: (ov as any).cajasPlanificadas, producto: (ov as any).producto };
+        out[id] = { 
+          cajasPlanificadas: (ov as any).cajasPlanificadas, 
+          producto: (ov as any).producto,
+          jarabeReal: (ov as any).jarabeReal,
+          ubb: (ov as any).ubb,
+        };
       });
     }
     return out;

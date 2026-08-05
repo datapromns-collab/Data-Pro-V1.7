@@ -94,7 +94,7 @@ export function SeguimientoLineaTable({
         acc.diferencia += Number(row.diferencia) || 0;
         acc.jarabeRequerido += calcularJarabeRequerido(row, linea);
         acc.jarabeReal += Number(row.jarabeReal) || 0;
-        acc.diferencia2 += Number(row.diferencia2) || 0;
+        acc.diferencia2 += (Number(row.jarabeReal) || 0) - calcularJarabeRequerido(row, linea);
         acc.botellasT += (Number(row.cajasCompletadas) || 0) * getLineMultiplier(linea) + (Number(row.producto) || 0);
         acc.ubb += Number(row.ubb) || 0;
         return acc;
@@ -108,7 +108,6 @@ export function SeguimientoLineaTable({
     const autoUbb = filasAuto.reduce((sum, f) => sum + (Number(autoOverrides[f.id]?.ubb) || 0), 0);
     // Diferencia = Cajas completadas - Cajas Planificadas | Diferencia2 = Jarabe Real - Jarabe requerido
     const autoDiferencia = filasAuto.reduce((sum, f) => sum + ((Number(f.cajasCompletadas) || 0) - (Number(autoOverrides[f.id]?.cajasPlanificadas) || 0)), 0);
-    const autoDiferencia2 = filasAuto.reduce((sum, f) => sum + (Number(autoOverrides[f.id]?.jarabeReal) || 0), 0);
     const autoBotellasT = filasAuto.reduce((sum, f) => {
       const overrideProducto = Number(autoOverrides[f.id]?.producto) || 0;
       return sum + ((Number(f.cajasCompletadas) || 0) * getLineMultiplier(linea) + overrideProducto);
@@ -116,6 +115,12 @@ export function SeguimientoLineaTable({
     const autoJarabeRequerido = filasAuto.reduce((sum, f) => {
       const overrideProducto = Number(autoOverrides[f.id]?.producto) || 0;
       return sum + calcularJarabeRequerido({ ...f, producto: overrideProducto }, linea);
+    }, 0);
+    const autoDiferencia2 = filasAuto.reduce((sum, f) => {
+      const overrideProducto = Number(autoOverrides[f.id]?.producto) || 0;
+      const req = calcularJarabeRequerido({ ...f, producto: overrideProducto }, linea);
+      const real = Number(autoOverrides[f.id]?.jarabeReal) || 0;
+      return sum + (real - req);
     }, 0);
 
     return {
@@ -196,8 +201,9 @@ export function SeguimientoLineaTable({
                   const ov = autoOverrides[row.id] ?? {};
                   const planificadas = Number(ov.cajasPlanificadas) || 0;
                   const jarabeReal = Number(ov.jarabeReal) || 0;
+                  const jarabeRequerido = calcularJarabeRequerido({ ...row, producto: Number(ov.producto) || 0 }, linea);
                   const difCajas = (Number(row.cajasCompletadas) || 0) - planificadas;
-                  const difJarabe = jarabeReal - 0; // Jarabe requerido no aplica en filas automáticas
+                  const difJarabe = jarabeReal - jarabeRequerido;
                   return (
                   <TableRow key={`auto-${row.id}`} className="group bg-emerald-50/40 hover:bg-emerald-50/70 transition-colors">
                     <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 pl-5 border-b border-slate-100">{row.sabor}</TableCell>
@@ -224,7 +230,7 @@ export function SeguimientoLineaTable({
                         className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-white/70 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
                       />
                     </TableCell>
-                    <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{difJarabe}</TableCell>
+                     <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{difJarabe.toFixed(1)}</TableCell>
                     <TableCell className="py-2 border-b border-slate-100">
                       <Input
                         type="text"
@@ -291,7 +297,7 @@ export function SeguimientoLineaTable({
                         className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
                       />
                     </TableCell>
-                    <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{row.diferencia2}</TableCell>
+                     <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{((Number(row.jarabeReal) || 0) - calcularJarabeRequerido(row, linea)).toFixed(1)}</TableCell>
                     <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100">{row.producto}</TableCell>
                      <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{(Number(row.cajasCompletadas) || 0) * getLineMultiplier(linea) + (Number(row.producto) || 0)}</TableCell>
                     <TableCell className="py-2 border-b border-slate-100">
@@ -326,7 +332,7 @@ export function SeguimientoLineaTable({
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.diferencia}</TableCell>
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.jarabeRequerido}</TableCell>
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.jarabeReal}</TableCell>
-                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.diferencia2}</TableCell>
+                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.diferencia2.toFixed(1)}</TableCell>
                 <TableCell className="border-t-2 border-slate-200" />
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.botellasT}</TableCell>
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.ubb}</TableCell>

@@ -66,7 +66,7 @@ export function SeguimientoResumenSemanaTable({
   autoOverrides = {},
 }: {
   filasAuto?: Record<number, SeguimientoOrdenFuente[]>;
-  autoOverrides?: Record<string, { cajasPlanificadas?: number; producto?: string }>;
+  autoOverrides?: Record<string, { cajasPlanificadas?: number; producto?: string; jarabeReal?: number; ubb?: number }>;
 }) {
   const { data } = useSeguimientoResumenOptimizado();
 
@@ -96,8 +96,8 @@ export function SeguimientoResumenSemanaTable({
           cajasCompletadas: cajasCompletadas,
           diferencia: 0,
           jarabeRequerido: jarabeRequerido,
-          jarabeReal: 0,
-          diferencia2: 0,
+          jarabeReal: Number(ov.jarabeReal) || 0,
+          diferencia2: (Number(ov.jarabeReal) || 0) - jarabeRequerido,
           producto: producto,
           botellasT: 0,
           ubb: 0,
@@ -123,7 +123,7 @@ export function SeguimientoResumenSemanaTable({
         const real = Number(r.jarabeReal) || 0;
         // Diferencia = Cajas completadas - Cajas Planificadas
         const diferencia = comp - plan;
-        const diferencia2 = req;
+        const diferencia2 = real - req;
         const jarabeReqCompletadas = plan > 0 ? (req / plan) * comp : 0;
         const porcentajeJarabe = req > 0 ? (real / req) * 100 : 0;
         const botellasT = comp * getLineMultiplier(r.linea) + (Number(r.producto) || 0);
