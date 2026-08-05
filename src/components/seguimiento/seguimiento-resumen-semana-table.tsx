@@ -125,7 +125,7 @@ export function SeguimientoResumenSemanaTable({
         const diferencia = comp - plan;
         const diferencia2 = real - req;
         const jarabeReqCompletadas = plan > 0 ? (req / plan) * comp : 0;
-        const porcentajeJarabe = req > 0 ? (real / req) * 100 : 0;
+        const porcentajeJarabe = req > 0 ? (diferencia2 / req) * 100 : 0;
         const botellasT = comp * getLineMultiplier(r.linea) + (Number(r.producto) || 0);
         const bebidaTerminada = botellasT * getBebidaTerminadaMultiplier(r.linea);
         return { ...r, diferencia, diferencia2, jarabeReqCompletadas, porcentajeJarabe, botellasT, bebidaTerminada };
@@ -252,7 +252,7 @@ export function SeguimientoResumenSemanaTable({
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.jarabeReal}</TableCell>
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.diferencia2.toFixed(1)}</TableCell>
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">
-                  {totales.jarabeRequerido > 0 ? ((totales.jarabeReal / totales.jarabeRequerido) * 100).toFixed(1) : '0.0'}%
+                  {totales.jarabeRequerido > 0 ? ((totales.diferencia2 / totales.jarabeRequerido) * 100).toFixed(1) : '0.0'}%
                 </TableCell>
                 <TableCell className="border-t-2 border-slate-200" />
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.botellasT}</TableCell>
