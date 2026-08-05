@@ -18919,32 +18919,32 @@
         },
         "2026-07-31": {
           "GLUP COLA": {
-            "inicial": "65.74",
+            "inicial": "",
             "preparado": "",
-            "final": "44.20"
+            "final": ""
           },
           "JUSTY DURAZNO": {
-            "inicial": "23",
-            "preparado": "200",
+            "inicial": "",
+            "preparado": "",
             "final": ""
           },
           "GLUP UVA": {
-            "inicial": "6.95",
+            "inicial": "",
             "preparado": "",
             "final": ""
           },
           "GLUP KOLITA": {
-            "inicial": "32.87",
-            "preparado": "54",
+            "inicial": "",
+            "preparado": "",
             "final": "13.70"
           },
           "GLUP FRESH": {
-            "inicial": "6.52",
-            "preparado": "12",
-            "final": "6"
+            "inicial": "",
+            "preparado": "",
+            "final": ""
           },
           "GLUP NARANJA": {
-            "preparado": "11",
+            "preparado": "",
             "final": "11"
           }
         },
@@ -19016,9 +19016,9 @@
         },
         "2026-07-30": {
           "PORTUGUESA": {
-            "invInicialSacos": "7",
-            "recepcionSacos": "3280",
-            "invFinalSacos": "10040"
+            "invInicialSacos": "7680",
+            "recepcionSacos": "",
+            "invFinalSacos": "7680"
           },
           "IMPORTADA 1": {
             "invInicialSacos": "2400",
@@ -19111,12 +19111,12 @@
             "invFinalSacos": "5"
           },
           "JARABE SIMPLE": {
-            "invInicialSacos": "117",
-            "invFinalSacos": "344"
+            "invInicialSacos": "322",
+            "invFinalSacos": "322"
           },
           "Sala 1": {
-            "invInicialSacos": "",
-            "invFinalSacos": "240"
+            "invInicialSacos": "689",
+            "invFinalSacos": "689"
           }
         },
         "2026-07-31": {
