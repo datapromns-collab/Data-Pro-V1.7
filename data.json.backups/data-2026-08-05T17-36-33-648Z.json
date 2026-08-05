@@ -19074,11 +19074,39 @@
           },
           "JUSTY NARANJA": {
             "inicial": "40",
+            "preparado": "220",
+            "final": "20"
+          },
+          "GLUP KOLITA": {
+            "final": "18",
+            "preparado": "18"
+          }
+        },
+        "2026-08-04": {
+          "GLUP COLA": {
+            "inicial": "55.65",
+            "preparado": "48",
+            "final": "65.81"
+          },
+          "GLUP FRESH": {
+            "inicial": "18.60",
+            "preparado": "18",
+            "final": "13.16"
+          },
+          "GLUP NARANJA": {
+            "inicial": "22.51",
             "preparado": "",
             "final": ""
           },
+          "JUSTY NARANJA": {
+            "inicial": "20",
+            "preparado": "200",
+            "final": "26"
+          },
           "GLUP KOLITA": {
-            "final": "18"
+            "inicial": "18",
+            "preparado": "",
+            "final": "12.44"
           }
         }
       },
@@ -19189,13 +19217,25 @@
         "2026-08-03": {
           "PORTUGUESA": {
             "invInicialSacos": "3960",
-            "recepcionSacos": "",
-            "invFinalSacos": ""
+            "recepcionSacos": "9120",
+            "invFinalSacos": "9760"
           },
           "IMPORTADA 1": {
             "invInicialSacos": "2400",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "2400"
+          }
+        },
+        "2026-08-04": {
+          "PORTUGUESA": {
+            "invInicialSacos": "9760",
+            "recepcionSacos": "2520",
+            "invFinalSacos": "9360"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2400"
           }
         }
       },
@@ -19321,15 +19361,29 @@
         "2026-08-03": {
           "KITS PREP.": {
             "invInicialSacos": "5",
-            "invFinalSacos": ""
+            "invFinalSacos": "5"
           },
           "JARABE SIMPLE": {
             "invInicialSacos": "298",
-            "invFinalSacos": ""
+            "invFinalSacos": "379"
           },
           "Sala 1": {
             "invInicialSacos": "456",
-            "invFinalSacos": ""
+            "invFinalSacos": "229"
+          }
+        },
+        "2026-08-04": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "379",
+            "invFinalSacos": "365"
+          },
+          "Sala 1": {
+            "invInicialSacos": "229",
+            "invFinalSacos": "229"
           }
         }
       },
@@ -19340,7 +19394,9 @@
         "2026-07-30": "50.36",
         "2026-07-01": "5",
         "2026-08-02": "50.41",
-        "2026-08-01": "50.31"
+        "2026-08-01": "50.31",
+        "2026-08-04": "50.55",
+        "2026-08-03": "50.43"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",

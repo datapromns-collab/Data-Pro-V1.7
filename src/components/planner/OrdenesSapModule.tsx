@@ -352,6 +352,7 @@ export default function OrdenesSapModule({
   const [selectedFechaProdtSemanal, setSelectedFechaProdtSemanal] = useState<Date | undefined>(undefined);
   const [fechaProdtSemanalInicializada, setFechaProdtSemanalInicializada] = useState(false);
   const [selectedFechaSeguimiento, setSelectedFechaSeguimiento] = useState<Date | undefined>(undefined);
+  const [fechaSeguimientoInicializada, setFechaSeguimientoInicializada] = useState(false);
   const [ordenComponentes, setOrdenComponentes] = useState<Record<string, { codigo: string; descripcion: string }>>({
     'Jarabe T': { codigo: '', descripcion: '' },
     'Bebida': { codigo: '', descripcion: '' },
@@ -806,6 +807,36 @@ export default function OrdenesSapModule({
       console.error('Error guardando fecha de DÍA A DÍA en localStorage', e);
     }
   }, [fechaDiaADia, fechaDiaADiaInicializada]);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('selected-fecha-seguimiento');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (parsed) {
+          setSelectedFechaSeguimiento(new Date(parsed));
+          return;
+        }
+      }
+    } catch (e) {
+      console.error('Error cargando fecha de SEGUIMIENTO desde localStorage', e);
+    } finally {
+      setFechaSeguimientoInicializada(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!fechaSeguimientoInicializada || typeof window === 'undefined') return;
+    try {
+      if (selectedFechaSeguimiento) {
+        localStorage.setItem('selected-fecha-seguimiento', JSON.stringify(selectedFechaSeguimiento));
+      } else {
+        localStorage.removeItem('selected-fecha-seguimiento');
+      }
+    } catch (e) {
+      console.error('Error guardando fecha de SEGUIMIENTO en localStorage', e);
+    }
+  }, [selectedFechaSeguimiento, fechaSeguimientoInicializada]);
   const [tablaDiaADIAEdits, setTablaDiaADIAEdits] = useState<Record<string, Record<number, number>>>({});
   const [tablaDiaADia, setTablaDiaADia] = useState<Record<string, Record<number, number>>>({});
   const [tablaTurnoEdits, setTablaTurnoEdits] = useState<Record<string, Record<string, Record<number, number>>>>({});

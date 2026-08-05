@@ -26,6 +26,41 @@ const getLineMultiplier = (linea: string): number => {
   return 6;
 };
 
+const getBebidaTerminadaMultiplier = (linea: string): number => {
+  const match = linea.match(/Línea (\d+)/);
+  if (!match) return 2;
+  const n = parseInt(match[1], 10);
+  if (n >= 1 && n <= 4) return 2;
+  if (n === 5) return 1.5;
+  if (n === 6) return 0.4;
+  if (n === 7) return 1;
+  return 2;
+};
+
+const getRmMultiplier = (sabor: string): number | null => {
+  const rmMap: Record<string, number> = {
+    'GLUP COLA': 6,
+    'GLUP KOLITA': 6,
+    'GLUP FRESH': 6,
+    'GLUP UVA': 5,
+    'GLUP MANZANA VERDE': 6,
+    'GLUP PIÑA': 5,
+    'GLUP NARANJA': 5,
+    'GLUP PIÑA PARCHITA': 5,
+    'GLUP MANZANA ROJA': 5.8,
+  };
+  const upper = sabor.toUpperCase();
+  if (upper.startsWith('JUSTY')) return null;
+  return rmMap[upper] || 6;
+};
+
+const calcularJarabeRequerido = (sabor: string, cajasCompletadas: number, producto: string | number, linea: string): number => {
+  const botellasT = (cajasCompletadas || 0) * getLineMultiplier(linea) + (Number(producto) || 0);
+  const bebidaTerminada = botellasT * getBebidaTerminadaMultiplier(linea);
+  const rm = getRmMultiplier(sabor);
+  return rm ? bebidaTerminada / rm : bebidaTerminada;
+};
+
 export function SeguimientoResumenSemanaTable({
   filasAuto = {},
   autoOverrides = {},
@@ -46,6 +81,9 @@ export function SeguimientoResumenSemanaTable({
       // 1) Filas automáticas de esta línea (Carga Prodt)
       (filasAuto[linea] ?? []).forEach((f) => {
         const ov = autoOverrides[f.id] ?? {};
+        const cajasCompletadas = f.cajasCompletadas;
+        const producto = ov.producto ?? '';
+        const jarabeRequerido = calcularJarabeRequerido(f.sabor, cajasCompletadas, producto, label);
         resultado.push({
           id: f.id,
           linea: label,
@@ -55,19 +93,22 @@ export function SeguimientoResumenSemanaTable({
           fechaFin: f.fechaFin,
           numeroOrden: f.numeroOrden,
           cajasPlanificadas: Number(ov.cajasPlanificadas) || 0,
-          cajasCompletadas: f.cajasCompletadas,
+          cajasCompletadas: cajasCompletadas,
           diferencia: 0,
-          jarabeRequerido: 0,
+          jarabeRequerido: jarabeRequerido,
           jarabeReal: 0,
           diferencia2: 0,
-          producto: ov.producto ?? '',
+          producto: producto,
           botellasT: 0,
           ubb: 0,
         });
       });
 
       // 2) Filas manuales de esta línea
-      data.filter((r) => r.linea === label).forEach((r) => resultado.push(r));
+      data.filter((r) => r.linea === label).forEach((r) => {
+        const jarabeRequerido = calcularJarabeRequerido(r.sabor, Number(r.cajasCompletadas) || 0, r.producto, label);
+        resultado.push({ ...r, jarabeRequerido });
+      });
     }
 
     return resultado;
@@ -87,7 +128,8 @@ export function SeguimientoResumenSemanaTable({
         const jarabeReqCompletadas = plan > 0 ? (req / plan) * comp : 0;
         const porcentajeJarabe = req > 0 ? (real / req) * 100 : 0;
         const botellasT = comp * getLineMultiplier(r.linea) + (Number(r.producto) || 0);
-        return { ...r, diferencia, diferencia2, jarabeReqCompletadas, porcentajeJarabe, botellasT };
+        const bebidaTerminada = botellasT * getBebidaTerminadaMultiplier(r.linea);
+        return { ...r, diferencia, diferencia2, jarabeReqCompletadas, porcentajeJarabe, botellasT, bebidaTerminada };
       }),
     [combinadas]
   );
@@ -104,6 +146,7 @@ export function SeguimientoResumenSemanaTable({
         acc.diferencia2 += Number(r.diferencia2) || 0;
         acc.porcentajeJarabe += r.porcentajeJarabe;
         acc.botellasT += Number(r.botellasT) || 0;
+        acc.bebidaTerminada += Number(r.bebidaTerminada) || 0;
         acc.ubb += Number(r.ubb) || 0;
         return acc;
       },
@@ -117,6 +160,7 @@ export function SeguimientoResumenSemanaTable({
         diferencia2: 0,
         porcentajeJarabe: 0,
         botellasT: 0,
+        bebidaTerminada: 0,
         ubb: 0,
       }
     );
@@ -193,7 +237,7 @@ export function SeguimientoResumenSemanaTable({
                   <TableCell className="text-[11px] font-black text-sky-700 py-2.5 border-b border-slate-100 text-center">{row.porcentajeJarabe.toFixed(1)}%</TableCell>
                   <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100">{row.producto}</TableCell>
                   <TableCell className="text-[11px] font-semibold text-slate-900 py-2.5 border-b border-slate-100 text-center">{row.botellasT}</TableCell>
-                  <TableCell className="text-[11px] font-semibold text-slate-900 py-2.5 border-b border-slate-100 text-right pr-4">{row.ubb}</TableCell>
+                  <TableCell className="text-[11px] font-semibold text-slate-900 py-2.5 border-b border-slate-100 text-right pr-4">{row.bebidaTerminada.toFixed(1)}</TableCell>
                 </TableRow>
               ))
             )}
@@ -213,7 +257,7 @@ export function SeguimientoResumenSemanaTable({
                 </TableCell>
                 <TableCell className="border-t-2 border-slate-200" />
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.botellasT}</TableCell>
-                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200 pr-4">{totales.ubb}</TableCell>
+                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200 pr-4">{totales.bebidaTerminada.toFixed(1)}</TableCell>
               </TableRow>
             </TableFooter>
           )}

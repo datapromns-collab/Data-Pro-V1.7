@@ -50,6 +50,41 @@ export function SeguimientoLineaTable({
     return 6;
   };
 
+  const getBebidaTerminadaMultiplier = (linea: LineaKey): number => {
+    const n = parseInt(linea.replace('linea-', ''), 10);
+    if (n >= 1 && n <= 4) return 2;
+    if (n === 5) return 1.5;
+    if (n === 6) return 0.4;
+    if (n === 7) return 1;
+    return 2;
+  };
+
+  const getRmMultiplier = (sabor: string): number | null => {
+    const rmMap: Record<string, number> = {
+      'GLUP COLA': 6,
+      'GLUP KOLITA': 6,
+      'GLUP FRESH': 6,
+      'GLUP UVA': 5,
+      'GLUP MANZANA VERDE': 6,
+      'GLUP PIÑA': 5,
+      'GLUP NARANJA': 5,
+      'GLUP PIÑA PARCHITA': 5,
+      'GLUP MANZANA ROJA': 5.8,
+    };
+    const upper = sabor.toUpperCase();
+    if (upper.startsWith('JUSTY')) return null;
+    return rmMap[upper] || 6;
+  };
+
+  const calcularJarabeRequerido = (row: { sabor: string; cajasCompletadas?: number; producto?: string | number }, lineaKey: LineaKey): number => {
+    const cajasCompletadas = Number(row.cajasCompletadas) || 0;
+    const producto = Number(row.producto) || 0;
+    const botellasT = cajasCompletadas * getLineMultiplier(lineaKey) + producto;
+    const bebidaTerminada = botellasT * getBebidaTerminadaMultiplier(lineaKey);
+    const rm = getRmMultiplier(row.sabor);
+    return rm ? bebidaTerminada / rm : bebidaTerminada;
+  };
+
   const totales = useMemo(() => {
     // Solo se suman las filas manuales (las automáticas ya traen sus propios totales en cajasCompletadas)
     const manuales = data.reduce(
@@ -57,7 +92,7 @@ export function SeguimientoLineaTable({
         acc.cajasPlanificadas += Number(row.cajasPlanificadas) || 0;
         acc.cajasCompletadas += Number(row.cajasCompletadas) || 0;
         acc.diferencia += Number(row.diferencia) || 0;
-        acc.jarabeRequerido += Number(row.jarabeRequerido) || 0;
+        acc.jarabeRequerido += calcularJarabeRequerido(row, linea);
         acc.jarabeReal += Number(row.jarabeReal) || 0;
         acc.diferencia2 += Number(row.diferencia2) || 0;
         acc.botellasT += (Number(row.cajasCompletadas) || 0) * getLineMultiplier(linea) + (Number(row.producto) || 0);
@@ -78,12 +113,17 @@ export function SeguimientoLineaTable({
       const overrideProducto = Number(autoOverrides[f.id]?.producto) || 0;
       return sum + ((Number(f.cajasCompletadas) || 0) * getLineMultiplier(linea) + overrideProducto);
     }, 0);
+    const autoJarabeRequerido = filasAuto.reduce((sum, f) => {
+      const overrideProducto = Number(autoOverrides[f.id]?.producto) || 0;
+      return sum + calcularJarabeRequerido({ ...f, producto: overrideProducto }, linea);
+    }, 0);
 
     return {
       ...manuales,
       cajasPlanificadas: manuales.cajasPlanificadas + autoCajasPlanificadas,
       cajasCompletadas: manuales.cajasCompletadas + autoCajasCompletadas,
       diferencia: manuales.diferencia + autoDiferencia,
+      jarabeRequerido: manuales.jarabeRequerido + autoJarabeRequerido,
       jarabeReal: manuales.jarabeReal + autoJarabeReal,
       diferencia2: manuales.diferencia2 + autoDiferencia2,
       ubb: manuales.ubb + autoUbb,
@@ -175,7 +215,7 @@ export function SeguimientoLineaTable({
                     </TableCell>
                     <TableCell className="text-[11px] font-black text-emerald-700 py-2.5 border-b border-slate-100 text-center">{row.cajasCompletadas}</TableCell>
                     <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{difCajas}</TableCell>
-                    <TableCell className="text-[11px] font-medium text-slate-400 py-2.5 border-b border-slate-100 text-center">—</TableCell>
+                     <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{calcularJarabeRequerido({ ...row, producto: Number(ov.producto) || 0 }, linea).toFixed(1)}</TableCell>
                     <TableCell className="py-2 border-b border-slate-100">
                       <Input
                         type="number"
@@ -238,18 +278,7 @@ export function SeguimientoLineaTable({
                       />
                     </TableCell>
                     <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{row.diferencia}</TableCell>
-                    <TableCell className="py-2 border-b border-slate-100">
-                      <Input
-                        type="number"
-                        value={row.jarabeRequerido || ''}
-                        onChange={(e) => {
-                          const val = Number(e.target.value) || 0;
-                          const dif2 = recalcDiferencia2(val, row.jarabeReal);
-                          handleUpdate(row.id, { jarabeRequerido: val, diferencia2: dif2 });
-                        }}
-                        className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
-                      />
-                    </TableCell>
+                     <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{calcularJarabeRequerido(row, linea).toFixed(1)}</TableCell>
                     <TableCell className="py-2 border-b border-slate-100">
                       <Input
                         type="number"
