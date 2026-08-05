@@ -307,13 +307,17 @@ export default function OrdenesSapModule({
   onLineaChange,
   selectedFecha,
   onFechaChange,
+  userId,
 }: { 
   activeLinea?: number; 
   onLineaChange?: (linea: number) => void;
   selectedFecha?: Date | undefined;
   onFechaChange?: (fecha: Date | undefined) => void;
+  userId?: string;
 }) {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
+  const allowedSections = userId === 'maria.mds' ? ['carga-prod', 'creador-ordenes'] as const : ['carga-prod', 'creador-ordenes', 'seguimiento-ordenes', 'dia-a-dia', 'prodt-semanal', 'resumen-mensual'] as const;
+  const isSectionAllowed = (section: string) => allowedSections.includes(section as any);
   const [activeSection, setActiveSection] = useState<'carga-prod' | 'creador-ordenes' | 'seguimiento-ordenes' | 'dia-a-dia' | 'prodt-semanal' | 'resumen-mensual'>('carga-prod');
   const [activeSubsection, setActiveSubsection] = useState<'dia' | 'diurno' | 'nocturno' | null>(null);
   // Estado independiente para la sección "Creador de Órdenes" (no afecta a las demás secciones)
@@ -1730,11 +1734,21 @@ const exportarPDFdia = async () => {
   const filasAutoSeguimiento = useMemo<Record<number, SeguimientoOrdenFuente[]>>(() => {
     const mapa: Record<number, SeguimientoOrdenFuente[]> = { 1: [], 2: [], 3: [], 4: [], 5: [], 6: [], 7: [] };
     const semanaFiltro = selectedFechaSeguimiento ? getISOWeek(selectedFechaSeguimiento) : null;
+    const mesFiltro = selectedFechaSeguimiento ? selectedFechaSeguimiento.getMonth() : null;
+    const anioFiltro = selectedFechaSeguimiento ? selectedFechaSeguimiento.getFullYear() : null;
 
     (ordenes || []).forEach((orden) => {
       if (semanaFiltro !== null && orden.semana !== semanaFiltro) return;
       const dias = orden.dias || [];
       if (dias.length === 0) return;
+      if (mesFiltro !== null && anioFiltro !== null) {
+        const tieneDiaEnMes = dias.some((d) => {
+          const fecha = new Date(d.fechaInicio + 'T12:00:00');
+          if (isNaN(fecha.getTime())) return false;
+          return fecha.getMonth() === mesFiltro && fecha.getFullYear() === anioFiltro;
+        });
+        if (!tieneDiaEnMes) return;
+      }
 
       const fechas = dias.map((d) => d.fechaInicio).filter(Boolean).sort();
       const fechaInicioRaw = fechas[0];
@@ -1784,45 +1798,57 @@ const exportarPDFdia = async () => {
     <div className="pb-10">
       <div className="space-y-3 mb-6 no-print">
         <div className="flex flex-wrap items-center justify-between gap-3">
-           <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-full sm:w-auto">
-             <button
-               onClick={() => setActiveSection('carga-prod')}
-               className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'carga-prod' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-             >
-               <Factory className="h-3.5 w-3.5" /> CARGA PRODT
-             </button>
-             <button
-               onClick={() => setActiveSection('creador-ordenes')}
-               className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'creador-ordenes' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-             >
-                <Factory className="h-3.5 w-3.5" /> CREADOR DE ORDENES
-              </button>
-              <button
-                onClick={() => setActiveSection('seguimiento-ordenes')}
-                className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'seguimiento-ordenes' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-              >
-                <Factory className="h-3.5 w-3.5" /> SEGUIMIENTO ORDENES
-              </button>
-              <button
-                onClick={() => setActiveSection('dia-a-dia')}
-               className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'dia-a-dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-             >
-               <Factory className="h-3.5 w-3.5" /> DÍA A DÍA
-             </button>
-             <button
-               onClick={() => setActiveSection('prodt-semanal')}
-               className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'prodt-semanal' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-             >
-               <Factory className="h-3.5 w-3.5" /> PRODT SEMANAL
-             </button>
-             <button
-               onClick={() => setActiveSection('resumen-mensual')}
-               className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'resumen-mensual' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-             >
-               <Factory className="h-3.5 w-3.5" /> RESUMEN MENSUAL
-             </button>
-           </div>
-           {activeSection === 'carga-prod' && (
+            <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-full sm:w-auto">
+              {isSectionAllowed('carga-prod') && (
+                <button
+                  onClick={() => setActiveSection('carga-prod')}
+                  className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'carga-prod' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                >
+                  <Factory className="h-3.5 w-3.5" /> CARGA PRODT
+                </button>
+              )}
+              {isSectionAllowed('creador-ordenes') && (
+                <button
+                  onClick={() => setActiveSection('creador-ordenes')}
+                  className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'creador-ordenes' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                >
+                   <Factory className="h-3.5 w-3.5" /> CREADOR DE ORDENES
+                 </button>
+              )}
+               {isSectionAllowed('seguimiento-ordenes') && (
+                 <button
+                   onClick={() => setActiveSection('seguimiento-ordenes')}
+                   className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'seguimiento-ordenes' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                 >
+                   <Factory className="h-3.5 w-3.5" /> SEGUIMIENTO ORDENES
+                 </button>
+               )}
+               {isSectionAllowed('dia-a-dia') && (
+                 <button
+                   onClick={() => setActiveSection('dia-a-dia')}
+                  className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'dia-a-dia' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                 >
+                   <Factory className="h-3.5 w-3.5" /> DÍA A DÍA
+                 </button>
+               )}
+               {isSectionAllowed('prodt-semanal') && (
+                 <button
+                   onClick={() => setActiveSection('prodt-semanal')}
+                   className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'prodt-semanal' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                 >
+                   <Factory className="h-3.5 w-3.5" /> PRODT SEMANAL
+                 </button>
+               )}
+               {isSectionAllowed('resumen-mensual') && (
+                 <button
+                   onClick={() => setActiveSection('resumen-mensual')}
+                   className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activeSection === 'resumen-mensual' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                 >
+                   <Factory className="h-3.5 w-3.5" /> RESUMEN MENSUAL
+                 </button>
+               )}
+            </div>
+            {isSectionAllowed('carga-prod') && isSectionAllowed('carga-prod') && activeSection === 'carga-prod' && (
              <Popover>
                <PopoverTrigger asChild>
                  <Button
@@ -1844,7 +1870,7 @@ const exportarPDFdia = async () => {
                </PopoverContent>
              </Popover>
            )}
-           {activeSection === 'prodt-semanal' && (
+            {isSectionAllowed('prodt-semanal') && isSectionAllowed('prodt-semanal') && activeSection === 'prodt-semanal' && (
              <Popover>
                <PopoverTrigger asChild>
                  <Button
@@ -1868,7 +1894,7 @@ const exportarPDFdia = async () => {
            )}
          </div>
 
-        {activeSection !== 'creador-ordenes' && (
+        {isSectionAllowed('carga-prod') && activeSection !== 'creador-ordenes' && (
         <div className="flex flex-wrap items-center justify-between gap-3">
           {activeSection === 'carga-prod' ? (
             <>
@@ -1905,7 +1931,7 @@ const exportarPDFdia = async () => {
                 </Button>
               </div>
             </>
-          ) : activeSection === 'dia-a-dia' ? (
+            ) : isSectionAllowed('dia-a-dia') && activeSection === 'dia-a-dia' ? (
             <div className="flex flex-wrap items-center justify-between gap-3 w-full">
               <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200">
                 <button
@@ -1955,7 +1981,7 @@ const exportarPDFdia = async () => {
          </div>
         )}
 
-        {activeSection === 'dia-a-dia' && (activeSubsection === 'diurno' || activeSubsection === 'nocturno') && (
+        {isSectionAllowed('dia-a-dia') && activeSection === 'dia-a-dia' && (activeSubsection === 'diurno' || activeSubsection === 'nocturno') && (
           <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-fit">
             <button
               onClick={() => setActiveSubsection('diurno')}
@@ -1975,7 +2001,7 @@ const exportarPDFdia = async () => {
 
         <div>
          {/* Sección independiente: Creador de Órdenes (no depende de la línea seleccionada ni afecta a las demás secciones) */}
-         {activeSection === 'creador-ordenes' && (
+         {isSectionAllowed('creador-ordenes') && activeSection === 'creador-ordenes' && (
            <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
               <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-fit mb-4">
                <button
@@ -2189,7 +2215,7 @@ const exportarPDFdia = async () => {
           {/* Filas automáticas del Seguimiento de Órdenes derivadas de "Carga Prodt" */}
 
           {/* Sección independiente: Seguimiento de Órdenes (no depende de la línea seleccionada ni afecta a las demás secciones) */}
-          {activeSection === 'seguimiento-ordenes' && (
+          {isSectionAllowed('seguimiento-ordenes') && activeSection === 'seguimiento-ordenes' && (
             <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
               <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
                 <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit flex-wrap gap-1 overflow-x-auto">

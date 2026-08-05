@@ -1,6 +1,17 @@
 {
   "messages": [
     {
+      "id": "2026-08-05T15:15:18.018Z-13ug2va",
+      "title": "Modificación PDP S32",
+      "message": "Se realizo modificación en el PDP S32 de las líneas 1,2,3 y 7",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-08-05T15:15:18.018Z"
+    },
+    {
       "id": "2026-08-03T13:39:02.073Z-2xpq0vn",
       "title": "Modificación PDP S32",
       "message": "Se realizo modificación en las líneas 2 y 7",
@@ -98,6 +109,17 @@
       "recipient": "jaime.r",
       "read": false,
       "createdAt": "2026-07-18T13:53:22.527Z"
+    },
+    {
+      "id": "2026-08-05T15:15:18.018Z-7hi6byv",
+      "title": "Modificación PDP S32",
+      "message": "Se realizo modificación en el PDP S32 de las líneas 1,2,3 y 7",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-08-05T15:15:18.018Z"
     },
     {
       "id": "2026-08-03T13:39:02.073Z-wejk3bo",
@@ -199,6 +221,17 @@
       "createdAt": "2026-07-18T13:53:22.527Z"
     },
     {
+      "id": "2026-08-05T15:15:18.018Z-7f7c6ms",
+      "title": "Modificación PDP S32",
+      "message": "Se realizo modificación en el PDP S32 de las líneas 1,2,3 y 7",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-08-05T15:15:18.018Z"
+    },
+    {
       "id": "2026-08-03T13:39:02.073Z-5olq1n6",
       "title": "Modificación PDP S32",
       "message": "Se realizo modificación en las líneas 2 y 7",
@@ -298,15 +331,15 @@
       "createdAt": "2026-07-23T20:48:51.443Z"
     },
     {
-      "id": "2026-07-20T20:04:14.406Z-y89a4p4",
-      "title": "Modificación PDP S30",
-      "message": "Se realizo modificación en la planificación de las líneas 3,6 y 7",
+      "id": "2026-08-05T15:15:18.018Z-bd1xsen",
+      "title": "Modificación PDP S32",
+      "message": "Se realizo modificación en el PDP S32 de las líneas 1,2,3 y 7",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-07-20T20:04:14.406Z"
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-08-05T15:15:18.018Z"
     },
     {
       "id": "2026-08-03T13:39:02.073Z-7lzqp37",
@@ -408,15 +441,15 @@
       "createdAt": "2026-07-18T13:53:22.527Z"
     },
     {
-      "id": "2026-07-18T13:47:27.461Z-0ribwe8",
-      "title": "PDP semana 30",
-      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
+      "id": "2026-08-05T15:15:18.018Z-llw19fd",
+      "title": "Modificación PDP S32",
+      "message": "Se realizo modificación en el PDP S32 de las líneas 1,2,3 y 7",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
+      "recipient": "prodtj.mds",
       "read": false,
-      "createdAt": "2026-07-18T13:47:27.461Z"
+      "createdAt": "2026-08-05T15:15:18.018Z"
     },
     {
       "id": "2026-08-03T13:39:02.073Z-m0jckrm",
@@ -518,15 +551,26 @@
       "createdAt": "2026-07-18T13:53:22.527Z"
     },
     {
-      "id": "2026-07-18T13:47:27.461Z-or9otoo",
-      "title": "PDP semana 30",
-      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
+      "id": "2026-08-05T15:15:18.018Z-wxe5jtb",
+      "title": "Modificación PDP S32",
+      "message": "Se realizo modificación en el PDP S32 de las líneas 1,2,3 y 7",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-07-18T13:47:27.461Z"
+      "recipient": "prodts.mds",
+      "read": false,
+      "createdAt": "2026-08-05T15:15:18.018Z"
+    },
+    {
+      "id": "2026-08-05T15:15:18.018Z-p77tutj",
+      "title": "Modificación PDP S32",
+      "message": "Se realizo modificación en el PDP S32 de las líneas 1,2,3 y 7",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "procj.mds",
+      "read": false,
+      "createdAt": "2026-08-05T15:15:18.018Z"
     },
     {
       "id": "2026-08-03T13:39:02.073Z-blegblc",
@@ -628,15 +672,15 @@
       "createdAt": "2026-07-20T20:04:14.406Z"
     },
     {
-      "id": "2026-07-18T13:53:22.527Z-1x0nbqm",
-      "title": "PDP S30",
-      "message": "la planificación de la semana 30 ya fue enviada por correo",
-      "type": "info",
+      "id": "2026-08-05T15:15:18.018Z-v228eo6",
+      "title": "Modificación PDP S32",
+      "message": "Se realizo modificación en el PDP S32 de las líneas 1,2,3 y 7",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-07-18T13:53:22.527Z"
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-08-05T15:15:18.018Z"
     },
     {
       "id": "2026-08-03T13:39:02.073Z-8ntv77p",
@@ -738,15 +782,15 @@
       "createdAt": "2026-07-18T13:53:22.527Z"
     },
     {
-      "id": "2026-07-18T13:47:27.461Z-brabhvc",
-      "title": "PDP semana 30",
-      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
+      "id": "2026-08-05T15:15:18.018Z-l7s6mym",
+      "title": "Modificación PDP S32",
+      "message": "Se realizo modificación en el PDP S32 de las líneas 1,2,3 y 7",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
+      "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-07-18T13:47:27.461Z"
+      "createdAt": "2026-08-05T15:15:18.018Z"
     },
     {
       "id": "2026-08-03T13:39:02.073Z-7xh85ry",
@@ -848,15 +892,15 @@
       "createdAt": "2026-07-18T13:53:22.527Z"
     },
     {
-      "id": "2026-07-18T13:47:27.461Z-qen5ctm",
-      "title": "PDP semana 30",
-      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
+      "id": "2026-08-05T15:15:18.018Z-c6t0mye",
+      "title": "Modificación PDP S32",
+      "message": "Se realizo modificación en el PDP S32 de las líneas 1,2,3 y 7",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
-      "read": true,
-      "createdAt": "2026-07-18T13:47:27.461Z"
+      "recipient": "prodt1.mds",
+      "read": false,
+      "createdAt": "2026-08-05T15:15:18.018Z"
     },
     {
       "id": "2026-08-03T13:39:02.073Z-qtjgay2",
@@ -870,6 +914,17 @@
       "createdAt": "2026-08-03T13:39:02.073Z"
     },
     {
+      "id": "2026-08-05T15:15:18.018Z-hjx8uiu",
+      "title": "Modificación PDP S32",
+      "message": "Se realizo modificación en el PDP S32 de las líneas 1,2,3 y 7",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt2.mds",
+      "read": false,
+      "createdAt": "2026-08-05T15:15:18.018Z"
+    },
+    {
       "id": "2026-08-03T13:39:02.073Z-jtufnny",
       "title": "Modificación PDP S32",
       "message": "Se realizo modificación en las líneas 2 y 7",
@@ -879,6 +934,17 @@
       "recipient": "prodt2.mds",
       "read": false,
       "createdAt": "2026-08-03T13:39:02.073Z"
+    },
+    {
+      "id": "2026-08-05T15:15:18.018Z-3zqajby",
+      "title": "Modificación PDP S32",
+      "message": "Se realizo modificación en el PDP S32 de las líneas 1,2,3 y 7",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-08-05T15:15:18.018Z"
     },
     {
       "id": "2026-08-03T13:39:02.073Z-8lxnngz",
@@ -980,15 +1046,15 @@
       "createdAt": "2026-07-18T13:53:22.527Z"
     },
     {
-      "id": "2026-07-18T13:47:27.461Z-sb8ivfk",
-      "title": "PDP semana 30",
-      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
+      "id": "2026-08-05T15:15:18.018Z-yvgx9vr",
+      "title": "Modificación PDP S32",
+      "message": "Se realizo modificación en el PDP S32 de las líneas 1,2,3 y 7",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
+      "recipient": "g.tec.mds",
       "read": false,
-      "createdAt": "2026-07-18T13:47:27.461Z"
+      "createdAt": "2026-08-05T15:15:18.018Z"
     },
     {
       "id": "2026-08-03T13:39:02.073Z-pp358c3",
@@ -998,7 +1064,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "g.tec.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-08-03T13:39:02.073Z"
     },
     {
@@ -1009,7 +1075,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "g.tec.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-07-30T19:06:01.189Z"
     },
     {
@@ -1020,7 +1086,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "g.tec.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-07-30T19:05:25.727Z"
     },
     {
@@ -1031,7 +1097,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "g.tec.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-07-29T21:27:32.776Z"
     },
     {
@@ -1042,7 +1108,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "g.tec.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-07-28T21:50:24.056Z"
     },
     {
@@ -1053,7 +1119,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "g.tec.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-07-23T22:24:07.654Z"
     },
     {
@@ -1064,7 +1130,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "g.tec.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-07-23T20:48:51.443Z"
     },
     {
@@ -1090,15 +1156,15 @@
       "createdAt": "2026-07-18T13:53:22.527Z"
     },
     {
-      "id": "2026-07-18T13:47:27.461Z-swtor2t",
-      "title": "PDP semana 30",
-      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
+      "id": "2026-08-05T15:15:18.018Z-z0stcs5",
+      "title": "Modificación PDP S32",
+      "message": "Se realizo modificación en el PDP S32 de las líneas 1,2,3 y 7",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
-      "read": true,
-      "createdAt": "2026-07-18T13:47:27.461Z"
+      "recipient": "enf.mds",
+      "read": false,
+      "createdAt": "2026-08-05T15:15:18.018Z"
     },
     {
       "id": "2026-08-03T13:39:02.073Z-3f6xl84",
@@ -1200,15 +1266,15 @@
       "createdAt": "2026-07-18T13:53:22.527Z"
     },
     {
-      "id": "2026-07-18T13:47:27.461Z-bkj8bsf",
-      "title": "PDP semana 30",
-      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
+      "id": "2026-08-05T15:15:18.018Z-n6ba4sn",
+      "title": "Modificación PDP S32",
+      "message": "Se realizo modificación en el PDP S32 de las líneas 1,2,3 y 7",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
-      "read": true,
-      "createdAt": "2026-07-18T13:47:27.461Z"
+      "recipient": "etq.mds",
+      "read": false,
+      "createdAt": "2026-08-05T15:15:18.018Z"
     },
     {
       "id": "2026-08-03T13:39:02.073Z-wfsh8zs",
@@ -1310,15 +1376,15 @@
       "createdAt": "2026-07-18T13:53:22.527Z"
     },
     {
-      "id": "2026-07-18T13:47:27.461Z-pwc31wd",
-      "title": "PDP semana 30",
-      "message": "Ya se recuperaron los datos perdido, ya se encuentra nuevamente disponible el PDP de la semana 30",
+      "id": "2026-08-05T15:15:18.018Z-qz32fti",
+      "title": "Modificación PDP S32",
+      "message": "Se realizo modificación en el PDP S32 de las líneas 1,2,3 y 7",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-07-18T13:47:27.461Z"
+      "createdAt": "2026-08-05T15:15:18.018Z"
     }
   ]
 }
