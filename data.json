@@ -20843,7 +20843,8 @@
       "linea-7": {
         "auto-7-1785756950894": {
           "cajasPlanificadas": 15000,
-          "producto": "2391"
+          "producto": "2391",
+          "jarabeReal": 0
         }
       }
     },
