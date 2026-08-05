@@ -17,6 +17,7 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
+import { useSeguimientoResumenOptimizado } from '@/hooks/use-seguimiento-ordenes';
 import {
   SeguimientoLineaTable,
   SeguimientoLinea1Table,
@@ -811,6 +812,18 @@ export default function OrdenesSapModule({
   const [tablaProdtSemanalEdits, setTablaProdtSemanalEdits] = useState<Record<string, Record<number, number>>>({});
   const [tablaResumenMensualEdits, setTablaResumenMensualEdits] = useState<Record<string, Record<number, number>>>({});
   const { ordenes, setOrdenes, eliminarOrden, eliminarDia } = useOrdenesSap();
+  const { getAutoOverrides } = useSeguimientoResumenOptimizado();
+
+  const autoOverridesFlat = useMemo(() => {
+    const out: Record<string, { cajasPlanificadas?: number; producto?: string }> = {};
+    for (let n = 1; n <= 7; n++) {
+      const key = `linea-${n}` as any;
+      Object.entries(getAutoOverrides(key) || {}).forEach(([id, ov]) => {
+        out[id] = { cajasPlanificadas: (ov as any).cajasPlanificadas, producto: (ov as any).producto };
+      });
+    }
+    return out;
+  }, [getAutoOverrides]);
 
   const tablaTurnoDiurnoAuto = useMemo(() => {
     const tabla: Record<string, Record<number, number>> = {};
@@ -2260,7 +2273,7 @@ const exportarPDFdia = async () => {
 
               <div className="flex flex-col gap-4">
                 {seguimientoSubsection === 'resumen' ? (
-                  <SeguimientoResumenSemanaTable filasAuto={filasAutoSeguimiento} />
+                  <SeguimientoResumenSemanaTable filasAuto={filasAutoSeguimiento} autoOverrides={autoOverridesFlat} />
                 ) : (
                   (() => {
                     const lineaNum = seguimientoSubsection as number;

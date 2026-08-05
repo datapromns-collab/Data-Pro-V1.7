@@ -19055,6 +19055,31 @@
             "preparado": "40",
             "final": "40"
           }
+        },
+        "2026-08-03": {
+          "GLUP COLA": {
+            "inicial": "76.30",
+            "preparado": "30",
+            "final": "55.65"
+          },
+          "GLUP FRESH": {
+            "inicial": "12",
+            "preparado": "30",
+            "final": "18.60"
+          },
+          "GLUP NARANJA": {
+            "inicial": "19.60",
+            "preparado": "22",
+            "final": "22.51"
+          },
+          "JUSTY NARANJA": {
+            "inicial": "40",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "final": "1"
+          }
         }
       },
       "sugar": {
@@ -19159,6 +19184,18 @@
             "invInicialSacos": "2400",
             "recepcionSacos": "",
             "invFinalSacos": "2400"
+          }
+        },
+        "2026-08-03": {
+          "PORTUGUESA": {
+            "invInicialSacos": "3960",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
           }
         }
       },
@@ -19279,6 +19316,20 @@
           "Sala 1": {
             "invInicialSacos": "1379",
             "invFinalSacos": "456"
+          }
+        },
+        "2026-08-03": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": ""
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "298",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "456",
+            "invFinalSacos": ""
           }
         }
       },
@@ -20736,7 +20787,7 @@
       "linea-7": {
         "auto-7-1785756950894": {
           "cajasPlanificadas": 15000,
-          "producto": "23"
+          "producto": "2391"
         }
       }
     },

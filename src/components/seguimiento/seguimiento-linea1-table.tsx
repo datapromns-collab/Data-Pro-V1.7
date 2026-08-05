@@ -298,9 +298,10 @@ export function SeguimientoLineaTable({
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.jarabeRequerido}</TableCell>
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.jarabeReal}</TableCell>
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.diferencia2}</TableCell>
-                <TableCell colSpan={2} className="border-t-2 border-slate-200" />
+                <TableCell className="border-t-2 border-slate-200" />
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.botellasT}</TableCell>
-                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200 pr-4">{totales.ubb}</TableCell>
+                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.ubb}</TableCell>
+                <TableCell className="border-t-2 border-slate-200" />
               </TableRow>
             </TableFooter>
           )}

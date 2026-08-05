@@ -28,8 +28,10 @@ const getLineMultiplier = (linea: string): number => {
 
 export function SeguimientoResumenSemanaTable({
   filasAuto = {},
+  autoOverrides = {},
 }: {
   filasAuto?: Record<number, SeguimientoOrdenFuente[]>;
+  autoOverrides?: Record<string, { cajasPlanificadas?: number; producto?: string }>;
 }) {
   const { data } = useSeguimientoResumenOptimizado();
 
@@ -43,6 +45,7 @@ export function SeguimientoResumenSemanaTable({
 
       // 1) Filas automáticas de esta línea (Carga Prodt)
       (filasAuto[linea] ?? []).forEach((f) => {
+        const ov = autoOverrides[f.id] ?? {};
         resultado.push({
           id: f.id,
           linea: label,
@@ -51,13 +54,13 @@ export function SeguimientoResumenSemanaTable({
           fechaInicio: f.fechaInicio,
           fechaFin: f.fechaFin,
           numeroOrden: f.numeroOrden,
-          cajasPlanificadas: 0,
+          cajasPlanificadas: Number(ov.cajasPlanificadas) || 0,
           cajasCompletadas: f.cajasCompletadas,
           diferencia: 0,
           jarabeRequerido: 0,
           jarabeReal: 0,
           diferencia2: 0,
-          producto: '',
+          producto: ov.producto ?? '',
           botellasT: 0,
           ubb: 0,
         });
