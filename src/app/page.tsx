@@ -1138,6 +1138,11 @@ export default function PlannerPage() {
     return hasReadOnlyModule(user.id, 'seguimiento');
   }, [user, hasReadOnlyModule]);
 
+  const planningReadOnly = useMemo(() => {
+    if (!user) return false;
+    return hasReadOnlyModule(user.id, 'planning');
+  }, [user, hasReadOnlyModule]);
+
   const handlePrintPlan = () => {
     setPrintMode('plan');
     const style = document.createElement('style');
@@ -1655,6 +1660,7 @@ export default function PlannerPage() {
                     <ShieldCheck className={`h-3 w-3 ${isAdmin ? 'text-primary' : 'text-slate-400'}`} />
                     <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">
                        {user.id === 'prodt1.mds' || user.id === 'prodt2.mds' ? 'ANALISTA DE PRODUCCIÓN' : 
+                        user.id === 'logg.mds' ? 'GERENTE DE LOGÍSTICA' : 
                         user.role === 'PURCHASING' ? 'COMPRAS' : 
                         user.role === 'INVENTORY' ? 'INVENTARIO' : 
                         user.role === 'STANDARD' ? 'ESTÁNDAR' : user.role}
@@ -3694,19 +3700,19 @@ export default function PlannerPage() {
           )}
         </div>
 
-        <TaskDialog 
-          isOpen={isDialogOpen} 
-          onClose={() => { setIsDialogOpen(false); setEditingTask(null); }} 
-          onSave={handleSaveTask} 
-          onDelete={handleDeleteTask} 
-          initialTask={editingTask} 
-          defaultLineId={selectedLine} 
-          weekStartDate={weekStartDate} 
-          allTasks={tasks}
-          lineSpeeds={lineSpeeds}
-          readOnly={!isAdmin}
-          onWeekChange={setWeekStartDate}
-        />
+         <TaskDialog 
+           isOpen={isDialogOpen} 
+           onClose={() => { setIsDialogOpen(false); setEditingTask(null); }} 
+           onSave={handleSaveTask} 
+           onDelete={handleDeleteTask} 
+           initialTask={editingTask} 
+           defaultLineId={selectedLine} 
+           weekStartDate={weekStartDate} 
+           allTasks={tasks}
+           lineSpeeds={lineSpeeds}
+           readOnly={planningReadOnly}
+           onWeekChange={setWeekStartDate}
+         />
 
         <Dialog open={isPlantaDialogOpen} onOpenChange={setIsPlantaDialogOpen}>
           <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">

@@ -138,10 +138,12 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   'g.tec.mds': ['planning', 'seguimiento', 'management'],
   'enf.mds': ['planning', 'seguimiento', 'management'],
   'etq.mds': ['planning', 'seguimiento', 'management'],
+  'logg.mds': ['planning'],
 };
 
 const DEFAULT_READONLY_MODULES: UserPermissions = {
   'g.tec.mds': ['seguimiento'],
+  'logg.mds': ['planning'],
 };
 
 export function usePermissionsStore() {

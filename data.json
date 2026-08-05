@@ -6803,7 +6803,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-03T14:07:45.118Z"
+    "updatedAt": "2026-08-05T12:06:26.932Z"
   },
   "ordenesSap": [
     {
@@ -10363,6 +10363,252 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 13548
+        }
+      ]
+    },
+    {
+      "id": "1-1785842002950",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "62737",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-03",
+          "ticket1": "17477",
+          "cajas1": 9520,
+          "ticket2": "17478",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 13200
+        },
+        {
+          "fechaInicio": "2026-08-04",
+          "ticket1": "17479",
+          "cajas1": 1520,
+          "ticket2": "17480",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 6640
+        }
+      ]
+    },
+    {
+      "id": "2-1785842172198",
+      "linea": 2,
+      "sabor": "GLUP NARANJA",
+      "ordenNumero": "62743",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-03",
+          "ticket1": "17439",
+          "cajas1": 9360,
+          "ticket2": "17440",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 2320
+        },
+        {
+          "fechaInicio": "2026-08-04",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17441",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 14347
+        }
+      ]
+    },
+    {
+      "id": "3-1785842370229",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62755",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-03",
+          "ticket1": "17389",
+          "cajas1": 11040,
+          "ticket2": "17390",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 21600
+        },
+        {
+          "fechaInicio": "2026-08-04",
+          "ticket1": "17391",
+          "cajas1": 2800,
+          "ticket2": "17392",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 240,
+          "ticket4": "",
+          "cajas4": 24240
+        }
+      ]
+    },
+    {
+      "id": "4-1785842482097",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62761",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-03",
+          "ticket1": "17525",
+          "cajas1": 11200,
+          "ticket2": "17526",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 19360
+        },
+        {
+          "fechaInicio": "2026-08-04",
+          "ticket1": "17527",
+          "cajas1": 3600,
+          "ticket2": "17528",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 240,
+          "ticket4": "",
+          "cajas4": 22320
+        }
+      ]
+    },
+    {
+      "id": "6-1785842530093",
+      "linea": 6,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "62772",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-03",
+          "ticket1": "17337",
+          "cajas1": 3680,
+          "ticket2": "17338",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 11680
+        },
+        {
+          "fechaInicio": "2026-08-04",
+          "ticket1": "17339",
+          "cajas1": 2080,
+          "ticket2": "17340",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 160,
+          "ticket4": "",
+          "cajas4": 10773
+        }
+      ]
+    },
+    {
+      "id": "7-1785842553558",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62778",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-03",
+          "ticket1": "17285",
+          "cajas1": 8970,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1785929468713",
+      "linea": 5,
+      "sabor": "JUSTY NARANJA",
+      "ordenNumero": "62766",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-03",
+          "ticket1": "17564",
+          "cajas1": 5000,
+          "ticket2": "17565",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 8050
+        },
+        {
+          "fechaInicio": "2026-08-04",
+          "ticket1": "17566",
+          "cajas1": 1850,
+          "ticket2": "17567",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 150,
+          "ticket4": "",
+          "cajas4": 8200
+        }
+      ]
+    },
+    {
+      "id": "2-1785930892296",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "62749",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-04",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17441",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 1920
+        }
+      ]
+    },
+    {
+      "id": "7-1785931492430",
+      "linea": 7,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "62784",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-04",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17287",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 16458
         }
       ]
     }
@@ -18549,122 +18795,137 @@
         "2026-07-14": {},
         "2026-07-27": {
           "GLUP COLA": {
-            "inicial": "45.47",
-            "preparado": "42",
-            "final": "58.50"
+            "inicial": "44.20",
+            "preparado": "",
+            "final": "44.20"
           },
           "GLUP FRESH": {
             "inicial": "6",
-            "preparado": "12",
-            "final": "0.52"
+            "preparado": "",
+            "final": "6"
           },
           "JUSTY DURAZNO": {
-            "inicial": "40",
-            "preparado": "240",
-            "final": "17"
+            "inicial": "",
+            "preparado": "",
+            "final": ""
           },
           "GLUP UVA": {
-            "preparado": "22",
-            "final": "12.15"
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP NARANJA": {
+            "inicial": "11",
+            "final": "11"
+          },
+          "GLUP KOLITA": {
+            "inicial": "13.70",
+            "final": "13.7"
           }
         },
         "2026-07-28": {
           "GLUP COLA": {
-            "inicial": "58.50",
-            "preparado": "48",
-            "final": "72.8"
+            "inicial": "44.20",
+            "preparado": "",
+            "final": "44.20"
           },
           "GLUP FRESH": {
-            "inicial": "0.52",
+            "inicial": "6",
+            "preparado": "",
+            "final": "6"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "",
             "preparado": "",
             "final": ""
           },
-          "JUSTY DURAZNO": {
-            "inicial": "17",
-            "preparado": "280",
-            "final": "28"
-          },
           "GLUP UVA": {
-            "inicial": "12.15",
-            "preparado": "33",
-            "final": "33"
+            "inicial": "",
+            "preparado": "",
+            "final": ""
           },
           "GLUP NARANJA": {
-            "preparado": "33",
-            "final": "1.6"
+            "preparado": "",
+            "final": "11",
+            "inicial": "11"
           },
           "GLUP KOLITA": {
-            "preparado": "18",
-            "final": "18"
+            "preparado": "",
+            "final": "13.70",
+            "inicial": "13.70"
           }
         },
         "2026-07-29": {
           "GLUP COLA": {
-            "inicial": "72.8",
-            "preparado": "12",
-            "final": "73.92"
+            "inicial": "44.20",
+            "preparado": "",
+            "final": "44.20"
           },
           "JUSTY DURAZNO": {
-            "inicial": "28",
-            "preparado": "180",
-            "final": "20"
-          },
-          "GLUP UVA": {
-            "inicial": "33",
-            "preparado": "33",
-            "final": "28.62"
-          },
-          "GLUP NARANJA": {
-            "inicial": "1.6",
+            "inicial": "",
             "preparado": "",
             "final": ""
           },
+          "GLUP UVA": {
+            "inicial": "",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP NARANJA": {
+            "inicial": "11",
+            "preparado": "",
+            "final": "11"
+          },
           "GLUP KOLITA": {
-            "inicial": "18",
-            "preparado": "36",
-            "final": "21.54"
+            "inicial": "13.70",
+            "preparado": "",
+            "final": "13.70"
           },
           "GLUP FRESH": {
-            "preparado": "12",
-            "final": "5.56"
+            "preparado": "",
+            "final": "6",
+            "inicial": "6"
           }
         },
         "2026-07-30": {
           "GLUP COLA": {
-            "inicial": "73.92",
-            "preparado": "36",
-            "final": "65.74"
+            "inicial": "44.20",
+            "preparado": "",
+            "final": "44.20"
           },
           "JUSTY DURAZNO": {
-            "inicial": "20",
-            "preparado": "200",
-            "final": "23"
+            "inicial": "",
+            "preparado": "",
+            "final": ""
           },
           "GLUP UVA": {
-            "inicial": "28.62",
+            "inicial": "",
             "preparado": "",
-            "final": "6.95"
+            "final": ""
           },
           "GLUP KOLITA": {
-            "inicial": "21.54",
-            "preparado": "72",
-            "final": "32.87"
+            "inicial": "13.70",
+            "preparado": "",
+            "final": "13.70"
           },
           "GLUP FRESH": {
-            "inicial": "5.56",
-            "preparado": "18",
-            "final": "6.52"
+            "inicial": "6",
+            "preparado": "",
+            "final": "6"
+          },
+          "GLUP NARANJA": {
+            "inicial": "11",
+            "final": "11"
           }
         },
         "2026-07-31": {
           "GLUP COLA": {
             "inicial": "65.74",
             "preparado": "",
-            "final": ""
+            "final": "44.20"
           },
           "JUSTY DURAZNO": {
             "inicial": "23",
-            "preparado": "",
+            "preparado": "200",
             "final": ""
           },
           "GLUP UVA": {
@@ -18674,31 +18935,43 @@
           },
           "GLUP KOLITA": {
             "inicial": "32.87",
-            "preparado": "",
-            "final": ""
+            "preparado": "54",
+            "final": "13.70"
           },
           "GLUP FRESH": {
             "inicial": "6.52",
-            "preparado": "",
-            "final": ""
+            "preparado": "12",
+            "final": "6"
+          },
+          "GLUP NARANJA": {
+            "preparado": "11",
+            "final": "11"
           }
         },
         "2026-07-01": {
           "GLUP COLA": {
-            "inicial": "17.38",
-            "preparado": ""
+            "inicial": "53.3",
+            "preparado": "",
+            "final": ""
           },
           "GLUP FRESH": {
-            "inicial": "8.50"
+            "inicial": "",
+            "preparado": "",
+            "final": ""
           },
           "GLUP KOLITA": {
-            "inicial": "33.45"
+            "inicial": "",
+            "preparado": "",
+            "final": ""
           },
           "GLUP MANZANA ROJA": {
-            "inicial": "8"
+            "inicial": "",
+            "preparado": ""
           },
           "JUSTY DURAZNO": {
-            "inicial": "29.5"
+            "inicial": "",
+            "preparado": "",
+            "final": ""
           }
         }
       },
@@ -18707,9 +18980,9 @@
         "2026-07-14": {},
         "2026-07-27": {
           "PORTUGUESA": {
-            "invInicialSacos": "7920",
-            "recepcionSacos": "5120",
-            "invFinalSacos": "10000"
+            "invInicialSacos": "7680",
+            "recepcionSacos": "",
+            "invFinalSacos": "7680"
           },
           "IMPORTADA 1": {
             "invInicialSacos": "2400",
@@ -18719,9 +18992,9 @@
         },
         "2026-07-28": {
           "PORTUGUESA": {
-            "invInicialSacos": "10000",
-            "recepcionSacos": "2840",
-            "invFinalSacos": "9400"
+            "invInicialSacos": "7680",
+            "recepcionSacos": "",
+            "invFinalSacos": "7680"
           },
           "IMPORTADA 1": {
             "invInicialSacos": "2400",
@@ -18731,9 +19004,9 @@
         },
         "2026-07-29": {
           "PORTUGUESA": {
-            "invInicialSacos": "9400",
-            "recepcionSacos": "3520",
-            "invFinalSacos": "10800"
+            "invInicialSacos": "7680",
+            "recepcionSacos": "",
+            "invFinalSacos": "7680"
           },
           "IMPORTADA 1": {
             "invInicialSacos": "2400",
@@ -18757,10 +19030,27 @@
           "PORTUGUESA": {
             "invInicialSacos": "10040",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "7680"
           },
           "IMPORTADA 1": {
             "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2400"
+          }
+        },
+        "2026-07-01": {
+          "PORTUGUESA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "",
             "recepcionSacos": "",
             "invFinalSacos": ""
           }
@@ -18775,12 +19065,12 @@
             "invFinalSacos": "5"
           },
           "JARABE SIMPLE": {
-            "invInicialSacos": "289",
-            "invFinalSacos": "376"
+            "invInicialSacos": "322",
+            "invFinalSacos": "322"
           },
           "Sala 1": {
-            "invInicialSacos": "1162",
-            "invFinalSacos": "931"
+            "invInicialSacos": "689",
+            "invFinalSacos": "689"
           },
           "sala 2": {
             "invInicialSacos": "",
@@ -18793,12 +19083,12 @@
             "invFinalSacos": "5"
           },
           "JARABE SIMPLE": {
-            "invInicialSacos": "376",
-            "invFinalSacos": "314"
+            "invInicialSacos": "322",
+            "invFinalSacos": "322"
           },
           "Sala 1": {
-            "invInicialSacos": "931",
-            "invFinalSacos": "226"
+            "invInicialSacos": "689",
+            "invFinalSacos": "689"
           }
         },
         "2026-07-29": {
@@ -18807,12 +19097,12 @@
             "invFinalSacos": "5"
           },
           "JARABE SIMPLE": {
-            "invInicialSacos": "314",
-            "invFinalSacos": "117"
+            "invInicialSacos": "322",
+            "invFinalSacos": "322"
           },
           "Sala 1": {
-            "invInicialSacos": "226",
-            "invFinalSacos": ""
+            "invInicialSacos": "689",
+            "invFinalSacos": "689"
           }
         },
         "2026-07-30": {
@@ -18832,14 +19122,28 @@
         "2026-07-31": {
           "KITS PREP.": {
             "invInicialSacos": "5",
-            "invFinalSacos": ""
+            "invFinalSacos": "5"
           },
           "JARABE SIMPLE": {
             "invInicialSacos": "344",
-            "invFinalSacos": ""
+            "invFinalSacos": "322"
           },
           "Sala 1": {
             "invInicialSacos": "240",
+            "invFinalSacos": "689"
+          }
+        },
+        "2026-07-01": {
+          "KITS PREP.": {
+            "invInicialSacos": "",
+            "invFinalSacos": ""
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "",
             "invFinalSacos": ""
           }
         }
@@ -18848,7 +19152,8 @@
         "2026-07-27": "50.29",
         "2026-07-28": "50.29",
         "2026-07-29": "50.5",
-        "2026-07-30": "50.36"
+        "2026-07-30": "50.36",
+        "2026-07-01": "5"
       },
       "costoAzucar": {
         "2026-07-28": "1.43"
@@ -21646,6 +21951,8 @@
   },
   "_deletedOrdenesSapIds": [
     "1-1785349102112",
-    "1-1785616908590"
+    "1-1785616908590",
+    "1-1785841894229",
+    "5-1785842507844"
   ]
 }
