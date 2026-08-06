@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-03T00:00:00.000",
+      "weekStartDate": "2026-07-27T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -6559,12 +6559,12 @@
             "name": "GLUP KOLITA",
             "lineId": "2",
             "loadPerHour": 2500,
-            "quantity": 89325,
-            "durationHours": 35.73,
+            "quantity": 149325,
+            "durationHours": 59.73,
             "presentation": "2Lts",
-            "tanks": 10.04,
+            "tanks": 16.79,
             "startTime": "2026-08-03T22:16:00.000Z",
-            "endTime": "2026-08-05T09:59:48.000Z",
+            "endTime": "2026-08-06T09:59:48.000Z",
             "id": "o2qjgx69j",
             "color": "#ec4899"
           },
@@ -6775,12 +6775,12 @@
             "name": "GLUP COLA",
             "lineId": "7",
             "loadPerHour": 2500,
-            "quantity": 20375,
-            "durationHours": 8.15,
+            "quantity": 80375,
+            "durationHours": 32.15,
             "presentation": "1Lt",
-            "tanks": 2.36,
+            "tanks": 9.32,
             "startTime": "2026-08-05T02:51:00.000Z",
-            "endTime": "2026-08-05T11:00:00.000Z",
+            "endTime": "2026-08-06T11:00:00.000Z",
             "id": "0zaa2ntfz",
             "color": "#ef4444"
           }
@@ -6833,7 +6833,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-05T22:07:19.593Z"
+    "updatedAt": "2026-08-06T17:17:07.049Z"
   },
   "ordenesSap": [
     {
@@ -10429,12 +10429,12 @@
           "fechaInicio": "2026-08-05",
           "ticket1": "17481",
           "cajas1": 8160,
-          "ticket2": "",
+          "ticket2": "17482",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 160,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 5359
         }
       ]
     },
@@ -10502,12 +10502,12 @@
           "fechaInicio": "2026-08-05",
           "ticket1": "17393",
           "cajas1": 12880,
-          "ticket2": "",
+          "ticket2": "17394",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 25559
         }
       ]
     },
@@ -10544,12 +10544,12 @@
           "fechaInicio": "2026-08-05",
           "ticket1": "17529",
           "cajas1": 10480,
-          "ticket2": "",
+          "ticket2": "17530",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 18160
         }
       ]
     },
@@ -10637,12 +10637,12 @@
           "fechaInicio": "2026-08-05",
           "ticket1": "17568",
           "cajas1": 3100,
-          "ticket2": "",
+          "ticket2": "17569",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 7250
         }
       ]
     },
@@ -10668,12 +10668,12 @@
           "fechaInicio": "2026-08-05",
           "ticket1": "17442",
           "cajas1": 4960,
-          "ticket2": "",
+          "ticket2": "17443",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 10485
         }
       ]
     },
@@ -10699,12 +10699,12 @@
           "fechaInicio": "2026-08-05",
           "ticket1": "17288",
           "cajas1": 5850,
-          "ticket2": "",
+          "ticket2": "17289",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 2736
         }
       ]
     },
@@ -10727,6 +10727,137 @@
           "fechaInicio": "2026-08-05",
           "ticket1": "17341",
           "cajas1": 2880,
+          "ticket2": "17342",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 9760
+        }
+      ]
+    },
+    {
+      "id": "2-1786018743782",
+      "linea": 2,
+      "sabor": "GLUP MANZANA ROJA",
+      "ordenNumero": "62796",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-05",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17443",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 4160
+        },
+        {
+          "fechaInicio": "2026-08-06",
+          "ticket1": "17444",
+          "cajas1": 2240,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1786018914928",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62802",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-05",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17289",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 3744
+        }
+      ]
+    },
+    {
+      "id": "1-1786021482314",
+      "linea": 1,
+      "sabor": "GLUP PIÑA PARCHITA",
+      "ordenNumero": "62808",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-06",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1786021493031",
+      "linea": 3,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "62814",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-06",
+          "ticket1": "17395",
+          "cajas1": 1920,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1786021505988",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62820",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-06",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1786021517697",
+      "linea": 5,
+      "sabor": "JUSTY NARANJA",
+      "ordenNumero": "62825",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-06",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -19194,6 +19325,40 @@
             "preparado": "",
             "final": "12.44"
           }
+        },
+        "2026-08-05": {
+          "GLUP COLA": {
+            "inicial": "65.81",
+            "preparado": "48",
+            "final": "59.89"
+          },
+          "GLUP FRESH": {
+            "inicial": "13.16",
+            "preparado": "6",
+            "final": "4.27"
+          },
+          "JUSTY NARANJA": {
+            "inicial": "26",
+            "preparado": "200",
+            "final": "35"
+          },
+          "GLUP KOLITA": {
+            "inicial": "12.44",
+            "preparado": "18",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "preparado": "33",
+            "final": "33"
+          },
+          "GLUP PIÑA PARCHITA": {
+            "preparado": "6",
+            "final": "6"
+          },
+          "GLUP MANZANA ROJA": {
+            "preparado": "16",
+            "final": "11.74"
+          }
         }
       },
       "sugar": {
@@ -19317,6 +19482,18 @@
             "invInicialSacos": "9760",
             "recepcionSacos": "2520",
             "invFinalSacos": "9360"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2400"
+          }
+        },
+        "2026-08-05": {
+          "PORTUGUESA": {
+            "invInicialSacos": "9360",
+            "recepcionSacos": "3200",
+            "invFinalSacos": "8960"
           },
           "IMPORTADA 1": {
             "invInicialSacos": "2400",
@@ -19471,6 +19648,20 @@
             "invInicialSacos": "229",
             "invFinalSacos": "229"
           }
+        },
+        "2026-08-05": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "365",
+            "invFinalSacos": "196"
+          },
+          "Sala 1": {
+            "invInicialSacos": "229",
+            "invFinalSacos": ""
+          }
         }
       },
       "realKgPerSack": {
@@ -19482,7 +19673,8 @@
         "2026-08-02": "50.41",
         "2026-08-01": "50.31",
         "2026-08-04": "50.55",
-        "2026-08-03": "50.43"
+        "2026-08-03": "50.43",
+        "2026-08-05": "50.5"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
@@ -20815,7 +21007,980 @@
       "fixedCapacities": {},
       "_deletedIds": {}
     },
-    "planta-informes-operacionales": [],
+    "planta-informes-operacionales": [
+      {
+        "fecha": "2026-08-01",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "07:30",
+        "finParada": "10:21",
+        "totalMin": "171",
+        "zona": "Llenado",
+        "falla": "INVENTARIO",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786026873257,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-06",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "07:00",
+        "finParada": "10:16",
+        "totalMin": "196",
+        "zona": "Llenado",
+        "falla": "INVENTARIO",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786027053232,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "07:00",
+        "finParada": "10:16",
+        "totalMin": "196",
+        "zona": "Llenado",
+        "falla": "INVENTARIO",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786027255448,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "ABRAHAM CARRILLO",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "18:33",
+        "finParada": "18:56",
+        "totalMin": "23",
+        "zona": "Llenado",
+        "falla": "SE RECIBE MAQUINA DETENIDA Y SE HACE REVISION EN TORNELAS Y GUIAS DE SALIDA DEL HORNO",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1786027271965
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "07:00",
+        "finParada": "10:15",
+        "totalMin": "195",
+        "zona": "Llenado",
+        "falla": "INVENTARIO",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786027335208,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "07:00",
+        "finParada": "10:22",
+        "totalMin": "202",
+        "zona": "Llenado",
+        "falla": "INVENTARIO",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786027513176,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "DIURNO",
+        "operador": "ABRAHAM CARRILLO",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "19:17",
+        "finParada": "19:32",
+        "totalMin": "15",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE GUIA DEL HORNO",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786027700881,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "10:22",
+        "finParada": "15:23",
+        "totalMin": "301",
+        "zona": "Llenado",
+        "falla": "FALLA DE ENERGIA ELECTRICA ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786027903681,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "10:22",
+        "finParada": "15:23",
+        "totalMin": "301",
+        "zona": "Llenado",
+        "falla": "FALLA DE ENERGIA ELECTRICA",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786027985225,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "10:23",
+        "finParada": "15:23",
+        "totalMin": "300",
+        "zona": "Llenado",
+        "falla": "FALLA DE ENERGIA ELECTRICA",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786028292705,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "10:23",
+        "finParada": "15:23",
+        "totalMin": "300",
+        "zona": "Llenado",
+        "falla": "FALLA DE ENERGIA ELECTRICA ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786028365457,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "ABRAHAM CARRILLO",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "20:51",
+        "finParada": "21:06",
+        "totalMin": "15",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE LAMPARA MODULO #02",
+        "orden": "8833",
+        "observaciones": "",
+        "id": 1786028534924,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "15:23",
+        "finParada": "16:00",
+        "totalMin": "37",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE LA FALLA DE ENERGIA ELECTRICA ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786028621329,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "ABRAHAM CARRILLO",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "21:29",
+        "finParada": "21:58",
+        "totalMin": "29",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE ALTURA DE  PINZAS #3 Y #9 ",
+        "orden": "8835",
+        "observaciones": "",
+        "id": 1786028732697,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "ABRAHAM CARRILLO",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "21:07",
+        "finParada": "21:23",
+        "totalMin": "16",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE BRAZO DE TRANSFERENCIA DE PREFORMA",
+        "orden": "8834",
+        "observaciones": "",
+        "id": 1786028898331,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 32,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "PTAB",
+        "inicioParada": "22:50",
+        "finParada": "07:00",
+        "totalMin": "490",
+        "zona": "Llenado",
+        "falla": "SE DETIENE LINEA POR CONTINGENCIA DE PTAB Y ARRAQUE DE LINEA 7",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786029079374,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "15:23",
+        "finParada": "15:28",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUIEGO DE LA FALLA DE ENERGIA ELECTRICA",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786029085658,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "JON TORRES",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "21:53",
+        "finParada": "22:13",
+        "totalMin": "20",
+        "zona": "Llenado",
+        "falla": "PERDIDA DE CONTEO, AJUSTE DE CARRO EMPUJADOR ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786029514833,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "FAIBERT MATTEY",
+        "linea": "Línea 1",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "22:48",
+        "finParada": "22:53",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "MALA ENTREGA ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786030017213,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "FAIBERT MATTEY",
+        "linea": "Línea 1",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "22:56",
+        "finParada": "23:00",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "MALA ENTREGA ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786030113763,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "FRANKLIN ALVARADO",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "23:08",
+        "finParada": "23:17",
+        "totalMin": "9",
+        "zona": "Llenado",
+        "falla": "PELICULA ATASCADA EN MESA DE ELEVACION, PERDIDA DE FASE",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786030534710,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "LEYBERGLER SILVA ",
+        "linea": "Línea 2",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "18:30",
+        "finParada": "18:38",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "PELICULA ATASCADA EN NESA DE ELEVACION, PERDIDA DE FASE",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786030794914,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "LEYBERGLER SILVA ",
+        "linea": "Línea 2",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "00:52",
+        "finParada": "01:00",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "SALTO DE BOTELLA EN DIENTES DE SEPARACION ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786030946302,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "LEYBERGLER SILVA ",
+        "linea": "Línea 2",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "01:35",
+        "finParada": "01:42",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "PAQUETES NO COMPACTADOS ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786031045484,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "15:23",
+        "finParada": "16:00",
+        "totalMin": "37",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE LA FALLA DE ENERGIA ELECTRICA ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786032054073,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "15:23",
+        "finParada": "16:00",
+        "totalMin": "37",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE LA FALLA DE ENERGIA ELECTRICA",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786032140168,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "10:16",
+        "finParada": "10:21",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "OBSTRUCCION MOLDE 08",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786032270153,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "15:28",
+        "finParada": "15:45",
+        "totalMin": "17",
+        "zona": "Llenado",
+        "falla": "OBSTRUCCION MOLDE 08",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786032391697,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "DIURNO",
+        "operador": "BLAS PADRON",
+        "linea": "Línea 4",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "16:31",
+        "finParada": "16:37",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "MALA ENTREGA",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786032564241,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "DIURNO",
+        "operador": "IVAN PEREZ",
+        "linea": "Línea 1",
+        "equipo": "TAPADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "16:35",
+        "finParada": "17:38",
+        "totalMin": "63",
+        "zona": "Llenado",
+        "falla": "BOTELLAS SIN TAPA SHOP 30",
+        "orden": "9166",
+        "observaciones": "",
+        "id": 1786032804554,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "ATAGUALPA BASTIDAS ",
+        "linea": "Línea 7",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "01:57",
+        "finParada": "02:03",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "ACUMULACION DE BOTELLAS POR CMBIO DE BOBINA ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786036108448,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "JOSE LINARES ",
+        "linea": "Línea 7",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "03:25",
+        "finParada": "03:30",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "ACUMULACION DE CAJAS EN TRANSPORTADOR DE ENTRADA POR CAMBIO DE FILM",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786036224839,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "ORLANDO TORREALBA ",
+        "linea": "Línea 7",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "04:40",
+        "finParada": "04:48",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786036310974,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "05:30",
+        "finParada": "07:00",
+        "totalMin": "90",
+        "zona": "Llenado",
+        "falla": "FIN DE PRODUCCION",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786036409405,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 32,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "06:00",
+        "finParada": "07:00",
+        "totalMin": "60",
+        "zona": "Llenado",
+        "falla": "FIN DE PRODUCCION",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786036454004,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "06:10",
+        "finParada": "07:00",
+        "totalMin": "50",
+        "zona": "Llenado",
+        "falla": "FIN DE PRODUCCION",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786036511323,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "DIURNO",
+        "operador": "JOSE CABALLERO",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "17:19",
+        "finParada": "18:07",
+        "totalMin": "48",
+        "zona": "Llenado",
+        "falla": "MALAS ENTREGAS ",
+        "orden": "1704",
+        "observaciones": "",
+        "id": 1786036584410,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "06:20",
+        "finParada": "07:00",
+        "totalMin": "40",
+        "zona": "Llenado",
+        "falla": "FIN DE PRODUCCION ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786036642993,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "JOS LAYA",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "17:49",
+        "finParada": "18:10",
+        "totalMin": "21",
+        "zona": "Llenado",
+        "falla": "FASE",
+        "orden": "8799",
+        "observaciones": "",
+        "id": 1786036720314,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "LUIS HERRERA ",
+        "linea": "Línea 4",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "19:05",
+        "finParada": "19:10",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786036761029,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "LUIS HERRERA ",
+        "linea": "Línea 4",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "19:32",
+        "finParada": "19:46",
+        "totalMin": "14",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786036839218,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "18:30",
+        "finParada": "21:00",
+        "totalMin": "150",
+        "zona": "Llenado",
+        "falla": "NO PROGRAMADA PARA ARRANCAR",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786036913392,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "21:00",
+        "finParada": "22:20",
+        "totalMin": "80",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES PARA EL ARRANQUE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1786037046198
+      },
+      {
+        "id": 1786037074553,
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "T1",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "TAPADORA",
+        "tipoParada": "MECÁNICO",
+        "inicioParada": "16:25",
+        "finParada": "17:38",
+        "totalMin": "",
+        "zona": "",
+        "falla": "",
+        "orden": "9166",
+        "aviso": "",
+        "maquina": "TAPADORA",
+        "solicitante": "FRANK PEREZ",
+        "fechaEmision": "2026-08-01",
+        "fechaParada": "2026-08-01",
+        "inicioMtto": "16:30",
+        "finMtto": "17:30",
+        "tMtto": "",
+        "mtto": "CORRECTIVO",
+        "mttoEsp": "MTTO",
+        "descripcionFalla": "BOTELLAS SIN TAPAS",
+        "descripcionAccion": "",
+        "observaciones": "CAMBIO DE SHOPS",
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "23:00",
+        "finParada": "23:30",
+        "totalMin": "30",
+        "zona": "Llenado",
+        "falla": "FALLA DE TEMPERATURA, ARRANQUE LENTO",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786037122373,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1786037361081,
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "T1",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "17:49",
+        "finParada": "18:10",
+        "totalMin": "",
+        "zona": "",
+        "falla": "",
+        "orden": "8799",
+        "aviso": "5663",
+        "maquina": "",
+        "solicitante": "FRAN PEREZ",
+        "fechaEmision": "2026-08-01",
+        "fechaParada": "2026-08-01",
+        "inicioMtto": "17:55",
+        "finMtto": "18:10",
+        "tMtto": "",
+        "mtto": "CORRECTIVO",
+        "mttoEsp": "MTTO",
+        "descripcionFalla": "FALLA CINTA DE COMPENSACION",
+        "descripcionAccion": "RECORTE DE CADENA",
+        "observaciones": "",
+        "usuario": "Produccion"
+      },
+      {
+        "id": 1786037547921,
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "T1",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "SOPLADORA",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "15:23",
+        "finParada": "15:45",
+        "totalMin": "",
+        "zona": "",
+        "falla": "",
+        "orden": "8798",
+        "aviso": "5659",
+        "maquina": "SOPLADORA",
+        "solicitante": "FRAN PEREZ",
+        "fechaEmision": "2026-08-01",
+        "fechaParada": "2026-08-01",
+        "inicioMtto": "15:35",
+        "finMtto": "15:45",
+        "tMtto": "",
+        "mtto": "CORRECTIVO",
+        "mttoEsp": "MTTO",
+        "descripcionFalla": "OBSTRUCION MOLDE 8",
+        "descripcionAccion": "AJUSTE DE ALTURA Y CARA MOLDE 08",
+        "observaciones": "",
+        "usuario": "Produccion"
+      },
+      {
+        "id": 1786037695201,
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "T1",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "15:23",
+        "finParada": "15:45",
+        "totalMin": "",
+        "zona": "",
+        "falla": "",
+        "orden": "8798",
+        "aviso": "5659",
+        "maquina": "ENFARDADORA",
+        "solicitante": "FRANK PEREZ",
+        "fechaEmision": "2026-08-01",
+        "fechaParada": "2026-08-01",
+        "inicioMtto": "15:35",
+        "finMtto": "15:45",
+        "tMtto": "",
+        "mtto": "CORRECTIVO",
+        "mttoEsp": "MTTO",
+        "descripcionFalla": "OBSTRUCCION MOLDE 08",
+        "descripcionAccion": "AJUSTE DE ALTURA DE BLOQUEO AJUSTE DE CARA",
+        "observaciones": "",
+        "usuario": "Produccion"
+      },
+      {
+        "id": 1786037731718,
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "T2",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "MECÁNICO",
+        "inicioParada": "21:06",
+        "finParada": "21:23",
+        "totalMin": "17",
+        "zona": "",
+        "falla": " LAMPARAS QUEMADAS ",
+        "orden": "8833",
+        "aviso": "5664",
+        "maquina": "SOPLADORA",
+        "solicitante": "RICARDO DIAZ",
+        "fechaEmision": "2026-08-01",
+        "fechaParada": "2026-08-01",
+        "inicioMtto": "21:06",
+        "finMtto": "21:23",
+        "tMtto": "17",
+        "mtto": "CORRECTIVO",
+        "mttoEsp": "MTTO",
+        "descripcionFalla": "CAMBIO DE LAMPARAS QUEMADAS ",
+        "descripcionAccion": "REEMPLAZO DE 5 LAMPARAS QUEMADAS ",
+        "observaciones": "",
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1786037990748,
+        "fecha": "2026-08-01",
+        "semana": 31,
+        "turno": "T2",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "21:29",
+        "finParada": "22:00",
+        "totalMin": "31",
+        "zona": "",
+        "falla": "AJUSTE DE BRAZO DE TRANSFERENCIA ",
+        "orden": "8834",
+        "aviso": "5665",
+        "maquina": "SOPLADORA",
+        "solicitante": "RICARDO DIAZ",
+        "fechaEmision": "2026-08-01",
+        "fechaParada": "2026-08-01",
+        "inicioMtto": "21:29",
+        "finMtto": "22:00",
+        "tMtto": "31",
+        "mtto": "CORRECTIVO",
+        "mttoEsp": "MTTO",
+        "descripcionFalla": "AJUSTE DE BRAZO DE TRANSFERENCIA",
+        "descripcionAccion": "AJUSTE DE BRAZO DE TRANSFERENCIA",
+        "observaciones": "",
+        "usuario": "Luis Sanchez"
+      }
+    ],
     "planta-ordenes-trabajo": [
       {
         "id": "orden-sync-52001",
@@ -20902,41 +22067,102 @@
           "producto": "108",
           "jarabeReal": 34510,
           "ubb": 12
+        },
+        "auto-1-1785842002950": {
+          "cajasPlanificadas": 72000,
+          "jarabeReal": 91085,
+          "ubb": 31.37,
+          "producto": "635"
         }
       },
       "linea-2": {
         "auto-2-1785616931433": {
           "cajasPlanificadas": 47500,
           "producto": "18",
-          "jarabeReal": 37860
+          "jarabeReal": 37860,
+          "ubb": 24.4
         },
         "auto-2-1785616920426": {
           "cajasPlanificadas": 6500,
           "producto": "47",
-          "jarabeReal": 13534
+          "jarabeReal": 13534,
+          "ubb": 13.7
+        },
+        "auto-2-1785842172198": {
+          "cajasPlanificadas": 26885,
+          "jarabeReal": 64520,
+          "ubb": 41.6,
+          "producto": "146"
+        },
+        "auto-2-1785930892296": {
+          "cajasPlanificadas": 88742,
+          "jarabeReal": 35530,
+          "ubb": 36,
+          "producto": "0"
         }
       },
       "linea-3": {
         "auto-3-1785616943143": {
           "cajasPlanificadas": 53200,
           "producto": "50",
-          "jarabeReal": 15858
+          "jarabeReal": 15858,
+          "ubb": 5.5
+        },
+        "auto-3-1785842370229": {
+          "cajasPlanificadas": 134400,
+          "jarabeReal": 195071,
+          "ubb": 67.8,
+          "producto": "1113"
         }
       },
       "linea-4": {
         "auto-4-1785616953194": {
           "cajasPlanificadas": 53200,
           "producto": "142",
-          "jarabeReal": 54363
+          "jarabeReal": 54363,
+          "ubb": 18.9
+        },
+        "auto-4-1785842482097": {
+          "cajasPlanificadas": 134400,
+          "jarabeReal": 171923,
+          "ubb": 59.76,
+          "producto": "669"
         }
       },
-      "linea-5": {},
-      "linea-6": {},
+      "linea-5": {
+        "auto-5-1785929468713": {
+          "cajasPlanificadas": 55660,
+          "jarabeReal": 615000,
+          "ubb": 615,
+          "producto": "866"
+        }
+      },
+      "linea-6": {
+        "auto-6-1785842530093": {
+          "cajasPlanificadas": 34500,
+          "jarabeReal": 29275,
+          "producto": "290",
+          "ubb": 10.19
+        }
+      },
       "linea-7": {
         "auto-7-1785756950894": {
           "cajasPlanificadas": 15000,
           "producto": "2391",
-          "jarabeReal": 2730
+          "jarabeReal": 27300,
+          "ubb": 9.5
+        },
+        "auto-7-1785842553558": {
+          "jarabeReal": 20172,
+          "ubb": 7.01,
+          "cajasPlanificadas": 67500,
+          "producto": "996"
+        },
+        "auto-7-1785931492430": {
+          "jarabeReal": 51700,
+          "ubb": 18,
+          "cajasPlanificadas": 34500,
+          "producto": "700"
         }
       }
     },
@@ -22091,6 +23317,390 @@
             "7": ""
           }
         }
+      },
+      "2026-07-21": {
+        "diurno": {
+          "GLUP COLA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP FRESH": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP UVA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP KOLITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA VERDE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PONCHE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP CHICLE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA PARCHITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANDARINA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY SANDIA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY TAMARINDO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANZANA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY PERA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          }
+        },
+        "nocturno": {
+          "GLUP COLA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP FRESH": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP UVA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP KOLITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA VERDE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PONCHE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP CHICLE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA PARCHITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANDARINA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY SANDIA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY TAMARINDO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANZANA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY PERA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          }
+        }
       }
     },
     "planta-pnc": {
@@ -22295,7 +23905,9 @@
         "1785417479222",
         "1785418190316",
         "1785508515291",
-        "1785509131922"
+        "1785509131922",
+        "1786024306648",
+        "1786024932528"
       ]
     },
     "planta-ordenes-trabajo": {

@@ -202,14 +202,14 @@ export function SeguimientoResumenSemanaTable({
       'Código de producto': row.codigoProducto,
       'Fecha de inicio': row.fechaInicio,
       'Fecha de finalización': row.fechaFin,
-      'Número de orden': row.numeroOrden,
+      'Número de orden': Number(row.numeroOrden) || 0,
       'Cajas Planificadas': Number(row.cajasPlanificadas) || 0,
       'Cajas completadas': Number(row.cajasCompletadas) || 0,
       Diferencia: Number(row.diferencia) || 0,
       'Jarabe requerido de cajas completadas': Number(row.jarabeRequerido) || 0,
       'Jarabe Real': Number(row.jarabeReal) || 0,
       Diferencia2: Number(row.diferencia2) || 0,
-      'Porcentaje de jarabe': Number(row.porcentajeJarabe) || 0,
+      'Porcentaje de jarabe': Number(row.jarabeRequerido) > 0 ? (Number(row.diferencia2) / Number(row.jarabeRequerido)) : 0,
       'Producto de segunda': Number(row.producto) || 0,
       'Botellas Totales': Number(row.botellasT) || 0,
       'Bebida terminada': Number(row.bebidaTerminada) || 0,
@@ -228,7 +228,7 @@ export function SeguimientoResumenSemanaTable({
       'Jarabe requerido de cajas completadas': totales.jarabeRequerido,
       'Jarabe Real': totales.jarabeReal,
       Diferencia2: totales.diferencia2,
-      'Porcentaje de jarabe': totales.jarabeRequerido > 0 ? (totales.diferencia2 / totales.jarabeRequerido) * 100 : 0,
+      'Porcentaje de jarabe': totales.jarabeRequerido > 0 ? (totales.diferencia2 / totales.jarabeRequerido) : 0,
       'Producto de segunda': 0,
       'Botellas Totales': totales.botellasT,
       'Bebida terminada': totales.bebidaTerminada,
@@ -245,7 +245,11 @@ export function SeguimientoResumenSemanaTable({
 
     data.forEach((row, rowIndex) => {
       Object.keys(row).forEach((key, colIndex) => {
-        worksheet.getCell(rowIndex + 2, colIndex + 1).value = (row as any)[key];
+        const cell = worksheet.getCell(rowIndex + 2, colIndex + 1);
+        cell.value = (row as any)[key];
+        if (key === 'Número de orden') {
+          cell.numFmt = '#,##0';
+        }
       });
     });
 
@@ -253,6 +257,9 @@ export function SeguimientoResumenSemanaTable({
       const cell = worksheet.getCell(data.length + 2, colIndex + 1);
       cell.value = (totalRow as any)[key];
       cell.font = { bold: true };
+      if (key === 'Número de orden') {
+        cell.numFmt = '#,##0';
+      }
     });
 
     worksheet.getRow(1).eachCell((cell) => {
@@ -267,6 +274,7 @@ export function SeguimientoResumenSemanaTable({
       'Jarabe requerido de cajas completadas',
       'Jarabe Real',
       'Diferencia2',
+      'Porcentaje de jarabe',
       'Producto de segunda',
       'Botellas Totales',
       'Bebida terminada',
@@ -295,8 +303,6 @@ export function SeguimientoResumenSemanaTable({
           cell.numFmt = '#,##0.0';
         } else if (integerColumns.includes(header)) {
           cell.numFmt = '#,##0';
-        } else if (header === 'Porcentaje de jarabe') {
-          cell.numFmt = '0.0"%"';
         }
       });
     });

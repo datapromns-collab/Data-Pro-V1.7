@@ -968,6 +968,14 @@ export default function PlannerPage() {
     setPlantaFormData(prev => ({ ...prev, totalMin: String(diff) }));
   }, [plantaFormData.inicioParada, plantaFormData.finParada, paradasSubTab]);
 
+  useEffect(() => {
+    if (paradasSubTab !== 'informes-operacionales') return;
+    if (!plantaFormData.fecha) return;
+    const date = parseFecha(plantaFormData.fecha);
+    if (!date) return;
+    setPlantaFormData(prev => ({ ...prev, semana: getISOWeek(date) }));
+  }, [plantaFormData.fecha, paradasSubTab]);
+
   const weeksForYear = useMemo(() => {
     const weeks: { isoWeek: number; start: Date; end: Date }[] = [];
     const year = plantaWeekStartDate.getFullYear();
@@ -3741,7 +3749,7 @@ export default function PlannerPage() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Semana</label>
-                    <Input type="number" value={plantaFormData.semana} onChange={(e) => setPlantaFormData({...plantaFormData, semana: parseInt(e.target.value) || 0})} className="h-9 text-[11px]" />
+                     <Input type="number" value={plantaFormData.semana} readOnly className="h-9 text-[11px] bg-slate-100" />
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Turno</label>

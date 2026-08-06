@@ -317,7 +317,7 @@ export default function OrdenesSapModule({
   userId?: string;
 }) {
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
-  const allowedSections = userId === 'maria.mds' ? ['carga-prod', 'creador-ordenes'] as const : ['carga-prod', 'creador-ordenes', 'seguimiento-ordenes', 'dia-a-dia', 'prodt-semanal', 'resumen-mensual'] as const;
+  const allowedSections = userId === 'maria.mds' ? ['carga-prod', 'creador-ordenes', 'seguimiento-ordenes'] as const : ['carga-prod', 'creador-ordenes', 'seguimiento-ordenes', 'dia-a-dia', 'prodt-semanal', 'resumen-mensual'] as const;
   const isSectionAllowed = (section: string) => allowedSections.includes(section as any);
   const [activeSection, setActiveSection] = useState<'carga-prod' | 'creador-ordenes' | 'seguimiento-ordenes' | 'dia-a-dia' | 'prodt-semanal' | 'resumen-mensual'>('carga-prod');
   const [activeSubsection, setActiveSubsection] = useState<'dia' | 'diurno' | 'nocturno' | null>(null);
