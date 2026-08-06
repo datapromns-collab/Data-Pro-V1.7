@@ -2,7 +2,6 @@
 
 import { useMemo, useCallback } from 'react';
 import ExcelJS from 'exceljs';
-import { saveAs } from 'file-saver';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 import { Trash2, Download } from 'lucide-react';
@@ -173,12 +172,6 @@ export function SeguimientoResumenSemanaTable({
   const exportarExcel = useCallback(async () => {
     if (!rows.length) return;
 
-    const formatNum = (value: number) => {
-      const rounded = Math.round(value * 100) / 100;
-      const fixed = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
-      return fixed.replace('.', ',');
-    };
-
     const extraerNumeroLinea = (linea: string): number => {
       const match = linea.match(/Línea (\d+)/);
       return match ? parseInt(match[1], 10) : 0;
@@ -203,99 +196,115 @@ export function SeguimientoResumenSemanaTable({
       'Bebida terminada',
     ];
 
-    const data = rows.map((row) => [
-      extraerNumeroLinea(row.linea),
-      row.sabor,
-      row.codigoProducto,
-      row.fechaInicio,
-      row.fechaFin,
-      row.numeroOrden,
-      row.cajasPlanificadas,
-      row.cajasCompletadas,
-      row.diferencia,
-      formatNum(row.jarabeRequerido),
-      row.jarabeReal,
-      formatNum(row.diferencia2),
-      `${row.porcentajeJarabe.toFixed(1).replace('.', ',')}%`,
-      row.producto,
-      row.botellasT,
-      formatNum(row.bebidaTerminada),
-    ]);
+    const data = rows.map((row) => ({
+      Lineas: extraerNumeroLinea(row.linea),
+      Sabor: row.sabor,
+      'Código de producto': row.codigoProducto,
+      'Fecha de inicio': row.fechaInicio,
+      'Fecha de finalización': row.fechaFin,
+      'Número de orden': row.numeroOrden,
+      'Cajas Planificadas': Number(row.cajasPlanificadas) || 0,
+      'Cajas completadas': Number(row.cajasCompletadas) || 0,
+      Diferencia: Number(row.diferencia) || 0,
+      'Jarabe requerido de cajas completadas': Number(row.jarabeRequerido) || 0,
+      'Jarabe Real': Number(row.jarabeReal) || 0,
+      Diferencia2: Number(row.diferencia2) || 0,
+      'Porcentaje de jarabe': Number(row.porcentajeJarabe) || 0,
+      'Producto de segunda': Number(row.producto) || 0,
+      'Botellas Totales': Number(row.botellasT) || 0,
+      'Bebida terminada': Number(row.bebidaTerminada) || 0,
+    }));
 
-    const totalRow = [
-      'TOTALES',
-      '',
-      '',
-      '',
-      '',
-      '',
-      totales.cajasPlanificadas,
-      totales.cajasCompletadas,
-      totales.diferencia,
-      formatNum(totales.jarabeRequerido),
-      totales.jarabeReal,
-      formatNum(totales.diferencia2),
-      `${totales.jarabeRequerido > 0 ? ((totales.diferencia2 / totales.jarabeRequerido) * 100).toFixed(1).replace('.', ',') : '0,0'}%`,
-      '',
-      totales.botellasT,
-      formatNum(totales.bebidaTerminada),
-    ];
+    const totalRow = {
+      Lineas: 'TOTALES',
+      Sabor: '',
+      'Código de producto': '',
+      'Fecha de inicio': '',
+      'Fecha de finalización': '',
+      'Número de orden': '',
+      'Cajas Planificadas': totales.cajasPlanificadas,
+      'Cajas completadas': totales.cajasCompletadas,
+      Diferencia: totales.diferencia,
+      'Jarabe requerido de cajas completadas': totales.jarabeRequerido,
+      'Jarabe Real': totales.jarabeReal,
+      Diferencia2: totales.diferencia2,
+      'Porcentaje de jarabe': totales.jarabeRequerido > 0 ? (totales.diferencia2 / totales.jarabeRequerido) * 100 : 0,
+      'Producto de segunda': 0,
+      'Botellas Totales': totales.botellasT,
+      'Bebida terminada': totales.bebidaTerminada,
+    };
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Resumen Semana');
 
-    worksheet.columns = headers.map((h) => ({ header: h, key: h, width: 18 }));
+    worksheet.columns = headers.map((header) => ({ header, key: header, width: 18 }));
 
     headers.forEach((header, index) => {
       worksheet.getCell(1, index + 1).value = header;
     });
 
     data.forEach((row, rowIndex) => {
-      row.forEach((value, colIndex) => {
-        worksheet.getCell(rowIndex + 2, colIndex + 1).value = value;
+      Object.keys(row).forEach((key, colIndex) => {
+        worksheet.getCell(rowIndex + 2, colIndex + 1).value = (row as any)[key];
       });
     });
 
-    totalRow.forEach((value, colIndex) => {
-      worksheet.getCell(data.length + 2, colIndex + 1).value = value;
-    });
-
-    const headerRow = worksheet.getRow(1);
-    headerRow.eachCell((cell) => {
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'FF228B22' },
-      };
-      cell.font = { color: { argb: 'FFFFFFFF' }, bold: true };
-      cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
-    });
-
-    const dataRows = data.length;
-    for (let i = 2; i <= dataRows + 1; i++) {
-      const row = worksheet.getRow(i);
-      row.eachCell((cell) => {
-        cell.fill = {
-          type: 'pattern',
-          pattern: 'solid',
-          fgColor: { argb: 'FF90EE90' },
-        };
-      });
-    }
-
-    const totalRowIndex = dataRows + 2;
-    const totalRow2 = worksheet.getRow(totalRowIndex);
-    totalRow2.eachCell((cell) => {
+    Object.keys(totalRow).forEach((key, colIndex) => {
+      const cell = worksheet.getCell(data.length + 2, colIndex + 1);
+      cell.value = (totalRow as any)[key];
       cell.font = { bold: true };
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'FF228B22' },
-      };
+    });
+
+    worksheet.getRow(1).eachCell((cell) => {
+      cell.font = { bold: true };
+    });
+
+    const fechaColumns = ['Fecha de inicio', 'Fecha de finalización'];
+    const numberColumns = [
+      'Cajas Planificadas',
+      'Cajas completadas',
+      'Diferencia',
+      'Jarabe requerido de cajas completadas',
+      'Jarabe Real',
+      'Diferencia2',
+      'Producto de segunda',
+      'Botellas Totales',
+      'Bebida terminada',
+    ];
+
+    const integerColumns = ['Número de orden'];
+
+    worksheet.eachRow((row) => {
+      row.eachCell((cell, colNumber) => {
+        const header = headers[colNumber - 1];
+        if (fechaColumns.includes(header)) {
+          const value = cell.value;
+          if (typeof value === 'string' && value) {
+            const parts = value.split('/');
+            if (parts.length === 3) {
+              const day = parseInt(parts[0], 10);
+              const month = parseInt(parts[1], 10);
+              const year = parseInt(parts[2], 10);
+              if (!isNaN(day) && !isNaN(month) && !isNaN(year)) {
+                cell.value = new Date(year, month - 1, day);
+                cell.numFmt = 'dd/mm/yyyy';
+              }
+            }
+          }
+        } else if (numberColumns.includes(header)) {
+          cell.numFmt = '#,##0.0';
+        } else if (integerColumns.includes(header)) {
+          cell.numFmt = '#,##0';
+        } else if (header === 'Porcentaje de jarabe') {
+          cell.numFmt = '0.0"%"';
+        }
+      });
     });
 
     const buffer = await workbook.xlsx.writeBuffer();
-    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const blob = new Blob([buffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
@@ -327,7 +336,7 @@ export function SeguimientoResumenSemanaTable({
   ];
 
   return (
-    <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+    <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
       <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-sky-500" />
