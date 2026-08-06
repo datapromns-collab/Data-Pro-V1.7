@@ -443,6 +443,10 @@ export default function PlannerPage() {
     };
     migrarInformes('planta-informes-operacionales');
     migrarOrdenesAInformes('planta-ordenes-trabajo');
+    informesOperacionalesStore.setData((prev) => {
+      const next = prev.map((r: any) => r.usuario === 'Produccion' ? { ...r, usuario: 'Ronald Valera' } : r);
+      return next === prev ? prev : next;
+    });
   }, [informesOperacionalesStore, ordenesTrabajoStore]);
 
   const ordenesTrabajoCargadas = useMemo(() => {
@@ -2083,7 +2087,7 @@ export default function PlannerPage() {
                                  </Popover>
                                 </div>
                             </div>
-                              {(isAdmin || (hasAccess(user.id, 'planta') && user?.id !== 'prodtj.mds' && user?.id !== 'prodts.mds')) && (paradasSubTab !== 'ordenes-trabajo' || user?.id === 'prodt.mds' || user?.id === 'prodt1.mds' || user?.id === 'prodt2.mds') && (
+                              {(isAdmin || (hasAccess(user.id, 'planta') && user?.id !== 'prodtj.mds' && user?.id !== 'prodts.mds')) && paradasSubTab !== 'ordenes-trabajo' && (
                              <button
                                onClick={() => setIsPlantaDialogOpen(true)}
                                className="inline-flex items-center gap-1.5 h-9 pl-4 pr-5 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-slate-800 text-white shadow-sm hover:bg-slate-900 active:scale-95"
