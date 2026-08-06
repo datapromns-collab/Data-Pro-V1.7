@@ -216,7 +216,7 @@ export function SeguimientoLineaTable({
                         type="number"
                         value={ov.cajasPlanificadas || ''}
                         onChange={(e) => updateAutoOverride(row.id, { cajasPlanificadas: Number(e.target.value) || 0 })}
-                        className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-white/70 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
+                        className="h-7 w-24 text-center text-[11px] font-semibold rounded-md border-transparent bg-white/70 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
                       />
                     </TableCell>
                     <TableCell className="text-[11px] font-black text-emerald-700 py-2.5 border-b border-slate-100 text-center">{row.cajasCompletadas}</TableCell>
@@ -227,7 +227,7 @@ export function SeguimientoLineaTable({
                         type="number"
                         value={ov.jarabeReal || ''}
                         onChange={(e) => updateAutoOverride(row.id, { jarabeReal: Number(e.target.value) || 0 })}
-                        className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-white/70 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
+                        className="h-7 w-24 text-center text-[11px] font-semibold rounded-md border-transparent bg-white/70 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
                       />
                     </TableCell>
                      <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{difJarabe.toFixed(1)}</TableCell>
@@ -268,7 +268,7 @@ export function SeguimientoLineaTable({
                           const dif = recalcDiferencia(val, row.cajasCompletadas);
                           handleUpdate(row.id, { cajasPlanificadas: val, diferencia: dif });
                         }}
-                        className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
+                        className="h-7 w-24 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
                       />
                     </TableCell>
                     <TableCell className="py-2 border-b border-slate-100">
@@ -294,7 +294,7 @@ export function SeguimientoLineaTable({
                           const dif2 = recalcDiferencia2(row.jarabeRequerido, val);
                           handleUpdate(row.id, { jarabeReal: val, diferencia2: dif2 });
                         }}
-                        className="h-7 w-16 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
+                        className="h-7 w-24 text-center text-[11px] font-semibold rounded-md border-transparent bg-slate-50 focus:bg-white focus:border-sky-300 focus:ring-2 focus:ring-sky-100 transition-all mx-auto"
                       />
                     </TableCell>
                      <TableCell className="text-[11px] font-black text-slate-900 py-2.5 border-b border-slate-100 text-center">{((Number(row.jarabeReal) || 0) - calcularJarabeRequerido(row, linea)).toFixed(1)}</TableCell>

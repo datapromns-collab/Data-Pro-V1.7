@@ -1,8 +1,11 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useCallback } from 'react';
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Trash2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Trash2, Download } from 'lucide-react';
 import { useSeguimientoResumenOptimizado, SeguimientoOrdenLineaConLinea } from '@/hooks/use-seguimiento-ordenes';
 import type { SeguimientoOrdenFuente } from '@/components/seguimiento/seguimiento-linea1-table';
 
@@ -64,9 +67,11 @@ const calcularJarabeRequerido = (sabor: string, cajasCompletadas: number, produc
 export function SeguimientoResumenSemanaTable({
   filasAuto = {},
   autoOverrides = {},
+  semanaNumero,
 }: {
   filasAuto?: Record<number, SeguimientoOrdenFuente[]>;
   autoOverrides?: Record<string, { cajasPlanificadas?: number; producto?: string; jarabeReal?: number; ubb?: number }>;
+  semanaNumero?: number;
 }) {
   const { data } = useSeguimientoResumenOptimizado();
 
@@ -165,6 +170,143 @@ export function SeguimientoResumenSemanaTable({
     );
   }, [rows]);
 
+  const exportarExcel = useCallback(async () => {
+    if (!rows.length) return;
+
+    const formatNum = (value: number) => {
+      const rounded = Math.round(value * 100) / 100;
+      const fixed = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
+      return fixed.replace('.', ',');
+    };
+
+    const extraerNumeroLinea = (linea: string): number => {
+      const match = linea.match(/Línea (\d+)/);
+      return match ? parseInt(match[1], 10) : 0;
+    };
+
+    const headers = [
+      'Lineas',
+      'Sabor',
+      'Código de producto',
+      'Fecha de inicio',
+      'Fecha de finalización',
+      'Número de orden',
+      'Cajas Planificadas',
+      'Cajas completadas',
+      'Diferencia',
+      'Jarabe requerido de cajas completadas',
+      'Jarabe Real',
+      'Diferencia2',
+      'Porcentaje de jarabe',
+      'Producto de segunda',
+      'Botellas Totales',
+      'Bebida terminada',
+    ];
+
+    const data = rows.map((row) => [
+      extraerNumeroLinea(row.linea),
+      row.sabor,
+      row.codigoProducto,
+      row.fechaInicio,
+      row.fechaFin,
+      row.numeroOrden,
+      row.cajasPlanificadas,
+      row.cajasCompletadas,
+      row.diferencia,
+      formatNum(row.jarabeRequerido),
+      row.jarabeReal,
+      formatNum(row.diferencia2),
+      `${row.porcentajeJarabe.toFixed(1).replace('.', ',')}%`,
+      row.producto,
+      row.botellasT,
+      formatNum(row.bebidaTerminada),
+    ]);
+
+    const totalRow = [
+      'TOTALES',
+      '',
+      '',
+      '',
+      '',
+      '',
+      totales.cajasPlanificadas,
+      totales.cajasCompletadas,
+      totales.diferencia,
+      formatNum(totales.jarabeRequerido),
+      totales.jarabeReal,
+      formatNum(totales.diferencia2),
+      `${totales.jarabeRequerido > 0 ? ((totales.diferencia2 / totales.jarabeRequerido) * 100).toFixed(1).replace('.', ',') : '0,0'}%`,
+      '',
+      totales.botellasT,
+      formatNum(totales.bebidaTerminada),
+    ];
+
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Resumen Semana');
+
+    worksheet.columns = headers.map((h) => ({ header: h, key: h, width: 18 }));
+
+    headers.forEach((header, index) => {
+      worksheet.getCell(1, index + 1).value = header;
+    });
+
+    data.forEach((row, rowIndex) => {
+      row.forEach((value, colIndex) => {
+        worksheet.getCell(rowIndex + 2, colIndex + 1).value = value;
+      });
+    });
+
+    totalRow.forEach((value, colIndex) => {
+      worksheet.getCell(data.length + 2, colIndex + 1).value = value;
+    });
+
+    const headerRow = worksheet.getRow(1);
+    headerRow.eachCell((cell) => {
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FF228B22' },
+      };
+      cell.font = { color: { argb: 'FFFFFFFF' }, bold: true };
+      cell.alignment = { horizontal: 'center', vertical: 'middle', wrapText: true };
+    });
+
+    const dataRows = data.length;
+    for (let i = 2; i <= dataRows + 1; i++) {
+      const row = worksheet.getRow(i);
+      row.eachCell((cell) => {
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FF90EE90' },
+        };
+      });
+    }
+
+    const totalRowIndex = dataRows + 2;
+    const totalRow2 = worksheet.getRow(totalRowIndex);
+    totalRow2.eachCell((cell) => {
+      cell.font = { bold: true };
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FF228B22' },
+      };
+    });
+
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    const nombreArchivo = `resumen semana ${semanaNumero ?? 'sin-semana'}.xlsx`;
+    link.download = nombreArchivo;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  }, [rows, totales, semanaNumero]);
+
   const headers = [
     'Lineas',
     'Sabor',
@@ -186,9 +328,20 @@ export function SeguimientoResumenSemanaTable({
 
   return (
     <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-      <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-        <div className="w-2 h-2 rounded-full bg-sky-500" />
-        <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">Resumen Semana</h4>
+      <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full bg-sky-500" />
+          <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">Resumen Semana</h4>
+        </div>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={exportarExcel}
+          className="h-8 px-3 text-[10px] font-black uppercase tracking-widest border-slate-200 text-slate-700 hover:bg-slate-50"
+        >
+          <Download className="h-3.5 w-3.5 mr-2" />
+          Excel
+        </Button>
       </div>
       <div className="p-2 sm:p-4 overflow-x-auto">
         <Table className="border-separate border-spacing-0">

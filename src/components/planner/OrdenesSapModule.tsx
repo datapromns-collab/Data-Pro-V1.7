@@ -2309,7 +2309,7 @@ const exportarPDFdia = async () => {
 
               <div className="flex flex-col gap-4">
                 {seguimientoSubsection === 'resumen' ? (
-                  <SeguimientoResumenSemanaTable filasAuto={filasAutoSeguimiento} autoOverrides={autoOverridesFlat} />
+                  <SeguimientoResumenSemanaTable filasAuto={filasAutoSeguimiento} autoOverrides={autoOverridesFlat} semanaNumero={selectedFechaSeguimiento ? getISOWeek(selectedFechaSeguimiento) : undefined} />
                 ) : (
                   (() => {
                     const lineaNum = seguimientoSubsection as number;

@@ -6833,7 +6833,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-05T22:07:19.363Z"
+    "updatedAt": "2026-08-05T22:07:19.593Z"
   },
   "ordenesSap": [
     {
@@ -10726,7 +10726,7 @@
         {
           "fechaInicio": "2026-08-05",
           "ticket1": "17341",
-          "cajas1": 288,
+          "cajas1": 2880,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -20907,23 +20907,27 @@
       "linea-2": {
         "auto-2-1785616931433": {
           "cajasPlanificadas": 47500,
-          "producto": "18"
+          "producto": "18",
+          "jarabeReal": 37860
         },
         "auto-2-1785616920426": {
           "cajasPlanificadas": 6500,
-          "producto": "47"
+          "producto": "47",
+          "jarabeReal": 13534
         }
       },
       "linea-3": {
         "auto-3-1785616943143": {
           "cajasPlanificadas": 53200,
-          "producto": "50"
+          "producto": "50",
+          "jarabeReal": 15858
         }
       },
       "linea-4": {
         "auto-4-1785616953194": {
           "cajasPlanificadas": 53200,
-          "producto": "142"
+          "producto": "142",
+          "jarabeReal": 54363
         }
       },
       "linea-5": {},
@@ -20932,7 +20936,7 @@
         "auto-7-1785756950894": {
           "cajasPlanificadas": 15000,
           "producto": "2391",
-          "jarabeReal": 0
+          "jarabeReal": 27
         }
       }
     },
