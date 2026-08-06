@@ -7291,7 +7291,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-06T20:49:35.545Z"
+    "updatedAt": "2026-08-06T21:47:53.514Z"
   },
   "ordenesSap": [
     {
@@ -11191,6 +11191,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 9760
+        },
+        {
+          "fechaInicio": "2026-08-06",
+          "ticket1": "17343",
+          "cajas1": 1836,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -11217,7 +11228,7 @@
           "ticket1": "17444",
           "cajas1": 2240,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 4000,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -11242,6 +11253,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 3744
+        },
+        {
+          "fechaInicio": "2026-08-06",
+          "ticket1": "17290",
+          "cajas1": 34,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -11254,8 +11276,8 @@
       "dias": [
         {
           "fechaInicio": "2026-08-06",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17483",
+          "cajas1": 800,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -11277,7 +11299,7 @@
           "ticket1": "17395",
           "cajas1": 1920,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 3200,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -11294,8 +11316,8 @@
       "dias": [
         {
           "fechaInicio": "2026-08-06",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17531",
+          "cajas1": 4400,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -11314,8 +11336,8 @@
       "dias": [
         {
           "fechaInicio": "2026-08-06",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17570",
+          "cajas1": 850,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -24530,7 +24552,7 @@
         "orden": "",
         "observaciones": "",
         "id": 1786049262057,
-        "usuario": "Produccion"
+        "usuario": "Ronald Valera"
       },
       {
         "fecha": "2026-08-04",
@@ -24566,7 +24588,7 @@
         "orden": "",
         "observaciones": "",
         "id": 1786049354801,
-        "usuario": "Produccion"
+        "usuario": "Ronald Valera"
       },
       {
         "fecha": "2026-08-03",
@@ -24584,7 +24606,7 @@
         "orden": "",
         "observaciones": "",
         "id": 1786049669313,
-        "usuario": "Produccion"
+        "usuario": "Ronald Valera"
       },
       {
         "fecha": "2026-08-03",
@@ -24602,7 +24624,7 @@
         "orden": "",
         "observaciones": "",
         "id": 1786049725120,
-        "usuario": "Produccion"
+        "usuario": "Ronald Valera"
       },
       {
         "fecha": "2026-08-03",
@@ -24620,7 +24642,7 @@
         "orden": "",
         "observaciones": "",
         "id": 1786049829432,
-        "usuario": "Produccion"
+        "usuario": "Ronald Valera"
       },
       {
         "fecha": "2026-08-03",
@@ -24638,7 +24660,79 @@
         "orden": "9114",
         "observaciones": "",
         "id": 1786050246761,
-        "usuario": "Produccion"
+        "usuario": "Ronald Valera"
+      },
+      {
+        "fecha": "2026-08-04",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO ",
+        "linea": "Línea 3",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:02",
+        "finParada": "07:07",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786051441892,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-04",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "07:35",
+        "finParada": "08:14",
+        "totalMin": "39",
+        "zona": "Llenado",
+        "falla": "TEMPERATURA ELEVADA DE JARABE",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786051501329,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-04",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "JUAN IZQUIEL ",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "INSUMOS",
+        "inicioParada": "08:18",
+        "finParada": "08:26",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "PREFORMA FUERA DE ESPECIFICACIONES ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786051670542,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-04",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "JOSE CORDERO ",
+        "linea": "Línea 3",
+        "equipo": "LLENADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "08:31",
+        "finParada": "08:38",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "CAMBIO  DE FRENO VALVULA #21 ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786052024760,
+        "usuario": "Luis Sanchez"
       }
     ],
     "planta-ordenes-trabajo": [

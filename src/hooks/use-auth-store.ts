@@ -71,6 +71,8 @@ const VALID_USERS = [
   { id: 'enf.mds', password: 'ad.158.', name: 'Especialista Enfardadora', role: 'STANDARD' as UserRole },
   { id: 'etq.mds', password: 'ad.159.', name: 'Especialista Etiquetadora', role: 'STANDARD' as UserRole },
   { id: 'logg.mds', password: 'ad.220.', name: 'Florencio Alvarez', role: 'STANDARD' as UserRole },
+  { id: 'mtto.mds', password: 'ad.321.', name: 'Jose Mora', role: 'STANDARD' as UserRole },
+  { id: 'cal.mds', password: 'ad.322.', name: 'Calidad', role: 'STANDARD' as UserRole },
 ];
 
 export interface UserInfo {

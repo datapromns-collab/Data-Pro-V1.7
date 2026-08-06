@@ -1504,7 +1504,7 @@ export default function PlannerPage() {
                <section className="space-y-2">
                  <p className="px-2 text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2">Módulos</p>
                  <div className="flex flex-col gap-2">
-                   {hasAccess(user.id, 'planning') && (
+                    {(hasAccess(user.id, 'planning') || user?.id === 'cal.mds') && (
                      <Button 
                        variant="ghost"
                        onClick={() => { setActiveModule('planning'); setActiveTab('gantt'); }}
@@ -1704,6 +1704,9 @@ export default function PlannerPage() {
                        {user.id === 'prodt.mds' || user.id === 'prodt1.mds' || user.id === 'prodt2.mds' ? 'ANALISTA DE PRODUCCIÓN' : 
                         user.id === 'logg.mds' ? 'GERENTE DE LOGÍSTICA' : 
                         user.id === 'prodts.mds' ? 'SUPERVISOR DE PRODUCCIÓN' : 
+                        user.id === 'mtto.mds' ? 'SUP. MANTENIMIENTO' : 
+                        user.id === 'cal.mds' ? 'ANALISTA DE CALIDAD' : 
+                        user.id === 'maria.mds' || user.id === 'alex.mds' ? 'ANALISTA DE GERENCIA TÉCNICA' : 
                         user.role === 'PURCHASING' ? 'COMPRAS' : 
                         user.role === 'INVENTORY' ? 'INVENTARIO' : 
                         user.role === 'STANDARD' ? 'ESTÁNDAR' : user.role}
@@ -1920,7 +1923,7 @@ export default function PlannerPage() {
                )}
 
               <div className="flex-1 min-w-0">
-                 {activeModule === 'planning' && hasAccess(user.id, 'planning') && (
+                  {activeModule === 'planning' && (isAdmin || hasAccess(user.id, 'planning') || user?.id === 'cal.mds') && (
                    <div className="flex flex-col h-full">
                      <div className="flex-1 min-h-0 overflow-auto">
                        {activeTab === 'gantt' && (
