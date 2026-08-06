@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-10T00:00:00.000",
+      "weekStartDate": "2026-08-04T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -7291,7 +7291,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-06T20:43:14.737Z"
+    "updatedAt": "2026-08-06T20:49:35.545Z"
   },
   "ordenesSap": [
     {
@@ -24495,6 +24495,114 @@
         "observaciones": "",
         "id": 1786049044865,
         "usuario": "Ronald Valera"
+      },
+      {
+        "fecha": "2026-08-04",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "07:41",
+        "finParada": "08:14",
+        "totalMin": "33",
+        "zona": "Llenado",
+        "falla": "BAJO VOLTAJE AFECTA SERVICIOS EN SALA DE MAQUINA ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786049082968,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-04",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "09:10",
+        "finParada": "09:14",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786049175013,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-03",
+        "semana": 32,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "02:20",
+        "finParada": "02:27",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "PRESION AIRE DE ENTRADA ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786049194617,
+        "usuario": "Ronald Valera"
+      },
+      {
+        "fecha": "2026-08-03",
+        "semana": 32,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "22:13",
+        "finParada": "22:38",
+        "totalMin": "25",
+        "zona": "Llenado",
+        "falla": "PELICULA MAL CORTADA",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786049262057,
+        "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-04",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "18:00",
+        "finParada": "18:20",
+        "totalMin": "20",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE MULTIPLES FALLAS ELECTRICAS CONSECUTIVAS",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786049295018,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-03",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "OSWALDO LINARES ",
+        "linea": "Línea 5",
+        "equipo": "LLENADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "22:48",
+        "finParada": "23:00",
+        "totalMin": "12",
+        "zona": "Llenado",
+        "falla": "ATASCO DE TAPAS ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786049354801,
+        "usuario": "Produccion"
       }
     ],
     "planta-ordenes-trabajo": [
