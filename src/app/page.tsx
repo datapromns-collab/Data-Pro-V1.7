@@ -41,7 +41,9 @@ import {
   Pencil,
   Check,
   X,
-  Save
+  Save,
+  Settings,
+  CheckSquare
 } from 'lucide-react';
 import { PRODUCT_LIST, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, PRODUCTION_START_HOUR } from '@/lib/planner-utils';
 import ProducidasTable, { ProducidasTabla, nuevaTabla, sumarTablas } from '@/components/planner/ProducidasTable';import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
@@ -1071,13 +1073,15 @@ export default function PlannerPage() {
     }
   }, [plannerLoaded]);
 
-  const defaultTabForModule: Record<string, string> = {
+  const   defaultTabForModule: Record<string, string> = {
     planning: 'gantt',
     management: 'admin-report',
     jarabes: 'jarabes-view',
     'raw-materials': 'raw-material-view',
     recipes: 'recipes-editor',
     planta: 'paradas-lineas',
+    procesos: 'procesos-view',
+    calidad: 'calidad-view',
     logistica: 'logistica-view',
     ventas: 'ventas-view',
     purchasing: 'purchasing-view',
@@ -1565,31 +1569,57 @@ export default function PlannerPage() {
                      </Button>
                    )}
 
-                    {hasAccess(user.id, 'planta') && (
+                     {hasAccess(user.id, 'planta') && (
+                     <Button 
+                       variant="ghost" 
+                        onClick={() => { setActiveModule('planta'); setActiveTab('paradas-lineas'); setParadasSubTab('informes-operacionales'); }}
+                       className={sidebarButtonClass(activeModule === 'planta', "bg-slate-800 hover:bg-slate-900", "shadow-slate-200/30")}
+                     >
+                       <div className={iconContainerClass(activeModule === 'planta')}>
+                         <Factory className="h-4 w-4" />
+                       </div>
+                       <span className="uppercase text-[10px] font-black tracking-tight">Planta</span>
+                     </Button>
+                     )}
+
+                     {isDemon && (
+                     <Button 
+                       variant="ghost" 
+                       onClick={() => { setActiveModule('procesos'); setActiveTab('procesos-view'); }}
+                       className={sidebarButtonClass(activeModule === 'procesos', "bg-teal-600 hover:bg-teal-700", "shadow-teal-400/30")}
+                     >
+                       <div className={iconContainerClass(activeModule === 'procesos')}>
+                         <Settings className="h-4 w-4" />
+                       </div>
+                       <span className="uppercase text-[10px] font-black tracking-tight">Procesos</span>
+                     </Button>
+                     )}
+
+                     {isDemon && (
+                     <Button 
+                       variant="ghost" 
+                       onClick={() => { setActiveModule('calidad'); setActiveTab('calidad-view'); }}
+                       className={sidebarButtonClass(activeModule === 'calidad', "bg-rose-600 hover:bg-rose-700", "shadow-rose-400/30")}
+                     >
+                       <div className={iconContainerClass(activeModule === 'calidad')}>
+                         <CheckSquare className="h-4 w-4" />
+                       </div>
+                       <span className="uppercase text-[10px] font-black tracking-tight">Calidad</span>
+                     </Button>
+                     )}
+
+                    {hasAccess(user.id, 'logistica') && (
                     <Button 
                       variant="ghost" 
-                       onClick={() => { setActiveModule('planta'); setActiveTab('paradas-lineas'); setParadasSubTab('informes-operacionales'); }}
-                      className={sidebarButtonClass(activeModule === 'planta', "bg-slate-800 hover:bg-slate-900", "shadow-slate-200/30")}
+                      onClick={() => { setActiveModule('logistica'); setActiveTab('logistica-view'); }}
+                      className={sidebarButtonClass(activeModule === 'logistica', "bg-orange-600 hover:bg-orange-700", "shadow-orange-200/30")}
                     >
-                      <div className={iconContainerClass(activeModule === 'planta')}>
-                        <Factory className="h-4 w-4" />
+                      <div className={iconContainerClass(activeModule === 'logistica')}>
+                        <Truck className="h-4 w-4" />
                       </div>
-                      <span className="uppercase text-[10px] font-black tracking-tight">Planta</span>
+                      <span className="uppercase text-[10px] font-black tracking-tight">Logística</span>
                     </Button>
                     )}
-
-                   {hasAccess(user.id, 'logistica') && (
-                   <Button 
-                     variant="ghost" 
-                     onClick={() => { setActiveModule('logistica'); setActiveTab('logistica-view'); }}
-                     className={sidebarButtonClass(activeModule === 'logistica', "bg-orange-600 hover:bg-orange-700", "shadow-orange-200/30")}
-                   >
-                     <div className={iconContainerClass(activeModule === 'logistica')}>
-                       <Truck className="h-4 w-4" />
-                     </div>
-                     <span className="uppercase text-[10px] font-black tracking-tight">Logística</span>
-                   </Button>
-                   )}
 
                    {hasAccess(user.id, 'ventas') && (
                    <Button 
@@ -1702,24 +1732,28 @@ export default function PlannerPage() {
                  activeModule === 'raw-materials' ? "bg-amber-100 text-amber-700" :
                  activeModule === 'jarabes' ? "bg-blue-100 text-blue-700" :
                   activeModule === 'planta' ? "bg-slate-100 text-slate-700" :
-                  activeModule === 'logistica' ? "bg-orange-100 text-orange-700" :
-                 activeModule === 'ventas' ? "bg-indigo-100 text-indigo-700" :
-                 activeModule === 'purchasing' ? "bg-blue-100 text-blue-700" :
-                  activeModule === 'permissions' ? "bg-violet-100 text-violet-700" :
-                  activeModule === 'seguimiento' ? "px-8 py-2 bg-purple-100 text-purple-700" :
-                  activeModule === 'ordenes-sap' ? "px-8 py-2 bg-sky-100 text-sky-700" : "bg-emerald-50 text-emerald-600"
+                  activeModule === 'procesos' ? "bg-teal-100 text-teal-700" :
+                  activeModule === 'calidad' ? "bg-rose-100 text-rose-700" :
+                   activeModule === 'logistica' ? "bg-orange-100 text-orange-700" :
+                  activeModule === 'ventas' ? "bg-indigo-100 text-indigo-700" :
+                  activeModule === 'purchasing' ? "bg-blue-100 text-blue-700" :
+                   activeModule === 'permissions' ? "bg-violet-100 text-violet-700" :
+                   activeModule === 'seguimiento' ? "px-8 py-2 bg-purple-100 text-purple-700" :
+                   activeModule === 'ordenes-sap' ? "px-8 py-2 bg-sky-100 text-sky-700" : "bg-emerald-50 text-emerald-600"
               )}>
                 {activeModule === 'management' ? 'MÓDULO DE GESTIÓN' :
                  activeModule === 'recipes' ? 'MÓDULO DE RECETAS' :
                  activeModule === 'raw-materials' ? 'MÓDULO DE MATERIA PRIMA' :
                  activeModule === 'jarabes' ? 'MÓDULO DE JARABES' :
                   activeModule === 'planta' ? 'MÓDULO DE PLANTA' :
-                  activeModule === 'logistica' ? 'MÓDULO DE LOGÍSTICA' :
-                 activeModule === 'ventas' ? 'MÓDULO DE VENTAS' :
-                 activeModule === 'purchasing' ? 'MÓDULO DE COMPRAS' :
-                  activeModule === 'ordenes-sap' ? 'MÓDULO DE ORDENES SAP' :
-                  activeModule === 'seguimiento' ? `MÓDULO DE SEGUIMIENTO - ${seguimientoVista === 'etiquetadora' ? 'ETIQUETADORA' : 'ENFARDADORA'}` :
-                  activeModule === 'permissions' ? 'MÓDULO DE PERMISOS' : 'MÓDULO DE PLANIFICACIÓN'}
+                  activeModule === 'procesos' ? 'MÓDULO DE PROCESOS' :
+                  activeModule === 'calidad' ? 'MÓDULO DE CALIDAD' :
+                   activeModule === 'logistica' ? 'MÓDULO DE LOGÍSTICA' :
+                  activeModule === 'ventas' ? 'MÓDULO DE VENTAS' :
+                  activeModule === 'purchasing' ? 'MÓDULO DE COMPRAS' :
+                   activeModule === 'ordenes-sap' ? 'MÓDULO DE ORDENES SAP' :
+                   activeModule === 'seguimiento' ? `MÓDULO DE SEGUIMIENTO - ${seguimientoVista === 'etiquetadora' ? 'ETIQUETADORA' : 'ENFARDADORA'}` :
+                   activeModule === 'permissions' ? 'MÓDULO DE PERMISOS' : 'MÓDULO DE PLANIFICACIÓN'}
               </div>
             </div>
              <div className="flex items-center gap-2 justify-end">
@@ -3443,14 +3477,32 @@ export default function PlannerPage() {
                            </div>
                          </div>
                        )}
-                   </>
-                 )}
-                 {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
-                   <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                     <Truck className="h-12 w-12 mb-4 opacity-20" />
-                     Módulo de Logística en Desarrollo
-                   </div>
-                 )}
+                    </>
+                  )}
+                  {activeModule === 'procesos' && isDemon && (
+                    <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                        <Settings className="h-12 w-12 mb-4 opacity-20" />
+                        Módulo de Procesos en Desarrollo
+                      </div>
+                    </div>
+                  )}
+                  {activeModule === 'calidad' && isDemon && (
+                    <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                        <CheckSquare className="h-12 w-12 mb-4 opacity-20" />
+                        Módulo de Calidad en Desarrollo
+                      </div>
+                    </div>
+                  )}
+                  {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
+                    <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                        <Truck className="h-12 w-12 mb-4 opacity-20" />
+                        Módulo de Logística en Desarrollo
+                      </div>
+                    </div>
+                  )}
                 {activeModule === 'ventas' && hasAccess(user.id, 'ventas') && (
                   <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                     <TrendingUp className="h-12 w-12 mb-4 opacity-20" />

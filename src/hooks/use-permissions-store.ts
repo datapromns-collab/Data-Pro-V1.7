@@ -61,6 +61,8 @@ export type ModuleId =
   | 'recipes'
   | 'planta'
   | 'planta-admin'
+  | 'procesos'
+  | 'calidad'
   | 'logistica'
   | 'ventas'
   | 'purchasing'
@@ -84,6 +86,8 @@ export const MODULE_LABELS: Record<ModuleId, string> = {
   recipes: 'Recetas',
   planta: 'Planta',
   'planta-admin': 'Planta (Admin)',
+  procesos: 'Procesos',
+  calidad: 'Calidad',
   logistica: 'Logística',
   ventas: 'Ventas',
   purchasing: 'Compras',
@@ -99,6 +103,8 @@ export const MODULE_COLORS: Record<ModuleId, string> = {
   recipes: 'bg-emerald-600',
   planta: 'bg-slate-800',
   'planta-admin': 'bg-slate-900',
+  procesos: 'bg-teal-600',
+  calidad: 'bg-rose-600',
   logistica: 'bg-orange-600',
   ventas: 'bg-indigo-600',
   purchasing: 'bg-blue-600',
@@ -114,6 +120,8 @@ export const ALL_MODULES = [
   'recipes',
   'planta',
   'planta-admin',
+  'procesos',
+  'calidad',
   'logistica',
   'ventas',
   'purchasing',
