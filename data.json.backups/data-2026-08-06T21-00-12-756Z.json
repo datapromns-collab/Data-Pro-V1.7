@@ -21491,24 +21491,6 @@
         "usuario": "Ronald Valera"
       },
       {
-        "fecha": "2026-08-06",
-        "semana": 32,
-        "turno": "DIURNO",
-        "operador": "",
-        "linea": "Línea 2",
-        "equipo": "",
-        "tipoParada": "PROGRAMADA",
-        "inicioParada": "07:00",
-        "finParada": "10:16",
-        "totalMin": "196",
-        "zona": "Llenado",
-        "falla": "INVENTARIO",
-        "orden": "",
-        "observaciones": "",
-        "id": 1786027053232,
-        "usuario": "Ronald Valera"
-      },
-      {
         "fecha": "2026-08-01",
         "semana": 31,
         "turno": "DIURNO",
@@ -21546,7 +21528,7 @@
       },
       {
         "fecha": "2026-08-01",
-        "semana": 32,
+        "semana": 31,
         "turno": "DIURNO",
         "operador": "",
         "linea": "Línea 3",
@@ -21600,7 +21582,7 @@
       },
       {
         "fecha": "2026-08-01",
-        "semana": 32,
+        "semana": 31,
         "turno": "DIURNO",
         "operador": "",
         "linea": "Línea 1",
@@ -21618,7 +21600,7 @@
       },
       {
         "fecha": "2026-08-01",
-        "semana": 32,
+        "semana": 31,
         "turno": "DIURNO",
         "operador": "",
         "linea": "Línea 2",
@@ -22086,7 +22068,7 @@
       },
       {
         "fecha": "2026-08-01",
-        "semana": 32,
+        "semana": 31,
         "turno": "NOCTURNO",
         "operador": "",
         "linea": "Línea 4",
@@ -24639,6 +24621,24 @@
         "observaciones": "",
         "id": 1786049725120,
         "usuario": "Produccion"
+      },
+      {
+        "fecha": "2026-08-03",
+        "semana": 32,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "02:40",
+        "finParada": "02:45",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "PRESION DE ENTRADA SOPLADORA ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786049829432,
+        "usuario": "Produccion"
       }
     ],
     "planta-ordenes-trabajo": [
@@ -26583,7 +26583,11 @@
         "1786037361081",
         "1786037547921",
         "1786037695201",
-        "1786038321776"
+        "1786038321776",
+        "1784554694921",
+        "1",
+        "1785413793661",
+        "1786027053232"
       ]
     },
     "planta-ordenes-trabajo": {
