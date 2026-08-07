@@ -479,13 +479,11 @@ function usePlannerStoreInner() {
           });
           ((remoteWeek as any).tasks || []).forEach((t: any) => {
             if (!t || !t.id) return;
-            if (!byId.has(t.id)) {
-              byId.set(t.id, {
-                ...t,
-                startTime: new Date(t.startTime),
-                endTime: new Date(t.endTime),
-              });
-            }
+            byId.set(t.id, {
+              ...t,
+              startTime: new Date(t.startTime),
+              endTime: new Date(t.endTime),
+            });
           });
           const mergedTasks = Array.from(byId.values()).filter((t: any) => !remoteDeleted.has(t.id));
           next[wk] = {
@@ -702,18 +700,23 @@ function usePlannerStoreInner() {
   saveToLocalStorageRef.current = saveToLocalStorage;
 
   const initPersistedRef = useRef(false);
-  useEffect(() => {
-    if (!isLoaded || initPersistedRef.current) return;
-    initPersistedRef.current = true;
-    lastPersistedSnapshotRef.current = computePlannerSnapshot();
-  }, [isLoaded, computePlannerSnapshot]);
+   useEffect(() => {
+     if (!isLoaded || initPersistedRef.current) return;
+     initPersistedRef.current = true;
+     lastPersistedSnapshotRef.current = computePlannerSnapshot();
+   }, [isLoaded, computePlannerSnapshot]);
 
-  useEffect(() => {
-    if (!isLoaded) return;
-    const snapshot = computePlannerSnapshot();
-    if (snapshot === lastPersistedSnapshotRef.current) {
-      return;
-    }
+   useEffect(() => {
+     if (!isLoaded) return;
+     refreshFromServer();
+   }, [isLoaded, refreshFromServer]);
+
+   useEffect(() => {
+     if (!isLoaded) return;
+     const snapshot = computePlannerSnapshot();
+     if (snapshot === lastPersistedSnapshotRef.current) {
+       return;
+     }
 
     const plan = {
       weeks: weeklyData,
@@ -731,6 +734,9 @@ function usePlannerStoreInner() {
         const remoteUpdatedAt = (remote as any)?._meta?.updatedAt;
         if (remoteUpdatedAt) {
           localStorage.setItem(STORAGE_KEY_REMOTE_TIMESTAMP, remoteUpdatedAt);
+        }
+        if (remote) {
+          applyRemoteToState(remote, true);
         }
         lastPersistedSnapshotRef.current = snapshot;
       } catch (error) {

@@ -25,6 +25,7 @@ export interface PlannerData {
   customRecipes: Record<string, Record<string, number>>;
   customPackagingRecipes: Record<string, Record<string, Record<string, number>>>;
   weeks: Record<string, WeeklyData>;
+  _meta?: { updatedAt: string };
 }
 
 export interface OrdenSapDia {
@@ -76,7 +77,7 @@ export async function loadPlannerData(): Promise<PlannerData | null> {
     const res = await fetchWithRetry(API_URL);
     if (!res.ok) throw new Error('API error');
     const json = await res.json();
-    return json.planner ?? json;
+    return { ...(json.planner || json), _meta: json._meta };
   } catch (error) {
     console.warn('[JSON_DB] Fallback to localStorage', error);
     return null;

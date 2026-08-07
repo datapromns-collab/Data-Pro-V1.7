@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-03T00:00:00.000",
+      "weekStartDate": "2026-07-27T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -6106,12 +6106,12 @@
             "name": "GLUP COLA",
             "lineId": "3",
             "loadPerHour": 2800,
-            "quantity": 36400,
-            "durationHours": 13,
+            "quantity": 53200,
+            "durationHours": 19,
             "presentation": "2Lts",
-            "tanks": 4.22,
+            "tanks": 6.17,
             "startTime": "2026-08-01T14:00:00.000Z",
-            "endTime": "2026-08-02T03:00:00.000Z",
+            "endTime": "2026-08-02T09:00:00.000Z",
             "id": "cyyfmcppe",
             "color": "#ef4444"
           },
@@ -6250,6 +6250,18 @@
             "endTime": "2026-08-02T09:00:00.000Z",
             "id": "mnzqqp20s",
             "color": "#6366f1"
+          },
+          {
+            "name": "OTROS",
+            "description": "inventario fin de mes",
+            "lineId": "1",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 3,
+            "startTime": "2026-08-01T11:00:00.000Z",
+            "endTime": "2026-08-01T14:00:00.000Z",
+            "id": "r64qnzbax",
+            "color": "#ef4444"
           }
         ],
         "realProduction": {},
@@ -6866,6 +6878,19 @@
             "endTime": "2026-08-08T14:01:00.000Z",
             "id": "cgg3jvphy",
             "color": "#10b981"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 28470,
+            "durationHours": 18.98,
+            "presentation": "2Lts",
+            "tanks": 3.3,
+            "startTime": "2026-08-08T14:01:00.000Z",
+            "endTime": "2026-08-09T08:59:48.000Z",
+            "id": "ot6n08a6j",
+            "color": "#ec4899"
           }
         ],
         "realProduction": {},
@@ -6938,13 +6963,13 @@
             "color": "#587593"
           },
           {
-            "name": "CIP 3P ALCALINO",
+            "name": "CS",
             "lineId": "1",
             "loadPerHour": 0,
             "quantity": 0,
-            "durationHours": 2,
+            "durationHours": 0.5,
             "startTime": "2026-08-11T11:13:00.000Z",
-            "endTime": "2026-08-11T13:13:00.000Z",
+            "endTime": "2026-08-11T11:43:00.000Z",
             "id": "ca6l0u79e",
             "color": "#f59e0b"
           },
@@ -7037,12 +7062,12 @@
             "name": "GLUP COLA",
             "lineId": "4",
             "loadPerHour": 2800,
-            "quantity": 266000,
-            "durationHours": 95,
+            "quantity": 246400,
+            "durationHours": 88,
             "presentation": "2Lts",
-            "tanks": 30.84,
+            "tanks": 28.57,
             "startTime": "2026-08-10T11:00:00.000Z",
-            "endTime": "2026-08-14T10:00:00.000Z",
+            "endTime": "2026-08-14T03:00:00.000Z",
             "id": "88gkl7alu",
             "color": "#ef4444"
           },
@@ -7331,7 +7356,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-07T13:32:01.322Z"
+    "updatedAt": "2026-08-07T14:21:05.914Z"
   },
   "ordenesSap": [
     {
