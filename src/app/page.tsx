@@ -1796,7 +1796,7 @@ export default function PlannerPage() {
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <div className="flex flex-col gap-6 h-full">
               
-                {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && activeModule !== 'jarabes' && activeModule !== 'ordenes-sap' && activeModule !== 'seguimiento' && (
+                {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'procesos' && activeModule !== 'calidad' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && activeModule !== 'jarabes' && activeModule !== 'ordenes-sap' && activeModule !== 'seguimiento' && (
                   <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1 shadow-none self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print h-11 shrink-0 gap-1 w-full justify-between">
                     {activeModule === 'planning' && (
                       <>
@@ -3088,19 +3088,49 @@ export default function PlannerPage() {
                                                  hrsPagadasDia={hrsPagadasDt.td}
                                                  hrsProgramadasDia={hrsProgramadasDt.td}
                                               />
-                                          <div className="mt-3">
-                                             <TablaResumenPorLinea 
-                                               informesOperacionales={informesOperacionales || []}
-                                               tasks={tasks}
-                                               realProduction={realProduction}
-                                               lineSpeeds={lineSpeeds}
-                                               fecha={reporteDiarioFecha}
-                                               planificadasPorDia={planificadasPorDia}
-                                               producidasDiurno={producidasDiurno}
-                                               producidasNocturno={producidasNocturno}
-                                             />
-                                          </div>
-                                          </>
+                                           <div className="mt-3">
+                                              <TablaResumenPorLinea 
+                                                informesOperacionales={informesOperacionales || []}
+                                                tasks={tasks}
+                                                realProduction={realProduction}
+                                                lineSpeeds={lineSpeeds}
+                                                fecha={reporteDiarioFecha}
+                                                planificadasPorDia={planificadasPorDia}
+                                                producidasDiurno={producidasDiurno}
+                                                producidasNocturno={producidasNocturno}
+                                              />
+                                           </div>
+                                           <div className="mt-3">
+                                              <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
+                                                <div className="p-4">
+                                                  <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                    <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
+                                                      <thead>
+                                                        <tr className="bg-slate-100">
+                                                          <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36 text-left">Línea</th>
+                                                          <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[80px]">Observaciones</th>
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        {[1,2,3,4,5,6,7].map((linea) => (
+                                                          <tr key={linea} className={linea % 2 === 0 ? 'even:bg-slate-50/60' : ''}>
+                                                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 text-left">Línea {linea}</td>
+                                                            <td className="px-2 py-1 border-b border-slate-100 text-left">
+                                                              <input
+                                                                type="text"
+                                                                className="w-full bg-transparent text-[10px] text-slate-700 outline-none focus:bg-slate-50 rounded px-1 py-0.5"
+                                                                placeholder="Sin observaciones"
+                                                              />
+                                                            </td>
+                                                          </tr>
+                                                        ))}
+                                                      </tbody>
+                                                    </table>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                           </>
                                         )}
                                         {turnoSubTab === 'nocturno' && (
                                           <>
@@ -3119,19 +3149,49 @@ export default function PlannerPage() {
                                                 hrsPagadasDia={hrsPagadasDt.tn}
                                                 hrsProgramadasDia={hrsProgramadasDt.tn}
                                              />
-                                          <div className="mt-3">
-                                             <TablaResumenPorLinea 
-                                               informesOperacionales={informesOperacionales || []}
-                                               tasks={tasks}
-                                               realProduction={realProduction}
-                                               lineSpeeds={lineSpeeds}
-                                               fecha={reporteDiarioFecha}
-                                               planificadasPorDia={planificadasPorDia}
-                                               producidasDiurno={producidasDiurno}
-                                               producidasNocturno={producidasNocturno}
-                                             />
-                                          </div>
-                                          </>
+                                           <div className="mt-3">
+                                              <TablaResumenPorLinea 
+                                                informesOperacionales={informesOperacionales || []}
+                                                tasks={tasks}
+                                                realProduction={realProduction}
+                                                lineSpeeds={lineSpeeds}
+                                                fecha={reporteDiarioFecha}
+                                                planificadasPorDia={planificadasPorDia}
+                                                producidasDiurno={producidasDiurno}
+                                                producidasNocturno={producidasNocturno}
+                                              />
+                                           </div>
+                                           <div className="mt-3">
+                                              <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
+                                                <div className="p-4">
+                                                  <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                    <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
+                                                      <thead>
+                                                        <tr className="bg-slate-100">
+                                                          <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36 text-left">Línea</th>
+                                                          <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[80px]">Observaciones</th>
+                                                        </tr>
+                                                      </thead>
+                                                      <tbody>
+                                                        {[1,2,3,4,5,6,7].map((linea) => (
+                                                          <tr key={linea} className={linea % 2 === 0 ? 'even:bg-slate-50/60' : ''}>
+                                                            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 text-left">Línea {linea}</td>
+                                                            <td className="px-2 py-1 border-b border-slate-100 text-left">
+                                                              <input
+                                                                type="text"
+                                                                className="w-full bg-transparent text-[10px] text-slate-700 outline-none focus:bg-slate-50 rounded px-1 py-0.5"
+                                                                placeholder="Sin observaciones"
+                                                              />
+                                                            </td>
+                                                          </tr>
+                                                        ))}
+                                                      </tbody>
+                                                    </table>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                           </>
                                          )}
                                       </div>
                                      )}
@@ -3512,30 +3572,24 @@ export default function PlannerPage() {
                        )}
                     </>
                   )}
-                  {activeModule === 'procesos' && isDemon && (
-                    <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                        <Settings className="h-12 w-12 mb-4 opacity-20" />
-                        Módulo de Procesos en Desarrollo
-                      </div>
-                    </div>
-                  )}
-                  {activeModule === 'calidad' && isDemon && (
-                    <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                        <CheckSquare className="h-12 w-12 mb-4 opacity-20" />
-                        Módulo de Calidad en Desarrollo
-                      </div>
-                    </div>
-                  )}
-                  {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
-                    <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                        <Truck className="h-12 w-12 mb-4 opacity-20" />
-                        Módulo de Logística en Desarrollo
-                      </div>
-                    </div>
-                  )}
+                   {activeModule === 'procesos' && isDemon && (
+                     <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                       <Settings className="h-12 w-12 mb-4 opacity-20" />
+                       Módulo de Procesos en Desarrollo
+                     </div>
+                   )}
+                   {activeModule === 'calidad' && isDemon && (
+                     <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                       <CheckSquare className="h-12 w-12 mb-4 opacity-20" />
+                       Módulo de Calidad en Desarrollo
+                     </div>
+                   )}
+                   {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
+                     <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                       <Truck className="h-12 w-12 mb-4 opacity-20" />
+                       Módulo de Logística en Desarrollo
+                     </div>
+                   )}
                 {activeModule === 'ventas' && hasAccess(user.id, 'ventas') && (
                   <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                     <TrendingUp className="h-12 w-12 mb-4 opacity-20" />

@@ -132,7 +132,7 @@ export const ALL_MODULES = [
 const DEFAULT_PERMISSIONS: UserPermissions = {
   mds: ['planning', 'planta', 'logistica', 'ventas'],
   'jaime.r': ['planning', 'management', 'jarabes', 'raw-materials', 'planta', 'logistica', 'ventas', 'purchasing', 'seguimiento'],
-  demon: ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'logistica', 'ventas', 'purchasing', 'ordenes-sap', 'seguimiento'],
+  demon: ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'procesos', 'calidad', 'logistica', 'ventas', 'purchasing', 'ordenes-sap', 'seguimiento'],
   'maria.mds': ['jarabes', 'raw-materials', 'planta', 'planta-admin', 'planning', 'management', 'ordenes-sap'],
   'alex.mds': ['jarabes', 'raw-materials', 'planta', 'planta-admin', 'planning', 'management'],
   'anto.mds': ['purchasing', 'planta', 'logistica', 'ventas', 'planning'],
@@ -145,10 +145,9 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   'prodt2.mds': ['planning', 'planta'],
   'proc.mds': ['planning'],
   'g.tec.mds': ['planning', 'seguimiento', 'management'],
-  'enf.mds': ['planning', 'seguimiento', 'management', 'planta'],
-   'etq.mds': ['planning', 'seguimiento', 'management'],
+  'enf.mds': ['planning', 'seguimiento', 'management'],
+  'etq.mds': ['planning', 'seguimiento', 'management'],
   'logg.mds': ['planning'],
-  'mtto.mds': ['planning'],
 };
 
 const DEFAULT_READONLY_MODULES: UserPermissions = {

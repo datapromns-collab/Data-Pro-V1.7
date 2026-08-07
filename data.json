@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-04T00:00:00.000",
+      "weekStartDate": "2026-07-27T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -6748,19 +6748,6 @@
             "color": "#ef4444"
           },
           {
-            "name": "GLUP FRESH",
-            "lineId": "1",
-            "loadPerHour": 1500,
-            "quantity": 94425,
-            "durationHours": 62.95,
-            "presentation": "2Lts",
-            "tanks": 10.95,
-            "startTime": "2026-08-06T18:03:00.000Z",
-            "endTime": "2026-08-09T09:00:00.000Z",
-            "id": "bnakfbrrv",
-            "color": "#ef4444"
-          },
-          {
             "name": "CIP 3P ALCALINO",
             "lineId": "3",
             "loadPerHour": 0,
@@ -6831,6 +6818,67 @@
             "endTime": "2026-08-09T09:00:12.000Z",
             "id": "exxrh01f3",
             "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 25875,
+            "durationHours": 17.25,
+            "presentation": "2Lts",
+            "tanks": 3,
+            "startTime": "2026-08-06T18:03:00.000Z",
+            "endTime": "2026-08-07T11:18:00.000Z",
+            "id": "nauwndv2p",
+            "color": "#ef4444"
+          },
+          {
+            "name": "CS",
+            "lineId": "1",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-08-07T11:18:00.000Z",
+            "endTime": "2026-08-07T11:48:00.000Z",
+            "id": "0dsilx0zw",
+            "color": "#ec4899"
+          },
+          {
+            "name": "GLUP PIÑA",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 36313,
+            "durationHours": 24.208666666666666,
+            "presentation": "2Lts",
+            "tanks": 5,
+            "startTime": "2026-08-07T11:48:00.000Z",
+            "endTime": "2026-08-08T12:00:31.200Z",
+            "id": "95p2np6pm",
+            "color": "#10b981"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "1",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-08-08T12:01:00.000Z",
+            "endTime": "2026-08-08T14:01:00.000Z",
+            "id": "cgg3jvphy",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 28470,
+            "durationHours": 18.98,
+            "presentation": "2Lts",
+            "tanks": 3.3,
+            "startTime": "2026-08-08T14:01:00.000Z",
+            "endTime": "2026-08-09T08:59:48.000Z",
+            "id": "ot6n08a6j",
+            "color": "#ec4899"
           }
         ],
         "realProduction": {},
@@ -6879,7 +6927,12 @@
           "nk4w3nsxl",
           "lemae85zp",
           "dtgbze11o",
-          "9jtvnod5g"
+          "9jtvnod5g",
+          "bnakfbrrv",
+          "o0eoak1gs",
+          "q6ugm34wq",
+          "7egg06ftv",
+          "60mich6lr"
         ]
       },
       "2026-08-10": {
@@ -7291,7 +7344,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-06T21:47:54.022Z"
+    "updatedAt": "2026-08-07T13:33:05.752Z"
   },
   "ordenesSap": [
     {
@@ -11196,12 +11249,12 @@
           "fechaInicio": "2026-08-06",
           "ticket1": "17343",
           "cajas1": 1836,
-          "ticket2": "",
+          "ticket2": "17344",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 10560
         }
       ]
     },
@@ -11227,12 +11280,12 @@
           "fechaInicio": "2026-08-06",
           "ticket1": "17444",
           "cajas1": 2240,
-          "ticket2": "",
+          "ticket2": "17445",
           "cajas2": 4000,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3200,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 9920
         }
       ]
     },
@@ -11258,12 +11311,12 @@
           "fechaInicio": "2026-08-06",
           "ticket1": "17290",
           "cajas1": 3432,
-          "ticket2": "",
+          "ticket2": "17291",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2418,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 15912
         }
       ]
     },
@@ -11278,12 +11331,12 @@
           "fechaInicio": "2026-08-06",
           "ticket1": "17483",
           "cajas1": 800,
-          "ticket2": "",
+          "ticket2": "17484",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1680,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 4230
         }
       ]
     },
@@ -11298,12 +11351,12 @@
           "fechaInicio": "2026-08-06",
           "ticket1": "17395",
           "cajas1": 1920,
-          "ticket2": "",
+          "ticket2": "17396",
           "cajas2": 3200,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2720,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 26811
         }
       ]
     },
@@ -11318,12 +11371,12 @@
           "fechaInicio": "2026-08-06",
           "ticket1": "17531",
           "cajas1": 4400,
-          "ticket2": "",
+          "ticket2": "17532",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 720,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 17360
         }
       ]
     },
@@ -11338,12 +11391,32 @@
           "fechaInicio": "2026-08-06",
           "ticket1": "17570",
           "cajas1": 850,
-          "ticket2": "",
+          "ticket2": "17571",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 1550,
+          "ticket4": "",
+          "cajas4": 11750
+        }
+      ]
+    },
+    {
+      "id": "1-1786103699079",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "62831",
+      "semana": 32,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-06",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17484",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 2880
         }
       ]
     }
@@ -19839,6 +19912,38 @@
             "preparado": "16",
             "final": "11.74"
           }
+        },
+        "2026-08-06": {
+          "GLUP COLA": {
+            "inicial": "59.89",
+            "preparado": "30",
+            "final": "53.11"
+          },
+          "GLUP FRESH": {
+            "inicial": "4.27",
+            "preparado": "6",
+            "final": "8.01"
+          },
+          "JUSTY NARANJA": {
+            "inicial": "35",
+            "preparado": "260",
+            "final": "28"
+          },
+          "GLUP UVA": {
+            "inicial": "33",
+            "preparado": "33",
+            "final": "11"
+          },
+          "GLUP PIÑA PARCHITA": {
+            "inicial": "6",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "11.74",
+            "preparado": "24",
+            "final": "15.68"
+          }
         }
       },
       "sugar": {
@@ -19984,6 +20089,18 @@
             "invInicialSacos": "",
             "recepcionSacos": "",
             "invFinalSacos": ""
+          }
+        },
+        "2026-08-06": {
+          "PORTUGUESA": {
+            "invInicialSacos": "8920",
+            "recepcionSacos": "3840",
+            "invFinalSacos": "9280"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2240"
           }
         }
       },
@@ -20147,6 +20264,20 @@
             "invInicialSacos": "229",
             "invFinalSacos": ""
           }
+        },
+        "2026-08-06": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "196",
+            "invFinalSacos": "354"
+          },
+          "Sala 1": {
+            "invInicialSacos": "",
+            "invFinalSacos": "230"
+          }
         }
       },
       "realKgPerSack": {
@@ -20159,7 +20290,8 @@
         "2026-08-01": "50.31",
         "2026-08-04": "50.55",
         "2026-08-03": "50.43",
-        "2026-08-05": "50.5"
+        "2026-08-05": "50.5",
+        "2026-08-06": "50.5"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
