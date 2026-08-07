@@ -3011,20 +3011,50 @@ export default function PlannerPage() {
                                             </div>
                                           );
                                        })()}
-                                       <div className="mt-3">
-                                         <TablaResumenPorLinea 
-                                          informesOperacionales={informesOperacionales || []}
-                                          tasks={tasks}
-                                          realProduction={realProduction}
-                                          lineSpeeds={lineSpeeds}
-                                          fecha={reporteDiarioFecha}
-                                          planificadasPorDia={planificadasPorDia}
-                                          producidasDiurno={producidasDiurno}
-                                          producidasNocturno={producidasNocturno}
-                                        />
-                                       </div>
-                                    </div>
-                                    )}
+                                        <div className="mt-3">
+                                          <TablaResumenPorLinea 
+                                           informesOperacionales={informesOperacionales || []}
+                                           tasks={tasks}
+                                           realProduction={realProduction}
+                                           lineSpeeds={lineSpeeds}
+                                           fecha={reporteDiarioFecha}
+                                           planificadasPorDia={planificadasPorDia}
+                                           producidasDiurno={producidasDiurno}
+                                           producidasNocturno={producidasNocturno}
+                                         />
+                                        </div>
+                                        <div className="mt-3">
+                                          <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
+                                            <div className="p-4">
+                                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
+                                                  <thead>
+                                                    <tr className="bg-slate-100">
+                                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36 text-left">Línea</th>
+                                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[80px]">Observaciones</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    {[1,2,3,4,5,6,7].map((linea) => (
+                                                      <tr key={linea} className={linea % 2 === 0 ? 'even:bg-slate-50/60' : ''}>
+                                                        <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 text-left" style={{ minWidth: '2cm' }}>Línea {linea}</td>
+                                                        <td className="px-2 py-1 border-b border-slate-100 text-left">
+                                                          <input
+                                                            type="text"
+                                                            className="w-full bg-transparent text-[10px] text-slate-700 outline-none focus:bg-slate-50 rounded px-1 py-0.5"
+                                                            placeholder="Sin observaciones"
+                                                          />
+                                                        </td>
+                                                      </tr>
+                                                    ))}
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                     </div>
+                                     )}
                                     {reporteSubTab === 'por-turno' && (
                                     <div className="flex flex-col gap-3 h-full">
                                       <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start">
