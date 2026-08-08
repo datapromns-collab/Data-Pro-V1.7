@@ -64,6 +64,7 @@ import { ComplianceReport } from '@/components/planner/ComplianceReport';
 import { MonthlyComplianceReport } from '@/components/planner/MonthlyComplianceReport';
 import { RecipeEditor } from '@/components/planner/RecipeEditor';
 import OrdenesSapModule, { CorrelativoSelector } from '@/components/planner/OrdenesSapModule';
+import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
 import SeguimientoPanel from '@/components/planner/SeguimientoPanel';
 import { PackagingRecipeEditor } from '@/components/planner/PackagingRecipeEditor';
 import { RawMaterialModule } from '@/components/planner/RawMaterialModule';
@@ -349,6 +350,8 @@ export default function PlannerPage() {
     allModules
   } = usePermissionsStore();
 
+  const { ordenes } = useOrdenesSap();
+
   const { toast } = useToast();
 
   const toMin = (t: string) => {
@@ -506,7 +509,19 @@ export default function PlannerPage() {
     }
     return new Date();
   });
+  const [isAutoUpdating, setIsAutoUpdating] = useState(false);
   const [co2DiarioData, setCo2DiarioData] = useState<Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }>>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('co2-diario-data');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (typeof parsed === 'object' && parsed !== null) {
+            return parsed;
+          }
+        }
+      } catch (e) {}
+    }
     const initial: Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }> = {};
     const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
     sabores.forEach(sabor => {
@@ -514,6 +529,51 @@ export default function PlannerPage() {
     });
     return initial;
   });
+
+   useEffect(() => {
+     if (!insumosFecha || typeof window === 'undefined') return;
+     const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
+
+     const ordenesDelDia = (ordenes || []).filter(orden =>
+       orden.dias.some(dia => dia.fechaInicio === fechaStr)
+     );
+
+     if (ordenesDelDia.length === 0) return;
+
+     const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }> = {};
+     const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
+     sabores.forEach(sabor => {
+       tabla[sabor] = { cajas2L: '', cajas1L: '', cajas04L: '' };
+     });
+
+      ordenesDelDia.forEach(orden => {
+        orden.dias.forEach(dia => {
+          if (dia.fechaInicio !== fechaStr) return;
+          const row = tabla[orden.sabor];
+          if (!row) return;
+          const totalDia = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
+          if (orden.linea >= 1 && orden.linea <= 4 && totalDia > 0) {
+            row.cajas2L = String((Number(row.cajas2L) || 0) + totalDia);
+          }
+          if (orden.linea === 7 && totalDia > 0) {
+            row.cajas1L = String((Number(row.cajas1L) || 0) + totalDia);
+          }
+          if (orden.linea === 6 && totalDia > 0) {
+            row.cajas04L = String((Number(row.cajas04L) || 0) + totalDia);
+          }
+        });
+      });
+
+     setIsAutoUpdating(true);
+     setCo2DiarioData(tabla);
+     localStorage.setItem('co2-diario-data', JSON.stringify(tabla));
+     setIsAutoUpdating(false);
+   }, [insumosFecha, ordenes]);
+
+  useEffect(() => {
+    if (isAutoUpdating || typeof window === 'undefined') return;
+    localStorage.setItem('co2-diario-data', JSON.stringify(co2DiarioData));
+  }, [co2DiarioData, isAutoUpdating]);
   const CO2_FACTORS: Record<string, number> = {
     'GLUP COLA': 0.008848,
     'GLUP FRESH': 0.0082445,
@@ -3721,28 +3781,55 @@ export default function PlannerPage() {
                                          <tr key={sabor} className="border-b border-slate-100 hover:bg-slate-50/50">
                                            <td className="px-3 py-1.5 font-bold text-slate-700 border border-slate-100">{sabor}</td>
                                            <td className="px-3 py-1.5 border border-slate-100">
-                                             <input
-                                               type="number"
-                                               value={row.cajas2L}
-                                               onChange={(e) => setCo2DiarioData(prev => ({ ...prev, [sabor]: { ...prev[sabor], cajas2L: e.target.value } }))}
-                                               className="w-full h-8 text-[11px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                                             />
+                                              <input
+                                                type="number"
+                                                value={row.cajas2L}
+                                                onChange={(e) => {
+                                                  const newValue = e.target.value;
+                                                  setCo2DiarioData(prev => {
+                                                    const next = { ...prev, [sabor]: { ...prev[sabor], cajas2L: newValue } };
+                                                    if (typeof window !== 'undefined') {
+                                                      localStorage.setItem('co2-diario-data', JSON.stringify(next));
+                                                    }
+                                                    return next;
+                                                  });
+                                                }}
+                                                className="w-full h-8 text-[11px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                              />
                                            </td>
                                            <td className="px-3 py-1.5 border border-slate-100">
-                                             <input
-                                               type="number"
-                                               value={row.cajas1L}
-                                               onChange={(e) => setCo2DiarioData(prev => ({ ...prev, [sabor]: { ...prev[sabor], cajas1L: e.target.value } }))}
-                                               className="w-full h-8 text-[11px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                                             />
+                                              <input
+                                                type="number"
+                                                value={row.cajas1L}
+                                                onChange={(e) => {
+                                                  const newValue = e.target.value;
+                                                  setCo2DiarioData(prev => {
+                                                    const next = { ...prev, [sabor]: { ...prev[sabor], cajas1L: newValue } };
+                                                    if (typeof window !== 'undefined') {
+                                                      localStorage.setItem('co2-diario-data', JSON.stringify(next));
+                                                    }
+                                                    return next;
+                                                  });
+                                                }}
+                                                className="w-full h-8 text-[11px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                              />
                                            </td>
                                            <td className="px-3 py-1.5 border border-slate-100">
-                                             <input
-                                               type="number"
-                                               value={row.cajas04L}
-                                               onChange={(e) => setCo2DiarioData(prev => ({ ...prev, [sabor]: { ...prev[sabor], cajas04L: e.target.value } }))}
-                                               className="w-full h-8 text-[11px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                                             />
+                                              <input
+                                                type="number"
+                                                value={row.cajas04L}
+                                                onChange={(e) => {
+                                                  const newValue = e.target.value;
+                                                  setCo2DiarioData(prev => {
+                                                    const next = { ...prev, [sabor]: { ...prev[sabor], cajas04L: newValue } };
+                                                    if (typeof window !== 'undefined') {
+                                                      localStorage.setItem('co2-diario-data', JSON.stringify(next));
+                                                    }
+                                                    return next;
+                                                  });
+                                                }}
+                                                className="w-full h-8 text-[11px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                              />
                                            </td>
                                            <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{litros.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                            <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{factor > 0 ? factor.toLocaleString('es-VE', { minimumFractionDigits: 6, maximumFractionDigits: 6 }) : ''}</td>
