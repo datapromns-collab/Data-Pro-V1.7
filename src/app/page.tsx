@@ -492,6 +492,20 @@ export default function PlannerPage() {
   const [errorValidacion, setErrorValidacion] = useState<string>('');
   const [activeModule, setActiveModule] = useState('planning');
   const [activeTab, setActiveTab] = useState('gantt');
+  const [insumosSubTab, setInsumosSubTab] = useState('co2');
+  const [insumosPeriodoSubTab, setInsumosPeriodoSubTab] = useState('diario');
+  const [insumosFecha, setInsumosFecha] = useState<Date | undefined>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('selected-insumos-fecha');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (parsed) return new Date(parsed);
+        }
+      } catch (e) {}
+    }
+    return new Date();
+  });
   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
   const [produccionSubTab, setProduccionSubTab] = useState('planificadas');
   const [planificadasSubTab, setPlanificadasSubTab] = useState('porturno');
@@ -1723,7 +1737,7 @@ export default function PlannerPage() {
                         user.id === 'maria.mds' || user.id === 'alex.mds' ? 'ANALISTA DE GERENCIA TÉCNICA' : 
                         user.role === 'PURCHASING' ? 'COMPRAS' : 
                         user.role === 'INVENTORY' ? 'INVENTARIO' : 
-                        user.role === 'STANDARD' ? 'ESTÁNDAR' : user.role}
+                        user.id === 'enf.mds' ? 'ESPECIALISTA ENFARDADORA' : user.role}
                     </span>
                   </div>
                 </div>
@@ -3600,12 +3614,62 @@ export default function PlannerPage() {
                         Módulo de Calidad en Desarrollo
                       </div>
                     )}
-                    {activeModule === 'insumos' && isDemon && (
-                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                        <Package className="h-12 w-12 mb-4 opacity-20" />
-                        Módulo de Insumos en Desarrollo
-                      </div>
-                    )}
+                      {activeModule === 'insumos' && isDemon && (
+                       <div className="flex flex-col h-full">
+                         <div className="flex items-center gap-2 mb-2 no-print">
+                           <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                             {['co2', 'agua'].map((tab) => (
+                               <button
+                                 key={tab}
+                                 onClick={() => setInsumosSubTab(tab)}
+                                 className={cn(
+                                   "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                   insumosSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                 )}
+                               >
+                                 {tab === 'co2' && <FlaskConical className="h-3.5 w-3.5" />}
+                                 {tab === 'agua' && <Droplets className="h-3.5 w-3.5" />}
+                                 {tab === 'co2' ? 'CO2' : 'Agua'}
+                               </button>
+                             ))}
+                           </div>
+                           <div className="ml-auto">
+                             <Popover>
+                               <PopoverTrigger asChild>
+                                 <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                                   <CalendarIcon className="h-3.5 w-3.5 text-primary" />
+                                   {format(insumosFecha || new Date(), "dd 'de' MMM, yyyy", { locale: es })}
+                                 </button>
+                               </PopoverTrigger>
+                               <PopoverContent className="w-auto p-0" align="end">
+                                 <Calendar mode="single" selected={insumosFecha} onSelect={(date) => { setInsumosFecha(date); if (date) { localStorage.setItem('selected-insumos-fecha', JSON.stringify(date)); } }} locale={es} />
+                               </PopoverContent>
+                             </Popover>
+                           </div>
+                         </div>
+                         {insumosSubTab === 'co2' && (
+                           <div className="flex items-center gap-2 mb-2 no-print">
+                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                               {['diario', 'semanal', 'mensual'].map((tab) => (
+                                 <button
+                                   key={tab}
+                                   onClick={() => setInsumosPeriodoSubTab(tab)}
+                                   className={cn(
+                                     "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                     insumosPeriodoSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                   )}
+                                 >
+                                   {tab === 'diario' ? 'Diario' : tab === 'semanal' ? 'Semanal' : 'Mensual'}
+                                 </button>
+                               ))}
+                             </div>
+                           </div>
+                         )}
+                         <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                           <div className="flex-1 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 min-h-[200px]" />
+                         </div>
+                       </div>
+                     )}
                     {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                        <Truck className="h-12 w-12 mb-4 opacity-20" />

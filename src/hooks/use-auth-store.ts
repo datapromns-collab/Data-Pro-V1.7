@@ -68,7 +68,7 @@ const VALID_USERS = [
   { id: 'prodt2.mds', password: 'ad.128.', name: 'Luis Sanchez', role: 'STANDARD' as UserRole },
    { id: 'proc.mds', password: 'ad.166.', name: 'Procesos', role: 'STANDARD' as UserRole },
   { id: 'g.tec.mds', password: 'ad.147.', name: 'Gerente Técnico', role: 'STANDARD' as UserRole },
-  { id: 'enf.mds', password: 'ad.158.', name: 'Especialista Enfardadora', role: 'STANDARD' as UserRole },
+  { id: 'enf.mds', password: 'ad.158.', name: 'Hector Pereira', role: 'STANDARD' as UserRole },
   { id: 'etq.mds', password: 'ad.159.', name: 'Especialista Etiquetadora', role: 'STANDARD' as UserRole },
   { id: 'logg.mds', password: 'ad.220.', name: 'Florencio Alvarez', role: 'STANDARD' as UserRole },
   { id: 'mtto.mds', password: 'ad.321.', name: 'Jose Mora', role: 'STANDARD' as UserRole },
