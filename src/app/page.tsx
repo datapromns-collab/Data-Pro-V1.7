@@ -534,18 +534,17 @@ export default function PlannerPage() {
      if (!insumosFecha || typeof window === 'undefined') return;
      const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
 
-     const ordenesDelDia = (ordenes || []).filter(orden =>
-       orden.dias.some(dia => dia.fechaInicio === fechaStr)
-     );
+    const ordenesDelDia = (ordenes || []).filter(orden =>
+      orden.dias.some(dia => dia.fechaInicio === fechaStr)
+    );
 
-     if (ordenesDelDia.length === 0) return;
+    const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }> = {};
+    const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
+    sabores.forEach(sabor => {
+      tabla[sabor] = { cajas2L: '', cajas1L: '', cajas04L: '' };
+    });
 
-     const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }> = {};
-     const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
-     sabores.forEach(sabor => {
-       tabla[sabor] = { cajas2L: '', cajas1L: '', cajas04L: '' };
-     });
-
+    if (ordenesDelDia.length > 0) {
       ordenesDelDia.forEach(orden => {
         orden.dias.forEach(dia => {
           if (dia.fechaInicio !== fechaStr) return;
@@ -563,6 +562,7 @@ export default function PlannerPage() {
           }
         });
       });
+    }
 
      setIsAutoUpdating(true);
      setCo2DiarioData(tabla);
