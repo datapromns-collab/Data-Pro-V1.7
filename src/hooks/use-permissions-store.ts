@@ -63,6 +63,7 @@ export type ModuleId =
   | 'planta-admin'
   | 'procesos'
   | 'calidad'
+  | 'insumos'
   | 'logistica'
   | 'ventas'
   | 'purchasing'
@@ -88,6 +89,7 @@ export const MODULE_LABELS: Record<ModuleId, string> = {
   'planta-admin': 'Planta (Admin)',
   procesos: 'Procesos',
   calidad: 'Calidad',
+  insumos: 'Insumos',
   logistica: 'Logística',
   ventas: 'Ventas',
   purchasing: 'Compras',
@@ -105,6 +107,7 @@ export const MODULE_COLORS: Record<ModuleId, string> = {
   'planta-admin': 'bg-slate-900',
   procesos: 'bg-teal-600',
   calidad: 'bg-rose-600',
+  insumos: 'bg-cyan-600',
   logistica: 'bg-orange-600',
   ventas: 'bg-indigo-600',
   purchasing: 'bg-blue-600',
@@ -122,6 +125,7 @@ export const ALL_MODULES = [
   'planta-admin',
   'procesos',
   'calidad',
+  'insumos',
   'logistica',
   'ventas',
   'purchasing',
@@ -132,7 +136,7 @@ export const ALL_MODULES = [
 const DEFAULT_PERMISSIONS: UserPermissions = {
   mds: ['planning', 'planta', 'logistica', 'ventas'],
   'jaime.r': ['planning', 'management', 'jarabes', 'raw-materials', 'planta', 'logistica', 'ventas', 'purchasing', 'seguimiento'],
-  demon: ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'procesos', 'calidad', 'logistica', 'ventas', 'purchasing', 'ordenes-sap', 'seguimiento'],
+  demon: ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'procesos', 'calidad', 'insumos', 'logistica', 'ventas', 'purchasing', 'ordenes-sap', 'seguimiento'],
   'maria.mds': ['jarabes', 'raw-materials', 'planta', 'planta-admin', 'planning', 'management', 'ordenes-sap'],
   'alex.mds': ['jarabes', 'raw-materials', 'planta', 'planta-admin', 'planning', 'management'],
   'anto.mds': ['purchasing', 'planta', 'logistica', 'ventas', 'planning'],
@@ -145,7 +149,7 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   'prodt2.mds': ['planning', 'planta'],
   'proc.mds': ['planning'],
   'g.tec.mds': ['planning', 'seguimiento', 'management'],
-  'enf.mds': ['planning', 'seguimiento', 'management'],
+  'enf.mds': ['planning', 'seguimiento', 'management', 'planta'],
   'etq.mds': ['planning', 'seguimiento', 'management'],
   'logg.mds': ['planning'],
 };

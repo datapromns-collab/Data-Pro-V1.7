@@ -1082,6 +1082,7 @@ export default function PlannerPage() {
     planta: 'paradas-lineas',
     procesos: 'procesos-view',
     calidad: 'calidad-view',
+    insumos: 'insumos-view',
     logistica: 'logistica-view',
     ventas: 'ventas-view',
     purchasing: 'purchasing-view',
@@ -1595,20 +1596,33 @@ export default function PlannerPage() {
                      </Button>
                      )}
 
-                     {isDemon && (
-                     <Button 
-                       variant="ghost" 
-                       onClick={() => { setActiveModule('calidad'); setActiveTab('calidad-view'); }}
-                       className={sidebarButtonClass(activeModule === 'calidad', "bg-rose-600 hover:bg-rose-700", "shadow-rose-400/30")}
-                     >
-                       <div className={iconContainerClass(activeModule === 'calidad')}>
-                         <CheckSquare className="h-4 w-4" />
-                       </div>
-                       <span className="uppercase text-[10px] font-black tracking-tight">Calidad</span>
-                     </Button>
-                     )}
+                      {isDemon && (
+                      <Button 
+                        variant="ghost" 
+                        onClick={() => { setActiveModule('calidad'); setActiveTab('calidad-view'); }}
+                        className={sidebarButtonClass(activeModule === 'calidad', "bg-rose-600 hover:bg-rose-700", "shadow-rose-400/30")}
+                      >
+                        <div className={iconContainerClass(activeModule === 'calidad')}>
+                          <CheckSquare className="h-4 w-4" />
+                        </div>
+                        <span className="uppercase text-[10px] font-black tracking-tight">Calidad</span>
+                      </Button>
+                      )}
 
-                    {hasAccess(user.id, 'logistica') && (
+                      {isDemon && (
+                      <Button 
+                        variant="ghost" 
+                        onClick={() => { setActiveModule('insumos'); setActiveTab('insumos-view'); }}
+                        className={sidebarButtonClass(activeModule === 'insumos', "bg-cyan-600 hover:bg-cyan-700", "shadow-cyan-400/30")}
+                      >
+                        <div className={iconContainerClass(activeModule === 'insumos')}>
+                          <Package className="h-4 w-4" />
+                        </div>
+                        <span className="uppercase text-[10px] font-black tracking-tight">Insumos</span>
+                      </Button>
+                      )}
+
+                     {hasAccess(user.id, 'logistica') && (
                     <Button 
                       variant="ghost" 
                       onClick={() => { setActiveModule('logistica'); setActiveTab('logistica-view'); }}
@@ -1735,9 +1749,10 @@ export default function PlannerPage() {
                  activeModule === 'raw-materials' ? "bg-amber-100 text-amber-700" :
                  activeModule === 'jarabes' ? "bg-blue-100 text-blue-700" :
                   activeModule === 'planta' ? "bg-slate-100 text-slate-700" :
-                  activeModule === 'procesos' ? "bg-teal-100 text-teal-700" :
-                  activeModule === 'calidad' ? "bg-rose-100 text-rose-700" :
-                   activeModule === 'logistica' ? "bg-orange-100 text-orange-700" :
+                   activeModule === 'procesos' ? "bg-teal-100 text-teal-700" :
+                   activeModule === 'calidad' ? "bg-rose-100 text-rose-700" :
+                   activeModule === 'insumos' ? "bg-cyan-100 text-cyan-700" :
+                    activeModule === 'logistica' ? "bg-orange-100 text-orange-700" :
                   activeModule === 'ventas' ? "bg-indigo-100 text-indigo-700" :
                   activeModule === 'purchasing' ? "bg-blue-100 text-blue-700" :
                    activeModule === 'permissions' ? "bg-violet-100 text-violet-700" :
@@ -1749,9 +1764,10 @@ export default function PlannerPage() {
                  activeModule === 'raw-materials' ? 'MÓDULO DE MATERIA PRIMA' :
                  activeModule === 'jarabes' ? 'MÓDULO DE JARABES' :
                   activeModule === 'planta' ? 'MÓDULO DE PLANTA' :
-                  activeModule === 'procesos' ? 'MÓDULO DE PROCESOS' :
-                  activeModule === 'calidad' ? 'MÓDULO DE CALIDAD' :
-                   activeModule === 'logistica' ? 'MÓDULO DE LOGÍSTICA' :
+                   activeModule === 'procesos' ? 'MÓDULO DE PROCESOS' :
+                   activeModule === 'calidad' ? 'MÓDULO DE CALIDAD' :
+                   activeModule === 'insumos' ? 'MÓDULO DE INSUMOS' :
+                    activeModule === 'logistica' ? 'MÓDULO DE LOGÍSTICA' :
                   activeModule === 'ventas' ? 'MÓDULO DE VENTAS' :
                   activeModule === 'purchasing' ? 'MÓDULO DE COMPRAS' :
                    activeModule === 'ordenes-sap' ? 'MÓDULO DE ORDENES SAP' :
@@ -1796,7 +1812,7 @@ export default function PlannerPage() {
           <div className="flex-1 overflow-auto p-6 lg:p-8">
             <div className="flex flex-col gap-6 h-full">
               
-                {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'procesos' && activeModule !== 'calidad' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && activeModule !== 'jarabes' && activeModule !== 'ordenes-sap' && activeModule !== 'seguimiento' && (
+                {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'procesos' && activeModule !== 'calidad' && activeModule !== 'insumos' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && activeModule !== 'jarabes' && activeModule !== 'ordenes-sap' && activeModule !== 'seguimiento' && (
                   <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1 shadow-none self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print h-11 shrink-0 gap-1 w-full justify-between">
                     {activeModule === 'planning' && (
                       <>
@@ -3578,13 +3594,19 @@ export default function PlannerPage() {
                        Módulo de Procesos en Desarrollo
                      </div>
                    )}
-                   {activeModule === 'calidad' && isDemon && (
-                     <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                       <CheckSquare className="h-12 w-12 mb-4 opacity-20" />
-                       Módulo de Calidad en Desarrollo
-                     </div>
-                   )}
-                   {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
+                    {activeModule === 'calidad' && isDemon && (
+                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                        <CheckSquare className="h-12 w-12 mb-4 opacity-20" />
+                        Módulo de Calidad en Desarrollo
+                      </div>
+                    )}
+                    {activeModule === 'insumos' && isDemon && (
+                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                        <Package className="h-12 w-12 mb-4 opacity-20" />
+                        Módulo de Insumos en Desarrollo
+                      </div>
+                    )}
+                    {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                        <Truck className="h-12 w-12 mb-4 opacity-20" />
                        Módulo de Logística en Desarrollo
