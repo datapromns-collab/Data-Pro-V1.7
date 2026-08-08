@@ -506,6 +506,27 @@ export default function PlannerPage() {
     }
     return new Date();
   });
+  const [co2DiarioData, setCo2DiarioData] = useState<Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }>>(() => {
+    const initial: Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }> = {};
+    const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
+    sabores.forEach(sabor => {
+      initial[sabor] = { cajas2L: '', cajas1L: '', cajas04L: '' };
+    });
+    return initial;
+  });
+  const CO2_FACTORS: Record<string, number> = {
+    'GLUP COLA': 0.008848,
+    'GLUP FRESH': 0.0082445,
+    'GLUP UVA': 0.006636,
+    'GLUP PIÑA': 0.0060325,
+    'GLUP NARANJA': 0.006636,
+    'GLUP KOLITA': 0.0082445,
+    'GLUP MANZANA VERDE': 0.006435,
+    'GLUP PONCHE': 0,
+    'GLUP CHICLE': 0,
+    'GLUP PIÑA PARCHITA': 0.008848,
+    'GLUP MANZANA ROJA': 0.006636,
+  };
   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
   const [produccionSubTab, setProduccionSubTab] = useState('planificadas');
   const [planificadasSubTab, setPlanificadasSubTab] = useState('porturno');
@@ -3665,9 +3686,113 @@ export default function PlannerPage() {
                              </div>
                            </div>
                          )}
-                         <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                           <div className="flex-1 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 min-h-[200px]" />
-                         </div>
+                          <div className="flex-1 bg-white rounded-[2.5rem] p-4 overflow-x-auto">
+                            {insumosSubTab === 'co2' && insumosPeriodoSubTab === 'diario' && (
+                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                <table className="w-full border-collapse text-[11px]">
+                                   <thead>
+                                     <tr className="bg-slate-800 text-white">
+                                       <th className="px-3 py-2 text-left font-black uppercase tracking-wider border border-white/10">SABOR</th>
+                                       <th colSpan={3} className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CAJAS PRODUCIDAS</th>
+                                       <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">LITROS PRODUCIDOS<br/>TOTAL</th>
+                                       <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CO2X1L BEBIDA<br/>FACTOR</th>
+                                       <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">TOTAL<br/>KG.CO2</th>
+                                     </tr>
+                                     <tr className="bg-slate-700 text-white">
+                                       <th className="px-3 py-1 border border-white/10"></th>
+                                       <th className="px-3 py-1 text-center font-black border border-white/10">2L</th>
+                                       <th className="px-3 py-1 text-center font-black border border-white/10">1L</th>
+                                       <th className="px-3 py-1 text-center font-black border border-white/10">0,4L</th>
+                                       <th className="px-3 py-1 text-center font-black border border-white/10"></th>
+                                       <th className="px-3 py-1 text-center font-black border border-white/10"></th>
+                                       <th className="px-3 py-1 text-center font-black border border-white/10"></th>
+                                     </tr>
+                                   </thead>
+                                  <tbody>
+                                     {['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'].map((sabor) => {
+                                       const row = co2DiarioData[sabor] || { cajas2L: '', cajas1L: '', cajas04L: '' };
+                                       const c2 = Number(row.cajas2L) || 0;
+                                       const c1 = Number(row.cajas1L) || 0;
+                                       const c04 = Number(row.cajas04L) || 0;
+                                       const litros = c2 * 2 + c1 * 1 + c04 * 0.4;
+                                       const factor = CO2_FACTORS[sabor] || 0;
+                                       const totalKg = factor > 0 ? litros * factor : 0;
+                                       return (
+                                         <tr key={sabor} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                           <td className="px-3 py-1.5 font-bold text-slate-700 border border-slate-100">{sabor}</td>
+                                           <td className="px-3 py-1.5 border border-slate-100">
+                                             <input
+                                               type="number"
+                                               value={row.cajas2L}
+                                               onChange={(e) => setCo2DiarioData(prev => ({ ...prev, [sabor]: { ...prev[sabor], cajas2L: e.target.value } }))}
+                                               className="w-full h-8 text-[11px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                             />
+                                           </td>
+                                           <td className="px-3 py-1.5 border border-slate-100">
+                                             <input
+                                               type="number"
+                                               value={row.cajas1L}
+                                               onChange={(e) => setCo2DiarioData(prev => ({ ...prev, [sabor]: { ...prev[sabor], cajas1L: e.target.value } }))}
+                                               className="w-full h-8 text-[11px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                             />
+                                           </td>
+                                           <td className="px-3 py-1.5 border border-slate-100">
+                                             <input
+                                               type="number"
+                                               value={row.cajas04L}
+                                               onChange={(e) => setCo2DiarioData(prev => ({ ...prev, [sabor]: { ...prev[sabor], cajas04L: e.target.value } }))}
+                                               className="w-full h-8 text-[11px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                             />
+                                           </td>
+                                           <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{litros.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                           <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{factor > 0 ? factor.toLocaleString('es-VE', { minimumFractionDigits: 6, maximumFractionDigits: 6 }) : ''}</td>
+                                           <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{totalKg.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                         </tr>
+                                       );
+                                     })}
+                                     <tr className="bg-slate-100 font-black text-slate-700">
+                                       <td className="px-3 py-2 border border-slate-200">TOTAL PRODUCCIÓN</td>
+                                       <td className="px-3 py-2 text-center border border-slate-200">
+                                         {Object.values(co2DiarioData).reduce((acc, row) => acc + (Number(row.cajas2L) || 0), 0).toLocaleString('es-VE')}
+                                       </td>
+                                       <td className="px-3 py-2 text-center border border-slate-200">
+                                         {Object.values(co2DiarioData).reduce((acc, row) => acc + (Number(row.cajas1L) || 0), 0).toLocaleString('es-VE')}
+                                       </td>
+                                       <td className="px-3 py-2 text-center border border-slate-200">
+                                         {Object.values(co2DiarioData).reduce((acc, row) => acc + (Number(row.cajas04L) || 0), 0).toLocaleString('es-VE')}
+                                       </td>
+                                       <td className="px-3 py-2 text-center border border-slate-200">
+                                         {Object.values(co2DiarioData).reduce((acc, row) => {
+                                           const c2 = Number(row.cajas2L) || 0;
+                                           const c1 = Number(row.cajas1L) || 0;
+                                           const c04 = Number(row.cajas04L) || 0;
+                                           return acc + (c2 * 2 + c1 * 1 + c04 * 0.4);
+                                         }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                       </td>
+                                       <td className="px-3 py-2 text-center border border-slate-200"></td>
+                                       <td className="px-3 py-2 text-center border border-slate-200">
+                                         {Object.values(co2DiarioData).reduce((acc, row) => {
+                                           const c2 = Number(row.cajas2L) || 0;
+                                           const c1 = Number(row.cajas1L) || 0;
+                                           const c04 = Number(row.cajas04L) || 0;
+                                           const litros = c2 * 2 + c1 * 1 + c04 * 0.4;
+                                           const sabor = Object.keys(co2DiarioData).find(key => co2DiarioData[key] === row);
+                                           const factor = sabor ? (CO2_FACTORS[sabor] || 0) : 0;
+                                           return acc + (litros * factor);
+                                         }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                       </td>
+                                     </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            )}
+                            {insumosSubTab === 'co2' && insumosPeriodoSubTab !== 'diario' && (
+                              <div className="flex-1 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 min-h-[200px]" />
+                            )}
+                            {insumosSubTab === 'agua' && (
+                              <div className="flex-1 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 min-h-[200px]" />
+                            )}
+                          </div>
                        </div>
                      )}
                     {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
