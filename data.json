@@ -27776,7 +27776,7 @@
         "operador": "ANTHONER NUÑEZ",
         "linea": "Línea 7",
         "equipo": "SOPLADORA",
-        "tipoParada": "AVERÍA",
+        "tipoParada": "si",
         "inicioParada": "16:17",
         "finParada": "16:40",
         "totalMin": "23",
@@ -27785,7 +27785,21 @@
         "orden": "9036",
         "observaciones": "",
         "id": 1786195485554,
-        "usuario": "Luis Sanchez"
+        "usuario": "Luis Sanchez",
+        "fechaEmision": "2026-08-06",
+        "solicitante": "RICARDO DIAZ",
+        "aviso": "5710",
+        "maquina": "SOPLADORA",
+        "otFechaParada": "",
+        "inicioMtto": "16:18",
+        "finMtto": "16:38",
+        "otInicioParada": "16:15",
+        "tMtto": "",
+        "otFinParada": "16:40",
+        "mtto": "correctivo",
+        "mttoEsp": "ANGEL C./ MIGUEL P.",
+        "descripcionFalla": "SE REALIZA PURGA EN LOS MOLDES POR MOLDES CALIENTES ",
+        "descripcionAccion": "SE REALIZA PURGADE TODOS LOS MOLDES "
       },
       {
         "fecha": "2026-08-04",
@@ -28982,16 +28996,30 @@
         "operador": "BRUNO VALLES ",
         "linea": "Línea 7",
         "equipo": "LLENADORA",
-        "tipoParada": "AVERÍA",
+        "tipoParada": "si",
         "inicioParada": "07:10",
         "finParada": "09:50",
         "totalMin": "160",
         "zona": "Llenado",
-        "falla": "FALLA EN VALVULA REGULADORA DE CO2",
+        "falla": "multiple",
         "orden": "9312",
         "observaciones": "",
         "id": 1786203983519,
-        "usuario": "Luis Sanchez"
+        "usuario": "Luis Sanchez",
+        "fechaEmision": "2026-08-07",
+        "solicitante": "RONALD VALERA",
+        "aviso": "5729",
+        "maquina": "LLENADORA",
+        "otFechaParada": "",
+        "inicioMtto": "07:10",
+        "finMtto": "08:50",
+        "otInicioParada": "07:10",
+        "tMtto": "",
+        "otFinParada": "09:50",
+        "mtto": "correctivo",
+        "mttoEsp": "SANTOS SALAZAR ",
+        "descripcionFalla": "FALLA EN VALVULA REGULADOR CO2",
+        "descripcionAccion": "SE REALIZA AJUSTE Y REVISION DE TODOS LOS ACTUADORES DEL SISTEMA,SE CALIBRAN LAS VALVULAS "
       },
       {
         "fecha": "2026-08-07",
@@ -29036,16 +29064,30 @@
         "operador": "ANTHONER NUÑES",
         "linea": "Línea 7",
         "equipo": "SOPLADORA",
-        "tipoParada": "AVERÍA",
+        "tipoParada": "si",
         "inicioParada": "13:20",
         "finParada": "13:50",
         "totalMin": "30",
         "zona": "Llenado",
-        "falla": "MOLDES CALIENTES",
+        "falla": "mecanica",
         "orden": "9313",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "id": 1786204209581
+        "id": 1786204209581,
+        "fechaEmision": "2026-08-07",
+        "solicitante": "RONAL VALERA ",
+        "aviso": "5730",
+        "maquina": "SOPLADORA",
+        "otFechaParada": "",
+        "inicioMtto": "13:20",
+        "finMtto": "13:50",
+        "otInicioParada": "13:20",
+        "tMtto": "",
+        "otFinParada": "13:50",
+        "mtto": "correctivo",
+        "mttoEsp": "ANGEL C.",
+        "descripcionFalla": "MOLDES CALIENTES ",
+        "descripcionAccion": ""
       },
       {
         "fecha": "2026-08-07",
@@ -29927,6 +29969,96 @@
         "orden": "",
         "observaciones": "",
         "id": 1786226080648,
+        "usuario": "Ronald Valera"
+      },
+      {
+        "fecha": "2026-08-05",
+        "semana": 32,
+        "turno": "NOCTURNO",
+        "operador": "GERARDO CARRILO",
+        "linea": "Línea 5",
+        "equipo": "LLENADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "23:19",
+        "finParada": "23:33",
+        "totalMin": "14",
+        "zona": "Llenado",
+        "falla": "TAPAS ATASCADAS ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786226349536,
+        "usuario": "Ronald Valera"
+      },
+      {
+        "fecha": "2026-08-05",
+        "semana": 32,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "SALA DE JARABE",
+        "inicioParada": "02:15",
+        "finParada": "03:15",
+        "totalMin": "60",
+        "zona": "Llenado",
+        "falla": "ESPERA DE JARABE",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786226391063,
+        "usuario": "Ronald Valera"
+      },
+      {
+        "fecha": "2026-08-05",
+        "semana": 32,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "21:50",
+        "finParada": "22:07",
+        "totalMin": "17",
+        "zona": "Llenado",
+        "falla": "FALLA DE COMUNICACION",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786226523679,
+        "usuario": "Ronald Valera"
+      },
+      {
+        "fecha": "2026-08-05",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "OSWALDO LINARES ",
+        "linea": "Línea 5",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "01:37",
+        "finParada": "01:47",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "ATASCO DE PREFORMAS ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786226810695,
+        "usuario": "Ronald Valera"
+      },
+      {
+        "fecha": "2026-08-05",
+        "semana": 32,
+        "turno": "NOCTURNO",
+        "operador": "JOSE SANCHEZ ",
+        "linea": "Línea 7",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "21:45",
+        "finParada": "22:07",
+        "totalMin": "22",
+        "zona": "Llenado",
+        "falla": "ALRAMA DISPARADA ",
+        "orden": "9303",
+        "observaciones": "",
+        "id": 1786226926279,
         "usuario": "Ronald Valera"
       }
     ],
@@ -31329,6 +31461,390 @@
           },
           "GLUP FRESH": {
             "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP UVA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP KOLITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA VERDE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PONCHE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP CHICLE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA PARCHITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANDARINA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY SANDIA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY TAMARINDO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANZANA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY PERA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          }
+        },
+        "nocturno": {
+          "GLUP COLA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP FRESH": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP UVA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP KOLITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA VERDE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PONCHE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP CHICLE": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP PIÑA PARCHITA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY NARANJA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANDARINA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY SANDIA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY TAMARINDO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY MANZANA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "JUSTY PERA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA DURAZNO": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "VITA TEA LIMON": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          }
+        }
+      },
+      "2026-08-05": {
+        "diurno": {
+          "GLUP COLA": {
+            "1": "",
+            "2": "",
+            "3": "",
+            "4": "",
+            "5": "",
+            "6": "",
+            "7": ""
+          },
+          "GLUP FRESH": {
+            "1": 0,
             "2": "",
             "3": "",
             "4": "",

@@ -588,6 +588,7 @@ export default function PlannerPage() {
     'GLUP MANZANA ROJA': 0.006636,
   };
   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
+  const [co2ConsumoKg, setCo2ConsumoKg] = useState('');
   const [produccionSubTab, setProduccionSubTab] = useState('planificadas');
   const [planificadasSubTab, setPlanificadasSubTab] = useState('porturno');
   const [planificadasTurnoSubTab, setPlanificadasTurnoSubTab] = useState('diurno');
@@ -3012,8 +3013,28 @@ export default function PlannerPage() {
                                                           );
                                                         })}
                                                       </tbody>
-                                                   </table>
-                                                 </div>
+                                 </table>
+                                 <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
+                                   <div className="flex items-center justify-between px-3 py-1 bg-slate-800 text-white">
+                                     <div className="font-black text-[11px] uppercase tracking-widest">CONSUMO DE CO2</div>
+                                     <div className="font-black text-[11px] uppercase tracking-widest">KG</div>
+                                   </div>
+                                   <div className="flex items-center justify-between px-3 py-1 bg-slate-100 font-black text-slate-700">
+                                     <div className="text-[11px]"></div>
+                                     <div className="text-[11px]">
+                                       {Object.values(co2DiarioData).reduce((acc, row) => {
+                                         const c2 = Number(row.cajas2L) || 0;
+                                         const c1 = Number(row.cajas1L) || 0;
+                                         const c04 = Number(row.cajas04L) || 0;
+                                         const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
+                                         const sabor = Object.keys(co2DiarioData).find(key => co2DiarioData[key] === row);
+                                         const factor = sabor ? (CO2_FACTORS[sabor] || 0) : 0;
+                                         return acc + (litros * factor);
+                                       }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} KG
+                                     </div>
+                                   </div>
+                                 </div>
+                               </div>
                                                </div>
                                              </div>
                                            ) : (
@@ -3769,108 +3790,96 @@ export default function PlannerPage() {
                                      </tr>
                                    </thead>
                                   <tbody>
-                                     {['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'].map((sabor) => {
-                                       const row = co2DiarioData[sabor] || { cajas2L: '', cajas1L: '', cajas04L: '' };
-                                       const c2 = Number(row.cajas2L) || 0;
-                                       const c1 = Number(row.cajas1L) || 0;
-                                       const c04 = Number(row.cajas04L) || 0;
-                                       const litros = c2 * 2 + c1 * 1 + c04 * 0.4;
-                                       const factor = CO2_FACTORS[sabor] || 0;
-                                       const totalKg = factor > 0 ? litros * factor : 0;
-                                       return (
-                                         <tr key={sabor} className="border-b border-slate-100 hover:bg-slate-50/50">
-                                           <td className="px-3 py-1.5 font-bold text-slate-700 border border-slate-100">{sabor}</td>
-                                           <td className="px-3 py-1.5 border border-slate-100">
-                                              <input
-                                                type="number"
-                                                value={row.cajas2L}
-                                                onChange={(e) => {
-                                                  const newValue = e.target.value;
-                                                  setCo2DiarioData(prev => {
-                                                    const next = { ...prev, [sabor]: { ...prev[sabor], cajas2L: newValue } };
-                                                    if (typeof window !== 'undefined') {
-                                                      localStorage.setItem('co2-diario-data', JSON.stringify(next));
-                                                    }
-                                                    return next;
-                                                  });
-                                                }}
-                                                className="w-full h-8 text-[11px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                                              />
-                                           </td>
-                                           <td className="px-3 py-1.5 border border-slate-100">
-                                              <input
-                                                type="number"
-                                                value={row.cajas1L}
-                                                onChange={(e) => {
-                                                  const newValue = e.target.value;
-                                                  setCo2DiarioData(prev => {
-                                                    const next = { ...prev, [sabor]: { ...prev[sabor], cajas1L: newValue } };
-                                                    if (typeof window !== 'undefined') {
-                                                      localStorage.setItem('co2-diario-data', JSON.stringify(next));
-                                                    }
-                                                    return next;
-                                                  });
-                                                }}
-                                                className="w-full h-8 text-[11px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                                              />
-                                           </td>
-                                           <td className="px-3 py-1.5 border border-slate-100">
-                                              <input
-                                                type="number"
-                                                value={row.cajas04L}
-                                                onChange={(e) => {
-                                                  const newValue = e.target.value;
-                                                  setCo2DiarioData(prev => {
-                                                    const next = { ...prev, [sabor]: { ...prev[sabor], cajas04L: newValue } };
-                                                    if (typeof window !== 'undefined') {
-                                                      localStorage.setItem('co2-diario-data', JSON.stringify(next));
-                                                    }
-                                                    return next;
-                                                  });
-                                                }}
-                                                className="w-full h-8 text-[11px] font-bold text-center bg-white border border-slate-200 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                                              />
-                                           </td>
-                                           <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{litros.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                           <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{factor > 0 ? factor.toLocaleString('es-VE', { minimumFractionDigits: 6, maximumFractionDigits: 6 }) : ''}</td>
-                                           <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{totalKg.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                         </tr>
-                                       );
-                                     })}
-                                     <tr className="bg-slate-100 font-black text-slate-700">
-                                       <td className="px-3 py-2 border border-slate-200">TOTAL PRODUCCIÓN</td>
-                                       <td className="px-3 py-2 text-center border border-slate-200">
-                                         {Object.values(co2DiarioData).reduce((acc, row) => acc + (Number(row.cajas2L) || 0), 0).toLocaleString('es-VE')}
-                                       </td>
-                                       <td className="px-3 py-2 text-center border border-slate-200">
-                                         {Object.values(co2DiarioData).reduce((acc, row) => acc + (Number(row.cajas1L) || 0), 0).toLocaleString('es-VE')}
-                                       </td>
-                                       <td className="px-3 py-2 text-center border border-slate-200">
-                                         {Object.values(co2DiarioData).reduce((acc, row) => acc + (Number(row.cajas04L) || 0), 0).toLocaleString('es-VE')}
-                                       </td>
-                                       <td className="px-3 py-2 text-center border border-slate-200">
-                                         {Object.values(co2DiarioData).reduce((acc, row) => {
-                                           const c2 = Number(row.cajas2L) || 0;
-                                           const c1 = Number(row.cajas1L) || 0;
-                                           const c04 = Number(row.cajas04L) || 0;
-                                           return acc + (c2 * 2 + c1 * 1 + c04 * 0.4);
-                                         }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                       </td>
-                                       <td className="px-3 py-2 text-center border border-slate-200"></td>
-                                       <td className="px-3 py-2 text-center border border-slate-200">
-                                         {Object.values(co2DiarioData).reduce((acc, row) => {
-                                           const c2 = Number(row.cajas2L) || 0;
-                                           const c1 = Number(row.cajas1L) || 0;
-                                           const c04 = Number(row.cajas04L) || 0;
-                                           const litros = c2 * 2 + c1 * 1 + c04 * 0.4;
-                                           const sabor = Object.keys(co2DiarioData).find(key => co2DiarioData[key] === row);
-                                           const factor = sabor ? (CO2_FACTORS[sabor] || 0) : 0;
-                                           return acc + (litros * factor);
-                                         }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                       </td>
-                                     </tr>
+                                      {['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'].map((sabor) => {
+                                        const row = co2DiarioData[sabor] || { cajas2L: '', cajas1L: '', cajas04L: '' };
+                                        const c2 = Number(row.cajas2L) || 0;
+                                        const c1 = Number(row.cajas1L) || 0;
+                                        const c04 = Number(row.cajas04L) || 0;
+                                        const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
+                                        const factor = CO2_FACTORS[sabor] || 0;
+                                        const totalKg = factor > 0 ? litros * factor : 0;
+                                        return (
+                                           <tr key={sabor} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                             <td className="px-3 py-1.5 font-bold text-slate-700 border border-slate-100">{sabor}</td>
+                                             <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas2L || ''}</td>
+                                             <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas1L || ''}</td>
+                                             <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas04L || ''}</td>
+                                             <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{litros.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                             <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{factor > 0 ? factor.toLocaleString('es-VE', { minimumFractionDigits: 6, maximumFractionDigits: 6 }) : ''}</td>
+                                             <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{totalKg.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                           </tr>
+                                        );
+                                      })}
+                                      <tr className="bg-slate-100 font-black text-slate-700">
+                                        <td className="px-3 py-2 border border-slate-200">TOTAL PRODUCCIÓN</td>
+                                        <td className="px-3 py-2 text-center border border-slate-200">
+                                          {Object.values(co2DiarioData).reduce((acc, row) => acc + (Number(row.cajas2L) || 0), 0).toLocaleString('es-VE')}
+                                        </td>
+                                        <td className="px-3 py-2 text-center border border-slate-200">
+                                          {Object.values(co2DiarioData).reduce((acc, row) => acc + (Number(row.cajas1L) || 0), 0).toLocaleString('es-VE')}
+                                        </td>
+                                        <td className="px-3 py-2 text-center border border-slate-200">
+                                          {Object.values(co2DiarioData).reduce((acc, row) => acc + (Number(row.cajas04L) || 0), 0).toLocaleString('es-VE')}
+                                        </td>
+                                        <td className="px-3 py-2 text-center border border-slate-200">
+                                          {Object.values(co2DiarioData).reduce((acc, row) => {
+                                            const c2 = Number(row.cajas2L) || 0;
+                                            const c1 = Number(row.cajas1L) || 0;
+                                            const c04 = Number(row.cajas04L) || 0;
+                                            return acc + ((c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4));
+                                          }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                        </td>
+                                        <td className="px-3 py-2 text-center border border-slate-200"></td>
+                                        <td className="px-3 py-2 text-center border border-slate-200">
+                                          {Object.values(co2DiarioData).reduce((acc, row) => {
+                                            const c2 = Number(row.cajas2L) || 0;
+                                            const c1 = Number(row.cajas1L) || 0;
+                                            const c04 = Number(row.cajas04L) || 0;
+                                            const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
+                                            const sabor = Object.keys(co2DiarioData).find(key => co2DiarioData[key] === row);
+                                            const factor = sabor ? (CO2_FACTORS[sabor] || 0) : 0;
+                                            return acc + (litros * factor);
+                                          }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                        </td>
+                                      </tr>
                                   </tbody>
                                 </table>
+                                <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
+                                  <div className="grid grid-cols-3">
+                                    <div className="flex items-center px-3 py-1 bg-slate-800 text-white">
+                                      <div className="font-black text-[11px] uppercase tracking-widest">CONSUMO DE CO2</div>
+                                    </div>
+                                    <div className="flex items-center px-3 py-1 bg-slate-800 justify-center">
+                                      <input
+                                        type="number"
+                                        value={co2ConsumoKg}
+                                        onChange={(e) => setCo2ConsumoKg(e.target.value)}
+                                        className="w-full h-7 text-[11px] font-bold text-center bg-white text-slate-900 border border-white/20 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                        placeholder="0"
+                                      />
+                                    </div>
+                                    <div className="flex items-center justify-end px-3 py-1 bg-slate-800 text-white">
+                                      <div className="font-black text-[11px] uppercase tracking-widest">KG</div>
+                                    </div>
+                                  </div>
+                                  <div className="grid grid-cols-3">
+                                    <div className="flex items-center px-3 py-1 bg-slate-100"></div>
+                                    <div className="flex items-center justify-center px-3 py-1 bg-slate-100 font-black text-slate-700 text-[11px]">
+                                      {co2ConsumoKg && Number(co2ConsumoKg) > 0 ? (Object.values(co2DiarioData).reduce((acc, row) => {
+                                        const c2 = Number(row.cajas2L) || 0;
+                                        const c1 = Number(row.cajas1L) || 0;
+                                        const c04 = Number(row.cajas04L) || 0;
+                                        const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
+                                        const sabor = Object.keys(co2DiarioData).find(key => co2DiarioData[key] === row);
+                                        const factor = sabor ? (CO2_FACTORS[sabor] || 0) : 0;
+                                        return acc + (litros * factor);
+                                      }, 0) / Number(co2ConsumoKg)).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0,00'}
+                                    </div>
+                                    <div className="flex items-center justify-end px-3 py-1 bg-slate-100 font-black text-slate-700 text-[11px]">
+                                      %
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                             )}
                             {insumosSubTab === 'co2' && insumosPeriodoSubTab !== 'diario' && (
