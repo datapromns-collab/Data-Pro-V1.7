@@ -27901,6 +27901,78 @@
         "observaciones": "",
         "id": 1786196067745,
         "usuario": "Ronald Valera"
+      },
+      {
+        "fecha": "2026-08-07",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA ",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "09:54",
+        "finParada": "09:59",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786196088759,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-07",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA ",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "10:48",
+        "finParada": "10:53",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786196158837,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-07",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "11:40",
+        "finParada": "11:46",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786196241003,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "fecha": "2026-08-07",
+        "semana": 32,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA ",
+        "linea": "Línea 1",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "11:50",
+        "finParada": "11:53",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "MALA ENTREGA MOLDE #04",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786196304090,
+        "usuario": "Luis Sanchez"
       }
     ],
     "planta-ordenes-trabajo": [
@@ -28005,7 +28077,9 @@
         },
         "auto-1-1786103699079": {
           "cajasPlanificadas": 72000,
-          "pnc": 240
+          "pnc": 240,
+          "jarabeReal": 46736,
+          "ubb": 16.27
         }
       },
       "linea-2": {
@@ -28033,6 +28107,11 @@
           "jarabeReal": 35530,
           "ubb": 36,
           "producto": "0"
+        },
+        "auto-2-1786018743782": {
+          "cajasPlanificadas": 40238,
+          "jarabeReal": 83210,
+          "ubb": 40
         }
       },
       "linea-3": {
@@ -28076,6 +28155,11 @@
           "jarabeReal": 615000,
           "ubb": 615,
           "producto": "866"
+        },
+        "auto-5-1786021517697": {
+          "cajasPlanificadas": 76230,
+          "jarabeReal": 385000,
+          "ubb": 385
         }
       },
       "linea-6": {
@@ -28084,6 +28168,11 @@
           "jarabeReal": 29275,
           "producto": "290",
           "ubb": 10.19
+        },
+        "auto-6-1785967611297": {
+          "cajasPlanificadas": 106440,
+          "jarabeReal": 35822,
+          "ubb": 12.46
         }
       },
       "linea-7": {
@@ -28108,7 +28197,10 @@
           "pnc": 147
         },
         "auto-7-1786018914928": {
-          "pnc": 2052
+          "pnc": 2052,
+          "cajasPlanificadas": 80375,
+          "jarabeReal": 96665,
+          "ubb": 33
         }
       }
     },
