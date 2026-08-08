@@ -103,8 +103,8 @@ export function SeguimientoResumenSemanaTable({
           jarabeReal: Number(ov.jarabeReal) || 0,
           diferencia2: (Number(ov.jarabeReal) || 0) - jarabeRequerido,
           producto: producto,
-          botellasT: 0,
-          ubb: 0,
+       botellasT: 0,
+       ubb: 0,
         });
       });
 
@@ -404,7 +404,7 @@ export function SeguimientoResumenSemanaTable({
                   <TableCell className="text-[11px] font-black text-sky-700 py-2.5 border-b border-slate-100 text-center">{row.porcentajeJarabe.toFixed(1)}%</TableCell>
                   <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100">{row.producto}</TableCell>
                   <TableCell className="text-[11px] font-semibold text-slate-900 py-2.5 border-b border-slate-100 text-center">{row.botellasT}</TableCell>
-                  <TableCell className="text-[11px] font-semibold text-slate-900 py-2.5 border-b border-slate-100 text-right pr-4">{row.bebidaTerminada.toFixed(1)}</TableCell>
+                   <TableCell className="text-[11px] font-semibold text-slate-900 py-2.5 border-b border-slate-100 text-right pr-4">{row.bebidaTerminada.toFixed(1)}</TableCell>
                 </TableRow>
               ))
             )}
@@ -424,7 +424,7 @@ export function SeguimientoResumenSemanaTable({
                 </TableCell>
                 <TableCell className="border-t-2 border-slate-200" />
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.botellasT}</TableCell>
-                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200 pr-4">{totales.bebidaTerminada.toFixed(1)}</TableCell>
+                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200 pr-4">{totales.bebidaTerminada.toFixed(1)}</TableCell>
               </TableRow>
             </TableFooter>
           )}
