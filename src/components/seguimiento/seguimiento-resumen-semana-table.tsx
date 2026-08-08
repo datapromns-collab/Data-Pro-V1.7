@@ -56,8 +56,8 @@ const getRmMultiplier = (sabor: string): number | null => {
   return rmMap[upper] || 6;
 };
 
-const calcularJarabeRequerido = (sabor: string, cajasCompletadas: number, producto: string | number, linea: string): number => {
-  const botellasT = (cajasCompletadas || 0) * getLineMultiplier(linea) + (Number(producto) || 0);
+const calcularJarabeRequerido = (sabor: string, cajasCompletadas: number, producto: string | number, pnc: number, linea: string): number => {
+  const botellasT = ((cajasCompletadas || 0) + (pnc || 0)) * getLineMultiplier(linea) + (Number(producto) || 0);
   const bebidaTerminada = botellasT * getBebidaTerminadaMultiplier(linea);
   const rm = getRmMultiplier(sabor);
   return rm ? bebidaTerminada / rm : bebidaTerminada;
@@ -69,7 +69,7 @@ export function SeguimientoResumenSemanaTable({
   semanaNumero,
 }: {
   filasAuto?: Record<number, SeguimientoOrdenFuente[]>;
-  autoOverrides?: Record<string, { cajasPlanificadas?: number; producto?: string; jarabeReal?: number; ubb?: number }>;
+  autoOverrides?: Record<string, { cajasPlanificadas?: number; producto?: string; jarabeReal?: number; ubb?: number; pnc?: number }>;
   semanaNumero?: number;
 }) {
   const { data } = useSeguimientoResumenOptimizado();
@@ -87,7 +87,8 @@ export function SeguimientoResumenSemanaTable({
         const ov = autoOverrides[f.id] ?? {};
         const cajasCompletadas = f.cajasCompletadas;
         const producto = ov.producto ?? '';
-        const jarabeRequerido = calcularJarabeRequerido(f.sabor, cajasCompletadas, producto, label);
+        const pnc = ov.pnc ?? 0;
+        const jarabeRequerido = calcularJarabeRequerido(f.sabor, cajasCompletadas, producto, pnc, label);
         resultado.push({
           id: f.id,
           linea: label,
@@ -103,20 +104,22 @@ export function SeguimientoResumenSemanaTable({
           jarabeReal: Number(ov.jarabeReal) || 0,
           diferencia2: (Number(ov.jarabeReal) || 0) - jarabeRequerido,
           producto: producto,
-       botellasT: 0,
-       ubb: 0,
-        });
+      botellasT: 0,
+      ubb: 0,
+      pnc: Number(ov.pnc) || 0,
+    });
       });
 
       // 2) Filas manuales de esta línea
       data.filter((r) => r.linea === label).forEach((r) => {
-        const jarabeRequerido = calcularJarabeRequerido(r.sabor, Number(r.cajasCompletadas) || 0, r.producto, label);
+        const pnc = Number(r.pnc) || 0;
+        const jarabeRequerido = calcularJarabeRequerido(r.sabor, Number(r.cajasCompletadas) || 0, r.producto, pnc, label);
         resultado.push({ ...r, jarabeRequerido });
       });
     }
 
     return resultado;
-  }, [data, filasAuto]);
+  }, [data, filasAuto, autoOverrides]);
 
   const rows = useMemo(
     () =>
@@ -130,7 +133,7 @@ export function SeguimientoResumenSemanaTable({
         const diferencia2 = real - req;
         const jarabeReqCompletadas = plan > 0 ? (req / plan) * comp : 0;
         const porcentajeJarabe = req > 0 ? (diferencia2 / req) * 100 : 0;
-        const botellasT = comp * getLineMultiplier(r.linea) + (Number(r.producto) || 0);
+        const botellasT = (comp + (Number(r.pnc) || 0)) * getLineMultiplier(r.linea) + (Number(r.producto) || 0);
         const bebidaTerminada = botellasT * getBebidaTerminadaMultiplier(r.linea);
         return { ...r, diferencia, diferencia2, jarabeReqCompletadas, porcentajeJarabe, botellasT, bebidaTerminada };
       }),
@@ -361,13 +364,15 @@ export function SeguimientoResumenSemanaTable({
       <div className="p-2 sm:p-4 overflow-x-auto">
         <Table className="border-separate border-spacing-0">
           <TableHeader>
-            <TableRow className="hover:bg-transparent">
+            <TableRow className="hover:bg-transparent sticky top-0 z-50 bg-slate-50">
               {headers.map((h, i) => (
                 <TableHead
                   key={i}
-                  className={`text-[10px] font-black uppercase tracking-widest text-slate-500 h-11 first:rounded-l-xl last:rounded-r-xl ${
-                    i === 0 ? 'pl-5' : ''
-                  } ${i === headers.length - 1 ? 'pr-4 text-right' : 'text-center'}`}
+                  className={`text-[10px] font-black uppercase tracking-widest text-slate-500 h-11 first:rounded-l-xl last:rounded-r-xl border-b border-slate-200 ${
+                    i === 0 ? 'pl-5 sticky left-0 z-40 bg-slate-50' : ''
+                  } ${i === 1 ? 'sticky left-[70px] z-40 bg-slate-50' : ''}${
+                    i === headers.length - 1 ? ' pr-4 text-right' : ' text-center'
+                  }`}
                 >
                   {h}
                 </TableHead>
@@ -389,8 +394,8 @@ export function SeguimientoResumenSemanaTable({
             ) : (
               rows.map((row) => (
                 <TableRow key={row.id} className="group hover:bg-sky-50/60 transition-colors">
-                  <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 pl-5 border-b border-slate-100 whitespace-nowrap">{row.linea}</TableCell>
-                  <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 border-b border-slate-100">{row.sabor}</TableCell>
+                   <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 pl-5 border-b border-slate-100 whitespace-nowrap sticky left-0 z-10 bg-slate-50">{row.linea}</TableCell>
+                  <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 border-b border-slate-100 sticky left-[70px] z-10 bg-slate-50">{row.sabor}</TableCell>
                   <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100">{row.codigoProducto}</TableCell>
                   <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100 whitespace-nowrap">{row.fechaInicio}</TableCell>
                   <TableCell className="text-[11px] font-medium text-slate-600 py-2.5 border-b border-slate-100 whitespace-nowrap">{row.fechaFin}</TableCell>
@@ -412,7 +417,9 @@ export function SeguimientoResumenSemanaTable({
           {rows.length > 0 && (
             <TableFooter>
               <TableRow className="hover:bg-transparent bg-transparent">
-                <TableCell colSpan={6} className="text-right font-black text-[10px] uppercase tracking-widest text-slate-700 py-4 pl-5 border-t-2 border-slate-200">TOTALES</TableCell>
+                <TableCell className="sticky left-0 z-20 bg-slate-50 border-t-2 border-slate-200" />
+                <TableCell className="sticky left-[70px] z-20 bg-slate-50 border-t-2 border-slate-200" />
+                <TableCell colSpan={4} className="text-right font-black text-[10px] uppercase tracking-widest text-slate-700 py-4 border-t-2 border-slate-200">TOTALES</TableCell>
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.cajasPlanificadas}</TableCell>
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.cajasCompletadas}</TableCell>
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.diferencia}</TableCell>
