@@ -32794,6 +32794,32 @@
       {
         "id": 1786376463580.1968,
         "fechaOrden": "2026-08-04",
+        "orden": "9115",
+        "fechaEmision": "2026-08-04",
+        "semana": 32,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 5",
+        "maquina": "LLENADORA",
+        "aviso": "",
+        "fechaParada": "2026-08-04",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "20:45",
+        "finParada": "21:14",
+        "tMtto": "29",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "FALLA EN ORGANOS DE ELEVACION",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera"
+      },
+      {
+        "id": 1786376463580.8381,
+        "fechaOrden": "2026-08-04",
         "orden": "8988",
         "fechaEmision": "2026-08-04",
         "semana": 32,
@@ -32818,7 +32844,7 @@
         "usuario": "Ronald Valera"
       },
       {
-        "id": 1786376463580.8381,
+        "id": 1786376463580.309,
         "fechaOrden": "2026-08-04",
         "orden": "8950",
         "fechaEmision": "2026-08-04",
@@ -32844,7 +32870,7 @@
         "usuario": "Ronald Valera"
       },
       {
-        "id": 1786376463580.309,
+        "id": 1786376463580.3618,
         "fechaOrden": "2026-08-04",
         "orden": "9201",
         "fechaEmision": "2026-08-04",
@@ -32870,7 +32896,7 @@
         "usuario": "Ronald Valera"
       },
       {
-        "id": 1786376463580.3618,
+        "id": 1786376463580.9324,
         "fechaOrden": "2026-08-06",
         "orden": "9353",
         "fechaEmision": "2026-08-06",
@@ -32896,7 +32922,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1786376463580.9324,
+        "id": 1786376463580.1445,
         "fechaOrden": "2026-08-04",
         "orden": "9202",
         "fechaEmision": "2026-08-04",
@@ -32922,7 +32948,7 @@
         "usuario": "Ronald Valera"
       },
       {
-        "id": 1786376463580.1445,
+        "id": 1786376463580.807,
         "fechaOrden": "2026-08-06",
         "orden": "9036",
         "fechaEmision": "2026-08-06",
@@ -32948,7 +32974,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1786376463580.807,
+        "id": 1786376463580.4858,
         "fechaOrden": "2026-08-07",
         "orden": "9054",
         "fechaEmision": "2026-08-07",
@@ -32974,7 +33000,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1786376463580.4858,
+        "id": 1786376463580.2751,
         "fechaOrden": "2026-08-07",
         "orden": "9055",
         "fechaEmision": "2026-08-07",
@@ -33000,7 +33026,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1786376463580.2751,
+        "id": 1786376463580.7107,
         "fechaOrden": "2026-08-07",
         "orden": "9312",
         "fechaEmision": "2026-08-07",
@@ -33026,7 +33052,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1786376463580.7107,
+        "id": 1786376463580.2727,
         "fechaOrden": "2026-08-07",
         "orden": "9313",
         "fechaEmision": "2026-08-07",
@@ -33052,7 +33078,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1786376463580.2727,
+        "id": 1786376463580.8713,
         "fechaOrden": "2026-08-04",
         "orden": "9301",
         "fechaEmision": "2026-08-04",
@@ -33078,7 +33104,7 @@
         "usuario": "Ronald Valera"
       },
       {
-        "id": 1786376463580.8713,
+        "id": 1786376463580.738,
         "fechaOrden": "2026-08-04",
         "orden": "9302",
         "fechaEmision": "2026-08-04",
@@ -33104,7 +33130,7 @@
         "usuario": "Ronald Valera"
       },
       {
-        "id": 1786376463580.738,
+        "id": 1786376463580.2124,
         "fechaOrden": "2026-08-04",
         "orden": "8989",
         "fechaEmision": "2026-08-04",
@@ -33130,7 +33156,7 @@
         "usuario": "Ronald Valera"
       },
       {
-        "id": 1786376463580.2124,
+        "id": 1786376463580.5652,
         "fechaOrden": "2026-08-05",
         "orden": "9304",
         "fechaEmision": "2026-08-05",
@@ -33156,7 +33182,7 @@
         "usuario": "Ronald Valera"
       },
       {
-        "id": 1786376463580.5652,
+        "id": 1786376463580.8884,
         "fechaOrden": "2026-08-05",
         "orden": "9305",
         "fechaEmision": "2026-08-05",
@@ -33182,7 +33208,7 @@
         "usuario": "Ronald Valera"
       },
       {
-        "id": 1786376463580.8884,
+        "id": 1786376463580.3445,
         "fechaOrden": "2026-08-05",
         "orden": "8842",
         "fechaEmision": "2026-08-05",
@@ -33208,7 +33234,7 @@
         "usuario": "Ronald Valera"
       },
       {
-        "id": 1786376463580.3445,
+        "id": 1786376463580.1472,
         "fechaOrden": "2026-08-05",
         "orden": "9303",
         "fechaEmision": "2026-08-05",
@@ -33234,7 +33260,7 @@
         "usuario": "Ronald Valera"
       },
       {
-        "id": 1786376463580.1472,
+        "id": 1786376463580.2393,
         "fechaOrden": "2026-08-10",
         "orden": "9122",
         "fechaEmision": "2026-08-10",
@@ -33260,7 +33286,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1786376463580.2393,
+        "id": 1786378246966,
         "fechaOrden": "2026-08-08",
         "orden": "9175",
         "fechaEmision": "2026-08-08",
@@ -33282,32 +33308,6 @@
         "mttoEsp": "GABRIEL ALFONZO",
         "descripcionFalla": "FALLA ELECTRICA ETIQUETADORA SENSOR EN FALLA",
         "descripcionAccion": "SE AJUSTO EL SENSOR DE PROXIMIDAD DE LA LEVA DE LOS RODILLOS TENSORES, ADEMAS SE EVALUO EL FRENO DE HISTERESIS ELECTRONICO DEL PORTABOBINAS Y LOS CONECTORES, POR FALLA DE LA TENSION EN LA ETIQUETADORA",
-        "observaciones": "",
-        "usuario": "Ronald Valera"
-      },
-      {
-        "id": 1786378246966,
-        "fechaOrden": "2026-08-08",
-        "orden": "8843",
-        "fechaEmision": "2026-08-08",
-        "semana": 32,
-        "turno": "DIURNO",
-        "solicitante": "",
-        "linea": "Línea 3",
-        "maquina": "LLENADORA",
-        "aviso": "",
-        "fechaParada": "2026-08-08",
-        "inicioMtto": "",
-        "finMtto": "",
-        "inicioParada": "08:44",
-        "finParada": "08:50",
-        "tMtto": "6",
-        "tipoParada": "AVERÍA",
-        "mtto": "",
-        "falla": "CAMBIO DE FRENO VALVULA #65 POR BAJO NIVEL",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera"
       },
@@ -33418,7 +33418,7 @@
       {
         "id": 1786378346566,
         "fechaOrden": "2026-08-08",
-        "orden": "8844",
+        "orden": "8843",
         "fechaEmision": "2026-08-08",
         "semana": 32,
         "turno": "DIURNO",
@@ -33429,12 +33429,12 @@
         "fechaParada": "2026-08-08",
         "inicioMtto": "",
         "finMtto": "",
-        "inicioParada": "09:39",
-        "finParada": "10:06",
-        "tMtto": "27",
+        "inicioParada": "08:44",
+        "finParada": "08:50",
+        "tMtto": "6",
         "tipoParada": "AVERÍA",
         "mtto": "",
-        "falla": "CAMBIO DE SNIFT EN LA VALVULA #65 POR BAJO NIVEL",
+        "falla": "CAMBIO DE FRENO VALVULA #65 POR BAJO NIVEL",
         "mttoEsp": "",
         "descripcionFalla": "",
         "descripcionAccion": "",
@@ -33859,6 +33859,32 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin"
+      },
+      {
+        "id": 1786391063153.3728,
+        "fechaOrden": "2026-08-08",
+        "orden": "8844",
+        "fechaEmision": "2026-08-08",
+        "semana": 32,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 3",
+        "maquina": "LLENADORA",
+        "aviso": "",
+        "fechaParada": "2026-08-08",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "09:39",
+        "finParada": "10:06",
+        "tMtto": "27",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "CAMBIO DE SNIFT EN LA VALVULA #65 POR BAJO NIVEL",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera"
       }
     ],
     "seguimiento-ordenes": {

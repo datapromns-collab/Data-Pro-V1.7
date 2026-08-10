@@ -5322,22 +5322,23 @@ export default function PlannerPage() {
                          }];
                        });
                      }
-                     setPlantaFormData({
-                       fecha: format(new Date(), 'yyyy-MM-dd'),
-                       semana: getISOWeek(new Date()),
-                       turno: 'DIURNO',
-                       operador: '',
-                      linea: 'Línea 1',
-                      equipo: '',
-                      tipoParada: 'PROGRAMADA',
-                      inicioParada: '',
-                     finParada: '',
-                     totalMin: '',
-                     zona: 'Llenado',
-                     falla: '',
-                     orden: '',
-                     observaciones: '',
-                   });
+                      setPlantaFormData({
+                        fecha: format(new Date(), 'yyyy-MM-dd'),
+                        semana: getISOWeek(new Date()),
+                        turno: 'DIURNO',
+                        operador: '',
+                       linea: 'Línea 1',
+                       equipo: '',
+                       tipoParada: 'PROGRAMADA',
+                       inicioParada: '',
+                      finParada: '',
+                      totalMin: '',
+                      zona: 'Llenado',
+                      falla: '',
+                      orden: '',
+                      observaciones: '',
+                      usuario: user?.name || '',
+                    });
                    setErrorValidacion('');
                    } else {
                       if (ordenFormData.orden && String(ordenFormData.orden).trim() !== '') {

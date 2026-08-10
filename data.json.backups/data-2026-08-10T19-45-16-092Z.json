@@ -33859,6 +33859,32 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin"
+      },
+      {
+        "id": 1786391063153.3728,
+        "fechaOrden": "2026-08-08",
+        "orden": "8844",
+        "fechaEmision": "2026-08-08",
+        "semana": 32,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 3",
+        "maquina": "LLENADORA",
+        "aviso": "",
+        "fechaParada": "2026-08-08",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "09:39",
+        "finParada": "10:06",
+        "tMtto": "27",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "CAMBIO DE SNIFT EN LA VALVULA #65 POR BAJO NIVEL",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera"
       }
     ],
     "seguimiento-ordenes": {
