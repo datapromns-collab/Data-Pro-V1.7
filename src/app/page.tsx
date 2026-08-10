@@ -675,6 +675,56 @@ export default function PlannerPage() {
       return acc + (litros * factor);
     }, 0);
   };
+  const AGUA_FACTORS: Record<string, number> = {
+    'GLUP COLA': 0,
+    'GLUP FRESH': 0,
+    'GLUP UVA': 0,
+    'GLUP PIÑA': 0,
+    'GLUP NARANJA': 0,
+    'GLUP KOLITA': 0,
+    'GLUP MANZANA VERDE': 0,
+    'GLUP PONCHE': 0,
+    'GLUP CHICLE': 0,
+    'GLUP PIÑA PARCHITA': 0,
+    'GLUP MANZANA ROJA': 0,
+  };
+  const calcularKgAguaParaFecha = (fechaStr: string): number => {
+    const ordenesDelDia = (ordenes || []).filter(orden =>
+      orden.dias.some(dia => dia.fechaInicio === fechaStr)
+    );
+    if (ordenesDelDia.length === 0) return 0;
+    const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }> = {};
+    const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
+    sabores.forEach(sabor => {
+      tabla[sabor] = { cajas2L: '', cajas1L: '', cajas04L: '' };
+    });
+    ordenesDelDia.forEach(orden => {
+      orden.dias.forEach(dia => {
+        if (dia.fechaInicio !== fechaStr) return;
+        const row = tabla[orden.sabor];
+        if (!row) return;
+        const totalDia = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
+        if (orden.linea >= 1 && orden.linea <= 4 && totalDia > 0) {
+          row.cajas2L = String((Number(row.cajas2L) || 0) + totalDia);
+        }
+        if (orden.linea === 7 && totalDia > 0) {
+          row.cajas1L = String((Number(row.cajas1L) || 0) + totalDia);
+        }
+        if (orden.linea === 6 && totalDia > 0) {
+          row.cajas04L = String((Number(row.cajas04L) || 0) + totalDia);
+        }
+      });
+    });
+    return Object.values(tabla).reduce((acc, row) => {
+      const c2 = Number(row.cajas2L) || 0;
+      const c1 = Number(row.cajas1L) || 0;
+      const c04 = Number(row.cajas04L) || 0;
+      const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
+      const sabor = Object.keys(tabla).find(key => tabla[key] === row);
+      const factor = sabor ? (AGUA_FACTORS[sabor] || 0) : 0;
+      return acc + (litros * factor);
+    }, 0);
+  };
   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
   const [co2ConsumoPorDia, setCo2ConsumoPorDia] = useState<Record<string, string>>(() => {
     if (typeof window !== 'undefined') {
@@ -709,6 +759,82 @@ export default function PlannerPage() {
     localStorage.setItem('co2-consumo-por-dia', JSON.stringify(co2ConsumoPorDia));
     localStorage.setItem('co2-kg-por-dia', JSON.stringify(co2KgPorDia));
   }, [co2ConsumoPorDia, co2KgPorDia]);
+  const [isAutoUpdatingAgua, setIsAutoUpdatingAgua] = useState(false);
+  const [aguaDiarioData, setAguaDiarioData] = useState<Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }>>(() => {
+    const initial: Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }> = {};
+    const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
+    sabores.forEach(sabor => {
+      initial[sabor] = { cajas2L: '', cajas1L: '', cajas04L: '' };
+    });
+    return initial;
+  });
+  useEffect(() => {
+    if (!insumosFecha || typeof window === 'undefined') return;
+    const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
+    const ordenesDelDia = (ordenes || []).filter(orden =>
+      orden.dias.some(dia => dia.fechaInicio === fechaStr)
+    );
+    const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }> = {};
+    const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
+    sabores.forEach(sabor => {
+      tabla[sabor] = { cajas2L: '', cajas1L: '', cajas04L: '' };
+    });
+    if (ordenesDelDia.length > 0) {
+      ordenesDelDia.forEach(orden => {
+        orden.dias.forEach(dia => {
+          if (dia.fechaInicio !== fechaStr) return;
+          const row = tabla[orden.sabor];
+          if (!row) return;
+          const totalDia = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
+          if (orden.linea >= 1 && orden.linea <= 4 && totalDia > 0) {
+            row.cajas2L = String((Number(row.cajas2L) || 0) + totalDia);
+          }
+          if (orden.linea === 7 && totalDia > 0) {
+            row.cajas1L = String((Number(row.cajas1L) || 0) + totalDia);
+          }
+          if (orden.linea === 6 && totalDia > 0) {
+            row.cajas04L = String((Number(row.cajas04L) || 0) + totalDia);
+          }
+        });
+      });
+    }
+    setIsAutoUpdatingAgua(true);
+    setAguaDiarioData(tabla);
+    setIsAutoUpdatingAgua(false);
+  }, [insumosFecha, ordenes]);
+  const [aguaConsumoPorDia, setAguaConsumoPorDia] = useState<Record<string, string>>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('agua-consumo-por-dia');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (typeof parsed === 'object' && parsed !== null) {
+            return parsed;
+          }
+        }
+      } catch (e) {}
+    }
+    return {};
+  });
+  const [aguaKgPorDia, setAguaKgPorDia] = useState<Record<string, number>>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('agua-kg-por-dia');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (typeof parsed === 'object' && parsed !== null) {
+            return parsed;
+          }
+        }
+      } catch (e) {}
+    }
+    return {};
+  });
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem('agua-consumo-por-dia', JSON.stringify(aguaConsumoPorDia));
+    localStorage.setItem('agua-kg-por-dia', JSON.stringify(aguaKgPorDia));
+  }, [aguaConsumoPorDia, aguaKgPorDia]);
   const [produccionSubTab, setProduccionSubTab] = useState('planificadas');
   const [planificadasSubTab, setPlanificadasSubTab] = useState('porturno');
   const [planificadasTurnoSubTab, setPlanificadasTurnoSubTab] = useState('diurno');
@@ -2834,9 +2960,351 @@ export default function PlannerPage() {
                                       </div>
                                 </div>
                               )}
-                             {insumosSubTab === 'agua' && (
-                               <div className="flex-1 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 min-h-[200px]" />
-                             )}
+                              {insumosSubTab === 'agua' && (
+                                <div className="flex flex-col h-full">
+                                  {insumosPeriodoSubTab === 'diario' && (
+                                    <div className="flex-1 bg-white rounded-[2.5rem] p-4 overflow-x-auto">
+                                      <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                        <table className="w-full border-collapse text-[11px]">
+                                          <thead>
+                                            <tr className="bg-slate-800 text-white">
+                                              <th className="px-3 py-2 text-left font-black uppercase tracking-wider border border-white/10">SABOR</th>
+                                              <th colSpan={3} className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CAJAS PRODUCIDAS</th>
+                                              <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">LITROS PRODUCIDOS<br/>TOTAL</th>
+                                              <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CO2X1L BEBIDA<br/>FACTOR</th>
+                                              <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">TOTAL<br/>KG.CO2</th>
+                                            </tr>
+                                            <tr className="bg-slate-700 text-white">
+                                              <th className="px-3 py-1 border border-white/10"></th>
+                                              <th className="px-3 py-1 text-center font-black border border-white/10">2L</th>
+                                              <th className="px-3 py-1 text-center font-black border border-white/10">1L</th>
+                                              <th className="px-3 py-1 text-center font-black border border-white/10">0,4L</th>
+                                              <th className="px-3 py-1 text-center font-black border border-white/10"></th>
+                                              <th className="px-3 py-1 text-center font-black border border-white/10"></th>
+                                              <th className="px-3 py-1 text-center font-black border border-white/10"></th>
+                                            </tr>
+                                          </thead>
+                                          <tbody>
+                                            {['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'].map((sabor) => {
+                                              const row = aguaDiarioData[sabor] || { cajas2L: '', cajas1L: '', cajas04L: '' };
+                                              const c2 = Number(row.cajas2L) || 0;
+                                              const c1 = Number(row.cajas1L) || 0;
+                                              const c04 = Number(row.cajas04L) || 0;
+                                              const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
+                                              const factor = AGUA_FACTORS[sabor] || 0;
+                                              const totalKg = factor > 0 ? litros * factor : 0;
+                                              return (
+                                                <tr key={sabor} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                                  <td className="px-3 py-1.5 font-bold text-slate-700 border border-slate-100">{sabor}</td>
+                                                  <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas2L || ''}</td>
+                                                  <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas1L || ''}</td>
+                                                  <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas04L || ''}</td>
+                                                  <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{litros.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                                  <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{factor > 0 ? factor.toLocaleString('es-VE', { minimumFractionDigits: 6, maximumFractionDigits: 6 }) : ''}</td>
+                                                  <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{totalKg.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                                </tr>
+                                              );
+                                            })}
+                                            <tr className="bg-slate-100 font-black text-slate-700">
+                                              <td className="px-3 py-2 border border-slate-200">TOTAL PRODUCCIÓN</td>
+                                              <td className="px-3 py-2 text-center border border-slate-200">
+                                                {Object.values(aguaDiarioData).reduce((acc, row) => acc + (Number(row.cajas2L) || 0), 0).toLocaleString('es-VE')}
+                                              </td>
+                                              <td className="px-3 py-2 text-center border border-slate-200">
+                                                {Object.values(aguaDiarioData).reduce((acc, row) => acc + (Number(row.cajas1L) || 0), 0).toLocaleString('es-VE')}
+                                              </td>
+                                              <td className="px-3 py-2 text-center border border-slate-200">
+                                                {Object.values(aguaDiarioData).reduce((acc, row) => acc + (Number(row.cajas04L) || 0), 0).toLocaleString('es-VE')}
+                                              </td>
+                                              <td className="px-3 py-2 text-center border border-slate-200">
+                                                {Object.values(aguaDiarioData).reduce((acc, row) => {
+                                                  const c2 = Number(row.cajas2L) || 0;
+                                                  const c1 = Number(row.cajas1L) || 0;
+                                                  const c04 = Number(row.cajas04L) || 0;
+                                                  return acc + ((c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4));
+                                                }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                              </td>
+                                              <td className="px-3 py-2 text-center border border-slate-200"></td>
+                                              <td className="px-3 py-2 text-center border border-slate-200">
+                                                {Object.values(aguaDiarioData).reduce((acc, row) => {
+                                                  const c2 = Number(row.cajas2L) || 0;
+                                                  const c1 = Number(row.cajas1L) || 0;
+                                                  const c04 = Number(row.cajas04L) || 0;
+                                                  const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
+                                                  const sabor = Object.keys(aguaDiarioData).find(key => aguaDiarioData[key] === row);
+                                                  const factor = sabor ? (AGUA_FACTORS[sabor] || 0) : 0;
+                                                  return acc + (litros * factor);
+                                                }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                        <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
+                                          <div className="grid grid-cols-3">
+                                            <div className="flex items-center px-3 py-1 bg-slate-800 text-white">
+                                              <div className="font-black text-[11px] uppercase tracking-widest">CONSUMO DE AGUA</div>
+                                            </div>
+                                            <div className="flex items-center px-3 py-1 bg-slate-800 justify-center">
+                                              <input
+                                                type="number"
+                                                value={insumosFecha ? (aguaConsumoPorDia[format(insumosFecha, 'yyyy-MM-dd')] || '') : ''}
+                                                onChange={(e) => {
+                                                  if (!insumosFecha) return;
+                                                  const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
+                                                  setAguaConsumoPorDia(prev => ({ ...prev, [fechaStr]: e.target.value }));
+                                                }}
+                                                className="w-full h-7 text-[11px] font-bold text-center bg-white text-slate-900 border border-white/20 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                                placeholder="0"
+                                              />
+                                            </div>
+                                            <div className="flex items-center justify-end px-3 py-1 bg-slate-800 text-white">
+                                              <div className="font-black text-[11px] uppercase tracking-widest">KG</div>
+                                            </div>
+                                          </div>
+                                          <div className="grid grid-cols-3">
+                                            <div className="flex items-center px-3 py-1 bg-slate-100"></div>
+                                            <div className="flex items-center justify-center px-3 py-1 bg-slate-100 font-black text-slate-700 text-[11px]">
+                                              {insumosFecha ? (() => {
+                                                const valor = Number(aguaConsumoPorDia[format(insumosFecha, 'yyyy-MM-dd')]) || 0;
+                                                const totalKg = Object.values(aguaDiarioData).reduce((acc, row) => {
+                                                  const c2 = Number(row.cajas2L) || 0;
+                                                  const c1 = Number(row.cajas1L) || 0;
+                                                  const c04 = Number(row.cajas04L) || 0;
+                                                  const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
+                                                  const sabor = Object.keys(aguaDiarioData).find(key => aguaDiarioData[key] === row);
+                                                  const factor = sabor ? (AGUA_FACTORS[sabor] || 0) : 0;
+                                                  return acc + (litros * factor);
+                                                }, 0);
+                                                return valor > 0 ? (totalKg / valor).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0,00';
+                                              })() : '0,00'}
+                                            </div>
+                                            <div className="flex items-center justify-end px-3 py-1 bg-slate-100 font-black text-slate-700 text-[11px]">
+                                              %
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  )}
+                                  {insumosSubTab === 'agua' && insumosPeriodoSubTab === 'semanal' && (
+                                    <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                      <div className="px-4 py-2 bg-slate-800 text-white">
+                                        <div className="font-black text-[11px] uppercase tracking-widest text-center">
+                                          SEMANA {getISOWeek(insumosFecha || new Date())} · {format(insumosFecha || new Date(), 'MMMM', { locale: es }).toUpperCase()}
+                                        </div>
+                                      </div>
+                                      <table className="w-full border-collapse text-[11px]">
+                                        <thead>
+                                          <tr className="bg-slate-700 text-white">
+                                            <th className="px-3 py-2 text-left font-black uppercase tracking-wider border border-white/10">DIAS/FEB</th>
+                                            <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.AGUA<br/>CONSUMIDO</th>
+                                            <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.AGUA.VP</th>
+                                            <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CON.AGUA/1LT</th>
+                                            <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">RENDIMIENTO<br/>AGUA</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {(() => {
+                                            const baseDate = insumosFecha || new Date();
+                                            const lunes = startOfWeek(baseDate, { weekStartsOn: 1 });
+                                            const mesSeleccionado = baseDate.getMonth();
+                                            const anioSeleccionado = baseDate.getFullYear();
+                                            const diasSemana = Array.from({ length: 7 }, (_, i) => addDays(lunes, i)).filter((dia) => {
+                                              return dia.getMonth() === mesSeleccionado && dia.getFullYear() === anioSeleccionado;
+                                            });
+                                            return diasSemana.map((dia, idx) => {
+                                              const fechaStr = format(dia, 'yyyy-MM-dd');
+                                              const consumido = Number(aguaConsumoPorDia[fechaStr]) || 0;
+                                              const vp = calcularKgAguaParaFecha(fechaStr);
+                                              const conAgua = consumido > 0 && vp > 0 ? consumido / vp : 0;
+                                              const rendimiento = consumido > 0 ? vp / consumido : 0;
+                                              const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
+                                              return (
+                                                <tr key={fechaStr} className={cn("border-b border-slate-100", idx % 2 === 0 ? "bg-white" : "bg-slate-50/60")}>
+                                                  <td className="px-3 py-1.5 font-bold text-slate-700 border border-slate-100">{diaNombre}</td>
+                                                  <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{consumido || ''}</td>
+                                                  <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{vp ? vp.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}</td>
+                                                  <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{conAgua ? conAgua.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}</td>
+                                                  <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{rendimiento ? rendimiento.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}</td>
+                                                </tr>
+                                              );
+                                            });
+                                          })()}
+                                          <tr className="bg-slate-100 font-black text-slate-700">
+                                            <td className="px-3 py-2 border border-slate-200">TOTAL</td>
+                                            <td className="px-3 py-2 text-center border border-slate-200">
+                                              {(() => {
+                                                const baseDate = insumosFecha || new Date();
+                                                const lunes = startOfWeek(baseDate, { weekStartsOn: 1 });
+                                                const mesSeleccionado = baseDate.getMonth();
+                                                const anioSeleccionado = baseDate.getFullYear();
+                                                const diasSemana = Array.from({ length: 7 }, (_, i) => addDays(lunes, i)).filter((dia) => {
+                                                  return dia.getMonth() === mesSeleccionado && dia.getFullYear() === anioSeleccionado;
+                                                });
+                                                return diasSemana.reduce((acc, dia) => {
+                                                  const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                  return acc + (Number(aguaConsumoPorDia[fechaStr]) || 0);
+                                                }, 0).toLocaleString('es-VE');
+                                              })()}
+                                            </td>
+                                            <td className="px-3 py-2 text-center border border-slate-200">
+                                              {(() => {
+                                                const baseDate = insumosFecha || new Date();
+                                                const lunes = startOfWeek(baseDate, { weekStartsOn: 1 });
+                                                const mesSeleccionado = baseDate.getMonth();
+                                                const anioSeleccionado = baseDate.getFullYear();
+                                                const diasSemana = Array.from({ length: 7 }, (_, i) => addDays(lunes, i)).filter((dia) => {
+                                                  return dia.getMonth() === mesSeleccionado && dia.getFullYear() === anioSeleccionado;
+                                                });
+                                                return diasSemana.reduce((acc, dia) => {
+                                                  const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                  return acc + calcularKgAguaParaFecha(fechaStr);
+                                                }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                                              })()}
+                                            </td>
+                                            <td className="px-3 py-2 text-center border border-slate-200">
+                                              {(() => {
+                                                const baseDate = insumosFecha || new Date();
+                                                const lunes = startOfWeek(baseDate, { weekStartsOn: 1 });
+                                                const mesSeleccionado = baseDate.getMonth();
+                                                const anioSeleccionado = baseDate.getFullYear();
+                                                const diasSemana = Array.from({ length: 7 }, (_, i) => addDays(lunes, i)).filter((dia) => {
+                                                  return dia.getMonth() === mesSeleccionado && dia.getFullYear() === anioSeleccionado;
+                                                });
+                                                const totalConsumido = diasSemana.reduce((acc, dia) => {
+                                                  const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                  return acc + (Number(aguaConsumoPorDia[fechaStr]) || 0);
+                                                }, 0);
+                                                const totalVP = diasSemana.reduce((acc, dia) => {
+                                                  const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                  return acc + calcularKgAguaParaFecha(fechaStr);
+                                                }, 0);
+                                                return totalConsumido > 0 && totalVP > 0 ? (totalConsumido / totalVP).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0,00';
+                                              })()}
+                                            </td>
+                                            <td className="px-3 py-2 text-center border border-slate-200">
+                                              {(() => {
+                                                const baseDate = insumosFecha || new Date();
+                                                const lunes = startOfWeek(baseDate, { weekStartsOn: 1 });
+                                                const mesSeleccionado = baseDate.getMonth();
+                                                const anioSeleccionado = baseDate.getFullYear();
+                                                const diasSemana = Array.from({ length: 7 }, (_, i) => addDays(lunes, i)).filter((dia) => {
+                                                  return dia.getMonth() === mesSeleccionado && dia.getFullYear() === anioSeleccionado;
+                                                });
+                                                const totalConsumido = diasSemana.reduce((acc, dia) => {
+                                                  const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                  return acc + (Number(aguaConsumoPorDia[fechaStr]) || 0);
+                                                }, 0);
+                                                const totalVP = diasSemana.reduce((acc, dia) => {
+                                                  const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                  return acc + calcularKgAguaParaFecha(fechaStr);
+                                                }, 0);
+                                                return totalConsumido > 0 ? (totalVP / totalConsumido).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0,00';
+                                              })()}
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  )}
+                                  {insumosSubTab === 'agua' && insumosPeriodoSubTab === 'mensual' && (
+                                    <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                      <div className="px-4 py-2 bg-slate-800 text-white">
+                                        <div className="font-black text-[11px] uppercase tracking-widest text-center">
+                                          {format(insumosFecha || new Date(), 'MMMM', { locale: es }).toUpperCase()}
+                                        </div>
+                                      </div>
+                                      <table className="w-full border-collapse text-[11px]">
+                                        <thead>
+                                          <tr className="bg-slate-700 text-white">
+                                            <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10">FECHA</th>
+                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">DIAS/FEB</th>
+                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.AGUA<br/>CONSUMIDO</th>
+                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.AGUA.VP</th>
+                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">RENDIMIENTO<br/>AGUA</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {(() => {
+                                            const baseDate = insumosFecha || new Date();
+                                            const mesSeleccionado = baseDate.getMonth();
+                                            const anioSeleccionado = baseDate.getFullYear();
+                                            const inicioMes = new Date(anioSeleccionado, mesSeleccionado, 1);
+                                            const finMes = endOfMonth(inicioMes);
+                                            const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
+                                            return diasMes.map((dia, idx) => {
+                                              const fechaStr = format(dia, 'yyyy-MM-dd');
+                                              const consumido = Number(aguaConsumoPorDia[fechaStr]) || 0;
+                                              const vp = calcularKgAguaParaFecha(fechaStr);
+                                              const rendimiento = consumido > 0 ? vp / consumido : 0;
+                                              const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
+                                              return (
+                                                <tr key={fechaStr} className={cn("border-b border-slate-100", idx % 2 === 0 ? "bg-white" : "bg-slate-50/60")}>
+                                                  <td className="px-2 py-1.5 font-bold text-slate-700 border border-slate-100">{format(dia, 'dd/MM/yyyy')}</td>
+                                                  <td className="px-2 py-1.5 font-bold text-slate-700 border border-slate-100">{diaNombre}</td>
+                                                  <td className="px-2 py-1.5 text-center font-black text-slate-700 border border-slate-100">{consumido || ''}</td>
+                                                  <td className="px-2 py-1.5 text-center font-black text-slate-700 border border-slate-100">{vp ? vp.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}</td>
+                                                  <td className="px-2 py-1.5 text-center font-black text-slate-700 border border-slate-100">{rendimiento ? rendimiento.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}</td>
+                                                </tr>
+                                              );
+                                            });
+                                          })()}
+                                          <tr className="bg-slate-100 font-black text-slate-700">
+                                            <td className="px-2 py-2 border border-slate-200" colSpan={2}>TOTAL</td>
+                                            <td className="px-2 py-2 text-center border border-slate-200">
+                                              {(() => {
+                                                const baseDate = insumosFecha || new Date();
+                                                const mesSeleccionado = baseDate.getMonth();
+                                                const anioSeleccionado = baseDate.getFullYear();
+                                                const inicioMes = new Date(anioSeleccionado, mesSeleccionado, 1);
+                                                const finMes = endOfMonth(inicioMes);
+                                                const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
+                                                return diasMes.reduce((acc, dia) => {
+                                                  const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                  return acc + (Number(aguaConsumoPorDia[fechaStr]) || 0);
+                                                }, 0).toLocaleString('es-VE');
+                                              })()}
+                                            </td>
+                                            <td className="px-2 py-2 text-center border border-slate-200">
+                                              {(() => {
+                                                const baseDate = insumosFecha || new Date();
+                                                const mesSeleccionado = baseDate.getMonth();
+                                                const anioSeleccionado = baseDate.getFullYear();
+                                                const inicioMes = new Date(anioSeleccionado, mesSeleccionado, 1);
+                                                const finMes = endOfMonth(inicioMes);
+                                                const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
+                                                return diasMes.reduce((acc, dia) => {
+                                                  const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                  return acc + calcularKgAguaParaFecha(fechaStr);
+                                                }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                                              })()}
+                                            </td>
+                                            <td className="px-2 py-2 text-center border border-slate-200">
+                                              {(() => {
+                                                const baseDate = insumosFecha || new Date();
+                                                const mesSeleccionado = baseDate.getMonth();
+                                                const anioSeleccionado = baseDate.getFullYear();
+                                                const inicioMes = new Date(anioSeleccionado, mesSeleccionado, 1);
+                                                const finMes = endOfMonth(inicioMes);
+                                                const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
+                                                const totalConsumido = diasMes.reduce((acc, dia) => {
+                                                  const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                  return acc + (Number(aguaConsumoPorDia[fechaStr]) || 0);
+                                                }, 0);
+                                                const totalVP = diasMes.reduce((acc, dia) => {
+                                                  const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                  return acc + calcularKgAguaParaFecha(fechaStr);
+                                                }, 0);
+                                                return totalConsumido > 0 ? (totalVP / totalConsumido).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0,00';
+                                              })()}
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
+                                  )}
+                                </div>
+                              )}
                            </div>
                         </div>
                       )}

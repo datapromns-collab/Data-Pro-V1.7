@@ -30887,7 +30887,7 @@
         "usuario": "Ronald Valera"
       },
       {
-        "fecha": "2026-08-10",
+        "fecha": "2026-08-08",
         "semana": 33,
         "turno": "DIURNO",
         "operador": "LUIS MORALES",
@@ -31049,7 +31049,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "fecha": "2026-08-10",
+        "fecha": "2026-08-08",
         "semana": 33,
         "turno": "NOCTURNO",
         "operador": "JESUS MARTINEZ",
@@ -31229,7 +31229,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "fecha": "2026-08-10",
+        "fecha": "2026-08-08",
         "semana": 33,
         "turno": "NOCTURNO",
         "operador": "IVAN PEREZ",
@@ -31373,7 +31373,7 @@
         "usuario": "Ronald Valera"
       },
       {
-        "fecha": "2026-08-10",
+        "fecha": "2026-08-08",
         "semana": 33,
         "turno": "NOCTURNO",
         "operador": "IVAN PEREZ",
@@ -31856,6 +31856,78 @@
         "orden": "",
         "observaciones": "",
         "id": 1786387046633,
+        "usuario": "Luis Blandin"
+      },
+      {
+        "fecha": "2026-08-08",
+        "semana": 32,
+        "turno": "NOCTURNO",
+        "operador": "JORGE NARANJO",
+        "linea": "Línea 3",
+        "equipo": "TRANSPORTADOR DE BOTELLAS",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "23:33",
+        "finParada": "23:43",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786387096921,
+        "usuario": "Luis Blandin"
+      },
+      {
+        "fecha": "2026-08-08",
+        "semana": 32,
+        "turno": "NOCTURNO",
+        "operador": "JORGE NARANJO",
+        "linea": "Línea 3",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "23:50",
+        "finParada": "23:56",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786387145025,
+        "usuario": "Luis Blandin"
+      },
+      {
+        "fecha": "2026-08-08",
+        "semana": 32,
+        "turno": "NOCTURNO",
+        "operador": "JORGE NARANJO",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "00:03",
+        "finParada": "00:06",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786387175113,
+        "usuario": "Luis Blandin"
+      },
+      {
+        "fecha": "2026-08-08",
+        "semana": 32,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "02:00",
+        "finParada": "02:16",
+        "totalMin": "16",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE SABOR DE GLUP COLA A GLUP UVA",
+        "orden": "",
+        "observaciones": "",
+        "id": 1786387217537,
         "usuario": "Luis Blandin"
       }
     ],
