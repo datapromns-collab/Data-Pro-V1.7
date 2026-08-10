@@ -400,52 +400,6 @@ export default function PlannerPage() {
         // ignore
       }
     };
-    const migrarOrdenesAInformes = (ns: string) => {
-      try {
-        const raw = localStorage.getItem(ns);
-        if (!raw) return;
-        const arr = JSON.parse(raw);
-        if (Array.isArray(arr) && arr.length > 0) {
-          const convertidas = arr
-            .filter((o: any) => o.orden && String(o.orden).trim() !== '')
-            .map((o: any) => ({
-              id: o.id ?? Date.now() + Math.random(),
-              fecha: o.fechaOrden || format(new Date(), 'yyyy-MM-dd'),
-              semana: o.semana || '',
-              turno: o.turno || '',
-              operador: '',
-              linea: o.linea || 'Línea 1',
-              equipo: o.maquina || '',
-              tipoParada: o.tipoParada || 'PROGRAMADA',
-              inicioParada: o.inicioParada || '',
-              finParada: o.finParada || '',
-              totalMin: o.tMtto || '',
-              zona: '',
-              falla: o.falla || '',
-              orden: o.orden || '',
-              aviso: o.aviso || '',
-              maquina: o.maquina || '',
-              solicitante: o.solicitante || '',
-              fechaEmision: o.fechaEmision || '',
-              fechaParada: o.fechaParada || '',
-              inicioMtto: o.inicioMtto || '',
-              finMtto: o.finMtto || '',
-              tMtto: o.tMtto || '',
-              mtto: o.mtto || '',
-              mttoEsp: o.mttoEsp || '',
-              descripcionFalla: o.descripcionFalla || '',
-              descripcionAccion: o.descripcionAccion || '',
-              observaciones: o.observaciones || '',
-            }));
-          if (convertidas.length > 0) {
-            informesOperacionalesStore.setData([...informesOperacionales, ...convertidas]);
-          }
-        }
-        localStorage.removeItem(ns);
-      } catch {
-        // ignore
-      }
-    };
     migrarInformes('planta-informes-operacionales');
     informesOperacionalesStore.setData((prev) => {
       const next = prev.map((r: any) => r.usuario === 'Produccion' ? { ...r, usuario: 'Ronald Valera' } : r);
@@ -453,11 +407,97 @@ export default function PlannerPage() {
     });
   }, [informesOperacionalesStore, ordenesTrabajoStore]);
 
+  useEffect(() => {
+    if (!ordenesTrabajoStore.isLoaded) return;
+    const informes = informesOperacionalesStore.data || [];
+    const ordenes = ordenesTrabajoStore.data || [];
+    const ordenesExistentes = new Set(ordenes.map((o: any) => `${o.orden}|${o.fechaOrden}`));
+    const nuevasOrdenes = informes
+      .filter((r: any) => r.orden && String(r.orden).trim() !== '' && !ordenesExistentes.has(`${r.orden}|${r.fecha}`))
+      .map((r: any) => ({
+        id: Date.now() + Math.random(),
+        fechaOrden: r.fecha || format(new Date(), 'yyyy-MM-dd'),
+        orden: r.orden || '',
+        fechaEmision: r.fecha || format(new Date(), 'yyyy-MM-dd'),
+        semana: r.semana || '',
+        turno: r.turno || 'DIURNO',
+        solicitante: '',
+        linea: r.linea || 'Línea 1',
+        maquina: r.equipo || '',
+        aviso: '',
+        fechaParada: r.fecha || format(new Date(), 'yyyy-MM-dd'),
+        inicioMtto: '',
+        finMtto: '',
+        inicioParada: r.inicioParada || '',
+        finParada: r.finParada || '',
+        tMtto: r.totalMin || '',
+        tipoParada: r.tipoParada || 'PROGRAMADA',
+        mtto: '',
+        falla: r.falla || '',
+        mttoEsp: '',
+        descripcionFalla: '',
+        descripcionAccion: '',
+        observaciones: r.observaciones || '',
+        usuario: r.usuario || '',
+      }));
+    if (nuevasOrdenes.length > 0) {
+      setOrdenesTrabajo(prev => [...prev, ...nuevasOrdenes]);
+    }
+
+    const actualizadas = informes
+      .filter((r: any) => r.orden && String(r.orden).trim() !== '')
+      .map((r: any) => {
+        const idx = ordenes.findIndex((o: any) => o.orden === r.orden && o.fechaOrden === r.fecha);
+        if (idx >= 0) {
+          const updated = {
+            fechaOrden: r.fecha || ordenes[idx].fechaOrden,
+            orden: r.orden || ordenes[idx].orden,
+            fechaEmision: r.fecha || ordenes[idx].fechaEmision,
+            semana: r.semana || ordenes[idx].semana,
+            turno: r.turno || ordenes[idx].turno,
+            solicitante: r.solicitante || ordenes[idx].solicitante,
+            linea: r.linea || ordenes[idx].linea,
+            maquina: r.equipo || ordenes[idx].maquina,
+            aviso: r.aviso || ordenes[idx].aviso,
+            fechaParada: r.fecha || ordenes[idx].fechaParada,
+            inicioMtto: r.inicioMtto || ordenes[idx].inicioMtto,
+            finMtto: r.finMtto || ordenes[idx].finMtto,
+            inicioParada: r.inicioParada || ordenes[idx].inicioParada,
+            finParada: r.finParada || ordenes[idx].finParada,
+            tMtto: r.totalMin || ordenes[idx].tMtto,
+            tipoParada: r.tipoParada || ordenes[idx].tipoParada,
+            mtto: r.mtto || ordenes[idx].mtto,
+            falla: r.falla || ordenes[idx].falla,
+            mttoEsp: r.mttoEsp || ordenes[idx].mttoEsp,
+            descripcionFalla: r.descripcionFalla || ordenes[idx].descripcionFalla,
+            descripcionAccion: r.descripcionAccion || ordenes[idx].descripcionAccion,
+            observaciones: r.observaciones || ordenes[idx].observaciones,
+            usuario: r.usuario || ordenes[idx].usuario,
+          };
+          return { idx, updated };
+        }
+        return null;
+      })
+      .filter(Boolean);
+
+    if (actualizadas.length > 0) {
+      setOrdenesTrabajo(prev => {
+        const next = [...prev];
+        actualizadas.forEach(({ idx, updated }: any) => {
+          if (idx >= 0 && idx < next.length) {
+            next[idx] = { ...next[idx], ...updated };
+          }
+        });
+        return next;
+      });
+    }
+  }, [informesOperacionalesStore.data, ordenesTrabajoStore.isLoaded, setOrdenesTrabajo]);
+
   const ordenesTrabajoCargadas = useMemo(() => {
     return (ordenesTrabajo || [])
       .filter((r) => {
         const orden = r.orden && String(r.orden).trim() !== '';
-        const fecha = r.fecha && String(r.fecha).trim() !== '';
+        const fecha = r.fechaOrden && String(r.fechaOrden).trim() !== '';
         return orden && fecha;
       })
       .map((r) => ({
@@ -2383,7 +2423,7 @@ export default function PlannerPage() {
                                                             setInformesOperacionales(prev => prev.map(r => String(r.id) === String(row.id) ? updated : r));
                                                             if (updated.orden && String(updated.orden).trim() !== '') {
                                                               setOrdenesTrabajo(prev => {
-                                                                const idx = prev.findIndex((o: any) => o.orden === updated.orden);
+                                                                const idx = prev.findIndex((o: any) => o.orden === updated.orden && o.fechaOrden === updated.fecha);
                                                                 if (idx >= 0) {
                                                                   const next = [...prev];
                                                                   next[idx] = {
