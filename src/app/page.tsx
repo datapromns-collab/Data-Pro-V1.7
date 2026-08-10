@@ -415,7 +415,7 @@ export default function PlannerPage() {
       return true;
     });
     if (limpios.length !== ordenes.length) {
-      setOrdenesTrabajo(limpios);
+      ordenesTrabajoStore.setData(limpios);
     }
   }, [informesOperacionalesStore, ordenesTrabajoStore]);
 
@@ -5374,30 +5374,31 @@ export default function PlannerPage() {
                        observaciones: ordenFormData.observaciones || '',
                        usuario: user?.name || '',
                      }]);
-                    setOrdenFormData({
-                      fechaOrden: format(new Date(), 'yyyy-MM-dd'),
-                      orden: '',
-                      fechaEmision: format(new Date(), 'yyyy-MM-dd'),
-                      semana: getISOWeek(new Date()),
-                      turno: 'T1',
-                      solicitante: '',
-                      linea: 'Línea 1',
-                      maquina: '',
-                      aviso: '',
-                      fechaParada: format(new Date(), 'yyyy-MM-dd'),
-                      inicioMtto: '',
-                      finMtto: '',
-                      inicioParada: '',
-                      finParada: '',
-                      tMtto: '',
-                      tipoParada: 'PROGRAMADA',
-                      mtto: 'CORRECTIVO',
-                      falla: '',
-                      mttoEsp: 'MTTO',
-                      descripcionFalla: '',
-                      descripcionAccion: '',
-                      observaciones: '',
-                    });
+                     setOrdenFormData({
+                       fechaOrden: format(new Date(), 'yyyy-MM-dd'),
+                       orden: '',
+                       fechaEmision: format(new Date(), 'yyyy-MM-dd'),
+                       semana: getISOWeek(new Date()),
+                       turno: 'T1',
+                       solicitante: '',
+                       linea: 'Línea 1',
+                       maquina: '',
+                       aviso: '',
+                       fechaParada: format(new Date(), 'yyyy-MM-dd'),
+                       inicioMtto: '',
+                       finMtto: '',
+                       inicioParada: '',
+                       finParada: '',
+                       tMtto: '',
+                       tipoParada: 'PROGRAMADA',
+                       mtto: 'CORRECTIVO',
+                       falla: '',
+                       mttoEsp: 'MTTO',
+                       descripcionFalla: '',
+                       descripcionAccion: '',
+                       observaciones: '',
+                       usuario: user?.name || '',
+                     });
                   }
                 setIsPlantaDialogOpen(false);
                 toast({ title: 'Registro guardado exitosamente' });
