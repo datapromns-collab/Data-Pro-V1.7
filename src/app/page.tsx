@@ -569,51 +569,63 @@ export default function PlannerPage() {
     return initial;
   });
 
-   useEffect(() => {
-     if (!insumosFecha || typeof window === 'undefined') return;
-     const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
+    useEffect(() => {
+      if (!insumosFecha || typeof window === 'undefined') return;
+      const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
 
-    const ordenesDelDia = (ordenes || []).filter(orden =>
-      orden.dias.some(dia => dia.fechaInicio === fechaStr)
-    );
+      const ordenesDelDia = (ordenes || []).filter(orden =>
+        orden.dias.some(dia => dia.fechaInicio === fechaStr)
+      );
 
-    const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }> = {};
-    const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
-    sabores.forEach(sabor => {
-      tabla[sabor] = { cajas2L: '', cajas1L: '', cajas04L: '' };
-    });
-
-    if (ordenesDelDia.length > 0) {
-      ordenesDelDia.forEach(orden => {
-        orden.dias.forEach(dia => {
-          if (dia.fechaInicio !== fechaStr) return;
-          const row = tabla[orden.sabor];
-          if (!row) return;
-          const totalDia = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
-          if (orden.linea >= 1 && orden.linea <= 4 && totalDia > 0) {
-            row.cajas2L = String((Number(row.cajas2L) || 0) + totalDia);
-          }
-          if (orden.linea === 7 && totalDia > 0) {
-            row.cajas1L = String((Number(row.cajas1L) || 0) + totalDia);
-          }
-          if (orden.linea === 6 && totalDia > 0) {
-            row.cajas04L = String((Number(row.cajas04L) || 0) + totalDia);
-          }
-        });
+      const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }> = {};
+      const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
+      sabores.forEach(sabor => {
+        tabla[sabor] = { cajas2L: '', cajas1L: '', cajas04L: '' };
       });
-    }
 
-     setIsAutoUpdating(true);
-     setCo2DiarioData(tabla);
-     localStorage.setItem('co2-diario-data', JSON.stringify(tabla));
-     setIsAutoUpdating(false);
-   }, [insumosFecha, ordenes]);
+      if (ordenesDelDia.length > 0) {
+        ordenesDelDia.forEach(orden => {
+          orden.dias.forEach(dia => {
+            if (dia.fechaInicio !== fechaStr) return;
+            const row = tabla[orden.sabor];
+            if (!row) return;
+            const totalDia = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
+            if (orden.linea >= 1 && orden.linea <= 4 && totalDia > 0) {
+              row.cajas2L = String((Number(row.cajas2L) || 0) + totalDia);
+            }
+            if (orden.linea === 7 && totalDia > 0) {
+              row.cajas1L = String((Number(row.cajas1L) || 0) + totalDia);
+            }
+            if (orden.linea === 6 && totalDia > 0) {
+              row.cajas04L = String((Number(row.cajas04L) || 0) + totalDia);
+            }
+          });
+        });
+      }
+
+      const totalKg = Object.values(tabla).reduce((acc, row) => {
+        const c2 = Number(row.cajas2L) || 0;
+        const c1 = Number(row.cajas1L) || 0;
+        const c04 = Number(row.cajas04L) || 0;
+        const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
+        const sabor = Object.keys(tabla).find(key => tabla[key] === row);
+        const factor = sabor ? (CO2_FACTORS[sabor] || 0) : 0;
+        return acc + (litros * factor);
+      }, 0);
+
+      setIsAutoUpdating(true);
+      setCo2DiarioData(tabla);
+      setCo2KgPorDia(prev => ({ ...prev, [fechaStr]: totalKg }));
+      localStorage.setItem('co2-diario-data', JSON.stringify(tabla));
+      localStorage.setItem('co2-kg-por-dia', JSON.stringify({ ...co2KgPorDia, [fechaStr]: totalKg }));
+      setIsAutoUpdating(false);
+    }, [insumosFecha, ordenes]);
 
    useEffect(() => {
      if (isAutoUpdating || typeof window === 'undefined') return;
      localStorage.setItem('co2-diario-data', JSON.stringify(co2DiarioData));
    }, [co2DiarioData, isAutoUpdating]);
-   const CO2_FACTORS: Record<string, number> = {
+  const CO2_FACTORS: Record<string, number> = {
     'GLUP COLA': 0.008848,
     'GLUP FRESH': 0.0082445,
     'GLUP UVA': 0.006636,
@@ -626,26 +638,78 @@ export default function PlannerPage() {
     'GLUP PIÑA PARCHITA': 0.008848,
     'GLUP MANZANA ROJA': 0.006636,
   };
-   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
-   const [co2ConsumoPorDia, setCo2ConsumoPorDia] = useState<Record<string, string>>(() => {
-     if (typeof window !== 'undefined') {
-       try {
-         const stored = localStorage.getItem('co2-consumo-por-dia');
-         if (stored) {
-           const parsed = JSON.parse(stored);
-           if (typeof parsed === 'object' && parsed !== null) {
-             return parsed;
-           }
-         }
-       } catch (e) {}
-     }
-     return {};
-   });
-   useEffect(() => {
-     if (typeof window === 'undefined') return;
-     localStorage.setItem('co2-consumo-por-dia', JSON.stringify(co2ConsumoPorDia));
-   }, [co2ConsumoPorDia]);
-   const [produccionSubTab, setProduccionSubTab] = useState('planificadas');
+  const calcularKgCo2ParaFecha = (fechaStr: string): number => {
+    const ordenesDelDia = (ordenes || []).filter(orden =>
+      orden.dias.some(dia => dia.fechaInicio === fechaStr)
+    );
+    if (ordenesDelDia.length === 0) return 0;
+    const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }> = {};
+    const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
+    sabores.forEach(sabor => {
+      tabla[sabor] = { cajas2L: '', cajas1L: '', cajas04L: '' };
+    });
+    ordenesDelDia.forEach(orden => {
+      orden.dias.forEach(dia => {
+        if (dia.fechaInicio !== fechaStr) return;
+        const row = tabla[orden.sabor];
+        if (!row) return;
+        const totalDia = (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
+        if (orden.linea >= 1 && orden.linea <= 4 && totalDia > 0) {
+          row.cajas2L = String((Number(row.cajas2L) || 0) + totalDia);
+        }
+        if (orden.linea === 7 && totalDia > 0) {
+          row.cajas1L = String((Number(row.cajas1L) || 0) + totalDia);
+        }
+        if (orden.linea === 6 && totalDia > 0) {
+          row.cajas04L = String((Number(row.cajas04L) || 0) + totalDia);
+        }
+      });
+    });
+    return Object.values(tabla).reduce((acc, row) => {
+      const c2 = Number(row.cajas2L) || 0;
+      const c1 = Number(row.cajas1L) || 0;
+      const c04 = Number(row.cajas04L) || 0;
+      const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
+      const sabor = Object.keys(tabla).find(key => tabla[key] === row);
+      const factor = sabor ? (CO2_FACTORS[sabor] || 0) : 0;
+      return acc + (litros * factor);
+    }, 0);
+  };
+  const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
+  const [co2ConsumoPorDia, setCo2ConsumoPorDia] = useState<Record<string, string>>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('co2-consumo-por-dia');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (typeof parsed === 'object' && parsed !== null) {
+            return parsed;
+          }
+        }
+      } catch (e) {}
+    }
+    return {};
+  });
+  const [co2KgPorDia, setCo2KgPorDia] = useState<Record<string, number>>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('co2-kg-por-dia');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (typeof parsed === 'object' && parsed !== null) {
+            return parsed;
+          }
+        }
+      } catch (e) {}
+    }
+    return {};
+  });
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem('co2-consumo-por-dia', JSON.stringify(co2ConsumoPorDia));
+    localStorage.setItem('co2-kg-por-dia', JSON.stringify(co2KgPorDia));
+  }, [co2ConsumoPorDia, co2KgPorDia]);
+  const [produccionSubTab, setProduccionSubTab] = useState('planificadas');
   const [planificadasSubTab, setPlanificadasSubTab] = useState('porturno');
   const [planificadasTurnoSubTab, setPlanificadasTurnoSubTab] = useState('diurno');
   const [producidasSubTab, setProducidasSubTab] = useState('porturno');
@@ -2768,11 +2832,14 @@ export default function PlannerPage() {
                                          </TableBody>
                                          </Table>
                                       </div>
-                                    </div>
-                                  )}
                                 </div>
-                              </div>
-                            )}
+                              )}
+                             {insumosSubTab === 'agua' && (
+                               <div className="flex-1 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 min-h-[200px]" />
+                             )}
+                           </div>
+                        </div>
+                      )}
                          {activeTab === 'produccion' && (
                            <>
                                <div className="flex flex-col gap-2 mb-4 no-print">
@@ -4007,67 +4074,223 @@ export default function PlannerPage() {
                                   </div>
                                </div>
                              )}
-                             {insumosSubTab === 'co2' && insumosPeriodoSubTab === 'semanal' && (
+                              {insumosSubTab === 'co2' && insumosPeriodoSubTab === 'semanal' && (
+                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                  <div className="px-4 py-2 bg-slate-800 text-white">
+                                    <div className="font-black text-[11px] uppercase tracking-widest text-center">
+                                      SEMANA {getISOWeek(insumosFecha || new Date())} · {format(insumosFecha || new Date(), 'MMMM', { locale: es }).toUpperCase()}
+                                    </div>
+                                  </div>
+                                  <table className="w-full border-collapse text-[11px]">
+                                    <thead>
+                                      <tr className="bg-slate-700 text-white">
+                                        <th className="px-3 py-2 text-left font-black uppercase tracking-wider border border-white/10">DIAS/FEB</th>
+                                        <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.CO2<br/>CONSUMIDO</th>
+                                        <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.CO2.VP</th>
+                                        <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CON.CO2/1LT</th>
+                                        <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">RENDIMIENTO<br/>CO2</th>
+                                      </tr>
+                                    </thead>
+                                      <tbody>
+                                         {(() => {
+                                           const baseDate = insumosFecha || new Date();
+                                           const lunes = startOfWeek(baseDate, { weekStartsOn: 1 });
+                                           const mesSeleccionado = baseDate.getMonth();
+                                           const anioSeleccionado = baseDate.getFullYear();
+                                           const diasSemana = Array.from({ length: 7 }, (_, i) => addDays(lunes, i)).filter((dia) => {
+                                             return dia.getMonth() === mesSeleccionado && dia.getFullYear() === anioSeleccionado;
+                                           });
+                                           return diasSemana.map((dia, idx) => {
+                                             const fechaStr = format(dia, 'yyyy-MM-dd');
+                                             const consumido = Number(co2ConsumoPorDia[fechaStr]) || 0;
+                                             const vp = calcularKgCo2ParaFecha(fechaStr);
+                                             const conCo2 = consumido > 0 && vp > 0 ? consumido / vp : 0;
+                                             const rendimiento = consumido > 0 ? vp / consumido : 0;
+                                             const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
+                                             return (
+                                               <tr key={fechaStr} className={cn("border-b border-slate-100", idx % 2 === 0 ? "bg-white" : "bg-slate-50/60")}>
+                                                 <td className="px-3 py-1.5 font-bold text-slate-700 border border-slate-100">{diaNombre}</td>
+                                                 <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{consumido || ''}</td>
+                                                 <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{vp ? vp.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}</td>
+                                                 <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{conCo2 ? conCo2.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}</td>
+                                                 <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{rendimiento ? rendimiento.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}</td>
+                                               </tr>
+                                             );
+                                           });
+                                         })()}
+                                         <tr className="bg-slate-100 font-black text-slate-700">
+                                           <td className="px-3 py-2 border border-slate-200">TOTAL</td>
+                                           <td className="px-3 py-2 text-center border border-slate-200">
+                                             {(() => {
+                                               const baseDate = insumosFecha || new Date();
+                                               const lunes = startOfWeek(baseDate, { weekStartsOn: 1 });
+                                               const mesSeleccionado = baseDate.getMonth();
+                                               const anioSeleccionado = baseDate.getFullYear();
+                                               const diasSemana = Array.from({ length: 7 }, (_, i) => addDays(lunes, i)).filter((dia) => {
+                                                 return dia.getMonth() === mesSeleccionado && dia.getFullYear() === anioSeleccionado;
+                                               });
+                                               return diasSemana.reduce((acc, dia) => {
+                                                 const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                 return acc + (Number(co2ConsumoPorDia[fechaStr]) || 0);
+                                               }, 0).toLocaleString('es-VE');
+                                             })()}
+                                           </td>
+                                           <td className="px-3 py-2 text-center border border-slate-200">
+                                             {(() => {
+                                               const baseDate = insumosFecha || new Date();
+                                               const lunes = startOfWeek(baseDate, { weekStartsOn: 1 });
+                                               const mesSeleccionado = baseDate.getMonth();
+                                               const anioSeleccionado = baseDate.getFullYear();
+                                               const diasSemana = Array.from({ length: 7 }, (_, i) => addDays(lunes, i)).filter((dia) => {
+                                                 return dia.getMonth() === mesSeleccionado && dia.getFullYear() === anioSeleccionado;
+                                               });
+                                               return diasSemana.reduce((acc, dia) => {
+                                                 const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                 return acc + calcularKgCo2ParaFecha(fechaStr);
+                                               }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                                             })()}
+                                           </td>
+                                           <td className="px-3 py-2 text-center border border-slate-200">
+                                             {(() => {
+                                               const baseDate = insumosFecha || new Date();
+                                               const lunes = startOfWeek(baseDate, { weekStartsOn: 1 });
+                                               const mesSeleccionado = baseDate.getMonth();
+                                               const anioSeleccionado = baseDate.getFullYear();
+                                               const diasSemana = Array.from({ length: 7 }, (_, i) => addDays(lunes, i)).filter((dia) => {
+                                                 return dia.getMonth() === mesSeleccionado && dia.getFullYear() === anioSeleccionado;
+                                               });
+                                               const totalConsumido = diasSemana.reduce((acc, dia) => {
+                                                 const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                 return acc + (Number(co2ConsumoPorDia[fechaStr]) || 0);
+                                               }, 0);
+                                               const totalVP = diasSemana.reduce((acc, dia) => {
+                                                 const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                 return acc + calcularKgCo2ParaFecha(fechaStr);
+                                               }, 0);
+                                               return totalConsumido > 0 && totalVP > 0 ? (totalConsumido / totalVP).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0,00';
+                                             })()}
+                                           </td>
+                                           <td className="px-3 py-2 text-center border border-slate-200">
+                                             {(() => {
+                                               const baseDate = insumosFecha || new Date();
+                                               const lunes = startOfWeek(baseDate, { weekStartsOn: 1 });
+                                               const mesSeleccionado = baseDate.getMonth();
+                                               const anioSeleccionado = baseDate.getFullYear();
+                                               const diasSemana = Array.from({ length: 7 }, (_, i) => addDays(lunes, i)).filter((dia) => {
+                                                 return dia.getMonth() === mesSeleccionado && dia.getFullYear() === anioSeleccionado;
+                                               });
+                                               const totalConsumido = diasSemana.reduce((acc, dia) => {
+                                                 const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                 return acc + (Number(co2ConsumoPorDia[fechaStr]) || 0);
+                                               }, 0);
+                                               const totalVP = diasSemana.reduce((acc, dia) => {
+                                                 const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                 return acc + calcularKgCo2ParaFecha(fechaStr);
+                                               }, 0);
+                                               return totalConsumido > 0 ? (totalVP / totalConsumido).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0,00';
+                                             })()}
+                                           </td>
+                                         </tr>
+                                     </tbody>
+                                  </table>
+                                </div>
+                              )}
+                             {insumosSubTab === 'co2' && insumosPeriodoSubTab === 'mensual' && (
                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
                                  <div className="px-4 py-2 bg-slate-800 text-white">
                                    <div className="font-black text-[11px] uppercase tracking-widest text-center">
-                                     SEMANA {getISOWeek(insumosFecha || new Date())}
+                                     {format(insumosFecha || new Date(), 'MMMM', { locale: es }).toUpperCase()}
                                    </div>
                                  </div>
                                  <table className="w-full border-collapse text-[11px]">
                                    <thead>
                                      <tr className="bg-slate-700 text-white">
-                                       <th className="px-3 py-2 text-left font-black uppercase tracking-wider border border-white/10">DIAS/FEB</th>
-                                       <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.CO2<br/>CONSUMIDO</th>
-                                       <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.CO2.VP</th>
-                                       <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CON.CO2/1LT</th>
-                                       <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">RENDIMIENTO<br/>CO2</th>
+                                       <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10">FECHA</th>
+                                       <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">DIAS/FEB</th>
+                                       <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.CO2<br/>CONSUMIDO</th>
+                                       <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.CO2.VP</th>
+                                       <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">RENDIMIENTO<br/>CO2</th>
                                      </tr>
                                    </thead>
-                                    <tbody>
-                                      {(() => {
-                                        const baseDate = insumosFecha || new Date();
-                                        const lunes = startOfWeek(baseDate, { weekStartsOn: 1 });
-                                        const diasSemana = Array.from({ length: 7 }, (_, i) => addDays(lunes, i));
-                                        return diasSemana.map((dia, idx) => {
-                                          const fechaStr = format(dia, 'yyyy-MM-dd');
-                                          const valor = Number(co2ConsumoPorDia[fechaStr]) || 0;
-                                          const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
-                                          return (
-                                            <tr key={fechaStr} className={cn("border-b border-slate-100", idx % 2 === 0 ? "bg-white" : "bg-slate-50/60")}>
-                                              <td className="px-3 py-1.5 font-bold text-slate-700 border border-slate-100">{diaNombre}</td>
-                                              <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{valor || ''}</td>
-                                              <td className="px-3 py-1.5 border border-slate-100"></td>
-                                              <td className="px-3 py-1.5 border border-slate-100"></td>
-                                              <td className="px-3 py-1.5 border border-slate-100"></td>
-                                            </tr>
-                                          );
-                                        });
-                                      })()}
-                                      <tr className="bg-slate-100 font-black text-slate-700">
-                                        <td className="px-3 py-2 border border-slate-200">TOTAL</td>
-                                        <td className="px-3 py-2 text-center border border-slate-200">
-                                          {(() => {
-                                            const baseDate = insumosFecha || new Date();
-                                            const lunes = startOfWeek(baseDate, { weekStartsOn: 1 });
-                                            const diasSemana = Array.from({ length: 7 }, (_, i) => addDays(lunes, i));
-                                            return diasSemana.reduce((acc, dia) => {
-                                              const fechaStr = format(dia, 'yyyy-MM-dd');
-                                              return acc + (Number(co2ConsumoPorDia[fechaStr]) || 0);
-                                            }, 0).toLocaleString('es-VE');
-                                          })()}
-                                        </td>
-                                        <td className="px-3 py-2 text-center border border-slate-200">0</td>
-                                        <td className="px-3 py-2 text-center border border-slate-200">0,00</td>
-                                        <td className="px-3 py-2 text-center border border-slate-200">0,00</td>
-                                      </tr>
-                                    </tbody>
+                                   <tbody>
+                                     {(() => {
+                                       const baseDate = insumosFecha || new Date();
+                                       const mesSeleccionado = baseDate.getMonth();
+                                       const anioSeleccionado = baseDate.getFullYear();
+                                       const inicioMes = new Date(anioSeleccionado, mesSeleccionado, 1);
+                                       const finMes = endOfMonth(inicioMes);
+                                       const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
+                                       return diasMes.map((dia, idx) => {
+                                         const fechaStr = format(dia, 'yyyy-MM-dd');
+                                         const consumido = Number(co2ConsumoPorDia[fechaStr]) || 0;
+                                         const vp = calcularKgCo2ParaFecha(fechaStr);
+                                         const rendimiento = consumido > 0 ? vp / consumido : 0;
+                                         const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
+                                         return (
+                                           <tr key={fechaStr} className={cn("border-b border-slate-100", idx % 2 === 0 ? "bg-white" : "bg-slate-50/60")}>
+                                             <td className="px-2 py-1.5 font-bold text-slate-700 border border-slate-100">{format(dia, 'dd/MM/yyyy')}</td>
+                                             <td className="px-2 py-1.5 font-bold text-slate-700 border border-slate-100">{diaNombre}</td>
+                                             <td className="px-2 py-1.5 text-center font-black text-slate-700 border border-slate-100">{consumido || ''}</td>
+                                             <td className="px-2 py-1.5 text-center font-black text-slate-700 border border-slate-100">{vp ? vp.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}</td>
+                                             <td className="px-2 py-1.5 text-center font-black text-slate-700 border border-slate-100">{rendimiento ? rendimiento.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : ''}</td>
+                                           </tr>
+                                         );
+                                       });
+                                     })()}
+                                     <tr className="bg-slate-100 font-black text-slate-700">
+                                       <td className="px-2 py-2 border border-slate-200" colSpan={2}>TOTAL</td>
+                                       <td className="px-2 py-2 text-center border border-slate-200">
+                                         {(() => {
+                                           const baseDate = insumosFecha || new Date();
+                                           const mesSeleccionado = baseDate.getMonth();
+                                           const anioSeleccionado = baseDate.getFullYear();
+                                           const inicioMes = new Date(anioSeleccionado, mesSeleccionado, 1);
+                                           const finMes = endOfMonth(inicioMes);
+                                           const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
+                                           return diasMes.reduce((acc, dia) => {
+                                             const fechaStr = format(dia, 'yyyy-MM-dd');
+                                             return acc + (Number(co2ConsumoPorDia[fechaStr]) || 0);
+                                           }, 0).toLocaleString('es-VE');
+                                         })()}
+                                       </td>
+                                       <td className="px-2 py-2 text-center border border-slate-200">
+                                         {(() => {
+                                           const baseDate = insumosFecha || new Date();
+                                           const mesSeleccionado = baseDate.getMonth();
+                                           const anioSeleccionado = baseDate.getFullYear();
+                                           const inicioMes = new Date(anioSeleccionado, mesSeleccionado, 1);
+                                           const finMes = endOfMonth(inicioMes);
+                                           const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
+                                           return diasMes.reduce((acc, dia) => {
+                                             const fechaStr = format(dia, 'yyyy-MM-dd');
+                                             return acc + calcularKgCo2ParaFecha(fechaStr);
+                                           }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                                         })()}
+                                       </td>
+                                       <td className="px-2 py-2 text-center border border-slate-200">
+                                         {(() => {
+                                           const baseDate = insumosFecha || new Date();
+                                           const mesSeleccionado = baseDate.getMonth();
+                                           const anioSeleccionado = baseDate.getFullYear();
+                                           const inicioMes = new Date(anioSeleccionado, mesSeleccionado, 1);
+                                           const finMes = endOfMonth(inicioMes);
+                                           const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
+                                           const totalConsumido = diasMes.reduce((acc, dia) => {
+                                             const fechaStr = format(dia, 'yyyy-MM-dd');
+                                             return acc + (Number(co2ConsumoPorDia[fechaStr]) || 0);
+                                           }, 0);
+                                           const totalVP = diasMes.reduce((acc, dia) => {
+                                             const fechaStr = format(dia, 'yyyy-MM-dd');
+                                             return acc + calcularKgCo2ParaFecha(fechaStr);
+                                           }, 0);
+                                           return totalConsumido > 0 ? (totalVP / totalConsumido).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0,00';
+                                         })()}
+                                       </td>
+                                     </tr>
+                                   </tbody>
                                  </table>
                                </div>
                              )}
-                            {insumosSubTab === 'agua' && (
-                              <div className="flex-1 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 min-h-[200px]" />
-                            )}
                           </div>
                        </div>
                      )}
