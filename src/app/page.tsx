@@ -2906,7 +2906,7 @@ export default function PlannerPage() {
                                                        {editable('descripcionAccion') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionAccion || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionAccion: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Desc. acción" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.descripcionAccion}>{rowEdit.descripcionAccion}</TableCell>}
                                                         {editable('observaciones') ? <TableCell className="px-2 py-2"><Input value={rowEdit.observaciones || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, observaciones: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Observaciones" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.observaciones}>{rowEdit.observaciones}</TableCell>}
                                                          {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
-                                                           <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.usuario || ''}</TableCell>
+                                                            <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.usuario || ''}</TableCell>
                                                          )}
                                                    <TableCell className="px-2 py-2 flex items-center gap-1">
                                                     {enEdicion ? (
@@ -5271,7 +5271,7 @@ export default function PlannerPage() {
                       return;
                     }
                     if (plantaFormData.orden && String(plantaFormData.orden).trim() !== '') {
-                      const duplicadoOrden = informesOperacionales.find(r => String(r.orden).trim() === String(plantaFormData.orden).trim() && r.id !== plantaFormData.id);
+                      const duplicadoOrden = informesOperacionales.find(r => String(r.orden).trim() === String(plantaFormData.orden).trim());
                       if (duplicadoOrden) {
                         setErrorValidacion(`Ya existe una orden registrada: ${plantaFormData.orden}.`);
                         return;
