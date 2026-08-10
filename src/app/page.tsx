@@ -405,6 +405,18 @@ export default function PlannerPage() {
       const next = prev.map((r: any) => r.usuario === 'Produccion' ? { ...r, usuario: 'Ronald Valera' } : r);
       return next === prev ? prev : next;
     });
+
+    const ordenes = ordenesTrabajoStore.data || [];
+    const vistos = new Set<string>();
+    const limpios = ordenes.filter((o: any) => {
+      const key = `${o.orden}|${o.fechaOrden}`;
+      if (vistos.has(key)) return false;
+      vistos.add(key);
+      return true;
+    });
+    if (limpios.length !== ordenes.length) {
+      setOrdenesTrabajo(limpios);
+    }
   }, [informesOperacionalesStore, ordenesTrabajoStore]);
 
   useEffect(() => {
