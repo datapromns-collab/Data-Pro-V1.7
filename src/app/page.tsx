@@ -2065,7 +2065,8 @@ export default function PlannerPage() {
                         user.id === 'maria.mds' || user.id === 'alex.mds' ? 'ANALISTA DE GERENCIA TÉCNICA' : 
                         user.role === 'PURCHASING' ? 'COMPRAS' : 
                         user.role === 'INVENTORY' ? 'INVENTARIO' : 
-                        user.id === 'enf.mds' ? 'ESPECIALISTA ENFARDADORA' : user.role}
+                         user.id === 'enf.mds' ? 'ESPECIALISTA ENFARDADORA' : 
+                         user.id === 'MDS' ? 'VISITANTE' : user.role}
                     </span>
                   </div>
                 </div>
@@ -2615,11 +2616,18 @@ export default function PlannerPage() {
                                                              setErrorValidacion('Ingrese hora de inicio y fin de la parada.');
                                                              return;
                                                            }
-                                                           const duplicado = informesOperacionales.find(r => String(r.id) !== String(row.id) && r.fecha === editForm.fecha && r.linea === editForm.linea && seSolapan(r.inicioParada, r.finParada, editForm.inicioParada, editForm.finParada));
-                                                           if (duplicado) {
-                                                             setErrorValidacion(`Ya existe una parada registrada en esta fecha y línea de ${duplicado.inicioParada} a ${duplicado.finParada}.`);
-                                                             return;
-                                                           }
+                                                            const duplicado = informesOperacionales.find(r => String(r.id) !== String(row.id) && r.fecha === editForm.fecha && r.linea === editForm.linea && seSolapan(r.inicioParada, r.finParada, editForm.inicioParada, editForm.finParada));
+                                                            if (duplicado) {
+                                                              setErrorValidacion(`Ya existe una parada registrada en esta fecha y línea de ${duplicado.inicioParada} a ${duplicado.finParada}.`);
+                                                              return;
+                                                            }
+                                                            if (editForm.orden && String(editForm.orden).trim() !== '') {
+                                                              const duplicadoOrden = informesOperacionales.find(r => String(r.orden).trim() === String(editForm.orden).trim() && String(r.id) !== String(row.id));
+                                                              if (duplicadoOrden) {
+                                                                setErrorValidacion(`Ya existe una orden registrada: ${editForm.orden}.`);
+                                                                return;
+                                                              }
+                                                            }
                                                            const [h1, m1] = (editForm.inicioParada || '00:00').split(':').map(Number);
                                                            const [h2, m2] = (editForm.finParada || '00:00').split(':').map(Number);
                                                            let inicio = h1 * 60 + m1;
@@ -2902,9 +2910,16 @@ export default function PlannerPage() {
                                                          )}
                                                    <TableCell className="px-2 py-2 flex items-center gap-1">
                                                     {enEdicion ? (
-                                                      <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
-                                                         const originalId = row.id;
-                                                         setOrdenesTrabajo(prev => prev.map((r: any) => {
+                                                       <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
+                                                          const originalId = row.id;
+                                                          if (rowEdit.orden && String(rowEdit.orden).trim() !== '') {
+                                                            const duplicado = ordenesTrabajo.find((o: any) => String(o.orden).trim() === String(rowEdit.orden).trim() && String(o.id) !== String(originalId));
+                                                            if (duplicado) {
+                                                              setErrorValidacion(`Ya existe una orden registrada: ${rowEdit.orden}.`);
+                                                              return;
+                                                            }
+                                                          }
+                                                          setOrdenesTrabajo(prev => prev.map((r: any) => {
                                                            if (String(r.id) !== String(originalId)) return r;
                                                            return {
                                                              ...r,
@@ -5250,11 +5265,18 @@ export default function PlannerPage() {
                      setErrorValidacion('Ingrese hora de inicio y fin de la parada.');
                      return;
                    }
-                   const duplicado = informesOperacionales.find(r => r.fecha === plantaFormData.fecha && r.linea === plantaFormData.linea && seSolapan(r.inicioParada, r.finParada, plantaFormData.inicioParada, plantaFormData.finParada));
-                   if (duplicado) {
-                     setErrorValidacion(`Ya existe una parada registrada en esta fecha y línea de ${duplicado.inicioParada} a ${duplicado.finParada}.`);
-                     return;
-                   }
+                    const duplicado = informesOperacionales.find(r => r.fecha === plantaFormData.fecha && r.linea === plantaFormData.linea && seSolapan(r.inicioParada, r.finParada, plantaFormData.inicioParada, plantaFormData.finParada));
+                    if (duplicado) {
+                      setErrorValidacion(`Ya existe una parada registrada en esta fecha y línea de ${duplicado.inicioParada} a ${duplicado.finParada}.`);
+                      return;
+                    }
+                    if (plantaFormData.orden && String(plantaFormData.orden).trim() !== '') {
+                      const duplicadoOrden = informesOperacionales.find(r => String(r.orden).trim() === String(plantaFormData.orden).trim() && r.id !== plantaFormData.id);
+                      if (duplicadoOrden) {
+                        setErrorValidacion(`Ya existe una orden registrada: ${plantaFormData.orden}.`);
+                        return;
+                      }
+                    }
                      setInformesOperacionales([...informesOperacionales, { ...plantaFormData, id: Date.now(), usuario: user?.name || '' }]);
                      if (plantaFormData.orden && String(plantaFormData.orden).trim() !== '') {
                        setOrdenesTrabajo(prev => {
@@ -5305,8 +5327,15 @@ export default function PlannerPage() {
                      observaciones: '',
                    });
                    setErrorValidacion('');
-                  } else {
-                     setOrdenesTrabajo(prev => [...prev, {
+                   } else {
+                      if (ordenFormData.orden && String(ordenFormData.orden).trim() !== '') {
+                        const duplicado = ordenesTrabajo.find((o: any) => String(o.orden).trim() === String(ordenFormData.orden).trim());
+                        if (duplicado) {
+                          setErrorValidacion(`Ya existe una orden registrada: ${ordenFormData.orden}.`);
+                          return;
+                        }
+                      }
+                      setOrdenesTrabajo(prev => [...prev, {
                        id: Date.now(),
                        fechaOrden: ordenFormData.fechaOrden || format(new Date(), 'yyyy-MM-dd'),
                        orden: ordenFormData.orden || '',

@@ -32015,7 +32015,7 @@
         "fechaEmision": "2026-08-01",
         "semana": 31,
         "turno": "NOCTURNO",
-        "solicitante": "",
+        "solicitante": "9999",
         "linea": "Línea 3",
         "maquina": "SOPLADORA",
         "aviso": "",
@@ -32032,7 +32032,10 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "2",
-        "usuario": "Luis Sanchez"
+        "usuario": "Luis Sanchez",
+        "otFechaParada": "2026-08-01",
+        "otInicioParada": "20:51",
+        "otFinParada": "21:06"
       },
       {
         "id": 1786376463580.3184,
