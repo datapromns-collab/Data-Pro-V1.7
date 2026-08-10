@@ -609,11 +609,11 @@ export default function PlannerPage() {
      setIsAutoUpdating(false);
    }, [insumosFecha, ordenes]);
 
-  useEffect(() => {
-    if (isAutoUpdating || typeof window === 'undefined') return;
-    localStorage.setItem('co2-diario-data', JSON.stringify(co2DiarioData));
-  }, [co2DiarioData, isAutoUpdating]);
-  const CO2_FACTORS: Record<string, number> = {
+   useEffect(() => {
+     if (isAutoUpdating || typeof window === 'undefined') return;
+     localStorage.setItem('co2-diario-data', JSON.stringify(co2DiarioData));
+   }, [co2DiarioData, isAutoUpdating]);
+   const CO2_FACTORS: Record<string, number> = {
     'GLUP COLA': 0.008848,
     'GLUP FRESH': 0.0082445,
     'GLUP UVA': 0.006636,
@@ -626,9 +626,26 @@ export default function PlannerPage() {
     'GLUP PIÑA PARCHITA': 0.008848,
     'GLUP MANZANA ROJA': 0.006636,
   };
-  const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
-  const [co2ConsumoKg, setCo2ConsumoKg] = useState('');
-  const [produccionSubTab, setProduccionSubTab] = useState('planificadas');
+   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
+   const [co2ConsumoPorDia, setCo2ConsumoPorDia] = useState<Record<string, string>>(() => {
+     if (typeof window !== 'undefined') {
+       try {
+         const stored = localStorage.getItem('co2-consumo-por-dia');
+         if (stored) {
+           const parsed = JSON.parse(stored);
+           if (typeof parsed === 'object' && parsed !== null) {
+             return parsed;
+           }
+         }
+       } catch (e) {}
+     }
+     return {};
+   });
+   useEffect(() => {
+     if (typeof window === 'undefined') return;
+     localStorage.setItem('co2-consumo-por-dia', JSON.stringify(co2ConsumoPorDia));
+   }, [co2ConsumoPorDia]);
+   const [produccionSubTab, setProduccionSubTab] = useState('planificadas');
   const [planificadasSubTab, setPlanificadasSubTab] = useState('porturno');
   const [planificadasTurnoSubTab, setPlanificadasTurnoSubTab] = useState('diurno');
   const [producidasSubTab, setProducidasSubTab] = useState('porturno');
@@ -3868,70 +3885,110 @@ export default function PlannerPage() {
                            </div>
                          )}
                           <div className="flex-1 bg-white rounded-[2.5rem] p-4 overflow-x-auto">
-                            {insumosSubTab === 'co2' && insumosPeriodoSubTab === 'diario' && (
-                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                <table className="w-full border-collapse text-[11px]">
-                                   <thead>
-                                     <tr className="bg-slate-800 text-white">
-                                       <th className="px-3 py-2 text-left font-black uppercase tracking-wider border border-white/10">SABOR</th>
-                                       <th colSpan={3} className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CAJAS PRODUCIDAS</th>
-                                       <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">LITROS PRODUCIDOS<br/>TOTAL</th>
-                                       <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CO2X1L BEBIDA<br/>FACTOR</th>
-                                       <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">TOTAL<br/>KG.CO2</th>
-                                     </tr>
-                                     <tr className="bg-slate-700 text-white">
-                                       <th className="px-3 py-1 border border-white/10"></th>
-                                       <th className="px-3 py-1 text-center font-black border border-white/10">2L</th>
-                                       <th className="px-3 py-1 text-center font-black border border-white/10">1L</th>
-                                       <th className="px-3 py-1 text-center font-black border border-white/10">0,4L</th>
-                                       <th className="px-3 py-1 text-center font-black border border-white/10"></th>
-                                       <th className="px-3 py-1 text-center font-black border border-white/10"></th>
-                                       <th className="px-3 py-1 text-center font-black border border-white/10"></th>
-                                     </tr>
-                                   </thead>
-                                  <tbody>
-                                      {['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'].map((sabor) => {
-                                        const row = co2DiarioData[sabor] || { cajas2L: '', cajas1L: '', cajas04L: '' };
-                                        const c2 = Number(row.cajas2L) || 0;
-                                        const c1 = Number(row.cajas1L) || 0;
-                                        const c04 = Number(row.cajas04L) || 0;
-                                        const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
-                                        const factor = CO2_FACTORS[sabor] || 0;
-                                        const totalKg = factor > 0 ? litros * factor : 0;
-                                        return (
-                                           <tr key={sabor} className="border-b border-slate-100 hover:bg-slate-50/50">
-                                             <td className="px-3 py-1.5 font-bold text-slate-700 border border-slate-100">{sabor}</td>
-                                             <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas2L || ''}</td>
-                                             <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas1L || ''}</td>
-                                             <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas04L || ''}</td>
-                                             <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{litros.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                             <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{factor > 0 ? factor.toLocaleString('es-VE', { minimumFractionDigits: 6, maximumFractionDigits: 6 }) : ''}</td>
-                                             <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{totalKg.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                           </tr>
-                                        );
-                                      })}
-                                      <tr className="bg-slate-100 font-black text-slate-700">
-                                        <td className="px-3 py-2 border border-slate-200">TOTAL PRODUCCIÓN</td>
-                                        <td className="px-3 py-2 text-center border border-slate-200">
-                                          {Object.values(co2DiarioData).reduce((acc, row) => acc + (Number(row.cajas2L) || 0), 0).toLocaleString('es-VE')}
-                                        </td>
-                                        <td className="px-3 py-2 text-center border border-slate-200">
-                                          {Object.values(co2DiarioData).reduce((acc, row) => acc + (Number(row.cajas1L) || 0), 0).toLocaleString('es-VE')}
-                                        </td>
-                                        <td className="px-3 py-2 text-center border border-slate-200">
-                                          {Object.values(co2DiarioData).reduce((acc, row) => acc + (Number(row.cajas04L) || 0), 0).toLocaleString('es-VE')}
-                                        </td>
-                                        <td className="px-3 py-2 text-center border border-slate-200">
-                                          {Object.values(co2DiarioData).reduce((acc, row) => {
-                                            const c2 = Number(row.cajas2L) || 0;
-                                            const c1 = Number(row.cajas1L) || 0;
-                                            const c04 = Number(row.cajas04L) || 0;
-                                            return acc + ((c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4));
-                                          }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                        </td>
-                                        <td className="px-3 py-2 text-center border border-slate-200"></td>
-                                        <td className="px-3 py-2 text-center border border-slate-200">
-                                          {Object.values(co2DiarioData).reduce((acc, row) => {
+                             {insumosSubTab === 'co2' && insumosPeriodoSubTab === 'diario' && (
+                               <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                 <table className="w-full border-collapse text-[11px]">
+                                    <thead>
+                                      <tr className="bg-slate-800 text-white">
+                                        <th className="px-3 py-2 text-left font-black uppercase tracking-wider border border-white/10">SABOR</th>
+                                        <th colSpan={3} className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CAJAS PRODUCIDAS</th>
+                                        <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">LITROS PRODUCIDOS<br/>TOTAL</th>
+                                        <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CO2X1L BEBIDA<br/>FACTOR</th>
+                                        <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">TOTAL<br/>KG.CO2</th>
+                                      </tr>
+                                      <tr className="bg-slate-700 text-white">
+                                        <th className="px-3 py-1 border border-white/10"></th>
+                                        <th className="px-3 py-1 text-center font-black border border-white/10">2L</th>
+                                        <th className="px-3 py-1 text-center font-black border border-white/10">1L</th>
+                                        <th className="px-3 py-1 text-center font-black border border-white/10">0,4L</th>
+                                        <th className="px-3 py-1 text-center font-black border border-white/10"></th>
+                                        <th className="px-3 py-1 text-center font-black border border-white/10"></th>
+                                        <th className="px-3 py-1 text-center font-black border border-white/10"></th>
+                                      </tr>
+                                    </thead>
+                                   <tbody>
+                                       {['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'].map((sabor) => {
+                                         const row = co2DiarioData[sabor] || { cajas2L: '', cajas1L: '', cajas04L: '' };
+                                         const c2 = Number(row.cajas2L) || 0;
+                                         const c1 = Number(row.cajas1L) || 0;
+                                         const c04 = Number(row.cajas04L) || 0;
+                                         const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
+                                         const factor = CO2_FACTORS[sabor] || 0;
+                                         const totalKg = factor > 0 ? litros * factor : 0;
+                                         return (
+                                            <tr key={sabor} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                              <td className="px-3 py-1.5 font-bold text-slate-700 border border-slate-100">{sabor}</td>
+                                              <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas2L || ''}</td>
+                                              <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas1L || ''}</td>
+                                              <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas04L || ''}</td>
+                                              <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{litros.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                              <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{factor > 0 ? factor.toLocaleString('es-VE', { minimumFractionDigits: 6, maximumFractionDigits: 6 }) : ''}</td>
+                                              <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{totalKg.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+                                            </tr>
+                                         );
+                                       })}
+                                       <tr className="bg-slate-100 font-black text-slate-700">
+                                         <td className="px-3 py-2 border border-slate-200">TOTAL PRODUCCIÓN</td>
+                                         <td className="px-3 py-2 text-center border border-slate-200">
+                                           {Object.values(co2DiarioData).reduce((acc, row) => acc + (Number(row.cajas2L) || 0), 0).toLocaleString('es-VE')}
+                                         </td>
+                                         <td className="px-3 py-2 text-center border border-slate-200">
+                                           {Object.values(co2DiarioData).reduce((acc, row) => acc + (Number(row.cajas1L) || 0), 0).toLocaleString('es-VE')}
+                                         </td>
+                                         <td className="px-3 py-2 text-center border border-slate-200">
+                                           {Object.values(co2DiarioData).reduce((acc, row) => acc + (Number(row.cajas04L) || 0), 0).toLocaleString('es-VE')}
+                                         </td>
+                                         <td className="px-3 py-2 text-center border border-slate-200">
+                                           {Object.values(co2DiarioData).reduce((acc, row) => {
+                                             const c2 = Number(row.cajas2L) || 0;
+                                             const c1 = Number(row.cajas1L) || 0;
+                                             const c04 = Number(row.cajas04L) || 0;
+                                             return acc + ((c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4));
+                                           }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                         </td>
+                                         <td className="px-3 py-2 text-center border border-slate-200"></td>
+                                         <td className="px-3 py-2 text-center border border-slate-200">
+                                           {Object.values(co2DiarioData).reduce((acc, row) => {
+                                             const c2 = Number(row.cajas2L) || 0;
+                                             const c1 = Number(row.cajas1L) || 0;
+                                             const c04 = Number(row.cajas04L) || 0;
+                                             const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
+                                             const sabor = Object.keys(co2DiarioData).find(key => co2DiarioData[key] === row);
+                                             const factor = sabor ? (CO2_FACTORS[sabor] || 0) : 0;
+                                             return acc + (litros * factor);
+                                           }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                         </td>
+                                       </tr>
+                                   </tbody>
+                                 </table>
+                                  <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
+                                    <div className="grid grid-cols-3">
+                                      <div className="flex items-center px-3 py-1 bg-slate-800 text-white">
+                                        <div className="font-black text-[11px] uppercase tracking-widest">CONSUMO DE CO2</div>
+                                      </div>
+                                      <div className="flex items-center px-3 py-1 bg-slate-800 justify-center">
+                                        <input
+                                          type="number"
+                                          value={insumosFecha ? (co2ConsumoPorDia[format(insumosFecha, 'yyyy-MM-dd')] || '') : ''}
+                                          onChange={(e) => {
+                                            if (!insumosFecha) return;
+                                            const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
+                                            setCo2ConsumoPorDia(prev => ({ ...prev, [fechaStr]: e.target.value }));
+                                          }}
+                                          className="w-full h-7 text-[11px] font-bold text-center bg-white text-slate-900 border border-white/20 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                          placeholder="0"
+                                        />
+                                      </div>
+                                      <div className="flex items-center justify-end px-3 py-1 bg-slate-800 text-white">
+                                        <div className="font-black text-[11px] uppercase tracking-widest">KG</div>
+                                      </div>
+                                    </div>
+                                    <div className="grid grid-cols-3">
+                                      <div className="flex items-center px-3 py-1 bg-slate-100"></div>
+                                      <div className="flex items-center justify-center px-3 py-1 bg-slate-100 font-black text-slate-700 text-[11px]">
+                                        {insumosFecha ? (() => {
+                                          const valor = Number(co2ConsumoPorDia[format(insumosFecha, 'yyyy-MM-dd')]) || 0;
+                                          const totalKg = Object.values(co2DiarioData).reduce((acc, row) => {
                                             const c2 = Number(row.cajas2L) || 0;
                                             const c1 = Number(row.cajas1L) || 0;
                                             const c04 = Number(row.cajas04L) || 0;
@@ -3939,52 +3996,75 @@ export default function PlannerPage() {
                                             const sabor = Object.keys(co2DiarioData).find(key => co2DiarioData[key] === row);
                                             const factor = sabor ? (CO2_FACTORS[sabor] || 0) : 0;
                                             return acc + (litros * factor);
-                                          }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                          }, 0);
+                                          return valor > 0 ? (totalKg / valor).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0,00';
+                                        })() : '0,00'}
+                                      </div>
+                                      <div className="flex items-center justify-end px-3 py-1 bg-slate-100 font-black text-slate-700 text-[11px]">
+                                        %
+                                      </div>
+                                    </div>
+                                  </div>
+                               </div>
+                             )}
+                             {insumosSubTab === 'co2' && insumosPeriodoSubTab === 'semanal' && (
+                               <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                 <div className="px-4 py-2 bg-slate-800 text-white">
+                                   <div className="font-black text-[11px] uppercase tracking-widest text-center">
+                                     SEMANA {getISOWeek(insumosFecha || new Date())}
+                                   </div>
+                                 </div>
+                                 <table className="w-full border-collapse text-[11px]">
+                                   <thead>
+                                     <tr className="bg-slate-700 text-white">
+                                       <th className="px-3 py-2 text-left font-black uppercase tracking-wider border border-white/10">DIAS/FEB</th>
+                                       <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.CO2<br/>CONSUMIDO</th>
+                                       <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.CO2.VP</th>
+                                       <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CON.CO2/1LT</th>
+                                       <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">RENDIMIENTO<br/>CO2</th>
+                                     </tr>
+                                   </thead>
+                                    <tbody>
+                                      {(() => {
+                                        const baseDate = insumosFecha || new Date();
+                                        const lunes = startOfWeek(baseDate, { weekStartsOn: 1 });
+                                        const diasSemana = Array.from({ length: 7 }, (_, i) => addDays(lunes, i));
+                                        return diasSemana.map((dia, idx) => {
+                                          const fechaStr = format(dia, 'yyyy-MM-dd');
+                                          const valor = Number(co2ConsumoPorDia[fechaStr]) || 0;
+                                          const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
+                                          return (
+                                            <tr key={fechaStr} className={cn("border-b border-slate-100", idx % 2 === 0 ? "bg-white" : "bg-slate-50/60")}>
+                                              <td className="px-3 py-1.5 font-bold text-slate-700 border border-slate-100">{diaNombre}</td>
+                                              <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{valor || ''}</td>
+                                              <td className="px-3 py-1.5 border border-slate-100"></td>
+                                              <td className="px-3 py-1.5 border border-slate-100"></td>
+                                              <td className="px-3 py-1.5 border border-slate-100"></td>
+                                            </tr>
+                                          );
+                                        });
+                                      })()}
+                                      <tr className="bg-slate-100 font-black text-slate-700">
+                                        <td className="px-3 py-2 border border-slate-200">TOTAL</td>
+                                        <td className="px-3 py-2 text-center border border-slate-200">
+                                          {(() => {
+                                            const baseDate = insumosFecha || new Date();
+                                            const lunes = startOfWeek(baseDate, { weekStartsOn: 1 });
+                                            const diasSemana = Array.from({ length: 7 }, (_, i) => addDays(lunes, i));
+                                            return diasSemana.reduce((acc, dia) => {
+                                              const fechaStr = format(dia, 'yyyy-MM-dd');
+                                              return acc + (Number(co2ConsumoPorDia[fechaStr]) || 0);
+                                            }, 0).toLocaleString('es-VE');
+                                          })()}
                                         </td>
+                                        <td className="px-3 py-2 text-center border border-slate-200">0</td>
+                                        <td className="px-3 py-2 text-center border border-slate-200">0,00</td>
+                                        <td className="px-3 py-2 text-center border border-slate-200">0,00</td>
                                       </tr>
-                                  </tbody>
-                                </table>
-                                <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
-                                  <div className="grid grid-cols-3">
-                                    <div className="flex items-center px-3 py-1 bg-slate-800 text-white">
-                                      <div className="font-black text-[11px] uppercase tracking-widest">CONSUMO DE CO2</div>
-                                    </div>
-                                    <div className="flex items-center px-3 py-1 bg-slate-800 justify-center">
-                                      <input
-                                        type="number"
-                                        value={co2ConsumoKg}
-                                        onChange={(e) => setCo2ConsumoKg(e.target.value)}
-                                        className="w-full h-7 text-[11px] font-bold text-center bg-white text-slate-900 border border-white/20 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                                        placeholder="0"
-                                      />
-                                    </div>
-                                    <div className="flex items-center justify-end px-3 py-1 bg-slate-800 text-white">
-                                      <div className="font-black text-[11px] uppercase tracking-widest">KG</div>
-                                    </div>
-                                  </div>
-                                  <div className="grid grid-cols-3">
-                                    <div className="flex items-center px-3 py-1 bg-slate-100"></div>
-                                    <div className="flex items-center justify-center px-3 py-1 bg-slate-100 font-black text-slate-700 text-[11px]">
-                                      {co2ConsumoKg && Number(co2ConsumoKg) > 0 ? (Object.values(co2DiarioData).reduce((acc, row) => {
-                                        const c2 = Number(row.cajas2L) || 0;
-                                        const c1 = Number(row.cajas1L) || 0;
-                                        const c04 = Number(row.cajas04L) || 0;
-                                        const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
-                                        const sabor = Object.keys(co2DiarioData).find(key => co2DiarioData[key] === row);
-                                        const factor = sabor ? (CO2_FACTORS[sabor] || 0) : 0;
-                                        return acc + (litros * factor);
-                                      }, 0) / Number(co2ConsumoKg)).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0,00'}
-                                    </div>
-                                    <div className="flex items-center justify-end px-3 py-1 bg-slate-100 font-black text-slate-700 text-[11px]">
-                                      %
-                                    </div>
-                                  </div>
-                                </div>
-                              </div>
-                            )}
-                            {insumosSubTab === 'co2' && insumosPeriodoSubTab !== 'diario' && (
-                              <div className="flex-1 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 min-h-[200px]" />
-                            )}
+                                    </tbody>
+                                 </table>
+                               </div>
+                             )}
                             {insumosSubTab === 'agua' && (
                               <div className="flex-1 rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 min-h-[200px]" />
                             )}
