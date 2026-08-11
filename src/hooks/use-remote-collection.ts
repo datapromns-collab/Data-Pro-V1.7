@@ -291,7 +291,28 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
               return prev;
             }
             if (Array.isArray(prev) && !Array.isArray(remote)) return prev;
-            if (Array.isArray(remote) && Array.isArray(prev)) return applyDeleted(remote) as T;
+            if (Array.isArray(remote) && Array.isArray(prev)) {
+              const merged = applyDeleted(remote) as T;
+              const prevArr = prev as any[];
+              if (Array.isArray(merged)) {
+                const map = new Map<string, any>();
+                prevArr.forEach((item: any) => {
+                  if (item && item.id != null) map.set(String(item.id), item);
+                });
+                (merged as any[]).forEach((item: any) => {
+                  if (item && item.id != null) {
+                    const prevItem = map.get(String(item.id));
+                    if (prevItem && prevItem.bloqueado === true && !('bloqueado' in item)) {
+                      map.set(String(item.id), { ...item, bloqueado: true });
+                    } else {
+                      map.set(String(item.id), item);
+                    }
+                  }
+                });
+                return Array.from(map.values()) as T;
+              }
+              return merged;
+            }
             if (Array.isArray(remote)) return applyDeleted(remote) as T;
             const remoteObj = remote as Record<string, any>;
             const merged = { ...(prev as Record<string, any>) };
