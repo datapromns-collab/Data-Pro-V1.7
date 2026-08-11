@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, useEffect, useRef } from "react";
+import React, { useState, useMemo, useEffect, useRef, memo } from "react";
 import Image from "next/image";
 import { 
   Plus, 
@@ -382,24 +382,6 @@ export default function PlannerPage() {
   const migracionPlantaHechaRef = useRef(false);
   const informesOperacionalesRef = useRef(informesOperacionales);
   informesOperacionalesRef.current = informesOperacionales;
-
-  const [ordenesBloqueadas, setOrdenesBloqueadas] = useState<Set<string>>(() => {
-    try {
-      const raw = localStorage.getItem('ordenes_trabajo_bloqueadas');
-      const list = raw ? JSON.parse(raw) : [];
-      return new Set(Array.isArray(list) ? list : []);
-    } catch {
-      return new Set();
-    }
-  });
-
-  useEffect(() => {
-    try {
-      localStorage.setItem('ordenes_trabajo_bloqueadas', JSON.stringify(Array.from(ordenesBloqueadas)));
-    } catch {
-      // ignore
-    }
-  }, [ordenesBloqueadas]);
 
   useEffect(() => {
     if (migracionPlantaHechaRef.current) return;
@@ -2875,139 +2857,33 @@ export default function PlannerPage() {
                                             </TableRow>
                                        </TableHeader>
                                          <TableBody>
-                                           {ordenesTrabajoCargadas
-                                             .filter((r) => {
-                                               const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
-                                               const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
-                                               const q = ordenBusqueda.trim().toLowerCase();
-                                               const matchQ = !q || [r.orden, r.solicitante, r.falla, r.maquina, r.aviso, r.observaciones, r.descripcionFalla, r.descripcionAccion]
-                                                 .filter(Boolean).some((v) => String(v).toLowerCase().includes(q));
-                                               return matchLine && matchDate && matchQ;
-                                             })
-                                             .map((row) => {
-                                                 const rowEdit = editingRows[row.id] || row;
-                                                    const esAdmin = user?.id === 'alex.mds' || user?.id === 'maria.mds';
-                                                    const enEdicion = (esAdmin || !ordenesBloqueadas.has(String(row.id))) && user?.id !== 'prodtj.mds' && user?.id !== 'prodts.mds' && user?.id !== 'enf.mds';
-                                                const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','inicioParada','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones','fechaParada']);
-                                                 const editable = (campo: string) => enEdicion && camposEditables.has(campo);
-                                                  const tMttoCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioMtto, rowEdit.fechaParada, rowEdit.finMtto);
-                                                  const tParadaCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioParada, rowEdit.fechaParada, rowEdit.finParada);
-                                                return (
-                                             <TableRow key={row.id} className="hover:bg-slate-50/60 border-b border-slate-100">
-                                                  <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap sticky left-0 z-20 bg-white even:bg-slate-50/60">{formatearFecha(rowEdit.fechaOrden)}</TableCell>
-                                                 <TableCell className="px-2 py-2 text-[11px] font-mono font-bold text-slate-900 whitespace-nowrap sticky left-[72px] z-20 bg-white even:bg-slate-50/60">{rowEdit.orden}</TableCell>
-                                                 {editable('fechaEmision') ? <TableCell className="px-2 py-2"><Input type="date" value={rowEdit.fechaEmision || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, fechaEmision: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{rowEdit.fechaEmision}</TableCell>}
-                                                 <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {rowEdit.semana}</TableCell>
-                                                 <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{rowEdit.turno}</TableCell>
-                                                 {editable('solicitante') ? <TableCell className="px-2 py-2"><Input value={rowEdit.solicitante || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, solicitante: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] font-semibold text-slate-800 whitespace-nowrap">{rowEdit.solicitante}</TableCell>}
-                                                 <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap sticky left-[150px] z-20 bg-white even:bg-slate-50/60">{rowEdit.linea}</TableCell>
-                                                 {editable('aviso') ? <TableCell className="px-2 py-2"><Input value={rowEdit.aviso || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, aviso: e.target.value}})} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.aviso}</TableCell>}
-                                                 <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.maquina}</TableCell>
-                                                      {editable('inicioParada') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={rowEdit.inicioParada || ''} onChange={onChangeHora((v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioParada: v}}))} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{normalizarHora(rowEdit.inicioParada)}</TableCell>}
-                                                      {editable('inicioMtto') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={rowEdit.inicioMtto || ''} onChange={onChangeHora((v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, inicioMtto: v}}))} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{normalizarHora(rowEdit.inicioMtto)}</TableCell>}
-                                                     {editable('finMtto') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={rowEdit.finMtto || ''} onChange={onChangeHora((v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finMtto: v}}))} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{normalizarHora(rowEdit.finMtto)}</TableCell>}
-                                                      {editable('finParada') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={rowEdit.finParada || ''} onChange={onChangeHora((v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, finParada: v}}))} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{normalizarHora(rowEdit.finParada)}</TableCell>}
-                                                    <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums">{tMttoCalc || rowEdit.tMtto}</TableCell>
-                                                     <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums">{tParadaCalc || rowEdit.tParada}</TableCell>
-                                                      <TableCell className="px-2 py-2">
-                                                        {editable('tipoParada') ? (
-                                                          <Select value={rowEdit.tipoParada || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, tipoParada: v}})}>
-                                                            <SelectTrigger className="h-8 text-[10px] w-24 border-slate-200">
-                                                              <SelectValue placeholder="PARADA?" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                              {PARADA_OPCIONES.map((o) => (<SelectItem key={o} value={o} className="text-[10px] capitalize">{o}</SelectItem>))}
-                                                            </SelectContent>
-                                                          </Select>
-                                                        ) : (
-                                                          <span className="text-[11px] text-slate-600 capitalize">{rowEdit.tipoParada}</span>
-                                                        )}
-                                                      </TableCell>
-                                                      <TableCell className="px-2 py-2">
-                                                        {editable('mtto') ? (
-                                                          <Select value={rowEdit.mtto || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, mtto: v}})}>
-                                                            <SelectTrigger className="h-8 text-[10px] w-40 border-slate-200">
-                                                              <SelectValue placeholder="MTTO" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                              {MTTO_OPCIONES.map((o) => (<SelectItem key={o} value={o} className="text-[10px] capitalize">{o}</SelectItem>))}
-                                                            </SelectContent>
-                                                          </Select>
-                                                        ) : (
-                                                          <span className="text-[11px] text-slate-600 capitalize">{rowEdit.mtto}</span>
-                                                        )}
-                                                      </TableCell>
-                                                      <TableCell className="px-2 py-2">
-                                                        {editable('falla') ? (
-                                                          <Select value={rowEdit.falla || ''} onValueChange={(v) => setEditingRows({...editingRows, [row.id]: {...rowEdit, falla: v}})}>
-                                                            <SelectTrigger className="h-8 text-[10px] w-36 border-slate-200">
-                                                              <SelectValue placeholder="FALLA" />
-                                                            </SelectTrigger>
-                                                            <SelectContent>
-                                                              {FALLA_OPCIONES.map((o) => (<SelectItem key={o} value={o} className="text-[10px] capitalize">{o}</SelectItem>))}
-                                                            </SelectContent>
-                                                          </Select>
-                                                        ) : (
-                                                          <span className="text-[11px] text-slate-600 capitalize">{rowEdit.falla}</span>
-                                                        )}
-                                                      </TableCell>
-                                                       {editable('mttoEsp') ? <TableCell className="px-2 py-2"><Input value={rowEdit.mttoEsp || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, mttoEsp: e.target.value}})} className="h-8 text-[10px] w-28" placeholder="MTTO / ESP" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600">{rowEdit.mttoEsp}</TableCell>}
-                                                       {editable('descripcionFalla') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionFalla || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionFalla: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Desc. falla" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.descripcionFalla}>{rowEdit.descripcionFalla}</TableCell>}
-                                                       {editable('descripcionAccion') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionAccion || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, descripcionAccion: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Desc. acción" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.descripcionAccion}>{rowEdit.descripcionAccion}</TableCell>}
-                                                        {editable('observaciones') ? <TableCell className="px-2 py-2"><Input value={rowEdit.observaciones || ''} onChange={(e) => setEditingRows({...editingRows, [row.id]: {...rowEdit, observaciones: e.target.value}})} className="h-8 text-[10px] w-52" placeholder="Observaciones" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.observaciones}>{rowEdit.observaciones}</TableCell>}
-                                                         {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
-                                                            <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.usuario || ''}</TableCell>
-                                                         )}
-                                                   <TableCell className="px-2 py-2 flex items-center gap-1">
-                                                    {enEdicion ? (
-                                                       <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" type="button" onClick={(e) => {
-                                                            e.stopPropagation();
-                                                            const originalId = row.id;
-                                                            if (rowEdit.orden && String(rowEdit.orden).trim() !== '') {
-                                                              const duplicado = ordenesTrabajo.find((o: any) => String(o.orden).trim() === String(rowEdit.orden).trim() && String(o.id) !== String(originalId));
-                                                              if (duplicado) {
-                                                                setErrorValidacion(`Ya existe una orden registrada: ${rowEdit.orden}.`);
-                                                                return;
-                                                              }
-                                                            }
-                                                            setOrdenesTrabajo(prev => prev.map((r: any) => {
-                                                             if (String(r.id) !== String(originalId)) return r;
-                                                             return {
-                                                               ...r,
-                                                               fechaEmision: rowEdit.fechaEmision || r.fechaEmision || '',
-                                                               solicitante: rowEdit.solicitante || r.solicitante || '',
-                                                               aviso: rowEdit.aviso || r.aviso || '',
-                                                               maquina: rowEdit.maquina || r.maquina || '',
-                                                               otFechaParada: rowEdit.fechaParada || r.fechaParada || '',
-                                                               inicioMtto: rowEdit.inicioMtto || r.inicioMtto || '',
-                                                               finMtto: rowEdit.finMtto || r.finMtto || '',
-                                                               otInicioParada: rowEdit.inicioParada || r.inicioParada || '',
-                                                               tMtto: rowEdit.tMtto || r.tMtto || '',
-                                                               otFinParada: rowEdit.finParada || r.finParada || '',
-                                                               tipoParada: rowEdit.tipoParada || r.tipoParada || '',
-                                                               mtto: rowEdit.mtto || r.mtto || '',
-                                                               falla: rowEdit.falla || r.falla || '',
-                                                               mttoEsp: rowEdit.mttoEsp || r.mttoEsp || '',
-                                                               descripcionFalla: rowEdit.descripcionFalla || r.descripcionFalla || '',
-                                                               descripcionAccion: rowEdit.descripcionAccion || r.descripcionAccion || '',
-                                                               observaciones: rowEdit.observaciones || r.observaciones || '',
-                                                             };
-                                                           }));
-                                                            setOrdenesBloqueadas(prev => new Set(prev).add(String(originalId)));
-                                                            setEditingRows(prev => { const next = {...prev}; delete next[row.id]; return next; });
-                                                            setFilasNoEditables(prev => ({...prev, [row.id]: true}));
-                                                         }}><Check className="h-3.5 w-3.5" /></Button>
-                                                      ) : (
-                                                        <>
-                                                           {(esAdmin || !ordenesBloqueadas.has(String(row.id))) && user?.id !== 'prodtj.mds' && user?.id !== 'prodt.mds' && user?.id !== 'prodt1.mds' && user?.id !== 'prodt2.mds' && user?.id !== 'prodts.mds' && user?.id !== 'enf.mds' && (
-                                                             <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingRows(prev => ({...prev, [row.id]: {...row}})); setFilasNoEditables(prev => { const next = {...prev}; delete next[row.id]; return next; }); }}><Pencil className="h-3.5 w-3.5" /></Button>
-                                                          )}
-                                                        </>
-                                                      )}
-                                                  </TableCell>
-                                             </TableRow>
-                                               );
-                                             })}
+                                            {ordenesTrabajoCargadas
+                                              .filter((r) => {
+                                                const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
+                                                const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
+                                                const q = ordenBusqueda.trim().toLowerCase();
+                                                const matchQ = !q || [r.orden, r.solicitante, r.falla, r.maquina, r.aviso, r.observaciones, r.descripcionFalla, r.descripcionAccion]
+                                                  .filter(Boolean).some((v) => String(v).toLowerCase().includes(q));
+                                                return matchLine && matchDate && matchQ;
+                                              })
+                                              .map((row) => (
+                                                <OrdenTrabajoRow
+                                                  key={row.id}
+                                                  row={row}
+                                                  editingRows={editingRows}
+                                                  setEditingRows={setEditingRows}
+                                                  setFilasNoEditables={setFilasNoEditables}
+                                                  errorValidacion={errorValidacion}
+                                                  setErrorValidacion={setErrorValidacion}
+                                                  ordenesTrabajo={ordenesTrabajo}
+                                                  setOrdenesTrabajo={setOrdenesTrabajo}
+                                                  user={user}
+                                                  onChangeHora={onChangeHora}
+                                                  tiempoTranscurrido={tiempoTranscurrido}
+                                                  normalizarHora={normalizarHora}
+                                                  formatearFecha={formatearFecha}
+                                                />
+                                              ))}
                                            {ordenesTrabajoCargadas.filter((r) => {
                                              const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
                                              const matchDate = !paradaFiltroFecha || r.fechaOrden === paradaFiltroFecha;
@@ -6206,6 +6082,147 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
            </div>
          </div>
        )}
-     </div>
-   );
- }
+      </div>
+    );
+  }
+
+  const OrdenTrabajoRow = memo(({ row, editingRows, setEditingRows, setFilasNoEditables, errorValidacion, setErrorValidacion, ordenesTrabajo, setOrdenesTrabajo, user, onChangeHora, tiempoTranscurrido, normalizarHora, formatearFecha }: any) => {
+    const rowEdit = editingRows[row.id] || row;
+    const esAdmin = user?.id === 'alex.mds' || user?.id === 'maria.mds';
+    const esUsuarioRestringido = user?.id === 'prodtj.mds' || user?.id === 'prodts.mds' || user?.id === 'enf.mds';
+    const estaBloqueado = (row as any).bloqueado === true;
+    const estaEnEdicion = editingRows[row.id] != null;
+    const enEdicion = esAdmin && !esUsuarioRestringido && (estaEnEdicion || !estaBloqueado);
+    const puedeEditar = esAdmin || (!estaBloqueado && !esUsuarioRestringido);
+    const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','inicioParada','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones','fechaParada']);
+    const editable = (campo: string) => enEdicion && camposEditables.has(campo);
+    const tMttoCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioMtto, rowEdit.fechaParada, rowEdit.finMtto);
+    const tParadaCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioParada, rowEdit.fechaParada, rowEdit.finParada);
+
+    const handleSave = (e: any) => {
+      e.stopPropagation();
+      const originalId = row.id;
+      console.log('[OT] guardar click', originalId, rowEdit.orden);
+      if (rowEdit.orden && String(rowEdit.orden).trim() !== '') {
+        const duplicado = ordenesTrabajo.find((o: any) => String(o.orden).trim() === String(rowEdit.orden).trim() && String(o.id) !== String(originalId));
+        if (duplicado) {
+          setErrorValidacion(`Ya existe una orden registrada: ${rowEdit.orden}.`);
+          return;
+        }
+      }
+      setOrdenesTrabajo((prev: any[]) => {
+        const idx = prev.findIndex((r: any) => String(r.id) === String(originalId));
+        if (idx < 0) return prev;
+        const updated: any = {
+          ...prev[idx],
+          fechaEmision: rowEdit.fechaEmision || prev[idx].fechaEmision || '',
+          solicitante: rowEdit.solicitante || prev[idx].solicitante || '',
+          aviso: rowEdit.aviso || prev[idx].aviso || '',
+          maquina: rowEdit.maquina || prev[idx].maquina || '',
+          otFechaParada: rowEdit.fechaParada || prev[idx].fechaParada || '',
+          inicioMtto: rowEdit.inicioMtto || prev[idx].inicioMtto || '',
+          finMtto: rowEdit.finMtto || prev[idx].finMtto || '',
+          otInicioParada: rowEdit.inicioParada || prev[idx].inicioParada || '',
+          tMtto: rowEdit.tMtto || prev[idx].tMtto || '',
+          otFinParada: rowEdit.finParada || prev[idx].finParada || '',
+          tipoParada: rowEdit.tipoParada || prev[idx].tipoParada || '',
+          mtto: rowEdit.mtto || prev[idx].mtto || '',
+          falla: rowEdit.falla || prev[idx].falla || '',
+          mttoEsp: rowEdit.mttoEsp || prev[idx].mttoEsp || '',
+          descripcionFalla: rowEdit.descripcionFalla || prev[idx].descripcionFalla || '',
+          descripcionAccion: rowEdit.descripcionAccion || prev[idx].descripcionAccion || '',
+          observaciones: rowEdit.observaciones || prev[idx].observaciones || '',
+          bloqueado: true,
+        };
+        const next = [...prev];
+        next[idx] = updated;
+        return next;
+      });
+      setEditingRows((prev: any) => { const next = { ...prev }; delete next[row.id]; return next; });
+      setFilasNoEditables((prev: any) => ({ ...prev, [row.id]: true }));
+    };
+
+    return (
+      <TableRow className="hover:bg-slate-50/60 border-b border-slate-100">
+        <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap sticky left-0 z-20 bg-white even:bg-slate-50/60">{formatearFecha(rowEdit.fechaOrden)}</TableCell>
+        <TableCell className="px-2 py-2 text-[11px] font-mono font-bold text-slate-900 whitespace-nowrap sticky left-[72px] z-20 bg-white even:bg-slate-50/60">{rowEdit.orden}</TableCell>
+        {editable('fechaEmision') ? <TableCell className="px-2 py-2"><Input type="date" value={rowEdit.fechaEmision || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, fechaEmision: e.target.value } })} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{rowEdit.fechaEmision}</TableCell>}
+        <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {rowEdit.semana}</TableCell>
+        <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{rowEdit.turno}</TableCell>
+        {editable('solicitante') ? <TableCell className="px-2 py-2"><Input value={rowEdit.solicitante || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, solicitante: e.target.value } })} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] font-semibold text-slate-800 whitespace-nowrap">{rowEdit.solicitante}</TableCell>}
+        <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-900 whitespace-nowrap sticky left-[150px] z-20 bg-white even:bg-slate-50/60">{rowEdit.linea}</TableCell>
+        {editable('aviso') ? <TableCell className="px-2 py-2"><Input value={rowEdit.aviso || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, aviso: e.target.value } })} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.aviso}</TableCell>}
+        <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.maquina}</TableCell>
+        {editable('inicioParada') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={rowEdit.inicioParada || ''} onChange={onChangeHora((v: string) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, inicioParada: v } }))} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{normalizarHora(rowEdit.inicioParada)}</TableCell>}
+        {editable('inicioMtto') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={rowEdit.inicioMtto || ''} onChange={onChangeHora((v: string) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, inicioMtto: v } }))} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{normalizarHora(rowEdit.inicioMtto)}</TableCell>}
+        {editable('finMtto') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={rowEdit.finMtto || ''} onChange={onChangeHora((v: string) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, finMtto: v } }))} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{normalizarHora(rowEdit.finMtto)}</TableCell>}
+        {editable('finParada') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={rowEdit.finParada || ''} onChange={onChangeHora((v: string) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, finParada: v } }))} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{normalizarHora(rowEdit.finParada)}</TableCell>}
+        <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums">{tMttoCalc || rowEdit.tMtto}</TableCell>
+        <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums">{tParadaCalc || rowEdit.tParada}</TableCell>
+        <TableCell className="px-2 py-2">
+          {editable('tipoParada') ? (
+            <Select value={rowEdit.tipoParada || ''} onValueChange={(v: string) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, tipoParada: v } })}>
+              <SelectTrigger className="h-8 text-[10px] w-24 border-slate-200">
+                <SelectValue placeholder="PARADA?" />
+              </SelectTrigger>
+              <SelectContent>
+                {PARADA_OPCIONES.map((o) => (<SelectItem key={o} value={o} className="text-[10px] capitalize">{o}</SelectItem>))}
+              </SelectContent>
+            </Select>
+          ) : (
+            <span className="text-[11px] text-slate-600 capitalize">{rowEdit.tipoParada}</span>
+          )}
+        </TableCell>
+        <TableCell className="px-2 py-2">
+          {editable('mtto') ? (
+            <Select value={rowEdit.mtto || ''} onValueChange={(v: string) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, mtto: v } })}>
+              <SelectTrigger className="h-8 text-[10px] w-40 border-slate-200">
+                <SelectValue placeholder="MTTO" />
+              </SelectTrigger>
+              <SelectContent>
+                {MTTO_OPCIONES.map((o) => (<SelectItem key={o} value={o} className="text-[10px] capitalize">{o}</SelectItem>))}
+              </SelectContent>
+            </Select>
+          ) : (
+            <span className="text-[11px] text-slate-600 capitalize">{rowEdit.mtto}</span>
+          )}
+        </TableCell>
+        <TableCell className="px-2 py-2">
+          {editable('falla') ? (
+            <Select value={rowEdit.falla || ''} onValueChange={(v: string) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, falla: v } })}>
+              <SelectTrigger className="h-8 text-[10px] w-36 border-slate-200">
+                <SelectValue placeholder="FALLA" />
+              </SelectTrigger>
+              <SelectContent>
+                {FALLA_OPCIONES.map((o) => (<SelectItem key={o} value={o} className="text-[10px] capitalize">{o}</SelectItem>))}
+              </SelectContent>
+            </Select>
+          ) : (
+            <span className="text-[11px] text-slate-600 capitalize">{rowEdit.falla}</span>
+          )}
+        </TableCell>
+        {editable('mttoEsp') ? <TableCell className="px-2 py-2"><Input value={rowEdit.mttoEsp || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, mttoEsp: e.target.value } })} className="h-8 text-[10px] w-28" placeholder="MTTO / ESP" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600">{rowEdit.mttoEsp}</TableCell>}
+        {editable('descripcionFalla') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionFalla || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, descripcionFalla: e.target.value } })} className="h-8 text-[10px] w-52" placeholder="Desc. falla" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.descripcionFalla}>{rowEdit.descripcionFalla}</TableCell>}
+        {editable('descripcionAccion') ? <TableCell className="px-2 py-2"><Input value={rowEdit.descripcionAccion || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, descripcionAccion: e.target.value } })} className="h-8 text-[10px] w-52" placeholder="Desc. acción" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.descripcionAccion}>{rowEdit.descripcionAccion}</TableCell>}
+        {editable('observaciones') ? <TableCell className="px-2 py-2"><Input value={rowEdit.observaciones || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, observaciones: e.target.value } })} className="h-8 text-[10px] w-52" placeholder="Observaciones" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 max-w-[200px] truncate" title={rowEdit.observaciones}>{rowEdit.observaciones}</TableCell>}
+        {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
+          <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{rowEdit.usuario || ''}</TableCell>
+        )}
+        <TableCell className="px-2 py-2 flex items-center gap-1">
+          {enEdicion ? (
+            <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" type="button" onClick={handleSave}>
+              <Check className="h-3.5 w-3.5" />
+            </Button>
+          ) : (
+            <>
+              {puedeEditar && (
+                <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingRows((prev: any) => ({ ...prev, [row.id]: { ...row } })); setFilasNoEditables((prev: any) => { const next = { ...prev }; delete next[row.id]; return next; }); }}><Pencil className="h-3.5 w-3.5" /></Button>
+              )}
+            </>
+          )}
+        </TableCell>
+      </TableRow>
+    );
+  });
+
+  OrdenTrabajoRow.displayName = 'OrdenTrabajoRow';

@@ -120,8 +120,17 @@ function mergeCollection(existing: any, incoming: any): any[] {
   const first = existingArr[0];
   if (first && first.id != null) {
     const map = new Map<string, any>();
-    existingArr.forEach((item: any) => map.set(String(item.id), item));
-    incomingArr.forEach((item: any) => map.set(String(item.id), item));
+    existingArr.forEach((item: any) => {
+      const id = String(item.id);
+      const blocked = item.bloqueado === true;
+      map.set(id, { ...item, bloqueado: blocked });
+    });
+    incomingArr.forEach((item: any) => {
+      const id = String(item.id);
+      const existingItem = map.get(id);
+      const blocked = existingItem ? (existingItem.bloqueado === true || item.bloqueado === true) : item.bloqueado === true;
+      map.set(id, { ...item, bloqueado: blocked });
+    });
     return Array.from(map.values());
   }
   return incomingArr;

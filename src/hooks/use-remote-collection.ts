@@ -170,22 +170,20 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
   }, [persistLocal, enqueue, flushQueue]);
 
   const setDataSynced = useCallback((updater: T | ((prev: T) => T)) => {
-    setData((prev) => {
-      const next = typeof updater === 'function' ? (updater as (p: T) => T)(prev) : updater;
-      console.log('[RC] setData', namespace, 'type', Array.isArray(next) ? 'array' : 'object', 'keys', Array.isArray(next) ? next.length : Object.keys(next as Record<string, any>).slice(0, 5));
-      persistLocal(next);
-      const payload = Array.isArray(next)
-        ? { items: next, _deletedIds: Array.from(deletedRef.current) }
-        : next;
-      enqueue(payload);
-      pendingRef.current = true;
-      if (timerRef.current) clearTimeout(timerRef.current);
-      timerRef.current = setTimeout(() => {
-        flushQueue();
-      }, 150);
-      return next;
-    });
-  }, [persistLocal, enqueue, flushQueue]);
+    const next = typeof updater === 'function' ? (updater as (p: T) => T)(data) : updater;
+    console.log('[RC] setData', namespace, 'type', Array.isArray(next) ? 'array' : 'object', 'keys', Array.isArray(next) ? next.length : Object.keys(next as Record<string, any>).slice(0, 5));
+    persistLocal(next);
+    const payload = Array.isArray(next)
+      ? { items: next, _deletedIds: Array.from(deletedRef.current) }
+      : next;
+    enqueue(payload);
+    pendingRef.current = true;
+    if (timerRef.current) clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      flushQueue();
+    }, 150);
+    setData(next);
+  }, [data, persistLocal, enqueue, flushQueue, namespace]);
 
   // Igual que setData pero envia al servidor SOLO las claves indicadas en `patch`
   // (delta), sin sobrescribir el estado completo. El servidor hace merge por clave,
