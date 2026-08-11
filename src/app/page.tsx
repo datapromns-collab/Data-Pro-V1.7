@@ -383,6 +383,24 @@ export default function PlannerPage() {
   const informesOperacionalesRef = useRef(informesOperacionales);
   informesOperacionalesRef.current = informesOperacionales;
 
+  const [ordenesBloqueadas, setOrdenesBloqueadas] = useState<Set<string>>(() => {
+    try {
+      const raw = localStorage.getItem('ordenes_trabajo_bloqueadas');
+      const list = raw ? JSON.parse(raw) : [];
+      return new Set(Array.isArray(list) ? list : []);
+    } catch {
+      return new Set();
+    }
+  });
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('ordenes_trabajo_bloqueadas', JSON.stringify(Array.from(ordenesBloqueadas)));
+    } catch {
+      // ignore
+    }
+  }, [ordenesBloqueadas]);
+
   useEffect(() => {
     if (migracionPlantaHechaRef.current) return;
     if (!informesOperacionalesStore.isLoaded || !ordenesTrabajoStore.isLoaded) return;
@@ -405,7 +423,9 @@ export default function PlannerPage() {
       const next = prev.map((r: any) => r.usuario === 'Produccion' ? { ...r, usuario: 'Ronald Valera' } : r);
       return next === prev ? prev : next;
     });
+  }, [informesOperacionalesStore, ordenesTrabajoStore]);
 
+  useEffect(() => {
     const ordenes = ordenesTrabajoStore.data || [];
     const vistos = new Set<string>();
     const limpios = ordenes.filter((o: any) => {
@@ -417,7 +437,7 @@ export default function PlannerPage() {
     if (limpios.length !== ordenes.length) {
       ordenesTrabajoStore.setData(limpios);
     }
-  }, [informesOperacionalesStore, ordenesTrabajoStore]);
+  }, [ordenesTrabajoStore.data, ordenesTrabajoStore.setData]);
 
   const sincronizacionPlantaHechaRef = useRef(false);
 
@@ -2627,10 +2647,10 @@ export default function PlannerPage() {
                                                 <TableCell className="px-2 py-2"><Input type="date" value={editForm.fecha || ''} onChange={(e) => setEditForm({...editForm, fecha: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                 <TableCell className="px-2 py-2"><Input type="number" value={editForm.semana ?? ''} onChange={(e) => setEditForm({...editForm, semana: parseInt(e.target.value) || 0})} className="h-8 text-[10px] w-16" /></TableCell>
                                                 <TableCell className="px-2 py-2"><Input value={editForm.turno || ''} onChange={(e) => setEditForm({...editForm, turno: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                                <TableCell className="px-2 py-2"><Input value={editForm.operador || ''} onChange={(e) => setEditForm({...editForm, operador: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                                 <TableCell className="px-2 py-2"><Input value={editForm.operador || ''} onChange={(e) => setEditForm({...editForm, operador: e.target.value})} disabled={!EQUIPO_ACTIVO_POR_TIPO.has(editForm.tipoParada)} className="h-8 text-[10px] disabled:opacity-50 disabled:cursor-not-allowed" /></TableCell>
                                                 <TableCell className="px-2 py-2"><Input value={editForm.linea || ''} onChange={(e) => setEditForm({...editForm, linea: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                 <TableCell className="px-2 py-2"><Input value={editForm.equipo || ''} onChange={(e) => setEditForm({...editForm, equipo: e.target.value})} className="h-8 text-[10px]" /></TableCell>
-                                                <TableCell className="px-2 py-2"><Input value={editForm.tipoParada || ''} onChange={(e) => setEditForm({...editForm, tipoParada: e.target.value})} className="h-8 text-[10px]" /></TableCell>
+                                                 <TableCell className="px-2 py-2"><Input value={editForm.tipoParada || ''} onChange={(e) => setEditForm({...editForm, tipoParada: e.target.value, equipo: EQUIPO_ACTIVO_POR_TIPO.has(e.target.value) ? editForm.equipo : '', operador: EQUIPO_ACTIVO_POR_TIPO.has(e.target.value) ? editForm.operador : ''})} className="h-8 text-[10px]" /></TableCell>
                                                    <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={editForm.inicioParada || ''} onChange={onChangeHora((v) => setEditForm({...editForm, inicioParada: v}))} className="h-8 text-[10px] w-24" /></TableCell>
                                                    <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={editForm.finParada || ''} onChange={onChangeHora((v) => setEditForm({...editForm, finParada: v}))} className="h-8 text-[10px] w-24" /></TableCell>
                                                   <TableCell className="px-2 py-2 whitespace-nowrap"><Input type="text" value={editForm.totalMin ?? ''} readOnly className="h-8 text-[10px] w-16 bg-slate-100" /></TableCell>
@@ -2865,8 +2885,9 @@ export default function PlannerPage() {
                                                return matchLine && matchDate && matchQ;
                                              })
                                              .map((row) => {
-                                                const rowEdit = editingRows[row.id] || row;
-                                                  const enEdicion = !filasNoEditables[row.id] && user?.id !== 'prodtj.mds' && user?.id !== 'prodts.mds' && user?.id !== 'enf.mds';
+                                                 const rowEdit = editingRows[row.id] || row;
+                                                    const esAdmin = user?.id === 'alex.mds' || user?.id === 'maria.mds';
+                                                    const enEdicion = (esAdmin || !ordenesBloqueadas.has(String(row.id))) && user?.id !== 'prodtj.mds' && user?.id !== 'prodts.mds' && user?.id !== 'enf.mds';
                                                 const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','inicioParada','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones','fechaParada']);
                                                  const editable = (campo: string) => enEdicion && camposEditables.has(campo);
                                                   const tMttoCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioMtto, rowEdit.fechaParada, rowEdit.finMtto);
@@ -2939,48 +2960,50 @@ export default function PlannerPage() {
                                                          )}
                                                    <TableCell className="px-2 py-2 flex items-center gap-1">
                                                     {enEdicion ? (
-                                                       <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" onClick={() => {
-                                                          const originalId = row.id;
-                                                          if (rowEdit.orden && String(rowEdit.orden).trim() !== '') {
-                                                            const duplicado = ordenesTrabajo.find((o: any) => String(o.orden).trim() === String(rowEdit.orden).trim() && String(o.id) !== String(originalId));
-                                                            if (duplicado) {
-                                                              setErrorValidacion(`Ya existe una orden registrada: ${rowEdit.orden}.`);
-                                                              return;
+                                                       <Button size="icon" variant="ghost" className="h-7 w-7 text-emerald-600 hover:text-emerald-700" type="button" onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            const originalId = row.id;
+                                                            if (rowEdit.orden && String(rowEdit.orden).trim() !== '') {
+                                                              const duplicado = ordenesTrabajo.find((o: any) => String(o.orden).trim() === String(rowEdit.orden).trim() && String(o.id) !== String(originalId));
+                                                              if (duplicado) {
+                                                                setErrorValidacion(`Ya existe una orden registrada: ${rowEdit.orden}.`);
+                                                                return;
+                                                              }
                                                             }
-                                                          }
-                                                          setOrdenesTrabajo(prev => prev.map((r: any) => {
-                                                           if (String(r.id) !== String(originalId)) return r;
-                                                           return {
-                                                             ...r,
-                                                             fechaEmision: rowEdit.fechaEmision || r.fechaEmision || '',
-                                                             solicitante: rowEdit.solicitante || r.solicitante || '',
-                                                             aviso: rowEdit.aviso || r.aviso || '',
-                                                             maquina: rowEdit.maquina || r.maquina || '',
-                                                             otFechaParada: rowEdit.fechaParada || r.fechaParada || '',
-                                                             inicioMtto: rowEdit.inicioMtto || r.inicioMtto || '',
-                                                             finMtto: rowEdit.finMtto || r.finMtto || '',
-                                                             otInicioParada: rowEdit.inicioParada || r.inicioParada || '',
-                                                             tMtto: rowEdit.tMtto || r.tMtto || '',
-                                                             otFinParada: rowEdit.finParada || r.finParada || '',
-                                                             tipoParada: rowEdit.tipoParada || r.tipoParada || '',
-                                                             mtto: rowEdit.mtto || r.mtto || '',
-                                                             falla: rowEdit.falla || r.falla || '',
-                                                             mttoEsp: rowEdit.mttoEsp || r.mttoEsp || '',
-                                                             descripcionFalla: rowEdit.descripcionFalla || r.descripcionFalla || '',
-                                                             descripcionAccion: rowEdit.descripcionAccion || r.descripcionAccion || '',
-                                                             observaciones: rowEdit.observaciones || r.observaciones || '',
-                                                           };
-                                                         }));
-                                                        setEditingRows(prev => { const next = {...prev}; delete next[row.id]; return next; });
-                                                        setFilasNoEditables(prev => ({...prev, [row.id]: true}));
-                                                      }}><Check className="h-3.5 w-3.5" /></Button>
-                                                     ) : (
-                                                       <>
-                                                          {user?.id !== 'prodtj.mds' && user?.id !== 'prodt.mds' && user?.id !== 'prodt1.mds' && user?.id !== 'prodt2.mds' && user?.id !== 'prodts.mds' && user?.id !== 'enf.mds' && (
-                                                            <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingRows(prev => ({...prev, [row.id]: {...row}})); setFilasNoEditables(prev => { const next = {...prev}; delete next[row.id]; return next; }); }}><Pencil className="h-3.5 w-3.5" /></Button>
-                                                         )}
-                                                       </>
-                                                     )}
+                                                            setOrdenesTrabajo(prev => prev.map((r: any) => {
+                                                             if (String(r.id) !== String(originalId)) return r;
+                                                             return {
+                                                               ...r,
+                                                               fechaEmision: rowEdit.fechaEmision || r.fechaEmision || '',
+                                                               solicitante: rowEdit.solicitante || r.solicitante || '',
+                                                               aviso: rowEdit.aviso || r.aviso || '',
+                                                               maquina: rowEdit.maquina || r.maquina || '',
+                                                               otFechaParada: rowEdit.fechaParada || r.fechaParada || '',
+                                                               inicioMtto: rowEdit.inicioMtto || r.inicioMtto || '',
+                                                               finMtto: rowEdit.finMtto || r.finMtto || '',
+                                                               otInicioParada: rowEdit.inicioParada || r.inicioParada || '',
+                                                               tMtto: rowEdit.tMtto || r.tMtto || '',
+                                                               otFinParada: rowEdit.finParada || r.finParada || '',
+                                                               tipoParada: rowEdit.tipoParada || r.tipoParada || '',
+                                                               mtto: rowEdit.mtto || r.mtto || '',
+                                                               falla: rowEdit.falla || r.falla || '',
+                                                               mttoEsp: rowEdit.mttoEsp || r.mttoEsp || '',
+                                                               descripcionFalla: rowEdit.descripcionFalla || r.descripcionFalla || '',
+                                                               descripcionAccion: rowEdit.descripcionAccion || r.descripcionAccion || '',
+                                                               observaciones: rowEdit.observaciones || r.observaciones || '',
+                                                             };
+                                                           }));
+                                                            setOrdenesBloqueadas(prev => new Set(prev).add(String(originalId)));
+                                                            setEditingRows(prev => { const next = {...prev}; delete next[row.id]; return next; });
+                                                            setFilasNoEditables(prev => ({...prev, [row.id]: true}));
+                                                         }}><Check className="h-3.5 w-3.5" /></Button>
+                                                      ) : (
+                                                        <>
+                                                           {(esAdmin || !ordenesBloqueadas.has(String(row.id))) && user?.id !== 'prodtj.mds' && user?.id !== 'prodt.mds' && user?.id !== 'prodt1.mds' && user?.id !== 'prodt2.mds' && user?.id !== 'prodts.mds' && user?.id !== 'enf.mds' && (
+                                                             <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingRows(prev => ({...prev, [row.id]: {...row}})); setFilasNoEditables(prev => { const next = {...prev}; delete next[row.id]; return next; }); }}><Pencil className="h-3.5 w-3.5" /></Button>
+                                                          )}
+                                                        </>
+                                                      )}
                                                   </TableCell>
                                              </TableRow>
                                                );
@@ -5123,10 +5146,10 @@ export default function PlannerPage() {
                       <option value="NOCTURNO">NOCTURNO</option>
                     </select>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Operador</label>
-                    <Input value={plantaFormData.operador} onChange={(e) => setPlantaFormData({...plantaFormData, operador: e.target.value})} className="h-9 text-[11px]" />
-                  </div>
+                   <div className="space-y-2">
+                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Operador</label>
+                     <Input value={plantaFormData.operador} onChange={(e) => setPlantaFormData({...plantaFormData, operador: e.target.value})} disabled={!EQUIPO_ACTIVO_POR_TIPO.has(plantaFormData.tipoParada)} className="h-9 text-[11px] disabled:opacity-50 disabled:cursor-not-allowed" />
+                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Línea</label>
                     <select value={plantaFormData.linea} onChange={(e) => setPlantaFormData({...plantaFormData, linea: e.target.value})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
@@ -5142,7 +5165,7 @@ export default function PlannerPage() {
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Tipo de Parada</label>
-                    <select value={plantaFormData.tipoParada} onChange={(e) => setPlantaFormData({...plantaFormData, tipoParada: e.target.value, equipo: EQUIPO_ACTIVO_POR_TIPO.has(e.target.value) ? plantaFormData.equipo : ''})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                     <select value={plantaFormData.tipoParada} onChange={(e) => setPlantaFormData({...plantaFormData, tipoParada: e.target.value, equipo: EQUIPO_ACTIVO_POR_TIPO.has(e.target.value) ? plantaFormData.equipo : '', operador: EQUIPO_ACTIVO_POR_TIPO.has(e.target.value) ? plantaFormData.operador : ''})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
                       {TIPOS_PARADA_INFORME_OPERACIONAL.map((t) => <option key={t} value={t}>{t}</option>)}
                     </select>
                   </div>
@@ -5311,32 +5334,32 @@ export default function PlannerPage() {
                        setOrdenesTrabajo(prev => {
                          const exists = prev.some((o: any) => o.orden === plantaFormData.orden && o.fechaOrden === plantaFormData.fecha);
                          if (exists) return prev;
-                         return [...prev, {
-                           id: Date.now(),
-                           fechaOrden: plantaFormData.fecha || format(new Date(), 'yyyy-MM-dd'),
-                           orden: plantaFormData.orden || '',
-                           fechaEmision: plantaFormData.fecha || format(new Date(), 'yyyy-MM-dd'),
-                           semana: plantaFormData.semana || '',
-                           turno: plantaFormData.turno || 'DIURNO',
-                           solicitante: '',
-                           linea: plantaFormData.linea || 'Línea 1',
-                           maquina: plantaFormData.equipo || '',
-                           aviso: '',
-                           fechaParada: plantaFormData.fecha || format(new Date(), 'yyyy-MM-dd'),
-                           inicioMtto: '',
-                           finMtto: '',
-                           inicioParada: plantaFormData.inicioParada || '',
-                           finParada: plantaFormData.finParada || '',
-                           tMtto: plantaFormData.totalMin || '',
-                           tipoParada: plantaFormData.tipoParada || 'PROGRAMADA',
-                           mtto: '',
-                           falla: plantaFormData.falla || '',
-                           mttoEsp: '',
-                           descripcionFalla: '',
-                           descripcionAccion: '',
-                           observaciones: plantaFormData.observaciones || '',
-                           usuario: user?.name || '',
-                         }];
+                          return [...prev, {
+                            id: Date.now(),
+                            fechaOrden: plantaFormData.fecha || format(new Date(), 'yyyy-MM-dd'),
+                            orden: plantaFormData.orden || '',
+                            fechaEmision: plantaFormData.fecha || format(new Date(), 'yyyy-MM-dd'),
+                            semana: plantaFormData.semana || '',
+                            turno: plantaFormData.turno || 'DIURNO',
+                            solicitante: '',
+                            linea: plantaFormData.linea || 'Línea 1',
+                            maquina: plantaFormData.equipo || '',
+                            aviso: '',
+                            fechaParada: plantaFormData.fecha || format(new Date(), 'yyyy-MM-dd'),
+                            inicioMtto: '',
+                            finMtto: '',
+                            inicioParada: plantaFormData.inicioParada || '',
+                            finParada: plantaFormData.finParada || '',
+                            tMtto: plantaFormData.totalMin || '',
+                            tipoParada: plantaFormData.tipoParada || 'PROGRAMADA',
+                            mtto: '',
+                            falla: plantaFormData.falla || '',
+                            mttoEsp: '',
+                            descripcionFalla: '',
+                            descripcionAccion: '',
+                            observaciones: plantaFormData.observaciones || '',
+                            usuario: user?.name || '',
+                          }];
                        });
                      }
                       setPlantaFormData({
@@ -5366,31 +5389,31 @@ export default function PlannerPage() {
                         }
                       }
                       setOrdenesTrabajo(prev => [...prev, {
-                       id: Date.now(),
-                       fechaOrden: ordenFormData.fechaOrden || format(new Date(), 'yyyy-MM-dd'),
-                       orden: ordenFormData.orden || '',
-                       fechaEmision: ordenFormData.fechaEmision || format(new Date(), 'yyyy-MM-dd'),
-                       semana: ordenFormData.semana || '',
-                       turno: ordenFormData.turno || 'T1',
-                       solicitante: ordenFormData.solicitante || '',
-                       linea: ordenFormData.linea || 'Línea 1',
-                       maquina: ordenFormData.maquina || '',
-                       aviso: ordenFormData.aviso || '',
-                       fechaParada: ordenFormData.fechaParada || format(new Date(), 'yyyy-MM-dd'),
-                       inicioMtto: ordenFormData.inicioMtto || '',
-                       finMtto: ordenFormData.finMtto || '',
-                       inicioParada: ordenFormData.inicioParada || '',
-                       finParada: ordenFormData.finParada || '',
-                       tMtto: ordenFormData.tMtto || '',
-                       tipoParada: ordenFormData.tipoParada || 'PROGRAMADA',
-                       mtto: ordenFormData.mtto || 'CORRECTIVO',
-                       falla: ordenFormData.falla || '',
-                       mttoEsp: ordenFormData.mttoEsp || 'MTTO',
-                       descripcionFalla: ordenFormData.descripcionFalla || '',
-                       descripcionAccion: ordenFormData.descripcionAccion || '',
-                       observaciones: ordenFormData.observaciones || '',
-                       usuario: user?.name || '',
-                     }]);
+                        id: Date.now(),
+                        fechaOrden: ordenFormData.fechaOrden || format(new Date(), 'yyyy-MM-dd'),
+                        orden: ordenFormData.orden || '',
+                        fechaEmision: ordenFormData.fechaEmision || format(new Date(), 'yyyy-MM-dd'),
+                        semana: ordenFormData.semana || '',
+                        turno: ordenFormData.turno || 'T1',
+                        solicitante: ordenFormData.solicitante || '',
+                        linea: ordenFormData.linea || 'Línea 1',
+                        maquina: ordenFormData.maquina || '',
+                        aviso: ordenFormData.aviso || '',
+                        fechaParada: ordenFormData.fechaParada || format(new Date(), 'yyyy-MM-dd'),
+                        inicioMtto: ordenFormData.inicioMtto || '',
+                        finMtto: ordenFormData.finMtto || '',
+                        inicioParada: ordenFormData.inicioParada || '',
+                        finParada: ordenFormData.finParada || '',
+                        tMtto: ordenFormData.tMtto || '',
+                        tipoParada: ordenFormData.tipoParada || 'PROGRAMADA',
+                        mtto: ordenFormData.mtto || 'CORRECTIVO',
+                        falla: ordenFormData.falla || '',
+                        mttoEsp: ordenFormData.mttoEsp || 'MTTO',
+                        descripcionFalla: ordenFormData.descripcionFalla || '',
+                        descripcionAccion: ordenFormData.descripcionAccion || '',
+                        observaciones: ordenFormData.observaciones || '',
+                        usuario: user?.name || '',
+                      }]);
                      setOrdenFormData({
                        fechaOrden: format(new Date(), 'yyyy-MM-dd'),
                        orden: '',
