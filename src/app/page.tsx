@@ -419,11 +419,17 @@ export default function PlannerPage() {
     }
   }, [informesOperacionalesStore, ordenesTrabajoStore]);
 
+  const sincronizacionPlantaHechaRef = useRef(false);
+
   useEffect(() => {
+    if (sincronizacionPlantaHechaRef.current) return;
     if (!ordenesTrabajoStore.isLoaded) return;
+    sincronizacionPlantaHechaRef.current = true;
+
     const informes = informesOperacionalesStore.data || [];
     const ordenes = ordenesTrabajoStore.data || [];
     const ordenesExistentes = new Set(ordenes.map((o: any) => `${o.orden}|${o.fechaOrden}`));
+
     const nuevasOrdenes = informes
       .filter((r: any) => r.orden && String(r.orden).trim() !== '' && !ordenesExistentes.has(`${r.orden}|${r.fecha}`))
       .map((r: any) => ({
@@ -452,8 +458,19 @@ export default function PlannerPage() {
         observaciones: r.observaciones || '',
         usuario: r.usuario || '',
       }));
+
     if (nuevasOrdenes.length > 0) {
-      setOrdenesTrabajo(prev => [...prev, ...nuevasOrdenes]);
+      setOrdenesTrabajo(prev => {
+        const combined = [...prev, ...nuevasOrdenes];
+        const vistos = new Set<string>();
+        const limpios = combined.filter((o: any) => {
+          const key = `${o.orden}|${o.fechaOrden}`;
+          if (vistos.has(key)) return false;
+          vistos.add(key);
+          return true;
+        });
+        return limpios;
+      });
     }
 
     const actualizadas = informes
