@@ -421,18 +421,22 @@ export default function PlannerPage() {
     }
   }, [ordenesTrabajoStore.data, ordenesTrabajoStore.setData]);
 
-  const sincronizacionPlantaHechaRef = useRef(false);
+  const informesPrevRef = useRef<any[] | null>(null);
 
   useEffect(() => {
-    if (sincronizacionPlantaHechaRef.current) return;
     if (!ordenesTrabajoStore.isLoaded) return;
-    sincronizacionPlantaHechaRef.current = true;
 
-    const informes = informesOperacionalesStore.data || [];
+    const curr = informesOperacionalesStore.data || [];
+    const prev = informesPrevRef.current;
+
+    if (prev === curr) return;
+
+    informesPrevRef.current = curr;
+
     const ordenes = ordenesTrabajoStore.data || [];
     const ordenesExistentes = new Set(ordenes.map((o: any) => `${o.orden}|${o.fechaOrden}`));
 
-    const nuevasOrdenes = informes
+    const nuevasOrdenes = curr
       .filter((r: any) => r.orden && String(r.orden).trim() !== '' && !ordenesExistentes.has(`${r.orden}|${r.fecha}`))
       .map((r: any) => ({
         id: Date.now() + Math.random(),
@@ -462,7 +466,7 @@ export default function PlannerPage() {
       }));
 
     if (nuevasOrdenes.length > 0) {
-      setOrdenesTrabajo(prev => {
+      setOrdenesTrabajo((prev) => {
         const combined = [...prev, ...nuevasOrdenes];
         const vistos = new Set<string>();
         const limpios = combined.filter((o: any) => {
@@ -475,7 +479,7 @@ export default function PlannerPage() {
       });
     }
 
-    const actualizadas = informes
+    const actualizadas = curr
       .filter((r: any) => r.orden && String(r.orden).trim() !== '')
       .map((r: any) => {
         const idx = ordenes.findIndex((o: any) => o.orden === r.orden && o.fechaOrden === r.fecha);
@@ -493,7 +497,7 @@ export default function PlannerPage() {
             fechaParada: r.fecha || ordenes[idx].fechaParada,
             inicioMtto: r.inicioMtto || ordenes[idx].inicioMtto,
             finMtto: r.finMtto || ordenes[idx].finMtto,
-            inicioParada: r.inicioParada || ordenes[idx].inicioParada,
+            inicioParada: r.inicioParada,
             finParada: r.finParada || ordenes[idx].finParada,
             tMtto: r.totalMin || ordenes[idx].tMtto,
             tipoParada: r.tipoParada || ordenes[idx].tipoParada,
@@ -512,7 +516,7 @@ export default function PlannerPage() {
       .filter(Boolean);
 
     if (actualizadas.length > 0) {
-      setOrdenesTrabajo(prev => {
+      setOrdenesTrabajo((prev) => {
         const next = [...prev];
         actualizadas.forEach(({ idx, updated }: any) => {
           if (idx >= 0 && idx < next.length) {
@@ -522,7 +526,7 @@ export default function PlannerPage() {
         return next;
       });
     }
-  }, [informesOperacionalesStore.data, ordenesTrabajoStore.isLoaded, setOrdenesTrabajo]);
+  }, [informesOperacionalesStore.data, ordenesTrabajoStore.isLoaded]);
 
   const ordenesTrabajoCargadas = useMemo(() => {
     return (ordenesTrabajo || [])
@@ -6093,7 +6097,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
     const estaEnEdicion = editingRows[row.id] != null;
     const enEdicion = esAdmin && !esUsuarioRestringido && (estaEnEdicion || !estaBloqueado);
     const puedeEditar = esAdmin || (!estaBloqueado && !esUsuarioRestringido);
-    const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','inicioParada','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones','fechaParada']);
+    const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones','fechaParada']);
     const editable = (campo: string) => enEdicion && camposEditables.has(campo);
     const tMttoCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioMtto, rowEdit.fechaParada, rowEdit.finMtto);
     const tParadaCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioParada, rowEdit.fechaParada, rowEdit.finParada);
