@@ -6092,10 +6092,11 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
   const OrdenTrabajoRow = memo(({ row, editingRows, setEditingRows, setFilasNoEditables, errorValidacion, setErrorValidacion, ordenesTrabajo, setOrdenesTrabajo, user, onChangeHora, tiempoTranscurrido, normalizarHora, formatearFecha }: any) => {
     const rowEdit = editingRows[row.id] || row;
     const esAdmin = user?.id === 'alex.mds' || user?.id === 'maria.mds';
+    const esUsuarioPlanta = user?.id === 'prodt.mds' || user?.id === 'prodt1.mds' || user?.id === 'prodt2.mds';
     const esUsuarioRestringido = user?.id === 'prodtj.mds' || user?.id === 'prodts.mds' || user?.id === 'enf.mds';
     const estaBloqueado = (row as any).bloqueado === true;
     const estaEnEdicion = editingRows[row.id] != null;
-    const enEdicion = esAdmin && !esUsuarioRestringido && (estaEnEdicion || !estaBloqueado);
+    const enEdicion = (esAdmin || esUsuarioPlanta) && !esUsuarioRestringido && (estaEnEdicion || !estaBloqueado);
     const puedeEditar = esAdmin || (!estaBloqueado && !esUsuarioRestringido);
     const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones','fechaParada']);
     const editable = (campo: string) => enEdicion && camposEditables.has(campo);
@@ -6118,16 +6119,16 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
         if (idx < 0) return prev;
         const updated: any = {
           ...prev[idx],
-          fechaEmision: rowEdit.fechaEmision || prev[idx].fechaEmision || '',
-          solicitante: rowEdit.solicitante || prev[idx].solicitante || '',
-          aviso: rowEdit.aviso || prev[idx].aviso || '',
-          maquina: rowEdit.maquina || prev[idx].maquina || '',
-          otFechaParada: rowEdit.fechaParada || prev[idx].fechaParada || '',
-          inicioMtto: rowEdit.inicioMtto || prev[idx].inicioMtto || '',
-          finMtto: rowEdit.finMtto || prev[idx].finMtto || '',
-          otInicioParada: rowEdit.inicioParada || prev[idx].inicioParada || '',
-          tMtto: rowEdit.tMtto || prev[idx].tMtto || '',
-          otFinParada: rowEdit.finParada || prev[idx].finParada || '',
+           fechaEmision: rowEdit.fechaEmision || prev[idx].fechaEmision || '',
+           solicitante: rowEdit.solicitante || prev[idx].solicitante || '',
+           aviso: rowEdit.aviso || prev[idx].aviso || '',
+           maquina: rowEdit.maquina || prev[idx].maquina || '',
+           fechaParada: rowEdit.fechaParada || prev[idx].fechaParada || '',
+           inicioMtto: rowEdit.inicioMtto || prev[idx].inicioMtto || '',
+           finMtto: rowEdit.finMtto || prev[idx].finMtto || '',
+           inicioParada: rowEdit.inicioParada || prev[idx].inicioParada || '',
+           tMtto: rowEdit.tMtto || prev[idx].tMtto || '',
+           finParada: rowEdit.finParada || prev[idx].finParada || '',
           tipoParada: rowEdit.tipoParada || prev[idx].tipoParada || '',
           mtto: rowEdit.mtto || prev[idx].mtto || '',
           falla: rowEdit.falla || prev[idx].falla || '',
@@ -6146,9 +6147,21 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
     };
 
     return (
-      <TableRow className="hover:bg-slate-50/60 border-b border-slate-100">
+      <TableRow className={cn("border-b border-slate-100", estaBloqueado ? "bg-emerald-50/30" : (esUsuarioPlanta ? "bg-amber-50/20 hover:bg-amber-50/30" : "hover:bg-slate-50/60"))}>
         <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap sticky left-0 z-20 bg-white even:bg-slate-50/60">{formatearFecha(rowEdit.fechaOrden)}</TableCell>
-        <TableCell className="px-2 py-2 text-[11px] font-mono font-bold text-slate-900 whitespace-nowrap sticky left-[72px] z-20 bg-white even:bg-slate-50/60">{rowEdit.orden}</TableCell>
+        <TableCell className="px-2 py-2 text-[11px] font-mono font-bold text-slate-900 whitespace-nowrap sticky left-[72px] z-20 bg-white even:bg-slate-50/60">
+          {rowEdit.orden}
+          {estaBloqueado && (
+            <span className="ml-1.5 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-black uppercase text-[8px] tracking-widest">
+              <CheckCircle2 className="h-2.5 w-2.5" />COMPLETADO
+            </span>
+          )}
+          {!estaBloqueado && esUsuarioPlanta && (
+            <span className="ml-1.5 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700 font-black uppercase text-[8px] tracking-widest">
+              Pendiente
+            </span>
+          )}
+        </TableCell>
         {editable('fechaEmision') ? <TableCell className="px-2 py-2"><Input type="date" value={rowEdit.fechaEmision || ''} onChange={(e) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, fechaEmision: e.target.value } })} className="h-8 text-[10px]" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap">{rowEdit.fechaEmision}</TableCell>}
         <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-500 text-center">Sem {rowEdit.semana}</TableCell>
         <TableCell className="px-2 py-2 text-[11px] font-bold uppercase text-slate-600 text-center">{rowEdit.turno}</TableCell>
