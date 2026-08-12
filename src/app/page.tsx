@@ -6148,6 +6148,21 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
       setFilasNoEditables((prev: any) => ({ ...prev, [row.id]: true }));
     };
 
+    const handleReactivar = (e: any) => {
+      e.stopPropagation();
+      const originalId = row.id;
+      setOrdenesTrabajo((prev: any[]) => {
+        const idx = prev.findIndex((r: any) => String(r.id) === String(originalId));
+        if (idx < 0) return prev;
+        const updated: any = { ...prev[idx], bloqueado: false };
+        const next = [...prev];
+        next[idx] = updated;
+        return next;
+      });
+      setEditingRows((prev: any) => { const next = { ...prev }; delete next[row.id]; return next; });
+      setFilasNoEditables((prev: any) => { const next = { ...prev }; delete next[row.id]; return next; });
+    };
+
     return (
       <TableRow className={cn("border-b border-slate-100", estaBloqueado ? "bg-emerald-50/30" : (esUsuarioPlanta ? "bg-amber-50/20 hover:bg-amber-50/30" : "hover:bg-slate-50/60"))}>
         <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap sticky left-0 z-20 bg-white even:bg-slate-50/60">{formatearFecha(rowEdit.fechaOrden)}</TableCell>
@@ -6219,6 +6234,18 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
             </Button>
           ) : (
             <>
+              {estaBloqueado && esAdmin && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button size="icon" variant="ghost" className="h-7 w-7 text-orange-600 hover:text-orange-700" type="button" onClick={handleReactivar}>
+                      <RefreshCw className="h-3.5 w-3.5" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <span className="text-xs font-black uppercase text-slate-800">Pasar a Pendiente</span>
+                  </TooltipContent>
+                </Tooltip>
+              )}
               {puedeEditar && (
                 <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingRows((prev: any) => ({ ...prev, [row.id]: { ...row } })); setFilasNoEditables((prev: any) => { const next = { ...prev }; delete next[row.id]; return next; }); }}><Pencil className="h-3.5 w-3.5" /></Button>
               )}
