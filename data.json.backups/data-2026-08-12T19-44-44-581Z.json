@@ -41519,6 +41519,114 @@
         "observaciones": "",
         "usuario": "Ronald Valera",
         "id": 1786563202766
+      },
+      {
+        "fecha": "2026-08-11",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "operador": "LEYBERGLER SILVA",
+        "linea": "Línea 3",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "05:20",
+        "finParada": "05:30",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "SALTO DE BOTELLA EN DIENTES DE SEPARACION OCACIONA PERDIDA DE FASE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1786563289150
+      },
+      {
+        "fecha": "2026-08-11",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "operador": "CESAR ALVARADO",
+        "linea": "Línea 4",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "05:10",
+        "finParada": "05:16",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "SALTO DE BOTELLA EN DIENTES DE SEPARACION OCACIONA PERDIDA DE FASE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1786563378269
+      },
+      {
+        "fecha": "2026-08-11",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "06:00",
+        "finParada": "07:00",
+        "totalMin": "60",
+        "zona": "Llenado",
+        "falla": "SE DETIENE LINEA PARA ENTREGA A MANTENIMENTO DE LINEA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1786563569957
+      },
+      {
+        "fecha": "2026-08-11",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "operador": "CARLOS GALINDO",
+        "linea": "Línea 5",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "06:05",
+        "finParada": "06:11",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "ETIQUETAS NO TRANSFERIDAS, BOTELLAS LLENAS DE JARABE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1786563697557
+      },
+      {
+        "fecha": "2026-08-11",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "operador": "DANIEL ZAPATA",
+        "linea": "Línea 5",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "03:45",
+        "finParada": "04:05",
+        "totalMin": "20",
+        "zona": "Llenado",
+        "falla": "PERDIDA DE FASE EN DIENTES DE SEPARACION",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1786563771349
+      },
+      {
+        "fecha": "2026-08-11",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "operador": "GABRIEL PADRON",
+        "linea": "Línea 7",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "23:00",
+        "finParada": "23:07",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1786563818341
       }
     ],
     "planta-ordenes-trabajo": [
@@ -41546,7 +41654,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "otFechaParada": "",
         "otInicioParada": "",
         "otFinParada": ""
@@ -41575,7 +41683,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "otFechaParada": "",
         "otInicioParada": "",
         "otFinParada": ""
@@ -41989,7 +42097,7 @@
         "descripcionAccion": "CAMBIO DE MANGUERA DE COMPENSACION DE MOLDE #11",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "id": 1786376463580.257,
@@ -42613,7 +42721,7 @@
         "otFechaParada": "2026-08-08",
         "otInicioParada": "09:39",
         "otFinParada": "10:06",
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "id": 1786378402972.4553,
@@ -42640,7 +42748,7 @@
         "descripcionAccion": "SE REALIZA AJUSTE Y REVISION DE TODOS LOS ACTUADORES DEL SISTEMA,SE CALIBRAN LAS VALVULAS ",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "id": 1786386202965.3103,
@@ -43342,7 +43450,7 @@
         "descripcionAccion": "SE REALIZA AJUSTE DE TENSOR CADENA DE LOS DEDOS",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": false,
+        "bloqueado": true,
         "otFechaParada": "2026-08-06",
         "otInicioParada": "05:28",
         "otFinParada": "05:36"

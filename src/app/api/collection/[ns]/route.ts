@@ -129,6 +129,8 @@ function dedupByKeys(items: any[], keys: string[]): any[] {
     } else {
       if (item.bloqueado === true && prev.bloqueado !== true) {
         seen.set(key, item);
+      } else if (item.bloqueado !== true && prev.bloqueado === true) {
+        seen.set(key, item);
       }
     }
   });
