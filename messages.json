@@ -1,6 +1,17 @@
 {
   "messages": [
     {
+      "id": "2026-08-12T15:06:37.196Z-9ok2bx2",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-08-12T15:06:37.196Z"
+    },
+    {
       "id": "2026-08-07T17:06:55.655Z-tje80di",
       "title": "Modificación PDP S32",
       "message": "Se realizo modificación en la planificación de linea 3 para trabajos de fin de semana",
@@ -100,15 +111,15 @@
       "createdAt": "2026-07-29T21:27:32.776Z"
     },
     {
-      "id": "2026-07-28T21:50:24.056Z-z61vaz9",
-      "title": "Modificación PDP L2",
-      "message": "disponible PDP L2 modificado",
-      "type": "warning",
+      "id": "2026-08-12T15:06:37.196Z-tkykk03",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
-      "read": true,
-      "createdAt": "2026-07-28T21:50:24.056Z"
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-08-12T15:06:37.196Z"
     },
     {
       "id": "2026-08-07T17:06:55.655Z-zp32f4y",
@@ -210,15 +221,15 @@
       "createdAt": "2026-07-29T21:27:32.776Z"
     },
     {
-      "id": "2026-07-28T21:50:24.056Z-h5rl9dr",
-      "title": "Modificación PDP L2",
-      "message": "disponible PDP L2 modificado",
-      "type": "warning",
+      "id": "2026-08-12T15:06:37.196Z-msib024",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-07-28T21:50:24.056Z"
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-08-12T15:06:37.196Z"
     },
     {
       "id": "2026-08-07T17:06:55.655Z-h9m7i21",
@@ -320,15 +331,15 @@
       "createdAt": "2026-07-30T19:05:25.727Z"
     },
     {
-      "id": "2026-07-30T15:00:44.798Z-pqsckm2",
-      "title": "hhhh",
-      "message": "holaaaaaa",
+      "id": "2026-08-12T15:06:37.196Z-c0ecvmq",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
       "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-07-30T15:00:44.798Z"
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-08-12T15:06:37.196Z"
     },
     {
       "id": "2026-08-07T17:06:55.655Z-i119496",
@@ -430,15 +441,15 @@
       "createdAt": "2026-07-29T21:27:32.776Z"
     },
     {
-      "id": "2026-07-28T21:50:24.056Z-o2y86z2",
-      "title": "Modificación PDP L2",
-      "message": "disponible PDP L2 modificado",
-      "type": "warning",
+      "id": "2026-08-12T15:06:37.196Z-xgizpnw",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
+      "recipient": "prodtj.mds",
       "read": false,
-      "createdAt": "2026-07-28T21:50:24.056Z"
+      "createdAt": "2026-08-12T15:06:37.196Z"
     },
     {
       "id": "2026-08-07T17:06:55.655Z-2z1r4xf",
@@ -540,15 +551,15 @@
       "createdAt": "2026-07-29T21:27:32.776Z"
     },
     {
-      "id": "2026-07-28T21:50:24.056Z-6du6577",
-      "title": "Modificación PDP L2",
-      "message": "disponible PDP L2 modificado",
-      "type": "warning",
+      "id": "2026-08-12T15:06:37.196Z-7evjer7",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-07-28T21:50:24.056Z"
+      "recipient": "prodts.mds",
+      "read": false,
+      "createdAt": "2026-08-12T15:06:37.196Z"
     },
     {
       "id": "2026-08-07T17:06:55.655Z-ib277qw",
@@ -604,6 +615,17 @@
       "recipient": "prodts.mds",
       "read": false,
       "createdAt": "2026-08-05T15:15:18.018Z"
+    },
+    {
+      "id": "2026-08-12T15:06:37.196Z-0zhk1p0",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "procj.mds",
+      "read": false,
+      "createdAt": "2026-08-12T15:06:37.196Z"
     },
     {
       "id": "2026-08-07T17:06:55.655Z-o2ss9ta",
@@ -705,15 +727,15 @@
       "createdAt": "2026-07-29T21:27:32.776Z"
     },
     {
-      "id": "2026-07-28T21:50:24.056Z-a91klpn",
-      "title": "Modificación PDP L2",
-      "message": "disponible PDP L2 modificado",
-      "type": "warning",
+      "id": "2026-08-12T15:06:37.196Z-hrwt8ju",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-07-28T21:50:24.056Z"
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-08-12T15:06:37.196Z"
     },
     {
       "id": "2026-08-07T17:06:55.655Z-gg8pkj1",
@@ -815,15 +837,15 @@
       "createdAt": "2026-07-29T21:27:32.776Z"
     },
     {
-      "id": "2026-07-28T21:50:24.056Z-8lim3kf",
-      "title": "Modificación PDP L2",
-      "message": "disponible PDP L2 modificado",
-      "type": "warning",
+      "id": "2026-08-12T15:06:37.196Z-nyqq9d2",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
+      "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-07-28T21:50:24.056Z"
+      "createdAt": "2026-08-12T15:06:37.196Z"
     },
     {
       "id": "2026-08-07T17:06:55.655Z-nx6xpzj",
@@ -925,15 +947,15 @@
       "createdAt": "2026-07-29T21:27:32.776Z"
     },
     {
-      "id": "2026-07-28T21:50:24.056Z-jmk3smp",
-      "title": "Modificación PDP L2",
-      "message": "disponible PDP L2 modificado",
-      "type": "warning",
+      "id": "2026-08-12T15:06:37.196Z-qszhmp1",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
-      "read": true,
-      "createdAt": "2026-07-28T21:50:24.056Z"
+      "recipient": "prodt1.mds",
+      "read": false,
+      "createdAt": "2026-08-12T15:06:37.196Z"
     },
     {
       "id": "2026-08-07T17:06:55.655Z-mysr1x1",
@@ -1002,6 +1024,17 @@
       "createdAt": "2026-08-03T13:39:02.073Z"
     },
     {
+      "id": "2026-08-12T15:06:37.196Z-d4nftbv",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt2.mds",
+      "read": false,
+      "createdAt": "2026-08-12T15:06:37.196Z"
+    },
+    {
       "id": "2026-08-07T17:06:55.655Z-0xmfyl4",
       "title": "Modificación PDP S32",
       "message": "Se realizo modificación en la planificación de linea 3 para trabajos de fin de semana",
@@ -1066,6 +1099,17 @@
       "recipient": "prodt2.mds",
       "read": false,
       "createdAt": "2026-08-03T13:39:02.073Z"
+    },
+    {
+      "id": "2026-08-12T15:06:37.196Z-xgkwr3u",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-08-12T15:06:37.196Z"
     },
     {
       "id": "2026-08-07T17:06:55.655Z-nerjwaa",
@@ -1167,15 +1211,15 @@
       "createdAt": "2026-07-29T21:27:32.776Z"
     },
     {
-      "id": "2026-07-28T21:50:24.056Z-pfwzf7o",
-      "title": "Modificación PDP L2",
-      "message": "disponible PDP L2 modificado",
-      "type": "warning",
+      "id": "2026-08-12T15:06:37.196Z-36ubebe",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
+      "recipient": "g.tec.mds",
       "read": false,
-      "createdAt": "2026-07-28T21:50:24.056Z"
+      "createdAt": "2026-08-12T15:06:37.196Z"
     },
     {
       "id": "2026-08-07T17:06:55.655Z-5et8gty",
@@ -1277,15 +1321,15 @@
       "createdAt": "2026-07-29T21:27:32.776Z"
     },
     {
-      "id": "2026-07-28T21:50:24.056Z-e534m9q",
-      "title": "Modificación PDP L2",
-      "message": "disponible PDP L2 modificado",
-      "type": "warning",
+      "id": "2026-08-12T15:06:37.196Z-uzboj5g",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
-      "read": true,
-      "createdAt": "2026-07-28T21:50:24.056Z"
+      "recipient": "enf.mds",
+      "read": false,
+      "createdAt": "2026-08-12T15:06:37.196Z"
     },
     {
       "id": "2026-08-07T17:06:55.655Z-7c081nr",
@@ -1387,15 +1431,15 @@
       "createdAt": "2026-07-29T21:27:32.776Z"
     },
     {
-      "id": "2026-07-28T21:50:24.056Z-mjp6rsn",
-      "title": "Modificación PDP L2",
-      "message": "disponible PDP L2 modificado",
-      "type": "warning",
+      "id": "2026-08-12T15:06:37.196Z-ryj0vpg",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
-      "read": true,
-      "createdAt": "2026-07-28T21:50:24.056Z"
+      "recipient": "etq.mds",
+      "read": false,
+      "createdAt": "2026-08-12T15:06:37.196Z"
     },
     {
       "id": "2026-08-07T17:06:55.655Z-6075gur",
@@ -1497,15 +1541,15 @@
       "createdAt": "2026-07-29T21:27:32.776Z"
     },
     {
-      "id": "2026-07-28T21:50:24.056Z-xemhqr2",
-      "title": "Modificación PDP L2",
-      "message": "disponible PDP L2 modificado",
-      "type": "warning",
+      "id": "2026-08-12T15:06:37.196Z-pym7okx",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-07-28T21:50:24.056Z"
+      "createdAt": "2026-08-12T15:06:37.196Z"
     },
     {
       "id": "2026-08-07T17:06:55.655Z-pfjqm6c",
@@ -1563,6 +1607,17 @@
       "createdAt": "2026-08-05T15:15:18.018Z"
     },
     {
+      "id": "2026-08-12T15:06:37.196Z-1f4rtzd",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "mtto.mds",
+      "read": false,
+      "createdAt": "2026-08-12T15:06:37.196Z"
+    },
+    {
       "id": "2026-08-07T17:06:55.655Z-zk1lcqz",
       "title": "Modificación PDP S32",
       "message": "Se realizo modificación en la planificación de linea 3 para trabajos de fin de semana",
@@ -1585,6 +1640,17 @@
       "createdAt": "2026-08-07T12:45:52.121Z"
     },
     {
+      "id": "2026-08-12T15:06:37.196Z-i7lh56k",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "cal.mds",
+      "read": false,
+      "createdAt": "2026-08-12T15:06:37.196Z"
+    },
+    {
       "id": "2026-08-07T17:06:55.655Z-tzcu8yu",
       "title": "Modificación PDP S32",
       "message": "Se realizo modificación en la planificación de linea 3 para trabajos de fin de semana",
@@ -1605,6 +1671,17 @@
       "recipient": "cal.mds",
       "read": false,
       "createdAt": "2026-08-07T12:45:52.121Z"
+    },
+    {
+      "id": "2026-08-12T15:06:37.196Z-4yzm5yn",
+      "title": "Aviso",
+      "message": "Se realizaran modificaciones al sistema, los movimientos del código podrían causar pantallazos de error en el transcurso de la edición, tomar en cuenta, la edición iniciara a las 11:10am del 12/8/26 y se notificara por este medio",
+      "type": "info",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "MDS",
+      "read": false,
+      "createdAt": "2026-08-12T15:06:37.196Z"
     }
   ]
 }

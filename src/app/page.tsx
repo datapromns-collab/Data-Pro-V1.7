@@ -2843,8 +2843,7 @@ export default function PlannerPage() {
                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">F-PARADA</TableHead>
                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 text-center">T-MTTO</TableHead>
                                              <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">T-PARADA</TableHead>
-                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">PARADA?</TableHead>
-                                             <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO</TableHead>
+                                              <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO</TableHead>
                                               <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">FALLA</TableHead>
                                               <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">MTTO / ESP</TableHead>
                                               <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2">DESCRIPCIÓN DE LA FALLA POR EL SOLICITANTE</TableHead>
@@ -2893,7 +2892,7 @@ export default function PlannerPage() {
                                              return matchLine && matchDate && matchQ;
                                             }).length === 0 && (
                                               <TableRow>
-                                                <TableCell colSpan={(user?.id === 'alex.mds' || user?.id === 'maria.mds') ? 24 : 23} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
+                                                 <TableCell colSpan={(user?.id === 'alex.mds' || user?.id === 'maria.mds') ? 23 : 22} className="text-center py-10 text-slate-400 font-bold uppercase text-[11px] tracking-wider">
                                                   Sin registros para el filtro seleccionado
                                                 </TableCell>
                                               </TableRow>
@@ -6158,22 +6157,8 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
         {editable('finMtto') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={rowEdit.finMtto || ''} onChange={onChangeHora((v: string) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, finMtto: v } }))} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{normalizarHora(rowEdit.finMtto)}</TableCell>}
         {editable('finParada') ? <TableCell className="px-2 py-2"><Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={rowEdit.finParada || ''} onChange={onChangeHora((v: string) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, finParada: v } }))} className="h-8 text-[10px] w-24" /></TableCell> : <TableCell className="px-2 py-2 text-[11px] text-slate-600 text-center tabular-nums">{normalizarHora(rowEdit.finParada)}</TableCell>}
         <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums">{tMttoCalc || rowEdit.tMtto}</TableCell>
-        <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums">{tParadaCalc || rowEdit.tParada}</TableCell>
-        <TableCell className="px-2 py-2">
-          {editable('tipoParada') ? (
-            <Select value={rowEdit.tipoParada || ''} onValueChange={(v: string) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, tipoParada: v } })}>
-              <SelectTrigger className="h-8 text-[10px] w-24 border-slate-200">
-                <SelectValue placeholder="PARADA?" />
-              </SelectTrigger>
-              <SelectContent>
-                {PARADA_OPCIONES.map((o) => (<SelectItem key={o} value={o} className="text-[10px] capitalize">{o}</SelectItem>))}
-              </SelectContent>
-            </Select>
-          ) : (
-            <span className="text-[11px] text-slate-600 capitalize">{rowEdit.tipoParada}</span>
-          )}
-        </TableCell>
-        <TableCell className="px-2 py-2">
+         <TableCell className="px-2 py-2 text-[11px] font-bold text-slate-800 text-center tabular-nums">{tParadaCalc || rowEdit.tParada}</TableCell>
+         <TableCell className="px-2 py-2">
           {editable('mtto') ? (
             <Select value={rowEdit.mtto || ''} onValueChange={(v: string) => setEditingRows({ ...editingRows, [row.id]: { ...rowEdit, mtto: v } })}>
               <SelectTrigger className="h-8 text-[10px] w-40 border-slate-200">
