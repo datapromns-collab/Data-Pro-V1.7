@@ -41,8 +41,8 @@ const DEFAULT_PLANNING_PERMISSIONS: PlanningPermissions = {
 const DEFAULT_MANAGEMENT_PERMISSIONS: ManagementPermissions = {
   demon: ['produccion-diaria', 'control-semanal', 'resumen-mensual', 'cumplimiento'],
   'jaime.r': ['produccion-diaria', 'control-semanal', 'resumen-mensual', 'cumplimiento'],
-  'alex.mds': ['produccion-diaria'],
-  'maria.mds': ['produccion-diaria'],
+  'alex.mds': ['produccion-diaria', 'resumen-mensual'],
+  'maria.mds': ['produccion-diaria', 'resumen-mensual'],
   'g.tec.mds': ['produccion-diaria'],
   'enf.mds': ['produccion-diaria'],
   'etq.mds': ['produccion-diaria'],
