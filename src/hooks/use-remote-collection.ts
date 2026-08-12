@@ -170,20 +170,22 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
   }, [persistLocal, enqueue, flushQueue]);
 
   const setDataSynced = useCallback((updater: T | ((prev: T) => T)) => {
-    const next = typeof updater === 'function' ? (updater as (p: T) => T)(data) : updater;
-    console.log('[RC] setData', namespace, 'type', Array.isArray(next) ? 'array' : 'object', 'keys', Array.isArray(next) ? next.length : Object.keys(next as Record<string, any>).slice(0, 5));
-    persistLocal(next);
-    const payload = Array.isArray(next)
-      ? { items: next, _deletedIds: Array.from(deletedRef.current) }
-      : next;
-    enqueue(payload);
-    pendingRef.current = true;
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = setTimeout(() => {
-      flushQueue();
-    }, 150);
-    setData(next);
-  }, [data, persistLocal, enqueue, flushQueue, namespace]);
+    setData((prevData) => {
+      const next = typeof updater === 'function' ? (updater as (p: T) => T)(prevData) : updater;
+      console.log('[RC] setData', namespace, 'type', Array.isArray(next) ? 'array' : 'object', 'keys', Array.isArray(next) ? next.length : Object.keys(next as Record<string, any>).slice(0, 5));
+      persistLocal(next);
+      const payload = Array.isArray(next)
+        ? { items: next, _deletedIds: Array.from(deletedRef.current) }
+        : next;
+      enqueue(payload);
+      pendingRef.current = true;
+      if (timerRef.current) clearTimeout(timerRef.current);
+      timerRef.current = setTimeout(() => {
+        flushQueue();
+      }, 150);
+      return next;
+    });
+  }, [persistLocal, enqueue, flushQueue, namespace]);
 
   // Igual que setData pero envia al servidor SOLO las claves indicadas en `patch`
   // (delta), sin sobrescribir el estado completo. El servidor hace merge por clave,
@@ -269,6 +271,9 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
           });
         }
         queueRef.current = loadPendingQueue(namespace);
+        if (queueRef.current.length > 0) {
+          pendingRef.current = true;
+        }
       }
     } catch {
       // ignore
@@ -291,27 +296,25 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
               return prev;
             }
             if (Array.isArray(prev) && !Array.isArray(remote)) return prev;
-            if (Array.isArray(remote) && Array.isArray(prev)) {
-              const merged = applyDeleted(remote) as T;
-              const prevArr = prev as any[];
-              if (Array.isArray(merged)) {
-                const map = new Map<string, any>();
-                prevArr.forEach((item: any) => {
-                  if (item && item.id != null) map.set(String(item.id), item);
-                });
-                (merged as any[]).forEach((item: any) => {
-                  if (item && item.id != null) {
-                    const prevItem = map.get(String(item.id));
-                    if (prevItem && prevItem.bloqueado === true && !('bloqueado' in item)) {
-                      map.set(String(item.id), { ...item, bloqueado: true });
-                    } else {
-                      map.set(String(item.id), item);
-                    }
-                  }
-                });
-                return Array.from(map.values()) as T;
-              }
-              return merged;
+             if (Array.isArray(remote) && Array.isArray(prev)) {
+               const merged = applyDeleted(remote) as T;
+               const prevArr = prev as any[];
+               if (Array.isArray(merged)) {
+                  const map = new Map<string, any>();
+                  (merged as any[]).forEach((item: any) => {
+                    if (item && item.id != null) {
+                      const id = String(item.id);
+                      const prevItem = prevArr.find((p: any) => String(p?.id) === id);
+                     if (prevItem && prevItem.bloqueado === true && !('bloqueado' in item)) {
+                       map.set(id, { ...item, bloqueado: true });
+                     } else {
+                       map.set(id, item);
+                     }
+                   }
+                  });
+                  return Array.from(map.values()) as T;
+               }
+               return merged;
             }
             if (Array.isArray(remote)) return applyDeleted(remote) as T;
             const remoteObj = remote as Record<string, any>;

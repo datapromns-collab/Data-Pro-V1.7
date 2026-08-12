@@ -105,19 +105,49 @@ function writeDb(data: any) {
 
 function toArray(value: any): any[] {
   if (Array.isArray(value)) return value;
-  if (value && typeof value === 'object') {
+  if (value && typeof value !== 'object') {
     const values = Object.values(value).filter((v) => v && typeof v === 'object');
     if (values.length > 0) return values;
   }
   return [];
 }
 
-function mergeCollection(existing: any, incoming: any): any[] {
+const DEDUP_KEYS: Record<string, string[]> = {
+  'planta-ordenes-trabajo': ['orden', 'fechaOrden'],
+};
+
+function dedupByKeys(items: any[], keys: string[]): any[] {
+  if (!Array.isArray(items) || items.length === 0) return items;
+  const seen = new Map<string, any>();
+  items.forEach((item: any) => {
+    if (!item || typeof item !== 'object') { seen.set(String(seen.size), item); return; }
+    const keyParts = keys.map((k) => String(item[k] ?? '')).join('|');
+    const key = `__dup__:${keyParts}`;
+    const prev = seen.get(key);
+    if (!prev) {
+      seen.set(key, item);
+    } else {
+      if (item.bloqueado === true && prev.bloqueado !== true) {
+        seen.set(key, item);
+      }
+    }
+  });
+  return Array.from(seen.values());
+}
+
+function mergeCollection(existing: any, incoming: any, ns?: string): any[] {
   const existingArr = toArray(existing);
   const incomingArr = toArray(incoming);
-  if (incomingArr.length === 0) return existingArr;
-  if (existingArr.length === 0) return incomingArr;
+  if (incomingArr.length === 0) {
+    if (ns && DEDUP_KEYS[ns]) return dedupByKeys(existingArr, DEDUP_KEYS[ns]);
+    return existingArr;
+  }
+  if (existingArr.length === 0) {
+    if (ns && DEDUP_KEYS[ns]) return dedupByKeys(incomingArr, DEDUP_KEYS[ns]);
+    return incomingArr;
+  }
   const first = existingArr[0];
+  let result: any[];
   if (first && first.id != null) {
     const map = new Map<string, any>();
     existingArr.forEach((item: any) => map.set(String(item.id), { ...item }));
@@ -136,9 +166,14 @@ function mergeCollection(existing: any, incoming: any): any[] {
       }
       map.set(id, merged);
     });
-    return Array.from(map.values());
+    result = Array.from(map.values());
+  } else {
+    result = incomingArr;
   }
-  return incomingArr;
+  if (ns && DEDUP_KEYS[ns]) {
+    result = dedupByKeys(result, DEDUP_KEYS[ns]);
+  }
+  return result;
 }
 
 function mergeDeletedIds(existing: Record<string, string[]> | undefined, incoming: Record<string, string[]> | undefined): Record<string, string[]> {
@@ -286,7 +321,7 @@ export async function POST(request: Request) {
         return copy;
       });
       const currentArr = Array.isArray(current) ? current : [];
-      const merged = mergeCollection(currentArr, incomingData);
+      const merged = mergeCollection(currentArr, incomingData, ns);
       const existingDeleted = getDeletedIds(db, ns);
       const deletedIds = mergeDeletedIds(existingDeleted, incomingDeleted);
       collectDeletedIds(incomingData, deletedIds);
