@@ -41483,6 +41483,60 @@
         "observaciones": "",
         "usuario": "Ronald Valera",
         "id": 1786562904351
+      },
+      {
+        "fecha": "2026-08-11",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "operador": "JOSE GUDIÑO",
+        "linea": "Línea 4",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "04:15",
+        "finParada": "04:25",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "FALLA POR FALTA DE PEGAMENTO EN LA PARTE INFERIOR Y SUPERIOR DE LA ETIQUETA",
+        "orden": "",
+        "observaciones": "O.T 9361",
+        "usuario": "Ronald Valera",
+        "id": 1786563144582
+      },
+      {
+        "fecha": "2026-08-11",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "05:25",
+        "finParada": "07:00",
+        "totalMin": "95",
+        "zona": "Llenado",
+        "falla": "VARIACION DE VOLTAJE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1786563202766
+      },
+      {
+        "fecha": "2026-08-11",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "operador": "LEYBERGLER SILVA",
+        "linea": "Línea 3",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "05:20",
+        "finParada": "05:30",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "SALTO DE BOTELLA EN DIENTES DE SEPARACION OCACIONA PERDIDA DE FASE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1786563289150
       }
     ],
     "planta-ordenes-trabajo": [
@@ -41510,7 +41564,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "otFechaParada": "",
         "otInicioParada": "",
         "otFinParada": ""
@@ -41539,7 +41593,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "otFechaParada": "",
         "otInicioParada": "",
         "otFinParada": ""
@@ -41953,7 +42007,7 @@
         "descripcionAccion": "CAMBIO DE MANGUERA DE COMPENSACION DE MOLDE #11",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786376463580.257,
@@ -42577,7 +42631,7 @@
         "otFechaParada": "2026-08-08",
         "otInicioParada": "09:39",
         "otFinParada": "10:06",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786378402972.4553,
@@ -42604,7 +42658,7 @@
         "descripcionAccion": "SE REALIZA AJUSTE Y REVISION DE TODOS LOS ACTUADORES DEL SISTEMA,SE CALIBRAN LAS VALVULAS ",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786386202965.3103,
@@ -43306,7 +43360,7 @@
         "descripcionAccion": "SE REALIZA AJUSTE DE TENSOR CADENA DE LOS DEDOS",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true,
+        "bloqueado": false,
         "otFechaParada": "2026-08-06",
         "otInicioParada": "05:28",
         "otFinParada": "05:36"

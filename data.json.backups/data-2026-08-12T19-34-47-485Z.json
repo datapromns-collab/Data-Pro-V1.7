@@ -41483,6 +41483,42 @@
         "observaciones": "",
         "usuario": "Ronald Valera",
         "id": 1786562904351
+      },
+      {
+        "fecha": "2026-08-11",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "operador": "JOSE GUDIÑO",
+        "linea": "Línea 4",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "04:15",
+        "finParada": "04:25",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "FALLA POR FALTA DE PEGAMENTO EN LA PARTE INFERIOR Y SUPERIOR DE LA ETIQUETA",
+        "orden": "",
+        "observaciones": "O.T 9361",
+        "usuario": "Ronald Valera",
+        "id": 1786563144582
+      },
+      {
+        "fecha": "2026-08-11",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "05:25",
+        "finParada": "07:00",
+        "totalMin": "95",
+        "zona": "Llenado",
+        "falla": "VARIACION DE VOLTAJE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1786563202766
       }
     ],
     "planta-ordenes-trabajo": [
