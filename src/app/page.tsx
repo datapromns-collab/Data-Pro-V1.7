@@ -537,7 +537,7 @@ export default function PlannerPage() {
       })
       .map((r) => ({
         id: r.id,
-        fechaOrden: r.fecha || '',
+        fechaOrden: r.fechaOrden || r.fecha || '',
         orden: r.orden || '',
         fechaEmision: r.fechaEmision || r.fecha || '',
         semana: r.semana || '',
@@ -546,12 +546,12 @@ export default function PlannerPage() {
         linea: r.linea || '',
         aviso: r.aviso || '',
         maquina: r.maquina || r.equipo || '',
-        fechaParada: r.otFechaParada || '',
+        fechaParada: r.fechaParada || r.otFechaParada || '',
         inicioMtto: r.inicioMtto || '',
         finMtto: r.finMtto || '',
-        inicioParada: r.otInicioParada || '',
+        inicioParada: r.inicioParada || r.otInicioParada || '',
         tMtto: r.tMtto || '',
-        finParada: r.otFinParada || '',
+        finParada: r.finParada || r.otFinParada || '',
         tipoParada: r.tipoParada || '',
         mtto: r.mtto || '',
         falla: r.falla || '',
@@ -559,8 +559,10 @@ export default function PlannerPage() {
         descripcionFalla: r.descripcionFalla || '',
         descripcionAccion: r.descripcionAccion || '',
         observaciones: r.observaciones || '',
+        bloqueado: r.bloqueado,
+        usuario: r.usuario || '',
       }));
-  }, [informesOperacionales]);
+   }, [informesOperacionalesStore.data, ordenesTrabajo]);
 
   const [editingRows, setEditingRows] = useState<Record<string | number, any>>({});
   const [filasNoEditables, setFilasNoEditables] = useState<Record<string | number, boolean>>({});
