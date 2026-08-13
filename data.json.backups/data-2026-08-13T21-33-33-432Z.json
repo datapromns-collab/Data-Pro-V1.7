@@ -7699,7 +7699,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-13T20:41:07.829Z"
+    "updatedAt": "2026-08-13T21:28:44.336Z"
   },
   "ordenesSap": [
     {
@@ -12404,12 +12404,12 @@
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 10480
         },
         {
           "fechaInicio": "2026-08-13",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17606",
+          "cajas1": 4800,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -12428,8 +12428,8 @@
       "dias": [
         {
           "fechaInicio": "2026-08-13",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17495",
+          "cajas1": 4160,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -21096,6 +21096,28 @@
             "preparado": "220",
             "final": "24"
           }
+        },
+        "2026-08-12": {
+          "GLUP COLA": {
+            "inicial": "65.20",
+            "preparado": "54",
+            "final": "70.41"
+          },
+          "GLUP KOLITA": {
+            "inicial": "18",
+            "preparado": "18",
+            "final": "12.28"
+          },
+          "GLUP FRESH": {
+            "inicial": "10.50",
+            "preparado": "12",
+            "final": "7.89"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "24",
+            "preparado": "160",
+            "final": "28"
+          }
         }
       },
       "sugar": {
@@ -21313,6 +21335,18 @@
             "invInicialSacos": "1531",
             "recepcionSacos": "",
             "invFinalSacos": "604"
+          }
+        },
+        "2026-08-12": {
+          "PORTUGUESA": {
+            "invInicialSacos": "10440",
+            "recepcionSacos": "2400",
+            "invFinalSacos": "10880"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "604",
+            "recepcionSacos": "2000",
+            "invFinalSacos": "1720"
           }
         }
       },
@@ -21559,6 +21593,20 @@
           "Sala 1": {
             "invInicialSacos": "240",
             "invFinalSacos": "227"
+          }
+        },
+        "2026-08-12": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "361",
+            "invFinalSacos": "228"
+          },
+          "Sala 1": {
+            "invInicialSacos": "227",
+            "invFinalSacos": ""
           }
         }
       },
@@ -46830,7 +46878,8 @@
         "bloqueado": true,
         "otFechaParada": "",
         "otInicioParada": "",
-        "otFinParada": ""
+        "otFinParada": "",
+        "usuario": "prodt.mds"
       },
       {
         "id": "orden-sync-5070",
@@ -47269,7 +47318,8 @@
         "descripcionFalla": "CAMBIO DE MANGUERA DE COMPENSACION",
         "descripcionAccion": "CAMBIO DE MANGUERA DE COMPENSACION DE MOLDE #11",
         "observaciones": "",
-        "usuario": "Luis Sanchez"
+        "usuario": "Luis Sanchez",
+        "bloqueado": false
       },
       {
         "id": 1786376463580.257,
@@ -47889,7 +47939,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786650181757.831,
@@ -47915,7 +47966,8 @@
         "descripcionFalla": "FALLA EN VALVULA REGULADOR CO2",
         "descripcionAccion": "SE REALIZA AJUSTE Y REVISION DE TODOS LOS ACTUADORES DEL SISTEMA,SE CALIBRAN LAS VALVULAS ",
         "observaciones": "",
-        "usuario": "Luis Sanchez"
+        "usuario": "Luis Sanchez",
+        "bloqueado": false
       },
       {
         "id": 1786386202965.3103,
@@ -48616,7 +48668,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786470418651.5312,
@@ -49813,22 +49866,22 @@
         "fechaEmision": "2026-08-12",
         "semana": 33,
         "turno": "NOCTURNO",
-        "solicitante": "",
+        "solicitante": "MICHAEL AGRAZ",
         "linea": "Línea 3",
         "maquina": "LLENADORA",
-        "aviso": "",
+        "aviso": "5783",
         "fechaParada": "2026-08-12",
-        "inicioMtto": "",
-        "finMtto": "",
+        "inicioMtto": "06:13",
+        "finMtto": "06:45",
         "inicioParada": "06:13",
         "finParada": "06:45",
         "tMtto": "32",
         "tipoParada": "AVERÍA",
         "mtto": "",
         "falla": "RUIDO NO CARACTERISTICO EN PLATO DE DISTRIBUCION DE TAPAS HACIA EL CHUCK",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
+        "mttoEsp": "ANGEL C",
+        "descripcionFalla": "RUIDO NO CARACTERISTICO EN PLATO DE CARGA DE TAPAS",
+        "descripcionAccion": "AJUSTE DE TORNILLERIA DE PLATO DE CARGA DE TAPAS Y CALIBRACION DEL MISMO",
         "observaciones": "",
         "bloqueado": false,
         "usuario": "Luis Blandin"
