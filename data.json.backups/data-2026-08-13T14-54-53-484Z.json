@@ -44851,25 +44851,6 @@
         "usuario": "Ronald Valera",
         "id": 1786632810902,
         "bloqueado": true
-      },
-      {
-        "fecha": "2026-08-12",
-        "semana": 33,
-        "turno": "DIURNO",
-        "operador": "JESUS ARREAZA",
-        "linea": "Línea 4",
-        "equipo": "PALETIZADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "08:40",
-        "finParada": "08:57",
-        "totalMin": "17",
-        "zona": "Llenado",
-        "falla": "VALVULA DE AIRE DEL VOLTEADOR DE PAQUETES CERRADA OCACIONANDO PARADAS CONSTANTE POR FALLA EN DOBLAJE DE PAQUETE",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Ronald Valera",
-        "id": 1786632896725,
-        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
