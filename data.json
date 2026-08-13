@@ -44870,6 +44870,25 @@
         "usuario": "Ronald Valera",
         "id": 1786632896725,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-12",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "23:29",
+        "finParada": "23:39",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "FALLA DE AIRE DE ALTA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1786633036380,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
