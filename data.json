@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-13T00:00:00.000",
+      "weekStartDate": "2026-08-03T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -7365,7 +7365,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-13T14:51:18.872Z"
+    "updatedAt": "2026-08-13T19:43:32.825Z"
   },
   "ordenesSap": [
     {
@@ -44889,6 +44889,44 @@
         "usuario": "Luis Blandin",
         "id": 1786633036380,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-12",
+        "semana": 33,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "09:39",
+        "finParada": "10:50",
+        "totalMin": "71",
+        "zona": "Llenado",
+        "falla": "FALLA DE ENERGIA ELECTRICA EXTERNA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1786650713108,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-12",
+        "semana": 33,
+        "turno": "DIURNO",
+        "operador": "JOSE OLIVO",
+        "linea": "Línea 4",
+        "equipo": "TRANSPORTADOR DE BOTELLAS",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "11:15",
+        "finParada": "11:19",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1786651067444,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -45335,7 +45373,7 @@
         "bloqueado": false
       },
       {
-        "id": 1786376463580.2305,
+        "id": 1786650181757.4155,
         "fechaOrden": "2026-08-03",
         "orden": "8948",
         "fechaEmision": "2026-08-03",
@@ -45358,8 +45396,7 @@
         "descripcionFalla": "CAMBIO DE MANGUERA DE COMPENSACION",
         "descripcionAccion": "CAMBIO DE MANGUERA DE COMPENSACION DE MOLDE #11",
         "observaciones": "",
-        "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "usuario": "Luis Sanchez"
       },
       {
         "id": 1786376463580.257,
@@ -45956,7 +45993,7 @@
         "bloqueado": false
       },
       {
-        "id": 1786391269959.06,
+        "id": 1786650181757.8193,
         "fechaOrden": "2026-08-08",
         "orden": "8844",
         "fechaEmision": "2026-08-08",
@@ -45979,14 +46016,10 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera",
-        "otFechaParada": "2026-08-08",
-        "otInicioParada": "09:39",
-        "otFinParada": "10:06",
-        "bloqueado": true
+        "usuario": "Ronald Valera"
       },
       {
-        "id": 1786378402972.4553,
+        "id": 1786650181757.831,
         "fechaOrden": "2026-08-07",
         "orden": "9312",
         "fechaEmision": "2026-08-07",
@@ -46009,8 +46042,7 @@
         "descripcionFalla": "FALLA EN VALVULA REGULADOR CO2",
         "descripcionAccion": "SE REALIZA AJUSTE Y REVISION DE TODOS LOS ACTUADORES DEL SISTEMA,SE CALIBRAN LAS VALVULAS ",
         "observaciones": "",
-        "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "usuario": "Luis Sanchez"
       },
       {
         "id": 1786386202965.3103,
@@ -46688,34 +46720,30 @@
         "bloqueado": false
       },
       {
-        "id": 1786470418651.9775,
+        "id": 1786650181757.5498,
         "fechaOrden": "2026-08-06",
         "orden": "9203",
         "fechaEmision": "2026-08-06",
         "semana": 32,
         "turno": "NOCTURNO",
-        "solicitante": "JULIO ACOSTA",
+        "solicitante": "",
         "linea": "Línea 2",
         "maquina": "ENFARDADORA",
-        "aviso": "5728",
+        "aviso": "",
         "fechaParada": "2026-08-06",
-        "inicioMtto": "05:28",
-        "finMtto": "05:36",
+        "inicioMtto": "",
+        "finMtto": "",
         "inicioParada": "05:28",
         "finParada": "05:36",
         "tMtto": "8",
         "tipoParada": "AVERÍA",
-        "mtto": "correctivo",
+        "mtto": "",
         "falla": "SALTO Y PERFORACION DE BOTELLAS EN ZONA DE DIENTES DE SEPARACION",
-        "mttoEsp": "RICHAR QUINTANA",
-        "descripcionFalla": "SALTO Y PERFORACION DE BOTELLAS EN ZONA DE DIENTES DE SEPARACION",
-        "descripcionAccion": "SE REALIZA AJUSTE DE TENSOR CADENA DE LOS DEDOS",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera",
-        "bloqueado": true,
-        "otFechaParada": "2026-08-06",
-        "otInicioParada": "05:28",
-        "otFinParada": "05:36"
+        "usuario": "Ronald Valera"
       },
       {
         "id": 1786470418651.5312,
