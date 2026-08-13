@@ -44851,6 +44851,25 @@
         "usuario": "Ronald Valera",
         "id": 1786632810902,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-12",
+        "semana": 33,
+        "turno": "DIURNO",
+        "operador": "JESUS ARREAZA",
+        "linea": "Línea 4",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "08:40",
+        "finParada": "08:57",
+        "totalMin": "17",
+        "zona": "Llenado",
+        "falla": "VALVULA DE AIRE DEL VOLTEADOR DE PAQUETES CERRADA OCACIONANDO PARADAS CONSTANTE POR FALLA EN DOBLAJE DE PAQUETE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1786632896725,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -44878,7 +44897,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "otFechaParada": "",
         "otInicioParada": "",
         "otFinParada": ""
@@ -44907,7 +44926,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "otFechaParada": "",
         "otInicioParada": "",
         "otFinParada": ""
@@ -45321,7 +45340,7 @@
         "descripcionAccion": "CAMBIO DE MANGUERA DE COMPENSACION DE MOLDE #11",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786376463580.257,
@@ -45918,7 +45937,7 @@
         "bloqueado": false
       },
       {
-        "id": 1786391269959.06,
+        "id": 1786391973396.2222,
         "fechaOrden": "2026-08-08",
         "orden": "8844",
         "fechaEmision": "2026-08-08",
@@ -45942,10 +45961,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "otFechaParada": "2026-08-08",
-        "otInicioParada": "09:39",
-        "otFinParada": "10:06",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786378402972.4553,
@@ -45972,7 +45988,7 @@
         "descripcionAccion": "SE REALIZA AJUSTE Y REVISION DE TODOS LOS ACTUADORES DEL SISTEMA,SE CALIBRAN LAS VALVULAS ",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786386202965.3103,
@@ -46674,7 +46690,7 @@
         "descripcionAccion": "SE REALIZA AJUSTE DE TENSOR CADENA DE LOS DEDOS",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true,
+        "bloqueado": false,
         "otFechaParada": "2026-08-06",
         "otInicioParada": "05:28",
         "otFinParada": "05:36"
