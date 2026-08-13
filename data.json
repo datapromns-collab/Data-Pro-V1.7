@@ -43919,6 +43919,44 @@
         "usuario": "Luis Blandin",
         "id": 1786572859243,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-12",
+        "semana": 33,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "PTAB",
+        "inicioParada": "07:00",
+        "finParada": "09:26",
+        "totalMin": "146",
+        "zona": "Llenado",
+        "falla": "DETENIDA POR RECUPERACION DE AGUA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1786624599828,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-12",
+        "semana": 33,
+        "turno": "DIURNO",
+        "operador": "ISRAEL RICO",
+        "linea": "Línea 7",
+        "equipo": "LLENADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "09:26",
+        "finParada": "09:35",
+        "totalMin": "9",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE PARAMETROS REALIZADOS POR EL PAISANO KENNY",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1786624666163,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -44986,7 +45024,7 @@
         "bloqueado": false
       },
       {
-        "id": 1786391269959.06,
+        "id": 1786391973396.2222,
         "fechaOrden": "2026-08-08",
         "orden": "8844",
         "fechaEmision": "2026-08-08",
@@ -45010,9 +45048,6 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "otFechaParada": "2026-08-08",
-        "otInicioParada": "09:39",
-        "otFinParada": "10:06",
         "bloqueado": false
       },
       {

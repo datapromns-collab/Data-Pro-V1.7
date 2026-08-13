@@ -152,7 +152,8 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   'enf.mds': ['planning', 'seguimiento', 'management', 'planta'],
   'etq.mds': ['planning', 'seguimiento', 'management'],
   'logg.mds': ['planning'],
-  'MDS': ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'logistica', 'ventas', 'purchasing', 'ordenes-sap', 'seguimiento'],
+  'mtto.mds': ['planning'],
+  'cal.mds': ['planning'],
 };
 
 const DEFAULT_READONLY_MODULES: UserPermissions = {
