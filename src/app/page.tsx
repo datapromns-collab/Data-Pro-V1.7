@@ -4401,8 +4401,26 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                ))}
                              </div>
                            </div>
-                         )}
-                          <div className="flex-1 bg-white rounded-[2.5rem] p-4 overflow-x-auto">
+                          )}
+                          {insumosSubTab === 'agua' && (
+                            <div className="flex items-center gap-2 mb-2 no-print">
+                              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                {['diario', 'semanal', 'mensual'].map((tab) => (
+                                  <button
+                                    key={tab}
+                                    onClick={() => setInsumosPeriodoSubTab(tab)}
+                                    className={cn(
+                                      "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                      insumosPeriodoSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                    )}
+                                  >
+                                    {tab === 'diario' ? 'Diario' : tab === 'semanal' ? 'Semanal' : 'Mensual'}
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                           <div className="flex-1 bg-white rounded-[2.5rem] p-4 overflow-x-auto">
                              {insumosSubTab === 'co2' && insumosPeriodoSubTab === 'diario' && (
                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
                                  <table className="w-full border-collapse text-[11px]">
