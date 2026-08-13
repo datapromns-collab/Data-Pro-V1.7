@@ -5273,8 +5273,9 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                             mttoEsp: '',
                             descripcionFalla: '',
                             descripcionAccion: '',
-                            observaciones: plantaFormData.observaciones || '',
-                            usuario: user?.name || '',
+                             observaciones: plantaFormData.observaciones || '',
+                             bloqueado: false,
+                             usuario: user?.name || '',
                           }];
                        });
                      }

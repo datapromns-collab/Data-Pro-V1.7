@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-11T00:00:00.000",
+      "weekStartDate": "2026-08-13T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -7365,7 +7365,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-12T22:12:14.246Z"
+    "updatedAt": "2026-08-13T12:11:19.725Z"
   },
   "ordenesSap": [
     {
@@ -11684,12 +11684,12 @@
           "fechaInicio": "2026-08-12",
           "ticket1": "17493",
           "cajas1": 9120,
-          "ticket2": "",
+          "ticket2": "17494",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 11600
         }
       ]
     },
@@ -11910,12 +11910,12 @@
           "fechaInicio": "2026-08-12",
           "ticket1": "17300",
           "cajas1": 4758,
-          "ticket2": "",
+          "ticket2": "17751",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 5928
         }
       ]
     },
@@ -11941,12 +11941,12 @@
           "fechaInicio": "2026-08-12",
           "ticket1": "17701",
           "cajas1": 6400,
-          "ticket2": "",
+          "ticket2": "17702",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 5920
         }
       ]
     },
@@ -11961,12 +11961,12 @@
           "fechaInicio": "2026-08-12",
           "ticket1": "17654",
           "cajas1": 14400,
-          "ticket2": "",
+          "ticket2": "17655",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 15680
         },
         {
           "fechaInicio": "2026-08-13",
@@ -11992,12 +11992,12 @@
           "fechaInicio": "2026-08-12",
           "ticket1": "17541",
           "cajas1": 11680,
-          "ticket2": "",
+          "ticket2": "17542",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 9040
         },
         {
           "fechaInicio": "2026-08-13",
@@ -12023,6 +12023,59 @@
           "fechaInicio": "2026-08-12",
           "ticket1": "17577",
           "cajas1": 2600,
+          "ticket2": "17578",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 5800
+        },
+        {
+          "fechaInicio": "2026-08-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-08-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1786623065320",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "62948",
+      "semana": 33,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-12",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17605",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-08-13",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -43893,7 +43946,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "otFechaParada": "",
         "otInicioParada": "",
         "otFinParada": ""
@@ -43922,7 +43975,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "otFechaParada": "",
         "otInicioParada": "",
         "otFinParada": ""
@@ -44336,7 +44389,7 @@
         "descripcionAccion": "CAMBIO DE MANGUERA DE COMPENSACION DE MOLDE #11",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786376463580.257,
@@ -44960,7 +45013,7 @@
         "otFechaParada": "2026-08-08",
         "otInicioParada": "09:39",
         "otFinParada": "10:06",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786378402972.4553,
@@ -44987,7 +45040,7 @@
         "descripcionAccion": "SE REALIZA AJUSTE Y REVISION DE TODOS LOS ACTUADORES DEL SISTEMA,SE CALIBRAN LAS VALVULAS ",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786386202965.3103,
@@ -45689,7 +45742,7 @@
         "descripcionAccion": "SE REALIZA AJUSTE DE TENSOR CADENA DE LOS DEDOS",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true,
+        "bloqueado": false,
         "otFechaParada": "2026-08-06",
         "otInicioParada": "05:28",
         "otFinParada": "05:36"
@@ -45826,7 +45879,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786483429339,
@@ -45852,7 +45906,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786485399520,
@@ -45878,7 +45933,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786537303510,
@@ -45904,7 +45960,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786537763058,
@@ -45930,7 +45987,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786538376572,
@@ -45956,7 +46014,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786543485374,
@@ -45982,7 +46041,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786543551924,
@@ -46008,7 +46068,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786544021204,
@@ -46034,7 +46095,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786544640834,
@@ -46060,7 +46122,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786545141551,
@@ -46086,7 +46149,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786548028184.163,
@@ -46112,7 +46176,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786548202620,
@@ -46138,7 +46203,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Luis Blandin"
+        "usuario": "Luis Blandin",
+        "bloqueado": false
       },
       {
         "id": 1786549448401,
@@ -46164,7 +46230,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786550229326,
@@ -46190,7 +46257,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786550300927,
@@ -46216,7 +46284,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786550550007,
@@ -46242,7 +46311,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786552995018,
@@ -46268,7 +46338,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786553634065,
@@ -46294,7 +46365,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Luis Blandin"
+        "usuario": "Luis Blandin",
+        "bloqueado": false
       },
       {
         "id": 1786554741705,
@@ -46320,7 +46392,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786561324045,
@@ -46346,7 +46419,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786562904362,
@@ -46372,7 +46446,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Ronald Valera"
+        "usuario": "Ronald Valera",
+        "bloqueado": false
       },
       {
         "id": 1786568662713,
@@ -46398,7 +46473,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Luis Blandin"
+        "usuario": "Luis Blandin",
+        "bloqueado": false
       },
       {
         "id": 1786570278285,
@@ -46424,7 +46500,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Luis Blandin"
+        "usuario": "Luis Blandin",
+        "bloqueado": false
       },
       {
         "id": 1786570744438,
@@ -46450,7 +46527,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Luis Blandin"
+        "usuario": "Luis Blandin",
+        "bloqueado": false
       },
       {
         "id": 1786570886181,
@@ -46476,7 +46554,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Luis Blandin"
+        "usuario": "Luis Blandin",
+        "bloqueado": false
       },
       {
         "id": 1786570981270,
@@ -46502,7 +46581,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Luis Blandin"
+        "usuario": "Luis Blandin",
+        "bloqueado": false
       },
       {
         "id": 1786570901694,
@@ -46528,7 +46608,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Luis Blandin"
+        "usuario": "Luis Blandin",
+        "bloqueado": false
       },
       {
         "id": 1786571065636,
@@ -46554,7 +46635,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Luis Blandin"
+        "usuario": "Luis Blandin",
+        "bloqueado": false
       },
       {
         "id": 1786571667211,
@@ -46580,7 +46662,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": "Luis Blandin"
+        "usuario": "Luis Blandin",
+        "bloqueado": false
       },
       {
         "id": 1786572859255,
@@ -46607,7 +46690,7 @@
         "descripcionAccion": "SE REALIZA CAMBIO DE MANGUERA DE REFRIGERACION DEL MOLDE #03",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       }
     ],
     "seguimiento-ordenes": {
