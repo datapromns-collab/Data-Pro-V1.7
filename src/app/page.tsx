@@ -884,7 +884,6 @@ export default function PlannerPage() {
   const [planificadasTurnoSubTab, setPlanificadasTurnoSubTab] = useState('diurno');
   const [producidasSubTab, setProducidasSubTab] = useState('porturno');
   const [producidasTurnoSubTab, setProducidasTurnoSubTab] = useState('diurno');
-  const [pncSubTab, setPncSubTab] = useState('td');
   const [ttSubTab, setTtSubTab] = useState('porturno');
   const [produccionMes, setProduccionMes] = useState<Date>(() => startOfMonth(new Date()));
   const [produccionFecha, setProduccionFecha] = useState<Date | undefined>(() => {
@@ -914,25 +913,6 @@ export default function PlannerPage() {
     producidasStore.setData((prev) => ({
       ...prev,
       [produccionFechaKey]: { ...(prev[produccionFechaKey] || { diurno: nuevaTabla(), nocturno: nuevaTabla() }), nocturno: val }
-    }));
-  };
-  const pncStore = useRemoteCollection<Record<string, { td: { producto: string; cantidad: string }[]; tn: { producto: string; cantidad: string }[] }>>('planta-pnc', {});
-  const pncDia = pncStore.data[produccionFechaKey] || {
-    td: Array.from({ length: 7 }, () => ({ producto: '', cantidad: '' })),
-    tn: Array.from({ length: 7 }, () => ({ producto: '', cantidad: '' }))
-  };
-  const pncTd = pncDia.td;
-  const pncTn = pncDia.tn;
-  const setPncTd = (val: { producto: string; cantidad: string }[]) => {
-    pncStore.setData((prev) => ({
-      ...prev,
-      [produccionFechaKey]: { ...(prev[produccionFechaKey] || { td: [], tn: [] }), td: val }
-    }));
-  };
-  const setPncTn = (val: { producto: string; cantidad: string }[]) => {
-    pncStore.setData((prev) => ({
-      ...prev,
-      [produccionFechaKey]: { ...(prev[produccionFechaKey] || { td: [], tn: [] }), tn: val }
     }));
   };
   const velocidadesDtStore = useRemoteCollection<Record<string, { td: string[], tn: string[] }>>('planta-velocidades-bpm', {});
@@ -3298,21 +3278,20 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                  <div className="flex items-center justify-between gap-2">
                                    <div className="flex items-center gap-3">
                                     <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                                       {['planificadas', 'producidas', 'pnc'].map((subTab) => (
-                                         <button
-                                           key={subTab}
-                                           onClick={() => setProduccionSubTab(subTab)}
-                                           className={cn(
-                                             "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                             produccionSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                           )}
-                                         >
-                                           {subTab === 'planificadas' && <ClipboardList className="h-3.5 w-3.5" />}
-                                           {subTab === 'planificadas' ? 'Planificadas' : subTab === 'producidas' ? 'Producidas' : 'PNC'}
-                                           {subTab === 'producidas' && <CheckCircle2 className="h-3.5 w-3.5" />}
-                                           {subTab === 'pnc' && <AlertTriangle className="h-3.5 w-3.5" />}
-                                         </button>
-                                       ))}
+                                       {['planificadas', 'producidas'].map((subTab) => (
+                                          <button
+                                            key={subTab}
+                                            onClick={() => setProduccionSubTab(subTab)}
+                                            className={cn(
+                                              "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                              produccionSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                            )}
+                                          >
+                                            {subTab === 'planificadas' && <ClipboardList className="h-3.5 w-3.5" />}
+                                            {subTab === 'planificadas' ? 'Planificadas' : 'Producidas'}
+                                            {subTab === 'producidas' && <CheckCircle2 className="h-3.5 w-3.5" />}
+                                          </button>
+                                        ))}
                                     </div>
                                    </div>
                                    <input
@@ -3328,24 +3307,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                      className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
                                     />
                                  </div>
-                                  {produccionSubTab === 'pnc' && (
-                                    <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start no-print">
-                                      {['td', 'tn', 'tt'].map((subTab) => (
-                                        <button
-                                          key={subTab}
-                                          onClick={() => setPncSubTab(subTab)}
-                                          className={cn(
-                                            "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                            pncSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                          )}
-                                        >
-                                          {subTab === 'td' ? 'TD' : subTab === 'tn' ? 'TN' : 'TT'}
-                                        </button>
-                                      ))}
-                                    </div>
-                                  )}
-                               </div>
-                              {produccionSubTab === 'planificadas' && (
+                                </div>
+                               {produccionSubTab === 'planificadas' && (
                                 <div className="flex items-center gap-3 mb-4 no-print flex-wrap">
                                   <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
                                     {['porturno', 'diario'].map((subTab) => (
@@ -3482,210 +3445,12 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                       ) : (
                                          <ProducidasTable titulo="Diaria - Producidas" value={sumarTablas(producidasDiurno, producidasNocturno)} readOnly />
                                       )
-                                   )}
-                                      {produccionSubTab === 'pnc' && (
-                                        <>
-                                          {pncSubTab === 'td' ? (
-                                            <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                                              <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-                                                <div className="w-2 h-2 rounded-full bg-amber-500" />
-                                                <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                                                  TD - PNC
-                                                </h4>
-                                              </div>
-                                              <div className="p-4">
-                                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                                  <table className="w-full border-collapse text-center">
-                                                    <thead>
-                                                      <tr className="bg-slate-100">
-                                                        <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-40 text-left">Ubicación</th>
-                                                        <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[200px]">Producto</th>
-                                                        <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">Cantidad</th>
-                                                      </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                      {pncTd.map((row, idx) => (
-                                                        <tr key={idx} className="even:bg-slate-50/60">
-                                                          <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
-                                                            Línea {idx + 1}
-                                                          </td>
-                                                            <td className="px-2 py-1 border-r border-b border-slate-100">
-                                                              <select
-                                                                value={row.producto}
-                                                                disabled={user?.id === 'prodtj.mds' || user?.id === 'prodts.mds'}
-                                                                onChange={(e) => {
-                                                                  const next = [...pncTd];
-                                                                  next[idx] = { ...next[idx], producto: e.target.value };
-                                                                  setPncTd(next);
-                                                                }}
-                                                                className="w-full bg-transparent text-center text-[10px] text-slate-700 outline-none focus:bg-sky-50 rounded px-1 py-0.5"
-                                                              >
-                                                                <option value="">Producto</option>
-                                                                {PRODUCT_LIST.map((sabor) => (
-                                                                  <option key={sabor} value={sabor}>{sabor}</option>
-                                                                ))}
-                                                              </select>
-                                                            </td>
-                                                           <td className="px-2 py-1 border-b border-slate-100">
-                                                             <input
-                                                               type="text"
-                                                               value={row.cantidad}
-                                                               disabled={user?.id === 'prodtj.mds' || user?.id === 'prodts.mds'}
-                                                               onChange={(e) => {
-                                                                const next = [...pncTd];
-                                                                next[idx] = { ...next[idx], cantidad: e.target.value };
-                                                                setPncTd(next);
-                                                              }}
-                                                              className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-sky-50 rounded px-1 py-0.5"
-                                                              placeholder="0"
-                                                            />
-                                                          </td>
-                                                        </tr>
-                                                      ))}
-                                                    </tbody>
-                                                  </table>
-                                                </div>
-                                              </div>
-                                            </div>
-                                          ) : pncSubTab === 'tn' ? (
-                                            <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                                              <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-                                                <div className="w-2 h-2 rounded-full bg-amber-500" />
-                                                <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                                                  TN - PNC
-                                                </h4>
-                                              </div>
-                                              <div className="p-4">
-                                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                                  <table className="w-full border-collapse text-center">
-                                                    <thead>
-                                                      <tr className="bg-slate-100">
-                                                        <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-40 text-left">Ubicación</th>
-                                                        <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[200px]">Producto</th>
-                                                        <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">Cantidad</th>
-                                                      </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                      {pncTn.map((row, idx) => (
-                                                        <tr key={idx} className="even:bg-slate-50/60">
-                                                          <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
-                                                            Línea {idx + 1}
-                                                          </td>
-                                                            <td className="px-2 py-1 border-r border-b border-slate-100">
-                                                              <select
-                                                                value={row.producto}
-                                                                disabled={user?.id === 'prodtj.mds' || user?.id === 'prodts.mds'}
-                                                                onChange={(e) => {
-                                                                  const next = [...pncTn];
-                                                                  next[idx] = { ...next[idx], producto: e.target.value };
-                                                                  setPncTn(next);
-                                                                }}
-                                                                className="w-full bg-transparent text-center text-[10px] text-slate-700 outline-none focus:bg-sky-50 rounded px-1 py-0.5"
-                                                              >
-                                                                <option value="">Producto</option>
-                                                                {PRODUCT_LIST.map((sabor) => (
-                                                                  <option key={sabor} value={sabor}>{sabor}</option>
-                                                                ))}
-                                                              </select>
-                                                            </td>
-                                                           <td className="px-2 py-1 border-b border-slate-100">
-                                                             <input
-                                                               type="text"
-                                                               value={row.cantidad}
-                                                               disabled={user?.id === 'prodtj.mds' || user?.id === 'prodts.mds'}
-                                                               onChange={(e) => {
-                                                                const next = [...pncTn];
-                                                                next[idx] = { ...next[idx], cantidad: e.target.value };
-                                                                setPncTn(next);
-                                                              }}
-                                                              className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-sky-50 rounded px-1 py-0.5"
-                                                              placeholder="0"
-                                                            />
-                                                          </td>
-                                                        </tr>
-                                                      ))}
-                                                    </tbody>
-                                                  </table>
-                                                </div>
-                                              </div>
-                                            </div>
-                                           ) : pncSubTab === 'tt' ? (
-                                             <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                                               <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
-                                                 <div className="w-2 h-2 rounded-full bg-amber-500" />
-                                                 <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">
-                                                   TT - PNC
-                                                 </h4>
-                                               </div>
-                                               <div className="p-4">
-                                                 <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                                   <table className="w-full border-collapse text-center">
-                                                     <thead>
-                                                       <tr className="bg-slate-100">
-                                                         <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-40 text-left">Ubicación</th>
-                                                         <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">Cantidad</th>
-                                                       </tr>
-                                                     </thead>
-                                                      <tbody>
-                                                         {pncTd.map((tdRow, idx) => {
-                                                           const tdCant = Number(tdRow.cantidad || 0);
-                                                           const tnCant = Number(pncTn[idx]?.cantidad || 0);
-                                                           const total = tdCant + tnCant;
-                                                             return (
-                                                            <tr key={idx} className="even:bg-slate-50/60">
-                                                              <td className="sticky left-0 z-10 bg-white even:bg-slate-50/60 px-2 py-1 text-[10px] font-bold text-slate-700 text-left border-r border-b border-slate-100 whitespace-nowrap">
-                                                                Línea {idx + 1}
-                                                              </td>
-                                                              <td className="px-2 py-1 border-b border-slate-100">
-                                                                <input
-                                                                  type="text"
-                                                                  readOnly
-                                                                  value={String(total)}
-                                                                  className="w-full bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-sky-50 rounded px-1 py-0.5"
-                                                                  placeholder="0"
-                                                                />
-                                                              </td>
-                                                            </tr>
-                                                          );
-                                                        })}
-                                                      </tbody>
-                                 </table>
-                                 <div className="mt-4 rounded-2xl border border-slate-200 bg-white overflow-hidden">
-                                   <div className="flex items-center justify-between px-3 py-1 bg-slate-800 text-white">
-                                     <div className="font-black text-[11px] uppercase tracking-widest">CONSUMO DE CO2</div>
-                                     <div className="font-black text-[11px] uppercase tracking-widest">KG</div>
-                                   </div>
-                                   <div className="flex items-center justify-between px-3 py-1 bg-slate-100 font-black text-slate-700">
-                                     <div className="text-[11px]"></div>
-                                     <div className="text-[11px]">
-                                       {Object.values(co2DiarioData).reduce((acc, row) => {
-                                         const c2 = Number(row.cajas2L) || 0;
-                                         const c1 = Number(row.cajas1L) || 0;
-                                         const c04 = Number(row.cajas04L) || 0;
-                                         const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
-                                         const sabor = Object.keys(co2DiarioData).find(key => co2DiarioData[key] === row);
-                                         const factor = sabor ? (CO2_FACTORS[sabor] || 0) : 0;
-                                         return acc + (litros * factor);
-                                       }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} KG
-                                     </div>
-                                   </div>
-                                 </div>
+                                     )}
                                </div>
-                                               </div>
-                                             </div>
-                                           ) : (
-                                            <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                                              <AlertTriangle className="h-12 w-12 mb-4 opacity-20" />
-                                              PNC en Desarrollo
-                                            </div>
-                                          )}
-                                        </>
-                                      )}
                               </div>
-                            </div>
-                          </>
-                        )}
-                        {activeTab === 'reporte' && (
+                            </>
+                          )}
+                         {activeTab === 'reporte' && (
                           <>
                              <div className="flex items-center justify-between gap-2 mb-4 no-print">
                                <div className="flex items-center gap-3">
@@ -3737,7 +3502,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                           planificadasPorDia={planificadasPorDia}
                                           producidasDiurno={producidasDiurno}
                                           producidasNocturno={producidasNocturno}
-                                          pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
+                                           pncPorLinea={Array.from({ length: 7 }, () => 0)}
                                            velocidadesDt={velocidadesDt}
                                           hrsPagadasDia={(() => { const a = hrsPagadasDt.td; const b = hrsPagadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
                                           hrsProgramadasDia={(() => { const a = hrsProgramadasDt.td; const b = hrsProgramadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
@@ -3851,7 +3616,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                 planificadasPorDia={planificadasPorDia}
                                                 producidasDiurno={producidasDiurno}
                                                 producidasNocturno={producidasNocturno}
-                                                pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
+                                                pncPorLinea={Array.from({ length: 7 }, () => 0)}
                                                 velocidadesDt={velocidadesDt}
                                                  hrsPagadasDia={hrsPagadasDt.td}
                                                  hrsProgramadasDia={hrsProgramadasDt.td}
@@ -3912,7 +3677,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                planificadasPorDia={planificadasPorDia}
                                                producidasDiurno={producidasDiurno}
                                                producidasNocturno={producidasNocturno}
-                                               pncPorLinea={Array.from({ length: 7 }, (_, idx) => Number(pncTd[idx]?.cantidad || 0) + Number(pncTn[idx]?.cantidad || 0))}
+                                               pncPorLinea={Array.from({ length: 7 }, () => 0)}
                                                velocidadesDt={velocidadesDt}
                                                 hrsPagadasDia={hrsPagadasDt.tn}
                                                 hrsProgramadasDia={hrsProgramadasDt.tn}
