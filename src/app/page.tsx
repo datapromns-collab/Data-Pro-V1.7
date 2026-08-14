@@ -5395,8 +5395,7 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
         const disponibilidadNum = (() => {
           const toNum = (v: any) => Number.parseFloat(String(v || '0').replace(',', '.')) || 0;
           const horasProgramadasNum = toNum(horasProgramadas);
-          const horasPerdidasNum = toNum(horasPerdidasPNC || '0,00');
-          const totalRestar = relacionNum + toNum(servicios) + toNum(ausentismo) + toNum(externas) + toNum(adecuaciones) + toNum(averia) + toNum(operacionales) + horasPerdidasNum;
+          const totalRestar = relacionNum + toNum(servicios) + toNum(ausentismo) + toNum(externas) + toNum(adecuaciones) + toNum(averia) + toNum(operacionales);
           return Math.max(0, horasProgramadasNum - totalRestar);
         })();
         const disponibilidad = disponibilidadNum.toFixed(2).replace('.', ',');
