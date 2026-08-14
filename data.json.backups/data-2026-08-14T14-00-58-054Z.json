@@ -7699,7 +7699,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-14T12:43:55.900Z"
+    "updatedAt": "2026-08-14T13:55:04.281Z"
   },
   "ordenesSap": [
     {
@@ -12261,6 +12261,17 @@
           "cajas3": 1716,
           "ticket4": "",
           "cajas4": 2340
+        },
+        {
+          "fechaInicio": "2026-08-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -12303,6 +12314,17 @@
           "cajas3": 1120,
           "ticket4": "",
           "cajas4": 7680
+        },
+        {
+          "fechaInicio": "2026-08-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -12458,6 +12480,28 @@
           "cajas3": 1680,
           "ticket4": "",
           "cajas4": 17840
+        },
+        {
+          "fechaInicio": "2026-08-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-08-15",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -12478,6 +12522,28 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 2320
+        },
+        {
+          "fechaInicio": "2026-08-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-08-15",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }

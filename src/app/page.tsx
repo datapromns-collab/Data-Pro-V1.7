@@ -6156,7 +6156,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
     const estaEnEdicion = editingRows[row.id] != null;
     const enEdicion = (esAdmin || esUsuarioPlanta) && !esUsuarioRestringido && (estaEnEdicion || !estaBloqueado);
     const puedeEditar = esAdmin || (!estaBloqueado && !esUsuarioRestringido);
-    const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones','fechaParada']);
+    const camposEditables = new Set(['fechaEmision','solicitante','aviso','inicioMtto','finMtto','inicioParada','finParada','tMtto','tipoParada','mtto','falla','mttoEsp','descripcionFalla','descripcionAccion','observaciones','fechaParada']);
     const editable = (campo: string) => enEdicion && camposEditables.has(campo);
     const tMttoCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioMtto, rowEdit.fechaParada, rowEdit.finMtto);
     const tParadaCalc = tiempoTranscurrido(rowEdit.fechaEmision, rowEdit.inicioParada, rowEdit.fechaParada, rowEdit.finParada);
