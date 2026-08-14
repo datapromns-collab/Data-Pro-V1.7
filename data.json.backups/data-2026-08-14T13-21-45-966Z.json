@@ -46917,7 +46917,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "otFechaParada": "",
         "otInicioParada": "",
         "otFinParada": "",
