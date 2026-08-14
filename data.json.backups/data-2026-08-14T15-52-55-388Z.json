@@ -7699,7 +7699,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-14T13:55:04.281Z"
+    "updatedAt": "2026-08-14T15:06:35.482Z"
   },
   "ordenesSap": [
     {
@@ -12523,6 +12523,68 @@
           "ticket4": "",
           "cajas4": 2320
         },
+        {
+          "fechaInicio": "2026-08-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-08-15",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1786718586742",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "62966",
+      "semana": 33,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-08-15",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1786719024730",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62972",
+      "semana": 33,
+      "dias": [
         {
           "fechaInicio": "2026-08-14",
           "ticket1": "",
@@ -50114,6 +50176,12 @@
           "jarabeReal": 66327,
           "pnc": 0,
           "ubb": 67.15
+        },
+        "auto-2-1786623065320": {
+          "cajasPlanificadas": 91250,
+          "producto": "63",
+          "jarabeReal": 77723,
+          "ubb": 78.67
         }
       },
       "linea-3": {
@@ -50152,6 +50220,12 @@
           "jarabeReal": 139094,
           "producto": "202",
           "ubb": 48.42
+        },
+        "auto-3-1786571974856": {
+          "cajasPlanificadas": 134400,
+          "producto": "173",
+          "jarabeReal": 116883,
+          "ubb": 40.63
         }
       },
       "linea-4": {
@@ -50179,6 +50253,10 @@
           "producto": "89",
           "jarabeReal": 120851,
           "ubb": 42
+        },
+        "auto-4-1786572197081": {
+          "cajasPlanificadas": 134400,
+          "producto": "254"
         }
       },
       "linea-5": {
