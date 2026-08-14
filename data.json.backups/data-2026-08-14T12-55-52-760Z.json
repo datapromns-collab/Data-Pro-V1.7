@@ -7007,12 +7007,12 @@
             "name": "GLUP COLA",
             "lineId": "3",
             "loadPerHour": 2800,
-            "quantity": 330400,
-            "durationHours": 118,
+            "quantity": 263200,
+            "durationHours": 94,
             "presentation": "2Lts",
-            "tanks": 38.31,
+            "tanks": 30.52,
             "startTime": "2026-08-10T11:00:00.000Z",
-            "endTime": "2026-08-15T09:00:00.000Z",
+            "endTime": "2026-08-14T09:00:00.000Z",
             "id": "k1gitnitf",
             "color": "#47CCB0"
           },
@@ -7279,8 +7279,8 @@
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 2,
-            "startTime": "2026-08-15T09:00:00.000Z",
-            "endTime": "2026-08-15T11:00:00.000Z",
+            "startTime": "2026-08-14T09:00:00.000Z",
+            "endTime": "2026-08-14T11:00:00.000Z",
             "id": "itvg4qag1",
             "color": "#ec4899"
           },
@@ -7288,11 +7288,11 @@
             "name": "GLUP UVA",
             "lineId": "3",
             "loadPerHour": 2800,
-            "quantity": 61600,
-            "durationHours": 22,
+            "quantity": 128800,
+            "durationHours": 46,
             "presentation": "2Lts",
-            "tanks": 8.66,
-            "startTime": "2026-08-15T11:00:00.000Z",
+            "tanks": 18.11,
+            "startTime": "2026-08-14T11:00:00.000Z",
             "endTime": "2026-08-16T09:00:00.000Z",
             "id": "0g2yq3nqq",
             "color": "#ec4899"
@@ -7699,7 +7699,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-14T02:53:13.651Z"
+    "updatedAt": "2026-08-14T12:43:55.900Z"
   },
   "ordenesSap": [
     {
@@ -12255,12 +12255,12 @@
           "fechaInicio": "2026-08-13",
           "ticket1": "17752",
           "cajas1": 2418,
-          "ticket2": "",
+          "ticket2": "17753",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1716,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 2340
         }
       ]
     },
@@ -12297,12 +12297,12 @@
           "fechaInicio": "2026-08-13",
           "ticket1": "17703",
           "cajas1": 480,
-          "ticket2": "",
+          "ticket2": "17704",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1120,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 7680
         }
       ]
     },
@@ -12328,12 +12328,12 @@
           "fechaInicio": "2026-08-13",
           "ticket1": "17656",
           "cajas1": 8000,
-          "ticket2": "",
+          "ticket2": "17657",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3760,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 17200
         }
       ]
     },
@@ -12359,12 +12359,12 @@
           "fechaInicio": "2026-08-13",
           "ticket1": "17543",
           "cajas1": 5200,
-          "ticket2": "",
+          "ticket2": "17544",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 4080,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 22320
         }
       ]
     },
@@ -12390,12 +12390,12 @@
           "fechaInicio": "2026-08-13",
           "ticket1": "17579",
           "cajas1": 1250,
-          "ticket2": "",
+          "ticket2": "17580",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 11200
         },
         {
           "fechaInicio": "2026-08-14",
@@ -12432,12 +12432,12 @@
           "fechaInicio": "2026-08-13",
           "ticket1": "17606",
           "cajas1": 4800,
-          "ticket2": "",
+          "ticket2": "17607",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2160,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 20800
         }
       ]
     },
@@ -12452,12 +12452,32 @@
           "fechaInicio": "2026-08-13",
           "ticket1": "17495",
           "cajas1": 4160,
-          "ticket2": "",
+          "ticket2": "17496",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 1680,
+          "ticket4": "",
+          "cajas4": 17840
+        }
+      ]
+    },
+    {
+      "id": "3-1786709759403",
+      "linea": 3,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "62960",
+      "semana": 33,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-13",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "1767",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 2320
         }
       ]
     }
@@ -23966,7 +23986,7 @@
         "mttoEsp": "JUNIOR R",
         "descripcionFalla": "CAMBIO DE MANGUERA DE COMPENSACION",
         "descripcionAccion": "CAMBIO DE MANGUERA DE COMPENSACION DE MOLDE #11",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-08-03",
@@ -23999,7 +24019,7 @@
         "mttoEsp": "ANGEL C.",
         "descripcionFalla": "DEFORMACION EN CUELLO DE BOTELLA, PURGA DE LOS MOLDES",
         "descripcionAccion": "SE REALIZA PURGA POR ALTA TEMPERATURA  DE LOS MOLDES  #01 Y #15",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-08-03",
@@ -30563,7 +30583,7 @@
         "mttoEsp": "SANTOS SALAZAR ",
         "descripcionFalla": "FALLA EN VALVULA REGULADOR CO2",
         "descripcionAccion": "SE REALIZA AJUSTE Y REVISION DE TODOS LOS ACTUADORES DEL SISTEMA,SE CALIBRAN LAS VALVULAS ",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-08-07",
@@ -30634,7 +30654,7 @@
         "mttoEsp": "ANGEL C.",
         "descripcionFalla": "MOLDES CALIENTES ",
         "descripcionAccion": "",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-08-07",
@@ -31693,7 +31713,7 @@
         "mttoEsp": "JUNIOR CABALLERO, OMAR BARRIOS",
         "descripcionFalla": "AJUSTE DE ALTURA DE ORGANOS DE ELEVACION #15, 66",
         "descripcionAccion": "SE REALIZA AJUSTE DE CENTRADOR Y ALTURA DE LOS ORGANOS #15, 66",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-08-08",
@@ -31859,7 +31879,7 @@
         "mttoEsp": "GABRIEL ALFONZO",
         "descripcionFalla": "FALLA ELECTRICA ETIQUETADORA SENSOR EN FALLA",
         "descripcionAccion": "SE AJUSTO EL SENSOR DE PROXIMIDAD DE LA LEVA DE LOS RODILLOS TENSORES, ADEMAS SE EVALUO EL FRENO DE HISTERESIS ELECTRONICO DEL PORTABOBINAS Y LOS CONECTORES, POR FALLA DE LA TENSION EN LA ETIQUETADORA",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-08-08",
@@ -46870,12 +46890,6 @@
         "usuario": "Luis Blandin",
         "id": 1786654095569,
         "bloqueado": true
-      },
-      {
-        "id": "TEST-OT-999",
-        "orden": "TEST-OT-999",
-        "bloqueado": false,
-        "fecha": "2026-08-14"
       }
     ],
     "planta-ordenes-trabajo": [
@@ -49934,7 +49948,6 @@
         "fechaParada": "2026-08-14",
         "inicioMtto": "",
         "finMtto": "",
-        "inicioParada": "",
         "finParada": "",
         "tMtto": "",
         "tipoParada": "PROGRAMADA",
