@@ -46870,6 +46870,12 @@
         "usuario": "Luis Blandin",
         "id": 1786654095569,
         "bloqueado": true
+      },
+      {
+        "id": "TEST-OT-999",
+        "orden": "TEST-OT-999",
+        "bloqueado": false,
+        "fecha": "2026-08-14"
       }
     ],
     "planta-ordenes-trabajo": [
@@ -49913,6 +49919,32 @@
         "observaciones": "",
         "bloqueado": false,
         "usuario": "Luis Blandin"
+      },
+      {
+        "id": 1786706981154.8667,
+        "fechaOrden": "2026-08-14",
+        "orden": "TEST-OT-999",
+        "fechaEmision": "2026-08-14",
+        "semana": "",
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 1",
+        "maquina": "",
+        "aviso": "",
+        "fechaParada": "2026-08-14",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "",
+        "finParada": "",
+        "tMtto": "",
+        "tipoParada": "PROGRAMADA",
+        "mtto": "",
+        "falla": "",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "usuario": ""
       }
     ],
     "seguimiento-ordenes": {
