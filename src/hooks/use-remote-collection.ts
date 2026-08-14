@@ -289,7 +289,15 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
           : remoteRaw && typeof remoteRaw === 'object'
             ? remoteRaw
             : remoteRaw;
-        if (remote && typeof remote === 'object') {
+         if (remote && typeof remote === 'object') {
+          // On first load, if the server is reachable, clear any stale pending queue.
+          // The server data is the source of truth; pending ops from a previous
+          // session can overwrite fresh server state (e.g. bloqueado:true -> false).
+          if (isFirst && queueRef.current.length > 0) {
+            queueRef.current = [];
+            savePendingQueue(namespace, []);
+            pendingRef.current = false;
+          }
           setData((prev) => {
             if (pendingRef.current) {
               console.log('[RC] GET skip because pending', namespace);

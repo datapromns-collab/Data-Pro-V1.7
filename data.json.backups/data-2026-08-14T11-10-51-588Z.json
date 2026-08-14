@@ -7699,7 +7699,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-13T21:28:44.336Z"
+    "updatedAt": "2026-08-14T02:53:13.651Z"
   },
   "ordenesSap": [
     {
@@ -12250,6 +12250,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 5928
+        },
+        {
+          "fechaInicio": "2026-08-13",
+          "ticket1": "17752",
+          "cajas1": 2418,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -12281,6 +12292,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 5920
+        },
+        {
+          "fechaInicio": "2026-08-13",
+          "ticket1": "17703",
+          "cajas1": 480,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -12304,8 +12326,8 @@
         },
         {
           "fechaInicio": "2026-08-13",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17656",
+          "cajas1": 8000,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -12335,8 +12357,8 @@
         },
         {
           "fechaInicio": "2026-08-13",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17543",
+          "cajas1": 5200,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -12366,8 +12388,8 @@
         },
         {
           "fechaInicio": "2026-08-13",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17579",
+          "cajas1": 1250,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -46875,7 +46897,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "otFechaParada": "",
         "otInicioParada": "",
         "otFinParada": "",
@@ -46905,7 +46927,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "otFechaParada": "",
         "otInicioParada": "",
         "otFinParada": ""
@@ -47295,7 +47317,7 @@
         "bloqueado": false
       },
       {
-        "id": 1786650181757.4155,
+        "id": 1786376463580.2305,
         "fechaOrden": "2026-08-03",
         "orden": "8948",
         "fechaEmision": "2026-08-03",
@@ -47916,7 +47938,7 @@
         "bloqueado": false
       },
       {
-        "id": 1786650181757.8193,
+        "id": 1786391269959.06,
         "fechaOrden": "2026-08-08",
         "orden": "8844",
         "fechaEmision": "2026-08-08",
@@ -47940,10 +47962,13 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
+        "otFechaParada": "2026-08-08",
+        "otInicioParada": "09:39",
+        "otFinParada": "10:06",
         "bloqueado": false
       },
       {
-        "id": 1786650181757.831,
+        "id": 1786378402972.4553,
         "fechaOrden": "2026-08-07",
         "orden": "9312",
         "fechaEmision": "2026-08-07",
@@ -48645,31 +48670,34 @@
         "bloqueado": false
       },
       {
-        "id": 1786650181757.5498,
+        "id": 1786470418651.9775,
         "fechaOrden": "2026-08-06",
         "orden": "9203",
         "fechaEmision": "2026-08-06",
         "semana": 32,
         "turno": "NOCTURNO",
-        "solicitante": "",
+        "solicitante": "JULIO ACOSTA",
         "linea": "Línea 2",
         "maquina": "ENFARDADORA",
-        "aviso": "",
+        "aviso": "5728",
         "fechaParada": "2026-08-06",
-        "inicioMtto": "",
-        "finMtto": "",
+        "inicioMtto": "05:28",
+        "finMtto": "05:36",
         "inicioParada": "05:28",
         "finParada": "05:36",
         "tMtto": "8",
         "tipoParada": "AVERÍA",
-        "mtto": "",
+        "mtto": "correctivo",
         "falla": "SALTO Y PERFORACION DE BOTELLAS EN ZONA DE DIENTES DE SEPARACION",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
+        "mttoEsp": "RICHAR QUINTANA",
+        "descripcionFalla": "SALTO Y PERFORACION DE BOTELLAS EN ZONA DE DIENTES DE SEPARACION",
+        "descripcionAccion": "SE REALIZA AJUSTE DE TENSOR CADENA DE LOS DEDOS",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": false
+        "bloqueado": false,
+        "otFechaParada": "2026-08-06",
+        "otInicioParada": "05:28",
+        "otFinParada": "05:36"
       },
       {
         "id": 1786470418651.5312,
