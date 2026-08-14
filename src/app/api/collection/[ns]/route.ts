@@ -71,6 +71,19 @@ function ensureDb() {
     if (!data.collections) { data.collections = {}; changed = true; }
     if (!data.deletedIds) { data.deletedIds = {}; changed = true; }
     if (typeof data.cacheVersion !== 'number') { data.cacheVersion = 0; changed = true; }
+    if (data.collections && typeof data.collections === 'object') {
+      for (const ns of Object.keys(data.collections)) {
+        const col = data.collections[ns];
+        if (Array.isArray(col)) {
+          col.forEach((item: any) => {
+            if (item && typeof item === 'object' && item.bloqueado === undefined) {
+              item.bloqueado = true;
+              changed = true;
+            }
+          });
+        }
+      }
+    }
     if (changed) {
       createRotatingBackup(DB_PATH);
       fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf8');

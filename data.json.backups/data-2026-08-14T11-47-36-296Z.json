@@ -49944,7 +49944,8 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "usuario": ""
+        "usuario": "",
+        "bloqueado": true
       }
     ],
     "seguimiento-ordenes": {

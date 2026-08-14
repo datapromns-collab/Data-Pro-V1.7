@@ -462,6 +462,7 @@ export default function PlannerPage() {
         descripcionFalla: '',
         descripcionAccion: '',
         observaciones: r.observaciones || '',
+        bloqueado: true,
         usuario: r.usuario || '',
       }));
 
@@ -5347,6 +5348,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                         descripcionFalla: ordenFormData.descripcionFalla || '',
                         descripcionAccion: ordenFormData.descripcionAccion || '',
                         observaciones: ordenFormData.observaciones || '',
+                        bloqueado: true,
                         usuario: user?.name || '',
                       }]);
                      setOrdenFormData({
