@@ -1,3 +1,5 @@
+@import "charts.css/dist/charts.min.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -233,6 +235,41 @@
     linear-gradient(to right, #ffffff 30%, rgba(255, 255, 255, 0)) left center / 24px 100% no-repeat,
     linear-gradient(to left, #ffffff 30%, rgba(255, 255, 255, 0)) right center / 24px 100% no-repeat,
     linear-gradient(to bottom, #ffffff 30%, rgba(255, 255, 255, 0)) top center / 100% 24px no-repeat,
-    linear-gradient(to top, #ffffff 30%, rgba(255, 255, 255, 0)) bottom center / 100% 24px no-repeat;
+     linear-gradient(to top, #ffffff 30%, rgba(255, 255, 255, 0)) bottom center / 100% 24px no-repeat;
   background-attachment: local, local, local, local;
+}
+
+/* ====================================================================
+   charts.css customizations for Jarabes module (Resumen tables)
+   Personaliza colores de acceso y ejes para coincidir con la paleta
+   del proyecto (blue / emerald / amber / red / violet)
+==================================================================== */
+.charts-css {
+  --data-axes-color: rgba(148, 163, 184, 0.35);
+  --data-axes-style: solid;
+  --data-axes-width: 1px;
+  --primary-axis-color: #94a3b8;
+  --primary-axis-style: solid;
+  --primary-axis-width: 1px;
+  --secondary-axes-color: rgba(148, 163, 184, 0.15);
+  --secondary-axes-style: solid;
+  --secondary-axes-width: 1px;
+  --chart-bg-color: transparent;
+  overflow: visible;
+}
+
+.charts-css td,
+.charts-css th {
+  border-color: #e2e8f0;
+}
+
+.charts-css.color-options {
+  --color-1: rgba(59, 130, 246, 0.8);
+  --color-2: rgba(16, 185, 169, 0.8);
+  --color-3: rgba(245, 158, 11, 0.8);
+  --color-4: rgba(239, 68, 68, 0.8);
+  --color-5: rgba(139, 92, 246, 0.8);
+  --color-6: rgba(234, 179, 209, 0.8);
+  --color-7: rgba(217, 219, 229, 0.8);
+  --color-8: rgba(156, 163, 175, 0.8);
 }

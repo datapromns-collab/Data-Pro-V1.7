@@ -51352,7 +51352,8 @@
         "auto-5-1786572467220": {
           "cajasPlanificadas": 55660,
           "jarabeReal": 474000,
-          "ubb": 474
+          "ubb": 474,
+          "producto": "1014"
         }
       },
       "linea-6": {
@@ -51377,7 +51378,8 @@
         "auto-6-1786485070095": {
           "cajasPlanificadas": 48420,
           "jarabeReal": 34548,
-          "ubb": 12
+          "ubb": 12,
+          "producto": "347"
         }
       },
       "linea-7": {
@@ -51431,7 +51433,9 @@
         "auto-7-1786457509586": {
           "cajasPlanificadas": 84970,
           "jarabeReal": 88448,
-          "ubb": 30.75
+          "ubb": 30.75,
+          "producto": "3581",
+          "pnc": 185
         }
       }
     },
