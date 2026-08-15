@@ -4173,25 +4173,6 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                 return acc + calcularLitrosAguaParaFecha(fechaStr);
                                               }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                                            })()}
-                                         </td>
-                                         <td className="px-2 py-2 text-center border border-slate-200">
-                                           {(() => {
-                                             const baseDate = insumosFecha || new Date();
-                                             const mesSeleccionado = baseDate.getMonth();
-                                             const anioSeleccionado = baseDate.getFullYear();
-                                             const inicioMes = new Date(anioSeleccionado, mesSeleccionado, 1);
-                                             const finMes = endOfMonth(inicioMes);
-                                             const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
-                                             const totalConsumido = diasMes.reduce((acc, dia) => {
-                                               const fechaStr = format(dia, 'yyyy-MM-dd');
-                                               return acc + (Number(aguaConsumoPorDia[fechaStr]) || 0);
-                                             }, 0);
-                                              const totalVP = diasMes.reduce((acc, dia) => {
-                                                const fechaStr = format(dia, 'yyyy-MM-dd');
-                                                return acc + calcularKgAguaParaFecha(fechaStr);
-                                              }, 0);
-                                              return totalConsumido > 0 && totalVP > 0 ? (totalConsumido / totalVP).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0,00';
-                                            })()}
                                           </td>
                                           <td className="px-2 py-2 text-center border border-slate-200">
                                             {(() => {
@@ -4205,12 +4186,12 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                 const fechaStr = format(dia, 'yyyy-MM-dd');
                                                 return acc + (Number(aguaConsumoPorDia[fechaStr]) || 0);
                                               }, 0);
-                                               const totalLitros = diasMes.reduce((acc, dia) => {
-                                                 const fechaStr = format(dia, 'yyyy-MM-dd');
-                                                 return acc + calcularLitrosAguaParaFecha(fechaStr);
-                                               }, 0);
-                                               return totalConsumido > 0 ? (totalLitros / totalConsumido).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0,00';
-                                             })()}
+                                              const totalLitros = diasMes.reduce((acc, dia) => {
+                                                const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                return acc + calcularLitrosAguaParaFecha(fechaStr);
+                                              }, 0);
+                                              return totalConsumido > 0 ? (totalLitros / totalConsumido).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '0,00';
+                                            })()}
                                           </td>
                                         </tr>
                                       </tbody>
