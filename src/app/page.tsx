@@ -5048,7 +5048,14 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
       const cumplimientoTD = planificadoTD > 0 ? ((alcanceTD / planificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
       const cumplimientoTN = planificadoTN > 0 ? ((alcanceTN / planificadoTN) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
         const raw = (velocidadesDt?.td?.[idx]) ?? '';
-        const velocidad = Number(String(raw).replace(',', '.')) || 0;
+        const velocidadBase = Number(String(raw).replace(',', '.')) || 0;
+        const factorVelocidad = (() => {
+          if (lineaNum >= 1 && lineaNum <= 4) return 6;
+          if (lineaNum === 5 || lineaNum === 7) return 12;
+          if (lineaNum === 6) return 15;
+          return 0;
+        })();
+        const velocidad = factorVelocidad > 0 ? (cajasH * factorVelocidad / 60) : velocidadBase;
        const tiempoMuerto = minutosAHorasDecimal(Math.max(0, totalParadaMin - (porTipo.programadas || 0)));
         const relacion = (() => {
           const toNum = (v: any) => Number.parseFloat(String(v || '0').replace(',', '.')) || 0;
