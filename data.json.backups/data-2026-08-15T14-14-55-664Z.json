@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-14T00:00:00.000",
+      "weekStartDate": "2026-08-03T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -7699,7 +7699,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-14T22:00:17.240Z"
+    "updatedAt": "2026-08-15T13:30:33.851Z"
   },
   "ordenesSap": [
     {
@@ -12266,12 +12266,12 @@
           "fechaInicio": "2026-08-14",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "",
+          "ticket2": "17754",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 16766
         }
       ]
     },
@@ -12319,12 +12319,12 @@
           "fechaInicio": "2026-08-14",
           "ticket1": "17705",
           "cajas1": 1920,
-          "ticket2": "",
+          "ticket2": "17706",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 3047
         }
       ]
     },
@@ -12423,12 +12423,12 @@
           "fechaInicio": "2026-08-14",
           "ticket1": "17581",
           "cajas1": 1050,
-          "ticket2": "",
+          "ticket2": "17582",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 2943
         }
       ]
     },
@@ -12485,12 +12485,12 @@
           "fechaInicio": "2026-08-14",
           "ticket1": "17497",
           "cajas1": 4240,
-          "ticket2": "",
+          "ticket2": "17498",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 16320
         },
         {
           "fechaInicio": "2026-08-15",
@@ -12527,12 +12527,12 @@
           "fechaInicio": "2026-08-14",
           "ticket1": "17658",
           "cajas1": 5920,
-          "ticket2": "",
+          "ticket2": "17659",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 20880
         },
         {
           "fechaInicio": "2026-08-15",
@@ -12558,12 +12558,12 @@
           "fechaInicio": "2026-08-14",
           "ticket1": "17608",
           "cajas1": 5120,
-          "ticket2": "",
+          "ticket2": "17609",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 17760
         },
         {
           "fechaInicio": "2026-08-15",
@@ -12589,12 +12589,12 @@
           "fechaInicio": "2026-08-14",
           "ticket1": "17545",
           "cajas1": 4640,
-          "ticket2": "",
+          "ticket2": "17546",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 16080
         },
         {
           "fechaInicio": "2026-08-15",
@@ -51326,7 +51326,7 @@
         "auto-4-1786572197081": {
           "cajasPlanificadas": 134400,
           "producto": "254",
-          "jarabeReal": 102832,
+          "jarabeReal": 103608,
           "ubb": 35.73
         }
       },
@@ -51348,6 +51348,11 @@
           "jarabeReal": 506000,
           "producto": "663",
           "ubb": 506
+        },
+        "auto-5-1786572467220": {
+          "cajasPlanificadas": 55660,
+          "jarabeReal": 474000,
+          "ubb": 474
         }
       },
       "linea-6": {
@@ -51368,6 +51373,11 @@
           "jarabeReal": 24123,
           "producto": "0",
           "ubb": 24.47
+        },
+        "auto-6-1786485070095": {
+          "cajasPlanificadas": 48420,
+          "jarabeReal": 34548,
+          "ubb": 12
         }
       },
       "linea-7": {
@@ -51417,6 +51427,11 @@
           "producto": "151",
           "ubb": 22,
           "jarabeReal": 34100
+        },
+        "auto-7-1786457509586": {
+          "cajasPlanificadas": 84970,
+          "jarabeReal": 88448,
+          "ubb": 30.75
         }
       }
     },

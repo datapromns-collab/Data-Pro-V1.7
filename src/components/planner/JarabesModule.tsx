@@ -910,7 +910,7 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
   };
 
   return (
-    <div ref={containerRef} className="space-y-4 print:space-y-8">
+    <div ref={containerRef} className="space-y-4 print:space-y-8 w-full">
       <div className="flex justify-end">
         <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
           Imprimir PDF
@@ -918,7 +918,7 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
       </div>
 
       <div className="print-only">
-        <h1 className="text-center text-lg font-black text-slate-900 uppercase tracking-widest mb-1">Resumen de Azucar Semanal</h1>
+        <h1 className="text-center text-lg font-black text-slate-900 uppercase tracking-widest mb-1">Resumen de Azucar (Estandar) Semanal</h1>
         <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-1">Semana {semanaNumero}</p>
         <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-3">Mes {mesNombre.toUpperCase()}</p>
       </div>
@@ -1013,7 +1013,7 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
       <div className="print-spacer h-4"></div>
 
       {!isEmpty && (
-        <div className="border border-slate-300 rounded-xl overflow-hidden bg-white p-4">
+        <div className="border border-slate-300 rounded-xl overflow-hidden bg-white p-4 w-full">
           <ResponsiveContainer width="100%" height={260}>
             <ComposedChart data={rows.map(r => ({ dia: r.dia, estandar: r.estandar, fisico: r.fisico, porcentaje: r.porcentaje }))}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -1082,7 +1082,7 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
   };
 
   return (
-    <div ref={containerRef} className="space-y-3">
+     <div ref={containerRef} className="space-y-3 w-full">
       <div className="flex justify-end">
         <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
           Imprimir PDF
@@ -1090,7 +1090,7 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
       </div>
 
       <div className="print-only">
-        <h1 className="text-center text-lg font-black text-slate-900 uppercase tracking-widest mb-1">Resumen de Azucar Semanal</h1>
+        <h1 className="text-center text-lg font-black text-slate-900 uppercase tracking-widest mb-1">Resumen de Azucar (Promedio) Semanal</h1>
         <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-1">Semana {semanaNumero}</p>
         <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-3">Mes {mesNombre.toUpperCase()}</p>
       </div>
@@ -1185,7 +1185,7 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
       <div className="h-8 print:h-16"></div>
 
       {!isEmpty && (
-        <div className="border border-slate-300 rounded-xl overflow-hidden bg-white p-4">
+        <div className="border border-slate-300 rounded-xl overflow-hidden bg-white p-4 w-full">
           <ResponsiveContainer width="100%" height={260}>
             <ComposedChart data={rows.map(r => ({ dia: r.dia, estandar: r.estandar, fisico: r.fisico, porcentaje: r.porcentaje }))}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -1267,7 +1267,7 @@ function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintM
   const mesNombre = selectedFecha ? format(selectedFecha, 'MMMM', { locale: es }) : '';
 
   return (
-    <div ref={containerRef} className="space-y-3">
+     <div ref={containerRef} className="space-y-3 w-full">
       <div className="flex justify-end">
         <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
           Imprimir PDF
@@ -1366,7 +1366,7 @@ function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintM
       )}
 
       {!isEmpty && (
-        <div className="border border-slate-300 rounded-xl overflow-hidden bg-white p-4">
+        <div className="border border-slate-300 rounded-xl overflow-hidden bg-white p-4 w-full">
           <ResponsiveContainer width="100%" height={260}>
             <ComposedChart data={rows.map(r => ({ semana: r.semana, estandar: r.estandar, fisico: r.fisico, porcentaje: r.porcentaje }))}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -1448,7 +1448,7 @@ function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
   const mesNombre = selectedFecha ? format(selectedFecha, 'MMMM', { locale: es }) : '';
 
   return (
-    <div ref={containerRef} className="space-y-3">
+     <div ref={containerRef} className="space-y-3 w-full">
       <div className="flex justify-end">
         <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
           Imprimir PDF
@@ -1547,7 +1547,7 @@ function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
       )}
 
       {!isEmpty && (
-        <div className="border border-slate-300 rounded-xl overflow-hidden bg-white p-4">
+        <div className="border border-slate-300 rounded-xl overflow-hidden bg-white p-4 w-full">
           <ResponsiveContainer width="100%" height={260}>
             <ComposedChart data={rows.map(r => ({ semana: r.semana, estandar: r.estandar, fisico: r.fisico, porcentaje: r.porcentaje }))}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -1638,7 +1638,7 @@ function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklySta
   }, [selectedFecha]);
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-700">
+    <div className="space-y-6 animate-in fade-in duration-700 w-full">
       <Tabs defaultValue="simple" className="w-full">
         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
           <TabsList className="bg-transparent h-auto p-0">

@@ -41,6 +41,7 @@
     "@tanstack/react-table": "^8.21.3",
     "bootstrap": "^5.3.8",
     "chart.js": "^4.5.1",
+    "charts.css": "^1.2.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
