@@ -622,7 +622,7 @@ export default function PlannerPage() {
       );
 
       const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }> = {};
-      const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
+    const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
       sabores.forEach(sabor => {
         tabla[sabor] = { cajas2L: '', cajas1L: '', cajas04L: '' };
       });
@@ -731,6 +731,16 @@ export default function PlannerPage() {
     'GLUP CHICLE': 0,
     'GLUP PIÑA PARCHITA': 0,
     'GLUP MANZANA ROJA': 0,
+    'JUSTY NARANJ': 0,
+    'JUSTY DURAZN': 0,
+    'JUSTY MANDAR': 0,
+    'JUSTY SANDIA': 0,
+    'JUSTY LIMON': 0,
+    'JUSTY TAMAR': 0,
+    'JUSTY MANZANA': 0,
+    'JUSTY PERA': 0,
+    'VITA TEA DURAZN': 0,
+    'VITA TEA LIMON': 0,
   };
   const calcularKgAguaParaFecha = (fechaStr: string): number => {
     const ordenesDelDia = (ordenes || []).filter(orden =>
@@ -738,7 +748,7 @@ export default function PlannerPage() {
     );
     if (ordenesDelDia.length === 0) return 0;
     const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas1_5L: string; cajas04L: string }> = {};
-    const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
+    const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA', 'JUSTY NARANJA', 'JUSTY DURAZNO', 'JUSTY MANDARINA', 'JUSTY SANDIA', 'JUSTY LIMON', 'JUSTY TAMARINDO', 'JUSTY MANZANA', 'JUSTY PERA', 'VITA TEA DURAZNO', 'VITA TEA LIMON'];
     sabores.forEach(sabor => {
       tabla[sabor] = { cajas2L: '', cajas1L: '', cajas1_5L: '', cajas04L: '' };
     });
@@ -776,7 +786,7 @@ export default function PlannerPage() {
     );
     if (ordenesDelDia.length === 0) return 0;
     const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas1_5L: string; cajas04L: string }> = {};
-    const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
+    const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA', 'JUSTY NARANJA', 'JUSTY DURAZNO', 'JUSTY MANDARINA', 'JUSTY SANDIA', 'JUSTY LIMON', 'JUSTY TAMARINDO', 'JUSTY MANZANA', 'JUSTY PERA', 'VITA TEA DURAZNO', 'VITA TEA LIMON'];
     sabores.forEach(sabor => {
       tabla[sabor] = { cajas2L: '', cajas1L: '', cajas1_5L: '', cajas04L: '' };
     });
@@ -842,7 +852,7 @@ export default function PlannerPage() {
   const [isAutoUpdatingAgua, setIsAutoUpdatingAgua] = useState(false);
   const [aguaDiarioData, setAguaDiarioData] = useState<Record<string, { cajas2L: string; cajas1L: string; cajas1_5L: string; cajas04L: string }>>(() => {
     const initial: Record<string, { cajas2L: string; cajas1L: string; cajas1_5L: string; cajas04L: string }> = {};
-    const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
+    const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA', 'JUSTY NARANJA', 'JUSTY DURAZNO', 'JUSTY MANDARINA', 'JUSTY SANDIA', 'JUSTY LIMON', 'JUSTY TAMARINDO', 'JUSTY MANZANA', 'JUSTY PERA', 'VITA TEA DURAZNO', 'VITA TEA LIMON'];
     sabores.forEach(sabor => {
       initial[sabor] = { cajas2L: '', cajas1L: '', cajas1_5L: '', cajas04L: '' };
     });
@@ -855,7 +865,7 @@ export default function PlannerPage() {
       orden.dias.some(dia => dia.fechaInicio === fechaStr)
     );
     const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas1_5L: string; cajas04L: string }> = {};
-    const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
+    const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA', 'JUSTY NARANJA', 'JUSTY DURAZNO', 'JUSTY MANDARINA', 'JUSTY SANDIA', 'JUSTY LIMON', 'JUSTY TAMARINDO', 'JUSTY MANZANA', 'JUSTY PERA', 'VITA TEA DURAZNO', 'VITA TEA LIMON'];
     sabores.forEach(sabor => {
       tabla[sabor] = { cajas2L: '', cajas1L: '', cajas1_5L: '', cajas04L: '' };
     });
@@ -871,6 +881,9 @@ export default function PlannerPage() {
           }
           if (orden.linea === 7 && totalDia > 0) {
             row.cajas1L = String((Number(row.cajas1L) || 0) + totalDia);
+          }
+          if (orden.linea === 5 && totalDia > 0) {
+            row.cajas1_5L = String((Number(row.cajas1_5L) || 0) + totalDia);
           }
           if (orden.linea === 6 && totalDia > 0) {
             row.cajas04L = String((Number(row.cajas04L) || 0) + totalDia);
@@ -3900,7 +3913,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                          </tr>
                                        </thead>
                                      <tbody>
-                                        {['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'].map((sabor) => {
+{['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA', 'JUSTY NARANJ', 'JUSTY DURAZN', 'JUSTY MANDAR', 'JUSTY SANDIA', 'JUSTY LIMON', 'JUSTY TAMAR', 'JUSTY MANZANA', 'JUSTY PERA', 'VITA TEA DURAZN', 'VITA TEA LIMON'].map((sabor) => {
                                           const row = aguaDiarioData[sabor] || { cajas2L: '', cajas1L: '', cajas1_5L: '', cajas04L: '' };
                                           const c2 = Number(row.cajas2L) || 0;
                                           const c1 = Number(row.cajas1L) || 0;
@@ -4252,7 +4265,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                       </tr>
                                     </thead>
                                    <tbody>
-                                       {['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'].map((sabor) => {
+{['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'].map((sabor) => {
                                          const row = co2DiarioData[sabor] || { cajas2L: '', cajas1L: '', cajas04L: '' };
                                          const c2 = Number(row.cajas2L) || 0;
                                          const c1 = Number(row.cajas1L) || 0;

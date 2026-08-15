@@ -7699,7 +7699,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-15T13:30:33.851Z"
+    "updatedAt": "2026-08-15T21:34:03.041Z"
   },
   "ordenesSap": [
     {
@@ -12494,8 +12494,8 @@
         },
         {
           "fechaInicio": "2026-08-15",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17499",
+          "cajas1": 12640,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -12536,8 +12536,8 @@
         },
         {
           "fechaInicio": "2026-08-15",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17660",
+          "cajas1": 16960,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -12567,8 +12567,8 @@
         },
         {
           "fechaInicio": "2026-08-15",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17610",
+          "cajas1": 13280,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -12598,8 +12598,8 @@
         },
         {
           "fechaInicio": "2026-08-15",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17547",
+          "cajas1": 14480,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -48272,6 +48272,44 @@
         "usuario": "Luis Blandin",
         "id": 1786822930655,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-13",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "operador": "BENJAMIN CORDERO",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "22:36",
+        "finParada": "22:42",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1786829453477,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-13",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "operador": "LEYBERGLER SILVA",
+        "linea": "Línea 3",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "23:07",
+        "finParada": "23:14",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "",
+        "orden": "TAPETES DEL EMPAYADO Y ENTRADA DEL HORNO ATASCADOS",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1786829500461,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -51444,6 +51482,33 @@
         "tipoParada": "AVERÍA",
         "mtto": "",
         "falla": "AJUSTE DE GUIA EN BAJANTE DE PREFORMAS",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Luis Blandin"
+      },
+      {
+        "id": 1786829500470,
+        "fechaOrden": "2026-08-13",
+        "orden": "TAPETES DEL EMPAYADO Y ENTRADA DEL HORNO ATASCADOS",
+        "fechaEmision": "2026-08-13",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 3",
+        "maquina": "ENFARDADORA",
+        "aviso": "",
+        "fechaParada": "2026-08-13",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "23:07",
+        "finParada": "23:14",
+        "tMtto": "7",
+        "tipoParada": "OPERACIONAL",
+        "mtto": "",
+        "falla": "",
         "mttoEsp": "",
         "descripcionFalla": "",
         "descripcionAccion": "",
