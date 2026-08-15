@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect, useRef, memo } from "react";
 import Image from "next/image";
+import ExcelJS from "exceljs";
 import { 
   Plus, 
   Trash2, 
@@ -814,6 +815,136 @@ export default function PlannerPage() {
       const c04 = Number(row.cajas04L) || 0;
       return acc + ((c2 * 6 * 2) + (c1 * 12 * 1) + (c15 * 12 * 1.5) + (c04 * 15 * 0.4));
     }, 0);
+  };
+  const generarExcelCo2Mensual = async () => {
+    if (typeof window === 'undefined') return;
+    const baseDate = insumosFecha || new Date();
+    const mesSeleccionado = baseDate.getMonth();
+    const anioSeleccionado = baseDate.getFullYear();
+    const inicioMes = new Date(anioSeleccionado, mesSeleccionado, 1);
+    const finMes = endOfMonth(inicioMes);
+    const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet(`CO2 ${format(baseDate, 'MMMM', { locale: es }).toUpperCase()}`);
+    worksheet.columns = [
+      { header: 'FECHA', key: 'fecha', width: 12 },
+      { header: 'DIA', key: 'dia', width: 12 },
+      { header: 'KG.CO2 CONSUMIDO', key: 'consumido', width: 20 },
+      { header: 'KG.CO2.VP', key: 'vp', width: 20 },
+      { header: 'RENDIMIENTO CO2', key: 'rendimiento', width: 18 },
+    ];
+    const headerRow = worksheet.getRow(1);
+    headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+    headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1e293b' } };
+    headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
+    headerRow.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+    let totalConsumido = 0;
+    let totalVP = 0;
+    diasMes.forEach((dia, idx) => {
+      const fechaStr = format(dia, 'yyyy-MM-dd');
+      const consumido = Number(co2ConsumoPorDia[fechaStr]) || 0;
+      const vp = calcularKgCo2ParaFecha(fechaStr);
+      const rendimiento = consumido > 0 && vp > 0 ? (consumido / vp) : 0;
+      const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
+      totalConsumido += consumido;
+      totalVP += vp;
+      const row = worksheet.addRow({
+        fecha: format(dia, 'dd/MM/yyyy'),
+        dia: diaNombre,
+        consumido: consumido || '',
+        vp: vp ? parseFloat(vp.toFixed(2)) : '',
+        rendimiento: rendimiento ? parseFloat(rendimiento.toFixed(2)) : '',
+      });
+      row.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+      if (idx % 2 === 0) {
+        row.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFf8fafc' } };
+      }
+    });
+    const totalRow = worksheet.addRow({
+      fecha: '',
+      dia: 'TOTAL',
+      consumido: totalConsumido || '',
+      vp: totalVP ? parseFloat(totalVP.toFixed(2)) : '',
+      rendimiento: totalConsumido > 0 && totalVP > 0 ? parseFloat((totalConsumido / totalVP).toFixed(2)) : '',
+    });
+    totalRow.font = { bold: true };
+    totalRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFe2e8f0' } };
+    totalRow.border = { top: { style: 'medium' }, bottom: { style: 'medium' }, left: { style: 'thin' }, right: { style: 'thin' } };
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `CO2_Mensual_${anioSeleccionado}_${String(mesSeleccionado + 1).padStart(2, '0')}.xlsx`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+  const generarExcelAguaMensual = async () => {
+    if (typeof window === 'undefined') return;
+    const baseDate = insumosFecha || new Date();
+    const mesSeleccionado = baseDate.getMonth();
+    const anioSeleccionado = baseDate.getFullYear();
+    const inicioMes = new Date(anioSeleccionado, mesSeleccionado, 1);
+    const finMes = endOfMonth(inicioMes);
+    const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet(`AGUA ${format(baseDate, 'MMMM', { locale: es }).toUpperCase()}`);
+    worksheet.columns = [
+      { header: 'FECHA', key: 'fecha', width: 12 },
+      { header: 'DIA', key: 'dia', width: 12 },
+      { header: 'LITROS.AGUA CONSUMIDO', key: 'consumido', width: 25 },
+      { header: 'LITROS.AGUA.VP', key: 'vp', width: 20 },
+      { header: 'RENDIMIENTO AGUA', key: 'rendimiento', width: 18 },
+    ];
+    const headerRow = worksheet.getRow(1);
+    headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+    headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF1e293b' } };
+    headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
+    headerRow.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+    let totalConsumido = 0;
+    let totalVP = 0;
+    diasMes.forEach((dia, idx) => {
+      const fechaStr = format(dia, 'yyyy-MM-dd');
+      const consumido = Number(aguaConsumoPorDia[fechaStr]) || 0;
+      const vp = calcularLitrosAguaParaFecha(fechaStr);
+      const rendimiento = consumido > 0 && vp > 0 ? (vp / consumido) : 0;
+      const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
+      totalConsumido += consumido;
+      totalVP += vp;
+      const row = worksheet.addRow({
+        fecha: format(dia, 'dd/MM/yyyy'),
+        dia: diaNombre,
+        consumido: consumido || '',
+        vp: vp ? parseFloat(vp.toFixed(2)) : '',
+        rendimiento: rendimiento ? parseFloat(rendimiento.toFixed(2)) : '',
+      });
+      row.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+      if (idx % 2 === 0) {
+        row.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFf8fafc' } };
+      }
+    });
+    const totalRow = worksheet.addRow({
+      fecha: '',
+      dia: 'TOTAL',
+      consumido: totalConsumido || '',
+      vp: totalVP ? parseFloat(totalVP.toFixed(2)) : '',
+      rendimiento: totalConsumido > 0 && totalVP > 0 ? parseFloat((totalVP / totalConsumido).toFixed(2)) : '',
+    });
+    totalRow.font = { bold: true };
+    totalRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFe2e8f0' } };
+    totalRow.border = { top: { style: 'medium' }, bottom: { style: 'medium' }, left: { style: 'thin' }, right: { style: 'thin' } };
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `AGUA_Mensual_${anioSeleccionado}_${String(mesSeleccionado + 1).padStart(2, '0')}.xlsx`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
   const [co2ConsumoPorDia, setCo2ConsumoPorDia] = useState<Record<string, string>>(() => {
@@ -4103,11 +4234,20 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                )}
                                 {insumosPeriodoSubTab === 'mensual' && (
                                   <div className="rounded-2xl border border-slate-200 bg-white overflow-x-hidden">
-                                    <div className="px-4 py-2 bg-slate-800 text-white">
-                                     <div className="font-black text-[11px] uppercase tracking-widest text-center">
-                                       {format(insumosFecha || new Date(), 'MMMM', { locale: es }).toUpperCase()}
-                                     </div>
-                                   </div>
+                                  <div className="px-4 py-2 bg-slate-800 text-white flex items-center justify-between">
+                                    <div className="font-black text-[11px] uppercase tracking-widest text-center flex-1">
+                                      {format(insumosFecha || new Date(), 'MMMM', { locale: es }).toUpperCase()}
+                                    </div>
+                                    <button
+                                      onClick={() => generarExcelAguaMensual()}
+                                      className="ml-4 px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
+                                    >
+                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                      </svg>
+                                      Excel
+                                    </button>
+                                  </div>
                                    <table className="w-full border-collapse text-[11px]">
                                      <thead>
                                        <tr className="bg-slate-700 text-white">
@@ -4445,12 +4585,21 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                 </div>
                               )}
                              {insumosSubTab === 'co2' && insumosPeriodoSubTab === 'mensual' && (
-                               <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                 <div className="px-4 py-2 bg-slate-800 text-white">
-                                   <div className="font-black text-[11px] uppercase tracking-widest text-center">
-                                     {format(insumosFecha || new Date(), 'MMMM', { locale: es }).toUpperCase()}
-                                   </div>
-                                 </div>
+                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                  <div className="px-4 py-2 bg-slate-800 text-white flex items-center justify-between">
+                                    <div className="font-black text-[11px] uppercase tracking-widest text-center flex-1">
+                                      {format(insumosFecha || new Date(), 'MMMM', { locale: es }).toUpperCase()}
+                                    </div>
+                                    <button
+                                      onClick={() => generarExcelCo2Mensual()}
+                                      className="ml-4 px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
+                                    >
+                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                      </svg>
+                                      Excel
+                                    </button>
+                                  </div>
                                  <table className="w-full border-collapse text-[11px]">
                                    <thead>
                                      <tr className="bg-slate-700 text-white">
