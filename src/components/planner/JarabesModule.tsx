@@ -861,7 +861,7 @@ function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50, updateCo
 
 const DIAS_SEMANA = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
 
-function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintWeeklyStandard }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; onPrintWeeklyStandard?: (html: string) => void }) {
+function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintWeeklyStandard }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; onPrintWeeklyStandard?: (html: string, filename?: string) => void }) {
   const { data } = useJarabes();
   const weekDays = useMemo(() => (selectedFecha ? getWeekDays(selectedFecha) : []), [selectedFecha]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -906,7 +906,9 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
   const handlePrint = () => {
     if (!containerRef.current || !onPrintWeeklyStandard) return;
     const html = containerRef.current.innerHTML;
-    onPrintWeeklyStandard(html);
+    const semanaNumero = selectedFecha ? format(selectedFecha, 'w', { locale: es }) : '';
+    const filename = `Resumen de Azucar (Estandar) Semanal - Semana ${semanaNumero}`;
+    onPrintWeeklyStandard(html, filename);
   };
 
   return (
@@ -1033,7 +1035,7 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
   );
 }
 
-function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCounter, onPrintWeeklyPromedio }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; updateCounter?: number; onPrintWeeklyPromedio?: (html: string) => void }) {
+function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCounter, onPrintWeeklyPromedio }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; updateCounter?: number; onPrintWeeklyPromedio?: (html: string, filename?: string) => void }) {
   const { data } = useJarabes();
   const weekDays = useMemo(() => (selectedFecha ? getWeekDays(selectedFecha) : []), [selectedFecha]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -1078,7 +1080,9 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
   const handlePrint = () => {
     if (!containerRef.current || !onPrintWeeklyPromedio) return;
     const html = containerRef.current.innerHTML;
-    onPrintWeeklyPromedio(html);
+    const semanaNumero = selectedFecha ? format(selectedFecha, 'w', { locale: es }) : '';
+    const filename = `Resumen de Azucar (Promedio) Semanal - Semana ${semanaNumero}`;
+    onPrintWeeklyPromedio(html, filename);
   };
 
   return (
@@ -1205,7 +1209,7 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
   );
 }
 
-function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintMonthlyStandard }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; onPrintMonthlyStandard?: (html: string) => void }) {
+function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintMonthlyStandard }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; onPrintMonthlyStandard?: (html: string, filename?: string) => void }) {
   const { data } = useJarabes();
   const weeks = useMemo(() => (selectedFecha ? getWeeksInMonth(selectedFecha) : []), [selectedFecha]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -1261,7 +1265,9 @@ function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintM
   const handlePrint = () => {
     if (!containerRef.current || !onPrintMonthlyStandard) return;
     const html = containerRef.current.innerHTML;
-    onPrintMonthlyStandard(html);
+    const mesNombre = selectedFecha ? format(selectedFecha, 'MMMM', { locale: es }) : '';
+    const filename = `Resumen de Azucar (Estandar) Mensual - ${mesNombre.toUpperCase()}`;
+    onPrintMonthlyStandard(html, filename);
   };
 
   const mesNombre = selectedFecha ? format(selectedFecha, 'MMMM', { locale: es }) : '';
@@ -1386,7 +1392,7 @@ function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintM
   );
 }
 
-function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCounter, onPrintMonthlyPromedio }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; updateCounter?: number; onPrintMonthlyPromedio?: (html: string) => void }) {
+function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCounter, onPrintMonthlyPromedio }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; updateCounter?: number; onPrintMonthlyPromedio?: (html: string, filename?: string) => void }) {
   const { data } = useJarabes();
   const weeks = useMemo(() => (selectedFecha ? getWeeksInMonth(selectedFecha) : []), [selectedFecha]);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -1442,7 +1448,9 @@ function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
   const handlePrint = () => {
     if (!containerRef.current || !onPrintMonthlyPromedio) return;
     const html = containerRef.current.innerHTML;
-    onPrintMonthlyPromedio(html);
+    const mesNombre = selectedFecha ? format(selectedFecha, 'MMMM', { locale: es }) : '';
+    const filename = `Resumen de Azucar (Promedio) Mensual - ${mesNombre.toUpperCase()}`;
+    onPrintMonthlyPromedio(html, filename);
   };
 
   const mesNombre = selectedFecha ? format(selectedFecha, 'MMMM', { locale: es }) : '';
@@ -1567,7 +1575,7 @@ function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
   );
 }
 
-export function JarabesModule(props: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; onPrintMonthlyStandard?: (html: string) => void; onPrintMonthlyPromedio?: (html: string) => void; weekStartDate?: Date }) {
+export function JarabesModule(props: { onPrintStandard?: (html: string, filename?: string) => void; onPrintPromedio?: (html: string, filename?: string) => void; onPrintWeeklyStandard?: (html: string, filename?: string) => void; onPrintWeeklyPromedio?: (html: string, filename?: string) => void; onPrintMonthlyStandard?: (html: string, filename?: string) => void; onPrintMonthlyPromedio?: (html: string, filename?: string) => void; weekStartDate?: Date }) {
   return (
     <JarabesProvider>
       <JarabesModuleInner {...props} />
@@ -1575,7 +1583,7 @@ export function JarabesModule(props: { onPrintStandard?: (html: string) => void;
   );
 }
 
-function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, onPrintMonthlyStandard, onPrintMonthlyPromedio, weekStartDate }: { onPrintStandard?: (html: string) => void; onPrintPromedio?: (html: string) => void; onPrintWeeklyStandard?: (html: string) => void; onPrintWeeklyPromedio?: (html: string) => void; onPrintMonthlyStandard?: (html: string) => void; onPrintMonthlyPromedio?: (html: string) => void; weekStartDate?: Date }) {
+function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, onPrintMonthlyStandard, onPrintMonthlyPromedio, weekStartDate }: { onPrintStandard?: (html: string, filename?: string) => void; onPrintPromedio?: (html: string, filename?: string) => void; onPrintWeeklyStandard?: (html: string, filename?: string) => void; onPrintWeeklyPromedio?: (html: string, filename?: string) => void; onPrintMonthlyStandard?: (html: string, filename?: string) => void; onPrintMonthlyPromedio?: (html: string, filename?: string) => void; weekStartDate?: Date }) {
   const { data } = useJarabes();
   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
   const [activeDisolucionTab, setActiveDisolucionTab] = useState<string>('disolucion');

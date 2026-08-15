@@ -986,6 +986,7 @@ export default function PlannerPage() {
   const [printMode, setPrintMode] = useState('');
   const [jarabesPrintMode, setJarabesPrintMode] = useState('');
   const [jarabesPrintHtml, setJarabesPrintHtml] = useState('');
+  const ORIGINAL_DOCUMENT_TITLE = 'Data Pro - Planificación Eficiente';
   const [selectedLine, setSelectedLine] = useState('1');
   const [ordenesSapActiveLinea, setOrdenesSapActiveLinea] = useState<number>(1);
   const [selectedFechaSap, setSelectedFechaSap] = useState<Date | undefined>(undefined);
@@ -1699,7 +1700,8 @@ export default function PlannerPage() {
     }, 150);
   };
 
-  const handlePrintJarabes = (html: string) => {
+  const handlePrintJarabes = (html: string, filename?: string) => {
+    if (filename) document.title = filename;
     setJarabesPrintMode('estandar');
     setJarabesPrintHtml(html);
     const style = document.createElement('style');
@@ -1709,12 +1711,14 @@ export default function PlannerPage() {
     setTimeout(() => {
       window.print();
       document.getElementById('print-orientation-style')?.remove();
+      document.title = ORIGINAL_DOCUMENT_TITLE;
       setJarabesPrintMode('');
       setJarabesPrintHtml('');
     }, 150);
   };
 
-  const handlePrintJarabesPromedio = (html: string) => {
+  const handlePrintJarabesPromedio = (html: string, filename?: string) => {
+    if (filename) document.title = filename;
     setJarabesPrintMode('promedio');
     setJarabesPrintHtml(html);
     const style = document.createElement('style');
@@ -1724,12 +1728,14 @@ export default function PlannerPage() {
     setTimeout(() => {
       window.print();
       document.getElementById('print-orientation-style')?.remove();
+      document.title = ORIGINAL_DOCUMENT_TITLE;
       setJarabesPrintMode('');
       setJarabesPrintHtml('');
     }, 150);
   };
 
-  const handlePrintJarabesSemanalEst = (html: string) => {
+  const handlePrintJarabesSemanalEst = (html: string, filename?: string) => {
+    if (filename) document.title = filename;
     setJarabesPrintMode('semanal-estandar');
     setJarabesPrintHtml(html);
     const style = document.createElement('style');
@@ -1739,12 +1745,14 @@ export default function PlannerPage() {
     setTimeout(() => {
       window.print();
       document.getElementById('print-orientation-style')?.remove();
+      document.title = ORIGINAL_DOCUMENT_TITLE;
       setJarabesPrintMode('');
       setJarabesPrintHtml('');
     }, 150);
   };
 
-  const handlePrintJarabesSemanalProm = (html: string) => {
+  const handlePrintJarabesSemanalProm = (html: string, filename?: string) => {
+    if (filename) document.title = filename;
     setJarabesPrintMode('semanal-promedio');
     setJarabesPrintHtml(html);
     const style = document.createElement('style');
@@ -1754,12 +1762,14 @@ export default function PlannerPage() {
     setTimeout(() => {
       window.print();
       document.getElementById('print-orientation-style')?.remove();
+      document.title = ORIGINAL_DOCUMENT_TITLE;
       setJarabesPrintMode('');
       setJarabesPrintHtml('');
     }, 150);
   };
 
-  const handlePrintJarabesMensualEst = (html: string) => {
+  const handlePrintJarabesMensualEst = (html: string, filename?: string) => {
+    if (filename) document.title = filename;
     setJarabesPrintMode('mensual-estandar');
     setJarabesPrintHtml(html);
     const style = document.createElement('style');
@@ -1769,12 +1779,14 @@ export default function PlannerPage() {
     setTimeout(() => {
       window.print();
       document.getElementById('print-orientation-style')?.remove();
+      document.title = ORIGINAL_DOCUMENT_TITLE;
       setJarabesPrintMode('');
       setJarabesPrintHtml('');
     }, 150);
   };
 
-  const handlePrintJarabesMensualProm = (html: string) => {
+  const handlePrintJarabesMensualProm = (html: string, filename?: string) => {
+    if (filename) document.title = filename;
     setJarabesPrintMode('mensual-promedio');
     setJarabesPrintHtml(html);
     const style = document.createElement('style');
@@ -1784,6 +1796,7 @@ export default function PlannerPage() {
     setTimeout(() => {
       window.print();
       document.getElementById('print-orientation-style')?.remove();
+      document.title = ORIGINAL_DOCUMENT_TITLE;
       setJarabesPrintMode('');
       setJarabesPrintHtml('');
     }, 150);
