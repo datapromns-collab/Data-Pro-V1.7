@@ -2948,8 +2948,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                               <th className="px-3 py-2 text-left font-black uppercase tracking-wider border border-white/10">SABOR</th>
                                               <th colSpan={3} className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CAJAS PRODUCIDAS</th>
                                               <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">LITROS PRODUCIDOS<br/>TOTAL</th>
-                                              <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CO2X1L BEBIDA<br/>FACTOR</th>
-                                              <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">TOTAL<br/>KG.CO2</th>
+                                         <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">AGUAX1L BEBIDA<br/>FACTOR</th>
+                                         <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">TOTAL<br/>KG.AGUA</th>
                                             </tr>
                                             <tr className="bg-slate-700 text-white">
                                               <th className="px-3 py-1 border border-white/10"></th>
@@ -3282,7 +3282,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                   )}
                                 </div>
                               )}
-                           </div>
+                            </div>
                         </div>
                       )}
                          {activeTab === 'produccion' && (
