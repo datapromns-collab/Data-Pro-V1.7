@@ -4101,9 +4101,9 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                    </table>
                                  </div>
                                )}
-                               {insumosPeriodoSubTab === 'mensual' && (
-                                 <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                   <div className="px-4 py-2 bg-slate-800 text-white">
+                                {insumosPeriodoSubTab === 'mensual' && (
+                                  <div className="rounded-2xl border border-slate-200 bg-white overflow-x-hidden">
+                                    <div className="px-4 py-2 bg-slate-800 text-white">
                                      <div className="font-black text-[11px] uppercase tracking-widest text-center">
                                        {format(insumosFecha || new Date(), 'MMMM', { locale: es }).toUpperCase()}
                                      </div>
@@ -4113,7 +4113,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        <tr className="bg-slate-700 text-white">
                                          <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10">FECHA</th>
                                          <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">DIAS/FEB</th>
-                                         <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.AGUA<br/>CONSUMIDO</th>
+                                          <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">LITROS.AGUA<br/>CONSUMIDO</th>
                                          <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.AGUA.VP</th>
                                          <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">RENDIMIENTO<br/>AGUA</th>
                                        </tr>
