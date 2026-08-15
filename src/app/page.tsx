@@ -5058,8 +5058,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                             descripcionFalla: '',
                             descripcionAccion: '',
                              observaciones: plantaFormData.observaciones || '',
-                             bloqueado: false,
-                             usuario: user?.name || '',
+                              bloqueado: true,
+                              usuario: user?.name || '',
                           }];
                        });
                      }
