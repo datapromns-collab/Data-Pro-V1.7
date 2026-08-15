@@ -48553,7 +48553,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786376463580.1257,
@@ -48580,7 +48580,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786376463580.8384,
@@ -48607,7 +48607,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786376463580.0552,
@@ -48634,7 +48634,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786376463580.2158,
@@ -48661,7 +48661,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786376463580.3228,
@@ -48688,7 +48688,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786376463580.7524,
@@ -48715,7 +48715,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786376463580.1846,
@@ -48742,7 +48742,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786376463580.692,
@@ -48769,7 +48769,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786376463580.635,
@@ -48796,7 +48796,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786376463580.7166,
@@ -48823,7 +48823,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786376463580.1472,
@@ -48850,7 +48850,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786376463580.2393,
@@ -48877,7 +48877,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786378246966,
@@ -48904,7 +48904,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786378246967,
@@ -48931,7 +48931,7 @@
         "descripcionAccion": "SE REALIZA PURGADE TODOS LOS MOLDES ",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786378282993.384,
@@ -48958,7 +48958,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786378302058.5503,
@@ -48985,7 +48985,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786378346566,
@@ -49012,7 +49012,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786391269959.06,
@@ -49042,7 +49042,7 @@
         "otFechaParada": "2026-08-08",
         "otInicioParada": "09:39",
         "otFinParada": "10:06",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786378402972.4553,
@@ -49069,7 +49069,7 @@
         "descripcionAccion": "SE REALIZA AJUSTE Y REVISION DE TODOS LOS ACTUADORES DEL SISTEMA,SE CALIBRAN LAS VALVULAS ",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786386202965.3103,
@@ -49096,7 +49096,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786393931286.0505,
@@ -49123,7 +49123,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786394954919,
@@ -49150,7 +49150,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786395143631,
@@ -49177,7 +49177,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786395042334.4338,
@@ -49204,7 +49204,7 @@
         "descripcionAccion": "SE REALIZA PURGADE TODOS LOS MOLDES ",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786405824764.843,
@@ -49231,7 +49231,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786407474486.2727,
@@ -49258,7 +49258,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786428605211.9697,
@@ -49285,7 +49285,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786428605211.247,
@@ -49312,7 +49312,7 @@
         "descripcionAccion": "SE REALIZA PURGADE TODOS LOS MOLDES ",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786446614155.4744,
@@ -49339,7 +49339,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786452067354.663,
@@ -49366,7 +49366,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786454887226.0012,
@@ -49393,7 +49393,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786455976037,
@@ -49420,7 +49420,7 @@
         "descripcionAccion": "SE REALIZA PURGADE TODOS LOS MOLDES ",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786456068132,
@@ -49447,7 +49447,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786456467543.5627,
@@ -49474,7 +49474,7 @@
         "descripcionAccion": "SE REALIZA AJUSTE DE CENTRADOR Y ALTURA DE LOS ORGANOS #15, 66",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786457340763.2637,
@@ -49501,7 +49501,7 @@
         "descripcionAccion": "SE AJUSTO EL SENSOR DE PROXIMIDAD DE LA LEVA DE LOS RODILLOS TENSORES, ADEMAS SE EVALUO EL FRENO DE HISTERESIS ELECTRONICO DEL PORTABOBINAS Y LOS CONECTORES, POR FALLA DE LA TENSION EN LA ETIQUETADORA",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786457482188.0571,
@@ -49528,7 +49528,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Sanchez",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786457482188.4705,
@@ -49555,7 +49555,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786457482188.3936,
@@ -49582,7 +49582,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786458735301.4463,
@@ -49609,7 +49609,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786458736657.9507,
@@ -49636,7 +49636,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786459460459.4158,
@@ -49663,7 +49663,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786465207547.4688,
@@ -49690,7 +49690,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786468228367.881,
@@ -49717,7 +49717,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786469787422,
@@ -49744,7 +49744,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786470418651.9775,
@@ -49771,7 +49771,7 @@
         "descripcionAccion": "SE REALIZA AJUSTE DE TENSOR CADENA DE LOS DEDOS",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true,
+        "bloqueado": false,
         "otFechaParada": "2026-08-06",
         "otInicioParada": "05:28",
         "otFinParada": "05:36"
@@ -49801,7 +49801,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786473668926.7285,
@@ -49828,7 +49828,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786473668926.7656,
@@ -49855,7 +49855,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786473668926.1963,
@@ -49882,7 +49882,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786482390074,
@@ -49909,7 +49909,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786483429339,
@@ -49936,7 +49936,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786485399520,
@@ -49963,7 +49963,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786537303510,
@@ -49990,7 +49990,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786537763058,
@@ -50017,7 +50017,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786538376572,
@@ -50044,7 +50044,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786543485374,
@@ -50071,7 +50071,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786543551924,
@@ -50098,7 +50098,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786544021204,
@@ -50125,7 +50125,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786544640834,
@@ -50152,7 +50152,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786545141551,
@@ -50179,7 +50179,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786548028184.163,
@@ -50206,7 +50206,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786548202620,
@@ -50233,7 +50233,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786549448401,
@@ -50260,7 +50260,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786550229326,
@@ -50287,7 +50287,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786550300927,
@@ -50314,7 +50314,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786550550007,
@@ -50341,7 +50341,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786552995018,
@@ -50368,7 +50368,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786553634065,
@@ -50395,7 +50395,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786554741705,
@@ -50422,7 +50422,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786561324045,
@@ -50449,7 +50449,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786562904362,
@@ -50476,7 +50476,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Ronald Valera",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786568662713,
@@ -50503,7 +50503,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786570278285,
@@ -50530,7 +50530,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786570744438,
@@ -50557,7 +50557,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786570886181,
@@ -50584,7 +50584,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786570981270,
@@ -50611,7 +50611,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786570901694,
@@ -50638,7 +50638,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786571065636,
@@ -50665,7 +50665,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786571667211,
@@ -50692,7 +50692,7 @@
         "descripcionAccion": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786572859255,
@@ -50719,7 +50719,7 @@
         "descripcionAccion": "SE REALIZA CAMBIO DE MANGUERA DE REFRIGERACION DEL MOLDE #03",
         "observaciones": "",
         "usuario": "Luis Blandin",
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "id": 1786625979411,
@@ -50745,7 +50745,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Ronald Valera"
       },
       {
@@ -50772,7 +50772,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Ronald Valera"
       },
       {
@@ -50799,7 +50799,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Ronald Valera"
       },
       {
@@ -50826,7 +50826,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Ronald Valera"
       },
       {
@@ -50853,7 +50853,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Ronald Valera"
       },
       {
@@ -50880,7 +50880,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Ronald Valera"
       },
       {
@@ -50907,7 +50907,7 @@
         "descripcionFalla": "FALLA EN HORNO NO AUMENTA TEMPERATURA",
         "descripcionAccion": "HACEN EL LLAMADO EL PERSONAL TECNICO POR FALLA DE TEMPERATURA EN EL HORNO, SE REALIZA LA INSPECCION DONDE SE ENCUENTRAN DOS GRUPOS DE RELE DE ESTADO SOLIDO APAGADO CABE DESTACAR QUE DICHO DISPOSITIVO COMANDA AL GRUPO DE RESISTENCIAS FIJAS",
         "observaciones": "DICHA PARADA FUE OCASIONADA POR EL PERSONAL OPERATIVO AL NO GENERAR ACTIVACION DEL GRUPO DE RESISTENCIAS FIJAS MEDIANTE UN PULSADOR CON RETENCION UBICADO EXTERNAMENTE EN EL TABLERO DEL HORNO CERCA DE LOS CONTROLADORES DE TEMPERATURA",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -50934,7 +50934,7 @@
         "descripcionFalla": "FALLA EN TIRADORES DE PAQUETES",
         "descripcionAccion": "AJUSTE DE TENSION DE BANDA TRANSPORTADORA DE ENTRADA AL PELETIZADOR",
         "observaciones": "SE REALIZA LIMPIEZA DE BANDA TRANSPORTADORA Y SE AJUSTA PRESION DE AIRE A LOS CILINDROS NEUMATICOS",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -50961,7 +50961,7 @@
         "descripcionFalla": "FALLA EN  CILINDRO NEUMATICO",
         "descripcionAccion": "AJUSTE DE CILINDRO NEUMATICO DEL HORNO",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -50988,7 +50988,7 @@
         "descripcionFalla": "RUIDO NO CARACTERISTICO EN PLATO DE CARGA DE TAPAS",
         "descripcionAccion": "AJUSTE DE TORNILLERIA DE PLATO DE CARGA DE TAPAS Y CALIBRACION DEL MISMO",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -51015,7 +51015,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "otFechaParada": "",
         "otInicioParada": "",
         "otFinParada": ""

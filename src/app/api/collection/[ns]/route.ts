@@ -173,7 +173,7 @@ function mergeCollection(existing: any, incoming: any, ns?: string): any[] {
       for (const key of Object.keys(item)) {
         if (key === '_deletedIds') continue;
         const value = (item as any)[key];
-        if (value === undefined || value === null || value === '') {
+        if (value === undefined || value === null) {
           if (!(key in merged)) merged[key] = value;
           continue;
         }
