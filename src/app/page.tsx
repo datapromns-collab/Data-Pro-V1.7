@@ -3169,8 +3169,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                           fecha={reporteDiarioFecha}
                                           planificadasPorDia={planificadasPorDia}
                                           producidasDiurno={producidasDiurno}
-                                          producidasNocturno={producidasNocturno}
-                                           pncPorLinea={Array.from({ length: 7 }, () => 0)}
+                                           producidasNocturno={producidasNocturno}
                                            velocidadesDt={velocidadesDt}
                                           hrsPagadasDia={(() => { const a = hrsPagadasDt.td; const b = hrsPagadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
                                           hrsProgramadasDia={(() => { const a = hrsProgramadasDt.td; const b = hrsProgramadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
@@ -3283,9 +3282,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                 fecha={reporteDiarioFecha}
                                                 planificadasPorDia={planificadasPorDia}
                                                 producidasDiurno={producidasDiurno}
-                                                producidasNocturno={producidasNocturno}
-                                                pncPorLinea={Array.from({ length: 7 }, () => 0)}
-                                                velocidadesDt={velocidadesDt}
+                                                 producidasNocturno={producidasNocturno}
+                                                 velocidadesDt={velocidadesDt}
                                                  hrsPagadasDia={hrsPagadasDt.td}
                                                  hrsProgramadasDia={hrsProgramadasDt.td}
                                               />
@@ -3344,9 +3342,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                fecha={reporteDiarioFecha}
                                                planificadasPorDia={planificadasPorDia}
                                                producidasDiurno={producidasDiurno}
-                                               producidasNocturno={producidasNocturno}
-                                               pncPorLinea={Array.from({ length: 7 }, () => 0)}
-                                               velocidadesDt={velocidadesDt}
+                                                producidasNocturno={producidasNocturno}
+                                                velocidadesDt={velocidadesDt}
                                                 hrsPagadasDia={hrsPagadasDt.tn}
                                                 hrsProgramadasDia={hrsProgramadasDt.tn}
                                              />
@@ -5089,7 +5086,6 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
           alcanceTN: String(alcanceTN),
           cumplimientoTD,
           cumplimientoTN,
-          pnc: pncPorLinea ? String(pncPorLinea[idx] ?? 0) : '0',
           velocidad: String(velocidad),
           cajasH: String(cajasH),
           horasPagadas,
@@ -5110,7 +5106,7 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
           tiempoMuertoNegativo: tiempoMuertoInexplicableRaw < 0,
         };
     });
-  }, [informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDt, semanaFechas]);
+  }, [informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, velocidadesDt, semanaFechas]);
 }
 
 function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, producidasDiurno?: any, producidasNocturno?: any, semanaFechas?: string[]) {
@@ -5345,8 +5341,8 @@ function PlanificadasPorDiaTable({ datosPorDia, fecha, turno }: { datosPorDia: a
   );
 }
 
-function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineSpeeds, turno = 'DIURNO', fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDt, hrsPagadasDia, hrsProgramadasDia }: any) {
-   const data = useReportData(informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, pncPorLinea, velocidadesDt, hrsPagadasDia, hrsProgramadasDia);
+function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineSpeeds, turno = 'DIURNO', fecha, planificadasPorDia, producidasDiurno, producidasNocturno, velocidadesDt, hrsPagadasDia, hrsProgramadasDia }: any) {
+   const data = useReportData(informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, producidasDiurno, producidasNocturno, velocidadesDt, hrsPagadasDia, hrsProgramadasDia);
    const formatCell = (v: any) => v ?? '0';
    const esDiurno = turno === 'DIURNO';
    const esNocturno = turno === 'NOCTURNO';
