@@ -737,10 +737,10 @@ export default function PlannerPage() {
       orden.dias.some(dia => dia.fechaInicio === fechaStr)
     );
     if (ordenesDelDia.length === 0) return 0;
-    const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }> = {};
+    const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas1_5L: string; cajas04L: string }> = {};
     const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
     sabores.forEach(sabor => {
-      tabla[sabor] = { cajas2L: '', cajas1L: '', cajas04L: '' };
+      tabla[sabor] = { cajas2L: '', cajas1L: '', cajas1_5L: '', cajas04L: '' };
     });
     ordenesDelDia.forEach(orden => {
       orden.dias.forEach(dia => {
@@ -762,8 +762,9 @@ export default function PlannerPage() {
     return Object.values(tabla).reduce((acc, row) => {
       const c2 = Number(row.cajas2L) || 0;
       const c1 = Number(row.cajas1L) || 0;
+      const c15 = Number(row.cajas1_5L) || 0;
       const c04 = Number(row.cajas04L) || 0;
-      const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
+      const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c15 * 12 * 1.5) + (c04 * 15 * 0.4);
       const sabor = Object.keys(tabla).find(key => tabla[key] === row);
       const factor = sabor ? (AGUA_FACTORS[sabor] || 0) : 0;
       return acc + (litros * factor);
@@ -774,10 +775,10 @@ export default function PlannerPage() {
       orden.dias.some(dia => dia.fechaInicio === fechaStr)
     );
     if (ordenesDelDia.length === 0) return 0;
-    const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }> = {};
+    const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas1_5L: string; cajas04L: string }> = {};
     const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
     sabores.forEach(sabor => {
-      tabla[sabor] = { cajas2L: '', cajas1L: '', cajas04L: '' };
+      tabla[sabor] = { cajas2L: '', cajas1L: '', cajas1_5L: '', cajas04L: '' };
     });
     ordenesDelDia.forEach(orden => {
       orden.dias.forEach(dia => {
@@ -799,8 +800,9 @@ export default function PlannerPage() {
     return Object.values(tabla).reduce((acc, row) => {
       const c2 = Number(row.cajas2L) || 0;
       const c1 = Number(row.cajas1L) || 0;
+      const c15 = Number(row.cajas1_5L) || 0;
       const c04 = Number(row.cajas04L) || 0;
-      return acc + ((c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4));
+      return acc + ((c2 * 6 * 2) + (c1 * 12 * 1) + (c15 * 12 * 1.5) + (c04 * 15 * 0.4));
     }, 0);
   };
   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
@@ -838,11 +840,11 @@ export default function PlannerPage() {
     localStorage.setItem('co2-kg-por-dia', JSON.stringify(co2KgPorDia));
   }, [co2ConsumoPorDia, co2KgPorDia]);
   const [isAutoUpdatingAgua, setIsAutoUpdatingAgua] = useState(false);
-  const [aguaDiarioData, setAguaDiarioData] = useState<Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }>>(() => {
-    const initial: Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }> = {};
+  const [aguaDiarioData, setAguaDiarioData] = useState<Record<string, { cajas2L: string; cajas1L: string; cajas1_5L: string; cajas04L: string }>>(() => {
+    const initial: Record<string, { cajas2L: string; cajas1L: string; cajas1_5L: string; cajas04L: string }> = {};
     const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
     sabores.forEach(sabor => {
-      initial[sabor] = { cajas2L: '', cajas1L: '', cajas04L: '' };
+      initial[sabor] = { cajas2L: '', cajas1L: '', cajas1_5L: '', cajas04L: '' };
     });
     return initial;
   });
@@ -852,10 +854,10 @@ export default function PlannerPage() {
     const ordenesDelDia = (ordenes || []).filter(orden =>
       orden.dias.some(dia => dia.fechaInicio === fechaStr)
     );
-    const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas04L: string }> = {};
+    const tabla: Record<string, { cajas2L: string; cajas1L: string; cajas1_5L: string; cajas04L: string }> = {};
     const sabores = ['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'];
     sabores.forEach(sabor => {
-      tabla[sabor] = { cajas2L: '', cajas1L: '', cajas04L: '' };
+      tabla[sabor] = { cajas2L: '', cajas1L: '', cajas1_5L: '', cajas04L: '' };
     });
     if (ordenesDelDia.length > 0) {
       ordenesDelDia.forEach(orden => {
@@ -3885,24 +3887,26 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        <thead>
                                          <tr className="bg-slate-800 text-white">
                                            <th className="px-3 py-2 text-left font-black uppercase tracking-wider border border-white/10">SABOR</th>
-                                           <th colSpan={3} className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CAJAS PRODUCIDAS</th>
+                                           <th colSpan={4} className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CAJAS PRODUCIDAS</th>
                                            <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">LITROS PRODUCIDOS<br/>TOTAL</th>
                                          </tr>
                                          <tr className="bg-slate-700 text-white">
                                            <th className="px-3 py-1 border border-white/10"></th>
                                            <th className="px-3 py-1 text-center font-black border border-white/10">2L</th>
                                            <th className="px-3 py-1 text-center font-black border border-white/10">1L</th>
+                                           <th className="px-3 py-1 text-center font-black border border-white/10">1,5L</th>
                                            <th className="px-3 py-1 text-center font-black border border-white/10">0,4L</th>
                                            <th className="px-3 py-1 text-center font-black border border-white/10"></th>
                                          </tr>
                                        </thead>
                                      <tbody>
                                         {['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'].map((sabor) => {
-                                          const row = aguaDiarioData[sabor] || { cajas2L: '', cajas1L: '', cajas04L: '' };
+                                          const row = aguaDiarioData[sabor] || { cajas2L: '', cajas1L: '', cajas1_5L: '', cajas04L: '' };
                                           const c2 = Number(row.cajas2L) || 0;
                                           const c1 = Number(row.cajas1L) || 0;
+                                          const c15 = Number(row.cajas1_5L) || 0;
                                           const c04 = Number(row.cajas04L) || 0;
-                                          const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
+                                          const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c15 * 12 * 1.5) + (c04 * 15 * 0.4);
                                           const factor = AGUA_FACTORS[sabor] || 0;
                                           const totalKg = factor > 0 ? litros * factor : 0;
                                           return (
@@ -3910,6 +3914,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                <td className="px-3 py-1.5 font-bold text-slate-700 border border-slate-100">{sabor}</td>
                                                <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas2L || ''}</td>
                                                <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas1L || ''}</td>
+                                               <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas1_5L || ''}</td>
                                                <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas04L || ''}</td>
                                                <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{litros.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                              </tr>
@@ -3924,14 +3929,18 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                             {Object.values(aguaDiarioData).reduce((acc, row) => acc + (Number(row.cajas1L) || 0), 0).toLocaleString('es-VE')}
                                           </td>
                                           <td className="px-3 py-2 text-center border border-slate-200">
+                                            {Object.values(aguaDiarioData).reduce((acc, row) => acc + (Number(row.cajas1_5L) || 0), 0).toLocaleString('es-VE')}
+                                          </td>
+                                          <td className="px-3 py-2 text-center border border-slate-200">
                                             {Object.values(aguaDiarioData).reduce((acc, row) => acc + (Number(row.cajas04L) || 0), 0).toLocaleString('es-VE')}
                                           </td>
                                           <td className="px-3 py-2 text-center border border-slate-200">
                                             {Object.values(aguaDiarioData).reduce((acc, row) => {
                                               const c2 = Number(row.cajas2L) || 0;
                                               const c1 = Number(row.cajas1L) || 0;
+                                              const c15 = Number(row.cajas1_5L) || 0;
                                               const c04 = Number(row.cajas04L) || 0;
-                                              return acc + ((c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4));
+                                              return acc + ((c2 * 6 * 2) + (c1 * 12 * 1) + (c15 * 12 * 1.5) + (c04 * 15 * 0.4));
                                             }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                           </td>
                                         </tr>
