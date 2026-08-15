@@ -3882,24 +3882,20 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                {insumosPeriodoSubTab === 'diario' && (
                                  <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
                                    <table className="w-full border-collapse text-[11px]">
-                                      <thead>
-                                        <tr className="bg-slate-800 text-white">
-                                          <th className="px-3 py-2 text-left font-black uppercase tracking-wider border border-white/10">SABOR</th>
-                                          <th colSpan={3} className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CAJAS PRODUCIDAS</th>
-                                          <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">LITROS PRODUCIDOS<br/>TOTAL</th>
-                                          <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">AGUAX1L BEBIDA<br/>FACTOR</th>
-                                          <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">TOTAL<br/>KG.AGUA</th>
-                                        </tr>
-                                        <tr className="bg-slate-700 text-white">
-                                          <th className="px-3 py-1 border border-white/10"></th>
-                                          <th className="px-3 py-1 text-center font-black border border-white/10">2L</th>
-                                          <th className="px-3 py-1 text-center font-black border border-white/10">1L</th>
-                                          <th className="px-3 py-1 text-center font-black border border-white/10">0,4L</th>
-                                          <th className="px-3 py-1 text-center font-black border border-white/10"></th>
-                                          <th className="px-3 py-1 text-center font-black border border-white/10"></th>
-                                          <th className="px-3 py-1 text-center font-black border border-white/10"></th>
-                                        </tr>
-                                      </thead>
+                                       <thead>
+                                         <tr className="bg-slate-800 text-white">
+                                           <th className="px-3 py-2 text-left font-black uppercase tracking-wider border border-white/10">SABOR</th>
+                                           <th colSpan={3} className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CAJAS PRODUCIDAS</th>
+                                           <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">LITROS PRODUCIDOS<br/>TOTAL</th>
+                                         </tr>
+                                         <tr className="bg-slate-700 text-white">
+                                           <th className="px-3 py-1 border border-white/10"></th>
+                                           <th className="px-3 py-1 text-center font-black border border-white/10">2L</th>
+                                           <th className="px-3 py-1 text-center font-black border border-white/10">1L</th>
+                                           <th className="px-3 py-1 text-center font-black border border-white/10">0,4L</th>
+                                           <th className="px-3 py-1 text-center font-black border border-white/10"></th>
+                                         </tr>
+                                       </thead>
                                      <tbody>
                                         {['GLUP COLA', 'GLUP FRESH', 'GLUP UVA', 'GLUP PIÑA', 'GLUP NARANJA', 'GLUP KOLITA', 'GLUP MANZANA VERDE', 'GLUP PONCHE', 'GLUP CHICLE', 'GLUP PIÑA PARCHITA', 'GLUP MANZANA ROJA'].map((sabor) => {
                                           const row = aguaDiarioData[sabor] || { cajas2L: '', cajas1L: '', cajas04L: '' };
@@ -3916,8 +3912,6 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas1L || ''}</td>
                                                <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{row.cajas04L || ''}</td>
                                                <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{litros.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
-                                               <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{factor > 0 ? factor.toLocaleString('es-VE', { minimumFractionDigits: 6, maximumFractionDigits: 6 }) : ''}</td>
-                                               <td className="px-3 py-1.5 text-center font-black text-slate-700 border border-slate-100">{totalKg.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
                                              </tr>
                                           );
                                         })}
@@ -3938,18 +3932,6 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                               const c1 = Number(row.cajas1L) || 0;
                                               const c04 = Number(row.cajas04L) || 0;
                                               return acc + ((c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4));
-                                            }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                          </td>
-                                          <td className="px-3 py-2 text-center border border-slate-200"></td>
-                                          <td className="px-3 py-2 text-center border border-slate-200">
-                                            {Object.values(aguaDiarioData).reduce((acc, row) => {
-                                              const c2 = Number(row.cajas2L) || 0;
-                                              const c1 = Number(row.cajas1L) || 0;
-                                              const c04 = Number(row.cajas04L) || 0;
-                                              const litros = (c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4);
-                                              const sabor = Object.keys(aguaDiarioData).find(key => aguaDiarioData[key] === row);
-                                              const factor = sabor ? (AGUA_FACTORS[sabor] || 0) : 0;
-                                              return acc + (litros * factor);
                                             }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                           </td>
                                         </tr>
