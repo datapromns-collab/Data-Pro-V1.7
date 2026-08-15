@@ -48101,6 +48101,25 @@
         "usuario": "Luis Blandin",
         "id": 1786822452111,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-13",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "operador": "FRANCISCO VELASQUEZ",
+        "linea": "Línea 2",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "INSUMOS",
+        "inicioParada": "22:48",
+        "finParada": "23:11",
+        "totalMin": "23",
+        "zona": "Llenado",
+        "falla": "FALLA EN EL CORTE POR BOBINA DEFECTUOSA, CONTAMINA TAMBOR DE CORTE Y TRANSFERENCIA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1786822511342,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [

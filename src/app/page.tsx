@@ -5502,9 +5502,10 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                        {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{cumplimientoTD}</td>}
                        {!esDiurno && !esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{cumplimientoTN}</td>}
                        {esDiurno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{cumplimientoTD}</td>}
-                       {esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{cumplimientoTN}</td>}
+                        {esNocturno && <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{cumplimientoTN}</td>}
                         <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
-                       <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasPagadas}</td>
+                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums"></td>
+                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasPagadas}</td>
                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasProgramadas}</td>
                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalParadasProgramadas}</td>
                        <td className="px-1 py-1.5 text-[9px] font-black text-slate-500 border-r border-b border-slate-200 text-center"></td>
