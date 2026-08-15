@@ -4013,8 +4013,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                      <thead>
                                        <tr className="bg-slate-700 text-white">
                                          <th className="px-3 py-2 text-left font-black uppercase tracking-wider border border-white/10">DIAS/FEB</th>
-                                         <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.AGUA<br/>CONSUMIDO</th>
-                                         <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.AGUA.VP</th>
+                                          <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">LITROS.AGUA<br/>CONSUMIDO</th>
+                                          <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">LITROS.AGUA.VP</th>
                                          <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">CON.AGUA/1LT</th>
                                          <th className="px-3 py-2 text-center font-black uppercase tracking-wider border border-white/10">RENDIMIENTO<br/>AGUA</th>
                                        </tr>
