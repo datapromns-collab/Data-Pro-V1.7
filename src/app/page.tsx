@@ -4114,7 +4114,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                          <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10">FECHA</th>
                                          <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">DIAS/FEB</th>
                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">LITROS.AGUA<br/>CONSUMIDO</th>
-                                         <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">KG.AGUA.VP</th>
+                                          <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">LITROS.AGUA.VP</th>
                                          <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">RENDIMIENTO<br/>AGUA</th>
                                        </tr>
                                      </thead>
@@ -4129,7 +4129,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                          return diasMes.map((dia, idx) => {
                                             const fechaStr = format(dia, 'yyyy-MM-dd');
                                             const consumido = Number(aguaConsumoPorDia[fechaStr]) || 0;
-                                            const vp = calcularKgAguaParaFecha(fechaStr);
+                                             const vp = calcularLitrosAguaParaFecha(fechaStr);
                                             const litrosTotales = calcularLitrosAguaParaFecha(fechaStr);
                                             const rendimiento = consumido > 0 ? litrosTotales / consumido : 0;
                                             const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
@@ -4168,10 +4168,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                              const inicioMes = new Date(anioSeleccionado, mesSeleccionado, 1);
                                              const finMes = endOfMonth(inicioMes);
                                              const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
-                                             return diasMes.reduce((acc, dia) => {
-                                               const fechaStr = format(dia, 'yyyy-MM-dd');
-                                               return acc + calcularKgAguaParaFecha(fechaStr);
-                                             }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                                              return diasMes.reduce((acc, dia) => {
+                                                const fechaStr = format(dia, 'yyyy-MM-dd');
+                                                return acc + calcularLitrosAguaParaFecha(fechaStr);
+                                              }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                                            })()}
                                          </td>
                                          <td className="px-2 py-2 text-center border border-slate-200">
