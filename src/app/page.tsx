@@ -4030,7 +4030,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                             return diasSemana.map((dia, idx) => {
                                               const fechaStr = format(dia, 'yyyy-MM-dd');
                                                 const consumido = Number(aguaConsumoPorDia[fechaStr]) || 0;
-                                                const vp = calcularKgAguaParaFecha(fechaStr);
+                                                 const vp = calcularLitrosAguaParaFecha(fechaStr);
                                                 const litrosTotales = calcularLitrosAguaParaFecha(fechaStr);
                                                 const rendimiento = consumido > 0 ? litrosTotales / consumido : 0;
                                                 const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
@@ -4072,7 +4072,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                 });
                                                 return diasSemana.reduce((acc, dia) => {
                                                   const fechaStr = format(dia, 'yyyy-MM-dd');
-                                                  return acc + calcularKgAguaParaFecha(fechaStr);
+                                                  return acc + calcularLitrosAguaParaFecha(fechaStr);
                                                 }, 0).toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                                               })()}
                                              </td>
