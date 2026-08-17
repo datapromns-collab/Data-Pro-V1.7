@@ -6406,6 +6406,20 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
               {puedeEditar && (
                 <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingRows((prev: any) => ({ ...prev, [row.id]: { ...row } })); setFilasNoEditables((prev: any) => { const next = { ...prev }; delete next[row.id]; return next; }); }}><Pencil className="h-3.5 w-3.5" /></Button>
               )}
+              {esAdmin && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => {
+                      if (window.confirm('¿Eliminar este registro?')) {
+                        setOrdenesTrabajo((prev: any[]) => prev.filter((o: any) => String(o.id) !== String(row.id)));
+                      }
+                    }}><Trash2 className="h-3.5 w-3.5" /></Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <span className="text-xs font-black uppercase text-slate-800">Eliminar</span>
+                  </TooltipContent>
+                </Tooltip>
+              )}
             </>
           )}
         </TableCell>
