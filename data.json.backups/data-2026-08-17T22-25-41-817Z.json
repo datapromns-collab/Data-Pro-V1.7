@@ -50115,6 +50115,44 @@
         "usuario": "Luis Sanchez",
         "id": 1787003299259,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-15",
+        "semana": 33,
+        "turno": "DIURNO",
+        "operador": "IVAN PEREZ",
+        "linea": "Línea 2",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "13:07",
+        "finParada": "13:13",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1787003438216,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-15",
+        "semana": 33,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "SALA DE JARABE",
+        "inicioParada": "13:18",
+        "finParada": "13:22",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "SIN PRESION DE JARABE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1787003551688,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -59387,7 +59425,8 @@
     "planta-ordenes-trabajo": {
       "*": [
         "orden-sync-52001",
-        "orden-sync-5070"
+        "orden-sync-5070",
+        "1786829500470"
       ]
     },
     "seguimiento-enfardadora": {},
