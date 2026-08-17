@@ -3024,9 +3024,12 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                   usuario: user?.name || '',
                                                                 }];
                                                                });
-                                                             } else if (row.orden && String(row.orden).trim() !== '') {
-                                                               setOrdenesTrabajo(prev => prev.filter((o: any) => !(o.orden === row.orden && o.fechaOrden === row.fecha)));
-                                                             }
+                                                              } else if (row.orden && String(row.orden).trim() !== '') {
+                                                                const ordenAEliminar = ordenesTrabajo.find((o: any) => o.orden === row.orden && o.fechaOrden === row.fecha);
+                                                                if (ordenAEliminar) {
+                                                                  ordenesTrabajoStore.removeItem(ordenAEliminar.id);
+                                                                }
+                                                              }
                                                             setEditingId(null);
                                                            setEditForm({});
                                                            setErrorValidacion('');
@@ -3088,16 +3091,19 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                           <>
                                                             <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingId(row.id); setEditForm(row); }}><Pencil className="h-3.5 w-3.5" /></Button>
                                                             {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
-                                                             <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => {
-                                                               if (window.confirm('¿Eliminar este registro?')) {
-                                                                 removeInformeOperacional(row.id);
-                                                                 if (row.orden && String(row.orden).trim() !== '') {
-                                                                   setOrdenesTrabajo(prev => prev.filter((o: any) => !(o.orden === row.orden && o.fechaOrden === row.fecha)));
-                                                                 }
-                                                                 setEditingId(null);
-                                                                 setEditForm({});
-                                                               }
-                                                             }}><Trash2 className="h-3.5 w-3.5" /></Button>
+                                                              <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => {
+                                                                if (window.confirm('¿Eliminar este registro?')) {
+                                                                  removeInformeOperacional(row.id);
+                                                                  if (row.orden && String(row.orden).trim() !== '') {
+                                                                    const ordenAEliminar = ordenesTrabajo.find((o: any) => o.orden === row.orden && o.fechaOrden === row.fecha);
+                                                                    if (ordenAEliminar) {
+                                                                      ordenesTrabajoStore.removeItem(ordenAEliminar.id);
+                                                                    }
+                                                                  }
+                                                                  setEditingId(null);
+                                                                  setEditForm({});
+                                                                }
+                                                              }}><Trash2 className="h-3.5 w-3.5" /></Button>
                                                           )}
                                                         </>
                                                       )}
@@ -3199,22 +3205,23 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                 return matchLine && matchDate && matchQ;
                                               })
                                               .map((row) => (
-                                                <OrdenTrabajoRow
-                                                  key={row.id}
-                                                  row={row}
-                                                  editingRows={editingRows}
-                                                  setEditingRows={setEditingRows}
-                                                  setFilasNoEditables={setFilasNoEditables}
-                                                  errorValidacion={errorValidacion}
-                                                  setErrorValidacion={setErrorValidacion}
-                                                  ordenesTrabajo={ordenesTrabajo}
-                                                  setOrdenesTrabajo={setOrdenesTrabajo}
-                                                  user={user}
-                                                  onChangeHora={onChangeHora}
-                                                  tiempoTranscurrido={tiempoTranscurrido}
-                                                  normalizarHora={normalizarHora}
-                                                  formatearFecha={formatearFecha}
-                                                />
+                                                 <OrdenTrabajoRow
+                                                   key={row.id}
+                                                   row={row}
+                                                   editingRows={editingRows}
+                                                   setEditingRows={setEditingRows}
+                                                   setFilasNoEditables={setFilasNoEditables}
+                                                   errorValidacion={errorValidacion}
+                                                   setErrorValidacion={setErrorValidacion}
+                                                   ordenesTrabajo={ordenesTrabajo}
+                                                   setOrdenesTrabajo={setOrdenesTrabajo}
+                                                   removeOrdenTrabajo={ordenesTrabajoStore.removeItem}
+                                                   user={user}
+                                                   onChangeHora={onChangeHora}
+                                                   tiempoTranscurrido={tiempoTranscurrido}
+                                                   normalizarHora={normalizarHora}
+                                                   formatearFecha={formatearFecha}
+                                                 />
                                               ))}
                                            {ordenesTrabajoCargadas.filter((r) => {
                                              const matchLine = ordenFiltroLinea === 'all' || r.linea === ordenFiltroLinea;
@@ -6248,7 +6255,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
     );
   }
 
-  const OrdenTrabajoRow = memo(({ row, editingRows, setEditingRows, setFilasNoEditables, errorValidacion, setErrorValidacion, ordenesTrabajo, setOrdenesTrabajo, user, onChangeHora, tiempoTranscurrido, normalizarHora, formatearFecha }: any) => {
+  const OrdenTrabajoRow = memo(({ row, editingRows, setEditingRows, setFilasNoEditables, errorValidacion, setErrorValidacion, ordenesTrabajo, setOrdenesTrabajo, removeOrdenTrabajo, user, onChangeHora, tiempoTranscurrido, normalizarHora, formatearFecha }: any) => {
     const rowEdit = editingRows[row.id] || row;
     const esAdmin = user?.id === 'alex.mds' || user?.id === 'maria.mds';
     const esUsuarioPlanta = user?.id === 'prodt.mds' || user?.id === 'prodt1.mds' || user?.id === 'prodt2.mds';
@@ -6411,7 +6418,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                   <TooltipTrigger asChild>
                     <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => {
                       if (window.confirm('¿Eliminar este registro?')) {
-                        setOrdenesTrabajo((prev: any[]) => prev.filter((o: any) => String(o.id) !== String(row.id)));
+                        removeOrdenTrabajo(row.id);
                       }
                     }}><Trash2 className="h-3.5 w-3.5" /></Button>
                   </TooltipTrigger>

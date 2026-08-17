@@ -51872,33 +51872,6 @@
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Luis Blandin"
-      },
-      {
-        "id": 1786829500470,
-        "fechaOrden": "2026-08-13",
-        "orden": "TAPETES DEL EMPAYADO Y ENTRADA DEL HORNO ATASCADOS",
-        "fechaEmision": "2026-08-13",
-        "semana": 33,
-        "turno": "NOCTURNO",
-        "solicitante": "",
-        "linea": "Línea 3",
-        "maquina": "ENFARDADORA",
-        "aviso": "",
-        "fechaParada": "2026-08-13",
-        "inicioMtto": "",
-        "finMtto": "",
-        "inicioParada": "23:07",
-        "finParada": "23:14",
-        "tMtto": "7",
-        "tipoParada": "OPERACIONAL",
-        "mtto": "",
-        "falla": "",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
-        "observaciones": "",
-        "bloqueado": true,
-        "usuario": "Luis Blandin"
       }
     ],
     "seguimiento-ordenes": {
@@ -57915,8 +57888,7 @@
     },
     "planta-ordenes-trabajo": {
       "*": [
-        "id-mro0ixwf-4q0bhmzm",
-        "2e2d231d-5d18-4af7-a1b2-4ea9e77cdeaa"
+        "1786829500470"
       ]
     },
     "seguimiento-enfardadora": {},
