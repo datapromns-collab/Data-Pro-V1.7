@@ -24471,10 +24471,10 @@
         "fecha": "2026-08-03",
         "semana": 32,
         "turno": "DIURNO",
-        "operador": "ANTHONER NUÑEZ ",
+        "operador": "",
         "linea": "Línea 7",
-        "equipo": "SOPLADORA",
-        "tipoParada": "si",
+        "equipo": "",
+        "tipoParada": "avería",
         "inicioParada": "10:16",
         "finParada": "10:25",
         "totalMin": "9",
@@ -49098,7 +49098,7 @@
         "inicioParada": "10:16",
         "finParada": "10:25",
         "tMtto": "9",
-        "tipoParada": "si",
+        "tipoParada": "avería",
         "mtto": "correctivo",
         "falla": "mecanica",
         "mttoEsp": "JUNIOR R",
@@ -52117,8 +52117,9 @@
         },
         "auto-4-1786719024730": {
           "cajasPlanificadas": 123200,
-          "jarabeReal": 0,
-          "producto": "308"
+          "jarabeReal": 84037,
+          "producto": "308",
+          "ubb": 29.2
         }
       },
       "linea-5": {
