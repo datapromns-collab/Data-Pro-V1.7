@@ -948,6 +948,114 @@ export default function PlannerPage() {
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
   };
+  const generarPDFCo2Mensual = async () => {
+    if (typeof window === 'undefined') return;
+    const baseDate = insumosFecha || new Date();
+    const mesSeleccionado = baseDate.getMonth();
+    const anioSeleccionado = baseDate.getFullYear();
+    const inicioMes = new Date(anioSeleccionado, mesSeleccionado, 1);
+    const finMes = endOfMonth(inicioMes);
+    const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
+    const doc = new jsPDF() as any;
+    doc.setFontSize(16);
+    doc.text(`CO2 - ${format(baseDate, 'MMMM', { locale: es }).toUpperCase()} ${anioSeleccionado}`, 14, 15);
+    doc.setFontSize(10);
+    const rows = diasMes.map((dia) => {
+      const fechaStr = format(dia, 'yyyy-MM-dd');
+      const consumido = Number(co2ConsumoPorDia[fechaStr]) || 0;
+      const vp = calcularKgCo2ParaFecha(fechaStr);
+      const rendimiento = consumido > 0 && vp > 0 ? (consumido / vp) : 0;
+      const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
+      return [
+        format(dia, 'dd/MM/yyyy'),
+        diaNombre,
+        consumido ? Number(consumido.toFixed(2)) : '',
+        vp ? Number(vp.toFixed(2)) : '',
+        rendimiento ? Number(rendimiento.toFixed(2)) : '',
+      ];
+    });
+    const totalConsumido = diasMes.reduce((acc, dia) => {
+      const fechaStr = format(dia, 'yyyy-MM-dd');
+      return acc + (Number(co2ConsumoPorDia[fechaStr]) || 0);
+    }, 0);
+    const totalVP = diasMes.reduce((acc, dia) => {
+      const fechaStr = format(dia, 'yyyy-MM-dd');
+      return acc + calcularKgCo2ParaFecha(fechaStr);
+    }, 0);
+    const totalRendimiento = totalConsumido > 0 && totalVP > 0 ? (totalConsumido / totalVP) : 0;
+    rows.push(['', 'TOTAL', Number(totalConsumido.toFixed(2)), Number(totalVP.toFixed(2)), Number(totalRendimiento.toFixed(2))]);
+    doc.autoTable({
+      startY: 22,
+      head: [['FECHA', 'DIA', 'KG.CO2 CONSUMIDO', 'KG.CO2.VP', 'RENDIMIENTO CO2']],
+      body: rows,
+      theme: 'grid',
+      headStyles: { fillColor: [30, 41, 59], textColor: 255, fontStyle: 'bold', halign: 'center' },
+      bodyStyles: { fontSize: 9, halign: 'center' },
+      alternateRowStyles: { fillColor: [248, 250, 252] },
+      footStyles: { fillColor: [226, 232, 240], fontStyle: 'bold' },
+      didParseCell: (data: any) => {
+        if (data.section === 'foot') {
+          data.cell.styles.fillColor = [226, 232, 240];
+          data.cell.styles.fontStyle = 'bold';
+        }
+      },
+    });
+    doc.save(`CO2_Mensual_${anioSeleccionado}_${String(mesSeleccionado + 1).padStart(2, '0')}.pdf`);
+  };
+  const generarPDFAguaMensual = async () => {
+    if (typeof window === 'undefined') return;
+    const baseDate = insumosFecha || new Date();
+    const mesSeleccionado = baseDate.getMonth();
+    const anioSeleccionado = baseDate.getFullYear();
+    const inicioMes = new Date(anioSeleccionado, mesSeleccionado, 1);
+    const finMes = endOfMonth(inicioMes);
+    const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
+    const doc = new jsPDF() as any;
+    doc.setFontSize(16);
+    doc.text(`AGUA - ${format(baseDate, 'MMMM', { locale: es }).toUpperCase()} ${anioSeleccionado}`, 14, 15);
+    doc.setFontSize(10);
+    const rows = diasMes.map((dia) => {
+      const fechaStr = format(dia, 'yyyy-MM-dd');
+      const consumido = Number(aguaConsumoPorDia[fechaStr]) || 0;
+      const vp = calcularLitrosAguaParaFecha(fechaStr);
+      const rendimiento = consumido > 0 && vp > 0 ? (vp / consumido) : 0;
+      const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
+      return [
+        format(dia, 'dd/MM/yyyy'),
+        diaNombre,
+        consumido ? Number(consumido.toFixed(2)) : '',
+        vp ? Number(vp.toFixed(2)) : '',
+        rendimiento ? Number(rendimiento.toFixed(2)) : '',
+      ];
+    });
+    const totalConsumido = diasMes.reduce((acc, dia) => {
+      const fechaStr = format(dia, 'yyyy-MM-dd');
+      return acc + (Number(aguaConsumoPorDia[fechaStr]) || 0);
+    }, 0);
+    const totalVP = diasMes.reduce((acc, dia) => {
+      const fechaStr = format(dia, 'yyyy-MM-dd');
+      return acc + calcularLitrosAguaParaFecha(fechaStr);
+    }, 0);
+    const totalRendimiento = totalConsumido > 0 && totalVP > 0 ? (totalVP / totalConsumido) : 0;
+    rows.push(['', 'TOTAL', Number(totalConsumido.toFixed(2)), Number(totalVP.toFixed(2)), Number(totalRendimiento.toFixed(2))]);
+    doc.autoTable({
+      startY: 22,
+      head: [['FECHA', 'DIA', 'LITROS.AGUA CONSUMIDO', 'LITROS.AGUA.VP', 'RENDIMIENTO AGUA']],
+      body: rows,
+      theme: 'grid',
+      headStyles: { fillColor: [30, 41, 59], textColor: 255, fontStyle: 'bold', halign: 'center' },
+      bodyStyles: { fontSize: 9, halign: 'center' },
+      alternateRowStyles: { fillColor: [248, 250, 252] },
+      footStyles: { fillColor: [226, 232, 240], fontStyle: 'bold' },
+      didParseCell: (data: any) => {
+        if (data.section === 'foot') {
+          data.cell.styles.fillColor = [226, 232, 240];
+          data.cell.styles.fontStyle = 'bold';
+        }
+      },
+    });
+    doc.save(`AGUA_Mensual_${anioSeleccionado}_${String(mesSeleccionado + 1).padStart(2, '0')}.pdf`);
+  };
   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
   const [co2ConsumoPorDia, setCo2ConsumoPorDia] = useState<Record<string, string>>(() => {
     if (typeof window !== 'undefined') {
