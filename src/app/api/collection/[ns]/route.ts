@@ -127,6 +127,7 @@ function toArray(value: any): any[] {
 
 const DEDUP_KEYS: Record<string, string[]> = {
   'planta-ordenes-trabajo': ['orden', 'fechaOrden'],
+  'planta-informes-operacionales': ['fecha', 'linea', 'equipo', 'inicioParada', 'finParada', 'turno', 'tipoParada'],
 };
 
 function dedupByKeys(items: any[], keys: string[]): any[] {

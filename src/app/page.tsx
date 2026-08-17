@@ -410,19 +410,34 @@ export default function PlannerPage() {
     });
   }, [informesOperacionalesStore, ordenesTrabajoStore]);
 
-  useEffect(() => {
-    const ordenes = ordenesTrabajoStore.data || [];
-    const vistos = new Set<string>();
-    const limpios = ordenes.filter((o: any) => {
-      const key = `${o.orden}|${o.fechaOrden}`;
-      if (vistos.has(key)) return false;
-      vistos.add(key);
-      return true;
-    });
-    if (limpios.length !== ordenes.length) {
-      ordenesTrabajoStore.setData(limpios);
-    }
-  }, [ordenesTrabajoStore.data, ordenesTrabajoStore.setData]);
+   useEffect(() => {
+     const informes = informesOperacionalesStore.data || [];
+     const vistos = new Set<string>();
+     const limpios = informes.filter((r: any) => {
+       const key = String(r.id ?? `${r.fecha}|${r.linea}|${r.equipo}|${r.inicioParada}|${r.finParada}|${r.turno}|${r.tipoParada}|${r.falla}|${r.observaciones}|${r.usuario}`);
+       if (vistos.has(key)) return false;
+       vistos.add(key);
+       return true;
+     });
+     if (limpios.length !== informes.length) {
+       console.warn('[DEDUP] informes operacionales duplicados detectados', informes.length, '->', limpios.length);
+       informesOperacionalesStore.setData(limpios);
+     }
+   }, [informesOperacionalesStore.data, informesOperacionalesStore.setData]);
+
+   useEffect(() => {
+     const ordenes = ordenesTrabajoStore.data || [];
+     const vistos = new Set<string>();
+     const limpios = ordenes.filter((o: any) => {
+       const key = `${o.orden}|${o.fechaOrden}`;
+       if (vistos.has(key)) return false;
+       vistos.add(key);
+       return true;
+     });
+     if (limpios.length !== ordenes.length) {
+       ordenesTrabajoStore.setData(limpios);
+     }
+   }, [ordenesTrabajoStore.data, ordenesTrabajoStore.setData]);
 
   const informesPrevRef = useRef<any[] | null>(null);
 
