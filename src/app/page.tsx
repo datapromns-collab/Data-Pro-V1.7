@@ -3023,9 +3023,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                   observaciones: updated.observaciones || '',
                                                                   usuario: user?.name || '',
                                                                 }];
-                                                              });
-                                                            }
-                                                           setEditingId(null);
+                                                               });
+                                                             } else if (row.orden && String(row.orden).trim() !== '') {
+                                                               setOrdenesTrabajo(prev => prev.filter((o: any) => !(o.orden === row.orden && o.fechaOrden === row.fecha)));
+                                                             }
+                                                            setEditingId(null);
                                                            setEditForm({});
                                                            setErrorValidacion('');
                                                            }}><Check className="h-3.5 w-3.5" /></Button>
@@ -3086,13 +3088,16 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                           <>
                                                             <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingId(row.id); setEditForm(row); }}><Pencil className="h-3.5 w-3.5" /></Button>
                                                             {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
-                                                            <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => {
-                                                              if (window.confirm('¿Eliminar este registro?')) {
-                                                                removeInformeOperacional(row.id);
-                                                                setEditingId(null);
-                                                                setEditForm({});
-                                                              }
-                                                            }}><Trash2 className="h-3.5 w-3.5" /></Button>
+                                                             <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => {
+                                                               if (window.confirm('¿Eliminar este registro?')) {
+                                                                 removeInformeOperacional(row.id);
+                                                                 if (row.orden && String(row.orden).trim() !== '') {
+                                                                   setOrdenesTrabajo(prev => prev.filter((o: any) => !(o.orden === row.orden && o.fechaOrden === row.fecha)));
+                                                                 }
+                                                                 setEditingId(null);
+                                                                 setEditForm({});
+                                                               }
+                                                             }}><Trash2 className="h-3.5 w-3.5" /></Button>
                                                           )}
                                                         </>
                                                       )}
