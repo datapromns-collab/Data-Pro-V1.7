@@ -31095,7 +31095,7 @@
         "mttoEsp": "SANTOS SALAZAR ",
         "descripcionFalla": "FALLA EN VALVULA REGULADOR CO2",
         "descripcionAccion": "SE REALIZA AJUSTE Y REVISION DE TODOS LOS ACTUADORES DEL SISTEMA,SE CALIBRAN LAS VALVULAS ",
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-08-07",

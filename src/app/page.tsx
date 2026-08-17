@@ -2919,8 +2919,8 @@ export default function PlannerPage() {
                                             return matchLine && matchTurno && matchEquipo && matchDate;
                                           })
                                            .map((row) => (
-                                              <TableRow key={row.id} className={cn("border-b border-slate-100 transition-all duration-200", row.bloqueado !== false ? "bg-emerald-50/30" : ((user?.id === 'prodt.mds' || user?.id === 'prodt1.mds' || user?.id === 'prodt2.mds') && "bg-amber-50/20 hover:bg-amber-50/30"))}>
-                                              {editingId === row.id || row.bloqueado === false ? (
+                                              <TableRow key={row.id} className={cn("border-b border-slate-100 transition-all duration-200", row.bloqueado !== false ? "bg-emerald-50/30" : "bg-amber-50/20 hover:bg-amber-50/30 cursor-pointer")} onClick={(e) => { const target = e.target as HTMLElement; if (target.tagName === 'INPUT' || target.tagName === 'BUTTON' || target.tagName === 'SELECT' || target.closest('button')) return; if (editingId !== row.id && row.bloqueado === false && user?.id !== 'prodtj.mds' && user?.id !== 'prodts.mds' && user?.id !== 'enf.mds') { setEditingId(row.id); setEditForm(row); } }}>
+                                               {editingId === row.id ? (
                                               <>
                                                  <TableCell className="px-2 py-2"><Input type="date" value={editForm.fecha ?? row.fecha ?? ''} onChange={(e) => setEditForm({...editForm, fecha: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                 <TableCell className="px-2 py-2"><Input type="number" value={editForm.semana ?? row.semana ?? ''} onChange={(e) => setEditForm({...editForm, semana: parseInt(e.target.value) || 0})} className="h-8 text-[10px] w-16" /></TableCell>
@@ -3028,10 +3028,13 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                            setEditingId(null);
                                                            setEditForm({});
                                                            setErrorValidacion('');
-                                                          }}><Check className="h-3.5 w-3.5" /></Button>
-                                                         {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
-                                                          <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => { setEditingId(null); setEditForm({}); setErrorValidacion(''); }}><X className="h-3.5 w-3.5" /></Button>
-                                                         )}
+                                                           }}><Check className="h-3.5 w-3.5" /></Button>
+                                                           {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
+                                                             <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => { setEditingId(null); setEditForm({}); setErrorValidacion(''); }}><X className="h-3.5 w-3.5" /></Button>
+                                                           )}
+                                                          {user?.id !== 'alex.mds' && user?.id !== 'maria.mds' && (
+                                                             <Button size="icon" variant="ghost" className="h-7 w-7 text-slate-500 hover:text-slate-700" onClick={() => { setEditingId(null); setEditForm({}); setErrorValidacion(''); }}><X className="h-3.5 w-3.5" /></Button>
+                                                           )}
                                                       </>
                                                     )}
                                                   </TableCell>
