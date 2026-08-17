@@ -22167,7 +22167,7 @@
         "2026-08-01": "50.31",
         "2026-08-04": "50.55",
         "2026-08-03": "50.43",
-        "2026-08-05": "50.5",
+        "2026-08-05": "50.44",
         "2026-08-06": "50.5",
         "2026-08-07": "50.5",
         "2026-08-08": "50.5",
@@ -48689,11 +48689,11 @@
         "totalMin": "7",
         "zona": "Llenado",
         "falla": "",
-        "orden": "TAPETES DEL EMPAYADO Y ENTRADA DEL HORNO ATASCADOS",
+        "orden": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1786829500461,
-        "bloqueado": false
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -52078,7 +52078,9 @@
           "ubb": 40.63
         },
         "auto-3-1786709759403": {
-          "cajasPlanificadas": 128800
+          "cajasPlanificadas": 128800,
+          "producto": "417",
+          "jarabeReal": 149907
         }
       },
       "linea-4": {
@@ -52115,7 +52117,8 @@
         },
         "auto-4-1786719024730": {
           "cajasPlanificadas": 123200,
-          "jarabeReal": 0
+          "jarabeReal": 0,
+          "producto": "308"
         }
       },
       "linea-5": {
