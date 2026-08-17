@@ -3079,10 +3079,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                           </TooltipContent>
                                                         </Tooltip>
                                                       )}
-                                                        {row.bloqueado !== false && (user?.id !== 'prodtj.mds' && user?.id !== 'prodts.mds' && user?.id !== 'enf.mds') && (
-                                                         <>
-                                                           <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingId(row.id); setEditForm(row); }}><Pencil className="h-3.5 w-3.5" /></Button>
-                                                           {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
+                                                         {row.bloqueado !== false && (user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
+                                                          <>
+                                                            <Button size="icon" variant="ghost" className="h-7 w-7 text-blue-600 hover:text-blue-700" onClick={() => { setEditingId(row.id); setEditForm(row); }}><Pencil className="h-3.5 w-3.5" /></Button>
+                                                            {(user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
                                                             <Button size="icon" variant="ghost" className="h-7 w-7 text-red-600 hover:text-red-700" onClick={() => {
                                                               if (window.confirm('¿Eliminar este registro?')) {
                                                                 removeInformeOperacional(row.id);
