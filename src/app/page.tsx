@@ -3,6 +3,8 @@
 import React, { useState, useMemo, useEffect, useRef, memo } from "react";
 import Image from "next/image";
 import ExcelJS from "exceljs";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 import { 
   Plus, 
   Trash2, 
@@ -4247,6 +4249,15 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                       </svg>
                                       Excel
                                     </button>
+                                    <button
+                                      onClick={() => generarPDFAguaMensual()}
+                                      className="ml-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
+                                    >
+                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                      </svg>
+                                      PDF
+                                    </button>
                                   </div>
                                    <table className="w-full border-collapse text-[11px]">
                                      <thead>
@@ -4598,6 +4609,15 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                       </svg>
                                       Excel
+                                    </button>
+                                    <button
+                                      onClick={() => generarPDFCo2Mensual()}
+                                      className="ml-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
+                                    >
+                                      <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                      </svg>
+                                      PDF
                                     </button>
                                   </div>
                                  <table className="w-full border-collapse text-[11px]">
