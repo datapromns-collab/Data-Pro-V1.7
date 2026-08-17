@@ -7867,7 +7867,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-17T12:44:44.463Z"
+    "updatedAt": "2026-08-17T15:07:40.856Z"
   },
   "ordenesSap": [
     {
@@ -12774,6 +12774,66 @@
           "cajas3": 2560,
           "ticket4": "",
           "cajas4": 11158
+        }
+      ]
+    },
+    {
+      "id": "1-1786979241208",
+      "linea": 1,
+      "sabor": "GLUP MANZANA VERDE",
+      "ordenNumero": "62983",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-17",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1786979251343",
+      "linea": 2,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "62989",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-17",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1786979260618",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "62995",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-17",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -24473,13 +24533,13 @@
         "turno": "DIURNO",
         "operador": "",
         "linea": "Línea 7",
-        "equipo": "",
-        "tipoParada": "avería",
+        "equipo": "SOPLADORA",
+        "tipoParada": "AVERIA",
         "inicioParada": "10:16",
         "finParada": "10:25",
         "totalMin": "9",
         "zona": "Llenado",
-        "falla": "mecanica",
+        "falla": "CAMBIO DE MANGUERA DE COMPENSACION",
         "orden": "8948",
         "observaciones": "",
         "id": 1786040101507,
@@ -24498,21 +24558,21 @@
         "mttoEsp": "JUNIOR R",
         "descripcionFalla": "CAMBIO DE MANGUERA DE COMPENSACION",
         "descripcionAccion": "CAMBIO DE MANGUERA DE COMPENSACION DE MOLDE #11",
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-08-03",
         "semana": 32,
         "turno": "DIURNO",
-        "operador": "ANTHONER NUÑEZ ",
+        "operador": "",
         "linea": "Línea 7",
         "equipo": "SOPLADORA",
-        "tipoParada": "si",
+        "tipoParada": "AVERIA",
         "inicioParada": "13:38",
         "finParada": "13:56",
         "totalMin": "18",
         "zona": "Llenado",
-        "falla": "mecanica",
+        "falla": "DEFORMACION EN CUELLO DE LA BOTELLA, PURGA DE MOLDES DEL 1 AL 15",
         "orden": "8949",
         "observaciones": "",
         "id": 1786040269661,
@@ -24531,7 +24591,7 @@
         "mttoEsp": "ANGEL C.",
         "descripcionFalla": "DEFORMACION EN CUELLO DE BOTELLA, PURGA DE LOS MOLDES",
         "descripcionAccion": "SE REALIZA PURGA POR ALTA TEMPERATURA  DE LOS MOLDES  #01 Y #15",
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-08-03",
@@ -48651,7 +48711,7 @@
         "totalMin": "6",
         "zona": "Llenado",
         "falla": "AJUSTE DE GUIA EN BAJANTE DE PREFORMAS",
-        "orden": "",
+        "orden": "9401",
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1786822930655,
@@ -49098,9 +49158,9 @@
         "inicioParada": "10:16",
         "finParada": "10:25",
         "tMtto": "9",
-        "tipoParada": "avería",
+        "tipoParada": "AVERIA",
         "mtto": "correctivo",
-        "falla": "mecanica",
+        "falla": "CAMBIO DE MANGUERA DE COMPENSACION",
         "mttoEsp": "JUNIOR R",
         "descripcionFalla": "CAMBIO DE MANGUERA DE COMPENSACION",
         "descripcionAccion": "CAMBIO DE MANGUERA DE COMPENSACION DE MOLDE #11",
@@ -49125,9 +49185,9 @@
         "inicioParada": "13:38",
         "finParada": "13:56",
         "tMtto": "18",
-        "tipoParada": "si",
+        "tipoParada": "AVERIA",
         "mtto": "correctivo",
-        "falla": "mecanica",
+        "falla": "DEFORMACION EN CUELLO DE LA BOTELLA, PURGA DE MOLDES DEL 1 AL 15",
         "mttoEsp": "ANGEL C.",
         "descripcionFalla": "DEFORMACION EN CUELLO DE BOTELLA, PURGA DE LOS MOLDES",
         "descripcionAccion": "SE REALIZA PURGA POR ALTA TEMPERATURA  DE LOS MOLDES  #01 Y #15",
@@ -51680,65 +51740,6 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": "orden-sync-5070",
-        "fechaOrden": "2026-07-16",
-        "orden": "5070",
-        "fechaEmision": "",
-        "semana": 29,
-        "turno": "DIURNO",
-        "solicitante": "",
-        "linea": "Línea 3",
-        "aviso": "",
-        "maquina": "",
-        "fechaParada": "",
-        "inicioMtto": "",
-        "finMtto": "",
-        "inicioParada": "",
-        "tMtto": "",
-        "finParada": "",
-        "tipoParada": "",
-        "mtto": "",
-        "falla": "",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
-        "observaciones": "",
-        "bloqueado": true,
-        "otFechaParada": "",
-        "otInicioParada": "",
-        "otFinParada": ""
-      },
-      {
-        "id": "orden-sync-52001",
-        "fechaOrden": "2026-07-16",
-        "orden": "52001",
-        "fechaEmision": "2026-08-12",
-        "semana": 29,
-        "turno": "DIURNO",
-        "solicitante": "",
-        "linea": "Línea 1",
-        "aviso": "",
-        "maquina": "SOPLADORA",
-        "fechaParada": "",
-        "inicioMtto": "",
-        "finMtto": "",
-        "inicioParada": "",
-        "tMtto": "",
-        "finParada": "",
-        "tipoParada": "si",
-        "mtto": "",
-        "falla": "",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
-        "observaciones": "",
-        "bloqueado": true,
-        "otFechaParada": "",
-        "otInicioParada": "",
-        "otFinParada": "",
-        "usuario": "prodt.mds"
-      },
-      {
         "id": 1786735069444.7695,
         "fechaOrden": "2026-08-13",
         "orden": "9179",
@@ -51872,6 +51873,33 @@
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Luis Blandin"
+      },
+      {
+        "id": 1786978082533,
+        "fechaOrden": "2026-08-13",
+        "orden": "9401",
+        "fechaEmision": "2026-08-13",
+        "semana": 33,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 3",
+        "maquina": "SOPLADORA",
+        "aviso": "",
+        "fechaParada": "2026-08-13",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "21:40",
+        "finParada": "21:46",
+        "tMtto": "6",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "AJUSTE DE GUIA EN BAJANTE DE PREFORMAS",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "bloqueado": true
       }
     ],
     "seguimiento-ordenes": {
@@ -57888,6 +57916,8 @@
     },
     "planta-ordenes-trabajo": {
       "*": [
+        "orden-sync-52001",
+        "orden-sync-5070",
         "1786829500470"
       ]
     },
