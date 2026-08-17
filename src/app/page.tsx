@@ -2919,8 +2919,8 @@ export default function PlannerPage() {
                                             return matchLine && matchTurno && matchEquipo && matchDate;
                                           })
                                            .map((row) => (
-                                            <TableRow key={row.id} className={cn("border-b border-slate-100", row.bloqueado !== false ? "bg-emerald-50/30" : ((user?.id === 'prodt.mds' || user?.id === 'prodt1.mds' || user?.id === 'prodt2.mds') && "bg-amber-50/20 hover:bg-amber-50/30"))}>
-                                             {editingId === row.id || row.bloqueado === false ? (
+                                             <TableRow key={row.id} className={cn("border-b border-slate-100 transition-all duration-200", row.bloqueado !== false ? "bg-emerald-50/30" : ((user?.id === 'prodt.mds' || user?.id === 'prodt1.mds' || user?.id === 'prodt2.mds') && "bg-amber-50/20 hover:bg-amber-50/30"))}>
+                                              {editingId === row.id || (row.bloqueado === false && !(user?.id === 'prodtj.mds' || user?.id === 'prodts.mds' || user?.id === 'enf.mds')) ? (
                                               <>
                                                 <TableCell className="px-2 py-2"><Input type="date" value={editForm.fecha || row.fecha || ''} onChange={(e) => setEditForm({...editForm, fecha: e.target.value})} className="h-8 text-[10px]" /></TableCell>
                                                 <TableCell className="px-2 py-2"><Input type="number" value={editForm.semana ?? row.semana ?? ''} onChange={(e) => setEditForm({...editForm, semana: parseInt(e.target.value) || 0})} className="h-8 text-[10px] w-16" /></TableCell>
@@ -3067,7 +3067,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     <TableCell className="px-2 py-2 text-[11px] text-slate-700 whitespace-nowrap">{row.usuario || ''}</TableCell>
                                                   )}
                                                     <TableCell className="px-2 py-2 flex items-center gap-1">
-                                                      {row.bloqueado !== false && (user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
+                                                       {row.bloqueado !== false && (user?.id === 'alex.mds' || user?.id === 'maria.mds') && (
                                                         <Tooltip>
                                                           <TooltipTrigger asChild>
                                                             <Button size="icon" variant="ghost" className="h-7 w-7 text-orange-600 hover:text-orange-700" type="button" onClick={() => handleReactivarInforme(row)}>
@@ -5102,7 +5102,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
            onWeekChange={setWeekStartDate}
          />
 
-        <Dialog open={isPlantaDialogOpen} onOpenChange={setIsPlantaDialogOpen}>
+        <Dialog open={isPlantaDialogOpen} onOpenChange={(open) => { setIsPlantaDialogOpen(open); if (!open) setErrorValidacion(''); }}>
           <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
@@ -5320,7 +5320,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                         return;
                       }
                     }
-                      setInformesOperacionales([...informesOperacionales, { ...plantaFormData, id: Date.now(), bloqueado: true, usuario: user?.name || '' }]);
+                       setInformesOperacionales(prev => [...prev, { ...plantaFormData, id: Date.now(), bloqueado: true, usuario: user?.name || '' }]);
                      if (plantaFormData.orden && String(plantaFormData.orden).trim() !== '') {
                        setOrdenesTrabajo(prev => {
                          const exists = prev.some((o: any) => o.orden === plantaFormData.orden && o.fechaOrden === plantaFormData.fecha);
@@ -5430,10 +5430,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                        descripcionFalla: '',
                        descripcionAccion: '',
                        observaciones: '',
-                       usuario: user?.name || '',
-                     });
-                  }
-                setIsPlantaDialogOpen(false);
+                        usuario: user?.name || '',
+                      });
+                      setErrorValidacion('');
+                   }
+                 setIsPlantaDialogOpen(false);
                 toast({ title: 'Registro guardado exitosamente' });
               }} className="rounded-xl bg-slate-800 text-white hover:bg-slate-900">
                 Guardar
@@ -6312,7 +6313,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
     };
 
     return (
-      <TableRow className={cn("border-b border-slate-100", estaBloqueado ? "bg-emerald-50/30" : (esUsuarioPlanta ? "bg-amber-50/20 hover:bg-amber-50/30" : "hover:bg-slate-50/60"))}>
+      <TableRow className={cn("border-b border-slate-100 transition-all duration-200", estaBloqueado ? "bg-emerald-50/30" : (esUsuarioPlanta ? "bg-amber-50/20 hover:bg-amber-50/30" : "hover:bg-slate-50/60"))}>
         <TableCell className="px-2 py-2 text-[11px] font-medium text-slate-700 whitespace-nowrap sticky left-0 z-20 bg-white even:bg-slate-50/60">{formatearFecha(rowEdit.fechaOrden)}</TableCell>
         <TableCell className="px-2 py-2 text-[11px] font-mono font-bold text-slate-900 whitespace-nowrap sticky left-[72px] z-20 bg-white even:bg-slate-50/60">
           {rowEdit.orden}
