@@ -59,6 +59,14 @@ const SABOR_COLORS: Record<string, string> = {
 
 const FALLBACK_COLOR = "bg-gray-200 text-gray-900";
 
+const SABOR_ALIAS: Record<string, string> = {
+  'GLUP MANZANA VERDE': 'GLUP MANZANA',
+};
+
+function resolveSabor(sabor: string): string {
+  return SABOR_ALIAS[sabor] || sabor;
+}
+
 const NumberInput = ({ value, onChange, onBlur, ...props }: any) => {
   const [tempValue, setTempValue] = useState(String(value ?? 0));
 
