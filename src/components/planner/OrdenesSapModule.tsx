@@ -734,17 +734,18 @@ export default function OrdenesSapModule({
 
   // Llenado automático de las filas de la segunda tabla según línea y sabor seleccionados.
   useEffect(() => {
+    const saborResuelto = resolveSabor(ordenSaborSeleccionado);
     // "Jarabe T" no aplica para la línea 5
     const datosJarabe = ordenLineaSeleccionada === '5'
       ? { codigo: '', descripcion: '' }
-      : (JARABE_T_POR_SABOR[ordenSaborSeleccionado] || { codigo: '', descripcion: '' });
-    const datosBebida = (ordenLineaSeleccionada === '5' && !(ordenSaborSeleccionado.startsWith('JUSTY') || ordenSaborSeleccionado.startsWith('VITA TEA')))
+      : (JARABE_T_POR_SABOR[saborResuelto] || { codigo: '', descripcion: '' });
+    const datosBebida = (ordenLineaSeleccionada === '5' && !(saborResuelto.startsWith('JUSTY') || saborResuelto.startsWith('VITA TEA')))
       ? { codigo: '', descripcion: '' }
-      : (BEBIDA_POR_SABOR[ordenSaborSeleccionado] || { codigo: '', descripcion: '' });
-    const datosEnv = ENV_POR_LINEA_SABOR[ordenLineaSeleccionada]?.[ordenSaborSeleccionado] || { codigo: '', descripcion: '' };
-    const datosEtq = ETQ_POR_LINEA_SABOR[ordenLineaSeleccionada]?.[ordenSaborSeleccionado] || { codigo: '', descripcion: '' };
-    const datosCaj = CAJ_POR_LINEA_SABOR[ordenLineaSeleccionada]?.[ordenSaborSeleccionado] || { codigo: '', descripcion: '' };
-    const datosProdt = PRODT_POR_LINEA_SABOR[ordenLineaSeleccionada]?.[ordenSaborSeleccionado] || { codigo: '', descripcion: '' };
+      : (BEBIDA_POR_SABOR[saborResuelto] || { codigo: '', descripcion: '' });
+    const datosEnv = ENV_POR_LINEA_SABOR[ordenLineaSeleccionada]?.[saborResuelto] || { codigo: '', descripcion: '' };
+    const datosEtq = ETQ_POR_LINEA_SABOR[ordenLineaSeleccionada]?.[saborResuelto] || { codigo: '', descripcion: '' };
+    const datosCaj = CAJ_POR_LINEA_SABOR[ordenLineaSeleccionada]?.[saborResuelto] || { codigo: '', descripcion: '' };
+    const datosProdt = PRODT_POR_LINEA_SABOR[ordenLineaSeleccionada]?.[saborResuelto] || { codigo: '', descripcion: '' };
     setOrdenComponentes(prev => ({
       ...prev,
       'Jarabe T': { codigo: datosJarabe.codigo, descripcion: datosJarabe.descripcion },
@@ -1836,7 +1837,8 @@ const exportarPDFdia = async () => {
 
       // Código de producto: mismas condiciones de línea + sabor que la fila "Prodt"
       // del Creador de Órdenes (PRODT_POR_LINEA_SABOR).
-      const datosProdt = PRODT_POR_LINEA_SABOR[String(orden.linea)]?.[orden.sabor] || { codigo: '', descripcion: '' };
+      const saborResuelto = resolveSabor(orden.sabor);
+      const datosProdt = PRODT_POR_LINEA_SABOR[String(orden.linea)]?.[saborResuelto] || { codigo: '', descripcion: '' };
 
       mapa[orden.linea].push({
         id: `auto-${orden.id}`,
