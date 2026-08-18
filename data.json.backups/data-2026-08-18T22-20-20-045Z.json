@@ -15880,16 +15880,6 @@
           "equipment": "PALETIZADORA",
           "stopType": "OPERACIONAL",
           "turno": "Diurno"
-        },
-        {
-          "id": "stop-1787084451252",
-          "lineId": "L3",
-          "startTime": "2026-08-17T15:10:00.000Z",
-          "endTime": "2026-08-17T21:40:00.000Z",
-          "reason": "FALLA ELECTRICA GENERAL",
-          "equipment": "ENFARDADORA",
-          "stopType": "FALLA DE E/E",
-          "turno": "Diurno"
         }
       ],
       "efficiencyStore": {
@@ -22115,7 +22105,7 @@
                 "scheduledStops": "0",
                 "operationalStopsMin": "17",
                 "breakdownStopsMin": "0",
-                "electricFailureStopsMin": "720",
+                "electricFailureStopsMin": "330",
                 "externalStopsMin": "120",
                 "scheduledBoxes": "",
                 "producedBoxes": "",

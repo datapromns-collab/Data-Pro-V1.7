@@ -265,7 +265,6 @@ function deepMerge(target: any, source: any): any {
     const first = target[0];
     if (first && first.id != null) {
       const map = new Map<string, any>();
-      target.forEach((item: any) => { if (item && item.id != null) map.set(String(item.id), item); });
       source.forEach((item: any) => { if (item && item.id != null) map.set(String(item.id), item); });
       return Array.from(map.values());
     }
@@ -276,7 +275,7 @@ function deepMerge(target: any, source: any): any {
   if (!target || typeof target !== 'object') return { ...source };
   const result: any = { ...target };
   for (const key of Object.keys(source)) {
-    result[key] = deepMerge(result[key], source[key]);
+    result[key] = deepMerge(target[key], source[key]);
   }
   return result;
 }
