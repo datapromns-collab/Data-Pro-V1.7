@@ -52115,7 +52115,7 @@
       {
         "fecha": "2026-08-14",
         "semana": 33,
-        "turno": "DIURNO",
+        "turno": "NOCTURNO",
         "operador": "",
         "linea": "Línea 5",
         "equipo": "",
@@ -53079,7 +53079,7 @@
         "observaciones": "",
         "usuario": "Ronald Valera",
         "id": 1787086931257,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-08-14",
