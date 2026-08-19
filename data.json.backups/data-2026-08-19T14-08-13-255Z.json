@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-07-27T00:00:00.000",
+      "weekStartDate": "2026-08-17T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -7869,7 +7869,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-19T12:10:39.254Z"
+    "updatedAt": "2026-08-19T13:46:37.411Z"
   },
   "ordenesSap": [
     {
@@ -13065,6 +13065,106 @@
           "ticket4": "",
           "cajas4": 9200
         },
+        {
+          "fechaInicio": "2026-08-19",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1787144164253",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63042",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-19",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1787144177160",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63048",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-19",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1787144205316",
+      "linea": 5,
+      "sabor": "JUSTY NARANJA",
+      "ordenNumero": "63053",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-19",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1787144222475",
+      "linea": 7,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "63059",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-19",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1787145553510",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "63065",
+      "semana": 34,
+      "dias": [
         {
           "fechaInicio": "2026-08-19",
           "ticket1": "",
@@ -51967,9 +52067,9 @@
         "finParada": "19:08",
         "totalMin": "38",
         "zona": "Llenado",
-        "falla": "",
+        "falla": "ADECUACIONES LUEGIO DE LA FALLA DE ENERGIA ELECTRICA ",
         "orden": "",
-        "observaciones": "ADECUACIONES LUEGIO DE LA FALLA DE ENERGIA ELECTRICA ",
+        "observaciones": "",
         "usuario": "Ronald Valera",
         "id": 1787064214510,
         "bloqueado": true
@@ -56626,6 +56726,12 @@
           "ubb": 19,
           "producto": "745",
           "pnc": 240
+        },
+        "auto-1-1787052198371": {
+          "cajasPlanificadas": 21788,
+          "jarabeReal": 34912,
+          "producto": "96",
+          "ubb": 20
         }
       },
       "linea-2": {
@@ -56691,6 +56797,12 @@
           "jarabeReal": 22327,
           "ubb": 14.36,
           "producto": "53"
+        },
+        "auto-2-1787052393479": {
+          "cajasPlanificadas": 21338,
+          "jarabeReal": 51234,
+          "producto": "298",
+          "ubb": 33
         }
       },
       "linea-3": {
@@ -56741,6 +56853,12 @@
           "producto": "417",
           "jarabeReal": 149907,
           "ubb": 95.64
+        },
+        "auto-3-1786979260618": {
+          "cajasPlanificadas": 134400,
+          "jarabeReal": 91636,
+          "producto": "429",
+          "ubb": 31.83
         }
       },
       "linea-4": {
@@ -56780,6 +56898,12 @@
           "jarabeReal": 94742,
           "producto": "308",
           "ubb": 32.92
+        },
+        "auto-4-1786979730494": {
+          "cajasPlanificadas": 134400,
+          "jarabeReal": 67127,
+          "producto": "418",
+          "ubb": 23.31
         }
       },
       "linea-5": {
@@ -56806,6 +56930,13 @@
           "jarabeReal": 474000,
           "ubb": 474,
           "producto": "1014"
+        },
+        "auto-5-1786979743912": {
+          "cajasPlanificadas": 55660,
+          "jarabeReal": 300000,
+          "producto": "536",
+          "pnc": 300,
+          "ubb": 300
         }
       },
       "linea-6": {
@@ -56888,6 +57019,13 @@
           "ubb": 30.75,
           "producto": "3581",
           "pnc": 185
+        },
+        "auto-7-1786979767131": {
+          "cajasPlanificadas": 34500,
+          "producto": "861",
+          "jarabeReal": 68969,
+          "ubb": 24,
+          "pnc": 1229
         }
       }
     },
