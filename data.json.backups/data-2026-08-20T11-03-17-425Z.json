@@ -7869,7 +7869,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-19T17:12:10.842Z"
+    "updatedAt": "2026-08-19T20:58:40.386Z"
   },
   "ordenesSap": [
     {
@@ -12943,8 +12943,8 @@
         },
         {
           "fechaInicio": "2026-08-19",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17711",
+          "cajas1": 3200,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -13067,8 +13067,8 @@
         },
         {
           "fechaInicio": "2026-08-19",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17616",
+          "cajas1": 5360,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -13087,8 +13087,8 @@
       "dias": [
         {
           "fechaInicio": "2026-08-19",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17666",
+          "cajas1": 3680,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -13107,8 +13107,8 @@
       "dias": [
         {
           "fechaInicio": "2026-08-19",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17853",
+          "cajas1": 3440,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -13127,8 +13127,8 @@
       "dias": [
         {
           "fechaInicio": "2026-08-19",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17587",
+          "cajas1": 1950,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -13150,7 +13150,7 @@
           "ticket1": "17759",
           "cajas1": 3042,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 3666,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -13167,8 +13167,8 @@
       "dias": [
         {
           "fechaInicio": "2026-08-19",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17805",
+          "cajas1": 4000,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
