@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-17T00:00:00.000",
+      "weekStartDate": "2026-08-03T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -7401,12 +7401,12 @@
             "name": "GLUP COLA",
             "lineId": "4",
             "loadPerHour": 2800,
-            "quantity": 200200,
-            "durationHours": 71.5,
+            "quantity": 266000,
+            "durationHours": 95,
             "presentation": "2Lts",
-            "tanks": 23.21,
+            "tanks": 30.84,
             "startTime": "2026-08-17T11:00:00.000Z",
-            "endTime": "2026-08-20T10:30:00.000Z",
+            "endTime": "2026-08-21T10:00:00.000Z",
             "id": "d3hu2rfmp",
             "color": "#10b981"
           },
@@ -7764,30 +7764,6 @@
             "color": "#10b981"
           },
           {
-            "name": "CS",
-            "lineId": "4",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 0.5,
-            "startTime": "2026-08-20T10:30:00.000Z",
-            "endTime": "2026-08-20T11:00:00.000Z",
-            "id": "3p9u71ayb",
-            "color": "#587593"
-          },
-          {
-            "name": "GLUP MANZANA ROJA",
-            "lineId": "4",
-            "loadPerHour": 2800,
-            "quantity": 64400,
-            "durationHours": 23,
-            "presentation": "2Lts",
-            "tanks": 8,
-            "startTime": "2026-08-20T11:00:00.000Z",
-            "endTime": "2026-08-21T10:00:00.000Z",
-            "id": "5jtfgdw0p",
-            "color": "#47CCB0"
-          },
-          {
             "name": "MTTO",
             "lineId": "4",
             "loadPerHour": 0,
@@ -7863,13 +7839,15 @@
           "bfkc56lyq",
           "vnrrucdyq",
           "s96sqibhh",
-          "9a67uskat"
+          "9a67uskat",
+          "5jtfgdw0p",
+          "3p9u71ayb"
         ]
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-19T20:58:40.386Z"
+    "updatedAt": "2026-08-20T12:12:01.239Z"
   },
   "ordenesSap": [
     {
@@ -12945,12 +12923,12 @@
           "fechaInicio": "2026-08-19",
           "ticket1": "17711",
           "cajas1": 3200,
-          "ticket2": "",
+          "ticket2": "17712",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 6305
         }
       ]
     },
@@ -13069,12 +13047,12 @@
           "fechaInicio": "2026-08-19",
           "ticket1": "17616",
           "cajas1": 5360,
-          "ticket2": "",
+          "ticket2": "17617",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 14000
         }
       ]
     },
@@ -13089,12 +13067,12 @@
           "fechaInicio": "2026-08-19",
           "ticket1": "17666",
           "cajas1": 3680,
-          "ticket2": "",
+          "ticket2": "17667",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 19920
         }
       ]
     },
@@ -13109,12 +13087,12 @@
           "fechaInicio": "2026-08-19",
           "ticket1": "17853",
           "cajas1": 3440,
-          "ticket2": "",
+          "ticket2": "17854",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 22000
         }
       ]
     },
@@ -13129,12 +13107,12 @@
           "fechaInicio": "2026-08-19",
           "ticket1": "17587",
           "cajas1": 1950,
-          "ticket2": "",
+          "ticket2": "17588",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 2600
         }
       ]
     },
@@ -13149,8 +13127,19 @@
           "fechaInicio": "2026-08-19",
           "ticket1": "17759",
           "cajas1": 3042,
-          "ticket2": "",
+          "ticket2": "17760",
           "cajas2": 3666,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 19958
+        },
+        {
+          "fechaInicio": "2026-08-20",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -13169,7 +13158,27 @@
           "fechaInicio": "2026-08-19",
           "ticket1": "17805",
           "cajas1": 4000,
-          "ticket2": "",
+          "ticket2": "17806",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 15840
+        }
+      ]
+    },
+    {
+      "id": "6-1787226321212",
+      "linea": 6,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63071",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-19",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17712",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
