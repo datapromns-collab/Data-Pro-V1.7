@@ -8336,7 +8336,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-20T21:59:18.405Z"
+    "updatedAt": "2026-08-21T14:56:28.779Z"
   },
   "ordenesSap": [
     {
@@ -13567,12 +13567,12 @@
           "fechaInicio": "2026-08-20",
           "ticket1": "17668",
           "cajas1": 5680,
-          "ticket2": "",
+          "ticket2": "17669",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 800,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 15520
         }
       ]
     },
@@ -13598,12 +13598,12 @@
           "fechaInicio": "2026-08-20",
           "ticket1": "17855",
           "cajas1": 7360,
-          "ticket2": "",
+          "ticket2": "17856",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 720,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 18160
         }
       ]
     },
@@ -13629,12 +13629,12 @@
           "fechaInicio": "2026-08-20",
           "ticket1": "17589",
           "cajas1": 3000,
-          "ticket2": "",
+          "ticket2": "17590",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 300,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8900
         }
       ]
     },
@@ -13660,12 +13660,12 @@
           "fechaInicio": "2026-08-20",
           "ticket1": "17761",
           "cajas1": 5460,
-          "ticket2": "",
+          "ticket2": "17762",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 780,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 1799
         }
       ]
     },
@@ -13691,12 +13691,12 @@
           "fechaInicio": "2026-08-20",
           "ticket1": "17807",
           "cajas1": 6000,
-          "ticket2": "",
+          "ticket2": "17808",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 960,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 13120
         }
       ]
     },
@@ -13722,12 +13722,12 @@
           "fechaInicio": "2026-08-20",
           "ticket1": "17713",
           "cajas1": 2400,
-          "ticket2": "",
+          "ticket2": "17714",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 320,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 10240
         },
         {
           "fechaInicio": "2026-08-21",
@@ -13753,6 +13753,205 @@
           "fechaInicio": "2026-08-20",
           "ticket1": "17618",
           "cajas1": 5600,
+          "ticket2": "17619",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 480,
+          "ticket4": "",
+          "cajas4": 16960
+        },
+        {
+          "fechaInicio": "2026-08-21",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-08-22",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1787315069553",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63083",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-20",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17762",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 9672
+        },
+        {
+          "fechaInicio": "2026-08-21",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-08-22",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1787322737129",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "63089",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-21",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-08-22",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1787322747111",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63095",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-21",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-08-22",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1787322762208",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63101",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-21",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-08-22",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-08-23",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1787322774349",
+      "linea": 5,
+      "sabor": "JUSTY NARANJA",
+      "ordenNumero": "63106",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-21",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-08-22",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -53460,44 +53659,6 @@
         "fecha": "2026-08-14",
         "semana": 33,
         "turno": "NOCTURNO",
-        "operador": "LUIS MACHADO ",
-        "linea": "Línea 1",
-        "equipo": "",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "02:55",
-        "finParada": "00:03",
-        "totalMin": "1268",
-        "zona": "Llenado",
-        "falla": "SENSOR DEL CABEZAL",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Ronald Valera",
-        "id": 1787086190625,
-        "bloqueado": true
-      },
-      {
-        "fecha": "2026-08-14",
-        "semana": 33,
-        "turno": "NOCTURNO",
-        "operador": "DANIEL PARRA",
-        "linea": "Línea 1",
-        "equipo": "ETIQUETADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "04:03",
-        "finParada": "04:12",
-        "totalMin": "9",
-        "zona": "Llenado",
-        "falla": "SIN ESPECIFICAR",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Ronald Valera",
-        "id": 1787086273033,
-        "bloqueado": true
-      },
-      {
-        "fecha": "2026-08-14",
-        "semana": 33,
-        "turno": "NOCTURNO",
         "operador": "DARWIN MARTINEZ",
         "linea": "Línea 2",
         "equipo": "ETIQUETADORA",
@@ -60867,6 +61028,13 @@
           "jarabeReal": 34912,
           "producto": "96",
           "ubb": 20
+        },
+        "auto-1-1787145553510": {
+          "cajasPlanificadas": 72000,
+          "producto": "237",
+          "pnc": 150,
+          "jarabeReal": 81261,
+          "ubb": 28.27
         }
       },
       "linea-2": {
@@ -61000,6 +61168,12 @@
           "jarabeReal": 91636,
           "producto": "429",
           "ubb": 31.83
+        },
+        "auto-3-1787144164253": {
+          "cajasPlanificadas": 128800,
+          "producto": "202",
+          "jarabeReal": 92345,
+          "ubb": 32.09
         }
       },
       "linea-4": {
@@ -61045,6 +61219,12 @@
           "jarabeReal": 67127,
           "producto": "418",
           "ubb": 23.31
+        },
+        "auto-4-1787144177160": {
+          "cajasPlanificadas": 131600,
+          "jarabeReal": 102552,
+          "producto": "416",
+          "ubb": 35.62
         }
       },
       "linea-5": {
@@ -61078,6 +61258,12 @@
           "producto": "536",
           "pnc": 300,
           "ubb": 300
+        },
+        "auto-5-1787144205316": {
+          "jarabeReal": 306000,
+          "producto": "131",
+          "ubb": 306,
+          "cajasPlanificadas": 53240
         }
       },
       "linea-6": {
@@ -61174,6 +61360,12 @@
           "jarabeReal": 68969,
           "ubb": 24,
           "pnc": 1229
+        },
+        "auto-7-1787144222475": {
+          "jarabeReal": 71155,
+          "producto": "908",
+          "cajasPlanificadas": 35580,
+          "ubb": 72
         }
       }
     },
@@ -66857,7 +67049,9 @@
         "1784554694921",
         "1",
         "1785413793661",
-        "1786996948604"
+        "1786996948604",
+        "1787086190625",
+        "1787086273033"
       ]
     },
     "planta-ordenes-trabajo": {
