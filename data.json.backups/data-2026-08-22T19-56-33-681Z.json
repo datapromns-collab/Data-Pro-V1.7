@@ -8301,67 +8301,6 @@
             "endTime": "2026-08-29T09:00:00.000Z",
             "id": "1tptwh22u",
             "color": "#6366f1"
-          },
-          {
-            "name": "GLUP UVA",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 28450,
-            "durationHours": 11.38,
-            "presentation": "1Lt",
-            "tanks": 4,
-            "startTime": "2026-08-24T11:00:00.000Z",
-            "endTime": "2026-08-24T22:22:48.000Z",
-            "id": "gggkr162o",
-            "color": "#ec4899"
-          },
-          {
-            "name": "CS",
-            "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 0.5,
-            "startTime": "2026-08-24T22:23:00.000Z",
-            "endTime": "2026-08-24T22:53:00.000Z",
-            "id": "eyvmgos1b",
-            "color": "#f59e0b"
-          },
-          {
-            "name": "GLUP MANZANA ROJA",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 16095,
-            "durationHours": 6.438,
-            "presentation": "1Lt",
-            "tanks": 2,
-            "startTime": "2026-08-24T22:53:00.000Z",
-            "endTime": "2026-08-25T05:19:16.800Z",
-            "id": "1y7c1ggde",
-            "color": "#ec4899"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-08-25T05:20:00.000Z",
-            "endTime": "2026-08-25T07:20:00.000Z",
-            "id": "zfqiw9eep",
-            "color": "#f59e0b"
-          },
-          {
-            "name": "GLUP COLA",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 244175,
-            "durationHours": 97.67,
-            "presentation": "1Lt",
-            "tanks": 28.31,
-            "startTime": "2026-08-25T07:20:00.000Z",
-            "endTime": "2026-08-29T09:00:12.000Z",
-            "id": "cu2iao3pg",
-            "color": "#f59e0b"
           }
         ],
         "realProduction": {},
@@ -8382,13 +8321,18 @@
         "logisticsInventoryAW": {},
         "plantInventoryAW": {},
         "deletedTaskIds": [
-          "m825zlxg2"
+          "m825zlxg2",
+          "cu2iao3pg",
+          "zfqiw9eep",
+          "1y7c1ggde",
+          "eyvmgos1b",
+          "gggkr162o"
         ]
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-22T18:14:04.677Z"
+    "updatedAt": "2026-08-22T19:33:44.315Z"
   },
   "ordenesSap": [
     {
