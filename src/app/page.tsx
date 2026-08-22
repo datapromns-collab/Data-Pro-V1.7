@@ -80,7 +80,7 @@ import { PlanProduccionReport } from '@/components/planner/PlanProduccionReport'
 import { RequisicionReport } from '@/components/planner/RequisicionReport';
 import { JarabesModule } from '@/components/planner/JarabesModule';
 import { LoginForm } from '@/components/auth/LoginForm';
-import { usePlannerStore } from '@/hooks/use-planner-store';
+import { usePlannerStore, getWeekKey } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
 import { usePermissionsStore, MODULE_LABELS, MODULE_COLORS } from '@/hooks/use-permissions-store';
 import { PermisosModule } from '@/components/planner/PermisosModule';
@@ -2656,29 +2656,29 @@ export default function PlannerPage() {
                               )}
                               {activeModule === 'management' && hasAccess(user.id, 'management') && (
                    <>
-                     {activeTab === 'admin-report' && (
-                       <AdminReportTool 
-                         view="production"
-                         tasks={tasks} 
-                         weekStartDate={weekStartDate} 
-                         realProduction={realProduction}
-                         updateRealProduction={updateRealProduction}
-                         onPrintWeeklyControl={handlePrintWeeklyControl}
-                         onPrintMonthly={handlePrintMonthly}
-                         allowedProductionTabs={allowedProdTabs}
-                       />
-                     )}
-                     {activeTab === 'compliance-report' && mgmtAllowsCumplimiento && (
-                       <AdminReportTool 
-                         view="compliance"
-                         tasks={tasks} 
-                         weekStartDate={weekStartDate} 
-                         realProduction={realProduction}
-                         updateRealProduction={updateRealProduction}
-                         onPrintCompliance={handlePrintCompliance}
-                         onPrintMonthlyCompliance={handlePrintMonthlyCompliance}
-                       />
-                     )}
+                      {activeTab === 'admin-report' && (
+                        <AdminReportTool 
+                          view="production"
+                          weeklyData={weeklyData}
+                          currentWeekKey={getWeekKey(weekStartDate)}
+                          realProduction={realProduction}
+                          updateRealProduction={updateRealProduction}
+                          onPrintWeeklyControl={handlePrintWeeklyControl}
+                          onPrintMonthly={handlePrintMonthly}
+                          allowedProductionTabs={allowedProdTabs}
+                        />
+                      )}
+                      {activeTab === 'compliance-report' && mgmtAllowsCumplimiento && (
+                        <AdminReportTool 
+                          view="compliance"
+                          weeklyData={weeklyData}
+                          currentWeekKey={getWeekKey(weekStartDate)}
+                          realProduction={realProduction}
+                          updateRealProduction={updateRealProduction}
+                          onPrintCompliance={handlePrintCompliance}
+                          onPrintMonthlyCompliance={handlePrintMonthlyCompliance}
+                        />
+                      )}
                    </>
                   )}
                   {activeModule === 'jarabes' && hasAccess(user.id, 'jarabes') && (

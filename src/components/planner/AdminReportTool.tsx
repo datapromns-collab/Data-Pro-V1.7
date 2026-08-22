@@ -19,10 +19,15 @@ import { cn } from '@/lib/utils';
 import DiaADiaSection from '@/components/planner/DiaADiaSection';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
 
+interface WeeklyData {
+  tasks: any[];
+  realProduction: Record<string, Record<string, Record<string, number>>>;
+}
+
 interface AdminReportToolProps {
   view: 'production' | 'compliance';
-  tasks: any[];
-  weekStartDate: Date;
+  weeklyData: Record<string, WeeklyData>;
+  currentWeekKey: string;
   realProduction: Record<string, Record<string, Record<string, number>>>;
   updateRealProduction: (lineId: string, flavor: string, dateKey: string, quantity: number) => void;
   onPrintMonthly?: (month: string, year: string) => void;
@@ -53,8 +58,8 @@ const chartConfig = {
 
 export function AdminReportTool({ 
   view, 
-  tasks, 
-  weekStartDate, 
+  weeklyData, 
+  currentWeekKey, 
   realProduction, 
   updateRealProduction, 
   onPrintMonthly, 
@@ -63,8 +68,8 @@ export function AdminReportTool({
   onPrintMonthlyCompliance,
   allowedProductionTabs
 }: AdminReportToolProps) {
-  const [weekSelectorMonth, setWeekSelectorMonth] = useState(format(weekStartDate, 'yyyy-MM'));
-  const [selectedWeekStart, setSelectedWeekStart] = useState(format(weekStartDate, 'yyyy-MM-dd'));
+  const [weekSelectorMonth, setWeekSelectorMonth] = useState(format(new Date(), 'yyyy-MM'));
+  const [selectedWeekStart, setSelectedWeekStart] = useState(format(new Date(), 'yyyy-MM-dd'));
 
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
@@ -73,9 +78,19 @@ export function AdminReportTool({
 
   const weeklyWeekStart = useMemo(() => parseISO(selectedWeekStart), [selectedWeekStart]);
   const weekDays = useMemo(
-    () => productionSubTab === 'weekly' ? getWeekDays(weeklyWeekStart) : getWeekDays(weekStartDate),
-    [productionSubTab, weeklyWeekStart, weekStartDate]
+    () => getWeekDays(weeklyWeekStart),
+    [weeklyWeekStart]
   );
+
+  const selectedWeekKey = useMemo(() => {
+    const d = new Date(selectedWeekStart);
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${d.getFullYear()}-${m}-${day}`;
+  }, [selectedWeekStart]);
+
+  const selectedWeekData = weeklyData[selectedWeekKey] || { tasks: [], realProduction: {} };
+  const selectedTasks = selectedWeekData.tasks;
 
   const complianceWeekDays = useMemo(() => {
     const parsed = parseISO(selectedWeekStart);
@@ -95,9 +110,10 @@ export function AdminReportTool({
   }, [weekSelectorMonth]);
 
   useEffect(() => {
-    setWeekSelectorMonth(format(weekStartDate, 'yyyy-MM'));
-    setSelectedWeekStart(format(weekStartDate, 'yyyy-MM-dd'));
-  }, [weekStartDate]);
+    const initialDate = currentWeekKey ? parseISO(currentWeekKey) : new Date();
+    setWeekSelectorMonth(format(initialDate, 'yyyy-MM'));
+    setSelectedWeekStart(format(initialDate, 'yyyy-MM-dd'));
+  }, [currentWeekKey]);
 
   const allowedTabs = allowedProductionTabs && allowedProductionTabs.length > 0
     ? allowedProductionTabs
@@ -113,7 +129,7 @@ export function AdminReportTool({
     const dayStart = setMinutes(setHours(startOfDay(day), 7), 0);
     const dayEnd = addDays(dayStart, 1);
 
-    return tasks
+    return selectedTasks
       .filter(t => t.lineId === lineId && t.name === flavor)
       .reduce((acc, task) => {
         const intersectionStart = task.startTime > dayStart ? task.startTime : dayStart;
@@ -136,7 +152,7 @@ export function AdminReportTool({
     const dayStart = setMinutes(setHours(startOfDay(day), 7), 0);
     const dayEnd = addDays(dayStart, 1);
 
-    return tasks
+    return selectedTasks
       .filter(t => t.lineId === lineId && t.quantity > 0)
       .reduce((acc, task) => {
         const intersectionStart = task.startTime > dayStart ? task.startTime : dayStart;
@@ -196,7 +212,7 @@ export function AdminReportTool({
       
       return { lineId, flavors, lineWeeklyTotal };
     });
-  }, [tasks, weekDays, realProductionAuto]);
+  }, [selectedTasks, weekDays, realProductionAuto]);
 
   const monthlyComplianceData = useMemo(() => {
     const yearNum = parseInt(selectedYear);
@@ -229,7 +245,7 @@ export function AdminReportTool({
         compliance: parseFloat(compliance.toFixed(2))
       };
     });
-  }, [tasks, realProductionAuto, selectedMonth, selectedYear]);
+  }, [selectedTasks, realProductionAuto, selectedMonth, selectedYear]);
 
   const totalCratesWeek = useMemo(() => 
     lineData.reduce((acc, l) => acc + l.lineWeeklyTotal, 0),

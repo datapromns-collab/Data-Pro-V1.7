@@ -16,7 +16,7 @@ function fromLocalISO(value: any): Date {
   return new Date(value);
 }
 
-function getWeekKey(date: Date): string {
+export function getWeekKey(date: Date): string {
   const d = new Date(date);
   d.setHours(0, 0, 0, 0);
   const start = startOfWeek(d, { weekStartsOn: 1 });
