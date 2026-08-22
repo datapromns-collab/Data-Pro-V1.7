@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { getWeekDays, getWeeksInMonth, PRODUCT_LIST, ALL_LINES_SUMMARY } from '@/lib/planner-utils';
-import { format, startOfDay, addDays, setHours, setMinutes, parseISO, startOfMonth, endOfMonth, isWithinInterval, eachDayOfInterval, startOfWeek } from 'date-fns';
+import { format, startOfDay, addDays, setHours, setMinutes, parseISO, startOfMonth, endOfMonth, isWithinInterval, eachDayOfInterval, startOfWeek, getDaysInMonth } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { BarChart3, Package, Layers, FileDown, FileStack, CheckCircle2, FileSpreadsheet, CalendarDays, TrendingUp } from 'lucide-react';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -81,6 +81,23 @@ export function AdminReportTool({
     () => getWeekDays(weeklyWeekStart),
     [weeklyWeekStart]
   );
+
+  const selectedMonthDate = useMemo(() => {
+    const [y, m] = weekSelectorMonth.split('-').map(Number);
+    return new Date(y, m - 1, 15);
+  }, [weekSelectorMonth]);
+
+  const visibleWeekDays = useMemo(() => {
+    const [y, m] = weekSelectorMonth.split('-').map(Number);
+    const monthStart = startOfMonth(new Date(y, m - 1));
+    const monthEnd = endOfMonth(monthStart);
+
+    return weekDays.filter(day => {
+      const d = new Date(day);
+      d.setHours(0, 0, 0, 0);
+      return d >= monthStart && d <= monthEnd;
+    });
+  }, [weekDays, weekSelectorMonth]);
 
   const selectedWeekKey = useMemo(() => {
     const d = parseISO(selectedWeekStart);
@@ -196,7 +213,7 @@ export function AdminReportTool({
   const lineData = useMemo(() => {
     return LINES.map(lineId => {
       const flavors = PRODUCT_LIST.map(flavor => {
-        const dailyData = weekDays.map(day => {
+        const dailyData = visibleWeekDays.map(day => {
           const dateKey = format(day, 'yyyy-MM-dd');
           const scheduled = getFlavorScheduledQty(lineId, flavor, day);
           const real = realProductionAuto[lineId]?.[flavor]?.[dateKey] || 0;
@@ -211,7 +228,7 @@ export function AdminReportTool({
       
       return { lineId, flavors, lineWeeklyTotal };
     });
-  }, [selectedTasks, weekDays, realProductionAuto]);
+  }, [selectedTasks, visibleWeekDays, realProductionAuto]);
 
   const monthlyComplianceData = useMemo(() => {
     const yearNum = parseInt(selectedYear);
@@ -393,62 +410,62 @@ export function AdminReportTool({
               <TooltipProvider>
                 {lineData.map((line) => (
                   <div key={line.lineId} className="space-y-1">
-                    <div className="flex justify-between items-center px-1">
-                      <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-widest">LÍNEA {line.lineId}</h3>
-                      <div className="flex gap-1">
-                        {weekDays.map((day, idx) => (
-                          <span key={idx} className="w-[88px] text-center text-[9px] font-bold text-slate-400">
-                            {format(day, 'd/M')}
-                          </span>
-                        ))}
-                        <span className="w-20"></span>
-                      </div>
-                    </div>
+                     <div className="flex justify-between items-center px-1">
+                       <h3 className="text-[10px] font-black text-slate-900 uppercase tracking-widest">LÍNEA {line.lineId}</h3>
+                       <div className="flex gap-1">
+                         {visibleWeekDays.map((day, idx) => (
+                           <span key={idx} className="w-[88px] text-center text-[9px] font-bold text-slate-400">
+                             {format(day, 'd/M')}
+                           </span>
+                         ))}
+                         <span className="w-20"></span>
+                       </div>
+                     </div>
 
-                    <Card className="overflow-hidden border-2 border-slate-200 shadow-sm rounded-lg bg-white">
-                      <Table>
-                        <TableHeader>
-                          <TableRow className="bg-[#4a7ebb] hover:bg-[#4a7ebb] h-8 border-none">
-                            <TableHead className="w-[180px] font-black text-[9px] text-white uppercase h-8 border-r border-white/10 py-0">SABOR</TableHead>
-                            {DAYS_NAMES.map((day, idx) => (
-                              <TableHead key={idx} className="text-center font-black text-[9px] text-white uppercase h-8 border-r border-white/10 py-0 w-[88px]">
-                                {day}
-                              </TableHead>
-                            ))}
-                            <TableHead className="text-center font-black text-[9px] text-white uppercase h-8 py-0 w-20">TOTAL</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {line.flavors.map((row, fIdx) => (
-                            <TableRow key={fIdx} className={`${fIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'} hover:bg-slate-100/50 h-8`}>
-                              <TableCell className="font-bold text-[9px] text-slate-700 uppercase border-r border-slate-100 py-0 px-2">
-                                {row.flavor}
-                              </TableCell>
-                              {row.dailyData.map((dayEntry, qIdx) => (
-                                <TableCell key={qIdx} className="p-0 text-center border-r border-slate-100">
-                                  <span className="block w-full h-8 leading-8 font-bold text-[10px] tabular-nums text-slate-700">
-                                    {dayEntry.real > 0 ? dayEntry.real.toLocaleString('es-ES') : '0'}
-                                  </span>
-                                </TableCell>
-                              ))}
-                              <TableCell className="text-center font-black text-[10px] text-slate-900 tabular-nums bg-slate-50/30 py-0">
-                                {row.weeklyTotalReal > 0 ? row.weeklyTotalReal.toLocaleString('es-ES') : '0'}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                        </TableBody>
-                        <tfoot className="bg-[#dce6f1] border-t-2 border-slate-200">
-                          <TableRow className="h-8">
-                            <TableCell className="font-black text-[9px] text-slate-900 uppercase border-r border-slate-200 px-2 py-0">TOTALES</TableCell>
-                            {weekDays.map((day, idx) => {
-                              const dateKey = format(day, 'yyyy-MM-dd');
-                              const dayTotal = line.flavors.reduce((acc, f) => acc + (realProductionAuto[line.lineId]?.[f.flavor]?.[dateKey] || 0), 0);
-                              return (
-                                <TableCell key={idx} className="text-center font-black text-[10px] text-slate-900 tabular-nums border-r border-slate-200 py-0">
-                                  {dayTotal > 0 ? dayTotal.toLocaleString('es-ES') : '0'}
-                                </TableCell>
-                              );
-                            })}
+                     <Card className="overflow-hidden border-2 border-slate-200 shadow-sm rounded-lg bg-white">
+                       <Table>
+                         <TableHeader>
+                           <TableRow className="bg-[#4a7ebb] hover:bg-[#4a7ebb] h-8 border-none">
+                             <TableHead className="w-[180px] font-black text-[9px] text-white uppercase h-8 border-r border-white/10 py-0">SABOR</TableHead>
+                             {visibleWeekDays.map((day, idx) => (
+                               <TableHead key={idx} className="text-center font-black text-[9px] text-white uppercase h-8 border-r border-white/10 py-0 w-[88px]">
+                                 {format(day, 'EEEE', { locale: es })}
+                               </TableHead>
+                             ))}
+                             <TableHead className="text-center font-black text-[9px] text-white uppercase h-8 py-0 w-20">TOTAL</TableHead>
+                           </TableRow>
+                         </TableHeader>
+                         <TableBody>
+                           {line.flavors.map((row, fIdx) => (
+                             <TableRow key={fIdx} className={`${fIdx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'} hover:bg-slate-100/50 h-8`}>
+                               <TableCell className="font-bold text-[9px] text-slate-700 uppercase border-r border-slate-100 py-0 px-2">
+                                 {row.flavor}
+                               </TableCell>
+                               {row.dailyData.map((dayEntry, qIdx) => (
+                                 <TableCell key={qIdx} className="p-0 text-center border-r border-slate-100">
+                                   <span className="block w-full h-8 leading-8 font-bold text-[10px] tabular-nums text-slate-700">
+                                     {dayEntry.real > 0 ? dayEntry.real.toLocaleString('es-ES') : '0'}
+                                   </span>
+                                 </TableCell>
+                               ))}
+                               <TableCell className="text-center font-black text-[10px] text-slate-900 tabular-nums bg-slate-50/30 py-0">
+                                 {row.weeklyTotalReal > 0 ? row.weeklyTotalReal.toLocaleString('es-ES') : '0'}
+                               </TableCell>
+                             </TableRow>
+                           ))}
+                         </TableBody>
+                         <tfoot className="bg-[#dce6f1] border-t-2 border-slate-200">
+                           <TableRow className="h-8">
+                             <TableCell className="font-black text-[9px] text-slate-900 uppercase border-r border-slate-200 px-2 py-0">TOTALES</TableCell>
+                             {visibleWeekDays.map((day, idx) => {
+                               const dateKey = format(day, 'yyyy-MM-dd');
+                               const dayTotal = line.flavors.reduce((acc, f) => acc + (realProductionAuto[line.lineId]?.[f.flavor]?.[dateKey] || 0), 0);
+                               return (
+                                 <TableCell key={idx} className="text-center font-black text-[10px] text-slate-900 tabular-nums border-r border-slate-200 py-0">
+                                   {dayTotal > 0 ? dayTotal.toLocaleString('es-ES') : '0'}
+                                 </TableCell>
+                               );
+                             })}
                             <TableCell className="text-center font-black text-[11px] text-primary tabular-nums bg-[#b8cce4] py-0">
                               {Math.round(line.lineWeeklyTotal).toLocaleString('es-ES')}
                             </TableCell>
@@ -696,14 +713,14 @@ export function AdminReportTool({
               </div>
              </div>
 
-             <TabsContent value="weekly" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
-               {selectedTasks.length === 0 ? (
-                 <Card className="p-6 bg-white border-slate-200 shadow-sm rounded-2xl">
-                   <p className="text-sm font-bold text-slate-500">Sin tareas planificadas para la semana seleccionada.</p>
-                 </Card>
+              <TabsContent value="weekly" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+                {selectedTasks.length === 0 ? (
+                  <Card className="p-6 bg-white border-slate-200 shadow-sm rounded-2xl">
+                    <p className="text-sm font-bold text-slate-500">Sin tareas planificadas para la semana seleccionada.</p>
+                  </Card>
                 ) : (
                   LINES.map(lineId => {
-                    const dailyStats = complianceWeekDays.map(day => {
+                    const dailyStats = visibleWeekDays.map(day => {
                       const dateKey = format(day, 'yyyy-MM-dd');
                       const planned = getLineDailyPlanned(lineId, day);
                       const real = PRODUCT_LIST.reduce((acc, flavor) => 
