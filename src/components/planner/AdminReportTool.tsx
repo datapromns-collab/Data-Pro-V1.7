@@ -69,7 +69,7 @@ export function AdminReportTool({
   allowedProductionTabs
 }: AdminReportToolProps) {
   const [weekSelectorMonth, setWeekSelectorMonth] = useState(format(new Date(), 'yyyy-MM'));
-  const [selectedWeekStart, setSelectedWeekStart] = useState(format(new Date(), 'yyyy-MM-dd'));
+  const [selectedWeekStart, setSelectedWeekStart] = useState(currentWeekKey || format(new Date(), 'yyyy-MM-dd'));
 
   const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
   const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
@@ -83,13 +83,12 @@ export function AdminReportTool({
   );
 
   const selectedWeekKey = useMemo(() => {
-    const d = new Date(selectedWeekStart);
-    d.setHours(0, 0, 0, 0);
+    const d = parseISO(selectedWeekStart);
     const start = startOfWeek(d, { weekStartsOn: 1 });
     return format(start, 'yyyy-MM-dd');
   }, [selectedWeekStart]);
 
-  const selectedWeekData = weeklyData[selectedWeekKey] || weeklyData[currentWeekKey] || { tasks: [], realProduction: {} };
+  const selectedWeekData = weeklyData[selectedWeekKey] || { tasks: [], realProduction: {} };
   const selectedTasks = selectedWeekData.tasks;
 
   const complianceWeekDays = useMemo(() => {
