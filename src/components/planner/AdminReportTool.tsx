@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { getWeekDays, getWeeksInMonth, PRODUCT_LIST, ALL_LINES_SUMMARY } from '@/lib/planner-utils';
-import { format, startOfDay, addDays, setHours, setMinutes, parseISO, startOfMonth, endOfMonth, isWithinInterval, eachDayOfInterval } from 'date-fns';
+import { format, startOfDay, addDays, setHours, setMinutes, parseISO, startOfMonth, endOfMonth, isWithinInterval, eachDayOfInterval, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { BarChart3, Package, Layers, FileDown, FileStack, CheckCircle2, FileSpreadsheet, CalendarDays, TrendingUp } from 'lucide-react';
 import { TooltipProvider } from '@/components/ui/tooltip';
@@ -84,12 +84,12 @@ export function AdminReportTool({
 
   const selectedWeekKey = useMemo(() => {
     const d = new Date(selectedWeekStart);
-    const m = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
-    return `${d.getFullYear()}-${m}-${day}`;
+    d.setHours(0, 0, 0, 0);
+    const start = startOfWeek(d, { weekStartsOn: 1 });
+    return format(start, 'yyyy-MM-dd');
   }, [selectedWeekStart]);
 
-  const selectedWeekData = weeklyData[selectedWeekKey] || { tasks: [], realProduction: {} };
+  const selectedWeekData = weeklyData[selectedWeekKey] || weeklyData[currentWeekKey] || { tasks: [], realProduction: {} };
   const selectedTasks = selectedWeekData.tasks;
 
   const complianceWeekDays = useMemo(() => {
@@ -695,62 +695,70 @@ export function AdminReportTool({
                   </SelectContent>
                 </Select>
               </div>
-            </div>
+             </div>
 
-            {LINES.map(lineId => {
-              const dailyStats = complianceWeekDays.map(day => {
-                const dateKey = format(day, 'yyyy-MM-dd');
-                const planned = getLineDailyPlanned(lineId, day);
-                const real = PRODUCT_LIST.reduce((acc, flavor) => 
-                  acc + (realProductionAuto[lineId]?.[flavor]?.[dateKey] || 0), 0);
-                const compliance = planned > 0 ? (real / planned) * 100 : (real > 0 ? 100 : 0);
-                return { day, planned, real, compliance };
-              });
+             <TabsContent value="weekly" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+               {selectedTasks.length === 0 ? (
+                 <Card className="p-6 bg-white border-slate-200 shadow-sm rounded-2xl">
+                   <p className="text-sm font-bold text-slate-500">Sin tareas planificadas para la semana seleccionada.</p>
+                 </Card>
+                ) : (
+                  LINES.map(lineId => {
+                    const dailyStats = complianceWeekDays.map(day => {
+                      const dateKey = format(day, 'yyyy-MM-dd');
+                      const planned = getLineDailyPlanned(lineId, day);
+                      const real = PRODUCT_LIST.reduce((acc, flavor) => 
+                        acc + (realProductionAuto[lineId]?.[flavor]?.[dateKey] || 0), 0);
+                      const compliance = planned > 0 ? (real / planned) * 100 : (real > 0 ? 100 : 0);
+                      return { day, planned, real, compliance };
+                    });
 
-              return (
-                <div key={lineId} className="space-y-2">
-                  <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-widest text-center border-b border-slate-200 pb-1">
-                    LINEA DE PRODUCCION N°{lineId}
-                  </h3>
-                  <div className="overflow-hidden border border-slate-900 rounded shadow-sm">
-                    <table className="w-full border-collapse text-[10px]">
-                      <thead>
-                        <tr className="bg-[#4a7ebb] text-white font-black uppercase">
-                          <th className="px-3 py-1.5 border border-slate-900 text-left">FECHA</th>
-                          <th className="px-3 py-1.5 border border-slate-900 text-left">DIAS</th>
-                          <th className="px-3 py-1.5 border border-slate-900 text-right">PLANIFICADO</th>
-                          <th className="px-3 py-1.5 border border-slate-900 text-right">PRODUCCION</th>
-                          <th className="px-3 py-1.5 border border-slate-900 text-right">CUMPLIMIENTO</th>
-                        </tr>
-                      </thead>
-                      <tbody className="bg-[#dce6f1]">
-                        {dailyStats.map((stat, idx) => (
-                          <tr key={idx} className="font-bold text-slate-800 hover:bg-slate-200/50 transition-none">
-                            <td className="px-3 py-1 border border-slate-900 tabular-nums">
-                              {format(stat.day, 'd/M/yyyy')}
-                            </td>
-                            <td className="px-3 py-1 border border-slate-900 uppercase">
-                              {format(stat.day, 'EEEE', { locale: es })}
-                            </td>
-                            <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
-                              {stat.planned > 0 ? Math.round(stat.planned).toLocaleString('es-ES') : ''}
-                            </td>
-                            <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
-                              {stat.real > 0 ? Math.round(stat.real).toLocaleString('es-ES') : '0'}
-                            </td>
-                            <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
-                              {stat.compliance.toFixed(2)}%
-                            </td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              );
-            })}
+                    return (
+                      <div key={lineId} className="space-y-2">
+                        <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-widest text-center border-b border-slate-200 pb-1">
+                          LINEA DE PRODUCCION N°{lineId}
+                        </h3>
+                        <div className="overflow-hidden border border-slate-900 rounded shadow-sm">
+                          <table className="w-full border-collapse text-[10px]">
+                            <thead>
+                              <tr className="bg-[#4a7ebb] text-white font-black uppercase">
+                                <th className="px-3 py-1.5 border border-slate-900 text-left">FECHA</th>
+                                <th className="px-3 py-1.5 border border-slate-900 text-left">DIAS</th>
+                                <th className="px-3 py-1.5 border border-slate-900 text-right">PLANIFICADO</th>
+                                <th className="px-3 py-1.5 border border-slate-900 text-right">PRODUCCION</th>
+                                <th className="px-3 py-1.5 border border-slate-900 text-right">CUMPLIMIENTO</th>
+                              </tr>
+                            </thead>
+                            <tbody className="bg-[#dce6f1]">
+                              {dailyStats.map((stat, idx) => (
+                                <tr key={idx} className="font-bold text-slate-800 hover:bg-slate-200/50 transition-none">
+                                  <td className="px-3 py-1 border border-slate-900 tabular-nums">
+                                    {format(stat.day, 'd/M/yyyy')}
+                                  </td>
+                                  <td className="px-3 py-1 border border-slate-900 uppercase">
+                                    {format(stat.day, 'EEEE', { locale: es })}
+                                  </td>
+                                  <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                                    {stat.planned > 0 ? Math.round(stat.planned).toLocaleString('es-ES') : ''}
+                                  </td>
+                                  <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                                    {stat.real > 0 ? Math.round(stat.real).toLocaleString('es-ES') : '0'}
+                                  </td>
+                                  <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                                    {stat.compliance.toFixed(2)}%
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    );
+                  })
+                )}
+              </TabsContent>
 
-            <TabsContent value="monthly" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+             <TabsContent value="monthly" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
               <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 mb-2">
