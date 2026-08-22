@@ -239,12 +239,45 @@ export function AdminReportTool({
     const monthEnd = endOfMonth(monthStart);
     const daysInMonth = eachDayOfInterval({ start: monthStart, end: monthEnd });
 
+    const allMonthTasks = daysInMonth.reduce((acc, day) => {
+      const weekKey = format(startOfWeek(day, { weekStartsOn: 1 }), 'yyyy-MM-dd');
+      const weekData = weeklyData[weekKey];
+      if (weekData && weekData.tasks) {
+        weekData.tasks.forEach(task => {
+          if (!acc.some((t: any) => t.id === task.id)) {
+            acc.push(task);
+          }
+        });
+      }
+      return acc;
+    }, [] as any[]);
+
     return LINES.map(lineId => {
       let totalPlanned = 0;
       let totalReal = 0;
 
       daysInMonth.forEach(day => {
-        totalPlanned += getLineDailyPlanned(lineId, day);
+        const dayStart = setMinutes(setHours(startOfDay(day), 7), 0);
+        const dayEnd = addDays(dayStart, 1);
+
+        totalPlanned += allMonthTasks
+          .filter(t => t.lineId === lineId && t.quantity > 0)
+          .reduce((acc, task) => {
+            const intersectionStart = task.startTime > dayStart ? task.startTime : dayStart;
+            const intersectionEnd = task.endTime < dayEnd ? task.endTime : dayEnd;
+
+            if (intersectionStart < intersectionEnd) {
+              const intersectionMinutes = (intersectionEnd.getTime() - intersectionStart.getTime()) / (1000 * 60);
+              const totalTaskMinutes = (task.endTime.getTime() - task.startTime.getTime()) / (1000 * 60);
+              
+              if (totalTaskMinutes > 0) {
+                const proportionalQty = (intersectionMinutes / totalTaskMinutes) * (task.quantity || 0);
+                return acc + proportionalQty;
+              }
+            }
+            return acc;
+          }, 0);
+
         PRODUCT_LIST.forEach(product => {
           const dateKey = format(day, 'yyyy-MM-dd');
           totalReal += realProductionAuto[lineId]?.[product]?.[dateKey] || 0;
@@ -261,7 +294,7 @@ export function AdminReportTool({
         compliance: parseFloat(compliance.toFixed(2))
       };
     });
-  }, [selectedTasks, realProductionAuto, selectedMonth, selectedYear]);
+  }, [weeklyData, realProductionAuto, selectedMonth, selectedYear]);
 
   const totalCratesWeek = useMemo(() => 
     lineData.reduce((acc, l) => acc + l.lineWeeklyTotal, 0),
@@ -684,37 +717,37 @@ export function AdminReportTool({
               </div>
             </div>
 
-            <div className="flex items-center justify-between mb-6 no-print">
-              <div className="flex items-center gap-2">
-                <Select value={weekSelectorMonth} onValueChange={setWeekSelectorMonth}>
-                  <SelectTrigger className="w-40 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Array.from({ length: 12 }).map((_, i) => (
-                      <SelectItem key={i} value={`${format(new Date(), 'yyyy')}-${(i + 1).toString().padStart(2, '0')}`} className="font-bold uppercase text-[9px]">
-                        {format(new Date(CURRENT_YEAR, i, 1), 'MMMM yyyy', { locale: es }).toUpperCase()}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <Select value={selectedWeekStart} onValueChange={setSelectedWeekStart}>
-                  <SelectTrigger className="w-44 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {weekOptions.map((opt) => (
-                      <SelectItem key={opt.value} value={opt.value} className="font-bold uppercase text-[9px]">
-                        {opt.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+            <TabsContent value="weekly" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+              <div className="flex items-center justify-between mb-6 no-print">
+                <div className="flex items-center gap-2">
+                  <Select value={weekSelectorMonth} onValueChange={setWeekSelectorMonth}>
+                    <SelectTrigger className="w-40 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array.from({ length: 12 }).map((_, i) => (
+                        <SelectItem key={i} value={`${format(new Date(), 'yyyy')}-${(i + 1).toString().padStart(2, '0')}`} className="font-bold uppercase text-[9px]">
+                          {format(new Date(CURRENT_YEAR, i, 1), 'MMMM yyyy', { locale: es }).toUpperCase()}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select value={selectedWeekStart} onValueChange={setSelectedWeekStart}>
+                    <SelectTrigger className="w-44 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {weekOptions.map((opt) => (
+                        <SelectItem key={opt.value} value={opt.value} className="font-bold uppercase text-[9px]">
+                          {opt.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
-             </div>
 
-              <TabsContent value="weekly" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
-                {selectedTasks.length === 0 ? (
+              {selectedTasks.length === 0 ? (
                   <Card className="p-6 bg-white border-slate-200 shadow-sm rounded-2xl">
                     <p className="text-sm font-bold text-slate-500">Sin tareas planificadas para la semana seleccionada.</p>
                   </Card>
