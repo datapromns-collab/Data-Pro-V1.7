@@ -593,65 +593,65 @@ export function AdminReportTool({
 
       {view === 'compliance' && (
         <Tabs value={complianceSubTab} onValueChange={setComplianceTab} className="w-full">
-           <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 no-print">
-              <TabsList className="bg-transparent h-auto p-0">
-                <TabsTrigger value="weekly" className={tabsTriggerClass}>
-                  <CalendarDays className="h-3.5 w-3.5" /> Detalle Semanal
-                </TabsTrigger>
-                <TabsTrigger value="monthly" className={tabsTriggerClass}>
-                  <BarChart3 className="h-3.5 w-3.5" /> Resumen Mensual
-                </TabsTrigger>
-              </TabsList>
-            </div>
+          <div className="space-y-4">
+            <div className="flex items-center justify-between mb-6">
+              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 no-print">
+                <TabsList className="bg-transparent h-auto p-0">
+                  <TabsTrigger value="weekly" className={tabsTriggerClass}>
+                    <CalendarDays className="h-3.5 w-3.5" /> Detalle Semanal
+                  </TabsTrigger>
+                  <TabsTrigger value="monthly" className={tabsTriggerClass}>
+                    <BarChart3 className="h-3.5 w-3.5" /> Resumen Mensual
+                  </TabsTrigger>
+                </TabsList>
+              </div>
 
-            <div className="flex items-center gap-2">
-              {complianceSubTab === 'weekly' ? (
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  onClick={onPrintCompliance}
-                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
-                >
-                  <CheckCircle2 className="h-4 w-4" />
-                  Exportar Reporte Cumplimiento
-                </Button>
-              ) : (
-                <div className="flex items-center gap-2">
-                  <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-                    <SelectTrigger className="w-36 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 12 }).map((_, i) => (
-                        <SelectItem key={i} value={(i + 1).toString().padStart(2, '0')} className="font-bold uppercase text-[9px]">
-                          {format(new Date(CURRENT_YEAR, i, 1), 'MMMM', { locale: es }).toUpperCase()}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Input 
-                    type="number"
-                    value={selectedYear}
-                    onChange={(e) => setSelectedYear(e.target.value)}
-                    className="w-24 bg-white border-slate-200 font-bold text-center rounded-xl h-10 text-[10px] focus:ring-primary/20"
-                    placeholder="Año"
-                  />
+              <div className="flex items-center gap-2">
+                {complianceSubTab === 'weekly' ? (
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    onClick={() => onPrintMonthlyCompliance?.(selectedMonth, selectedYear)}
+                    onClick={onPrintCompliance}
                     className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
                   >
-                    <FileDown className="h-4 w-4" />
-                    Exportar Reporte Mensual
+                    <CheckCircle2 className="h-4 w-4" />
+                    Exportar Reporte Cumplimiento
                   </Button>
-                </div>
-              )}
+                ) : (
+                  <div className="flex items-center gap-2">
+                    <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+                      <SelectTrigger className="w-36 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Array.from({ length: 12 }).map((_, i) => (
+                          <SelectItem key={i} value={(i + 1).toString().padStart(2, '0')} className="font-bold uppercase text-[9px]">
+                            {format(new Date(CURRENT_YEAR, i, 1), 'MMMM', { locale: es }).toUpperCase()}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Input 
+                      type="number"
+                      value={selectedYear}
+                      onChange={(e) => setSelectedYear(e.target.value)}
+                      className="w-24 bg-white border-slate-200 font-bold text-center rounded-xl h-10 text-[10px] focus:ring-primary/20"
+                      placeholder="Año"
+                    />
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      onClick={() => onPrintMonthlyCompliance?.(selectedMonth, selectedYear)}
+                      className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
+                    >
+                      <FileDown className="h-4 w-4" />
+                      Exportar Reporte Mensual
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
 
-          <TabsContent value="weekly" className="space-y-8 m-0 animate-in fade-in-50 duration-500">
             <div className="flex items-center justify-between mb-6 no-print">
               <div className="flex items-center gap-2">
                 <Select value={weekSelectorMonth} onValueChange={setWeekSelectorMonth}>
@@ -679,16 +679,8 @@ export function AdminReportTool({
                   </SelectContent>
                 </Select>
               </div>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={onPrintCompliance}
-                className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
-              >
-                <CheckCircle2 className="h-4 w-4" />
-                Exportar Reporte Cumplimiento
-              </Button>
             </div>
+
             {LINES.map(lineId => {
               const dailyStats = complianceWeekDays.map(day => {
                 const dateKey = format(day, 'yyyy-MM-dd');
@@ -741,137 +733,137 @@ export function AdminReportTool({
                 </div>
               );
             })}
-          </TabsContent>
 
-          <TabsContent value="monthly" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
-              <div className="space-y-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <TrendingUp className="h-5 w-5 text-primary" />
-                  <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Resumen Comparativo Mensual</h3>
-                </div>
-                
-                <div className="overflow-hidden border border-slate-900 rounded shadow-md">
-                  <table className="w-full border-collapse text-[10px]">
-                    <thead>
-                      <tr className="bg-[#4a7ebb] text-white font-black uppercase text-center">
-                        <th className="px-3 py-2 border border-slate-900 text-left">LINEAS</th>
-                        <th className="px-3 py-2 border border-slate-900 text-right">PLANIFICADO</th>
-                        <th className="px-3 py-2 border border-slate-900 text-right">PRODUCCION</th>
-                        <th className="px-3 py-2 border border-slate-900 text-right">CUMPLIMIENTO</th>
-                      </tr>
-                    </thead>
-                    <tbody className="bg-[#dce6f1]">
-                      {monthlyComplianceData.map((data, idx) => (
-                        <tr key={idx} className="font-bold text-slate-800 hover:bg-white/40 transition-none h-10">
-                          <td className="px-3 py-1 border border-slate-900 uppercase">{data.lineLabel}</td>
+            <TabsContent value="monthly" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 items-start">
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 mb-2">
+                    <TrendingUp className="h-5 w-5 text-primary" />
+                    <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Resumen Comparativo Mensual</h3>
+                  </div>
+                  
+                  <div className="overflow-hidden border border-slate-900 rounded shadow-md">
+                    <table className="w-full border-collapse text-[10px]">
+                      <thead>
+                        <tr className="bg-[#4a7ebb] text-white font-black uppercase text-center">
+                          <th className="px-3 py-2 border border-slate-900 text-left">LINEAS</th>
+                          <th className="px-3 py-2 border border-slate-900 text-right">PLANIFICADO</th>
+                          <th className="px-3 py-2 border border-slate-900 text-right">PRODUCCION</th>
+                          <th className="px-3 py-2 border border-slate-900 text-right">CUMPLIMIENTO</th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-[#dce6f1]">
+                        {monthlyComplianceData.map((data, idx) => (
+                          <tr key={idx} className="font-bold text-slate-800 hover:bg-white/40 transition-none h-10">
+                            <td className="px-3 py-1 border border-slate-900 uppercase">{data.lineLabel}</td>
+                            <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                              {data.planned.toLocaleString('es-ES')}
+                            </td>
+                            <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                              {data.real.toLocaleString('es-ES')}
+                            </td>
+                            <td className={`px-3 py-1 border border-slate-900 text-right tabular-nums font-black ${data.compliance >= 80 ? 'text-emerald-600' : 'text-primary'}`}>
+                              {data.compliance.toFixed(2)}%
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                      <tfoot className="bg-[#b8cce4] font-black text-slate-900 border-t-2 border-slate-900">
+                        <tr className="h-10">
+                          <td className="px-3 py-1 border border-slate-900 uppercase">TOTAL PLANTA</td>
                           <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
-                            {data.planned.toLocaleString('es-ES')}
+                            {monthlyComplianceData.reduce((a, b) => a + b.planned, 0).toLocaleString('es-ES')}
                           </td>
                           <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
-                            {data.real.toLocaleString('es-ES')}
+                            {monthlyComplianceData.reduce((a, b) => a + b.real, 0).toLocaleString('es-ES')}
                           </td>
-                          <td className={`px-3 py-1 border border-slate-900 text-right tabular-nums font-black ${data.compliance >= 80 ? 'text-emerald-600' : 'text-primary'}`}>
-                            {data.compliance.toFixed(2)}%
+                          <td className="px-3 py-1 border border-slate-900 text-right tabular-nums text-primary text-xs">
+                            {(monthlyComplianceData.reduce((a, b) => a + b.real, 0) / (monthlyComplianceData.reduce((a, b) => a + b.planned, 0) || 1) * 100).toFixed(2)}%
                           </td>
                         </tr>
-                      ))}
-                    </tbody>
-                    <tfoot className="bg-[#b8cce4] font-black text-slate-900 border-t-2 border-slate-900">
-                      <tr className="h-10">
-                        <td className="px-3 py-1 border border-slate-900 uppercase">TOTAL PLANTA</td>
-                        <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
-                          {monthlyComplianceData.reduce((a, b) => a + b.planned, 0).toLocaleString('es-ES')}
-                        </td>
-                        <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
-                          {monthlyComplianceData.reduce((a, b) => a + b.real, 0).toLocaleString('es-ES')}
-                        </td>
-                        <td className="px-3 py-1 border border-slate-900 text-right tabular-nums text-primary text-xs">
-                          {(monthlyComplianceData.reduce((a, b) => a + b.real, 0) / (monthlyComplianceData.reduce((a, b) => a + b.planned, 0) || 1) * 100).toFixed(2)}%
-                        </td>
-                      </tr>
-                    </tfoot>
-                  </table>
-                </div>
-              </div>
-
-              <Card className="p-6 bg-white border-slate-200 shadow-sm rounded-2xl h-[450px] flex flex-col">
-                <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Planificado vs Real (Mensual)</h3>
-                  <div className="flex items-center gap-4">
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-3 h-3 bg-primary rounded-sm"></div>
-                      <span className="text-[9px] font-black text-slate-400 uppercase">Plan</span>
-                    </div>
-                    <div className="flex items-center gap-1.5">
-                      <div className="w-3 h-3 bg-emerald-500 rounded-sm"></div>
-                      <span className="text-[9px] font-black text-slate-400 uppercase">Real</span>
-                    </div>
+                      </tfoot>
+                    </table>
                   </div>
                 </div>
-                
-                <ChartContainer config={chartConfig} className="flex-1 w-full">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <ComposedChart data={monthlyComplianceData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                      <XAxis 
-                        dataKey="lineShort" 
-                        axisLine={false} 
-                        tickLine={false} 
-                        tick={{ fontSize: 10, fontWeight: 700, fill: '#64748b' }}
-                        dy={10}
-                      />
-                      <YAxis 
-                        yAxisId="left"
-                        axisLine={false} 
-                        tickLine={false} 
-                        tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }}
-                        tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(0)}k` : val}
-                      />
-                      <YAxis 
-                        yAxisId="right" 
-                        orientation="right" 
-                        domain={[0, 120]}
-                        axisLine={false} 
-                        tickLine={false} 
-                        tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }}
-                        tickFormatter={(val) => `${val}%`}
-                      />
-                      <Tooltip 
-                        content={<ChartTooltipContent />} 
-                        cursor={{ fill: '#f8fafc' }}
-                      />
-                      <Bar 
-                        yAxisId="left" 
-                        dataKey="planned" 
-                        fill="var(--color-planned)" 
-                        radius={[4, 4, 0, 0]} 
-                        barSize={30} 
-                        name="Planificado"
-                      />
-                      <Bar 
-                        yAxisId="left" 
-                        dataKey="real" 
-                        fill="var(--color-real)" 
-                        radius={[4, 4, 0, 0]} 
-                        barSize={30} 
-                        name="Producción"
-                      />
-                      <Line 
-                        yAxisId="right" 
-                        type="monotone" 
-                        dataKey="compliance" 
-                        stroke="var(--color-compliance)" 
-                        strokeWidth={3} 
-                        dot={{ r: 4, fill: 'var(--color-compliance)', strokeWidth: 2, stroke: '#fff' }}
-                        name="Cumplimiento %"
-                      />
-                    </ComposedChart>
-                  </ResponsiveContainer>
-                </ChartContainer>
-              </Card>
-            </div>
-          </TabsContent>
+
+                <Card className="p-6 bg-white border-slate-200 shadow-sm rounded-2xl h-[450px] flex flex-col">
+                  <div className="flex justify-between items-center mb-6">
+                    <h3 className="text-sm font-black text-slate-900 uppercase tracking-widest">Planificado vs Real (Mensual)</h3>
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-3 h-3 bg-primary rounded-sm"></div>
+                        <span className="text-[9px] font-black text-slate-400 uppercase">Plan</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <div className="w-3 h-3 bg-emerald-500 rounded-sm"></div>
+                        <span className="text-[9px] font-black text-slate-400 uppercase">Real</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <ChartContainer config={chartConfig} className="flex-1 w-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <ComposedChart data={monthlyComplianceData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                        <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
+                        <XAxis 
+                          dataKey="lineShort" 
+                          axisLine={false} 
+                          tickLine={false} 
+                          tick={{ fontSize: 10, fontWeight: 700, fill: '#64748b' }}
+                          dy={10}
+                        />
+                        <YAxis 
+                          yAxisId="left"
+                          axisLine={false} 
+                          tickLine={false} 
+                          tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }}
+                          tickFormatter={(val) => val >= 1000 ? `${(val/1000).toFixed(0)}k` : val}
+                        />
+                        <YAxis 
+                          yAxisId="right" 
+                          orientation="right" 
+                          domain={[0, 120]}
+                          axisLine={false} 
+                          tickLine={false} 
+                          tick={{ fontSize: 9, fontWeight: 700, fill: '#94a3b8' }}
+                          tickFormatter={(val) => `${val}%`}
+                        />
+                        <Tooltip 
+                          content={<ChartTooltipContent />} 
+                          cursor={{ fill: '#f8fafc' }}
+                        />
+                        <Bar 
+                          yAxisId="left" 
+                          dataKey="planned" 
+                          fill="var(--color-planned)" 
+                          radius={[4, 4, 0, 0]} 
+                          barSize={30} 
+                          name="Planificado"
+                        />
+                        <Bar 
+                          yAxisId="left" 
+                          dataKey="real" 
+                          fill="var(--color-real)" 
+                          radius={[4, 4, 0, 0]} 
+                          barSize={30} 
+                          name="Producción"
+                        />
+                        <Line 
+                          yAxisId="right" 
+                          type="monotone" 
+                          dataKey="compliance" 
+                          stroke="var(--color-compliance)" 
+                          strokeWidth={3} 
+                          dot={{ r: 4, fill: 'var(--color-compliance)', strokeWidth: 2, stroke: '#fff' }}
+                          name="Cumplimiento %"
+                        />
+                      </ComposedChart>
+                    </ResponsiveContainer>
+                  </ChartContainer>
+                </Card>
+              </div>
+            </TabsContent>
+          </div>
         </Tabs>
       )}
     </div>
