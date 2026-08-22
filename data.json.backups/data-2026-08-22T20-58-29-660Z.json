@@ -8332,7 +8332,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-22T19:33:44.315Z"
+    "updatedAt": "2026-08-22T20:12:08.433Z"
   },
   "ordenesSap": [
     {
@@ -13769,8 +13769,8 @@
         },
         {
           "fechaInicio": "2026-08-22",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17622",
+          "cajas1": 5520,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -13831,8 +13831,8 @@
         },
         {
           "fechaInicio": "2026-08-22",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17811",
+          "cajas1": 75,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -13862,8 +13862,8 @@
         },
         {
           "fechaInicio": "2026-08-22",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17672",
+          "cajas1": 9840,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -13893,8 +13893,8 @@
         },
         {
           "fechaInicio": "2026-08-22",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17858",
+          "cajas1": 11200,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -13935,8 +13935,8 @@
         },
         {
           "fechaInicio": "2026-08-22",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17593",
+          "cajas1": 3800,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -13963,6 +13963,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 11310
+        },
+        {
+          "fechaInicio": "2026-08-22",
+          "ticket1": "17765",
+          "cajas1": 4420,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -13974,9 +13985,9 @@
       "semana": 34,
       "dias": [
         {
-          "fechaInicio": "2026-08-21",
-          "ticket1": "",
-          "cajas1": 0,
+          "fechaInicio": "2026-08-22",
+          "ticket1": "17765",
+          "cajas1": 2262,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -57592,6 +57603,82 @@
         "observaciones": "",
         "usuario": "Ronald Valera",
         "id": 1787424644187,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-17",
+        "semana": 34,
+        "turno": "NOCTURNO",
+        "operador": "RICARDO GOMEZ",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "04:21",
+        "finParada": "04:55",
+        "totalMin": "34",
+        "zona": "Llenado",
+        "falla": "FALLA DEL SENSOR 1",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1787431319444,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-17",
+        "semana": 34,
+        "turno": "NOCTURNO",
+        "operador": "RICARDO GHOMEZ",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "05:26",
+        "finParada": "05:42",
+        "totalMin": "16",
+        "zona": "Llenado",
+        "falla": "FALLA EN SERVO",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1787431452507,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-17",
+        "semana": 34,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "02:03",
+        "finParada": "02:25",
+        "totalMin": "22",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE LA FALLA DE ENERGIA ELECTRICA ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1787431523499,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-17",
+        "semana": 34,
+        "turno": "NOCTURNO",
+        "operador": "KENNY MENDEZ",
+        "linea": "Línea 3",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "04:55",
+        "finParada": "05:00",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "MARCA DE CORTE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Ronald Valera",
+        "id": 1787431927114,
         "bloqueado": true
       }
     ],
