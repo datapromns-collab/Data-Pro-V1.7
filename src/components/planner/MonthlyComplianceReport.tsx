@@ -13,11 +13,13 @@ interface MonthlyComplianceReportProps {
   realProduction: Record<string, Record<string, Record<string, number>>>;
   selectedMonth: string;
   selectedYear: string;
+  title?: string;
+  subtitle?: string;
 }
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
-export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, selectedYear }: MonthlyComplianceReportProps) {
+export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, selectedYear, title = 'Cumplimiento Mensual de Planta', subtitle }: MonthlyComplianceReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
 
   const getLineDailyPlanned = (lineId: string, day: Date) => {
@@ -83,6 +85,8 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
     }
   }, [selectedMonth, selectedYear]);
 
+  const finalSubtitle = subtitle || `Cumplimiento de planificación mes de ${monthName}`;
+
   const maxVal = useMemo(() => {
     const vals = monthlyData.flatMap(d => [d.planned, d.real]);
     const max = Math.max(...vals, 1);
@@ -132,7 +136,7 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
     <div className="bg-white w-full print:p-0">
       {/* PÁGINA 1: TABLA DE DATOS */}
       <div className="page-break-section h-screen flex flex-col p-6" style={{ pageBreakAfter: 'always' }}>
-        {renderHeader('RESUMEN EJECUTIVO DE DATOS')}
+        {renderHeader(finalSubtitle)}
 
         <div className="flex-1 flex flex-col items-center justify-center">
           <h2 className="text-[12px] font-black text-slate-900 mb-4 uppercase tracking-widest border-b border-slate-200 pb-1 w-full text-center">Cumplimiento Detallado por Línea</h2>
@@ -181,7 +185,7 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
 
       {/* PÁGINA 2: GRÁFICO VISUAL CON LÍNEA DE CUMPLIMIENTO */}
       <div className="page-break-section h-screen flex flex-col p-6">
-        {renderHeader('RESUMEN COMPARATIVO VISUAL')}
+        {renderHeader(`${finalSubtitle} - Análisis Gráfico`)}
 
         <div className="flex-1 flex flex-col min-h-0 mt-4">
           <h2 className="text-[12px] font-black text-slate-900 mb-4 uppercase tracking-widest border-b border-slate-200 pb-1 w-full text-center">Planificado vs Real (Análisis Gráfico)</h2>

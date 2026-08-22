@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { format, startOfDay, addDays, setHours, setMinutes } from 'date-fns';
+import { format, startOfDay, addDays, setHours, setMinutes, getISOWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { PRODUCT_LIST, getWeekDays } from '@/lib/planner-utils';
 import { ScheduledTask } from '@/lib/types';
@@ -12,13 +12,18 @@ interface ComplianceReportProps {
   tasks: ScheduledTask[];
   realProduction: Record<string, Record<string, Record<string, number>>>;
   weekStartDate: Date;
+  title?: string;
+  subtitle?: string;
+  weekLabel?: string;
 }
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
-export function ComplianceReport({ tasks, realProduction, weekStartDate }: ComplianceReportProps) {
+export function ComplianceReport({ tasks, realProduction, weekStartDate, title = 'Reporte de Cumplimiento', subtitle = 'resumen cumplimiento semanal', weekLabel }: ComplianceReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
+  const weekNumber = useMemo(() => getISOWeek(new Date(weekStartDate)), [weekStartDate]);
+  const finalSubtitle = weekLabel ? `${subtitle} ${weekLabel}` : subtitle;
 
   const getLineDailyPlanned = (lineId: string, day: Date) => {
     const dayStart = setMinutes(setHours(startOfDay(day), 7), 0);
@@ -93,7 +98,7 @@ export function ComplianceReport({ tasks, realProduction, weekStartDate }: Compl
     <div className="bg-white w-full print:p-0 h-full">
       {/* PÁGINA 1: RESUMEN DE CUMPLIMIENTO SEMANAL */}
       <div className="page-break-section h-screen flex flex-col p-2" style={{ pageBreakInside: 'avoid' }}>
-        {renderHeader('Resumen Ejecutivo Semanal')}
+        {renderHeader(finalSubtitle)}
 
         <div className="flex-1 flex flex-col items-center justify-start pt-8">
           <h2 className="text-xs font-black text-slate-900 mb-2 uppercase tracking-widest border-b border-slate-200 pb-0.5">Cumplimiento de Líneas</h2>

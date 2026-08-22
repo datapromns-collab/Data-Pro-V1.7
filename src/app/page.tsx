@@ -5095,7 +5095,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                   <ComplianceReport 
                     tasks={tasks}
                     realProduction={realProduction} 
-                    weekStartDate={weekStartDate} 
+                    weekStartDate={weekStartDate}
+                    weekLabel={`Semana ${getISOWeek(weekStartDate)}`}
                   />
                 </div>
               )}
@@ -5106,6 +5107,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                     realProduction={realProduction} 
                     selectedMonth={selectedMonth} 
                     selectedYear={selectedYear}
+                    subtitle={`Cumplimiento de planificación mes de ${format(new Date(parseInt(selectedYear), parseInt(selectedMonth) - 1), 'MMMM', { locale: es })}`}
                   />
                 </div>
                )}
