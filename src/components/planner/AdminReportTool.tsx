@@ -77,6 +77,11 @@ export function AdminReportTool({
     [productionSubTab, weeklyWeekStart, weekStartDate]
   );
 
+  const complianceWeekDays = useMemo(() => {
+    const parsed = parseISO(selectedWeekStart);
+    return getWeekDays(parsed);
+  }, [selectedWeekStart]);
+
   const weekOptions = useMemo(() => {
     const [y, m] = weekSelectorMonth.split('-').map(Number);
     const base = new Date(y, m - 1, 15);
@@ -647,8 +652,45 @@ export function AdminReportTool({
           </div>
 
           <TabsContent value="weekly" className="space-y-8 m-0 animate-in fade-in-50 duration-500">
+            <div className="flex items-center justify-between mb-6 no-print">
+              <div className="flex items-center gap-2">
+                <Select value={weekSelectorMonth} onValueChange={setWeekSelectorMonth}>
+                  <SelectTrigger className="w-40 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {Array.from({ length: 12 }).map((_, i) => (
+                      <SelectItem key={i} value={`${format(new Date(), 'yyyy')}-${(i + 1).toString().padStart(2, '0')}`} className="font-bold uppercase text-[9px]">
+                        {format(new Date(CURRENT_YEAR, i, 1), 'MMMM yyyy', { locale: es }).toUpperCase()}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <Select value={selectedWeekStart} onValueChange={setSelectedWeekStart}>
+                  <SelectTrigger className="w-44 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {weekOptions.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value} className="font-bold uppercase text-[9px]">
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={onPrintCompliance}
+                className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
+              >
+                <CheckCircle2 className="h-4 w-4" />
+                Exportar Reporte Cumplimiento
+              </Button>
+            </div>
             {LINES.map(lineId => {
-              const dailyStats = weekDays.map(day => {
+              const dailyStats = complianceWeekDays.map(day => {
                 const dateKey = format(day, 'yyyy-MM-dd');
                 const planned = getLineDailyPlanned(lineId, day);
                 const real = PRODUCT_LIST.reduce((acc, flavor) => 
