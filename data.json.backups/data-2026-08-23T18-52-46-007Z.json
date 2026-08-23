@@ -8247,8 +8247,8 @@
             "loadPerHour": 1210,
             "quantity": 29040,
             "durationHours": 24,
-            "presentation": "2Lts",
-            "tanks": 0,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
             "startTime": "2026-08-25T13:00:00.000Z",
             "endTime": "2026-08-26T13:00:00.000Z",
             "id": "bmuf0fjrc",
@@ -8362,6 +8362,67 @@
             "endTime": "2026-08-29T09:00:00.000Z",
             "id": "1tptwh22u",
             "color": "#6366f1"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 25875,
+            "durationHours": 10.35,
+            "presentation": "1Lt",
+            "tanks": 3,
+            "startTime": "2026-08-24T11:00:00.000Z",
+            "endTime": "2026-08-24T21:21:00.000Z",
+            "id": "e827urhg4",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "CS",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-08-24T21:21:00.000Z",
+            "endTime": "2026-08-24T21:51:00.000Z",
+            "id": "okzwv1ovg",
+            "color": "#587593"
+          },
+          {
+            "name": "GLUP UVA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 14225,
+            "durationHours": 5.69,
+            "presentation": "1Lt",
+            "tanks": 2,
+            "startTime": "2026-08-24T21:51:00.000Z",
+            "endTime": "2026-08-25T03:32:24.000Z",
+            "id": "27ujsxv12",
+            "color": "#6366f1"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-08-25T03:33:00.000Z",
+            "endTime": "2026-08-25T05:33:00.000Z",
+            "id": "z318ubwa8",
+            "color": "#6366f1"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 248625,
+            "durationHours": 99.45,
+            "presentation": "1Lt",
+            "tanks": 28.83,
+            "startTime": "2026-08-25T05:33:00.000Z",
+            "endTime": "2026-08-29T09:00:00.000Z",
+            "id": "m4jp0j9w7",
+            "color": "#6366f1"
           }
         ],
         "realProduction": {},
@@ -8393,7 +8454,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-23T17:16:46.178Z"
+    "updatedAt": "2026-08-23T18:45:46.206Z"
   },
   "ordenesSap": [
     {
