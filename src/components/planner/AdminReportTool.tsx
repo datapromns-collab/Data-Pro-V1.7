@@ -305,7 +305,7 @@ export function AdminReportTool({
     <div className="space-y-4 animate-in fade-in duration-700 pb-4">
       {view === 'production' && (
         <Tabs value={productionSubTab} onValueChange={setProductionTab} className="w-full">
-          <div className="flex items-center justify-between mb-6">
+          <div className="mb-6">
             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 no-print overflow-x-auto -mx-1 scroll-smooth">
               <TabsList className="bg-transparent h-auto p-0 flex-nowrap">
                 {allowedTabs.includes('dia-a-dia') && (
@@ -330,8 +330,7 @@ export function AdminReportTool({
                  )}
               </TabsList>
             </div>
-
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 mt-2">
               {productionSubTab === 'weekly' && (
                 <>
                   <Select value={weekSelectorMonth} onValueChange={setWeekSelectorMonth}>
@@ -660,7 +659,7 @@ export function AdminReportTool({
       {view === 'compliance' && (
         <Tabs value={complianceSubTab} onValueChange={setComplianceTab} className="w-full">
           <div className="space-y-4">
-            <div className="flex items-center justify-between mb-6">
+            <div className="mb-6">
               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 no-print overflow-x-auto -mx-1 scroll-smooth">
                 <TabsList className="bg-transparent h-auto p-0 flex-nowrap">
                   <TabsTrigger value="weekly" className={tabsTriggerClass}>
@@ -670,52 +669,51 @@ export function AdminReportTool({
                     <BarChart3 className="h-3.5 w-3.5" /> Resumen Mensual
                   </TabsTrigger>
                 </TabsList>
-               </div>
-
-               <div className="flex items-center gap-2">
-                {complianceSubTab === 'weekly' ? (
+              </div>
+              <div className="flex items-center gap-2 mt-2">
+              {complianceSubTab === 'weekly' ? (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={onPrintCompliance}
+                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
+                >
+                  <CheckCircle2 className="h-4 w-4" />
+                  Exportar Reporte Cumplimiento
+                </Button>
+              ) : (
+                <div className="flex items-center gap-2">
+                  <Select value={selectedMonth} onValueChange={setSelectedMonth}>
+                    <SelectTrigger className="w-36 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {Array.from({ length: 12 }).map((_, i) => (
+                        <SelectItem key={i} value={(i + 1).toString().padStart(2, '0')} className="font-bold uppercase text-[9px]">
+                          {format(new Date(CURRENT_YEAR, i, 1), 'MMMM', { locale: es }).toUpperCase()}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Input 
+                    type="number"
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                    className="w-24 bg-white border-slate-200 font-bold text-center rounded-xl h-10 text-[10px] focus:ring-primary/20"
+                    placeholder="Año"
+                  />
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    onClick={onPrintCompliance}
+                    onClick={() => onPrintMonthlyCompliance?.(selectedMonth, selectedYear)}
                     className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
                   >
-                    <CheckCircle2 className="h-4 w-4" />
-                    Exportar Reporte Cumplimiento
+                    <FileDown className="h-4 w-4" />
+                    Exportar Reporte Mensual
                   </Button>
-                ) : (
-                  <div className="flex items-center gap-2">
-                    <Select value={selectedMonth} onValueChange={setSelectedMonth}>
-                      <SelectTrigger className="w-36 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Array.from({ length: 12 }).map((_, i) => (
-                          <SelectItem key={i} value={(i + 1).toString().padStart(2, '0')} className="font-bold uppercase text-[9px]">
-                            {format(new Date(CURRENT_YEAR, i, 1), 'MMMM', { locale: es }).toUpperCase()}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Input 
-                      type="number"
-                      value={selectedYear}
-                      onChange={(e) => setSelectedYear(e.target.value)}
-                      className="w-24 bg-white border-slate-200 font-bold text-center rounded-xl h-10 text-[10px] focus:ring-primary/20"
-                      placeholder="Año"
-                    />
-                    <Button 
-                      variant="outline" 
-                      size="sm" 
-                      onClick={() => onPrintMonthlyCompliance?.(selectedMonth, selectedYear)}
-                      className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
-                    >
-                      <FileDown className="h-4 w-4" />
-                      Exportar Reporte Mensual
-                    </Button>
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
+            </div>
             </div>
 
             <TabsContent value="weekly" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
