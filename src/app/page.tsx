@@ -1792,10 +1792,11 @@ export default function PlannerPage() {
   }, [tasks, selectedLine, weekStartDate, weekEnd]);
 
   const allowedProdTabs = useMemo(() => {
-    const tabs: ('dia-a-dia' | 'weekly' | 'monthly')[] = [];
+    const tabs: ('dia-a-dia' | 'weekly' | 'weekly-summary' | 'monthly')[] = [];
     if (user) {
       if (hasManagementAccess(user.id, 'produccion-diaria')) tabs.push('dia-a-dia');
       if (hasManagementAccess(user.id, 'control-semanal')) tabs.push('weekly');
+      tabs.push('weekly-summary');
       if (hasManagementAccess(user.id, 'resumen-mensual')) tabs.push('monthly');
     }
     return tabs;
