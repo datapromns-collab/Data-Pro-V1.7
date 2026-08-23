@@ -306,8 +306,8 @@ export function AdminReportTool({
       {view === 'production' && (
         <Tabs value={productionSubTab} onValueChange={setProductionTab} className="w-full">
           <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 no-print">
-              <TabsList className="bg-transparent h-auto p-0">
+            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 no-print overflow-x-auto -mx-1 scroll-smooth">
+              <TabsList className="bg-transparent h-auto p-0 flex-nowrap">
                 {allowedTabs.includes('dia-a-dia') && (
                   <TabsTrigger value="dia-a-dia" className={tabsTriggerClass}>
                     <CalendarDays className="h-3.5 w-3.5" /> Producción Diaria
@@ -660,8 +660,8 @@ export function AdminReportTool({
         <Tabs value={complianceSubTab} onValueChange={setComplianceTab} className="w-full">
           <div className="space-y-4">
             <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 no-print">
-                <TabsList className="bg-transparent h-auto p-0">
+              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 no-print overflow-x-auto -mx-1 scroll-smooth">
+                <TabsList className="bg-transparent h-auto p-0 flex-nowrap">
                   <TabsTrigger value="weekly" className={tabsTriggerClass}>
                     <CalendarDays className="h-3.5 w-3.5" /> Detalle Semanal
                   </TabsTrigger>
@@ -669,9 +669,9 @@ export function AdminReportTool({
                     <BarChart3 className="h-3.5 w-3.5" /> Resumen Mensual
                   </TabsTrigger>
                 </TabsList>
-              </div>
+               </div>
 
-              <div className="flex items-center gap-2">
+               <div className="flex items-center gap-2">
                 {complianceSubTab === 'weekly' ? (
                   <Button 
                     variant="outline" 
