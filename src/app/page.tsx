@@ -62,6 +62,7 @@ import { DailyPlanSection } from '@/components/planner/DailyPlanSection';
 import { AdminReportTool } from '@/components/planner/AdminReportTool';
 import { ProductionEntryDialog } from '@/components/planner/ProductionEntryDialog';
 import { MonthlyReport } from '@/components/planner/MonthlyReport';
+import { WeeklySummaryReport } from '@/components/planner/WeeklySummaryReport';
 import { ComplianceReport } from '@/components/planner/ComplianceReport';
 import { MonthlyComplianceReport } from '@/components/planner/MonthlyComplianceReport';
 import { RecipeEditor } from '@/components/planner/RecipeEditor';
@@ -1288,6 +1289,7 @@ export default function PlannerPage() {
   const [turnoSubTab, setTurnoSubTab] = useState<'diurno' | 'nocturno' | 'dt'>('diurno');
   const [dtSubTab, setDtSubTab] = useState<'td' | 'tn'>('td');
   const [printMode, setPrintMode] = useState('');
+  const [printWeekStart, setPrintWeekStart] = useState<string>('');
   const [jarabesPrintMode, setJarabesPrintMode] = useState('');
   const [jarabesPrintHtml, setJarabesPrintHtml] = useState('');
   const ORIGINAL_DOCUMENT_TITLE = 'Data Pro - Planificación Eficiente';
@@ -1848,6 +1850,19 @@ export default function PlannerPage() {
     setSelectedMonth(month);
     setSelectedYear(year);
     setPrintMode('monthly');
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: landscape; margin: 0; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
+
+  const handlePrintWeeklySummary = (weekStart: string) => {
+    setPrintWeekStart(weekStart);
+    setPrintMode('weekly-summary');
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: landscape; margin: 0; }';
@@ -2645,15 +2660,16 @@ export default function PlannerPage() {
                               {activeModule === 'management' && hasAccess(user.id, 'management') && (
                    <>
                       {activeTab === 'admin-report' && (
-                         <AdminReportTool 
-                           view="production"
-                           weeklyData={weeklyData}
-                           currentWeekKey={getWeekKey(weekStartDate)}
-                           realProduction={realProduction}
-                           updateRealProduction={updateRealProduction}
-                           onPrintMonthly={handlePrintMonthly}
-                           allowedProductionTabs={allowedProdTabs}
-                         />
+                          <AdminReportTool 
+                            view="production"
+                            weeklyData={weeklyData}
+                            currentWeekKey={getWeekKey(weekStartDate)}
+                            realProduction={realProduction}
+                            updateRealProduction={updateRealProduction}
+                            onPrintMonthly={handlePrintMonthly}
+                            onPrintWeeklySummary={handlePrintWeeklySummary}
+                            allowedProductionTabs={allowedProdTabs}
+                          />
                       )}
                       {activeTab === 'compliance-report' && mgmtAllowsCumplimiento && (
                         <AdminReportTool 
@@ -5066,6 +5082,14 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                     realProduction={realProduction} 
                     selectedMonth={selectedMonth} 
                     selectedYear={selectedYear} 
+                  />
+                </div>
+              )}
+              {printMode === 'weekly-summary' && (
+                <div className="p-0">
+                  <WeeklySummaryReport 
+                    realProduction={realProduction}
+                    weekStart={printWeekStart || format(weekStartDate, 'yyyy-MM-dd')}
                   />
                 </div>
               )}

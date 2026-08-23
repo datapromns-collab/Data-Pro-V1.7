@@ -33,6 +33,7 @@ interface AdminReportToolProps {
   onPrintMonthly?: (month: string, year: string) => void;
   onPrintCompliance?: () => void;
   onPrintMonthlyCompliance?: (month: string, year: string) => void;
+  onPrintWeeklySummary?: (weekStart: string) => void;
   allowedProductionTabs?: ('dia-a-dia' | 'weekly' | 'weekly-summary' | 'monthly')[];
 }
 
@@ -64,6 +65,7 @@ export function AdminReportTool({
   onPrintMonthly, 
   onPrintCompliance,
   onPrintMonthlyCompliance,
+  onPrintWeeklySummary,
   allowedProductionTabs
 }: AdminReportToolProps) {
   const [weekSelectorMonth, setWeekSelectorMonth] = useState(format(new Date(), 'yyyy-MM'));
@@ -390,6 +392,17 @@ export function AdminReportTool({
                     Exportar Resumen Mensual
                   </Button>
                 </>
+              )}
+              {productionSubTab === 'weekly-summary' && (
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => onPrintWeeklySummary?.(selectedWeekKey)}
+                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
+                >
+                  <FileDown className="h-4 w-4" />
+                  Exportar Resumen Semanal
+                </Button>
               )}
             </div>
           </div>
