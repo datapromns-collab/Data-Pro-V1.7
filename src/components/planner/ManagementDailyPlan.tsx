@@ -15,7 +15,6 @@ interface ManagementDailyPlanProps {
   currentWeekKey: string;
   realProduction: Record<string, Record<string, Record<string, number>>>;
   updateRealProduction: (lineId: string, flavor: string, dateKey: string, quantity: number) => void;
-  onPrintWeeklyControl?: () => void;
   onPrintMonthly?: (month: string, year: string) => void;
 }
 
@@ -24,7 +23,6 @@ export default function ManagementDailyPlan({
   currentWeekKey,
   realProduction,
   updateRealProduction,
-  onPrintWeeklyControl,
   onPrintMonthly
 }: ManagementDailyPlanProps) {
   const [productionSubTab, setProductionTab] = useState('weekly');
@@ -41,7 +39,6 @@ export default function ManagementDailyPlan({
           currentWeekKey={currentWeekKey}
           realProduction={realProduction}
           updateRealProduction={updateRealProduction}
-          onPrintWeeklyControl={onPrintWeeklyControl}
           onPrintMonthly={onPrintMonthly}
         />
       </div>

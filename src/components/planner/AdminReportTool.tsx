@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { getWeekDays, getWeeksInMonth, PRODUCT_LIST, ALL_LINES_SUMMARY } from '@/lib/planner-utils';
 import { format, startOfDay, addDays, setHours, setMinutes, parseISO, startOfMonth, endOfMonth, isWithinInterval, eachDayOfInterval, startOfWeek, getDaysInMonth } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { BarChart3, Package, Layers, FileDown, FileStack, CheckCircle2, FileSpreadsheet, CalendarDays, TrendingUp } from 'lucide-react';
+import { BarChart3, Package, Layers, FileDown, CheckCircle2, FileSpreadsheet, CalendarDays, TrendingUp } from 'lucide-react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -31,10 +31,9 @@ interface AdminReportToolProps {
   realProduction: Record<string, Record<string, Record<string, number>>>;
   updateRealProduction: (lineId: string, flavor: string, dateKey: string, quantity: number) => void;
   onPrintMonthly?: (month: string, year: string) => void;
-  onPrintWeeklyControl?: (weekKey: string, weekStartDate: Date) => void;
   onPrintCompliance?: () => void;
   onPrintMonthlyCompliance?: (month: string, year: string) => void;
-  allowedProductionTabs?: ('dia-a-dia' | 'weekly' | 'monthly')[];
+  allowedProductionTabs?: ('dia-a-dia' | 'weekly' | 'weekly-summary' | 'monthly')[];
 }
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
@@ -63,7 +62,6 @@ export function AdminReportTool({
   realProduction, 
   updateRealProduction, 
   onPrintMonthly, 
-  onPrintWeeklyControl, 
   onPrintCompliance,
   onPrintMonthlyCompliance,
   allowedProductionTabs
@@ -133,7 +131,7 @@ export function AdminReportTool({
 
   const allowedTabs = allowedProductionTabs && allowedProductionTabs.length > 0
     ? allowedProductionTabs
-    : (['dia-a-dia', 'weekly', 'monthly'] as const);
+    : (['dia-a-dia', 'weekly', 'weekly-summary', 'monthly'] as const);
 
   useEffect(() => {
     if (!allowedTabs.includes(productionSubTab as any)) {
@@ -315,16 +313,21 @@ export function AdminReportTool({
                     <CalendarDays className="h-3.5 w-3.5" /> Producción Diaria
                   </TabsTrigger>
                 )}
-                {allowedTabs.includes('weekly') && (
-                  <TabsTrigger value="weekly" className={tabsTriggerClass}>
-                    <CalendarDays className="h-3.5 w-3.5" /> Control Semanal
-                  </TabsTrigger>
-                )}
-                {allowedTabs.includes('monthly') && (
-                  <TabsTrigger value="monthly" className={tabsTriggerClass}>
-                    <FileSpreadsheet className="h-3.5 w-3.5" /> Resumen Mensual
-                  </TabsTrigger>
-                )}
+                 {allowedTabs.includes('weekly') && (
+                   <TabsTrigger value="weekly" className={tabsTriggerClass}>
+                     <CalendarDays className="h-3.5 w-3.5" /> Control Semanal
+                   </TabsTrigger>
+                 )}
+                 {allowedTabs.includes('weekly-summary') && (
+                   <TabsTrigger value="weekly-summary" className={tabsTriggerClass}>
+                     <CalendarDays className="h-3.5 w-3.5" /> Resumen Semanal
+                   </TabsTrigger>
+                 )}
+                 {allowedTabs.includes('monthly') && (
+                   <TabsTrigger value="monthly" className={tabsTriggerClass}>
+                     <FileSpreadsheet className="h-3.5 w-3.5" /> Resumen Mensual
+                   </TabsTrigger>
+                 )}
               </TabsList>
             </div>
 
@@ -355,15 +358,6 @@ export function AdminReportTool({
                       ))}
                     </SelectContent>
                   </Select>
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => onPrintWeeklyControl?.(selectedWeekKey, weeklyWeekStart)}
-                    className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
-                  >
-                    <FileStack className="h-4 w-4" />
-                    Exportar Reporte Semanal
-                  </Button>
                 </>
               ) : (
                 <>
@@ -510,9 +504,15 @@ export function AdminReportTool({
                 ))}
               </TooltipProvider>
             </div>
-          </TabsContent>
+           </TabsContent>
 
-          <TabsContent value="monthly" className="m-0 animate-in fade-in-50 duration-500">
+           <TabsContent value="weekly-summary" className="m-0 animate-in fade-in-50 duration-500">
+             <div className="p-4 text-slate-400 text-xs">
+               Próximamente
+             </div>
+           </TabsContent>
+
+           <TabsContent value="monthly" className="m-0 animate-in fade-in-50 duration-500">
             <Card className="rounded-2xl border-slate-200 overflow-hidden bg-white shadow-sm">
               <div className="p-4 bg-slate-50 border-b flex justify-between items-center">
                 <div>
