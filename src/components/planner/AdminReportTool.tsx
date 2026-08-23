@@ -31,7 +31,7 @@ interface AdminReportToolProps {
   realProduction: Record<string, Record<string, Record<string, number>>>;
   updateRealProduction: (lineId: string, flavor: string, dateKey: string, quantity: number) => void;
   onPrintMonthly?: (month: string, year: string) => void;
-  onPrintWeeklyControl?: (weekStart: Date) => void;
+  onPrintWeeklyControl?: (weekKey: string, weekStartDate: Date) => void;
   onPrintCompliance?: () => void;
   onPrintMonthlyCompliance?: (month: string, year: string) => void;
   allowedProductionTabs?: ('dia-a-dia' | 'weekly' | 'monthly')[];
@@ -358,7 +358,7 @@ export function AdminReportTool({
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    onClick={() => onPrintWeeklyControl?.(weeklyWeekStart)}
+                    onClick={() => onPrintWeeklyControl?.(selectedWeekKey, weeklyWeekStart)}
                     className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
                   >
                     <FileStack className="h-4 w-4" />

@@ -1859,8 +1859,8 @@ export default function PlannerPage() {
     }, 150);
   };
 
-  const handlePrintWeeklyControl = (weekStart: Date) => {
-    setPrintWeekStartStr(format(weekStart, 'yyyy-MM-dd'));
+  const handlePrintWeeklyControl = (weekKey: string, weekStartDate: Date) => {
+    setPrintWeekStartStr(weekKey);
     setPrintMode('weekly-control');
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
@@ -5088,7 +5088,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                 <div className="p-0">
                   <WeeklyControlReport 
                     weeklyData={weeklyData}
-                    weekStart={printWeekStartStr}
+                    weekKey={printWeekStartStr}
                   />
                 </div>
               )}
