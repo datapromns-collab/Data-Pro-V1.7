@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-24T00:00:00.000",
+      "weekStartDate": "2026-08-03T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -7560,12 +7560,12 @@
             "name": "GLUP FRESH",
             "lineId": "1",
             "loadPerHour": 1500,
-            "quantity": 179175,
-            "durationHours": 119.45,
+            "quantity": 176670,
+            "durationHours": 117.78,
             "presentation": "2Lts",
-            "tanks": 20.77,
+            "tanks": 20.48,
             "startTime": "2026-08-18T09:33:00.000Z",
-            "endTime": "2026-08-23T09:00:00.000Z",
+            "endTime": "2026-08-23T07:19:48.000Z",
             "id": "n5t1tm31i",
             "color": "#ec4899"
           },
@@ -7754,12 +7754,12 @@
             "name": "GLUP KOLITA",
             "lineId": "2",
             "loadPerHour": 2500,
-            "quantity": 155000,
-            "durationHours": 62,
+            "quantity": 151250,
+            "durationHours": 60.5,
             "presentation": "2Lts",
-            "tanks": 17.43,
+            "tanks": 17,
             "startTime": "2026-08-20T19:00:00.000Z",
-            "endTime": "2026-08-23T09:00:00.000Z",
+            "endTime": "2026-08-23T07:30:00.000Z",
             "id": "9z4py46vq",
             "color": "#10b981"
           },
@@ -7893,6 +7893,54 @@
             "endTime": "2026-08-22T17:09:24.000Z",
             "id": "3a5p91rhl",
             "color": "#10b981"
+          },
+          {
+            "name": "CS",
+            "lineId": "1",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-08-23T07:20:00.000Z",
+            "endTime": "2026-08-23T07:50:00.000Z",
+            "id": "jili238ja",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP PIÑA",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 3435,
+            "durationHours": 2.29,
+            "presentation": "2Lts",
+            "tanks": 0.47,
+            "startTime": "2026-08-23T07:50:00.000Z",
+            "endTime": "2026-08-23T10:07:24.000Z",
+            "id": "zc2ncs2du",
+            "color": "#ec4899"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-08-23T07:30:00.000Z",
+            "endTime": "2026-08-23T08:00:00.000Z",
+            "id": "j627gd8tr",
+            "color": "#ec4899"
+          },
+          {
+            "name": "GLUP NARANJA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 4326,
+            "durationHours": 1.7304,
+            "presentation": "2Lts",
+            "tanks": 0.61,
+            "startTime": "2026-08-23T08:00:00.000Z",
+            "endTime": "2026-08-23T09:43:49.440Z",
+            "id": "qruenzx9c",
+            "color": "#47CCB0"
           }
         ],
         "realProduction": {},
@@ -8332,7 +8380,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-22T22:15:59.586Z"
+    "updatedAt": "2026-08-23T12:31:46.288Z"
   },
   "ordenesSap": [
     {
@@ -13771,12 +13819,12 @@
           "fechaInicio": "2026-08-22",
           "ticket1": "17622",
           "cajas1": 5520,
-          "ticket2": "",
+          "ticket2": "17623",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 640,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 10776
         }
       ]
     },
@@ -13833,12 +13881,12 @@
           "fechaInicio": "2026-08-22",
           "ticket1": "17811",
           "cajas1": 7520,
-          "ticket2": "",
+          "ticket2": "17812",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 880,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 10442
         }
       ]
     },
@@ -13864,12 +13912,12 @@
           "fechaInicio": "2026-08-22",
           "ticket1": "17672",
           "cajas1": 9840,
-          "ticket2": "",
+          "ticket2": "17673",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1680,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 22120
         }
       ]
     },
@@ -13895,12 +13943,12 @@
           "fechaInicio": "2026-08-22",
           "ticket1": "17858",
           "cajas1": 11200,
-          "ticket2": "",
+          "ticket2": "17859",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 640,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 25760
         },
         {
           "fechaInicio": "2026-08-23",
@@ -13937,12 +13985,12 @@
           "fechaInicio": "2026-08-22",
           "ticket1": "17593",
           "cajas1": 3800,
-          "ticket2": "",
+          "ticket2": "17594",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 350,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 1992
         }
       ]
     },
@@ -13988,12 +14036,103 @@
           "fechaInicio": "2026-08-22",
           "ticket1": "17765",
           "cajas1": 2262,
+          "ticket2": "17766",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 11335
+        }
+      ]
+    },
+    {
+      "id": "1-1787485792150",
+      "linea": 1,
+      "sabor": "GLUP PIÑA",
+      "ordenNumero": "63124",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-22",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17812",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 3333
+        }
+      ]
+    },
+    {
+      "id": "2-1787486209420",
+      "linea": 2,
+      "sabor": "GLUP NARANJA",
+      "ordenNumero": "63130",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-22",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17623",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 4160
+        }
+      ]
+    },
+    {
+      "id": "3-1787486545956",
+      "linea": 3,
+      "sabor": "GLUP MANZANA ROJA",
+      "ordenNumero": "63136",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-22",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17673",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 2320
+        },
+        {
+          "fechaInicio": "2026-08-23",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1787487099589",
+      "linea": 6,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "63142",
+      "semana": 34,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-22",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17717",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 1518
         }
       ]
     }
@@ -61782,6 +61921,18 @@
           "pnc": 150,
           "jarabeReal": 81261,
           "ubb": 28.27
+        },
+        "auto-1-1787322737129": {
+          "cajasPlanificadas": 69000,
+          "jarabeReal": 91317,
+          "ubb": 31.73,
+          "producto": "616"
+        },
+        "auto-1-1787485792150": {
+          "jarabeReal": 8256,
+          "cajasPlanificadas": 3435,
+          "ubb": 4.73,
+          "producto": "0"
         }
       },
       "linea-2": {
@@ -61859,6 +62010,19 @@
           "producto": "118",
           "jarabeReal": 67540,
           "ubb": 68.46
+        },
+        "auto-2-1787259054601": {
+          "cajasPlanificadas": 114961,
+          "jarabeReal": 145855,
+          "ubb": 147.54,
+          "producto": "1666"
+        },
+        "auto-2-1787486209420": {
+          "cajasPlanificadas": 4326,
+          "jarabeReal": 10396,
+          "ubb": 6.69,
+          "pnc": 50,
+          "producto": "57"
         }
       },
       "linea-3": {
@@ -61921,6 +62085,12 @@
           "producto": "202",
           "jarabeReal": 92345,
           "ubb": 32.09
+        },
+        "auto-3-1787322747111": {
+          "cajasPlanificadas": 134400,
+          "jarabeReal": 134237,
+          "ubb": 46.68,
+          "producto": "1688"
         }
       },
       "linea-4": {
@@ -62011,6 +62181,12 @@
           "producto": "131",
           "ubb": 306,
           "cajasPlanificadas": 53240
+        },
+        "auto-5-1787322774349": {
+          "cajasPlanificadas": 48400,
+          "jarabeReal": 234000,
+          "ubb": 234,
+          "producto": "188"
         }
       },
       "linea-6": {
@@ -62049,7 +62225,14 @@
           "cajasPlanificadas": 49500,
           "jarabeReal": 35903,
           "producto": "1249",
-          "ubb": 12.47
+          "ubb": 12.47,
+          "pnc": 60
+        },
+        "auto-6-1787487099589": {
+          "cajasPlanificadas": 2194,
+          "jarabeReal": 2197,
+          "ubb": 2.22,
+          "producto": "222"
         }
       },
       "linea-7": {
@@ -62125,6 +62308,18 @@
           "producto": "1166",
           "ubb": 22,
           "cajasPlanificadas": 146255
+        },
+        "auto-7-1787400133747": {
+          "cajasPlanificadas": 16095,
+          "jarabeReal": 33227,
+          "ubb": 16,
+          "producto": "56"
+        },
+        "auto-7-1787422420771": {
+          "cajasPlanificadas": 14225,
+          "jarabeReal": 34164.8,
+          "ubb": 22,
+          "producto": "110"
         }
       }
     },
