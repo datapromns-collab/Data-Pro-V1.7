@@ -332,7 +332,7 @@ export function AdminReportTool({
             </div>
 
             <div className="flex items-center gap-2">
-              {productionSubTab === 'weekly' ? (
+              {productionSubTab === 'weekly' && (
                 <>
                   <Select value={weekSelectorMonth} onValueChange={setWeekSelectorMonth}>
                     <SelectTrigger className="w-40 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
@@ -359,7 +359,8 @@ export function AdminReportTool({
                     </SelectContent>
                   </Select>
                 </>
-              ) : (
+              )}
+              {productionSubTab === 'monthly' && (
                 <>
                   <Select value={selectedMonth} onValueChange={setSelectedMonth}>
                     <SelectTrigger className="w-36 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
