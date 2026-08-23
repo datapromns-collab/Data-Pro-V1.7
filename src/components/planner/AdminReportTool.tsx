@@ -330,8 +330,8 @@ export function AdminReportTool({
                  )}
               </TabsList>
             </div>
-            <div className="flex items-center gap-2 mt-2">
-              {productionSubTab === 'weekly' && (
+             <div className="flex items-center gap-2 mt-2">
+              {(productionSubTab === 'weekly' || productionSubTab === 'weekly-summary') && (
                 <>
                   <Select value={weekSelectorMonth} onValueChange={setWeekSelectorMonth}>
                     <SelectTrigger className="w-40 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
