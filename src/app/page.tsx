@@ -1289,7 +1289,7 @@ export default function PlannerPage() {
   const [turnoSubTab, setTurnoSubTab] = useState<'diurno' | 'nocturno' | 'dt'>('diurno');
   const [dtSubTab, setDtSubTab] = useState<'td' | 'tn'>('td');
   const [printMode, setPrintMode] = useState('');
-  const [printWeekStartDate, setPrintWeekStartDate] = useState<Date | null>(null);
+  const [printWeekStartStr, setPrintWeekStartStr] = useState<string | null>(null);
   const [jarabesPrintMode, setJarabesPrintMode] = useState('');
   const [jarabesPrintHtml, setJarabesPrintHtml] = useState('');
   const ORIGINAL_DOCUMENT_TITLE = 'Data Pro - Planificación Eficiente';
@@ -1860,7 +1860,7 @@ export default function PlannerPage() {
   };
 
   const handlePrintWeeklyControl = (weekStart: Date) => {
-    setPrintWeekStartDate(weekStart);
+    setPrintWeekStartStr(format(weekStart, 'yyyy-MM-dd'));
     setPrintMode('weekly-control');
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
@@ -5084,11 +5084,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                   />
                 </div>
               )}
-              {printMode === 'weekly-control' && printWeekStartDate && (
+              {printMode === 'weekly-control' && printWeekStartStr && (
                 <div className="p-0">
                   <WeeklyControlReport 
                     weeklyData={weeklyData}
-                    weekStart={printWeekStartDate}
+                    weekStart={printWeekStartStr}
                   />
                 </div>
               )}

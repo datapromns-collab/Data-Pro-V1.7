@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { format, getISOWeek, startOfWeek, startOfDay } from 'date-fns';
+import { format, getISOWeek, startOfWeek, parseISO } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { PRODUCT_LIST, ALL_LINES_SUMMARY, getWeekDays } from '@/lib/planner-utils';
 
@@ -13,18 +13,18 @@ interface WeeklyData {
 }
 
 interface WeeklyControlReportProps {
-  weeklyData: Record<string, WeeklyData>;
-  weekStart: Date;
+  weeklyData: Record<string, { tasks: any[]; realProduction: Record<string, Record<string, Record<string, number>>> }>;
+  weekStart: string;
 }
 
 export function WeeklyControlReport({ weeklyData, weekStart }: WeeklyControlReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
-  const weekNumber = getISOWeek(weekStart);
-  const weekDays = useMemo(() => getWeekDays(weekStart), [weekStart]);
+  const weekNumber = getISOWeek(parseISO(weekStart));
+  const weekDays = useMemo(() => getWeekDays(parseISO(weekStart)), [weekStart]);
   const dateKeys = useMemo(() => weekDays.map(d => format(d, 'yyyy-MM-dd')), [weekDays]);
 
   const selectedWeekKey = useMemo(() => {
-    const start = startOfWeek(startOfDay(weekStart), { weekStartsOn: 1 });
+    const start = startOfWeek(parseISO(weekStart), { weekStartsOn: 1 });
     return format(start, 'yyyy-MM-dd');
   }, [weekStart]);
 
@@ -185,7 +185,7 @@ export function WeeklyControlReport({ weeklyData, weekStart }: WeeklyControlRepo
               <div className="flex-1 text-right">
                 <p className="text-[6px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Confidencial - Planta</p>
                 <p className="text-base font-black text-slate-900 uppercase leading-none">Semana {weekNumber}</p>
-                 <p className="text-[7px] text-slate-400 font-bold uppercase mt-0.5">{format(weekStart, "dd 'de' MMMM yyyy", { locale: es })}</p>
+                 <p className="text-[7px] text-slate-400 font-bold uppercase mt-0.5">{format(parseISO(weekStart), "dd 'de' MMMM yyyy", { locale: es })}</p>
               </div>
             </div>
 
