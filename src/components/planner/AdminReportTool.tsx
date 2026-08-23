@@ -506,11 +506,116 @@ export function AdminReportTool({
             </div>
            </TabsContent>
 
-           <TabsContent value="weekly-summary" className="m-0 animate-in fade-in-50 duration-500">
-             <div className="p-4 text-slate-400 text-xs">
-               Próximamente
-             </div>
-           </TabsContent>
+            <TabsContent value="weekly-summary" className="m-0 animate-in fade-in-50 duration-500">
+              <Card className="p-0 bg-white border-slate-200 shadow-sm rounded-2xl overflow-hidden">
+                <div className="px-4 py-3 border-b border-slate-200">
+                  <h3 className="text-[11px] font-black text-slate-900 uppercase tracking-widest">Resumen Semanal por Sabor y Línea</h3>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse text-[10px]">
+                    <thead>
+                      <tr className="bg-[#4a7ebb] text-white font-black uppercase">
+                        <th className="px-3 py-1.5 border border-slate-900 text-left min-w-[140px]">SABOR / PRODUCTO</th>
+                        {ALL_LINES_SUMMARY.slice(0, 4).map(l => (
+                          <th key={l} className="px-2 py-1.5 border border-slate-900 text-center w-16">L{l}</th>
+                        ))}
+                        <th className="px-2 py-1.5 border border-slate-900 text-center bg-[#2f5597] w-20">TOTAL 2L</th>
+                        {ALL_LINES_SUMMARY.slice(4).map(l => (
+                          <th key={l} className="px-2 py-1.5 border border-slate-900 text-center w-16">L{l}</th>
+                        ))}
+                        <th className="px-3 py-1.5 border border-slate-900 text-center bg-[#2f5597] w-24">TOTAL</th>
+                      </tr>
+                    </thead>
+                    <tbody className="bg-[#dce6f1]">
+                      {PRODUCT_LIST.map((flavor, fIdx) => {
+                        const lineValues = ALL_LINES_SUMMARY.map(lineId => {
+                          const daySum = visibleWeekDays.reduce((acc, day) => {
+                            const key = format(day, 'yyyy-MM-dd');
+                            return acc + (realProductionAuto[lineId]?.[flavor]?.[key] || 0);
+                          }, 0);
+                          return daySum;
+                        });
+                        const total2L = lineValues.slice(0, 4).reduce((a, b) => a + b, 0);
+                        const total = lineValues.reduce((a, b) => a + b, 0);
+
+                        return (
+                          <tr key={fIdx} className={`font-bold text-slate-800 h-8 border-b border-slate-900/10 ${fIdx % 2 === 0 ? 'bg-[#dce6f1]' : 'bg-white'}`}>
+                            <td className="px-3 py-0 border-r border-slate-900 font-bold uppercase">{flavor}</td>
+                            {lineValues.slice(0, 4).map((val, lIdx) => (
+                              <td key={lIdx} className="px-2 py-0 border-r border-slate-900 text-center tabular-nums">
+                                {val > 0 ? val.toLocaleString('es-ES') : '0'}
+                              </td>
+                            ))}
+                            <td className="px-2 py-0 border-r border-slate-900 text-center tabular-nums bg-[#b8cce4] font-black">
+                              {total2L > 0 ? total2L.toLocaleString('es-ES') : '0'}
+                            </td>
+                            {lineValues.slice(4).map((val, lIdx) => (
+                              <td key={lIdx + 4} className="px-2 py-0 border-r border-slate-900 text-center tabular-nums">
+                                {val > 0 ? val.toLocaleString('es-ES') : '0'}
+                              </td>
+                            ))}
+                            <td className="px-3 py-0 border-r border-slate-900 text-center tabular-nums bg-[#b8cce4] font-black">
+                              {total > 0 ? total.toLocaleString('es-ES') : '0'}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                    <tfoot className="bg-[#b8cce4] font-black text-slate-900 border-t-2 border-slate-900">
+                      <tr className="h-9">
+                        <td className="px-3 py-0 border-r border-slate-900 uppercase">TOTALES</td>
+                        {ALL_LINES_SUMMARY.slice(0, 4).map(lineId => {
+                          const colTotal = PRODUCT_LIST.reduce((acc, flavor) => {
+                            return acc + visibleWeekDays.reduce((dayAcc, day) => {
+                              const key = format(day, 'yyyy-MM-dd');
+                              return dayAcc + (realProductionAuto[lineId]?.[flavor]?.[key] || 0);
+                            }, 0);
+                          }, 0);
+                          return (
+                            <td key={lineId} className="px-2 py-0 border-r border-slate-900 text-center tabular-nums text-[11px]">
+                              {colTotal.toLocaleString('es-ES')}
+                            </td>
+                          );
+                        })}
+                        <td className="px-2 py-0 border-r border-slate-900 text-center tabular-nums bg-[#8aaad0] text-[11px]">
+                          {PRODUCT_LIST.reduce((acc, flavor) => {
+                            return acc + ALL_LINES_SUMMARY.slice(0, 4).reduce((lineAcc, lineId) => {
+                              return lineAcc + visibleWeekDays.reduce((dayAcc, day) => {
+                                const key = format(day, 'yyyy-MM-dd');
+                                return dayAcc + (realProductionAuto[lineId]?.[flavor]?.[key] || 0);
+                              }, 0);
+                            }, 0);
+                          }, 0).toLocaleString('es-ES')}
+                        </td>
+                        {ALL_LINES_SUMMARY.slice(4).map(lineId => {
+                          const colTotal = PRODUCT_LIST.reduce((acc, flavor) => {
+                            return acc + visibleWeekDays.reduce((dayAcc, day) => {
+                              const key = format(day, 'yyyy-MM-dd');
+                              return dayAcc + (realProductionAuto[lineId]?.[flavor]?.[key] || 0);
+                            }, 0);
+                          }, 0);
+                          return (
+                            <td key={lineId} className="px-2 py-0 border-r border-slate-900 text-center tabular-nums text-[11px]">
+                              {colTotal.toLocaleString('es-ES')}
+                            </td>
+                          );
+                        })}
+                        <td className="px-3 py-0 border-r border-slate-900 text-center tabular-nums bg-[#8aaad0] text-[12px]">
+                          {PRODUCT_LIST.reduce((acc, flavor) => {
+                            return acc + ALL_LINES_SUMMARY.reduce((lineAcc, lineId) => {
+                              return lineAcc + visibleWeekDays.reduce((dayAcc, day) => {
+                                const key = format(day, 'yyyy-MM-dd');
+                                return dayAcc + (realProductionAuto[lineId]?.[flavor]?.[key] || 0);
+                              }, 0);
+                            }, 0);
+                          }, 0).toLocaleString('es-ES')}
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </Card>
+            </TabsContent>
 
            <TabsContent value="monthly" className="m-0 animate-in fade-in-50 duration-500">
             <Card className="rounded-2xl border-slate-200 overflow-hidden bg-white shadow-sm">
