@@ -3,20 +3,35 @@
 import { useMemo } from 'react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { format, getISOWeek } from 'date-fns';
+import { format, getISOWeek, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { PRODUCT_LIST, ALL_LINES_SUMMARY, getWeekDays } from '@/lib/planner-utils';
 
-interface WeeklyControlReportProps {
+interface WeeklyData {
+  tasks: any[];
   realProduction: Record<string, Record<string, Record<string, number>>>;
-  weekStartDate: Date;
 }
 
-export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyControlReportProps) {
+interface WeeklyControlReportProps {
+  weeklyData: Record<string, WeeklyData>;
+  weekStart: Date;
+}
+
+export function WeeklyControlReport({ weeklyData, weekStart }: WeeklyControlReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
-  const weekNumber = getISOWeek(weekStartDate);
-  const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
+  const weekNumber = getISOWeek(weekStart);
+  const weekDays = useMemo(() => getWeekDays(weekStart), [weekStart]);
   const dateKeys = useMemo(() => weekDays.map(d => format(d, 'yyyy-MM-dd')), [weekDays]);
+
+  const selectedWeekKey = useMemo(() => {
+    const d = new Date(weekStart);
+    d.setHours(0, 0, 0, 0);
+    const start = startOfWeek(d, { weekStartsOn: 1 });
+    return format(start, 'yyyy-MM-dd');
+  }, [weekStart]);
+
+  const selectedWeekData = weeklyData[selectedWeekKey] || { realProduction: {} };
+  const weekRealProduction = selectedWeekData.realProduction || {};
 
   const summaryData = useMemo(() => {
     const data: Record<string, Record<string, number>> = {};
@@ -25,7 +40,7 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
       data[product] = {};
       ALL_LINES_SUMMARY.forEach(lineId => {
         let lineProductTotal = 0;
-        const lineRealData = realProduction[lineId]?.[product] || {};
+        const lineRealData = weekRealProduction[lineId]?.[product] || {};
         dateKeys.forEach(dateKey => {
           lineProductTotal += lineRealData[dateKey] || 0;
         });
@@ -34,7 +49,7 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
     });
     
     return data;
-  }, [realProduction, dateKeys]);
+  }, [weekRealProduction, dateKeys]);
 
   const totalSemanaGeneral = useMemo(() => {
     let total = 0;
@@ -154,7 +169,7 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
       {ALL_LINES_SUMMARY.map((lineId) => {
         const lineTotal = PRODUCT_LIST.reduce((acc, flavor) => {
           let flavorTotal = 0;
-          const lineRealData = realProduction[lineId]?.[flavor] || {};
+          const lineRealData = weekRealProduction[lineId]?.[flavor] || {};
           dateKeys.forEach(dateKey => flavorTotal += lineRealData[dateKey] || 0);
           return acc + flavorTotal;
         }, 0);
@@ -172,7 +187,7 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
               <div className="flex-1 text-right">
                 <p className="text-[6px] font-black text-slate-400 uppercase tracking-[0.2em] mb-0.5">Confidencial - Planta</p>
                 <p className="text-base font-black text-slate-900 uppercase leading-none">Semana {weekNumber}</p>
-                <p className="text-[7px] text-slate-400 font-bold uppercase mt-0.5">{format(weekStartDate, "dd 'de' MMMM yyyy", { locale: es })}</p>
+                 <p className="text-[7px] text-slate-400 font-bold uppercase mt-0.5">{format(weekStart, "dd 'de' MMMM yyyy", { locale: es })}</p>
               </div>
             </div>
 
@@ -192,7 +207,7 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
                 </thead>
                 <tbody>
                   {PRODUCT_LIST.map((flavor, fIdx) => {
-                    const dailyVals = dateKeys.map(key => realProduction[lineId]?.[flavor]?.[key] || 0);
+                    const dailyVals = dateKeys.map(key => weekRealProduction[lineId]?.[flavor]?.[key] || 0);
                     const flavorTotal = dailyVals.reduce((a, b) => a + b, 0);
 
                     return (
@@ -214,7 +229,7 @@ export function WeeklyControlReport({ realProduction, weekStartDate }: WeeklyCon
                   <tr className="h-7">
                     <td className="px-1.5 py-0 border border-slate-900 uppercase">TOTAL LÍNEA {lineId}</td>
                     {dateKeys.map((key, idx) => {
-                      const dayTotal = PRODUCT_LIST.reduce((acc, flavor) => acc + (realProduction[lineId]?.[flavor]?.[key] || 0), 0);
+                      const dayTotal = PRODUCT_LIST.reduce((acc, flavor) => acc + (weekRealProduction[lineId]?.[flavor]?.[key] || 0), 0);
                       return (
                         <td key={idx} className="px-0.5 py-0 border border-slate-900 text-center tabular-nums text-[9pt]">
                           {dayTotal.toLocaleString('es-ES')}
