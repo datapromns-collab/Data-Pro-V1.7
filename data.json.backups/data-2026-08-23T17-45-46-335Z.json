@@ -7941,6 +7941,19 @@
             "endTime": "2026-08-23T09:43:49.440Z",
             "id": "qruenzx9c",
             "color": "#47CCB0"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "6",
+            "loadPerHour": 1200,
+            "quantity": 9600,
+            "durationHours": 8,
+            "presentation": "0.4Lts",
+            "tanks": 0.54,
+            "startTime": "2026-08-23T01:00:00.000Z",
+            "endTime": "2026-08-23T09:00:00.000Z",
+            "id": "fjmf03i7k",
+            "color": "#ec4899"
           }
         ],
         "realProduction": {},
@@ -8380,7 +8393,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-23T12:31:46.288Z"
+    "updatedAt": "2026-08-23T17:16:46.178Z"
   },
   "ordenesSap": [
     {
