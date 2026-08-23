@@ -3,7 +3,7 @@
 import { useMemo } from 'react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { format, getISOWeek, startOfWeek } from 'date-fns';
+import { format, getISOWeek, startOfWeek, startOfDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { PRODUCT_LIST, ALL_LINES_SUMMARY, getWeekDays } from '@/lib/planner-utils';
 
@@ -24,9 +24,7 @@ export function WeeklyControlReport({ weeklyData, weekStart }: WeeklyControlRepo
   const dateKeys = useMemo(() => weekDays.map(d => format(d, 'yyyy-MM-dd')), [weekDays]);
 
   const selectedWeekKey = useMemo(() => {
-    const d = new Date(weekStart);
-    d.setHours(0, 0, 0, 0);
-    const start = startOfWeek(d, { weekStartsOn: 1 });
+    const start = startOfWeek(startOfDay(weekStart), { weekStartsOn: 1 });
     return format(start, 'yyyy-MM-dd');
   }, [weekStart]);
 
