@@ -598,6 +598,7 @@ export default function PlannerPage() {
   const [activeTab, setActiveTab] = useState('gantt');
   const [insumosSubTab, setInsumosSubTab] = useState('co2');
   const [insumosPeriodoSubTab, setInsumosPeriodoSubTab] = useState('diario');
+  const [procesosSubTab, setProcesosSubTab] = useState('ptab');
   const [insumosFecha, setInsumosFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -2273,7 +2274,7 @@ export default function PlannerPage() {
                      {isDemon && (
                      <Button 
                        variant="ghost" 
-                       onClick={() => { setActiveModule('procesos'); setActiveTab('procesos-view'); }}
+                       onClick={() => { setActiveModule('procesos'); setActiveTab('procesos-view'); setProcesosSubTab('ptab'); }}
                        className={sidebarButtonClass(activeModule === 'procesos', "bg-teal-600 hover:bg-teal-700", "shadow-teal-400/30")}
                      >
                        <div className={iconContainerClass(activeModule === 'procesos')}>
@@ -4087,12 +4088,56 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                        )}
                     </>
                   )}
-                   {activeModule === 'procesos' && isDemon && (
-                     <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                       <Settings className="h-12 w-12 mb-4 opacity-20" />
-                       Módulo de Procesos en Desarrollo
-                     </div>
-                   )}
+                    {activeModule === 'procesos' && isDemon && (
+                      <div className="flex flex-col h-full">
+                        <div className="flex items-center gap-2 mb-2 no-print">
+                          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                            {['ptab', 'miteco', 'sala-jarabe'].map((tab) => (
+                              <button
+                                key={tab}
+                                onClick={() => setProcesosSubTab(tab)}
+                                className={cn(
+                                  "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                  procesosSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                )}
+                              >
+                                {tab === 'ptab' && <FlaskConical className="h-3.5 w-3.5" />}
+                                {tab === 'miteco' && <Gauge className="h-3.5 w-3.5" />}
+                                {tab === 'sala-jarabe' && <Droplets className="h-3.5 w-3.5" />}
+                                {tab === 'ptab' ? 'PTAB' : tab === 'miteco' ? 'MITECO' : 'Sala de jarabe'}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                        {procesosSubTab === 'ptab' && (
+                          <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                            <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                              <div className="flex flex-col h-full gap-3">
+                                <div className="text-slate-400 uppercase font-black text-sm tracking-widest">PTAB</div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {procesosSubTab === 'miteco' && (
+                          <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                            <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                              <div className="flex flex-col h-full gap-3">
+                                <div className="text-slate-400 uppercase font-black text-sm tracking-widest">MITECO</div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        {procesosSubTab === 'sala-jarabe' && (
+                          <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                            <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                              <div className="flex flex-col h-full gap-3">
+                                <div className="text-slate-400 uppercase font-black text-sm tracking-widest">Sala de jarabe</div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
                     {activeModule === 'calidad' && isDemon && (
                       <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                         <CheckSquare className="h-12 w-12 mb-4 opacity-20" />

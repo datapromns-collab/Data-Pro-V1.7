@@ -6,6 +6,7 @@ import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { format, parseISO, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { PRODUCT_LIST, ALL_LINES_SUMMARY, getWeekDays } from '@/lib/planner-utils';
+import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
 
 interface WeeklySummaryReportProps {
   realProduction: Record<string, Record<string, Record<string, number>>>;
@@ -14,6 +15,28 @@ interface WeeklySummaryReportProps {
 
 export function WeeklySummaryReport({ realProduction, weekStart }: WeeklySummaryReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
+  const { ordenes: ordenesSap } = useOrdenesSap();
+
+  const realProductionAuto = useMemo(() => {
+    const result: Record<string, Record<string, Record<string, number>>> = {};
+    ordenesSap.forEach(orden => {
+      const lineId = String(orden.linea);
+      orden.dias.forEach(dia => {
+        const dateKey = dia.fechaInicio;
+        const total =
+          (Number(dia.cajas1) || 0) +
+          (Number(dia.cajas2) || 0) +
+          (Number(dia.cajas3) || 0) +
+          (Number(dia.cajas4) || 0);
+        if (total <= 0 || !dateKey) return;
+        if (!result[lineId]) result[lineId] = {};
+        if (!result[lineId][orden.sabor]) result[lineId][orden.sabor] = {};
+        result[lineId][orden.sabor][dateKey] =
+          (result[lineId][orden.sabor][dateKey] || 0) + total;
+      });
+    });
+    return result;
+  }, [ordenesSap]);
 
   const weekDays = useMemo(() => {
     const d = parseISO(weekStart);
@@ -24,12 +47,13 @@ export function WeeklySummaryReport({ realProduction, weekStart }: WeeklySummary
 
   const weekData = useMemo(() => {
     const result: Record<string, Record<string, number>> = {};
+    const source = realProductionAuto;
 
     PRODUCT_LIST.forEach(product => {
       result[product] = {};
       ALL_LINES_SUMMARY.forEach(lineId => {
         let lineProductTotal = 0;
-        const lineRealData = realProduction[lineId]?.[product] || {};
+        const lineRealData = source[lineId]?.[product] || {};
 
         Object.entries(lineRealData).forEach(([dateKey, qty]) => {
           if (weekDayKeys.includes(dateKey)) {
@@ -41,7 +65,7 @@ export function WeeklySummaryReport({ realProduction, weekStart }: WeeklySummary
     });
 
     return result;
-  }, [realProduction, weekDayKeys]);
+  }, [realProductionAuto, weekDayKeys]);
 
   const weekLabel = useMemo(() => {
     const start = parseISO(weekStart);
