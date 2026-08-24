@@ -8481,7 +8481,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-24T15:24:03.431Z"
+    "updatedAt": "2026-08-24T17:56:58.150Z"
   },
   "ordenesSap": [
     {
@@ -14234,6 +14234,206 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 1518
+        }
+      ]
+    },
+    {
+      "id": "1-1787593306676",
+      "linea": 1,
+      "sabor": "GLUP PIÑA",
+      "ordenNumero": "63153",
+      "semana": 35,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-24",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1787593404907",
+      "linea": 2,
+      "sabor": "GLUP MANZANA ROJA",
+      "ordenNumero": "63159",
+      "semana": 35,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-24",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1787593491127",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63165",
+      "semana": 35,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-24",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1787593564237",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63171",
+      "semana": 35,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-24",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1787593785804",
+      "linea": 5,
+      "sabor": "JUSTY DURAZNO",
+      "ordenNumero": "63176",
+      "semana": 35,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-24",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1787593797900",
+      "linea": 6,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "63182",
+      "semana": 35,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-24",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1787593935871",
+      "linea": 7,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "63188",
+      "semana": 35,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-24",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1787594045127",
+      "linea": 2,
+      "sabor": "GLUP NARANJA",
+      "ordenNumero": "63194",
+      "semana": 35,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-24",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1787594144712",
+      "linea": 7,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "63200",
+      "semana": 35,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-24",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1787594217920",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63206",
+      "semana": 35,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-24",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
