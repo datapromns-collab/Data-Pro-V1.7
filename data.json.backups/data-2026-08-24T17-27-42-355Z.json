@@ -8481,7 +8481,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-24T14:59:44.226Z"
+    "updatedAt": "2026-08-24T15:24:03.431Z"
   },
   "ordenesSap": [
     {
@@ -24648,6 +24648,33 @@
             "preparado": "40",
             "final": "40"
           }
+        },
+        "2026-08-17": {
+          "GLUP COLA": {
+            "inicial": "48",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "14.36",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP MANZANA VERDE": {
+            "inicial": "19",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "18",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY NARANJA": {
+            "inicial": "40",
+            "preparado": "",
+            "final": ""
+          }
         }
       },
       "sugar": {
@@ -24930,6 +24957,18 @@
             "invInicialSacos": "2480",
             "recepcionSacos": "",
             "invFinalSacos": "2400"
+          }
+        },
+        "2026-08-17": {
+          "PORTUGUESA": {
+            "invInicialSacos": "8880",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
           }
         }
       },
@@ -25242,6 +25281,20 @@
           "Sala 1": {
             "invInicialSacos": "1377",
             "invFinalSacos": "462"
+          }
+        },
+        "2026-08-17": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": ""
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "285",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "462",
+            "invFinalSacos": ""
           }
         }
       },
