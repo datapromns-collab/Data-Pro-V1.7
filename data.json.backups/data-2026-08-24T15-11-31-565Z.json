@@ -8083,43 +8083,6 @@
             "color": "#f59e0b"
           },
           {
-            "name": "GLUP NARANJA",
-            "lineId": "2",
-            "loadPerHour": 2500,
-            "quantity": 120000,
-            "durationHours": 48,
-            "presentation": "2Lts",
-            "tanks": 16.87,
-            "startTime": "2026-08-24T11:00:00.000Z",
-            "endTime": "2026-08-26T11:00:00.000Z",
-            "id": "y9bobpv3z",
-            "color": "#6366f1"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "2",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-08-26T11:00:00.000Z",
-            "endTime": "2026-08-26T13:00:00.000Z",
-            "id": "c4e9clyl9",
-            "color": "#47CCB0"
-          },
-          {
-            "name": "GLUP KOLITA",
-            "lineId": "2",
-            "loadPerHour": 2500,
-            "quantity": 170000,
-            "durationHours": 68,
-            "presentation": "2Lts",
-            "tanks": 19.11,
-            "startTime": "2026-08-26T13:00:00.000Z",
-            "endTime": "2026-08-29T09:00:00.000Z",
-            "id": "hspiz3ske",
-            "color": "#ec4899"
-          },
-          {
             "name": "GLUP COLA",
             "lineId": "3",
             "loadPerHour": 2800,
@@ -8423,6 +8386,67 @@
             "endTime": "2026-08-29T09:00:00.000Z",
             "id": "m4jp0j9w7",
             "color": "#6366f1"
+          },
+          {
+            "name": "GLUP MANZANA ROJA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 2469,
+            "durationHours": 0.9876,
+            "presentation": "2Lts",
+            "tanks": 0.31,
+            "startTime": "2026-08-24T11:00:00.000Z",
+            "endTime": "2026-08-24T11:59:15.360Z",
+            "id": "eo0e0rx60",
+            "color": "#6366f1"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-08-24T12:00:00.000Z",
+            "endTime": "2026-08-24T12:30:00.000Z",
+            "id": "agxlszxo3",
+            "color": "#6366f1"
+          },
+          {
+            "name": "GLUP NARANJA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 120000,
+            "durationHours": 48,
+            "presentation": "2Lts",
+            "tanks": 16.87,
+            "startTime": "2026-08-24T12:30:00.000Z",
+            "endTime": "2026-08-26T12:30:00.000Z",
+            "id": "c74396qiz",
+            "color": "#10b981"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-08-26T12:30:00.000Z",
+            "endTime": "2026-08-26T14:30:00.000Z",
+            "id": "q7bl0r5xd",
+            "color": "#6366f1"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 166250,
+            "durationHours": 66.5,
+            "presentation": "2Lts",
+            "tanks": 18.69,
+            "startTime": "2026-08-26T14:30:00.000Z",
+            "endTime": "2026-08-29T09:00:00.000Z",
+            "id": "3eg61aiqs",
+            "color": "#ef4444"
           }
         ],
         "realProduction": {},
@@ -8448,13 +8472,16 @@
           "zfqiw9eep",
           "1y7c1ggde",
           "eyvmgos1b",
-          "gggkr162o"
+          "gggkr162o",
+          "y9bobpv3z",
+          "c4e9clyl9",
+          "hspiz3ske"
         ]
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-24T10:47:45.307Z"
+    "updatedAt": "2026-08-24T14:59:44.226Z"
   },
   "ordenesSap": [
     {
@@ -62169,7 +62196,8 @@
         "auto-3-1787486545956": {
           "cajasPlanificadas": 26600,
           "jarabeReal": 44819,
-          "ubb": 21.54
+          "ubb": 21.54,
+          "producto": "136"
         }
       },
       "linea-4": {
@@ -62226,7 +62254,8 @@
           "cajasPlanificadas": 128800,
           "jarabeReal": 154989,
           "ubb": 53.83,
-          "pnc": 64
+          "pnc": 64,
+          "producto": "342"
         }
       },
       "linea-5": {
