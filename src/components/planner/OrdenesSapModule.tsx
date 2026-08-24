@@ -262,7 +262,7 @@ export function CorrelativoSelector({ activeLinea = 1, selectedFecha }: { active
         <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">
           {getFechaLinea()}
         </span>
-        <button onClick={() => navigator.clipboard.writeText(getFechaLinea())} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar fecha">
+        <button onClick={() => copiarAlPortapapeles(getFechaLinea())} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar fecha">
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
         </button>
         <Select
@@ -283,7 +283,7 @@ export function CorrelativoSelector({ activeLinea = 1, selectedFecha }: { active
         <span className="text-[10px] font-black uppercase tracking-widest text-slate-700">
           {getCorrelativo()}
         </span>
-        <button onClick={() => navigator.clipboard.writeText(getCorrelativo())} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar correlativo">
+        <button onClick={() => copiarAlPortapapeles(getCorrelativo())} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar correlativo">
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
         </button>
       </div>
@@ -303,7 +303,7 @@ export function CorrelativoSelector({ activeLinea = 1, selectedFecha }: { active
             ))}
           </SelectContent>
         </Select>
-        <button onClick={() => navigator.clipboard.writeText(`${turnoSeleccionado} ${getFechaParaTurno(turnoSeleccionado)} L${activeLinea}`)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar turno">
+        <button onClick={() => copiarAlPortapapeles(`${turnoSeleccionado} ${getFechaParaTurno(turnoSeleccionado)} L${activeLinea}`)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar turno">
           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
         </button>
       </div>
@@ -324,6 +324,24 @@ export default function OrdenesSapModule({
   onFechaChange?: (fecha: Date | undefined) => void;
   userId?: string;
 }) {
+  const copiarAlPortapapeles = (texto: string) => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard && copiarAlPortapapeles) {
+      copiarAlPortapapeles(texto).catch(() => fallbackCopy(texto));
+    } else {
+      fallbackCopy(texto);
+    }
+  };
+  const fallbackCopy = (texto: string) => {
+    if (typeof document === 'undefined') return;
+    const textarea = document.createElement('textarea');
+    textarea.value = texto;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try { document.execCommand('copy'); } catch (e) { /* noop */ }
+    document.body.removeChild(textarea);
+  };
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
   const allowedSections = userId === 'maria.mds' ? ['carga-prod', 'creador-ordenes', 'seguimiento-ordenes'] as const : ['carga-prod', 'creador-ordenes', 'seguimiento-ordenes', 'dia-a-dia', 'prodt-semanal', 'resumen-mensual'] as const;
   const isSectionAllowed = (section: string) => allowedSections.includes(section as any);
@@ -2100,7 +2118,7 @@ const exportarPDFdia = async () => {
                             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">
                               <div className="flex items-center justify-center gap-1.5">
                                 <span>AGUA-00005</span>
-                                <button onClick={() => navigator.clipboard.writeText('AGUA-00005')} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
+                                <button onClick={() => copiarAlPortapapeles('AGUA-00005')} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
                                   <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
                                 </button>
                               </div>
@@ -2112,7 +2130,7 @@ const exportarPDFdia = async () => {
                             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">
                               <div className="flex items-center justify-center gap-1.5">
                                 <span>AGUA-00004</span>
-                                <button onClick={() => navigator.clipboard.writeText('AGUA-00004')} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
+                                <button onClick={() => copiarAlPortapapeles('AGUA-00004')} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
                                   <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
                                 </button>
                               </div>
@@ -2124,7 +2142,7 @@ const exportarPDFdia = async () => {
                             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">
                               <div className="flex items-center justify-center gap-1.5">
                                 <span>AGUA-00003</span>
-                                <button onClick={() => navigator.clipboard.writeText('AGUA-00003')} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
+                                <button onClick={() => copiarAlPortapapeles('AGUA-00003')} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
                                   <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
                                 </button>
                               </div>
@@ -2136,7 +2154,7 @@ const exportarPDFdia = async () => {
                             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">
                               <div className="flex items-center justify-center gap-1.5">
                                 <span>AGUA-00002</span>
-                                <button onClick={() => navigator.clipboard.writeText('AGUA-00002')} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
+                                <button onClick={() => copiarAlPortapapeles('AGUA-00002')} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
                                   <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
                                 </button>
                               </div>
@@ -2148,7 +2166,7 @@ const exportarPDFdia = async () => {
                             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">
                               <div className="flex items-center justify-center gap-1.5">
                                 <span>JARA-00001</span>
-                                <button onClick={() => navigator.clipboard.writeText('JARA-00001')} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
+                                <button onClick={() => copiarAlPortapapeles('JARA-00001')} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
                                   <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
                                 </button>
                               </div>
@@ -2226,7 +2244,7 @@ const exportarPDFdia = async () => {
                               <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">
                                 <div className="flex items-center justify-center gap-1.5">
                                   <span>{values.codigo}</span>
-                                  <button onClick={() => navigator.clipboard.writeText(values.codigo)} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
+                                  <button onClick={() => copiarAlPortapapeles(values.codigo)} className="h-6 w-6 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar código">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
                                   </button>
                                 </div>
@@ -2425,7 +2443,7 @@ const exportarPDFdia = async () => {
                                     <div className="p-1 border-b border-slate-100">
                                       <div className="flex items-center gap-1">
                                         <Input value={orden.ordenNumero} readOnly className="h-7 text-[10px] font-bold rounded-md border-slate-100 bg-slate-50 text-slate-500 px-1.5 flex-1 min-w-0" />
-                                        <button onClick={() => navigator.clipboard.writeText(orden.ordenNumero)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar número de orden">
+                                        <button onClick={() => copiarAlPortapapeles(orden.ordenNumero)} className="h-7 w-7 flex items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:text-slate-900 hover:border-slate-900 transition-none flex-shrink-0" title="Copiar número de orden">
                                           <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
                                         </button>
                                       </div>
