@@ -147,6 +147,24 @@ const TURNOS_OPCIONES = [
 ];
 
 export function CorrelativoSelector({ activeLinea = 1, selectedFecha }: { activeLinea?: number; selectedFecha?: Date | undefined; }) {
+  const copiarAlPortapapeles = (texto: string) => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).catch(() => fallbackCopy(texto));
+    } else {
+      fallbackCopy(texto);
+    }
+  };
+  const fallbackCopy = (texto: string) => {
+    if (typeof document === 'undefined') return;
+    const textarea = document.createElement('textarea');
+    textarea.value = texto;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try { document.execCommand('copy'); } catch (e) { /* noop */ }
+    document.body.removeChild(textarea);
+  };
   const [correlativoNumero, setCorrelativoNumero] = useState<number>(() => {
     try {
       const stored = localStorage.getItem(CORRELATIVO_KEY);
@@ -325,8 +343,8 @@ export default function OrdenesSapModule({
   userId?: string;
 }) {
   const copiarAlPortapapeles = (texto: string) => {
-    if (typeof navigator !== 'undefined' && navigator.clipboard && copiarAlPortapapeles) {
-      copiarAlPortapapeles(texto).catch(() => fallbackCopy(texto));
+    if (typeof navigator !== 'undefined' && navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(texto).catch(() => fallbackCopy(texto));
     } else {
       fallbackCopy(texto);
     }
