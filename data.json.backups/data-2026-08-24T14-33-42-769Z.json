@@ -8454,7 +8454,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-23T21:39:01.135Z"
+    "updatedAt": "2026-08-24T10:47:45.307Z"
   },
   "ordenesSap": [
     {
@@ -62167,7 +62167,9 @@
           "producto": "1688"
         },
         "auto-3-1787486545956": {
-          "cajasPlanificadas": 26600
+          "cajasPlanificadas": 26600,
+          "jarabeReal": 44819,
+          "ubb": 21.54
         }
       },
       "linea-4": {
@@ -62221,7 +62223,10 @@
           "ubb": 35.62
         },
         "auto-4-1787322762208": {
-          "cajasPlanificadas": 128800
+          "cajasPlanificadas": 128800,
+          "jarabeReal": 154989,
+          "ubb": 53.83,
+          "pnc": 64
         }
       },
       "linea-5": {
@@ -62264,8 +62269,8 @@
         },
         "auto-5-1787322774349": {
           "cajasPlanificadas": 48400,
-          "jarabeReal": 234000,
-          "ubb": 234,
+          "jarabeReal": 254000,
+          "ubb": 254,
           "producto": "188"
         }
       },
