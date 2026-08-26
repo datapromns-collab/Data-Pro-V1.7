@@ -8229,67 +8229,6 @@
             "color": "#f59e0b"
           },
           {
-            "name": "JUSTY DURAZNO",
-            "lineId": "5",
-            "loadPerHour": 1210,
-            "quantity": 29040,
-            "durationHours": 24,
-            "presentation": "1.5Lts",
-            "tanks": 26.14,
-            "startTime": "2026-08-26T15:00:00.000Z",
-            "endTime": "2026-08-27T15:00:00.000Z",
-            "id": "v9nn22xof",
-            "color": "#587593"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "5",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-08-27T15:00:00.000Z",
-            "endTime": "2026-08-27T17:00:00.000Z",
-            "id": "tc9uhka16",
-            "color": "#ef4444"
-          },
-          {
-            "name": "JUSTY DURAZNO",
-            "lineId": "5",
-            "loadPerHour": 1210,
-            "quantity": 29040,
-            "durationHours": 24,
-            "presentation": "1.5Lts",
-            "tanks": 26.14,
-            "startTime": "2026-08-27T17:00:00.000Z",
-            "endTime": "2026-08-28T17:00:00.000Z",
-            "id": "jfhf3pmif",
-            "color": "#47CCB0"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "5",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-08-28T17:00:00.000Z",
-            "endTime": "2026-08-28T19:00:00.000Z",
-            "id": "53ovgegan",
-            "color": "#47CCB0"
-          },
-          {
-            "name": "JUSTY DURAZNO",
-            "lineId": "5",
-            "loadPerHour": 1210,
-            "quantity": 14520,
-            "durationHours": 12,
-            "presentation": "1.5Lts",
-            "tanks": 13.07,
-            "startTime": "2026-08-28T19:00:00.000Z",
-            "endTime": "2026-08-29T07:00:00.000Z",
-            "id": "ao39m8vs9",
-            "color": "#ef4444"
-          },
-          {
             "name": "GLUP KOLITA",
             "lineId": "6",
             "loadPerHour": 1200,
@@ -8495,6 +8434,78 @@
             "endTime": "2026-08-29T09:00:00.000Z",
             "id": "y0oaveg9y",
             "color": "#587593"
+          },
+          {
+            "name": "JUSTY DURAZNO",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 22990,
+            "durationHours": 19,
+            "presentation": "1.5Lts",
+            "tanks": 20.69,
+            "startTime": "2026-08-26T15:00:00.000Z",
+            "endTime": "2026-08-27T10:00:00.000Z",
+            "id": "dz4kb8kkz",
+            "color": "#6366f1"
+          },
+          {
+            "name": "MTTO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 10.5,
+            "startTime": "2026-08-27T10:00:00.000Z",
+            "endTime": "2026-08-27T20:30:00.000Z",
+            "id": "el7xgm7e4",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-08-27T20:30:00.000Z",
+            "endTime": "2026-08-27T22:30:00.000Z",
+            "id": "t6mqfww2x",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "JUSTY DURAZNO",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-08-27T22:30:00.000Z",
+            "endTime": "2026-08-28T22:30:00.000Z",
+            "id": "qullw0s57",
+            "color": "#ef4444"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-08-28T22:30:00.000Z",
+            "endTime": "2026-08-29T00:30:00.000Z",
+            "id": "ajow5p8kz",
+            "color": "#ec4899"
+          },
+          {
+            "name": "JUSTY DURAZNO",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 8470,
+            "durationHours": 7,
+            "presentation": "1.5Lts",
+            "tanks": 7.62,
+            "startTime": "2026-08-29T00:30:00.000Z",
+            "endTime": "2026-08-29T07:30:00.000Z",
+            "id": "g2uoc7kn0",
+            "color": "#587593"
           }
         ],
         "realProduction": {},
@@ -8525,13 +8536,18 @@
           "c4e9clyl9",
           "hspiz3ske",
           "q7bl0r5xd",
-          "3eg61aiqs"
+          "3eg61aiqs",
+          "v9nn22xof",
+          "tc9uhka16",
+          "jfhf3pmif",
+          "53ovgegan",
+          "ao39m8vs9"
         ]
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-26T15:24:24.030Z"
+    "updatedAt": "2026-08-26T21:43:23.352Z"
   },
   "ordenesSap": [
     {
@@ -14428,6 +14444,17 @@
           "cajas3": 1450,
           "ticket4": "",
           "cajas4": 10800
+        },
+        {
+          "fechaInicio": "2026-08-26",
+          "ticket1": "17599",
+          "cajas1": 2150,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -14462,8 +14489,8 @@
         },
         {
           "fechaInicio": "2026-08-26",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17722",
+          "cajas1": 3200,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -14524,8 +14551,8 @@
         },
         {
           "fechaInicio": "2026-08-26",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17628",
+          "cajas1": 10992,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -14583,6 +14610,17 @@
           "cajas3": 5304,
           "ticket4": "",
           "cajas4": 1092
+        },
+        {
+          "fechaInicio": "2026-08-26",
+          "ticket1": "17771",
+          "cajas1": 3432,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -14608,8 +14646,8 @@
           "fechaInicio": "2026-08-26",
           "ticket1": "17680",
           "cajas1": 1520,
-          "ticket2": "",
-          "cajas2": 0,
+          "ticket2": "17680",
+          "cajas2": 14880,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -14629,27 +14667,7 @@
           "ticket1": "17817",
           "cajas1": 800,
           "ticket2": "",
-          "cajas2": 3120,
-          "ticket3": "",
-          "cajas3": 0,
-          "ticket4": "",
-          "cajas4": 0
-        }
-      ]
-    },
-    {
-      "id": "2-1787746751497",
-      "linea": 2,
-      "sabor": "GLUP KOLITA",
-      "ordenNumero": "63224",
-      "semana": 35,
-      "dias": [
-        {
-          "fechaInicio": "2026-08-26",
-          "ticket1": "",
-          "cajas1": 0,
-          "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 11760,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -14666,8 +14684,8 @@
       "dias": [
         {
           "fechaInicio": "2026-08-26",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17865",
+          "cajas1": 19680,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -14685,7 +14703,7 @@
       "semana": 35,
       "dias": [
         {
-          "fechaInicio": "2026-08-26",
+          "fechaInicio": "2026-08-27",
           "ticket1": "",
           "cajas1": 0,
           "ticket2": "",
@@ -14702,6 +14720,46 @@
       "linea": 6,
       "sabor": "GLUP COLA",
       "ordenNumero": "63241",
+      "semana": 35,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-26",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1787776289584",
+      "linea": 2,
+      "sabor": "GLUP PIÑA PARCHITA",
+      "ordenNumero": "63247",
+      "semana": 35,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-26",
+          "ticket1": "17628",
+          "cajas1": 3680,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1787776312174",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "63224",
       "semana": 35,
       "dias": [
         {
@@ -69117,6 +69175,7 @@
     "1-1785349102112",
     "1-1785616908590",
     "1-1785841894229",
-    "5-1785842507844"
+    "5-1785842507844",
+    "2-1787746751497"
   ]
 }
