@@ -5151,8 +5151,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
               {printMode === 'monthly-compliance' && (
                 <div className="p-0">
                   <MonthlyComplianceReport 
-                    tasks={tasks}
-                    realProduction={realProduction}
+                    weeklyData={weeklyData}
                     selectedMonth={selectedMonth} 
                     selectedYear={selectedYear}
                     subtitle={`Cumplimiento de planificación mes de ${format(new Date(parseInt(selectedYear), parseInt(selectedMonth) - 1), 'MMMM', { locale: es })}`}

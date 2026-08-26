@@ -3,14 +3,13 @@
 import { useMemo } from 'react';
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { format, startOfMonth, endOfMonth, eachDayOfInterval, setHours, setMinutes, startOfDay, addDays } from 'date-fns';
+import { format, startOfMonth, endOfMonth, eachDayOfInterval, setHours, setMinutes, startOfDay, addDays, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { PRODUCT_LIST, getWeekDays } from '@/lib/planner-utils';
 import { ScheduledTask } from '@/lib/types';
 
 interface MonthlyComplianceReportProps {
-  tasks: any[];
-  realProduction: Record<string, Record<string, Record<string, number>>>;
+  weeklyData: Record<string, { tasks: any[]; realProduction: Record<string, Record<string, Record<string, number>>> }>;
   selectedMonth: string;
   selectedYear: string;
   title?: string;
@@ -19,7 +18,7 @@ interface MonthlyComplianceReportProps {
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
-export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, selectedYear, title = 'Cumplimiento Mensual de Planta', subtitle }: MonthlyComplianceReportProps) {
+export function MonthlyComplianceReport({ weeklyData, selectedMonth, selectedYear, title = 'Cumplimiento Mensual de Planta', subtitle }: MonthlyComplianceReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
 
   const monthName = useMemo(() => {
@@ -32,11 +31,11 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
 
   const finalSubtitle = subtitle || `Cumplimiento de planificación mes de ${monthName}`;
 
-  const getLineDailyPlanned = (lineId: string, day: Date) => {
+  const getLineDailyPlanned = (lineId: string, day: Date, allTasks: any[]) => {
     const dayStart = setMinutes(setHours(startOfDay(day), 7), 0);
     const dayEnd = addDays(dayStart, 1);
 
-    return tasks
+    return allTasks
       .filter(t => t.lineId === lineId && t.quantity > 0)
       .reduce((acc, task) => {
         const intersectionStart = task.startTime > dayStart ? task.startTime : dayStart;
@@ -64,15 +63,45 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
     const monthEnd = endOfMonth(monthStart);
     const daysInMonth = eachDayOfInterval({ start: monthStart, end: monthEnd });
 
+    const allMonthTasks = daysInMonth.reduce((acc, day) => {
+      const weekKey = format(startOfWeek(day, { weekStartsOn: 1 }), 'yyyy-MM-dd');
+      const weekData = weeklyData[weekKey];
+      if (weekData && weekData.tasks) {
+        weekData.tasks.forEach(task => {
+          if (!acc.some((t: any) => t.id === task.id)) {
+            acc.push(task);
+          }
+        });
+      }
+      return acc;
+    }, [] as any[]);
+
+    const allRealProduction = daysInMonth.reduce((acc, day) => {
+      const weekKey = format(startOfWeek(day, { weekStartsOn: 1 }), 'yyyy-MM-dd');
+      const weekData = weeklyData[weekKey];
+      if (weekData && weekData.realProduction) {
+        Object.entries(weekData.realProduction).forEach(([lineId, flavors]) => {
+          if (!acc[lineId]) acc[lineId] = {};
+          Object.entries(flavors).forEach(([flavor, dates]) => {
+            if (!acc[lineId][flavor]) acc[lineId][flavor] = {};
+            Object.entries(dates).forEach(([dateKey, qty]) => {
+              acc[lineId][flavor][dateKey] = (acc[lineId][flavor][dateKey] || 0) + qty;
+            });
+          });
+        });
+      }
+      return acc;
+    }, {} as Record<string, Record<string, Record<string, number>>>);
+
     return LINES.map(lineId => {
       let totalPlanned = 0;
       let totalReal = 0;
 
       daysInMonth.forEach(day => {
-        totalPlanned += getLineDailyPlanned(lineId, day);
+        totalPlanned += getLineDailyPlanned(lineId, day, allMonthTasks);
         PRODUCT_LIST.forEach(product => {
           const dateKey = format(day, 'yyyy-MM-dd');
-          totalReal += realProduction[lineId]?.[product]?.[dateKey] || 0;
+          totalReal += (allRealProduction[lineId]?.[product]?.[dateKey] || 0);
         });
       });
 
@@ -85,7 +114,7 @@ export function MonthlyComplianceReport({ tasks, realProduction, selectedMonth, 
         compliance: parseFloat(compliance.toFixed(2))
       };
     });
-  }, [tasks, realProduction, selectedMonth, selectedYear]);
+  }, [weeklyData, selectedMonth, selectedYear]);
 
   const maxVal = useMemo(() => {
     const vals = monthlyData.flatMap(d => [d.planned, d.real]);
