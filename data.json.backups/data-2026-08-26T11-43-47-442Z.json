@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-24T00:00:00.000",
+      "weekStartDate": "2026-08-25T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -8481,7 +8481,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-24T21:37:16.441Z"
+    "updatedAt": "2026-08-26T11:43:28.510Z"
   },
   "ordenesSap": [
     {
@@ -14248,12 +14248,23 @@
           "fechaInicio": "2026-08-24",
           "ticket1": "17813",
           "cajas1": 5600,
-          "ticket2": "",
+          "ticket2": "17814",
           "cajas2": 3200,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2400,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 16880
+        },
+        {
+          "fechaInicio": "2026-08-25",
+          "ticket1": "17815",
+          "cajas1": 4800,
+          "ticket2": "17816",
+          "cajas2": 7360,
+          "ticket3": "",
+          "cajas3": 2400,
+          "ticket4": "",
+          "cajas4": 11335
         }
       ]
     },
@@ -14288,12 +14299,23 @@
           "fechaInicio": "2026-08-24",
           "ticket1": "17675",
           "cajas1": 8000,
-          "ticket2": "",
+          "ticket2": "17677",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2320,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 27360
+        },
+        {
+          "fechaInicio": "2026-08-25",
+          "ticket1": "17678",
+          "cajas1": 9600,
+          "ticket2": "17679",
+          "cajas2": 9600,
+          "ticket3": "",
+          "cajas3": 3840,
+          "ticket4": "",
+          "cajas4": 22560
         }
       ]
     },
@@ -14308,8 +14330,19 @@
           "fechaInicio": "2026-08-24",
           "ticket1": "17861",
           "cajas1": 7824,
-          "ticket2": "",
+          "ticket2": "17862",
           "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 3040,
+          "ticket4": "",
+          "cajas4": 25440
+        },
+        {
+          "fechaInicio": "2026-08-25",
+          "ticket1": "17863",
+          "cajas1": 8640,
+          "ticket2": "",
+          "cajas2": 7200,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -14328,8 +14361,19 @@
           "fechaInicio": "2026-08-24",
           "ticket1": "17595",
           "cajas1": 4000,
-          "ticket2": "",
+          "ticket2": "17596",
           "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 850,
+          "ticket4": "",
+          "cajas4": 11250
+        },
+        {
+          "fechaInicio": "2026-08-25",
+          "ticket1": "17597",
+          "cajas1": 4000,
+          "ticket2": "",
+          "cajas2": 3100,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -14346,10 +14390,21 @@
       "dias": [
         {
           "fechaInicio": "2026-08-24",
-          "ticket1": "1771",
+          "ticket1": "17718",
           "cajas1": 6560,
-          "ticket2": "",
+          "ticket2": "17719",
           "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 1920,
+          "ticket4": "",
+          "cajas4": 4960
+        },
+        {
+          "fechaInicio": "2026-08-25",
+          "ticket1": "17720",
+          "cajas1": 5120,
+          "ticket2": "",
+          "cajas2": 640,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -14368,12 +14423,12 @@
           "fechaInicio": "2026-08-24",
           "ticket1": "17767",
           "cajas1": 12636,
-          "ticket2": "",
+          "ticket2": "17768",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2574,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 10384
         }
       ]
     },
@@ -14388,8 +14443,30 @@
           "fechaInicio": "2026-08-24",
           "ticket1": "17624",
           "cajas1": 4000,
-          "ticket2": "",
+          "ticket2": "17265",
           "cajas2": 3200,
+          "ticket3": "",
+          "cajas3": 2480,
+          "ticket4": "",
+          "cajas4": 16960
+        },
+        {
+          "fechaInicio": "2026-08-25",
+          "ticket1": "17626",
+          "cajas1": 2880,
+          "ticket2": "17627",
+          "cajas2": 8160,
+          "ticket3": "",
+          "cajas3": 2480,
+          "ticket4": "",
+          "cajas4": 21680
+        },
+        {
+          "fechaInicio": "2026-08-26",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -14408,6 +14485,17 @@
           "fechaInicio": "2026-08-24",
           "ticket1": "",
           "cajas1": 0,
+          "ticket2": "17768",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 6786,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-08-25",
+          "ticket1": "17769",
+          "cajas1": 1036,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -14425,11 +14513,11 @@
       "semana": 35,
       "dias": [
         {
-          "fechaInicio": "2026-08-24",
-          "ticket1": "",
-          "cajas1": 0,
+          "fechaInicio": "2026-08-25",
+          "ticket1": "17769",
+          "cajas1": 2730,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 3510,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
