@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-26T00:00:00.000",
+      "weekStartDate": "2026-08-24T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -8415,14 +8415,62 @@
             "name": "GLUP NARANJA",
             "lineId": "2",
             "loadPerHour": 2500,
+            "quantity": 73899,
+            "durationHours": 29.5596,
+            "presentation": "2Lts",
+            "tanks": 10.39,
+            "startTime": "2026-08-24T12:30:00.000Z",
+            "endTime": "2026-08-25T18:03:34.560Z",
+            "id": "c74396qiz",
+            "color": "#10b981"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-08-25T18:04:00.000Z",
+            "endTime": "2026-08-25T18:34:00.000Z",
+            "id": "lht9pt5zs",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP PIÑA PARCHITA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 6813,
+            "durationHours": 2.7252,
+            "presentation": "2Lts",
+            "tanks": 1,
+            "startTime": "2026-08-25T18:34:00.000Z",
+            "endTime": "2026-08-25T21:17:30.720Z",
+            "id": "4isouvhb5",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-08-25T21:18:00.000Z",
+            "endTime": "2026-08-25T21:48:00.000Z",
+            "id": "ebx16lmdm",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "2",
+            "loadPerHour": 2500,
             "quantity": 120000,
             "durationHours": 48,
             "presentation": "2Lts",
-            "tanks": 16.87,
-            "startTime": "2026-08-24T12:30:00.000Z",
-            "endTime": "2026-08-26T12:30:00.000Z",
-            "id": "c74396qiz",
-            "color": "#10b981"
+            "tanks": 13.49,
+            "startTime": "2026-08-25T21:48:00.000Z",
+            "endTime": "2026-08-27T21:48:00.000Z",
+            "id": "6arzus8yz",
+            "color": "#6366f1"
           },
           {
             "name": "CIP 3P ALCALINO",
@@ -8430,23 +8478,23 @@
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 2,
-            "startTime": "2026-08-26T12:30:00.000Z",
-            "endTime": "2026-08-26T14:30:00.000Z",
-            "id": "q7bl0r5xd",
-            "color": "#6366f1"
+            "startTime": "2026-08-27T21:48:00.000Z",
+            "endTime": "2026-08-27T23:48:00.000Z",
+            "id": "rc4aensj5",
+            "color": "#587593"
           },
           {
             "name": "GLUP KOLITA",
             "lineId": "2",
             "loadPerHour": 2500,
-            "quantity": 166250,
-            "durationHours": 66.5,
+            "quantity": 83000,
+            "durationHours": 33.2,
             "presentation": "2Lts",
-            "tanks": 18.69,
-            "startTime": "2026-08-26T14:30:00.000Z",
+            "tanks": 9.33,
+            "startTime": "2026-08-27T23:48:00.000Z",
             "endTime": "2026-08-29T09:00:00.000Z",
-            "id": "3eg61aiqs",
-            "color": "#ef4444"
+            "id": "y0oaveg9y",
+            "color": "#587593"
           }
         ],
         "realProduction": {},
@@ -8475,13 +8523,15 @@
           "gggkr162o",
           "y9bobpv3z",
           "c4e9clyl9",
-          "hspiz3ske"
+          "hspiz3ske",
+          "q7bl0r5xd",
+          "3eg61aiqs"
         ]
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-26T14:46:20.846Z"
+    "updatedAt": "2026-08-26T15:24:24.030Z"
   },
   "ordenesSap": [
     {
@@ -14556,8 +14606,8 @@
         },
         {
           "fechaInicio": "2026-08-26",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17680",
+          "cajas1": 1520,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -14579,7 +14629,7 @@
           "ticket1": "17817",
           "cajas1": 800,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 3120,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -62884,6 +62934,12 @@
           "cajasPlanificadas": 3435,
           "ubb": 4.73,
           "producto": "0"
+        },
+        "auto-1-1787593306676": {
+          "cajasPlanificadas": 72000,
+          "jarabeReal": 131380,
+          "ubb": 75.27,
+          "producto": "718"
         }
       },
       "linea-2": {
@@ -62974,6 +63030,12 @@
           "ubb": 6.69,
           "pnc": 50,
           "producto": "57"
+        },
+        "auto-2-1787593404907": {
+          "cajasPlanificadas": 2469,
+          "jarabeReal": 5111,
+          "ubb": 2.46,
+          "producto": "9"
         }
       },
       "linea-3": {
@@ -63048,6 +63110,12 @@
           "jarabeReal": 44819,
           "ubb": 21.54,
           "producto": "136"
+        },
+        "auto-3-1787593491127": {
+          "cajasPlanificadas": 134400,
+          "jarabeReal": 164547,
+          "ubb": 57.15,
+          "producto": "251"
         }
       },
       "linea-4": {
@@ -63106,6 +63174,12 @@
           "ubb": 53.83,
           "pnc": 64,
           "producto": "342"
+        },
+        "auto-4-1787593564237": {
+          "cajasPlanificadas": 134400,
+          "jarabeReal": 158953,
+          "ubb": 55.28,
+          "producto": "552"
         }
       },
       "linea-5": {
@@ -63151,6 +63225,12 @@
           "jarabeReal": 254000,
           "ubb": 254,
           "producto": "188"
+        },
+        "auto-5-1787593785804": {
+          "jarabeReal": 645000,
+          "ubb": 645,
+          "producto": "169",
+          "cajasPlanificadas": 55660
         }
       },
       "linea-6": {
@@ -63284,6 +63364,18 @@
           "jarabeReal": 34164.8,
           "ubb": 22,
           "producto": "110"
+        },
+        "auto-7-1787593935871": {
+          "cajasPlanificadas": 25875,
+          "jarabeReal": 51805,
+          "ubb": 18,
+          "producto": "973"
+        },
+        "auto-7-1787594144712": {
+          "cajasPlanificadas": 14225,
+          "jarabeReal": 19546,
+          "ubb": 12.59,
+          "producto": "93"
         }
       }
     },
