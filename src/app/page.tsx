@@ -5427,10 +5427,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                             mttoEsp: '',
                             descripcionFalla: '',
                             descripcionAccion: '',
-                             observaciones: plantaFormData.observaciones || '',
-                              bloqueado: true,
-                              usuario: user?.name || '',
-                          }];
+                              observaciones: plantaFormData.observaciones || '',
+                               bloqueado: false,
+                               usuario: user?.name || '',
+                           }];
                        });
                      }
                       setPlantaFormData({
@@ -5482,9 +5482,9 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                         mttoEsp: ordenFormData.mttoEsp || 'MTTO',
                         descripcionFalla: ordenFormData.descripcionFalla || '',
                         descripcionAccion: ordenFormData.descripcionAccion || '',
-                        observaciones: ordenFormData.observaciones || '',
-                        bloqueado: true,
-                        usuario: user?.name || '',
+                         observaciones: ordenFormData.observaciones || '',
+                         bloqueado: false,
+                         usuario: user?.name || '',
                       }]);
                      setOrdenFormData({
                        fechaOrden: format(new Date(), 'yyyy-MM-dd'),
