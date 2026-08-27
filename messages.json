@@ -118,7 +118,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "maria.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-08-26T14:52:39.343Z"
     },
     {
@@ -888,7 +888,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-08-26T14:52:39.343Z"
     },
     {
@@ -899,7 +899,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-08-23T18:40:35.194Z"
     },
     {
@@ -998,7 +998,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt1.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-08-26T14:52:39.343Z"
     },
     {
