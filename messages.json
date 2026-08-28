@@ -1328,7 +1328,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "g.tec.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-08-26T14:52:39.343Z"
     },
     {

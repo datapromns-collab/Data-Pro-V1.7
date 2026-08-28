@@ -73109,25 +73109,6 @@
         "usuario": "Luis Blandin",
         "id": 1787946610636,
         "bloqueado": true
-      },
-      {
-        "fecha": "2026-08-20",
-        "semana": 34,
-        "turno": "NOCTURNO",
-        "operador": "JOSE LAYA",
-        "linea": "Línea 1",
-        "equipo": "ENFARDADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "02:30",
-        "finParada": "02:40",
-        "totalMin": "10",
-        "zona": "Llenado",
-        "falla": "PELICULA ATASCADA EN MESA DE ELEVACION, PERDIDA DE FASE",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Blandin",
-        "id": 1787946657916,
-        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
