@@ -73128,6 +73128,25 @@
         "usuario": "Luis Blandin",
         "id": 1787946657916,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-20",
+        "semana": 34,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "18:30",
+        "finParada": "19:13",
+        "totalMin": "43",
+        "zona": "Llenado",
+        "falla": "ADECUACUACIONES LUEGO DE LA INTERRUPCION DE ENERGIA ELECTRICAEN EL TURNO ANTERIOR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1787946725037,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
