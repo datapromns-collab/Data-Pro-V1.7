@@ -25481,13 +25481,13 @@
         "2026-08-24": {
           "GLUP COLA": {
             "inicial": "48",
-            "preparado": "",
-            "final": ""
+            "preparado": "60",
+            "final": "57.68"
           },
           "GLUP KOLITA": {
             "inicial": "15.78",
-            "preparado": "",
-            "final": ""
+            "preparado": "18",
+            "final": "18"
           },
           "GLUP MANZANA ROJA": {
             "inicial": "2.46",
@@ -25496,21 +25496,57 @@
           },
           "GLUP PIÑA": {
             "inicial": "15.27",
-            "preparado": "",
-            "final": ""
+            "preparado": "40",
+            "final": "16.57"
           },
           "GLUP NARANJA": {
             "inicial": "15.31",
-            "preparado": "",
-            "final": ""
+            "preparado": "44",
+            "final": "17.69"
           },
           "GLUP FRESH": {
             "inicial": "12",
-            "preparado": "",
+            "preparado": "6",
             "final": ""
           },
           "JUSTY DURAZNO": {
             "inicial": "40",
+            "preparado": "280",
+            "final": "20"
+          },
+          "GLUP UVA": {
+            "preparado": "22",
+            "final": "11"
+          }
+        },
+        "2026-08-25": {
+          "GLUP COLA": {
+            "inicial": "57.68",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "18",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP PIÑA": {
+            "inicial": "16.57",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP NARANJA": {
+            "inicial": "17.69",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "20",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "11",
             "preparado": "",
             "final": ""
           }
@@ -25895,11 +25931,23 @@
         "2026-08-24": {
           "PORTUGUESA": {
             "invInicialSacos": "6320",
+            "recepcionSacos": "4000",
+            "invFinalSacos": "6440"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2800",
+            "recepcionSacos": "",
+            "invFinalSacos": "1840"
+          }
+        },
+        "2026-08-25": {
+          "PORTUGUESA": {
+            "invInicialSacos": "6440",
             "recepcionSacos": "",
             "invFinalSacos": ""
           },
           "IMPORTADA 1": {
-            "invInicialSacos": "2800",
+            "invInicialSacos": "1840",
             "recepcionSacos": "",
             "invFinalSacos": ""
           }
@@ -26317,14 +26365,24 @@
         "2026-08-24": {
           "KITS PREP.": {
             "invInicialSacos": "5",
-            "invFinalSacos": ""
+            "invFinalSacos": "5"
           },
           "JARABE SIMPLE": {
             "invInicialSacos": "110",
-            "invFinalSacos": ""
+            "invFinalSacos": "338"
           },
           "Sala 1": {
             "invInicialSacos": "1226",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-08-25": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": ""
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "338",
             "invFinalSacos": ""
           }
         }
@@ -26357,7 +26415,8 @@
         "2026-08-20": "50.43",
         "2026-08-21": "50.45",
         "2026-08-22": "50.39",
-        "2026-08-23": "50.48"
+        "2026-08-23": "50.48",
+        "2026-08-24": "50.39"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
