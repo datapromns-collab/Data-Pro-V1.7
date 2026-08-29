@@ -383,7 +383,7 @@ export const getWeeksInMonth = (baseDate: Date) => {
 
   let currentStart = firstWeekStart;
   while (currentStart <= monthEnd || weeks.length === 0) {
-    const week = Array.from({ length: 7 }).map((_, i) => addDays(currentStart, i));
+    const week = getWeekDays(currentStart);
     const hasDaysInMonth = week.some(day => isSameMonth(day, baseDate));
     if (hasDaysInMonth) {
       weeks.push(week);
