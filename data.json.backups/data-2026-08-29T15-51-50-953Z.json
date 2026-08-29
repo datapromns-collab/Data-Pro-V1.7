@@ -85539,6 +85539,25 @@
         "usuario": "Luis Blandin",
         "id": 1788018653963,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-21",
+        "semana": 34,
+        "turno": "NOCTURNO",
+        "operador": "IVAN PEREZ",
+        "linea": "Línea 2",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "03:45",
+        "finParada": "03:53",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1788018685349,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
