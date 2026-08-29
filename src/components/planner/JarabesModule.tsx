@@ -1608,6 +1608,25 @@ function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklySta
 
   const [realKgPerSack, setRealKgPerSack] = useState<number | undefined>(undefined);
   const [costoAzucar, setCostoAzucar] = useState<number | undefined>(undefined);
+  const [mensualMes, setMensualMes] = useState<string>(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  });
+
+  useEffect(() => {
+    if (!selectedFecha) return;
+    const y = selectedFecha.getFullYear();
+    const m = String(selectedFecha.getMonth() + 1).padStart(2, '0');
+    setMensualMes(`${y}-${m}`);
+  }, [selectedFecha]);
+
+  const handleMensualMesChange = (value: string) => {
+    setMensualMes(value);
+    const [y, m] = value.split('-').map(Number);
+    if (y && m) {
+      setSelectedFecha(new Date(y, m - 1, 1));
+    }
+  };
 
   useEffect(() => {
     if (!selectedFecha) {
@@ -1766,6 +1785,14 @@ function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklySta
                     </TabsContent>
 
                     <TabsContent value="mensual" className="m-0 animate-in fade-in-50 duration-500">
+                      <div className="flex items-center justify-between gap-3 w-full mb-6 no-print">
+                        <input
+                          type="month"
+                          value={mensualMes}
+                          onChange={(e) => handleMensualMesChange(e.target.value)}
+                          className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                        />
+                      </div>
                       <Tabs value={activeResumenMensualTab} onValueChange={setActiveResumenMensualTab} defaultValue="r-estandar-mes" className="w-full">
                         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
                           <TabsList className="bg-transparent h-auto p-0">
