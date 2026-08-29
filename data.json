@@ -93395,7 +93395,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1788026161075.6143,
+        "id": 1788026291178,
         "fechaOrden": "2026-08-18",
         "orden": "9375",
         "fechaEmision": "2026-08-18",
@@ -93418,7 +93418,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       }
     ],
