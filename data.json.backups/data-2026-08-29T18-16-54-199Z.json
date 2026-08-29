@@ -86926,6 +86926,44 @@
         "usuario": "Luis Blandin",
         "id": 1788026668663,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-22",
+        "semana": 34,
+        "turno": "NOCTURNO",
+        "operador": "DAVIS MATHEUS",
+        "linea": "Línea 4",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "21:07",
+        "finParada": "21:15",
+        "totalMin": "8",
+        "zona": "Llenado",
+        "falla": "PAQUETES CAIDOS DENTRO DEL HORNO",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1788026783950,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-22",
+        "semana": 34,
+        "turno": "NOCTURNO",
+        "operador": "FERNANDO GARCIA",
+        "linea": "Línea 4",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "21:22",
+        "finParada": "21:29",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE EYECTOR DE PEFORMAS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1788026982519,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -93395,7 +93433,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1788026161075.6143,
+        "id": 1788026111418.7175,
         "fechaOrden": "2026-08-18",
         "orden": "9375",
         "fechaEmision": "2026-08-18",
@@ -93536,7 +93574,8 @@
         "auto-1-1787746737208": {
           "cajasPlanificadas": 67500,
           "jarabeReal": 142670,
-          "ubb": 49.6
+          "ubb": 49.6,
+          "producto": "442"
         }
       },
       "linea-2": {
@@ -93649,7 +93688,8 @@
         "auto-2-1787776312174": {
           "cajasPlanificadas": 111250,
           "jarabeReal": 92353,
-          "ubb": 93.39
+          "ubb": 93.39,
+          "producto": "176"
         }
       },
       "linea-3": {
@@ -93735,7 +93775,8 @@
           "cajasPlanificadas": 133000,
           "jarabeReal": 168276,
           "pnc": 1094,
-          "ubb": 108.41
+          "ubb": 108.41,
+          "producto": "637"
         }
       },
       "linea-4": {
@@ -93804,7 +93845,8 @@
         "auto-4-1787746770763": {
           "cajasPlanificadas": 128800,
           "jarabeReal": 124617,
-          "ubb": 43.29
+          "ubb": 43.29,
+          "producto": "186"
         }
       },
       "linea-5": {
