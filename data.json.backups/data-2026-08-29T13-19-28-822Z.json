@@ -82596,25 +82596,6 @@
         "usuario": "Luis Blandin",
         "id": 1788009455047,
         "bloqueado": true
-      },
-      {
-        "fecha": "2026-08-21",
-        "semana": 34,
-        "turno": "DIURNO",
-        "operador": "",
-        "linea": "Línea 5",
-        "equipo": "",
-        "tipoParada": "PROGRAMADA",
-        "inicioParada": "18:02",
-        "finParada": "18:30",
-        "totalMin": "28",
-        "zona": "Llenado",
-        "falla": "ADECUACIONES PARA LA REALIZACION DEL CIP 3 PASOS ALCALINO PROGRAMADO",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Blandin",
-        "id": 1788009568293,
-        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -88355,7 +88336,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1788008413478,
+        "id": 1788008421548.3335,
         "fechaOrden": "2026-08-21",
         "orden": "9417",
         "fechaEmision": "2026-08-21",
@@ -88378,11 +88359,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1788008420083.0623,
+        "id": 1788008413507,
         "fechaOrden": "2026-08-18",
         "orden": "9378",
         "fechaEmision": "2026-08-18",
@@ -88405,11 +88386,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1788008598075,
+        "id": 1788008602184.988,
         "fechaOrden": "2026-08-21",
         "orden": "9418",
         "fechaEmision": "2026-08-21",
@@ -88432,11 +88413,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1788009027166,
+        "id": 1788009036726.1848,
         "fechaOrden": "2026-08-21",
         "orden": "9149",
         "fechaEmision": "2026-08-21",
@@ -88459,11 +88440,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1788009298803,
+        "id": 1788009306586.3809,
         "fechaOrden": "2026-08-21",
         "orden": "9451",
         "fechaEmision": "2026-08-21",
@@ -88486,7 +88467,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       }
     ],
