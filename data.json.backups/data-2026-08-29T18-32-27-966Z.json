@@ -93743,6 +93743,33 @@
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Luis Blandin"
+      },
+      {
+        "id": 1788028346557.4856,
+        "fechaOrden": "2026-08-22",
+        "orden": "9348",
+        "fechaEmision": "2026-08-22",
+        "semana": 34,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 7",
+        "maquina": "SOPLADORA",
+        "aviso": "",
+        "fechaParada": "2026-08-22",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "21:15",
+        "finParada": "21:29",
+        "tMtto": "14",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "CAMBIO DE MAGUERA DE COMPENSACION DE MOLDE #18",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": true,
+        "usuario": "Luis Blandin"
       }
     ],
     "seguimiento-ordenes": {
