@@ -1274,21 +1274,21 @@ function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintM
 
   return (
      <div ref={containerRef} className="space-y-3 w-full">
-      <div className="flex justify-end">
-        <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
-          Imprimir PDF
-        </Button>
-      </div>
+       <div className="flex justify-end">
+         <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
+           Imprimir PDF
+         </Button>
+       </div>
 
-      <div className="print-only">
-        <h1 className="text-center text-lg font-black text-slate-900 uppercase tracking-widest mb-1">Resumen de Azucar Mensual</h1>
-        <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-3">Mes {mesNombre.toUpperCase()}</p>
-      </div>
-      <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
-        <table className="w-full border-collapse text-center">
-          <thead>
-            <tr className="bg-blue-700 text-white">
-              <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Semana</th>
+       <div className="print-only">
+         <h1 className="text-center text-lg font-black text-slate-900 uppercase tracking-widest mb-1">Resumen de Azucar Mensual</h1>
+         <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-3">Mes {mesNombre.toUpperCase()}</p>
+       </div>
+       <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
+         <table className="w-full border-collapse text-center">
+           <thead>
+             <tr className="bg-blue-700 text-white">
+               <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Semana</th>
               <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Estandar</th>
               <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Fisico</th>
               <th className="border border-blue-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Diferencia</th>
@@ -1457,21 +1457,21 @@ function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
 
   return (
      <div ref={containerRef} className="space-y-3 w-full">
-      <div className="flex justify-end">
-        <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
-          Imprimir PDF
-        </Button>
-      </div>
+        <div className="flex justify-end">
+          <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
+            Imprimir PDF
+          </Button>
+        </div>
 
-      <div className="print-only">
-        <h1 className="text-center text-lg font-black text-slate-900 uppercase tracking-widest mb-1">Resumen de Azucar Mensual</h1>
-        <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-3">Mes {mesNombre.toUpperCase()}</p>
-      </div>
-      <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
-        <table className="w-full border-collapse text-center">
-          <thead>
-            <tr className="bg-emerald-700 text-white">
-              <th className="border border-emerald-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Semana</th>
+        <div className="print-only">
+          <h1 className="text-center text-lg font-black text-slate-900 uppercase tracking-widest mb-1">Resumen de Azucar Mensual</h1>
+          <p className="text-center text-xs font-bold text-slate-600 uppercase tracking-widest mb-3">Mes {mesNombre.toUpperCase()}</p>
+        </div>
+        <div className="border border-slate-300 rounded-xl overflow-hidden bg-white">
+          <table className="w-full border-collapse text-center">
+            <thead>
+              <tr className="bg-emerald-700 text-white">
+                <th className="border border-emerald-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Semana</th>
               <th className="border border-emerald-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Estandar</th>
               <th className="border border-emerald-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[14%]">Fisico</th>
               <th className="border border-emerald-600 px-2 py-1.5 text-[10px] font-black uppercase tracking-widest w-[12%]">Diferencia</th>
