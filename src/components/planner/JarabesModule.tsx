@@ -909,15 +909,15 @@ function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50, updateCo
 
 const DIAS_SEMANA = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
 
-function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintWeeklyStandard, onFisicoSemanal }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; onPrintWeeklyStandard?: (html: string, filename?: string) => void; onFisicoSemanal?: (weekStart: Date, monthRef: Date, fisico: number) => void }) {
+function REstandarSemTable({ selectedFecha, costoAzucar, onPrintWeeklyStandard, onFisicoSemanal }: { selectedFecha?: Date; costoAzucar?: number; onPrintWeeklyStandard?: (html: string, filename?: string) => void; onFisicoSemanal?: (weekStart: Date, monthRef: Date, fisico: number) => void }) {
   const { data, setData } = useJarabes();
   const weekDays = useMemo(() => (selectedFecha ? getWeekDays(selectedFecha) : []), [selectedFecha]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const rows = useMemo(() => {
     return weekDays.map((fecha, idx) => {
-      const dayKgPerSack = realKgPerSack ?? 50;
-      const resumen = computeResumenForDateData(data, fecha, dayKgPerSack);
+      // Modo Estándar: kg/saco fijo = 50, igual que la sección "Estándar" (ResumenTable)
+      const resumen = computeResumenForDateData(data, fecha, 50);
       const merma = costoAzucar ? Math.round(resumen.diferencia * costoAzucar * 100) / 100 : 0;
       return {
         fecha: format(fecha, 'd/M/yyyy'),
@@ -929,9 +929,9 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
         merma,
       };
     });
-  }, [weekDays, costoAzucar, realKgPerSack, data]);
+  }, [weekDays, costoAzucar, data]);
 
-  const totals = useMemo(() => computeWeekTotals(data, weekDays, costoAzucar, realKgPerSack), [weekDays, costoAzucar, realKgPerSack, data]);
+  const totals = useMemo(() => computeWeekTotals(data, weekDays, costoAzucar, 50), [weekDays, costoAzucar, data]);
 
   const isEmpty = weekDays.length === 0;
 
@@ -1835,7 +1835,7 @@ function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklySta
                         </div>
 
                         <TabsContent value="r-estandar-sem" className="m-0 animate-in fade-in-50 duration-500">
-                          <REstandarSemTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} realKgPerSack={realKgPerSack} onPrintWeeklyStandard={onPrintWeeklyStandard} onFisicoSemanal={onFisicoSemanal} />
+                          <REstandarSemTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} onPrintWeeklyStandard={onPrintWeeklyStandard} onFisicoSemanal={onFisicoSemanal} />
                         </TabsContent>
 
                         <TabsContent value="r-promedio-sem" className="m-0 animate-in fade-in-50 duration-500">
