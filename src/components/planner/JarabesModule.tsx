@@ -1265,45 +1265,35 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
   );
 }
 
-function REstandarMesTable({ selectedFecha, data, costoAzucar, realKgPerSack, onPrintMonthlyStandard }: { selectedFecha?: Date; data: JarabesData; costoAzucar?: number; realKgPerSack?: number; onPrintMonthlyStandard?: (html: string, filename?: string) => void }) {
+function REstandarMesTable({ selectedFecha, data, costoAzucar, realKgPerSack, onPrintMonthlyStandard, getWeeklyFisico }: { selectedFecha?: Date; data: JarabesData; costoAzucar?: number; realKgPerSack?: number; onPrintMonthlyStandard?: (html: string, filename?: string) => void; getWeeklyFisico?: (weekStart: Date, monthRef: Date) => number }) {
   const weeks = useMemo(() => (selectedFecha ? getWeeksInMonth(selectedFecha) : []), [selectedFecha]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const rows = useMemo(() => {
     if (!selectedFecha) return [];
-    const monthStart = startOfMonth(selectedFecha);
-    const monthEnd = endOfMonth(selectedFecha);
-    const firstWeekStart = startOfWeek(monthStart, { weekStartsOn: 1 });
-
-    const weeks: Date[][] = [];
-    let currentStart = firstWeekStart;
-    while (currentStart <= monthEnd || weeks.length === 0) {
-      const week = getWeekDays(currentStart);
-      const hasDaysInMonth = week.some(day => isSameMonth(day, selectedFecha));
-      if (hasDaysInMonth) {
-        weeks.push(week);
-      }
-      currentStart = addDays(currentStart, 7);
-      if (weeks.length > 0 && currentStart > monthEnd && week.every(day => !isSameMonth(day, selectedFecha))) {
-        break;
-      }
-    }
 
     return weeks.map((week) => {
       const weekStart = week[0];
       const semanaNumero = format(weekStart, 'w', { locale: es });
-      const totals = computeWeekTotals(data, week, costoAzucar, realKgPerSack);
+      const totals = computeWeekTotals(data, week, costoAzucar, 50);
+
+      // Preferir el Físico guardado (semana + mes) para que coincida con R estandar sem
+      const savedFisico = getWeeklyFisico ? getWeeklyFisico(weekStart, selectedFecha!) : 0;
+      const fisico = savedFisico > 0 ? savedFisico : totals.fisico;
+      const diferencia = Math.round((fisico - totals.estandar) * 100) / 100;
+      const porcentaje = totals.estandar > 0 ? Math.round((diferencia / totals.estandar) * 10000) / 100 : 0;
+      const merma = costoAzucar ? Math.round(diferencia * costoAzucar * 100) / 100 : 0;
 
       return {
         semana: semanaNumero,
         estandar: totals.estandar,
-        fisico: 0,
-        diferencia: totals.diferencia,
-        porcentaje: totals.porcentaje,
-        merma: totals.merma,
+        fisico,
+        diferencia,
+        porcentaje,
+        merma,
       };
     });
-  }, [selectedFecha, costoAzucar, realKgPerSack, data]);
+  }, [selectedFecha, costoAzucar, data, getWeeklyFisico]);
 
   const totals = useMemo(() => {
     const totalEstandar = rows.reduce((sum, r) => sum + r.estandar, 0);
@@ -1866,7 +1856,7 @@ function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklySta
                         </div>
 
                         <TabsContent value="r-estandar-mes" className="m-0 animate-in fade-in-50 duration-500">
-                          <REstandarMesTable selectedFecha={selectedFecha} data={data} costoAzucar={costoAzucar} realKgPerSack={realKgPerSack} onPrintMonthlyStandard={onPrintMonthlyStandard} />
+                          <REstandarMesTable selectedFecha={selectedFecha} data={data} costoAzucar={costoAzucar} realKgPerSack={realKgPerSack} onPrintMonthlyStandard={onPrintMonthlyStandard} getWeeklyFisico={getWeeklyFisico} />
                         </TabsContent>
 
                         <TabsContent value="r-promedio-mes" className="m-0 animate-in fade-in-50 duration-500">
