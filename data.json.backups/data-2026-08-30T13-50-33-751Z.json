@@ -9227,7 +9227,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-29T20:05:32.296Z"
+    "updatedAt": "2026-08-30T13:48:14.340Z"
   },
   "ordenesSap": [
     {
@@ -15474,12 +15474,12 @@
           "fechaInicio": "2026-08-29",
           "ticket1": "17902",
           "cajas1": 6450,
-          "ticket2": "",
+          "ticket2": "17903",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8349
         }
       ]
     },
@@ -15527,12 +15527,12 @@
           "fechaInicio": "2026-08-29",
           "ticket1": "17727",
           "cajas1": 4640,
-          "ticket2": "",
+          "ticket2": "17728",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 702
         }
       ]
     },
@@ -15609,6 +15609,17 @@
           "fechaInicio": "2026-08-29",
           "ticket1": "17634",
           "cajas1": 9920,
+          "ticket2": "17635",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 14800
+        },
+        {
+          "fechaInicio": "2026-08-30",
+          "ticket1": "17636",
+          "cajas1": 2304,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -15640,12 +15651,12 @@
           "fechaInicio": "2026-08-29",
           "ticket1": "17686",
           "cajas1": 12160,
-          "ticket2": "",
+          "ticket2": "17687",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 20320
         },
         {
           "fechaInicio": "2026-08-30",
@@ -15682,12 +15693,43 @@
           "fechaInicio": "2026-08-29",
           "ticket1": "17871",
           "cajas1": 13360,
+          "ticket2": "17872",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 16880
+        },
+        {
+          "fechaInicio": "2026-08-30",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1788088569808",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "63271",
+      "semana": 35,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-29",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17824",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 11680
         },
         {
           "fechaInicio": "2026-08-30",
@@ -96942,7 +96984,11 @@
           "pnc": 0
         },
         "auto-2-1787948338403": {
-          "pnc": 160
+          "pnc": 160,
+          "cajasPlanificadas": 115000,
+          "jarabeReal": 83427,
+          "producto": "124",
+          "ubb": 84.39
         }
       },
       "linea-3": {
@@ -97151,6 +97197,12 @@
           "ubb": 700,
           "producto": "184",
           "cajasPlanificadas": 55660
+        },
+        "auto-5-1787746789753": {
+          "cajasPlanificadas": 53240,
+          "jarabeReal": 460000,
+          "ubb": 460,
+          "producto": "86"
         }
       },
       "linea-6": {
@@ -97204,6 +97256,12 @@
           "ubb": 36,
           "pnc": 48,
           "producto": "324"
+        },
+        "auto-6-1787746808093": {
+          "cajasPlanificadas": 55200,
+          "jarabeReal": 29949,
+          "producto": "319",
+          "ubb": 10.42
         }
       },
       "linea-7": {
