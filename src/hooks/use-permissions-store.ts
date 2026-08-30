@@ -30,6 +30,7 @@ const DEFAULT_PLANNING_PERMISSIONS: PlanningPermissions = {
   'alex.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
   'anto.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
   'prodtj.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
+  'prodtg.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
   'procj.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
   'cald.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
   'prodt.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
@@ -47,6 +48,8 @@ const DEFAULT_MANAGEMENT_PERMISSIONS: ManagementPermissions = {
   'g.tec.mds': ['produccion-diaria', 'resumen-semanal'],
   'enf.mds': ['produccion-diaria', 'resumen-semanal'],
   'etq.mds': ['produccion-diaria', 'resumen-semanal'],
+  'prodtj.mds': [],
+  'prodtg.mds': [],
   'logg.mds': ['resumen-mensual'],
 };
 
@@ -143,6 +146,7 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   'alex.mds': ['jarabes', 'raw-materials', 'planta', 'planta-admin', 'planning', 'management'],
   'anto.mds': ['purchasing', 'planta', 'logistica', 'ventas', 'planning'],
   'prodtj.mds': ['planning', 'planta'],
+  'prodtg.mds': ['planning', 'planta'],
   'prodts.mds': ['planning', 'planta'],
   'procj.mds': ['planning'],
   'cald.mds': ['planning'],

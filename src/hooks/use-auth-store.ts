@@ -60,6 +60,7 @@ const VALID_USERS = [
   { id: 'alex.mds', password: 'ad.159.', name: 'Alexandra Arteaga', role: 'INVENTORY' as UserRole },
   { id: 'anto.mds', password: '123.', name: 'Antonella Dos Santos', role: 'PURCHASING' as UserRole },
   { id: 'prodtj.mds', password: 'ad.144.', name: 'Jefes de Producción', role: 'STANDARD' as UserRole },
+  { id: 'prodtg.mds', password: 'ad.521.', name: 'Carlos', role: 'STANDARD' as UserRole },
   { id: 'prodts.mds', password: 'ad.222.', name: 'Supervisor de Produccion', role: 'STANDARD' as UserRole },
   { id: 'procj.mds', password: 'ad.145.', name: 'Jefes de Procesos', role: 'STANDARD' as UserRole },
   { id: 'cald.mds', password: 'ad.146.', name: 'Jefa de Calidad', role: 'STANDARD' as UserRole },
