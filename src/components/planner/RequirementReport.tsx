@@ -428,6 +428,58 @@ export function RequirementReport({ tasks, weekStartDate, recipes, packagingReci
             </Table>
           </div>
         </section>
+
+        <section className="break-inside-avoid">
+          {renderSectionHeader("XI. Cálculo para Solicitud", "violet-600")}
+          <div className="rounded border border-slate-200 overflow-hidden">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-slate-50 h-8">
+                  <TableHead className="py-1 font-bold text-slate-700 text-xs">Producto</TableHead>
+                  <TableHead className="py-1 font-bold text-slate-700 text-xs">Presentación</TableHead>
+                  <TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad Planificada</TableHead>
+                  <TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Factor Empaque</TableHead>
+                  <TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Total Empaque Requerido</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {tasks.filter(t => t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0).map((task, idx) => {
+                  const isFresh = task.name === "GLUP FRESH";
+                  const isColaKolita = task.name === "GLUP COLA" || task.name === "GLUP KOLITA";
+                  const isJugo = (task.name || '').startsWith("JUSTY") || (task.name || '').startsWith("VITA");
+                  const pres = task.presentation || "";
+                  const qty = task.quantity || 0;
+                  let factor = 0;
+                  if (pres === "2Lts" && isFresh) factor = 6;
+                  else if (pres === "2Lts" && !isFresh && !isJugo) factor = 6;
+                  else if (pres === "1Lt" && isColaKolita) factor = 12;
+                  else if (pres === "1Lt" && isFresh) factor = 12;
+                  else if (pres === "1Lt" && !isFresh && !isColaKolita && !isJugo) factor = 12;
+                  else if (pres === "0.4Lts" && isFresh) factor = 15;
+                  else if (pres === "0.4Lts" && !isFresh && !isJugo) factor = 15;
+                  else if (pres === "1.5Lts" && isJugo) factor = 12;
+                  else if (pres === "1.5Lts" && !isJugo) factor = 12;
+                  return (
+                    <TableRow key={`calc-${idx}`} className="border-b last:border-0 h-8">
+                      <TableCell className="py-1 text-[11px] font-medium text-slate-800">{task.name}</TableCell>
+                      <TableCell className="py-1 text-[11px] text-slate-600">{pres}</TableCell>
+                      <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{qty.toLocaleString('es-ES')} cajas</TableCell>
+                      <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{factor > 0 ? `x${factor}` : '-'}</TableCell>
+                      <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{factor > 0 ? (qty * factor).toLocaleString('es-ES') : '-'}</TableCell>
+                    </TableRow>
+                  );
+                })}
+                {tasks.filter(t => t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0).length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center text-slate-400 py-4 font-bold text-[11px]">
+                      No hay producción planificada en el rango de fechas seleccionado
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </section>
       </div>
 
       <div className="mt-12 pt-4 border-t border-slate-200 flex justify-between items-center text-[9px] text-slate-400 font-black uppercase tracking-widest">

@@ -16,7 +16,8 @@ import {
   Box,
   Plus,
   Waves,
-  StickyNote
+  StickyNote,
+  Calculator
 } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
 import { addDays } from 'date-fns';
@@ -252,6 +253,9 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
               <TabsTrigger value="consumibles" className={tabsTriggerClass}>
                 <Waves className="h-3.5 w-3.5" /> Consumibles
               </TabsTrigger>
+              <TabsTrigger value="calculo" className={tabsTriggerClass}>
+                <Calculator className="h-3.5 w-3.5" /> Cálculo
+              </TabsTrigger>
             </TabsList>
           </div>
 
@@ -345,6 +349,69 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
         </TabsContent>
 
         <TabsContent value="consumibles" className="m-0 animate-in fade-in-50 duration-500">{renderTable(CONSUMABLES_DATA)}</TabsContent>
+
+        <TabsContent value="calculo" className="m-0 animate-in fade-in-50 duration-500">
+          <div className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
+            <Table>
+              <TableHeader>
+                <TableRow className="bg-slate-50/50">
+                  <TableHead className="font-bold text-slate-500 py-4">Producto</TableHead>
+                  <TableHead className="font-bold text-slate-500 py-4">Presentación</TableHead>
+                  <TableHead className="text-right font-bold text-slate-500 py-4">Cantidad Planificada</TableHead>
+                  <TableHead className="text-right font-bold text-slate-500 py-4">Factor Empaque</TableHead>
+                  <TableHead className="text-right font-bold text-slate-500 py-4">Total Empaque Requerido</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {tasks.filter(t => t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0).map((task, idx) => {
+                  const isFresh = task.name === "GLUP FRESH";
+                  const isColaKolita = task.name === "GLUP COLA" || task.name === "GLUP KOLITA";
+                  const isJugo = (task.name || '').startsWith("JUSTY") || (task.name || '').startsWith("VITA");
+                  const pres = task.presentation || "";
+                  const qty = task.quantity || 0;
+                  let factor = 0;
+                  if (pres === "2Lts" && isFresh) factor = 6;
+                  else if (pres === "2Lts" && !isFresh && !isJugo) factor = 6;
+                  else if (pres === "1Lt" && isColaKolita) factor = 12;
+                  else if (pres === "1Lt" && isFresh) factor = 12;
+                  else if (pres === "1Lt" && !isFresh && !isColaKolita && !isJugo) factor = 12;
+                  else if (pres === "0.4Lts" && isFresh) factor = 15;
+                  else if (pres === "0.4Lts" && !isFresh && !isJugo) factor = 15;
+                  else if (pres === "1.5Lts" && isJugo) factor = 12;
+                  else if (pres === "1.5Lts" && !isJugo) factor = 12;
+                  return (
+                    <TableRow key={`calc-${idx}`} className="hover:bg-slate-50/50 transition-colors">
+                      <TableCell className="text-sm font-bold text-slate-700 py-4">{task.name}</TableCell>
+                      <TableCell className="text-sm text-slate-600 py-4">{pres}</TableCell>
+                      <TableCell className="text-right py-4">
+                        <Badge variant="secondary" className="bg-slate-50 text-slate-400 border-slate-200 px-4 py-1.5 font-bold text-[12px] min-w-[100px] justify-center">
+                          {qty.toLocaleString('es-ES')} cajas
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right py-4">
+                        <Badge variant="secondary" className="bg-slate-50 text-slate-400 border-slate-200 px-4 py-1.5 font-bold text-[12px] min-w-[100px] justify-center">
+                          {factor > 0 ? `x${factor}` : '-'}
+                        </Badge>
+                      </TableCell>
+                      <TableCell className="text-right py-4">
+                        <Badge variant="secondary" className="bg-primary/5 text-primary border-primary/10 px-4 py-1.5 font-black text-[12px] min-w-[100px] justify-center">
+                          {factor > 0 ? (qty * factor).toLocaleString('es-ES') : '-'}
+                        </Badge>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+                {tasks.filter(t => t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0).length === 0 && (
+                  <TableRow>
+                    <TableCell colSpan={5} className="text-center text-slate-400 py-8 font-bold">
+                      No hay producción planificada en el rango de fechas seleccionado
+                    </TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </TabsContent>
       </Tabs>
     </div>
   );
