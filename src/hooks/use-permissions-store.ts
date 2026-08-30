@@ -7,6 +7,7 @@ export type PlanningSection = 'gantt' | 'daily' | 'requirement';
 export type ManagementSection =
   | 'produccion-diaria'
   | 'control-semanal'
+  | 'resumen-semanal'
   | 'resumen-mensual'
   | 'cumplimiento';
 
@@ -39,13 +40,14 @@ const DEFAULT_PLANNING_PERMISSIONS: PlanningPermissions = {
 };
 
 const DEFAULT_MANAGEMENT_PERMISSIONS: ManagementPermissions = {
-  demon: ['produccion-diaria', 'control-semanal', 'resumen-mensual', 'cumplimiento'],
-  'jaime.r': ['produccion-diaria', 'control-semanal', 'resumen-mensual', 'cumplimiento'],
-  'alex.mds': ['produccion-diaria', 'resumen-mensual'],
-  'maria.mds': ['produccion-diaria', 'resumen-mensual'],
-  'g.tec.mds': ['produccion-diaria'],
-  'enf.mds': ['produccion-diaria'],
-  'etq.mds': ['produccion-diaria'],
+  demon: ['produccion-diaria', 'control-semanal', 'resumen-semanal', 'resumen-mensual', 'cumplimiento'],
+  'jaime.r': ['produccion-diaria', 'control-semanal', 'resumen-semanal', 'resumen-mensual', 'cumplimiento'],
+  'alex.mds': ['produccion-diaria', 'resumen-semanal', 'resumen-mensual'],
+  'maria.mds': ['produccion-diaria', 'resumen-semanal', 'resumen-mensual'],
+  'g.tec.mds': ['produccion-diaria', 'resumen-semanal'],
+  'enf.mds': ['produccion-diaria', 'resumen-semanal'],
+  'etq.mds': ['produccion-diaria', 'resumen-semanal'],
+  'logg.mds': ['resumen-mensual'],
 };
 
 const STORAGE_KEY = 'planner_module_permissions';
@@ -151,7 +153,7 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   'g.tec.mds': ['planning', 'seguimiento', 'management'],
   'enf.mds': ['planning', 'seguimiento', 'management', 'planta'],
   'etq.mds': ['planning', 'seguimiento', 'management'],
-  'logg.mds': ['planning'],
+  'logg.mds': ['planning', 'management'],
   'mtto.mds': ['planning'],
   'cal.mds': ['planning'],
 };

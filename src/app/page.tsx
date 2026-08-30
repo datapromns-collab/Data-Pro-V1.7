@@ -1805,7 +1805,7 @@ export default function PlannerPage() {
     if (user) {
       if (hasManagementAccess(user.id, 'produccion-diaria')) tabs.push('dia-a-dia');
       if (hasManagementAccess(user.id, 'control-semanal')) tabs.push('weekly');
-      tabs.push('weekly-summary');
+      if (hasManagementAccess(user.id, 'resumen-semanal')) tabs.push('weekly-summary');
       if (hasManagementAccess(user.id, 'resumen-mensual')) tabs.push('monthly');
     }
     return tabs;
