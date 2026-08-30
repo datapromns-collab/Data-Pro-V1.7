@@ -604,6 +604,18 @@ export default function PlannerPage() {
   const [ptabTab, setPtabTab] = useState<'agua' | 'insumos'>('agua');
   const [ptabWeekStartDate, setPtabWeekStartDate] = useState(new Date());
   const ptabWeeksContainerRef = useRef<HTMLDivElement>(null);
+  const [ptabAguaData, setPtabAguaData] = useState<Record<string, string>>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const stored = localStorage.getItem('ptab-agua-data');
+        if (stored) {
+          const parsed = JSON.parse(stored);
+          if (typeof parsed === 'object' && parsed !== null) return parsed;
+        }
+      } catch (e) {}
+    }
+    return {};
+  });
   const [insumosFecha, setInsumosFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -1722,6 +1734,21 @@ export default function PlannerPage() {
       el.scrollIntoView({ block: 'nearest' });
     }
   }, [ptabWeekStartDate]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.setItem('ptab-agua-data', JSON.stringify(ptabAguaData));
+    } catch (e) {
+      console.error('Error guardando ptab-agua-data en localStorage', e);
+    }
+  }, [ptabAguaData]);
+
+  const getPtabAguaCellKey = (dateStr: string, rowKey: string) => `${dateStr}-${rowKey}`;
+
+  const handlePtabAguaChange = (dateStr: string, rowKey: string, value: string) => {
+    setPtabAguaData(prev => ({ ...prev, [getPtabAguaCellKey(dateStr, rowKey)]: value }));
+  };
 
   const globalSalesProjection = useMemo(() => {
     const result: Record<string, Record<string, number>> = {};
@@ -4235,43 +4262,64 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        </PopoverContent>
                                      </Popover>
                                    </div>
-                                   <div className="flex-1 rounded-2xl border border-slate-100 bg-white overflow-x-auto">
-                                     <div className="mb-2">
-                                       <span className="text-slate-700 font-black text-sm uppercase tracking-widest">Semana {getISOWeek(ptabWeekStartDate)}</span>
-                                     </div>
-                                     <table className="w-full border-collapse text-[11px]">
-                                       <thead>
-                                         <tr className="bg-slate-800 text-white">
-                                           <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10">Descripción</th>
-                                           {getWeekDays(ptabWeekStartDate).map((day, idx) => (
-                                             <th key={idx} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">
-                                               {format(day, 'EEEE d/M/yy', { locale: es })}
-                                             </th>
-                                           ))}
-                                         </tr>
-                                       </thead>
-                                       <tbody>
-                                          {['CONSUMO DE A. SERVICIO', 'CONSUMO DE A. SUAVE', 'CONSUMO DE A. PROCESOS', 'CONSUMO DE AGUA FILTRADA'].map((row) => (
-                                            <tr key={row} className="border-b border-slate-100 hover:bg-slate-50/50">
-                                              <td className="px-2 py-2 font-bold text-slate-700 border border-slate-100 whitespace-nowrap">{row}</td>
-                                              {getWeekDays(ptabWeekStartDate).map((_, idx) => (
-                                                <td key={idx} className="px-2 py-2 text-center border border-slate-100">
-                                                  <input type="text" className="w-full min-w-[14ch] h-8 text-center text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                                </td>
-                                              ))}
-                                            </tr>
-                                          ))}
-                                          <tr className="bg-slate-100 font-black text-slate-700">
-                                            <td className="px-2 py-2 border border-slate-200 whitespace-nowrap">TOTAL AGUA SUM. POZOS LTS</td>
-                                            {getWeekDays(ptabWeekStartDate).map((_, idx) => (
-                                              <td key={idx} className="px-2 py-2 text-center border border-slate-200">
-                                                <input type="text" className="w-full min-w-[14ch] h-8 text-center text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                              </td>
+                                    <div className="flex-1 rounded-2xl border border-slate-100 bg-white overflow-x-auto">
+                                      <div className="mb-2">
+                                        <span className="text-slate-700 font-black text-sm uppercase tracking-widest">Semana {getISOWeek(ptabWeekStartDate)}</span>
+                                      </div>
+                                      <table className="w-full border-collapse text-[11px]">
+                                        <thead>
+                                          <tr className="bg-slate-800 text-white">
+                                            <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10">Descripción</th>
+                                            {getWeekDays(ptabWeekStartDate).map((day, idx) => (
+                                              <th key={idx} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">
+                                                {format(day, 'EEEE d/M/yy', { locale: es })}
+                                              </th>
                                             ))}
                                           </tr>
-                                       </tbody>
-                                     </table>
-                                   </div>
+                                        </thead>
+                                        <tbody>
+                                          {['CONSUMO DE A. SERVICIO', 'CONSUMO DE A. SUAVE', 'CONSUMO DE A. PROCESOS', 'CONSUMO DE AGUA FILTRADA'].map((row, rowIdx) => {
+                                            const rowKey = ['servicio', 'suave', 'procesos', 'filtrada'][rowIdx];
+                                            return (
+                                              <tr key={row} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                                <td className="px-2 py-2 font-bold text-slate-700 border border-slate-100 whitespace-nowrap">{row}</td>
+                                                {getWeekDays(ptabWeekStartDate).map((day, idx) => {
+                                                  const dateStr = format(day, 'yyyy-MM-dd');
+                                                  const cellKey = getPtabAguaCellKey(dateStr, rowKey);
+                                                  return (
+                                                    <td key={idx} className="px-2 py-2 text-center border border-slate-100">
+                                                      <input
+                                                        type="text"
+                                                        defaultValue={ptabAguaData[cellKey] || ''}
+                                                        onChange={(e) => handlePtabAguaChange(dateStr, rowKey, e.target.value)}
+                                                        className="w-full min-w-[14ch] h-8 text-center text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary"
+                                                      />
+                                                    </td>
+                                                  );
+                                                })}
+                                              </tr>
+                                            );
+                                          })}
+                                          <tr className="bg-slate-100 font-black text-slate-700">
+                                            <td className="px-2 py-2 border border-slate-200 whitespace-nowrap">TOTAL AGUA SUM. POZOS LTS</td>
+                                            {getWeekDays(ptabWeekStartDate).map((day, idx) => {
+                                              const dateStr = format(day, 'yyyy-MM-dd');
+                                              const cellKey = getPtabAguaCellKey(dateStr, 'total');
+                                              return (
+                                                <td key={idx} className="px-2 py-2 text-center border border-slate-200">
+                                                  <input
+                                                    type="text"
+                                                    defaultValue={ptabAguaData[cellKey] || ''}
+                                                    onChange={(e) => handlePtabAguaChange(dateStr, 'total', e.target.value)}
+                                                    className="w-full min-w-[14ch] h-8 text-center text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary"
+                                                  />
+                                                </td>
+                                              );
+                                            })}
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </div>
                                 </div>
                               </div>
                             </div>
