@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
@@ -17,7 +17,8 @@ import {
   Plus,
   Waves,
   StickyNote,
-  Calculator
+  Calculator,
+  Calendar as CalendarIcon
 } from 'lucide-react';
 import { ScheduledTask } from '@/lib/types';
 import { addDays } from 'date-fns';
@@ -60,6 +61,9 @@ interface RequirementSectionProps {
 
 export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, packagingRecipes }: RequirementSectionProps) {
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
+
+  const [calcStartDate, setCalcStartDate] = useState<Date>(weekStartDate);
+  const [calcEndDate, setCalcEndDate] = useState<Date>(weekEnd);
 
   const getCalculatedValue = (code: string) => {
     let packagingTotal = 0;
@@ -351,6 +355,28 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
         <TabsContent value="consumibles" className="m-0 animate-in fade-in-50 duration-500">{renderTable(CONSUMABLES_DATA)}</TabsContent>
 
         <TabsContent value="calculo" className="m-0 animate-in fade-in-50 duration-500">
+          <div className="flex items-center gap-3 mb-4 no-print">
+            <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-2 shadow-sm">
+              <CalendarIcon className="h-4 w-4 text-slate-500" />
+              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Inicio</span>
+              <input
+                type="date"
+                value={calcStartDate.toISOString().split('T')[0]}
+                onChange={(e) => setCalcStartDate(new Date(e.target.value + 'T00:00:00'))}
+                className="text-xs font-bold text-slate-700 border-0 bg-transparent focus:ring-0 p-0 w-[130px]"
+              />
+            </div>
+            <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-2 shadow-sm">
+              <CalendarIcon className="h-4 w-4 text-slate-500" />
+              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Fin</span>
+              <input
+                type="date"
+                value={calcEndDate.toISOString().split('T')[0]}
+                onChange={(e) => setCalcEndDate(new Date(e.target.value + 'T00:00:00'))}
+                className="text-xs font-bold text-slate-700 border-0 bg-transparent focus:ring-0 p-0 w-[130px]"
+              />
+            </div>
+          </div>
           <div className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
             <Table>
               <TableHeader>
@@ -363,7 +389,11 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {tasks.filter(t => t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0).map((task, idx) => {
+                {tasks.filter(t => {
+                  const start = new Date(t.startTime);
+                  const end = new Date(t.endTime);
+                  return end > calcStartDate && start < calcEndDate && t.quantity > 0;
+                }).map((task, idx) => {
                   const isFresh = task.name === "GLUP FRESH";
                   const isColaKolita = task.name === "GLUP COLA" || task.name === "GLUP KOLITA";
                   const isJugo = (task.name || '').startsWith("JUSTY") || (task.name || '').startsWith("VITA");
@@ -401,7 +431,11 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
                     </TableRow>
                   );
                 })}
-                {tasks.filter(t => t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0).length === 0 && (
+                {tasks.filter(t => {
+                  const start = new Date(t.startTime);
+                  const end = new Date(t.endTime);
+                  return end > calcStartDate && start < calcEndDate && t.quantity > 0;
+                }).length === 0 && (
                   <TableRow>
                     <TableCell colSpan={5} className="text-center text-slate-400 py-8 font-bold">
                       No hay producción planificada en el rango de fechas seleccionado
