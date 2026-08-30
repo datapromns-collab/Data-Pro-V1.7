@@ -1,9 +1,7 @@
 "use client";
 
-import Image from 'next/image';
 import { ScheduledTask } from '@/lib/types';
-import { PlaceHolderImages } from '@/lib/placeholder-images';
-import { format, addDays } from 'date-fns';
+import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { 
@@ -36,8 +34,6 @@ interface CalculationReportProps {
 }
 
 export function CalculationReport({ tasks, calcStartDate, calcEndDate, availability, recipes, packagingRecipes }: CalculationReportProps) {
-  const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
-
   const getCalculatedValue = (code: string) => {
     let packagingTotal = 0;
     tasks.forEach(task => {
@@ -186,25 +182,16 @@ export function CalculationReport({ tasks, calcStartDate, calcEndDate, availabil
   ] as { code: string; description: string; unit: string }[];
 
   return (
-    <div id="report" className="bg-white max-w-[210mm] mx-auto print:pt-0 print:px-4 print:pb-0 print:max-w-none">
-      <div className="flex justify-between items-start mb-1">
-        <div className="flex-1">
-          <h1 className="text-base font-headline font-bold text-slate-900 leading-tight">Reporte de Calculo para Solicitud</h1>
-          <p className="text-primary font-black text-[9px] uppercase tracking-widest">Gestion de Materiales de Empaque</p>
-        </div>
-        <div className="flex-shrink-0 ml-4">
-          {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={90} height={25} className="object-contain" />}
-        </div>
-        <div className="text-right">
-          <p className="text-[9px] font-black text-primary uppercase tracking-widest">CONFIDENCIAL - PLANTA</p>
-          <p className="text-[9px] text-slate-500 font-bold uppercase">Rango de Fechas</p>
-          <p className="text-[9px] text-slate-400 font-medium italic">
-            {format(calcStartDate, "dd/MM/yyyy", { locale: es })} - {format(calcEndDate, "dd/MM/yyyy", { locale: es })}
-          </p>
-        </div>
+    <div id="report" className="bg-white print:pt-0 print:px-3 print:pb-0 print:max-w-none">
+      <div className="mb-0.5">
+        <h1 className="text-[11px] font-bold text-slate-900">Reporte de Calculo para Solicitud</h1>
+        <p className="text-[9px] font-black text-primary uppercase tracking-widest">Gestion de Materiales de Empaque</p>
+        <p className="text-[8px] font-black text-slate-500 uppercase mt-0.5">
+          {format(calcStartDate, "dd/MM/yyyy", { locale: es })} - {format(calcEndDate, "dd/MM/yyyy", { locale: es })}
+        </p>
       </div>
 
-      <section>
+      <div>
           <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
               <TableHeader>
@@ -233,7 +220,7 @@ export function CalculationReport({ tasks, calcStartDate, calcEndDate, availabil
               </TableBody>
             </Table>
           </div>
-        </section>
+        </div>
       <div className="mt-12 pt-4 border-t border-slate-200 flex justify-between items-center text-[9px] text-slate-400 font-black uppercase tracking-widest">
         <span>Data Pro - Sistema de Requerimiento de Produccion</span>
         <span>Generado: {format(new Date(), "dd/MM/yyyy HH:mm:ss")}</span>

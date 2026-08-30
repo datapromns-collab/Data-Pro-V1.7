@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Beaker, Pipette, Activity, FileSpreadsheet, TrendingUp, ScrollText, CalendarIcon } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, startOfMonth, endOfMonth, startOfWeek, addDays, isSameMonth } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { getWeekDays, getWeeksInMonth } from '@/lib/planner-utils';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Line, ComposedChart } from 'recharts';
@@ -236,6 +236,31 @@ function getRealKgPerSackForDateData(data: JarabesData, fecha: Date): number {
     if (Number.isFinite(parsed) && parsed > 0) return parsed;
   }
   return 50;
+}
+
+function computeWeekTotals(data: JarabesData, weekDays: Date[], costoAzucar?: number, realKgPerSack?: number) {
+  let totalEstandar = 0;
+  let totalFisico = 0;
+  weekDays.forEach(fecha => {
+    const dayKgPerSack = realKgPerSack ?? 50;
+    const resumen = computeResumenForDateData(data, fecha, dayKgPerSack);
+    totalEstandar += resumen.estandar;
+    totalFisico += resumen.fisico;
+  });
+
+  totalEstandar = Math.round(totalEstandar * 100) / 100;
+  totalFisico = Math.round(totalFisico * 100) / 100;
+  const diferencia = Math.round((totalFisico - totalEstandar) * 100) / 100;
+  const porcentaje = totalEstandar > 0 ? Math.round((diferencia / totalEstandar) * 10000) / 100 : 0;
+  const merma = costoAzucar ? Math.round(diferencia * costoAzucar * 100) / 100 : 0;
+
+  return {
+    estandar: totalEstandar,
+    fisico: totalFisico,
+    diferencia,
+    porcentaje,
+    merma,
+  };
 }
 
 function RealKgPerSackInput({ selectedFecha, value, onChange }: { selectedFecha?: Date; value?: number; onChange?: (value: number | undefined) => void }) {
@@ -883,20 +908,7 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
     });
   }, [weekDays, costoAzucar, realKgPerSack, data]);
 
-  const totals = useMemo(() => {
-    const totalEstandar = rows.reduce((sum, r) => sum + r.estandar, 0);
-    const totalFisico = rows.reduce((sum, r) => sum + r.fisico, 0);
-    const totalDiferencia = Math.round((totalFisico - totalEstandar) * 100) / 100;
-    const totalPorcentaje = totalEstandar > 0 ? Math.round((totalDiferencia / totalEstandar) * 10000) / 100 : 0;
-    const totalMerma = costoAzucar ? Math.round(totalDiferencia * costoAzucar * 100) / 100 : 0;
-    return {
-      estandar: Math.round(totalEstandar * 100) / 100,
-      fisico: Math.round(totalFisico * 100) / 100,
-      diferencia: totalDiferencia,
-      porcentaje: totalPorcentaje,
-      merma: totalMerma,
-    };
-  }, [rows, costoAzucar]);
+  const totals = useMemo(() => computeWeekTotals(data, weekDays, costoAzucar, realKgPerSack), [weekDays, costoAzucar, realKgPerSack, data]);
 
   const isEmpty = weekDays.length === 0;
 
@@ -1215,35 +1227,40 @@ function REstandarMesTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintM
   const containerRef = useRef<HTMLDivElement>(null);
 
   const rows = useMemo(() => {
-    return weeks.map((week, idx) => {
+    if (!selectedFecha) return [];
+    const monthStart = startOfMonth(selectedFecha);
+    const monthEnd = endOfMonth(selectedFecha);
+    const firstWeekStart = startOfWeek(monthStart, { weekStartsOn: 1 });
+
+    const weeks: Date[][] = [];
+    let currentStart = firstWeekStart;
+    while (currentStart <= monthEnd || weeks.length === 0) {
+      const week = getWeekDays(currentStart);
+      const hasDaysInMonth = week.some(day => isSameMonth(day, selectedFecha));
+      if (hasDaysInMonth) {
+        weeks.push(week);
+      }
+      currentStart = addDays(currentStart, 7);
+      if (weeks.length > 0 && currentStart > monthEnd && week.every(day => !isSameMonth(day, selectedFecha))) {
+        break;
+      }
+    }
+
+    return weeks.map((week) => {
       const weekStart = week[0];
-      const semanaNumero = format(weekStart, 'I', { locale: es });
-      const dayKgPerSack = realKgPerSack ?? 50;
-
-      let totalEstandar = 0;
-      let totalFisico = 0;
-      week.forEach(fecha => {
-        const resumen = computeResumenForDateData(data, fecha, dayKgPerSack);
-        totalEstandar += resumen.estandar;
-        totalFisico += resumen.fisico;
-      });
-
-      totalEstandar = Math.round(totalEstandar * 100) / 100;
-      totalFisico = Math.round(totalFisico * 100) / 100;
-      const diferencia = Math.round((totalFisico - totalEstandar) * 100) / 100;
-      const porcentaje = totalEstandar > 0 ? Math.round((diferencia / totalEstandar) * 10000) / 100 : 0;
-      const merma = costoAzucar ? Math.round(diferencia * costoAzucar * 100) / 100 : 0;
+      const semanaNumero = format(weekStart, 'w', { locale: es });
+      const totals = computeWeekTotals(data, week, costoAzucar, realKgPerSack);
 
       return {
         semana: semanaNumero,
-        estandar: totalEstandar,
-        fisico: totalFisico,
-        diferencia,
-        porcentaje,
-        merma,
+        estandar: totals.estandar,
+        fisico: totals.fisico,
+        diferencia: totals.diferencia,
+        porcentaje: totals.porcentaje,
+        merma: totals.merma,
       };
     });
-  }, [weeks, costoAzucar, realKgPerSack, data]);
+  }, [selectedFecha, costoAzucar, realKgPerSack, data]);
 
   const totals = useMemo(() => {
     const totalEstandar = rows.reduce((sum, r) => sum + r.estandar, 0);
