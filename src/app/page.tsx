@@ -82,6 +82,7 @@ import { RequisicionReport } from '@/components/planner/RequisicionReport';
 import { JarabesModule, weekMonthKey } from '@/components/planner/JarabesModule';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore, getWeekKey } from '@/hooks/use-planner-store';
+import { getWeekDays } from '@/lib/planner-utils';
 import { useAuthStore } from '@/hooks/use-auth-store';
 import { usePermissionsStore, MODULE_LABELS, MODULE_COLORS } from '@/hooks/use-permissions-store';
 import { PermisosModule } from '@/components/planner/PermisosModule';
@@ -4234,9 +4235,43 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        </PopoverContent>
                                      </Popover>
                                    </div>
-                                  <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
-                                    Agua
-                                  </div>
+                                   <div className="flex-1 rounded-2xl border border-slate-100 bg-white overflow-x-auto">
+                                     <div className="mb-2">
+                                       <span className="text-slate-700 font-black text-sm uppercase tracking-widest">Semana {getISOWeek(ptabWeekStartDate)}</span>
+                                     </div>
+                                     <table className="w-full border-collapse text-[11px]">
+                                       <thead>
+                                         <tr className="bg-slate-800 text-white">
+                                           <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10">Descripción</th>
+                                           {getWeekDays(ptabWeekStartDate).map((day, idx) => (
+                                             <th key={idx} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">
+                                               {format(day, 'EEEE d/M/yy', { locale: es })}
+                                             </th>
+                                           ))}
+                                         </tr>
+                                       </thead>
+                                       <tbody>
+                                          {['CONSUMO DE A. SERVICIO', 'CONSUMO DE A. SUAVE', 'CONSUMO DE A. PROCESOS', 'CONSUMO DE AGUA FILTRADA'].map((row) => (
+                                            <tr key={row} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                              <td className="px-2 py-2 font-bold text-slate-700 border border-slate-100 whitespace-nowrap">{row}</td>
+                                              {getWeekDays(ptabWeekStartDate).map((_, idx) => (
+                                                <td key={idx} className="px-2 py-2 text-center border border-slate-100">
+                                                  <input type="text" className="w-full min-w-[14ch] h-8 text-center text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                </td>
+                                              ))}
+                                            </tr>
+                                          ))}
+                                          <tr className="bg-slate-100 font-black text-slate-700">
+                                            <td className="px-2 py-2 border border-slate-200 whitespace-nowrap">TOTAL AGUA SUM. POZOS LTS</td>
+                                            {getWeekDays(ptabWeekStartDate).map((_, idx) => (
+                                              <td key={idx} className="px-2 py-2 text-center border border-slate-200">
+                                                <input type="text" className="w-full min-w-[14ch] h-8 text-center text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                              </td>
+                                            ))}
+                                          </tr>
+                                       </tbody>
+                                     </table>
+                                   </div>
                                 </div>
                               </div>
                             </div>
