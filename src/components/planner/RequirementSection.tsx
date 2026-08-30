@@ -53,13 +53,14 @@ import { cn } from '@/lib/utils';
 
 interface RequirementSectionProps {
   onPrint?: () => void;
+  onPrintCalculation?: (startDate: Date, endDate: Date, availability: Record<string, number>) => void;
   tasks: ScheduledTask[];
   weekStartDate: Date;
   recipes: Record<string, Record<string, number>>;
   packagingRecipes?: Record<string, Record<string, Record<string, number>>>;
 }
 
-export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, packagingRecipes }: RequirementSectionProps) {
+export function RequirementSection({ onPrint, onPrintCalculation, tasks, weekStartDate, recipes, packagingRecipes }: RequirementSectionProps) {
   const weekEnd = useMemo(() => addDays(weekStartDate, 7), [weekStartDate]);
 
   const [calcStartDate, setCalcStartDate] = useState<Date>(weekStartDate);
@@ -371,27 +372,40 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
         <TabsContent value="consumibles" className="m-0 animate-in fade-in-50 duration-500">{renderTable(CONSUMABLES_DATA)}</TabsContent>
 
         <TabsContent value="calculo" className="m-0 animate-in fade-in-50 duration-500">
-          <div className="flex items-center gap-3 mb-4 no-print">
-            <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-2 shadow-sm">
-              <CalendarIcon className="h-4 w-4 text-slate-500" />
-              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Inicio</span>
-              <input
-                type="date"
-                value={calcStartDate.toISOString().split('T')[0]}
-                onChange={(e) => setCalcStartDate(new Date(e.target.value + 'T00:00:00'))}
-                className="text-xs font-bold text-slate-700 border-0 bg-transparent focus:ring-0 p-0 w-[130px]"
-              />
+          <div className="flex items-center justify-between mb-4 no-print">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-2 shadow-sm">
+                <CalendarIcon className="h-4 w-4 text-slate-500" />
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Inicio</span>
+                <input
+                  type="date"
+                  value={calcStartDate.toISOString().split('T')[0]}
+                  onChange={(e) => setCalcStartDate(new Date(e.target.value + 'T00:00:00'))}
+                  className="text-xs font-bold text-slate-700 border-0 bg-transparent focus:ring-0 p-0 w-[130px]"
+                />
+              </div>
+              <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-2 shadow-sm">
+                <CalendarIcon className="h-4 w-4 text-slate-500" />
+                <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Fin</span>
+                <input
+                  type="date"
+                  value={calcEndDate.toISOString().split('T')[0]}
+                  onChange={(e) => setCalcEndDate(new Date(e.target.value + 'T00:00:00'))}
+                  className="text-xs font-bold text-slate-700 border-0 bg-transparent focus:ring-0 p-0 w-[130px]"
+                />
+              </div>
             </div>
-            <div className="flex items-center gap-2 bg-white border border-slate-200 rounded-lg px-3 py-2 shadow-sm">
-              <CalendarIcon className="h-4 w-4 text-slate-500" />
-              <span className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Fin</span>
-              <input
-                type="date"
-                value={calcEndDate.toISOString().split('T')[0]}
-                onChange={(e) => setCalcEndDate(new Date(e.target.value + 'T00:00:00'))}
-                className="text-xs font-bold text-slate-700 border-0 bg-transparent focus:ring-0 p-0 w-[130px]"
-              />
-            </div>
+            {onPrintCalculation && (
+              <Button 
+                onClick={() => onPrintCalculation(calcStartDate, calcEndDate, availability)} 
+                variant="outline" 
+                size="lg"
+                className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 rounded-xl h-11 px-6 shadow-sm active:scale-95"
+              >
+                <Printer className="h-4 w-4" />
+                Imprimir Calculo
+              </Button>
+            )}
           </div>
           <div className="border border-slate-200 rounded-xl overflow-hidden bg-white shadow-sm">
             <Table>

@@ -57,6 +57,7 @@ import { KeyboardShortcuts } from '@/components/planner/KeyboardShortcuts';
 import { useRemoteCollection } from '@/hooks/use-remote-collection';
 import { RequirementSection } from '@/components/planner/RequirementSection';
 import { RequirementReport } from '@/components/planner/RequirementReport';
+import { CalculationReport } from '@/components/planner/CalculationReport';
 import { SummaryReport } from '@/components/planner/SummaryReport';
 import { DailyPlanSection } from '@/components/planner/DailyPlanSection';
 import { AdminReportTool } from '@/components/planner/AdminReportTool';
@@ -1291,6 +1292,9 @@ export default function PlannerPage() {
   const [dtSubTab, setDtSubTab] = useState<'td' | 'tn'>('td');
   const [printMode, setPrintMode] = useState('');
   const [printWeekStart, setPrintWeekStart] = useState<string>('');
+  const [calcPrintStartDate, setCalcPrintStartDate] = useState<Date>(new Date());
+  const [calcPrintEndDate, setCalcPrintEndDate] = useState<Date>(new Date());
+  const [calcPrintAvailability, setCalcPrintAvailability] = useState<Record<string, number>>({});
   const [jarabesPrintMode, setJarabesPrintMode] = useState('');
   const [jarabesPrintHtml, setJarabesPrintHtml] = useState('');
   const ORIGINAL_DOCUMENT_TITLE = 'Data Pro - Planificación Eficiente';
@@ -1902,6 +1906,21 @@ export default function PlannerPage() {
 
   const handlePrintRequirements = () => {
     setPrintMode('requirements');
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: portrait; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
+
+  const handlePrintCalculation = (calcStartDate: Date, calcEndDate: Date, availability: Record<string, number>) => {
+    setCalcPrintStartDate(calcStartDate);
+    setCalcPrintEndDate(calcEndDate);
+    setCalcPrintAvailability(availability);
+    setPrintMode('calculation');
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
     style.innerHTML = '@page { size: portrait; margin: 5mm; }';
@@ -2637,9 +2656,9 @@ export default function PlannerPage() {
                        {activeTab === 'daily' && (
                          <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintDaily} />
                        )}
-                       {activeTab === 'requirement' && (
-                         <RequirementSection onPrint={handlePrintRequirements} tasks={tasks} weekStartDate={weekStartDate} recipes={customRecipes} packagingRecipes={customPackagingRecipes} />
-                       )}
+                        {activeTab === 'requirement' && (
+                          <RequirementSection onPrint={handlePrintRequirements} onPrintCalculation={handlePrintCalculation} tasks={tasks} weekStartDate={weekStartDate} recipes={customRecipes} packagingRecipes={customPackagingRecipes} />
+                        )}
                        {activeTab === 'speeds' && (
                          <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} readOnly={!isAdmin} />
                        )}
@@ -5009,11 +5028,16 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
               </div>
             ))
           )}
-          {printMode === 'requirements' && (
-            <div className="p-0">
-              <RequirementReport tasks={tasks} weekStartDate={weekStartDate} recipes={customRecipes} packagingRecipes={customPackagingRecipes} />
-            </div>
-          )}
+           {printMode === 'requirements' && (
+             <div className="p-0">
+               <RequirementReport tasks={tasks} weekStartDate={weekStartDate} recipes={customRecipes} packagingRecipes={customPackagingRecipes} />
+             </div>
+           )}
+           {printMode === 'calculation' && (
+             <div className="p-0">
+               <CalculationReport tasks={tasks} calcStartDate={calcPrintStartDate} calcEndDate={calcPrintEndDate} availability={calcPrintAvailability} recipes={customRecipes} packagingRecipes={customPackagingRecipes} />
+             </div>
+           )}
           {(printMode === 'purchasing-requirements' || printMode === 'purchasing-requirements-aw') && (
             <div className="p-0">
               <PurchasingRequirementReport 
