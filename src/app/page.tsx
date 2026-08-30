@@ -600,6 +600,8 @@ export default function PlannerPage() {
   const [insumosSubTab, setInsumosSubTab] = useState('co2');
   const [insumosPeriodoSubTab, setInsumosPeriodoSubTab] = useState('diario');
   const [procesosSubTab, setProcesosSubTab] = useState('ptab');
+  const [ptabSubTab, setPtabSubTab] = useState('agua');
+  const [ptabWeekStartDate, setPtabWeekStartDate] = useState(new Date());
   const [insumosFecha, setInsumosFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -2430,14 +2432,15 @@ export default function PlannerPage() {
                   <div className="flex items-center gap-1">
                     <ShieldCheck className={`h-3 w-3 ${isAdmin ? 'text-primary' : 'text-slate-400'}`} />
                     <span className="text-[9px] font-black uppercase tracking-widest text-slate-400">
-                       {user.id === 'prodt.mds' || user.id === 'prodt1.mds' || user.id === 'prodt2.mds' ? 'ANALISTA DE PRODUCCIÓN' : 
-                        user.id === 'logg.mds' ? 'GERENTE DE LOGÍSTICA' : 
-                        user.id === 'prodts.mds' ? 'SUPERVISOR DE PRODUCCIÓN' : 
-                        user.id === 'mtto.mds' ? 'SUP. MANTENIMIENTO' : 
-                        user.id === 'cal.mds' ? 'ANALISTA DE CALIDAD' : 
-                        user.id === 'maria.mds' || user.id === 'alex.mds' ? 'ANALISTA DE GERENCIA TÉCNICA' : 
-                        user.role === 'PURCHASING' ? 'COMPRAS' : 
-                        user.role === 'INVENTORY' ? 'INVENTARIO' : 
+                        {user.id === 'prodt.mds' || user.id === 'prodt1.mds' || user.id === 'prodt2.mds' ? 'ANALISTA DE PRODUCCIÓN' : 
+                         user.id === 'logg.mds' ? 'GERENTE DE LOGÍSTICA' : 
+                         user.id === 'prodts.mds' ? 'SUPERVISOR DE PRODUCCIÓN' : 
+                         user.id === 'prodtj.mds' || user.id === 'prodtg.mds' ? 'GERENTE DE PRODUCCIÓN' : 
+                         user.id === 'mtto.mds' ? 'SUP. MANTENIMIENTO' : 
+                         user.id === 'cal.mds' ? 'ANALISTA DE CALIDAD' : 
+                         user.id === 'maria.mds' || user.id === 'alex.mds' ? 'ANALISTA DE GERENCIA TÉCNICA' : 
+                         user.role === 'PURCHASING' ? 'COMPRAS' : 
+                         user.role === 'INVENTORY' ? 'INVENTARIO' : 
                          user.id === 'enf.mds' ? 'ESPECIALISTA ENFARDADORA' : 
                          user.id === 'MDS' ? 'VISITANTE' : user.role}
                     </span>
