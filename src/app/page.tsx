@@ -79,7 +79,7 @@ import { PurchasingRequirementReport } from '@/components/planner/PurchasingRequ
 import { InventoryReport } from '@/components/planner/InventoryReport';
 import { PlanProduccionReport } from '@/components/planner/PlanProduccionReport';
 import { RequisicionReport } from '@/components/planner/RequisicionReport';
-import { JarabesModule } from '@/components/planner/JarabesModule';
+import { JarabesModule, weekMonthKey } from '@/components/planner/JarabesModule';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore, getWeekKey } from '@/hooks/use-planner-store';
 import { useAuthStore } from '@/hooks/use-auth-store';
@@ -1297,6 +1297,8 @@ export default function PlannerPage() {
   const [calcPrintAvailability, setCalcPrintAvailability] = useState<Record<string, number>>({});
   const [jarabesPrintMode, setJarabesPrintMode] = useState('');
   const [jarabesPrintHtml, setJarabesPrintHtml] = useState('');
+  // Físico total semanal de jarabes (clave: "semana yyyy-MM-dd|mes yyyy-MM")
+  const [jarabesWeeklyFisico, setJarabesWeeklyFisico] = useState<Record<string, number>>({});
   const ORIGINAL_DOCUMENT_TITLE = 'Data Pro - Planificación Eficiente';
   const [selectedLine, setSelectedLine] = useState('1');
   const [ordenesSapActiveLinea, setOrdenesSapActiveLinea] = useState<number>(1);
@@ -2079,6 +2081,12 @@ export default function PlannerPage() {
     }, 150);
   };
 
+  const handleFisicoSemanal = (weekStart: Date, monthRef: Date, fisico: number) => {
+    setJarabesWeeklyFisico((prev) => ({ ...prev, [weekMonthKey(weekStart, monthRef)]: fisico }));
+  };
+
+  const getJarabesWeeklyFisico = (weekStart: Date, monthRef: Date) => jarabesWeeklyFisico[weekMonthKey(weekStart, monthRef)] ?? 0;
+
   const handlePrintJarabesSemanalProm = (html: string, filename?: string) => {
     if (filename) document.title = filename;
     setJarabesPrintMode('semanal-promedio');
@@ -2713,6 +2721,8 @@ export default function PlannerPage() {
                       onPrintMonthlyStandard={handlePrintJarabesMensualEst}
                       onPrintMonthlyPromedio={handlePrintJarabesMensualProm}
                       weekStartDate={weekStartDate}
+                      onFisicoSemanal={handleFisicoSemanal}
+                      getWeeklyFisico={getJarabesWeeklyFisico}
                     />
                   )}
                  {activeModule === 'raw-materials' && hasAccess(user.id, 'raw-materials') && (

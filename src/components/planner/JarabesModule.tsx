@@ -58,26 +58,31 @@ type UbbRow = { inicial: string; preparado: string; final: string };
 type SugarRow = { invInicialSacos: string; recepcionSacos: string; invFinalSacos: string };
 type TanquesRow = { invInicialSacos: string; invFinalSacos: string };
 
-interface JarabesData {
+export interface JarabesData {
   ubb: Record<string, Record<string, UbbRow>>;
   sugar: Record<string, Record<string, SugarRow>>;
   tanques: Record<string, Record<string, TanquesRow>>;
   realKgPerSack: Record<string, string>;
   costoAzucar: Record<string, string>;
+  // Físico total de la semana (R estandar sem) guardado por semana + mes
+  // Clave: `${semana yyyy-MM-dd}|${mes yyyy-MM}`
+  weeklyFisico: Record<string, number>;
 }
 
-const EMPTY_JARABES_DATA: JarabesData = {
+export const EMPTY_JARABES_DATA: JarabesData = {
   ubb: {},
   sugar: {},
   tanques: {},
   realKgPerSack: {},
   costoAzucar: {},
+  weeklyFisico: {},
 };
 
 interface JarabesContextValue {
   data: JarabesData;
   isLoaded: boolean;
   setData: (updater: JarabesData | ((prev: JarabesData) => JarabesData)) => void;
+  getWeeklyFisico: (weekStart: Date, monthRef: Date) => number;
 }
 
 const JarabesContext = createContext<JarabesContextValue | null>(null);
@@ -90,14 +95,25 @@ function useJarabes(): JarabesContextValue {
 
 const dk = (fecha: Date) => format(fecha, 'yyyy-MM-dd');
 
+// Clave de persistencia del Físico total semanal: ${semana yyyy-MM-dd}|${mes yyyy-MM}
+export const weekMonthKey = (weekStart: Date, monthRef: Date) =>
+  `${dk(weekStart)}|${format(monthRef, 'yyyy-MM')}`;
+
 function normalizeJarabesData(raw: any): JarabesData {
   const d = raw && typeof raw === 'object' ? raw : {};
+  const wf = d.weeklyFisico && typeof d.weeklyFisico === 'object' ? d.weeklyFisico : {};
+  const normalized: Record<string, number> = {};
+  Object.keys(wf).forEach((k) => {
+    const n = Number(wf[k]);
+    if (Number.isFinite(n)) normalized[k] = n;
+  });
   return {
     ubb: d.ubb && typeof d.ubb === 'object' ? d.ubb : {},
     sugar: d.sugar && typeof d.sugar === 'object' ? d.sugar : {},
     tanques: d.tanques && typeof d.tanques === 'object' ? d.tanques : {},
     realKgPerSack: d.realKgPerSack && typeof d.realKgPerSack === 'object' ? d.realKgPerSack : {},
     costoAzucar: d.costoAzucar && typeof d.costoAzucar === 'object' ? d.costoAzucar : {},
+    weeklyFisico: normalized,
   };
 }
 
@@ -122,7 +138,7 @@ function JarabesProvider({ children }: { children: React.ReactNode }) {
       return;
     }
     try {
-      const migrated: JarabesData = { ubb: {}, sugar: {}, tanques: {}, realKgPerSack: {}, costoAzucar: {} };
+      const migrated: JarabesData = { ubb: {}, sugar: {}, tanques: {}, realKgPerSack: {}, costoAzucar: {}, weeklyFisico: {} };
       let found = false;
       for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
@@ -138,6 +154,8 @@ function JarabesProvider({ children }: { children: React.ReactNode }) {
           const v = localStorage.getItem(key); if (v) { migrated.realKgPerSack[m[1]] = v; found = true; }
         } else if ((m = key.match(/^jarabes-costo-azucar-(\d{4}-\d{2}-\d{2})$/))) {
           const v = localStorage.getItem(key); if (v) { migrated.costoAzucar[m[1]] = v; found = true; }
+        } else if ((m = key.match(/^jarabes-weekly-fisico-(\d{4}-\d{2}-\d{2})\|(\d{4}-\d{2})$/))) {
+          const v = localStorage.getItem(key); if (v) { migrated.weeklyFisico[`${m[1]}|${m[2]}`] = Number(v); found = true; }
         }
       }
       if (found) {
@@ -157,6 +175,11 @@ function JarabesProvider({ children }: { children: React.ReactNode }) {
         const base = normalizeJarabesData(prev);
         return typeof updater === 'function' ? (updater as (p: JarabesData) => JarabesData)(base) : updater;
       });
+    },
+    getWeeklyFisico: (weekStart: Date, monthRef: Date) => {
+      const key = weekMonthKey(weekStart, monthRef);
+      const saved = data.weeklyFisico[key];
+      return saved !== undefined ? saved : 0;
     },
   }), [data, store]);
 
@@ -886,8 +909,8 @@ function ResumenTable({ selectedFecha, theme = 'amber', kgPerSack = 50, updateCo
 
 const DIAS_SEMANA = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
 
-function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintWeeklyStandard }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; onPrintWeeklyStandard?: (html: string, filename?: string) => void }) {
-  const { data } = useJarabes();
+function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintWeeklyStandard, onFisicoSemanal }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; onPrintWeeklyStandard?: (html: string, filename?: string) => void; onFisicoSemanal?: (weekStart: Date, monthRef: Date, fisico: number) => void }) {
+  const { data, setData } = useJarabes();
   const weekDays = useMemo(() => (selectedFecha ? getWeekDays(selectedFecha) : []), [selectedFecha]);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -911,6 +934,27 @@ function REstandarSemTable({ selectedFecha, costoAzucar, realKgPerSack, onPrintW
   const totals = useMemo(() => computeWeekTotals(data, weekDays, costoAzucar, realKgPerSack), [weekDays, costoAzucar, realKgPerSack, data]);
 
   const isEmpty = weekDays.length === 0;
+
+  // Persistir el Físico del total de la semana (clave semana + mes) en el store
+  useEffect(() => {
+    if (!selectedFecha || isEmpty) return;
+    const key = weekMonthKey(weekDays[0], selectedFecha);
+    const saved = data.weeklyFisico[key];
+    if (saved !== undefined && Math.abs(saved - totals.fisico) < 0.005) return;
+    setData((prev) => ({
+      ...prev,
+      weeklyFisico: { ...prev.weeklyFisico, [key]: totals.fisico },
+    }));
+  }, [weekDays, selectedFecha, totals.fisico, isEmpty, data.weeklyFisico, setData]);
+
+  // Notificar al padre (ej. page.tsx) con el valor actual de la semana+mes
+  const fisicoNotifyRef = useRef<number | undefined>(undefined);
+  useEffect(() => {
+    if (!selectedFecha || isEmpty) return;
+    if (fisicoNotifyRef.current !== undefined && Math.abs(fisicoNotifyRef.current - totals.fisico) < 0.005) return;
+    fisicoNotifyRef.current = totals.fisico;
+    onFisicoSemanal?.(weekDays[0], selectedFecha, totals.fisico);
+  }, [weekDays, selectedFecha, totals.fisico, isEmpty, onFisicoSemanal]);
 
   const semanaNumero = selectedFecha ? format(selectedFecha, 'w', { locale: es }) : '';
   const mesNombre = selectedFecha ? format(selectedFecha, 'MMMM', { locale: es }) : '';
@@ -1591,7 +1635,7 @@ function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
   );
 }
 
-export function JarabesModule(props: { onPrintStandard?: (html: string, filename?: string) => void; onPrintPromedio?: (html: string, filename?: string) => void; onPrintWeeklyStandard?: (html: string, filename?: string) => void; onPrintWeeklyPromedio?: (html: string, filename?: string) => void; onPrintMonthlyStandard?: (html: string, filename?: string) => void; onPrintMonthlyPromedio?: (html: string, filename?: string) => void; weekStartDate?: Date }) {
+export function JarabesModule(props: { onPrintStandard?: (html: string, filename?: string) => void; onPrintPromedio?: (html: string, filename?: string) => void; onPrintWeeklyStandard?: (html: string, filename?: string) => void; onPrintWeeklyPromedio?: (html: string, filename?: string) => void; onPrintMonthlyStandard?: (html: string, filename?: string) => void; onPrintMonthlyPromedio?: (html: string, filename?: string) => void; weekStartDate?: Date; onFisicoSemanal?: (weekStart: Date, monthRef: Date, fisico: number) => void; getWeeklyFisico?: (weekStart: Date, monthRef: Date) => number }) {
   return (
     <JarabesProvider>
       <JarabesModuleInner {...props} />
@@ -1599,8 +1643,8 @@ export function JarabesModule(props: { onPrintStandard?: (html: string, filename
   );
 }
 
-function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, onPrintMonthlyStandard, onPrintMonthlyPromedio, weekStartDate }: { onPrintStandard?: (html: string, filename?: string) => void; onPrintPromedio?: (html: string, filename?: string) => void; onPrintWeeklyStandard?: (html: string, filename?: string) => void; onPrintWeeklyPromedio?: (html: string, filename?: string) => void; onPrintMonthlyStandard?: (html: string, filename?: string) => void; onPrintMonthlyPromedio?: (html: string, filename?: string) => void; weekStartDate?: Date }) {
-  const { data } = useJarabes();
+function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklyStandard, onPrintWeeklyPromedio, onPrintMonthlyStandard, onPrintMonthlyPromedio, weekStartDate, onFisicoSemanal, getWeeklyFisico }: { onPrintStandard?: (html: string, filename?: string) => void; onPrintPromedio?: (html: string, filename?: string) => void; onPrintWeeklyStandard?: (html: string, filename?: string) => void; onPrintWeeklyPromedio?: (html: string, filename?: string) => void; onPrintMonthlyStandard?: (html: string, filename?: string) => void; onPrintMonthlyPromedio?: (html: string, filename?: string) => void; weekStartDate?: Date; onFisicoSemanal?: (weekStart: Date, monthRef: Date, fisico: number) => void; getWeeklyFisico?: (weekStart: Date, monthRef: Date) => number }) {
+  const { data, setData } = useJarabes();
   const [activeInnerTab, setActiveInnerTab] = useState<string>('estandar');
   const [activeDisolucionTab, setActiveDisolucionTab] = useState<string>('disolucion');
   const [activeResumenTab, setActiveResumenTab] = useState<string>('semanal');
@@ -1791,7 +1835,7 @@ function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklySta
                         </div>
 
                         <TabsContent value="r-estandar-sem" className="m-0 animate-in fade-in-50 duration-500">
-                          <REstandarSemTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} onPrintWeeklyStandard={onPrintWeeklyStandard} />
+                          <REstandarSemTable selectedFecha={selectedFecha} costoAzucar={costoAzucar} realKgPerSack={realKgPerSack} onPrintWeeklyStandard={onPrintWeeklyStandard} onFisicoSemanal={onFisicoSemanal} />
                         </TabsContent>
 
                         <TabsContent value="r-promedio-sem" className="m-0 animate-in fade-in-50 duration-500">
