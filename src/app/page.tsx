@@ -601,6 +601,7 @@ export default function PlannerPage() {
   const [insumosPeriodoSubTab, setInsumosPeriodoSubTab] = useState('diario');
   const [procesosSubTab, setProcesosSubTab] = useState('ptab');
   const [ptabTab, setPtabTab] = useState<'agua' | 'insumos'>('agua');
+  const [ptabWeekStartDate, setPtabWeekStartDate] = useState(new Date());
   const [insumosFecha, setInsumosFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -1694,6 +1695,22 @@ export default function PlannerPage() {
     }
     return weeks;
   }, [resumenSemanalWeekStartDate]);
+
+  const weeksForYearPtab = useMemo(() => {
+    const weeks: { isoWeek: number; start: Date; end: Date }[] = [];
+    const year = ptabWeekStartDate.getFullYear();
+    const d = new Date(year, 0, 1);
+    let week = 1;
+    while (d.getFullYear() === year) {
+      const start = new Date(d);
+      const end = new Date(d);
+      end.setDate(end.getDate() + 6);
+      weeks.push({ isoWeek: week, start: new Date(start), end: new Date(end) });
+      d.setDate(d.getDate() + 7);
+      week++;
+    }
+    return weeks;
+  }, [ptabWeekStartDate]);
 
   const globalSalesProjection = useMemo(() => {
     const result: Record<string, Record<string, number>> = {};
@@ -4141,7 +4158,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                           </div>
                          </div>
                          {procesosSubTab === 'ptab' && (
-                           <div className="flex items-center gap-2 no-print">
+                           <div className="flex items-center gap-2 no-print mb-2">
                              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
                                {['agua', 'insumos'].map((tab) => (
                                  <button
@@ -4160,17 +4177,59 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                              </div>
                            </div>
                          )}
-                         {procesosSubTab === 'ptab' && ptabTab === 'agua' && (
-                           <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                             <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
-                               <div className="flex flex-col h-full gap-3">
-                                 <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
-                                   Agua
-                                 </div>
-                               </div>
-                             </div>
-                           </div>
-                         )}
+                          {procesosSubTab === 'ptab' && ptabTab === 'agua' && (
+                            <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                              <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                                <div className="flex flex-col h-full gap-3">
+                                  <div className="flex items-center justify-end no-print">
+                                    <Popover>
+                                      <PopoverTrigger asChild>
+                                        <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                                          <CalendarIcon className="h-3.5 w-3.5 text-primary" />
+                                          Semana {getISOWeek(ptabWeekStartDate)}
+                                        </button>
+                                      </PopoverTrigger>
+                                      <PopoverContent className="p-0 w-72" align="end">
+                                        <div className="flex flex-col p-2">
+                                          <div className="flex items-center justify-between mb-2">
+                                            <button onClick={() => {
+                                              const d = new Date(ptabWeekStartDate);
+                                              d.setFullYear(d.getFullYear() - 1);
+                                              setPtabWeekStartDate(d);
+                                            }} className="h-7 px-2 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50">← Año</button>
+                                            <span className="text-[11px] font-black text-slate-700">{ptabWeekStartDate.getFullYear()}</span>
+                                            <button onClick={() => {
+                                              const d = new Date(ptabWeekStartDate);
+                                              d.setFullYear(d.getFullYear() + 1);
+                                              setPtabWeekStartDate(d);
+                                            }} className="h-7 px-2 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50">Año →</button>
+                                          </div>
+                                          <div className="max-h-64 overflow-auto rounded-lg border border-slate-200">
+                                            {weeksForYearPtab.map((week) => (
+                                              <button
+                                                key={week.isoWeek}
+                                                onClick={() => setPtabWeekStartDate(week.start)}
+                                                className={cn(
+                                                  "w-full text-left px-3 py-2 text-[11px] border-b border-slate-100 last:border-0 flex items-center justify-between",
+                                                  getISOWeek(ptabWeekStartDate) === week.isoWeek ? "bg-slate-800 text-white" : "hover:bg-slate-50"
+                                                )}
+                                              >
+                                                <span className="font-bold">Sem {week.isoWeek}</span>
+                                                <span className="text-[10px] opacity-70">{format(week.start, 'dd MMM', { locale: es })} - {format(week.end, 'dd MMM', { locale: es })}</span>
+                                              </button>
+                                            ))}
+                                          </div>
+                                        </div>
+                                      </PopoverContent>
+                                    </Popover>
+                                  </div>
+                                  <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
+                                    Agua
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          )}
                          {procesosSubTab === 'ptab' && ptabTab === 'insumos' && (
                            <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                              <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
