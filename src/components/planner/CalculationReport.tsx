@@ -186,34 +186,33 @@ export function CalculationReport({ tasks, calcStartDate, calcEndDate, availabil
   ] as { code: string; description: string; unit: string }[];
 
   return (
-    <div className="bg-white p-8 max-w-[210mm] mx-auto print:pt-[5mm] print:px-8 print:pb-8 print:max-w-none">
-      <div className="mb-6 border-b-2 border-primary pb-4 flex justify-between items-center">
+    <div id="report" className="bg-white max-w-[210mm] mx-auto print:pt-0 print:px-4 print:pb-0 print:max-w-none">
+      <div className="flex justify-between items-start mb-1">
         <div className="flex-1">
-          <h1 className="text-2xl font-headline font-bold text-slate-900 leading-tight">Reporte de Calculo para Solicitud</h1>
-          <p className="text-primary font-black text-sm uppercase tracking-widest">Gestion de Materiales de Empaque</p>
+          <h1 className="text-base font-headline font-bold text-slate-900 leading-tight">Reporte de Calculo para Solicitud</h1>
+          <p className="text-primary font-black text-[9px] uppercase tracking-widest">Gestion de Materiales de Empaque</p>
         </div>
-        <div className="flex-1 flex justify-center">
-          {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={140} height={50} className="object-contain" />}
+        <div className="flex-shrink-0 ml-4">
+          {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={90} height={25} className="object-contain" />}
         </div>
-        <div className="flex-1 text-right">
-          <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-1">CONFIDENCIAL - PLANTA</p>
-          <p className="text-[11px] text-slate-500 font-bold uppercase">Rango de Fechas</p>
-          <p className="text-[10px] text-slate-400 font-medium italic">
+        <div className="text-right">
+          <p className="text-[9px] font-black text-primary uppercase tracking-widest">CONFIDENCIAL - PLANTA</p>
+          <p className="text-[9px] text-slate-500 font-bold uppercase">Rango de Fechas</p>
+          <p className="text-[9px] text-slate-400 font-medium italic">
             {format(calcStartDate, "dd/MM/yyyy", { locale: es })} - {format(calcEndDate, "dd/MM/yyyy", { locale: es })}
           </p>
         </div>
       </div>
 
-      <div className="space-y-6">
-        <section className="break-inside-avoid">
+      <section>
           <div className="rounded border border-slate-200 overflow-hidden">
             <Table>
               <TableHeader>
-                <TableRow className="bg-slate-50 h-8">
-                  <TableHead className="py-1 font-bold text-slate-700 text-xs">Descripcion</TableHead>
-                  <TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad Requerida</TableHead>
-                  <TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Disponibilidad</TableHead>
-                  <TableHead className="py-1 text-right font-bold text-slate-700 text-xs">Cantidad para Solicitar</TableHead>
+                <TableRow className="bg-slate-50">
+                  <TableHead className="py-0.5 font-bold text-slate-700 text-[10px]">Descripcion</TableHead>
+                  <TableHead className="py-0.5 text-right font-bold text-slate-700 text-[10px]">Cantidad Requerida</TableHead>
+                  <TableHead className="py-0.5 text-right font-bold text-slate-700 text-[10px]">Disponibilidad</TableHead>
+                  <TableHead className="py-0.5 text-right font-bold text-slate-700 text-[10px]">Cantidad para Solicitar</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -223,11 +222,11 @@ export function CalculationReport({ tasks, calcStartDate, calcEndDate, availabil
                   const base = requerida - disp;
                   const solicitar = Number((base * 1.05).toFixed(2));
                   return (
-                    <TableRow key={`${item.code}-${index}`} className="border-b last:border-0 h-8">
-                      <TableCell className="py-1 text-[11px] font-medium text-slate-800">{item.description}</TableCell>
-                      <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{requerida.toLocaleString('es-ES')} {item.unit || ''}</TableCell>
-                      <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{disp.toLocaleString('es-ES')} {item.unit || ''}</TableCell>
-                      <TableCell className="py-1 text-right font-black text-slate-900 bg-slate-50/30 text-[11px]">{solicitar.toLocaleString('es-ES')} {item.unit || ''}</TableCell>
+                    <TableRow key={`${item.code}-${index}`} className="border-b last:border-0">
+                      <TableCell className="py-0.5 text-[10px] font-medium text-slate-800">{item.description}</TableCell>
+                      <TableCell className="py-0.5 text-right font-black text-slate-900 bg-slate-50/30 text-[10px]">{requerida.toLocaleString('es-ES')} {item.unit || ''}</TableCell>
+                      <TableCell className="py-0.5 text-right font-black text-slate-900 bg-slate-50/30 text-[10px]">{disp.toLocaleString('es-ES')} {item.unit || ''}</TableCell>
+                      <TableCell className="py-0.5 text-right font-black text-slate-900 bg-slate-50/30 text-[10px]">{solicitar.toLocaleString('es-ES')} {item.unit || ''}</TableCell>
                     </TableRow>
                   );
                 })}
@@ -235,8 +234,6 @@ export function CalculationReport({ tasks, calcStartDate, calcEndDate, availabil
             </Table>
           </div>
         </section>
-      </div>
-
       <div className="mt-12 pt-4 border-t border-slate-200 flex justify-between items-center text-[9px] text-slate-400 font-black uppercase tracking-widest">
         <span>Data Pro - Sistema de Requerimiento de Produccion</span>
         <span>Generado: {format(new Date(), "dd/MM/yyyy HH:mm:ss")}</span>
