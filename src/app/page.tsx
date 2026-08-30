@@ -600,8 +600,7 @@ export default function PlannerPage() {
   const [insumosSubTab, setInsumosSubTab] = useState('co2');
   const [insumosPeriodoSubTab, setInsumosPeriodoSubTab] = useState('diario');
   const [procesosSubTab, setProcesosSubTab] = useState('ptab');
-  const [ptabSubTab, setPtabSubTab] = useState('agua');
-  const [ptabWeekStartDate, setPtabWeekStartDate] = useState(new Date());
+  const [ptabTab, setPtabTab] = useState<'agua' | 'insumos'>('agua');
   const [insumosFecha, setInsumosFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -4140,16 +4139,60 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                               </button>
                             ))}
                           </div>
-                        </div>
-                        {procesosSubTab === 'ptab' && (
-                          <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                            <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
-                              <div className="flex flex-col h-full gap-3">
-                                <div className="text-slate-400 uppercase font-black text-sm tracking-widest">PTAB</div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
+                         </div>
+                         {procesosSubTab === 'ptab' && (
+                           <div className="flex items-center gap-2 no-print">
+                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                               {['agua', 'insumos'].map((tab) => (
+                                 <button
+                                   key={tab}
+                                   onClick={() => setPtabTab(tab as 'agua' | 'insumos')}
+                                   className={cn(
+                                     "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                     ptabTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                   )}
+                                 >
+                                   {tab === 'agua' && <Droplets className="h-3.5 w-3.5" />}
+                                   {tab === 'insumos' && <Package className="h-3.5 w-3.5" />}
+                                   {tab === 'agua' ? 'Agua' : 'Insumos'}
+                                 </button>
+                               ))}
+                             </div>
+                           </div>
+                         )}
+                         {procesosSubTab === 'ptab' && ptabTab === 'agua' && (
+                           <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                             <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                               <div className="flex flex-col h-full gap-3">
+                                 <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
+                                   Agua
+                                 </div>
+                               </div>
+                             </div>
+                           </div>
+                         )}
+                         {procesosSubTab === 'ptab' && ptabTab === 'insumos' && (
+                           <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                             <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                               <div className="flex flex-col h-full gap-3">
+                                 <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
+                                   Insumos
+                                 </div>
+                               </div>
+                             </div>
+                           </div>
+                         )}
+                         {procesosSubTab === 'ptab' && ptabTab !== 'agua' && ptabTab !== 'insumos' && (
+                           <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                             <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                               <div className="flex flex-col h-full gap-3">
+                                 <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
+                                   PTAB
+                                 </div>
+                               </div>
+                             </div>
+                           </div>
+                         )}
                         {procesosSubTab === 'miteco' && (
                           <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                             <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
