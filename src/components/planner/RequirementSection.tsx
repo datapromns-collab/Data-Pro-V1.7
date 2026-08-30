@@ -64,11 +64,27 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
 
   const [calcStartDate, setCalcStartDate] = useState<Date>(weekStartDate);
   const [calcEndDate, setCalcEndDate] = useState<Date>(weekEnd);
+  const [availability, setAvailability] = useState<Record<string, number>>({});
 
-  const getCalculatedValue = (code: string) => {
+  const empaqueItems = useMemo(() => {
+    return [
+      ...PREFORMS_DATA,
+      ...CAPS_DATA,
+      ...LABELS_2LTS_DATA,
+      ...LABELS_1_5LTS_DATA,
+      ...LABELS_1LT_DATA,
+      ...LABELS_04LT_DATA,
+      ...PLASTICS_DATA.filter((item: any) => !item.isHeader),
+      ...ADHESIVE_DATA,
+    ] as { code: string; description: string; unit: string }[];
+  }, []);
+
+  const getCalculatedValue = (code: string, startDate?: Date, endDate?: Date) => {
+    const start = startDate || weekStartDate;
+    const end = endDate || weekEnd;
     let packagingTotal = 0;
     tasks.forEach(task => {
-      if (task.endTime > weekStartDate && task.startTime < weekEnd) {
+      if (task.endTime > start && task.startTime < end) {
         // Prioritize Custom Packaging Recipes
         const customPkg = packagingRecipes?.[task.name]?.[task.presentation || ''];
         if (customPkg && customPkg[code] !== undefined) {
@@ -110,7 +126,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
 
     let materialTotal = 0;
     tasks.forEach(task => {
-      if (task.endTime > weekStartDate && task.startTime < weekEnd) {
+      if (task.endTime > start && task.startTime < end) {
         const recipe = recipes[task.name];
         if (recipe && recipe[code]) {
           const productUbbFactor = UBB_FACTORS[task.name] || 0;
@@ -128,8 +144,8 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
         .filter(t => 
           t.name === mapping.product && 
           t.presentation === mapping.presentation &&
-          t.endTime > weekStartDate && 
-          t.startTime < weekEnd
+          t.endTime > start && 
+          t.startTime < end
         )
         .reduce((acc, t) => acc + (t.quantity || 0), 0);
       return Number((totalBoxes * factor).toFixed(2));
@@ -140,8 +156,8 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
       return Number(formats.reduce((acc, fmt) => {
         const factor = PLASTIC_FACTORS[fmt];
         const totalBoxes = tasks
-          .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
-          .reduce((sum, t) => sum + (t.quantity || 0), 0);
+           .filter(t => t.presentation === fmt && t.endTime > start && t.startTime < end && t.quantity > 0)
+           .reduce((sum, t) => sum + (t.quantity || 0), 0);
         return acc + (totalBoxes * factor);
       }, 0).toFixed(2));
     }
@@ -151,7 +167,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
       return Number(formats.reduce((acc, fmt) => {
         const factor = TERMO_0017_FACTORS[fmt];
         const totalBoxes = tasks
-          .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
+          .filter(t => t.presentation === fmt && t.endTime > start && t.startTime < end && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);
         return acc + (totalBoxes * factor);
       }, 0).toFixed(2));
@@ -162,7 +178,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
       return Number(formats.reduce((acc, fmt) => {
         const factor = TERMO_0080_FACTORS[fmt];
         const totalBoxes = tasks
-          .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
+          .filter(t => t.presentation === fmt && t.endTime > start && t.startTime < end && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);
         return acc + (totalBoxes * factor);
       }, 0).toFixed(2));
@@ -173,7 +189,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
       return Number(formats.reduce((acc, fmt) => {
         const factor = TERMO_0130_FACTORS[fmt];
         const totalBoxes = tasks
-          .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
+          .filter(t => t.presentation === fmt && t.endTime > start && t.startTime < end && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);
         return acc + (totalBoxes * factor);
       }, 0).toFixed(2));
@@ -184,7 +200,7 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
       return Number(formats.reduce((acc, fmt) => {
         const factor = ADHESIVE_FACTORS[fmt];
         const totalBoxes = tasks
-          .filter(t => t.presentation === fmt && t.endTime > weekStartDate && t.startTime < weekEnd && t.quantity > 0)
+          .filter(t => t.presentation === fmt && t.endTime > start && t.startTime < end && t.quantity > 0)
           .reduce((sum, t) => sum + (t.quantity || 0), 0);
         return acc + (totalBoxes * factor);
       }, 0).toFixed(6));
@@ -192,19 +208,19 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
 
     // Tapas Fallback
     if (code === 'EMP_0105_N') {
-       return Math.round(tasks.filter(t => t.name === "GLUP FRESH" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
+       return Math.round(tasks.filter(t => t.name === "GLUP FRESH" && t.endTime > start && t.startTime < end).reduce((acc, t) => {
           const f = t.presentation === "2Lts" ? 6 : (t.presentation === "1Lt" ? 12 : 15);
           return acc + (t.quantity || 0) * f;
        }, 0));
     }
     if (code === 'EMP_0105') {
-       return Math.round(tasks.filter(t => t.name !== "GLUP FRESH" && !(t.name || '').startsWith("JUSTY") && !(t.name || '').startsWith("VITA") && t.presentation !== "0.4Lts" && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
+       return Math.round(tasks.filter(t => t.name !== "GLUP FRESH" && !(t.name || '').startsWith("JUSTY") && !(t.name || '').startsWith("VITA") && t.presentation !== "0.4Lts" && t.endTime > start && t.startTime < end).reduce((acc, t) => {
           const f = t.presentation === "2Lts" ? 6 : 12;
           return acc + (t.quantity || 0) * f;
        }, 0));
     }
     if (code === 'EMP_0095') {
-       return Math.round(tasks.filter(t => ((t.name || '').startsWith("JUSTY") || (t.name || '').startsWith("VITA")) && t.endTime > weekStartDate && t.startTime < weekEnd).reduce((acc, t) => {
+       return Math.round(tasks.filter(t => ((t.name || '').startsWith("JUSTY") || (t.name || '').startsWith("VITA")) && t.endTime > start && t.startTime < end).reduce((acc, t) => {
           const f = (t.presentation === "1.5Lts") ? 12 : 15;
           return acc + (t.quantity || 0) * f;
        }, 0));
@@ -381,67 +397,46 @@ export function RequirementSection({ onPrint, tasks, weekStartDate, recipes, pac
             <Table>
               <TableHeader>
                 <TableRow className="bg-slate-50/50">
-                  <TableHead className="font-bold text-slate-500 py-4">Producto</TableHead>
-                  <TableHead className="font-bold text-slate-500 py-4">Presentación</TableHead>
-                  <TableHead className="text-right font-bold text-slate-500 py-4">Cantidad Planificada</TableHead>
-                  <TableHead className="text-right font-bold text-slate-500 py-4">Factor Empaque</TableHead>
-                  <TableHead className="text-right font-bold text-slate-500 py-4">Total Empaque Requerido</TableHead>
+                  <TableHead className="font-bold text-slate-500 py-4">Descripción</TableHead>
+                  <TableHead className="text-right font-bold text-slate-500 py-4">Cantidad Requerida</TableHead>
+                  <TableHead className="text-right font-bold text-slate-500 py-4">Disponibilidad</TableHead>
+                  <TableHead className="text-right font-bold text-slate-500 py-4">Cantidad para Solicitar</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {tasks.filter(t => {
-                  const start = new Date(t.startTime);
-                  const end = new Date(t.endTime);
-                  return end > calcStartDate && start < calcEndDate && t.quantity > 0;
-                }).map((task, idx) => {
-                  const isFresh = task.name === "GLUP FRESH";
-                  const isColaKolita = task.name === "GLUP COLA" || task.name === "GLUP KOLITA";
-                  const isJugo = (task.name || '').startsWith("JUSTY") || (task.name || '').startsWith("VITA");
-                  const pres = task.presentation || "";
-                  const qty = task.quantity || 0;
-                  let factor = 0;
-                  if (pres === "2Lts" && isFresh) factor = 6;
-                  else if (pres === "2Lts" && !isFresh && !isJugo) factor = 6;
-                  else if (pres === "1Lt" && isColaKolita) factor = 12;
-                  else if (pres === "1Lt" && isFresh) factor = 12;
-                  else if (pres === "1Lt" && !isFresh && !isColaKolita && !isJugo) factor = 12;
-                  else if (pres === "0.4Lts" && isFresh) factor = 15;
-                  else if (pres === "0.4Lts" && !isFresh && !isJugo) factor = 15;
-                  else if (pres === "1.5Lts" && isJugo) factor = 12;
-                  else if (pres === "1.5Lts" && !isJugo) factor = 12;
+                {empaqueItems.map((item, idx) => {
+                  const requerida = Number(getCalculatedValue(item.code, calcStartDate, calcEndDate).toFixed(2));
+                  const disp = availability[item.code] || 0;
+                  const base = requerida - disp;
+                  const solicitar = Number((base * 1.05).toFixed(2));
                   return (
-                    <TableRow key={`calc-${idx}`} className="hover:bg-slate-50/50 transition-colors">
-                      <TableCell className="text-sm font-bold text-slate-700 py-4">{task.name}</TableCell>
-                      <TableCell className="text-sm text-slate-600 py-4">{pres}</TableCell>
+                    <TableRow key={`calc-${item.code}`} className="hover:bg-slate-50/50 transition-colors">
+                      <TableCell className="text-sm font-bold text-slate-700 py-4">{item.description}</TableCell>
                       <TableCell className="text-right py-4">
                         <Badge variant="secondary" className="bg-slate-50 text-slate-400 border-slate-200 px-4 py-1.5 font-bold text-[12px] min-w-[100px] justify-center">
-                          {qty.toLocaleString('es-ES')} cajas
+                          {requerida.toLocaleString('es-ES')} {item.unit || ''}
                         </Badge>
                       </TableCell>
                       <TableCell className="text-right py-4">
-                        <Badge variant="secondary" className="bg-slate-50 text-slate-400 border-slate-200 px-4 py-1.5 font-bold text-[12px] min-w-[100px] justify-center">
-                          {factor > 0 ? `x${factor}` : '-'}
-                        </Badge>
+                        <input
+                          type="number"
+                          step="any"
+                          value={availability[item.code] ?? ''}
+                          onChange={(e) => {
+                            const val = e.target.value === '' ? 0 : parseFloat(e.target.value);
+                            setAvailability(prev => ({ ...prev, [item.code]: isNaN(val) ? 0 : val }));
+                          }}
+                          className="w-28 text-right text-sm font-bold text-slate-700 border border-slate-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-primary/20"
+                        />
                       </TableCell>
                       <TableCell className="text-right py-4">
                         <Badge variant="secondary" className="bg-primary/5 text-primary border-primary/10 px-4 py-1.5 font-black text-[12px] min-w-[100px] justify-center">
-                          {factor > 0 ? (qty * factor).toLocaleString('es-ES') : '-'}
+                          {solicitar.toLocaleString('es-ES')} {item.unit || ''}
                         </Badge>
                       </TableCell>
                     </TableRow>
                   );
                 })}
-                {tasks.filter(t => {
-                  const start = new Date(t.startTime);
-                  const end = new Date(t.endTime);
-                  return end > calcStartDate && start < calcEndDate && t.quantity > 0;
-                }).length === 0 && (
-                  <TableRow>
-                    <TableCell colSpan={5} className="text-center text-slate-400 py-8 font-bold">
-                      No hay producción planificada en el rango de fechas seleccionado
-                    </TableCell>
-                  </TableRow>
-                )}
               </TableBody>
             </Table>
           </div>
