@@ -952,7 +952,7 @@ export function AdminReportTool({
                             <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
                               {data.real.toLocaleString('es-ES')}
                             </td>
-                            <td className={`px-3 py-1 border border-slate-900 text-right tabular-nums font-black ${data.compliance >= 80 ? 'text-emerald-600' : 'text-primary'}`}>
+                            <td className="px-3 py-1 border border-slate-900 text-right tabular-nums font-black text-slate-900">
                               {data.compliance.toFixed(2)}%
                             </td>
                           </tr>
@@ -967,7 +967,7 @@ export function AdminReportTool({
                           <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
                             {monthlyComplianceData.reduce((a, b) => a + b.real, 0).toLocaleString('es-ES')}
                           </td>
-                          <td className="px-3 py-1 border border-slate-900 text-right tabular-nums text-primary text-xs">
+                          <td className="px-3 py-1 border border-slate-900 text-right tabular-nums text-slate-900 text-xs">
                             {(monthlyComplianceData.reduce((a, b) => a + b.real, 0) / (monthlyComplianceData.reduce((a, b) => a + b.planned, 0) || 1) * 100).toFixed(2)}%
                           </td>
                         </tr>
