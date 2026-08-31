@@ -9227,7 +9227,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-31T12:45:06.451Z"
+    "updatedAt": "2026-08-31T12:45:25.054Z"
   },
   "ordenesSap": [
     {
@@ -15749,6 +15749,26 @@
       "linea": 1,
       "sabor": "GLUP FRESH",
       "ordenNumero": "63282",
+      "semana": 36,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-31",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1788180324790",
+      "linea": 2,
+      "sabor": "GLUP MANZANA ROJA",
+      "ordenNumero": "63288",
       "semana": 36,
       "dias": [
         {
@@ -26559,21 +26579,38 @@
         "2026-08-29": {
           "GLUP COLA": {
             "inicial": "40.57",
+            "preparado": "42",
+            "final": "51.35"
+          },
+          "GLUP KOLITA": {
+            "inicial": "36.30",
+            "preparado": "18",
+            "final": "4.74"
+          },
+          "GLUP FRESH": {
+            "inicial": "4.40",
+            "preparado": "12",
+            "final": "8.27"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "24",
+            "preparado": "240",
+            "final": ""
+          }
+        },
+        "2026-08-30": {
+          "GLUP COLA": {
+            "inicial": "51.35",
             "preparado": "",
             "final": ""
           },
           "GLUP KOLITA": {
-            "inicial": "36.30",
+            "inicial": "4.74",
             "preparado": "",
             "final": ""
           },
           "GLUP FRESH": {
-            "inicial": "4.40",
-            "preparado": "",
-            "final": ""
-          },
-          "JUSTY DURAZNO": {
-            "inicial": "24",
+            "inicial": "8.27",
             "preparado": "",
             "final": ""
           }
@@ -27033,16 +27070,33 @@
         "2026-08-29": {
           "PORTUGUESA": {
             "invInicialSacos": "6600",
+            "recepcionSacos": "1960",
+            "invFinalSacos": "7520"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2280",
+            "recepcionSacos": "720",
+            "invFinalSacos": "2800"
+          },
+          "PASTORA": {
+            "invInicialSacos": "1480",
+            "recepcionSacos": "2120",
+            "invFinalSacos": "2040"
+          }
+        },
+        "2026-08-30": {
+          "PORTUGUESA": {
+            "invInicialSacos": "7520",
             "recepcionSacos": "",
             "invFinalSacos": ""
           },
           "IMPORTADA 1": {
-            "invInicialSacos": "2280",
+            "invInicialSacos": "2800",
             "recepcionSacos": "",
             "invFinalSacos": ""
           },
           "PASTORA": {
-            "invInicialSacos": "1480",
+            "invInicialSacos": "2040",
             "recepcionSacos": "",
             "invFinalSacos": ""
           }
@@ -27530,14 +27584,28 @@
         "2026-08-29": {
           "KITS PREP.": {
             "invInicialSacos": "5",
-            "invFinalSacos": ""
+            "invFinalSacos": "5"
           },
           "JARABE SIMPLE": {
             "invInicialSacos": "403",
-            "invFinalSacos": ""
+            "invFinalSacos": "243"
           },
           "Sala 1": {
             "invInicialSacos": "230",
+            "invFinalSacos": "229"
+          }
+        },
+        "2026-08-30": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": ""
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "243",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "229",
             "invFinalSacos": ""
           }
         }
@@ -27575,7 +27643,8 @@
         "2026-08-25": "50.3",
         "2026-08-26": "50.46",
         "2026-08-27": "50.4",
-        "2026-08-28": "50.43"
+        "2026-08-28": "50.43",
+        "2026-08-29": "50.43"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
