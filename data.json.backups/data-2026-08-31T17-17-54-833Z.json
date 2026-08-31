@@ -92355,6 +92355,25 @@
         "usuario": "Luis Sanchez",
         "id": 1788194820278,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-28",
+        "semana": 35,
+        "turno": "NOCTURNO",
+        "operador": "DARWIN MARTINEZ",
+        "linea": "Línea 2",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "02:20",
+        "finParada": "02:25",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "PALETIZADO MANUAL ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788196503499,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -99553,7 +99572,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1788193887001.324,
+        "id": 1788194041052,
         "fechaOrden": "2026-08-29",
         "orden": "9064",
         "fechaEmision": "2026-08-29",
@@ -99576,11 +99595,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1788193885798,
+        "id": 1788194089402.7385,
         "fechaOrden": "2026-08-28",
         "orden": "9223",
         "fechaEmision": "2026-08-28",
@@ -99603,7 +99622,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       }
     ],
@@ -99723,6 +99742,12 @@
           "jarabeReal": 142670,
           "ubb": 49.6,
           "producto": "442"
+        },
+        "auto-1-1788088569808": {
+          "cajasPlanificadas": 33000,
+          "producto": "366",
+          "jarabeReal": 32822,
+          "ubb": 11.43
         }
       },
       "linea-2": {
@@ -99932,6 +99957,13 @@
           "pnc": 1094,
           "ubb": 108.41,
           "producto": "637"
+        },
+        "auto-3-1787948910295": {
+          "cajasPlanificadas": 155400,
+          "jarabeReal": 124018,
+          "producto": "503",
+          "ubb": 43.1,
+          "pnc": 306
         }
       },
       "linea-4": {
@@ -100002,6 +100034,12 @@
           "jarabeReal": 124617,
           "ubb": 43.29,
           "producto": "186"
+        },
+        "auto-4-1787949145256": {
+          "cajasPlanificadas": 161000,
+          "jarabeReal": 130448,
+          "producto": "301",
+          "ubb": 45.35
         }
       },
       "linea-5": {
