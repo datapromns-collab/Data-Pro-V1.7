@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-31T00:00:00.000",
+      "weekStartDate": "2026-08-24T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -9227,7 +9227,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-31T17:02:27.426Z"
+    "updatedAt": "2026-08-31T18:50:07.141Z"
   },
   "ordenesSap": [
     {
@@ -27773,7 +27773,8 @@
         "2026-08-03|2026-08": 1090313.59,
         "2026-08-10|2026-08": 1086706.74,
         "2026-08-17|2026-08": 1131882.14,
-        "2026-08-24|2026-08": 1353500.36
+        "2026-08-24|2026-08": 1353500.36,
+        "2026-08-31|2026-08": 0
       }
     },
     "seguimiento-etiquetadora": {
@@ -92507,6 +92508,101 @@
         "usuario": "Luis Sanchez",
         "id": 1788199572565,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-29",
+        "semana": 35,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA ",
+        "linea": "Línea 1",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "02:08",
+        "finParada": "02:13",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "PERTURBACION EN REFRIGERACION DE PARED DE FONDO MOLDE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788199941990,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-29",
+        "semana": 35,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA ",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "02:44",
+        "finParada": "02:51",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788200010645,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-29",
+        "semana": 35,
+        "turno": "DIURNO",
+        "operador": "DANIEL PARRA ",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "03:10",
+        "finParada": "03:14",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788200073436,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-29",
+        "semana": 35,
+        "turno": "DIURNO",
+        "operador": "KEVIN MENDOZA ",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "03:28",
+        "finParada": "03:37",
+        "totalMin": "9",
+        "zona": "Llenado",
+        "falla": "ERROR DE COMPACTACION, PROTECTORES DISPARADOS ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788200157461,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-29",
+        "semana": 35,
+        "turno": "DIURNO",
+        "operador": "KEVIN MENDOZA ",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "03:47",
+        "finParada": "03:52",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "ERROR DE COMPACTACION, PROTECTORES DISPARADOS ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788200249773,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -105917,6 +106013,26 @@
           "",
           "",
           ""
+        ]
+      },
+      "2026-08-24": {
+        "td": [
+          "11.5",
+          "11.5",
+          "11.5",
+          "11.5",
+          "11.5",
+          "11.5",
+          "11.5"
+        ],
+        "tn": [
+          "12.5",
+          "12.5",
+          "12.5",
+          "12.5",
+          "12.5",
+          "12.5",
+          "12.5"
         ]
       }
     },
