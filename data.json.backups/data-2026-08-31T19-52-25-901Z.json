@@ -92417,7 +92417,7 @@
       {
         "fecha": "2026-08-29",
         "semana": 35,
-        "turno": "DIURNO",
+        "turno": "NOCTURNO",
         "operador": "",
         "linea": "Línea 1",
         "equipo": "",
@@ -92436,7 +92436,7 @@
       {
         "fecha": "2026-08-29",
         "semana": 35,
-        "turno": "DIURNO",
+        "turno": "NOCTURNO",
         "operador": "DANIEL PARRA ",
         "linea": "Línea 1",
         "equipo": "PALETIZADORA",
@@ -92455,7 +92455,7 @@
       {
         "fecha": "2026-08-29",
         "semana": 35,
-        "turno": "DIURNO",
+        "turno": "NOCTURNO",
         "operador": "DANIEL PARRA ",
         "linea": "Línea 1",
         "equipo": "ENFARDADORA",
@@ -92474,7 +92474,7 @@
       {
         "fecha": "2026-08-31",
         "semana": 36,
-        "turno": "DIURNO",
+        "turno": "NOCTURNO",
         "operador": "DANIEL PARRA",
         "linea": "Línea 1",
         "equipo": "ETIQUETADORA",
@@ -92493,7 +92493,7 @@
       {
         "fecha": "2026-08-29",
         "semana": 35,
-        "turno": "DIURNO",
+        "turno": "NOCTURNO",
         "operador": "DANIEL PARRA",
         "linea": "Línea 1",
         "equipo": "ENFARDADORA",
@@ -92531,7 +92531,7 @@
       {
         "fecha": "2026-08-29",
         "semana": 35,
-        "turno": "DIURNO",
+        "turno": "NOCTURNO",
         "operador": "DANIEL PARRA ",
         "linea": "Línea 1",
         "equipo": "ETIQUETADORA",
@@ -92602,6 +92602,25 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788200249773,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-29",
+        "semana": 35,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "03:58",
+        "finParada": "04:17",
+        "totalMin": "19",
+        "zona": "Llenado",
+        "falla": "REVISION DE COMPONENTES DE LA COMPACTACION ",
+        "orden": "9194",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788205928670,
         "bloqueado": true
       }
     ],
@@ -99852,6 +99871,33 @@
         "descripcionAccion": "",
         "observaciones": "",
         "bloqueado": true,
+        "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1788205928674,
+        "fechaOrden": "2026-08-29",
+        "orden": "9194",
+        "fechaEmision": "2026-08-29",
+        "semana": 35,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 1",
+        "maquina": "PALETIZADORA",
+        "aviso": "",
+        "fechaParada": "2026-08-29",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "03:58",
+        "finParada": "04:17",
+        "tMtto": "19",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "REVISION DE COMPONENTES DE LA COMPACTACION ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
         "usuario": "Luis Sanchez"
       }
     ],
