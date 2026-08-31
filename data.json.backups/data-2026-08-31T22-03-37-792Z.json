@@ -9227,7 +9227,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-31T21:52:43.507Z"
+    "updatedAt": "2026-08-31T22:00:17.432Z"
   },
   "ordenesSap": [
     {
@@ -93533,6 +93533,25 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788213690247,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-29",
+        "semana": 35,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "21:28",
+        "finParada": "07:00",
+        "totalMin": "572",
+        "zona": "Llenado",
+        "falla": "FIN DE PRODUCCION ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788213753615,
         "bloqueado": true
       }
     ],
