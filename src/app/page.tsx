@@ -2499,6 +2499,7 @@ export default function PlannerPage() {
                          user.id === 'proc.mds' ? 'SALA DE JARABE' : 
                          user.id === 'proc1.mds' ? 'PTAB' : 
                          user.id === 'procs1.mds' ? 'Supervisor de procesos' : 
+                         user.id === 'procs2.mds' ? 'Supervisor de procesos' : 
                          user.id === 'MDS' ? 'VISITANTE' : user.role}
                     </span>
                   </div>
