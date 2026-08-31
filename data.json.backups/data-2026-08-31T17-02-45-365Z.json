@@ -99553,7 +99553,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1788194041052,
+        "id": 1788193887001.324,
         "fechaOrden": "2026-08-29",
         "orden": "9064",
         "fechaEmision": "2026-08-29",
@@ -99576,7 +99576,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       },
       {
