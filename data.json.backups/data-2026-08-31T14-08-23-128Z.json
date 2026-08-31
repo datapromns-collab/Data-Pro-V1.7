@@ -9227,7 +9227,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-31T12:45:25.054Z"
+    "updatedAt": "2026-08-31T13:56:13.033Z"
   },
   "ordenesSap": [
     {
@@ -15769,6 +15769,106 @@
       "linea": 2,
       "sabor": "GLUP MANZANA ROJA",
       "ordenNumero": "63288",
+      "semana": 36,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-31",
+          "ticket1": "17637",
+          "cajas1": 2400,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1788183596534",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63294",
+      "semana": 36,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-31",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1788183606006",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63300",
+      "semana": 36,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-31",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1788183621614",
+      "linea": 5,
+      "sabor": "JUSTY DURAZNO",
+      "ordenNumero": "63305",
+      "semana": 36,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-31",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1788183637238",
+      "linea": 6,
+      "sabor": "GLUP MANZANA ROJA",
+      "ordenNumero": "63311",
+      "semana": 36,
+      "dias": [
+        {
+          "fechaInicio": "2026-08-31",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1788183656016",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63317",
       "semana": 36,
       "dias": [
         {
@@ -26601,8 +26701,8 @@
         "2026-08-30": {
           "GLUP COLA": {
             "inicial": "51.35",
-            "preparado": "",
-            "final": ""
+            "preparado": "30",
+            "final": "67.72"
           },
           "GLUP KOLITA": {
             "inicial": "4.74",
@@ -26611,8 +26711,16 @@
           },
           "GLUP FRESH": {
             "inicial": "8.27",
-            "preparado": "",
-            "final": ""
+            "preparado": "6",
+            "final": "10.97"
+          },
+          "GLUP MANZANA ROJA": {
+            "preparado": "16",
+            "final": "16"
+          },
+          "JUSTY DURAZNO": {
+            "preparado": "40",
+            "final": "40"
           }
         }
       },
@@ -27088,17 +27196,17 @@
           "PORTUGUESA": {
             "invInicialSacos": "7520",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "6840"
           },
           "IMPORTADA 1": {
             "invInicialSacos": "2800",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "2800"
           },
           "PASTORA": {
             "invInicialSacos": "2040",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "1160"
           }
         }
       },
@@ -27598,11 +27706,11 @@
         "2026-08-30": {
           "KITS PREP.": {
             "invInicialSacos": "5",
-            "invFinalSacos": ""
+            "invFinalSacos": "5"
           },
           "JARABE SIMPLE": {
             "invInicialSacos": "243",
-            "invFinalSacos": ""
+            "invFinalSacos": "105"
           },
           "Sala 1": {
             "invInicialSacos": "229",
@@ -27644,7 +27752,8 @@
         "2026-08-26": "50.46",
         "2026-08-27": "50.4",
         "2026-08-28": "50.43",
-        "2026-08-29": "50.43"
+        "2026-08-29": "50.43",
+        "2026-08-30": "50.44"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
@@ -27655,7 +27764,8 @@
         "2026-08-11": "1.34",
         "2026-08-16": "1.34",
         "2026-08-10": "1.5",
-        "2026-08-23": "1.34"
+        "2026-08-23": "1.34",
+        "2026-08-30": "1.34"
       },
       "_deletedIds": {},
       "weeklyFisico": {
@@ -27663,7 +27773,7 @@
         "2026-08-03|2026-08": 1090313.59,
         "2026-08-10|2026-08": 1086706.74,
         "2026-08-17|2026-08": 1131882.14,
-        "2026-08-24|2026-08": 802150.48
+        "2026-08-24|2026-08": 1353500.36
       }
     },
     "seguimiento-etiquetadora": {
