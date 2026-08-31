@@ -1694,6 +1694,20 @@ export default function PlannerPage() {
     return weeks;
   }, [plantaWeekStartDate]);
 
+  const informesOperacionalesFiltrados = useMemo(() => {
+    if (paradasSubTab !== 'informes-operacionales') return informesOperacionales;
+    const weekStart = new Date(plantaWeekStartDate);
+    weekStart.setHours(0, 0, 0, 0);
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekEnd.getDate() + 6);
+    weekEnd.setHours(23, 59, 59, 999);
+    return informesOperacionales.filter((r) => {
+      const fecha = parseFecha(r.fecha);
+      if (!fecha) return false;
+      return fecha >= weekStart && fecha <= weekEnd;
+    });
+  }, [informesOperacionales, plantaWeekStartDate, paradasSubTab]);
+
   const weeksForYearResumen = useMemo(() => {
     const weeks: { isoWeek: number; start: Date; end: Date }[] = [];
     const year = resumenSemanalWeekStartDate.getFullYear();
@@ -2984,8 +2998,8 @@ export default function PlannerPage() {
                                         ))}
                                       </SelectContent>
                                     </Select>
-                                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                       {informesOperacionales.filter((r) => {
+                                     <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                                       {informesOperacionalesFiltrados.filter((r) => {
                                          const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
                                          const matchTurno = paradaFiltroTurno === 'all' || r.turno === paradaFiltroTurno;
                                          const matchEquipo = paradaFiltroEquipo === 'all' || r.equipo === paradaFiltroEquipo;
@@ -3018,15 +3032,15 @@ export default function PlannerPage() {
                                           <TableHead className="text-white font-black text-[9px] uppercase tracking-wider h-10 px-2 w-16">Acciones</TableHead>
                                         </TableRow>
                                      </TableHeader>
-                                     <TableBody>
-                                        {informesOperacionales
-                                          .filter((r) => {
-                                            const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
-                                            const matchTurno = paradaFiltroTurno === 'all' || r.turno === paradaFiltroTurno;
-                                            const matchEquipo = paradaFiltroEquipo === 'all' || r.equipo === paradaFiltroEquipo;
-                                            const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
-                                            return matchLine && matchTurno && matchEquipo && matchDate;
-                                          })
+                                      <TableBody>
+                                        {informesOperacionalesFiltrados
+                                           .filter((r) => {
+                                             const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
+                                             const matchTurno = paradaFiltroTurno === 'all' || r.turno === paradaFiltroTurno;
+                                             const matchEquipo = paradaFiltroEquipo === 'all' || r.equipo === paradaFiltroEquipo;
+                                             const matchDate = !paradaFiltroFecha || r.fecha === paradaFiltroFecha;
+                                             return matchLine && matchTurno && matchEquipo && matchDate;
+                                           })
                                            .map((row) => (
                                               <TableRow key={row.id} className={cn("border-b border-slate-100 transition-all duration-200", row.bloqueado !== false ? "bg-emerald-50/30" : "bg-amber-50/20 hover:bg-amber-50/30 cursor-pointer")} onClick={(e) => { const target = e.target as HTMLElement; if (target.tagName === 'INPUT' || target.tagName === 'BUTTON' || target.tagName === 'SELECT' || target.closest('button')) return; if (editingId !== row.id && row.bloqueado === false && user?.id !== 'prodtj.mds' && user?.id !== 'prodtg.mds' && user?.id !== 'prodts.mds' && user?.id !== 'enf.mds') { setEditingId(row.id); setEditForm(row); } }}>
                                                {editingId === row.id ? (
