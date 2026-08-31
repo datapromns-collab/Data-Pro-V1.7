@@ -76967,25 +76967,6 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-08-28",
-        "semana": 35,
-        "turno": "DIURNO",
-        "operador": "",
-        "linea": "Línea 1",
-        "equipo": "",
-        "tipoParada": "ADECUACIONES",
-        "inicioParada": "07:00",
-        "finParada": "07:09",
-        "totalMin": "9",
-        "zona": "Llenado",
-        "falla": "ADECUACION PARA EL ARRANQUE ",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Sanchez",
-        "id": 1787959521278,
-        "bloqueado": true
-      },
-      {
         "fecha": "2026-08-26",
         "semana": 35,
         "turno": "DIURNO",
@@ -103457,7 +103438,8 @@
         "1787237062452",
         "1787247465383",
         "1787422345628",
-        "1787424322682"
+        "1787424322682",
+        "1787959521278"
       ]
     },
     "planta-ordenes-trabajo": {
