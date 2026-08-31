@@ -9227,7 +9227,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-08-31T18:50:07.141Z"
+    "updatedAt": "2026-08-31T20:06:10.064Z"
   },
   "ordenesSap": [
     {
@@ -15776,7 +15776,7 @@
           "ticket1": "17637",
           "cajas1": 2400,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 960,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -92488,7 +92488,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788199496998,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-08-29",
@@ -92526,7 +92526,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788199941990,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-08-29",
@@ -92564,7 +92564,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788200073436,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-08-29",
@@ -92583,7 +92583,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788200157461,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-08-29",
@@ -92602,7 +92602,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788200249773,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-08-29",
@@ -92621,6 +92621,63 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788205928670,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-29",
+        "semana": 35,
+        "turno": "NOCTURNO",
+        "operador": "JOSE GUDIÑO",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "04:45",
+        "finParada": "04:50",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "BOBINA ROTA ( PORTABOBINAS SE FRENA DE GOLPE, LIMPIEZA DE LISTON)",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788206758175,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-29",
+        "semana": 35,
+        "turno": "NOCTURNO",
+        "operador": "DANIEL PARRA ",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "05:59",
+        "finParada": "06:03",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788207000992,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-08-29",
+        "semana": 35,
+        "turno": "NOCTURNO",
+        "operador": "DANIEL PARRA ",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "06:37",
+        "finParada": "06:41",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788207112663,
         "bloqueado": true
       }
     ],
