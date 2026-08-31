@@ -298,9 +298,28 @@ export async function GET(request: Request) {
   ensureDb();
   const db = readDb();
   const raw = (db.collections && db.collections[ns]) ?? [];
+
+  // Parse query params for date range filtering
+  const url = new URL(request.url);
+  const startDate = url.searchParams.get('startDate');
+  const endDate = url.searchParams.get('endDate');
+  const hasDateFilter = startDate || endDate;
+
   if (Array.isArray(raw)) {
     const deletedIds = getDeletedIds(db, ns);
-    const col = applyDeletedIds(raw, deletedIds);
+    let col = applyDeletedIds(raw, deletedIds);
+
+    // Apply server-side date filtering for collections with 'fecha' field
+    if (hasDateFilter && col.length > 0 && col[0] && 'fecha' in col[0]) {
+      const start = startDate ? new Date(startDate + 'T00:00:00') : new Date('1970-01-01');
+      const end = endDate ? new Date(endDate + 'T23:59:59') : new Date('2099-12-31');
+      col = col.filter((item: any) => {
+        if (!item.fecha) return false;
+        const itemDate = new Date(item.fecha + 'T00:00:00');
+        return itemDate >= start && itemDate <= end;
+      });
+    }
+
     return new Response(JSON.stringify(col), {
       status: 200,
       headers: { 'content-type': 'application/json; charset=utf-8' },

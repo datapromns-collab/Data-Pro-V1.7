@@ -65,7 +65,7 @@ function deepMergeQueuePayload(a: any, b: any): any {
   return result;
 }
 
-export function useRemoteCollection<T = any>(namespace: string, initial: T) {
+export function useRemoteCollection<T = any>(namespace: string, initial: T, queryParams?: Record<string, string>) {
   const [data, setData] = useState<T>(initial);
   const [isLoaded, setIsLoaded] = useState(false);
   const cacheKey = `rc_${namespace}`;
@@ -76,6 +76,8 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
   const firstLoadRef = useRef(true);
   const queueRef = useRef<PendingOperation[]>([]);
   const sendingRef = useRef(false);
+  const queryParamsRef = useRef(queryParams);
+  queryParamsRef.current = queryParams;
 
   const applyDeleted = useCallback((items: any[]): any[] => {
     if (!Array.isArray(items) || deletedRef.current.size === 0) return items;
@@ -279,7 +281,13 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
       // ignore
     }
     try {
-      const res = await fetch(`/api/collection/${encodeURIComponent(namespace)}`, { cache: 'no-store' });
+      const params = queryParamsRef.current;
+      let url = `/api/collection/${encodeURIComponent(namespace)}`;
+      if (params && Object.keys(params).length > 0) {
+        const searchParams = new URLSearchParams(params);
+        url += `?${searchParams.toString()}`;
+      }
+      const res = await fetch(url, { cache: 'no-store' });
       console.log('[RC] GET', namespace, 'status', res.status);
       if (res.ok) {
         const remoteRaw = await res.json();
@@ -368,6 +376,14 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T) {
       document.removeEventListener('visibilitychange', onVisible);
     };
   }, [isLoaded, load]);
+
+  // Re-fetch when queryParams change
+  const queryParamsKey = JSON.stringify(queryParams || {});
+  useEffect(() => {
+    if (isLoaded) {
+      load();
+    }
+  }, [queryParamsKey]);
 
   return { data, setData: setDataSynced, patchData, removeItem, removeKey, isLoaded };
 }

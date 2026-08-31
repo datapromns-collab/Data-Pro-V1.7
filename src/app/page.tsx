@@ -377,15 +377,28 @@ export default function PlannerPage() {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPlantaDialogOpen, setIsPlantaDialogOpen] = useState(false);
-  const informesOperacionalesStore = useRemoteCollection<any[]>('planta-informes-operacionales', []);
+  const [plantaWeekStartDate, setPlantaWeekStartDate] = useState(new Date());
+  const migracionPlantaHechaRef = useRef(false);
+  const informesOperacionalesRef = useRef<any[]>([]);
+
+  // Server-side week filter for informes operacionales
+  const plantaWeekStart = new Date(plantaWeekStartDate);
+  plantaWeekStart.setHours(0, 0, 0, 0);
+  const plantaWeekEnd = new Date(plantaWeekStart);
+  plantaWeekEnd.setDate(plantaWeekEnd.getDate() + 6);
+  plantaWeekEnd.setHours(23, 59, 59, 999);
+  const plantaWeekQuery = {
+    startDate: format(plantaWeekStart, 'yyyy-MM-dd'),
+    endDate: format(plantaWeekEnd, 'yyyy-MM-dd'),
+  };
+
+  const informesOperacionalesStore = useRemoteCollection<any[]>('planta-informes-operacionales', [], plantaWeekQuery);
   const ordenesTrabajoStore = useRemoteCollection<any[]>('planta-ordenes-trabajo', []);
   const informesOperacionales = informesOperacionalesStore.data;
   const setInformesOperacionales = informesOperacionalesStore.setData;
   const removeInformeOperacional = informesOperacionalesStore.removeItem;
   const ordenesTrabajo = ordenesTrabajoStore.data;
   const setOrdenesTrabajo = ordenesTrabajoStore.setData;
-  const migracionPlantaHechaRef = useRef(false);
-  const informesOperacionalesRef = useRef(informesOperacionales);
   informesOperacionalesRef.current = informesOperacionales;
 
   useEffect(() => {
@@ -1609,7 +1622,6 @@ export default function PlannerPage() {
   const [ordenFiltroLinea, setOrdenFiltroLinea] = useState('all');
   const [ordenBusqueda, setOrdenBusqueda] = useState('');
   const [paradaFiltroFecha, setParadaFiltroFecha] = useState('');
-  const [plantaWeekStartDate, setPlantaWeekStartDate] = useState(new Date());
   const [plantaFormData, setPlantaFormData] = useState({
     fecha: format(new Date(), 'yyyy-MM-dd'),
     semana: getISOWeek(new Date()),
@@ -1693,20 +1705,6 @@ export default function PlannerPage() {
     }
     return weeks;
   }, [plantaWeekStartDate]);
-
-  const informesOperacionalesFiltrados = useMemo(() => {
-    if (paradasSubTab !== 'informes-operacionales') return informesOperacionales;
-    const weekStart = new Date(plantaWeekStartDate);
-    weekStart.setHours(0, 0, 0, 0);
-    const weekEnd = new Date(weekStart);
-    weekEnd.setDate(weekEnd.getDate() + 6);
-    weekEnd.setHours(23, 59, 59, 999);
-    return informesOperacionales.filter((r) => {
-      const fecha = parseFecha(r.fecha);
-      if (!fecha) return false;
-      return fecha >= weekStart && fecha <= weekEnd;
-    });
-  }, [informesOperacionales, plantaWeekStartDate, paradasSubTab]);
 
   const weeksForYearResumen = useMemo(() => {
     const weeks: { isoWeek: number; start: Date; end: Date }[] = [];
@@ -2999,7 +2997,7 @@ export default function PlannerPage() {
                                       </SelectContent>
                                     </Select>
                                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                                       {informesOperacionalesFiltrados.filter((r) => {
+                                       {informesOperacionales.filter((r) => {
                                          const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
                                          const matchTurno = paradaFiltroTurno === 'all' || r.turno === paradaFiltroTurno;
                                          const matchEquipo = paradaFiltroEquipo === 'all' || r.equipo === paradaFiltroEquipo;
@@ -3033,7 +3031,7 @@ export default function PlannerPage() {
                                         </TableRow>
                                      </TableHeader>
                                       <TableBody>
-                                        {informesOperacionalesFiltrados
+                                        {informesOperacionales
                                            .filter((r) => {
                                              const matchLine = paradaFiltroLinea === 'all' || r.linea === paradaFiltroLinea;
                                              const matchTurno = paradaFiltroTurno === 'all' || r.turno === paradaFiltroTurno;
