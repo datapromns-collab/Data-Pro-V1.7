@@ -33,9 +33,11 @@ interface AdminReportToolProps {
   onPrintMonthly?: (month: string, year: string) => void;
   onPrintCompliance?: () => void;
   onPrintMonthlyCompliance?: (month: string, year: string) => void;
-  onPrintWeeklySummary?: (weekStart: string) => void;
-  allowedProductionTabs?: ('dia-a-dia' | 'weekly' | 'weekly-summary' | 'monthly')[];
-}
+   onPrintWeeklySummary?: (weekStart: string) => void;
+   allowedProductionTabs?: ('dia-a-dia' | 'weekly' | 'weekly-summary' | 'monthly')[];
+   showSignatureButton?: boolean;
+   onPrintMonthlyWithSignature?: (month: string, year: string) => void;
+ }
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
 const DAYS_NAMES = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁBADO', 'DOMINGO'];
@@ -62,11 +64,13 @@ export function AdminReportTool({
   currentWeekKey, 
   realProduction, 
   updateRealProduction, 
-  onPrintMonthly, 
+   onPrintMonthly, 
   onPrintCompliance,
   onPrintMonthlyCompliance,
   onPrintWeeklySummary,
-  allowedProductionTabs
+  allowedProductionTabs,
+  showSignatureButton = false,
+  onPrintMonthlyWithSignature,
 }: AdminReportToolProps) {
   const [weekSelectorMonth, setWeekSelectorMonth] = useState(format(new Date(), 'yyyy-MM'));
   const [selectedWeekStart, setSelectedWeekStart] = useState(currentWeekKey || format(new Date(), 'yyyy-MM-dd'));
@@ -382,16 +386,27 @@ export function AdminReportTool({
                     className="w-24 bg-white border-slate-200 font-bold text-center rounded-xl h-10 text-[10px] focus:ring-primary/20"
                     placeholder="Año"
                   />
-                  <Button 
-                    variant="outline" 
-                    size="sm" 
-                    onClick={() => onPrintMonthly?.(selectedMonth, selectedYear)}
-                    className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
-                  >
-                    <FileDown className="h-4 w-4" />
-                    Exportar Resumen Mensual
-                  </Button>
-                </>
+                   <Button 
+                     variant="outline" 
+                     size="sm" 
+                     onClick={() => onPrintMonthly?.(selectedMonth, selectedYear)}
+                     className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
+                   >
+                     <FileDown className="h-4 w-4" />
+                     Exportar Resumen Mensual
+                   </Button>
+                   {showSignatureButton && onPrintMonthlyWithSignature && (
+                     <Button 
+                       variant="outline" 
+                       size="sm" 
+                       onClick={() => onPrintMonthlyWithSignature(selectedMonth, selectedYear)}
+                       className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
+                     >
+                       <FileDown className="h-4 w-4" />
+                       Exportar Resumen Mensual con Firma
+                     </Button>
+                   )}
+                 </>
               )}
               {productionSubTab === 'weekly-summary' && (
                 <Button 

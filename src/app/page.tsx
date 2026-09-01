@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect, useRef, memo } from "react";
 import Image from "next/image";
 import ExcelJS from "exceljs";
 import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 import "jspdf-autotable";
 import { 
   Plus, 
@@ -1974,6 +1975,33 @@ export default function PlannerPage() {
     }, 150);
   };
 
+  const handlePrintMonthlyWithSignature = async (month: string, year: string) => {
+    setSelectedMonth(month);
+    setSelectedYear(year);
+    setPrintMode('monthly-with-signature');
+    await new Promise(r => setTimeout(r, 300));
+    const reportEl = document.querySelector('.monthly-report-print') as HTMLElement | null;
+    if (!reportEl) return;
+    const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
+    const imgData = canvas.toDataURL('image/png');
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'pt', format: [canvas.width, canvas.height] });
+    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
+    const signaturePath = '/logos/FIRMA N.png';
+    const signatureImg = new window.Image();
+    signatureImg.src = signaturePath;
+    await new Promise((resolve, reject) => {
+      signatureImg.onload = resolve;
+      signatureImg.onerror = reject;
+    });
+    const sigWidth = 120;
+    const sigHeight = 60;
+    const sigX = canvas.width - sigWidth - 20;
+    const sigY = canvas.height - sigHeight - 20;
+    pdf.addImage(signatureImg.src, 'PNG', sigX, sigY, sigWidth, sigHeight);
+    pdf.save('resumen-mensual-con-firma.pdf');
+    setPrintMode('');
+  };
+
   const handlePrintRequirements = () => {
     setPrintMode('requirements');
     const style = document.createElement('style');
@@ -2762,16 +2790,18 @@ export default function PlannerPage() {
                               {activeModule === 'management' && hasAccess(user.id, 'management') && (
                    <>
                       {activeTab === 'admin-report' && (
-                          <AdminReportTool 
-                            view="production"
-                            weeklyData={weeklyData}
-                            currentWeekKey={getWeekKey(weekStartDate)}
-                            realProduction={realProduction}
-                            updateRealProduction={updateRealProduction}
-                            onPrintMonthly={handlePrintMonthly}
-                            onPrintWeeklySummary={handlePrintWeeklySummary}
-                            allowedProductionTabs={allowedProdTabs}
-                          />
+                      <AdminReportTool 
+                        view="production"
+                        weeklyData={weeklyData}
+                        currentWeekKey={getWeekKey(weekStartDate)}
+                        realProduction={realProduction}
+                        updateRealProduction={updateRealProduction}
+                        onPrintMonthly={handlePrintMonthly}
+                        onPrintWeeklySummary={handlePrintWeeklySummary}
+                        allowedProductionTabs={allowedProdTabs}
+                        showSignatureButton={user?.id === 'finan.mds' || user?.id === 'demon'}
+                        onPrintMonthlyWithSignature={handlePrintMonthlyWithSignature}
+                      />
                       )}
                       {activeTab === 'compliance-report' && mgmtAllowsCumplimiento && (
                         <AdminReportTool 
@@ -5371,12 +5401,23 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
           )}
           {isAdmin && (
             <>
-              {printMode === 'monthly' && (
+               {printMode === 'monthly' && (
                 <div className="p-0">
                   <MonthlyReport 
                     realProduction={realProduction} 
                     selectedMonth={selectedMonth} 
                     selectedYear={selectedYear} 
+                  />
+                </div>
+              )}
+              {printMode === 'monthly-with-signature' && (
+                <div className="p-0">
+                  <MonthlyReport 
+                    realProduction={realProduction} 
+                    selectedMonth={selectedMonth} 
+                    selectedYear={selectedYear} 
+                    showSignature={true}
+                    signaturePath="/logos/FIRMA N.png"
                   />
                 </div>
               )}

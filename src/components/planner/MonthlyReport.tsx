@@ -11,9 +11,11 @@ interface MonthlyReportProps {
   realProduction: Record<string, Record<string, Record<string, number>>>;
   selectedMonth: string;
   selectedYear: string;
+  showSignature?: boolean;
+  signaturePath?: string;
 }
 
-export function MonthlyReport({ realProduction, selectedMonth, selectedYear }: MonthlyReportProps) {
+export function MonthlyReport({ realProduction, selectedMonth, selectedYear, showSignature = false, signaturePath }: MonthlyReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
 
   const monthlyData = useMemo(() => {
@@ -54,7 +56,7 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear }: M
   }, [selectedMonth, selectedYear]);
 
   return (
-    <div className="bg-white w-full h-full monthly-report-print overflow-hidden flex flex-col p-1" style={{ pageBreakInside: 'avoid' }}>
+    <div className={`bg-white w-full h-full monthly-report-print overflow-hidden flex flex-col p-1 ${showSignature ? 'relative' : ''}`} style={{ pageBreakInside: 'avoid' }}>
       <div className="mb-0.5 border-b-2 border-slate-900 pb-0.5 flex justify-between items-center shrink-0">
         <div className="flex-1">
           <h1 className="text-xl font-headline font-black text-slate-900 leading-none">RESUMEN MENSUAL DE PRODUCCIÓN</h1>
@@ -158,6 +160,11 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear }: M
           <p>MULTINACIONAL DE SABORES</p>
         </div>
       </div>
+      {showSignature && signaturePath && (
+        <div className="absolute bottom-2 right-2">
+          <Image src={signaturePath} alt="Firma" width={120} height={60} className="object-contain opacity-80" />
+        </div>
+      )}
     </div>
   );
 }
