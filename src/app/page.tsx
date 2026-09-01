@@ -2002,7 +2002,7 @@ export default function PlannerPage() {
     setPrintMode('monthly-with-signature');
     const style = document.createElement('style');
     style.id = 'print-orientation-style-signature';
-    style.innerHTML = '@page { size: landscape; margin: 0; } .monthly-signature-print { position: fixed; bottom: 50px; right: 20px; width: 120px; } .monthly-signature-print img { opacity: 1; filter: contrast(1.4) brightness(0.85); }';
+    style.innerHTML = '@page { size: landscape; margin: 0; } .monthly-signature-print { position: fixed; bottom: 50px; right: 20px; width: 120px; background: white; }';
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
