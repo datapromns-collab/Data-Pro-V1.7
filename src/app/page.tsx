@@ -358,6 +358,27 @@ export default function PlannerPage() {
 
   const { ordenes } = useOrdenesSap();
 
+  const realProductionAuto = useMemo(() => {
+    const result: Record<string, Record<string, Record<string, number>>> = {};
+    ordenes.forEach((orden) => {
+      const lineId = String(orden.linea);
+      orden.dias.forEach((dia) => {
+        const dateKey = dia.fechaInicio;
+        const total =
+          (Number(dia.cajas1) || 0) +
+          (Number(dia.cajas2) || 0) +
+          (Number(dia.cajas3) || 0) +
+          (Number(dia.cajas4) || 0);
+        if (total <= 0 || !dateKey) return;
+        if (!result[lineId]) result[lineId] = {};
+        if (!result[lineId][orden.sabor]) result[lineId][orden.sabor] = {};
+        result[lineId][orden.sabor][dateKey] =
+          (result[lineId][orden.sabor][dateKey] || 0) + total;
+      });
+    });
+    return result;
+  }, [ordenes]);
+
   const { toast } = useToast();
 
   const toMin = (t: string) => {
@@ -5389,26 +5410,30 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
           )}
            {(isAdmin || user?.id === 'finan.mds' || user?.id === 'demon') && (
             <>
-               {printMode === 'monthly' && (
-                <div className="p-0">
-                  <MonthlyReport 
-                    realProduction={realProduction} 
-                    selectedMonth={selectedMonth} 
-                    selectedYear={selectedYear} 
-                  />
-                </div>
-              )}
-                {printMode === 'monthly-with-signature' && (
-                 <div className="p-0 min-h-[600px]">
+                {printMode === 'monthly' && (
+                 <div className="p-0">
                    <MonthlyReport 
                      realProduction={realProduction} 
+                     realProductionAuto={realProductionAuto}
                      selectedMonth={selectedMonth} 
                      selectedYear={selectedYear} 
-                     showSignature={true}
-                     signaturePath="/logos/FIRMA_N.png"
                    />
                  </div>
                )}
+                 {printMode === 'monthly-with-signature' && (
+                  <div className="p-0 min-h-[600px]">
+                    <MonthlyReport 
+                      realProduction={realProduction} 
+                      realProductionAuto={realProductionAuto}
+                      selectedMonth={selectedMonth} 
+                      selectedYear={selectedYear} 
+                      month={selectedMonth}
+                      year={selectedYear}
+                      showSignature={true}
+                      signaturePath="/logos/FIRMA_N.png"
+                    />
+                  </div>
+                )}
               {printMode === 'weekly-summary' && (
                 <div className="p-0">
                   <WeeklySummaryReport 

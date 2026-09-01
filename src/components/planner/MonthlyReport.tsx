@@ -11,28 +11,32 @@ interface MonthlyReportProps {
   realProduction: Record<string, Record<string, Record<string, number>>>;
   selectedMonth: string;
   selectedYear: string;
+  month?: string;
+  year?: string;
   showSignature?: boolean;
   signaturePath?: string;
+  realProductionAuto?: Record<string, Record<string, Record<string, number>>>;
 }
 
-export function MonthlyReport({ realProduction, selectedMonth, selectedYear, showSignature = false, signaturePath = "/logos/FIRMA_N.png", onReady }: MonthlyReportProps & { onReady?: () => void }) {
+export function MonthlyReport({ realProduction, selectedMonth, selectedYear, month, year, showSignature = false, signaturePath = "/logos/FIRMA_N.png", realProductionAuto, onReady }: MonthlyReportProps & { onReady?: () => void }) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
 
   const monthlyData = useMemo(() => {
-    const yearNum = parseInt(selectedYear);
-    const monthNum = parseInt(selectedMonth);
+    const yearNum = parseInt(year || selectedYear);
+    const monthNum = parseInt(month || selectedMonth);
     if (isNaN(yearNum) || isNaN(monthNum)) return {};
 
     const monthStart = startOfMonth(new Date(yearNum, monthNum - 1));
     const monthEnd = endOfMonth(monthStart);
 
     const totals: Record<string, Record<string, number>> = {};
+    const source = realProductionAuto || realProduction;
     
     PRODUCT_LIST.forEach(product => {
       totals[product] = {};
       ALL_LINES_SUMMARY.forEach(lineId => {
         let lineProductTotal = 0;
-        const lineRealData = realProduction[lineId]?.[product] || {};
+        const lineRealData = source[lineId]?.[product] || {};
         
         Object.entries(lineRealData).forEach(([dateKey, qty]) => {
           const date = parseISO(dateKey);
@@ -45,15 +49,17 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear, sho
     });
 
     return totals;
-  }, [realProduction, selectedMonth, selectedYear]);
+  }, [realProduction, selectedMonth, selectedYear, month, year, realProductionAuto]);
 
   const monthName = useMemo(() => {
+    const y = parseInt(year || selectedYear);
+    const m = parseInt(month || selectedMonth);
     try {
-      return format(new Date(parseInt(selectedYear), parseInt(selectedMonth) - 1), 'MMMM yyyy', { locale: es }).toUpperCase();
+      return format(new Date(y, m - 1), 'MMMM yyyy', { locale: es }).toUpperCase();
     } catch (e) {
       return "REPORTE MENSUAL";
     }
-  }, [selectedMonth, selectedYear]);
+  }, [selectedMonth, selectedYear, month, year]);
 
   return (
     <div className="bg-white w-full monthly-report-print overflow-hidden flex flex-col p-1" style={{ pageBreakInside: 'avoid' }}>
