@@ -5404,8 +5404,6 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                     realProduction={realProduction} 
                     selectedMonth={selectedMonth} 
                     selectedYear={selectedYear} 
-                    showSignature={true}
-                    signaturePath="/logos/FIRMA_N.png"
                   />
                 </div>
               )}
