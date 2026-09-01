@@ -62,7 +62,7 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear, sho
           <h1 className="text-xl font-headline font-black text-slate-900 leading-none">RESUMEN MENSUAL DE PRODUCCIÓN</h1>
           <p className="text-primary font-black text-[9px] uppercase tracking-widest mt-0.5">Reporte Ejecutivo de Cajas Reales</p>
         </div>
-        <div className="flex-1 flex justify-center">
+        <div className={`flex-1 flex justify-center ${showSignature ? 'hidden' : ''}`}>
           {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={100} height={35} className="object-contain" />}
         </div>
         <div className="flex-1 text-right">
@@ -71,8 +71,8 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear, sho
         </div>
       </div>
 
-      <div className="flex-none overflow-hidden border border-slate-900 rounded-sm w-full pb-14">
-        <table className="w-full border-collapse text-[6pt] h-auto">
+      <div className="flex-none overflow-hidden border border-slate-900 rounded-sm w-full h-[16cm]">
+        <table className="w-full border-collapse text-[6pt] h-full">
           <thead>
             <tr className="bg-[#4a7ebb] text-white font-black uppercase">
               <th className="px-1 py-0 border border-slate-900 text-left min-w-[140px]">SABOR / PRODUCTO</th>

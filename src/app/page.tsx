@@ -1981,7 +1981,7 @@ export default function PlannerPage() {
     setPrintMode('monthly-with-signature');
     const style = document.createElement('style');
     style.id = 'print-orientation-style-signature';
-    style.innerHTML = '@page { size: landscape; margin: 0; } .monthly-signature-print { position: fixed; bottom: 20px; right: 20px; width: 120px; opacity: 0.8; }';
+    style.innerHTML = '@page { size: landscape; margin: 0; } .monthly-signature-print { position: fixed; bottom: 50px; right: 20px; width: 120px; opacity: 0.8; }';
     document.head.appendChild(style);
     setTimeout(() => {
       window.print();
@@ -5398,15 +5398,17 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                   />
                 </div>
               )}
-               {printMode === 'monthly-with-signature' && (
-                <div className="p-0 min-h-[600px]">
-                  <MonthlyReport 
-                    realProduction={realProduction} 
-                    selectedMonth={selectedMonth} 
-                    selectedYear={selectedYear} 
-                  />
-                </div>
-              )}
+                {printMode === 'monthly-with-signature' && (
+                 <div className="p-0 min-h-[600px]">
+                   <MonthlyReport 
+                     realProduction={realProduction} 
+                     selectedMonth={selectedMonth} 
+                     selectedYear={selectedYear} 
+                     showSignature={true}
+                     signaturePath="/logos/FIRMA_N.png"
+                   />
+                 </div>
+               )}
               {printMode === 'weekly-summary' && (
                 <div className="p-0">
                   <WeeklySummaryReport 
