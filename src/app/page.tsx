@@ -2512,6 +2512,7 @@ export default function PlannerPage() {
                          user.id === 'proc1.mds' ? 'PTAB' : 
                          user.id === 'procs1.mds' ? 'Supervisor de procesos' : 
                          user.id === 'procs2.mds' ? 'Supervisor de procesos' : 
+                         user.id === 'finan.mds' ? 'Finanzas' : 
                          user.id === 'MDS' ? 'VISITANTE' : user.role}
                     </span>
                   </div>

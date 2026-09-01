@@ -35,6 +35,7 @@ const DEFAULT_PLANNING_PERMISSIONS: PlanningPermissions = {
   'proc1.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
   'procs1.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
   'procs2.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
+  'finan.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
   'cald.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
   'prodt.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
   'proc.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
@@ -54,6 +55,7 @@ const DEFAULT_MANAGEMENT_PERMISSIONS: ManagementPermissions = {
   'prodtj.mds': [],
   'prodtg.mds': [],
   'logg.mds': ['resumen-mensual'],
+  'finan.mds': ['resumen-mensual'],
   'anto.mds': ['resumen-mensual'],
 };
 
@@ -165,6 +167,7 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   'enf.mds': ['planning', 'seguimiento', 'management', 'planta'],
   'etq.mds': ['planning', 'seguimiento', 'management'],
   'logg.mds': ['planning', 'management'],
+  'finan.mds': ['planning', 'management'],
   'mtto.mds': ['planning'],
   'cal.mds': ['planning'],
 };
