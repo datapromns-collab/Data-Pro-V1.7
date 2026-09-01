@@ -168,7 +168,7 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear, mon
       </div>
       {showSignature && signaturePath && (
         <div className="monthly-signature-print">
-          <img src={signaturePath} alt="Firma" width={120} height={60} className="object-contain opacity-80" />
+          <img src={signaturePath} alt="Firma" width={120} height={60} className="object-contain" />
         </div>
       )}
     </div>
