@@ -15,7 +15,7 @@ interface MonthlyReportProps {
   signaturePath?: string;
 }
 
-export function MonthlyReport({ realProduction, selectedMonth, selectedYear, showSignature = false, signaturePath }: MonthlyReportProps) {
+export function MonthlyReport({ realProduction, selectedMonth, selectedYear, showSignature = false, signaturePath = "/logos/FIRMA_N.png", onReady }: MonthlyReportProps & { onReady?: () => void }) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
 
   const monthlyData = useMemo(() => {
@@ -56,7 +56,7 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear, sho
   }, [selectedMonth, selectedYear]);
 
   return (
-    <div className={`bg-white w-full h-full monthly-report-print overflow-hidden flex flex-col p-1 ${showSignature ? 'relative' : ''}`} style={{ pageBreakInside: 'avoid' }}>
+    <div className="bg-white w-full monthly-report-print overflow-hidden flex flex-col p-1" style={{ pageBreakInside: 'avoid' }}>
       <div className="mb-0.5 border-b-2 border-slate-900 pb-0.5 flex justify-between items-center shrink-0">
         <div className="flex-1">
           <h1 className="text-xl font-headline font-black text-slate-900 leading-none">RESUMEN MENSUAL DE PRODUCCIÓN</h1>
@@ -71,10 +71,10 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear, sho
         </div>
       </div>
 
-      <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm w-full">
-        <table className="w-full border-collapse text-[7.5pt] h-full">
+      <div className="flex-1 overflow-hidden border border-slate-900 rounded-sm w-full pb-8">
+        <table className="w-full border-collapse text-[7pt] h-full">
           <thead>
-            <tr className="bg-[#4a7ebb] text-white font-black uppercase h-6">
+            <tr className="bg-[#4a7ebb] text-white font-black uppercase h-5">
               <th className="px-1.5 py-0 border border-slate-900 text-left min-w-[140px]">SABOR / PRODUCTO</th>
               {ALL_LINES_SUMMARY.slice(0, 4).map(l => (
                 <th key={l} className="px-0.5 py-0 border border-slate-900 text-center">LÍNEA {l}</th>
@@ -93,7 +93,7 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear, sho
               const totalSabor = lineVals.reduce((a, b) => a + b, 0);
 
               return (
-                <tr key={idx} className={`font-bold text-slate-800 h-5 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
+                <tr key={idx} className={`font-bold text-slate-800 ${idx % 2 === 0 ? 'bg-white' : 'bg-slate-50'}`}>
                   <td className="px-1.5 py-0 border border-slate-300 uppercase leading-none">{flavor}</td>
                   {lineVals.slice(0, 4).map((val, lIdx) => (
                     <td key={lIdx} className="px-0.5 py-0 border border-slate-300 text-center tabular-nums">
@@ -116,7 +116,7 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear, sho
             })}
           </tbody>
           <tfoot className="bg-[#dce6f1] text-slate-900 font-black">
-            <tr className="h-7">
+            <tr className="h-6">
               <td className="px-1.5 py-0 border border-slate-900 uppercase">TOTALES</td>
               {ALL_LINES_SUMMARY.slice(0, 4).map(l => {
                 const colTotal = PRODUCT_LIST.reduce((acc, flavor) => acc + (monthlyData[flavor]?.[l] || 0), 0);
@@ -161,8 +161,8 @@ export function MonthlyReport({ realProduction, selectedMonth, selectedYear, sho
         </div>
       </div>
       {showSignature && signaturePath && (
-        <div className="absolute bottom-2 right-2">
-          <Image src={signaturePath} alt="Firma" width={120} height={60} className="object-contain opacity-80" />
+        <div className="monthly-signature-print">
+          <img src={signaturePath} alt="Firma" width={120} height={60} className="object-contain opacity-80" />
         </div>
       )}
     </div>

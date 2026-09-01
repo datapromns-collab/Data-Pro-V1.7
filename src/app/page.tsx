@@ -1975,31 +1975,19 @@ export default function PlannerPage() {
     }, 150);
   };
 
-  const handlePrintMonthlyWithSignature = async (month: string, year: string) => {
+  const handlePrintMonthlyWithSignature = (month: string, year: string) => {
     setSelectedMonth(month);
     setSelectedYear(year);
     setPrintMode('monthly-with-signature');
-    await new Promise(r => setTimeout(r, 300));
-    const reportEl = document.querySelector('.monthly-report-print') as HTMLElement | null;
-    if (!reportEl) return;
-    const canvas = await html2canvas(reportEl, { scale: 2, useCORS: true, backgroundColor: '#ffffff' });
-    const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF({ orientation: 'landscape', unit: 'pt', format: [canvas.width, canvas.height] });
-    pdf.addImage(imgData, 'PNG', 0, 0, canvas.width, canvas.height);
-    const signaturePath = '/logos/FIRMA N.png';
-    const signatureImg = new window.Image();
-    signatureImg.src = signaturePath;
-    await new Promise((resolve, reject) => {
-      signatureImg.onload = resolve;
-      signatureImg.onerror = reject;
-    });
-    const sigWidth = 120;
-    const sigHeight = 60;
-    const sigX = canvas.width - sigWidth - 20;
-    const sigY = canvas.height - sigHeight - 20;
-    pdf.addImage(signatureImg.src, 'PNG', sigX, sigY, sigWidth, sigHeight);
-    pdf.save('resumen-mensual-con-firma.pdf');
-    setPrintMode('');
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style-signature';
+    style.innerHTML = '@page { size: landscape; margin: 0; } .monthly-signature-print { position: fixed; bottom: 20px; right: 20px; width: 120px; opacity: 0.8; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style-signature')?.remove();
+      setPrintMode('');
+    }, 150);
   };
 
   const handlePrintRequirements = () => {
@@ -2691,7 +2679,7 @@ export default function PlannerPage() {
                               {LINES.map((l, i) => <SelectItem key={l} value={(i + 1).toString()} className="font-bold text-[11px]">Línea {i + 1}</SelectItem>)}
                             </SelectContent>
                           </Select>
-                          {isAdmin && (
+           {(isAdmin || user?.id === 'finan.mds' || user?.id === 'demon') && (
                             <button
                               onClick={() => { setEditingTask(null); setIsDialogOpen(true); }}
                               className="inline-flex items-center gap-1.5 h-9 pl-4 pr-5 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-[#F59E0B] text-white shadow-sm active:scale-95"
@@ -2774,7 +2762,7 @@ export default function PlannerPage() {
                        )}
                        {activeTab === 'calculator' && <Calculator />}
                      </div>
-                     {isAdmin && (
+                     {(isAdmin || user?.id === 'finan.mds' || user?.id === 'demon') && (
                        <div className="flex justify-end">
                          <button
                            onClick={handleClearContext}
@@ -5399,7 +5387,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
               />
             </div>
           )}
-          {isAdmin && (
+           {(isAdmin || user?.id === 'finan.mds' || user?.id === 'demon') && (
             <>
                {printMode === 'monthly' && (
                 <div className="p-0">
@@ -5410,14 +5398,14 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                   />
                 </div>
               )}
-              {printMode === 'monthly-with-signature' && (
-                <div className="p-0">
+               {printMode === 'monthly-with-signature' && (
+                <div className="p-0 min-h-[600px]">
                   <MonthlyReport 
                     realProduction={realProduction} 
                     selectedMonth={selectedMonth} 
                     selectedYear={selectedYear} 
                     showSignature={true}
-                    signaturePath="/logos/FIRMA N.png"
+                    signaturePath="/logos/FIRMA_N.png"
                   />
                 </div>
               )}
