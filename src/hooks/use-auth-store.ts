@@ -26,8 +26,8 @@ const STORAGE_KEY = 'planner_auth_session';
  *    - Restricción: No ven Planificación, Compras, Logística ni Ventas.
  * 
  * 4. anto.mds (PURCHASING - Antonella Dos Santos): 
- *    - Acceso: Compras, Planta, Logística, Ventas y Planificación en solo lectura.
- *    - Restricción: No ve Jarabes ni Materia Prima. Redirección automática a Compras.
+ *    - Acceso: Compras, Logística, Ventas y Planificación en solo lectura.
+ *    - Restricción: No ve Jarabes, Materia Prima ni Planta. Redirección automática a Compras.
  * 
  * 5. prodtj.mds (STANDARD - Jefes de Producción): 
  *    - Acceso: Planificación en solo lectura.
@@ -71,6 +71,7 @@ const VALID_USERS = [
    { id: 'proc1.mds', password: 'ad.533.', name: 'tecnico de procesos', role: 'STANDARD' as UserRole },
    { id: 'procs1.mds', password: 'ad.558.', name: 'Jose Vargas', role: 'STANDARD' as UserRole },
    { id: 'procs2.mds', password: 'ad.220.', name: 'jorge acosta', role: 'STANDARD' as UserRole },
+   { id: 'finan.mds', password: 'ad.124.', name: 'Patricia Gamez', role: 'STANDARD' as UserRole },
   { id: 'g.tec.mds', password: 'ad.147.', name: 'Gerente Técnico', role: 'STANDARD' as UserRole },
   { id: 'enf.mds', password: 'ad.158.', name: 'Hector Pereira', role: 'STANDARD' as UserRole },
   { id: 'etq.mds', password: 'ad.159.', name: 'Especialista Etiquetadora', role: 'STANDARD' as UserRole },

@@ -54,6 +54,7 @@ const DEFAULT_MANAGEMENT_PERMISSIONS: ManagementPermissions = {
   'prodtj.mds': [],
   'prodtg.mds': [],
   'logg.mds': ['resumen-mensual'],
+  'anto.mds': ['resumen-mensual'],
 };
 
 const STORAGE_KEY = 'planner_module_permissions';
@@ -147,7 +148,7 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   demon: ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'procesos', 'calidad', 'insumos', 'logistica', 'ventas', 'purchasing', 'ordenes-sap', 'seguimiento'],
   'maria.mds': ['jarabes', 'raw-materials', 'planta', 'planta-admin', 'planning', 'management', 'ordenes-sap'],
   'alex.mds': ['jarabes', 'raw-materials', 'planta', 'planta-admin', 'planning', 'management'],
-  'anto.mds': ['purchasing', 'planta', 'logistica', 'ventas', 'planning'],
+  'anto.mds': ['purchasing', 'logistica', 'ventas', 'planning', 'management'],
   'prodtj.mds': ['planning', 'planta'],
   'prodtg.mds': ['planning', 'planta', 'management'],
   'prodts.mds': ['planning', 'planta'],
