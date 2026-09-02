@@ -2638,7 +2638,7 @@ export default function PlannerPage() {
                       variant="ghost" 
                       size="sm" 
                       onClick={handlePrintSummary}
-                      className="gap-1.5 font-bold text-slate-600 hover:text-primary active:scale-100 active:transform-none transition-none hidden sm:flex"
+                      className="gap-1.5 font-bold text-slate-600 hover:text-primary active:scale-100 active:transform-none transition-none"
                     >
                       <LayoutDashboard className="h-4 w-4" /> 
                       <span className="hidden sm:inline">Resumen</span>
@@ -2647,7 +2647,7 @@ export default function PlannerPage() {
                       variant="ghost" 
                       size="sm" 
                       onClick={handlePrintPlan}
-                      className="gap-1.5 font-bold text-slate-600 hover:text-primary active:scale-100 active:transform-none transition-none hidden sm:flex"
+                      className="gap-1.5 font-bold text-slate-600 hover:text-primary active:scale-100 active:transform-none transition-none"
                     >
                       <Printer className="h-4 w-4" /> 
                       <span className="hidden sm:inline">Programa</span>
