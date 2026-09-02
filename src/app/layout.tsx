@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { PlannerProvider } from '@/hooks/use-planner-store';
+import { UpdateBanner } from '@/components/UpdateBanner';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -45,6 +46,7 @@ export default function RootLayout({
           {children}
         </PlannerProvider>
         <div id="notifications-portal" />
+        <UpdateBanner />
       </body>
     </html>
   );
