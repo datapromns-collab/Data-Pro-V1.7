@@ -66,20 +66,20 @@ export default function ProducidasTable({
 
   return (
     <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-      <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
+      <div className="flex items-center gap-2 px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100">
         <div className="w-2 h-2 rounded-full bg-sky-500" />
         <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">{titulo}</h4>
       </div>
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
           <table className="w-full border-collapse text-center">
             <thead>
               <tr className="bg-slate-100">
-                <th className="sticky left-0 z-20 bg-slate-100 px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36 text-left">Sabor</th>
+                <th className="sticky left-0 z-20 bg-slate-100 px-2 sm:px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36 text-left">Sabor</th>
                 {LINEAS.map((n) => (
-                  <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[60px]">Línea {n}</th>
+                  <th key={n} className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[50px] sm:min-w-[60px]">L{n}</th>
                 ))}
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[50px]">Totales</th>
+                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[40px] sm:min-w-[50px]">Tot</th>
               </tr>
             </thead>
             <tbody>
@@ -94,7 +94,7 @@ export default function ProducidasTable({
                         readOnly={readOnly}
                         value={tabla[sabor]?.[linea] ?? ""}
                         onChange={(e) => actualizar(sabor, linea, e.target.value)}
-                        className="w-full min-w-[48px] bg-transparent text-center text-[10px] text-slate-700 tabular-nums outline-none focus:bg-sky-50 rounded px-1 py-0.5 disabled:bg-transparent disabled:opacity-100"
+                        className="w-full min-w-[40px] sm:min-w-[48px] bg-transparent text-center text-[10px] sm:text-[10px] text-slate-700 tabular-nums outline-none focus:bg-sky-50 rounded px-1 py-1 sm:py-0.5 disabled:bg-transparent disabled:opacity-100"
                       />
                     </td>
                   ))}

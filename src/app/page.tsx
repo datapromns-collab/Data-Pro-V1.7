@@ -91,7 +91,7 @@ import { PermisosModule } from '@/components/planner/PermisosModule';
 import { MessagesCenter } from '@/components/planner/MessagesCenter';
 import { FcmManager } from '@/components/FcmManager';
 import { Toaster } from '@/components/ui/toaster';
-import { SidebarProvider, Sidebar, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
+import { SidebarProvider, Sidebar, SidebarContent, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarTrigger, useSidebar } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
@@ -2310,7 +2310,7 @@ export default function PlannerPage() {
   }
 
   const navTabClass = (isActive: boolean) => cn(
-    "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95",
+    "inline-flex items-center justify-center gap-2 h-9 px-3 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95",
     isActive ? "bg-white text-slate-900 shadow-sm" : "bg-slate-200/50 text-slate-500 hover:bg-slate-200 hover:text-slate-700"
   );
 
@@ -2586,8 +2586,9 @@ export default function PlannerPage() {
         </Sidebar>
 
         <main className="flex-1 flex flex-col h-screen overflow-hidden no-print">
-          <header className="h-16 border-b bg-white/50 backdrop-blur-md px-6 flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-4">
+          <header className="h-16 border-b bg-white/50 backdrop-blur-md px-4 lg:px-6 flex items-center justify-between shrink-0">
+            <div className="flex items-center gap-3">
+              <SidebarTrigger className="md:hidden" />
               <div className={cn(
                 "px-3 py-1 rounded-lg font-black text-[10px] uppercase tracking-[0.2em] whitespace-nowrap",
                 activeModule === 'management' ? "bg-[#A67B5B]/10 text-[#A67B5B]" :
@@ -2622,41 +2623,41 @@ export default function PlannerPage() {
               </div>
             </div>
              <div className="flex items-center gap-2 justify-end">
-                 {user && <MessagesCenter user={user} isAdmin={isAdmin} />}
-                 <FcmManager userId={user?.id} />
-                {activeModule === 'ordenes-sap' && <CorrelativoSelector activeLinea={ordenesSapActiveLinea} selectedFecha={selectedFechaSap} />}
-                {activeModule === 'planning' && (
-                 <>
-                   <Badge variant="secondary" className="mr-2 bg-primary/10 text-primary border-primary/5 font-black text-[13px] h-8 px-3 hidden sm:flex items-center">
-                     Semana {weekNumber}
-                   </Badge>
-                   <Badge variant="outline" className="mr-2 bg-primary/5 text-primary border-primary/20 font-black uppercase text-[10px] h-8 px-3 hidden sm:flex items-center">
-                     LÍNEA {selectedLine}
-                   </Badge>
-                   <Button 
-                     variant="ghost" 
-                     size="sm" 
-                     onClick={handlePrintSummary}
-                     className="gap-2 font-bold text-slate-600 hover:text-primary active:scale-100 active:transform-none transition-none"
-                   >
-                     <LayoutDashboard className="h-4 w-4" /> 
-                     <span className="hidden sm:inline">Resumen</span>
-                   </Button>
-                   <Button 
-                     variant="ghost" 
-                     size="sm" 
-                     onClick={handlePrintPlan}
-                     className="gap-2 font-bold text-slate-600 hover:text-primary active:scale-100 active:transform-none transition-none"
-                   >
-                     <Printer className="h-4 w-4" /> 
-                     <span className="hidden sm:inline">Programa</span>
-                   </Button>
-                 </>
-               )}
-            </div>
+                  {user && <MessagesCenter user={user} isAdmin={isAdmin} />}
+                  <FcmManager userId={user?.id} />
+                 {activeModule === 'ordenes-sap' && <CorrelativoSelector activeLinea={ordenesSapActiveLinea} selectedFecha={selectedFechaSap} />}
+                 {activeModule === 'planning' && (
+                  <>
+                    <Badge variant="secondary" className="mr-2 bg-primary/10 text-primary border-primary/5 font-black text-[13px] h-8 px-3 hidden sm:flex items-center">
+                      Semana {weekNumber}
+                    </Badge>
+                    <Badge variant="outline" className="mr-2 bg-primary/5 text-primary border-primary/20 font-black uppercase text-[10px] h-8 px-3 hidden sm:flex items-center">
+                      LÍNEA {selectedLine}
+                    </Badge>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={handlePrintSummary}
+                      className="gap-1.5 font-bold text-slate-600 hover:text-primary active:scale-100 active:transform-none transition-none hidden sm:flex"
+                    >
+                      <LayoutDashboard className="h-4 w-4" /> 
+                      <span className="hidden sm:inline">Resumen</span>
+                    </Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={handlePrintPlan}
+                      className="gap-1.5 font-bold text-slate-600 hover:text-primary active:scale-100 active:transform-none transition-none hidden sm:flex"
+                    >
+                      <Printer className="h-4 w-4" /> 
+                      <span className="hidden sm:inline">Programa</span>
+                    </Button>
+                  </>
+                )}
+             </div>
           </header>
-          <div className="flex-1 overflow-auto p-6 lg:p-8">
-            <div className="flex flex-col gap-6 h-full">
+          <div className="flex-1 overflow-auto p-4 lg:p-8">
+            <div className="flex flex-col gap-4 lg:gap-6 h-full">
               
                 {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'procesos' && activeModule !== 'calidad' && activeModule !== 'insumos' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && activeModule !== 'jarabes' && activeModule !== 'ordenes-sap' && activeModule !== 'seguimiento' && (
                   <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1 shadow-none self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print h-11 shrink-0 gap-1 w-full justify-between">
@@ -2668,43 +2669,43 @@ export default function PlannerPage() {
                             className={cn(navTabClass(activeTab === 'gantt'))}
                           >
                             <GanttChartSquare className="h-3.5 w-3.5" />
-                            Programación
+                            <span className="hidden sm:inline">Programación</span>
                           </button>
                            <button 
                              onClick={() => setActiveTab('daily')}
                              className={cn(navTabClass(activeTab === 'daily'))}
                            >
                              <ListTodo className="h-3.5 w-3.5" />
-                             Plan Día a Día
+                             <span className="hidden sm:inline">Plan Día a Día</span>
                            </button>
                            <button 
                              onClick={() => setActiveTab('preparation')}
                              className={cn(navTabClass(activeTab === 'preparation'))}
                            >
                              <FlaskConical className="h-3.5 w-3.5" />
-                             Preparación
+                             <span className="hidden sm:inline">Preparación</span>
                            </button>
                            <button 
                              onClick={() => setActiveTab('requirement')}
                              className={cn(navTabClass(activeTab === 'requirement'))}
                            >
                              <ClipboardList className="h-3.5 w-3.5" />
-                             Requerimiento
+                             <span className="hidden sm:inline">Requerimiento</span>
                            </button>
-                          <button 
-                            onClick={() => setActiveTab('speeds')}
-                            className={cn(navTabClass(activeTab === 'speeds'))}
-                          >
-                            <Gauge className="h-3.5 w-3.5" />
-                            Velocidades
-                          </button>
-                          <button 
-                            onClick={() => setActiveTab('calculator')}
-                            className={cn(navTabClass(activeTab === 'calculator'))}
-                          >
-                            <CalculatorIcon className="h-3.5 w-3.5" />
-                            Calculadora
-                          </button>
+                           <button 
+                             onClick={() => setActiveTab('speeds')}
+                             className={cn(navTabClass(activeTab === 'speeds'))}
+                           >
+                             <Gauge className="h-3.5 w-3.5" />
+                             <span className="hidden sm:inline">Velocidades</span>
+                           </button>
+                           <button 
+                             onClick={() => setActiveTab('calculator')}
+                             className={cn(navTabClass(activeTab === 'calculator'))}
+                           >
+                             <CalculatorIcon className="h-3.5 w-3.5" />
+                             <span className="hidden sm:inline">Calculadora</span>
+                           </button>
                         </div>
                         <div className="flex items-center gap-2">
                           <Popover>
@@ -2738,56 +2739,56 @@ export default function PlannerPage() {
                         </div>
                       </>
                     )}
-                    {activeModule === 'management' ? (
-                      <div className="flex items-center gap-0.5">
-                        <div className="w-px h-5 bg-slate-300/60 mx-1 flex-shrink-0" />
-                        {mgmtOnlyProduccionDiaria && (
-                          <button 
-                            onClick={() => setActiveTab('admin-report')}
-                            className={cn(navTabClass(activeTab === 'admin-report'))}
-                          >
-                            <BarChart3 className="h-3.5 w-3.5" />
-                            Producción Diaria
-                          </button>
-                        )}
-                        {mgmtAllowsControl && (
-                          <button 
-                            onClick={() => setActiveTab('admin-report')}
-                            className={cn(navTabClass(activeTab === 'admin-report'))}
-                          >
-                            <BarChart3 className="h-3.5 w-3.5" />
-                            Control Producción
-                          </button>
-                        )}
-                        {mgmtAllowsCumplimiento && (
-                          <button 
-                            onClick={() => setActiveTab('compliance-report')}
-                            className={cn(navTabClass(activeTab === 'compliance-report'))}
-                          >
-                            <CheckCircle2 className="h-3.5 w-3.5" />
-                            Cumplimiento
-                          </button>
-                        )}
-                      </div>
-                    ) : activeModule === 'recipes' ? (
-                      <div className="flex items-center gap-0.5">
-                        <div className="w-px h-5 bg-slate-300/60 mx-1 flex-shrink-0" />
-                        <button 
-                          onClick={() => setActiveTab('recipes-editor')}
-                          className={cn(navTabClass(activeTab === 'recipes-editor'))}
-                        >
-                          <FlaskConical className="h-3.5 w-3.5" />
-                          Recetas de Materia Prima
-                        </button>
-                        <button 
-                          onClick={() => setActiveTab('packaging-recipes-editor')}
-                          className={cn(navTabClass(activeTab === 'packaging-recipes-editor'))}
-                        >
-                          <Package className="h-3.5 w-3.5" />
-                          Recetas de Empaque
-                        </button>
-                      </div>
-                    ) : null}
+                     {activeModule === 'management' ? (
+                       <div className="flex items-center gap-0.5">
+                         <div className="w-px h-5 bg-slate-300/60 mx-1 flex-shrink-0" />
+                         {mgmtOnlyProduccionDiaria && (
+                           <button 
+                             onClick={() => setActiveTab('admin-report')}
+                             className={cn(navTabClass(activeTab === 'admin-report'))}
+                           >
+                             <BarChart3 className="h-3.5 w-3.5" />
+                             <span className="hidden sm:inline">Producción Diaria</span>
+                           </button>
+                         )}
+                         {mgmtAllowsControl && (
+                           <button 
+                             onClick={() => setActiveTab('admin-report')}
+                             className={cn(navTabClass(activeTab === 'admin-report'))}
+                           >
+                             <BarChart3 className="h-3.5 w-3.5" />
+                             <span className="hidden sm:inline">Control Producción</span>
+                           </button>
+                         )}
+                         {mgmtAllowsCumplimiento && (
+                           <button 
+                             onClick={() => setActiveTab('compliance-report')}
+                             className={cn(navTabClass(activeTab === 'compliance-report'))}
+                           >
+                             <CheckCircle2 className="h-3.5 w-3.5" />
+                             <span className="hidden sm:inline">Cumplimiento</span>
+                           </button>
+                         )}
+                       </div>
+                     ) : activeModule === 'recipes' ? (
+                       <div className="flex items-center gap-0.5">
+                         <div className="w-px h-5 bg-slate-300/60 mx-1 flex-shrink-0" />
+                         <button 
+                           onClick={() => setActiveTab('recipes-editor')}
+                           className={cn(navTabClass(activeTab === 'recipes-editor'))}
+                         >
+                           <FlaskConical className="h-3.5 w-3.5" />
+                           <span className="hidden sm:inline">Recetas de Materia Prima</span>
+                         </button>
+                         <button 
+                           onClick={() => setActiveTab('packaging-recipes-editor')}
+                           className={cn(navTabClass(activeTab === 'packaging-recipes-editor'))}
+                         >
+                           <Package className="h-3.5 w-3.5" />
+                           <span className="hidden sm:inline">Recetas de Empaque</span>
+                         </button>
+                       </div>
+                     ) : null}
                   </div>
                )}
 
@@ -2918,45 +2919,45 @@ export default function PlannerPage() {
                    <>
                       <div className="flex items-center gap-2 mb-2 no-print">
                        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                             {(user?.id === 'prodtj.mds' || user?.id === 'prodtg.mds' || user?.id === 'prodts.mds' || user?.id === 'prodt.mds' || user?.id === 'prodt1.mds' || user?.id === 'prodt2.mds' || user?.id === 'enf.mds' ? ['paradas-lineas', 'produccion', 'reporte', 'resumen-semanal', 'resumen-mensual'] : ['paradas-lineas', 'produccion', 'reporte', 'resumen-semanal', 'resumen-mensual', 'ciclos']).map((tab) => (
-                            <button
-                              key={tab}
-                              onClick={() => { setActiveTab(tab); if (tab === 'paradas-lineas') setParadasSubTab('informes-operacionales'); if (tab === 'produccion') setProduccionSubTab('planificadas'); if (tab === 'reporte') setReporteSubTab('diario'); if (tab === 'resumen-semanal') { setResumenSemanalSubTab('resumen'); setPtSubTab('TDiurno'); setResumenSemanalWeekStartDate(new Date()); } }}
-                              className={cn(
-                                "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                activeTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                              )}
-                            >
-                              {tab === 'paradas-lineas' && <AlertTriangle className="h-3.5 w-3.5" />}
-                              {tab === 'produccion' && <CalendarIcon className="h-3.5 w-3.5" />}
-                              {tab === 'reporte' && <Factory className="h-3.5 w-3.5" />}
-                              {tab === 'resumen-semanal' && <CalendarDays className="h-3.5 w-3.5" />}
-                              {tab === 'resumen-mensual' && <CalendarRange className="h-3.5 w-3.5" />}
-                              {tab === 'ciclos' && <RefreshCw className="h-3.5 w-3.5" />}
-                              {tab === 'paradas-lineas' ? 'Paradas de Líneas' : tab === 'produccion' ? 'Producción' : tab === 'reporte' ? 'Reporte' : tab === 'resumen-semanal' ? 'Resumen Semanal' : tab === 'resumen-mensual' ? 'Resumen Mensual' : 'Ciclos'}
-                            </button>
-                          ))}
+                              {(user?.id === 'prodtj.mds' || user?.id === 'prodtg.mds' || user?.id === 'prodts.mds' || user?.id === 'prodt.mds' || user?.id === 'prodt1.mds' || user?.id === 'prodt2.mds' || user?.id === 'enf.mds' ? ['paradas-lineas', 'produccion', 'reporte', 'resumen-semanal', 'resumen-mensual'] : ['paradas-lineas', 'produccion', 'reporte', 'resumen-semanal', 'resumen-mensual', 'ciclos']).map((tab) => (
+                             <button
+                               key={tab}
+                               onClick={() => { setActiveTab(tab); if (tab === 'paradas-lineas') setParadasSubTab('informes-operacionales'); if (tab === 'produccion') setProduccionSubTab('planificadas'); if (tab === 'reporte') setReporteSubTab('diario'); if (tab === 'resumen-semanal') { setResumenSemanalSubTab('resumen'); setPtSubTab('TDiurno'); setResumenSemanalWeekStartDate(new Date()); } }}
+                               className={cn(
+                                 "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                 activeTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                               )}
+                             >
+                               {tab === 'paradas-lineas' && <AlertTriangle className="h-3.5 w-3.5" />}
+                               {tab === 'produccion' && <CalendarIcon className="h-3.5 w-3.5" />}
+                               {tab === 'reporte' && <Factory className="h-3.5 w-3.5" />}
+                               {tab === 'resumen-semanal' && <CalendarDays className="h-3.5 w-3.5" />}
+                               {tab === 'resumen-mensual' && <CalendarRange className="h-3.5 w-3.5" />}
+                               {tab === 'ciclos' && <RefreshCw className="h-3.5 w-3.5" />}
+                               <span className="hidden sm:inline">{tab === 'paradas-lineas' ? 'Paradas de Líneas' : tab === 'produccion' ? 'Producción' : tab === 'reporte' ? 'Reporte' : tab === 'resumen-semanal' ? 'Resumen Semanal' : tab === 'resumen-mensual' ? 'Resumen Mensual' : 'Ciclos'}</span>
+                             </button>
+                           ))}
                        </div>
                       </div>
                        {activeTab === 'paradas-lineas' && (
                          <div className="flex items-center justify-between gap-2 mb-4 no-print">
                            <div className="flex items-center gap-3">
-                            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                              {['informes-operacionales', 'ordenes-trabajo'].map((subTab) => (
-                                <button
-                                  key={subTab}
-                                  onClick={() => setParadasSubTab(subTab)}
-                                  className={cn(
-                                    "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                    paradasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                  )}
-                                >
-                                  {subTab === 'informes-operacionales' && <ClipboardList className="h-3.5 w-3.5" />}
-                                  {subTab === 'informes-operacionales' ? 'Informes Operacionales' : 'Órdenes de Trabajo'}
-                                  {subTab === 'ordenes-trabajo' && <Wrench className="h-3.5 w-3.5" />}
-                                </button>
-                              ))}
-                            </div>
+                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                               {['informes-operacionales', 'ordenes-trabajo'].map((subTab) => (
+                                 <button
+                                   key={subTab}
+                                   onClick={() => setParadasSubTab(subTab)}
+                                   className={cn(
+                                     "inline-flex items-center justify-center gap-1.5 h-8 px-2 sm:px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                     paradasSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                   )}
+                                 >
+                                   {subTab === 'informes-operacionales' && <ClipboardList className="h-3.5 w-3.5" />}
+                                   {subTab === 'ordenes-trabajo' && <Wrench className="h-3.5 w-3.5" />}
+                                   <span className="hidden sm:inline">{subTab === 'informes-operacionales' ? 'Informes Operacionales' : 'Órdenes de Trabajo'}</span>
+                                 </button>
+                               ))}
+                             </div>
                              <div className="flex items-center gap-2">
                                 <Popover>
                                   <PopoverTrigger asChild>
@@ -4263,43 +4264,43 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                        <div className="flex flex-col h-full">
                          <div className="flex items-center gap-2 mb-2 no-print">
                            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                             {(isDemon ? ['ptab', 'miteco', 'sala-jarabe'] : ['ptab']).map((tab) => (
-                              <button
-                                key={tab}
-                                onClick={() => setProcesosSubTab(tab)}
-                                className={cn(
-                                  "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                  procesosSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                )}
-                              >
-                                {tab === 'ptab' && <FlaskConical className="h-3.5 w-3.5" />}
-                                {tab === 'miteco' && <Gauge className="h-3.5 w-3.5" />}
-                                {tab === 'sala-jarabe' && <Droplets className="h-3.5 w-3.5" />}
-                                {tab === 'ptab' ? 'PTAB' : tab === 'miteco' ? 'MITECO' : 'Sala de jarabe'}
-                              </button>
-                            ))}
-                          </div>
-                         </div>
-                         {procesosSubTab === 'ptab' && (
-                           <div className="flex items-center gap-2 no-print mb-2">
-                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                               {['agua', 'insumos'].map((tab) => (
-                                 <button
-                                   key={tab}
-                                   onClick={() => setPtabTab(tab as 'agua' | 'insumos')}
-                                   className={cn(
-                                     "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                     ptabTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                   )}
-                                 >
-                                   {tab === 'agua' && <Droplets className="h-3.5 w-3.5" />}
-                                   {tab === 'insumos' && <Package className="h-3.5 w-3.5" />}
-                                   {tab === 'agua' ? 'Agua' : 'Insumos'}
-                                 </button>
-                               ))}
-                             </div>
+                              {(isDemon ? ['ptab', 'miteco', 'sala-jarabe'] : ['ptab']).map((tab) => (
+                               <button
+                                 key={tab}
+                                 onClick={() => setProcesosSubTab(tab)}
+                                 className={cn(
+                                   "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                   procesosSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                 )}
+                               >
+                                 {tab === 'ptab' && <FlaskConical className="h-3.5 w-3.5" />}
+                                 {tab === 'miteco' && <Gauge className="h-3.5 w-3.5" />}
+                                 {tab === 'sala-jarabe' && <Droplets className="h-3.5 w-3.5" />}
+                                 <span className="hidden sm:inline">{tab === 'ptab' ? 'PTAB' : tab === 'miteco' ? 'MITECO' : 'Sala de jarabe'}</span>
+                               </button>
+                             ))}
                            </div>
-                         )}
+                          </div>
+                          {procesosSubTab === 'ptab' && (
+                            <div className="flex items-center gap-2 no-print mb-2">
+                              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                {['agua', 'insumos'].map((tab) => (
+                                  <button
+                                    key={tab}
+                                    onClick={() => setPtabTab(tab as 'agua' | 'insumos')}
+                                    className={cn(
+                                      "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                      ptabTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                    )}
+                                  >
+                                    {tab === 'agua' && <Droplets className="h-3.5 w-3.5" />}
+                                    {tab === 'insumos' && <Package className="h-3.5 w-3.5" />}
+                                    <span className="hidden sm:inline">{tab === 'agua' ? 'Agua' : 'Insumos'}</span>
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                           {procesosSubTab === 'ptab' && ptabTab === 'agua' && (
                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                               <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
@@ -4460,22 +4461,22 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                       {activeModule === 'insumos' && isDemon && (
                        <div className="flex flex-col h-full">
                          <div className="flex items-center gap-2 mb-2 no-print">
-                           <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                             {['co2', 'agua'].map((tab) => (
-                               <button
-                                 key={tab}
-                                 onClick={() => setInsumosSubTab(tab)}
-                                 className={cn(
-                                   "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                   insumosSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                 )}
-                               >
-                                 {tab === 'co2' && <FlaskConical className="h-3.5 w-3.5" />}
-                                 {tab === 'agua' && <Droplets className="h-3.5 w-3.5" />}
-                                 {tab === 'co2' ? 'CO2' : 'Agua'}
-                               </button>
-                             ))}
-                           </div>
+                            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                              {['co2', 'agua'].map((tab) => (
+                                <button
+                                  key={tab}
+                                  onClick={() => setInsumosSubTab(tab)}
+                                  className={cn(
+                                    "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                    insumosSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                  )}
+                                >
+                                  {tab === 'co2' && <FlaskConical className="h-3.5 w-3.5" />}
+                                  {tab === 'agua' && <Droplets className="h-3.5 w-3.5" />}
+                                  <span className="hidden sm:inline">{tab === 'co2' ? 'CO2' : 'Agua'}</span>
+                                </button>
+                              ))}
+                            </div>
                            <div className="ml-auto">
                              <Popover>
                                <PopoverTrigger asChild>
@@ -4492,40 +4493,42 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                          </div>
                          {insumosSubTab === 'co2' && (
                            <div className="flex items-center gap-2 mb-2 no-print">
-                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                               {['diario', 'semanal', 'mensual'].map((tab) => (
-                                 <button
-                                   key={tab}
-                                   onClick={() => setInsumosPeriodoSubTab(tab)}
-                                   className={cn(
-                                     "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                     insumosPeriodoSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                   )}
-                                 >
-                                   {tab === 'diario' ? 'Diario' : tab === 'semanal' ? 'Semanal' : 'Mensual'}
-                                 </button>
-                               ))}
-                             </div>
-                           </div>
-                          )}
-                           {insumosSubTab === 'agua' && (
-                             <>
-                               <div className="flex items-center gap-2 mb-2 no-print">
-                                 <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                   {['diario', 'semanal', 'mensual'].map((tab) => (
-                                     <button
-                                       key={tab}
-                                       onClick={() => setInsumosPeriodoSubTab(tab)}
-                                       className={cn(
-                                         "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                         insumosPeriodoSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                       )}
-                                     >
-                                       {tab === 'diario' ? 'Diario' : tab === 'semanal' ? 'Semanal' : 'Mensual'}
-                                     </button>
-                                   ))}
-                                 </div>
-                               </div>
+                            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                {['diario', 'semanal', 'mensual'].map((tab) => (
+                                  <button
+                                    key={tab}
+                                    onClick={() => setInsumosPeriodoSubTab(tab)}
+                                    className={cn(
+                                      "inline-flex items-center justify-center h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                      insumosPeriodoSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                    )}
+                                  >
+                                    <span className="hidden sm:inline">{tab === 'diario' ? 'Diario' : tab === 'semanal' ? 'Semanal' : 'Mensual'}</span>
+                                    <span className="sm:hidden">{tab === 'diario' ? 'D' : tab === 'semanal' ? 'S' : 'M'}</span>
+                                  </button>
+                                ))}
+                              </div>
+                            </div>
+                           )}
+                            {insumosSubTab === 'agua' && (
+                              <>
+                                <div className="flex items-center gap-2 mb-2 no-print">
+                                  <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                    {['diario', 'semanal', 'mensual'].map((tab) => (
+                                      <button
+                                        key={tab}
+                                        onClick={() => setInsumosPeriodoSubTab(tab)}
+                                        className={cn(
+                                          "inline-flex items-center justify-center h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                          insumosPeriodoSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                        )}
+                                      >
+                                        <span className="hidden sm:inline">{tab === 'diario' ? 'Diario' : tab === 'semanal' ? 'Semanal' : 'Mensual'}</span>
+                                        <span className="sm:hidden">{tab === 'diario' ? 'D' : tab === 'semanal' ? 'S' : 'M'}</span>
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
                                {insumosPeriodoSubTab === 'diario' && (
                                  <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
                                    <table className="w-full border-collapse text-[11px]">
