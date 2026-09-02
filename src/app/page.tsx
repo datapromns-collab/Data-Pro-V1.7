@@ -685,8 +685,14 @@ export default function PlannerPage() {
     return initial;
   });
 
-    useEffect(() => {
-      if (!insumosFecha || typeof window === 'undefined') return;
+  useEffect(() => {
+    if (activeModule === 'procesos' && user?.id === 'proc1.mds') {
+      setProcesosSubTab('ptab');
+    }
+  }, [activeModule, user?.id]);
+
+  useEffect(() => {
+    if (!insumosFecha || typeof window === 'undefined') return;
       const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
 
       const ordenesDelDia = (ordenes || []).filter(orden =>
@@ -2416,18 +2422,18 @@ export default function PlannerPage() {
                      </Button>
                      )}
 
-                     {isDemon && (
-                     <Button 
-                       variant="ghost" 
-                       onClick={() => { setActiveModule('procesos'); setActiveTab('procesos-view'); setProcesosSubTab('ptab'); }}
-                       className={sidebarButtonClass(activeModule === 'procesos', "bg-teal-600 hover:bg-teal-700", "shadow-teal-400/30")}
-                     >
-                       <div className={iconContainerClass(activeModule === 'procesos')}>
-                         <Settings className="h-4 w-4" />
-                       </div>
-                       <span className="uppercase text-[10px] font-black tracking-tight">Procesos</span>
-                     </Button>
-                     )}
+                      {(isDemon || hasAccess(user.id, 'procesos')) && (
+                      <Button 
+                        variant="ghost" 
+                        onClick={() => { setActiveModule('procesos'); setActiveTab('procesos-view'); setProcesosSubTab('ptab'); }}
+                        className={sidebarButtonClass(activeModule === 'procesos', "bg-teal-600 hover:bg-teal-700", "shadow-teal-400/30")}
+                      >
+                        <div className={iconContainerClass(activeModule === 'procesos')}>
+                          <Settings className="h-4 w-4" />
+                        </div>
+                        <span className="uppercase text-[10px] font-black tracking-tight">Procesos</span>
+                      </Button>
+                      )}
 
                       {isDemon && (
                       <Button 
@@ -4253,11 +4259,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                        )}
                     </>
                   )}
-                    {activeModule === 'procesos' && isDemon && (
-                      <div className="flex flex-col h-full">
-                        <div className="flex items-center gap-2 mb-2 no-print">
-                          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                            {['ptab', 'miteco', 'sala-jarabe'].map((tab) => (
+                     {activeModule === 'procesos' && (isDemon || user.id === 'proc1.mds') && (
+                       <div className="flex flex-col h-full">
+                         <div className="flex items-center gap-2 mb-2 no-print">
+                           <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                             {(isDemon ? ['ptab', 'miteco', 'sala-jarabe'] : ['ptab']).map((tab) => (
                               <button
                                 key={tab}
                                 onClick={() => setProcesosSubTab(tab)}
@@ -4425,7 +4431,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                              </div>
                            </div>
                          )}
-                        {procesosSubTab === 'miteco' && (
+                         {isDemon && procesosSubTab === 'miteco' && (
                           <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                             <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                               <div className="flex flex-col h-full gap-3">
@@ -4434,7 +4440,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                             </div>
                           </div>
                         )}
-                        {procesosSubTab === 'sala-jarabe' && (
+                         {isDemon && procesosSubTab === 'sala-jarabe' && (
                           <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                             <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                               <div className="flex flex-col h-full gap-3">
