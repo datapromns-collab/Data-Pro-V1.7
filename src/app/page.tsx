@@ -61,6 +61,7 @@ import { RequirementReport } from '@/components/planner/RequirementReport';
 import { CalculationReport } from '@/components/planner/CalculationReport';
 import { SummaryReport } from '@/components/planner/SummaryReport';
 import { DailyPlanSection } from '@/components/planner/DailyPlanSection';
+import { PreparationSection } from '@/components/planner/PreparationSection';
 import { AdminReportTool } from '@/components/planner/AdminReportTool';
 import { ProductionEntryDialog } from '@/components/planner/ProductionEntryDialog';
 import { MonthlyReport } from '@/components/planner/MonthlyReport';
@@ -2110,6 +2111,18 @@ export default function PlannerPage() {
     }, 150);
   };
 
+  const handlePrintPreparation = () => {
+    setPrintMode('preparation');
+    const style = document.createElement('style');
+    style.id = 'print-orientation-style';
+    style.innerHTML = '@page { size: landscape; margin: 5mm; }';
+    document.head.appendChild(style);
+    setTimeout(() => {
+      window.print();
+      document.getElementById('print-orientation-style')?.remove();
+    }, 150);
+  };
+
   const handlePrintRawMaterial = () => {
     setPrintMode('raw-material');
     const style = document.createElement('style');
@@ -2651,20 +2664,27 @@ export default function PlannerPage() {
                             <GanttChartSquare className="h-3.5 w-3.5" />
                             Programación
                           </button>
-                          <button 
-                            onClick={() => setActiveTab('daily')}
-                            className={cn(navTabClass(activeTab === 'daily'))}
-                          >
-                            <ListTodo className="h-3.5 w-3.5" />
-                            Plan Día a Día
-                          </button>
-                          <button 
-                            onClick={() => setActiveTab('requirement')}
-                            className={cn(navTabClass(activeTab === 'requirement'))}
-                          >
-                            <ClipboardList className="h-3.5 w-3.5" />
-                            Requerimiento
-                          </button>
+                           <button 
+                             onClick={() => setActiveTab('daily')}
+                             className={cn(navTabClass(activeTab === 'daily'))}
+                           >
+                             <ListTodo className="h-3.5 w-3.5" />
+                             Plan Día a Día
+                           </button>
+                           <button 
+                             onClick={() => setActiveTab('preparation')}
+                             className={cn(navTabClass(activeTab === 'preparation'))}
+                           >
+                             <FlaskConical className="h-3.5 w-3.5" />
+                             Preparación
+                           </button>
+                           <button 
+                             onClick={() => setActiveTab('requirement')}
+                             className={cn(navTabClass(activeTab === 'requirement'))}
+                           >
+                             <ClipboardList className="h-3.5 w-3.5" />
+                             Requerimiento
+                           </button>
                           <button 
                             onClick={() => setActiveTab('speeds')}
                             className={cn(navTabClass(activeTab === 'speeds'))}
@@ -2772,12 +2792,15 @@ export default function PlannerPage() {
                        {activeTab === 'gantt' && (
                          <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
                        )}
-                       {activeTab === 'daily' && (
-                         <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintDaily} />
-                       )}
-                        {activeTab === 'requirement' && (
-                          <RequirementSection onPrint={handlePrintRequirements} onPrintCalculation={handlePrintCalculation} tasks={tasks} weekStartDate={weekStartDate} recipes={customRecipes} packagingRecipes={customPackagingRecipes} />
+                        {activeTab === 'daily' && (
+                          <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintDaily} />
                         )}
+                        {activeTab === 'preparation' && (
+                          <PreparationSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintPreparation} />
+                        )}
+                         {activeTab === 'requirement' && (
+                           <RequirementSection onPrint={handlePrintRequirements} onPrintCalculation={handlePrintCalculation} tasks={tasks} weekStartDate={weekStartDate} recipes={customRecipes} packagingRecipes={customPackagingRecipes} />
+                         )}
                        {activeTab === 'speeds' && (
                          <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} readOnly={!isAdmin} />
                        )}
@@ -5377,11 +5400,16 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
               <SummaryReport tasks={tasks} weekStartDate={weekStartDate} />
             </div>
           )}
-          {printMode === 'daily' && (
-            <div className="p-0">
-              <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} />
-            </div>
-          )}
+           {printMode === 'daily' && (
+             <div className="p-0">
+               <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} />
+             </div>
+           )}
+           {printMode === 'preparation' && (
+             <div className="p-0">
+               <PreparationSection tasks={tasks} weekStartDate={weekStartDate} />
+             </div>
+           )}
           {printMode === 'raw-material' && (
             <div className="p-0 h-full">
               <RawMaterialReport 

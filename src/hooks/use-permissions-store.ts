@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 
-export type PlanningSection = 'gantt' | 'daily' | 'requirement';
+export type PlanningSection = 'gantt' | 'daily' | 'preparation' | 'requirement';
 
 export type ManagementSection =
   | 'produccion-diaria'
@@ -23,25 +23,25 @@ export interface ManagementPermissions {
 }
 
 const DEFAULT_PLANNING_PERMISSIONS: PlanningPermissions = {
-  mds: { read: ['gantt', 'daily', 'requirement'], write: ['gantt', 'daily', 'requirement'] },
-  'jaime.r': { read: ['gantt', 'daily', 'requirement'], write: ['gantt', 'daily', 'requirement'] },
-  demon: { read: ['gantt', 'daily', 'requirement'], write: ['gantt', 'daily', 'requirement'] },
-  'maria.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
-  'alex.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
-  'anto.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
-  'prodtj.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
-  'prodtg.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
-  'procj.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
-  'proc1.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
-  'procs1.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
-  'procs2.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
-  'finan.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
-  'cald.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
-  'prodt.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
-  'proc.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
-  'g.tec.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
-  'enf.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
-  'etq.mds': { read: ['gantt', 'daily', 'requirement'], write: [] },
+  mds: { read: ['gantt', 'daily', 'preparation', 'requirement'], write: ['gantt', 'daily', 'preparation', 'requirement'] },
+  'jaime.r': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: ['gantt', 'daily', 'preparation', 'requirement'] },
+  demon: { read: ['gantt', 'daily', 'preparation', 'requirement'], write: ['gantt', 'daily', 'preparation', 'requirement'] },
+  'maria.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'alex.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'anto.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'prodtj.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'prodtg.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'procj.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'proc1.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'procs1.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'procs2.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'finan.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'cald.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'prodt.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'proc.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'g.tec.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'enf.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'etq.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
 };
 
 const DEFAULT_MANAGEMENT_PERMISSIONS: ManagementPermissions = {
