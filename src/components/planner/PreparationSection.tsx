@@ -18,7 +18,6 @@ interface PreparationSectionProps {
 }
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
-const PRESENTATIONS = ["2Lts", "1Lt", "1.5Lts", "0.4Lts"];
 
 export function PreparationSection({ tasks, weekStartDate, onPrint }: PreparationSectionProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
@@ -29,9 +28,9 @@ export function PreparationSection({ tasks, weekStartDate, onPrint }: Preparatio
     return tasks.filter(t => isBefore(t.startTime, dayEnd) && isAfter(t.endTime, dayStart));
   };
 
-  const getTanksForLineAndPresentation = (dayTasks: ScheduledTask[], lineId: string, presentation: string) => {
+  const getTanksForLineAndFlavor = (dayTasks: ScheduledTask[], lineId: string, flavor: string) => {
     return dayTasks
-      .filter(t => t.lineId === lineId && t.presentation === presentation)
+      .filter(t => t.lineId === lineId && t.name === flavor)
       .reduce((sum, t) => sum + (t.tanks || 0), 0);
   };
 
@@ -41,15 +40,35 @@ export function PreparationSection({ tasks, weekStartDate, onPrint }: Preparatio
       .reduce((sum, t) => sum + (t.tanks || 0), 0);
   };
 
-  const getPresentationTotal = (dayTasks: ScheduledTask[], presentation: string) => {
+  const getFlavorTotal = (dayTasks: ScheduledTask[], flavor: string) => {
     return dayTasks
-      .filter(t => t.presentation === presentation)
+      .filter(t => t.name === flavor)
       .reduce((sum, t) => sum + (t.tanks || 0), 0);
   };
 
   const getDayTotal = (dayTasks: ScheduledTask[]) => {
     return dayTasks.reduce((sum, t) => sum + (t.tanks || 0), 0);
   };
+
+  const getFlavors = (dayTasks: ScheduledTask[]) => {
+    const flavorSet = new Set<string>();
+    dayTasks.forEach(t => {
+      if (t.name) flavorSet.add(t.name);
+    });
+    return Array.from(flavorSet).sort();
+  };
+
+  const dailyData = useMemo(() => {
+    return weekDays.map(day => {
+      const dayTasks = getDayTasks(day);
+      return {
+        day,
+        tasks: dayTasks,
+        flavors: getFlavors(dayTasks),
+        total: getDayTotal(dayTasks),
+      };
+    });
+  }, [weekDays, tasks]);
 
   return (
     <div className="space-y-12 pb-10 print:space-y-0 print:pb-0">
@@ -67,10 +86,7 @@ export function PreparationSection({ tasks, weekStartDate, onPrint }: Preparatio
         )}
       </div>
 
-      {weekDays.map((day, dIdx) => {
-        const dayTasks = getDayTasks(day);
-        const dayTotal = getDayTotal(dayTasks);
-
+      {dailyData.map(({ day, tasks: dayTasks, flavors, total }, dIdx) => {
         if (dayTasks.length === 0) return null;
 
         return (
@@ -86,7 +102,7 @@ export function PreparationSection({ tasks, weekStartDate, onPrint }: Preparatio
               <div className="text-right flex flex-col items-end">
                 <p className="text-[9px] font-black text-primary uppercase tracking-[0.2em] mb-0.5">PREPARACIÓN DE TANQUES</p>
                 <Badge variant="outline" className="text-[9px] font-black uppercase text-slate-400 border-slate-200 px-2 py-0.5">
-                  {dayTotal.toFixed(2)} Tanques Totales
+                  {total.toFixed(2)} Tanques Totales
                 </Badge>
               </div>
             </div>
@@ -99,9 +115,9 @@ export function PreparationSection({ tasks, weekStartDate, onPrint }: Preparatio
                       <TableHead className="text-[10px] font-black uppercase tracking-wider text-slate-500 bg-slate-50/80 w-24">
                         Línea
                       </TableHead>
-                      {PRESENTATIONS.map(presentation => (
-                        <TableHead key={presentation} className="text-[10px] font-black uppercase tracking-wider text-slate-500 bg-slate-50/80 text-center min-w-[80px]">
-                          {presentation}
+                      {flavors.map(flavor => (
+                        <TableHead key={flavor} className="text-[10px] font-black uppercase tracking-wider text-slate-500 bg-slate-50/80 text-center min-w-[120px]">
+                          {flavor}
                         </TableHead>
                       ))}
                       <TableHead className="text-[10px] font-black uppercase tracking-wider text-slate-700 bg-slate-100/80 text-center w-24">
@@ -123,10 +139,10 @@ export function PreparationSection({ tasks, weekStartDate, onPrint }: Preparatio
                               </div>
                             </div>
                           </TableCell>
-                          {PRESENTATIONS.map(presentation => {
-                            const tanks = getTanksForLineAndPresentation(dayTasks, lineId, presentation);
+                          {flavors.map(flavor => {
+                            const tanks = getTanksForLineAndFlavor(dayTasks, lineId, flavor);
                             return (
-                              <TableCell key={presentation} className="text-center">
+                              <TableCell key={flavor} className="text-center">
                                 <span className={cn(
                                   "text-sm font-bold tabular-nums",
                                   tanks > 0 ? "text-slate-900" : "text-slate-300"
@@ -146,21 +162,21 @@ export function PreparationSection({ tasks, weekStartDate, onPrint }: Preparatio
                     })}
                     <TableRow className="bg-slate-50/80">
                       <TableCell className="font-black text-xs uppercase tracking-wider text-slate-600">
-                        Total Presentación
+                        Total Sabor
                       </TableCell>
-                      {PRESENTATIONS.map(presentation => {
-                        const presTotal = getPresentationTotal(dayTasks, presentation);
+                      {flavors.map(flavor => {
+                        const flavorTotal = getFlavorTotal(dayTasks, flavor);
                         return (
-                          <TableCell key={presentation} className="text-center">
+                          <TableCell key={flavor} className="text-center">
                             <span className="text-xs font-black text-slate-700 tabular-nums">
-                              {presTotal > 0 ? presTotal.toFixed(2) : '-'}
+                              {flavorTotal > 0 ? flavorTotal.toFixed(2) : '-'}
                             </span>
                           </TableCell>
                         );
                       })}
                       <TableCell className="text-center">
                         <span className="text-sm font-black text-primary tabular-nums">
-                          {dayTotal > 0 ? dayTotal.toFixed(2) : '-'}
+                          {total > 0 ? total.toFixed(2) : '-'}
                         </span>
                       </TableCell>
                     </TableRow>
