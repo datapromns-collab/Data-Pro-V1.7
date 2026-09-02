@@ -2,55 +2,49 @@
 
 import { useEffect, useState } from "react"
 
-export function useServiceWorkerUpdate() {
+const POLL_INTERVAL = 60_000
+
+export function useAppUpdate() {
   const [updateAvailable, setUpdateAvailable] = useState(false)
+  const [currentVersion, setCurrentVersion] = useState<string | null>(null)
 
   useEffect(() => {
-    if (typeof window === "undefined" || !("serviceWorker" in navigator)) {
-      return
-    }
+    if (typeof window === "undefined") return
 
-    const handleControllerChange = () => {
-      window.location.reload()
-    }
+    let mounted = true
 
-    navigator.serviceWorker.addEventListener("controllerchange", handleControllerChange)
+    const checkVersion = async () => {
+      try {
+        const res = await fetch("/version.json", { cache: "no-store" })
+        if (!res.ok) return
+        const data = await res.json()
+        if (!mounted) return
 
-    const handleUpdateFound = (registration: ServiceWorkerRegistration) => {
-      const newWorker = registration.installing
-      if (!newWorker) return
+        const remoteVersion = data.build || data.version
+        if (currentVersion === null) {
+          setCurrentVersion(remoteVersion)
+          return
+        }
 
-      newWorker.addEventListener("statechange", () => {
-        if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+        if (remoteVersion && remoteVersion !== currentVersion) {
           setUpdateAvailable(true)
         }
-      })
+      } catch {
+        // Silenciar errores de red para no molestar al usuario
+      }
     }
 
-    navigator.serviceWorker.ready.then((registration) => {
-      if (registration.waiting) {
-        setUpdateAvailable(true)
-      }
-
-      registration.addEventListener("updatefound", () => handleUpdateFound(registration))
-    })
+    checkVersion()
+    const interval = setInterval(checkVersion, POLL_INTERVAL)
 
     return () => {
-      navigator.serviceWorker.removeEventListener("controllerchange", handleControllerChange)
+      mounted = false
+      clearInterval(interval)
     }
-  }, [])
+  }, [currentVersion])
 
   const applyUpdate = () => {
-    if (!("serviceWorker" in navigator)) return
-
-    navigator.serviceWorker.ready.then((registration) => {
-      const waitingWorker = registration.waiting
-      if (waitingWorker) {
-        waitingWorker.postMessage({ type: "SKIP_WAITING" })
-      } else {
-        window.location.reload()
-      }
-    })
+    window.location.reload()
   }
 
   return { updateAvailable, applyUpdate }

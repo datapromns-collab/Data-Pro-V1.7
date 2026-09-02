@@ -1,13 +1,13 @@
 "use client"
 
-import { useServiceWorkerUpdate } from "@/hooks/use-service-worker-update"
+import { useAppUpdate } from "@/hooks/use-service-worker-update"
 import { useToast } from "@/hooks/use-toast"
 import { useEffect } from "react"
 import { Button } from "@/components/ui/button"
 import { RefreshCw } from "lucide-react"
 
 export function UpdateBanner() {
-  const { updateAvailable, applyUpdate } = useServiceWorkerUpdate()
+  const { updateAvailable, applyUpdate } = useAppUpdate()
   const { toast } = useToast()
 
   useEffect(() => {
