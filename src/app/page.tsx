@@ -2331,11 +2331,14 @@ export default function PlannerPage() {
       <div className="flex min-h-screen w-full bg-[#f8fafc]">
         <Sidebar className="border-r border-slate-200 bg-white no-print">
           <div className="p-6">
-            <div className="flex flex-col">
-              <h1 className="text-xl font-headline font-bold text-slate-900 tracking-tight leading-none uppercase">
-                Data Pro
-              </h1>
-              <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] mt-1.5 leading-none">Pro Edition</span>
+            <div className="flex items-center gap-3">
+              <Image src="/icox-v1.png" alt="Data Pro" width={36} height={36} className="h-9 w-9 object-contain" />
+              <div className="flex flex-col">
+                <h1 className="text-xl font-headline font-bold text-slate-900 tracking-tight leading-none uppercase">
+                  Data Pro
+                </h1>
+                <span className="text-[10px] font-black text-slate-300 uppercase tracking-[0.2em] mt-1.5 leading-none">Pro Edition</span>
+              </div>
             </div>
           </div>
           <SidebarContent className="px-4 py-2 flex flex-col h-full">
