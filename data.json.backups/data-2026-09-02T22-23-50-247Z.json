@@ -9237,7 +9237,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-02T19:08:30.012Z"
+    "updatedAt": "2026-09-02T21:47:41.666Z"
   },
   "ordenesSap": [
     {
@@ -15914,6 +15914,17 @@
         },
         {
           "fechaInicio": "2026-09-02",
+          "ticket1": "17830",
+          "cajas1": 4800,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-09-03",
           "ticket1": "",
           "cajas1": 0,
           "ticket2": "",
@@ -15945,8 +15956,8 @@
         },
         {
           "fechaInicio": "2026-09-02",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17641",
+          "cajas1": 2658,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -15996,6 +16007,17 @@
         },
         {
           "fechaInicio": "2026-09-02",
+          "ticket1": "17878",
+          "cajas1": 8560,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-09-03",
           "ticket1": "",
           "cajas1": 0,
           "ticket2": "",
@@ -16027,6 +16049,17 @@
         },
         {
           "fechaInicio": "2026-09-02",
+          "ticket1": "17909",
+          "cajas1": 3200,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-09-03",
           "ticket1": "",
           "cajas1": 0,
           "ticket2": "",
@@ -16098,8 +16131,8 @@
         },
         {
           "fechaInicio": "2026-09-02",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17733",
+          "cajas1": 1420,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -16129,8 +16162,8 @@
         },
         {
           "fechaInicio": "2026-09-02",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17778",
+          "cajas1": 4524,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -16149,6 +16182,79 @@
       "dias": [
         {
           "fechaInicio": "2026-09-02",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-09-03",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1788385423643",
+      "linea": 6,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "63387",
+      "semana": 36,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-02",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-09-03",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1788385635908",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "63393",
+      "semana": 36,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-02",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-09-03",
           "ticket1": "",
           "cajas1": 0,
           "ticket2": "",
