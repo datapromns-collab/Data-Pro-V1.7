@@ -19,8 +19,8 @@ export const metadata: Metadata = {
   title: 'Data Pro - Planificación Eficiente',
   description: 'Sistema de planificación semanal profesional con monitoreo de turnos e IA.',
   icons: {
-    icon: { url: '/icox.png', sizes: '512x512', type: 'image/png' },
-    apple: { url: '/icox.png', sizes: '512x512', type: 'image/png' },
+    icon: { url: '/icox-v1.png', sizes: '512x512', type: 'image/png' },
+    apple: { url: '/icox-v1.png', sizes: '512x512', type: 'image/png' },
   },
   other: {
     'mobile-web-app-capable': 'yes',

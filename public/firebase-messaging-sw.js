@@ -20,8 +20,8 @@ messaging.onBackgroundMessage((payload) => {
   const title = notification.title || 'Data Pro';
   const options = {
     body: notification.body || '',
-    icon: '/icox.png',
-    badge: '/icox.png',
+    icon: '/icox-v1.png',
+    badge: '/icox-v1.png',
     tag: payload.data?.messageId || undefined,
     data: payload.data || {},
   };

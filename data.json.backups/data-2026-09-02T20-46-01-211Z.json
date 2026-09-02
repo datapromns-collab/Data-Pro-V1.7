@@ -27027,6 +27027,41 @@
           "JUSTY NARANJA": {
             "preparado": ""
           }
+        },
+        "2026-09-01": {
+          "GLUP COLA": {
+            "inicial": "59.68",
+            "preparado": "18",
+            "final": "33.13"
+          },
+          "GLUP FRESH": {
+            "inicial": "8.88",
+            "preparado": "18",
+            "final": "13.69"
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "9.01",
+            "preparado": "8",
+            "final": "2.16"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "40",
+            "preparado": "200",
+            "final": "28"
+          },
+          "GLUP UVA": {
+            "inicial": "11",
+            "preparado": "",
+            "final": "0.96"
+          },
+          "GLUP PIÑA": {
+            "preparado": "10",
+            "final": "10"
+          },
+          "GLUP KOLITA": {
+            "preparado": "72",
+            "final": "59.16"
+          }
         }
       },
       "sugar": {
@@ -27527,6 +27562,28 @@
           },
           "PASTORA": {
             "invInicialSacos": "1160",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-09-01": {
+          "PORTUGUESA": {
+            "invInicialSacos": "6600",
+            "recepcionSacos": "",
+            "invFinalSacos": "4360"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2680",
+            "recepcionSacos": "",
+            "invFinalSacos": "2200"
+          },
+          "PASTORA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "3000",
+            "invFinalSacos": "2240"
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "",
             "recepcionSacos": "",
             "invFinalSacos": ""
           }
@@ -28051,6 +28108,20 @@
           "Sala 1": {
             "invInicialSacos": "",
             "invFinalSacos": "216"
+          }
+        },
+        "2026-09-01": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "245",
+            "invFinalSacos": "370"
+          },
+          "Sala 1": {
+            "invInicialSacos": "216",
+            "invFinalSacos": "266"
           }
         }
       },
