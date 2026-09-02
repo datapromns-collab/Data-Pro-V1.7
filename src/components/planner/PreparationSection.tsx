@@ -18,6 +18,12 @@ interface PreparationSectionProps {
 }
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
+const SPECIAL_TASKS = ['CS', 'CIP', 'MTTO', 'PARADA', 'S.A.M.I', 'PASIVACIÓN', 'PRUEBA DE MATERIAL', 'OTROS'];
+
+const isSpecialTask = (name: string) => {
+  if (!name) return false;
+  return SPECIAL_TASKS.some(s => name.toUpperCase().includes(s));
+};
 
 export function PreparationSection({ tasks, weekStartDate, onPrint }: PreparationSectionProps) {
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
@@ -25,7 +31,7 @@ export function PreparationSection({ tasks, weekStartDate, onPrint }: Preparatio
   const getDayTasks = (day: Date) => {
     const dayStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
     const dayEnd = addDays(dayStart, 1);
-    return tasks.filter(t => isBefore(t.startTime, dayEnd) && isAfter(t.endTime, dayStart));
+    return tasks.filter(t => isBefore(t.startTime, dayEnd) && isAfter(t.endTime, dayStart) && !isSpecialTask(t.name));
   };
 
   const getTanksForLineAndFlavor = (dayTasks: ScheduledTask[], lineId: string, flavor: string) => {
@@ -53,7 +59,7 @@ export function PreparationSection({ tasks, weekStartDate, onPrint }: Preparatio
   const getFlavors = (dayTasks: ScheduledTask[]) => {
     const flavorSet = new Set<string>();
     dayTasks.forEach(t => {
-      if (t.name) flavorSet.add(t.name);
+      if (t.name && !isSpecialTask(t.name)) flavorSet.add(t.name);
     });
     return Array.from(flavorSet).sort();
   };
