@@ -108,28 +108,55 @@ export function ComplianceReport({ tasks, realProduction, weekStartDate, title =
                 <tr className="bg-[#4a7ebb] text-white font-black uppercase h-9">
                   <th className="px-4 py-0 border border-slate-900 text-left">LÍNEAS</th>
                   <th className="px-4 py-0 border border-slate-900 text-right">PLANIFICADO</th>
-                  <th className="px-4 py-0 border border-slate-900 text-right">PRODUCCIÓN</th>
-                  <th className="px-4 py-0 border border-slate-900 text-right">CUMPLIMIENTO</th>
+                       <th className="px-4 py-0 border border-slate-900 text-right">PRODUCCIÓN</th>
+                       <th className="px-4 py-0 border border-slate-900 text-right">FALTANTE</th>
+                       <th className="px-4 py-0 border border-slate-900 text-right">CUMPLIMIENTO</th>
                 </tr>
               </thead>
-              <tbody className="bg-[#dce6f1]">
-                {summaryData.map((data, idx) => (
-                  <tr key={idx} className="font-bold text-slate-900 h-9 border-b border-slate-900/10 last:border-b-0">
-                    <td className="px-4 py-0 border-r border-slate-900 font-black">
-                      Línea {data.lineId}
-                    </td>
-                    <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums">
-                      {data.planned > 0 ? Math.round(data.planned).toLocaleString('es-ES') : '—'}
-                    </td>
-                    <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums">
-                      {data.real > 0 ? Math.round(data.real).toLocaleString('es-ES') : '0'}
-                    </td>
-                    <td className="px-4 py-0 text-right tabular-nums font-black text-primary">
-                      {data.compliance.toFixed(2).replace('.', ',')}%
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
+               <tbody className="bg-[#dce6f1]">
+                 {summaryData.map((data, idx) => (
+                   <tr key={idx} className="font-bold text-slate-900 h-9 border-b border-slate-900/10 last:border-b-0">
+                     <td className="px-4 py-0 border-r border-slate-900 font-black">
+                       Línea {data.lineId}
+                     </td>
+                     <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums">
+                       {data.planned > 0 ? Math.round(data.planned).toLocaleString('es-ES') : '—'}
+                     </td>
+                     <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums">
+                       {data.real > 0 ? Math.round(data.real).toLocaleString('es-ES') : '0'}
+                     </td>
+                     <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums">
+                       {(() => {
+                         const missing = Math.round(data.planned) - Math.round(data.real);
+                         return missing !== 0 ? missing.toLocaleString('es-ES') : '0';
+                       })()}
+                     </td>
+                     <td className="px-4 py-0 text-right tabular-nums font-black text-primary">
+                       {data.compliance.toFixed(2).replace('.', ',')}%
+                     </td>
+                   </tr>
+                 ))}
+                 <tr className="font-black text-slate-900 h-9 bg-[#b8cce4]">
+                   <td className="px-4 py-0 border-r border-slate-900 uppercase">TOTAL PLANTA</td>
+                   <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums">
+                     {Math.round(summaryData.reduce((a, b) => a + b.planned, 0)).toLocaleString('es-ES')}
+                   </td>
+                   <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums">
+                     {Math.round(summaryData.reduce((a, b) => a + b.real, 0)).toLocaleString('es-ES')}
+                   </td>
+                   <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums">
+                     {(() => {
+                       const totalPlanned = Math.round(summaryData.reduce((a, b) => a + b.planned, 0));
+                       const totalReal = Math.round(summaryData.reduce((a, b) => a + b.real, 0));
+                       const missing = totalPlanned - totalReal;
+                       return missing !== 0 ? missing.toLocaleString('es-ES') : '0';
+                     })()}
+                   </td>
+                   <td className="px-4 py-0 text-right tabular-nums text-primary text-[10pt]">
+                     {(summaryData.reduce((a, b) => a + b.real, 0) / (summaryData.reduce((a, b) => a + b.planned, 0) || 1) * 100).toFixed(2).replace('.', ',')}%
+                   </td>
+                 </tr>
+               </tbody>
             </table>
           </div>
         </div>
@@ -161,8 +188,9 @@ export function ComplianceReport({ tasks, realProduction, weekStartDate, title =
                       <th className="px-4 py-0 border border-slate-900 text-left">FECHA</th>
                       <th className="px-4 py-0 border border-slate-900 text-left">DÍAS</th>
                       <th className="px-4 py-0 border border-slate-900 text-right">PLANIFICADO</th>
-                      <th className="px-4 py-0 border border-slate-900 text-right">PRODUCCIÓN</th>
-                      <th className="px-4 py-0 border border-slate-900 text-right">CUMPLIMIENTO</th>
+                   <th className="px-4 py-0 border border-slate-900 text-right">PRODUCCIÓN</th>
+                   <th className="px-4 py-0 border border-slate-900 text-right">FALTANTE</th>
+                   <th className="px-4 py-0 border border-slate-900 text-right">CUMPLIMIENTO</th>
                     </tr>
                   </thead>
                   <tbody className="bg-[#dce6f1]">
@@ -177,29 +205,43 @@ export function ComplianceReport({ tasks, realProduction, weekStartDate, title =
                         <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums bg-white/10">
                           {stat.planned > 0 ? Math.round(stat.planned).toLocaleString('es-ES') : '—'}
                         </td>
-                        <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums">
-                          {stat.real > 0 ? Math.round(stat.real).toLocaleString('es-ES') : '0'}
-                        </td>
-                        <td className="px-4 py-0 text-right tabular-nums font-black text-primary">
-                          {stat.compliance.toFixed(2).replace('.', ',')}%
-                        </td>
+                         <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums">
+                           {stat.real > 0 ? Math.round(stat.real).toLocaleString('es-ES') : '0'}
+                         </td>
+                         <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums">
+                           {(() => {
+                             const missing = Math.round(stat.planned) - Math.round(stat.real);
+                             return missing !== 0 ? missing.toLocaleString('es-ES') : '0';
+                           })()}
+                         </td>
+                         <td className="px-4 py-0 text-right tabular-nums font-black text-primary">
+                           {stat.compliance.toFixed(2).replace('.', ',')}%
+                         </td>
                       </tr>
                     ))}
                   </tbody>
-                  <tfoot className="bg-[#b8cce4] font-black text-slate-900 border-t border-slate-900">
-                    <tr className="h-9">
-                      <td colSpan={2} className="px-4 py-0 border-r border-slate-900 uppercase">TOTAL SEMANA</td>
-                      <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums">
-                        {Math.round(dailyStats.reduce((a, b) => a + b.planned, 0)).toLocaleString('es-ES')}
-                      </td>
-                      <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums">
-                        {Math.round(dailyStats.reduce((a, b) => a + b.real, 0)).toLocaleString('es-ES')}
-                      </td>
-                      <td className="px-4 py-0 text-right tabular-nums text-primary text-[10pt]">
-                        {(dailyStats.reduce((a, b) => a + b.real, 0) / (dailyStats.reduce((a, b) => a + b.planned, 0) || 1) * 100).toFixed(2).replace('.', ',')}%
-                      </td>
-                    </tr>
-                  </tfoot>
+                   <tfoot className="bg-[#b8cce4] font-black text-slate-900 border-t border-slate-900">
+                     <tr className="h-9">
+                       <td colSpan={2} className="px-4 py-0 border-r border-slate-900 uppercase">TOTAL SEMANA</td>
+                       <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums">
+                         {Math.round(dailyStats.reduce((a, b) => a + b.planned, 0)).toLocaleString('es-ES')}
+                       </td>
+                       <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums">
+                         {Math.round(dailyStats.reduce((a, b) => a + b.real, 0)).toLocaleString('es-ES')}
+                       </td>
+                       <td className="px-4 py-0 border-r border-slate-900 text-right tabular-nums">
+                         {(() => {
+                           const totalPlanned = Math.round(dailyStats.reduce((a, b) => a + b.planned, 0));
+                           const totalReal = Math.round(dailyStats.reduce((a, b) => a + b.real, 0));
+                           const missing = totalPlanned - totalReal;
+                           return missing !== 0 ? missing.toLocaleString('es-ES') : '0';
+                         })()}
+                       </td>
+                       <td className="px-4 py-0 text-right tabular-nums text-primary text-[10pt]">
+                         {(dailyStats.reduce((a, b) => a + b.real, 0) / (dailyStats.reduce((a, b) => a + b.planned, 0) || 1) * 100).toFixed(2).replace('.', ',')}%
+                       </td>
+                     </tr>
+                   </tfoot>
                 </table>
               </div>
             </div>
