@@ -73,36 +73,46 @@ export function AdminReportTool({
   onPrintMonthlyWithSignature,
 }: AdminReportToolProps) {
   const [weekSelectorMonth, setWeekSelectorMonthRaw] = useState(() => {
-    const saved = typeof window !== 'undefined' ? localStorage.getItem('admin-report-week-month') : null;
-    if (saved) return saved;
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('admin-report-week-month');
+      if (saved) return saved;
+    }
     const initial = currentWeekKey ? parseISO(currentWeekKey) : new Date();
     return format(initial, 'yyyy-MM');
   });
-  const [selectedWeekStart, setSelectedWeekStartRaw] = useState(currentWeekKey || format(new Date(), 'yyyy-MM-dd'));
-  const manualMonthChangeRef = useRef(false);
+  const [selectedWeekStart, setSelectedWeekStartRaw] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('admin-report-week-start');
+      if (saved) return saved;
+    }
+    return currentWeekKey || format(new Date(), 'yyyy-MM-dd');
+  });
+  const [productionSubTab, setProductionTab] = useState('dia-a-dia');
+  const [complianceSubTab, setComplianceTab] = useState('weekly');
+  const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
+  const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
 
   const setWeekSelectorMonth = (value: string) => {
-    manualMonthChangeRef.current = true;
     setWeekSelectorMonthRaw(value);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('admin-report-week-month', value);
+    }
   };
 
   const setSelectedWeekStart = (value: string) => {
     setSelectedWeekStartRaw(value);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('admin-report-week-start', value);
+    }
   };
 
   useEffect(() => {
-    if (weekSelectorMonth && typeof window !== 'undefined') {
-      localStorage.setItem('admin-report-week-month', weekSelectorMonth);
-    }
-  }, [weekSelectorMonth]);
-
-  useEffect(() => {
-    if (!manualMonthChangeRef.current) {
-      const initialDate = currentWeekKey ? parseISO(currentWeekKey) : new Date();
-      setSelectedWeekStartRaw(format(initialDate, 'yyyy-MM-dd'));
-    }
-    manualMonthChangeRef.current = false;
-  }, [currentWeekKey]);
+    const initialDate = currentWeekKey ? parseISO(currentWeekKey) : new Date();
+    const newMonth = format(initialDate, 'yyyy-MM');
+    const newWeekStart = format(initialDate, 'yyyy-MM-dd');
+    setWeekSelectorMonthRaw(newMonth);
+    setSelectedWeekStartRaw(newWeekStart);
+  }, []);
 
   const selectedWeekKey = useMemo(() => {
     const d = parseISO(selectedWeekStart);
@@ -112,6 +122,21 @@ export function AdminReportTool({
 
   const selectedWeekData = weeklyData[selectedWeekKey] || { tasks: [], realProduction: {} };
   const selectedTasks = selectedWeekData.tasks;
+
+  const weeklyWeekStart = useMemo(() => parseISO(selectedWeekStart), [selectedWeekStart]);
+  const weekDays = useMemo(() => getWeekDays(weeklyWeekStart), [weeklyWeekStart]);
+
+  const visibleWeekDays = useMemo(() => {
+    const [y, m] = weekSelectorMonth.split('-').map(Number);
+    const monthStart = startOfMonth(new Date(y, m - 1));
+    const monthEnd = endOfMonth(monthStart);
+
+    return weekDays.filter(day => {
+      const d = new Date(day);
+      d.setHours(0, 0, 0, 0);
+      return d >= monthStart && d <= monthEnd;
+    });
+  }, [weekDays, weekSelectorMonth]);
 
   const complianceWeekDays = useMemo(() => {
     const parsed = parseISO(selectedWeekStart);
@@ -129,11 +154,6 @@ export function AdminReportTool({
       return { value, label };
     });
   }, [weekSelectorMonth]);
-
-  useEffect(() => {
-    const initialDate = currentWeekKey ? parseISO(currentWeekKey) : new Date();
-    setSelectedWeekStart(format(initialDate, 'yyyy-MM-dd'));
-  }, [currentWeekKey]);
 
   const handleWeekChange = (weekStart: string) => {
     setSelectedWeekStart(weekStart);
