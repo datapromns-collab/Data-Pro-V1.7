@@ -590,7 +590,11 @@ export default function PlannerPage() {
       .filter((r) => {
         const orden = r.orden && String(r.orden).trim() !== '';
         const fecha = r.fechaOrden && String(r.fechaOrden).trim() !== '';
-        return orden && fecha;
+        if (!orden || !fecha) return false;
+        const start = plantaWeekQuery.startDate;
+        const end = plantaWeekQuery.endDate;
+        const inWeek = (d: string) => d >= start && d <= end;
+        return inWeek(r.fechaOrden) || inWeek(r.fechaParada) || inWeek(r.otFechaParada);
       })
       .map((r) => ({
         id: r.id,
@@ -602,7 +606,7 @@ export default function PlannerPage() {
         solicitante: r.solicitante || '',
         linea: r.linea || '',
         aviso: r.aviso || '',
-        maquina: r.maquina || r.equipo || '',
+        maquina: r.equipo || '',
         fechaParada: r.fechaParada || r.otFechaParada || '',
         inicioMtto: r.inicioMtto || '',
         finMtto: r.finMtto || '',
@@ -619,7 +623,7 @@ export default function PlannerPage() {
         bloqueado: r.bloqueado,
         usuario: r.usuario || '',
       }));
-   }, [informesOperacionalesStore.data, ordenesTrabajo]);
+   }, [informesOperacionalesStore.data, ordenesTrabajo, plantaWeekQuery.startDate, plantaWeekQuery.endDate]);
 
   const [editingRows, setEditingRows] = useState<Record<string | number, any>>({});
   const [filasNoEditables, setFilasNoEditables] = useState<Record<string | number, boolean>>({});
