@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-04T00:00:00.000",
+      "weekStartDate": "2026-08-27T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -9237,7 +9237,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-03T21:19:27.516Z"
+    "updatedAt": "2026-09-04T13:51:05.519Z"
   },
   "ordenesSap": [
     {
@@ -15919,20 +15919,20 @@
           "ticket2": "17831",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 12640,
+          "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 12640
         },
         {
           "fechaInicio": "2026-09-03",
           "ticket1": "17832",
           "cajas1": 7360,
-          "ticket2": "",
+          "ticket2": "17833",
           "cajas2": 2000,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8320
         }
       ]
     },
@@ -16012,20 +16012,20 @@
           "ticket2": "17879",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 19280,
+          "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 19280
         },
         {
           "fechaInicio": "2026-09-03",
           "ticket1": "17880",
           "cajas1": 10880,
-          "ticket2": "",
+          "ticket2": "17881",
           "cajas2": 2960,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 14400
         }
       ]
     },
@@ -16054,20 +16054,20 @@
           "ticket2": "17910",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 6400,
+          "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 6400
         },
         {
           "fechaInicio": "2026-09-03",
           "ticket1": "17911",
           "cajas1": 3000,
-          "ticket2": "",
+          "ticket2": "17912",
           "cajas2": 2100,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 3150
         }
       ]
     },
@@ -16175,12 +16175,12 @@
           "fechaInicio": "2026-09-03",
           "ticket1": "17780",
           "cajas1": 5460,
-          "ticket2": "",
+          "ticket2": "17781",
           "cajas2": 3432,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 2650
         }
       ]
     },
@@ -16198,20 +16198,20 @@
           "ticket2": "17694",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 19360,
+          "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 19360
         },
         {
           "fechaInicio": "2026-09-03",
           "ticket1": "17695",
           "cajas1": 9120,
-          "ticket2": "",
+          "ticket2": "17696",
           "cajas2": 4800,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 17040
         }
       ]
     },
@@ -16229,20 +16229,20 @@
           "ticket2": "17734",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 10400,
+          "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 10400
         },
         {
           "fechaInicio": "2026-09-03",
           "ticket1": "17735",
           "cajas1": 4800,
-          "ticket2": "",
+          "ticket2": "17736",
           "cajas2": 2240,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8480
         }
       ]
     },
@@ -16260,20 +16260,40 @@
           "ticket2": "17642",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 5120,
+          "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 5120
         },
         {
           "fechaInicio": "2026-09-03",
           "ticket1": "17643",
           "cajas1": 8800,
-          "ticket2": "",
+          "ticket2": "17644",
           "cajas2": 1200,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 4704
+        }
+      ]
+    },
+    {
+      "id": "7-1788524953322",
+      "linea": 7,
+      "sabor": "GLUP PIÑA",
+      "ordenNumero": "63399",
+      "semana": 36,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-03",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17781",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 7011
         }
       ]
     }
@@ -27179,6 +27199,74 @@
             "preparado": "72",
             "final": "59.16"
           }
+        },
+        "2026-09-02": {
+          "GLUP COLA": {
+            "inicial": "33.13",
+            "preparado": "24",
+            "final": "38.08"
+          },
+          "GLUP FRESH": {
+            "inicial": "13.69",
+            "preparado": "12",
+            "final": "9.12"
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "2.16",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "28",
+            "preparado": "180",
+            "final": "26"
+          },
+          "GLUP UVA": {
+            "inicial": "0.96",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP PIÑA": {
+            "inicial": "10",
+            "preparado": "40",
+            "final": "22.29"
+          },
+          "GLUP KOLITA": {
+            "inicial": "59.16",
+            "preparado": "36",
+            "final": "61.78"
+          }
+        },
+        "2026-09-03": {
+          "GLUP COLA": {
+            "inicial": "38.08",
+            "preparado": "30",
+            "final": "48.69"
+          },
+          "GLUP FRESH": {
+            "inicial": "9.12",
+            "preparado": "18",
+            "final": "9.15"
+          },
+          "GLUP PIÑA": {
+            "inicial": "22.29",
+            "preparado": "40",
+            "final": "9.17"
+          },
+          "GLUP KOLITA": {
+            "inicial": "61.78",
+            "preparado": "36",
+            "final": "40.61"
+          },
+          "GLUP UVA": {
+            "preparado": "22",
+            "final": "22"
+          },
+          "JUSTY DURAZNO": {
+            "final": "13",
+            "preparado": "140",
+            "inicial": "26"
+          }
         }
       },
       "sugar": {
@@ -27703,6 +27791,40 @@
             "invInicialSacos": "",
             "recepcionSacos": "",
             "invFinalSacos": ""
+          }
+        },
+        "2026-09-02": {
+          "PORTUGUESA": {
+            "invInicialSacos": "4360",
+            "recepcionSacos": "4160",
+            "invFinalSacos": "7080"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2200",
+            "recepcionSacos": "800",
+            "invFinalSacos": "2480"
+          },
+          "PASTORA": {
+            "invInicialSacos": "2240",
+            "recepcionSacos": "",
+            "invFinalSacos": "840"
+          }
+        },
+        "2026-09-03": {
+          "PORTUGUESA": {
+            "invInicialSacos": "7080",
+            "recepcionSacos": "",
+            "invFinalSacos": "5360"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2480",
+            "recepcionSacos": "640",
+            "invFinalSacos": "2560"
+          },
+          "PASTORA": {
+            "invInicialSacos": "840",
+            "recepcionSacos": "1800",
+            "invFinalSacos": "1320"
           }
         }
       },
@@ -28239,6 +28361,34 @@
           "Sala 1": {
             "invInicialSacos": "216",
             "invFinalSacos": "266"
+          }
+        },
+        "2026-09-02": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "370",
+            "invFinalSacos": "238"
+          },
+          "Sala 1": {
+            "invInicialSacos": "266",
+            "invFinalSacos": "464"
+          }
+        },
+        "2026-09-03": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "238",
+            "invFinalSacos": "228"
+          },
+          "Sala 1": {
+            "invInicialSacos": "464",
+            "invFinalSacos": ""
           }
         }
       },
