@@ -1,224 +1,26 @@
 {
   "messages": [
     {
-      "id": "2026-09-02T19:05:19.694Z-95ih2qb",
-      "title": "V1.9.22.06",
-      "message": "La versión 22.06 del data pro mejoró la visualización móvil, ya se puede usar de forma más fluido en dispositivos móviles",
-      "type": "success",
+      "id": "2026-09-04T17:25:40.524Z-sjh4mbp",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-09-02T19:05:19.694Z"
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:40.524Z"
     },
     {
-      "id": "2026-08-28T19:57:39.064Z-ml68nzv",
+      "id": "2026-09-04T17:25:10.363Z-krp9woy",
       "title": "PDP S36",
-      "message": "Ya se encuentra disponible el PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-08-28T19:57:39.064Z"
-    },
-    {
-      "id": "2026-08-28T19:56:46.530Z-9jr0kkf",
-      "title": "Modificación de PDP S35",
-      "message": "ya se encuentra disponible el PDP S35 para trabajos de fin de semana",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-08-28T19:56:46.530Z"
-    },
-    {
-      "id": "2026-08-26T14:52:39.343Z-ijtw9v1",
-      "title": "Modificación PDP S35",
-      "message": "Se realizo modificación en la planificación de la linea 2",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-08-26T14:52:39.343Z"
-    },
-    {
-      "id": "2026-08-23T18:40:35.194Z-fuyyriy",
-      "title": "Modificación PDP S35",
-      "message": "Ya se encuentra disponible la ultima modificación del PDP S35",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-08-23T18:40:35.194Z"
-    },
-    {
-      "id": "2026-08-20T19:11:55.621Z-tzhzpbf",
-      "title": "PDP S35",
-      "message": "Ya se encuentra disponible el PDP S35",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-08-20T19:11:55.621Z"
-    },
-    {
-      "id": "2026-08-20T19:10:41.881Z-ugpz1hd",
-      "title": "Modificación PDP S34",
-      "message": "Se realiza modificación en el PDP S34 para los trabajos de fin de semana",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-08-20T19:10:41.881Z"
-    },
-    {
-      "id": "2026-08-18T21:31:30.139Z-mbk86tu",
-      "title": "Modificación de PDP S34",
-      "message": "se realiza modificación el linea 1y4",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-08-18T21:31:30.139Z"
-    },
-    {
-      "id": "2026-08-17T17:46:08.080Z-fy8se1y",
-      "title": "Modificación PDP S34",
-      "message": "Se Realizo modificación en el PDP S34 para líneas 1y2",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-08-17T17:46:08.080Z"
-    },
-    {
-      "id": "2026-08-14T12:56:08.516Z-hmstnm4",
-      "title": "Aviso",
-      "message": "se aran movimientos en el código que pueden producir pantallas de error",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-08-14T12:56:08.516Z"
-    },
-    {
-      "id": "2026-09-02T19:05:19.694Z-o5zyzaf",
-      "title": "V1.9.22.06",
-      "message": "La versión 22.06 del data pro mejoró la visualización móvil, ya se puede usar de forma más fluido en dispositivos móviles",
-      "type": "success",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-09-02T19:05:19.694Z"
-    },
-    {
-      "id": "2026-08-28T19:57:39.064Z-ienyox2",
-      "title": "PDP S36",
-      "message": "Ya se encuentra disponible el PDP S36",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-08-28T19:57:39.064Z"
-    },
-    {
-      "id": "2026-08-28T19:56:46.530Z-jqxq8hx",
-      "title": "Modificación de PDP S35",
-      "message": "ya se encuentra disponible el PDP S35 para trabajos de fin de semana",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-08-28T19:56:46.530Z"
-    },
-    {
-      "id": "2026-08-26T14:52:39.343Z-kfqzik5",
-      "title": "Modificación PDP S35",
-      "message": "Se realizo modificación en la planificación de la linea 2",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-08-26T14:52:39.343Z"
-    },
-    {
-      "id": "2026-08-23T18:40:35.194Z-ctrw4ht",
-      "title": "Modificación PDP S35",
-      "message": "Ya se encuentra disponible la ultima modificación del PDP S35",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-08-23T18:40:35.194Z"
-    },
-    {
-      "id": "2026-08-20T19:11:55.621Z-onc9i5i",
-      "title": "PDP S35",
-      "message": "Ya se encuentra disponible el PDP S35",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-08-20T19:11:55.621Z"
-    },
-    {
-      "id": "2026-08-20T19:10:41.881Z-7iliq0b",
-      "title": "Modificación PDP S34",
-      "message": "Se realiza modificación en el PDP S34 para los trabajos de fin de semana",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-08-20T19:10:41.881Z"
-    },
-    {
-      "id": "2026-08-18T21:31:30.139Z-wr6cnba",
-      "title": "Modificación de PDP S34",
-      "message": "se realiza modificación el linea 1y4",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-08-18T21:31:30.139Z"
-    },
-    {
-      "id": "2026-08-17T17:46:08.080Z-4c0uzej",
-      "title": "Modificación PDP S34",
-      "message": "Se Realizo modificación en el PDP S34 para líneas 1y2",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-08-17T17:46:08.080Z"
-    },
-    {
-      "id": "2026-08-14T12:56:08.516Z-1ibnsvn",
-      "title": "Aviso",
-      "message": "se aran movimientos en el código que pueden producir pantallas de error",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-08-14T12:56:08.516Z"
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-09-02T19:05:19.694Z-joyz056",
@@ -309,26 +111,246 @@
       "createdAt": "2026-08-18T21:31:30.139Z"
     },
     {
-      "id": "2026-08-17T17:46:08.080Z-ytfh8rl",
-      "title": "Modificación PDP S34",
-      "message": "Se Realizo modificación en el PDP S34 para líneas 1y2",
-      "type": "info",
+      "id": "2026-09-04T17:25:40.524Z-5lf7x97",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
-      "read": true,
-      "createdAt": "2026-08-17T17:46:08.080Z"
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:40.524Z"
     },
     {
-      "id": "2026-08-13T20:27:42.178Z-htz8d4d",
-      "title": "PDP S34",
-      "message": "Ya se encuentra disponible el PDP de la semana 34",
-      "type": "info",
+      "id": "2026-09-04T17:25:10.363Z-av2ahne",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
+      "recipient": "maria.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:10.363Z"
+    },
+    {
+      "id": "2026-09-02T19:05:19.694Z-95ih2qb",
+      "title": "V1.9.22.06",
+      "message": "La versión 22.06 del data pro mejoró la visualización móvil, ya se puede usar de forma más fluido en dispositivos móviles",
+      "type": "success",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
       "read": true,
-      "createdAt": "2026-08-13T20:27:42.178Z"
+      "createdAt": "2026-09-02T19:05:19.694Z"
+    },
+    {
+      "id": "2026-08-28T19:57:39.064Z-ml68nzv",
+      "title": "PDP S36",
+      "message": "Ya se encuentra disponible el PDP S36",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-08-28T19:57:39.064Z"
+    },
+    {
+      "id": "2026-08-28T19:56:46.530Z-9jr0kkf",
+      "title": "Modificación de PDP S35",
+      "message": "ya se encuentra disponible el PDP S35 para trabajos de fin de semana",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-08-28T19:56:46.530Z"
+    },
+    {
+      "id": "2026-08-26T14:52:39.343Z-ijtw9v1",
+      "title": "Modificación PDP S35",
+      "message": "Se realizo modificación en la planificación de la linea 2",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-08-26T14:52:39.343Z"
+    },
+    {
+      "id": "2026-08-23T18:40:35.194Z-fuyyriy",
+      "title": "Modificación PDP S35",
+      "message": "Ya se encuentra disponible la ultima modificación del PDP S35",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-08-23T18:40:35.194Z"
+    },
+    {
+      "id": "2026-08-20T19:11:55.621Z-tzhzpbf",
+      "title": "PDP S35",
+      "message": "Ya se encuentra disponible el PDP S35",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-08-20T19:11:55.621Z"
+    },
+    {
+      "id": "2026-08-20T19:10:41.881Z-ugpz1hd",
+      "title": "Modificación PDP S34",
+      "message": "Se realiza modificación en el PDP S34 para los trabajos de fin de semana",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-08-20T19:10:41.881Z"
+    },
+    {
+      "id": "2026-08-18T21:31:30.139Z-mbk86tu",
+      "title": "Modificación de PDP S34",
+      "message": "se realiza modificación el linea 1y4",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-08-18T21:31:30.139Z"
+    },
+    {
+      "id": "2026-09-04T17:25:40.524Z-m4mgxp1",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:40.524Z"
+    },
+    {
+      "id": "2026-09-04T17:25:10.363Z-d0ayu38",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:10.363Z"
+    },
+    {
+      "id": "2026-09-02T19:05:19.694Z-o5zyzaf",
+      "title": "V1.9.22.06",
+      "message": "La versión 22.06 del data pro mejoró la visualización móvil, ya se puede usar de forma más fluido en dispositivos móviles",
+      "type": "success",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-09-02T19:05:19.694Z"
+    },
+    {
+      "id": "2026-08-28T19:57:39.064Z-ienyox2",
+      "title": "PDP S36",
+      "message": "Ya se encuentra disponible el PDP S36",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-08-28T19:57:39.064Z"
+    },
+    {
+      "id": "2026-08-28T19:56:46.530Z-jqxq8hx",
+      "title": "Modificación de PDP S35",
+      "message": "ya se encuentra disponible el PDP S35 para trabajos de fin de semana",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-08-28T19:56:46.530Z"
+    },
+    {
+      "id": "2026-08-26T14:52:39.343Z-kfqzik5",
+      "title": "Modificación PDP S35",
+      "message": "Se realizo modificación en la planificación de la linea 2",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-08-26T14:52:39.343Z"
+    },
+    {
+      "id": "2026-08-23T18:40:35.194Z-ctrw4ht",
+      "title": "Modificación PDP S35",
+      "message": "Ya se encuentra disponible la ultima modificación del PDP S35",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-08-23T18:40:35.194Z"
+    },
+    {
+      "id": "2026-08-20T19:11:55.621Z-onc9i5i",
+      "title": "PDP S35",
+      "message": "Ya se encuentra disponible el PDP S35",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-08-20T19:11:55.621Z"
+    },
+    {
+      "id": "2026-08-20T19:10:41.881Z-7iliq0b",
+      "title": "Modificación PDP S34",
+      "message": "Se realiza modificación en el PDP S34 para los trabajos de fin de semana",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-08-20T19:10:41.881Z"
+    },
+    {
+      "id": "2026-08-18T21:31:30.139Z-wr6cnba",
+      "title": "Modificación de PDP S34",
+      "message": "se realiza modificación el linea 1y4",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "alex.mds",
+      "read": true,
+      "createdAt": "2026-08-18T21:31:30.139Z"
+    },
+    {
+      "id": "2026-09-04T17:25:40.524Z-s80sa9i",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:40.524Z"
+    },
+    {
+      "id": "2026-09-04T17:25:10.363Z-8eiq19v",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-08-28T19:57:39.064Z-4kft60n",
@@ -419,26 +441,26 @@
       "createdAt": "2026-08-17T17:46:08.080Z"
     },
     {
-      "id": "2026-08-13T20:27:42.178Z-p4pg1n7",
-      "title": "PDP S34",
-      "message": "Ya se encuentra disponible el PDP de la semana 34",
-      "type": "info",
+      "id": "2026-09-04T17:25:40.524Z-13k0n0y",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
+      "recipient": "prodtj.mds",
       "read": false,
-      "createdAt": "2026-08-13T20:27:42.178Z"
+      "createdAt": "2026-09-04T17:25:40.524Z"
     },
     {
-      "id": "2026-08-13T20:17:54.414Z-ji9ugm4",
-      "title": "PDP semana 33",
-      "message": "Ya se encuentra disponible la modificación del PDP S33 para trabajos de fin de semana",
-      "type": "info",
+      "id": "2026-09-04T17:25:10.363Z-1til1u7",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
+      "recipient": "prodtj.mds",
       "read": false,
-      "createdAt": "2026-08-13T20:17:54.414Z"
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-08-28T19:57:39.064Z-d06pcyv",
@@ -529,26 +551,48 @@
       "createdAt": "2026-08-17T17:46:08.080Z"
     },
     {
-      "id": "2026-08-13T20:27:42.178Z-qwtpjyg",
-      "title": "PDP S34",
-      "message": "Ya se encuentra disponible el PDP de la semana 34",
-      "type": "info",
+      "id": "2026-09-04T17:25:40.524Z-027edvt",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-08-13T20:27:42.178Z"
+      "recipient": "prodtg.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:40.524Z"
     },
     {
-      "id": "2026-08-13T20:17:54.414Z-k5tp7f4",
-      "title": "PDP semana 33",
-      "message": "Ya se encuentra disponible la modificación del PDP S33 para trabajos de fin de semana",
-      "type": "info",
+      "id": "2026-09-04T17:25:10.363Z-h2uot3r",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-08-13T20:17:54.414Z"
+      "recipient": "prodtg.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:10.363Z"
+    },
+    {
+      "id": "2026-09-04T17:25:40.524Z-a34i8nk",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodts.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:40.524Z"
+    },
+    {
+      "id": "2026-09-04T17:25:10.363Z-py4seq0",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodts.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-08-28T19:57:39.064Z-qcgnjtf",
@@ -639,26 +683,26 @@
       "createdAt": "2026-08-17T17:46:08.080Z"
     },
     {
-      "id": "2026-08-13T20:27:42.178Z-jf4wuqk",
-      "title": "PDP S34",
-      "message": "Ya se encuentra disponible el PDP de la semana 34",
-      "type": "info",
+      "id": "2026-09-04T17:25:40.524Z-wjtmm1s",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodts.mds",
+      "recipient": "procj.mds",
       "read": false,
-      "createdAt": "2026-08-13T20:27:42.178Z"
+      "createdAt": "2026-09-04T17:25:40.524Z"
     },
     {
-      "id": "2026-08-13T20:17:54.414Z-emx2p4l",
-      "title": "PDP semana 33",
-      "message": "Ya se encuentra disponible la modificación del PDP S33 para trabajos de fin de semana",
-      "type": "info",
+      "id": "2026-09-04T17:25:10.363Z-abkx228",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodts.mds",
+      "recipient": "procj.mds",
       "read": false,
-      "createdAt": "2026-08-13T20:17:54.414Z"
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-08-28T19:57:39.064Z-jvia5t1",
@@ -749,26 +793,26 @@
       "createdAt": "2026-08-17T17:46:08.080Z"
     },
     {
-      "id": "2026-08-13T20:27:42.178Z-yt1o5yr",
-      "title": "PDP S34",
-      "message": "Ya se encuentra disponible el PDP de la semana 34",
-      "type": "info",
+      "id": "2026-09-04T17:25:40.524Z-x3x0bg1",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
+      "recipient": "cald.mds",
       "read": false,
-      "createdAt": "2026-08-13T20:27:42.178Z"
+      "createdAt": "2026-09-04T17:25:40.524Z"
     },
     {
-      "id": "2026-08-13T20:17:54.414Z-ihxw3r2",
-      "title": "PDP semana 33",
-      "message": "Ya se encuentra disponible la modificación del PDP S33 para trabajos de fin de semana",
-      "type": "info",
+      "id": "2026-09-04T17:25:10.363Z-17m0xyv",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
+      "recipient": "cald.mds",
       "read": false,
-      "createdAt": "2026-08-13T20:17:54.414Z"
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-08-28T19:57:39.064Z-zzinuqi",
@@ -859,26 +903,26 @@
       "createdAt": "2026-08-17T17:46:08.080Z"
     },
     {
-      "id": "2026-08-13T20:27:42.178Z-5y0i3k7",
-      "title": "PDP S34",
-      "message": "Ya se encuentra disponible el PDP de la semana 34",
-      "type": "info",
+      "id": "2026-09-04T17:25:40.524Z-h3gd4al",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
+      "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-08-13T20:27:42.178Z"
+      "createdAt": "2026-09-04T17:25:40.524Z"
     },
     {
-      "id": "2026-08-13T20:17:54.414Z-zyqm68e",
-      "title": "PDP semana 33",
-      "message": "Ya se encuentra disponible la modificación del PDP S33 para trabajos de fin de semana",
-      "type": "info",
+      "id": "2026-09-04T17:25:10.363Z-tzt7i95",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
+      "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-08-13T20:17:54.414Z"
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-08-28T19:57:39.064Z-hcxu3lm",
@@ -969,26 +1013,26 @@
       "createdAt": "2026-08-17T17:46:08.080Z"
     },
     {
-      "id": "2026-08-15T14:15:44.235Z-oiuur8q",
-      "title": "AVISO",
-      "message": "Voy a mover cosas en el codigo",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
-      "read": true,
-      "createdAt": "2026-08-15T14:15:44.235Z"
-    },
-    {
-      "id": "2026-08-14T19:50:23.751Z-usztel8",
-      "title": "Avisa",
-      "message": "voy hacer movimientos en el codigo",
+      "id": "2026-09-04T17:25:40.524Z-lkm6lzt",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
-      "read": true,
-      "createdAt": "2026-08-14T19:50:23.751Z"
+      "recipient": "prodt1.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:40.524Z"
+    },
+    {
+      "id": "2026-09-04T17:25:10.363Z-joylz0y",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt1.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-08-28T19:57:39.064Z-bhcts4g",
@@ -1079,26 +1123,26 @@
       "createdAt": "2026-08-17T17:46:08.080Z"
     },
     {
-      "id": "2026-08-15T14:15:44.235Z-gyu5kks",
-      "title": "AVISO",
-      "message": "Voy a mover cosas en el codigo",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "prodt1.mds",
-      "read": true,
-      "createdAt": "2026-08-15T14:15:44.235Z"
-    },
-    {
-      "id": "2026-08-14T19:50:23.751Z-kv39gtm",
-      "title": "Avisa",
-      "message": "voy hacer movimientos en el codigo",
+      "id": "2026-09-04T17:25:40.524Z-12sx3mh",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt1.mds",
-      "read": true,
-      "createdAt": "2026-08-14T19:50:23.751Z"
+      "recipient": "prodt2.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:40.524Z"
+    },
+    {
+      "id": "2026-09-04T17:25:10.363Z-6skjs0i",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "prodt2.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-08-28T19:57:39.064Z-brbthhj",
@@ -1189,26 +1233,26 @@
       "createdAt": "2026-08-17T17:46:08.080Z"
     },
     {
-      "id": "2026-08-15T14:15:44.235Z-ls92jwn",
-      "title": "AVISO",
-      "message": "Voy a mover cosas en el codigo",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "prodt2.mds",
-      "read": true,
-      "createdAt": "2026-08-15T14:15:44.235Z"
-    },
-    {
-      "id": "2026-08-14T19:50:23.751Z-rzs8tao",
-      "title": "Avisa",
-      "message": "voy hacer movimientos en el codigo",
+      "id": "2026-09-04T17:25:40.524Z-3mqmesy",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt2.mds",
-      "read": true,
-      "createdAt": "2026-08-14T19:50:23.751Z"
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:40.524Z"
+    },
+    {
+      "id": "2026-09-04T17:25:10.363Z-6jp5ubx",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-08-28T19:57:39.064Z-5lki2i1",
@@ -1299,26 +1343,114 @@
       "createdAt": "2026-08-17T17:46:08.080Z"
     },
     {
-      "id": "2026-08-13T20:27:42.178Z-d26am5g",
-      "title": "PDP S34",
-      "message": "Ya se encuentra disponible el PDP de la semana 34",
-      "type": "info",
+      "id": "2026-09-04T17:25:40.524Z-bliqreg",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
-      "read": true,
-      "createdAt": "2026-08-13T20:27:42.178Z"
+      "recipient": "proc1.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:40.524Z"
     },
     {
-      "id": "2026-08-13T20:17:54.414Z-5970ik8",
-      "title": "PDP semana 33",
-      "message": "Ya se encuentra disponible la modificación del PDP S33 para trabajos de fin de semana",
-      "type": "info",
+      "id": "2026-09-04T17:25:10.363Z-axocwvg",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
-      "read": true,
-      "createdAt": "2026-08-13T20:17:54.414Z"
+      "recipient": "proc1.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:10.363Z"
+    },
+    {
+      "id": "2026-09-04T17:25:40.524Z-psqudde",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "procs1.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:40.524Z"
+    },
+    {
+      "id": "2026-09-04T17:25:10.363Z-gv5pim3",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "procs1.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:10.363Z"
+    },
+    {
+      "id": "2026-09-04T17:25:40.524Z-aol8wig",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "procs2.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:40.524Z"
+    },
+    {
+      "id": "2026-09-04T17:25:10.363Z-my1z6qz",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "procs2.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:10.363Z"
+    },
+    {
+      "id": "2026-09-04T17:25:40.524Z-aio723f",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "finan.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:40.524Z"
+    },
+    {
+      "id": "2026-09-04T17:25:10.363Z-uuib9vh",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "finan.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:10.363Z"
+    },
+    {
+      "id": "2026-09-04T17:25:40.524Z-dp9sayw",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "g.tec.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:40.524Z"
+    },
+    {
+      "id": "2026-09-04T17:25:10.363Z-l8qf0q7",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "g.tec.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-08-28T19:57:39.064Z-zf75pfr",
@@ -1409,26 +1541,26 @@
       "createdAt": "2026-08-17T17:46:08.080Z"
     },
     {
-      "id": "2026-08-13T20:27:42.178Z-1rwvztb",
-      "title": "PDP S34",
-      "message": "Ya se encuentra disponible el PDP de la semana 34",
-      "type": "info",
+      "id": "2026-09-04T17:25:40.524Z-usb3u1k",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
-      "read": true,
-      "createdAt": "2026-08-13T20:27:42.178Z"
+      "recipient": "enf.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:40.524Z"
     },
     {
-      "id": "2026-08-13T20:17:54.414Z-479dlbc",
-      "title": "PDP semana 33",
-      "message": "Ya se encuentra disponible la modificación del PDP S33 para trabajos de fin de semana",
-      "type": "info",
+      "id": "2026-09-04T17:25:10.363Z-dynrl7x",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
-      "read": true,
-      "createdAt": "2026-08-13T20:17:54.414Z"
+      "recipient": "enf.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-08-28T19:57:39.064Z-pviuigg",
@@ -1519,26 +1651,26 @@
       "createdAt": "2026-08-17T17:46:08.080Z"
     },
     {
-      "id": "2026-08-13T20:27:42.178Z-eenpkw6",
-      "title": "PDP S34",
-      "message": "Ya se encuentra disponible el PDP de la semana 34",
-      "type": "info",
+      "id": "2026-09-04T17:25:40.524Z-tfo8myw",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
-      "read": true,
-      "createdAt": "2026-08-13T20:27:42.178Z"
+      "recipient": "etq.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:40.524Z"
     },
     {
-      "id": "2026-08-13T20:17:54.414Z-2mz8gsd",
-      "title": "PDP semana 33",
-      "message": "Ya se encuentra disponible la modificación del PDP S33 para trabajos de fin de semana",
-      "type": "info",
+      "id": "2026-09-04T17:25:10.363Z-cd4kze2",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
-      "read": true,
-      "createdAt": "2026-08-13T20:17:54.414Z"
+      "recipient": "etq.mds",
+      "read": false,
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-08-28T19:57:39.064Z-5cj43vd",
@@ -1629,26 +1761,26 @@
       "createdAt": "2026-08-17T17:46:08.080Z"
     },
     {
-      "id": "2026-08-13T20:27:42.178Z-5jt5j0p",
-      "title": "PDP S34",
-      "message": "Ya se encuentra disponible el PDP de la semana 34",
-      "type": "info",
+      "id": "2026-09-04T17:25:40.524Z-d06htk9",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-08-13T20:27:42.178Z"
+      "createdAt": "2026-09-04T17:25:40.524Z"
     },
     {
-      "id": "2026-08-13T20:17:54.414Z-bvf2fvr",
-      "title": "PDP semana 33",
-      "message": "Ya se encuentra disponible la modificación del PDP S33 para trabajos de fin de semana",
-      "type": "info",
+      "id": "2026-09-04T17:25:10.363Z-qvi3j9u",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-08-13T20:17:54.414Z"
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-08-28T19:57:39.064Z-nd5ysse",
@@ -1739,26 +1871,26 @@
       "createdAt": "2026-08-17T17:46:08.080Z"
     },
     {
-      "id": "2026-08-13T20:27:42.178Z-uscr8gc",
-      "title": "PDP S34",
-      "message": "Ya se encuentra disponible el PDP de la semana 34",
-      "type": "info",
+      "id": "2026-09-04T17:25:40.524Z-q1a6w6m",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "logg.mds",
+      "recipient": "mtto.mds",
       "read": false,
-      "createdAt": "2026-08-13T20:27:42.178Z"
+      "createdAt": "2026-09-04T17:25:40.524Z"
     },
     {
-      "id": "2026-08-13T20:17:54.414Z-f2469fj",
-      "title": "PDP semana 33",
-      "message": "Ya se encuentra disponible la modificación del PDP S33 para trabajos de fin de semana",
-      "type": "info",
+      "id": "2026-09-04T17:25:10.363Z-03nlq3n",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "logg.mds",
+      "recipient": "mtto.mds",
       "read": false,
-      "createdAt": "2026-08-13T20:17:54.414Z"
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-08-28T19:57:39.064Z-mbcehtz",
@@ -1849,26 +1981,26 @@
       "createdAt": "2026-08-17T17:46:08.080Z"
     },
     {
-      "id": "2026-08-13T20:27:42.178Z-ccv3lpr",
-      "title": "PDP S34",
-      "message": "Ya se encuentra disponible el PDP de la semana 34",
-      "type": "info",
+      "id": "2026-09-04T17:25:40.524Z-e5o8pef",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto.mds",
+      "recipient": "cal.mds",
       "read": false,
-      "createdAt": "2026-08-13T20:27:42.178Z"
+      "createdAt": "2026-09-04T17:25:40.524Z"
     },
     {
-      "id": "2026-08-13T20:17:54.414Z-flic1cz",
-      "title": "PDP semana 33",
-      "message": "Ya se encuentra disponible la modificación del PDP S33 para trabajos de fin de semana",
-      "type": "info",
+      "id": "2026-09-04T17:25:10.363Z-zyvfei7",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto.mds",
+      "recipient": "cal.mds",
       "read": false,
-      "createdAt": "2026-08-13T20:17:54.414Z"
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-08-28T19:57:39.064Z-7zc9tbp",
@@ -1959,26 +2091,26 @@
       "createdAt": "2026-08-17T17:46:08.080Z"
     },
     {
-      "id": "2026-08-13T20:27:42.178Z-tzrl6zr",
-      "title": "PDP S34",
-      "message": "Ya se encuentra disponible el PDP de la semana 34",
-      "type": "info",
+      "id": "2026-09-04T17:25:40.524Z-yly0gt6",
+      "title": "PDP S37",
+      "message": "Ya se encuentra disponible el PDP S37",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cal.mds",
+      "recipient": "MDS",
       "read": false,
-      "createdAt": "2026-08-13T20:27:42.178Z"
+      "createdAt": "2026-09-04T17:25:40.524Z"
     },
     {
-      "id": "2026-08-13T20:17:54.414Z-1gr6q4s",
-      "title": "PDP semana 33",
-      "message": "Ya se encuentra disponible la modificación del PDP S33 para trabajos de fin de semana",
-      "type": "info",
+      "id": "2026-09-04T17:25:10.363Z-kd85v5t",
+      "title": "PDP S36",
+      "message": "Modificación PDP S36 para trabajos de fin de semana",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cal.mds",
+      "recipient": "MDS",
       "read": false,
-      "createdAt": "2026-08-13T20:17:54.414Z"
+      "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
       "id": "2026-08-28T19:57:39.064Z-f07s7je",
@@ -2067,28 +2199,6 @@
       "recipient": "MDS",
       "read": false,
       "createdAt": "2026-08-17T17:46:08.080Z"
-    },
-    {
-      "id": "2026-08-13T20:27:42.178Z-xhi5057",
-      "title": "PDP S34",
-      "message": "Ya se encuentra disponible el PDP de la semana 34",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "MDS",
-      "read": false,
-      "createdAt": "2026-08-13T20:27:42.178Z"
-    },
-    {
-      "id": "2026-08-13T20:17:54.414Z-miomjxe",
-      "title": "PDP semana 33",
-      "message": "Ya se encuentra disponible la modificación del PDP S33 para trabajos de fin de semana",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "MDS",
-      "read": false,
-      "createdAt": "2026-08-13T20:17:54.414Z"
     }
   ]
 }
