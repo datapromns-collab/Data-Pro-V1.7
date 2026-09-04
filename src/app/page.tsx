@@ -1722,15 +1722,16 @@ export default function PlannerPage() {
   const weeksForYear = useMemo(() => {
     const weeks: { isoWeek: number; start: Date; end: Date }[] = [];
     const year = plantaWeekStartDate.getFullYear();
-    const d = new Date(year, 0, 1);
+    const jan4 = new Date(year, 0, 4);
+    let current = startOfWeek(jan4, { weekStartsOn: 1 });
     let week = 1;
-    while (d.getFullYear() === year) {
-      const start = new Date(d);
-      const end = new Date(d);
-      end.setDate(end.getDate() + 6);
-      weeks.push({ isoWeek: week, start: new Date(start), end: new Date(end) });
-      d.setDate(d.getDate() + 7);
+    while (current.getFullYear() <= year) {
+      const start = new Date(current);
+      const end = addDays(current, 6);
+      weeks.push({ isoWeek: week, start, end });
+      current = addDays(current, 7);
       week++;
+      if (start.getFullYear() > year) break;
     }
     return weeks;
   }, [plantaWeekStartDate]);
@@ -1738,15 +1739,16 @@ export default function PlannerPage() {
   const weeksForYearResumen = useMemo(() => {
     const weeks: { isoWeek: number; start: Date; end: Date }[] = [];
     const year = resumenSemanalWeekStartDate.getFullYear();
-    const d = new Date(year, 0, 1);
+    const jan4 = new Date(year, 0, 4);
+    let current = startOfWeek(jan4, { weekStartsOn: 1 });
     let week = 1;
-    while (d.getFullYear() === year) {
-      const start = new Date(d);
-      const end = new Date(d);
-      end.setDate(end.getDate() + 6);
-      weeks.push({ isoWeek: week, start: new Date(start), end: new Date(end) });
-      d.setDate(d.getDate() + 7);
+    while (current.getFullYear() <= year) {
+      const start = new Date(current);
+      const end = addDays(current, 6);
+      weeks.push({ isoWeek: week, start, end });
+      current = addDays(current, 7);
       week++;
+      if (start.getFullYear() > year) break;
     }
     return weeks;
   }, [resumenSemanalWeekStartDate]);
@@ -1754,15 +1756,16 @@ export default function PlannerPage() {
   const weeksForYearPtab = useMemo(() => {
     const weeks: { isoWeek: number; start: Date; end: Date }[] = [];
     const year = ptabWeekStartDate.getFullYear();
-    const d = new Date(year, 0, 1);
+    const jan4 = new Date(year, 0, 4);
+    let current = startOfWeek(jan4, { weekStartsOn: 1 });
     let week = 1;
-    while (d.getFullYear() === year) {
-      const start = new Date(d);
-      const end = new Date(d);
-      end.setDate(end.getDate() + 6);
-      weeks.push({ isoWeek: week, start: new Date(start), end: new Date(end) });
-      d.setDate(d.getDate() + 7);
+    while (current.getFullYear() <= year) {
+      const start = new Date(current);
+      const end = addDays(current, 6);
+      weeks.push({ isoWeek: week, start, end });
+      current = addDays(current, 7);
       week++;
+      if (start.getFullYear() > year) break;
     }
     return weeks;
   }, [ptabWeekStartDate]);
