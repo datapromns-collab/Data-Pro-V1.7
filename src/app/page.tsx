@@ -400,20 +400,25 @@ export default function PlannerPage() {
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isPlantaDialogOpen, setIsPlantaDialogOpen] = useState(false);
-  const [plantaWeekStartDate, setPlantaWeekStartDate] = useState(new Date());
-  const migracionPlantaHechaRef = useRef(false);
-  const informesOperacionalesRef = useRef<any[]>([]);
+  const [plantaWeekStartDate, setPlantaWeekStartDate] = useState(() => {
+    const d = new Date();
+    const jan4 = new Date(d.getFullYear(), 0, 4);
+    const start = startOfWeek(jan4, { weekStartsOn: 1 });
+    const diff = Math.floor((d.getTime() - start.getTime()) / (7 * 24 * 60 * 60 * 1000));
+    return addDays(start, diff * 7);
+  });
 
-  // Server-side week filter for informes operacionales
-  const plantaWeekStart = new Date(plantaWeekStartDate);
-  plantaWeekStart.setHours(0, 0, 0, 0);
-  const plantaWeekEnd = new Date(plantaWeekStart);
-  plantaWeekEnd.setDate(plantaWeekEnd.getDate() + 6);
-  plantaWeekEnd.setHours(23, 59, 59, 999);
-  const plantaWeekQuery = {
-    startDate: format(plantaWeekStart, 'yyyy-MM-dd'),
-    endDate: format(plantaWeekEnd, 'yyyy-MM-dd'),
-  };
+  const plantaWeekQuery = useMemo(() => {
+    const plantaWeekStart = new Date(plantaWeekStartDate);
+    plantaWeekStart.setHours(0, 0, 0, 0);
+    const plantaWeekEnd = new Date(plantaWeekStart);
+    plantaWeekEnd.setDate(plantaWeekEnd.getDate() + 6);
+    plantaWeekEnd.setHours(23, 59, 59, 999);
+    return {
+      startDate: format(plantaWeekStart, 'yyyy-MM-dd'),
+      endDate: format(plantaWeekEnd, 'yyyy-MM-dd'),
+    };
+  }, [plantaWeekStartDate]);
 
   const informesOperacionalesStore = useRemoteCollection<any[]>('planta-informes-operacionales', [], plantaWeekQuery);
   const ordenesTrabajoStore = useRemoteCollection<any[]>('planta-ordenes-trabajo', [], plantaWeekQuery);
@@ -424,6 +429,8 @@ export default function PlannerPage() {
   const setOrdenesTrabajo = ordenesTrabajoStore.setData;
   const informesLoading = informesOperacionalesStore.isLoading;
   const ordenesLoading = ordenesTrabajoStore.isLoading;
+  const migracionPlantaHechaRef = useRef(false);
+  const informesOperacionalesRef = useRef<any[]>([]);
   informesOperacionalesRef.current = informesOperacionales;
 
   useEffect(() => {
