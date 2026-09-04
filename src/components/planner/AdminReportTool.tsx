@@ -931,6 +931,27 @@ export function AdminReportTool({
                                 </tr>
                               ))}
                             </tbody>
+                            <tfoot className="bg-[#b8cce4] font-black text-slate-900 border-t-2 border-slate-900">
+                              <tr className="h-8">
+                                <td className="px-3 py-1 border border-slate-900 uppercase">TOTAL</td>
+                                <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                                  {dailyStats.length}
+                                </td>
+                                <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                                  {Math.round(dailyStats.reduce((a, b) => a + b.planned, 0)).toLocaleString('es-ES')}
+                                </td>
+                                <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                                  {Math.round(dailyStats.reduce((a, b) => a + b.real, 0)).toLocaleString('es-ES')}
+                                </td>
+                                <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                                  {(() => {
+                                    const totalPlanned = dailyStats.reduce((a, b) => a + b.planned, 0);
+                                    const totalReal = dailyStats.reduce((a, b) => a + b.real, 0);
+                                    return totalPlanned > 0 ? ((totalReal / totalPlanned) * 100).toFixed(2) + '%' : (totalReal > 0 ? '100.00%' : '0.00%');
+                                  })()}
+                                </td>
+                              </tr>
+                            </tfoot>
                           </table>
                         </div>
                       </div>

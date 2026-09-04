@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-24T00:00:00.000",
+      "weekStartDate": "2026-09-05T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -9656,7 +9656,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-04T18:01:40.284Z"
+    "updatedAt": "2026-09-04T18:43:18.531Z"
   },
   "ordenesSap": [
     {
@@ -16676,8 +16676,8 @@
         },
         {
           "fechaInicio": "2026-09-04",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17737",
+          "cajas1": 2560,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -16789,6 +16789,26 @@
           "fechaInicio": "2026-09-04",
           "ticket1": "17882",
           "cajas1": 5280,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1788545202524",
+      "linea": 5,
+      "sabor": "JUSTY DURAZNO",
+      "ordenNumero": "63422",
+      "semana": 36,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-04",
+          "ticket1": "17913",
+          "cajas1": 1400,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -28956,7 +28976,8 @@
         "2026-08-17|2026-08": 1131882.14,
         "2026-08-24|2026-08": 1353500.36,
         "2026-08-31|2026-08": 181833.05,
-        "2026-07-27|2026-07": 121494.94
+        "2026-07-27|2026-07": 121494.94,
+        "2026-08-31|2026-09": 702896.6
       }
     },
     "seguimiento-etiquetadora": {
@@ -97223,6 +97244,25 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788542761882,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-01",
+        "semana": 36,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "18:30",
+        "finParada": "18:50",
+        "totalMin": "20",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE LA FALLA ELECTRICA ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788546510257,
         "bloqueado": true
       }
     ],
