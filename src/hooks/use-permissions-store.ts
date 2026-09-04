@@ -177,6 +177,7 @@ const DEFAULT_READONLY_MODULES: UserPermissions = {
   'logg.mds': ['planning'],
   'mtto.mds': ['planning'],
   'cal.mds': ['planning'],
+  'prodtg.mds': ['planning'],
   'MDS': ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'logistica', 'ventas', 'purchasing', 'ordenes-sap', 'seguimiento'],
 };
 
