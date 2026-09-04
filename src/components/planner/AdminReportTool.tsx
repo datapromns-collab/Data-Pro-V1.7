@@ -906,8 +906,9 @@ export function AdminReportTool({
                                 <th className="px-3 py-1.5 border border-slate-900 text-left">FECHA</th>
                                 <th className="px-3 py-1.5 border border-slate-900 text-left">DIAS</th>
                                 <th className="px-3 py-1.5 border border-slate-900 text-right">PLANIFICADO</th>
-                                <th className="px-3 py-1.5 border border-slate-900 text-right">PRODUCCION</th>
-                                <th className="px-3 py-1.5 border border-slate-900 text-right">CUMPLIMIENTO</th>
+                                 <th className="px-3 py-1.5 border border-slate-900 text-right">PRODUCCION</th>
+                                 <th className="px-3 py-1.5 border border-slate-900 text-right">FALTANTE</th>
+                                 <th className="px-3 py-1.5 border border-slate-900 text-right">CUMPLIMIENTO</th>
                               </tr>
                             </thead>
                             <tbody className="bg-[#dce6f1]">
@@ -926,6 +927,12 @@ export function AdminReportTool({
                                     {stat.real > 0 ? Math.round(stat.real).toLocaleString('es-ES') : '0'}
                                   </td>
                                   <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                                    {(() => {
+                                      const missing = Math.round(stat.planned) - Math.round(stat.real);
+                                      return missing !== 0 ? missing.toLocaleString('es-ES') : '0';
+                                    })()}
+                                  </td>
+                                  <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
                                     {stat.compliance.toFixed(2)}%
                                   </td>
                                 </tr>
@@ -942,6 +949,14 @@ export function AdminReportTool({
                                 </td>
                                 <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
                                   {Math.round(dailyStats.reduce((a, b) => a + b.real, 0)).toLocaleString('es-ES')}
+                                </td>
+                                <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                                  {(() => {
+                                    const totalPlanned = Math.round(dailyStats.reduce((a, b) => a + b.planned, 0));
+                                    const totalReal = Math.round(dailyStats.reduce((a, b) => a + b.real, 0));
+                                    const missing = totalPlanned - totalReal;
+                                    return missing !== 0 ? missing.toLocaleString('es-ES') : '0';
+                                  })()}
                                 </td>
                                 <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
                                   {(() => {
