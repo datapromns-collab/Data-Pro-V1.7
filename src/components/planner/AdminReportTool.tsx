@@ -106,14 +106,6 @@ export function AdminReportTool({
     }
   };
 
-  useEffect(() => {
-    const initialDate = currentWeekKey ? parseISO(currentWeekKey) : new Date();
-    const newMonth = format(initialDate, 'yyyy-MM');
-    const newWeekStart = format(initialDate, 'yyyy-MM-dd');
-    setWeekSelectorMonthRaw(newMonth);
-    setSelectedWeekStartRaw(newWeekStart);
-  }, []);
-
   const selectedWeekKey = useMemo(() => {
     const d = parseISO(selectedWeekStart);
     const start = startOfWeek(d, { weekStartsOn: 1 });
