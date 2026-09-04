@@ -422,6 +422,8 @@ export default function PlannerPage() {
   const removeInformeOperacional = informesOperacionalesStore.removeItem;
   const ordenesTrabajo = ordenesTrabajoStore.data;
   const setOrdenesTrabajo = ordenesTrabajoStore.setData;
+  const informesLoading = informesOperacionalesStore.isLoading;
+  const ordenesLoading = ordenesTrabajoStore.isLoading;
   informesOperacionalesRef.current = informesOperacionales;
 
   useEffect(() => {

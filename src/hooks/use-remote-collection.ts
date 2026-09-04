@@ -68,6 +68,7 @@ function deepMergeQueuePayload(a: any, b: any): any {
 export function useRemoteCollection<T = any>(namespace: string, initial: T, queryParams?: Record<string, string>) {
   const [data, setData] = useState<T>(initial);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const cacheKey = `rc_${namespace}`;
   const deletedKey = `rc_del_${namespace}`;
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -78,6 +79,27 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
   const sendingRef = useRef(false);
   const queryParamsRef = useRef(queryParams);
   queryParamsRef.current = queryParams;
+  const queryParamsKey = JSON.stringify(queryParams || {});
+  const queryCacheKey = `rc_q_${namespace}_${queryParamsKey}`;
+
+  const getQueryCache = useCallback(<U = any>(key: string): U | null => {
+    try {
+      const raw = localStorage.getItem(key);
+      if (!raw) return null;
+      const parsed = JSON.parse(raw);
+      return (parsed && parsed.data) || parsed;
+    } catch {
+      return null;
+    }
+  }, []);
+
+  const setQueryCache = useCallback(<U = any>(key: string, value: U) => {
+    try {
+      localStorage.setItem(key, JSON.stringify({ data: value, timestamp: Date.now() }));
+    } catch {
+      // ignore
+    }
+  }, []);
 
   const applyDeleted = useCallback((items: any[]): any[] => {
     if (!Array.isArray(items) || deletedRef.current.size === 0) return items;
@@ -251,7 +273,8 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
     });
   }, [persistLocal, enqueue, flushQueue]);
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (skipQueryCache = false) => {
+    setIsLoading(true);
     const isFirst = firstLoadRef.current;
     try {
       const cachedDel = localStorage.getItem(deletedKey);
@@ -265,16 +288,30 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
       if (isFirst) {
         const cached = localStorage.getItem(cacheKey);
         if (cached) {
-          const parsed = JSON.parse(cached);
-          setData((prev) => {
-            if (Array.isArray(prev) && !Array.isArray(parsed)) return prev;
-            if (Array.isArray(parsed) && Array.isArray(prev)) return applyDeleted(parsed) as T;
-            return { ...prev, ...parsed };
-          });
+          try {
+            const parsed = JSON.parse(cached);
+            setData((prev) => {
+              if (Array.isArray(prev) && !Array.isArray(parsed)) return prev;
+              if (Array.isArray(parsed) && Array.isArray(prev)) return applyDeleted(parsed) as T;
+              return { ...prev, ...parsed };
+            });
+          } catch {
+            // ignore
+          }
         }
         queueRef.current = loadPendingQueue(namespace);
         if (queueRef.current.length > 0) {
           pendingRef.current = true;
+        }
+      }
+
+      if (!skipQueryCache) {
+        const cachedQuery = getQueryCache<T>(queryCacheKey);
+        if (cachedQuery) {
+          setData(cachedQuery);
+          setIsLoaded(true);
+          firstLoadRef.current = false;
+          return;
         }
       }
     } catch {
@@ -298,9 +335,6 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
             ? remoteRaw
             : remoteRaw;
          if (remote && typeof remote === 'object') {
-          // On first load, if the server is reachable, clear any stale pending queue.
-          // The server data is the source of truth; pending ops from a previous
-          // session can overwrite fresh server state (e.g. bloqueado:true -> false).
           if (isFirst && queueRef.current.length > 0) {
             queueRef.current = [];
             savePendingQueue(namespace, []);
@@ -326,23 +360,31 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
                      } else {
                        map.set(id, item);
                      }
-                   }
+                    }
                   });
-                  return Array.from(map.values()) as T;
+                  const result = Array.from(map.values()) as T;
+                  setQueryCache(queryCacheKey, result);
+                  return result;
                }
+               setQueryCache(queryCacheKey, merged);
                return merged;
-            }
-            if (Array.isArray(remote)) return applyDeleted(remote) as T;
-            const remoteObj = remote as Record<string, any>;
-            const merged = { ...(prev as Record<string, any>) };
-            for (const key of Object.keys(remoteObj)) {
-              const value = remoteObj[key];
-              if (Array.isArray(value) && value.length === 0) continue;
-              if (value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) continue;
-              merged[key] = deepMerge(merged[key], value);
-            }
-            console.log('[RC] GET merged', namespace, 'keys', Object.keys(merged).slice(0, 5));
-            return merged as T;
+             }
+             if (Array.isArray(remote)) {
+               const result = applyDeleted(remote) as T;
+               setQueryCache(queryCacheKey, result);
+               return result;
+             }
+             const remoteObj = remote as Record<string, any>;
+             const merged = { ...(prev as Record<string, any>) };
+             for (const key of Object.keys(remoteObj)) {
+               const value = remoteObj[key];
+               if (Array.isArray(value) && value.length === 0) continue;
+               if (value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) continue;
+               merged[key] = deepMerge(merged[key], value);
+             }
+             console.log('[RC] GET merged', namespace, 'keys', Object.keys(merged).slice(0, 5));
+             setQueryCache(queryCacheKey, merged as T);
+             return merged as T;
           });
         }
       } else {
@@ -356,7 +398,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
     if (queueRef.current.length > 0) {
       flushQueue();
     }
-  }, [namespace, cacheKey, deletedKey, applyDeleted, flushQueue]);
+  }, [namespace, cacheKey, deletedKey, applyDeleted, flushQueue, queryCacheKey, getQueryCache, setQueryCache]);
 
   useEffect(() => {
     load();
@@ -365,10 +407,10 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
   useEffect(() => {
     if (!isLoaded) return;
     const interval = setInterval(() => {
-      load();
+      load(true);
     }, POLL_INTERVAL);
     const onVisible = () => {
-      if (document.visibilityState === 'visible') load();
+      if (document.visibilityState === 'visible') load(true);
     };
     document.addEventListener('visibilitychange', onVisible);
     return () => {
@@ -377,13 +419,10 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
     };
   }, [isLoaded, load]);
 
-  // Re-fetch when queryParams change
-  const queryParamsKey = JSON.stringify(queryParams || {});
   useEffect(() => {
-    if (isLoaded) {
-      load();
-    }
-  }, [queryParamsKey]);
+    setIsLoaded(false);
+    load();
+  }, [queryParamsKey, load]);
 
-  return { data, setData: setDataSynced, patchData, removeItem, removeKey, isLoaded };
+  return { data, setData: setDataSynced, patchData, removeItem, removeKey, isLoaded, isLoading };
 }
