@@ -104859,6 +104859,33 @@
         "observaciones": "",
         "bloqueado": false,
         "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1788544202342,
+        "fechaOrden": "2026-09-02",
+        "orden": "9456",
+        "fechaEmision": "2026-09-02",
+        "semana": 36,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 5",
+        "maquina": "ENFARDADORA",
+        "aviso": "",
+        "fechaParada": "2026-09-02",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "08:54",
+        "finParada": "09:20",
+        "tMtto": "26",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "FALLA EN BANDA TRANSPORTADORA DE BOTELLAS",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Luis Sanchez"
       }
     ],
     "seguimiento-ordenes": {

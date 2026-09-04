@@ -416,7 +416,7 @@ export default function PlannerPage() {
   };
 
   const informesOperacionalesStore = useRemoteCollection<any[]>('planta-informes-operacionales', [], plantaWeekQuery);
-  const ordenesTrabajoStore = useRemoteCollection<any[]>('planta-ordenes-trabajo', []);
+  const ordenesTrabajoStore = useRemoteCollection<any[]>('planta-ordenes-trabajo', [], plantaWeekQuery);
   const informesOperacionales = informesOperacionalesStore.data;
   const setInformesOperacionales = informesOperacionalesStore.setData;
   const removeInformeOperacional = informesOperacionalesStore.removeItem;
