@@ -72,36 +72,37 @@ export function AdminReportTool({
   showSignatureButton = false,
   onPrintMonthlyWithSignature,
 }: AdminReportToolProps) {
-  const [weekSelectorMonth, setWeekSelectorMonth] = useState(format(new Date(), 'yyyy-MM'));
-  const [selectedWeekStart, setSelectedWeekStart] = useState(currentWeekKey || format(new Date(), 'yyyy-MM-dd'));
+  const [weekSelectorMonth, setWeekSelectorMonthRaw] = useState(() => {
+    const saved = typeof window !== 'undefined' ? localStorage.getItem('admin-report-week-month') : null;
+    if (saved) return saved;
+    const initial = currentWeekKey ? parseISO(currentWeekKey) : new Date();
+    return format(initial, 'yyyy-MM');
+  });
+  const [selectedWeekStart, setSelectedWeekStartRaw] = useState(currentWeekKey || format(new Date(), 'yyyy-MM-dd'));
+  const manualMonthChangeRef = useRef(false);
 
-  const [selectedMonth, setSelectedMonth] = useState(format(new Date(), 'MM'));
-  const [selectedYear, setSelectedYear] = useState(format(new Date(), 'yyyy'));
-  const [productionSubTab, setProductionTab] = useState('dia-a-dia');
-  const [complianceSubTab, setComplianceTab] = useState('weekly');
+  const setWeekSelectorMonth = (value: string) => {
+    manualMonthChangeRef.current = true;
+    setWeekSelectorMonthRaw(value);
+  };
 
-  const weeklyWeekStart = useMemo(() => parseISO(selectedWeekStart), [selectedWeekStart]);
-  const weekDays = useMemo(
-    () => getWeekDays(weeklyWeekStart),
-    [weeklyWeekStart]
-  );
+  const setSelectedWeekStart = (value: string) => {
+    setSelectedWeekStartRaw(value);
+  };
 
-  const selectedMonthDate = useMemo(() => {
-    const [y, m] = weekSelectorMonth.split('-').map(Number);
-    return new Date(y, m - 1, 15);
+  useEffect(() => {
+    if (weekSelectorMonth && typeof window !== 'undefined') {
+      localStorage.setItem('admin-report-week-month', weekSelectorMonth);
+    }
   }, [weekSelectorMonth]);
 
-  const visibleWeekDays = useMemo(() => {
-    const [y, m] = weekSelectorMonth.split('-').map(Number);
-    const monthStart = startOfMonth(new Date(y, m - 1));
-    const monthEnd = endOfMonth(monthStart);
-
-    return weekDays.filter(day => {
-      const d = new Date(day);
-      d.setHours(0, 0, 0, 0);
-      return d >= monthStart && d <= monthEnd;
-    });
-  }, [weekDays, weekSelectorMonth]);
+  useEffect(() => {
+    if (!manualMonthChangeRef.current) {
+      const initialDate = currentWeekKey ? parseISO(currentWeekKey) : new Date();
+      setSelectedWeekStartRaw(format(initialDate, 'yyyy-MM-dd'));
+    }
+    manualMonthChangeRef.current = false;
+  }, [currentWeekKey]);
 
   const selectedWeekKey = useMemo(() => {
     const d = parseISO(selectedWeekStart);
@@ -131,9 +132,15 @@ export function AdminReportTool({
 
   useEffect(() => {
     const initialDate = currentWeekKey ? parseISO(currentWeekKey) : new Date();
-    setWeekSelectorMonth(format(initialDate, 'yyyy-MM'));
     setSelectedWeekStart(format(initialDate, 'yyyy-MM-dd'));
   }, [currentWeekKey]);
+
+  const handleWeekChange = (weekStart: string) => {
+    setSelectedWeekStart(weekStart);
+    const weekStartDate = parseISO(weekStart);
+    const month = format(weekStartDate, 'yyyy-MM');
+    setWeekSelectorMonth(month);
+  };
 
   const allowedTabs = allowedProductionTabs && allowedProductionTabs.length > 0
     ? allowedProductionTabs
@@ -336,35 +343,35 @@ export function AdminReportTool({
                  )}
               </TabsList>
             </div>
-             <div className="flex items-center gap-2 mt-2">
-              {(productionSubTab === 'weekly' || productionSubTab === 'weekly-summary') && (
-                <>
-                  <Select value={weekSelectorMonth} onValueChange={setWeekSelectorMonth}>
-                    <SelectTrigger className="w-40 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 12 }).map((_, i) => (
-                        <SelectItem key={i} value={`${format(new Date(), 'yyyy')}-${(i + 1).toString().padStart(2, '0')}`} className="font-bold uppercase text-[9px]">
-                          {format(new Date(CURRENT_YEAR, i, 1), 'MMMM yyyy', { locale: es }).toUpperCase()}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select value={selectedWeekStart} onValueChange={setSelectedWeekStart}>
-                    <SelectTrigger className="w-44 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {weekOptions.map((opt) => (
-                        <SelectItem key={opt.value} value={opt.value} className="font-bold uppercase text-[9px]">
-                          {opt.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </>
-              )}
+              <div className="flex items-center gap-2 mt-2">
+               {(productionSubTab === 'weekly' || productionSubTab === 'weekly-summary') && (
+                 <>
+                   <Select value={weekSelectorMonth} onValueChange={setWeekSelectorMonth}>
+                     <SelectTrigger className="w-40 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
+                       <SelectValue />
+                     </SelectTrigger>
+                     <SelectContent>
+                       {Array.from({ length: 12 }).map((_, i) => (
+                         <SelectItem key={i} value={`${format(new Date(), 'yyyy')}-${(i + 1).toString().padStart(2, '0')}`} className="font-bold uppercase text-[9px]">
+                           {format(new Date(CURRENT_YEAR, i, 1), 'MMMM yyyy', { locale: es }).toUpperCase()}
+                         </SelectItem>
+                       ))}
+                     </SelectContent>
+                   </Select>
+                   <Select value={selectedWeekStart} onValueChange={handleWeekChange}>
+                     <SelectTrigger className="w-44 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
+                       <SelectValue />
+                     </SelectTrigger>
+                     <SelectContent>
+                       {weekOptions.map((opt) => (
+                         <SelectItem key={opt.value} value={opt.value} className="font-bold uppercase text-[9px]">
+                           {opt.label}
+                         </SelectItem>
+                       ))}
+                     </SelectContent>
+                   </Select>
+                 </>
+               )}
               {productionSubTab === 'monthly' && (
                 <>
                   <Select value={selectedMonth} onValueChange={setSelectedMonth}>
@@ -849,35 +856,35 @@ export function AdminReportTool({
             </div>
             </div>
 
-            <TabsContent value="weekly" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
-              <div className="flex items-center justify-between mb-6 no-print">
-                <div className="flex items-center gap-2">
-                  <Select value={weekSelectorMonth} onValueChange={setWeekSelectorMonth}>
-                    <SelectTrigger className="w-40 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {Array.from({ length: 12 }).map((_, i) => (
-                        <SelectItem key={i} value={`${format(new Date(), 'yyyy')}-${(i + 1).toString().padStart(2, '0')}`} className="font-bold uppercase text-[9px]">
-                          {format(new Date(CURRENT_YEAR, i, 1), 'MMMM yyyy', { locale: es }).toUpperCase()}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select value={selectedWeekStart} onValueChange={setSelectedWeekStart}>
-                    <SelectTrigger className="w-44 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {weekOptions.map((opt) => (
-                        <SelectItem key={opt.value} value={opt.value} className="font-bold uppercase text-[9px]">
-                          {opt.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
+             <TabsContent value="weekly" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+               <div className="flex items-center justify-between mb-6 no-print">
+                 <div className="flex items-center gap-2">
+                   <Select value={weekSelectorMonth} onValueChange={setWeekSelectorMonth}>
+                     <SelectTrigger className="w-40 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
+                       <SelectValue />
+                     </SelectTrigger>
+                     <SelectContent>
+                       {Array.from({ length: 12 }).map((_, i) => (
+                         <SelectItem key={i} value={`${format(new Date(), 'yyyy')}-${(i + 1).toString().padStart(2, '0')}`} className="font-bold uppercase text-[9px]">
+                           {format(new Date(CURRENT_YEAR, i, 1), 'MMMM yyyy', { locale: es }).toUpperCase()}
+                         </SelectItem>
+                       ))}
+                     </SelectContent>
+                   </Select>
+                   <Select value={selectedWeekStart} onValueChange={handleWeekChange}>
+                     <SelectTrigger className="w-44 bg-white border-slate-200 font-bold uppercase text-[10px] tracking-widest rounded-xl h-10">
+                       <SelectValue />
+                     </SelectTrigger>
+                     <SelectContent>
+                       {weekOptions.map((opt) => (
+                         <SelectItem key={opt.value} value={opt.value} className="font-bold uppercase text-[9px]">
+                           {opt.label}
+                         </SelectItem>
+                       ))}
+                     </SelectContent>
+                   </Select>
+                 </div>
+               </div>
 
               {selectedTasks.length === 0 ? (
                   <Card className="p-6 bg-white border-slate-200 shadow-sm rounded-2xl">
