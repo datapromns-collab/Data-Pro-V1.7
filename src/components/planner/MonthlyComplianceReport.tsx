@@ -175,8 +175,9 @@ export function MonthlyComplianceReport({ weeklyData, selectedMonth, selectedYea
                 <tr className="bg-[#4a7ebb] text-white font-black uppercase h-10">
                   <th className="px-6 py-0 border border-slate-900 text-left">LINEAS</th>
                   <th className="px-6 py-0 border border-slate-900 text-right">PLANIFICADO (CJS)</th>
-                  <th className="px-6 py-0 border border-slate-900 text-right">PRODUCCIÓN (CJS)</th>
-                  <th className="px-6 py-0 border border-slate-900 text-right">CUMPLIMIENTO (%)</th>
+                   <th className="px-6 py-0 border border-slate-900 text-right">PRODUCCIÓN (CJS)</th>
+                   <th className="px-6 py-0 border border-slate-900 text-right">FALTANTE (CJS)</th>
+                   <th className="px-6 py-0 border border-slate-900 text-right">CUMPLIMIENTO (%)</th>
                 </tr>
               </thead>
               <tbody className="bg-[#dce6f1]">
@@ -184,8 +185,14 @@ export function MonthlyComplianceReport({ weeklyData, selectedMonth, selectedYea
                   <tr key={idx} className="font-bold text-slate-900 h-10 border-b border-slate-900/10 last:border-b-0">
                     <td className="px-6 py-0 border-r border-slate-900 font-black uppercase">{data.lineLabel}</td>
                     <td className="px-6 py-0 border-r border-slate-900 text-right tabular-nums">{data.planned.toLocaleString('es-ES')}</td>
-                    <td className="px-6 py-0 border-r border-slate-900 text-right tabular-nums">{data.real.toLocaleString('es-ES')}</td>
-                    <td className={`px-6 py-0 text-right tabular-nums font-black ${data.compliance >= 90 ? 'text-emerald-700' : 'text-primary'}`}>
+                     <td className="px-6 py-0 border-r border-slate-900 text-right tabular-nums">{data.real.toLocaleString('es-ES')}</td>
+                     <td className="px-6 py-0 border-r border-slate-900 text-right tabular-nums">
+                       {(() => {
+                         const missing = data.planned - data.real;
+                         return missing !== 0 ? missing.toLocaleString('es-ES') : '0';
+                       })()}
+                     </td>
+                     <td className={`px-6 py-0 text-right tabular-nums font-black ${data.compliance >= 90 ? 'text-emerald-700' : 'text-primary'}`}>
                       {data.compliance.toFixed(2).replace('.', ',')}%
                     </td>
                   </tr>
@@ -197,10 +204,18 @@ export function MonthlyComplianceReport({ weeklyData, selectedMonth, selectedYea
                   <td className="px-6 py-0 border-r border-slate-900 text-right tabular-nums text-[12pt]">
                     {monthlyData.reduce((a, b) => a + b.planned, 0).toLocaleString('es-ES')}
                   </td>
-                  <td className="px-6 py-0 border-r border-slate-900 text-right tabular-nums text-[12pt]">
-                    {monthlyData.reduce((a, b) => a + b.real, 0).toLocaleString('es-ES')}
-                  </td>
-                  <td className="px-6 py-0 text-right tabular-nums text-primary text-[14pt]">
+                   <td className="px-6 py-0 border-r border-slate-900 text-right tabular-nums text-[12pt]">
+                     {monthlyData.reduce((a, b) => a + b.real, 0).toLocaleString('es-ES')}
+                   </td>
+                   <td className="px-6 py-0 border-r border-slate-900 text-right tabular-nums text-[12pt]">
+                     {(() => {
+                       const totalPlanned = monthlyData.reduce((a, b) => a + b.planned, 0);
+                       const totalReal = monthlyData.reduce((a, b) => a + b.real, 0);
+                       const missing = totalPlanned - totalReal;
+                       return missing !== 0 ? missing.toLocaleString('es-ES') : '0';
+                     })()}
+                   </td>
+                   <td className="px-6 py-0 text-right tabular-nums text-primary text-[14pt]">
                     {(monthlyData.reduce((a, b) => a + b.real, 0) / (monthlyData.reduce((a, b) => a + b.planned, 0) || 1) * 100).toFixed(2).replace('.', ',')}%
                   </td>
                 </tr>

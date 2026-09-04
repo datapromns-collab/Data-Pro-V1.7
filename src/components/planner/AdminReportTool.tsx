@@ -989,8 +989,9 @@ export function AdminReportTool({
                         <tr className="bg-[#4a7ebb] text-white font-black uppercase text-center">
                           <th className="px-3 py-2 border border-slate-900 text-left">LINEAS</th>
                           <th className="px-3 py-2 border border-slate-900 text-right">PLANIFICADO</th>
-                          <th className="px-3 py-2 border border-slate-900 text-right">PRODUCCION</th>
-                          <th className="px-3 py-2 border border-slate-900 text-right">CUMPLIMIENTO</th>
+                           <th className="px-3 py-2 border border-slate-900 text-right">PRODUCCION</th>
+                           <th className="px-3 py-2 border border-slate-900 text-right">FALTANTE</th>
+                           <th className="px-3 py-2 border border-slate-900 text-right">CUMPLIMIENTO</th>
                         </tr>
                       </thead>
                       <tbody className="bg-[#dce6f1]">
@@ -1002,6 +1003,12 @@ export function AdminReportTool({
                             </td>
                             <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
                               {data.real.toLocaleString('es-ES')}
+                            </td>
+                            <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                              {(() => {
+                                const missing = data.planned - data.real;
+                                return missing !== 0 ? missing.toLocaleString('es-ES') : '0';
+                              })()}
                             </td>
                             <td className="px-3 py-1 border border-slate-900 text-right tabular-nums font-black text-slate-900">
                               {data.compliance.toFixed(2)}%
@@ -1017,6 +1024,14 @@ export function AdminReportTool({
                           </td>
                           <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
                             {monthlyComplianceData.reduce((a, b) => a + b.real, 0).toLocaleString('es-ES')}
+                          </td>
+                          <td className="px-3 py-1 border border-slate-900 text-right tabular-nums">
+                            {(() => {
+                              const totalPlanned = monthlyComplianceData.reduce((a, b) => a + b.planned, 0);
+                              const totalReal = monthlyComplianceData.reduce((a, b) => a + b.real, 0);
+                              const missing = totalPlanned - totalReal;
+                              return missing !== 0 ? missing.toLocaleString('es-ES') : '0';
+                            })()}
                           </td>
                           <td className="px-3 py-1 border border-slate-900 text-right tabular-nums text-slate-900 text-xs">
                             {(monthlyComplianceData.reduce((a, b) => a + b.real, 0) / (monthlyComplianceData.reduce((a, b) => a + b.planned, 0) || 1) * 100).toFixed(2)}%
