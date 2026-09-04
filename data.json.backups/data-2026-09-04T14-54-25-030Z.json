@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-25T00:00:00.000",
+      "weekStartDate": "2026-08-24T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -9237,7 +9237,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-04T13:51:09.803Z"
+    "updatedAt": "2026-09-04T14:53:42.401Z"
   },
   "ordenesSap": [
     {
@@ -16180,7 +16180,7 @@
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 2650
+          "cajas4": 2995
         }
       ]
     },
@@ -16212,6 +16212,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 17040
+        },
+        {
+          "fechaInicio": "2026-09-04",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -16243,6 +16254,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 8480
+        },
+        {
+          "fechaInicio": "2026-09-04",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -94939,7 +94961,7 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-09-01",
+        "fecha": "2026-09-02",
         "semana": 36,
         "turno": "NOCTURNO",
         "operador": "",
@@ -94955,10 +94977,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788464547002,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-09-01",
+        "fecha": "2026-09-02",
         "semana": 36,
         "turno": "NOCTURNO",
         "operador": "VICTOR GUTIERRE",
@@ -94974,7 +94996,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788464702705,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-01",
@@ -94996,7 +95018,7 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-09-01",
+        "fecha": "2026-09-02",
         "semana": 36,
         "turno": "NOCTURNO",
         "operador": "VICTOR GUTIERRE",
@@ -95012,10 +95034,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788464812146,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-09-01",
+        "fecha": "2026-09-02",
         "semana": 36,
         "turno": "NOCTURNO",
         "operador": "VICTOR GUTIERRE",
@@ -95031,7 +95053,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788464891241,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-01",
@@ -95053,7 +95075,7 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-09-01",
+        "fecha": "2026-09-02",
         "semana": 36,
         "turno": "NOCTURNO",
         "operador": "JOSE BUSTAMANTE ",
@@ -95069,7 +95091,7 @@
         "observaciones": "SE REALIZA PALETIZADO MANUAL DURANTE FALLA LO QUE GENERA PARADAS INTERMITENTES\n",
         "usuario": "Luis Sanchez",
         "id": 1788464983602,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-01",
@@ -95091,7 +95113,7 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-09-01",
+        "fecha": "2026-09-02",
         "semana": 36,
         "turno": "NOCTURNO",
         "operador": "JOSE BUSTAMANTE ",
@@ -95107,10 +95129,10 @@
         "observaciones": "\n",
         "usuario": "Luis Sanchez",
         "id": 1788465069754,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-09-01",
+        "fecha": "2026-09-02",
         "semana": 36,
         "turno": "NOCTURNO",
         "operador": "JOSE BUSTAMANTE ",
@@ -95126,10 +95148,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788465117594,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-09-01",
+        "fecha": "2026-09-02",
         "semana": 36,
         "turno": "NOCTURNO",
         "operador": "JOSE BUSTAMANTE ",
@@ -95145,10 +95167,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788465166073,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-09-01",
+        "fecha": "2026-09-02",
         "semana": 36,
         "turno": "NOCTURNO",
         "operador": "JOSE BUSTAMANTE",
@@ -95164,7 +95186,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788465213218,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-01",
@@ -95202,10 +95224,10 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788465257897,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
-        "fecha": "2026-09-01",
+        "fecha": "2026-09-02",
         "semana": 36,
         "turno": "NOCTURNO",
         "operador": "JOSE BUSTAMANTE ",
@@ -95221,7 +95243,7 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788465297986,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-01",
@@ -95772,6 +95794,234 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788473475791,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-01",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "11:05",
+        "finParada": "11:11",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE TRANSFERENCIA, LIMPIEZA DE TAMBOR DE CORTE Y TRANSFERENCIA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788531933064,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-01",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "11:16",
+        "finParada": "11:30",
+        "totalMin": "14",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE TRANSFERENCIA, LIMPIEZA DE TAMBOR DE CORTE Y TRANSFERENCIA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788531979342,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-01",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "11:30",
+        "finParada": "17:30",
+        "totalMin": "360",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E EXTERNA PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788532018382,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-01",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "17:30",
+        "finParada": "18:30",
+        "totalMin": "60",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE LA INTERRUPCION E/E",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788532104310,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-01",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "07:00",
+        "finParada": "10:06",
+        "totalMin": "186",
+        "zona": "Llenado",
+        "falla": "INVENTARIO FIN DE MES ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788532172318,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-01",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "11:30",
+        "finParada": "17:30",
+        "totalMin": "360",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E EXTERNA PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788532228206,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-01",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "17:30",
+        "finParada": "18:30",
+        "totalMin": "60",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE LA INTERRUPCION E/E",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788532281399,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-01",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "JUAN GIL ",
+        "linea": "Línea 6",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "10:58",
+        "finParada": "11:02",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "TRANCAMIENTO DE BOTELLAS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788532333990,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-01",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "07:00",
+        "finParada": "09:45",
+        "totalMin": "165",
+        "zona": "Llenado",
+        "falla": "INVENTARIO DE FIN DE MES",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788532368630,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-01",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "JOSE NAVARRO",
+        "linea": "Línea 7",
+        "equipo": "MIXER",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "09:45",
+        "finParada": "11:15",
+        "totalMin": "90",
+        "zona": "Llenado",
+        "falla": "FALLA EN MIXER BOMBA DE VACIO",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788532656366,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-01",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "11:30",
+        "finParada": "17:30",
+        "totalMin": "360",
+        "zona": "Llenado",
+        "falla": "INTERRUPCION DE E/E EXTERNA PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788532687517,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-01",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 7",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "17:30",
+        "finParada": "18:30",
+        "totalMin": "60",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE LA INTERRUPCION E/E",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788532721222,
         "bloqueado": true
       }
     ],
@@ -103266,6 +103516,33 @@
         "observaciones": "",
         "bloqueado": true,
         "usuario": "Luis Sanchez"
+      },
+      {
+        "id": 1788532868516,
+        "fechaOrden": "2026-09-02",
+        "orden": "9196",
+        "fechaEmision": "2026-09-02",
+        "semana": 36,
+        "turno": "NOCTURNO",
+        "solicitante": "",
+        "linea": "Línea 1",
+        "maquina": "MIXER",
+        "aviso": "",
+        "fechaParada": "2026-09-02",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "19:18",
+        "finParada": "21:30",
+        "tMtto": "132",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "FALLA DE PRESION EN TANQUE DE PRODUCTO TERMINADO",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "bloqueado": true
       }
     ],
     "seguimiento-ordenes": {
