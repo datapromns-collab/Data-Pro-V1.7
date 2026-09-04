@@ -10,6 +10,7 @@ import { ScheduledTask } from '@/lib/types';
 
 interface MonthlyComplianceReportProps {
   weeklyData: Record<string, { tasks: any[]; realProduction: Record<string, Record<string, Record<string, number>>> }>;
+  realProductionAuto: Record<string, Record<string, Record<string, number>>>;
   selectedMonth: string;
   selectedYear: string;
   title?: string;
@@ -18,7 +19,7 @@ interface MonthlyComplianceReportProps {
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
-export function MonthlyComplianceReport({ weeklyData, selectedMonth, selectedYear, title = 'Cumplimiento Mensual de Planta', subtitle }: MonthlyComplianceReportProps) {
+export function MonthlyComplianceReport({ weeklyData, realProductionAuto, selectedMonth, selectedYear, title = 'Cumplimiento Mensual de Planta', subtitle }: MonthlyComplianceReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
 
   const monthName = useMemo(() => {
@@ -77,19 +78,18 @@ export function MonthlyComplianceReport({ weeklyData, selectedMonth, selectedYea
     }, [] as any[]);
 
     const allRealProduction = daysInMonth.reduce((acc, day) => {
-      const weekKey = format(startOfWeek(day, { weekStartsOn: 1 }), 'yyyy-MM-dd');
-      const weekData = weeklyData[weekKey];
-      if (weekData && weekData.realProduction) {
-        Object.entries(weekData.realProduction).forEach(([lineId, flavors]) => {
-          if (!acc[lineId]) acc[lineId] = {};
-          Object.entries(flavors).forEach(([flavor, dates]) => {
-            if (!acc[lineId][flavor]) acc[lineId][flavor] = {};
-            Object.entries(dates).forEach(([dateKey, qty]) => {
+      const dateKey = format(day, 'yyyy-MM-dd');
+      Object.entries(realProductionAuto).forEach(([lineId, flavors]) => {
+        if (!acc[lineId]) acc[lineId] = {};
+        Object.entries(flavors).forEach(([flavor, dates]) => {
+          if (!acc[lineId][flavor]) acc[lineId][flavor] = {};
+          Object.entries(dates).forEach(([dKey, qty]) => {
+            if (dKey === dateKey) {
               acc[lineId][flavor][dateKey] = (acc[lineId][flavor][dateKey] || 0) + qty;
-            });
+            }
           });
         });
-      }
+      });
       return acc;
     }, {} as Record<string, Record<string, Record<string, number>>>);
 
@@ -114,7 +114,7 @@ export function MonthlyComplianceReport({ weeklyData, selectedMonth, selectedYea
         compliance: parseFloat(compliance.toFixed(2))
       };
     });
-  }, [weeklyData, selectedMonth, selectedYear]);
+  }, [weeklyData, realProductionAuto, selectedMonth, selectedYear]);
 
   const maxVal = useMemo(() => {
     const vals = monthlyData.flatMap(d => [d.planned, d.real]);

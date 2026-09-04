@@ -11,6 +11,7 @@ import { ScheduledTask } from '@/lib/types';
 interface ComplianceReportProps {
   tasks: ScheduledTask[];
   realProduction: Record<string, Record<string, Record<string, number>>>;
+  realProductionAuto: Record<string, Record<string, Record<string, number>>>;
   weekStartDate: Date;
   title?: string;
   subtitle?: string;
@@ -19,7 +20,7 @@ interface ComplianceReportProps {
 
 const LINES = ["1", "2", "3", "4", "5", "6", "7", "8"];
 
-export function ComplianceReport({ tasks, realProduction, weekStartDate, title = 'Reporte de Cumplimiento', subtitle = 'resumen cumplimiento semanal', weekLabel }: ComplianceReportProps) {
+export function ComplianceReport({ tasks, realProduction, realProductionAuto, weekStartDate, title = 'Reporte de Cumplimiento', subtitle = 'resumen cumplimiento semanal', weekLabel }: ComplianceReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
   const weekDays = useMemo(() => getWeekDays(weekStartDate), [weekStartDate]);
   const weekNumber = useMemo(() => getISOWeek(new Date(weekStartDate)), [weekStartDate]);
@@ -57,14 +58,14 @@ export function ComplianceReport({ tasks, realProduction, weekStartDate, title =
         const dateKey = format(day, 'yyyy-MM-dd');
         weeklyPlanned += getLineDailyPlanned(lineId, day);
         weeklyReal += PRODUCT_LIST.reduce((acc, flavor) => 
-          acc + (realProduction[lineId]?.[flavor]?.[dateKey] || 0), 0);
+          acc + (realProductionAuto[lineId]?.[flavor]?.[dateKey] || 0), 0);
       });
 
       const compliance = weeklyPlanned > 0 ? (weeklyReal / weeklyPlanned) * 100 : (weeklyReal > 0 ? 100 : 0);
 
       return { lineId, planned: weeklyPlanned, real: weeklyReal, compliance };
     });
-  }, [tasks, realProduction, weekDays]);
+  }, [tasks, realProductionAuto, weekDays]);
 
   const renderHeader = (subtitle: string, lineLabel?: string) => (
     <div className="mb-2 border-b-2 border-slate-900 pb-1 flex justify-between items-center shrink-0">
@@ -170,7 +171,7 @@ export function ComplianceReport({ tasks, realProduction, weekStartDate, title =
           const dateKey = format(day, 'yyyy-MM-dd');
           const planned = getLineDailyPlanned(lineId, day);
           const real = PRODUCT_LIST.reduce((acc, flavor) => 
-            acc + (realProduction[lineId]?.[flavor]?.[dateKey] || 0), 0);
+            acc + (realProductionAuto[lineId]?.[flavor]?.[dateKey] || 0), 0);
           const compliance = planned > 0 ? (real / planned) * 100 : (real > 0 ? 100 : 0);
           return { day, planned, real, compliance };
         });
