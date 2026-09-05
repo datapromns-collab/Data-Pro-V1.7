@@ -1272,6 +1272,18 @@ export default function PlannerPage() {
     localStorage.setItem('agua-consumo-por-dia', JSON.stringify(aguaConsumoPorDia));
     localStorage.setItem('agua-kg-por-dia', JSON.stringify(aguaKgPorDia));
   }, [aguaConsumoPorDia, aguaKgPorDia]);
+  useEffect(() => {
+    if (!insumosFecha) return;
+    const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
+    const cellKey = getPtabAguaCellKey(fechaStr, 'total');
+    const valorPtab = ptabAguaStore.data?.[cellKey];
+    if (valorPtab) {
+      setAguaConsumoPorDia((prev) => {
+        if (prev[fechaStr] && prev[fechaStr] !== '') return prev;
+        return { ...prev, [fechaStr]: valorPtab };
+      });
+    }
+  }, [insumosFecha, ptabAguaStore.data]);
   const [produccionSubTab, setProduccionSubTab] = useState('planificadas');
   const [planificadasSubTab, setPlanificadasSubTab] = useState('porturno');
   const [planificadasTurnoSubTab, setPlanificadasTurnoSubTab] = useState('diurno');
