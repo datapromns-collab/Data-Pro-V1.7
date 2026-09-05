@@ -1272,18 +1272,6 @@ export default function PlannerPage() {
     localStorage.setItem('agua-consumo-por-dia', JSON.stringify(aguaConsumoPorDia));
     localStorage.setItem('agua-kg-por-dia', JSON.stringify(aguaKgPorDia));
   }, [aguaConsumoPorDia, aguaKgPorDia]);
-  useEffect(() => {
-    if (!insumosFecha) return;
-    const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
-    const cellKey = getPtabAguaCellKey(fechaStr, 'total');
-    const valorPtab = ptabAguaStore.data?.[cellKey];
-    if (valorPtab) {
-      setAguaConsumoPorDia((prev) => {
-        if (prev[fechaStr] && prev[fechaStr] !== '') return prev;
-        return { ...prev, [fechaStr]: valorPtab };
-      });
-    }
-  }, [insumosFecha, ptabAguaStore.data]);
   const [produccionSubTab, setProduccionSubTab] = useState('planificadas');
   const [planificadasSubTab, setPlanificadasSubTab] = useState('porturno');
   const [planificadasTurnoSubTab, setPlanificadasTurnoSubTab] = useState('diurno');
@@ -1823,9 +1811,6 @@ export default function PlannerPage() {
 
   const handlePtabAguaChange = (dateStr: string, rowKey: string, value: string) => {
     ptabAguaStore.patchData({ [getPtabAguaCellKey(dateStr, rowKey)]: value });
-    if (rowKey === 'total') {
-      setAguaConsumoPorDia((prev) => ({ ...prev, [dateStr]: value }));
-    }
   };
 
   const globalSalesProjection = useMemo(() => {
@@ -4718,19 +4703,26 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        <div className="flex items-center px-3 py-1 bg-slate-800 text-white">
                                          <div className="font-black text-[11px] uppercase tracking-widest">CONSUMO DE AGUA</div>
                                        </div>
-                                       <div className="flex items-center px-3 py-1 bg-slate-800 justify-center">
-                                         <input
-                                           type="number"
-                                           value={insumosFecha ? (aguaConsumoPorDia[format(insumosFecha, 'yyyy-MM-dd')] || '') : ''}
-                                           onChange={(e) => {
-                                             if (!insumosFecha) return;
-                                             const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
-                                             setAguaConsumoPorDia(prev => ({ ...prev, [fechaStr]: e.target.value }));
-                                           }}
-                                           className="w-full h-7 text-[11px] font-bold text-center bg-white text-slate-900 border border-white/20 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
-                                           placeholder="0"
-                                         />
-                                       </div>
+                                        <div className="flex items-center px-3 py-1 bg-slate-800 justify-center">
+                                          <input
+                                            type="number"
+                                            value={(() => {
+                                              if (!insumosFecha) return '';
+                                              const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
+                                              const manual = aguaConsumoPorDia[fechaStr];
+                                              if (manual !== undefined) return manual;
+                                              const cellKey = getPtabAguaCellKey(fechaStr, 'total');
+                                              return ptabAguaStore.data?.[cellKey] ?? '';
+                                            })()}
+                                            onChange={(e) => {
+                                              if (!insumosFecha) return;
+                                              const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
+                                              setAguaConsumoPorDia(prev => ({ ...prev, [fechaStr]: e.target.value }));
+                                            }}
+                                            className="w-full h-7 text-[11px] font-bold text-center bg-white text-slate-900 border border-white/20 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
+                                            placeholder="0"
+                                          />
+                                        </div>
                                        <div className="flex items-center justify-end px-3 py-1 bg-slate-800 text-white">
                                          <div className="font-black text-[11px] uppercase tracking-widest">KG</div>
                                        </div>
