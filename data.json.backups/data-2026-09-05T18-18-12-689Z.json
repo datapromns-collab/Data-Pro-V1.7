@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-05T00:00:00.000",
+      "weekStartDate": "2026-09-07T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -9656,7 +9656,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-05T14:14:55.604Z"
+    "updatedAt": "2026-09-05T18:16:57.215Z"
   },
   "ordenesSap": [
     {
@@ -16758,8 +16758,8 @@
         },
         {
           "fechaInicio": "2026-09-05",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17836",
+          "cajas1": 8960,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -16789,8 +16789,8 @@
         },
         {
           "fechaInicio": "2026-09-05",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17647",
+          "cajas1": 9040,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -16817,6 +16817,17 @@
           "cajas3": 3120,
           "ticket4": "",
           "cajas4": 24960
+        },
+        {
+          "fechaInicio": "2026-09-05",
+          "ticket1": "17884",
+          "cajas1": 12000,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -16857,6 +16868,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 23200
+        },
+        {
+          "fechaInicio": "2026-09-05",
+          "ticket1": "17699",
+          "cajas1": 9600,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -16897,6 +16919,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 7566
+        },
+        {
+          "fechaInicio": "2026-09-05",
+          "ticket1": "1778",
+          "cajas1": 7082,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -105302,8 +105335,9 @@
         "auto-2-1788385635908": {
           "cajasPlanificadas": 88750,
           "jarabeReal": 43072,
-          "producto": "43.68",
-          "ubb": 341
+          "producto": "341",
+          "ubb": 43.68,
+          "pnc": 187
         }
       },
       "linea-3": {
@@ -105672,7 +105706,8 @@
         "auto-6-1788609873732": {
           "cajasPlanificadas": 13801,
           "jarabeReal": 13898,
-          "producto": ""
+          "producto": "",
+          "pnc": 80
         }
       },
       "linea-7": {
@@ -105800,7 +105835,8 @@
         },
         "auto-7-1788524953322": {
           "cajasPlanificadas": 7263,
-          "jarabeReal": 17450
+          "jarabeReal": 17450,
+          "ubb": 10
         }
       }
     },
@@ -111504,7 +111540,18 @@
       "2026-09-04-procesos": "3082293,510395",
       "2026-09-04-filtrada": "4613571,119295",
       "2026-09-04-total": "3185346,66666667",
-      "2026-09-05-servicio": ""
+      "2026-09-05-servicio": "",
+      "2026-09-05-total": "",
+      "2026-09-06-total": ""
+    },
+    "insumos-agua": {
+      "2026-09-04": "3185346,66666667",
+      "2026-09-05": "",
+      "2026-09-06": "",
+      "2026-08-31": "3070160",
+      "2026-09-01": "2960460",
+      "2026-09-02": "2619866,67",
+      "2026-09-03": "2793864"
     }
   },
   "cacheVersion": 0,
@@ -111594,7 +111641,8 @@
     "planta-hrs-pagadas-dt": {},
     "jarabes": {},
     "planta-hrs-programadas": {},
-    "ptab-agua": {}
+    "ptab-agua": {},
+    "insumos-agua": {}
   },
   "_deletedOrdenesSapIds": [
     "1-1785349102112",

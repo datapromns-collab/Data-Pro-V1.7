@@ -656,6 +656,7 @@ export default function PlannerPage() {
   const [rMensualSubTab, setRMensualSubTab] = useState<'m-agua' | 'm-insumos'>('m-agua');
   const ptabWeeksContainerRef = useRef<HTMLDivElement>(null);
   const ptabAguaStore = useRemoteCollection<Record<string, string>>('ptab-agua', {});
+  const insumosAguaTotalStore = useRemoteCollection<Record<string, string>>('insumos-agua', {});
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -680,13 +681,30 @@ export default function PlannerPage() {
       // ignore
     }
   }, [ptabAguaStore.isLoaded]);
+
+  useEffect(() => {
+    if (!ptabAguaStore.isLoaded || !insumosAguaTotalStore.isLoaded) return;
+    const sync: Record<string, string> = {};
+    Object.entries(ptabAguaStore.data || {}).forEach(([key, value]) => {
+      if (key.endsWith('-total') && value) {
+        const fechaStr = key.slice(0, -6);
+        sync[fechaStr] = value;
+      }
+    });
+    if (Object.keys(sync).length > 0) {
+      insumosAguaTotalStore.patchData(sync);
+    }
+  }, [ptabAguaStore.data, ptabAguaStore.isLoaded, insumosAguaTotalStore.isLoaded]);
   const [insumosFecha, setInsumosFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
       try {
         const stored = localStorage.getItem('selected-insumos-fecha');
         if (stored) {
           const parsed = JSON.parse(stored);
-          if (parsed) return new Date(parsed);
+          const d = new Date(parsed);
+          if (!isNaN(d.getTime())) {
+            return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+          }
         }
       } catch (e) {}
     }
@@ -720,7 +738,7 @@ export default function PlannerPage() {
   }, [activeModule, user?.id]);
 
   useEffect(() => {
-    if (!insumosFecha || typeof window === 'undefined') return;
+    if (!insumosFecha || typeof window === 'undefined' || isNaN(insumosFecha.getTime())) return;
       const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
 
       const ordenesDelDia = (ordenes || []).filter(orden =>
@@ -1203,7 +1221,7 @@ export default function PlannerPage() {
     return initial;
   });
    useEffect(() => {
-    if (!insumosFecha || typeof window === 'undefined') return;
+    if (!insumosFecha || typeof window === 'undefined' || isNaN(insumosFecha.getTime())) return;
     const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
     const ordenesDelDia = (ordenes || []).filter(orden =>
       orden.dias.some(dia => dia.fechaInicio === fechaStr)
@@ -4590,7 +4608,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                  </button>
                                </PopoverTrigger>
                                <PopoverContent className="w-auto p-0" align="end">
-                                 <Calendar mode="single" selected={insumosFecha} onSelect={(date) => { setInsumosFecha(date); if (date) { localStorage.setItem('selected-insumos-fecha', JSON.stringify(date)); } }} locale={es} />
+                                  <Calendar mode="single" selected={insumosFecha} onSelect={(date) => { setInsumosFecha(date); if (date) { localStorage.setItem('selected-insumos-fecha', JSON.stringify(format(date, 'yyyy-MM-dd'))); } }} locale={es} />
                                </PopoverContent>
                              </Popover>
                            </div>
@@ -4706,19 +4724,22 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                         <div className="flex items-center px-3 py-1 bg-slate-800 justify-center">
                                            <input
                                              type="number"
-                                             value={(() => {
-                                               if (!insumosFecha) return '';
-                                               const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
-                                               const manual = aguaConsumoPorDia[fechaStr];
-                                               if (manual !== undefined) return manual;
-                                               const cellKey = getPtabAguaCellKey(fechaStr, 'total');
-                                               return ptabAguaStore.data?.[cellKey] ?? '';
-                                             })()}
-                                             onChange={(e) => {
-                                               if (!insumosFecha) return;
-                                               const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
-                                               setAguaConsumoPorDia(prev => ({ ...prev, [fechaStr]: e.target.value }));
-                                             }}
+                                            value={(() => {
+                                              if (!insumosFecha || isNaN(insumosFecha.getTime())) return '';
+                                              const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
+                                              const manual = aguaConsumoPorDia[fechaStr];
+                                              if (manual !== undefined) return manual;
+                                              const remote = insumosAguaTotalStore.data?.[fechaStr];
+                                              if (remote !== undefined && remote !== '') return remote;
+                                              const fallback = ptabAguaStore.data?.[getPtabAguaCellKey(fechaStr, 'total')];
+                                              if (fallback !== undefined) return fallback;
+                                              return '';
+                                            })()}
+                                              onChange={(e) => {
+                                                if (!insumosFecha || isNaN(insumosFecha.getTime())) return;
+                                                const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
+                                                setAguaConsumoPorDia(prev => ({ ...prev, [fechaStr]: e.target.value }));
+                                              }}
                                             className="w-full h-7 text-[11px] font-bold text-center bg-white text-slate-900 border border-white/20 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                                             placeholder="0"
                                           />
@@ -4730,8 +4751,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                      <div className="grid grid-cols-3">
                                        <div className="flex items-center px-3 py-1 bg-slate-100"></div>
                                        <div className="flex items-center justify-center px-3 py-1 bg-slate-100 font-black text-slate-700 text-[11px]">
-                                          {insumosFecha ? (() => {
-                                             const valor = Number(aguaConsumoPorDia[format(startOfDay(insumosFecha), 'yyyy-MM-dd')]) || 0;
+                                           {insumosFecha && !isNaN(insumosFecha.getTime()) ? (() => {
+                                              const valor = Number(aguaConsumoPorDia[format(startOfDay(insumosFecha), 'yyyy-MM-dd')]) || 0;
                                             const totalLitros = Object.values(aguaDiarioData).reduce((acc, row) => {
                                               const c2 = Number(row.cajas2L) || 0;
                                               const c1 = Number(row.cajas1L) || 0;
@@ -5047,14 +5068,14 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                         <div className="font-black text-[11px] uppercase tracking-widest">CONSUMO DE CO2</div>
                                       </div>
                                       <div className="flex items-center px-3 py-1 bg-slate-800 justify-center">
-                                        <input
-                                          type="number"
-                                          value={insumosFecha ? (co2ConsumoPorDia[format(insumosFecha, 'yyyy-MM-dd')] || '') : ''}
-                                          onChange={(e) => {
-                                            if (!insumosFecha) return;
-                                            const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
-                                            setCo2ConsumoPorDia(prev => ({ ...prev, [fechaStr]: e.target.value }));
-                                          }}
+                                         <input
+                                           type="number"
+                                           value={insumosFecha && !isNaN(insumosFecha.getTime()) ? (co2ConsumoPorDia[format(startOfDay(insumosFecha), 'yyyy-MM-dd')] || '') : ''}
+                                           onChange={(e) => {
+                                             if (!insumosFecha || isNaN(insumosFecha.getTime())) return;
+                                             const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
+                                             setCo2ConsumoPorDia(prev => ({ ...prev, [fechaStr]: e.target.value }));
+                                           }}
                                           className="w-full h-7 text-[11px] font-bold text-center bg-white text-slate-900 border border-white/20 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                                           placeholder="0"
                                         />
@@ -5066,8 +5087,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                     <div className="grid grid-cols-3">
                                       <div className="flex items-center px-3 py-1 bg-slate-100"></div>
                                       <div className="flex items-center justify-center px-3 py-1 bg-slate-100 font-black text-slate-700 text-[11px]">
-                                        {insumosFecha ? (() => {
-                                          const valor = Number(co2ConsumoPorDia[format(insumosFecha, 'yyyy-MM-dd')]) || 0;
+                                         {insumosFecha && !isNaN(insumosFecha.getTime()) ? (() => {
+                                           const valor = Number(co2ConsumoPorDia[format(startOfDay(insumosFecha), 'yyyy-MM-dd')]) || 0;
                                           const totalKg = Object.values(co2DiarioData).reduce((acc, row) => {
                                             const c2 = Number(row.cajas2L) || 0;
                                             const c1 = Number(row.cajas1L) || 0;
