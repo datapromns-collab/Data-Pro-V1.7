@@ -9656,7 +9656,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-04T21:33:29.803Z"
+    "updatedAt": "2026-09-05T13:07:42.255Z"
   },
   "ordenesSap": [
     {
@@ -16636,10 +16636,10 @@
           "fechaInicio": "2026-09-04",
           "ticket1": "17697",
           "cajas1": 3040,
-          "ticket2": "",
+          "ticket2": "17698",
           "cajas2": 960,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2727,
           "ticket4": "",
           "cajas4": 0
         }
@@ -16678,10 +16678,10 @@
           "fechaInicio": "2026-09-04",
           "ticket1": "17737",
           "cajas1": 2560,
-          "ticket2": "",
+          "ticket2": "17738",
           "cajas2": 320,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 102,
           "ticket4": "",
           "cajas4": 0
         }
@@ -16749,8 +16749,19 @@
           "fechaInicio": "2026-09-04",
           "ticket1": "17834",
           "cajas1": 3360,
-          "ticket2": "",
+          "ticket2": "17835",
           "cajas2": 1200,
+          "ticket3": "",
+          "cajas3": 1840,
+          "ticket4": "",
+          "cajas4": 16800
+        },
+        {
+          "fechaInicio": "2026-09-05",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -16769,8 +16780,19 @@
           "fechaInicio": "2026-09-04",
           "ticket1": "17645",
           "cajas1": 3360,
-          "ticket2": "",
+          "ticket2": "17646",
           "cajas2": 320,
+          "ticket3": "",
+          "cajas3": 2640,
+          "ticket4": "",
+          "cajas4": 21120
+        },
+        {
+          "fechaInicio": "2026-09-05",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -16789,12 +16811,12 @@
           "fechaInicio": "2026-09-04",
           "ticket1": "17882",
           "cajas1": 5280,
-          "ticket2": "",
+          "ticket2": "17883",
           "cajas2": 1280,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3120,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 24960
         }
       ]
     },
@@ -16809,12 +16831,72 @@
           "fechaInicio": "2026-09-04",
           "ticket1": "17913",
           "cajas1": 1400,
-          "ticket2": "",
+          "ticket2": "17914",
           "cajas2": 50,
+          "ticket3": "",
+          "cajas3": 250,
+          "ticket4": "",
+          "cajas4": 6589
+        }
+      ]
+    },
+    {
+      "id": "3-1788608967807",
+      "linea": 3,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "63428",
+      "semana": 36,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-04",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17698",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 23200
+        }
+      ]
+    },
+    {
+      "id": "6-1788609873732",
+      "linea": 6,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63434",
+      "semana": 36,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-04",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17738",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 13337
+        }
+      ]
+    },
+    {
+      "id": "7-1788610139168",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63440",
+      "semana": 36,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-04",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17783",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 7566
         }
       ]
     }
