@@ -683,7 +683,7 @@ export default function PlannerPage() {
   }, [ptabAguaStore.isLoaded]);
 
   useEffect(() => {
-    if (!ptabAguaStore.isLoaded || !insumosAguaTotalStore.isLoaded) return;
+    if (!ptabAguaStore.isLoaded) return;
     const sync: Record<string, string> = {};
     Object.entries(ptabAguaStore.data || {}).forEach(([key, value]) => {
       if (key.endsWith('-total') && value) {
@@ -691,10 +691,11 @@ export default function PlannerPage() {
         sync[fechaStr] = value;
       }
     });
+    console.log('[DEBUG] Syncing totals from ptabAguaStore to insumosAguaTotalStore', Object.keys(sync).length, 'entries', sync);
     if (Object.keys(sync).length > 0) {
       insumosAguaTotalStore.patchData(sync);
     }
-  }, [ptabAguaStore.data, ptabAguaStore.isLoaded, insumosAguaTotalStore.isLoaded]);
+  }, [ptabAguaStore.data, ptabAguaStore.isLoaded]);
   const [insumosFecha, setInsumosFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -4730,9 +4731,16 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                               const manual = aguaConsumoPorDia[fechaStr];
                                               if (manual !== undefined) return manual;
                                               const remote = insumosAguaTotalStore.data?.[fechaStr];
-                                              if (remote !== undefined && remote !== '') return remote;
+                                              if (remote !== undefined && remote !== '') {
+                                                console.log('[DEBUG] Render from insumosAguaTotalStore', fechaStr, remote);
+                                                return remote;
+                                              }
                                               const fallback = ptabAguaStore.data?.[getPtabAguaCellKey(fechaStr, 'total')];
-                                              if (fallback !== undefined) return fallback;
+                                              if (fallback !== undefined) {
+                                                console.log('[DEBUG] Render from ptabAguaStore fallback', fechaStr, fallback);
+                                                return fallback;
+                                              }
+                                              console.log('[DEBUG] Render empty', fechaStr, 'insumosAguaTotalStore keys:', Object.keys(insumosAguaTotalStore.data || {}), 'ptabAguaStore total keys:', Object.keys(ptabAguaStore.data || {}).filter(k => k.endsWith('-total')).slice(0, 10));
                                               return '';
                                             })()}
                                               onChange={(e) => {
