@@ -105296,7 +105296,12 @@
         "auto-2-1788299575740": {
           "cajasPlanificadas": 21250,
           "jarabeReal": 33274,
-          "producto": "8"
+          "producto": "89",
+          "ubb": 16
+        },
+        "auto-2-1788385635908": {
+          "cajasPlanificadas": 88750,
+          "jarabeReal": 430
         }
       },
       "linea-3": {

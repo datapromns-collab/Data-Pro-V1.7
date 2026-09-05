@@ -656,6 +656,30 @@ export default function PlannerPage() {
   const [rMensualSubTab, setRMensualSubTab] = useState<'m-agua' | 'm-insumos'>('m-agua');
   const ptabWeeksContainerRef = useRef<HTMLDivElement>(null);
   const ptabAguaStore = useRemoteCollection<Record<string, string>>('ptab-agua', {});
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      localStorage.setItem('ptab-agua-data', JSON.stringify(ptabAguaStore.data || {}));
+    } catch (e) {
+      // ignore
+    }
+  }, [ptabAguaStore.data]);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (!ptabAguaStore.isLoaded) return;
+    if (ptabAguaStore.data && Object.keys(ptabAguaStore.data).length > 0) return;
+    try {
+      const legacyRaw = localStorage.getItem('ptab-agua-data');
+      if (!legacyRaw) return;
+      const legacy = JSON.parse(legacyRaw);
+      if (!legacy || typeof legacy !== 'object' || Array.isArray(legacy) || Object.keys(legacy).length === 0) return;
+      ptabAguaStore.setData(legacy);
+    } catch (e) {
+      // ignore
+    }
+  }, [ptabAguaStore.isLoaded]);
   const [insumosFecha, setInsumosFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -1784,24 +1808,6 @@ export default function PlannerPage() {
    }, [ptabWeekStartDate]);
 
   const getPtabAguaCellKey = (dateStr: string, rowKey: string) => `${dateStr}-${rowKey}`;
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    if (localStorage.getItem('ptab-agua-migrated')) return;
-    const legacyRaw = localStorage.getItem('ptab-agua-data');
-    if (!legacyRaw) return;
-    try {
-      const legacy = JSON.parse(legacyRaw);
-      if (!legacy || typeof legacy !== 'object' || Object.keys(legacy).length === 0) return;
-      if (Object.keys(ptabAguaStore.data).length === 0) {
-        ptabAguaStore.setData(legacy);
-      }
-      localStorage.removeItem('ptab-agua-data');
-      localStorage.setItem('ptab-agua-migrated', 'true');
-    } catch (e) {
-      // ignore
-    }
-  }, [ptabAguaStore.data, ptabAguaStore.setData]);
 
   const handlePtabAguaChange = (dateStr: string, rowKey: string, value: string) => {
     ptabAguaStore.patchData({ [getPtabAguaCellKey(dateStr, rowKey)]: value });
