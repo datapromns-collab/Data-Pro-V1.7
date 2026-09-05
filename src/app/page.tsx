@@ -4730,7 +4730,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                if (!insumosFecha || isNaN(insumosFecha.getTime())) return '';
                                                const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
                                                const manual = aguaConsumoPorDia[fechaStr];
-                                               if (manual !== undefined) return manual;
+                                               if (manual && String(manual).trim() !== '') return manual;
                                                const remote = insumosAguaTotalStore.data?.[fechaStr];
                                                if (remote !== undefined && remote !== '') return remote;
                                                const fallback = ptabAguaStore.data?.[getPtabAguaCellKey(fechaStr, 'total')];
