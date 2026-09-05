@@ -154,7 +154,7 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   'prodtj.mds': ['planning', 'planta'],
   'prodtg.mds': ['planning', 'planta', 'management'],
   'prodts.mds': ['planning', 'planta'],
-  'procj.mds': ['planning'],
+  'procj.mds': ['planning', 'procesos'],
   'cald.mds': ['planning'],
   'prodt.mds': ['planning', 'planta'],
   'prodt1.mds': ['planning', 'planta'],

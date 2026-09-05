@@ -699,9 +699,8 @@ export default function PlannerPage() {
   });
 
   useEffect(() => {
-    if (activeModule === 'procesos' && user?.id === 'proc1.mds') {
+    if (activeModule === 'procesos' && (user?.id === 'proc1.mds' || user?.id === 'procj.mds')) {
       setProcesosSubTab('ptab');
-      setPtabTab(prev => (prev === 'r-semanal' || prev === 'r-mensual' ? 'agua' : prev));
     }
   }, [activeModule, user?.id]);
 
@@ -4281,11 +4280,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                        )}
                     </>
                   )}
-                     {activeModule === 'procesos' && (isDemon || user.id === 'proc1.mds') && (
-                       <div className="flex flex-col h-full">
-                         <div className="flex items-center gap-2 mb-2 no-print">
-                           <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                              {(isDemon ? ['ptab', 'miteco', 'sala-jarabe'] : ['ptab']).map((tab) => (
+                      {activeModule === 'procesos' && (isDemon || user.id === 'proc1.mds' || user.id === 'procj.mds') && (
+                        <div className="flex flex-col h-full">
+                          <div className="flex items-center gap-2 mb-2 no-print">
+                            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                               {(isDemon ? ['ptab', 'miteco', 'sala-jarabe'] : user.id === 'procj.mds' ? ['agua', 'insumos', 'r-semanal', 'r-mensual'] : ['ptab']).map((tab) => (
                                <button
                                  key={tab}
                                  onClick={() => setProcesosSubTab(tab)}
@@ -4455,7 +4454,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                               </div>
                             </div>
                           )}
-                           {isDemon && procesosSubTab === 'ptab' && ptabTab === 'r-semanal' && (
+                            {(isDemon || user.id === 'procj.mds') && procesosSubTab === 'ptab' && ptabTab === 'r-semanal' && (
                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                               <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                 <div className="flex flex-col h-full gap-3">
@@ -4466,7 +4465,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                               </div>
                             </div>
                           )}
-                           {isDemon && procesosSubTab === 'ptab' && ptabTab === 'r-mensual' && (
+                            {(isDemon || user.id === 'procj.mds') && procesosSubTab === 'ptab' && ptabTab === 'r-mensual' && (
                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                               <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                 <div className="flex flex-col h-full gap-3">
