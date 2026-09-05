@@ -2584,8 +2584,9 @@ export default function PlannerPage() {
                          user.role === 'PURCHASING' ? 'COMPRAS' : 
                          user.role === 'INVENTORY' ? 'INVENTARIO' : 
                          user.id === 'enf.mds' ? 'ESPECIALISTA ENFARDADORA' : 
-                         user.id === 'proc.mds' ? 'SALA DE JARABE' : 
-                         user.id === 'proc1.mds' ? 'PTAB' : 
+                          user.id === 'proc.mds' ? 'SALA DE JARABE' : 
+                          user.id === 'procj.mds' ? 'Jefe de Procesos' : 
+                          user.id === 'proc1.mds' ? 'PTAB' : 
                          user.id === 'procs1.mds' ? 'Supervisor de procesos' : 
                          user.id === 'procs2.mds' ? 'Supervisor de procesos' : 
                          user.id === 'finan.mds' ? 'Finanzas' : 
