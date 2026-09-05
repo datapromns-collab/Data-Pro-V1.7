@@ -4401,14 +4401,14 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                   const dateStr = format(day, 'yyyy-MM-dd');
                                                   const cellKey = getPtabAguaCellKey(dateStr, rowKey);
                                                   return (
-                                                    <td key={idx} className="px-2 py-2 text-center border border-slate-100">
+                                                     <td key={idx} className="px-2 py-2 text-center border border-slate-100">
                                                        <input
                                                          type="text"
-                                                         defaultValue={ptabAguaStore.data[cellKey] || ''}
+                                                         value={ptabAguaStore.data[cellKey] || ''}
                                                          onChange={(e) => handlePtabAguaChange(dateStr, rowKey, e.target.value)}
                                                          className="w-full min-w-[14ch] h-8 text-center text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary"
                                                        />
-                                                    </td>
+                                                     </td>
                                                   );
                                                 })}
                                               </tr>
@@ -4420,14 +4420,14 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                               const dateStr = format(day, 'yyyy-MM-dd');
                                               const cellKey = getPtabAguaCellKey(dateStr, 'total');
                                               return (
-                                                <td key={idx} className="px-2 py-2 text-center border border-slate-200">
+                                                 <td key={idx} className="px-2 py-2 text-center border border-slate-200">
                                                    <input
                                                      type="text"
-                                                     defaultValue={ptabAguaStore.data[cellKey] || ''}
+                                                     value={ptabAguaStore.data[cellKey] || ''}
                                                      onChange={(e) => handlePtabAguaChange(dateStr, 'total', e.target.value)}
                                                      className="w-full min-w-[14ch] h-8 text-center text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary"
                                                    />
-                                                </td>
+                                                 </td>
                                               );
                                             })}
                                           </tr>

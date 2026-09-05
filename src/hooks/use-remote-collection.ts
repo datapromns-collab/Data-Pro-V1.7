@@ -369,14 +369,14 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
                setQueryCache(queryCacheKey, merged);
                return merged;
              }
+              if (!Array.isArray(prev) && Array.isArray(remote) && remote.length === 0) {
+                console.log('[RC] GET skip empty array because prev is object-like', namespace);
+                return prev;
+              }
               if (Array.isArray(remote)) {
                 const result = applyDeleted(remote) as T;
                 setQueryCache(queryCacheKey, result);
                 return result;
-              }
-              if (!Array.isArray(prev) && Array.isArray(remote) && remote.length === 0) {
-                console.log('[RC] GET skip empty array because prev is object-like', namespace);
-                return prev;
               }
               const remoteObj = remote as Record<string, any>;
              const merged = { ...(prev as Record<string, any>) };
