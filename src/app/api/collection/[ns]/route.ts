@@ -384,6 +384,7 @@ export async function POST(request: Request) {
     return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'content-type': 'application/json' } });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
+    console.error('[API][POST][ERROR]', ns, message, error);
     return new Response(JSON.stringify({ error: message }), { status: 500, headers: { 'content-type': 'application/json' } });
   }
 }

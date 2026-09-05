@@ -693,7 +693,7 @@ export default function PlannerPage() {
     });
     console.log('[DEBUG] Syncing totals from ptabAguaStore to insumosAguaTotalStore', Object.keys(sync).length, 'entries', sync);
     if (Object.keys(sync).length > 0) {
-      insumosAguaTotalStore.patchData(sync);
+      insumosAguaTotalStore.setData(sync);
     }
   }, [ptabAguaStore.data, ptabAguaStore.isLoaded]);
   const [insumosFecha, setInsumosFecha] = useState<Date | undefined>(() => {
@@ -4723,24 +4723,25 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                          <div className="font-black text-[11px] uppercase tracking-widest">CONSUMO DE AGUA</div>
                                        </div>
                                         <div className="flex items-center px-3 py-1 bg-slate-800 justify-center">
-                                           <input
-                                             type="number"
-                                            value={(() => {
-                                              if (!insumosFecha || isNaN(insumosFecha.getTime())) return '';
-                                              const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
-                                              const manual = aguaConsumoPorDia[fechaStr];
-                                              if (manual !== undefined) return manual;
-                                              const remote = insumosAguaTotalStore.data?.[fechaStr];
-                                              if (remote !== undefined && remote !== '') return remote;
-                                              const fallback = ptabAguaStore.data?.[getPtabAguaCellKey(fechaStr, 'total')];
-                                              if (fallback !== undefined && fallback !== '') return String(fallback).replace(',', '.');
-                                              return '';
-                                            })()}
-                                              onChange={(e) => {
-                                                if (!insumosFecha || isNaN(insumosFecha.getTime())) return;
-                                                const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
-                                                setAguaConsumoPorDia(prev => ({ ...prev, [fechaStr]: e.target.value }));
-                                              }}
+                                            <input
+                                              type="text"
+                                              inputMode="decimal"
+                                             value={(() => {
+                                               if (!insumosFecha || isNaN(insumosFecha.getTime())) return '';
+                                               const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
+                                               const manual = aguaConsumoPorDia[fechaStr];
+                                               if (manual !== undefined) return manual;
+                                               const remote = insumosAguaTotalStore.data?.[fechaStr];
+                                               if (remote !== undefined && remote !== '') return remote;
+                                               const fallback = ptabAguaStore.data?.[getPtabAguaCellKey(fechaStr, 'total')];
+                                               if (fallback !== undefined && fallback !== '') return String(fallback).replace(',', '.');
+                                               return '';
+                                             })()}
+                                               onChange={(e) => {
+                                                 if (!insumosFecha || isNaN(insumosFecha.getTime())) return;
+                                                 const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
+                                                 setAguaConsumoPorDia(prev => ({ ...prev, [fechaStr]: e.target.value }));
+                                               }}
                                             className="w-full h-7 text-[11px] font-bold text-center bg-white text-slate-900 border border-white/20 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                                             placeholder="0"
                                           />
