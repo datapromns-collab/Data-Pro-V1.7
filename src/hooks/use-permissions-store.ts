@@ -162,7 +162,7 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   'proc.mds': ['planning'],
   'proc1.mds': ['planning', 'procesos'],
   'procs1.mds': ['planning'],
-  'procs2.mds': ['planning'],
+  'procs2.mds': ['planning', 'procesos'],
   'g.tec.mds': ['planning', 'seguimiento', 'management'],
   'enf.mds': ['planning', 'seguimiento', 'management', 'planta'],
   'etq.mds': ['planning', 'seguimiento', 'management'],
