@@ -293,6 +293,10 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
             setData((prev) => {
               if (Array.isArray(prev) && !Array.isArray(parsed)) return prev;
               if (Array.isArray(parsed) && Array.isArray(prev)) return applyDeleted(parsed) as T;
+              if (!Array.isArray(prev) && Array.isArray(parsed)) {
+                if (parsed.length === 0) return prev;
+                return prev;
+              }
               return { ...prev, ...parsed };
             });
           } catch {

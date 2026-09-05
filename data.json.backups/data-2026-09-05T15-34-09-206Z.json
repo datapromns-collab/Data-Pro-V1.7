@@ -105404,6 +105404,24 @@
           "jarabeReal": 58323,
           "producto": "223",
           "ubb": 20.29
+        },
+        "auto-3-1788299665181": {
+          "cajasPlanificadas": 56000,
+          "jarabeReal": 54297,
+          "producto": "169",
+          "ubb": 18.88
+        },
+        "auto-3-1788360323114": {
+          "cajasPlanificadas": 134400,
+          "jarabeReal": 139721,
+          "producto": "145",
+          "ubb": 80
+        },
+        "auto-3-1788608967807": {
+          "cajasPlanificadas": 0,
+          "jarabeReal": 0,
+          "producto": "",
+          "ubb": 0
         }
       },
       "linea-4": {
@@ -105486,6 +105504,12 @@
           "jarabeReal": 54228,
           "producto": "145",
           "ubb": 18.86
+        },
+        "auto-4-1788299817685": {
+          "cajasPlanificadas": 126000,
+          "jarabeReal": 163837,
+          "producto": "518",
+          "ubb": 57
         }
       },
       "linea-5": {
@@ -105549,6 +105573,18 @@
           "jarabeReal": 220000,
           "producto": "506",
           "ubb": 220
+        },
+        "auto-5-1788299958183": {
+          "cajasPlanificadas": 52030,
+          "jarabeReal": 547000,
+          "producto": "282",
+          "ubb": 547
+        },
+        "auto-5-1788545202524": {
+          "cajasPlanificadas": 15125,
+          "jarabeReal": 153000,
+          "ubb": 153,
+          "producto": "203"
         }
       },
       "linea-6": {
@@ -105614,6 +105650,22 @@
           "jarabeReal": 14574,
           "producto": "416",
           "ubb": 6.99
+        },
+        "auto-6-1788300047069": {
+          "cajasPlanificadas": 2032,
+          "jarabeReal": 2106,
+          "producto": "135",
+          "ubb": 1.01
+        },
+        "auto-6-1788350795262": {
+          "cajasPlanificadas": 14168,
+          "jarabeReal": 17042,
+          "producto": "",
+          "ubb": 11
+        },
+        "auto-6-1788385423643": {
+          "cajasPlanificadas": 34500,
+          "jarabeReal": 305
         }
       },
       "linea-7": {

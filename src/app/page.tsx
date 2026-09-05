@@ -1811,6 +1811,9 @@ export default function PlannerPage() {
 
   const handlePtabAguaChange = (dateStr: string, rowKey: string, value: string) => {
     ptabAguaStore.patchData({ [getPtabAguaCellKey(dateStr, rowKey)]: value });
+    if (rowKey === 'total') {
+      setAguaConsumoPorDia((prev) => ({ ...prev, [dateStr]: value }));
+    }
   };
 
   const globalSalesProjection = useMemo(() => {
