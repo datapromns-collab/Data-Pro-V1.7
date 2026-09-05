@@ -701,6 +701,7 @@ export default function PlannerPage() {
   useEffect(() => {
     if (activeModule === 'procesos' && user?.id === 'proc1.mds') {
       setProcesosSubTab('ptab');
+      setPtabTab(prev => (prev === 'r-semanal' || prev === 'r-mensual' ? 'agua' : prev));
     }
   }, [activeModule, user?.id]);
 
@@ -4303,7 +4304,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                           {procesosSubTab === 'ptab' && (
                             <div className="flex items-center gap-2 no-print mb-2">
                               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                 {['agua', 'insumos', 'r-semanal', 'r-mensual'].map((tab) => (
+                                 {(isDemon ? ['agua', 'insumos', 'r-semanal', 'r-mensual'] : ['agua', 'insumos']).map((tab) => (
                                    <button
                                      key={tab}
                                      onClick={() => setPtabTab(tab as 'agua' | 'insumos' | 'r-semanal' | 'r-mensual')}
@@ -4453,7 +4454,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                               </div>
                             </div>
                           )}
-                          {procesosSubTab === 'ptab' && ptabTab === 'r-semanal' && (
+                           {isDemon && procesosSubTab === 'ptab' && ptabTab === 'r-semanal' && (
                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                               <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                 <div className="flex flex-col h-full gap-3">
@@ -4464,7 +4465,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                               </div>
                             </div>
                           )}
-                          {procesosSubTab === 'ptab' && ptabTab === 'r-mensual' && (
+                           {isDemon && procesosSubTab === 'ptab' && ptabTab === 'r-mensual' && (
                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                               <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                 <div className="flex flex-col h-full gap-3">
