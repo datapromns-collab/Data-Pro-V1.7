@@ -23,7 +23,7 @@ export interface ManagementPermissions {
 }
 
 const DEFAULT_PLANNING_PERMISSIONS: PlanningPermissions = {
-  mds: { read: ['gantt', 'daily', 'preparation', 'requirement'], write: ['gantt', 'daily', 'preparation', 'requirement'] },
+  mds: { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
   'jaime.r': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: ['gantt', 'daily', 'preparation', 'requirement'] },
   demon: { read: ['gantt', 'daily', 'preparation', 'requirement'], write: ['gantt', 'daily', 'preparation', 'requirement'] },
   'maria.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
@@ -42,6 +42,12 @@ const DEFAULT_PLANNING_PERMISSIONS: PlanningPermissions = {
   'g.tec.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
   'enf.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
   'etq.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'prodts.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'prodt1.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'prodt2.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'logg.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'mtto.mds': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
+  'MDS': { read: ['gantt', 'daily', 'preparation', 'requirement'], write: [] },
 };
 
 const DEFAULT_MANAGEMENT_PERMISSIONS: ManagementPermissions = {
@@ -173,8 +179,26 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
 };
 
 const DEFAULT_READONLY_MODULES: UserPermissions = {
-  'g.tec.mds': ['seguimiento'],
+  mds: ['planning'],
+  'maria.mds': ['planning'],
+  'alex.mds': ['planning'],
+  'anto.mds': ['planning'],
+  'prodtj.mds': ['planning'],
+  'prodts.mds': ['planning'],
+  'procj.mds': ['planning'],
+  'cald.mds': ['planning'],
+  'prodt.mds': ['planning'],
+  'prodt1.mds': ['planning'],
+  'prodt2.mds': ['planning'],
+  'proc.mds': ['planning'],
+  'proc1.mds': ['planning'],
+  'procs1.mds': ['planning'],
+  'procs2.mds': ['planning'],
+  'g.tec.mds': ['planning', 'seguimiento'],
+  'enf.mds': ['planning'],
+  'etq.mds': ['planning'],
   'logg.mds': ['planning'],
+  'finan.mds': ['planning'],
   'mtto.mds': ['planning'],
   'cal.mds': ['planning'],
   'prodtg.mds': ['planning'],

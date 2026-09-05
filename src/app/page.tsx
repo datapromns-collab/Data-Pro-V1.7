@@ -653,6 +653,7 @@ export default function PlannerPage() {
   const [ptabTab, setPtabTab] = useState<'agua' | 'insumos' | 'r-semanal' | 'r-mensual'>('agua');
   const [ptabWeekStartDate, setPtabWeekStartDate] = useState(new Date());
   const [rSemanalSubTab, setRSemanalSubTab] = useState<'s-agua' | 's-insumos'>('s-agua');
+  const [rMensualSubTab, setRMensualSubTab] = useState<'m-agua' | 'm-insumos'>('m-agua');
   const ptabWeeksContainerRef = useRef<HTMLDivElement>(null);
   const [ptabAguaData, setPtabAguaData] = useState<Record<string, string>>(() => {
     if (typeof window !== 'undefined') {
@@ -4455,53 +4456,82 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                               </div>
                             </div>
                           )}
-                             {(isDemon || user.id === 'procj.mds' || user.id === 'procs2.mds') && procesosSubTab === 'ptab' && ptabTab === 'r-semanal' && (
-                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                               <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
-                                 <div className="flex flex-col h-full gap-3">
-                                   <div className="flex items-center gap-2 no-print">
-                                     <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                       {['s-agua', 's-insumos'].map((tab) => (
-                                         <button
-                                           key={tab}
-                                           onClick={() => setRSemanalSubTab(tab as 's-agua' | 's-insumos')}
-                                           className={cn(
-                                             "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                             rSemanalSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                           )}
-                                         >
-                                           {tab === 's-agua' && <Droplets className="h-3.5 w-3.5" />}
-                                           {tab === 's-insumos' && <Package className="h-3.5 w-3.5" />}
-                                           <span className="hidden sm:inline">{tab === 's-agua' ? 'S Agua' : 'S Insumos'}</span>
-                                         </button>
-                                       ))}
-                                     </div>
+                              {(isDemon || user.id === 'procj.mds' || user.id === 'procs2.mds') && procesosSubTab === 'ptab' && ptabTab === 'r-semanal' && (
+                              <div className="flex flex-col h-full">
+                                <div className="flex items-center gap-2 mb-2 no-print">
+                                  <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                    {['s-agua', 's-insumos'].map((tab) => (
+                                      <button
+                                        key={tab}
+                                        onClick={() => setRSemanalSubTab(tab as 's-agua' | 's-insumos')}
+                                        className={cn(
+                                          "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                          rSemanalSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                        )}
+                                      >
+                                        {tab === 's-agua' && <Droplets className="h-3.5 w-3.5" />}
+                                        {tab === 's-insumos' && <Package className="h-3.5 w-3.5" />}
+                                        <span className="hidden sm:inline">{tab === 's-agua' ? 'S Agua' : 'S Insumos'}</span>
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                                <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                                  <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                                    <div className="flex flex-col h-full gap-3">
+                                      {rSemanalSubTab === 's-agua' && (
+                                        <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
+                                          S Agua
+                                        </div>
+                                      )}
+                                      {rSemanalSubTab === 's-insumos' && (
+                                        <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
+                                          S Insumos
+                                        </div>
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+                             {(isDemon || user.id === 'procj.mds') && procesosSubTab === 'ptab' && ptabTab === 'r-mensual' && (
+                             <div className="flex flex-col h-full">
+                               <div className="flex items-center gap-2 mb-2 no-print">
+                                 <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                   {['m-agua', 'm-insumos'].map((tab) => (
+                                     <button
+                                       key={tab}
+                                       onClick={() => setRMensualSubTab(tab as 'm-agua' | 'm-insumos')}
+                                       className={cn(
+                                         "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                         rMensualSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                       )}
+                                     >
+                                       {tab === 'm-agua' && <Droplets className="h-3.5 w-3.5" />}
+                                       {tab === 'm-insumos' && <Package className="h-3.5 w-3.5" />}
+                                       <span className="hidden sm:inline">{tab === 'm-agua' ? 'M Agua' : 'M Insumos'}</span>
+                                     </button>
+                                   ))}
+                                 </div>
+                               </div>
+                               <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                                 <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                                   <div className="flex flex-col h-full gap-3">
+                                     {rMensualSubTab === 'm-agua' && (
+                                       <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
+                                         M Agua
+                                       </div>
+                                     )}
+                                     {rMensualSubTab === 'm-insumos' && (
+                                       <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
+                                         M Insumos
+                                       </div>
+                                     )}
                                    </div>
-                                   {rSemanalSubTab === 's-agua' && (
-                                     <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
-                                       S Agua
-                                     </div>
-                                   )}
-                                   {rSemanalSubTab === 's-insumos' && (
-                                     <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
-                                       S Insumos
-                                     </div>
-                                   )}
                                  </div>
                                </div>
                              </div>
                            )}
-                            {(isDemon || user.id === 'procj.mds') && procesosSubTab === 'ptab' && ptabTab === 'r-mensual' && (
-                            <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                              <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
-                                <div className="flex flex-col h-full gap-3">
-                                  <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
-                                    R mensual
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          )}
                          {isDemon && procesosSubTab === 'miteco' && (
                           <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                             <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
