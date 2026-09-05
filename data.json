@@ -105158,6 +105158,12 @@
           "jarabeReal": 40522,
           "producto": "113",
           "ubb": 14.09
+        },
+        "auto-1-1788299435452": {
+          "cajasPlanificadas": 67500,
+          "jarabeReal": 109451,
+          "producto": "781",
+          "ubb": 38.02
         }
       },
       "linea-2": {
@@ -105286,6 +105292,12 @@
           "jarabeReal": 33332,
           "producto": "132",
           "ubb": 16
+        },
+        "auto-2-1788299575740": {
+          "cajasPlanificadas": 21250,
+          "jarabeReal": 33274,
+          "producto": "89",
+          "ubb": 2
         }
       },
       "linea-3": {
@@ -111384,6 +111396,13 @@
         "0",
         "0"
       ]
+    },
+    "ptab-agua": {
+      "2026-08-31-servicio": "9320",
+      "2026-08-31-suave": "171992",
+      "2026-08-31-procesos": "1984115,33",
+      "2026-08-31-filtrada": "3076038,37",
+      "2026-08-31-total": "3070160"
     }
   },
   "cacheVersion": 0,
@@ -111472,7 +111491,8 @@
     "planta-velocidades-bpm": {},
     "planta-hrs-pagadas-dt": {},
     "jarabes": {},
-    "planta-hrs-programadas": {}
+    "planta-hrs-programadas": {},
+    "ptab-agua": {}
   },
   "_deletedOrdenesSapIds": [
     "1-1785349102112",

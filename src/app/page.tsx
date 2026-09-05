@@ -655,18 +655,7 @@ export default function PlannerPage() {
   const [rSemanalSubTab, setRSemanalSubTab] = useState<'s-agua' | 's-insumos'>('s-agua');
   const [rMensualSubTab, setRMensualSubTab] = useState<'m-agua' | 'm-insumos'>('m-agua');
   const ptabWeeksContainerRef = useRef<HTMLDivElement>(null);
-  const [ptabAguaData, setPtabAguaData] = useState<Record<string, string>>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const stored = localStorage.getItem('ptab-agua-data');
-        if (stored) {
-          const parsed = JSON.parse(stored);
-          if (typeof parsed === 'object' && parsed !== null) return parsed;
-        }
-      } catch (e) {}
-    }
-    return {};
-  });
+  const ptabAguaStore = useRemoteCollection<Record<string, string>>('ptab-agua', {});
   const [insumosFecha, setInsumosFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -1792,21 +1781,30 @@ export default function PlannerPage() {
     if (el) {
       el.scrollIntoView({ block: 'nearest' });
     }
-  }, [ptabWeekStartDate]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    try {
-      localStorage.setItem('ptab-agua-data', JSON.stringify(ptabAguaData));
-    } catch (e) {
-      console.error('Error guardando ptab-agua-data en localStorage', e);
-    }
-  }, [ptabAguaData]);
+   }, [ptabWeekStartDate]);
 
   const getPtabAguaCellKey = (dateStr: string, rowKey: string) => `${dateStr}-${rowKey}`;
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    if (localStorage.getItem('ptab-agua-migrated')) return;
+    const legacyRaw = localStorage.getItem('ptab-agua-data');
+    if (!legacyRaw) return;
+    try {
+      const legacy = JSON.parse(legacyRaw);
+      if (!legacy || typeof legacy !== 'object' || Object.keys(legacy).length === 0) return;
+      if (Object.keys(ptabAguaStore.data).length === 0) {
+        ptabAguaStore.setData(legacy);
+      }
+      localStorage.removeItem('ptab-agua-data');
+      localStorage.setItem('ptab-agua-migrated', 'true');
+    } catch (e) {
+      // ignore
+    }
+  }, [ptabAguaStore.data, ptabAguaStore.setData]);
+
   const handlePtabAguaChange = (dateStr: string, rowKey: string, value: string) => {
-    setPtabAguaData(prev => ({ ...prev, [getPtabAguaCellKey(dateStr, rowKey)]: value }));
+    ptabAguaStore.patchData({ [getPtabAguaCellKey(dateStr, rowKey)]: value });
   };
 
   const globalSalesProjection = useMemo(() => {
@@ -4398,12 +4396,12 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                   const cellKey = getPtabAguaCellKey(dateStr, rowKey);
                                                   return (
                                                     <td key={idx} className="px-2 py-2 text-center border border-slate-100">
-                                                      <input
-                                                        type="text"
-                                                        defaultValue={ptabAguaData[cellKey] || ''}
-                                                        onChange={(e) => handlePtabAguaChange(dateStr, rowKey, e.target.value)}
-                                                        className="w-full min-w-[14ch] h-8 text-center text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary"
-                                                      />
+                                                       <input
+                                                         type="text"
+                                                         defaultValue={ptabAguaStore.data[cellKey] || ''}
+                                                         onChange={(e) => handlePtabAguaChange(dateStr, rowKey, e.target.value)}
+                                                         className="w-full min-w-[14ch] h-8 text-center text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary"
+                                                       />
                                                     </td>
                                                   );
                                                 })}
@@ -4417,12 +4415,12 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                               const cellKey = getPtabAguaCellKey(dateStr, 'total');
                                               return (
                                                 <td key={idx} className="px-2 py-2 text-center border border-slate-200">
-                                                  <input
-                                                    type="text"
-                                                    defaultValue={ptabAguaData[cellKey] || ''}
-                                                    onChange={(e) => handlePtabAguaChange(dateStr, 'total', e.target.value)}
-                                                    className="w-full min-w-[14ch] h-8 text-center text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary"
-                                                  />
+                                                   <input
+                                                     type="text"
+                                                     defaultValue={ptabAguaStore.data[cellKey] || ''}
+                                                     onChange={(e) => handlePtabAguaChange(dateStr, 'total', e.target.value)}
+                                                     className="w-full min-w-[14ch] h-8 text-center text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary"
+                                                   />
                                                 </td>
                                               );
                                             })}
