@@ -4284,7 +4284,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                         <div className="flex flex-col h-full">
                           <div className="flex items-center gap-2 mb-2 no-print">
                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                               {(isDemon ? ['ptab', 'miteco', 'sala-jarabe'] : user.id === 'procj.mds' ? ['agua', 'insumos', 'r-semanal', 'r-mensual'] : ['ptab']).map((tab) => (
+                               {(isDemon ? ['ptab', 'miteco', 'sala-jarabe'] : ['ptab']).map((tab) => (
                                <button
                                  key={tab}
                                  onClick={() => setProcesosSubTab(tab)}
@@ -4304,7 +4304,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                           {procesosSubTab === 'ptab' && (
                             <div className="flex items-center gap-2 no-print mb-2">
                               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                 {(isDemon ? ['agua', 'insumos', 'r-semanal', 'r-mensual'] : ['agua', 'insumos']).map((tab) => (
+                                  {(isDemon || user.id === 'procj.mds' ? ['agua', 'insumos', 'r-semanal', 'r-mensual'] : ['agua', 'insumos']).map((tab) => (
                                    <button
                                      key={tab}
                                      onClick={() => setPtabTab(tab as 'agua' | 'insumos' | 'r-semanal' | 'r-mensual')}
