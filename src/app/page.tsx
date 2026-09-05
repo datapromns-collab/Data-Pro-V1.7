@@ -4692,35 +4692,43 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                         ))}
                                                       </tr>
                                                     </thead>
-                                                     <tbody>
-                                                       {['CONSUMO FISICO', 'CONSUMO TEORICO', 'RENDIMIENTO DE AGUA'].map((row, rowIdx) => {
-                                                         const rowKey = ['fisico', 'teorico', 'rendimiento'][rowIdx];
-                                                         const isConsumoFisico = rowKey === 'fisico';
-                                                         return (
-                                                           <tr key={row} className="border-b border-slate-100 hover:bg-slate-50/50">
-                                                             <td className="px-2 py-2 font-bold text-slate-700 border border-slate-100 whitespace-nowrap">{row}</td>
-                                                              {getWeekDays(rSemanalWeekStartDate).filter((day) => {
-                                                                const dayMonth = day.getMonth() + 1;
-                                                                const dayYear = day.getFullYear();
-                                                                return dayMonth === rSemanalSelectedMonth && dayYear === rSemanalSelectedYear;
-                                                              }).map((day, idx) => {
-                                                                const dateStr = format(day, 'yyyy-MM-dd');
-                                                                const cellKey = getRSemanalAguaCellKey(dateStr, rowKey);
-                                                                const cellValue = isConsumoFisico
-                                                                  ? ptabAguaStore.data[`${dateStr}-total`] || ''
-                                                                  : rSemanalAguaStore.data[cellKey] || '';
-                                                                return (
-                                                                  <td key={idx} className="px-2 py-2 text-center border border-slate-100">
-                                                                    <div className={`w-full min-w-[14ch] h-8 flex items-center justify-center text-center text-[11px] font-black text-slate-700 bg-slate-100 border border-slate-200 rounded ${isConsumoFisico ? 'text-slate-500' : 'text-slate-700'}`}>
-                                                                      {cellValue}
-                                                                    </div>
-                                                                  </td>
-                                                                );
-                                                              })}
-                                                           </tr>
-                                                         );
-                                                       })}
-                                                     </tbody>
+                                                      <tbody>
+                                                        {['CONSUMO FISICO', 'CONSUMO TEORICO', 'RENDIMIENTO DE AGUA'].map((row, rowIdx) => {
+                                                          const rowKey = ['fisico', 'teorico', 'rendimiento'][rowIdx];
+                                                          const isConsumoFisico = rowKey === 'fisico';
+                                                          const isConsumoTeorico = rowKey === 'teorico';
+                                                          const isRendimiento = rowKey === 'rendimiento';
+                                                          return (
+                                                            <tr key={row} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                                              <td className="px-2 py-2 font-bold text-slate-700 border border-slate-100 whitespace-nowrap">{row}</td>
+                                                               {getWeekDays(rSemanalWeekStartDate).filter((day) => {
+                                                                 const dayMonth = day.getMonth() + 1;
+                                                                 const dayYear = day.getFullYear();
+                                                                 return dayMonth === rSemanalSelectedMonth && dayYear === rSemanalSelectedYear;
+                                                               }).map((day, idx) => {
+                                                                 const dateStr = format(day, 'yyyy-MM-dd');
+                                                                 const cellKey = getRSemanalAguaCellKey(dateStr, rowKey);
+                                                                 const consumido = getAguaConsumoNumber(dateStr);
+                                                                 const vp = calcularLitrosAguaParaFecha(dateStr);
+                                                                 const cellValue = isConsumoFisico
+                                                                   ? ptabAguaStore.data[`${dateStr}-total`] || ''
+                                                                   : isConsumoTeorico
+                                                                     ? vp ? formatAguaDisplay(vp) : ''
+                                                                     : isRendimiento
+                                                                       ? consumido > 0 ? formatAguaDisplay(vp / consumido) : '0,00'
+                                                                       : rSemanalAguaStore.data[cellKey] || '';
+                                                                 return (
+                                                                   <td key={idx} className="px-2 py-2 text-center border border-slate-100">
+                                                                     <div className={`w-full min-w-[14ch] h-8 flex items-center justify-center text-center text-[11px] font-black text-slate-700 bg-slate-100 border border-slate-200 rounded ${isConsumoFisico ? 'text-slate-500' : 'text-slate-700'}`}>
+                                                                       {cellValue}
+                                                                     </div>
+                                                                   </td>
+                                                                 );
+                                                               })}
+                                                            </tr>
+                                                          );
+                                                        })}
+                                                      </tbody>
                                                   </table>
                                                 </div>
                                              </div>
