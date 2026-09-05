@@ -656,6 +656,9 @@ export default function PlannerPage() {
   const [rMensualSubTab, setRMensualSubTab] = useState<'m-agua' | 'm-insumos'>('m-agua');
   const ptabWeeksContainerRef = useRef<HTMLDivElement>(null);
   const ptabAguaStore = useRemoteCollection<Record<string, string>>('ptab-agua', {});
+  const [rSemanalWeekStartDate, setRSemanalWeekStartDate] = useState(new Date());
+  const rSemanalWeeksContainerRef = useRef<HTMLDivElement>(null);
+  const rSemanalAguaStore = useRemoteCollection<Record<string, string>>('ptab-r-semanal-agua', {});
   const insumosAguaTotalStore = useRemoteCollection<Record<string, string>>('insumos-agua', {});
 
   useEffect(() => {
@@ -1031,7 +1034,7 @@ export default function PlannerPage() {
     let totalVP = 0;
     diasMes.forEach((dia, idx) => {
       const fechaStr = format(dia, 'yyyy-MM-dd');
-      const consumido = Number(aguaConsumoPorDia[fechaStr]) || 0;
+                                                 const consumido = Number(getAguaConsumo(fechaStr)) || 0;
       const vp = calcularLitrosAguaParaFecha(fechaStr);
       const rendimiento = consumido > 0 && vp > 0 ? (vp / consumido) : 0;
       const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
@@ -1138,7 +1141,7 @@ export default function PlannerPage() {
     doc.setFontSize(10);
     const rows = diasMes.map((dia) => {
       const fechaStr = format(dia, 'yyyy-MM-dd');
-      const consumido = Number(aguaConsumoPorDia[fechaStr]) || 0;
+                                                 const consumido = Number(getAguaConsumo(fechaStr)) || 0;
       const vp = calcularLitrosAguaParaFecha(fechaStr);
       const rendimiento = consumido > 0 && vp > 0 ? (vp / consumido) : 0;
       const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
@@ -1152,7 +1155,7 @@ export default function PlannerPage() {
     });
     const totalConsumido = diasMes.reduce((acc, dia) => {
       const fechaStr = format(dia, 'yyyy-MM-dd');
-      return acc + (Number(aguaConsumoPorDia[fechaStr]) || 0);
+      return acc + (Number(getAguaConsumo(fechaStr)) || 0);
     }, 0);
     const totalVP = diasMes.reduce((acc, dia) => {
       const fechaStr = format(dia, 'yyyy-MM-dd');
@@ -1817,16 +1820,74 @@ export default function PlannerPage() {
     return weeks;
   }, [ptabWeekStartDate]);
 
+  const weeksForYearRSemanal = useMemo(() => {
+    const weeks: { isoWeek: number; start: Date; end: Date }[] = [];
+    const year = rSemanalWeekStartDate.getFullYear();
+    const jan4 = new Date(year, 0, 4);
+    let current = startOfWeek(jan4, { weekStartsOn: 1 });
+    let week = 1;
+    while (current.getFullYear() <= year) {
+      const start = new Date(current);
+      const end = addDays(current, 6);
+      weeks.push({ isoWeek: week, start, end });
+      current = addDays(current, 7);
+      week++;
+      if (start.getFullYear() > year) break;
+    }
+    return weeks;
+  }, [rSemanalWeekStartDate]);
+
   useEffect(() => {
-    if (!ptabWeeksContainerRef.current) return;
-    const selectedWeek = getISOWeek(ptabWeekStartDate);
-    const el = document.getElementById(`ptab-week-${selectedWeek}`);
+    if (!rSemanalWeeksContainerRef.current) return;
+    const selectedWeek = getISOWeek(rSemanalWeekStartDate);
+    const el = document.getElementById(`r-semanal-week-${selectedWeek}`);
     if (el) {
       el.scrollIntoView({ block: 'nearest' });
     }
-   }, [ptabWeekStartDate]);
+   }, [rSemanalWeekStartDate]);
 
   const getPtabAguaCellKey = (dateStr: string, rowKey: string) => `${dateStr}-${rowKey}`;
+
+  const getRSemanalAguaCellKey = (dateStr: string, rowKey: string) => `${dateStr}-${rowKey}`;
+
+  const handleRSemanalAguaChange = (dateStr: string, rowKey: string, value: string) => {
+    rSemanalAguaStore.patchData({ [getRSemanalAguaCellKey(dateStr, rowKey)]: value });
+  };
+
+  const rSemanalSelectedMonth = rSemanalWeekStartDate.getMonth() + 1;
+  const rSemanalSelectedYear = rSemanalWeekStartDate.getFullYear();
+
+  const rSemanalMonthOptions = [
+    { value: '1', label: 'Enero' },
+    { value: '2', label: 'Febrero' },
+    { value: '3', label: 'Marzo' },
+    { value: '4', label: 'Abril' },
+    { value: '5', label: 'Mayo' },
+    { value: '6', label: 'Junio' },
+    { value: '7', label: 'Julio' },
+    { value: '8', label: 'Agosto' },
+    { value: '9', label: 'Septiembre' },
+    { value: '10', label: 'Octubre' },
+    { value: '11', label: 'Noviembre' },
+    { value: '12', label: 'Diciembre' },
+  ];
+
+  const rSemanalCurrentYear = new Date().getFullYear();
+  const rSemanalYearOptions = Array.from({ length: 11 }, (_, i) => rSemanalCurrentYear - 5 + i);
+
+  const getAguaConsumo = (fechaStr: string): string => {
+    const candidates = [
+      aguaConsumoPorDia[fechaStr],
+      insumosAguaTotalStore.data?.[fechaStr],
+      ptabAguaStore.data?.[getPtabAguaCellKey(fechaStr, 'total')],
+    ];
+    for (const raw of candidates) {
+      if (raw !== undefined && raw !== null && String(raw).trim() !== '') {
+        return String(raw).replace(/\./g, '').replace(',', '.');
+      }
+    }
+    return '';
+  };
 
   const handlePtabAguaChange = (dateStr: string, rowKey: string, value: string) => {
     ptabAguaStore.patchData({ [getPtabAguaCellKey(dateStr, rowKey)]: value });
@@ -4501,18 +4562,110 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                 </div>
                                 <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                                   <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
-                                    <div className="flex flex-col h-full gap-3">
-                                      {rSemanalSubTab === 's-agua' && (
-                                        <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
-                                          S Agua
-                                        </div>
-                                      )}
-                                      {rSemanalSubTab === 's-insumos' && (
-                                        <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
-                                          S Insumos
-                                        </div>
-                                      )}
-                                    </div>
+                                     <div className="flex flex-col h-full gap-3">
+                                       {rSemanalSubTab === 's-agua' && (
+                                         <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                                           <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                                             <div className="flex flex-col h-full gap-3">
+                                               <div className="flex items-center justify-end no-print">
+                                                 <Popover>
+                                                   <PopoverTrigger asChild>
+                                                     <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                                                       <CalendarIcon className="h-3.5 w-3.5 text-primary" />
+                                                       Semana {getISOWeek(rSemanalWeekStartDate)}
+                                                     </button>
+                                                   </PopoverTrigger>
+                                                   <PopoverContent className="p-0 w-72" align="end">
+                                                     <div className="flex flex-col p-2">
+                                                       <div className="flex items-center justify-between mb-2">
+                                                         <button onClick={() => {
+                                                           const d = new Date(rSemanalWeekStartDate);
+                                                           d.setFullYear(d.getFullYear() - 1);
+                                                           setRSemanalWeekStartDate(d);
+                                                         }} className="h-7 px-2 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50">← Año</button>
+                                                         <span className="text-[11px] font-black text-slate-700">{rSemanalWeekStartDate.getFullYear()}</span>
+                                                         <button onClick={() => {
+                                                           const d = new Date(rSemanalWeekStartDate);
+                                                           d.setFullYear(d.getFullYear() + 1);
+                                                           setRSemanalWeekStartDate(d);
+                                                         }} className="h-7 px-2 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50">Año →</button>
+                                                       </div>
+                                                       <div ref={rSemanalWeeksContainerRef} className="max-h-64 overflow-auto rounded-lg border border-slate-200">
+                                                         {weeksForYearRSemanal.map((week) => (
+                                                           <button
+                                                             key={week.isoWeek}
+                                                             id={`r-semanal-week-${week.isoWeek}`}
+                                                             onClick={() => setRSemanalWeekStartDate(week.start)}
+                                                             className={cn(
+                                                               "w-full text-left px-3 py-2 text-[11px] border-b border-slate-100 last:border-0 flex items-center justify-between",
+                                                               getISOWeek(rSemanalWeekStartDate) === week.isoWeek ? "bg-slate-800 text-white" : "hover:bg-slate-50"
+                                                             )}
+                                                           >
+                                                             <span className="font-bold">Sem {week.isoWeek}</span>
+                                                             <span className="text-[10px] opacity-70">{format(week.start, 'dd MMM', { locale: es })} - {format(week.end, 'dd MMM', { locale: es })}</span>
+                                                           </button>
+                                                         ))}
+                                                       </div>
+                                                     </div>
+                                                   </PopoverContent>
+                                                 </Popover>
+                                               </div>
+                                               <div className="flex-1 rounded-2xl border border-slate-100 bg-white overflow-x-auto">
+                                                 <div className="mb-2">
+                                                   <span className="text-slate-700 font-black text-sm uppercase tracking-widest">Semana {getISOWeek(rSemanalWeekStartDate)}</span>
+                                                 </div>
+                                                 <table className="w-full border-collapse text-[11px]">
+                                                   <thead>
+                                                     <tr className="bg-slate-800 text-white">
+                                                       <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10">Consumo Agua</th>
+                                                       {getWeekDays(rSemanalWeekStartDate).map((day, idx) => (
+                                                         <th key={idx} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">
+                                                           {format(day, 'EEEE d/M/yy', { locale: es })}
+                                                         </th>
+                                                       ))}
+                                                     </tr>
+                                                   </thead>
+                                                    <tbody>
+                                                      {['CONSUMO FISICO', 'CONSUMO TEORICO', 'RENDIMIENTO DE AGUA'].map((row, rowIdx) => {
+                                                        const rowKey = ['fisico', 'teorico', 'rendimiento'][rowIdx];
+                                                        const isConsumoFisico = rowKey === 'fisico';
+                                                        return (
+                                                          <tr key={row} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                                            <td className="px-2 py-2 font-bold text-slate-700 border border-slate-100 whitespace-nowrap">{row}</td>
+                                                            {getWeekDays(rSemanalWeekStartDate).map((day, idx) => {
+                                                              const dateStr = format(day, 'yyyy-MM-dd');
+                                                              const cellKey = getRSemanalAguaCellKey(dateStr, rowKey);
+                                                              const cellValue = isConsumoFisico
+                                                                ? ptabAguaStore.data[`${dateStr}-total`] || ''
+                                                                : rSemanalAguaStore.data[cellKey] || '';
+                                                              return (
+                                                                <td key={idx} className="px-2 py-2 text-center border border-slate-100">
+                                                                  <input
+                                                                    type="text"
+                                                                    value={cellValue}
+                                                                    readOnly={isConsumoFisico}
+                                                                    onChange={(e) => !isConsumoFisico && handleRSemanalAguaChange(dateStr, rowKey, e.target.value)}
+                                                                    className={`w-full min-w-[14ch] h-8 text-center text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary ${isConsumoFisico ? 'bg-slate-100 text-slate-500' : ''}`}
+                                                                  />
+                                                                </td>
+                                                              );
+                                                            })}
+                                                          </tr>
+                                                        );
+                                                      })}
+                                                    </tbody>
+                                                 </table>
+                                               </div>
+                                             </div>
+                                           </div>
+                                         </div>
+                                       )}
+                                       {rSemanalSubTab === 's-insumos' && (
+                                         <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
+                                           S Insumos
+                                         </div>
+                                       )}
+                                     </div>
                                   </div>
                                 </div>
                               </div>
@@ -4726,17 +4879,12 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                             <input
                                               type="text"
                                               inputMode="decimal"
-                                             value={(() => {
-                                               if (!insumosFecha || isNaN(insumosFecha.getTime())) return '';
-                                               const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
-                                               const manual = aguaConsumoPorDia[fechaStr];
-                                               if (manual && String(manual).trim() !== '') return manual;
-                                               const remote = insumosAguaTotalStore.data?.[fechaStr];
-                                               if (remote !== undefined && remote !== '') return remote;
-                                               const fallback = ptabAguaStore.data?.[getPtabAguaCellKey(fechaStr, 'total')];
-                                               if (fallback !== undefined && fallback !== '') return String(fallback).replace(',', '.');
-                                               return '';
-                                             })()}
+                                              value={(() => {
+                                                if (!insumosFecha || isNaN(insumosFecha.getTime())) return '';
+                                                const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
+                                                const valor = getAguaConsumo(fechaStr);
+                                                return valor;
+                                              })()}
                                                onChange={(e) => {
                                                  if (!insumosFecha || isNaN(insumosFecha.getTime())) return;
                                                  const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
@@ -4753,8 +4901,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                      <div className="grid grid-cols-3">
                                        <div className="flex items-center px-3 py-1 bg-slate-100"></div>
                                        <div className="flex items-center justify-center px-3 py-1 bg-slate-100 font-black text-slate-700 text-[11px]">
-                                           {insumosFecha && !isNaN(insumosFecha.getTime()) ? (() => {
-                                              const valor = Number(aguaConsumoPorDia[format(startOfDay(insumosFecha), 'yyyy-MM-dd')]) || 0;
+                                            {insumosFecha && !isNaN(insumosFecha.getTime()) ? (() => {
+                                               const valor = Number(getAguaConsumo(format(startOfDay(insumosFecha), 'yyyy-MM-dd'))) || 0;
                                             const totalLitros = Object.values(aguaDiarioData).reduce((acc, row) => {
                                               const c2 = Number(row.cajas2L) || 0;
                                               const c1 = Number(row.cajas1L) || 0;
@@ -4798,7 +4946,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                             });
                                             return diasSemana.map((dia, idx) => {
                                               const fechaStr = format(dia, 'yyyy-MM-dd');
-                                                const consumido = Number(aguaConsumoPorDia[fechaStr]) || 0;
+                                                                                           const consumido = Number(getAguaConsumo(fechaStr)) || 0;
                                                  const vp = calcularLitrosAguaParaFecha(fechaStr);
                                                 const litrosTotales = calcularLitrosAguaParaFecha(fechaStr);
                                                 const rendimiento = consumido > 0 ? litrosTotales / consumido : 0;
@@ -4826,7 +4974,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                 });
                                                 return diasSemana.reduce((acc, dia) => {
                                                   const fechaStr = format(dia, 'yyyy-MM-dd');
-                                                  return acc + (Number(aguaConsumoPorDia[fechaStr]) || 0);
+                                                  return acc + (Number(getAguaConsumo(fechaStr)) || 0);
                                                 }, 0).toLocaleString('es-VE');
                                               })()}
                                             </td>
@@ -4856,7 +5004,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                  });
                                                  const totalConsumido = diasSemana.reduce((acc, dia) => {
                                                    const fechaStr = format(dia, 'yyyy-MM-dd');
-                                                   return acc + (Number(aguaConsumoPorDia[fechaStr]) || 0);
+                                                   return acc + (Number(getAguaConsumo(fechaStr)) || 0);
                                                  }, 0);
                                                  const totalLitros = diasSemana.reduce((acc, dia) => {
                                                    const fechaStr = format(dia, 'yyyy-MM-dd');
@@ -4915,7 +5063,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                          const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
                                          return diasMes.map((dia, idx) => {
                                             const fechaStr = format(dia, 'yyyy-MM-dd');
-                                            const consumido = Number(aguaConsumoPorDia[fechaStr]) || 0;
+                                                                                       const consumido = Number(getAguaConsumo(fechaStr)) || 0;
                                              const vp = calcularLitrosAguaParaFecha(fechaStr);
                                             const litrosTotales = calcularLitrosAguaParaFecha(fechaStr);
                                             const rendimiento = consumido > 0 ? litrosTotales / consumido : 0;
@@ -4943,7 +5091,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                              const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
                                              return diasMes.reduce((acc, dia) => {
                                                const fechaStr = format(dia, 'yyyy-MM-dd');
-                                               return acc + (Number(aguaConsumoPorDia[fechaStr]) || 0);
+                                               return acc + (Number(getAguaConsumo(fechaStr)) || 0);
                                              }, 0).toLocaleString('es-VE');
                                            })()}
                                          </td>
@@ -4971,7 +5119,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                               const diasMes = eachDayOfInterval({ start: inicioMes, end: finMes });
                                               const totalConsumido = diasMes.reduce((acc, dia) => {
                                                 const fechaStr = format(dia, 'yyyy-MM-dd');
-                                                return acc + (Number(aguaConsumoPorDia[fechaStr]) || 0);
+                                                return acc + (Number(getAguaConsumo(fechaStr)) || 0);
                                               }, 0);
                                               const totalLitros = diasMes.reduce((acc, dia) => {
                                                 const fechaStr = format(dia, 'yyyy-MM-dd');
