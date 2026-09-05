@@ -105665,7 +105665,14 @@
         },
         "auto-6-1788385423643": {
           "cajasPlanificadas": 34500,
-          "jarabeReal": 3058
+          "jarabeReal": 30587,
+          "producto": "172",
+          "ubb": 10.65
+        },
+        "auto-6-1788609873732": {
+          "cajasPlanificadas": 13801,
+          "jarabeReal": 13898,
+          "producto": ""
         }
       },
       "linea-7": {
@@ -105778,6 +105785,18 @@
           "ubb": 10.89,
           "jarabeReal": 31336,
           "pnc": 156
+        },
+        "auto-7-1788348716712": {
+          "cajasPlanificadas": 40000,
+          "jarabeReal": 20443,
+          "producto": "309",
+          "ubb": 7.11
+        },
+        "auto-7-1788350938588": {
+          "cajasPlanificadas": 35580,
+          "jarabeReal": 66618,
+          "producto": "459",
+          "ubb": 59.71
         }
       }
     },
