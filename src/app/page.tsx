@@ -103,7 +103,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { WeeklyData } from '@/lib/json-db';
 import { ScheduledTask } from '@/lib/types';
-import { format, getISOWeek, addDays, addMonths, subMonths, startOfWeek, startOfMonth, endOfMonth, eachDayOfInterval } from 'date-fns';
+import { format, getISOWeek, addDays, addMonths, subMonths, startOfWeek, startOfMonth, endOfMonth, eachDayOfInterval, startOfDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -721,7 +721,7 @@ export default function PlannerPage() {
 
   useEffect(() => {
     if (!insumosFecha || typeof window === 'undefined') return;
-      const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
+      const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
 
       const ordenesDelDia = (ordenes || []).filter(orden =>
         orden.dias.some(dia => dia.fechaInicio === fechaStr)
@@ -1202,9 +1202,9 @@ export default function PlannerPage() {
     });
     return initial;
   });
-  useEffect(() => {
+   useEffect(() => {
     if (!insumosFecha || typeof window === 'undefined') return;
-    const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
+    const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
     const ordenesDelDia = (ordenes || []).filter(orden =>
       orden.dias.some(dia => dia.fechaInicio === fechaStr)
     );
@@ -4397,9 +4397,9 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                             return (
                                               <tr key={row} className="border-b border-slate-100 hover:bg-slate-50/50">
                                                 <td className="px-2 py-2 font-bold text-slate-700 border border-slate-100 whitespace-nowrap">{row}</td>
-                                                {getWeekDays(ptabWeekStartDate).map((day, idx) => {
-                                                  const dateStr = format(day, 'yyyy-MM-dd');
-                                                  const cellKey = getPtabAguaCellKey(dateStr, rowKey);
+                                                 {getWeekDays(ptabWeekStartDate).map((day, idx) => {
+                                                   const dateStr = format(startOfDay(day), 'yyyy-MM-dd');
+                                                   const cellKey = getPtabAguaCellKey(dateStr, rowKey);
                                                   return (
                                                      <td key={idx} className="px-2 py-2 text-center border border-slate-100">
                                                        <input
@@ -4416,9 +4416,9 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                           })}
                                           <tr className="bg-slate-100 font-black text-slate-700">
                                             <td className="px-2 py-2 border border-slate-200 whitespace-nowrap">TOTAL AGUA SUM. POZOS LTS</td>
-                                            {getWeekDays(ptabWeekStartDate).map((day, idx) => {
-                                              const dateStr = format(day, 'yyyy-MM-dd');
-                                              const cellKey = getPtabAguaCellKey(dateStr, 'total');
+                                             {getWeekDays(ptabWeekStartDate).map((day, idx) => {
+                                               const dateStr = format(startOfDay(day), 'yyyy-MM-dd');
+                                               const cellKey = getPtabAguaCellKey(dateStr, 'total');
                                               return (
                                                  <td key={idx} className="px-2 py-2 text-center border border-slate-200">
                                                    <input
@@ -4704,21 +4704,21 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                          <div className="font-black text-[11px] uppercase tracking-widest">CONSUMO DE AGUA</div>
                                        </div>
                                         <div className="flex items-center px-3 py-1 bg-slate-800 justify-center">
-                                          <input
-                                            type="number"
-                                            value={(() => {
-                                              if (!insumosFecha) return '';
-                                              const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
-                                              const manual = aguaConsumoPorDia[fechaStr];
-                                              if (manual !== undefined) return manual;
-                                              const cellKey = getPtabAguaCellKey(fechaStr, 'total');
-                                              return ptabAguaStore.data?.[cellKey] ?? '';
-                                            })()}
-                                            onChange={(e) => {
-                                              if (!insumosFecha) return;
-                                              const fechaStr = format(insumosFecha, 'yyyy-MM-dd');
-                                              setAguaConsumoPorDia(prev => ({ ...prev, [fechaStr]: e.target.value }));
-                                            }}
+                                           <input
+                                             type="number"
+                                             value={(() => {
+                                               if (!insumosFecha) return '';
+                                               const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
+                                               const manual = aguaConsumoPorDia[fechaStr];
+                                               if (manual !== undefined) return manual;
+                                               const cellKey = getPtabAguaCellKey(fechaStr, 'total');
+                                               return ptabAguaStore.data?.[cellKey] ?? '';
+                                             })()}
+                                             onChange={(e) => {
+                                               if (!insumosFecha) return;
+                                               const fechaStr = format(startOfDay(insumosFecha), 'yyyy-MM-dd');
+                                               setAguaConsumoPorDia(prev => ({ ...prev, [fechaStr]: e.target.value }));
+                                             }}
                                             className="w-full h-7 text-[11px] font-bold text-center bg-white text-slate-900 border border-white/20 rounded focus:outline-none focus:ring-1 focus:ring-blue-500 focus:border-blue-500"
                                             placeholder="0"
                                           />
@@ -4731,7 +4731,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        <div className="flex items-center px-3 py-1 bg-slate-100"></div>
                                        <div className="flex items-center justify-center px-3 py-1 bg-slate-100 font-black text-slate-700 text-[11px]">
                                           {insumosFecha ? (() => {
-                                            const valor = Number(aguaConsumoPorDia[format(insumosFecha, 'yyyy-MM-dd')]) || 0;
+                                             const valor = Number(aguaConsumoPorDia[format(startOfDay(insumosFecha), 'yyyy-MM-dd')]) || 0;
                                             const totalLitros = Object.values(aguaDiarioData).reduce((acc, row) => {
                                               const c2 = Number(row.cajas2L) || 0;
                                               const c1 = Number(row.cajas1L) || 0;
