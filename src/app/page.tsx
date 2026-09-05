@@ -4731,16 +4731,9 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                               const manual = aguaConsumoPorDia[fechaStr];
                                               if (manual !== undefined) return manual;
                                               const remote = insumosAguaTotalStore.data?.[fechaStr];
-                                              if (remote !== undefined && remote !== '') {
-                                                console.log('[DEBUG] Render from insumosAguaTotalStore', fechaStr, remote);
-                                                return remote;
-                                              }
+                                              if (remote !== undefined && remote !== '') return remote;
                                               const fallback = ptabAguaStore.data?.[getPtabAguaCellKey(fechaStr, 'total')];
-                                              if (fallback !== undefined) {
-                                                console.log('[DEBUG] Render from ptabAguaStore fallback', fechaStr, fallback);
-                                                return fallback;
-                                              }
-                                              console.log('[DEBUG] Render empty', fechaStr, 'insumosAguaTotalStore keys:', Object.keys(insumosAguaTotalStore.data || {}), 'ptabAguaStore total keys:', Object.keys(ptabAguaStore.data || {}).filter(k => k.endsWith('-total')).slice(0, 10));
+                                              if (fallback !== undefined && fallback !== '') return String(fallback).replace(',', '.');
                                               return '';
                                             })()}
                                               onChange={(e) => {
