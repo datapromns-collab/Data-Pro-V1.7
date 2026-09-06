@@ -656,6 +656,8 @@ export default function PlannerPage() {
   const [ptabWeekStartDate, setPtabWeekStartDate] = useState(new Date());
   const [rSemanalSubTab, setRSemanalSubTab] = useState<'s-agua' | 's-insumos'>('s-agua');
   const [rMensualSubTab, setRMensualSubTab] = useState<'m-agua' | 'm-insumos'>('m-agua');
+  const [rMensualSelectedMonth, setRMensualSelectedMonth] = useState(new Date().getMonth() + 1);
+  const [rMensualSelectedYear, setRMensualSelectedYear] = useState(new Date().getFullYear());
   const ptabWeeksContainerRef = useRef<HTMLDivElement>(null);
   const ptabAguaStore = useRemoteCollection<Record<string, string>>('ptab-agua', {});
   const [rSemanalWeekStartDate, setRSemanalWeekStartDate] = useState(new Date());
@@ -1942,6 +1944,24 @@ export default function PlannerPage() {
 
   const rSemanalCurrentYear = new Date().getFullYear();
   const rSemanalYearOptions = Array.from({ length: 11 }, (_, i) => rSemanalCurrentYear - 5 + i);
+
+  const rMensualMonthOptions = [
+    { value: '1', label: 'Enero' },
+    { value: '2', label: 'Febrero' },
+    { value: '3', label: 'Marzo' },
+    { value: '4', label: 'Abril' },
+    { value: '5', label: 'Mayo' },
+    { value: '6', label: 'Junio' },
+    { value: '7', label: 'Julio' },
+    { value: '8', label: 'Agosto' },
+    { value: '9', label: 'Septiembre' },
+    { value: '10', label: 'Octubre' },
+    { value: '11', label: 'Noviembre' },
+    { value: '12', label: 'Diciembre' },
+  ];
+
+  const rMensualCurrentYear = new Date().getFullYear();
+  const rMensualYearOptions = Array.from({ length: 11 }, (_, i) => rMensualCurrentYear - 5 + i);
 
   const getAguaConsumo = (fechaStr: string): string => {
     const candidates = [
@@ -4885,11 +4905,97 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                                  <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                    <div className="flex flex-col h-full gap-3">
-                                     {rMensualSubTab === 'm-agua' && (
-                                       <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
-                                         M Agua
-                                       </div>
-                                     )}
+                                      {rMensualSubTab === 'm-agua' && (
+                                        <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                                          <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                                            <div className="flex flex-col h-full gap-3">
+                                              <div className="flex items-center justify-end no-print gap-2">
+                                                <Popover>
+                                                  <PopoverTrigger asChild>
+                                                    <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                                                      <CalendarIcon className="h-3.5 w-3.5 text-primary" />
+                                                      {rMensualMonthOptions.find(m => m.value === String(rMensualSelectedMonth))?.label} {rMensualSelectedYear}
+                                                    </button>
+                                                  </PopoverTrigger>
+                                                  <PopoverContent className="p-2 w-56" align="end">
+                                                    <div className="flex flex-col gap-2">
+                                                      <Select value={String(rMensualSelectedMonth)} onValueChange={(val) => setRMensualSelectedMonth(Number(val))}>
+                                                        <SelectTrigger className="h-8 text-[11px]">
+                                                          <SelectValue placeholder="Mes" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                          {rMensualMonthOptions.map(m => (
+                                                            <SelectItem key={m.value} value={m.value}>{m.label}</SelectItem>
+                                                          ))}
+                                                        </SelectContent>
+                                                      </Select>
+                                                      <Select value={String(rMensualSelectedYear)} onValueChange={(val) => setRMensualSelectedYear(Number(val))}>
+                                                        <SelectTrigger className="h-8 text-[11px]">
+                                                          <SelectValue placeholder="Año" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                          {rMensualYearOptions.map(y => (
+                                                            <SelectItem key={y} value={String(y)}>{y}</SelectItem>
+                                                          ))}
+                                                        </SelectContent>
+                                                      </Select>
+                                                    </div>
+                                                  </PopoverContent>
+                                                </Popover>
+                                              </div>
+                                              <div className="flex-1 rounded-2xl border border-slate-100 bg-white overflow-x-auto">
+                                                <div className="mb-2">
+                                                  <span className="text-slate-700 font-black text-sm uppercase tracking-widest">{rMensualMonthOptions.find(m => m.value === String(rMensualSelectedMonth))?.label} {rMensualSelectedYear}</span>
+                                                </div>
+                                                <table className="w-full border-collapse text-[11px]">
+                                                  <thead>
+                                                    <tr className="bg-slate-800 text-white">
+                                                      <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10">Consumo Agua</th>
+                                                      {Array.from({ length: new Date(rMensualSelectedYear, rMensualSelectedMonth, 0).getDate() }, (_, i) => i + 1).map((day) => (
+                                                        <th key={day} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[60px]">
+                                                          {day}
+                                                        </th>
+                                                      ))}
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    {['CONSUMO FISICO', 'CONSUMO TEORICO', 'RENDIMIENTO DE AGUA'].map((row, rowIdx) => {
+                                                      const rowKey = ['fisico', 'teorico', 'rendimiento'][rowIdx];
+                                                      const isConsumoFisico = rowKey === 'fisico';
+                                                      const isConsumoTeorico = rowKey === 'teorico';
+                                                      const isRendimiento = rowKey === 'rendimiento';
+                                                      return (
+                                                        <tr key={row} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                                          <td className="px-2 py-2 font-bold text-slate-700 border border-slate-100 whitespace-nowrap">{row}</td>
+                                                          {Array.from({ length: new Date(rMensualSelectedYear, rMensualSelectedMonth, 0).getDate() }, (_, i) => i + 1).map((day) => {
+                                                            const dateStr = `${rMensualSelectedYear}-${String(rMensualSelectedMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                                                            const consumido = getAguaConsumoNumber(dateStr);
+                                                            const vp = calcularLitrosAguaParaFecha(dateStr);
+                                                            const cellValue = isConsumoFisico
+                                                              ? ptabAguaStore.data[`${dateStr}-total`] || ''
+                                                              : isConsumoTeorico
+                                                                ? vp ? formatAguaDisplay(vp) : ''
+                                                                : isRendimiento
+                                                                  ? consumido > 0 ? formatAguaDisplay(vp / consumido) : '0,00'
+                                                                  : '';
+                                                            return (
+                                                              <td key={day} className="px-2 py-2 text-center border border-slate-100">
+                                                                <div className={`w-full min-w-[14ch] h-8 flex items-center justify-center text-center text-[11px] font-black text-slate-700 bg-slate-100 border border-slate-200 rounded ${isConsumoFisico ? 'text-slate-500' : 'text-slate-700'}`}>
+                                                                  {cellValue}
+                                                                </div>
+                                                              </td>
+                                                            );
+                                                          })}
+                                                        </tr>
+                                                      );
+                                                    })}
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                      )}
                                      {rMensualSubTab === 'm-insumos' && (
                                        <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
                                          M Insumos
