@@ -5,7 +5,7 @@ import Image from "next/image";
 import ExcelJS from "exceljs";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
-import "jspdf-autotable";
+import { autoTable } from "jspdf-autotable";
 import { 
   Plus, 
   Trash2, 
@@ -47,7 +47,8 @@ import {
   X,
   Save,
   Settings,
-  CheckSquare
+  CheckSquare,
+  FileDown
 } from 'lucide-react';
 import { PRODUCT_LIST, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, PRODUCTION_START_HOUR } from '@/lib/planner-utils';
 import ProducidasTable, { ProducidasTabla, nuevaTabla, sumarTablas } from '@/components/planner/ProducidasTable';import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
@@ -1110,7 +1111,7 @@ export default function PlannerPage() {
     }, 0);
     const totalRendimiento = totalConsumido > 0 && totalVP > 0 ? (totalConsumido / totalVP) : 0;
     rows.push(['', 'TOTAL', Number(formatAguaDisplay(totalConsumido).replace(/\./g, '').replace(',', '.')), Number(formatAguaDisplay(totalVP).replace(/\./g, '').replace(',', '.')), Number(formatAguaDisplay(totalRendimiento).replace(/\./g, '').replace(',', '.'))]);
-    doc.autoTable({
+    autoTable(doc, {
       startY: 22,
       head: [['FECHA', 'DIA', 'KG.CO2 CONSUMIDO', 'KG.CO2.VP', 'RENDIMIENTO CO2']],
       body: rows,
@@ -1164,7 +1165,7 @@ export default function PlannerPage() {
     }, 0);
     const totalRendimiento = totalConsumido > 0 && totalVP > 0 ? formatAguaDisplay(totalVP / totalConsumido) : '0,00';
     rows.push(['', 'TOTAL', Number(formatAguaDisplay(totalConsumido).replace(/\./g, '').replace(',', '.')), Number(formatAguaDisplay(totalVP).replace(/\./g, '').replace(',', '.')), Number(formatAguaDisplay(totalRendimiento).replace(/\./g, '').replace(',', '.'))]);
-    doc.autoTable({
+    autoTable(doc, {
       startY: 22,
       head: [['FECHA', 'DIA', 'LITROS.AGUA CONSUMIDO', 'LITROS.AGUA.VP', 'RENDIMIENTO AGUA']],
       body: rows,
@@ -1181,6 +1182,59 @@ export default function PlannerPage() {
       },
     });
     doc.save(`AGUA_Mensual_${anioSeleccionado}_${String(mesSeleccionado + 1).padStart(2, '0')}.pdf`);
+  };
+  const generarPDFRSemanalAgua = async () => {
+    if (typeof window === 'undefined') return;
+    const days = getWeekDays(rSemanalWeekStartDate).filter((day) => {
+      const dayMonth = day.getMonth() + 1;
+      const dayYear = day.getFullYear();
+      return dayMonth === rSemanalSelectedMonth && dayYear === rSemanalSelectedYear;
+    });
+    const doc = new jsPDF() as any;
+    doc.setFontSize(16);
+    doc.text(`AGUA - SEMANA ${getISOWeek(rSemanalWeekStartDate)} - ${rSemanalMonthOptions.find(m => m.value === String(rSemanalSelectedMonth))?.label?.toUpperCase()} ${rSemanalSelectedYear}`, 14, 15);
+    doc.setFontSize(10);
+    const rows = days.map((dia) => {
+      const fechaStr = format(dia, 'yyyy-MM-dd');
+      const consumido = getAguaConsumoNumber(fechaStr);
+      const vp = calcularLitrosAguaParaFecha(fechaStr);
+      const rendimiento = consumido > 0 && vp > 0 ? formatAguaDisplay(vp / consumido) : '0,00';
+      const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
+      return [
+        format(dia, 'dd/MM/yyyy'),
+        diaNombre,
+        consumido ? Number(formatAguaDisplay(consumido).replace(/\./g, '').replace(',', '.')) : '',
+        vp ? Number(formatAguaDisplay(vp).replace(/\./g, '').replace(',', '.')) : '',
+        rendimiento ? Number(formatAguaDisplay(rendimiento).replace(/\./g, '').replace(',', '.')) : '',
+      ];
+    });
+    const totalConsumido = days.reduce((acc, dia) => {
+      const fechaStr = format(dia, 'yyyy-MM-dd');
+      return acc + getAguaConsumoNumber(fechaStr);
+    }, 0);
+    const totalVP = days.reduce((acc, dia) => {
+      const fechaStr = format(dia, 'yyyy-MM-dd');
+      return acc + calcularLitrosAguaParaFecha(fechaStr);
+    }, 0);
+    const totalRendimiento = totalConsumido > 0 && totalVP > 0 ? formatAguaDisplay(totalVP / totalConsumido) : '0,00';
+    rows.push(['', 'TOTAL', Number(formatAguaDisplay(totalConsumido).replace(/\./g, '').replace(',', '.')), Number(formatAguaDisplay(totalVP).replace(/\./g, '').replace(',', '.')), Number(formatAguaDisplay(totalRendimiento).replace(/\./g, '').replace(',', '.'))]);
+    autoTable(doc, {
+      startY: 22,
+      head: [['FECHA', 'DIA', 'LITROS.AGUA CONSUMIDO', 'LITROS.AGUA.VP', 'RENDIMIENTO AGUA']],
+      body: rows,
+      theme: 'grid',
+      headStyles: { fillColor: [30, 41, 59], textColor: 255, fontStyle: 'bold', halign: 'center' },
+      bodyStyles: { fontSize: 9, halign: 'center' },
+      alternateRowStyles: { fillColor: [248, 250, 252] },
+      footStyles: { fillColor: [226, 232, 240], fontStyle: 'bold' },
+      didParseCell: (data: any) => {
+        if (data.section === 'foot') {
+          data.cell.styles.fillColor = [226, 232, 240];
+          data.cell.styles.fontStyle = 'bold';
+        }
+      },
+    });
+    doc.save(`AGUA_R_Semanal_Semana_${getISOWeek(rSemanalWeekStartDate)}_${rSemanalSelectedYear}.pdf`);
   };
   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
   const [co2ConsumoPorDia, setCo2ConsumoPorDia] = useState<Record<string, string>>(() => {
@@ -4752,9 +4806,14 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                       </tbody>
                                                    </table>
                                                  </div>
-                                                 <div className="mt-4 bg-white rounded-2xl border border-slate-100 p-4">
-                                                   <div className="text-slate-700 font-black text-xs uppercase tracking-widest mb-2">Consumo de agua - Gráfico semanal</div>
-                                                    <div className="min-h-[320px]">
+                                                  <div className="mt-4 bg-white rounded-2xl border border-slate-100 p-4">
+                                                    <div className="flex items-center justify-between mb-2">
+                                                      <div className="text-slate-700 font-black text-xs uppercase tracking-widest">Consumo de agua - Gráfico semanal</div>
+                                                      <Button size="sm" onClick={generarPDFRSemanalAgua} className="h-8 pl-3 pr-4 rounded-full bg-teal-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-teal-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
+                                                        <FileDown className="h-3.5 w-3.5" /> PDF
+                                                      </Button>
+                                                    </div>
+                                                     <div className="min-h-[320px]">
                                                       {rSemanalChartData.length > 0 ? (
                                                         <ResponsiveContainer width="100%" height={320}>
                                                            <ComposedChart data={rSemanalChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
