@@ -2015,7 +2015,14 @@ export default function PlannerPage() {
   const rMensualChartData = useMemo(() => {
     const weeks = getWeeksForMonth(rMensualSelectedYear, rMensualSelectedMonth);
     return weeks.map((week) => {
-      const weekFisico = week.days.reduce((acc, day) => acc + getAguaConsumoNumber(format(day, 'yyyy-MM-dd')), 0);
+      const weekFisico = week.days.reduce((acc, day) => {
+        const dateStr = format(day, 'yyyy-MM-dd');
+        const rawFisico = ptabAguaStore.data?.[`${dateStr}-total`];
+        const val = rawFisico !== undefined && rawFisico !== null && String(rawFisico).trim() !== ''
+          ? Number(String(rawFisico).replace(/\./g, '').replace(',', '.'))
+          : 0;
+        return acc + (isFinite(val) ? val : 0);
+      }, 0);
       const weekTeorico = week.days.reduce((acc, day) => acc + calcularLitrosAguaParaFecha(format(day, 'yyyy-MM-dd')), 0);
       const rendimiento = weekFisico > 0 && weekTeorico > 0 ? Number((weekTeorico / weekFisico).toFixed(2)) : 0;
       return {
@@ -2035,12 +2042,15 @@ export default function PlannerPage() {
     });
     return days.map((day) => {
       const dateStr = format(day, 'yyyy-MM-dd');
-      const consumido = getAguaConsumoNumber(dateStr);
+      const rawFisico = ptabAguaStore.data?.[`${dateStr}-total`];
+      const consumido = rawFisico !== undefined && rawFisico !== null && String(rawFisico).trim() !== ''
+        ? Number(String(rawFisico).replace(/\./g, '').replace(',', '.'))
+        : 0;
       const vp = calcularLitrosAguaParaFecha(dateStr);
       const rendimiento = consumido > 0 && vp > 0 ? Number((vp / consumido).toFixed(2)) : 0;
       return {
         dia: format(day, 'EEEE', { locale: es }).toUpperCase().slice(0, 3),
-        fisico: consumido || 0,
+        fisico: isFinite(consumido) ? consumido : 0,
         teorico: vp || 0,
         rendimiento: rendimiento || 0,
       };
@@ -3973,36 +3983,12 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                         <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{row.disponibilidadTN}</td>
                                                       </tr>
                                                     </tbody>
-                                                </table>
-                                              </div>
-                                              <div className="mt-4 bg-white rounded-2xl border border-slate-100 p-4">
-                                                <div className="text-slate-700 font-black text-xs uppercase tracking-widest mb-2">Consumo de agua - Gráfico mensual</div>
-                                                <div className="min-h-[320px]">
-                                                  {rMensualChartData.length > 0 ? (
-                                                    <ResponsiveContainer width="100%" height={320}>
-                                                      <ComposedChart data={rMensualChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                                                        <CartesianGrid strokeDasharray="3 3" />
-                                                        <XAxis dataKey="semana" />
-                                                        <YAxis yAxisId="left" tickFormatter={(v) => (Math.abs(Number(v)) >= 1_000_000 ? `${(Number(v) / 1_000_000).toFixed(1)}M` : Math.abs(Number(v)) >= 1_000 ? `${(Number(v) / 1_000).toFixed(1)}K` : String(v))} width={50} />
-                                                        <YAxis yAxisId="right" orientation="right" />
-                                                        <RechartsTooltip />
-                                                        <Legend />
-                                                        <Bar yAxisId="left" dataKey="fisico" fill="#0ea5e9" name="Consumo Físico" />
-                                                        <Bar yAxisId="left" dataKey="teorico" fill="#10b981" name="Consumo Teórico" />
-                                                        <Line yAxisId="right" type="monotone" dataKey="rendimiento" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
-                                                      </ComposedChart>
-                                                    </ResponsiveContainer>
-                                                  ) : (
-                                                    <div className="h-[320px] rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-xs tracking-widest">
-                                                      Sin datos para graficar
-                                                    </div>
-                                                  )}
+                                                  </table>
                                                 </div>
                                               </div>
-                                            </div>
-                                            </div>
-                                          );
-                                       })()}
+                                             </div>
+                                           );
+                                        })()}
                                         <div className="mt-3">
                                           <TablaResumenPorLinea 
                                            informesOperacionales={informesOperacionales || []}
@@ -4701,14 +4687,14 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                  </td>
                                               );
                                             })}
-                                          </tr>
-                                        </tbody>
-                                      </table>
-                                    </div>
-                                </div>
-                              </div>
-                            </div>
-                          )}
+                                           </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </div>
+                               </div>
+                             </div>
+                           )}
                          {procesosSubTab === 'ptab' && ptabTab === 'insumos' && (
                            <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                              <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
@@ -7253,15 +7239,15 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalProduccionTeorica}</td>
                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-200 text-center tabular-nums">{totalHorasEfectivas}</td>
                        <td className="px-1 py-1.5 text-[10px] font-black text-slate-900 border-b border-slate-200 text-center tabular-nums">{totalTiempoMuerto}</td>
-                     </tr>
-                   );
-                 })()}
-               </tbody>
-             </table>
-           </div>
-         </div>
-       </div>
-       {(turno === 'DIURNO' || turno === 'NOCTURNO') && (
+                      </tr>
+                    );
+                  })()}
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </div>
+        </div>
+        {(turno === 'DIURNO' || turno === 'NOCTURNO') && (
          <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible mt-3">
            <div className="p-4">
              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
@@ -7289,10 +7275,34 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                      <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{disponibilidadGlobal}</td>
                      <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{disponibilidadGlobal}</td>
                    </tr>
-                 </tbody>
-               </table>
-             </div>
-           </div>
+                                                   </tbody>
+                                                 </table>
+                                               </div>
+                                               <div className="mt-4 bg-white rounded-2xl border border-slate-100 p-4">
+                                                 <div className="text-slate-700 font-black text-xs uppercase tracking-widest mb-2">Consumo de agua - Gráfico mensual</div>
+                                                 <div className="min-h-[320px]">
+                                                   {rMensualChartData.length > 0 ? (
+                                                     <ResponsiveContainer width="100%" height={320}>
+                                                       <ComposedChart data={rMensualChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                                                         <CartesianGrid strokeDasharray="3 3" />
+                                                         <XAxis dataKey="semana" />
+                                                         <YAxis yAxisId="left" tickFormatter={(v) => (Math.abs(Number(v)) >= 1_000_000 ? `${(Number(v) / 1_000_000).toFixed(1)}M` : Math.abs(Number(v)) >= 1_000 ? `${(Number(v) / 1_000).toFixed(1)}K` : String(v))} width={50} />
+                                                         <YAxis yAxisId="right" orientation="right" />
+                                                         <RechartsTooltip />
+                                                         <Legend />
+                                                         <Bar yAxisId="left" dataKey="fisico" fill="#0ea5e9" name="Consumo Físico" />
+                                                         <Bar yAxisId="left" dataKey="teorico" fill="#10b981" name="Consumo Teórico" />
+                                                         <Line yAxisId="right" type="monotone" dataKey="rendimiento" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
+                                                       </ComposedChart>
+                                                     </ResponsiveContainer>
+                                                   ) : (
+                                                     <div className="h-[320px] rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-xs tracking-widest">
+                                                       Sin datos para graficar
+                                                     </div>
+                                                   )}
+                                                 </div>
+                                               </div>
+                                             </div>
          </div>
        )}
       </div>
