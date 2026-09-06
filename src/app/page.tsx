@@ -107,7 +107,7 @@ import { format, getISOWeek, addDays, addMonths, subMonths, startOfWeek, startOf
 import { es } from 'date-fns/locale';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
-import { Bar, CartesianGrid, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Legend } from 'recharts';
+import { Bar, CartesianGrid, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Legend, Line, ComposedChart } from 'recharts';
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7", "Línea 8"];
 
@@ -4757,16 +4757,17 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     <div className="min-h-[320px]">
                                                       {rSemanalChartData.length > 0 ? (
                                                         <ResponsiveContainer width="100%" height={320}>
-                                                          <BarChart data={rSemanalChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                                                            <CartesianGrid strokeDasharray="3 3" />
-                                                            <XAxis dataKey="dia" />
-                                                            <YAxis />
-                                                            <RechartsTooltip />
-                                                            <Legend />
-                                                            <Bar dataKey="fisico" fill="#0ea5e9" name="Consumo Físico" />
-                                                            <Bar dataKey="teorico" fill="#10b981" name="Consumo Teórico" />
-                                                            <Bar dataKey="rendimiento" fill="#f59e0b" name="Rendimiento" />
-                                                          </BarChart>
+                                                           <ComposedChart data={rSemanalChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                                                             <CartesianGrid strokeDasharray="3 3" />
+                                                             <XAxis dataKey="dia" />
+                                                             <YAxis yAxisId="left" />
+                                                             <YAxis yAxisId="right" orientation="right" />
+                                                             <RechartsTooltip />
+                                                             <Legend />
+                                                             <Bar yAxisId="left" dataKey="fisico" fill="#0ea5e9" name="Consumo Físico" />
+                                                             <Bar yAxisId="left" dataKey="teorico" fill="#10b981" name="Consumo Teórico" />
+                                                             <Line yAxisId="right" type="monotone" dataKey="rendimiento" stroke="#f59e0b" name="Rendimiento" />
+                                                           </ComposedChart>
                                                         </ResponsiveContainer>
                                                       ) : (
                                                         <div className="h-[320px] rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-xs tracking-widest">
