@@ -5296,34 +5296,74 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                             </div>
                                           </div>
                                           <div className="flex-1 overflow-x-auto">
-                                            <table className="w-full border-collapse text-[11px]">
-                                              <thead>
-                                                <tr className="bg-slate-800 text-white">
+                                            {preparacionTab === 'glup' && (
+                                              <table className="w-full border-collapse text-[11px]">
+                                                <thead>
+                                                  <tr className="bg-slate-800 text-white">
                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Fecha</th>
                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Hora</th>
                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[120px]">Sabor</th>
-                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Litros ubb</th>
-                                                </tr>
-                                              </thead>
-                                              <tbody>
-                                                {Array.from({ length: 8 }).map((_, idx) => (
-                                                  <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
-                                                    <td className="px-2 py-2 border border-slate-100">
-                                                      <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                                    </td>
-                                                    <td className="px-2 py-2 border border-slate-100">
-                                                      <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                                    </td>
-                                                    <td className="px-2 py-2 border border-slate-100">
-                                                      <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                                    </td>
-                                                    <td className="px-2 py-2 border border-slate-100">
-                                                      <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                                    </td>
+                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Litros</th>
+                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Ubb</th>
                                                   </tr>
-                                                ))}
-                                              </tbody>
-                                            </table>
+                                                </thead>
+                                                <tbody>
+                                                  {Array.from({ length: 8 }).map((_, idx) => (
+                                                    <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                                       <td className="px-2 py-2 border border-slate-100">
+                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                       </td>
+                                                       <td className="px-2 py-2 border border-slate-100">
+                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                       </td>
+                                                       <td className="px-2 py-2 border border-slate-100">
+                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                       </td>
+                                                       <td className="px-2 py-2 border border-slate-100">
+                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                       </td>
+                                                       <td className="px-2 py-2 border border-slate-100">
+                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                       </td>
+                                                    </tr>
+                                                  ))}
+                                                </tbody>
+                                              </table>
+                                            )}
+                                            {preparacionTab === 'justy' && (
+                                              <table className="w-full border-collapse text-[11px]">
+                                                <thead>
+                                                  <tr className="bg-slate-800 text-white">
+                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Fecha</th>
+                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Hora</th>
+                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[120px]">Sabor</th>
+                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Litros</th>
+                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Ubb</th>
+                                                  </tr>
+                                                </thead>
+                                                <tbody>
+                                                  {Array.from({ length: 8 }).map((_, idx) => (
+                                                    <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                                       <td className="px-2 py-2 border border-slate-100">
+                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                       </td>
+                                                       <td className="px-2 py-2 border border-slate-100">
+                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                       </td>
+                                                       <td className="px-2 py-2 border border-slate-100">
+                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                       </td>
+                                                       <td className="px-2 py-2 border border-slate-100">
+                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                       </td>
+                                                       <td className="px-2 py-2 border border-slate-100">
+                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                       </td>
+                                                    </tr>
+                                                  ))}
+                                                </tbody>
+                                              </table>
+                                            )}
                                           </div>
                                         </div>
                                       )}
