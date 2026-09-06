@@ -804,8 +804,8 @@ export default function PlannerPage() {
   });
 
   useEffect(() => {
-    if (activeModule === 'procesos' && (user?.id === 'proc1.mds' || user?.id === 'procj.mds' || user?.id === 'procs2.mds' || user?.id === 'maria.mds' || user?.id === 'alex.mds')) {
-      setProcesosSubTab('ptab');
+    if (activeModule === 'procesos' && (user?.id === 'proc1.mds' || user?.id === 'procj.mds' || user?.id === 'procs2.mds' || user?.id === 'maria.mds' || user?.id === 'alex.mds' || user?.id === 'proc.mds' || user?.id === 'procs1.mds' || user?.id === 'proc2.mds')) {
+      setProcesosSubTab(user?.id === 'proc.mds' || user?.id === 'procs1.mds' || user?.id === 'proc2.mds' || user?.id === 'procj.mds' ? 'sala-jarabe' : 'ptab');
     }
   }, [activeModule, user?.id]);
 
@@ -2916,11 +2916,12 @@ export default function PlannerPage() {
                          user.role === 'PURCHASING' ? 'COMPRAS' : 
                          user.role === 'INVENTORY' ? 'INVENTARIO' : 
                          user.id === 'enf.mds' ? 'ESPECIALISTA ENFARDADORA' : 
-                          user.id === 'proc.mds' ? 'SALA DE JARABE' : 
-                          user.id === 'procj.mds' ? 'Jefe de Procesos' : 
-                          user.id === 'proc1.mds' ? 'PTAB' : 
-                         user.id === 'procs1.mds' ? 'Supervisor de procesos' : 
-                         user.id === 'procs2.mds' ? 'Supervisor de procesos' : 
+                           user.id === 'proc.mds' ? 'SALA DE JARABE' : 
+                           user.id === 'procj.mds' ? 'Jefe de Procesos' : 
+                           user.id === 'proc1.mds' ? 'PTAB' : 
+                           user.id === 'proc2.mds' ? 'miteco' : 
+                          user.id === 'procs1.mds' ? 'Supervisor de procesos' : 
+                          user.id === 'procs2.mds' ? 'Supervisor de procesos' : 
                          user.id === 'finan.mds' ? 'Finanzas' : 
                          user.id === 'MDS' ? 'VISITANTE' : user.role}
                     </span>
@@ -4648,11 +4649,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                        )}
                     </>
                   )}
-                      {activeModule === 'procesos' && (isDemon || user.id === 'proc1.mds' || user.id === 'procj.mds' || user.id === 'procs2.mds' || user.id === 'maria.mds' || user.id === 'alex.mds') && (
+                      {activeModule === 'procesos' && (isDemon || user.id === 'proc1.mds' || user.id === 'procj.mds' || user.id === 'procs2.mds' || user.id === 'maria.mds' || user.id === 'alex.mds' || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds') && (
                         <div className="flex flex-col h-full">
                           <div className="flex items-center gap-2 mb-2 no-print">
                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                               {(isDemon || user.id === 'maria.mds' || user.id === 'alex.mds' ? ['ptab', 'miteco', 'sala-jarabe'] : ['ptab']).map((tab) => (
+                                {(isDemon || user.id === 'maria.mds' || user.id === 'alex.mds' ? ['ptab', 'miteco', 'sala-jarabe'] : user.id === 'procj.mds' ? ['ptab', 'sala-jarabe'] : user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' ? ['sala-jarabe'] : ['ptab']).map((tab) => (
                                <button
                                  key={tab}
                                  onClick={() => setProcesosSubTab(tab)}
@@ -4744,7 +4745,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                       </div>
                                       <table className="w-full border-collapse text-[11px]">
                                         <thead>
-                                          <tr className="bg-slate-800 text-white">
+                                           <tr className="bg-[#ecab0f] text-white">
                                             <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10">Descripción</th>
                                             {getWeekDays(ptabWeekStartDate).map((day, idx) => (
                                               <th key={idx} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">
@@ -5308,7 +5309,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                             </div>
                           </div>
                         )}
-                            {isDemon && procesosSubTab === 'sala-jarabe' && (
+                              {(isDemon || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' || user.id === 'procj.mds') && procesosSubTab === 'sala-jarabe' && (
                              <div className="flex flex-col h-full gap-3">
                                <div className="flex flex-col gap-2 no-print">
                                  <div className="flex items-center gap-2">
