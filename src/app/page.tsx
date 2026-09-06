@@ -107,6 +107,7 @@ import { format, getISOWeek, addDays, addMonths, subMonths, startOfWeek, startOf
 import { es } from 'date-fns/locale';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
+import { Bar, CartesianGrid, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Legend } from 'recharts';
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7", "Línea 8"];
 
@@ -1902,6 +1903,26 @@ export default function PlannerPage() {
     if (!isFinite(n)) return '';
     return n.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   };
+
+  const rSemanalChartData = useMemo(() => {
+    const days = getWeekDays(rSemanalWeekStartDate).filter((day) => {
+      const dayMonth = day.getMonth() + 1;
+      const dayYear = day.getFullYear();
+      return dayMonth === rSemanalSelectedMonth && dayYear === rSemanalSelectedYear;
+    });
+    return days.map((day) => {
+      const dateStr = format(day, 'yyyy-MM-dd');
+      const consumido = getAguaConsumoNumber(dateStr);
+      const vp = calcularLitrosAguaParaFecha(dateStr);
+      const rendimiento = consumido > 0 && vp > 0 ? Number((vp / consumido).toFixed(2)) : 0;
+      return {
+        dia: format(day, 'EEEE', { locale: es }).toUpperCase().slice(0, 3),
+        fisico: consumido || 0,
+        teorico: vp || 0,
+        rendimiento: rendimiento || 0,
+      };
+    });
+  }, [rSemanalWeekStartDate, rSemanalSelectedMonth, rSemanalSelectedYear]);
 
   const parseAguaInput = (raw: string): string => {
     const trimmed = raw.trim();
@@ -4729,13 +4750,36 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                           );
                                                         })}
                                                       </tbody>
-                                                  </table>
-                                                </div>
-                                             </div>
-                                           </div>
-                                         </div>
-                                       )}
-                                       {rSemanalSubTab === 's-insumos' && (
+                                                   </table>
+                                                 </div>
+                                                 <div className="mt-4 bg-white rounded-2xl border border-slate-100 p-4">
+                                                   <div className="text-slate-700 font-black text-xs uppercase tracking-widest mb-2">Consumo de agua - Gráfico semanal</div>
+                                                   <div className="min-h-[220px]">
+                                                     {rSemanalChartData.length > 0 ? (
+                                                       <ResponsiveContainer width="100%" height={220}>
+                                                         <BarChart data={rSemanalChartData}>
+                                                           <CartesianGrid strokeDasharray="3 3" />
+                                                           <XAxis dataKey="dia" />
+                                                           <YAxis />
+                                                           <RechartsTooltip />
+                                                           <Legend />
+                                                           <Bar dataKey="fisico" fill="#0ea5e9" name="Consumo Físico" />
+                                                           <Bar dataKey="teorico" fill="#10b981" name="Consumo Teórico" />
+                                                           <Bar dataKey="rendimiento" fill="#f59e0b" name="Rendimiento" />
+                                                         </BarChart>
+                                                       </ResponsiveContainer>
+                                                     ) : (
+                                                       <div className="h-[220px] rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-xs tracking-widest">
+                                                         Sin datos para graficar
+                                                       </div>
+                                                     )}
+                                                   </div>
+                                                 </div>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        )}
+                                        {rSemanalSubTab === 's-insumos' && (
                                          <div className="flex-1 rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-sm tracking-widest">
                                            S Insumos
                                          </div>
