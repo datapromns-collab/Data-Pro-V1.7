@@ -9656,7 +9656,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-06T15:08:56.849Z"
+    "updatedAt": "2026-09-06T17:34:10.899Z"
   },
   "ordenesSap": [
     {
@@ -16769,8 +16769,8 @@
         },
         {
           "fechaInicio": "2026-09-06",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17838",
+          "cajas1": 1760,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -16842,8 +16842,8 @@
         },
         {
           "fechaInicio": "2026-09-06",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17886",
+          "cajas1": 2400,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -98674,6 +98674,63 @@
         "usuario": "Luis Sanchez",
         "id": 1788714986498,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-01",
+        "semana": 36,
+        "turno": "NOCTURNO",
+        "operador": "ISRAEL RICO ",
+        "linea": "Línea 7",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "03:19",
+        "finParada": "03:24",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788715031314,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-01",
+        "semana": 36,
+        "turno": "NOCTURNO",
+        "operador": "YEFERSON BRETO",
+        "linea": "Línea 7",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "03:49",
+        "finParada": "04:40",
+        "totalMin": "51",
+        "zona": "Llenado",
+        "falla": "ETIQUETA NO TRANSFERIDA, LIMPIEZA DE LISTONES, ETIQUETA ATASCADA EN TAMBOR DE CORTE, VARIADORES DE LA BOMBA DE PEGA Y EL TRANSPORTADOR INTERNO EN ERROR, FALLA DE VACIO AFECTA EL CORTE DE LA ETIQUETA, SE PURGA FRL",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788715101466,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-01",
+        "semana": 36,
+        "turno": "NOCTURNO",
+        "operador": "JORFRANK RIVERO",
+        "linea": "Línea 7",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "05:30",
+        "finParada": "05:39",
+        "totalMin": "9",
+        "zona": "Llenado",
+        "falla": "PERDIDA DE FASE EN COMPACTACION POR SALTO DE BOTELLA EN DIENTES DE SEPARACION",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788715147499,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -106493,7 +106550,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1788714986503,
+        "id": 1788714995053.9866,
         "fechaOrden": "2026-09-01",
         "orden": "1007",
         "fechaEmision": "2026-09-01",
@@ -106516,7 +106573,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Sanchez"
       }
     ],
