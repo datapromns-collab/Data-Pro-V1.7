@@ -656,8 +656,11 @@ export default function PlannerPage() {
   const [salaJarabeNuevaTareaOpen, setSalaJarabeNuevaTareaOpen] = useState(false);
   const [preparacionTab, setPreparacionTab] = useState<'glup' | 'justy'>('glup');
   const [nuevaTarea, setNuevaTarea] = useState({ fecha: '', hora: '', sabor: '', litros: '', ubb: '' });
-  const [glupRows, setGlupRows] = useState<{ fecha: string; hora: string; sabor: string; litros: string; ubb: string }[]>([]);
-  const [justyRows, setJustyRows] = useState<{ fecha: string; hora: string; sabor: string; litros: string; ubb: string }[]>([]);
+  const [glupRows, setGlupRows] = useState<{ fecha: string; hora: string; sabor: string; litros: string; ubb: string; estado: 'preparado' | 'enviado a linea'; enviarALinea: number | null }[]>([]);
+  const [justyRows, setJustyRows] = useState<{ fecha: string; hora: string; sabor: string; litros: string; ubb: string; estado: 'preparado' | 'enviado a linea'; enviarALinea: number | null }[]>([]);
+  const [lineaModalOpen, setLineaModalOpen] = useState(false);
+  const [selectedLineaRow, setSelectedLineaRow] = useState<{ index: number; type: 'glup' | 'justy' } | null>(null);
+  const [selectedLinea, setSelectedLinea] = useState<number | null>(null);
   const [procesosSubTab, setProcesosSubTab] = useState('ptab');
   const [ptabTab, setPtabTab] = useState<'agua' | 'insumos' | 'r-semanal' | 'r-mensual'>('agua');
   const [ptabWeekStartDate, setPtabWeekStartDate] = useState(new Date());
@@ -3121,9 +3124,44 @@ export default function PlannerPage() {
                            Limpiar Plan
                          </button>
                                     </div>
-                                  )}
-                                </div>
-                              )}
+                                 )}
+                                 <Dialog open={lineaModalOpen} onOpenChange={setLineaModalOpen}>
+                                   <DialogContent className="sm:max-w-sm">
+                                     <DialogHeader>
+                                       <DialogTitle>Enviar a Linea</DialogTitle>
+                                       <DialogDescription>Selecciona la linea a la que deseas enviar el jarabe.</DialogDescription>
+                                     </DialogHeader>
+                                     <div className="py-4">
+                                       <Select value={selectedLinea ? String(selectedLinea) : ''} onValueChange={(val) => setSelectedLinea(Number(val))}>
+                                         <SelectTrigger className="h-10">
+                                           <SelectValue placeholder="Seleccionar linea" />
+                                         </SelectTrigger>
+                                         <SelectContent>
+                                           {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+                                             <SelectItem key={n} value={String(n)}>Linea {n}</SelectItem>
+                                           ))}
+                                         </SelectContent>
+                                       </Select>
+                                     </div>
+                                     <DialogFooter>
+                                       <Button variant="outline" onClick={() => setLineaModalOpen(false)} className="rounded-xl">Cancelar</Button>
+                                       <Button onClick={() => {
+                                         if (!selectedLineaRow || selectedLinea === null) return;
+                                         const { index, type } = selectedLineaRow;
+                                         if (type === 'glup') {
+                                           setGlupRows((prev) => prev.map((row, i) => i === index ? { ...row, estado: 'enviado a linea', enviarALinea: selectedLinea } : row));
+                                         } else {
+                                           setJustyRows((prev) => prev.map((row, i) => i === index ? { ...row, estado: 'enviado a linea', enviarALinea: selectedLinea } : row));
+                                         }
+                                         setLineaModalOpen(false);
+                                         setSelectedLineaRow(null);
+                                         setSelectedLinea(null);
+                                       }} className="rounded-xl bg-blue-600 text-white hover:bg-blue-700">Confirmar</Button>
+                                     </DialogFooter>
+                                   </DialogContent>
+                                 </Dialog>
+                              </div>
+                            )}
                               {activeModule === 'management' && hasAccess(user.id, 'management') && (
                    <>
                       {activeTab === 'admin-report' && (
@@ -5301,33 +5339,6 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                           <div className="flex-1 overflow-x-auto">
                                             {preparacionTab === 'glup' && (
                                               <table className="w-full border-collapse text-[11px]">
-                                                <thead>
-                                                  <tr className="bg-slate-800 text-white">
-                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Fecha</th>
-                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Hora</th>
-                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[120px]">Sabor</th>
-                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Litros</th>
-                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Ubb</th>
-                                                  </tr>
-                                                </thead>
-                                                <tbody>
-                                                  {glupRows.length === 0 && (
-                                                    <tr><td colSpan={5} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
-                                                  )}
-                                                  {glupRows.map((row, idx) => (
-                                                    <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
-                                                      <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.fecha}</td>
-                                                      <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.hora}</td>
-                                                      <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.sabor}</td>
-                                                      <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.litros}</td>
-                                                      <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.ubb}</td>
-                                                    </tr>
-                                                  ))}
-                                                </tbody>
-                                              </table>
-                                            )}
-                                             {preparacionTab === 'justy' && (
-                                               <table className="w-full border-collapse text-[11px]">
                                                  <thead>
                                                    <tr className="bg-slate-800 text-white">
                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Fecha</th>
@@ -5335,24 +5346,67 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[120px]">Sabor</th>
                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Litros</th>
                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Ubb</th>
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Estado</th>
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[140px]">Enviar a Linea</th>
                                                    </tr>
                                                  </thead>
                                                  <tbody>
-                                                   {justyRows.length === 0 && (
-                                                     <tr><td colSpan={5} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
+                                                   {glupRows.length === 0 && (
+                                                     <tr><td colSpan={7} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
                                                    )}
-                                                   {justyRows.map((row, idx) => (
+                                                   {glupRows.map((row, idx) => (
                                                      <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.fecha}</td>
                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.hora}</td>
                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.sabor}</td>
                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.litros}</td>
                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.ubb}</td>
+                                                       <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.estado}</td>
+                                                       <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                         {row.enviarALinea ? `Linea ${row.enviarALinea}` : (
+                                                           <button onClick={() => { setSelectedLineaRow({ index: idx, type: 'glup' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
+                                                         )}
+                                                       </td>
                                                      </tr>
                                                    ))}
                                                  </tbody>
-                                               </table>
-                                             )}
+                                              </table>
+                                            )}
+                                              {preparacionTab === 'justy' && (
+                                                <table className="w-full border-collapse text-[11px]">
+                                                  <thead>
+                                                    <tr className="bg-slate-800 text-white">
+                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Fecha</th>
+                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Hora</th>
+                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[120px]">Sabor</th>
+                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Litros</th>
+                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Ubb</th>
+                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Estado</th>
+                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[140px]">Enviar a Linea</th>
+                                                    </tr>
+                                                  </thead>
+                                                  <tbody>
+                                                    {justyRows.length === 0 && (
+                                                      <tr><td colSpan={7} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
+                                                    )}
+                                                    {justyRows.map((row, idx) => (
+                                                      <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.fecha}</td>
+                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.hora}</td>
+                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.sabor}</td>
+                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.litros}</td>
+                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.ubb}</td>
+                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.estado}</td>
+                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                          {row.enviarALinea ? `Linea ${row.enviarALinea}` : (
+                                                            <button onClick={() => { setSelectedLineaRow({ index: idx, type: 'justy' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
+                                                          )}
+                                                        </td>
+                                                      </tr>
+                                                    ))}
+                                                  </tbody>
+                                                </table>
+                                              )}
                                           </div>
                                         </div>
                                       )}
@@ -5424,19 +5478,19 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                         </div>
                                         <div className="flex justify-end gap-2 mt-2">
                                           <button onClick={() => setSalaJarabeNuevaTareaOpen(false)} className="h-9 px-4 rounded-full bg-slate-100 text-slate-700 font-black uppercase text-[10px] tracking-widest hover:bg-slate-200 transition-none">Cancelar</button>
-                                          <button onClick={() => {
-                                            const sabor = nuevaTarea.sabor.toUpperCase();
-                                            const row = { ...nuevaTarea };
-                                            if (sabor.startsWith('GLUP')) {
-                                              setGlupRows((prev) => [...prev, row]);
-                                              setPreparacionTab('glup');
-                                            } else if (sabor.startsWith('JUSTY') || sabor.startsWith('VITA TEA')) {
-                                              setJustyRows((prev) => [...prev, row]);
-                                              setPreparacionTab('justy');
-                                            }
-                                            setSalaJarabeNuevaTareaOpen(false);
-                                            setNuevaTarea({ fecha: '', hora: '', sabor: '', litros: '', ubb: '' });
-                                          }} className="h-9 px-4 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
+                                           <button onClick={() => {
+                                             const sabor = nuevaTarea.sabor.toUpperCase();
+                                             const row = { ...nuevaTarea, estado: 'preparado' as const, enviarALinea: null };
+                                             if (sabor.startsWith('GLUP')) {
+                                               setGlupRows((prev) => [...prev, row]);
+                                               setPreparacionTab('glup');
+                                             } else if (sabor.startsWith('JUSTY') || sabor.startsWith('VITA TEA')) {
+                                               setJustyRows((prev) => [...prev, row]);
+                                               setPreparacionTab('justy');
+                                             }
+                                             setSalaJarabeNuevaTareaOpen(false);
+                                             setNuevaTarea({ fecha: '', hora: '', sabor: '', litros: '', ubb: '' });
+                                           }} className="h-9 px-4 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
                                         </div>
                                       </div>
                                     </div>
