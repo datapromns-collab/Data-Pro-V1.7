@@ -4754,26 +4754,26 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                  </div>
                                                  <div className="mt-4 bg-white rounded-2xl border border-slate-100 p-4">
                                                    <div className="text-slate-700 font-black text-xs uppercase tracking-widest mb-2">Consumo de agua - Gráfico semanal</div>
-                                                   <div className="min-h-[220px]">
-                                                     {rSemanalChartData.length > 0 ? (
-                                                       <ResponsiveContainer width="100%" height={220}>
-                                                         <BarChart data={rSemanalChartData}>
-                                                           <CartesianGrid strokeDasharray="3 3" />
-                                                           <XAxis dataKey="dia" />
-                                                           <YAxis />
-                                                           <RechartsTooltip />
-                                                           <Legend />
-                                                           <Bar dataKey="fisico" fill="#0ea5e9" name="Consumo Físico" />
-                                                           <Bar dataKey="teorico" fill="#10b981" name="Consumo Teórico" />
-                                                           <Bar dataKey="rendimiento" fill="#f59e0b" name="Rendimiento" />
-                                                         </BarChart>
-                                                       </ResponsiveContainer>
-                                                     ) : (
-                                                       <div className="h-[220px] rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-xs tracking-widest">
-                                                         Sin datos para graficar
-                                                       </div>
-                                                     )}
-                                                   </div>
+                                                    <div className="min-h-[320px]">
+                                                      {rSemanalChartData.length > 0 ? (
+                                                        <ResponsiveContainer width="100%" height={320}>
+                                                          <BarChart data={rSemanalChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                                                            <CartesianGrid strokeDasharray="3 3" />
+                                                            <XAxis dataKey="dia" />
+                                                            <YAxis />
+                                                            <RechartsTooltip />
+                                                            <Legend />
+                                                            <Bar dataKey="fisico" fill="#0ea5e9" name="Consumo Físico" />
+                                                            <Bar dataKey="teorico" fill="#10b981" name="Consumo Teórico" />
+                                                            <Bar dataKey="rendimiento" fill="#f59e0b" name="Rendimiento" />
+                                                          </BarChart>
+                                                        </ResponsiveContainer>
+                                                      ) : (
+                                                        <div className="h-[320px] rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-xs tracking-widest">
+                                                          Sin datos para graficar
+                                                        </div>
+                                                      )}
+                                                    </div>
                                                  </div>
                                               </div>
                                             </div>
