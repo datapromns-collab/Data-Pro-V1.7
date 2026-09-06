@@ -134,7 +134,21 @@ function ensureDb() {
 
 function readDb(): any {
   ensureDb();
-  return JSON.parse(fs.readFileSync(DB_PATH, 'utf8'));
+  try {
+    const raw = fs.readFileSync(DB_PATH, 'utf8');
+    if (!raw || raw.trim().length === 0) {
+      throw new Error('Empty database file');
+    }
+    return JSON.parse(raw);
+  } catch (error) {
+    console.error('[DB][READ][ERROR]', error);
+    recoverFromBackup(DB_PATH).catch(() => {});
+    const raw2 = fs.readFileSync(DB_PATH, 'utf8');
+    if (!raw2 || raw2.trim().length === 0) {
+      return { planner: { tasks: [], config: { weekStartDate: new Date().toISOString(), lineSpeeds: {} }, deletedTaskIds: [] }, collections: {}, ordenesSap: [], notifications: [], cacheVersion: 0, deletedIds: {} };
+    }
+    return JSON.parse(raw2);
+  }
 }
 
 async function writeDb(data: any) {
