@@ -655,6 +655,9 @@ export default function PlannerPage() {
   const [salaJarabeLinea, setSalaJarabeLinea] = useState<number>(1);
   const [salaJarabeNuevaTareaOpen, setSalaJarabeNuevaTareaOpen] = useState(false);
   const [preparacionTab, setPreparacionTab] = useState<'glup' | 'justy'>('glup');
+  const [nuevaTarea, setNuevaTarea] = useState({ fecha: '', hora: '', sabor: '', litros: '', ubb: '' });
+  const [glupRows, setGlupRows] = useState<{ fecha: string; hora: string; sabor: string; litros: string; ubb: string }[]>([]);
+  const [justyRows, setJustyRows] = useState<{ fecha: string; hora: string; sabor: string; litros: string; ubb: string }[]>([]);
   const [procesosSubTab, setProcesosSubTab] = useState('ptab');
   const [ptabTab, setPtabTab] = useState<'agua' | 'insumos' | 'r-semanal' | 'r-mensual'>('agua');
   const [ptabWeekStartDate, setPtabWeekStartDate] = useState(new Date());
@@ -746,7 +749,7 @@ export default function PlannerPage() {
   });
 
   useEffect(() => {
-    if (activeModule === 'procesos' && (user?.id === 'proc1.mds' || user?.id === 'procj.mds' || user?.id === 'procs2.mds')) {
+    if (activeModule === 'procesos' && (user?.id === 'proc1.mds' || user?.id === 'procj.mds' || user?.id === 'procs2.mds' || user?.id === 'maria.mds' || user?.id === 'alex.mds')) {
       setProcesosSubTab('ptab');
     }
   }, [activeModule, user?.id]);
@@ -4555,11 +4558,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                        )}
                     </>
                   )}
-                      {activeModule === 'procesos' && (isDemon || user.id === 'proc1.mds' || user.id === 'procj.mds' || user.id === 'procs2.mds') && (
+                      {activeModule === 'procesos' && (isDemon || user.id === 'proc1.mds' || user.id === 'procj.mds' || user.id === 'procs2.mds' || user.id === 'maria.mds' || user.id === 'alex.mds') && (
                         <div className="flex flex-col h-full">
                           <div className="flex items-center gap-2 mb-2 no-print">
                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                               {(isDemon ? ['ptab', 'miteco', 'sala-jarabe'] : ['ptab']).map((tab) => (
+                               {(isDemon || user.id === 'maria.mds' || user.id === 'alex.mds' ? ['ptab', 'miteco', 'sala-jarabe'] : ['ptab']).map((tab) => (
                                <button
                                  key={tab}
                                  onClick={() => setProcesosSubTab(tab)}
@@ -4579,7 +4582,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                           {procesosSubTab === 'ptab' && (
                             <div className="flex items-center gap-2 no-print mb-2">
                               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                  {(isDemon || user.id === 'procj.mds' ? ['agua', 'insumos', 'r-semanal', 'r-mensual'] : user.id === 'procs2.mds' ? ['agua', 'insumos', 'r-semanal'] : ['agua', 'insumos']).map((tab) => (
+                                  {(isDemon || user.id === 'procj.mds' || user.id === 'maria.mds' || user.id === 'alex.mds' ? ['agua', 'insumos', 'r-semanal', 'r-mensual'] : user.id === 'procs2.mds' ? ['agua', 'insumos', 'r-semanal'] : ['agua', 'insumos']).map((tab) => (
                                    <button
                                      key={tab}
                                      onClick={() => setPtabTab(tab as 'agua' | 'insumos' | 'r-semanal' | 'r-mensual')}
@@ -4848,7 +4851,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                               </div>
                             </div>
                           )}
-                              {(isDemon || user.id === 'procj.mds' || user.id === 'procs2.mds') && procesosSubTab === 'ptab' && ptabTab === 'r-semanal' && (
+                              {(isDemon || user.id === 'procj.mds' || user.id === 'procs2.mds' || user.id === 'maria.mds' || user.id === 'alex.mds') && procesosSubTab === 'ptab' && ptabTab === 'r-semanal' && (
                               <div className="flex flex-col h-full">
                                 <div className="flex items-center gap-2 mb-2 no-print">
                                   <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
@@ -5059,7 +5062,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                 </div>
                               </div>
                             )}
-                             {(isDemon || user.id === 'procj.mds') && procesosSubTab === 'ptab' && ptabTab === 'r-mensual' && (
+                              {(isDemon || user.id === 'procj.mds' || user.id === 'maria.mds' || user.id === 'alex.mds') && procesosSubTab === 'ptab' && ptabTab === 'r-mensual' && (
                              <div className="flex flex-col h-full">
                                <div className="flex items-center gap-2 mb-2 no-print">
                                  <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
@@ -5308,62 +5311,48 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                   </tr>
                                                 </thead>
                                                 <tbody>
-                                                  {Array.from({ length: 8 }).map((_, idx) => (
+                                                  {glupRows.length === 0 && (
+                                                    <tr><td colSpan={5} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
+                                                  )}
+                                                  {glupRows.map((row, idx) => (
                                                     <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
-                                                       <td className="px-2 py-2 border border-slate-100">
-                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                                       </td>
-                                                       <td className="px-2 py-2 border border-slate-100">
-                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                                       </td>
-                                                       <td className="px-2 py-2 border border-slate-100">
-                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                                       </td>
-                                                       <td className="px-2 py-2 border border-slate-100">
-                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                                       </td>
-                                                       <td className="px-2 py-2 border border-slate-100">
-                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                                       </td>
+                                                      <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.fecha}</td>
+                                                      <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.hora}</td>
+                                                      <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.sabor}</td>
+                                                      <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.litros}</td>
+                                                      <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.ubb}</td>
                                                     </tr>
                                                   ))}
                                                 </tbody>
                                               </table>
                                             )}
-                                            {preparacionTab === 'justy' && (
-                                              <table className="w-full border-collapse text-[11px]">
-                                                <thead>
-                                                  <tr className="bg-slate-800 text-white">
-                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Fecha</th>
-                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Hora</th>
-                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[120px]">Sabor</th>
-                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Litros</th>
-                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Ubb</th>
-                                                  </tr>
-                                                </thead>
-                                                <tbody>
-                                                  {Array.from({ length: 8 }).map((_, idx) => (
-                                                    <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
-                                                       <td className="px-2 py-2 border border-slate-100">
-                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                                       </td>
-                                                       <td className="px-2 py-2 border border-slate-100">
-                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                                       </td>
-                                                       <td className="px-2 py-2 border border-slate-100">
-                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                                       </td>
-                                                       <td className="px-2 py-2 border border-slate-100">
-                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                                       </td>
-                                                       <td className="px-2 py-2 border border-slate-100">
-                                                         <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                                       </td>
-                                                    </tr>
-                                                  ))}
-                                                </tbody>
-                                              </table>
-                                            )}
+                                             {preparacionTab === 'justy' && (
+                                               <table className="w-full border-collapse text-[11px]">
+                                                 <thead>
+                                                   <tr className="bg-slate-800 text-white">
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Fecha</th>
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Hora</th>
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[120px]">Sabor</th>
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Litros</th>
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Ubb</th>
+                                                   </tr>
+                                                 </thead>
+                                                 <tbody>
+                                                   {justyRows.length === 0 && (
+                                                     <tr><td colSpan={5} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
+                                                   )}
+                                                   {justyRows.map((row, idx) => (
+                                                     <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                                       <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.fecha}</td>
+                                                       <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.hora}</td>
+                                                       <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.sabor}</td>
+                                                       <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.litros}</td>
+                                                       <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.ubb}</td>
+                                                     </tr>
+                                                   ))}
+                                                 </tbody>
+                                               </table>
+                                             )}
                                           </div>
                                         </div>
                                       )}
@@ -5376,19 +5365,83 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                    </div>
                                  </div>
                                </div>
-                               {salaJarabeSubTab === 'preparacion' && salaJarabeNuevaTareaOpen && (
-                                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
-                                   <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 p-6">
-                                     <div className="flex items-center justify-between mb-4">
-                                       <h3 className="text-slate-900 font-black uppercase tracking-widest text-sm">Nueva Tarea</h3>
-                                       <button onClick={() => setSalaJarabeNuevaTareaOpen(false)} className="text-slate-500 hover:text-slate-900">✕</button>
-                                     </div>
-                                     <div className="min-h-[120px] rounded-xl border border-dashed border-slate-200 bg-white/60 flex items-center justify-center text-slate-400 uppercase font-black text-xs tracking-widest">
-                                       En blanco
-                                     </div>
-                                   </div>
-                                 </div>
-                               )}
+                                {salaJarabeSubTab === 'preparacion' && salaJarabeNuevaTareaOpen && (
+                                  <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                                    <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 p-6">
+                                      <div className="flex items-center justify-between mb-4">
+                                        <h3 className="text-slate-900 font-black uppercase tracking-widest text-sm">Nueva Tarea</h3>
+                                        <button onClick={() => setSalaJarabeNuevaTareaOpen(false)} className="text-slate-500 hover:text-slate-900">✕</button>
+                                      </div>
+                                      <div className="flex flex-col gap-3">
+                                        <div className="grid grid-cols-2 gap-3">
+                                          <div>
+                                            <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Fecha</label>
+                                            <input type="date" value={nuevaTarea.fecha} onChange={(e) => setNuevaTarea({ ...nuevaTarea, fecha: e.target.value })} className="w-full h-9 px-3 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                          </div>
+                                          <div>
+                                            <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Hora</label>
+                                            <input type="time" value={nuevaTarea.hora} onChange={(e) => setNuevaTarea({ ...nuevaTarea, hora: e.target.value })} className="w-full h-9 px-3 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                          </div>
+                                        </div>
+                                        <div>
+                                          <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Sabor</label>
+                                          <select value={nuevaTarea.sabor} onChange={(e) => setNuevaTarea({ ...nuevaTarea, sabor: e.target.value })} className="w-full h-9 px-3 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary">
+                                            <option value="">Seleccionar sabor</option>
+                                            <optgroup label="GLUP">
+                                              <option value="GLUP COLA">GLUP COLA</option>
+                                              <option value="GLUP FRESH">GLUP FRESH</option>
+                                              <option value="GLUP UVA">GLUP UVA</option>
+                                              <option value="GLUP PIÑA">GLUP PIÑA</option>
+                                              <option value="GLUP NARANJA">GLUP NARANJA</option>
+                                              <option value="GLUP KOLITA">GLUP KOLITA</option>
+                                              <option value="GLUP MANZANA VERDE">GLUP MANZANA VERDE</option>
+                                              <option value="GLUP PONCHE">GLUP PONCHE</option>
+                                              <option value="GLUP CHICLE">GLUP CHICLE</option>
+                                              <option value="GLUP PIÑA PARCHITA">GLUP PIÑA PARCHITA</option>
+                                              <option value="GLUP MANZANA ROJA">GLUP MANZANA ROJA</option>
+                                            </optgroup>
+                                            <optgroup label="JUSTY / VITA TEA">
+                                              <option value="JUSTY NARANJA">JUSTY NARANJA</option>
+                                              <option value="JUSTY DURAZNO">JUSTY DURAZNO</option>
+                                              <option value="JUSTY PERA">JUSTY PERA</option>
+                                              <option value="JUSTY MANZANA">JUSTY MANZANA</option>
+                                              <option value="JUSTY LIMON">JUSTY LIMON</option>
+                                              <option value="JUSTY TAMARINDO">JUSTY TAMARINDO</option>
+                                              <option value="VITA TEA DURAZNO">VITA TEA DURAZNO</option>
+                                              <option value="VITA TEA LIMON">VITA TEA LIMON</option>
+                                            </optgroup>
+                                          </select>
+                                        </div>
+                                        <div className="grid grid-cols-2 gap-3">
+                                          <div>
+                                            <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Litros</label>
+                                            <input type="number" value={nuevaTarea.litros} onChange={(e) => setNuevaTarea({ ...nuevaTarea, litros: e.target.value })} className="w-full h-9 px-3 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                          </div>
+                                          <div>
+                                            <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Ubb</label>
+                                            <input type="number" value={nuevaTarea.ubb} onChange={(e) => setNuevaTarea({ ...nuevaTarea, ubb: e.target.value })} className="w-full h-9 px-3 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                          </div>
+                                        </div>
+                                        <div className="flex justify-end gap-2 mt-2">
+                                          <button onClick={() => setSalaJarabeNuevaTareaOpen(false)} className="h-9 px-4 rounded-full bg-slate-100 text-slate-700 font-black uppercase text-[10px] tracking-widest hover:bg-slate-200 transition-none">Cancelar</button>
+                                          <button onClick={() => {
+                                            const sabor = nuevaTarea.sabor.toUpperCase();
+                                            const row = { ...nuevaTarea };
+                                            if (sabor.startsWith('GLUP')) {
+                                              setGlupRows((prev) => [...prev, row]);
+                                              setPreparacionTab('glup');
+                                            } else if (sabor.startsWith('JUSTY') || sabor.startsWith('VITA TEA')) {
+                                              setJustyRows((prev) => [...prev, row]);
+                                              setPreparacionTab('justy');
+                                            }
+                                            setSalaJarabeNuevaTareaOpen(false);
+                                            setNuevaTarea({ fecha: '', hora: '', sabor: '', litros: '', ubb: '' });
+                                          }} className="h-9 px-4 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                )}
                              </div>
                            )}
                       </div>
