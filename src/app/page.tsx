@@ -661,6 +661,28 @@ export default function PlannerPage() {
   const [lineaModalOpen, setLineaModalOpen] = useState(false);
   const [selectedLineaRow, setSelectedLineaRow] = useState<{ index: number; type: 'glup' | 'justy' } | null>(null);
   const [selectedLinea, setSelectedLinea] = useState<number | null>(null);
+  const [revisionEditingRow, setRevisionEditingRow] = useState<{ index: number; type: 'glup' | 'justy'; scope: 'privileged' | 'public' } | null>(null);
+  const [revisionEditForm, setRevisionEditForm] = useState<{ fecha: string; hora: string; sabor: string; litros: string; ubb: string } | null>(null);
+  const isRevisionUser = user?.id === 'maria.mds' || user?.id === 'alex.mds' || user?.id === 'demon';
+  const showRevisionColumn = isRevisionUser || (revisionEditingRow && revisionEditingRow.scope === 'public');
+  const updateRow = (type: 'glup' | 'justy', index: number, data: { fecha: string; hora: string; sabor: string; litros: string; ubb: string }) => {
+    if (type === 'glup') {
+      setGlupRows((prev) => prev.map((row, i) => i === index ? { ...row, ...data } : row));
+    } else {
+      setJustyRows((prev) => prev.map((row, i) => i === index ? { ...row, ...data } : row));
+    }
+  };
+  const deleteRow = (type: 'glup' | 'justy', index: number) => {
+    if (type === 'glup') {
+      setGlupRows((prev) => prev.filter((_, i) => i !== index));
+    } else {
+      setJustyRows((prev) => prev.filter((_, i) => i !== index));
+    }
+    if (revisionEditingRow && revisionEditingRow.type === type && revisionEditingRow.index === index) {
+      setRevisionEditingRow(null);
+      setRevisionEditForm(null);
+    }
+   };
   const [procesosSubTab, setProcesosSubTab] = useState('ptab');
   const [ptabTab, setPtabTab] = useState<'agua' | 'insumos' | 'r-semanal' | 'r-mensual'>('agua');
   const [ptabWeekStartDate, setPtabWeekStartDate] = useState(new Date());
@@ -5347,28 +5369,73 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Litros</th>
                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Ubb</th>
                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Estado</th>
-                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[140px]">Enviar a Linea</th>
-                                                   </tr>
+                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[140px]">Enviar a Linea</th>
+                                                    {showRevisionColumn && (<th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[160px]">Revisión</th>)}
+                                                    </tr>
                                                  </thead>
                                                  <tbody>
                                                    {glupRows.length === 0 && (
-                                                     <tr><td colSpan={7} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
+                                                      <tr><td colSpan={showRevisionColumn ? 8 : 7} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
                                                    )}
-                                                   {glupRows.map((row, idx) => (
-                                                     <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
-                                                       <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.fecha}</td>
-                                                       <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.hora}</td>
-                                                       <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.sabor}</td>
-                                                       <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.litros}</td>
-                                                       <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.ubb}</td>
-                                                       <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.estado}</td>
-                                                       <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                         {row.enviarALinea ? `Linea ${row.enviarALinea}` : (
-                                                           <button onClick={() => { setSelectedLineaRow({ index: idx, type: 'glup' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
-                                                         )}
-                                                       </td>
-                                                     </tr>
-                                                   ))}
+                                                    {glupRows.map((row, idx) => (
+                                                      <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                                        {(() => {
+                                                          const isEditing = revisionEditingRow && revisionEditingRow.type === 'glup' && revisionEditingRow.index === idx;
+                                                          const form = isEditing ? revisionEditForm : null;
+                                                          return (
+                                                            <>
+                                                              <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                {isEditing ? (<input value={form?.fecha ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), fecha: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.fecha}
+                                                              </td>
+                                                              <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                {isEditing ? (<input value={form?.hora ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), hora: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.hora}
+                                                              </td>
+                                                              <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                {isEditing ? (<input value={form?.sabor ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), sabor: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.sabor}
+                                                              </td>
+                                                              <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                {isEditing ? (<input value={form?.litros ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), litros: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.litros}
+                                                              </td>
+                                                              <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                {isEditing ? (<input value={form?.ubb ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), ubb: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.ubb}
+                                                              </td>
+                                                              <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.estado}</td>
+                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                 {row.enviarALinea ? `Linea ${row.enviarALinea}` : (
+                                                                   <button onClick={() => { setSelectedLineaRow({ index: idx, type: 'glup' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
+                                                                 )}
+                                                               </td>
+                                                               {showRevisionColumn && (
+                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                   {(() => {
+                                                                     if (isEditing) {
+                                                                       return (
+                                                                         <button onClick={() => {
+                                                                           if (!revisionEditForm) return;
+                                                                           updateRow('glup', idx, revisionEditForm);
+                                                                           setRevisionEditingRow(null);
+                                                                           setRevisionEditForm(null);
+                                                                         }} className="h-8 px-3 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
+                                                                       );
+                                                                     }
+                                                                     if (isRevisionUser) {
+                                                                       return (
+                                                                         <div className="flex items-center gap-1">
+                                                                           <button onClick={() => deleteRow('glup', idx)} className="h-8 px-3 rounded-full bg-red-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-red-700 transition-none">Eliminar</button>
+                                                                           <button onClick={() => { setRevisionEditingRow({ index: idx, type: 'glup', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
+                                                                           <button onClick={() => { setRevisionEditingRow({ index: idx, type: 'glup', scope: 'public' }); setRevisionEditForm(null); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
+                                                                         </div>
+                                                                       );
+                                                                     }
+                                                                     return null;
+                                                                   })()}
+                                                                 </td>
+                                                               )}
+                                                            </>
+                                                          );
+                                                        })()}
+                                                      </tr>
+                                                    ))}
                                                  </tbody>
                                               </table>
                                             )}
@@ -5383,27 +5450,72 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Ubb</th>
                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Estado</th>
                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[140px]">Enviar a Linea</th>
+                                                    {showRevisionColumn && (<th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[160px]">Revisión</th>)}
                                                     </tr>
                                                   </thead>
                                                   <tbody>
                                                     {justyRows.length === 0 && (
-                                                      <tr><td colSpan={7} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
+                                                      <tr><td colSpan={showRevisionColumn ? 8 : 7} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
                                                     )}
-                                                    {justyRows.map((row, idx) => (
-                                                      <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
-                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.fecha}</td>
-                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.hora}</td>
-                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.sabor}</td>
-                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.litros}</td>
-                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.ubb}</td>
-                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.estado}</td>
-                                                        <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                          {row.enviarALinea ? `Linea ${row.enviarALinea}` : (
-                                                            <button onClick={() => { setSelectedLineaRow({ index: idx, type: 'justy' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
-                                                          )}
-                                                        </td>
-                                                      </tr>
-                                                    ))}
+                                                     {justyRows.map((row, idx) => (
+                                                       <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                                         {(() => {
+                                                           const isEditing = revisionEditingRow && revisionEditingRow.type === 'justy' && revisionEditingRow.index === idx;
+                                                           const form = isEditing ? revisionEditForm : null;
+                                                           return (
+                                                             <>
+                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                 {isEditing ? (<input value={form?.fecha ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), fecha: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.fecha}
+                                                               </td>
+                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                 {isEditing ? (<input value={form?.hora ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), hora: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.hora}
+                                                               </td>
+                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                 {isEditing ? (<input value={form?.sabor ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), sabor: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.sabor}
+                                                               </td>
+                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                 {isEditing ? (<input value={form?.litros ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), litros: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.litros}
+                                                               </td>
+                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                 {isEditing ? (<input value={form?.ubb ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), ubb: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.ubb}
+                                                               </td>
+                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.estado}</td>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {row.enviarALinea ? `Linea ${row.enviarALinea}` : (
+                                                                    <button onClick={() => { setSelectedLineaRow({ index: idx, type: 'justy' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
+                                                                  )}
+                                                                </td>
+                                                                {showRevisionColumn && (
+                                                                  <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                    {(() => {
+                                                                      if (isEditing) {
+                                                                        return (
+                                                                          <button onClick={() => {
+                                                                            if (!revisionEditForm) return;
+                                                                            updateRow('justy', idx, revisionEditForm);
+                                                                            setRevisionEditingRow(null);
+                                                                            setRevisionEditForm(null);
+                                                                          }} className="h-8 px-3 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
+                                                                        );
+                                                                      }
+                                                                      if (isRevisionUser) {
+                                                                        return (
+                                                                          <div className="flex items-center gap-1">
+                                                                            <button onClick={() => deleteRow('justy', idx)} className="h-8 px-3 rounded-full bg-red-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-red-700 transition-none">Eliminar</button>
+                                                                            <button onClick={() => { setRevisionEditingRow({ index: idx, type: 'justy', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
+                                                                            <button onClick={() => { setRevisionEditingRow({ index: idx, type: 'justy', scope: 'public' }); setRevisionEditForm(null); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
+                                                                          </div>
+                                                                        );
+                                                                      }
+                                                                      return null;
+                                                                    })()}
+                                                                  </td>
+                                                                )}
+                                                             </>
+                                                           );
+                                                         })()}
+                                                       </tr>
+                                                     ))}
                                                   </tbody>
                                                 </table>
                                               )}
