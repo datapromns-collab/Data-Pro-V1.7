@@ -3824,11 +3824,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                  Diurno - Planificadas
                                                </h4>
                                              </div>
-                                             <div className="p-4">
-                                               <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                                 <PlanificadasPorDiaTable datosPorDia={planificadasPorDia} fecha={produccionFecha || new Date()} turno="diurno" />
-                                               </div>
-                                             </div>
+                                              <div className="p-4">
+                                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                                  <PlanificadasPorDiaTable datosPorDia={planificadasPorDia} fecha={produccionFecha || new Date()} turno="diurno" />
+                                                </div>
+                                              </div>
                                            </div>
                                          )}
                                           {planificadasTurnoSubTab === 'nocturno' && (
@@ -5032,12 +5032,36 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                             );
                                                           })}
                                                         </tr>
-                                                      );
-                                                    })}
-                                                  </tbody>
-                                                </table>
-                                              </div>
-                                            </div>
+                                                       );
+                                                     })}
+                                                   </tbody>
+                                                 </table>
+                                               </div>
+                                               <div className="mt-4 bg-white rounded-2xl border border-slate-100 p-4">
+                                                 <div className="text-slate-700 font-black text-xs uppercase tracking-widest mb-2">Consumo de agua - Gráfico mensual</div>
+                                                 <div className="min-h-[320px]">
+                                                   {rMensualChartData.length > 0 ? (
+                                                     <ResponsiveContainer width="100%" height={320}>
+                                                       <ComposedChart data={rMensualChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                                                         <CartesianGrid strokeDasharray="3 3" />
+                                                         <XAxis dataKey="semana" />
+                                                         <YAxis yAxisId="left" tickFormatter={(v) => (Math.abs(Number(v)) >= 1_000_000 ? `${(Number(v) / 1_000_000).toFixed(1)}M` : Math.abs(Number(v)) >= 1_000 ? `${(Number(v) / 1_000).toFixed(1)}K` : String(v))} width={50} />
+                                                         <YAxis yAxisId="right" orientation="right" />
+                                                         <RechartsTooltip />
+                                                         <Legend />
+                                                         <Bar yAxisId="left" dataKey="fisico" fill="#0ea5e9" name="Consumo Físico" />
+                                                         <Bar yAxisId="left" dataKey="teorico" fill="#10b981" name="Consumo Teórico" />
+                                                         <Line yAxisId="right" type="monotone" dataKey="rendimiento" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
+                                                       </ComposedChart>
+                                                     </ResponsiveContainer>
+                                                   ) : (
+                                                     <div className="h-[320px] rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-xs tracking-widest">
+                                                       Sin datos para graficar
+                                                     </div>
+                                                   )}
+                                                 </div>
+                                               </div>
+                                             </div>
                                           </div>
                                         </div>
                                       )}
@@ -7274,39 +7298,15 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                      <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTN}</td>
                      <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{disponibilidadGlobal}</td>
                      <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{disponibilidadGlobal}</td>
-                   </tr>
-                                                   </tbody>
-                                                 </table>
-                                               </div>
-                                               <div className="mt-4 bg-white rounded-2xl border border-slate-100 p-4">
-                                                 <div className="text-slate-700 font-black text-xs uppercase tracking-widest mb-2">Consumo de agua - Gráfico mensual</div>
-                                                 <div className="min-h-[320px]">
-                                                   {rMensualChartData.length > 0 ? (
-                                                     <ResponsiveContainer width="100%" height={320}>
-                                                       <ComposedChart data={rMensualChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                                                         <CartesianGrid strokeDasharray="3 3" />
-                                                         <XAxis dataKey="semana" />
-                                                         <YAxis yAxisId="left" tickFormatter={(v) => (Math.abs(Number(v)) >= 1_000_000 ? `${(Number(v) / 1_000_000).toFixed(1)}M` : Math.abs(Number(v)) >= 1_000 ? `${(Number(v) / 1_000).toFixed(1)}K` : String(v))} width={50} />
-                                                         <YAxis yAxisId="right" orientation="right" />
-                                                         <RechartsTooltip />
-                                                         <Legend />
-                                                         <Bar yAxisId="left" dataKey="fisico" fill="#0ea5e9" name="Consumo Físico" />
-                                                         <Bar yAxisId="left" dataKey="teorico" fill="#10b981" name="Consumo Teórico" />
-                                                         <Line yAxisId="right" type="monotone" dataKey="rendimiento" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
-                                                       </ComposedChart>
-                                                     </ResponsiveContainer>
-                                                   ) : (
-                                                     <div className="h-[320px] rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-xs tracking-widest">
-                                                       Sin datos para graficar
-                                                     </div>
-                                                   )}
-                                                 </div>
-                                               </div>
-                                             </div>
-         </div>
-       )}
-      </div>
-    );
+                    </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </div>
+          </div>
+        )}
+       </div>
+     );
   }
 
   const OrdenTrabajoRow = memo(({ row, editingRows, setEditingRows, setFilasNoEditables, errorValidacion, setErrorValidacion, ordenesTrabajo, setOrdenesTrabajo, removeOrdenTrabajo, user, onChangeHora, tiempoTranscurrido, normalizarHora, formatearFecha }: any) => {
