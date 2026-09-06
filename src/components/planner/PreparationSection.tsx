@@ -34,26 +34,94 @@ export function PreparationSection({ tasks, weekStartDate, onPrint }: Preparatio
     return tasks.filter(t => isBefore(t.startTime, dayEnd) && isAfter(t.endTime, dayStart) && !isSpecialTask(t.name));
   };
 
-  const getTanksForLineAndFlavor = (dayTasks: ScheduledTask[], lineId: string, flavor: string) => {
+  const getTanksForLineAndFlavor = (day: Date, dayTasks: ScheduledTask[], lineId: string, flavor: string) => {
+    const dayStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
+    const dayEnd = addDays(dayStart, 1);
+
     return dayTasks
       .filter(t => t.lineId === lineId && t.name === flavor)
-      .reduce((sum, t) => sum + (t.tanks || 0), 0);
+      .reduce((sum, t) => {
+        const intersectionStart = t.startTime > dayStart ? t.startTime : dayStart;
+        const intersectionEnd = t.endTime < dayEnd ? t.endTime : dayEnd;
+
+        if (intersectionStart < intersectionEnd) {
+          const intersectionMinutes = (intersectionEnd.getTime() - intersectionStart.getTime()) / (1000 * 60);
+          const totalTaskMinutes = (t.endTime.getTime() - t.startTime.getTime()) / (1000 * 60);
+          
+          if (totalTaskMinutes > 0) {
+            const proportionalTanks = (intersectionMinutes / totalTaskMinutes) * (t.tanks || 0);
+            return sum + proportionalTanks;
+          }
+        }
+        return sum;
+      }, 0);
   };
 
-  const getLineTotal = (dayTasks: ScheduledTask[], lineId: string) => {
+  const getLineTotal = (day: Date, dayTasks: ScheduledTask[], lineId: string) => {
+    const dayStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
+    const dayEnd = addDays(dayStart, 1);
+
     return dayTasks
       .filter(t => t.lineId === lineId)
-      .reduce((sum, t) => sum + (t.tanks || 0), 0);
+      .reduce((sum, t) => {
+        const intersectionStart = t.startTime > dayStart ? t.startTime : dayStart;
+        const intersectionEnd = t.endTime < dayEnd ? t.endTime : dayEnd;
+
+        if (intersectionStart < intersectionEnd) {
+          const intersectionMinutes = (intersectionEnd.getTime() - intersectionStart.getTime()) / (1000 * 60);
+          const totalTaskMinutes = (t.endTime.getTime() - t.startTime.getTime()) / (1000 * 60);
+          
+          if (totalTaskMinutes > 0) {
+            const proportionalTanks = (intersectionMinutes / totalTaskMinutes) * (t.tanks || 0);
+            return sum + proportionalTanks;
+          }
+        }
+        return sum;
+      }, 0);
   };
 
-  const getFlavorTotal = (dayTasks: ScheduledTask[], flavor: string) => {
+  const getFlavorTotal = (day: Date, dayTasks: ScheduledTask[], flavor: string) => {
+    const dayStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
+    const dayEnd = addDays(dayStart, 1);
+
     return dayTasks
       .filter(t => t.name === flavor)
-      .reduce((sum, t) => sum + (t.tanks || 0), 0);
+      .reduce((sum, t) => {
+        const intersectionStart = t.startTime > dayStart ? t.startTime : dayStart;
+        const intersectionEnd = t.endTime < dayEnd ? t.endTime : dayEnd;
+
+        if (intersectionStart < intersectionEnd) {
+          const intersectionMinutes = (intersectionEnd.getTime() - intersectionStart.getTime()) / (1000 * 60);
+          const totalTaskMinutes = (t.endTime.getTime() - t.startTime.getTime()) / (1000 * 60);
+          
+          if (totalTaskMinutes > 0) {
+            const proportionalTanks = (intersectionMinutes / totalTaskMinutes) * (t.tanks || 0);
+            return sum + proportionalTanks;
+          }
+        }
+        return sum;
+      }, 0);
   };
 
-  const getDayTotal = (dayTasks: ScheduledTask[]) => {
-    return dayTasks.reduce((sum, t) => sum + (t.tanks || 0), 0);
+  const getDayTotal = (day: Date, dayTasks: ScheduledTask[]) => {
+    const dayStart = setMinutes(setHours(startOfDay(day), PRODUCTION_START_HOUR), 0);
+    const dayEnd = addDays(dayStart, 1);
+
+    return dayTasks.reduce((sum, t) => {
+      const intersectionStart = t.startTime > dayStart ? t.startTime : dayStart;
+      const intersectionEnd = t.endTime < dayEnd ? t.endTime : dayEnd;
+
+      if (intersectionStart < intersectionEnd) {
+        const intersectionMinutes = (intersectionEnd.getTime() - intersectionStart.getTime()) / (1000 * 60);
+        const totalTaskMinutes = (t.endTime.getTime() - t.startTime.getTime()) / (1000 * 60);
+        
+        if (totalTaskMinutes > 0) {
+          const proportionalTanks = (intersectionMinutes / totalTaskMinutes) * (t.tanks || 0);
+          return sum + proportionalTanks;
+        }
+      }
+      return sum;
+    }, 0);
   };
 
   const getFlavors = (dayTasks: ScheduledTask[]) => {
@@ -71,7 +139,7 @@ export function PreparationSection({ tasks, weekStartDate, onPrint }: Preparatio
         day,
         tasks: dayTasks,
         flavors: getFlavors(dayTasks),
-        total: getDayTotal(dayTasks),
+        total: getDayTotal(day, dayTasks),
       };
     });
   }, [weekDays, tasks]);
@@ -133,7 +201,7 @@ export function PreparationSection({ tasks, weekStartDate, onPrint }: Preparatio
                   </TableHeader>
                   <TableBody>
                     {LINES.map(lineId => {
-                      const lineTotal = getLineTotal(dayTasks, lineId);
+                      const lineTotal = getLineTotal(day, dayTasks, lineId);
                       if (lineTotal === 0 && dayTasks.filter(t => t.lineId === lineId).length === 0) return null;
 
                       return (
@@ -146,7 +214,7 @@ export function PreparationSection({ tasks, weekStartDate, onPrint }: Preparatio
                             </div>
                           </TableCell>
                           {flavors.map(flavor => {
-                            const tanks = getTanksForLineAndFlavor(dayTasks, lineId, flavor);
+                            const tanks = getTanksForLineAndFlavor(day, dayTasks, lineId, flavor);
                             return (
                               <TableCell key={flavor} className="text-center">
                                 <span className={cn(
@@ -171,7 +239,7 @@ export function PreparationSection({ tasks, weekStartDate, onPrint }: Preparatio
                         Total Sabor
                       </TableCell>
                       {flavors.map(flavor => {
-                        const flavorTotal = getFlavorTotal(dayTasks, flavor);
+                        const flavorTotal = getFlavorTotal(day, dayTasks, flavor);
                         return (
                           <TableCell key={flavor} className="text-center">
                             <span className="text-xs font-black text-slate-700 tabular-nums">
