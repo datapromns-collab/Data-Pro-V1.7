@@ -4,7 +4,46 @@ import fs from 'fs';
 const DB_PATH = path.join(process.cwd(), 'data.json');
 const MAX_BACKUPS = 10;
 
-function createRotatingBackup(dbPath: string) {
+const RETRYABLE_CODES = new Set(['EPERM', 'EACCES', 'EBUSY', 'UNKNOWN']);
+
+function withRetry<T>(fn: () => Promise<T> | T, retries = 3, baseDelay = 100): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    let attempt = 0;
+    function attemptFn() {
+      try {
+        const result = fn();
+        if (result instanceof Promise) {
+          result.then(resolve).catch((error) => {
+            const err = error as NodeJS.ErrnoException & { code?: string };
+            const isRetryable = err.code && RETRYABLE_CODES.has(err.code);
+            if (!isRetryable || attempt >= retries - 1) {
+              reject(error);
+            } else {
+              attempt++;
+              const delay = baseDelay * Math.pow(2, attempt) + Math.floor(Math.random() * 50);
+              setTimeout(attemptFn, delay);
+            }
+          });
+        } else {
+          resolve(result);
+        }
+      } catch (error) {
+        const err = error as NodeJS.ErrnoException & { code?: string };
+        const isRetryable = err.code && RETRYABLE_CODES.has(err.code);
+        if (!isRetryable || attempt >= retries - 1) {
+          reject(error);
+        } else {
+          attempt++;
+          const delay = baseDelay * Math.pow(2, attempt) + Math.floor(Math.random() * 50);
+          setTimeout(attemptFn, delay);
+        }
+      }
+    }
+    attemptFn();
+  });
+}
+
+async function createRotatingBackup(dbPath: string) {
   const backupDir = dbPath + '.backups';
   try {
     if (!fs.existsSync(backupDir)) {
@@ -13,14 +52,15 @@ function createRotatingBackup(dbPath: string) {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const backupPath = path.join(backupDir, `data-${timestamp}.json`);
     if (fs.existsSync(dbPath)) {
-      fs.copyFileSync(dbPath, backupPath);
-      const files = fs.readdirSync(backupDir)
+      await withRetry(() => fs.promises.copyFile(dbPath, backupPath));
+      const files = await fs.promises.readdir(backupDir);
+      const backups = files
         .filter((f) => f.startsWith('data-') && f.endsWith('.json'))
         .sort();
-      while (files.length > MAX_BACKUPS) {
-        const oldest = files.shift();
+      while (backups.length > MAX_BACKUPS) {
+        const oldest = backups.shift();
         if (oldest) {
-          fs.unlinkSync(path.join(backupDir, oldest));
+          await fs.promises.unlink(path.join(backupDir, oldest));
         }
       }
     }
@@ -29,20 +69,19 @@ function createRotatingBackup(dbPath: string) {
   }
 }
 
-function recoverFromBackup(dbPath: string): boolean {
+async function recoverFromBackup(dbPath: string): Promise<boolean> {
   const backupDir = dbPath + '.backups';
   if (!fs.existsSync(backupDir)) return false;
-  const files = fs.readdirSync(backupDir)
-    .filter((f) => f.startsWith('data-') && f.endsWith('.json'))
-    .sort()
-    .reverse();
+  const files = await fs.promises.readdir(backupDir)
+    .then((files) => files.filter((f) => f.startsWith('data-') && f.endsWith('.json')).sort().reverse())
+    .catch(() => []);
   for (const file of files) {
     const backupPath = path.join(backupDir, file);
     try {
-      const raw = fs.readFileSync(backupPath, 'utf8');
+      const raw = await fs.promises.readFile(backupPath, 'utf8');
       const data = JSON.parse(raw);
       if (data && typeof data === 'object' && data.collections && typeof data.collections === 'object') {
-        fs.copyFileSync(backupPath, dbPath);
+        await fs.promises.copyFile(backupPath, dbPath);
         console.warn('[COLLECTION] Recovered data.json from backup', backupPath);
         return true;
       }
@@ -85,13 +124,32 @@ function ensureDb() {
       }
     }
     if (changed) {
-      createRotatingBackup(DB_PATH);
       fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf8');
     }
   } catch {
     // Archivo corrupto: intentar recuperar desde el ultimo respaldo
-    recoverFromBackup(DB_PATH);
+    recoverFromBackup(DB_PATH).catch(() => {});
   }
+}
+
+function readDb(): any {
+  ensureDb();
+  return JSON.parse(fs.readFileSync(DB_PATH, 'utf8'));
+}
+
+async function writeDb(data: any) {
+  await createRotatingBackup(DB_PATH);
+  const payload = JSON.stringify(data, null, 2);
+  await withRetry(() => fs.promises.writeFile(DB_PATH, payload, 'utf8'));
+}
+
+function toArray(value: any): any[] {
+  if (Array.isArray(value)) return value;
+  if (value && typeof value !== 'object') {
+    const values = Object.values(value).filter((v) => v && typeof v === 'object');
+    if (values.length > 0) return values;
+  }
+  return [];
 }
 
 function getDeletedIds(db: any, ns: string): Record<string, string[]> {
@@ -104,25 +162,6 @@ function getDeletedIds(db: any, ns: string): Record<string, string[]> {
 function setDeletedIds(db: any, ns: string, value: Record<string, string[]>) {
   db.deletedIds = db.deletedIds || {};
   db.deletedIds[ns] = value;
-}
-
-function readDb(): any {
-  ensureDb();
-  return JSON.parse(fs.readFileSync(DB_PATH, 'utf8'));
-}
-
-function writeDb(data: any) {
-  createRotatingBackup(DB_PATH);
-  fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf8');
-}
-
-function toArray(value: any): any[] {
-  if (Array.isArray(value)) return value;
-  if (value && typeof value !== 'object') {
-    const values = Object.values(value).filter((v) => v && typeof v === 'object');
-    if (values.length > 0) return values;
-  }
-  return [];
 }
 
 const DEDUP_KEYS: Record<string, string[]> = {
@@ -380,7 +419,7 @@ export async function POST(request: Request) {
     }
 
     db.collections[ns] = result;
-    writeDb(db);
+    await writeDb(db);
     return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'content-type': 'application/json' } });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
