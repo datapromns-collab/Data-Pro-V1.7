@@ -654,6 +654,7 @@ export default function PlannerPage() {
   const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-ubb'>('preparacion');
   const [salaJarabeLinea, setSalaJarabeLinea] = useState<number>(1);
   const [salaJarabeNuevaTareaOpen, setSalaJarabeNuevaTareaOpen] = useState(false);
+  const [preparacionTab, setPreparacionTab] = useState<'glup' | 'justy'>('glup');
   const [procesosSubTab, setProcesosSubTab] = useState('ptab');
   const [ptabTab, setPtabTab] = useState<'agua' | 'insumos' | 'r-semanal' | 'r-mensual'>('agua');
   const [ptabWeekStartDate, setPtabWeekStartDate] = useState(new Date());
@@ -5273,9 +5274,59 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                                  <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                    <div className="flex flex-col h-full gap-3">
-                                     {salaJarabeSubTab === 'preparacion' && (
-                                       <div className="text-slate-400 uppercase font-black text-sm tracking-widest">Preparacion</div>
-                                     )}
+                                      {salaJarabeSubTab === 'preparacion' && (
+                                        <div className="flex flex-col h-full gap-3">
+                                          <div className="flex items-center gap-2 no-print">
+                                            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                              {[
+                                                { key: 'glup', label: 'Glup' },
+                                                { key: 'justy', label: 'Justy' },
+                                              ].map((tab) => (
+                                                <button
+                                                  key={tab.key}
+                                                  onClick={() => setPreparacionTab(tab.key as any)}
+                                                  className={cn(
+                                                    "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                                    preparacionTab === tab.key ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                                  )}
+                                                >
+                                                  {tab.label}
+                                                </button>
+                                              ))}
+                                            </div>
+                                          </div>
+                                          <div className="flex-1 overflow-x-auto">
+                                            <table className="w-full border-collapse text-[11px]">
+                                              <thead>
+                                                <tr className="bg-slate-800 text-white">
+                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Fecha</th>
+                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Hora</th>
+                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[120px]">Sabor</th>
+                                                  <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Litros ubb</th>
+                                                </tr>
+                                              </thead>
+                                              <tbody>
+                                                {Array.from({ length: 8 }).map((_, idx) => (
+                                                  <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                                    <td className="px-2 py-2 border border-slate-100">
+                                                      <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                    </td>
+                                                    <td className="px-2 py-2 border border-slate-100">
+                                                      <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                    </td>
+                                                    <td className="px-2 py-2 border border-slate-100">
+                                                      <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                    </td>
+                                                    <td className="px-2 py-2 border border-slate-100">
+                                                      <input type="text" className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                    </td>
+                                                  </tr>
+                                                ))}
+                                              </tbody>
+                                            </table>
+                                          </div>
+                                        </div>
+                                      )}
                                      {salaJarabeSubTab === 'consumo-lineas' && (
                                        <div className="text-slate-400 uppercase font-black text-sm tracking-widest">Linea {salaJarabeLinea}</div>
                                      )}
