@@ -5219,7 +5219,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                 </div>
                                                 <table className="w-full border-collapse text-[11px]">
                                                   <thead>
-                                                    <tr className="bg-slate-800 text-white">
+                                                     <tr className="bg-[#002D82] text-white">
                                                       <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10">Consumo Agua</th>
                                                       {getWeeksForMonth(rMensualSelectedYear, rMensualSelectedMonth).map((week, idx) => (
                                                         <th key={week.isoWeek} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">
