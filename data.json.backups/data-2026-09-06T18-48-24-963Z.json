@@ -113220,6 +113220,11 @@
       "2026-09-01": "2960460",
       "2026-09-02": "2619866,67",
       "2026-09-03": "2793864"
+    },
+    "ptab-insumos": {
+      "2026-09-06-LP20-0": "",
+      "2026-09-06-LP20-1": "",
+      "2026-09-06-LP20-2": ""
     }
   },
   "cacheVersion": 0,
@@ -113310,7 +113315,8 @@
     "jarabes": {},
     "planta-hrs-programadas": {},
     "ptab-agua": {},
-    "insumos-agua": {}
+    "insumos-agua": {},
+    "ptab-insumos": {}
   },
   "_deletedOrdenesSapIds": [
     "1-1785349102112",

@@ -4751,35 +4751,61 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                            <tr key={quimico} className="border-b border-slate-100 hover:bg-slate-50/50">
                                              <td className="px-2 py-2 border border-slate-100"></td>
                                              <td className="px-2 py-2 font-bold text-slate-700 border border-slate-100 whitespace-nowrap">{quimico}</td>
-                                              {Array.from({ length: 4 }).map((_, idx) => (
-                                                <td key={idx} className="px-1 py-1 text-center border border-slate-300 bg-white">
-                                                  <input
-                                                    type="text"
-                                                    value={ptabInsumosStore.data[`${ptabInsumosFecha ? format(ptabInsumosFecha, 'yyyy-MM-dd') : ''}-${quimico}-${idx}`] || ''}
-                                                    onChange={(e) => handlePtabInsumosChange(ptabInsumosFecha, quimico, idx, e.target.value)}
-                                                    className="w-full min-w-[14ch] h-9 text-center text-[11px] font-bold text-slate-900 bg-white border border-slate-300 rounded focus:outline-none focus:border-primary"
-                                                  />
-                                                </td>
-                                              ))}
-                                              {Array.from({ length: 4 }).map((_, idx) => (
-                                                <td key={`noct-${idx}`} className={`px-1 py-1 text-center border border-slate-300 bg-white ${idx === 0 ? 'border-l-4 border-black' : ''}`}>
-                                                  <input
-                                                    type="text"
-                                                    value={ptabInsumosStore.data[`${ptabInsumosFecha ? format(ptabInsumosFecha, 'yyyy-MM-dd') : ''}-${quimico}-${idx + 4}`] || ''}
-                                                    onChange={(e) => handlePtabInsumosChange(ptabInsumosFecha, quimico, idx + 4, e.target.value)}
-                                                    className="w-full min-w-[14ch] h-9 text-center text-[11px] font-bold text-slate-900 bg-white border border-slate-300 rounded focus:outline-none focus:border-primary"
-                                                  />
-                                                </td>
-                                              ))}
+                                               {Array.from({ length: 3 }).map((_, idx) => (
+                                                 <td key={idx} className="px-1 py-1 text-center border border-slate-300 bg-white">
+                                                   <input
+                                                     type="text"
+                                                     value={ptabInsumosStore.data[`${ptabInsumosFecha ? format(ptabInsumosFecha, 'yyyy-MM-dd') : ''}-${quimico}-${idx}`] || ''}
+                                                     onChange={(e) => handlePtabInsumosChange(ptabInsumosFecha, quimico, idx, e.target.value)}
+                                                     className="w-full min-w-[14ch] h-9 text-center text-[11px] font-bold text-slate-900 bg-white border border-slate-300 rounded focus:outline-none focus:border-primary"
+                                                   />
+                                                 </td>
+                                               ))}
+                                               <td className="px-1 py-1 text-center border border-slate-300 bg-white font-black text-slate-700">
+                                                 {(() => {
+                                                   const dateStr = ptabInsumosFecha ? format(ptabInsumosFecha, 'yyyy-MM-dd') : '';
+                                                   const invInicial = Number(String(ptabInsumosStore.data[`${dateStr}-${quimico}-0`] || '0').replace(/\./g, '').replace(',', '.')) || 0;
+                                                   const recepcion = Number(String(ptabInsumosStore.data[`${dateStr}-${quimico}-1`] || '0').replace(/\./g, '').replace(',', '.')) || 0;
+                                                   const invFinal = Number(String(ptabInsumosStore.data[`${dateStr}-${quimico}-2`] || '0').replace(/\./g, '').replace(',', '.')) || 0;
+                                                   const consumo = (invInicial + recepcion) - invFinal;
+                                                   return consumo ? consumo.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
+                                                 })()}
+                                               </td>
+                                               {Array.from({ length: 3 }).map((_, idx) => (
+                                                 <td key={`noct-${idx}`} className={`px-1 py-1 text-center border border-slate-300 bg-white ${idx === 0 ? 'border-l-4 border-black' : ''}`}>
+                                                   <input
+                                                     type="text"
+                                                     value={ptabInsumosStore.data[`${ptabInsumosFecha ? format(ptabInsumosFecha, 'yyyy-MM-dd') : ''}-${quimico}-${idx + 4}`] || ''}
+                                                     onChange={(e) => handlePtabInsumosChange(ptabInsumosFecha, quimico, idx + 4, e.target.value)}
+                                                     className="w-full min-w-[14ch] h-9 text-center text-[11px] font-bold text-slate-900 bg-white border border-slate-300 rounded focus:outline-none focus:border-primary"
+                                                   />
+                                                 </td>
+                                               ))}
+                                               <td className="px-1 py-1 text-center border border-slate-300 bg-white font-black text-slate-700">
+                                                 {(() => {
+                                                   const dateStr = ptabInsumosFecha ? format(ptabInsumosFecha, 'yyyy-MM-dd') : '';
+                                                   const invInicial = Number(String(ptabInsumosStore.data[`${dateStr}-${quimico}-4`] || '0').replace(/\./g, '').replace(',', '.')) || 0;
+                                                   const recepcion = Number(String(ptabInsumosStore.data[`${dateStr}-${quimico}-5`] || '0').replace(/\./g, '').replace(',', '.')) || 0;
+                                                   const invFinal = Number(String(ptabInsumosStore.data[`${dateStr}-${quimico}-6`] || '0').replace(/\./g, '').replace(',', '.')) || 0;
+                                                   const consumo = (invInicial + recepcion) - invFinal;
+                                                   return consumo ? consumo.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
+                                                 })()}
+                                               </td>
                                              <td className="px-2 py-2 text-center border border-slate-100 font-black text-slate-700">
-                                               {(() => {
-                                                 const dateStr = ptabInsumosFecha ? format(ptabInsumosFecha, 'yyyy-MM-dd') : '';
-                                                 const v1 = Number(String(ptabInsumosStore.data[`${dateStr}-${quimico}-3`] || '').replace(/\./g, '').replace(',', '.')) || 0;
-                                                 const v2 = Number(String(ptabInsumosStore.data[`${dateStr}-${quimico}-7`] || '').replace(/\./g, '').replace(',', '.')) || 0;
-                                                 const total = v1 + v2;
-                                                 return total ? total.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
-                                               })()}
-                                             </td>
+                                                {(() => {
+                                                  const dateStr = ptabInsumosFecha ? format(ptabInsumosFecha, 'yyyy-MM-dd') : '';
+                                                  const invInicialDiurno = Number(String(ptabInsumosStore.data[`${dateStr}-${quimico}-0`] || '0').replace(/\./g, '').replace(',', '.')) || 0;
+                                                  const recepcionDiurno = Number(String(ptabInsumosStore.data[`${dateStr}-${quimico}-1`] || '0').replace(/\./g, '').replace(',', '.')) || 0;
+                                                  const invFinalDiurno = Number(String(ptabInsumosStore.data[`${dateStr}-${quimico}-2`] || '0').replace(/\./g, '').replace(',', '.')) || 0;
+                                                  const invInicialNocturno = Number(String(ptabInsumosStore.data[`${dateStr}-${quimico}-4`] || '0').replace(/\./g, '').replace(',', '.')) || 0;
+                                                  const recepcionNocturno = Number(String(ptabInsumosStore.data[`${dateStr}-${quimico}-5`] || '0').replace(/\./g, '').replace(',', '.')) || 0;
+                                                  const invFinalNocturno = Number(String(ptabInsumosStore.data[`${dateStr}-${quimico}-6`] || '0').replace(/\./g, '').replace(',', '.')) || 0;
+                                                  const consumoDiurno = (invInicialDiurno + recepcionDiurno) - invFinalDiurno;
+                                                  const consumoNocturno = (invInicialNocturno + recepcionNocturno) - invFinalNocturno;
+                                                  const total = consumoDiurno + consumoNocturno;
+                                                  return total ? total.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
+                                                })()}
+                                              </td>
                                            </tr>
                                          ))}
                                        </tbody>
