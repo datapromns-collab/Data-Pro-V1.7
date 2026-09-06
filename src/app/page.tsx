@@ -653,6 +653,7 @@ export default function PlannerPage() {
   const [insumosPeriodoSubTab, setInsumosPeriodoSubTab] = useState('diario');
   const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-ubb'>('preparacion');
   const [salaJarabeLinea, setSalaJarabeLinea] = useState<number>(1);
+  const [salaJarabeNuevaTareaOpen, setSalaJarabeNuevaTareaOpen] = useState(false);
   const [procesosSubTab, setProcesosSubTab] = useState('ptab');
   const [ptabTab, setPtabTab] = useState<'agua' | 'insumos' | 'r-semanal' | 'r-mensual'>('agua');
   const [ptabWeekStartDate, setPtabWeekStartDate] = useState(new Date());
@@ -5237,6 +5238,16 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                      ))}
                                    </div>
                                  </div>
+                                 {salaJarabeSubTab === 'preparacion' && (
+                                   <div className="flex items-center gap-2">
+                                     <button
+                                       onClick={() => setSalaJarabeNuevaTareaOpen(true)}
+                                       className="inline-flex items-center gap-2 h-9 px-4 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none shadow-sm active:scale-95"
+                                     >
+                                       Tanque Preparado
+                                     </button>
+                                   </div>
+                                 )}
                                  {salaJarabeSubTab === 'consumo-lineas' && (
                                    <div className="flex items-center gap-2">
                                      <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
@@ -5251,7 +5262,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                salaJarabeLinea === n ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
                                              )}
                                            >
-                                             {n}
+                                             L{n}
                                            </button>
                                          );
                                        })}
@@ -5274,6 +5285,19 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                    </div>
                                  </div>
                                </div>
+                               {salaJarabeSubTab === 'preparacion' && salaJarabeNuevaTareaOpen && (
+                                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+                                   <div className="bg-white rounded-2xl shadow-xl w-full max-w-lg mx-4 p-6">
+                                     <div className="flex items-center justify-between mb-4">
+                                       <h3 className="text-slate-900 font-black uppercase tracking-widest text-sm">Nueva Tarea</h3>
+                                       <button onClick={() => setSalaJarabeNuevaTareaOpen(false)} className="text-slate-500 hover:text-slate-900">✕</button>
+                                     </div>
+                                     <div className="min-h-[120px] rounded-xl border border-dashed border-slate-200 bg-white/60 flex items-center justify-center text-slate-400 uppercase font-black text-xs tracking-widest">
+                                       En blanco
+                                     </div>
+                                   </div>
+                                 </div>
+                               )}
                              </div>
                            )}
                       </div>
