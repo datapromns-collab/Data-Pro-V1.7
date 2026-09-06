@@ -1,0 +1,14 @@
+{
+  "planner": {
+    "tasks": [],
+    "config": {
+      "weekStartDate": "2026-09-06T15:31:04.784Z",
+      "lineSpeeds": {}
+    },
+    "deletedTaskIds": []
+  },
+  "collections": {},
+  "ordenesSap": [],
+  "notifications": [],
+  "cacheVersion": 0
+}

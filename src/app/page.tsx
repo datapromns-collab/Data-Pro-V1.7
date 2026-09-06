@@ -2032,7 +2032,7 @@ export default function PlannerPage() {
         rendimiento: rendimiento || 0,
       };
     });
-  }, [rMensualSelectedMonth, rMensualSelectedYear]);
+  }, [rMensualSelectedMonth, rMensualSelectedYear, ptabAguaStore.data]);
 
   const rSemanalChartData = useMemo(() => {
     const days = getWeekDays(rSemanalWeekStartDate).filter((day) => {
@@ -2055,7 +2055,7 @@ export default function PlannerPage() {
         rendimiento: rendimiento || 0,
       };
     });
-  }, [rSemanalWeekStartDate, rSemanalSelectedMonth, rSemanalSelectedYear]);
+   }, [rSemanalWeekStartDate, rSemanalSelectedMonth, rSemanalSelectedYear, ptabAguaStore.data]);
 
   const parseAguaInput = (raw: string): string => {
     const trimmed = raw.trim();

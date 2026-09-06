@@ -1,0 +1,25 @@
+{
+  "planner": {
+    "tasks": [],
+    "config": {
+      "weekStartDate": "2026-09-06T15:31:04.784Z",
+      "lineSpeeds": {}
+    },
+    "deletedTaskIds": []
+  },
+  "collections": {
+    "insumos-agua": {
+      "2026-08-31": "3070160",
+      "2026-09-01": "2960460",
+      "2026-09-02": "2619866,67",
+      "2026-09-03": "2793864",
+      "2026-09-04": "3185346,66666667"
+    }
+  },
+  "ordenesSap": [],
+  "notifications": [],
+  "cacheVersion": 0,
+  "deletedIds": {
+    "insumos-agua": {}
+  }
+}
