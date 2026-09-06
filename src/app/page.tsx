@@ -1234,6 +1234,18 @@ export default function PlannerPage() {
         }
       },
     });
+    const finalY = (doc as any).lastAutoTable ? (doc as any).lastAutoTable.finalY : 80;
+    const chartEl = document.getElementById('r-semanal-agua-chart');
+    if (chartEl) {
+      const canvas = await html2canvas(chartEl, { scale: 2, backgroundColor: '#ffffff' });
+      const imgData = canvas.toDataURL('image/png');
+      const imgWidth = doc.internal.pageSize.getWidth() - 28;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const maxHeight = doc.internal.pageSize.getHeight() - finalY - 20;
+      const ratio = Math.min(1, maxHeight / imgHeight);
+      const finalHeight = imgHeight * ratio;
+      doc.addImage(imgData, 'PNG', 14, finalY + 4, imgWidth, finalHeight);
+    }
     doc.save(`AGUA_R_Semanal_Semana_${getISOWeek(rSemanalWeekStartDate)}_${rSemanalSelectedYear}.pdf`);
   };
   const [paradasSubTab, setParadasSubTab] = useState('informes-operacionales');
@@ -4813,26 +4825,26 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                         <FileDown className="h-3.5 w-3.5" /> PDF
                                                       </Button>
                                                     </div>
-                                                     <div className="min-h-[320px]">
-                                                      {rSemanalChartData.length > 0 ? (
-                                                        <ResponsiveContainer width="100%" height={320}>
-                                                           <ComposedChart data={rSemanalChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                                                             <CartesianGrid strokeDasharray="3 3" />
-                                                             <XAxis dataKey="dia" />
-                                                              <YAxis yAxisId="left" tickFormatter={(v) => (Math.abs(Number(v)) >= 1_000_000 ? `${(Number(v) / 1_000_000).toFixed(1)}M` : Math.abs(Number(v)) >= 1_000 ? `${(Number(v) / 1_000).toFixed(1)}K` : String(v))} width={50} />
-                                                              <YAxis yAxisId="right" orientation="right" />
-                                                             <RechartsTooltip />
-                                                             <Legend />
-                                                             <Bar yAxisId="left" dataKey="fisico" fill="#0ea5e9" name="Consumo Físico" />
-                                                             <Bar yAxisId="left" dataKey="teorico" fill="#10b981" name="Consumo Teórico" />
-                                                              <Line yAxisId="right" type="monotone" dataKey="rendimiento" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
-                                                           </ComposedChart>
-                                                        </ResponsiveContainer>
-                                                      ) : (
-                                                        <div className="h-[320px] rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-xs tracking-widest">
-                                                          Sin datos para graficar
-                                                        </div>
-                                                      )}
+                                                       <div id="r-semanal-agua-chart" className="min-h-[420px]">
+                                                       {rSemanalChartData.length > 0 ? (
+                                                         <ResponsiveContainer width="100%" height={420}>
+                                                            <ComposedChart data={rSemanalChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                                                              <CartesianGrid strokeDasharray="3 3" />
+                                                              <XAxis dataKey="dia" />
+                                                               <YAxis yAxisId="left" tickFormatter={(v) => (Math.abs(Number(v)) >= 1_000_000 ? `${(Number(v) / 1_000_000).toFixed(1)}M` : Math.abs(Number(v)) >= 1_000 ? `${(Number(v) / 1_000).toFixed(1)}K` : String(v))} width={50} />
+                                                               <YAxis yAxisId="right" orientation="right" />
+                                                              <RechartsTooltip />
+                                                              <Legend />
+                                                              <Bar yAxisId="left" dataKey="fisico" fill="#0ea5e9" name="Consumo Físico" />
+                                                              <Bar yAxisId="left" dataKey="teorico" fill="#10b981" name="Consumo Teórico" />
+                                                               <Line yAxisId="right" type="monotone" dataKey="rendimiento" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
+                                                            </ComposedChart>
+                                                         </ResponsiveContainer>
+                                                       ) : (
+                                                         <div className="h-[420px] rounded-2xl border border-dashed border-slate-200 bg-white/50 flex items-center justify-center text-slate-400 uppercase font-black text-xs tracking-widest">
+                                                           Sin datos para graficar
+                                                         </div>
+                                                       )}
                                                     </div>
                                                  </div>
                                               </div>
