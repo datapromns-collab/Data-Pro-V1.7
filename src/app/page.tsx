@@ -1239,7 +1239,8 @@ export default function PlannerPage() {
     if (chartEl) {
       const canvas = await html2canvas(chartEl, { scale: 2, backgroundColor: '#ffffff' });
       const imgData = canvas.toDataURL('image/png');
-      const imgWidth = doc.internal.pageSize.getWidth() - 28;
+      const pageWidth = doc.internal.pageSize.getWidth();
+      const imgWidth = pageWidth - 28;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
       const maxHeight = doc.internal.pageSize.getHeight() - finalY - 20;
       const ratio = Math.min(1, maxHeight / imgHeight);
@@ -4818,14 +4819,14 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                       </tbody>
                                                    </table>
                                                  </div>
-                                                  <div className="mt-4 bg-white rounded-2xl border border-slate-100 p-4">
-                                                    <div className="flex items-center justify-between mb-2">
-                                                      <div className="text-slate-700 font-black text-xs uppercase tracking-widest">Consumo de agua - Gráfico semanal</div>
-                                                      <Button size="sm" onClick={generarPDFRSemanalAgua} className="h-8 pl-3 pr-4 rounded-full bg-teal-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-teal-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
-                                                        <FileDown className="h-3.5 w-3.5" /> PDF
-                                                      </Button>
-                                                    </div>
-                                                       <div id="r-semanal-agua-chart" className="min-h-[420px]">
+                                                   <div className="mt-4 bg-white rounded-2xl border border-slate-100">
+                                                     <div className="flex items-center justify-between mb-2 px-4 pt-4">
+                                                       <div className="text-slate-700 font-black text-xs uppercase tracking-widest">Consumo de agua - Gráfico semanal</div>
+                                                       <Button size="sm" onClick={generarPDFRSemanalAgua} className="h-8 pl-3 pr-4 rounded-full bg-teal-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-teal-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
+                                                         <FileDown className="h-3.5 w-3.5" /> PDF
+                                                       </Button>
+                                                     </div>
+                                                        <div id="r-semanal-agua-chart" className="min-h-[420px] px-4 pb-4">
                                                        {rSemanalChartData.length > 0 ? (
                                                          <ResponsiveContainer width="100%" height={420}>
                                                             <ComposedChart data={rSemanalChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
