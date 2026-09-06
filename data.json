@@ -98731,6 +98731,25 @@
         "usuario": "Luis Sanchez",
         "id": 1788715147499,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-02",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "DANIEL ZAPATA ",
+        "linea": "Línea 5",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "08:54",
+        "finParada": "09:20",
+        "totalMin": "26",
+        "zona": "Llenado",
+        "falla": "FALLA EN BANDA TRANSPORTADORA DE BOTELLAS",
+        "orden": "9456",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1788717432833,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [

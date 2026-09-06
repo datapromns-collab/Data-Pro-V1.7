@@ -4722,27 +4722,27 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                   </div>
                                   <div className="flex-1 rounded-2xl border border-slate-100 bg-white overflow-x-auto">
                                     <div className="mb-2">
-                                      <span className="text-slate-700 font-black text-sm uppercase tracking-widest">{ptabInsumosFecha ? format(ptabInsumosFecha, 'd/M/yyyy') : ''}</span>
+                                      <span className="text-slate-700 font-black text-sm uppercase tracking-widest">Consumo de insumos Químicos - {ptabInsumosFecha ? format(ptabInsumosFecha, 'EEEE d/M/yyyy', { locale: es }) : ''}</span>
                                     </div>
                                      <table className="w-full border-collapse text-[11px]">
-                                       <thead>
-                                         <tr className="bg-slate-800 text-white">
-                                           <th colSpan={2} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10"></th>
-                                           <th colSpan={4} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">Turno Diurno</th>
-                                           <th colSpan={4} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">Turno Nocturno</th>
-                                         </tr>
-                                         <tr className="bg-slate-100 text-slate-900">
-                                           <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[70px]">Codigo</th>
-                                           <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[70px]">Quimico</th>
-                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-slate-200 min-w-[70px]">Inv. Inicial</th>
-                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-slate-200 min-w-[70px]">Recepcion</th>
-                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-slate-200 min-w-[70px]">Inv. Final</th>
-                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-slate-200 min-w-[70px]">Consumo</th>
-                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-slate-200 min-w-[70px]">Inv. Inicial</th>
-                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-slate-200 min-w-[70px]">Recepcion</th>
-                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-slate-200 min-w-[70px]">Inv. Final</th>
-                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-slate-200 min-w-[70px]">Consumo</th>
-                                         </tr>
+                                        <thead>
+                                          <tr className="bg-[#055651] text-white">
+                                            <th colSpan={2} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10"></th>
+                                            <th colSpan={4} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">Turno Diurno</th>
+                                            <th colSpan={4} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">Turno Nocturno</th>
+                                          </tr>
+                                          <tr className="bg-slate-100 text-slate-900">
+                                            <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Codigo</th>
+                                            <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Quimico</th>
+                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Inv. Inicial</th>
+                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Recepcion</th>
+                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Inv. Final</th>
+                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Consumo</th>
+                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Inv. Inicial</th>
+                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Recepcion</th>
+                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Inv. Final</th>
+                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Consumo</th>
+                                          </tr>
                                        </thead>
                                        <tbody>
                                          {['LP20', 'Cloro', 'AntiEscalante', 'Sal', 'Alcalino', 'Peracetico', 'Lark Foam Quat', 'Lark Foam IN', 'Lark Desengrasante', 'Soda Caustica', 'GermiQuat', 'Lark Inox', 'TM Smart', 'Gamma Ro-432', 'RO Cleaner', 'Sanitizer'].map((quimico) => (
