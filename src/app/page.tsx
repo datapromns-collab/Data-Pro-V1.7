@@ -104,7 +104,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { WeeklyData } from '@/lib/json-db';
 import { ScheduledTask } from '@/lib/types';
-import { format, getISOWeek, addDays, addMonths, subMonths, startOfWeek, startOfMonth, endOfMonth, eachDayOfInterval, startOfDay } from 'date-fns';
+import { format, getISOWeek, addDays, addMonths, subMonths, startOfWeek, startOfMonth, endOfMonth, eachDayOfInterval, startOfDay, endOfDay } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
@@ -653,6 +653,7 @@ export default function PlannerPage() {
   const [insumosPeriodoSubTab, setInsumosPeriodoSubTab] = useState('diario');
   const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-ubb'>('preparacion');
   const [salaJarabeLinea, setSalaJarabeLinea] = useState<number>(1);
+  const [salaJarabePrepWeekStartDate, setSalaJarabePrepWeekStartDate] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [salaJarabeNuevaTareaOpen, setSalaJarabeNuevaTareaOpen] = useState(false);
   const [preparacionTab, setPreparacionTab] = useState<'glup' | 'justy'>('glup');
   const [nuevaTarea, setNuevaTarea] = useState({ fecha: '', hora: '', sabor: '', litros: '', ubb: '' });
@@ -682,7 +683,36 @@ export default function PlannerPage() {
       setRevisionEditingRow(null);
       setRevisionEditForm(null);
     }
-   };
+  };
+  const salaJarabePrepWeekStart = salaJarabePrepWeekStartDate;
+  const salaJarabePrepWeekEnd = addDays(salaJarabePrepWeekStart, 6);
+  const salaJarabePrepWeekNumber = getISOWeek(salaJarabePrepWeekStart);
+  const filteredGlupRows = glupRows.filter((row) => {
+    if (!row.fecha) return true;
+    const d = new Date(row.fecha + 'T00:00:00');
+    return d >= startOfDay(salaJarabePrepWeekStart) && d <= endOfDay(salaJarabePrepWeekEnd);
+  });
+  const filteredJustyRows = justyRows.filter((row) => {
+    if (!row.fecha) return true;
+    const d = new Date(row.fecha + 'T00:00:00');
+    return d >= startOfDay(salaJarabePrepWeekStart) && d <= endOfDay(salaJarabePrepWeekEnd);
+  });
+  const salaJarabePrepWeeks = useMemo(() => {
+    const year = salaJarabePrepWeekStart.getFullYear();
+    const jan4 = new Date(year, 0, 4);
+    let current = startOfWeek(jan4, { weekStartsOn: 1 });
+    const weeks: { isoWeek: number; start: Date; end: Date }[] = [];
+    let week = 1;
+    while (current.getFullYear() <= year) {
+      const start = new Date(current);
+      const end = addDays(current, 6);
+      weeks.push({ isoWeek: week, start, end });
+      current = addDays(current, 7);
+      week++;
+      if (start.getFullYear() > year) break;
+    }
+    return weeks;
+  }, [salaJarabePrepWeekStart.getFullYear()]);
   const [procesosSubTab, setProcesosSubTab] = useState('ptab');
   const [ptabTab, setPtabTab] = useState<'agua' | 'insumos' | 'r-semanal' | 'r-mensual'>('agua');
   const [ptabWeekStartDate, setPtabWeekStartDate] = useState(new Date());
@@ -5027,7 +5057,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                   </div>
                                                   <table className="w-full border-collapse text-[11px]">
                                                     <thead>
-                                                      <tr className="bg-slate-800 text-white">
+                                                    <tr className="bg-[#002D82] text-white">
                                                         <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10">Consumo Agua</th>
                                                         {getWeekDays(rSemanalWeekStartDate).filter((day) => {
                                                           const dayMonth = day.getMonth() + 1;
@@ -5302,16 +5332,48 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                      ))}
                                    </div>
                                  </div>
-                                 {salaJarabeSubTab === 'preparacion' && (
-                                   <div className="flex items-center gap-2">
-                                     <button
-                                       onClick={() => setSalaJarabeNuevaTareaOpen(true)}
-                                       className="inline-flex items-center gap-2 h-9 px-4 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none shadow-sm active:scale-95"
-                                     >
-                                       Tanque Preparado
-                                     </button>
-                                   </div>
-                                 )}
+                                  {salaJarabeSubTab === 'preparacion' && (
+                                    <div className="flex items-center gap-2">
+                                      <button
+                                        onClick={() => setSalaJarabeNuevaTareaOpen(true)}
+                                        className="inline-flex items-center gap-2 h-9 px-4 rounded-full bg-[#006DB2] text-white font-black uppercase text-[10px] tracking-widest hover:bg-[#005a94] transition-none shadow-sm active:scale-95"
+                                      >
+                                        Tanque Preparado
+                                      </button>
+                                      <Popover>
+                                        <PopoverTrigger asChild>
+                                          <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                                            <CalendarIcon className="h-3.5 w-3.5 text-primary" />
+                                            Semana {salaJarabePrepWeekNumber}
+                                          </button>
+                                        </PopoverTrigger>
+                                        <PopoverContent className="p-0 w-72" align="end">
+                                          <div className="flex flex-col p-2">
+                                            <div className="flex items-center justify-between mb-2">
+                                              <button onClick={() => { const d = new Date(salaJarabePrepWeekStart); d.setFullYear(d.getFullYear() - 1); setSalaJarabePrepWeekStartDate(d); }} className="h-7 px-2 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50">← Año</button>
+                                              <span className="text-[11px] font-black text-slate-700">{salaJarabePrepWeekStart.getFullYear()}</span>
+                                              <button onClick={() => { const d = new Date(salaJarabePrepWeekStart); d.setFullYear(d.getFullYear() + 1); setSalaJarabePrepWeekStartDate(d); }} className="h-7 px-2 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50">Año →</button>
+                                            </div>
+                                            <div className="max-h-64 overflow-auto rounded-lg border border-slate-200">
+                                              {salaJarabePrepWeeks.map((week) => (
+                                                <button
+                                                  key={week.isoWeek}
+                                                  onClick={() => setSalaJarabePrepWeekStartDate(week.start)}
+                                                  className={cn(
+                                                    "w-full text-left px-3 py-2 text-[11px] border-b border-slate-100 last:border-0 flex items-center justify-between",
+                                                    salaJarabePrepWeekNumber === week.isoWeek ? "bg-slate-800 text-white" : "hover:bg-slate-50"
+                                                  )}
+                                                >
+                                                  <span className="font-bold">Sem {week.isoWeek}</span>
+                                                  <span className="text-[10px] opacity-70">{format(week.start, 'dd MMM', { locale: es })} - {format(week.end, 'dd MMM', { locale: es })}</span>
+                                                </button>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        </PopoverContent>
+                                      </Popover>
+                                    </div>
+                                  )}
                                  {salaJarabeSubTab === 'consumo-lineas' && (
                                    <div className="flex items-center gap-2">
                                      <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
@@ -5359,10 +5421,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                             </div>
                                           </div>
                                           <div className="flex-1 overflow-x-auto">
-                                            {preparacionTab === 'glup' && (
-                                              <table className="w-full border-collapse text-[11px]">
-                                                 <thead>
-                                                   <tr className="bg-slate-800 text-white">
+                                             {preparacionTab === 'glup' && (
+                                               <table className="w-full border-collapse text-[11px]">
+                                                  <thead>
+                                                    <tr className="bg-[#002D82] text-white">
                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Fecha</th>
                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Hora</th>
                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[120px]">Sabor</th>
@@ -5374,10 +5436,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     </tr>
                                                  </thead>
                                                  <tbody>
-                                                   {glupRows.length === 0 && (
+                                                    {filteredGlupRows.length === 0 && (
                                                       <tr><td colSpan={showRevisionColumn ? 8 : 7} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
                                                    )}
-                                                    {glupRows.map((row, idx) => (
+                                                    {filteredGlupRows.map((row, idx) => (
                                                       <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
                                                         {(() => {
                                                           const isEditing = revisionEditingRow && revisionEditingRow.type === 'glup' && revisionEditingRow.index === idx;
@@ -5439,10 +5501,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                  </tbody>
                                               </table>
                                             )}
-                                              {preparacionTab === 'justy' && (
-                                                <table className="w-full border-collapse text-[11px]">
-                                                  <thead>
-                                                    <tr className="bg-slate-800 text-white">
+                                               {preparacionTab === 'justy' && (
+                                                 <table className="w-full border-collapse text-[11px]">
+                                                   <thead>
+                                                     <tr className="bg-[#002D82] text-white">
                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Fecha</th>
                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Hora</th>
                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[120px]">Sabor</th>
@@ -5454,10 +5516,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     </tr>
                                                   </thead>
                                                   <tbody>
-                                                    {justyRows.length === 0 && (
+                                                     {filteredJustyRows.length === 0 && (
                                                       <tr><td colSpan={showRevisionColumn ? 8 : 7} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
                                                     )}
-                                                     {justyRows.map((row, idx) => (
+                                                     {filteredJustyRows.map((row, idx) => (
                                                        <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
                                                          {(() => {
                                                            const isEditing = revisionEditingRow && revisionEditingRow.type === 'justy' && revisionEditingRow.index === idx;
