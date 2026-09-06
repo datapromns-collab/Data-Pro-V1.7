@@ -4726,12 +4726,12 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                     </div>
                                      <table className="w-full border-collapse text-[11px]">
                                        <thead>
-                                         <tr className="bg-[#055651] text-white">
-                                           <th colSpan={2} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10"></th>
-                                           <th colSpan={4} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">Turno Diurno</th>
-                                           <th colSpan={4} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 border-l-4 border-black">Turno Nocturno</th>
-                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Consumo Total</th>
-                                         </tr>
+                                           <tr className="bg-[#055651] text-white">
+                                             <th colSpan={2} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10"></th>
+                                             <th colSpan={4} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">Turno Diurno</th>
+                                             <th colSpan={4} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 border-l-4 border-black">Turno Nocturno</th>
+                                             <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]"></th>
+                                           </tr>
                                          <tr className="bg-[#d9ef9f] text-slate-900">
                                            <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Codigo</th>
                                            <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Quimico</th>
