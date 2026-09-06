@@ -4760,8 +4760,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                            <ComposedChart data={rSemanalChartData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
                                                              <CartesianGrid strokeDasharray="3 3" />
                                                              <XAxis dataKey="dia" />
-                                                             <YAxis yAxisId="left" />
-                                                             <YAxis yAxisId="right" orientation="right" />
+                                                              <YAxis yAxisId="left" tickFormatter={(v) => (Math.abs(Number(v)) >= 1_000_000 ? `${(Number(v) / 1_000_000).toFixed(1)}M` : Math.abs(Number(v)) >= 1_000 ? `${(Number(v) / 1_000).toFixed(1)}K` : String(v))} width={50} />
+                                                              <YAxis yAxisId="right" orientation="right" />
                                                              <RechartsTooltip />
                                                              <Legend />
                                                              <Bar yAxisId="left" dataKey="fisico" fill="#0ea5e9" name="Consumo Físico" />
