@@ -652,6 +652,7 @@ export default function PlannerPage() {
   const [insumosSubTab, setInsumosSubTab] = useState('co2');
   const [insumosPeriodoSubTab, setInsumosPeriodoSubTab] = useState('diario');
   const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-ubb'>('preparacion');
+  const [salaJarabeLinea, setSalaJarabeLinea] = useState<number>(1);
   const [procesosSubTab, setProcesosSubTab] = useState('ptab');
   const [ptabTab, setPtabTab] = useState<'agua' | 'insumos' | 'r-semanal' | 'r-mensual'>('agua');
   const [ptabWeekStartDate, setPtabWeekStartDate] = useState(new Date());
@@ -5212,46 +5213,69 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                             </div>
                           </div>
                         )}
-                           {isDemon && procesosSubTab === 'sala-jarabe' && (
-                            <div className="flex flex-col h-full gap-3">
-                              <div className="flex items-center gap-2 no-print">
-                                <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                  {[
-                                    { key: 'preparacion', label: 'Preparacion', icon: FlaskConical },
-                                    { key: 'consumo-lineas', label: 'Consumo en Lineas', icon: Activity },
-                                    { key: 'consumo-ubb', label: 'Consumo Ubb', icon: BarChart3 },
-                                  ].map((tab) => (
-                                    <button
-                                      key={tab.key}
-                                      onClick={() => setSalaJarabeSubTab(tab.key as any)}
-                                      className={cn(
-                                        "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                        salaJarabeSubTab === tab.key ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                      )}
-                                    >
-                                      <tab.icon className="h-3.5 w-3.5" />
-                                      <span className="hidden sm:inline">{tab.label}</span>
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                              <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                                <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
-                                  <div className="flex flex-col h-full gap-3">
-                                    {salaJarabeSubTab === 'preparacion' && (
-                                      <div className="text-slate-400 uppercase font-black text-sm tracking-widest">Preparacion</div>
-                                    )}
-                                    {salaJarabeSubTab === 'consumo-lineas' && (
-                                      <div className="text-slate-400 uppercase font-black text-sm tracking-widest">Consumo en Lineas</div>
-                                    )}
-                                    {salaJarabeSubTab === 'consumo-ubb' && (
-                                      <div className="text-slate-400 uppercase font-black text-sm tracking-widest">Consumo Ubb</div>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          )}
+                            {isDemon && procesosSubTab === 'sala-jarabe' && (
+                             <div className="flex flex-col h-full gap-3">
+                               <div className="flex flex-col gap-2 no-print">
+                                 <div className="flex items-center gap-2">
+                                   <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                     {[
+                                       { key: 'preparacion', label: 'Preparacion', icon: FlaskConical },
+                                       { key: 'consumo-lineas', label: 'Consumo en Lineas', icon: Activity },
+                                       { key: 'consumo-ubb', label: 'Consumo Ubb', icon: BarChart3 },
+                                     ].map((tab) => (
+                                       <button
+                                         key={tab.key}
+                                         onClick={() => setSalaJarabeSubTab(tab.key as any)}
+                                         className={cn(
+                                           "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                           salaJarabeSubTab === tab.key ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                         )}
+                                       >
+                                         <tab.icon className="h-3.5 w-3.5" />
+                                         <span className="hidden sm:inline">{tab.label}</span>
+                                       </button>
+                                     ))}
+                                   </div>
+                                 </div>
+                                 {salaJarabeSubTab === 'consumo-lineas' && (
+                                   <div className="flex items-center gap-2">
+                                     <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                       {Array.from({ length: 7 }).map((_, idx) => {
+                                         const n = idx + 1;
+                                         return (
+                                           <button
+                                             key={n}
+                                             onClick={() => setSalaJarabeLinea(n)}
+                                             className={cn(
+                                               "inline-flex items-center justify-center h-9 min-w-[2.2rem] px-2 sm:px-3 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                               salaJarabeLinea === n ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                             )}
+                                           >
+                                             {n}
+                                           </button>
+                                         );
+                                       })}
+                                     </div>
+                                   </div>
+                                 )}
+                               </div>
+                               <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                                 <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                                   <div className="flex flex-col h-full gap-3">
+                                     {salaJarabeSubTab === 'preparacion' && (
+                                       <div className="text-slate-400 uppercase font-black text-sm tracking-widest">Preparacion</div>
+                                     )}
+                                     {salaJarabeSubTab === 'consumo-lineas' && (
+                                       <div className="text-slate-400 uppercase font-black text-sm tracking-widest">Linea {salaJarabeLinea}</div>
+                                     )}
+                                     {salaJarabeSubTab === 'consumo-ubb' && (
+                                       <div className="text-slate-400 uppercase font-black text-sm tracking-widest">Consumo Ubb</div>
+                                     )}
+                                   </div>
+                                 </div>
+                               </div>
+                             </div>
+                           )}
                       </div>
                     )}
                     {activeModule === 'calidad' && isDemon && (
