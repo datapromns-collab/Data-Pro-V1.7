@@ -4725,32 +4725,34 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                       <span className="text-slate-700 font-black text-sm uppercase tracking-widest">Consumo de insumos Químicos - {ptabInsumosFecha ? format(ptabInsumosFecha, 'EEEE d/M/yyyy', { locale: es }) : ''}</span>
                                     </div>
                                      <table className="w-full border-collapse text-[11px]">
-                                        <thead>
-                                          <tr className="bg-[#055651] text-white">
-                                            <th colSpan={2} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10"></th>
-                                            <th colSpan={4} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">Turno Diurno</th>
-                                            <th colSpan={4} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 border-l-4 border-black">Turno Nocturno</th>
-                                          </tr>
-                                          <tr className="bg-[#d9ef9f] text-slate-900">
-                                            <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[70px]"></th>
-                                            <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[70px]"></th>
-                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Inv. Inicial</th>
-                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Recepcion</th>
-                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Inv. Final</th>
-                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px] border-l-4 border-black">Consumo</th>
-                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px] border-l-4 border-black">Inv. Inicial</th>
-                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Recepcion</th>
-                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Inv. Final</th>
-                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Consumo</th>
-                                           </tr>
-                                        </thead>
-                                        <tbody>
+                                       <thead>
+                                         <tr className="bg-[#055651] text-white">
+                                           <th colSpan={2} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10"></th>
+                                           <th colSpan={4} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10">Turno Diurno</th>
+                                           <th colSpan={4} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 border-l-4 border-black">Turno Nocturno</th>
+                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Consumo Total</th>
+                                         </tr>
+                                         <tr className="bg-[#d9ef9f] text-slate-900">
+                                           <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Codigo</th>
+                                           <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Quimico</th>
+                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Inv. Inicial</th>
+                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Recepcion</th>
+                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Inv. Final</th>
+                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Consumo</th>
+                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px] border-l-4 border-black">Inv. Inicial</th>
+                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Recepcion</th>
+                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Inv. Final</th>
+                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Consumo</th>
+                                           <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Consumo Total</th>
+                                         </tr>
+                                       </thead>
+                                       <tbody>
                                          {['LP20', 'Cloro', 'AntiEscalante', 'Sal', 'Alcalino', 'Peracetico', 'Lark Foam Quat', 'Lark Foam IN', 'Lark Desengrasante', 'Soda Caustica', 'GermiQuat', 'Lark Inox', 'TM Smart', 'Gamma Ro-432', 'RO Cleaner', 'Sanitizer'].map((quimico) => (
                                            <tr key={quimico} className="border-b border-slate-100 hover:bg-slate-50/50">
                                              <td className="px-2 py-2 border border-slate-100"></td>
                                              <td className="px-2 py-2 font-bold text-slate-700 border border-slate-100 whitespace-nowrap">{quimico}</td>
-                                              {Array.from({ length: 8 }).map((_, idx) => (
-                                                <td key={idx} className={`px-2 py-2 text-center border border-slate-100 ${idx === 4 ? 'border-l-4 border-black' : ''}`}>
+                                             {Array.from({ length: 4 }).map((_, idx) => (
+                                               <td key={idx} className="px-2 py-2 text-center border border-slate-100">
                                                  <input
                                                    type="text"
                                                    value={ptabInsumosStore.data[`${ptabInsumosFecha ? format(ptabInsumosFecha, 'yyyy-MM-dd') : ''}-${quimico}-${idx}`] || ''}
@@ -4759,6 +4761,26 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                  />
                                                </td>
                                              ))}
+                                             <td className="px-2 py-2 text-center border border-slate-100 border-l-4 border-black"></td>
+                                             {Array.from({ length: 4 }).map((_, idx) => (
+                                               <td key={idx} className="px-2 py-2 text-center border border-slate-100">
+                                                 <input
+                                                   type="text"
+                                                   value={ptabInsumosStore.data[`${ptabInsumosFecha ? format(ptabInsumosFecha, 'yyyy-MM-dd') : ''}-${quimico}-${idx + 4}`] || ''}
+                                                   onChange={(e) => handlePtabInsumosChange(ptabInsumosFecha, quimico, idx + 4, e.target.value)}
+                                                   className="w-full min-w-[14ch] h-8 text-center text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary"
+                                                 />
+                                               </td>
+                                             ))}
+                                             <td className="px-2 py-2 text-center border border-slate-100 font-black text-slate-700">
+                                               {(() => {
+                                                 const dateStr = ptabInsumosFecha ? format(ptabInsumosFecha, 'yyyy-MM-dd') : '';
+                                                 const v1 = Number(String(ptabInsumosStore.data[`${dateStr}-${quimico}-3`] || '').replace(/\./g, '').replace(',', '.')) || 0;
+                                                 const v2 = Number(String(ptabInsumosStore.data[`${dateStr}-${quimico}-7`] || '').replace(/\./g, '').replace(',', '.')) || 0;
+                                                 const total = v1 + v2;
+                                                 return total ? total.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '';
+                                               })()}
+                                             </td>
                                            </tr>
                                          ))}
                                        </tbody>
