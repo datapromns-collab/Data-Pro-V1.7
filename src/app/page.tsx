@@ -4766,7 +4766,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                              <Legend />
                                                              <Bar yAxisId="left" dataKey="fisico" fill="#0ea5e9" name="Consumo Físico" />
                                                              <Bar yAxisId="left" dataKey="teorico" fill="#10b981" name="Consumo Teórico" />
-                                                             <Line yAxisId="right" type="monotone" dataKey="rendimiento" stroke="#f59e0b" name="Rendimiento" />
+                                                              <Line yAxisId="right" type="monotone" dataKey="rendimiento" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
                                                            </ComposedChart>
                                                         </ResponsiveContainer>
                                                       ) : (
