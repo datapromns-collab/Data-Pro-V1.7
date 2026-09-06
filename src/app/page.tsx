@@ -1963,6 +1963,27 @@ export default function PlannerPage() {
   const rMensualCurrentYear = new Date().getFullYear();
   const rMensualYearOptions = Array.from({ length: 11 }, (_, i) => rMensualCurrentYear - 5 + i);
 
+  const getWeeksForMonth = (year: number, month: number) => {
+    const weeks: { isoWeek: number; start: Date; end: Date; days: Date[] }[] = [];
+    const jan4 = new Date(year, 0, 4);
+    let current = startOfWeek(jan4, { weekStartsOn: 1 });
+    let week = 1;
+    const monthStart = new Date(year, month - 1, 1);
+    const monthEnd = new Date(year, month, 0);
+    while (current.getFullYear() <= year || current <= monthEnd) {
+      const start = new Date(current);
+      const end = addDays(current, 6);
+      const days = eachDayOfInterval({ start, end }).filter((day) => day >= monthStart && day <= monthEnd);
+      if (days.length > 0) {
+        weeks.push({ isoWeek: week, start, end, days });
+      }
+      current = addDays(current, 7);
+      week++;
+      if (start.getFullYear() > year && start > monthEnd) break;
+    }
+    return weeks;
+  };
+
   const getAguaConsumo = (fechaStr: string): string => {
     const candidates = [
       aguaConsumoPorDia[fechaStr],
@@ -4951,9 +4972,9 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                   <thead>
                                                     <tr className="bg-slate-800 text-white">
                                                       <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10">Consumo Agua</th>
-                                                      {Array.from({ length: new Date(rMensualSelectedYear, rMensualSelectedMonth, 0).getDate() }, (_, i) => i + 1).map((day) => (
-                                                        <th key={day} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[60px]">
-                                                          {day}
+                                                      {getWeeksForMonth(rMensualSelectedYear, rMensualSelectedMonth).map((week, idx) => (
+                                                        <th key={week.isoWeek} className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">
+                                                          SEM {week.isoWeek}
                                                         </th>
                                                       ))}
                                                     </tr>
@@ -4967,19 +4988,18 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                       return (
                                                         <tr key={row} className="border-b border-slate-100 hover:bg-slate-50/50">
                                                           <td className="px-2 py-2 font-bold text-slate-700 border border-slate-100 whitespace-nowrap">{row}</td>
-                                                          {Array.from({ length: new Date(rMensualSelectedYear, rMensualSelectedMonth, 0).getDate() }, (_, i) => i + 1).map((day) => {
-                                                            const dateStr = `${rMensualSelectedYear}-${String(rMensualSelectedMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                                                            const consumido = getAguaConsumoNumber(dateStr);
-                                                            const vp = calcularLitrosAguaParaFecha(dateStr);
+                                                          {getWeeksForMonth(rMensualSelectedYear, rMensualSelectedMonth).map((week) => {
+                                                            const weekFisico = week.days.reduce((acc, day) => acc + getAguaConsumoNumber(format(day, 'yyyy-MM-dd')), 0);
+                                                            const weekTeorico = week.days.reduce((acc, day) => acc + calcularLitrosAguaParaFecha(format(day, 'yyyy-MM-dd')), 0);
                                                             const cellValue = isConsumoFisico
-                                                              ? ptabAguaStore.data[`${dateStr}-total`] || ''
+                                                              ? weekFisico ? formatAguaDisplay(weekFisico) : ''
                                                               : isConsumoTeorico
-                                                                ? vp ? formatAguaDisplay(vp) : ''
+                                                                ? weekTeorico ? formatAguaDisplay(weekTeorico) : ''
                                                                 : isRendimiento
-                                                                  ? consumido > 0 ? formatAguaDisplay(vp / consumido) : '0,00'
+                                                                  ? weekFisico > 0 ? formatAguaDisplay(weekTeorico / weekFisico) : '0,00'
                                                                   : '';
                                                             return (
-                                                              <td key={day} className="px-2 py-2 text-center border border-slate-100">
+                                                              <td key={week.isoWeek} className="px-2 py-2 text-center border border-slate-100">
                                                                 <div className={`w-full min-w-[14ch] h-8 flex items-center justify-center text-center text-[11px] font-black text-slate-700 bg-slate-100 border border-slate-200 rounded ${isConsumoFisico ? 'text-slate-500' : 'text-slate-700'}`}>
                                                                   {cellValue}
                                                                 </div>
