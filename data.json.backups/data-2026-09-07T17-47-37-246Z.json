@@ -1,0 +1,2642 @@
+{
+  "planner": {
+    "config": {
+      "weekStartDate": "2026-09-07T17:47:33.581Z",
+      "lineSpeeds": {}
+    },
+    "weeks": {
+      "2026-09-07": {
+        "tasks": [],
+        "realProduction": {},
+        "rawMaterialStock": {},
+        "manualUBB": {},
+        "initialUBBTanks": {},
+        "finalUBBTanks": {},
+        "initialUBBTanksDaily": {},
+        "finalUBBTanksDaily": {},
+        "salesProjection": {},
+        "finishedProductInventory": {},
+        "productionPlan": {},
+        "logisticsInventory": {},
+        "plantInventory": {},
+        "salesProjectionAW": {},
+        "finishedProductInventoryAW": {},
+        "productionPlanAW": {},
+        "logisticsInventoryAW": {},
+        "plantInventoryAW": {},
+        "deletedTaskIds": []
+      }
+    }
+  },
+  "collections": {
+    "jarabes": {
+      "ubb": {
+        "2026-07-13": {},
+        "2026-07-14": {},
+        "2026-07-27": {
+          "GLUP COLA": {
+            "inicial": "44.20",
+            "preparado": "",
+            "final": "44.20"
+          },
+          "GLUP FRESH": {
+            "inicial": "6",
+            "preparado": "",
+            "final": "6"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP NARANJA": {
+            "inicial": "11",
+            "final": "11"
+          },
+          "GLUP KOLITA": {
+            "inicial": "13.70",
+            "final": "13.7"
+          }
+        },
+        "2026-07-28": {
+          "GLUP COLA": {
+            "inicial": "44.20",
+            "preparado": "",
+            "final": "44.20"
+          },
+          "GLUP FRESH": {
+            "inicial": "6",
+            "preparado": "",
+            "final": "6"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP NARANJA": {
+            "preparado": "",
+            "final": "11",
+            "inicial": "11"
+          },
+          "GLUP KOLITA": {
+            "preparado": "",
+            "final": "13.70",
+            "inicial": "13.70"
+          }
+        },
+        "2026-07-29": {
+          "GLUP COLA": {
+            "inicial": "44.20",
+            "preparado": "",
+            "final": "44.20"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP NARANJA": {
+            "inicial": "11",
+            "preparado": "",
+            "final": "11"
+          },
+          "GLUP KOLITA": {
+            "inicial": "13.70",
+            "preparado": "",
+            "final": "13.70"
+          },
+          "GLUP FRESH": {
+            "preparado": "",
+            "final": "6",
+            "inicial": "6"
+          }
+        },
+        "2026-07-30": {
+          "GLUP COLA": {
+            "inicial": "44.20",
+            "preparado": "",
+            "final": "44.20"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "13.70",
+            "preparado": "",
+            "final": "13.70"
+          },
+          "GLUP FRESH": {
+            "inicial": "6",
+            "preparado": "",
+            "final": "6"
+          },
+          "GLUP NARANJA": {
+            "inicial": "11",
+            "final": "11"
+          }
+        },
+        "2026-07-31": {
+          "GLUP COLA": {
+            "inicial": "44.20",
+            "preparado": "",
+            "final": "44.20"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "13.70",
+            "preparado": "",
+            "final": "13.70"
+          },
+          "GLUP FRESH": {
+            "inicial": "6",
+            "preparado": "",
+            "final": "6"
+          },
+          "GLUP NARANJA": {
+            "preparado": "",
+            "final": "11",
+            "inicial": "11"
+          }
+        },
+        "2026-07-01": {
+          "GLUP COLA": {
+            "inicial": "53.3",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "",
+            "preparado": ""
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "",
+            "preparado": "",
+            "final": ""
+          }
+        },
+        "2026-08-01": {
+          "GLUP COLA": {
+            "inicial": "44.20",
+            "preparado": "12",
+            "final": "22.30"
+          },
+          "GLUP KOLITA": {
+            "inicial": "13.70",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "6",
+            "preparado": "12",
+            "final": "6"
+          },
+          "GLUP NARANJA": {
+            "inicial": "11",
+            "preparado": "22",
+            "final": "8.60"
+          }
+        },
+        "2026-08-02": {
+          "GLUP COLA": {
+            "inicial": "22.30",
+            "preparado": "54",
+            "final": "76.30"
+          },
+          "GLUP FRESH": {
+            "inicial": "6",
+            "preparado": "6",
+            "final": "12"
+          },
+          "GLUP NARANJA": {
+            "inicial": "8.60",
+            "preparado": "11",
+            "final": "19.60"
+          },
+          "JUSTY NARANJA": {
+            "preparado": "40",
+            "final": "40"
+          }
+        },
+        "2026-08-03": {
+          "GLUP COLA": {
+            "inicial": "76.30",
+            "preparado": "30",
+            "final": "55.65"
+          },
+          "GLUP FRESH": {
+            "inicial": "12",
+            "preparado": "30",
+            "final": "18.60"
+          },
+          "GLUP NARANJA": {
+            "inicial": "19.60",
+            "preparado": "22",
+            "final": "22.51"
+          },
+          "JUSTY NARANJA": {
+            "inicial": "40",
+            "preparado": "220",
+            "final": "20"
+          },
+          "GLUP KOLITA": {
+            "final": "18",
+            "preparado": "18"
+          }
+        },
+        "2026-08-04": {
+          "GLUP COLA": {
+            "inicial": "55.65",
+            "preparado": "48",
+            "final": "65.81"
+          },
+          "GLUP FRESH": {
+            "inicial": "18.60",
+            "preparado": "18",
+            "final": "13.16"
+          },
+          "GLUP NARANJA": {
+            "inicial": "22.51",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY NARANJA": {
+            "inicial": "20",
+            "preparado": "200",
+            "final": "26"
+          },
+          "GLUP KOLITA": {
+            "inicial": "18",
+            "preparado": "",
+            "final": "12.44"
+          }
+        },
+        "2026-08-05": {
+          "GLUP COLA": {
+            "inicial": "65.81",
+            "preparado": "48",
+            "final": "59.89"
+          },
+          "GLUP FRESH": {
+            "inicial": "13.16",
+            "preparado": "6",
+            "final": "4.27"
+          },
+          "JUSTY NARANJA": {
+            "inicial": "26",
+            "preparado": "200",
+            "final": "35"
+          },
+          "GLUP KOLITA": {
+            "inicial": "12.44",
+            "preparado": "18",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "preparado": "33",
+            "final": "33"
+          },
+          "GLUP PIÑA PARCHITA": {
+            "preparado": "6",
+            "final": "6"
+          },
+          "GLUP MANZANA ROJA": {
+            "preparado": "16",
+            "final": "11.74"
+          }
+        },
+        "2026-08-06": {
+          "GLUP COLA": {
+            "inicial": "59.89",
+            "preparado": "30",
+            "final": "53.11"
+          },
+          "GLUP FRESH": {
+            "inicial": "4.27",
+            "preparado": "6",
+            "final": "8.01"
+          },
+          "JUSTY NARANJA": {
+            "inicial": "35",
+            "preparado": "260",
+            "final": "28"
+          },
+          "GLUP UVA": {
+            "inicial": "33",
+            "preparado": "33",
+            "final": "11"
+          },
+          "GLUP PIÑA PARCHITA": {
+            "inicial": "6",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "11.74",
+            "preparado": "24",
+            "final": "15.68"
+          }
+        },
+        "2026-08-07": {
+          "GLUP COLA": {
+            "inicial": "53.11",
+            "preparado": "54",
+            "final": "57.14"
+          },
+          "GLUP FRESH": {
+            "inicial": "8.01",
+            "preparado": "6",
+            "final": "0"
+          },
+          "JUSTY NARANJA": {
+            "inicial": "28",
+            "preparado": "80",
+            "final": "0"
+          },
+          "GLUP UVA": {
+            "inicial": "11",
+            "preparado": "",
+            "final": "11"
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "15.68",
+            "preparado": "",
+            "final": "0"
+          },
+          "GLUP KOLITA": {
+            "preparado": "72",
+            "final": "48.56"
+          },
+          "GLUP PIÑA": {
+            "preparado": "20",
+            "final": "18.72"
+          }
+        },
+        "2026-08-08": {
+          "GLUP COLA": {
+            "inicial": "57.14",
+            "preparado": "12",
+            "final": "26.72"
+          },
+          "GLUP UVA": {
+            "inicial": "11",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "48.56",
+            "preparado": "72",
+            "final": "19.62"
+          },
+          "GLUP PIÑA": {
+            "inicial": "18.72",
+            "preparado": "10",
+            "final": ""
+          }
+        },
+        "2026-08-09": {
+          "GLUP COLA": {
+            "inicial": "26.72",
+            "preparado": "30",
+            "final": "56.72"
+          },
+          "GLUP KOLITA": {
+            "inicial": "19.62",
+            "preparado": "36",
+            "final": "55.62"
+          },
+          "GLUP FRESH": {
+            "preparado": "12",
+            "final": "12"
+          },
+          "GLUP PIÑA": {
+            "preparado": "20",
+            "final": "20"
+          },
+          "JUSTY DURAZNO": {
+            "preparado": "40",
+            "final": "40"
+          }
+        },
+        "2026-08-10": {
+          "GLUP COLA": {
+            "inicial": "56.72",
+            "preparado": "54",
+            "final": "63"
+          },
+          "GLUP KOLITA": {
+            "inicial": "55.62",
+            "preparado": "18",
+            "final": "17.5"
+          },
+          "GLUP FRESH": {
+            "inicial": "12",
+            "preparado": "12",
+            "final": "9.5"
+          },
+          "GLUP PIÑA": {
+            "inicial": "20",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "40",
+            "preparado": "280",
+            "final": "28"
+          },
+          "GLUP NARANJA": {
+            "preparado": "22"
+          }
+        },
+        "2026-08-11": {
+          "GLUP COLA": {
+            "inicial": "63",
+            "preparado": "54",
+            "final": "65.20"
+          },
+          "GLUP KOLITA": {
+            "inicial": "17.5",
+            "preparado": "36",
+            "final": "18"
+          },
+          "GLUP FRESH": {
+            "inicial": "9.5",
+            "preparado": "12",
+            "final": "10.50"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "28",
+            "preparado": "220",
+            "final": "24"
+          }
+        },
+        "2026-08-12": {
+          "GLUP COLA": {
+            "inicial": "65.20",
+            "preparado": "54",
+            "final": "70.41"
+          },
+          "GLUP KOLITA": {
+            "inicial": "18",
+            "preparado": "18",
+            "final": "12.28"
+          },
+          "GLUP FRESH": {
+            "inicial": "10.50",
+            "preparado": "12",
+            "final": "7.89"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "24",
+            "preparado": "160",
+            "final": "28"
+          }
+        },
+        "2026-08-13": {
+          "GLUP COLA": {
+            "inicial": "70.41",
+            "preparado": "42",
+            "final": "64.74"
+          },
+          "GLUP KOLITA": {
+            "inicial": "12.28",
+            "preparado": "54",
+            "final": "11.33"
+          },
+          "GLUP FRESH": {
+            "inicial": "7.89",
+            "preparado": "12",
+            "final": "3.6"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "28",
+            "preparado": "240",
+            "final": "31"
+          },
+          "GLUP UVA": {
+            "preparado": "33",
+            "final": "29.08"
+          }
+        },
+        "2026-08-14": {
+          "GLUP COLA": {
+            "inicial": "64.74",
+            "preparado": "",
+            "final": "36.85"
+          },
+          "GLUP KOLITA": {
+            "inicial": "11.33",
+            "preparado": "54",
+            "final": "18.30"
+          },
+          "GLUP FRESH": {
+            "inicial": "3.6",
+            "preparado": "15",
+            "final": "3.65"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "31",
+            "preparado": "40",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "29.08",
+            "preparado": "33",
+            "final": "18.41"
+          }
+        },
+        "2026-08-15": {
+          "GLUP COLA": {
+            "inicial": "36.85",
+            "preparado": "12",
+            "final": "30"
+          },
+          "GLUP KOLITA": {
+            "inicial": "18.30",
+            "preparado": "36",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "3.65",
+            "preparado": "12",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "18.41",
+            "preparado": "44",
+            "final": "14.36"
+          },
+          "GLUP MANZANA VERDE": {
+            "preparado": "19",
+            "final": "19"
+          }
+        },
+        "2026-08-16": {
+          "GLUP COLA": {
+            "inicial": "30",
+            "preparado": "18",
+            "final": "48"
+          },
+          "GLUP UVA": {
+            "inicial": "14.36",
+            "preparado": "",
+            "final": "14.36"
+          },
+          "GLUP MANZANA VERDE": {
+            "inicial": "19",
+            "preparado": "",
+            "final": "19"
+          },
+          "GLUP FRESH": {
+            "preparado": "18",
+            "final": "18"
+          },
+          "JUSTY NARANJA": {
+            "preparado": "40",
+            "final": "40"
+          }
+        },
+        "2026-08-17": {
+          "GLUP COLA": {
+            "inicial": "48",
+            "preparado": "36",
+            "final": "55.39"
+          },
+          "GLUP UVA": {
+            "inicial": "14.36",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP MANZANA VERDE": {
+            "inicial": "19",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "18",
+            "preparado": "18",
+            "final": "19.02"
+          },
+          "JUSTY NARANJA": {
+            "inicial": "40",
+            "preparado": "180",
+            "final": "25"
+          },
+          "GLUP PIÑA": {
+            "preparado": "20",
+            "final": "16.02"
+          },
+          "GLUP NARANJA": {
+            "preparado": "33",
+            "final": "5.6"
+          },
+          "GLUP KOLITA": {
+            "preparado": "18",
+            "final": "18"
+          }
+        },
+        "2026-08-18": {
+          "GLUP COLA": {
+            "inicial": "55.39",
+            "preparado": "18",
+            "final": "46.86"
+          },
+          "GLUP FRESH": {
+            "inicial": "19.02",
+            "preparado": "6",
+            "final": "9.2"
+          },
+          "JUSTY NARANJA": {
+            "inicial": "25",
+            "preparado": "120",
+            "final": "30"
+          },
+          "GLUP PIÑA": {
+            "inicial": "16.02",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP NARANJA": {
+            "inicial": "5.6",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "18",
+            "preparado": "72",
+            "final": "58.06"
+          }
+        },
+        "2026-08-19": {
+          "GLUP COLA": {
+            "inicial": "46.86",
+            "preparado": "60",
+            "final": "71.38"
+          },
+          "GLUP FRESH": {
+            "inicial": "9.2",
+            "preparado": "18",
+            "final": "9.47"
+          },
+          "JUSTY NARANJA": {
+            "inicial": "30",
+            "preparado": "80",
+            "final": "31"
+          },
+          "GLUP KOLITA": {
+            "inicial": "58.06",
+            "preparado": "72",
+            "final": "50.15"
+          }
+        },
+        "2026-08-20": {
+          "GLUP COLA": {
+            "inicial": "71.38",
+            "preparado": "36",
+            "final": "61.33"
+          },
+          "GLUP FRESH": {
+            "inicial": "9.47",
+            "preparado": "12",
+            "final": "7.73"
+          },
+          "JUSTY NARANJA": {
+            "inicial": "31",
+            "preparado": "220",
+            "final": "24"
+          },
+          "GLUP KOLITA": {
+            "inicial": "50.15",
+            "preparado": "54",
+            "final": "29.74"
+          }
+        },
+        "2026-08-21": {
+          "GLUP COLA": {
+            "inicial": "61.33",
+            "preparado": "42",
+            "final": "45.99"
+          },
+          "GLUP FRESH": {
+            "inicial": "7.73",
+            "preparado": "18",
+            "final": "7.21"
+          },
+          "JUSTY NARANJA": {
+            "inicial": "24",
+            "preparado": "140",
+            "final": "32"
+          },
+          "GLUP KOLITA": {
+            "inicial": "29.74",
+            "preparado": "72",
+            "final": "32.10"
+          },
+          "GLUP UVA": {
+            "preparado": "22",
+            "final": "22"
+          },
+          "GLUP MANZANA ROJA": {
+            "preparado": "16",
+            "final": "3.6"
+          }
+        },
+        "2026-08-22": {
+          "GLUP COLA": {
+            "inicial": "45.99",
+            "preparado": "42",
+            "final": "38.78"
+          },
+          "GLUP FRESH": {
+            "inicial": "7.21",
+            "preparado": "6",
+            "final": ""
+          },
+          "JUSTY NARANJA": {
+            "inicial": "32",
+            "preparado": "60",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "32.10",
+            "preparado": "18",
+            "final": "15.78"
+          },
+          "GLUP UVA": {
+            "inicial": "22",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "3.6",
+            "preparado": "16",
+            "final": "12.32"
+          },
+          "GLUP PIÑA": {
+            "preparado": "10",
+            "final": "5.27"
+          },
+          "GLUP NARANJA": {
+            "preparado": "11",
+            "final": "4.31"
+          }
+        },
+        "2026-08-23": {
+          "GLUP COLA": {
+            "inicial": "38.78",
+            "preparado": "24",
+            "final": "48"
+          },
+          "GLUP KOLITA": {
+            "inicial": "15.78",
+            "preparado": "",
+            "final": "15.78"
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "12.32",
+            "preparado": "8",
+            "final": "2.46"
+          },
+          "GLUP PIÑA": {
+            "inicial": "5.27",
+            "preparado": "10",
+            "final": "15.27"
+          },
+          "GLUP NARANJA": {
+            "inicial": "4.31",
+            "preparado": "11",
+            "final": "15.31"
+          },
+          "GLUP FRESH": {
+            "preparado": "12",
+            "final": "12"
+          },
+          "JUSTY DURAZNO": {
+            "preparado": "40",
+            "final": "40"
+          }
+        },
+        "2026-08-24": {
+          "GLUP COLA": {
+            "inicial": "48",
+            "preparado": "60",
+            "final": "57.68"
+          },
+          "GLUP KOLITA": {
+            "inicial": "15.78",
+            "preparado": "18",
+            "final": "18"
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "2.46",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP PIÑA": {
+            "inicial": "15.27",
+            "preparado": "40",
+            "final": "16.57"
+          },
+          "GLUP NARANJA": {
+            "inicial": "15.31",
+            "preparado": "44",
+            "final": "17.69"
+          },
+          "GLUP FRESH": {
+            "inicial": "12",
+            "preparado": "6",
+            "final": ""
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "40",
+            "preparado": "280",
+            "final": "20"
+          },
+          "GLUP UVA": {
+            "preparado": "22",
+            "final": "11"
+          }
+        },
+        "2026-08-25": {
+          "GLUP COLA": {
+            "inicial": "57.68",
+            "preparado": "72",
+            "final": "57.87"
+          },
+          "GLUP KOLITA": {
+            "inicial": "18",
+            "preparado": "18",
+            "final": "20.02"
+          },
+          "GLUP PIÑA": {
+            "inicial": "16.57",
+            "preparado": "20",
+            "final": ""
+          },
+          "GLUP NARANJA": {
+            "inicial": "17.69",
+            "preparado": "55",
+            "final": "16.88"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "20",
+            "preparado": "360",
+            "final": "20"
+          },
+          "GLUP UVA": {
+            "inicial": "11",
+            "preparado": "22",
+            "final": "27.88"
+          },
+          "GLUP FRESH": {
+            "preparado": "6",
+            "final": "5.65"
+          }
+        },
+        "2026-08-26": {
+          "GLUP COLA": {
+            "inicial": "57.87",
+            "preparado": "30",
+            "final": "57.12"
+          },
+          "GLUP KOLITA": {
+            "inicial": "20.02",
+            "preparado": "36",
+            "final": "18"
+          },
+          "GLUP NARANJA": {
+            "inicial": "16.88",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "20",
+            "preparado": "20",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "27.88",
+            "preparado": "66",
+            "final": "33"
+          },
+          "GLUP FRESH": {
+            "inicial": "5.65",
+            "preparado": "18",
+            "final": "4.94"
+          },
+          "GLUP PIÑA PARCHITA": {
+            "preparado": "6"
+          }
+        },
+        "2026-08-27": {
+          "GLUP COLA": {
+            "inicial": "57.12",
+            "preparado": "48",
+            "final": "70.21"
+          },
+          "GLUP KOLITA": {
+            "inicial": "18",
+            "preparado": "54",
+            "final": "12.39"
+          },
+          "GLUP UVA": {
+            "inicial": "33",
+            "preparado": "11",
+            "final": "0.83"
+          },
+          "GLUP FRESH": {
+            "inicial": "4.94",
+            "preparado": "18",
+            "final": "6.53"
+          }
+        },
+        "2026-08-28": {
+          "GLUP COLA": {
+            "inicial": "70.21",
+            "preparado": "30",
+            "final": "40.57"
+          },
+          "GLUP KOLITA": {
+            "inicial": "12.39",
+            "preparado": "54",
+            "final": "36.30"
+          },
+          "GLUP UVA": {
+            "inicial": "0.83",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "6.53",
+            "preparado": "12",
+            "final": "4.40"
+          },
+          "JUSTY DURAZNO": {
+            "preparado": "220",
+            "final": "24"
+          }
+        },
+        "2026-08-29": {
+          "GLUP COLA": {
+            "inicial": "40.57",
+            "preparado": "42",
+            "final": "51.35"
+          },
+          "GLUP KOLITA": {
+            "inicial": "36.30",
+            "preparado": "18",
+            "final": "4.74"
+          },
+          "GLUP FRESH": {
+            "inicial": "4.40",
+            "preparado": "12",
+            "final": "8.27"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "24",
+            "preparado": "240",
+            "final": ""
+          }
+        },
+        "2026-08-30": {
+          "GLUP COLA": {
+            "inicial": "51.35",
+            "preparado": "30",
+            "final": "67.72"
+          },
+          "GLUP KOLITA": {
+            "inicial": "4.74",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "8.27",
+            "preparado": "6",
+            "final": "10.97"
+          },
+          "GLUP MANZANA ROJA": {
+            "preparado": "16",
+            "final": "16"
+          },
+          "JUSTY DURAZNO": {
+            "preparado": "40",
+            "final": "40"
+          }
+        },
+        "2026-08-31": {
+          "GLUP COLA": {
+            "inicial": "67.72",
+            "preparado": "42",
+            "final": "59.68"
+          },
+          "GLUP FRESH": {
+            "inicial": "10.97",
+            "preparado": "12",
+            "final": "8.88"
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "16",
+            "preparado": "16",
+            "final": "9.01"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "40",
+            "preparado": "220",
+            "final": "40"
+          },
+          "GLUP UVA": {
+            "preparado": "11",
+            "final": "11"
+          },
+          "JUSTY NARANJA": {
+            "preparado": ""
+          }
+        },
+        "2026-09-01": {
+          "GLUP COLA": {
+            "inicial": "59.68",
+            "preparado": "18",
+            "final": "33.13"
+          },
+          "GLUP FRESH": {
+            "inicial": "8.88",
+            "preparado": "18",
+            "final": "13.69"
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "9.01",
+            "preparado": "8",
+            "final": "2.16"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "40",
+            "preparado": "200",
+            "final": "28"
+          },
+          "GLUP UVA": {
+            "inicial": "11",
+            "preparado": "",
+            "final": "0.96"
+          },
+          "GLUP PIÑA": {
+            "preparado": "10",
+            "final": "10"
+          },
+          "GLUP KOLITA": {
+            "preparado": "72",
+            "final": "59.16"
+          }
+        },
+        "2026-09-02": {
+          "GLUP COLA": {
+            "inicial": "33.13",
+            "preparado": "24",
+            "final": "38.08"
+          },
+          "GLUP FRESH": {
+            "inicial": "13.69",
+            "preparado": "12",
+            "final": "9.12"
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "2.16",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "28",
+            "preparado": "180",
+            "final": "26"
+          },
+          "GLUP UVA": {
+            "inicial": "0.96",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP PIÑA": {
+            "inicial": "10",
+            "preparado": "40",
+            "final": "22.29"
+          },
+          "GLUP KOLITA": {
+            "inicial": "59.16",
+            "preparado": "36",
+            "final": "61.78"
+          }
+        },
+        "2026-09-03": {
+          "GLUP COLA": {
+            "inicial": "38.08",
+            "preparado": "30",
+            "final": "48.69"
+          },
+          "GLUP FRESH": {
+            "inicial": "9.12",
+            "preparado": "18",
+            "final": "9.15"
+          },
+          "GLUP PIÑA": {
+            "inicial": "22.29",
+            "preparado": "40",
+            "final": "9.17"
+          },
+          "GLUP KOLITA": {
+            "inicial": "61.78",
+            "preparado": "36",
+            "final": "40.61"
+          },
+          "GLUP UVA": {
+            "preparado": "22",
+            "final": "22"
+          },
+          "JUSTY DURAZNO": {
+            "final": "13",
+            "preparado": "140",
+            "inicial": "26"
+          }
+        },
+        "2026-09-04": {
+          "GLUP COLA": {
+            "inicial": "48.69",
+            "preparado": "42",
+            "final": "56.01"
+          },
+          "GLUP FRESH": {
+            "inicial": "9.15",
+            "preparado": "18",
+            "final": "9.65"
+          },
+          "GLUP PIÑA": {
+            "inicial": "9.17",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "40.61",
+            "preparado": "36",
+            "final": "21.84"
+          },
+          "GLUP UVA": {
+            "inicial": "22",
+            "preparado": "44",
+            "final": "27.48"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "13",
+            "preparado": "140",
+            "final": ""
+          }
+        },
+        "2026-09-05": {
+          "GLUP COLA": {
+            "inicial": "56.01",
+            "preparado": "48",
+            "final": "73.39"
+          },
+          "GLUP FRESH": {
+            "inicial": "9.65",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "21.84",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "27.48",
+            "preparado": "",
+            "final": ""
+          }
+        }
+      },
+      "sugar": {
+        "2026-07-13": {},
+        "2026-07-14": {},
+        "2026-07-27": {
+          "PORTUGUESA": {
+            "invInicialSacos": "7680",
+            "recepcionSacos": "",
+            "invFinalSacos": "7680"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2400"
+          }
+        },
+        "2026-07-28": {
+          "PORTUGUESA": {
+            "invInicialSacos": "7680",
+            "recepcionSacos": "",
+            "invFinalSacos": "7680"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2400"
+          }
+        },
+        "2026-07-29": {
+          "PORTUGUESA": {
+            "invInicialSacos": "7680",
+            "recepcionSacos": "",
+            "invFinalSacos": "7680"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2400"
+          }
+        },
+        "2026-07-30": {
+          "PORTUGUESA": {
+            "invInicialSacos": "7680",
+            "recepcionSacos": "",
+            "invFinalSacos": "7680"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2400"
+          }
+        },
+        "2026-07-31": {
+          "PORTUGUESA": {
+            "invInicialSacos": "7680",
+            "recepcionSacos": "",
+            "invFinalSacos": "7680"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2400"
+          }
+        },
+        "2026-07-01": {
+          "PORTUGUESA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-08-01": {
+          "PORTUGUESA": {
+            "invInicialSacos": "7680",
+            "recepcionSacos": "",
+            "invFinalSacos": "5920"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2400"
+          }
+        },
+        "2026-08-02": {
+          "PORTUGUESA": {
+            "invInicialSacos": "5920",
+            "recepcionSacos": "",
+            "invFinalSacos": "3960"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2400"
+          }
+        },
+        "2026-08-03": {
+          "PORTUGUESA": {
+            "invInicialSacos": "3960",
+            "recepcionSacos": "9120",
+            "invFinalSacos": "9760"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2400"
+          }
+        },
+        "2026-08-04": {
+          "PORTUGUESA": {
+            "invInicialSacos": "9760",
+            "recepcionSacos": "2520",
+            "invFinalSacos": "9360"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2400"
+          }
+        },
+        "2026-08-05": {
+          "PORTUGUESA": {
+            "invInicialSacos": "9360",
+            "recepcionSacos": "3200",
+            "invFinalSacos": "8920"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2400"
+          },
+          "PASTORA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-08-06": {
+          "PORTUGUESA": {
+            "invInicialSacos": "8920",
+            "recepcionSacos": "3840",
+            "invFinalSacos": "9280"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "2240"
+          }
+        },
+        "2026-08-07": {
+          "PORTUGUESA": {
+            "invInicialSacos": "9280",
+            "recepcionSacos": "3520",
+            "invFinalSacos": "8920"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2240",
+            "recepcionSacos": "",
+            "invFinalSacos": "2120"
+          }
+        },
+        "2026-08-08": {
+          "PORTUGUESA": {
+            "invInicialSacos": "8920",
+            "recepcionSacos": "3600",
+            "invFinalSacos": "9240"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2120",
+            "recepcionSacos": "",
+            "invFinalSacos": "2120"
+          }
+        },
+        "2026-08-09": {
+          "PORTUGUESA": {
+            "invInicialSacos": "9240",
+            "recepcionSacos": "",
+            "invFinalSacos": "8160"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2120",
+            "recepcionSacos": "",
+            "invFinalSacos": "2120"
+          }
+        },
+        "2026-08-10": {
+          "PORTUGUESA": {
+            "invInicialSacos": "8160",
+            "recepcionSacos": "",
+            "invFinalSacos": "5120"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2120",
+            "recepcionSacos": "",
+            "invFinalSacos": "1531"
+          }
+        },
+        "2026-08-11": {
+          "PORTUGUESA": {
+            "invInicialSacos": "5120",
+            "recepcionSacos": "8160",
+            "invFinalSacos": "10440"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "1531",
+            "recepcionSacos": "",
+            "invFinalSacos": "604"
+          }
+        },
+        "2026-08-12": {
+          "PORTUGUESA": {
+            "invInicialSacos": "10440",
+            "recepcionSacos": "2400",
+            "invFinalSacos": "10880"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "604",
+            "recepcionSacos": "2000",
+            "invFinalSacos": "1720"
+          }
+        },
+        "2026-08-13": {
+          "PORTUGUESA": {
+            "invInicialSacos": "10880",
+            "recepcionSacos": "1600",
+            "invFinalSacos": "9320"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "1720",
+            "recepcionSacos": "",
+            "invFinalSacos": "760"
+          }
+        },
+        "2026-08-14": {
+          "PORTUGUESA": {
+            "invInicialSacos": "9320",
+            "recepcionSacos": "",
+            "invFinalSacos": "7120"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "760",
+            "recepcionSacos": "",
+            "invFinalSacos": "200"
+          }
+        },
+        "2026-08-15": {
+          "PORTUGUESA": {
+            "invInicialSacos": "7120",
+            "recepcionSacos": "4960",
+            "invFinalSacos": "9440"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "200",
+            "recepcionSacos": "2800",
+            "invFinalSacos": "2480"
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-08-16": {
+          "PORTUGUESA": {
+            "invInicialSacos": "9440",
+            "recepcionSacos": "",
+            "invFinalSacos": "8880"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2480",
+            "recepcionSacos": "",
+            "invFinalSacos": "2400"
+          }
+        },
+        "2026-08-17": {
+          "PORTUGUESA": {
+            "invInicialSacos": "8880",
+            "recepcionSacos": "",
+            "invFinalSacos": "5720"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": "1520"
+          },
+          "PASTORA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-08-18": {
+          "PORTUGUESA": {
+            "invInicialSacos": "5720",
+            "recepcionSacos": "4880",
+            "invFinalSacos": "8640"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "1520",
+            "recepcionSacos": "",
+            "invFinalSacos": "1240"
+          }
+        },
+        "2026-08-19": {
+          "PORTUGUESA": {
+            "invInicialSacos": "8640",
+            "recepcionSacos": "2480",
+            "invFinalSacos": "8640"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "1240",
+            "recepcionSacos": "1760",
+            "invFinalSacos": "2160"
+          }
+        },
+        "2026-08-20": {
+          "PORTUGUESA": {
+            "invInicialSacos": "8640",
+            "recepcionSacos": "2680",
+            "invFinalSacos": "8320"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2160",
+            "recepcionSacos": "920",
+            "invFinalSacos": "2560"
+          }
+        },
+        "2026-08-21": {
+          "PORTUGUESA": {
+            "invInicialSacos": "8320",
+            "recepcionSacos": "2400",
+            "invFinalSacos": "6360"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2560",
+            "recepcionSacos": "240",
+            "invFinalSacos": "2800"
+          },
+          "PASTORA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-08-22": {
+          "PORTUGUESA": {
+            "invInicialSacos": "6360",
+            "recepcionSacos": "5920",
+            "invFinalSacos": "8160"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2800",
+            "recepcionSacos": "",
+            "invFinalSacos": "2800"
+          }
+        },
+        "2026-08-23": {
+          "PORTUGUESA": {
+            "invInicialSacos": "8160",
+            "recepcionSacos": "",
+            "invFinalSacos": "6320"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2800",
+            "recepcionSacos": "",
+            "invFinalSacos": "2800"
+          }
+        },
+        "2026-08-24": {
+          "PORTUGUESA": {
+            "invInicialSacos": "6320",
+            "recepcionSacos": "4000",
+            "invFinalSacos": "6440"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2800",
+            "recepcionSacos": "",
+            "invFinalSacos": "1840"
+          }
+        },
+        "2026-08-25": {
+          "PORTUGUESA": {
+            "invInicialSacos": "6440",
+            "recepcionSacos": "5760",
+            "invFinalSacos": "6280"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "1840",
+            "recepcionSacos": "1440",
+            "invFinalSacos": "2800"
+          },
+          "PASTORA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-08-26": {
+          "PORTUGUESA": {
+            "invInicialSacos": "6280",
+            "recepcionSacos": "6400",
+            "invFinalSacos": "9080"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2800",
+            "recepcionSacos": "",
+            "invFinalSacos": "2120"
+          }
+        },
+        "2026-08-27": {
+          "PORTUGUESA": {
+            "invInicialSacos": "9080",
+            "recepcionSacos": "",
+            "invFinalSacos": "7920"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2120",
+            "recepcionSacos": "",
+            "invFinalSacos": "1560"
+          },
+          "PASTORA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "3000",
+            "invFinalSacos": "1400"
+          }
+        },
+        "2026-08-28": {
+          "PORTUGUESA": {
+            "invInicialSacos": "7920",
+            "recepcionSacos": "200",
+            "invFinalSacos": "6600"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "1560",
+            "recepcionSacos": "1240",
+            "invFinalSacos": "2280"
+          },
+          "PASTORA": {
+            "invInicialSacos": "1400",
+            "recepcionSacos": "880",
+            "invFinalSacos": "1480"
+          }
+        },
+        "2026-08-29": {
+          "PORTUGUESA": {
+            "invInicialSacos": "6600",
+            "recepcionSacos": "1960",
+            "invFinalSacos": "7520"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2280",
+            "recepcionSacos": "720",
+            "invFinalSacos": "2800"
+          },
+          "PASTORA": {
+            "invInicialSacos": "1480",
+            "recepcionSacos": "2120",
+            "invFinalSacos": "2040"
+          }
+        },
+        "2026-08-30": {
+          "PORTUGUESA": {
+            "invInicialSacos": "7520",
+            "recepcionSacos": "",
+            "invFinalSacos": "6840"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2800",
+            "recepcionSacos": "",
+            "invFinalSacos": "2800"
+          },
+          "PASTORA": {
+            "invInicialSacos": "2040",
+            "recepcionSacos": "",
+            "invFinalSacos": "1160"
+          }
+        },
+        "2026-08-31": {
+          "PORTUGUESA": {
+            "invInicialSacos": "6840",
+            "recepcionSacos": "2000",
+            "invFinalSacos": "6600"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2800",
+            "recepcionSacos": "120",
+            "invFinalSacos": "2680"
+          },
+          "PASTORA": {
+            "invInicialSacos": "1160",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-09-01": {
+          "PORTUGUESA": {
+            "invInicialSacos": "6600",
+            "recepcionSacos": "",
+            "invFinalSacos": "4360"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2680",
+            "recepcionSacos": "",
+            "invFinalSacos": "2200"
+          },
+          "PASTORA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "3000",
+            "invFinalSacos": "2240"
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-09-02": {
+          "PORTUGUESA": {
+            "invInicialSacos": "4360",
+            "recepcionSacos": "4160",
+            "invFinalSacos": "7080"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2200",
+            "recepcionSacos": "800",
+            "invFinalSacos": "2480"
+          },
+          "PASTORA": {
+            "invInicialSacos": "2240",
+            "recepcionSacos": "",
+            "invFinalSacos": "840"
+          }
+        },
+        "2026-09-03": {
+          "PORTUGUESA": {
+            "invInicialSacos": "7080",
+            "recepcionSacos": "",
+            "invFinalSacos": "5360"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2480",
+            "recepcionSacos": "640",
+            "invFinalSacos": "2560"
+          },
+          "PASTORA": {
+            "invInicialSacos": "840",
+            "recepcionSacos": "1800",
+            "invFinalSacos": "1320"
+          }
+        },
+        "2026-09-04": {
+          "PORTUGUESA": {
+            "invInicialSacos": "5360",
+            "recepcionSacos": "3600",
+            "invFinalSacos": "3480"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2560",
+            "recepcionSacos": "360",
+            "invFinalSacos": "2080"
+          },
+          "PASTORA": {
+            "invInicialSacos": "1320",
+            "recepcionSacos": "",
+            "invFinalSacos": "3720"
+          }
+        },
+        "2026-09-05": {
+          "PORTUGUESA": {
+            "invInicialSacos": "3480",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2080",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "PASTORA": {
+            "invInicialSacos": "3720",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
+        }
+      },
+      "tanques": {
+        "2026-07-13": {},
+        "2026-07-14": {},
+        "2026-07-27": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "322",
+            "invFinalSacos": "322"
+          },
+          "Sala 1": {
+            "invInicialSacos": "689",
+            "invFinalSacos": "689"
+          },
+          "sala 2": {
+            "invInicialSacos": "",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-07-28": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "322",
+            "invFinalSacos": "322"
+          },
+          "Sala 1": {
+            "invInicialSacos": "689",
+            "invFinalSacos": "689"
+          }
+        },
+        "2026-07-29": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "322",
+            "invFinalSacos": "322"
+          },
+          "Sala 1": {
+            "invInicialSacos": "689",
+            "invFinalSacos": "689"
+          }
+        },
+        "2026-07-30": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "322",
+            "invFinalSacos": "322"
+          },
+          "Sala 1": {
+            "invInicialSacos": "689",
+            "invFinalSacos": "689"
+          }
+        },
+        "2026-07-31": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "322",
+            "invFinalSacos": "322"
+          },
+          "Sala 1": {
+            "invInicialSacos": "689",
+            "invFinalSacos": "689"
+          }
+        },
+        "2026-07-01": {
+          "KITS PREP.": {
+            "invInicialSacos": "",
+            "invFinalSacos": ""
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-08-01": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "322",
+            "invFinalSacos": "24"
+          },
+          "Sala 1": {
+            "invInicialSacos": "689",
+            "invFinalSacos": "1379"
+          }
+        },
+        "2026-08-02": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "24",
+            "invFinalSacos": "298"
+          },
+          "Sala 1": {
+            "invInicialSacos": "1379",
+            "invFinalSacos": "456"
+          }
+        },
+        "2026-08-03": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "298",
+            "invFinalSacos": "379"
+          },
+          "Sala 1": {
+            "invInicialSacos": "456",
+            "invFinalSacos": "229"
+          }
+        },
+        "2026-08-04": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "379",
+            "invFinalSacos": "365"
+          },
+          "Sala 1": {
+            "invInicialSacos": "229",
+            "invFinalSacos": "229"
+          }
+        },
+        "2026-08-05": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "365",
+            "invFinalSacos": "196"
+          },
+          "Sala 1": {
+            "invInicialSacos": "229",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-08-06": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "196",
+            "invFinalSacos": "354"
+          },
+          "Sala 1": {
+            "invInicialSacos": "",
+            "invFinalSacos": "230"
+          }
+        },
+        "2026-08-07": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "354",
+            "invFinalSacos": "227"
+          },
+          "Sala 1": {
+            "invInicialSacos": "230",
+            "invFinalSacos": "470"
+          }
+        },
+        "2026-08-08": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "227",
+            "invFinalSacos": "247"
+          },
+          "Sala 1": {
+            "invInicialSacos": "470",
+            "invFinalSacos": "2089"
+          }
+        },
+        "2026-08-09": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "247",
+            "invFinalSacos": "292"
+          },
+          "Sala 1": {
+            "invInicialSacos": "2089",
+            "invFinalSacos": "460"
+          }
+        },
+        "2026-08-10": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "292",
+            "invFinalSacos": "178"
+          },
+          "Sala 1": {
+            "invInicialSacos": "460",
+            "invFinalSacos": "240"
+          }
+        },
+        "2026-08-11": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "178",
+            "invFinalSacos": "361"
+          },
+          "Sala 1": {
+            "invInicialSacos": "240",
+            "invFinalSacos": "227"
+          }
+        },
+        "2026-08-12": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "361",
+            "invFinalSacos": "228"
+          },
+          "Sala 1": {
+            "invInicialSacos": "227",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-08-13": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "228",
+            "invFinalSacos": "230"
+          }
+        },
+        "2026-08-14": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "230",
+            "invFinalSacos": "244"
+          },
+          "Sala 1": {
+            "invInicialSacos": "",
+            "invFinalSacos": "685"
+          }
+        },
+        "2026-08-15": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "244",
+            "invFinalSacos": "195"
+          },
+          "Sala 1": {
+            "invInicialSacos": "685",
+            "invFinalSacos": "1377"
+          }
+        },
+        "2026-08-16": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "195",
+            "invFinalSacos": "285"
+          },
+          "Sala 1": {
+            "invInicialSacos": "1377",
+            "invFinalSacos": "462"
+          }
+        },
+        "2026-08-17": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "285",
+            "invFinalSacos": "476"
+          },
+          "Sala 1": {
+            "invInicialSacos": "462",
+            "invFinalSacos": "459"
+          }
+        },
+        "2026-08-18": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "476",
+            "invFinalSacos": "324"
+          },
+          "Sala 1": {
+            "invInicialSacos": "459",
+            "invFinalSacos": "709"
+          }
+        },
+        "2026-08-19": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "324",
+            "invFinalSacos": "223"
+          },
+          "Sala 1": {
+            "invInicialSacos": "709",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-08-20": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "223",
+            "invFinalSacos": "237"
+          },
+          "Sala 1": {
+            "invInicialSacos": "",
+            "invFinalSacos": "459"
+          }
+        },
+        "2026-08-21": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "237",
+            "invFinalSacos": "206"
+          },
+          "Sala 1": {
+            "invInicialSacos": "459",
+            "invFinalSacos": "460"
+          }
+        },
+        "2026-08-22": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "206",
+            "invFinalSacos": "56"
+          },
+          "Sala 1": {
+            "invInicialSacos": "460",
+            "invFinalSacos": "1610"
+          }
+        },
+        "2026-08-23": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "56",
+            "invFinalSacos": "110"
+          },
+          "Sala 1": {
+            "invInicialSacos": "1610",
+            "invFinalSacos": "1226"
+          }
+        },
+        "2026-08-24": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "110",
+            "invFinalSacos": "338"
+          },
+          "Sala 1": {
+            "invInicialSacos": "1226",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-08-25": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "338",
+            "invFinalSacos": "297"
+          },
+          "Sala 1": {
+            "invInicialSacos": "",
+            "invFinalSacos": "229"
+          }
+        },
+        "2026-08-26": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "297",
+            "invFinalSacos": "178"
+          },
+          "Sala 1": {
+            "invInicialSacos": "229",
+            "invFinalSacos": "698"
+          }
+        },
+        "2026-08-27": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "178",
+            "invFinalSacos": "257"
+          },
+          "Sala 1": {
+            "invInicialSacos": "698",
+            "invFinalSacos": "470"
+          }
+        },
+        "2026-08-28": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "257",
+            "invFinalSacos": "403"
+          },
+          "Sala 1": {
+            "invInicialSacos": "470",
+            "invFinalSacos": "230"
+          }
+        },
+        "2026-08-29": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "403",
+            "invFinalSacos": "243"
+          },
+          "Sala 1": {
+            "invInicialSacos": "230",
+            "invFinalSacos": "229"
+          }
+        },
+        "2026-08-30": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "243",
+            "invFinalSacos": "105"
+          },
+          "Sala 1": {
+            "invInicialSacos": "229",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-08-31": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "105",
+            "invFinalSacos": "245"
+          },
+          "Sala 1": {
+            "invInicialSacos": "",
+            "invFinalSacos": "216"
+          }
+        },
+        "2026-09-01": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "245",
+            "invFinalSacos": "370"
+          },
+          "Sala 1": {
+            "invInicialSacos": "216",
+            "invFinalSacos": "266"
+          }
+        },
+        "2026-09-02": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "370",
+            "invFinalSacos": "238"
+          },
+          "Sala 1": {
+            "invInicialSacos": "266",
+            "invFinalSacos": "464"
+          }
+        },
+        "2026-09-03": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "238",
+            "invFinalSacos": "228"
+          },
+          "Sala 1": {
+            "invInicialSacos": "464",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-09-04": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "228",
+            "invFinalSacos": "82"
+          }
+        },
+        "2026-09-05": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": ""
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "82",
+            "invFinalSacos": ""
+          }
+        }
+      },
+      "realKgPerSack": {
+        "2026-07-27": "50.29",
+        "2026-07-28": "50.29",
+        "2026-07-29": "50.5",
+        "2026-07-30": "50.36",
+        "2026-07-01": "5",
+        "2026-08-02": "50.41",
+        "2026-08-01": "50.31",
+        "2026-08-04": "50.55",
+        "2026-08-03": "50.43",
+        "2026-08-05": "50.44",
+        "2026-08-06": "50.31",
+        "2026-08-07": "50.35",
+        "2026-08-08": "50.40",
+        "2026-08-11": "50.24",
+        "2026-08-09": "50.33",
+        "2026-08-10": "50.35",
+        "2026-08-12": "50.4",
+        "2026-08-13": "50.42",
+        "2026-08-14": "50.69",
+        "2026-08-15": "50.55",
+        "2026-08-16": "50.31",
+        "2026-08-17": "50.37",
+        "2026-08-18": "50.26",
+        "2026-08-19": "50.43",
+        "2026-08-20": "50.43",
+        "2026-08-21": "50.45",
+        "2026-08-22": "50.39",
+        "2026-08-23": "50.48",
+        "2026-08-24": "50.39",
+        "2026-08-25": "50.3",
+        "2026-08-26": "50.46",
+        "2026-08-27": "50.4",
+        "2026-08-28": "50.43",
+        "2026-08-29": "50.43",
+        "2026-08-30": "50.44",
+        "2026-08-31": "50.42",
+        "2026-09-01": "50.4",
+        "2026-09-02": "50.5",
+        "2026-09-03": "50.38",
+        "2026-09-04": "50.45",
+        "2026-09-05": "5"
+      },
+      "costoAzucar": {
+        "2026-07-28": "1.43",
+        "2026-08-01": "1.34",
+        "2026-08-05": "1.34",
+        "2026-08-03": "1.34",
+        "2026-08-09": "1.34",
+        "2026-08-11": "1.34",
+        "2026-08-16": "1.34",
+        "2026-08-10": "1.34",
+        "2026-08-23": "1.34",
+        "2026-08-30": "1.34",
+        "2026-08-31": "1.34",
+        "2026-08-24": "1.34",
+        "2026-08-17": "1.34",
+        "2026-07-27": "1.34"
+      },
+      "weeklyFisico": {
+        "2026-07-27|2026-08": 121494.94,
+        "2026-08-03|2026-08": 1090313.59,
+        "2026-08-10|2026-08": 1086706.74,
+        "2026-08-17|2026-08": 1131882.14,
+        "2026-08-24|2026-08": 1353500.36,
+        "2026-08-31|2026-08": 181833.05,
+        "2026-07-27|2026-07": 121494.94,
+        "2026-08-31|2026-09": 702896.6
+      }
+    },
+    "seguimiento-ordenes-auto": {
+      "linea-1": {
+        "auto-1-1784114040796": {
+          "cajasPlanificadas": 36000
+        },
+        "auto-1-1784115734311": {
+          "cajasPlanificadas": 34500
+        },
+        "auto-1-1784139724174": {
+          "cajasPlanificadas": 54750
+        },
+        "auto-1-1784323686130": {
+          "cajasPlanificadas": 69000
+        },
+        "auto-1-1784559843506": {
+          "cajasPlanificadas": 36000
+        },
+        "auto-1-1785178699799": {
+          "cajasPlanificadas": 0
+        },
+        "auto-1-1785755471311": {
+          "cajasPlanificadas": 28500,
+          "producto": "108",
+          "jarabeReal": 34510,
+          "ubb": 12
+        },
+        "auto-1-1785842002950": {
+          "cajasPlanificadas": 72000,
+          "jarabeReal": 91085,
+          "ubb": 31.37,
+          "producto": "635",
+          "pnc": 0
+        },
+        "auto-1-1786021482314": {
+          "cajasPlanificadas": 6813,
+          "producto": "110",
+          "ubb": 6,
+          "jarabeReal": 16310
+        },
+        "auto-1-1786103699079": {
+          "cajasPlanificadas": 72000,
+          "pnc": 240,
+          "jarabeReal": 46736,
+          "ubb": 16.27,
+          "producto": "1033"
+        },
+        "auto-1-1786188437876": {
+          "cajasPlanificadas": 36313,
+          "producto": "764",
+          "jarabeReal": 52320,
+          "ubb": 30
+        },
+        "auto-1-1786368925861": {
+          "cajasPlanificadas": 72000,
+          "jarabeReal": 115308,
+          "ubb": 40.11,
+          "producto": "744"
+        },
+        "auto-1-1786632515756": {
+          "cajasPlanificadas": 69000,
+          "jarabeReal": 134902,
+          "ubb": 46.89,
+          "producto": "649"
+        },
+        "auto-1-1786979241208": {
+          "cajasPlanificadas": 8265,
+          "jarabeReal": 16535,
+          "ubb": 19,
+          "producto": "745",
+          "pnc": 240
+        },
+        "auto-1-1787052198371": {
+          "cajasPlanificadas": 21788,
+          "jarabeReal": 34912,
+          "producto": "96",
+          "ubb": 20
+        },
+        "auto-1-1787145553510": {
+          "cajasPlanificadas": 72000,
+          "producto": "237",
+          "pnc": 150,
+          "jarabeReal": 81261,
+          "ubb": 28.27
+        },
+        "auto-1-1787322737129": {
+          "cajasPlanificadas": 69000,
+          "jarabeReal": 91317,
+          "ubb": 31.73,
+          "producto": "616"
+        },
+        "auto-1-1787485792150": {
+          "jarabeReal": 8256,
+          "cajasPlanificadas": 3435,
+          "ubb": 4.73,
+          "producto": "0"
+        },
+        "auto-1-1787593306676": {
+          "cajasPlanificadas": 72000,
+          "jarabeReal": 131380,
+          "ubb": 75.27,
+          "producto": "718"
+        },
+        "auto-1-1787746737208": {
+          "cajasPlanificadas": 67500,
+          "jarabeReal": 142670,
+          "ubb": 49.6,
+          "producto": "442"
+        },
+        "auto-1-1788088569808": {
+          "cajasPlanificadas": 33000,
+          "producto": "366",
+          "jarabeReal": 32822,
+          "ubb": 11.43
+        },
+        "auto-1-1788180306190": {
+          "cajasPlanificadas": 34500,
+          "jarabeReal": 40522,
+          "producto": "113",
+          "ubb": 14.09
+        },
+        "auto-1-1788299435452": {
+          "cajasPlanificadas": 67500,
+          "jarabeReal": 109451,
+          "producto": "781",
+          "ubb": 38.02
+        },
+        "auto-1-1788543142452": {
+          "cajasPlanificadas": 8775,
+          "producto": "598",
+          "jarabeReal": 94576
+        }
+      }
+    }
+  },
+  "ordenesSap": [],
+  "notifications": [],
+  "cacheVersion": 0,
+  "deletedIds": {
+    "jarabes": {},
+    "seguimiento-ordenes-auto": {}
+  },
+  "_deletedOrdenesSapIds": []
+}
