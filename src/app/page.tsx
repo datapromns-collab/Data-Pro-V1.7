@@ -656,17 +656,17 @@ export default function PlannerPage() {
   const [salaJarabePrepWeekStartDate, setSalaJarabePrepWeekStartDate] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [salaJarabeNuevaTareaOpen, setSalaJarabeNuevaTareaOpen] = useState(false);
   const [preparacionTab, setPreparacionTab] = useState<'glup' | 'justy'>('glup');
-  const [nuevaTarea, setNuevaTarea] = useState({ fecha: '', hora: '', sabor: '', litros: '', ubb: '' });
-  const [glupRows, setGlupRows] = useState<{ fecha: string; hora: string; sabor: string; litros: string; ubb: string; estado: 'preparado' | 'enviado a linea'; enviarALinea: number | null }[]>([]);
-  const [justyRows, setJustyRows] = useState<{ fecha: string; hora: string; sabor: string; litros: string; ubb: string; estado: 'preparado' | 'enviado a linea'; enviarALinea: number | null }[]>([]);
+  const [nuevaTarea, setNuevaTarea] = useState({ fecha: '', hora: '', numeroTanques: '', sabor: '', litros: '', ubb: '' });
+  const [glupRows, setGlupRows] = useState<{ fecha: string; hora: string; numeroTanques: string; sabor: string; litros: string; ubb: string; estado: 'preparado' | 'enviado a linea'; enviarALinea: number | null }[]>([]);
+  const [justyRows, setJustyRows] = useState<{ fecha: string; hora: string; numeroTanques: string; sabor: string; litros: string; ubb: string; estado: 'preparado' | 'enviado a linea'; enviarALinea: number | null }[]>([]);
   const [lineaModalOpen, setLineaModalOpen] = useState(false);
   const [selectedLineaRow, setSelectedLineaRow] = useState<{ index: number; type: 'glup' | 'justy' } | null>(null);
   const [selectedLinea, setSelectedLinea] = useState<number | null>(null);
   const [revisionEditingRow, setRevisionEditingRow] = useState<{ index: number; type: 'glup' | 'justy'; scope: 'privileged' | 'public' } | null>(null);
-  const [revisionEditForm, setRevisionEditForm] = useState<{ fecha: string; hora: string; sabor: string; litros: string; ubb: string } | null>(null);
+  const [revisionEditForm, setRevisionEditForm] = useState<{ fecha: string; hora: string; numeroTanques: string; sabor: string; litros: string; ubb: string } | null>(null);
   const isRevisionUser = user?.id === 'maria.mds' || user?.id === 'alex.mds' || user?.id === 'demon';
   const showRevisionColumn = isRevisionUser || (revisionEditingRow && revisionEditingRow.scope === 'public');
-  const updateRow = (type: 'glup' | 'justy', index: number, data: { fecha: string; hora: string; sabor: string; litros: string; ubb: string }) => {
+  const updateRow = (type: 'glup' | 'justy', index: number, data: { fecha: string; hora: string; numeroTanques: string; sabor: string; litros: string; ubb: string }) => {
     if (type === 'glup') {
       setGlupRows((prev) => prev.map((row, i) => i === index ? { ...row, ...data } : row));
     } else {
@@ -5413,9 +5413,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                <table className="w-full border-collapse text-[11px]">
                                                   <thead>
                                                     <tr className="bg-[#002D82] text-white">
-                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Fecha</th>
-                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Hora</th>
-                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[120px]">Sabor</th>
+                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Fecha</th>
+                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Hora</th>
+                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">N° Tanques</th>
+                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[120px]">Sabor</th>
                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Litros</th>
                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Ubb</th>
                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Estado</th>
@@ -5425,7 +5426,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                  </thead>
                                                  <tbody>
                                                     {filteredGlupRows.length === 0 && (
-                                                      <tr><td colSpan={showRevisionColumn ? 8 : 7} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
+                                                       <tr><td colSpan={showRevisionColumn ? 9 : 8} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
                                                    )}
                                                     {filteredGlupRows.map((row, idx) => (
                                                       <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
@@ -5437,12 +5438,15 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                 {isEditing ? (<input value={form?.fecha ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), fecha: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.fecha}
                                                               </td>
-                                                              <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                {isEditing ? (<input value={form?.hora ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), hora: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.hora}
-                                                              </td>
-                                                              <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                {isEditing ? (<input value={form?.sabor ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), sabor: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.sabor}
-                                                              </td>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {isEditing ? (<input value={form?.hora ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), hora: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.hora}
+                                                                </td>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {isEditing ? (<input value={form?.numeroTanques ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), numeroTanques: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.numeroTanques}
+                                                                </td>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {isEditing ? (<input value={form?.sabor ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), sabor: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.sabor}
+                                                                </td>
                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                 {isEditing ? (<input value={form?.litros ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), litros: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.litros}
                                                               </td>
@@ -5472,7 +5476,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                        return (
                                                                          <div className="flex items-center gap-1">
                                                                            <button onClick={() => deleteRow('glup', idx)} className="h-8 px-3 rounded-full bg-red-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-red-700 transition-none">Eliminar</button>
-                                                                           <button onClick={() => { setRevisionEditingRow({ index: idx, type: 'glup', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
+                                                                            <button onClick={() => { setRevisionEditingRow({ index: idx, type: 'glup', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
                                                                            <button onClick={() => { setRevisionEditingRow({ index: idx, type: 'glup', scope: 'public' }); setRevisionEditForm(null); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
                                                                          </div>
                                                                        );
@@ -5495,6 +5499,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                      <tr className="bg-[#002D82] text-white">
                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Fecha</th>
                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">Hora</th>
+                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">N° Tanques</th>
                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[120px]">Sabor</th>
                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Litros</th>
                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Ubb</th>
@@ -5505,7 +5510,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                   </thead>
                                                   <tbody>
                                                      {filteredJustyRows.length === 0 && (
-                                                      <tr><td colSpan={showRevisionColumn ? 8 : 7} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
+                                                       <tr><td colSpan={showRevisionColumn ? 9 : 8} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
                                                     )}
                                                      {filteredJustyRows.map((row, idx) => (
                                                        <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
@@ -5519,6 +5524,9 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                </td>
                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                  {isEditing ? (<input value={form?.hora ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), hora: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.hora}
+                                                               </td>
+                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                 {isEditing ? (<input value={form?.numeroTanques ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), numeroTanques: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.numeroTanques}
                                                                </td>
                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                  {isEditing ? (<input value={form?.sabor ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), sabor: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.sabor}
@@ -5552,7 +5560,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                         return (
                                                                           <div className="flex items-center gap-1">
                                                                             <button onClick={() => deleteRow('justy', idx)} className="h-8 px-3 rounded-full bg-red-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-red-700 transition-none">Eliminar</button>
-                                                                            <button onClick={() => { setRevisionEditingRow({ index: idx, type: 'justy', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
+                                                                            <button onClick={() => { setRevisionEditingRow({ index: idx, type: 'justy', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
                                                                             <button onClick={() => { setRevisionEditingRow({ index: idx, type: 'justy', scope: 'public' }); setRevisionEditForm(null); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
                                                                           </div>
                                                                         );
@@ -5589,16 +5597,20 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                         <button onClick={() => setSalaJarabeNuevaTareaOpen(false)} className="text-slate-500 hover:text-slate-900">✕</button>
                                       </div>
                                       <div className="flex flex-col gap-3">
-                                        <div className="grid grid-cols-2 gap-3">
-                                          <div>
-                                            <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Fecha</label>
-                                            <input type="date" value={nuevaTarea.fecha} onChange={(e) => setNuevaTarea({ ...nuevaTarea, fecha: e.target.value })} className="w-full h-9 px-3 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                          </div>
-                                          <div>
-                                            <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Hora</label>
-                                            <input type="time" value={nuevaTarea.hora} onChange={(e) => setNuevaTarea({ ...nuevaTarea, hora: e.target.value })} className="w-full h-9 px-3 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
-                                          </div>
-                                        </div>
+                                         <div className="grid grid-cols-2 gap-3">
+                                           <div>
+                                             <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Fecha</label>
+                                             <input type="date" value={nuevaTarea.fecha} onChange={(e) => setNuevaTarea({ ...nuevaTarea, fecha: e.target.value })} className="w-full h-9 px-3 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                           </div>
+                                           <div>
+                                             <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Hora</label>
+                                             <input type="time" value={nuevaTarea.hora} onChange={(e) => setNuevaTarea({ ...nuevaTarea, hora: e.target.value })} className="w-full h-9 px-3 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                           </div>
+                                         </div>
+                                         <div>
+                                           <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">N° Tanques</label>
+                                           <input type="number" value={nuevaTarea.numeroTanques} onChange={(e) => setNuevaTarea({ ...nuevaTarea, numeroTanques: e.target.value })} className="w-full h-9 px-3 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                         </div>
                                         <div>
                                           <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Sabor</label>
                                           <select value={nuevaTarea.sabor} onChange={(e) => setNuevaTarea({ ...nuevaTarea, sabor: e.target.value })} className="w-full h-9 px-3 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary">
@@ -5651,7 +5663,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                setPreparacionTab('justy');
                                              }
                                              setSalaJarabeNuevaTareaOpen(false);
-                                             setNuevaTarea({ fecha: '', hora: '', sabor: '', litros: '', ubb: '' });
+                                              setNuevaTarea({ fecha: '', hora: '', numeroTanques: '', sabor: '', litros: '', ubb: '' });
                                            }} className="h-9 px-4 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
                                         </div>
                                       </div>
