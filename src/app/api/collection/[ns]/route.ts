@@ -95,11 +95,18 @@ async function recoverFromBackup(dbPath: string): Promise<boolean> {
 function ensureDb() {
   if (!fs.existsSync(DB_PATH)) {
     const initial = {
-      planner: { tasks: [], config: { weekStartDate: new Date().toISOString(), lineSpeeds: {} }, deletedTaskIds: [] },
-      collections: {},
+      planner: {
+        config: { weekStartDate: new Date().toISOString(), lineSpeeds: {} },
+        customRecipes: {},
+        customPackagingRecipes: {},
+        weeks: {},
+      },
       ordenesSap: [],
       notifications: [],
+      collections: {},
       cacheVersion: 0,
+      deletedIds: {},
+      _deletedOrdenesSapIds: [],
     };
     fs.writeFileSync(DB_PATH, JSON.stringify(initial, null, 2), 'utf8');
     return;

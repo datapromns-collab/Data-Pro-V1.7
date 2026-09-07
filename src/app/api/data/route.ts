@@ -21,6 +21,10 @@ function getWeekKey(date: Date): string {
   return `${monday.getFullYear()}-${pad(monday.getMonth() + 1)}-${pad(monday.getDate())}`;
 }
 
+function isValidWeekKey(key: string): boolean {
+  return /^\d{4}-\d{2}-\d{2}$/.test(key);
+}
+
 function ensureDb() {
   cleanupTemp();
   if (!fs.existsSync(DB_PATH)) {
@@ -179,7 +183,9 @@ function createRotatingBackup(dbPath: string) {
 
 function writeJsonAtomically(dbPath: string, payload: Record<string, any>) {
   const raw = JSON.stringify(payload, null, 2);
-  fs.writeFileSync(dbPath, raw, 'utf8');
+  const tmpPath = dbPath + '.tmp';
+  fs.writeFileSync(tmpPath, raw, 'utf8');
+  fs.renameSync(tmpPath, dbPath);
 }
 
 function deepMerge(current: any, incoming: any): any {
@@ -314,7 +320,12 @@ export async function POST(request: Request) {
       if (incomingPlanner.weeks) {
         const currentWeeks = merged.weeks || {};
         const mergedWeeks = { ...currentWeeks };
-        for (const [wk, data] of Object.entries(incomingPlanner.weeks)) {
+        const validEntries = Object.entries(incomingPlanner.weeks).filter(([wk]) => isValidWeekKey(wk));
+        const skipped = Object.keys(incomingPlanner.weeks).filter((wk) => !isValidWeekKey(wk));
+        if (skipped.length > 0) {
+          console.warn('[DATA] Skipping malformed week keys from incoming planner.weeks:', skipped);
+        }
+        for (const [wk, data] of validEntries) {
           if (mergedWeeks[wk]) {
             mergedWeeks[wk] = deepMergeWeeklyData(mergedWeeks[wk], data);
           } else {

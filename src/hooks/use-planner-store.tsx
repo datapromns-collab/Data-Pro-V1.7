@@ -160,6 +160,10 @@ function deepMergeWeeklyData(current: WeeklyData, incoming: any): WeeklyData {
   return next;
 }
 
+function isValidWeekKey(key: string): boolean {
+  return /^\d{4}-\d{2}-\d{2}$/.test(key);
+}
+
 function deepMerge(current: any, incoming: any): any {
   if (incoming == null) return current;
   if (Array.isArray(current) && Array.isArray(incoming)) {
@@ -457,7 +461,8 @@ function usePlannerStoreInner() {
     if (remote.weeks) {
       setWeeklyData((prev) => {
         const next = { ...prev };
-        for (const [wk, remoteWeek] of Object.entries(remote.weeks)) {
+        const validRemoteWeeks = Object.entries(remote.weeks).filter(([wk]) => isValidWeekKey(wk));
+        for (const [wk, remoteWeek] of validRemoteWeeks) {
           const localWeek = next[wk] ?? emptyWeek();
           const remoteDeleted = new Set<string>([
             ...((remoteWeek as any)?.deletedTaskIds || []),
