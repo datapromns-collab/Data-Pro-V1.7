@@ -9572,7 +9572,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-07T18:55:16.538Z"
+    "updatedAt": "2026-09-07T18:56:19.368Z"
   },
   "ordenesSap": [
     {
@@ -16976,6 +16976,46 @@
       "linea": 4,
       "sabor": "GLUP COLA",
       "ordenNumero": "63475",
+      "semana": 37,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-07",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1788807363989",
+      "linea": 5,
+      "sabor": "JUSTY NARANJA",
+      "ordenNumero": "63480",
+      "semana": 37,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-07",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1788807379146",
+      "linea": 6,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63486",
       "semana": 37,
       "dias": [
         {
