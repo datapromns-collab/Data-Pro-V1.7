@@ -107599,8 +107599,9 @@
         },
         "auto-7-1788610139168": {
           "producto": "711",
-          "cajasPlanificadas": 8625,
-          "jarabeReal": 49658
+          "cajasPlanificadas": 86250,
+          "jarabeReal": 49658,
+          "ubb": 17.27
         }
       }
     },
