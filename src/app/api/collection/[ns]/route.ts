@@ -143,18 +143,25 @@ function readDb(): any {
   } catch (error) {
     console.error('[DB][READ][ERROR]', error);
     recoverFromBackup(DB_PATH).catch(() => {});
-    const raw2 = fs.readFileSync(DB_PATH, 'utf8');
-    if (!raw2 || raw2.trim().length === 0) {
+    try {
+      const raw2 = fs.readFileSync(DB_PATH, 'utf8');
+      if (!raw2 || raw2.trim().length === 0) {
+        return { planner: { tasks: [], config: { weekStartDate: new Date().toISOString(), lineSpeeds: {} }, deletedTaskIds: [] }, collections: {}, ordenesSap: [], notifications: [], cacheVersion: 0, deletedIds: {} };
+      }
+      return JSON.parse(raw2);
+    } catch (error2) {
+      console.error('[DB][READ][ERROR][FALLBACK]', error2);
       return { planner: { tasks: [], config: { weekStartDate: new Date().toISOString(), lineSpeeds: {} }, deletedTaskIds: [] }, collections: {}, ordenesSap: [], notifications: [], cacheVersion: 0, deletedIds: {} };
     }
-    return JSON.parse(raw2);
   }
 }
 
 async function writeDb(data: any) {
   await createRotatingBackup(DB_PATH);
   const payload = JSON.stringify(data, null, 2);
-  await withRetry(() => fs.promises.writeFile(DB_PATH, payload, 'utf8'));
+  const tmpPath = DB_PATH + '.tmp';
+  await withRetry(() => fs.promises.writeFile(tmpPath, payload, 'utf8'));
+  await withRetry(() => fs.promises.rename(tmpPath, DB_PATH));
 }
 
 function toArray(value: any): any[] {
