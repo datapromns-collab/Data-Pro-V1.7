@@ -9572,7 +9572,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-07T16:36:32.605Z"
+    "updatedAt": "2026-09-07T18:55:01.980Z"
   },
   "ordenesSap": [
     {
@@ -16902,6 +16902,66 @@
           "fechaInicio": "2026-09-07",
           "ticket1": "17786",
           "cajas1": 1248,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1788807255328",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "63457",
+      "semana": 37,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-07",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1788807268047",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "63463",
+      "semana": 37,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-07",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1788807301737",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63469",
+      "semana": 37,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-07",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
