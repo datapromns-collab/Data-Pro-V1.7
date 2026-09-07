@@ -59,6 +59,8 @@ const DEFAULT_MANAGEMENT_PERMISSIONS: ManagementPermissions = {
   'g.tec.mds': ['produccion-diaria', 'resumen-semanal'],
   'enf.mds': ['produccion-diaria', 'resumen-semanal'],
   'etq.mds': ['produccion-diaria', 'resumen-semanal'],
+  'procj.mds': ['resumen-semanal'],
+  'cal.mds': ['resumen-semanal'],
   'prodtj.mds': [],
   'prodtg.mds': [],
   'logg.mds': ['resumen-mensual'],
@@ -161,7 +163,7 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   'prodtj.mds': ['planning', 'planta'],
   'prodtg.mds': ['planning', 'planta', 'management'],
   'prodts.mds': ['planning', 'planta'],
-  'procj.mds': ['planning', 'procesos'],
+  'procj.mds': ['planning', 'procesos', 'management'],
   'cald.mds': ['planning'],
   'prodt.mds': ['planning', 'planta'],
   'prodt1.mds': ['planning', 'planta'],
@@ -177,7 +179,7 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   'logg.mds': ['planning', 'management'],
   'finan.mds': ['planning', 'management'],
   'mtto.mds': ['planning'],
-  'cal.mds': ['planning'],
+  'cal.mds': ['planning', 'management'],
 };
 
 const DEFAULT_READONLY_MODULES: UserPermissions = {
