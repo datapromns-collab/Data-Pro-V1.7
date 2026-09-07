@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-07T00:00:00.000",
+      "weekStartDate": "2026-08-31T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -9656,7 +9656,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-07T14:25:38.485Z"
+    "updatedAt": "2026-09-07T14:26:16.072Z"
   },
   "ordenesSap": [
     {
@@ -27965,6 +27965,60 @@
             "preparado": "140",
             "inicial": "26"
           }
+        },
+        "2026-09-04": {
+          "GLUP COLA": {
+            "inicial": "48.69",
+            "preparado": "42",
+            "final": "56.01"
+          },
+          "GLUP FRESH": {
+            "inicial": "9.15",
+            "preparado": "18",
+            "final": "9.65"
+          },
+          "GLUP PIÑA": {
+            "inicial": "9.17",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "40.61",
+            "preparado": "36",
+            "final": "21.84"
+          },
+          "GLUP UVA": {
+            "inicial": "22",
+            "preparado": "44",
+            "final": "27.48"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "13",
+            "preparado": "140",
+            "final": ""
+          }
+        },
+        "2026-09-05": {
+          "GLUP COLA": {
+            "inicial": "56.01",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "9.65",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "21.84",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "27.48",
+            "preparado": "",
+            "final": ""
+          }
         }
       },
       "sugar": {
@@ -28523,6 +28577,40 @@
             "invInicialSacos": "840",
             "recepcionSacos": "1800",
             "invFinalSacos": "1320"
+          }
+        },
+        "2026-09-04": {
+          "PORTUGUESA": {
+            "invInicialSacos": "5360",
+            "recepcionSacos": "3600",
+            "invFinalSacos": "3480"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2560",
+            "recepcionSacos": "360",
+            "invFinalSacos": "2080"
+          },
+          "PASTORA": {
+            "invInicialSacos": "1320",
+            "recepcionSacos": "",
+            "invFinalSacos": "3720"
+          }
+        },
+        "2026-09-05": {
+          "PORTUGUESA": {
+            "invInicialSacos": "3480",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2080",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "PASTORA": {
+            "invInicialSacos": "3720",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
           }
         }
       },
@@ -29088,6 +29176,26 @@
             "invInicialSacos": "464",
             "invFinalSacos": ""
           }
+        },
+        "2026-09-04": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "228",
+            "invFinalSacos": "82"
+          }
+        },
+        "2026-09-05": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": ""
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "82",
+            "invFinalSacos": ""
+          }
         }
       },
       "realKgPerSack": {
@@ -29127,7 +29235,11 @@
         "2026-08-29": "50.43",
         "2026-08-30": "50.44",
         "2026-08-31": "50.42",
-        "2026-09-01": "50.4"
+        "2026-09-01": "50.4",
+        "2026-09-02": "50.5",
+        "2026-09-03": "50.38",
+        "2026-09-04": "50.45",
+        "2026-09-05": "5"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
