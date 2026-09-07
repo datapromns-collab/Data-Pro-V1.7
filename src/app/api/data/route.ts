@@ -1,8 +1,4 @@
-import path from 'path';
-import fs from 'fs';
 import { readDb, writeDb } from '@/lib/db-writer';
-
-const DB_PATH = path.join(process.cwd(), 'data.json');
 
 function getWeekKey(date: Date): string {
   const d = new Date(date);
