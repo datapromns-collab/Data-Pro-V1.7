@@ -726,7 +726,7 @@ export default function PlannerPage() {
   const ptabInsumosStore = useRemoteCollection<Record<string, string>>('ptab-insumos', {});
   const [rSemanalWeekStartDate, setRSemanalWeekStartDate] = useState(new Date());
   const rSemanalWeeksContainerRef = useRef<HTMLDivElement>(null);
-  const rSemanalAguaStore = useRemoteCollection<Record<string, string>>('ptab-r-semanal-agua', {});
+  const rSemanalAguaStore = useRemoteCollection<Record<string, string>>('ptab-agua', {});
   const insumosAguaTotalStore = useRemoteCollection<Record<string, string>>('insumos-agua', {});
 
   useEffect(() => {
@@ -752,21 +752,6 @@ export default function PlannerPage() {
       // ignore
     }
   }, [ptabAguaStore.isLoaded]);
-
-  useEffect(() => {
-    if (!ptabAguaStore.isLoaded) return;
-    const sync: Record<string, string> = {};
-    Object.entries(ptabAguaStore.data || {}).forEach(([key, value]) => {
-      if (key.endsWith('-total') && value) {
-        const fechaStr = key.slice(0, -6);
-        sync[fechaStr] = value;
-      }
-    });
-    console.log('[DEBUG] Syncing totals from ptabAguaStore to insumosAguaTotalStore', Object.keys(sync).length, 'entries', sync);
-    if (Object.keys(sync).length > 0) {
-      insumosAguaTotalStore.setData(sync);
-    }
-  }, [ptabAguaStore.data, ptabAguaStore.isLoaded]);
   const [insumosFecha, setInsumosFecha] = useState<Date | undefined>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -2056,7 +2041,6 @@ export default function PlannerPage() {
   const getAguaConsumo = (fechaStr: string): string => {
     const candidates = [
       aguaConsumoPorDia[fechaStr],
-      insumosAguaTotalStore.data?.[fechaStr],
       ptabAguaStore.data?.[getPtabAguaCellKey(fechaStr, 'total')],
     ];
     for (const raw of candidates) {
