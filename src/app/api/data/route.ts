@@ -1,15 +1,8 @@
 import path from 'path';
 import fs from 'fs';
+import { readDb, writeDb } from '@/lib/db-writer';
 
 const DB_PATH = path.join(process.cwd(), 'data.json');
-const MAX_BACKUPS = 10;
-
-function cleanupTemp() {
-  const tmpPath = DB_PATH + '.tmp';
-  if (fs.existsSync(tmpPath)) {
-    try { fs.unlinkSync(tmpPath); } catch {}
-  }
-}
 
 function getWeekKey(date: Date): string {
   const d = new Date(date);
@@ -25,103 +18,6 @@ function isValidWeekKey(key: string): boolean {
   return /^\d{4}-\d{2}-\d{2}$/.test(key);
 }
 
-function ensureDb() {
-  cleanupTemp();
-  if (!fs.existsSync(DB_PATH)) {
-    const initial = {
-      planner: {
-        config: { weekStartDate: new Date().toISOString(), lineSpeeds: {} },
-        customRecipes: {},
-        customPackagingRecipes: {},
-        weeks: {},
-      },
-      ordenesSap: [],
-      notifications: [],
-    };
-    fs.writeFileSync(DB_PATH, JSON.stringify(initial, null, 2), 'utf8');
-  } else {
-    try {
-      const raw = fs.readFileSync(DB_PATH, 'utf8');
-      const data = JSON.parse(raw);
-      let migrated = false;
-      if (!data.planner) {
-        data.planner = {
-          config: { weekStartDate: new Date().toISOString(), lineSpeeds: {} },
-          customRecipes: {},
-          customPackagingRecipes: {},
-          weeks: {},
-        };
-        migrated = true;
-      }
-      if (data.planner && !data.planner.weeks && data.planner.tasks) {
-        const targetWeekKey = getWeekKey(new Date(data.planner.config?.weekStartDate || new Date()));
-        data.planner.weeks = {
-          [targetWeekKey]: {
-            tasks: data.planner.tasks,
-            realProduction: data.planner.realProduction || {},
-            rawMaterialStock: data.planner.rawMaterialStock || {},
-            manualUBB: data.planner.manualUBB || {},
-            initialUBBTanks: data.planner.initialUBBTanks || {},
-            finalUBBTanks: data.planner.finalUBBTanks || {},
-            initialUBBTanksDaily: data.planner.initialUBBTanksDaily || {},
-            finalUBBTanksDaily: data.planner.finalUBBTanksDaily || {},
-            salesProjection: data.planner.salesProjection || {},
-            finishedProductInventory: data.planner.finishedProductInventory || {},
-            productionPlan: data.planner.productionPlan || {},
-            logisticsInventory: data.planner.logisticsInventory || {},
-            plantInventory: data.planner.plantInventory || {},
-            salesProjectionAW: data.planner.salesProjectionAW || {},
-            finishedProductInventoryAW: data.planner.finishedProductInventoryAW || {},
-            productionPlanAW: data.planner.productionPlanAW || {},
-            logisticsInventoryAW: data.planner.logisticsInventoryAW || {},
-            plantInventoryAW: data.planner.plantInventoryAW || {},
-            deletedTaskIds: data.planner.deletedTaskIds || [],
-          },
-        };
-        delete data.planner.tasks;
-        delete data.planner.realProduction;
-        delete data.planner.rawMaterialStock;
-        delete data.planner.manualUBB;
-        delete data.planner.initialUBBTanks;
-        delete data.planner.finalUBBTanks;
-        delete data.planner.initialUBBTanksDaily;
-        delete data.planner.finalUBBTanksDaily;
-        delete data.planner.salesProjection;
-        delete data.planner.finishedProductInventory;
-        delete data.planner.productionPlan;
-        delete data.planner.logisticsInventory;
-        delete data.planner.plantInventory;
-        delete data.planner.salesProjectionAW;
-        delete data.planner.finishedProductInventoryAW;
-        delete data.planner.productionPlanAW;
-        delete data.planner.logisticsInventoryAW;
-        delete data.planner.plantInventoryAW;
-        delete data.planner.deletedTaskIds;
-        migrated = true;
-      }
-      if (!data.ordenesSap) {
-        data.ordenesSap = [];
-        migrated = true;
-      }
-      if (!data.notifications) {
-        data.notifications = [];
-        migrated = true;
-      }
-      if (!data._deletedOrdenesSapIds) {
-        data._deletedOrdenesSapIds = [];
-        migrated = true;
-      }
-      if (migrated) {
-        createRotatingBackup(DB_PATH);
-        fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf8');
-      }
-    } catch (e) {
-      console.error('Error migrating data.json schema', e);
-      recoverFromBackup(DB_PATH);
-    }
-  }
-}
-
 function validateOrdenesSap(value: any): value is any[] {
   if (!Array.isArray(value)) return false;
   return value.every((item) => {
@@ -135,57 +31,6 @@ function validateOrdenesSap(value: any): value is any[] {
       Array.isArray(item.dias)
     );
   });
-}
-
-function recoverFromBackup(dbPath: string) {
-  const backupDir = dbPath + '.backups';
-  if (!fs.existsSync(backupDir)) return;
-  const files = fs.readdirSync(backupDir)
-    .filter((f) => f.startsWith('data-') && f.endsWith('.json'))
-    .sort()
-    .reverse();
-  for (const file of files) {
-    const backupPath = path.join(backupDir, file);
-    try {
-      const raw = fs.readFileSync(backupPath, 'utf8');
-      const data = JSON.parse(raw);
-      if (data && typeof data === 'object' && Array.isArray(data.ordenesSap)) {
-        fs.copyFileSync(backupPath, dbPath);
-        console.warn('[DATA] Recovered data.json from backup', backupPath);
-        return;
-      }
-    } catch {
-      continue;
-    }
-  }
-}
-
-function createRotatingBackup(dbPath: string) {
-  const backupDir = dbPath + '.backups';
-  if (!fs.existsSync(backupDir)) {
-    fs.mkdirSync(backupDir, { recursive: true });
-  }
-  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-  const backupPath = path.join(backupDir, `data-${timestamp}.json`);
-  if (fs.existsSync(dbPath)) {
-    fs.copyFileSync(dbPath, backupPath);
-    const files = fs.readdirSync(backupDir)
-      .filter((f) => f.startsWith('data-') && f.endsWith('.json'))
-      .sort();
-    while (files.length > MAX_BACKUPS) {
-      const oldest = files.shift();
-      if (oldest) {
-        fs.unlinkSync(path.join(backupDir, oldest));
-      }
-    }
-  }
-}
-
-function writeJsonAtomically(dbPath: string, payload: Record<string, any>) {
-  const raw = JSON.stringify(payload, null, 2);
-  const tmpPath = dbPath + '.tmp';
-  fs.writeFileSync(tmpPath, raw, 'utf8');
-  fs.renameSync(tmpPath, dbPath);
 }
 
 function deepMerge(current: any, incoming: any): any {
@@ -250,9 +95,7 @@ function deepMergeWeeklyData(current: any, incoming: any): any {
 
 export async function GET() {
   try {
-    ensureDb();
-    const raw = fs.readFileSync(DB_PATH, 'utf8');
-    const data = JSON.parse(raw);
+    const data = readDb();
     const plannerWithMeta = {
       ...data.planner,
       ordenesSap: Array.isArray(data.ordenesSap) ? data.ordenesSap : [],
@@ -265,26 +108,10 @@ export async function GET() {
       headers: { 'content-type': 'application/json' },
     });
   } catch (error) {
-    recoverFromBackup(DB_PATH);
-    try {
-      const raw = fs.readFileSync(DB_PATH, 'utf8');
-      const data = JSON.parse(raw);
-      const plannerWithMeta = {
-        ...data.planner,
-        ordenesSap: data.ordenesSap ?? [],
-        notifications: data.notifications ?? [],
-        _meta: data._meta,
-      };
-      return new Response(JSON.stringify(plannerWithMeta), {
-        status: 200,
-        headers: { 'content-type': 'application/json' },
-      });
-    } catch (recoveryError) {
-      return new Response(JSON.stringify({ error: 'Failed to read data' }), {
-        status: 500,
-        headers: { 'content-type': 'application/json' },
-      });
-    }
+    return new Response(JSON.stringify({ error: 'Failed to read data' }), {
+      status: 500,
+      headers: { 'content-type': 'application/json' },
+    });
   }
 }
 
@@ -300,12 +127,10 @@ const flatWeeklyFields = [
 export async function POST(request: Request) {
   let body: any = {};
   try {
-    ensureDb();
     body = await request.json();
     const now = new Date().toISOString();
 
-    const existingRaw = fs.readFileSync(DB_PATH, 'utf8');
-    const existing = JSON.parse(existingRaw);
+    const existing = readDb();
 
     let incomingPlanner = body.planner ?? null;
     if (!incomingPlanner && body.ordenesSap === undefined) {
@@ -388,32 +213,30 @@ export async function POST(request: Request) {
       }
     }
 
-    const payload: Record<string, any> = { ...existing };
-    payload.planner = merged;
-    payload._meta = { ...(existing._meta ?? {}), updatedAt: now };
-    if (body.ordenesSap !== undefined) {
-      const incomingOrdenes = Array.isArray(body.ordenesSap) ? body.ordenesSap : [];
-      if (!validateOrdenesSap(incomingOrdenes)) {
-        return new Response(JSON.stringify({ error: 'Invalid ordenesSap schema' }), {
-          status: 400,
-          headers: { 'content-type': 'application/json' },
-        });
+    await writeDb((current) => {
+      const payload: Record<string, any> = { ...current };
+      payload.planner = merged;
+      payload._meta = { ...(current._meta ?? {}), updatedAt: now };
+      if (body.ordenesSap !== undefined) {
+        const incomingOrdenes = Array.isArray(body.ordenesSap) ? body.ordenesSap : [];
+        if (!validateOrdenesSap(incomingOrdenes)) {
+          throw new Error('Invalid ordenesSap schema');
+        }
+        const incomingDeleted = Array.isArray(body._deletedOrdenesSapIds) ? body._deletedOrdenesSapIds : [];
+        const currentOrdenes = Array.isArray(current.ordenesSap) ? current.ordenesSap : [];
+        const byId = new Map<string | number, any>();
+        currentOrdenes.forEach((item: any) => { byId.set(item.id, item); });
+        incomingOrdenes.forEach((item: any) => { byId.set(item.id, item); });
+        let mergedOrdenes = Array.from(byId.values());
+        const existingDeleted = Array.isArray(current._deletedOrdenesSapIds) ? current._deletedOrdenesSapIds : [];
+        const deletedIds = Array.from(new Set([...existingDeleted, ...incomingDeleted]));
+        const incomingIds = new Set(incomingOrdenes.map((o: any) => o.id));
+        payload.ordenesSap = mergedOrdenes.filter((o: any) => !deletedIds.includes(o.id));
+        payload._deletedOrdenesSapIds = deletedIds.filter((id: string) => !incomingIds.has(id));
       }
-      const incomingDeleted = Array.isArray(body._deletedOrdenesSapIds) ? body._deletedOrdenesSapIds : [];
-      const currentOrdenes = Array.isArray(existing.ordenesSap) ? existing.ordenesSap : [];
-      const byId = new Map<string | number, any>();
-      currentOrdenes.forEach((item: any) => { byId.set(item.id, item); });
-      incomingOrdenes.forEach((item: any) => { byId.set(item.id, item); });
-      let mergedOrdenes = Array.from(byId.values());
-      const existingDeleted = Array.isArray(existing._deletedOrdenesSapIds) ? existing._deletedOrdenesSapIds : [];
-      const deletedIds = Array.from(new Set([...existingDeleted, ...incomingDeleted]));
-      const incomingIds = new Set(incomingOrdenes.map((o: any) => o.id));
-      payload.ordenesSap = mergedOrdenes.filter((o: any) => !deletedIds.includes(o.id));
-      payload._deletedOrdenesSapIds = deletedIds.filter((id: string) => !incomingIds.has(id));
-    }
+      return payload;
+    });
 
-    createRotatingBackup(DB_PATH);
-    writeJsonAtomically(DB_PATH, payload);
     return new Response(JSON.stringify({ ok: true, updatedAt: now }), {
       status: 200,
       headers: { 'content-type': 'application/json' },

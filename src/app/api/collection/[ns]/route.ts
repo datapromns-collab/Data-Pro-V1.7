@@ -1,8 +1,4 @@
-import path from 'path';
-import fs from 'fs';
-
-const DB_PATH = path.join(process.cwd(), 'data.json');
-const MAX_BACKUPS = 10;
+import { readDb, writeDb } from '@/lib/db-writer';
 
 const RETRYABLE_CODES = new Set(['EPERM', 'EACCES', 'EBUSY', 'UNKNOWN']);
 
@@ -43,138 +39,10 @@ function withRetry<T>(fn: () => Promise<T> | T, retries = 3, baseDelay = 100): P
   });
 }
 
-async function createRotatingBackup(dbPath: string) {
-  const backupDir = dbPath + '.backups';
-  try {
-    if (!fs.existsSync(backupDir)) {
-      fs.mkdirSync(backupDir, { recursive: true });
-    }
-    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const backupPath = path.join(backupDir, `data-${timestamp}.json`);
-    if (fs.existsSync(dbPath)) {
-      await withRetry(() => fs.promises.copyFile(dbPath, backupPath));
-      const files = await fs.promises.readdir(backupDir);
-      const backups = files
-        .filter((f) => f.startsWith('data-') && f.endsWith('.json'))
-        .sort();
-      while (backups.length > MAX_BACKUPS) {
-        const oldest = backups.shift();
-        if (oldest) {
-          await fs.promises.unlink(path.join(backupDir, oldest));
-        }
-      }
-    }
-  } catch {
-    // ignore backup failures
-  }
-}
-
-async function recoverFromBackup(dbPath: string): Promise<boolean> {
-  const backupDir = dbPath + '.backups';
-  if (!fs.existsSync(backupDir)) return false;
-  const files = await fs.promises.readdir(backupDir)
-    .then((files) => files.filter((f) => f.startsWith('data-') && f.endsWith('.json')).sort().reverse())
-    .catch(() => []);
-  for (const file of files) {
-    const backupPath = path.join(backupDir, file);
-    try {
-      const raw = await fs.promises.readFile(backupPath, 'utf8');
-      const data = JSON.parse(raw);
-      if (data && typeof data === 'object' && data.collections && typeof data.collections === 'object') {
-        await fs.promises.copyFile(backupPath, dbPath);
-        console.warn('[COLLECTION] Recovered data.json from backup', backupPath);
-        return true;
-      }
-    } catch {
-      continue;
-    }
-  }
-  return false;
-}
-
-function ensureDb() {
-  if (!fs.existsSync(DB_PATH)) {
-    const initial = {
-      planner: {
-        config: { weekStartDate: new Date().toISOString(), lineSpeeds: {} },
-        customRecipes: {},
-        customPackagingRecipes: {},
-        weeks: {},
-      },
-      ordenesSap: [],
-      notifications: [],
-      collections: {},
-      cacheVersion: 0,
-      deletedIds: {},
-      _deletedOrdenesSapIds: [],
-    };
-    fs.writeFileSync(DB_PATH, JSON.stringify(initial, null, 2), 'utf8');
-    return;
-  }
-  try {
-    const data = JSON.parse(fs.readFileSync(DB_PATH, 'utf8'));
-    let changed = false;
-    if (!data.collections) { data.collections = {}; changed = true; }
-    if (!data.deletedIds) { data.deletedIds = {}; changed = true; }
-    if (typeof data.cacheVersion !== 'number') { data.cacheVersion = 0; changed = true; }
-    if (data.collections && typeof data.collections === 'object') {
-      for (const ns of Object.keys(data.collections)) {
-        const col = data.collections[ns];
-        if (Array.isArray(col)) {
-          col.forEach((item: any) => {
-            if (item && typeof item === 'object' && item.bloqueado === undefined) {
-              item.bloqueado = true;
-              changed = true;
-            }
-          });
-        }
-      }
-    }
-    if (changed) {
-      fs.writeFileSync(DB_PATH, JSON.stringify(data, null, 2), 'utf8');
-    }
-  } catch {
-    // Archivo corrupto: intentar recuperar desde el ultimo respaldo
-    recoverFromBackup(DB_PATH).catch(() => {});
-  }
-}
-
-function readDb(): any {
-  ensureDb();
-  try {
-    const raw = fs.readFileSync(DB_PATH, 'utf8');
-    if (!raw || raw.trim().length === 0) {
-      throw new Error('Empty database file');
-    }
-    return JSON.parse(raw);
-  } catch (error) {
-    console.error('[DB][READ][ERROR]', error);
-    recoverFromBackup(DB_PATH).catch(() => {});
-    try {
-      const raw2 = fs.readFileSync(DB_PATH, 'utf8');
-      if (!raw2 || raw2.trim().length === 0) {
-        return { planner: { tasks: [], config: { weekStartDate: new Date().toISOString(), lineSpeeds: {} }, deletedTaskIds: [] }, collections: {}, ordenesSap: [], notifications: [], cacheVersion: 0, deletedIds: {} };
-      }
-      return JSON.parse(raw2);
-    } catch (error2) {
-      console.error('[DB][READ][ERROR][FALLBACK]', error2);
-      return { planner: { tasks: [], config: { weekStartDate: new Date().toISOString(), lineSpeeds: {} }, deletedTaskIds: [] }, collections: {}, ordenesSap: [], notifications: [], cacheVersion: 0, deletedIds: {} };
-    }
-  }
-}
-
-async function writeDb(data: any) {
-  await createRotatingBackup(DB_PATH);
-  const payload = JSON.stringify(data, null, 2);
-  const tmpPath = DB_PATH + '.tmp';
-  await withRetry(() => fs.promises.writeFile(tmpPath, payload, 'utf8'));
-  await withRetry(() => fs.promises.rename(tmpPath, DB_PATH));
-}
-
 function toArray(value: any): any[] {
   if (Array.isArray(value)) return value;
   if (value && typeof value !== 'object') {
-    const values = Object.values(value).filter((v) => v && typeof v === 'object');
+    const values = Object.values(value).filter((v: any) => v && typeof v === 'object');
     if (values.length > 0) return values;
   }
   return [];
@@ -298,8 +166,6 @@ function sanitizeNs(ns: string): string | null {
   return /^[a-z0-9-]+$/i.test(ns) ? ns : null;
 }
 
-// Claves válidas por namespace. Si se define, el merge por objeto solo acepta
-// estas claves y descarta cualquier entrada numérica o basura acumulada.
 const VALID_KEYS: Record<string, string[]> = {
   'seguimiento-ordenes': ['linea-1', 'linea-2', 'linea-3', 'linea-4', 'linea-5', 'linea-6', 'linea-7'],
   'seguimiento-ordenes-auto': ['linea-1', 'linea-2', 'linea-3', 'linea-4', 'linea-5', 'linea-6', 'linea-7'],
@@ -319,7 +185,6 @@ function sanitizeObjectKeys(ns: string, obj: any): any {
   return out;
 }
 
-// Limpia basura (claves numericas u otras no validas) de una coleccion existente.
 function cleanExisting(ns: string, existing: any): any {
   if (!existing || typeof existing !== 'object') return existing;
   if (Array.isArray(existing)) return existing;
@@ -362,11 +227,9 @@ function getNsFromUrl(request: Request): string | null {
 export async function GET(request: Request) {
   const ns = getNsFromUrl(request);
   if (!ns) return new Response(JSON.stringify({ error: 'invalid namespace' }), { status: 400 });
-  ensureDb();
   const db = readDb();
   const raw = (db.collections && db.collections[ns]) ?? [];
 
-  // Parse query params for date range filtering
   const url = new URL(request.url);
   const startDate = url.searchParams.get('startDate');
   const endDate = url.searchParams.get('endDate');
@@ -376,7 +239,6 @@ export async function GET(request: Request) {
     const deletedIds = getDeletedIds(db, ns);
     let col = applyDeletedIds(raw, deletedIds);
 
-    // Apply server-side date filtering for collections with 'fecha' field
     if (hasDateFilter && col.length > 0 && col[0] && 'fecha' in col[0]) {
       const start = startDate ? new Date(startDate + 'T00:00:00') : new Date('1970-01-01');
       const end = endDate ? new Date(endDate + 'T23:59:59') : new Date('2099-12-31');
@@ -403,51 +265,53 @@ export async function POST(request: Request) {
   const ns = getNsFromUrl(request);
   if (!ns) return new Response(JSON.stringify({ error: 'invalid namespace' }), { status: 400 });
   try {
-    ensureDb();
-    const db = readDb();
-    db.collections = db.collections || {};
     const incoming = await request.json();
     const incomingItems = incoming && Array.isArray(incoming.items) ? incoming.items : incoming;
     const incomingDeleted = Array.isArray(incoming?._deletedIds)
       ? { '*': incoming!._deletedIds }
       : (incoming?._deletedIds ?? {});
 
-    let result: any;
-    const current = db.collections[ns];
+    await writeDb((db) => {
+      db.collections = db.collections || {};
 
-    if (Array.isArray(incomingItems)) {
-      const incomingData = incomingItems.map((item: any) => {
-        const copy = { ...item };
-        delete copy._deletedIds;
-        return copy;
-      });
-      const currentArr = Array.isArray(current) ? current : [];
-      const merged = mergeCollection(currentArr, incomingData, ns);
-      const existingDeleted = getDeletedIds(db, ns);
-      const deletedIds = mergeDeletedIds(existingDeleted, incomingDeleted);
-      collectDeletedIds(incomingData, deletedIds);
-      result = applyDeletedIds(merged, deletedIds);
-      setDeletedIds(db, ns, deletedIds);
-    } else if (incomingItems && typeof incomingItems === 'object') {
-      const base = cleanExisting(ns, current) || {};
-      const incomingClean = sanitizeObjectKeys(ns, incomingItems);
-      const merged: any = { ...base };
-      for (const key of Object.keys(incomingClean)) {
-        const value = incomingClean[key];
-        if (Array.isArray(value) && value.length === 0) continue;
-        if (value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) continue;
-        merged[key] = deepMerge(base[key], value);
+      let result: any;
+      const current = db.collections[ns];
+
+      if (Array.isArray(incomingItems)) {
+        const incomingData = incomingItems.map((item: any) => {
+          const copy = { ...item };
+          delete copy._deletedIds;
+          return copy;
+        });
+        const currentArr = Array.isArray(current) ? current : [];
+        const merged = mergeCollection(currentArr, incomingData, ns);
+        const existingDeleted = getDeletedIds(db, ns);
+        const deletedIds = mergeDeletedIds(existingDeleted, incomingDeleted);
+        collectDeletedIds(incomingData, deletedIds);
+        result = applyDeletedIds(merged, deletedIds);
+        setDeletedIds(db, ns, deletedIds);
+      } else if (incomingItems && typeof incomingItems === 'object') {
+        const base = cleanExisting(ns, current) || {};
+        const incomingClean = sanitizeObjectKeys(ns, incomingItems);
+        const merged: any = { ...base };
+        for (const key of Object.keys(incomingClean)) {
+          const value = incomingClean[key];
+          if (Array.isArray(value) && value.length === 0) continue;
+          if (value && typeof value === 'object' && !Array.isArray(value) && Object.keys(value).length === 0) continue;
+          merged[key] = deepMerge(base[key], value);
+        }
+        result = merged;
+        const existingDeleted = getDeletedIds(db, ns);
+        const deletedIds = mergeDeletedIds(existingDeleted, incomingDeleted);
+        setDeletedIds(db, ns, deletedIds);
+      } else {
+        result = current ?? [];
       }
-      result = merged;
-      const existingDeleted = getDeletedIds(db, ns);
-      const deletedIds = mergeDeletedIds(existingDeleted, incomingDeleted);
-      setDeletedIds(db, ns, deletedIds);
-    } else {
-      result = current ?? [];
-    }
 
-    db.collections[ns] = result;
-    await writeDb(db);
+      db.collections[ns] = result;
+      return db;
+    });
+
     return new Response(JSON.stringify({ ok: true }), { status: 200, headers: { 'content-type': 'application/json' } });
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Unknown error';
