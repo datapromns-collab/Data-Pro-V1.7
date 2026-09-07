@@ -9656,7 +9656,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-07T11:31:17.239Z"
+    "updatedAt": "2026-09-07T11:37:29.549Z"
   },
   "ordenesSap": [
     {
@@ -16952,6 +16952,26 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 8239
+        }
+      ]
+    },
+    {
+      "id": "3-1788781000297",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63446",
+      "semana": 36,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-06",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17951",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 2287,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
