@@ -107296,6 +107296,12 @@
           "jarabeReal": 163837,
           "producto": "518",
           "ubb": 57
+        },
+        "auto-4-1788544353152": {
+          "cajasPlanificadas": 163800,
+          "producto": "567",
+          "jarabeReal": 132228,
+          "ubb": 45.94
         }
       },
       "linea-5": {
@@ -107590,6 +107596,12 @@
           "cajasPlanificadas": 7263,
           "jarabeReal": 17450,
           "ubb": 10
+        },
+        "auto-7-1788610139168": {
+          "producto": "711",
+          "cajasPlanificadas": 8625,
+          "jarabeReal": 49658,
+          "ubb": 1
         }
       }
     },
