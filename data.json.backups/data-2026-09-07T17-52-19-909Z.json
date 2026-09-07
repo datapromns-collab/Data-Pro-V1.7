@@ -107198,14 +107198,15 @@
           "ubb": 80
         },
         "auto-3-1788608967807": {
-          "cajasPlanificadas": 61,
-          "jarabeReal": 0,
+          "cajasPlanificadas": 61600,
+          "jarabeReal": 119565,
           "producto": "459",
-          "ubb": 0
+          "ubb": 77
         },
         "auto-3-1788781000297": {
           "producto": "51",
-          "cajasPlanificadas": 32200
+          "cajasPlanificadas": 32200,
+          "jarabeReal": 53
         }
       },
       "linea-4": {
