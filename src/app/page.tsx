@@ -4984,12 +4984,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     </PopoverTrigger>
                                                     <PopoverContent className="p-2 w-56" align="end">
                                                       <div className="flex flex-col gap-2">
-                                                         <Select value={String(rSemanalSelectedMonth)} onValueChange={(val) => {
-                                                           const month = Number(val);
-                                                           setRSemanalSelectedMonth(month);
-                                                           const firstDay = new Date(rSemanalSelectedYear, month - 1, 1);
-                                                           setRSemanalWeekStartDate(startOfWeek(firstDay, { weekStartsOn: 1 }));
-                                                         }}>
+                                                          <Select value={String(rSemanalSelectedMonth)} onValueChange={(val) => {
+                                                            const month = Number(val);
+                                                            setRSemanalSelectedMonth(month);
+                                                          }}>
                                                           <SelectTrigger className="h-8 text-[11px]">
                                                             <SelectValue placeholder="Mes" />
                                                           </SelectTrigger>
@@ -4999,12 +4997,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                             ))}
                                                           </SelectContent>
                                                         </Select>
-                                                         <Select value={String(rSemanalSelectedYear)} onValueChange={(val) => {
-                                                           const year = Number(val);
-                                                           setRSemanalSelectedYear(year);
-                                                           const firstDay = new Date(year, rSemanalSelectedMonth - 1, 1);
-                                                           setRSemanalWeekStartDate(startOfWeek(firstDay, { weekStartsOn: 1 }));
-                                                         }}>
+                                                          <Select value={String(rSemanalSelectedYear)} onValueChange={(val) => {
+                                                            const year = Number(val);
+                                                            setRSemanalSelectedYear(year);
+                                                          }}>
                                                           <SelectTrigger className="h-8 text-[11px]">
                                                             <SelectValue placeholder="Año" />
                                                           </SelectTrigger>
