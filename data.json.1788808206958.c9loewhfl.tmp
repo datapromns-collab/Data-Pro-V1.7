@@ -9572,7 +9572,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-07T18:56:04.220Z"
+    "updatedAt": "2026-09-07T18:56:19.368Z"
   },
   "ordenesSap": [
     {
@@ -16996,6 +16996,26 @@
       "linea": 5,
       "sabor": "JUSTY NARANJA",
       "ordenNumero": "63480",
+      "semana": 37,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-07",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1788807379146",
+      "linea": 6,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63486",
       "semana": 37,
       "dias": [
         {
@@ -28017,22 +28037,22 @@
         "2026-09-05": {
           "GLUP COLA": {
             "inicial": "56.01",
-            "preparado": "",
-            "final": ""
+            "preparado": "48",
+            "final": "73.39"
           },
           "GLUP FRESH": {
             "inicial": "9.65",
-            "preparado": "",
-            "final": ""
+            "preparado": "12",
+            "final": "8.08"
           },
           "GLUP KOLITA": {
             "inicial": "21.84",
-            "preparado": "",
-            "final": ""
+            "preparado": "36",
+            "final": "18"
           },
           "GLUP UVA": {
             "inicial": "27.48",
-            "preparado": "",
+            "preparado": "11",
             "final": ""
           }
         }
@@ -28616,17 +28636,17 @@
           "PORTUGUESA": {
             "invInicialSacos": "3480",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "4760"
           },
           "IMPORTADA 1": {
             "invInicialSacos": "2080",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "2800"
           },
           "PASTORA": {
             "invInicialSacos": "3720",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "1600"
           }
         }
       },
@@ -29206,11 +29226,11 @@
         "2026-09-05": {
           "KITS PREP.": {
             "invInicialSacos": "5",
-            "invFinalSacos": ""
+            "invFinalSacos": "115"
           },
           "JARABE SIMPLE": {
             "invInicialSacos": "82",
-            "invFinalSacos": ""
+            "invFinalSacos": "157"
           }
         }
       },
@@ -29255,7 +29275,7 @@
         "2026-09-02": "50.5",
         "2026-09-03": "50.38",
         "2026-09-04": "50.45",
-        "2026-09-05": "5"
+        "2026-09-05": "50.42"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
