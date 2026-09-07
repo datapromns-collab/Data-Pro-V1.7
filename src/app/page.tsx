@@ -1194,9 +1194,9 @@ export default function PlannerPage() {
     doc.setFontSize(10);
     const rows = diasMes.map((dia) => {
       const fechaStr = format(dia, 'yyyy-MM-dd');
-                                                                                             const consumido = getAguaConsumoNumber(fechaStr);
+      const consumido = getAguaConsumoNumber(fechaStr);
       const vp = calcularLitrosAguaParaFecha(fechaStr);
-      const rendimiento = consumido > 0 && vp > 0 ? formatAguaDisplay(vp / consumido) : '0,00';
+      const rendimiento = consumido > 0 && vp > 0 ? formatAguaDisplay(consumido / vp) : '0,00';
       const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
       return [
         format(dia, 'dd/MM/yyyy'),
@@ -1267,7 +1267,7 @@ export default function PlannerPage() {
       const fechaStr = format(dia, 'yyyy-MM-dd');
       return acc + calcularLitrosAguaParaFecha(fechaStr);
     }, 0);
-    const totalRendimiento = totalConsumido > 0 && totalVP > 0 ? formatAguaDisplay(totalVP / totalConsumido) : '0,00';
+    const totalRendimiento = totalConsumido > 0 && totalVP > 0 ? formatAguaDisplay(totalConsumido / totalVP) : '0,00';
     rows.push(['', 'TOTAL', Number(formatAguaDisplay(totalConsumido).replace(/\./g, '').replace(',', '.')), Number(formatAguaDisplay(totalVP).replace(/\./g, '').replace(',', '.')), Number(formatAguaDisplay(totalRendimiento).replace(/\./g, '').replace(',', '.'))]);
     autoTable(doc, {
       startY: 22,
@@ -2077,7 +2077,7 @@ export default function PlannerPage() {
         return acc + (isFinite(val) ? val : 0);
       }, 0);
       const weekTeorico = week.days.reduce((acc, day) => acc + calcularLitrosAguaParaFecha(format(day, 'yyyy-MM-dd')), 0);
-      const rendimiento = weekFisico > 0 && weekTeorico > 0 ? Number((weekTeorico / weekFisico).toFixed(2)) : 0;
+      const rendimiento = weekFisico > 0 && weekTeorico > 0 ? Number((weekFisico / weekTeorico).toFixed(2)) : 0;
       return {
         semana: `SEM ${week.isoWeek}`,
         fisico: weekFisico || 0,
@@ -2100,7 +2100,7 @@ export default function PlannerPage() {
         ? Number(String(rawFisico).replace(/\./g, '').replace(',', '.'))
         : 0;
       const vp = calcularLitrosAguaParaFecha(dateStr);
-      const rendimiento = consumido > 0 && vp > 0 ? Number((vp / consumido).toFixed(2)) : 0;
+      const rendimiento = consumido > 0 && vp > 0 ? Number((consumido / vp).toFixed(2)) : 0;
       return {
         dia: format(day, 'EEEE', { locale: es }).toUpperCase().slice(0, 3),
         fisico: isFinite(consumido) ? consumido : 0,
@@ -5080,8 +5080,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                    ? ptabAguaStore.data[`${dateStr}-total`] || ''
                                                                    : isConsumoTeorico
                                                                      ? vp ? formatAguaDisplay(vp) : ''
-                                                                     : isRendimiento
-                                                                       ? consumido > 0 ? formatAguaDisplay(vp / consumido) : '0,00'
+                                                                      : isRendimiento
+                                                                        ? consumido > 0 ? formatAguaDisplay(consumido / vp) : '0,00'
                                                                        : rSemanalAguaStore.data[cellKey] || '';
                                                                  return (
                                                                    <td key={idx} className="px-2 py-2 text-center border border-slate-100">
@@ -5232,8 +5232,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                               ? weekFisico ? formatAguaDisplay(weekFisico) : ''
                                                               : isConsumoTeorico
                                                                 ? weekTeorico ? formatAguaDisplay(weekTeorico) : ''
-                                                                : isRendimiento
-                                                                  ? weekFisico > 0 ? formatAguaDisplay(weekTeorico / weekFisico) : '0,00'
+                                                                   : isRendimiento
+                                                                     ? weekFisico > 0 ? formatAguaDisplay(weekFisico / weekTeorico) : '0,00'
                                                                   : '';
                                                             return (
                                                               <td key={week.isoWeek} className="px-2 py-2 text-center border border-slate-100">
