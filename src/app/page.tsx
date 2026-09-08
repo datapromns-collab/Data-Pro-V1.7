@@ -5296,7 +5296,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                             </div>
                           </div>
                         )}
-                              {(isDemon || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' || user.id === 'procj.mds') && procesosSubTab === 'sala-jarabe' && (
+                              {(isDemon || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' || user.id === 'procj.mds' || user.id === 'maria.mds' || user.id === 'alex.mds') && procesosSubTab === 'sala-jarabe' && (
                              <div className="flex flex-col h-full gap-3">
                                <div className="flex flex-col gap-2 no-print">
                                  <div className="flex items-center gap-2">
@@ -5425,10 +5425,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     {showRevisionColumn && (<th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[160px]">Revisión</th>)}
                                                     </tr>
                                                  </thead>
-                                                 <tbody>
-                                                    {filteredGlupRows.length === 0 && (
-                                                       <tr><td colSpan={showRevisionColumn ? 9 : 8} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
-                                                   )}
+                                                  <tbody>
+                                                     {filteredGlupRows.length === 0 && (
+                                                        <tr><td colSpan={showRevisionColumn ? 10 : 9} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
+                                                    )}
                                                     {filteredGlupRows.map((row, idx) => (
                                                       <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
                                                         {(() => {
@@ -5513,10 +5513,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     {showRevisionColumn && (<th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[160px]">Revisión</th>)}
                                                     </tr>
                                                   </thead>
-                                                  <tbody>
-                                                     {filteredJustyRows.length === 0 && (
-                                                       <tr><td colSpan={showRevisionColumn ? 9 : 8} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
-                                                    )}
+                                                   <tbody>
+                                                      {filteredJustyRows.length === 0 && (
+                                                        <tr><td colSpan={showRevisionColumn ? 10 : 9} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
+                                                     )}
                                                      {filteredJustyRows.map((row, idx) => (
                                                        <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
                                                          {(() => {
