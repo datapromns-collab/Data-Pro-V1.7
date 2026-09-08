@@ -657,8 +657,8 @@ export default function PlannerPage() {
   const [salaJarabeNuevaTareaOpen, setSalaJarabeNuevaTareaOpen] = useState(false);
   const [preparacionTab, setPreparacionTab] = useState<'glup' | 'justy'>('glup');
   const [nuevaTarea, setNuevaTarea] = useState({ fecha: '', hora: '', numeroTanques: '', sala: '', sabor: '', litros: '', ubb: '' });
-  const glupStore = useRemoteCollection<{ id: string; fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; estado: 'preparado' | 'enviado a linea'; enviarALinea: number | null }[]>('sala-jarabe-glup', []);
-  const justyStore = useRemoteCollection<{ id: string; fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; estado: 'preparado' | 'enviado a linea'; enviarALinea: number | null }[]>('sala-jarabe-justy', []);
+  const glupStore = useRemoteCollection<{ id: string; fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; estado: 'preparado' | 'enviado a linea'; enviarALinea: number | null; editando: boolean; editandoPor: string | null }[]>('sala-jarabe-glup', []);
+  const justyStore = useRemoteCollection<{ id: string; fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; estado: 'preparado' | 'enviado a linea'; enviarALinea: number | null; editando: boolean; editandoPor: string | null }[]>('sala-jarabe-justy', []);
   const glupRows = glupStore.data;
   const justyRows = justyStore.data;
   const setGlupRows = glupStore.setData;
@@ -696,7 +696,14 @@ export default function PlannerPage() {
   const [revisionEditingRow, setRevisionEditingRow] = useState<{ id: string; type: 'glup' | 'justy'; scope: 'privileged' | 'public' } | null>(null);
   const [revisionEditForm, setRevisionEditForm] = useState<{ fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string } | null>(null);
   const isRevisionUser = user?.id === 'maria.mds' || user?.id === 'alex.mds' || user?.id === 'demon';
-  const showRevisionColumn = isRevisionUser || (revisionEditingRow && revisionEditingRow.scope === 'public');
+  const showRevisionColumn = isRevisionUser || glupRows.some((r) => r.editando) || justyRows.some((r) => r.editando);
+  const canEditRow = (row: { editando: boolean; editandoPor: string | null }) => {
+    if (!row.editando) return false;
+    if (!user?.id) return false;
+    if (row.editandoPor === user.id) return true;
+    if (isRevisionUser) return true;
+    return false;
+  };
   const updateRow = (type: 'glup' | 'justy', id: string, data: { fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string }) => {
     if (type === 'glup') {
       setGlupRows((prev) => prev.map((row) => row.id === id ? { ...row, ...data } : row));
@@ -5462,32 +5469,42 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     )}
                                                     {filteredGlupRows.map((row, idx) => (
                                                       <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
-                                                        {(() => {
-                                                           const isEditing = revisionEditingRow && revisionEditingRow.type === 'glup' && revisionEditingRow.id === row.id;
-                                                          const form = isEditing ? revisionEditForm : null;
-                                                          return (
-                                                            <>
-                                                              <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                {isEditing ? (<input value={form?.fecha ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), fecha: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.fecha}
-                                                              </td>
+                                                         {(() => {
+                                                            const isEditing = revisionEditingRow && revisionEditingRow.type === 'glup' && revisionEditingRow.id === row.id;
+                                                            const form = isEditing ? revisionEditForm : null;
+                                                            const editable = !isEditing && canEditRow(row);
+                                                            const showInput = isEditing || editable;
+                                                            const cellValue = (field: keyof typeof form) => isEditing ? (form?.[field] ?? '') : row[field as keyof typeof row];
+                                                            const cellOnChange = (field: keyof typeof form, value: string) => {
+                                                              if (isEditing) {
+                                                                setRevisionEditForm({ ...(form as any), [field]: value });
+                                                              } else if (editable) {
+                                                                updateRow('glup', row.id, { [field]: value } as any);
+                                                              }
+                                                            };
+                                                            return (
+                                                              <>
                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                 {isEditing ? (<input value={form?.hora ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), hora: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.hora}
+                                                                  {showInput ? (<input value={cellValue('fecha')} onChange={(e) => cellOnChange('fecha', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.fecha}
+                                                                </td>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {showInput ? (<input value={cellValue('hora')} onChange={(e) => cellOnChange('hora', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.hora}
+                                                                </td>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {showInput ? (<input value={cellValue('sala')} onChange={(e) => cellOnChange('sala', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.sala}
+                                                                </td>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {showInput ? (<input value={cellValue('numeroTanques')} onChange={(e) => cellOnChange('numeroTanques', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.numeroTanques}
+                                                                </td>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {showInput ? (<input value={cellValue('sabor')} onChange={(e) => cellOnChange('sabor', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.sabor}
+                                                                </td>
+                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {showInput ? (<input value={cellValue('litros')} onChange={(e) => cellOnChange('litros', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.litros}
                                                                </td>
                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                 {isEditing ? (<input value={form?.sala ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), sala: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.sala}
+                                                                  {showInput ? (<input value={cellValue('ubb')} onChange={(e) => cellOnChange('ubb', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.ubb}
                                                                </td>
-                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                 {isEditing ? (<input value={form?.numeroTanques ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), numeroTanques: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.numeroTanques}
-                                                               </td>
-                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                 {isEditing ? (<input value={form?.sabor ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), sabor: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.sabor}
-                                                               </td>
-                                                              <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                {isEditing ? (<input value={form?.litros ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), litros: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.litros}
-                                                              </td>
-                                                              <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                {isEditing ? (<input value={form?.ubb ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), ubb: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.ubb}
-                                                              </td>
                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.estado}</td>
                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                  {row.enviarALinea ? `Linea ${row.enviarALinea}` : (
@@ -5499,12 +5516,13 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                    {(() => {
                                                                      if (isEditing) {
                                                                        return (
-                                                                         <button onClick={() => {
-                                                                           if (!revisionEditForm) return;
+                                                                          <button onClick={() => {
+                                                                            if (!revisionEditForm) return;
                                                                             updateRow('glup', row.id, revisionEditForm);
-                                                                           setRevisionEditingRow(null);
-                                                                           setRevisionEditForm(null);
-                                                                         }} className="h-8 px-3 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
+                                                                            setRevisionEditingRow(null);
+                                                                            setRevisionEditForm(null);
+                                                                            setGlupRows((prev) => prev.map((r) => r.id === row.id ? { ...r, editando: false, editandoPor: null } : r));
+                                                                          }} className="h-8 px-3 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
                                                                        );
                                                                      }
                                                                      if (isRevisionUser) {
@@ -5512,7 +5530,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                          <div className="flex items-center gap-1">
                                                                             <button onClick={() => deleteRow('glup', row.id)} className="h-8 px-3 rounded-full bg-red-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-red-700 transition-none">Eliminar</button>
                                                                              <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'glup', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
-                                                                            <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'glup', scope: 'public' }); setRevisionEditForm(null); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
+                                                                            <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'glup', scope: 'public' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); setGlupRows((prev) => prev.map((r) => r.id === row.id ? { ...r, editando: true, editandoPor: user?.id || null } : r)); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
                                                                          </div>
                                                                        );
                                                                      }
@@ -5550,32 +5568,42 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                      )}
                                                      {filteredJustyRows.map((row, idx) => (
                                                        <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
-                                                         {(() => {
-                                                            const isEditing = revisionEditingRow && revisionEditingRow.type === 'justy' && revisionEditingRow.id === row.id;
-                                                           const form = isEditing ? revisionEditForm : null;
-                                                           return (
-                                                             <>
-                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                 {isEditing ? (<input value={form?.fecha ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), fecha: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.fecha}
-                                                               </td>
-                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                 {isEditing ? (<input value={form?.hora ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), hora: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.hora}
-                                                               </td>
-                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                 {isEditing ? (<input value={form?.sala ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), sala: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.sala}
-                                                               </td>
-                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                 {isEditing ? (<input value={form?.numeroTanques ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), numeroTanques: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.numeroTanques}
-                                                               </td>
-                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                 {isEditing ? (<input value={form?.sabor ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), sabor: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.sabor}
-                                                               </td>
-                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                 {isEditing ? (<input value={form?.litros ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), litros: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.litros}
-                                                               </td>
-                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                 {isEditing ? (<input value={form?.ubb ?? ''} onChange={(e) => setRevisionEditForm({ ...(form as any), ubb: e.target.value })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.ubb}
-                                                               </td>
+                                                          {(() => {
+                                                             const isEditing = revisionEditingRow && revisionEditingRow.type === 'justy' && revisionEditingRow.id === row.id;
+                                                            const form = isEditing ? revisionEditForm : null;
+                                                            const editable = !isEditing && canEditRow(row);
+                                                            const showInput = isEditing || editable;
+                                                            const cellValue = (field: keyof typeof form) => isEditing ? (form?.[field] ?? '') : row[field as keyof typeof row];
+                                                            const cellOnChange = (field: keyof typeof form, value: string) => {
+                                                              if (isEditing) {
+                                                                setRevisionEditForm({ ...(form as any), [field]: value });
+                                                              } else if (editable) {
+                                                                updateRow('justy', row.id, { [field]: value } as any);
+                                                              }
+                                                            };
+                                                            return (
+                                                              <>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {showInput ? (<input value={cellValue('fecha')} onChange={(e) => cellOnChange('fecha', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.fecha}
+                                                                </td>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {showInput ? (<input value={cellValue('hora')} onChange={(e) => cellOnChange('hora', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.hora}
+                                                                </td>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {showInput ? (<input value={cellValue('sala')} onChange={(e) => cellOnChange('sala', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.sala}
+                                                                </td>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {showInput ? (<input value={cellValue('numeroTanques')} onChange={(e) => cellOnChange('numeroTanques', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.numeroTanques}
+                                                                </td>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {showInput ? (<input value={cellValue('sabor')} onChange={(e) => cellOnChange('sabor', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.sabor}
+                                                                </td>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {showInput ? (<input value={cellValue('litros')} onChange={(e) => cellOnChange('litros', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.litros}
+                                                                </td>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {showInput ? (<input value={cellValue('ubb')} onChange={(e) => cellOnChange('ubb', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.ubb}
+                                                                </td>
                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.estado}</td>
                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                   {row.enviarALinea ? `Linea ${row.enviarALinea}` : (
@@ -5600,7 +5628,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                           <div className="flex items-center gap-1">
                                                                              <button onClick={() => deleteRow('justy', row.id)} className="h-8 px-3 rounded-full bg-red-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-red-700 transition-none">Eliminar</button>
                                                                              <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'justy', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
-                                                                             <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'justy', scope: 'public' }); setRevisionEditForm(null); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
+                                                                             <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'justy', scope: 'public' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); setJustyRows((prev) => prev.map((r) => r.id === row.id ? { ...r, editando: true, editandoPor: user?.id || null } : r)); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
                                                                           </div>
                                                                         );
                                                                       }
