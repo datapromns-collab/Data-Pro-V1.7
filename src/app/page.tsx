@@ -1863,7 +1863,7 @@ export default function PlannerPage() {
     operador: '',
     linea: 'Línea 1',
     equipo: '',
-    tipoParada: 'MECÁNICO',
+    tipoParada: '',
     inicioParada: '',
     finParada: '',
     totalMin: '',
@@ -6890,9 +6890,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Tipo de Parada</label>
-                     <select value={plantaFormData.tipoParada} onChange={(e) => setPlantaFormData({...plantaFormData, tipoParada: e.target.value, equipo: EQUIPO_ACTIVO_POR_TIPO.has(e.target.value) ? plantaFormData.equipo : '', operador: EQUIPO_ACTIVO_POR_TIPO.has(e.target.value) ? plantaFormData.operador : ''})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
-                      {TIPOS_PARADA_INFORME_OPERACIONAL.map((t) => <option key={t} value={t}>{t}</option>)}
-                    </select>
+                      <select value={plantaFormData.tipoParada} onChange={(e) => setPlantaFormData({...plantaFormData, tipoParada: e.target.value, equipo: EQUIPO_ACTIVO_POR_TIPO.has(e.target.value) ? plantaFormData.equipo : '', operador: EQUIPO_ACTIVO_POR_TIPO.has(e.target.value) ? plantaFormData.operador : ''})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                        <option value="">—</option>
+                        {TIPOS_PARADA_INFORME_OPERACIONAL.map((t) => <option key={t} value={t}>{t}</option>)}
+                      </select>
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Parada</label>
