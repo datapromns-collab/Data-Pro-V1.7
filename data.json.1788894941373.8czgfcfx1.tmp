@@ -102590,6 +102590,25 @@
         "usuario": "Luis Blandin",
         "id": 1788894113219,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-07",
+        "semana": 37,
+        "turno": "NOCTURNO",
+        "operador": "ATAGUALPA BASTIDAS",
+        "linea": "Línea 1",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "05:09",
+        "finParada": "05:13",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "BOTELLAS CAIDAS EN COMPACTACION ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1788894825610,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
