@@ -700,9 +700,7 @@ export default function PlannerPage() {
   const canEditRow = (row: { editando: boolean; editandoPor: string | null }) => {
     if (!row.editando) return false;
     if (!user?.id) return false;
-    if (row.editandoPor === user.id) return true;
-    if (isRevisionUser) return true;
-    return false;
+    return true;
   };
   const updateRow = (type: 'glup' | 'justy', id: string, data: { fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string }) => {
     if (type === 'glup') {
@@ -5511,11 +5509,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                     <button onClick={() => { setSelectedLineaRow({ id: row.id, type: 'glup' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
                                                                  )}
                                                                </td>
-                                                               {showRevisionColumn && (
-                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                   {(() => {
-                                                                     if (isEditing) {
-                                                                       return (
+                                                                {showRevisionColumn && (
+                                                                  <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                    {(() => {
+                                                                      if (isEditing) {
+                                                                        return (
                                                                           <button onClick={() => {
                                                                             if (!revisionEditForm) return;
                                                                             updateRow('glup', row.id, revisionEditForm);
@@ -5523,21 +5521,28 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                             setRevisionEditForm(null);
                                                                             setGlupRows((prev) => prev.map((r) => r.id === row.id ? { ...r, editando: false, editandoPor: null } : r));
                                                                           }} className="h-8 px-3 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
-                                                                       );
-                                                                     }
-                                                                     if (isRevisionUser) {
-                                                                       return (
-                                                                         <div className="flex items-center gap-1">
-                                                                            <button onClick={() => deleteRow('glup', row.id)} className="h-8 px-3 rounded-full bg-red-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-red-700 transition-none">Eliminar</button>
-                                                                             <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'glup', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
-                                                                            <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'glup', scope: 'public' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); setGlupRows((prev) => prev.map((r) => r.id === row.id ? { ...r, editando: true, editandoPor: user?.id || null } : r)); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
-                                                                         </div>
-                                                                       );
-                                                                     }
-                                                                     return null;
-                                                                   })()}
-                                                                 </td>
-                                                               )}
+                                                                        );
+                                                                      }
+                                                                      if (row.editando) {
+                                                                        return (
+                                                                          <button onClick={() => {
+                                                                            setGlupRows((prev) => prev.map((r) => r.id === row.id ? { ...r, editando: false, editandoPor: null } : r));
+                                                                          }} className="h-8 px-3 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
+                                                                        );
+                                                                      }
+                                                                      if (isRevisionUser) {
+                                                                        return (
+                                                                          <div className="flex items-center gap-1">
+                                                                             <button onClick={() => deleteRow('glup', row.id)} className="h-8 px-3 rounded-full bg-red-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-red-700 transition-none">Eliminar</button>
+                                                                              <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'glup', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
+                                                                             <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'glup', scope: 'public' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); setGlupRows((prev) => prev.map((r) => r.id === row.id ? { ...r, editando: true, editandoPor: user?.id || null } : r)); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
+                                                                          </div>
+                                                                        );
+                                                                      }
+                                                                      return null;
+                                                                    })()}
+                                                                  </td>
+                                                                )}
                                                             </>
                                                           );
                                                         })()}

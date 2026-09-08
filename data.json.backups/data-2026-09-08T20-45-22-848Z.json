@@ -101240,7 +101240,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788889059780,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-09-07",
@@ -110963,7 +110963,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1788898767907.8499,
+        "id": 1788898476622,
         "fechaOrden": "2026-09-07",
         "orden": "10080",
         "fechaEmision": "2026-09-07",
@@ -110986,7 +110986,6 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
         "usuario": "Luis Blandin"
       }
     ],
