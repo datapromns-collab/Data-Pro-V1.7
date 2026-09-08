@@ -5618,18 +5618,25 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                 {showRevisionColumn && (
                                                                   <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                     {(() => {
-                                                                      if (isEditing) {
-                                                                        return (
+                                                                       if (isEditing) {
+                                                                         return (
+                                                                            <button onClick={() => {
+                                                                             if (!revisionEditForm) return;
+                                                                             updateRow('justy', row.id, revisionEditForm);
+                                                                             setRevisionEditingRow(null);
+                                                                             setRevisionEditForm(null);
+                                                                             setJustyRows((prev) => prev.map((r) => r.id === row.id ? { ...r, editando: false, editandoPor: null } : r));
+                                                                           }} className="h-8 px-3 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
+                                                                         );
+                                                                       }
+                                                                       if (row.editando) {
+                                                                         return (
                                                                            <button onClick={() => {
-                                                                            if (!revisionEditForm) return;
-                                                                            updateRow('justy', row.id, revisionEditForm);
-                                                                            setRevisionEditingRow(null);
-                                                                            setRevisionEditForm(null);
-                                                                            setJustyRows((prev) => prev.map((r) => r.id === row.id ? { ...r, editando: false, editandoPor: null } : r));
-                                                                          }} className="h-8 px-3 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
-                                                                        );
-                                                                      }
-                                                                      if (isRevisionUser) {
+                                                                             setJustyRows((prev) => prev.map((r) => r.id === row.id ? { ...r, editando: false, editandoPor: null } : r));
+                                                                           }} className="h-8 px-3 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
+                                                                         );
+                                                                       }
+                                                                       if (isRevisionUser) {
                                                                         return (
                                                                           <div className="flex items-center gap-1">
                                                                              <button onClick={() => deleteRow('justy', row.id)} className="h-8 px-3 rounded-full bg-red-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-red-700 transition-none">Eliminar</button>
