@@ -101507,6 +101507,44 @@
         "usuario": "Luis Blandin",
         "id": 1788890496819,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-07",
+        "semana": 37,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "22:00",
+        "finParada": "22:28",
+        "totalMin": "28",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE LA FALLA ELECTRICA PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1788890536154,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-07",
+        "semana": 37,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "22:00",
+        "finParada": "23:24",
+        "totalMin": "84",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES LUEGO DE LA FALLA ELCTRICA PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1788890576666,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -109601,6 +109639,9 @@
           "producto": "598",
           "jarabeReal": 94576,
           "ubb": 32.92
+        },
+        "auto-1-1788807255328": {
+          "cajasPlanificadas": 72000
         }
       },
       "linea-2": {
@@ -109748,6 +109789,9 @@
           "producto": "223",
           "jarabeReal": 93473,
           "ubb": 94.61
+        },
+        "auto-2-1788807268047": {
+          "cajasPlanificadas": 117500
         }
       },
       "linea-3": {
@@ -109872,6 +109916,9 @@
           "cajasPlanificadas": 32200,
           "jarabeReal": 5348,
           "ubb": 1.86
+        },
+        "auto-3-1788807301737": {
+          "cajasPlanificadas": 134400
         }
       },
       "linea-4": {
@@ -109966,6 +110013,9 @@
           "producto": "567",
           "jarabeReal": 132228,
           "ubb": 45.94
+        },
+        "auto-4-1788807316295": {
+          "cajasPlanificadas": 134400
         }
       },
       "linea-5": {
@@ -110041,6 +110091,9 @@
           "jarabeReal": 153000,
           "ubb": 153,
           "producto": "203"
+        },
+        "auto-5-1788807363989": {
+          "cajasPlanificadas": 580
         }
       },
       "linea-6": {

@@ -9661,7 +9661,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-08T19:10:01.977Z"
+    "updatedAt": "2026-09-08T18:57:25.420Z"
   },
   "ordenesSap": [
     {
@@ -102570,25 +102570,6 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788894069835,
-        "bloqueado": true
-      },
-      {
-        "fecha": "2026-09-07",
-        "semana": 37,
-        "turno": "NOCTURNO",
-        "operador": "JOSE VIEIRA",
-        "linea": "Línea 7",
-        "equipo": "ETIQUETADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "06:05",
-        "finParada": "06:13",
-        "totalMin": "8",
-        "zona": "Llenado",
-        "falla": "CONTAMINACION DE CONJUNTO POR EXCESO DE PEGA",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Blandin",
-        "id": 1788894113219,
         "bloqueado": true
       }
     ],
