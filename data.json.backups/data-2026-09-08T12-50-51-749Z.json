@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-07T00:00:00.000",
+      "weekStartDate": "2026-08-03T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -9613,7 +9613,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-08T12:48:55.358Z"
+    "updatedAt": "2026-09-08T12:50:20.063Z"
   },
   "ordenesSap": [
     {
@@ -16949,6 +16949,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 12324
+        },
+        {
+          "fechaInicio": "2026-09-08",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -16969,6 +16980,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 9600
+        },
+        {
+          "fechaInicio": "2026-09-08",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -16989,6 +17011,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 10000
+        },
+        {
+          "fechaInicio": "2026-09-08",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -17009,6 +17042,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 9840
+        },
+        {
+          "fechaInicio": "2026-09-08",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -17029,6 +17073,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 14000
+        },
+        {
+          "fechaInicio": "2026-09-08",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -17049,6 +17104,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 4650
+        },
+        {
+          "fechaInicio": "2026-09-08",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -17069,6 +17135,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 3520
+        },
+        {
+          "fechaInicio": "2026-09-08",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
