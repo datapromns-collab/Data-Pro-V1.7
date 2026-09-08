@@ -100127,7 +100127,7 @@
         "turno": "DIURNO",
         "operador": "MAXIMILIANO CORTEZAO",
         "linea": "Línea 3",
-        "equipo": "",
+        "equipo": "PALETIZADORA",
         "tipoParada": "OPERACIONAL",
         "inicioParada": "07:03",
         "finParada": "07:25",
@@ -100138,7 +100138,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788878524608,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-07",
@@ -101192,17 +101192,17 @@
         "operador": "KEVIN PONCE",
         "linea": "Línea 7",
         "equipo": "PALETIZADORA",
-        "tipoParada": "OPERACIONAL",
+        "tipoParada": "AVERÍA",
         "inicioParada": "07:32",
         "finParada": "08:44",
         "totalMin": "72",
         "zona": "Llenado",
         "falla": "FALLA EN LA PRECOMPACTACION, BANDA SE ATASCA",
-        "orden": "",
+        "orden": "10080",
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788888936911,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-07",
@@ -102646,44 +102646,6 @@
         "observaciones": "SE CAMBIA REDUCTOR DE LINEA 6 A LINEA 3 CON ORDEN DE TRABJO 9557",
         "usuario": "Luis Blandin",
         "id": 1788895152394,
-        "bloqueado": true
-      },
-      {
-        "fecha": "2026-09-06",
-        "semana": 36,
-        "turno": "DIURNO",
-        "operador": "DANIEL RICO",
-        "linea": "Línea 1",
-        "equipo": "ENFARDADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "07:00",
-        "finParada": "07:07",
-        "totalMin": "7",
-        "zona": "Llenado",
-        "falla": "CAMBIO DE BOBINA (PERSONAL DE APOYO)",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Blandin",
-        "id": 1788899107492,
-        "bloqueado": true
-      },
-      {
-        "fecha": "2026-09-06",
-        "semana": 36,
-        "turno": "DIURNO",
-        "operador": "FAIBERT MATTEY",
-        "linea": "Línea 1",
-        "equipo": "SOPLADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "07:13",
-        "finParada": "07:16",
-        "totalMin": "3",
-        "zona": "Llenado",
-        "falla": "PREFORMA ATASCADA EN TOLVA",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Blandin",
-        "id": 1788899308364,
         "bloqueado": true
       }
     ],
@@ -110963,7 +110925,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1788898476622,
+        "id": 1788898717297.521,
         "fechaOrden": "2026-09-07",
         "orden": "10080",
         "fechaEmision": "2026-09-07",
@@ -110986,6 +110948,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       }
     ],
@@ -117322,22 +117285,22 @@
       },
       "2026-08-12": {
         "td": [
-          "11.5",
-          "11.5",
-          "11.5",
-          "11.5",
-          "11.5",
-          "0",
-          "11.5"
+          "24",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
         ],
         "tn": [
-          "12.5",
-          "12.5",
-          "12.5",
-          "12.5",
-          "12.5",
-          "12.5",
-          "12.5"
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
         ]
       },
       "2026-08-24": {

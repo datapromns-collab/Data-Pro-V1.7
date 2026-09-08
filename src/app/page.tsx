@@ -673,7 +673,7 @@ export default function PlannerPage() {
       try {
         const parsed = JSON.parse(legacyGlup);
         if (Array.isArray(parsed)) {
-          const withId = parsed.map((row: any) => ({ ...row, id: row.id || `glup_${Date.now()}_${Math.random().toString(36).slice(2, 8)}` }));
+          const withId = parsed.map((row: any) => ({ ...row, id: row.id || `glup_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, editando: false, editandoPor: null }));
           setGlupRows(withId);
         }
       } catch {}
@@ -683,7 +683,7 @@ export default function PlannerPage() {
       try {
         const parsed = JSON.parse(legacyJusty);
         if (Array.isArray(parsed)) {
-          const withId = parsed.map((row: any) => ({ ...row, id: row.id || `justy_${Date.now()}_${Math.random().toString(36).slice(2, 8)}` }));
+          const withId = parsed.map((row: any) => ({ ...row, id: row.id || `justy_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, editando: false, editandoPor: null }));
           setJustyRows(withId);
         }
       } catch {}
@@ -5726,7 +5726,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                           <button onClick={() => setSalaJarabeNuevaTareaOpen(false)} className="h-9 px-4 rounded-full bg-slate-100 text-slate-700 font-black uppercase text-[10px] tracking-widest hover:bg-slate-200 transition-none">Cancelar</button>
                                             <button onClick={() => {
                                               const sabor = nuevaTarea.sabor.toUpperCase();
-                                              const row = { id: `row_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, ...nuevaTarea, estado: 'preparado' as const, enviarALinea: null };
+                                              const row = { id: `row_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, ...nuevaTarea, estado: 'preparado' as const, enviarALinea: null, editando: false, editandoPor: null };
                                               if (sabor.startsWith('GLUP')) {
                                                 setGlupRows((prev) => [...prev, row]);
                                                 setPreparacionTab('glup');

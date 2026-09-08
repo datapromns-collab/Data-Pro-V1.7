@@ -102666,25 +102666,6 @@
         "usuario": "Luis Blandin",
         "id": 1788899107492,
         "bloqueado": true
-      },
-      {
-        "fecha": "2026-09-06",
-        "semana": 36,
-        "turno": "DIURNO",
-        "operador": "FAIBERT MATTEY",
-        "linea": "Línea 1",
-        "equipo": "SOPLADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "07:13",
-        "finParada": "07:16",
-        "totalMin": "3",
-        "zona": "Llenado",
-        "falla": "PREFORMA ATASCADA EN TOLVA",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Blandin",
-        "id": 1788899308364,
-        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -117327,7 +117308,7 @@
           "11.5",
           "11.5",
           "11.5",
-          "0",
+          "11.5",
           "11.5"
         ],
         "tn": [

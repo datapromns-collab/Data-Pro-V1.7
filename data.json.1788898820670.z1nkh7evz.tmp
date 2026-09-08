@@ -102647,44 +102647,6 @@
         "usuario": "Luis Blandin",
         "id": 1788895152394,
         "bloqueado": true
-      },
-      {
-        "fecha": "2026-09-06",
-        "semana": 36,
-        "turno": "DIURNO",
-        "operador": "DANIEL RICO",
-        "linea": "Línea 1",
-        "equipo": "ENFARDADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "07:00",
-        "finParada": "07:07",
-        "totalMin": "7",
-        "zona": "Llenado",
-        "falla": "CAMBIO DE BOBINA (PERSONAL DE APOYO)",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Blandin",
-        "id": 1788899107492,
-        "bloqueado": true
-      },
-      {
-        "fecha": "2026-09-06",
-        "semana": 36,
-        "turno": "DIURNO",
-        "operador": "FAIBERT MATTEY",
-        "linea": "Línea 1",
-        "equipo": "SOPLADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "07:13",
-        "finParada": "07:16",
-        "totalMin": "3",
-        "zona": "Llenado",
-        "falla": "PREFORMA ATASCADA EN TOLVA",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Blandin",
-        "id": 1788899308364,
-        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -110963,7 +110925,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1788898476622,
+        "id": 1788898767907.8499,
         "fechaOrden": "2026-09-07",
         "orden": "10080",
         "fechaEmision": "2026-09-07",
@@ -110986,6 +110948,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       }
     ],
@@ -117322,22 +117285,22 @@
       },
       "2026-08-12": {
         "td": [
-          "11.5",
-          "11.5",
-          "11.5",
-          "11.5",
-          "11.5",
-          "0",
-          "11.5"
+          "24",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
         ],
         "tn": [
-          "12.5",
-          "12.5",
-          "12.5",
-          "12.5",
-          "12.5",
-          "12.5",
-          "12.5"
+          "",
+          "",
+          "",
+          "",
+          "",
+          "",
+          ""
         ]
       },
       "2026-08-24": {
