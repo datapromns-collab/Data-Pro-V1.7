@@ -657,29 +657,58 @@ export default function PlannerPage() {
   const [salaJarabeNuevaTareaOpen, setSalaJarabeNuevaTareaOpen] = useState(false);
   const [preparacionTab, setPreparacionTab] = useState<'glup' | 'justy'>('glup');
   const [nuevaTarea, setNuevaTarea] = useState({ fecha: '', hora: '', numeroTanques: '', sala: '', sabor: '', litros: '', ubb: '' });
-  const [glupRows, setGlupRows] = useState<{ fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; estado: 'preparado' | 'enviado a linea'; enviarALinea: number | null }[]>([]);
-  const [justyRows, setJustyRows] = useState<{ fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; estado: 'preparado' | 'enviado a linea'; enviarALinea: number | null }[]>([]);
+  const glupStore = useRemoteCollection<{ id: string; fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; estado: 'preparado' | 'enviado a linea'; enviarALinea: number | null }[]>('sala-jarabe-glup', []);
+  const justyStore = useRemoteCollection<{ id: string; fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; estado: 'preparado' | 'enviado a linea'; enviarALinea: number | null }[]>('sala-jarabe-justy', []);
+  const glupRows = glupStore.data;
+  const justyRows = justyStore.data;
+  const setGlupRows = glupStore.setData;
+  const setJustyRows = justyStore.setData;
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const legacyGlup = localStorage.getItem('salaJarabeGlupRows');
+    const legacyJusty = localStorage.getItem('salaJarabeJustyRows');
+    if (legacyGlup && glupRows.length === 0) {
+      try {
+        const parsed = JSON.parse(legacyGlup);
+        if (Array.isArray(parsed)) {
+          const withId = parsed.map((row: any) => ({ ...row, id: row.id || `glup_${Date.now()}_${Math.random().toString(36).slice(2, 8)}` }));
+          setGlupRows(withId);
+        }
+      } catch {}
+      localStorage.removeItem('salaJarabeGlupRows');
+    }
+    if (legacyJusty && justyRows.length === 0) {
+      try {
+        const parsed = JSON.parse(legacyJusty);
+        if (Array.isArray(parsed)) {
+          const withId = parsed.map((row: any) => ({ ...row, id: row.id || `justy_${Date.now()}_${Math.random().toString(36).slice(2, 8)}` }));
+          setJustyRows(withId);
+        }
+      } catch {}
+      localStorage.removeItem('salaJarabeJustyRows');
+    }
+  }, []);
   const [lineaModalOpen, setLineaModalOpen] = useState(false);
-  const [selectedLineaRow, setSelectedLineaRow] = useState<{ index: number; type: 'glup' | 'justy' } | null>(null);
+  const [selectedLineaRow, setSelectedLineaRow] = useState<{ id: string; type: 'glup' | 'justy' } | null>(null);
   const [selectedLinea, setSelectedLinea] = useState<number | null>(null);
-  const [revisionEditingRow, setRevisionEditingRow] = useState<{ index: number; type: 'glup' | 'justy'; scope: 'privileged' | 'public' } | null>(null);
+  const [revisionEditingRow, setRevisionEditingRow] = useState<{ id: string; type: 'glup' | 'justy'; scope: 'privileged' | 'public' } | null>(null);
   const [revisionEditForm, setRevisionEditForm] = useState<{ fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string } | null>(null);
   const isRevisionUser = user?.id === 'maria.mds' || user?.id === 'alex.mds' || user?.id === 'demon';
   const showRevisionColumn = isRevisionUser || (revisionEditingRow && revisionEditingRow.scope === 'public');
-  const updateRow = (type: 'glup' | 'justy', index: number, data: { fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string }) => {
+  const updateRow = (type: 'glup' | 'justy', id: string, data: { fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string }) => {
     if (type === 'glup') {
-      setGlupRows((prev) => prev.map((row, i) => i === index ? { ...row, ...data } : row));
+      setGlupRows((prev) => prev.map((row) => row.id === id ? { ...row, ...data } : row));
     } else {
-      setJustyRows((prev) => prev.map((row, i) => i === index ? { ...row, ...data } : row));
+      setJustyRows((prev) => prev.map((row) => row.id === id ? { ...row, ...data } : row));
     }
   };
-  const deleteRow = (type: 'glup' | 'justy', index: number) => {
+  const deleteRow = (type: 'glup' | 'justy', id: string) => {
     if (type === 'glup') {
-      setGlupRows((prev) => prev.filter((_, i) => i !== index));
+      setGlupRows((prev) => prev.filter((row) => row.id !== id));
     } else {
-      setJustyRows((prev) => prev.filter((_, i) => i !== index));
+      setJustyRows((prev) => prev.filter((row) => row.id !== id));
     }
-    if (revisionEditingRow && revisionEditingRow.type === type && revisionEditingRow.index === index) {
+    if (revisionEditingRow && revisionEditingRow.type === type && revisionEditingRow.id === id) {
       setRevisionEditingRow(null);
       setRevisionEditForm(null);
     }
@@ -3187,18 +3216,18 @@ export default function PlannerPage() {
                                      </div>
                                      <DialogFooter>
                                        <Button variant="outline" onClick={() => setLineaModalOpen(false)} className="rounded-xl">Cancelar</Button>
-                                       <Button onClick={() => {
-                                         if (!selectedLineaRow || selectedLinea === null) return;
-                                         const { index, type } = selectedLineaRow;
-                                         if (type === 'glup') {
-                                           setGlupRows((prev) => prev.map((row, i) => i === index ? { ...row, estado: 'enviado a linea', enviarALinea: selectedLinea } : row));
-                                         } else {
-                                           setJustyRows((prev) => prev.map((row, i) => i === index ? { ...row, estado: 'enviado a linea', enviarALinea: selectedLinea } : row));
-                                         }
-                                         setLineaModalOpen(false);
-                                         setSelectedLineaRow(null);
-                                         setSelectedLinea(null);
-                                       }} className="rounded-xl bg-blue-600 text-white hover:bg-blue-700">Confirmar</Button>
+                                        <Button onClick={() => {
+                                          if (!selectedLineaRow || selectedLinea === null) return;
+                                          const { id, type } = selectedLineaRow;
+                                          if (type === 'glup') {
+                                            setGlupRows((prev) => prev.map((row) => row.id === id ? { ...row, estado: 'enviado a linea', enviarALinea: selectedLinea } : row));
+                                          } else {
+                                            setJustyRows((prev) => prev.map((row) => row.id === id ? { ...row, estado: 'enviado a linea', enviarALinea: selectedLinea } : row));
+                                          }
+                                          setLineaModalOpen(false);
+                                          setSelectedLineaRow(null);
+                                          setSelectedLinea(null);
+                                        }} className="rounded-xl bg-blue-600 text-white hover:bg-blue-700">Confirmar</Button>
                                      </DialogFooter>
                                    </DialogContent>
                                  </Dialog>
@@ -5432,7 +5461,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                     {filteredGlupRows.map((row, idx) => (
                                                       <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
                                                         {(() => {
-                                                          const isEditing = revisionEditingRow && revisionEditingRow.type === 'glup' && revisionEditingRow.index === idx;
+                                                           const isEditing = revisionEditingRow && revisionEditingRow.type === 'glup' && revisionEditingRow.id === row.id;
                                                           const form = isEditing ? revisionEditForm : null;
                                                           return (
                                                             <>
@@ -5460,7 +5489,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.estado}</td>
                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                  {row.enviarALinea ? `Linea ${row.enviarALinea}` : (
-                                                                   <button onClick={() => { setSelectedLineaRow({ index: idx, type: 'glup' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
+                                                                    <button onClick={() => { setSelectedLineaRow({ id: row.id, type: 'glup' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
                                                                  )}
                                                                </td>
                                                                {showRevisionColumn && (
@@ -5470,7 +5499,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                        return (
                                                                          <button onClick={() => {
                                                                            if (!revisionEditForm) return;
-                                                                           updateRow('glup', idx, revisionEditForm);
+                                                                            updateRow('glup', row.id, revisionEditForm);
                                                                            setRevisionEditingRow(null);
                                                                            setRevisionEditForm(null);
                                                                          }} className="h-8 px-3 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
@@ -5479,9 +5508,9 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                      if (isRevisionUser) {
                                                                        return (
                                                                          <div className="flex items-center gap-1">
-                                                                           <button onClick={() => deleteRow('glup', idx)} className="h-8 px-3 rounded-full bg-red-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-red-700 transition-none">Eliminar</button>
-                                                                            <button onClick={() => { setRevisionEditingRow({ index: idx, type: 'glup', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
-                                                                           <button onClick={() => { setRevisionEditingRow({ index: idx, type: 'glup', scope: 'public' }); setRevisionEditForm(null); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
+                                                                            <button onClick={() => deleteRow('glup', row.id)} className="h-8 px-3 rounded-full bg-red-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-red-700 transition-none">Eliminar</button>
+                                                                             <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'glup', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
+                                                                            <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'glup', scope: 'public' }); setRevisionEditForm(null); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
                                                                          </div>
                                                                        );
                                                                      }
@@ -5520,7 +5549,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                      {filteredJustyRows.map((row, idx) => (
                                                        <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
                                                          {(() => {
-                                                           const isEditing = revisionEditingRow && revisionEditingRow.type === 'justy' && revisionEditingRow.index === idx;
+                                                            const isEditing = revisionEditingRow && revisionEditingRow.type === 'justy' && revisionEditingRow.id === row.id;
                                                            const form = isEditing ? revisionEditForm : null;
                                                            return (
                                                              <>
@@ -5548,7 +5577,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.estado}</td>
                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                   {row.enviarALinea ? `Linea ${row.enviarALinea}` : (
-                                                                    <button onClick={() => { setSelectedLineaRow({ index: idx, type: 'justy' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
+                                                                     <button onClick={() => { setSelectedLineaRow({ id: row.id, type: 'justy' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
                                                                   )}
                                                                 </td>
                                                                 {showRevisionColumn && (
@@ -5558,7 +5587,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                         return (
                                                                           <button onClick={() => {
                                                                             if (!revisionEditForm) return;
-                                                                            updateRow('justy', idx, revisionEditForm);
+                                                                            updateRow('justy', row.id, revisionEditForm);
                                                                             setRevisionEditingRow(null);
                                                                             setRevisionEditForm(null);
                                                                           }} className="h-8 px-3 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
@@ -5567,9 +5596,9 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                       if (isRevisionUser) {
                                                                         return (
                                                                           <div className="flex items-center gap-1">
-                                                                            <button onClick={() => deleteRow('justy', idx)} className="h-8 px-3 rounded-full bg-red-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-red-700 transition-none">Eliminar</button>
-                                                                            <button onClick={() => { setRevisionEditingRow({ index: idx, type: 'justy', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
-                                                                            <button onClick={() => { setRevisionEditingRow({ index: idx, type: 'justy', scope: 'public' }); setRevisionEditForm(null); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
+                                                                             <button onClick={() => deleteRow('justy', row.id)} className="h-8 px-3 rounded-full bg-red-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-red-700 transition-none">Eliminar</button>
+                                                                             <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'justy', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
+                                                                             <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'justy', scope: 'public' }); setRevisionEditForm(null); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
                                                                           </div>
                                                                         );
                                                                       }
@@ -5664,19 +5693,19 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                         </div>
                                         <div className="flex justify-end gap-2 mt-2">
                                           <button onClick={() => setSalaJarabeNuevaTareaOpen(false)} className="h-9 px-4 rounded-full bg-slate-100 text-slate-700 font-black uppercase text-[10px] tracking-widest hover:bg-slate-200 transition-none">Cancelar</button>
-                                           <button onClick={() => {
-                                             const sabor = nuevaTarea.sabor.toUpperCase();
-                                             const row = { ...nuevaTarea, estado: 'preparado' as const, enviarALinea: null };
-                                             if (sabor.startsWith('GLUP')) {
-                                               setGlupRows((prev) => [...prev, row]);
-                                               setPreparacionTab('glup');
-                                             } else if (sabor.startsWith('JUSTY') || sabor.startsWith('VITA TEA')) {
-                                               setJustyRows((prev) => [...prev, row]);
-                                               setPreparacionTab('justy');
-                                             }
-                                             setSalaJarabeNuevaTareaOpen(false);
-                                              setNuevaTarea({ fecha: '', hora: '', numeroTanques: '', sala: '', sabor: '', litros: '', ubb: '' });
-                                           }} className="h-9 px-4 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
+                                            <button onClick={() => {
+                                              const sabor = nuevaTarea.sabor.toUpperCase();
+                                              const row = { id: `row_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, ...nuevaTarea, estado: 'preparado' as const, enviarALinea: null };
+                                              if (sabor.startsWith('GLUP')) {
+                                                setGlupRows((prev) => [...prev, row]);
+                                                setPreparacionTab('glup');
+                                              } else if (sabor.startsWith('JUSTY') || sabor.startsWith('VITA TEA')) {
+                                                setJustyRows((prev) => [...prev, row]);
+                                                setPreparacionTab('justy');
+                                              }
+                                              setSalaJarabeNuevaTareaOpen(false);
+                                               setNuevaTarea({ fecha: '', hora: '', numeroTanques: '', sala: '', sabor: '', litros: '', ubb: '' });
+                                            }} className="h-9 px-4 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
                                         </div>
                                       </div>
                                     </div>
