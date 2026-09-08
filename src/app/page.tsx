@@ -3217,42 +3217,12 @@ export default function PlannerPage() {
                          >
                            <Trash2 className="h-3.5 w-3.5" />
                            Limpiar Plan
-                         </button>
-                                    </div>
-                                 )}
-                                   <Dialog open={lineaModalOpen} onOpenChange={setLineaModalOpen}>
-                                    <DialogContent className="sm:max-w-sm z-[9999]">
-                                      <DialogHeader>
-                                        <DialogTitle>Seleccionar Linea a Enviar</DialogTitle>
-                                        <DialogDescription>Selecciona la linea a la que deseas enviar el jarabe.</DialogDescription>
-                                      </DialogHeader>
-                                      <div className="py-4">
-                                        <div className="grid grid-cols-2 gap-2">
-                                          {[1, 2, 3, 4, 5, 6, 7].map((n) => (
-                                            <Button key={n} onClick={() => setSelectedLinea(n)} className="h-10 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Linea {n}</Button>
-                                          ))}
-                                        </div>
+                          </button>
                                       </div>
-                                      <DialogFooter>
-                                        <Button variant="outline" onClick={() => setLineaModalOpen(false)} className="rounded-xl">Cancelar</Button>
-                                         <Button onClick={() => {
-                                           if (!selectedLineaRow || selectedLinea === null) return;
-                                           const { id, type } = selectedLineaRow;
-                                           if (type === 'glup') {
-                                             setGlupRows((prev) => prev.map((row) => row.id === id ? { ...row, estado: 'enviado a linea', enviarALinea: selectedLinea } : row));
-                                           } else {
-                                             setJustyRows((prev) => prev.map((row) => row.id === id ? { ...row, estado: 'enviado a linea', enviarALinea: selectedLinea } : row));
-                                           }
-                                           setLineaModalOpen(false);
-                                           setSelectedLineaRow(null);
-                                           setSelectedLinea(null);
-                                         }} className="rounded-xl bg-blue-600 text-white hover:bg-blue-700">Confirmar</Button>
-                                      </DialogFooter>
-                                    </DialogContent>
-                                  </Dialog>
-                              </div>
-                            )}
-                              {activeModule === 'management' && hasAccess(user.id, 'management') && (
+                                   )}
+                                 </div>
+                               )}
+                                {activeModule === 'management' && hasAccess(user.id, 'management') && (
                    <>
                       {activeTab === 'admin-report' && (
                       <AdminReportTool 
@@ -7214,6 +7184,37 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
               }} className="rounded-xl bg-slate-800 text-white hover:bg-slate-900">
                 Guardar
               </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={lineaModalOpen} onOpenChange={setLineaModalOpen}>
+          <DialogContent className="sm:max-w-sm z-[9999]">
+            <DialogHeader>
+              <DialogTitle>Seleccionar Linea a Enviar</DialogTitle>
+              <DialogDescription>Selecciona la linea a la que deseas enviar el jarabe.</DialogDescription>
+            </DialogHeader>
+            <div className="py-4">
+              <div className="grid grid-cols-2 gap-2">
+                {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+                  <Button key={n} onClick={() => setSelectedLinea(n)} className="h-10 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Linea {n}</Button>
+                ))}
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setLineaModalOpen(false)} className="rounded-xl">Cancelar</Button>
+              <Button onClick={() => {
+                if (!selectedLineaRow || selectedLinea === null) return;
+                const { id, type } = selectedLineaRow;
+                if (type === 'glup') {
+                  setGlupRows((prev) => prev.map((row) => row.id === id ? { ...row, estado: 'enviado a linea', enviarALinea: selectedLinea } : row));
+                } else {
+                  setJustyRows((prev) => prev.map((row) => row.id === id ? { ...row, estado: 'enviado a linea', enviarALinea: selectedLinea } : row));
+                }
+                setLineaModalOpen(false);
+                setSelectedLineaRow(null);
+                setSelectedLinea(null);
+              }} className="rounded-xl bg-blue-600 text-white hover:bg-blue-700">Confirmar</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>

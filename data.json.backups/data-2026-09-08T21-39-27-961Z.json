@@ -9661,7 +9661,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-08T19:10:01.977Z"
+    "updatedAt": "2026-09-08T21:28:27.831Z"
   },
   "ordenesSap": [
     {
@@ -17034,7 +17034,7 @@
           "ticket1": "17842",
           "cajas1": 2400,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 320,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -17065,7 +17065,7 @@
           "ticket1": "16001",
           "cajas1": 4000,
           "ticket2": "",
-          "cajas2": 560,
+          "cajas2": 1680,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -17096,7 +17096,7 @@
           "ticket1": "17954",
           "cajas1": 3200,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 800,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -17127,7 +17127,7 @@
           "ticket1": "17890",
           "cajas1": 4160,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 800,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -17158,7 +17158,7 @@
           "ticket1": "17917",
           "cajas1": 1250,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 150,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -17189,7 +17189,7 @@
           "ticket1": "17740",
           "cajas1": 1760,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 160,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -117553,8 +117553,8 @@
         "sabor": "GLUP FRESH",
         "litros": "17250",
         "ubb": "6",
-        "estado": "preparado",
-        "enviarALinea": null,
+        "estado": "enviado a linea",
+        "enviarALinea": 1,
         "editando": false,
         "editandoPor": "alex.mds"
       }
