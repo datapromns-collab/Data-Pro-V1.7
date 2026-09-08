@@ -117555,7 +117555,7 @@
         "ubb": "6",
         "estado": "preparado",
         "enviarALinea": null,
-        "editando": false,
+        "editando": true,
         "editandoPor": "alex.mds"
       }
     ]
