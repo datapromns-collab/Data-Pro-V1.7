@@ -9523,12 +9523,12 @@
             "name": "GLUP KOLITA",
             "lineId": "6",
             "loadPerHour": 1200,
-            "quantity": 17790,
-            "durationHours": 14.825,
+            "quantity": 35580,
+            "durationHours": 29.65,
             "presentation": "0.4Lts",
-            "tanks": 1,
+            "tanks": 2,
             "startTime": "2026-09-08T22:30:00.000Z",
-            "endTime": "2026-09-09T13:19:30.000Z",
+            "endTime": "2026-09-10T04:09:00.000Z",
             "id": "jcm57h9kd",
             "color": "#47CCB0"
           },
@@ -9579,6 +9579,17 @@
             "endTime": "2026-09-09T17:20:27.428Z",
             "id": "8qk7sr2hd",
             "color": "#587593"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "6",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-09-10T04:09:00.000Z",
+            "endTime": "2026-09-10T06:09:00.000Z",
+            "id": "pss3k89nt",
+            "color": "#ef4444"
           }
         ],
         "realProduction": {},
@@ -9613,7 +9624,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-08T12:50:10.176Z"
+    "updatedAt": "2026-09-08T13:20:51.781Z"
   },
   "ordenesSap": [
     {
@@ -16949,6 +16960,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 12324
+        },
+        {
+          "fechaInicio": "2026-09-08",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -17062,6 +17084,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 14000
+        },
+        {
+          "fechaInicio": "2026-09-08",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -17082,6 +17115,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 4650
+        },
+        {
+          "fechaInicio": "2026-09-08",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -17102,6 +17146,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 3520
+        },
+        {
+          "fechaInicio": "2026-09-08",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -29436,7 +29491,8 @@
         "2026-08-24|2026-08": 1353500.36,
         "2026-08-31|2026-08": 891165.86,
         "2026-07-27|2026-07": 121494.94,
-        "2026-08-31|2026-09": 891165.86
+        "2026-08-31|2026-09": 891165.86,
+        "2026-09-01|2026-09": 891165.86
       }
     },
     "seguimiento-etiquetadora": {

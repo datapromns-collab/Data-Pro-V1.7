@@ -911,17 +911,19 @@ const DIAS_SEMANA = ['LUNES', 'MARTES', 'MIÉRCOLES', 'JUEVES', 'VIERNES', 'SÁB
 
 function REstandarSemTable({ selectedFecha, costoAzucar, onPrintWeeklyStandard, onFisicoSemanal }: { selectedFecha?: Date; costoAzucar?: number; onPrintWeeklyStandard?: (html: string, filename?: string) => void; onFisicoSemanal?: (weekStart: Date, monthRef: Date, fisico: number) => void }) {
   const { data, setData } = useJarabes();
-  const weekDays = useMemo(() => (selectedFecha ? getWeekDays(selectedFecha) : []), [selectedFecha]);
+  const weekDays = useMemo(() => {
+    if (!selectedFecha) return [];
+    return getWeekDays(selectedFecha).filter(d => isSameMonth(d, selectedFecha!));
+  }, [selectedFecha]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const rows = useMemo(() => {
-    return weekDays.map((fecha, idx) => {
-      // Modo Estándar: kg/saco fijo = 50, igual que la sección "Estándar" (ResumenTable)
+    return weekDays.map((fecha) => {
       const resumen = computeResumenForDateData(data, fecha, 50);
       const merma = costoAzucar ? Math.round(resumen.diferencia * costoAzucar * 100) / 100 : 0;
       return {
         fecha: format(fecha, 'd/M/yyyy'),
-        dia: DIAS_SEMANA[idx],
+        dia: format(fecha, 'EEEE', { locale: es }).toUpperCase(),
         estandar: resumen.estandar,
         fisico: resumen.fisico,
         diferencia: resumen.diferencia,
@@ -956,13 +958,13 @@ function REstandarSemTable({ selectedFecha, costoAzucar, onPrintWeeklyStandard, 
     onFisicoSemanal?.(weekDays[0], selectedFecha, totals.fisico);
   }, [weekDays, selectedFecha, totals.fisico, isEmpty, onFisicoSemanal]);
 
-  const semanaNumero = selectedFecha ? format(selectedFecha, 'w', { locale: es }) : '';
+  const semanaNumero = weekDays.length > 0 ? format(weekDays[0], 'w', { locale: es }) : '';
   const mesNombre = selectedFecha ? format(selectedFecha, 'MMMM', { locale: es }) : '';
 
   const handlePrint = () => {
     if (!containerRef.current || !onPrintWeeklyStandard) return;
     const html = containerRef.current.innerHTML;
-    const semanaNumero = selectedFecha ? format(selectedFecha, 'w', { locale: es }) : '';
+    const semanaNumero = weekDays.length > 0 ? format(weekDays[0], 'w', { locale: es }) : '';
     const filename = `Resumen de Azucar (Estandar) Semanal - Semana ${semanaNumero}`;
     onPrintWeeklyStandard(html, filename);
   };
@@ -1093,17 +1095,20 @@ function REstandarSemTable({ selectedFecha, costoAzucar, onPrintWeeklyStandard, 
 
 function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCounter, onPrintWeeklyPromedio }: { selectedFecha?: Date; costoAzucar?: number; realKgPerSack?: number; updateCounter?: number; onPrintWeeklyPromedio?: (html: string, filename?: string) => void }) {
   const { data } = useJarabes();
-  const weekDays = useMemo(() => (selectedFecha ? getWeekDays(selectedFecha) : []), [selectedFecha]);
+  const weekDays = useMemo(() => {
+    if (!selectedFecha) return [];
+    return getWeekDays(selectedFecha).filter(d => isSameMonth(d, selectedFecha!));
+  }, [selectedFecha]);
   const containerRef = useRef<HTMLDivElement>(null);
 
   const rows = useMemo(() => {
-    return weekDays.map((fecha, idx) => {
+    return weekDays.map((fecha) => {
       const dayKgPerSack = getRealKgPerSackForDateData(data, fecha);
       const resumen = computeResumenForDateData(data, fecha, dayKgPerSack);
       const merma = costoAzucar ? Math.round(resumen.diferencia * costoAzucar * 100) / 100 : 0;
       return {
         fecha: format(fecha, 'd/M/yyyy'),
-        dia: DIAS_SEMANA[idx],
+        dia: format(fecha, 'EEEE', { locale: es }).toUpperCase(),
         estandar: resumen.estandar,
         fisico: resumen.fisico,
         diferencia: resumen.diferencia,
@@ -1130,13 +1135,13 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
 
   const isEmpty = weekDays.length === 0;
 
-  const semanaNumero = selectedFecha ? format(selectedFecha, 'w', { locale: es }) : '';
+  const semanaNumero = weekDays.length > 0 ? format(weekDays[0], 'w', { locale: es }) : '';
   const mesNombre = selectedFecha ? format(selectedFecha, 'MMMM', { locale: es }) : '';
 
   const handlePrint = () => {
     if (!containerRef.current || !onPrintWeeklyPromedio) return;
     const html = containerRef.current.innerHTML;
-    const semanaNumero = selectedFecha ? format(selectedFecha, 'w', { locale: es }) : '';
+    const semanaNumero = weekDays.length > 0 ? format(weekDays[0], 'w', { locale: es }) : '';
     const filename = `Resumen de Azucar (Promedio) Semanal - Semana ${semanaNumero}`;
     onPrintWeeklyPromedio(html, filename);
   };
@@ -1219,7 +1224,7 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
             <tbody>
               <tr className="bg-yellow-100">
                 <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700" colSpan={2}>
-                  TOTAL SEMANA {selectedFecha ? format(selectedFecha, 'I', { locale: es }) : ''}
+                  TOTAL SEMANA {semanaNumero}
                 </td>
                 <td className="border border-yellow-200 px-2 py-1 text-[10px] font-black text-slate-700">
                   {totals.estandar.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
@@ -1760,18 +1765,26 @@ function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklySta
                       </TabsTrigger>
                     </TabsList>
                   </div>
-                  <input
-                    type="date"
-                    value={selectedFecha ? format(selectedFecha, 'yyyy-MM-dd') : ''}
-                    onChange={(e) => {
-                      const raw = e.target.value;
-                      if (!raw) return;
-                      const [year, month, day] = raw.split('-').map(Number);
-                      const date = new Date(year, month - 1, day);
-                      setSelectedFecha(date);
-                    }}
-                    className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
-                  />
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="month"
+                      value={mensualMes}
+                      onChange={(e) => handleMensualMesChange(e.target.value)}
+                      className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                    />
+                    <input
+                      type="date"
+                      value={selectedFecha ? format(selectedFecha, 'yyyy-MM-dd') : ''}
+                      onChange={(e) => {
+                        const raw = e.target.value;
+                        if (!raw) return;
+                        const [year, month, day] = raw.split('-').map(Number);
+                        const date = new Date(year, month - 1, day);
+                        setSelectedFecha(date);
+                      }}
+                      className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                    />
+                  </div>
                 </div>
 
                 <TabsContent value="estandar" className="m-0 animate-in fade-in-50 duration-500">
@@ -1835,14 +1848,6 @@ function JarabesModuleInner({ onPrintStandard, onPrintPromedio, onPrintWeeklySta
                     </TabsContent>
 
                     <TabsContent value="mensual" className="m-0 animate-in fade-in-50 duration-500">
-                      <div className="flex items-center justify-between gap-3 w-full mb-6 no-print">
-                        <input
-                          type="month"
-                          value={mensualMes}
-                          onChange={(e) => handleMensualMesChange(e.target.value)}
-                          className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
-                        />
-                      </div>
                       <Tabs value={activeResumenMensualTab} onValueChange={setActiveResumenMensualTab} defaultValue="r-estandar-mes" className="w-full">
                         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
                           <TabsList className="bg-transparent h-auto p-0">
