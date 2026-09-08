@@ -9661,7 +9661,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-08T21:28:27.831Z"
+    "updatedAt": "2026-09-08T21:57:57.482Z"
   },
   "ordenesSap": [
     {
@@ -17002,10 +17002,10 @@
           "fechaInicio": "2026-09-08",
           "ticket1": "17788",
           "cajas1": 3276,
-          "ticket2": "",
+          "ticket2": "CREADAS",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 320,
           "ticket4": "",
           "cajas4": 0
         }
@@ -117543,22 +117543,7 @@
       "2026-09-06-LP20-1": "",
       "2026-09-06-LP20-2": ""
     },
-    "sala-jarabe-glup": [
-      {
-        "id": "row_1788897622488_5tss36",
-        "fecha": "2026-09-08",
-        "hora": "16:00",
-        "numeroTanques": "1",
-        "sala": "1",
-        "sabor": "GLUP FRESH",
-        "litros": "17250",
-        "ubb": "6",
-        "estado": "enviado a linea",
-        "enviarALinea": 1,
-        "editando": false,
-        "editandoPor": "alex.mds"
-      }
-    ]
+    "sala-jarabe-glup": []
   },
   "cacheVersion": 0,
   "deletedIds": {
@@ -117652,7 +117637,8 @@
     "ptab-insumos": {},
     "sala-jarabe-glup": {
       "*": [
-        "row_1788897287273_vh896t"
+        "row_1788897287273_vh896t",
+        "row_1788897622488_5tss36"
       ]
     }
   },
