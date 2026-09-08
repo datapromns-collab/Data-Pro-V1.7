@@ -117479,20 +117479,7 @@
       "2026-09-06-LP20-1": "",
       "2026-09-06-LP20-2": ""
     },
-    "sala-jarabe-glup": [
-      {
-        "id": "row_1788897287273_vh896t",
-        "fecha": "2026-09-07",
-        "hora": "15:54",
-        "numeroTanques": "1",
-        "sala": "1",
-        "sabor": "GLUP COLA",
-        "litros": "17250",
-        "ubb": "6",
-        "estado": "preparado",
-        "enviarALinea": null
-      }
-    ]
+    "sala-jarabe-glup": []
   },
   "cacheVersion": 0,
   "deletedIds": {
@@ -117585,7 +117572,9 @@
     "insumos-agua": {},
     "ptab-insumos": {},
     "sala-jarabe-glup": {
-      "*": []
+      "*": [
+        "row_1788897287273_vh896t"
+      ]
     }
   },
   "_deletedOrdenesSapIds": [
