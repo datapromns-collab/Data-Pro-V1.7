@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-07T00:00:00.000",
+      "weekStartDate": "2026-08-03T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -9270,12 +9270,12 @@
             "name": "GLUP COLA",
             "lineId": "3",
             "loadPerHour": 2800,
-            "quantity": 134400,
-            "durationHours": 48,
+            "quantity": 133000,
+            "durationHours": 47.5,
             "presentation": "2Lts",
-            "tanks": 15.58,
+            "tanks": 15.42,
             "startTime": "2026-09-07T11:00:00.000Z",
-            "endTime": "2026-09-09T11:00:00.000Z",
+            "endTime": "2026-09-09T10:30:00.000Z",
             "id": "qzwewupkc",
             "color": "#10b981"
           },
@@ -9426,78 +9426,6 @@
             "color": "#ec4899"
           },
           {
-            "name": "GLUP COLA",
-            "lineId": "6",
-            "loadPerHour": 1200,
-            "quantity": 86400,
-            "durationHours": 72,
-            "presentation": "0.4Lts",
-            "tanks": 5.01,
-            "startTime": "2026-09-07T11:00:00.000Z",
-            "endTime": "2026-09-10T11:00:00.000Z",
-            "id": "l6p1ccu6x",
-            "color": "#ec4899"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "6",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-09-10T11:00:00.000Z",
-            "endTime": "2026-09-10T13:00:00.000Z",
-            "id": "fru37nxno",
-            "color": "#10b981"
-          },
-          {
-            "name": "GLUP FRESH",
-            "lineId": "6",
-            "loadPerHour": 1200,
-            "quantity": 25200,
-            "durationHours": 21,
-            "presentation": "0.4Lts",
-            "tanks": 1.46,
-            "startTime": "2026-09-10T13:00:00.000Z",
-            "endTime": "2026-09-11T10:00:00.000Z",
-            "id": "8s5gzaps8",
-            "color": "#587593"
-          },
-          {
-            "name": "MTTO",
-            "lineId": "6",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 10.5,
-            "startTime": "2026-09-11T10:00:00.000Z",
-            "endTime": "2026-09-11T20:30:00.000Z",
-            "id": "zjmynmpn0",
-            "color": "#ec4899"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "6",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-09-11T20:30:00.000Z",
-            "endTime": "2026-09-11T22:30:00.000Z",
-            "id": "pifo8dyxu",
-            "color": "#f59e0b"
-          },
-          {
-            "name": "GLUP FRESH",
-            "lineId": "6",
-            "loadPerHour": 1200,
-            "quantity": 9315,
-            "durationHours": 7.7625,
-            "presentation": "0.4Lts",
-            "tanks": 0.54,
-            "startTime": "2026-09-11T22:30:00.000Z",
-            "endTime": "2026-09-12T06:15:45.000Z",
-            "id": "mxr7n12nb",
-            "color": "#587593"
-          },
-          {
             "name": "GLUP FRESH",
             "lineId": "7",
             "loadPerHour": 2500,
@@ -9544,6 +9472,100 @@
             "endTime": "2026-09-11T06:18:00.000Z",
             "id": "8onbxqamk",
             "color": "#587593"
+          },
+          {
+            "name": "MTTO",
+            "lineId": "6",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 9.5,
+            "startTime": "2026-09-07T11:00:00.000Z",
+            "endTime": "2026-09-07T20:30:00.000Z",
+            "id": "vyj85f9fg",
+            "color": "#587593"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "6",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-09-07T20:30:00.000Z",
+            "endTime": "2026-09-07T22:30:00.000Z",
+            "id": "abk7ogu3a",
+            "color": "#ec4899"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "6",
+            "loadPerHour": 1200,
+            "quantity": 28200,
+            "durationHours": 23.5,
+            "presentation": "2Lts",
+            "tanks": 3.27,
+            "startTime": "2026-09-07T22:30:00.000Z",
+            "endTime": "2026-09-08T22:00:00.000Z",
+            "id": "diabk3w7l",
+            "color": "#587593"
+          },
+          {
+            "name": "CS",
+            "lineId": "6",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-09-08T22:00:00.000Z",
+            "endTime": "2026-09-08T22:30:00.000Z",
+            "id": "y6tkv5xla",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "6",
+            "loadPerHour": 1200,
+            "quantity": 17790,
+            "durationHours": 14.825,
+            "presentation": "0.4Lts",
+            "tanks": 1,
+            "startTime": "2026-09-08T22:30:00.000Z",
+            "endTime": "2026-09-09T13:19:30.000Z",
+            "id": "jcm57h9kd",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "CS",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-09-09T10:30:00.000Z",
+            "endTime": "2026-09-09T11:00:00.000Z",
+            "id": "j2tplatir",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "GLUP MANZANA VERDE",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 8265,
+            "durationHours": 2.9517857142857142,
+            "presentation": "2Lts",
+            "tanks": 1,
+            "startTime": "2026-09-09T11:00:00.000Z",
+            "endTime": "2026-09-09T13:57:06.428Z",
+            "id": "syj9ms8sx",
+            "color": "#ef4444"
+          },
+          {
+            "name": "CS",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-09-09T13:58:00.000Z",
+            "endTime": "2026-09-09T14:28:00.000Z",
+            "id": "b4bg1zqwk",
+            "color": "#587593"
           }
         ],
         "realProduction": {},
@@ -9566,13 +9588,19 @@
         "deletedTaskIds": [
           "whwnl8fzu",
           "328mm1fnq",
-          "iluqetbxq"
+          "iluqetbxq",
+          "mxr7n12nb",
+          "zjmynmpn0",
+          "fru37nxno",
+          "pifo8dyxu",
+          "8s5gzaps8",
+          "l6p1ccu6x"
         ]
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-08T12:23:17.545Z"
+    "updatedAt": "2026-09-08T12:48:41.754Z"
   },
   "ordenesSap": [
     {
@@ -16902,12 +16930,12 @@
           "fechaInicio": "2026-09-07",
           "ticket1": "17786",
           "cajas1": 1248,
-          "ticket2": "1",
+          "ticket2": "17787",
           "cajas2": 6162,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 12324
         }
       ]
     },
@@ -29362,7 +29390,7 @@
         "2026-08-24|2026-08": 1353500.36,
         "2026-08-31|2026-08": 891165.86,
         "2026-07-27|2026-07": 121494.94,
-        "2026-08-31|2026-09": 1072998.91
+        "2026-08-31|2026-09": 891165.86
       }
     },
     "seguimiento-etiquetadora": {
