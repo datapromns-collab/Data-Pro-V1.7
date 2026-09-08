@@ -110925,7 +110925,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1788898476622,
+        "id": 1788898276760.8223,
         "fechaOrden": "2026-09-07",
         "orden": "10080",
         "fechaEmision": "2026-09-07",
@@ -110948,6 +110948,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       }
     ],
@@ -117516,9 +117517,7 @@
         "litros": "17250",
         "ubb": "6",
         "estado": "preparado",
-        "enviarALinea": null,
-        "editando": false,
-        "editandoPor": "demon"
+        "enviarALinea": null
       }
     ]
   },

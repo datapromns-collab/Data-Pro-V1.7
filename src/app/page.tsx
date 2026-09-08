@@ -5615,11 +5615,12 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                     {(() => {
                                                                       if (isEditing) {
                                                                         return (
-                                                                          <button onClick={() => {
+                                                                           <button onClick={() => {
                                                                             if (!revisionEditForm) return;
                                                                             updateRow('justy', row.id, revisionEditForm);
                                                                             setRevisionEditingRow(null);
                                                                             setRevisionEditForm(null);
+                                                                            setJustyRows((prev) => prev.map((r) => r.id === row.id ? { ...r, editando: false, editandoPor: null } : r));
                                                                           }} className="h-8 px-3 rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Guardar</button>
                                                                         );
                                                                       }
