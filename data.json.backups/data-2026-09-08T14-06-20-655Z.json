@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-07T00:00:00.000",
+      "weekStartDate": "2026-08-03T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -9603,6 +9603,30 @@
             "endTime": "2026-09-12T09:00:00.000Z",
             "id": "nf1ffk0tl",
             "color": "#f59e0b"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-09-10T04:51:00.000Z",
+            "endTime": "2026-09-10T06:51:00.000Z",
+            "id": "8p52crwkb",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 140420,
+            "durationHours": 50.15,
+            "presentation": "2Lts",
+            "tanks": 16.28,
+            "startTime": "2026-09-10T06:51:00.000Z",
+            "endTime": "2026-09-12T09:00:00.000Z",
+            "id": "pfqnq9ap7",
+            "color": "#f59e0b"
           }
         ],
         "realProduction": {},
@@ -9637,7 +9661,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-08T13:21:21.424Z"
+    "updatedAt": "2026-09-08T13:22:41.617Z"
   },
   "ordenesSap": [
     {
@@ -99273,6 +99297,44 @@
         "observaciones": "",
         "usuario": "Luis Sanchez",
         "id": 1788719439183,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-07",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "CARLOS TORREALBA",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:00",
+        "finParada": "07:05",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "ETIQUETA NO TRANSFERIDA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1788876294725,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-07",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "CHRISTIAN CELIS",
+        "linea": "Línea 1",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:19",
+        "finParada": "07:23",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "FALLA EN REFRIGERACION DE MOLDE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1788876380372,
         "bloqueado": true
       }
     ],
