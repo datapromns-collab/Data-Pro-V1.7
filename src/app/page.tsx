@@ -1856,7 +1856,7 @@ export default function PlannerPage() {
   const [ordenFiltroLinea, setOrdenFiltroLinea] = useState('all');
   const [ordenBusqueda, setOrdenBusqueda] = useState('');
   const [paradaFiltroFecha, setParadaFiltroFecha] = useState('');
-  const [plantaFormData, setPlantaFormData] = useState({
+   const [plantaFormData, setPlantaFormData] = useState({
     fecha: format(new Date(), 'yyyy-MM-dd'),
     semana: getISOWeek(new Date()),
     turno: 'DIURNO',
@@ -1873,6 +1873,7 @@ export default function PlannerPage() {
     observaciones: '',
     usuario: '',
   });
+  const [tipoParadaProgramada, setTipoParadaProgramada] = useState('');
   const [ordenFormData, setOrdenFormData] = useState({
     fechaOrden: format(new Date(), 'yyyy-MM-dd'),
     orden: '',
@@ -1899,24 +1900,40 @@ export default function PlannerPage() {
     usuario: '',
   });
 
-  useEffect(() => {
-    if (paradasSubTab !== 'informes-operacionales') return;
-    if (!plantaFormData.inicioParada || !plantaFormData.finParada) {
-      setPlantaFormData(prev => ({ ...prev, totalMin: '' }));
-      return;
-    }
-    const toMin = (t: string) => {
-      const [h, m] = t.split(':').map(Number);
-      return h * 60 + m;
-    };
-    let inicio = toMin(plantaFormData.inicioParada);
-    let fin = toMin(plantaFormData.finParada);
-    let diff = fin - inicio;
-    if (diff < 0) diff += 1440;
-    setPlantaFormData(prev => ({ ...prev, totalMin: String(diff) }));
-  }, [plantaFormData.inicioParada, plantaFormData.finParada, paradasSubTab]);
+   useEffect(() => {
+     if (paradasSubTab !== 'informes-operacionales') return;
+     if (!plantaFormData.inicioParada || !plantaFormData.finParada) {
+       setPlantaFormData(prev => ({ ...prev, totalMin: '' }));
+       return;
+     }
+     const toMin = (t: string) => {
+       const [h, m] = t.split(':').map(Number);
+       return h * 60 + m;
+     };
+     let inicio = toMin(plantaFormData.inicioParada);
+     let fin = toMin(plantaFormData.finParada);
+     let diff = fin - inicio;
+     if (diff < 0) diff += 1440;
+     setPlantaFormData(prev => ({ ...prev, totalMin: String(diff) }));
+   }, [plantaFormData.inicioParada, plantaFormData.finParada, paradasSubTab]);
 
-  useEffect(() => {
+   useEffect(() => {
+     if (paradasSubTab !== 'informes-operacionales') return;
+     if (plantaFormData.tipoParada !== 'PROGRAMADA' || !tipoParadaProgramada || !plantaFormData.inicioParada) return;
+     const [h, m] = plantaFormData.inicioParada.split(':').map(Number);
+     let minutos = h * 60 + m;
+     if (tipoParadaProgramada === 'CIP 3 Pasos') minutos += 120;
+     else if (tipoParadaProgramada === 'Cambio de Sabor') minutos += 30;
+     else if (tipoParadaProgramada === 'Mtto') minutos += 570;
+     else if (tipoParadaProgramada === 'Inventario') minutos += 180;
+     minutos = minutos % 1440;
+     const hFin = Math.floor(minutos / 60);
+     const mFin = minutos % 60;
+     const nuevaFin = `${String(hFin).padStart(2, '0')}:${String(mFin).padStart(2, '0')}`;
+     setPlantaFormData(prev => ({ ...prev, finParada: nuevaFin }));
+   }, [tipoParadaProgramada, plantaFormData.tipoParada, plantaFormData.inicioParada, paradasSubTab]);
+
+   useEffect(() => {
     if (paradasSubTab !== 'informes-operacionales') return;
     if (!plantaFormData.fecha) return;
     const date = parseFecha(plantaFormData.fecha);
@@ -3203,41 +3220,36 @@ export default function PlannerPage() {
                          </button>
                                     </div>
                                  )}
-                                 <Dialog open={lineaModalOpen} onOpenChange={setLineaModalOpen}>
-                                   <DialogContent className="sm:max-w-sm">
-                                     <DialogHeader>
-                                       <DialogTitle>Enviar a Linea</DialogTitle>
-                                       <DialogDescription>Selecciona la linea a la que deseas enviar el jarabe.</DialogDescription>
-                                     </DialogHeader>
-                                     <div className="py-4">
-                                       <Select value={selectedLinea ? String(selectedLinea) : ''} onValueChange={(val) => setSelectedLinea(Number(val))}>
-                                         <SelectTrigger className="h-10">
-                                           <SelectValue placeholder="Seleccionar linea" />
-                                         </SelectTrigger>
-                                         <SelectContent>
-                                           {[1, 2, 3, 4, 5, 6, 7].map((n) => (
-                                             <SelectItem key={n} value={String(n)}>Linea {n}</SelectItem>
-                                           ))}
-                                         </SelectContent>
-                                       </Select>
-                                     </div>
-                                     <DialogFooter>
-                                       <Button variant="outline" onClick={() => setLineaModalOpen(false)} className="rounded-xl">Cancelar</Button>
-                                        <Button onClick={() => {
-                                          if (!selectedLineaRow || selectedLinea === null) return;
-                                          const { id, type } = selectedLineaRow;
-                                          if (type === 'glup') {
-                                            setGlupRows((prev) => prev.map((row) => row.id === id ? { ...row, estado: 'enviado a linea', enviarALinea: selectedLinea } : row));
-                                          } else {
-                                            setJustyRows((prev) => prev.map((row) => row.id === id ? { ...row, estado: 'enviado a linea', enviarALinea: selectedLinea } : row));
-                                          }
-                                          setLineaModalOpen(false);
-                                          setSelectedLineaRow(null);
-                                          setSelectedLinea(null);
-                                        }} className="rounded-xl bg-blue-600 text-white hover:bg-blue-700">Confirmar</Button>
-                                     </DialogFooter>
-                                   </DialogContent>
-                                 </Dialog>
+                                   <Dialog open={lineaModalOpen} onOpenChange={setLineaModalOpen}>
+                                    <DialogContent className="sm:max-w-sm z-[9999]">
+                                      <DialogHeader>
+                                        <DialogTitle>Seleccionar Linea a Enviar</DialogTitle>
+                                        <DialogDescription>Selecciona la linea a la que deseas enviar el jarabe.</DialogDescription>
+                                      </DialogHeader>
+                                      <div className="py-4">
+                                        <div className="grid grid-cols-2 gap-2">
+                                          {[1, 2, 3, 4, 5, 6, 7].map((n) => (
+                                            <Button key={n} onClick={() => setSelectedLinea(n)} className="h-10 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Linea {n}</Button>
+                                          ))}
+                                        </div>
+                                      </div>
+                                      <DialogFooter>
+                                        <Button variant="outline" onClick={() => setLineaModalOpen(false)} className="rounded-xl">Cancelar</Button>
+                                         <Button onClick={() => {
+                                           if (!selectedLineaRow || selectedLinea === null) return;
+                                           const { id, type } = selectedLineaRow;
+                                           if (type === 'glup') {
+                                             setGlupRows((prev) => prev.map((row) => row.id === id ? { ...row, estado: 'enviado a linea', enviarALinea: selectedLinea } : row));
+                                           } else {
+                                             setJustyRows((prev) => prev.map((row) => row.id === id ? { ...row, estado: 'enviado a linea', enviarALinea: selectedLinea } : row));
+                                           }
+                                           setLineaModalOpen(false);
+                                           setSelectedLineaRow(null);
+                                           setSelectedLinea(null);
+                                         }} className="rounded-xl bg-blue-600 text-white hover:bg-blue-700">Confirmar</Button>
+                                      </DialogFooter>
+                                    </DialogContent>
+                                  </Dialog>
                               </div>
                             )}
                               {activeModule === 'management' && hasAccess(user.id, 'management') && (
@@ -6836,7 +6848,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
            onWeekChange={setWeekStartDate}
          />
 
-        <Dialog open={isPlantaDialogOpen} onOpenChange={(open) => { setIsPlantaDialogOpen(open); if (!open) setErrorValidacion(''); }}>
+         <Dialog open={isPlantaDialogOpen} onOpenChange={(open) => { setIsPlantaDialogOpen(open); if (!open) { setErrorValidacion(''); setTipoParadaProgramada(''); } }}>
           <DialogContent className="sm:max-w-4xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle className="flex items-center gap-2">
@@ -6888,21 +6900,49 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                       {EQUIPOS_INFORME_OPERACIONAL.map((e) => <option key={e} value={e}>{e}</option>)}
                     </select>
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Tipo de Parada</label>
-                      <select value={plantaFormData.tipoParada} onChange={(e) => setPlantaFormData({...plantaFormData, tipoParada: e.target.value, equipo: EQUIPO_ACTIVO_POR_TIPO.has(e.target.value) ? plantaFormData.equipo : '', operador: EQUIPO_ACTIVO_POR_TIPO.has(e.target.value) ? plantaFormData.operador : ''})} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                   <div className="space-y-2">
+                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Tipo de Parada</label>
+                      <select value={plantaFormData.tipoParada} onChange={(e) => { setTipoParadaProgramada(''); setPlantaFormData({...plantaFormData, tipoParada: e.target.value, finParada: '', equipo: EQUIPO_ACTIVO_POR_TIPO.has(e.target.value) ? plantaFormData.equipo : '', operador: EQUIPO_ACTIVO_POR_TIPO.has(e.target.value) ? plantaFormData.operador : ''}); }} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
                         <option value="">—</option>
                         {TIPOS_PARADA_INFORME_OPERACIONAL.map((t) => <option key={t} value={t}>{t}</option>)}
                       </select>
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Parada</label>
-                    <Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={plantaFormData.inicioParada} onChange={onChangeHora((v) => setPlantaFormData({...plantaFormData, inicioParada: v}))} className="h-9 text-[11px]" />
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Parada</label>
-                    <Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={plantaFormData.finParada} onChange={onChangeHora((v) => setPlantaFormData({...plantaFormData, finParada: v}))} className="h-9 text-[11px]" />
-                  </div>
+                   </div>
+                    {plantaFormData.tipoParada === 'PROGRAMADA' && (
+                      <div className="space-y-2 animate-in fade-in slide-in-from-top-2">
+                        <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Tipo de Parada Programada</label>
+                        <select value={tipoParadaProgramada} onChange={(e) => { setTipoParadaProgramada(e.target.value); setPlantaFormData({...plantaFormData, finParada: ''}); }} className="h-9 text-[11px] border border-slate-200 rounded-md px-3 w-full">
+                          <option value="">—</option>
+                          <option value="CIP 3 Pasos">CIP 3 Pasos</option>
+                          <option value="Cambio de Sabor">Cambio de Sabor</option>
+                          <option value="Mtto">Mtto</option>
+                          <option value="Inventario">Inventario</option>
+                        </select>
+                      </div>
+                    )}
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Inicio Parada</label>
+                      <Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={plantaFormData.inicioParada} onChange={onChangeHora((v) => {
+                        const nuevaInicio = v;
+                        let nuevaFin = plantaFormData.finParada;
+                        if (plantaFormData.tipoParada === 'PROGRAMADA' && tipoParadaProgramada && nuevaInicio) {
+                          const [h, m] = nuevaInicio.split(':').map(Number);
+                          let minutos = h * 60 + m;
+                          if (tipoParadaProgramada === 'CIP 3 Pasos') minutos += 120;
+                          else if (tipoParadaProgramada === 'Cambio de Sabor') minutos += 30;
+                          else if (tipoParadaProgramada === 'Mtto') minutos += 570;
+                          else if (tipoParadaProgramada === 'Inventario') minutos += 180;
+                          minutos = minutos % 1440;
+                          const hFin = Math.floor(minutos / 60);
+                          const mFin = minutos % 60;
+                          nuevaFin = `${String(hFin).padStart(2, '0')}:${String(mFin).padStart(2, '0')}`;
+                        }
+                        setPlantaFormData({...plantaFormData, inicioParada: nuevaInicio, finParada: nuevaFin});
+                      })} className="h-9 text-[11px]" />
+                    </div>
+                    <div className="space-y-2">
+                      <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Fin Parada</label>
+                      <Input type="text" inputMode="numeric" placeholder="HH:MM" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false} maxLength={5} value={plantaFormData.finParada} onChange={plantaFormData.tipoParada === 'PROGRAMADA' && tipoParadaProgramada ? undefined : onChangeHora((v) => setPlantaFormData({...plantaFormData, finParada: v}))} disabled={plantaFormData.tipoParada === 'PROGRAMADA' && !!tipoParadaProgramada} className="h-9 text-[11px]" />
+                    </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-black uppercase text-slate-500 tracking-wider">Total (min)</label>
                     <Input type="number" value={plantaFormData.totalMin} readOnly className="h-9 text-[11px] bg-slate-100" />
