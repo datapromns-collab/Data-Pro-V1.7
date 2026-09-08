@@ -117481,12 +117481,13 @@
     },
     "sala-jarabe-glup": [
       {
+        "id": "row_1788897287273_vh896t",
         "fecha": "2026-09-07",
-        "hora": "15:48",
+        "hora": "15:54",
         "numeroTanques": "1",
         "sala": "1",
         "sabor": "GLUP COLA",
-        "litros": "17251",
+        "litros": "17250",
         "ubb": "6",
         "estado": "preparado",
         "enviarALinea": null
