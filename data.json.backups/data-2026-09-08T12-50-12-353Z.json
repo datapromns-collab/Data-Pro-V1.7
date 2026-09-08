@@ -9270,12 +9270,12 @@
             "name": "GLUP COLA",
             "lineId": "3",
             "loadPerHour": 2800,
-            "quantity": 134400,
-            "durationHours": 48,
+            "quantity": 133000,
+            "durationHours": 47.5,
             "presentation": "2Lts",
-            "tanks": 15.58,
+            "tanks": 15.42,
             "startTime": "2026-09-07T11:00:00.000Z",
-            "endTime": "2026-09-09T11:00:00.000Z",
+            "endTime": "2026-09-09T10:30:00.000Z",
             "id": "qzwewupkc",
             "color": "#10b981"
           },
@@ -9531,6 +9531,54 @@
             "endTime": "2026-09-09T13:19:30.000Z",
             "id": "jcm57h9kd",
             "color": "#47CCB0"
+          },
+          {
+            "name": "CS",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-09-09T10:30:00.000Z",
+            "endTime": "2026-09-09T11:00:00.000Z",
+            "id": "j2tplatir",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "GLUP MANZANA VERDE",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 8265,
+            "durationHours": 2.9517857142857142,
+            "presentation": "2Lts",
+            "tanks": 1,
+            "startTime": "2026-09-09T11:00:00.000Z",
+            "endTime": "2026-09-09T13:57:06.428Z",
+            "id": "syj9ms8sx",
+            "color": "#ef4444"
+          },
+          {
+            "name": "CS",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-09-09T13:58:00.000Z",
+            "endTime": "2026-09-09T14:28:00.000Z",
+            "id": "b4bg1zqwk",
+            "color": "#587593"
+          },
+          {
+            "name": "GLUP MANZANA ROJA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 8048,
+            "durationHours": 2.874285714285714,
+            "presentation": "2Lts",
+            "tanks": 1,
+            "startTime": "2026-09-09T14:28:00.000Z",
+            "endTime": "2026-09-09T17:20:27.428Z",
+            "id": "8qk7sr2hd",
+            "color": "#587593"
           }
         ],
         "realProduction": {},
@@ -9565,7 +9613,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-08T12:44:40.411Z"
+    "updatedAt": "2026-09-08T12:50:10.176Z"
   },
   "ordenesSap": [
     {
@@ -16921,6 +16969,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 9600
+        },
+        {
+          "fechaInicio": "2026-09-08",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -16941,6 +17000,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 10000
+        },
+        {
+          "fechaInicio": "2026-09-08",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -16961,6 +17031,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 9840
+        },
+        {
+          "fechaInicio": "2026-09-08",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },

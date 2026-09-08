@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-07T00:00:00.000",
+      "weekStartDate": "2026-08-03T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -9555,6 +9555,30 @@
             "endTime": "2026-09-09T13:57:06.428Z",
             "id": "syj9ms8sx",
             "color": "#ef4444"
+          },
+          {
+            "name": "CS",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-09-09T13:58:00.000Z",
+            "endTime": "2026-09-09T14:28:00.000Z",
+            "id": "b4bg1zqwk",
+            "color": "#587593"
+          },
+          {
+            "name": "GLUP MANZANA ROJA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 8048,
+            "durationHours": 2.874285714285714,
+            "presentation": "2Lts",
+            "tanks": 1,
+            "startTime": "2026-09-09T14:28:00.000Z",
+            "endTime": "2026-09-09T17:20:27.428Z",
+            "id": "8qk7sr2hd",
+            "color": "#587593"
           }
         ],
         "realProduction": {},
@@ -9589,7 +9613,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-08T12:48:27.162Z"
+    "updatedAt": "2026-09-08T12:50:06.029Z"
   },
   "ordenesSap": [
     {
@@ -16945,6 +16969,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 9600
+        },
+        {
+          "fechaInicio": "2026-09-08",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },

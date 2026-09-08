@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-07T00:00:00.000",
+      "weekStartDate": "2026-08-03T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -9566,6 +9566,19 @@
             "endTime": "2026-09-09T14:28:00.000Z",
             "id": "b4bg1zqwk",
             "color": "#587593"
+          },
+          {
+            "name": "GLUP MANZANA ROJA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 8048,
+            "durationHours": 2.874285714285714,
+            "presentation": "2Lts",
+            "tanks": 1,
+            "startTime": "2026-09-09T14:28:00.000Z",
+            "endTime": "2026-09-09T17:20:27.428Z",
+            "id": "8qk7sr2hd",
+            "color": "#587593"
           }
         ],
         "realProduction": {},
@@ -9600,7 +9613,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-08T12:48:37.931Z"
+    "updatedAt": "2026-09-08T12:49:40.408Z"
   },
   "ordenesSap": [
     {
