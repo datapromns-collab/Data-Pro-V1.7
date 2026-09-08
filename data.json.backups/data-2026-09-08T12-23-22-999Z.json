@@ -9572,7 +9572,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-07T21:50:16.569Z"
+    "updatedAt": "2026-09-08T12:23:22.725Z"
   },
   "ordenesSap": [
     {
@@ -16902,12 +16902,12 @@
           "fechaInicio": "2026-09-07",
           "ticket1": "17786",
           "cajas1": 1248,
-          "ticket2": "",
+          "ticket2": "17787",
           "cajas2": 6162,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 1
         }
       ]
     },
@@ -16921,13 +16921,13 @@
         {
           "fechaInicio": "2026-09-07",
           "ticket1": "17840",
-          "cajas1": 1,
-          "ticket2": "",
+          "cajas1": 10560,
+          "ticket2": "17841",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 9600
         }
       ]
     },
@@ -16942,12 +16942,12 @@
           "fechaInicio": "2026-09-07",
           "ticket1": "17649",
           "cajas1": 12320,
-          "ticket2": "",
+          "ticket2": "17650",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 10000
         }
       ]
     },
@@ -16962,12 +16962,12 @@
           "fechaInicio": "2026-09-07",
           "ticket1": "17952",
           "cajas1": 15920,
-          "ticket2": "",
+          "ticket2": "17953",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 9840
         }
       ]
     },
@@ -16982,12 +16982,12 @@
           "fechaInicio": "2026-09-07",
           "ticket1": "17888",
           "cajas1": 10560,
-          "ticket2": "",
+          "ticket2": "17889",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 14000
         }
       ]
     },
@@ -17002,12 +17002,12 @@
           "fechaInicio": "2026-09-07",
           "ticket1": "17915",
           "cajas1": 6650,
-          "ticket2": "",
+          "ticket2": "17916",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 4650
         }
       ]
     },
@@ -17022,12 +17022,12 @@
           "fechaInicio": "2026-09-07",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "",
+          "ticket2": "17739",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 3520
         }
       ]
     }
