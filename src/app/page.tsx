@@ -663,6 +663,8 @@ export default function PlannerPage() {
   const justyRows = justyStore.data;
   const setGlupRows = glupStore.setData;
   const setJustyRows = justyStore.setData;
+  const removeGlupRow = glupStore.removeItem;
+  const removeJustyRow = justyStore.removeItem;
   useEffect(() => {
     if (typeof window === 'undefined') return;
     const legacyGlup = localStorage.getItem('salaJarabeGlupRows');
@@ -704,9 +706,9 @@ export default function PlannerPage() {
   };
   const deleteRow = (type: 'glup' | 'justy', id: string) => {
     if (type === 'glup') {
-      setGlupRows((prev) => prev.filter((row) => row.id !== id));
+      removeGlupRow(id);
     } else {
-      setJustyRows((prev) => prev.filter((row) => row.id !== id));
+      removeJustyRow(id);
     }
     if (revisionEditingRow && revisionEditingRow.type === type && revisionEditingRow.id === id) {
       setRevisionEditingRow(null);
