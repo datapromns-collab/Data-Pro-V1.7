@@ -5474,8 +5474,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                             const form = isEditing ? revisionEditForm : null;
                                                             const editable = !isEditing && canEditRow(row);
                                                             const showInput = isEditing || editable;
-                                                            const cellValue = (field: keyof typeof form) => isEditing ? (form?.[field] ?? '') : row[field as keyof typeof row];
-                                                            const cellOnChange = (field: keyof typeof form, value: string) => {
+                                                            const cellValue = (field: 'fecha' | 'hora' | 'sala' | 'numeroTanques' | 'sabor' | 'litros' | 'ubb') => isEditing ? (form?.[field] ?? '') : row[field];
+                                                            const cellOnChange = (field: 'fecha' | 'hora' | 'sala' | 'numeroTanques' | 'sabor' | 'litros' | 'ubb', value: string) => {
                                                               if (isEditing) {
                                                                 setRevisionEditForm({ ...(form as any), [field]: value });
                                                               } else if (editable) {
@@ -5573,8 +5573,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                             const form = isEditing ? revisionEditForm : null;
                                                             const editable = !isEditing && canEditRow(row);
                                                             const showInput = isEditing || editable;
-                                                            const cellValue = (field: keyof typeof form) => isEditing ? (form?.[field] ?? '') : row[field as keyof typeof row];
-                                                            const cellOnChange = (field: keyof typeof form, value: string) => {
+                                                            const cellValue = (field: 'fecha' | 'hora' | 'sala' | 'numeroTanques' | 'sabor' | 'litros' | 'ubb') => isEditing ? (form?.[field] ?? '') : row[field];
+                                                            const cellOnChange = (field: 'fecha' | 'hora' | 'sala' | 'numeroTanques' | 'sabor' | 'litros' | 'ubb', value: string) => {
                                                               if (isEditing) {
                                                                 setRevisionEditForm({ ...(form as any), [field]: value });
                                                               } else if (editable) {
