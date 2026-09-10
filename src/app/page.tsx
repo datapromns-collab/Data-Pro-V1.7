@@ -3,7 +3,6 @@
 import React, { useState, useMemo, useEffect, useRef, memo } from "react";
 import Image from "next/image";
 import ExcelJS from "exceljs";
-import { read, utils } from "xlsx";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { autoTable } from "jspdf-autotable";
@@ -656,29 +655,18 @@ export default function PlannerPage() {
   const [logisticaSubTab, setLogisticaSubTab] = useState('stock-producto-terminado');
   const logisticaFileInputRef = useRef<HTMLInputElement>(null);
   const handleLogisticaUploadClick = () => logisticaFileInputRef.current?.click();
-  const [logisticaExcelData, setLogisticaExcelData] = useState<any[]>([]);
-  const [logisticaExcelHeaders, setLogisticaExcelHeaders] = useState<string[]>([]);
-  const [logisticaLoading, setLogisticaLoading] = useState(false);
+  const [logisticaUploadedFile, setLogisticaUploadedFile] = useState<{ name: string; size: number; url?: string } | null>(null);
   const handleLogisticaFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-    setLogisticaLoading(true);
-    try {
-      const buffer = await file.arrayBuffer();
-      const workbook = read(buffer, { type: 'array' });
-      const firstSheet = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[firstSheet];
-      const jsonData = utils.sheet_to_json(worksheet, { defval: '' });
-      if (jsonData.length > 0) {
-        setLogisticaExcelHeaders(Object.keys(jsonData[0] as Record<string, any>));
-        setLogisticaExcelData(jsonData as any[]);
-      }
-    } catch (error) {
-      console.error('Error al leer el archivo Excel de logística:', error);
-    } finally {
-      setLogisticaLoading(false);
-      e.target.value = '';
-    }
+    const url = URL.createObjectURL(file);
+    setLogisticaUploadedFile({ name: file.name, size: file.size, url });
+    e.target.value = '';
+  };
+  const formatLogisticaFileSize = (bytes: number) => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
   };
   const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-ubb'>('preparacion');
   const [salaJarabeLinea, setSalaJarabeLinea] = useState<number>(1);
@@ -6572,68 +6560,50 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                            />
                          </div>
 
-                          {logisticaSubTab === 'stock-producto-terminado' && (
-                            <div className="flex-1 bg-white rounded-[2.5rem] p-4 overflow-auto">
-                              {logisticaLoading && (
-                                <div className="flex flex-col items-center justify-center h-full">
-                                  <RefreshCw className="h-8 w-8 animate-spin text-orange-600 mb-2" />
-                                  <span className="text-sm font-bold text-slate-500 uppercase tracking-widest">Cargando archivo...</span>
-                                </div>
-                              )}
-                              {!logisticaLoading && logisticaExcelData.length > 0 && (
-                                <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                                  <table className="w-full text-xs">
-                                    <thead>
-                                      <tr className="bg-slate-100">
-                                        {logisticaExcelHeaders.map((header) => (
-                                          <th key={header} className="px-3 py-2 text-left font-black uppercase tracking-wider text-slate-700 border-b border-slate-200 whitespace-nowrap">
-                                            {header}
-                                          </th>
-                                        ))}
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {logisticaExcelData.map((row, idx) => (
-                                        <tr key={idx} className={idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/50'}>
-                                          {logisticaExcelHeaders.map((header) => {
-                                            const value = row[header];
-                                            const isNumeric = typeof value === 'number' || (typeof value === 'string' && value.trim() !== '' && !isNaN(Number(value)));
-                                            const numValue = Number(value);
-                                            let cellClass = 'px-3 py-1.5 border-b border-slate-100 tabular-nums whitespace-nowrap';
-                                            if (isNumeric && header.toLowerCase().includes('stock')) {
-                                              if (numValue === 0) cellClass += ' text-red-600 font-bold';
-                                              else if (numValue < 5) cellClass += ' text-red-600 font-bold';
-                                              else if (numValue < 20) cellClass += ' text-amber-600 font-bold';
-                                              else cellClass += ' text-emerald-700 font-bold';
-                                            } else if (isNumeric && (header.toLowerCase().includes('dias') || header.toLowerCase().includes('inventario'))) {
-                                              if (numValue === 0) cellClass += ' text-red-600 font-bold';
-                                              else if (numValue < 2) cellClass += ' text-red-600 font-bold';
-                                              else if (numValue < 5) cellClass += ' text-amber-600 font-bold';
-                                              else cellClass += ' text-emerald-700 font-bold';
-                                            } else {
-                                              cellClass += ' text-slate-700';
-                                            }
-                                            return (
-                                              <td key={header} className={cellClass}>
-                                                {String(value ?? '')}
-                                              </td>
-                                            );
-                                          })}
-                                        </tr>
-                                      ))}
-                                    </tbody>
-                                  </table>
-                                </div>
-                              )}
-                              {!logisticaLoading && logisticaExcelData.length === 0 && (
-                                <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                                  <Package className="h-12 w-12 mb-4 opacity-20" />
-                                  Stock de Producto Terminado
-                                  <span className="text-[10px] font-bold mt-2 normal-case tracking-normal">Suba un archivo Excel para visualizar el stock</span>
-                                </div>
-                              )}
-                            </div>
-                          )}
+                           {logisticaSubTab === 'stock-producto-terminado' && (
+                             <div className="flex-1 bg-white rounded-[2.5rem] p-4 overflow-auto">
+                               {logisticaUploadedFile ? (
+                                 <div className="rounded-2xl border border-slate-200 bg-white">
+                                   <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+                                     <div className="text-[10px] font-black uppercase tracking-widest text-slate-500">Adjunto</div>
+                                   </div>
+                                   <div className="flex items-center gap-3 p-4">
+                                     <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-600 text-white font-black text-xs shadow-sm">
+                                       XLS
+                                     </div>
+                                     <div className="flex-1 min-w-0">
+                                       <div className="text-sm font-bold text-slate-900 truncate">{logisticaUploadedFile.name}</div>
+                                       <div className="text-[11px] font-medium text-slate-500">{formatLogisticaFileSize(logisticaUploadedFile.size)}</div>
+                                     </div>
+                                     <Button
+                                       size="sm"
+                                       variant="outline"
+                                       className="h-8 px-3 rounded-full border-slate-300 text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-none"
+                                       onClick={() => {
+                                         if (logisticaUploadedFile.url) {
+                                           const a = document.createElement('a');
+                                           a.href = logisticaUploadedFile.url;
+                                           a.download = logisticaUploadedFile.name;
+                                           document.body.appendChild(a);
+                                           a.click();
+                                           document.body.removeChild(a);
+                                         }
+                                       }}
+                                     >
+                                       <FileDown className="h-3 w-3 mr-1.5" />
+                                       Ver
+                                     </Button>
+                                   </div>
+                                 </div>
+                               ) : (
+                                 <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                   <Package className="h-12 w-12 mb-4 opacity-20" />
+                                   Stock de Producto Terminado
+                                   <span className="text-[10px] font-bold mt-2 normal-case tracking-normal">Suba un archivo Excel para visualizarlo</span>
+                                 </div>
+                               )}
+                             </div>
+                           )}
                        </div>
                      )}
                 {activeModule === 'ventas' && hasAccess(user.id, 'ventas') && (
