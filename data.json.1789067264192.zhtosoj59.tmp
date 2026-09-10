@@ -9453,25 +9453,14 @@
             "name": "GLUP COLA",
             "lineId": "7",
             "loadPerHour": 2500,
-            "quantity": 187500,
-            "durationHours": 75,
+            "quantity": 199250,
+            "durationHours": 79.7,
             "presentation": "1Lt",
-            "tanks": 21.74,
+            "tanks": 23.1,
             "startTime": "2026-09-08T01:18:00.000Z",
-            "endTime": "2026-09-11T04:18:00.000Z",
+            "endTime": "2026-09-11T09:00:00.000Z",
             "id": "04fzeuyz1",
             "color": "#47CCB0"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-09-11T04:18:00.000Z",
-            "endTime": "2026-09-11T06:18:00.000Z",
-            "id": "8onbxqamk",
-            "color": "#587593"
           },
           {
             "name": "MTTO",
@@ -9655,13 +9644,14 @@
           "fru37nxno",
           "pifo8dyxu",
           "8s5gzaps8",
-          "l6p1ccu6x"
+          "l6p1ccu6x",
+          "8onbxqamk"
         ]
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-10T18:44:12.751Z"
+    "updatedAt": "2026-09-10T19:07:36.908Z"
   },
   "ordenesSap": [
     {
@@ -100372,7 +100362,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788878524608,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-07",
@@ -101436,7 +101426,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788888936911,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-07",
