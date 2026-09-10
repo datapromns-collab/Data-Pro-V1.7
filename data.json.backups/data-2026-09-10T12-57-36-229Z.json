@@ -9661,7 +9661,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-10T12:56:14.719Z"
+    "updatedAt": "2026-09-10T12:57:35.220Z"
   },
   "ordenesSap": [
     {
@@ -17228,8 +17228,19 @@
           "fechaInicio": "2026-09-09",
           "ticket1": "17956",
           "cajas1": 2400,
-          "ticket2": "",
+          "ticket2": "17957",
           "cajas2": 5600,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 14160
+        },
+        {
+          "fechaInicio": "2026-09-10",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -17248,7 +17259,7 @@
           "fechaInicio": "2026-09-09",
           "ticket1": "17892",
           "cajas1": 8000,
-          "ticket2": "",
+          "ticket2": "178",
           "cajas2": 8800,
           "ticket3": "",
           "cajas3": 0,
@@ -17385,6 +17396,37 @@
           "cajas1": 7566,
           "ticket2": "",
           "cajas2": 2964,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1789044999627",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "63539",
+      "semana": 37,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-09",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16003",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 11200
+        },
+        {
+          "fechaInicio": "2026-09-10",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
