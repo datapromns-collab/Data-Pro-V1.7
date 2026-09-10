@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useEffect, useRef, memo } from "react";
 import Image from "next/image";
 import ExcelJS from "exceljs";
+import { read, utils } from "xlsx";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
 import { autoTable } from "jspdf-autotable";
@@ -655,18 +656,31 @@ export default function PlannerPage() {
   const [logisticaSubTab, setLogisticaSubTab] = useState('stock-producto-terminado');
   const logisticaFileInputRef = useRef<HTMLInputElement>(null);
   const handleLogisticaUploadClick = () => logisticaFileInputRef.current?.click();
-  const [logisticaUploadedFile, setLogisticaUploadedFile] = useState<{ name: string; size: number; url?: string } | null>(null);
-  const handleLogisticaFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    const url = URL.createObjectURL(file);
-    setLogisticaUploadedFile({ name: file.name, size: file.size, url });
-    e.target.value = '';
-  };
+  const [logisticaExcelHtml, setLogisticaExcelHtml] = useState<string>('');
+  const [logisticaUploadedFile, setLogisticaUploadedFile] = useState<{ name: string; size: number } | null>(null);
+  const [logisticaShowPreview, setLogisticaShowPreview] = useState(false);
   const formatLogisticaFileSize = (bytes: number) => {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
     return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+  const handleLogisticaFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setLogisticaShowPreview(false);
+    try {
+      const buffer = await file.arrayBuffer();
+      const workbook = read(buffer, { type: 'array' });
+      const firstSheet = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[firstSheet];
+      const html = utils.sheet_to_html(worksheet);
+      setLogisticaExcelHtml(html);
+      setLogisticaUploadedFile({ name: file.name, size: file.size });
+    } catch (error) {
+      console.error('Error al generar vista previa del Excel:', error);
+    } finally {
+      e.target.value = '';
+    }
   };
   const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-ubb'>('preparacion');
   const [salaJarabeLinea, setSalaJarabeLinea] = useState<number>(1);
@@ -6579,21 +6593,19 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        size="sm"
                                        variant="outline"
                                        className="h-8 px-3 rounded-full border-slate-300 text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-none"
-                                       onClick={() => {
-                                         if (logisticaUploadedFile.url) {
-                                           const a = document.createElement('a');
-                                           a.href = logisticaUploadedFile.url;
-                                           a.download = logisticaUploadedFile.name;
-                                           document.body.appendChild(a);
-                                           a.click();
-                                           document.body.removeChild(a);
-                                         }
-                                       }}
+                                       onClick={() => setLogisticaShowPreview(true)}
                                      >
                                        <FileDown className="h-3 w-3 mr-1.5" />
                                        Ver
                                      </Button>
                                    </div>
+                                   {logisticaShowPreview && logisticaExcelHtml && (
+                                     <div className="border-t border-slate-100 p-4">
+                                       <div className="rounded-2xl border border-slate-200 bg-white overflow-auto" style={{ maxHeight: 'calc(100vh - 320px)' }}>
+                                         <div dangerouslySetInnerHTML={{ __html: logisticaExcelHtml }} />
+                                       </div>
+                                     </div>
+                                   )}
                                  </div>
                                ) : (
                                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
