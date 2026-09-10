@@ -37,7 +37,17 @@ function writePayloadSync(payload: DbData): void {
   const serialized = JSON.stringify(payload, null, 2);
   const tmpPath = DB_PATH + '.' + Date.now() + '.' + Math.random().toString(36).substr(2, 9) + '.tmp';
   fs.writeFileSync(tmpPath, serialized, 'utf8');
-  fs.renameSync(tmpPath, DB_PATH);
+  try {
+    fs.renameSync(tmpPath, DB_PATH);
+  } catch (error) {
+    const err = error as NodeJS.ErrnoException;
+    if (err.code === 'EPERM' || err.code === 'EACCES') {
+      fs.copyFileSync(tmpPath, DB_PATH);
+      fs.unlinkSync(tmpPath);
+    } else {
+      throw error;
+    }
+  }
 }
 
 function createRotatingBackupSync(): void {
