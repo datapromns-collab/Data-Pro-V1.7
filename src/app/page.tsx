@@ -746,8 +746,6 @@ export default function PlannerPage() {
         const data = await res.json();
         if (cancelled || !data.exists) return;
         setLogisticaUploadedFile({ name: data.originalName || data.nombre, size: data.tamano, uploadedAt: data.uploadedAt ? new Date(data.uploadedAt).toLocaleString('es-VE') : undefined });
-        setLogisticaFileUrl('/api/logistica/stock-producto-terminado/file');
-
         const fileRes = await fetch('/api/logistica/stock-producto-terminado/file');
         if (fileRes.ok) {
           const buffer = await fileRes.arrayBuffer();

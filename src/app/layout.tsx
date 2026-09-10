@@ -3,6 +3,7 @@ import { Inter, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 import { PlannerProvider } from '@/hooks/use-planner-store';
 import { UpdateBanner } from '@/components/UpdateBanner';
+import { Polyfills } from './polyfills';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -45,6 +46,7 @@ export default function RootLayout({
         <PlannerProvider>
           {children}
         </PlannerProvider>
+        <Polyfills />
         <div id="notifications-portal" />
         <UpdateBanner />
       </body>
