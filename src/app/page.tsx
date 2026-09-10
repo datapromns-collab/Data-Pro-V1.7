@@ -657,7 +657,7 @@ export default function PlannerPage() {
   const [logisticaSubTab, setLogisticaSubTab] = useState('stock-producto-terminado');
   const logisticaFileInputRef = useRef<HTMLInputElement>(null);
   const handleLogisticaUploadClick = () => logisticaFileInputRef.current?.click();
-  const [logisticaExcelBuffer, setLogisticaExcelBuffer] = useState<ArrayBuffer | null>(null);
+  const [logisticaExcelBuffer, setLogisticaExcelBuffer] = useState<ArrayBuffer | Buffer | null>(null);
   const [logisticaUploadedFile, setLogisticaUploadedFile] = useState<{ name: string; size: number } | null>(null);
   const [logisticaShowPreview, setLogisticaShowPreview] = useState(false);
   const logisticaViewerContainerRef = useRef<HTMLDivElement>(null);
@@ -673,10 +673,45 @@ export default function PlannerPage() {
     setLogisticaShowPreview(false);
     try {
       const buffer = await file.arrayBuffer();
-      setLogisticaExcelBuffer(buffer);
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(buffer);
+
+      workbook.eachSheet((sheet) => {
+        const hiddenColumns = new Set<number>();
+        sheet.columns?.forEach((col, idx) => {
+          if (col.hidden) hiddenColumns.add(idx + 1);
+        });
+
+        sheet.eachRow((row, rowNumber) => {
+          const hiddenColsInRow = new Set<number>();
+          row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+            if ((cell.style as any)?.hidden) {
+              hiddenColsInRow.add(colNumber);
+            }
+          });
+
+          if (hiddenColsInRow.size > 0) {
+            const newValues: any[] = [];
+            row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+              if (!hiddenColsInRow.has(colNumber)) {
+                newValues[colNumber - 1] = cell.value;
+              }
+            });
+            row.values = newValues;
+          }
+        });
+
+        if (hiddenColumns.size > 0) {
+          sheet.columns = sheet.columns.filter((_col, idx) => !hiddenColumns.has(idx + 1));
+        }
+      });
+
+      const written = await workbook.xlsx.writeBuffer();
+      const processedBuffer = new Uint8Array(written as ArrayBuffer).buffer;
+      setLogisticaExcelBuffer(processedBuffer as ArrayBuffer);
       setLogisticaUploadedFile({ name: file.name, size: file.size });
     } catch (error) {
-      console.error('Error al cargar el archivo Excel:', error);
+      console.error('Error al procesar el archivo Excel:', error);
     } finally {
       e.target.value = '';
     }
