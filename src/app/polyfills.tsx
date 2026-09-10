@@ -1,8 +1,9 @@
 "use client";
 
 if (typeof globalThis !== 'undefined' && !(globalThis as any).crypto?.randomUUID) {
-  (globalThis as any).crypto = {
-    ...(globalThis as any).crypto,
+  const existingCrypto = (globalThis as any).crypto || {};
+  const patchedCrypto = {
+    ...existingCrypto,
     randomUUID: () => {
       return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c: string) => {
         const r = (Math.random() * 16) | 0;
@@ -11,6 +12,18 @@ if (typeof globalThis !== 'undefined' && !(globalThis as any).crypto?.randomUUID
       });
     },
   };
+
+  try {
+    Object.defineProperty(globalThis, 'crypto', {
+      value: patchedCrypto,
+      writable: true,
+      configurable: true,
+    });
+  } catch {
+    try {
+      (globalThis as any).crypto = patchedCrypto;
+    } catch {}
+  }
 }
 
 export function Polyfills() {
