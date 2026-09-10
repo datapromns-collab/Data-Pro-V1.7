@@ -658,7 +658,7 @@ export default function PlannerPage() {
   const logisticaFileInputRef = useRef<HTMLInputElement>(null);
   const handleLogisticaUploadClick = () => logisticaFileInputRef.current?.click();
   const [logisticaExcelBuffer, setLogisticaExcelBuffer] = useState<ArrayBuffer | Buffer | null>(null);
-  const [logisticaUploadedFile, setLogisticaUploadedFile] = useState<{ name: string; size: number } | null>(null);
+  const [logisticaUploadedFile, setLogisticaUploadedFile] = useState<{ name: string; size: number; uploadedAt?: string } | null>(null);
   const [logisticaShowPreview, setLogisticaShowPreview] = useState(false);
   const logisticaViewerContainerRef = useRef<HTMLDivElement>(null);
   const logisticaViewerClientRef = useRef<any>(null);
@@ -709,7 +709,10 @@ export default function PlannerPage() {
       const written = await workbook.xlsx.writeBuffer();
       const processedBuffer = new Uint8Array(written as ArrayBuffer).buffer;
       setLogisticaExcelBuffer(processedBuffer as ArrayBuffer);
-      setLogisticaUploadedFile({ name: file.name, size: file.size });
+      const now = new Date();
+      const pad = (n: number) => String(n).padStart(2, '0');
+      const uploadedAt = `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+      setLogisticaUploadedFile({ name: file.name, size: file.size, uploadedAt });
     } catch (error) {
       console.error('Error al procesar el archivo Excel:', error);
     } finally {
@@ -6651,7 +6654,9 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                {logisticaUploadedFile ? (
                                  <div className="rounded-2xl border border-slate-200 bg-white">
                                    <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
-                                     <div className="text-[10px] font-black uppercase tracking-widest text-slate-500">Adjunto</div>
+                                      <div className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                        Adjuntado - actualizado el {logisticaUploadedFile?.uploadedAt || ''}
+                                      </div>
                                    </div>
                                    <div className="flex items-center gap-3 p-4">
                                      <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-600 text-white font-black text-xs shadow-sm">
