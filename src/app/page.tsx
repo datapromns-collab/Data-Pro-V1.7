@@ -48,7 +48,8 @@ import {
   Save,
   Settings,
   CheckSquare,
-  FileDown
+  FileDown,
+  Upload
 } from 'lucide-react';
 import { PRODUCT_LIST, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, PRODUCTION_START_HOUR } from '@/lib/planner-utils';
 import ProducidasTable, { ProducidasTabla, nuevaTabla, sumarTablas } from '@/components/planner/ProducidasTable';import { LineSpeedsConfig } from '@/components/planner/LineSpeedsConfig';
@@ -651,6 +652,7 @@ export default function PlannerPage() {
   const [activeTab, setActiveTab] = useState('gantt');
   const [insumosSubTab, setInsumosSubTab] = useState('co2');
   const [insumosPeriodoSubTab, setInsumosPeriodoSubTab] = useState('diario');
+  const [logisticaSubTab, setLogisticaSubTab] = useState('stock-producto-terminado');
   const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-ubb'>('preparacion');
   const [salaJarabeLinea, setSalaJarabeLinea] = useState<number>(1);
   const [salaJarabePrepWeekStartDate, setSalaJarabePrepWeekStartDate] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
@@ -2858,7 +2860,7 @@ export default function PlannerPage() {
                      {hasAccess(user.id, 'logistica') && (
                     <Button 
                       variant="ghost" 
-                      onClick={() => { setActiveModule('logistica'); setActiveTab('logistica-view'); }}
+                      onClick={() => { setActiveModule('logistica'); setActiveTab('logistica-view'); setLogisticaSubTab('stock-producto-terminado'); }}
                       className={sidebarButtonClass(activeModule === 'logistica', "bg-orange-600 hover:bg-orange-700", "shadow-orange-200/30")}
                     >
                       <div className={iconContainerClass(activeModule === 'logistica')}>
@@ -6508,12 +6510,38 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                           </div>
                        </div>
                      )}
-                    {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
-                     <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                       <Truck className="h-12 w-12 mb-4 opacity-20" />
-                       Módulo de Logística en Desarrollo
-                     </div>
-                   )}
+                     {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
+                      <div className="flex flex-col h-full">
+                        <div className="flex items-center gap-2 mb-2 no-print">
+                          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                            {['stock-producto-terminado'].map((tab) => (
+                              <button
+                                key={tab}
+                                onClick={() => setLogisticaSubTab(tab)}
+                                className={cn(
+                                  "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                  logisticaSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                )}
+                              >
+                                <Package className="h-3.5 w-3.5" />
+                                <span className="hidden sm:inline">Stock de Producto Terminado</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        {logisticaSubTab === 'stock-producto-terminado' && (
+                          <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                            <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                              <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                <Package className="h-12 w-12 mb-4 opacity-20" />
+                                Stock de Producto Terminado
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
                 {activeModule === 'ventas' && hasAccess(user.id, 'ventas') && (
                   <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
                     <TrendingUp className="h-12 w-12 mb-4 opacity-20" />
