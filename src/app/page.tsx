@@ -3,7 +3,7 @@
 import React, { useState, useMemo, useEffect, useRef, memo } from "react";
 import Image from "next/image";
 import ExcelJS from "exceljs";
-import { UDocViewer } from '@docmentis/udoc-viewer';
+import { UDocClient } from '@docmentis/udoc-viewer';
 import { read, utils } from "xlsx";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -660,6 +660,8 @@ export default function PlannerPage() {
   const [logisticaExcelBuffer, setLogisticaExcelBuffer] = useState<ArrayBuffer | null>(null);
   const [logisticaUploadedFile, setLogisticaUploadedFile] = useState<{ name: string; size: number } | null>(null);
   const [logisticaShowPreview, setLogisticaShowPreview] = useState(false);
+  const logisticaViewerContainerRef = useRef<HTMLDivElement>(null);
+  const logisticaViewerClientRef = useRef<any>(null);
   const formatLogisticaFileSize = (bytes: number) => {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
@@ -679,6 +681,42 @@ export default function PlannerPage() {
       e.target.value = '';
     }
   };
+  useEffect(() => {
+    if (!logisticaShowPreview || !logisticaExcelBuffer || !logisticaViewerContainerRef.current) return;
+    let viewer: any;
+    let client: any;
+    const container = logisticaViewerContainerRef.current;
+    container.innerHTML = '';
+
+    (async () => {
+      try {
+        client = await UDocClient.create();
+        viewer = await client.createViewer({
+          container,
+        });
+        const blob = new Blob([logisticaExcelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = URL.createObjectURL(blob);
+        await viewer.load(url);
+        logisticaViewerClientRef.current = { client, viewer, url };
+      } catch (error) {
+        console.error('Error al inicializar el visor de Excel:', error);
+        container.innerHTML = '<div class="flex items-center justify-center h-full text-slate-500 text-sm font-bold uppercase tracking-widest">Error al cargar la vista previa</div>';
+      }
+    })();
+
+    return () => {
+      if (viewer) {
+        try { viewer.destroy(); } catch {}
+      }
+      if (client) {
+        try { client.destroy(); } catch {}
+      }
+      if (logisticaViewerClientRef.current?.url) {
+        URL.revokeObjectURL(logisticaViewerClientRef.current.url);
+      }
+      logisticaViewerClientRef.current = null;
+    };
+  }, [logisticaShowPreview, logisticaExcelBuffer]);
   const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-ubb'>('preparacion');
   const [salaJarabeLinea, setSalaJarabeLinea] = useState<number>(1);
   const [salaJarabePrepWeekStartDate, setSalaJarabePrepWeekStartDate] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
@@ -6598,14 +6636,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                    </div>
                                     {logisticaShowPreview && logisticaExcelBuffer && (
                                       <div className="border-t border-slate-100 p-4">
-                                        <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden" style={{ maxHeight: 'calc(100vh - 320px)' }}>
-                                          <UDocViewer
-                                            file={logisticaExcelBuffer}
-                                            filename={logisticaUploadedFile?.name || 'preview.xlsx'}
-                                            width="100%"
-                                            height="100%"
-                                          />
-                                        </div>
+                                        <div
+                                          ref={logisticaViewerContainerRef}
+                                          className="rounded-2xl border border-slate-200 bg-white overflow-hidden"
+                                          style={{ maxHeight: 'calc(100vh - 320px)', height: '600px' }}
+                                        />
                                       </div>
                                     )}
                                  </div>
