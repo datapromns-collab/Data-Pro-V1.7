@@ -3,6 +3,7 @@
 import React, { useState, useMemo, useEffect, useRef, memo } from "react";
 import Image from "next/image";
 import ExcelJS from "exceljs";
+import { UDocViewer } from '@docmentis/udoc-viewer';
 import { read, utils } from "xlsx";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -656,7 +657,7 @@ export default function PlannerPage() {
   const [logisticaSubTab, setLogisticaSubTab] = useState('stock-producto-terminado');
   const logisticaFileInputRef = useRef<HTMLInputElement>(null);
   const handleLogisticaUploadClick = () => logisticaFileInputRef.current?.click();
-  const [logisticaExcelHtml, setLogisticaExcelHtml] = useState<string>('');
+  const [logisticaExcelBuffer, setLogisticaExcelBuffer] = useState<ArrayBuffer | null>(null);
   const [logisticaUploadedFile, setLogisticaUploadedFile] = useState<{ name: string; size: number } | null>(null);
   const [logisticaShowPreview, setLogisticaShowPreview] = useState(false);
   const formatLogisticaFileSize = (bytes: number) => {
@@ -670,14 +671,10 @@ export default function PlannerPage() {
     setLogisticaShowPreview(false);
     try {
       const buffer = await file.arrayBuffer();
-      const workbook = read(buffer, { type: 'array' });
-      const firstSheet = workbook.SheetNames[0];
-      const worksheet = workbook.Sheets[firstSheet];
-      const html = utils.sheet_to_html(worksheet);
-      setLogisticaExcelHtml(html);
+      setLogisticaExcelBuffer(buffer);
       setLogisticaUploadedFile({ name: file.name, size: file.size });
     } catch (error) {
-      console.error('Error al generar vista previa del Excel:', error);
+      console.error('Error al cargar el archivo Excel:', error);
     } finally {
       e.target.value = '';
     }
@@ -6599,13 +6596,18 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                        Ver
                                      </Button>
                                    </div>
-                                   {logisticaShowPreview && logisticaExcelHtml && (
-                                     <div className="border-t border-slate-100 p-4">
-                                       <div className="rounded-2xl border border-slate-200 bg-white overflow-auto" style={{ maxHeight: 'calc(100vh - 320px)' }}>
-                                         <div dangerouslySetInnerHTML={{ __html: logisticaExcelHtml }} />
-                                       </div>
-                                     </div>
-                                   )}
+                                    {logisticaShowPreview && logisticaExcelBuffer && (
+                                      <div className="border-t border-slate-100 p-4">
+                                        <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden" style={{ maxHeight: 'calc(100vh - 320px)' }}>
+                                          <UDocViewer
+                                            file={logisticaExcelBuffer}
+                                            filename={logisticaUploadedFile?.name || 'preview.xlsx'}
+                                            width="100%"
+                                            height="100%"
+                                          />
+                                        </div>
+                                      </div>
+                                    )}
                                  </div>
                                ) : (
                                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
