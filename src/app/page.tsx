@@ -660,6 +660,7 @@ export default function PlannerPage() {
   const [logisticaExcelBuffer, setLogisticaExcelBuffer] = useState<ArrayBuffer | Buffer | null>(null);
   const [logisticaUploadedFile, setLogisticaUploadedFile] = useState<{ name: string; size: number; uploadedAt?: string } | null>(null);
   const [logisticaShowPreview, setLogisticaShowPreview] = useState(false);
+  const [logisticaFileUrl, setLogisticaFileUrl] = useState<string | null>(null);
   const logisticaViewerContainerRef = useRef<HTMLDivElement>(null);
   const logisticaViewerClientRef = useRef<any>(null);
   const formatLogisticaFileSize = (bytes: number) => {
@@ -709,16 +710,51 @@ export default function PlannerPage() {
       const written = await workbook.xlsx.writeBuffer();
       const processedBuffer = new Uint8Array(written as ArrayBuffer).buffer;
       setLogisticaExcelBuffer(processedBuffer as ArrayBuffer);
+
+      const formData = new FormData();
+      formData.append('file', new Blob([processedBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), file.name);
+      formData.append('uploadedBy', 'local-user');
+
+      const res = await fetch('/api/logistica/stock-producto-terminado', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) {
+        throw new Error(`Upload failed: ${res.status}`);
+      }
+
+      const result = await res.json();
       const now = new Date();
       const pad = (n: number) => String(n).padStart(2, '0');
       const uploadedAt = `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-      setLogisticaUploadedFile({ name: file.name, size: file.size, uploadedAt });
+      setLogisticaUploadedFile({ name: result.nombre || file.name, size: result.tamano || file.size, uploadedAt });
+      setLogisticaFileUrl('/api/logistica/stock-producto-terminado/file');
     } catch (error) {
-      console.error('Error al procesar el archivo Excel:', error);
+      console.error('Error al procesar/subir el archivo Excel:', error);
     } finally {
       e.target.value = '';
     }
   };
+  useEffect(() => {
+    if (activeModule !== 'logistica') return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/logistica/stock-producto-terminado');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (cancelled || !data.exists) return;
+        setLogisticaUploadedFile({ name: data.originalName || data.nombre, size: data.tamano, uploadedAt: data.uploadedAt ? new Date(data.uploadedAt).toLocaleString('es-VE') : undefined });
+        setLogisticaFileUrl('/api/logistica/stock-producto-terminado/file');
+      } catch (error) {
+        console.error('Error al cargar archivo de logística desde servidor:', error);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [activeModule]);
   useEffect(() => {
     if (!logisticaShowPreview || !logisticaExcelBuffer || !logisticaViewerContainerRef.current) return;
     let viewer: any;
