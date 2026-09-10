@@ -736,7 +736,7 @@ export default function PlannerPage() {
       e.target.value = '';
     }
   };
-  useEffect(() => {
+   useEffect(() => {
     if (activeModule !== 'logistica') return;
     let cancelled = false;
     (async () => {
@@ -747,6 +747,12 @@ export default function PlannerPage() {
         if (cancelled || !data.exists) return;
         setLogisticaUploadedFile({ name: data.originalName || data.nombre, size: data.tamano, uploadedAt: data.uploadedAt ? new Date(data.uploadedAt).toLocaleString('es-VE') : undefined });
         setLogisticaFileUrl('/api/logistica/stock-producto-terminado/file');
+
+        const fileRes = await fetch('/api/logistica/stock-producto-terminado/file');
+        if (fileRes.ok) {
+          const buffer = await fileRes.arrayBuffer();
+          setLogisticaExcelBuffer(buffer);
+        }
       } catch (error) {
         console.error('Error al cargar archivo de logística desde servidor:', error);
       }
@@ -756,7 +762,7 @@ export default function PlannerPage() {
     };
   }, [activeModule]);
    useEffect(() => {
-    if (!logisticaShowPreview || !logisticaFileUrl || !logisticaViewerContainerRef.current) return;
+    if (!logisticaShowPreview || !logisticaExcelBuffer || !logisticaViewerContainerRef.current) return;
     let viewer: any;
     let client: any;
     const container = logisticaViewerContainerRef.current;
@@ -768,8 +774,10 @@ export default function PlannerPage() {
         viewer = await client.createViewer({
           container,
         });
-        await viewer.load(logisticaFileUrl);
-        logisticaViewerClientRef.current = { client, viewer, url: logisticaFileUrl };
+        const blob = new Blob([logisticaExcelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = URL.createObjectURL(blob);
+        await viewer.load(url);
+        logisticaViewerClientRef.current = { client, viewer, url };
       } catch (error) {
         console.error('Error al inicializar el visor de Excel:', error);
         container.innerHTML = '<div class="flex items-center justify-center h-full text-slate-500 text-sm font-bold uppercase tracking-widest">Error al cargar la vista previa</div>';
@@ -783,9 +791,12 @@ export default function PlannerPage() {
       if (client) {
         try { client.destroy(); } catch {}
       }
+      if (logisticaViewerClientRef.current?.url) {
+        URL.revokeObjectURL(logisticaViewerClientRef.current.url);
+      }
       logisticaViewerClientRef.current = null;
     };
-  }, [logisticaShowPreview, logisticaFileUrl]);
+  }, [logisticaShowPreview, logisticaExcelBuffer]);
   const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-ubb'>('preparacion');
   const [salaJarabeLinea, setSalaJarabeLinea] = useState<number>(1);
   const [salaJarabePrepWeekStartDate, setSalaJarabePrepWeekStartDate] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
