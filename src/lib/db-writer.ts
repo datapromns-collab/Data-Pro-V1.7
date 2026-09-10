@@ -60,8 +60,30 @@ function createRotatingBackupSync(): void {
         }
       }
     }
-  } catch {
+  } catch (_e) {
     // ignore backup failures
+  }
+}
+
+function sanitizeJson(raw: string): string | null {
+  const trimmed = raw.trim();
+  if (!trimmed) return null;
+
+  const firstBrace = trimmed.indexOf('{');
+  const lastBrace = trimmed.lastIndexOf('}');
+  if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) return null;
+
+  let candidate = trimmed.substring(firstBrace, lastBrace + 1);
+
+  candidate = candidate
+    .replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, ' ')
+    .replace(/,\s*([}\]])/g, '$1');
+
+  try {
+    JSON.parse(candidate);
+    return candidate;
+  } catch (_e) {
+    return null;
   }
 }
 
@@ -69,20 +91,57 @@ export function readDb(): DbData {
   if (!fs.existsSync(DB_PATH)) {
     return readSync();
   }
-  try {
-    const raw = fs.readFileSync(DB_PATH, 'utf8');
+
+  const tryParse = (raw: string): DbData => {
     if (!raw || raw.trim().length === 0) {
       throw new Error('Empty database file');
     }
     return JSON.parse(raw);
+  };
+
+  const tryRead = (target: string): DbData => {
+    const raw = fs.readFileSync(target, 'utf8');
+    return tryParse(raw);
+  };
+
+  try {
+    return tryRead(DB_PATH);
   } catch (error) {
     console.error('[DB][READ][ERROR]', error);
     recoverFromBackupSync();
-    const raw2 = fs.readFileSync(DB_PATH, 'utf8');
-    if (!raw2 || raw2.trim().length === 0) {
-      return readSync();
+
+    try {
+      return tryRead(DB_PATH);
+    } catch (recoveryError) {
+      console.error('[DB][RECOVERY][ERROR]', recoveryError);
     }
-    return JSON.parse(raw2);
+
+    try {
+      const raw = fs.readFileSync(DB_PATH, 'utf8');
+      const repaired = sanitizeJson(raw);
+      if (repaired) {
+        fs.writeFileSync(DB_PATH, repaired, 'utf8');
+        console.warn('[DB] Repaired corrupted data.json');
+        return JSON.parse(repaired);
+      }
+    } catch (repairError) {
+      console.error('[DB][REPAIR][ERROR]', repairError);
+    }
+
+    return {
+      planner: {
+        config: { weekStartDate: new Date().toISOString(), lineSpeeds: {} },
+        customRecipes: {},
+        customPackagingRecipes: {},
+        weeks: {},
+      },
+      ordenesSap: [],
+      notifications: [],
+      collections: {},
+      cacheVersion: 0,
+      deletedIds: {},
+      _deletedOrdenesSapIds: [],
+    };
   }
 }
 
@@ -127,7 +186,7 @@ function recoverFromBackupSync(): void {
         console.warn('[DB] Recovered data.json from backup', backupPath);
         return;
       }
-    } catch {
+    } catch (_e) {
       continue;
     }
   }
