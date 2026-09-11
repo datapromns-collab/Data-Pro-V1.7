@@ -10220,7 +10220,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-11T21:33:09.400Z"
+    "updatedAt": "2026-09-11T20:30:05.670Z"
   },
   "ordenesSap": [
     {
@@ -17987,7 +17987,7 @@
           "ticket1": "17795",
           "cajas1": 3120,
           "ticket2": "",
-          "cajas2": 9674,
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -18029,7 +18029,7 @@
           "ticket1": "16006",
           "cajas1": 2560,
           "ticket2": "",
-          "cajas2": 6960,
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -18060,7 +18060,7 @@
           "ticket1": "17960",
           "cajas1": 5840,
           "ticket2": "",
-          "cajas2": 4800,
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -18102,7 +18102,7 @@
           "ticket1": "17747",
           "cajas1": 1920,
           "ticket2": "",
-          "cajas2": 5120,
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -18122,7 +18122,7 @@
           "ticket1": "17848",
           "cajas1": 4000,
           "ticket2": "",
-          "cajas2": 8320,
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -18153,7 +18153,7 @@
           "ticket1": "17896",
           "cajas1": 2800,
           "ticket2": "",
-          "cajas2": 18400,
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -18184,7 +18184,7 @@
           "ticket1": "17923",
           "cajas1": 1500,
           "ticket2": "",
-          "cajas2": 5700,
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
