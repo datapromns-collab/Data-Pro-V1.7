@@ -117537,15 +117537,11 @@
         },
         "auto-1-1788807255328": {
           "cajasPlanificadas": 72000,
-          "producto": "499",
-          "jarabeReal": 79734,
-          "ubb": 27.73
+          "producto": "499"
         },
         "auto-1-1788889874456": {
           "cajasPlanificadas": 69000,
-          "producto": "472",
-          "jarabeReal": 86269,
-          "ubb": 30
+          "producto": "472"
         }
       },
       "linea-2": {
@@ -117696,9 +117692,7 @@
         },
         "auto-2-1788807268047": {
           "cajasPlanificadas": 117500,
-          "producto": "221",
-          "jarabeReal": 90485,
-          "ubb": 91.57
+          "producto": "221"
         }
       },
       "linea-3": {
