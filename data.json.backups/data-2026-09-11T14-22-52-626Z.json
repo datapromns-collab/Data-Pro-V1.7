@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-07T00:00:00.000",
+      "weekStartDate": "2026-09-11T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -9725,7 +9725,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-11T12:37:23.210Z"
+    "updatedAt": "2026-09-11T13:31:54.810Z"
   },
   "ordenesSap": [
     {
@@ -17548,6 +17548,28 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 14000
+        },
+        {
+          "fechaInicio": "2026-09-11",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-09-12",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -17568,6 +17590,86 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 8960
+        }
+      ]
+    },
+    {
+      "id": "1-1789131929902",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "63557",
+      "semana": 37,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-11",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1789131939149",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63563",
+      "semana": 37,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-11",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1789131973529",
+      "linea": 5,
+      "sabor": "JUSTY NARANJA",
+      "ordenNumero": "63568",
+      "semana": 37,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-11",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1789131987937",
+      "linea": 7,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "63574",
+      "semana": 37,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-11",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -100487,7 +100589,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788878524608,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-09-07",
@@ -101551,7 +101653,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788888936911,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-09-07",
@@ -117765,7 +117867,7 @@
           "cajasPlanificadas": 134400
         },
         "auto-4-1788889814611": {
-          "cajasPlanificadas": 12880
+          "cajasPlanificadas": 128800
         }
       },
       "linea-5": {
@@ -117844,6 +117946,9 @@
         },
         "auto-5-1788807363989": {
           "cajasPlanificadas": 58080
+        },
+        "auto-5-1788889830309": {
+          "cajasPlanificadas": 53240
         }
       },
       "linea-6": {
@@ -117937,6 +118042,9 @@
         },
         "auto-6-1788807379146": {
           "cajasPlanificadas": 57600
+        },
+        "auto-6-1788889847650": {
+          "cajasPlanificadas": 35580
         }
       },
       "linea-7": {
@@ -118075,6 +118183,9 @@
         },
         "auto-7-1788788454025": {
           "cajasPlanificadas": 34500
+        },
+        "auto-7-1788889887698": {
+          "cajasPlanificadas": 91250
         }
       }
     },
@@ -123802,7 +123913,12 @@
       "2026-09-09-suave": "202398",
       "2026-09-09-procesos": "2749332.4",
       "2026-09-09-filtrada": "4130952.47",
-      "2026-09-09-total": "3185640"
+      "2026-09-09-total": "3185640",
+      "2026-09-10-servicio": "15161",
+      "2026-09-10-suave": "176985",
+      "2026-09-10-procesos": "2140091.39",
+      "2026-09-10-filtrada": "3293310.05",
+      "2026-09-10-total": "3101417.33"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",

@@ -9725,7 +9725,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-11T12:37:23.210Z"
+    "updatedAt": "2026-09-11T12:59:08.175Z"
   },
   "ordenesSap": [
     {
@@ -17548,6 +17548,28 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 14000
+        },
+        {
+          "fechaInicio": "2026-09-11",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        },
+        {
+          "fechaInicio": "2026-09-12",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -100487,7 +100509,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788878524608,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-09-07",
@@ -101551,7 +101573,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788888936911,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-09-07",
@@ -117844,6 +117866,9 @@
         },
         "auto-5-1788807363989": {
           "cajasPlanificadas": 58080
+        },
+        "auto-5-1788889830309": {
+          "cajasPlanificadas": 53240
         }
       },
       "linea-6": {
@@ -117937,6 +117962,9 @@
         },
         "auto-6-1788807379146": {
           "cajasPlanificadas": 57600
+        },
+        "auto-6-1788889847650": {
+          "cajasPlanificadas": 35580
         }
       },
       "linea-7": {
@@ -118075,6 +118103,9 @@
         },
         "auto-7-1788788454025": {
           "cajasPlanificadas": 34500
+        },
+        "auto-7-1788889887698": {
+          "cajasPlanificadas": 91250
         }
       }
     },
