@@ -683,6 +683,13 @@ export default function PlannerPage() {
           if (col.hidden) hiddenColumns.add(idx + 1);
         });
 
+        hiddenColumns.forEach((colNumber) => {
+          const col = sheet.getColumn(colNumber);
+          if (col) {
+            col.hidden = true;
+          }
+        });
+
         sheet.eachRow((row, rowNumber) => {
           const hiddenColsInRow = new Set<number>();
           row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
@@ -692,19 +699,12 @@ export default function PlannerPage() {
           });
 
           if (hiddenColsInRow.size > 0) {
-            const newValues: any[] = [];
-            row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
-              if (!hiddenColsInRow.has(colNumber)) {
-                newValues[colNumber - 1] = cell.value;
-              }
+            hiddenColsInRow.forEach((colNumber) => {
+              const cell = row.getCell(colNumber);
+              cell.style = { ...cell.style, hidden: true } as any;
             });
-            row.values = newValues;
           }
         });
-
-        if (hiddenColumns.size > 0) {
-          sheet.columns = sheet.columns.filter((_col, idx) => !hiddenColumns.has(idx + 1));
-        }
       });
 
       const written = await workbook.xlsx.writeBuffer();
