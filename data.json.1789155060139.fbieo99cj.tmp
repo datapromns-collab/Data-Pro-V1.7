@@ -9954,248 +9954,6 @@
             "endTime": "2026-09-19T09:00:00.000Z",
             "id": "ejnbaw0ow",
             "color": "#f59e0b"
-          },
-          {
-            "name": "JUSTY DURAZNO",
-            "lineId": "5",
-            "loadPerHour": 1210,
-            "quantity": 29040,
-            "durationHours": 24,
-            "presentation": "1.5Lts",
-            "tanks": 26.14,
-            "startTime": "2026-09-14T11:00:00.000Z",
-            "endTime": "2026-09-15T11:00:00.000Z",
-            "id": "h2oizjuux",
-            "color": "#f59e0b"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "5",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-09-15T11:00:00.000Z",
-            "endTime": "2026-09-15T13:00:00.000Z",
-            "id": "ftko6k0px",
-            "color": "#ec4899"
-          },
-          {
-            "name": "JUSTY DURAZNO",
-            "lineId": "5",
-            "loadPerHour": 1210,
-            "quantity": 25410,
-            "durationHours": 21,
-            "presentation": "1.5Lts",
-            "tanks": 22.87,
-            "startTime": "2026-09-15T13:00:00.000Z",
-            "endTime": "2026-09-16T10:00:00.000Z",
-            "id": "jjz6h0ax5",
-            "color": "#587593"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "5",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-09-17T22:30:00.000Z",
-            "endTime": "2026-09-18T00:30:00.000Z",
-            "id": "9jjym978u",
-            "color": "#47CCB0"
-          },
-          {
-            "name": "MTTO",
-            "lineId": "5",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 10.5,
-            "startTime": "2026-09-16T10:00:00.000Z",
-            "endTime": "2026-09-16T20:30:00.000Z",
-            "id": "tme5nf17y",
-            "color": "#587593"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "5",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-09-16T20:30:00.000Z",
-            "endTime": "2026-09-16T22:30:00.000Z",
-            "id": "9k8k912ki",
-            "color": "#6366f1"
-          },
-          {
-            "name": "JUSTY MANZANA",
-            "lineId": "5",
-            "loadPerHour": 1210,
-            "quantity": 29040,
-            "durationHours": 24,
-            "presentation": "1.5Lts",
-            "tanks": 26.14,
-            "startTime": "2026-09-16T22:30:00.000Z",
-            "endTime": "2026-09-17T22:30:00.000Z",
-            "id": "ldhg8e7mg",
-            "color": "#10b981"
-          },
-          {
-            "name": "JUSTY MANZANA",
-            "lineId": "5",
-            "loadPerHour": 1210,
-            "quantity": 29040,
-            "durationHours": 24,
-            "presentation": "1.5Lts",
-            "tanks": 26.14,
-            "startTime": "2026-09-18T00:30:00.000Z",
-            "endTime": "2026-09-19T00:30:00.000Z",
-            "id": "g8cbrtodi",
-            "color": "#f59e0b"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "5",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-09-19T00:30:00.000Z",
-            "endTime": "2026-09-19T02:30:00.000Z",
-            "id": "bnqsbveyl",
-            "color": "#ec4899"
-          },
-          {
-            "name": "JUSTY MANZANA",
-            "lineId": "5",
-            "loadPerHour": 1210,
-            "quantity": 33880,
-            "durationHours": 28,
-            "presentation": "1.5Lts",
-            "tanks": 30.49,
-            "startTime": "2026-09-19T02:30:00.000Z",
-            "endTime": "2026-09-20T06:30:00.000Z",
-            "id": "3u5ee8z3o",
-            "color": "#47CCB0"
-          },
-          {
-            "name": "GLUP FRESH",
-            "lineId": "6",
-            "loadPerHour": 1200,
-            "quantity": 51750,
-            "durationHours": 43.125,
-            "presentation": "0.4Lts",
-            "tanks": 3,
-            "startTime": "2026-09-14T11:00:00.000Z",
-            "endTime": "2026-09-16T06:07:30.000Z",
-            "id": "1dktt2l64",
-            "color": "#6366f1"
-          },
-          {
-            "name": "CS",
-            "lineId": "6",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 0.5,
-            "startTime": "2026-09-16T06:08:00.000Z",
-            "endTime": "2026-09-16T06:38:00.000Z",
-            "id": "t7njfldo4",
-            "color": "#f59e0b"
-          },
-          {
-            "name": "GLUP COLA",
-            "lineId": "6",
-            "loadPerHour": 1200,
-            "quantity": 38400,
-            "durationHours": 32,
-            "presentation": "0.4Lts",
-            "tanks": 2.23,
-            "startTime": "2026-09-16T06:38:00.000Z",
-            "endTime": "2026-09-17T14:38:00.000Z",
-            "id": "2eeo647tf",
-            "color": "#6366f1"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "6",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-09-17T14:38:00.000Z",
-            "endTime": "2026-09-17T16:38:00.000Z",
-            "id": "n8xbktnnb",
-            "color": "#47CCB0"
-          },
-          {
-            "name": "GLUP COLA",
-            "lineId": "6",
-            "loadPerHour": 1200,
-            "quantity": 48444,
-            "durationHours": 40.37,
-            "presentation": "0.4Lts",
-            "tanks": 2.81,
-            "startTime": "2026-09-17T16:38:00.000Z",
-            "endTime": "2026-09-19T09:00:12.000Z",
-            "id": "j09oiytfo",
-            "color": "#587593"
-          },
-          {
-            "name": "GLUP UVA",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 14225,
-            "durationHours": 5.69,
-            "presentation": "1Lt",
-            "tanks": 2,
-            "startTime": "2026-09-14T11:00:00.000Z",
-            "endTime": "2026-09-14T16:41:24.000Z",
-            "id": "pehm4fqhs",
-            "color": "#ef4444"
-          },
-          {
-            "name": "CS",
-            "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 0.5,
-            "startTime": "2026-09-14T16:42:00.000Z",
-            "endTime": "2026-09-14T17:12:00.000Z",
-            "id": "v5gmc8jva",
-            "color": "#ec4899"
-          },
-          {
-            "name": "GLUP PIÑA",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 14525,
-            "durationHours": 5.81,
-            "presentation": "1Lt",
-            "tanks": 2,
-            "startTime": "2026-09-14T17:12:00.000Z",
-            "endTime": "2026-09-14T23:00:36.000Z",
-            "id": "zcjqs594a",
-            "color": "#ef4444"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-09-14T23:01:00.000Z",
-            "endTime": "2026-09-15T01:01:00.000Z",
-            "id": "1160ovja7",
-            "color": "#ec4899"
-          },
-          {
-            "name": "GLUP COLA",
-            "lineId": "7",
-            "loadPerHour": 2500,
-            "quantity": 180000,
-            "durationHours": 72,
-            "presentation": "1Lt",
-            "tanks": 20.87,
-            "startTime": "2026-09-15T01:01:00.000Z",
-            "endTime": "2026-09-18T01:01:00.000Z",
-            "id": "vbftmygas",
-            "color": "#f59e0b"
           }
         ],
         "realProduction": {},
@@ -10220,7 +9978,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-11T19:47:34.120Z"
+    "updatedAt": "2026-09-11T19:31:00.023Z"
   },
   "ordenesSap": [
     {
@@ -101139,7 +100897,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788878524608,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-07",
@@ -102203,7 +101961,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788888936911,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-07",
@@ -103800,6 +103558,25 @@
         "usuario": "Luis Blandin",
         "id": 1788978159280,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-13",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "08:33",
+        "finParada": "14:33",
+        "totalMin": "360",
+        "zona": "Llenado",
+        "falla": "FALLA DE E/E PAC",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1788978219703,
+        "bloqueado": false
       },
       {
         "fecha": "2026-09-06",
@@ -109694,7 +109471,7 @@
       {
         "fecha": "2026-09-08",
         "semana": 37,
-        "turno": "NOCTURNO",
+        "turno": "DIURNO",
         "operador": "",
         "linea": "Línea 6",
         "equipo": "",
@@ -118362,33 +118139,6 @@
         "observaciones": "",
         "bloqueado": false,
         "usuario": "Luis Sanchez"
-      },
-      {
-        "id": 1789155187339.6804,
-        "fechaOrden": "2026-09-03",
-        "orden": "9072",
-        "fechaEmision": "2026-09-03",
-        "semana": 36,
-        "turno": "DIURNO",
-        "solicitante": "",
-        "linea": "Línea 6",
-        "maquina": "ENFARDADORA",
-        "aviso": "",
-        "fechaParada": "2026-09-03",
-        "inicioMtto": "",
-        "finMtto": "",
-        "inicioParada": "12:05",
-        "finParada": "12:25",
-        "tMtto": "20",
-        "tipoParada": "OPERACIONAL",
-        "mtto": "",
-        "falla": "FALLA DE FRENO DEL PORTA BOBINA # 2",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
-        "observaciones": "",
-        "bloqueado": true,
-        "usuario": "Luis Sanchez"
       }
     ],
     "seguimiento-ordenes": {
@@ -125032,7 +124782,8 @@
   "deletedIds": {
     "planta-informes-operacionales": {
       "*": [
-        "1788991023411",
+        "1786456646957",
+        "1786456705797",
         "1784566101946",
         "1784568143186",
         "1785014920340",
@@ -125078,17 +124829,20 @@
         "1786040712235",
         "1786119936092",
         "1786128206608",
-        "1786456646957",
-        "1786456705797",
+        "1784554694921",
+        "1",
+        "1785413793661",
         "1786996948604",
         "1787086190625",
         "1787086273033",
         "1787938439979",
         "1787237062452",
         "1787247465383",
+        "1787422345628",
+        "1787424322682",
         "1787959521278",
         "1788293882619",
-        "1788978219703"
+        "1788991023411"
       ]
     },
     "planta-ordenes-trabajo": {
