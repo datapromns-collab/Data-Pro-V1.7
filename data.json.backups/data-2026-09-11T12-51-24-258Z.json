@@ -117380,6 +117380,9 @@
         },
         "auto-1-1788807255328": {
           "cajasPlanificadas": 72000
+        },
+        "auto-1-1788889874456": {
+          "cajasPlanificadas": 69000
         }
       },
       "linea-2": {
@@ -117657,6 +117660,12 @@
         },
         "auto-3-1788807301737": {
           "cajasPlanificadas": 134400
+        },
+        "auto-3-1788889788593": {
+          "cajasPlanificadas": 8265
+        },
+        "auto-3-1788889800420": {
+          "cajasPlanificadas": 40238
         }
       },
       "linea-4": {
@@ -117754,6 +117763,9 @@
         },
         "auto-4-1788807316295": {
           "cajasPlanificadas": 134400
+        },
+        "auto-4-1788889814611": {
+          "cajasPlanificadas": 1288
         }
       },
       "linea-5": {
