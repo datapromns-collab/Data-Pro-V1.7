@@ -9725,7 +9725,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-11T15:08:18.058Z"
+    "updatedAt": "2026-09-11T14:35:08.908Z"
   },
   "ordenesSap": [
     {
@@ -123973,7 +123973,7 @@
       "2026-09-10-suave": "176985",
       "2026-09-10-procesos": "2140091.39",
       "2026-09-10-filtrada": "3293310.05",
-      "2026-09-10-total": "3101417,33"
+      "2026-09-10-total": "3101417.33"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -124102,7 +124102,7 @@
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  08 .xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "tamano": 12520,
-    "uploadedAt": "2026-09-11T15:08:18.058Z",
+    "uploadedAt": "2026-09-11T12:37:23.210Z",
     "uploadedBy": "local-user"
   }
 }
