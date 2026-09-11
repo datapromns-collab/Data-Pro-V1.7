@@ -108815,25 +108815,6 @@
         "usuario": "Luis Blandin",
         "id": 1789151397751,
         "bloqueado": true
-      },
-      {
-        "fecha": "2026-09-08",
-        "semana": 37,
-        "turno": "DIURNO",
-        "operador": "SAMUEL DIAZ",
-        "linea": "Línea 6",
-        "equipo": "PALETIZADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "07:11",
-        "finParada": "07:25",
-        "totalMin": "14",
-        "zona": "Llenado",
-        "falla": "SIN ESPECIFICAR",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Blandin",
-        "id": 1789151445424,
-        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
