@@ -118131,6 +118131,44 @@
         "usuario": "Luis Blandin",
         "id": 1789248539533,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-11",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "CRSITIAN CELIS",
+        "linea": "Línea 2",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:03",
+        "finParada": "07:06",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789249221268,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-11",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "CRISTIAN CELIS",
+        "linea": "Línea 2",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:17",
+        "finParada": "07:21",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789249254188,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -127515,7 +127553,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789249164796,
+        "id": 1789249180271.8428,
         "fechaOrden": "2026-09-11",
         "orden": "9605",
         "fechaEmision": "2026-09-11",
@@ -127538,6 +127576,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       }
     ],
