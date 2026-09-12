@@ -2475,6 +2475,7 @@ export default function PlannerPage() {
     'raw-materials': 'raw-material-view',
     recipes: 'recipes-editor',
     planta: 'paradas-lineas',
+    produccion: 'produccion-view',
     procesos: 'procesos-view',
     calidad: 'calidad-view',
     insumos: 'insumos-view',
@@ -3030,20 +3031,33 @@ export default function PlannerPage() {
                      </Button>
                    )}
 
-                     {hasAccess(user.id, 'planta') && (
-                     <Button 
-                       variant="ghost" 
-                        onClick={() => { setActiveModule('planta'); setActiveTab('paradas-lineas'); setParadasSubTab('informes-operacionales'); }}
-                       className={sidebarButtonClass(activeModule === 'planta', "bg-slate-800 hover:bg-slate-900", "shadow-slate-200/30")}
-                     >
-                       <div className={iconContainerClass(activeModule === 'planta')}>
-                         <Factory className="h-4 w-4" />
-                       </div>
-                       <span className="uppercase text-[10px] font-black tracking-tight">Planta</span>
-                     </Button>
-                     )}
+                      {hasAccess(user.id, 'planta') && (
+                      <Button 
+                        variant="ghost" 
+                         onClick={() => { setActiveModule('planta'); setActiveTab('paradas-lineas'); setParadasSubTab('informes-operacionales'); }}
+                        className={sidebarButtonClass(activeModule === 'planta', "bg-slate-800 hover:bg-slate-900", "shadow-slate-200/30")}
+                      >
+                        <div className={iconContainerClass(activeModule === 'planta')}>
+                          <Factory className="h-4 w-4" />
+                        </div>
+                        <span className="uppercase text-[10px] font-black tracking-tight">Planta</span>
+                      </Button>
+                      )}
 
-                      {(isDemon || hasAccess(user.id, 'procesos')) && (
+                      {hasAccess(user.id, 'produccion') && (
+                      <Button 
+                        variant="ghost" 
+                        onClick={() => { setActiveModule('produccion'); setActiveTab('produccion-view'); }}
+                        className={sidebarButtonClass(activeModule === 'produccion', "bg-orange-700 hover:bg-orange-800", "shadow-orange-200/30")}
+                      >
+                        <div className={iconContainerClass(activeModule === 'produccion')}>
+                          <Gauge className="h-4 w-4" />
+                        </div>
+                        <span className="uppercase text-[10px] font-black tracking-tight">Producción</span>
+                      </Button>
+                      )}
+
+                       {(isDemon || hasAccess(user.id, 'procesos')) && (
                       <Button 
                         variant="ghost" 
                         onClick={() => { setActiveModule('procesos'); setActiveTab('procesos-view'); setProcesosSubTab('ptab'); }}
@@ -3220,8 +3234,9 @@ export default function PlannerPage() {
                 activeModule === 'recipes' ? "bg-emerald-100 text-emerald-700" :
                  activeModule === 'raw-materials' ? "bg-amber-100 text-amber-700" :
                  activeModule === 'jarabes' ? "bg-blue-100 text-blue-700" :
-                  activeModule === 'planta' ? "bg-slate-100 text-slate-700" :
-                   activeModule === 'procesos' ? "bg-teal-100 text-teal-700" :
+                   activeModule === 'planta' ? "bg-slate-100 text-slate-700" :
+                   activeModule === 'produccion' ? "bg-orange-100 text-orange-700" :
+                    activeModule === 'procesos' ? "bg-teal-100 text-teal-700" :
                    activeModule === 'calidad' ? "bg-rose-100 text-rose-700" :
                    activeModule === 'insumos' ? "bg-cyan-100 text-cyan-700" :
                     activeModule === 'logistica' ? "bg-orange-100 text-orange-700" :
@@ -3235,8 +3250,9 @@ export default function PlannerPage() {
                  activeModule === 'recipes' ? 'MÓDULO DE RECETAS' :
                  activeModule === 'raw-materials' ? 'MÓDULO DE MATERIA PRIMA' :
                  activeModule === 'jarabes' ? 'MÓDULO DE JARABES' :
-                  activeModule === 'planta' ? 'MÓDULO DE PLANTA' :
-                   activeModule === 'procesos' ? 'MÓDULO DE PROCESOS' :
+                 activeModule === 'planta' ? 'MÓDULO DE PLANTA' :
+                 activeModule === 'produccion' ? 'MÓDULO DE PRODUCCIÓN' :
+                    activeModule === 'procesos' ? 'MÓDULO DE PROCESOS' :
                    activeModule === 'calidad' ? 'MÓDULO DE CALIDAD' :
                    activeModule === 'insumos' ? 'MÓDULO DE INSUMOS' :
                     activeModule === 'logistica' ? 'MÓDULO DE LOGÍSTICA' :
@@ -3284,7 +3300,7 @@ export default function PlannerPage() {
           <div className="flex-1 overflow-auto p-4 lg:p-8">
             <div className="flex flex-col gap-4 lg:gap-6 h-full">
               
-                {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'procesos' && activeModule !== 'calidad' && activeModule !== 'insumos' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && activeModule !== 'jarabes' && activeModule !== 'ordenes-sap' && activeModule !== 'seguimiento' && (
+                 {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'produccion' && activeModule !== 'procesos' && activeModule !== 'calidad' && activeModule !== 'insumos' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && activeModule !== 'jarabes' && activeModule !== 'ordenes-sap' && activeModule !== 'seguimiento' && (
                   <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1 shadow-none self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print h-11 shrink-0 gap-1 w-full justify-between">
                     {activeModule === 'planning' && (
                       <>
@@ -4883,9 +4899,15 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                            </div>
                          </div>
                        )}
-                    </>
-                  )}
-                      {activeModule === 'procesos' && (isDemon || user.id === 'jaime.r' || user.id === 'proc1.mds' || user.id === 'procj.mds' || user.id === 'procs2.mds' || user.id === 'maria.mds' || user.id === 'alex.mds' || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds') && (
+                     </>
+                   )}
+                   {activeModule === 'produccion' && hasAccess(user.id, 'produccion') && (
+                     <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                       <Gauge className="h-12 w-12 mb-4 opacity-20" />
+                       Módulo de Producción en Desarrollo
+                     </div>
+                   )}
+                       {activeModule === 'procesos' && (isDemon || user.id === 'jaime.r' || user.id === 'proc1.mds' || user.id === 'procj.mds' || user.id === 'procs2.mds' || user.id === 'maria.mds' || user.id === 'alex.mds' || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds') && (
                         <div className="flex flex-col h-full">
                           <div className="flex items-center gap-2 mb-2 no-print">
                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">

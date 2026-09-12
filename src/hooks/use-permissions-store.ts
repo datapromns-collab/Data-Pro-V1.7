@@ -80,6 +80,7 @@ export type ModuleId =
   | 'raw-materials'
   | 'recipes'
   | 'planta'
+  | 'produccion'
   | 'planta-admin'
   | 'procesos'
   | 'calidad'
@@ -106,6 +107,7 @@ export const MODULE_LABELS: Record<ModuleId, string> = {
   'raw-materials': 'Materia Prima',
   recipes: 'Recetas',
   planta: 'Planta',
+  produccion: 'Producción',
   'planta-admin': 'Planta (Admin)',
   procesos: 'Procesos',
   calidad: 'Calidad',
@@ -124,6 +126,7 @@ export const MODULE_COLORS: Record<ModuleId, string> = {
   'raw-materials': 'bg-amber-600',
   recipes: 'bg-emerald-600',
   planta: 'bg-slate-800',
+  produccion: 'bg-orange-700',
   'planta-admin': 'bg-slate-900',
   procesos: 'bg-teal-600',
   calidad: 'bg-rose-600',
@@ -142,6 +145,7 @@ export const ALL_MODULES = [
   'raw-materials',
   'recipes',
   'planta',
+  'produccion',
   'planta-admin',
   'procesos',
   'calidad',
@@ -156,7 +160,7 @@ export const ALL_MODULES = [
 const DEFAULT_PERMISSIONS: UserPermissions = {
   mds: ['planning', 'planta', 'logistica', 'ventas'],
   'jaime.r': ['planning', 'management', 'jarabes', 'raw-materials', 'planta', 'logistica', 'ventas', 'purchasing', 'seguimiento', 'procesos'],
-  demon: ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'procesos', 'calidad', 'insumos', 'logistica', 'ventas', 'purchasing', 'ordenes-sap', 'seguimiento'],
+  demon: ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'produccion', 'procesos', 'calidad', 'insumos', 'logistica', 'ventas', 'purchasing', 'ordenes-sap', 'seguimiento'],
   'maria.mds': ['jarabes', 'raw-materials', 'planta', 'planta-admin', 'planning', 'management', 'ordenes-sap', 'procesos', 'logistica'],
   'alex.mds': ['jarabes', 'raw-materials', 'planta', 'planta-admin', 'planning', 'management', 'procesos', 'logistica'],
   'anto.mds': ['purchasing', 'logistica', 'ventas', 'planning', 'management'],
