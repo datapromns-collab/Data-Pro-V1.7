@@ -10220,7 +10220,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-12T17:59:15.425Z"
+    "updatedAt": "2026-09-12T18:14:06.741Z"
   },
   "ordenesSap": [
     {
@@ -111561,13 +111561,13 @@
       {
         "fecha": "2026-09-10",
         "semana": 37,
-        "turno": "NOCTURNO",
+        "turno": "DIURNO",
         "operador": "",
         "linea": "Línea 6",
         "equipo": "",
         "tipoParada": "PROGRAMADA",
-        "inicioParada": "18:30",
-        "finParada": "20:30",
+        "inicioParada": "17:20",
+        "finParada": "19:20",
         "totalMin": "120",
         "zona": "Llenado",
         "falla": "CIP 3 PASOS ",
@@ -111575,7 +111575,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1789226236607,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-10",
@@ -129939,8 +129939,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  08 .xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 12520,
-    "uploadedAt": "2026-09-11T15:08:18.058Z",
+    "tamano": 13826,
+    "uploadedAt": "2026-09-12T18:14:06.741Z",
     "uploadedBy": "local-user"
   }
 }
