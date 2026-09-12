@@ -125139,7 +125139,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789241521789.984,
+        "id": 1789238757537,
         "fechaOrden": "2026-09-09",
         "orden": "10083",
         "fechaEmision": "2026-09-09",
@@ -125162,7 +125162,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -125301,7 +125301,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789241521789.1758,
+        "id": 1789242047398.871,
         "fechaOrden": "2026-09-09",
         "orden": "9081",
         "fechaEmision": "2026-09-09",
@@ -125355,7 +125355,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789241521789.6719,
+        "id": 1789242047398.2488,
         "fechaOrden": "2026-09-09",
         "orden": "9082",
         "fechaEmision": "2026-09-09",
@@ -125382,7 +125382,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789241521789.6936,
+        "id": 1789242047398.3057,
         "fechaOrden": "2026-09-09",
         "orden": "9464",
         "fechaEmision": "2026-09-09",
