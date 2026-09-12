@@ -1270,7 +1270,7 @@ export default function PlannerPage() {
       const fechaStr = format(dia, 'yyyy-MM-dd');
                                                                                             const consumido = getAguaConsumoNumber(fechaStr);
       const vp = calcularLitrosAguaParaFecha(fechaStr);
-      const rendimiento = consumido > 0 && vp > 0 ? formatAguaDisplay(vp / consumido) : '0,00';
+      const rendimiento = consumido > 0 && vp > 0 ? formatAguaDisplay(consumido / vp) : '0,00';
       const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
       totalConsumido += consumido;
       totalVP += vp;
@@ -1291,7 +1291,7 @@ export default function PlannerPage() {
       dia: 'TOTAL',
       consumido: totalConsumido || '',
       vp: totalVP ? parseFloat(totalVP.toFixed(2)) : '',
-      rendimiento: totalConsumido > 0 && totalVP > 0 ? Number(formatAguaDisplay(totalVP / totalConsumido).replace(/\./g, '').replace(',', '.')) : '',
+      rendimiento: totalConsumido > 0 && totalVP > 0 ? Number(formatAguaDisplay(totalConsumido / totalVP).replace(/\./g, '').replace(',', '.')) : '',
     });
     totalRow.font = { bold: true };
     totalRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFe2e8f0' } };
@@ -1395,7 +1395,7 @@ export default function PlannerPage() {
       const fechaStr = format(dia, 'yyyy-MM-dd');
       return acc + calcularLitrosAguaParaFecha(fechaStr);
     }, 0);
-    const totalRendimiento = totalConsumido > 0 && totalVP > 0 ? formatAguaDisplay(totalVP / totalConsumido) : '0,00';
+    const totalRendimiento = totalConsumido > 0 && totalVP > 0 ? formatAguaDisplay(totalConsumido / totalVP) : '0,00';
     rows.push(['', 'TOTAL', Number(formatAguaDisplay(totalConsumido).replace(/\./g, '').replace(',', '.')), Number(formatAguaDisplay(totalVP).replace(/\./g, '').replace(',', '.')), Number(formatAguaDisplay(totalRendimiento).replace(/\./g, '').replace(',', '.'))]);
     autoTable(doc, {
       startY: 22,
@@ -1430,7 +1430,7 @@ export default function PlannerPage() {
       const fechaStr = format(dia, 'yyyy-MM-dd');
       const consumido = getAguaConsumoNumber(fechaStr);
       const vp = calcularLitrosAguaParaFecha(fechaStr);
-      const rendimiento = consumido > 0 && vp > 0 ? formatAguaDisplay(vp / consumido) : '0,00';
+      const rendimiento = consumido > 0 && vp > 0 ? formatAguaDisplay(consumido / vp) : '0,00';
       const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
       return [
         format(dia, 'dd/MM/yyyy'),
@@ -2347,41 +2347,50 @@ export default function PlannerPage() {
     headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFecab0f' } };
     headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
     headerRow.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+    const parsePtabAguaValue = (value: string | undefined) => {
+      if (value === undefined || value === null || value.trim() === '') return null;
+      const normalized = value.replace(/\./g, '').replace(',', '.');
+      const numericValue = Number(normalized);
+      if (!Number.isFinite(numericValue)) return null;
+      return Number(numericValue.toFixed(2));
+    };
+    const formatPtabAguaCell = (value: string | undefined) => {
+      const numericValue = parsePtabAguaValue(value);
+      return numericValue !== null ? { value: numericValue, numFmt: '#,##0.00' } : { value: null, numFmt: '#,##0.00' };
+    };
     rows.forEach((rowLabel, idx) => {
       const rowData: Record<string, any> = { descripcion: rowLabel };
       days.forEach((day) => {
         const dateStr = format(startOfDay(day), 'yyyy-MM-dd');
         const cellKey = getPtabAguaCellKey(dateStr, rowKeys[idx]);
         const value = data[cellKey];
-        if (value !== undefined && value !== '') {
-          const numericValue = Number(value);
-          if (Number.isFinite(numericValue)) {
-            rowData[format(day, 'yyyy-MM-dd')] = numericValue;
-          }
-        }
+        const formatted = formatPtabAguaCell(value);
+        rowData[format(day, 'yyyy-MM-dd')] = formatted.value;
       });
       const row = worksheet.addRow(rowData);
       row.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
       if (idx % 2 === 0) {
         row.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFf8fafc' } };
       }
+      row.eachCell((cell, colNumber) => {
+        if (colNumber > 1) cell.numFmt = '#,##0.00';
+      });
     });
     const totalRowData: Record<string, any> = { descripcion: 'TOTAL AGUA SUM. POZOS LTS' };
     days.forEach((day) => {
       const dateStr = format(startOfDay(day), 'yyyy-MM-dd');
       const cellKey = getPtabAguaCellKey(dateStr, 'total');
       const value = data[cellKey];
-      if (value !== undefined && value !== '') {
-        const numericValue = Number(value);
-        if (Number.isFinite(numericValue)) {
-          totalRowData[format(day, 'yyyy-MM-dd')] = numericValue;
-        }
-      }
+      const formatted = formatPtabAguaCell(value);
+      totalRowData[format(day, 'yyyy-MM-dd')] = formatted.value;
     });
     const totalRow = worksheet.addRow(totalRowData);
     totalRow.font = { bold: true };
     totalRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFe2e8f0' } };
     totalRow.border = { top: { style: 'medium' }, bottom: { style: 'medium' }, left: { style: 'thin' }, right: { style: 'thin' } };
+    totalRow.eachCell((cell, colNumber) => {
+      if (colNumber > 1) cell.numFmt = '#,##0.00';
+    });
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
     const url = URL.createObjectURL(blob);
@@ -6148,7 +6157,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                               const c04 = Number(row.cajas04L) || 0;
                                               return acc + ((c2 * 6 * 2) + (c1 * 12 * 1) + (c04 * 15 * 0.4));
                                             }, 0);
-                                             return valor > 0 ? formatAguaDisplay(totalLitros / valor) : '0,00';
+                                             return valor > 0 ? formatAguaDisplay(valor / totalLitros) : '0,00';
                                           })() : '0,00'}
                                        </div>
                                        <div className="flex items-center justify-end px-3 py-1 bg-slate-100 font-black text-slate-700 text-[11px]">
@@ -6188,7 +6197,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                                                                                       const consumido = getAguaConsumoNumber(fechaStr);
                                                  const vp = calcularLitrosAguaParaFecha(fechaStr);
                                                 const litrosTotales = calcularLitrosAguaParaFecha(fechaStr);
-                                                 const rendimiento = consumido > 0 ? formatAguaDisplay(litrosTotales / consumido) : '0,00';
+                                                 const rendimiento = consumido > 0 ? formatAguaDisplay(consumido / litrosTotales) : '0,00';
                                                 const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
                                                 return (
                                                   <tr key={fechaStr} className={cn("border-b border-slate-100", idx % 2 === 0 ? "bg-white" : "bg-slate-50/60")}>
@@ -6249,7 +6258,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    const fechaStr = format(dia, 'yyyy-MM-dd');
                                                    return acc + calcularLitrosAguaParaFecha(fechaStr);
                                                  }, 0);
-                                                  return totalConsumido > 0 ? formatAguaDisplay(totalLitros / totalConsumido) : '0,00';
+                                                  return totalConsumido > 0 ? formatAguaDisplay(totalConsumido / totalLitros) : '0,00';
                                                })()}
                                             </td>
                                           </tr>
@@ -6305,7 +6314,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                                                                                   const consumido = getAguaConsumoNumber(fechaStr);
                                              const vp = calcularLitrosAguaParaFecha(fechaStr);
                                             const litrosTotales = calcularLitrosAguaParaFecha(fechaStr);
-                                             const rendimiento = consumido > 0 ? formatAguaDisplay(litrosTotales / consumido) : '0,00';
+                                             const rendimiento = consumido > 0 ? formatAguaDisplay(consumido / litrosTotales) : '0,00';
                                             const diaNombre = format(dia, 'EEEE', { locale: es }).toUpperCase();
                                            return (
                                              <tr key={fechaStr} className={cn("border-b border-slate-100", idx % 2 === 0 ? "bg-white" : "bg-slate-50/60")}>
@@ -6364,7 +6373,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                 const fechaStr = format(dia, 'yyyy-MM-dd');
                                                 return acc + calcularLitrosAguaParaFecha(fechaStr);
                                               }, 0);
-                                               return totalConsumido > 0 ? formatAguaDisplay(totalLitros / totalConsumido) : '0,00';
+                                               return totalConsumido > 0 ? formatAguaDisplay(totalConsumido / totalLitros) : '0,00';
                                             })()}
                                           </td>
                                         </tr>
