@@ -114198,6 +114198,25 @@
         "usuario": "Luis Blandin",
         "id": 1789236031672,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-10",
+        "semana": 37,
+        "turno": "NOCTURNO",
+        "operador": "LUIS RAUL",
+        "linea": "Línea 6",
+        "equipo": "LLENADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "19:20",
+        "finParada": "20:07",
+        "totalMin": "47",
+        "zona": "Llenado",
+        "falla": "EXTENSION DE CIP POR RETIRO DE FALSA BOTELLAS Y PINES, MEZCLA NO CONFORME POR CO2",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789236932844,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
