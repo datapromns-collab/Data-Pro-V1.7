@@ -109930,6 +109930,25 @@
         "usuario": "Luis Blandin",
         "id": 1789219104857,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-08",
+        "semana": 37,
+        "turno": "NOCTURNO",
+        "operador": "JOSE VIEIRA",
+        "linea": "Línea 7",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "02:05",
+        "finParada": "02:17",
+        "totalMin": "12",
+        "zona": "Llenado",
+        "falla": "PERDIDA DE MARCA DE CORTE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789219153560,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
