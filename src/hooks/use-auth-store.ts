@@ -54,7 +54,7 @@ const STORAGE_KEY = 'planner_auth_session';
  *    - Acceso: Planificación en solo lectura.
  */
 const VALID_USERS = [
-  { id: 'jaime.r', password: 'ad.123.', name: 'Gerencia de Planta', role: 'ADMIN' as UserRole },
+  { id: 'jaime.r', password: 'ad.123.', name: 'Jaime Rangel', role: 'ADMIN' as UserRole },
   { id: 'demon', password: '2005', name: 'Yonny Hernández', role: 'ADMIN' as UserRole },
   { id: 'maria.mds', password: 'ad.147.', name: 'Maria Reinoso', role: 'INVENTORY' as UserRole },
   { id: 'alex.mds', password: 'ad.159.', name: 'Alexandra Arteaga', role: 'INVENTORY' as UserRole },

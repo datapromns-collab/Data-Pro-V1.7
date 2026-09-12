@@ -10220,7 +10220,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-11T21:33:09.400Z"
+    "updatedAt": "2026-09-12T11:36:29.525Z"
   },
   "ordenesSap": [
     {
@@ -18028,12 +18028,12 @@
           "fechaInicio": "2026-09-11",
           "ticket1": "16006",
           "cajas1": 2560,
-          "ticket2": "",
+          "ticket2": "16007",
           "cajas2": 6960,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1760,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 7559
         }
       ]
     },
@@ -18059,12 +18059,12 @@
           "fechaInicio": "2026-09-11",
           "ticket1": "17960",
           "cajas1": 5840,
-          "ticket2": "",
+          "ticket2": "17961",
           "cajas2": 4800,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3040,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 14560
         },
         {
           "fechaInicio": "2026-09-12",
@@ -18121,12 +18121,12 @@
           "fechaInicio": "2026-09-11",
           "ticket1": "17848",
           "cajas1": 4000,
-          "ticket2": "",
+          "ticket2": "17849",
           "cajas2": 8320,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1760,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 11440
         },
         {
           "fechaInicio": "2026-09-12",
@@ -18152,12 +18152,12 @@
           "fechaInicio": "2026-09-11",
           "ticket1": "17896",
           "cajas1": 2800,
-          "ticket2": "",
+          "ticket2": "17897",
           "cajas2": 18400,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3040,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 14720
         },
         {
           "fechaInicio": "2026-09-12",
@@ -18212,6 +18212,37 @@
       "dias": [
         {
           "fechaInicio": "2026-09-11",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1789212755017",
+      "linea": 2,
+      "sabor": "GLUP PIÑA",
+      "ordenNumero": "63580",
+      "semana": 37,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-11",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16007",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 2000
+        },
+        {
+          "fechaInicio": "2026-09-12",
           "ticket1": "",
           "cajas1": 0,
           "ticket2": "",

@@ -10220,7 +10220,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-11T21:33:09.400Z"
+    "updatedAt": "2026-09-12T11:41:08.014Z"
   },
   "ordenesSap": [
     {
@@ -18028,12 +18028,12 @@
           "fechaInicio": "2026-09-11",
           "ticket1": "16006",
           "cajas1": 2560,
-          "ticket2": "",
+          "ticket2": "16007",
           "cajas2": 6960,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1760,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 7559
         }
       ]
     },
@@ -18059,12 +18059,12 @@
           "fechaInicio": "2026-09-11",
           "ticket1": "17960",
           "cajas1": 5840,
-          "ticket2": "",
+          "ticket2": "17961",
           "cajas2": 4800,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3040,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 14560
         },
         {
           "fechaInicio": "2026-09-12",
@@ -18101,12 +18101,12 @@
           "fechaInicio": "2026-09-11",
           "ticket1": "17747",
           "cajas1": 1920,
-          "ticket2": "",
+          "ticket2": "17748",
           "cajas2": 5120,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1440,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 6080
         }
       ]
     },
@@ -18121,12 +18121,12 @@
           "fechaInicio": "2026-09-11",
           "ticket1": "17848",
           "cajas1": 4000,
-          "ticket2": "",
+          "ticket2": "17849",
           "cajas2": 8320,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1760,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 11440
         },
         {
           "fechaInicio": "2026-09-12",
@@ -18152,12 +18152,12 @@
           "fechaInicio": "2026-09-11",
           "ticket1": "17896",
           "cajas1": 2800,
-          "ticket2": "",
+          "ticket2": "17897",
           "cajas2": 18400,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3040,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 14720
         },
         {
           "fechaInicio": "2026-09-12",
@@ -18183,12 +18183,12 @@
           "fechaInicio": "2026-09-11",
           "ticket1": "17923",
           "cajas1": 1500,
-          "ticket2": "",
+          "ticket2": "17924",
           "cajas2": 5700,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1300,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 5350
         },
         {
           "fechaInicio": "2026-09-12",
@@ -18212,6 +18212,37 @@
       "dias": [
         {
           "fechaInicio": "2026-09-11",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17796",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 858,
+          "ticket4": "",
+          "cajas4": 11856
+        }
+      ]
+    },
+    {
+      "id": "2-1789212755017",
+      "linea": 2,
+      "sabor": "GLUP PIÑA",
+      "ordenNumero": "63580",
+      "semana": 37,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-11",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16007",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 2000
+        },
+        {
+          "fechaInicio": "2026-09-12",
           "ticket1": "",
           "cajas1": 0,
           "ticket2": "",
@@ -109709,6 +109740,63 @@
         "usuario": "Luis Blandin",
         "id": 1789154814428,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-09",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "16:25",
+        "finParada": "16:40",
+        "totalMin": "15",
+        "zona": "Llenado",
+        "falla": "ADECUACION DE ARRANQUE LUEGO DEL RETORNO DE E/E",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1788991023411,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-08",
+        "semana": 37,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "20:15",
+        "finParada": "20:19",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "EN ESPERA DE SERVICIOS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789218059100,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-08",
+        "semana": 37,
+        "turno": "NOCTURNO",
+        "operador": "ORLANDO TORREALBA",
+        "linea": "Línea 6",
+        "equipo": "TAPADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "20:19",
+        "finParada": "20:22",
+        "totalMin": "3",
+        "zona": "Llenado",
+        "falla": "AJUSTE DE PISTON DE APERTURA DE TAPAS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789218111547,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -118696,6 +118784,12 @@
           "producto": "221",
           "jarabeReal": 90485,
           "ubb": 91.57
+        },
+        "auto-2-1789044999627": {
+          "cajasPlanificadas": 91250,
+          "producto": "56",
+          "jarabeReal": 105227,
+          "ubb": 106.43
         }
       },
       "linea-3": {
@@ -119133,6 +119227,12 @@
           "producto": "743",
           "jarabeReal": 25831,
           "ubb": 26.15
+        },
+        "auto-6-1789128243296": {
+          "cajasPlanificadas": 41400,
+          "jarabeReal": 24812,
+          "producto": "520",
+          "ubb": 8.63
         }
       },
       "linea-7": {
@@ -119277,7 +119377,9 @@
         },
         "auto-7-1788889887698": {
           "cajasPlanificadas": 91250,
-          "producto": "766"
+          "producto": "926",
+          "jarabeReal": 103664,
+          "ubb": 36
         }
       }
     },
@@ -125010,7 +125112,12 @@
       "2026-09-10-suave": "176985",
       "2026-09-10-procesos": "2140091.39",
       "2026-09-10-filtrada": "3293310.05",
-      "2026-09-10-total": "3101417,33"
+      "2026-09-10-total": "3101417,33",
+      "2026-09-11-servicio": "27983",
+      "2026-09-11-suave": "237342",
+      "2026-09-11-procesos": "2870037.54",
+      "2026-09-11-filtrada": "4340098.55",
+      "2026-09-11-total": "3416646.67"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
