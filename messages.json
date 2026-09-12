@@ -8,7 +8,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "jaime.r",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-11T19:52:05.466Z"
     },
     {
@@ -19,7 +19,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "jaime.r",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-10T20:37:56.258Z"
     },
     {
@@ -30,7 +30,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "jaime.r",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-08T13:23:36.462Z"
     },
     {
@@ -41,7 +41,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "jaime.r",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-04T17:25:40.524Z"
     },
     {
@@ -52,7 +52,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "jaime.r",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-04T17:25:10.363Z"
     },
     {
@@ -63,7 +63,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "jaime.r",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-02T19:05:19.694Z"
     },
     {
@@ -74,7 +74,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "jaime.r",
-      "read": false,
+      "read": true,
       "createdAt": "2026-08-28T19:57:39.064Z"
     },
     {
@@ -85,7 +85,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "jaime.r",
-      "read": false,
+      "read": true,
       "createdAt": "2026-08-28T19:56:46.530Z"
     },
     {
@@ -96,7 +96,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "jaime.r",
-      "read": false,
+      "read": true,
       "createdAt": "2026-08-26T14:52:39.343Z"
     },
     {
@@ -107,7 +107,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "jaime.r",
-      "read": false,
+      "read": true,
       "createdAt": "2026-08-23T18:40:35.194Z"
     },
     {

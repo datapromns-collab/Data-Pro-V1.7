@@ -109797,6 +109797,25 @@
         "usuario": "Luis Blandin",
         "id": 1789218111547,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-08",
+        "semana": 37,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "20:55",
+        "finParada": "21:25",
+        "totalMin": "30",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE SABOR DE GLUP COLA A GLUP KOLITA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789218235692,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -125117,7 +125136,7 @@
       "2026-09-11-suave": "237342",
       "2026-09-11-procesos": "2870037.54",
       "2026-09-11-filtrada": "4340098.55",
-      "2026-09-11-total": "3416646.67"
+      "2026-09-11-total": "3416646,67"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
