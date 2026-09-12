@@ -111614,25 +111614,6 @@
         "usuario": "Luis Blandin",
         "id": 1789226387088,
         "bloqueado": true
-      },
-      {
-        "fecha": "2026-09-10",
-        "semana": 37,
-        "turno": "NOCTURNO",
-        "operador": "JUAN EZEQUIEL",
-        "linea": "Línea 6",
-        "equipo": "CHILLER",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "21:40",
-        "finParada": "21:54",
-        "totalMin": "14",
-        "zona": "Llenado",
-        "falla": "LIMPIEZA DE FILTRO DE CHILLER DE HORNO",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Blandin",
-        "id": 1789226452935,
-        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -127057,6 +127038,7 @@
   "deletedIds": {
     "planta-informes-operacionales": {
       "*": [
+        "1788978219703",
         "1788991023411"
       ]
     },
