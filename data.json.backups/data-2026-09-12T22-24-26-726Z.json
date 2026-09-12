@@ -118416,6 +118416,25 @@
         "usuario": "Luis Blandin",
         "id": 1789251144560,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-11",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "KENNY MENDEZ",
+        "linea": "Línea 2",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "15:22",
+        "finParada": "15:29",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "ETIQUETA ENRROLLADA EN CILINDRO PRINCIPAL",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789251440615,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
