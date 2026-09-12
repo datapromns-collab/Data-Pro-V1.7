@@ -114407,6 +114407,25 @@
         "usuario": "Luis Blandin",
         "id": 1789238191672,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-09",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "YEFERSON BRETO",
+        "linea": "Línea 6",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "11:44",
+        "finParada": "11:54",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "ERROR DE EJE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789238245263,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
