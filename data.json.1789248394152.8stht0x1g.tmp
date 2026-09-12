@@ -10220,7 +10220,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-12T21:24:06.630Z"
+    "updatedAt": "2026-09-12T21:26:07.266Z"
   },
   "ordenesSap": [
     {
@@ -18071,7 +18071,7 @@
           "ticket1": "17962",
           "cajas1": 4640,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 480,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -118016,6 +118016,25 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1789248335388,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-11",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "ENDERSON BUSTAMANTE",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "15:37",
+        "finParada": "15:42",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789248369845,
         "bloqueado": true
       }
     ],
