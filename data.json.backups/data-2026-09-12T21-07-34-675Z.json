@@ -101171,7 +101171,7 @@
         "turno": "DIURNO",
         "operador": "MAXIMILIANO CORTEZAO",
         "linea": "Línea 3",
-        "equipo": "PALETIZADORA",
+        "equipo": "",
         "tipoParada": "OPERACIONAL",
         "inicioParada": "07:03",
         "finParada": "07:25",
@@ -101182,7 +101182,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788878524608,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-09-07",
@@ -102236,17 +102236,17 @@
         "operador": "KEVIN PONCE",
         "linea": "Línea 7",
         "equipo": "PALETIZADORA",
-        "tipoParada": "AVERÍA",
+        "tipoParada": "OPERACIONAL",
         "inicioParada": "07:32",
         "finParada": "08:44",
         "totalMin": "72",
         "zona": "Llenado",
         "falla": "FALLA EN LA PRECOMPACTACION, BANDA SE ATASCA",
-        "orden": "10080",
+        "orden": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788888936911,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-09-07",
@@ -109737,7 +109737,7 @@
       {
         "fecha": "2026-09-08",
         "semana": 37,
-        "turno": "NOCTURNO",
+        "turno": "DIURNO",
         "operador": "",
         "linea": "Línea 6",
         "equipo": "",
@@ -117788,6 +117788,44 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1789247073484,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-11",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "GERARDO CARRILLO",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "17:17",
+        "finParada": "17:23",
+        "totalMin": "6",
+        "zona": "Llenado",
+        "falla": "BOTELLAS ATASCADAS EN LA SALIDA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789247110928,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-11",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "07:30",
+        "finParada": "07:46",
+        "totalMin": "16",
+        "zona": "Llenado",
+        "falla": "FALLA DE E/E",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789247137423,
         "bloqueado": true
       }
     ],
