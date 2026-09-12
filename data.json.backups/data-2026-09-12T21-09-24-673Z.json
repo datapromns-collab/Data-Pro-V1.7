@@ -117827,6 +117827,25 @@
         "usuario": "Luis Blandin",
         "id": 1789247137423,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-11",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "ENDERSON BUSTAMANTE",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "07:53",
+        "finParada": "07:58",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789247320624,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
