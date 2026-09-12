@@ -101171,7 +101171,7 @@
         "turno": "DIURNO",
         "operador": "MAXIMILIANO CORTEZAO",
         "linea": "Línea 3",
-        "equipo": "",
+        "equipo": "PALETIZADORA",
         "tipoParada": "OPERACIONAL",
         "inicioParada": "07:03",
         "finParada": "07:25",
@@ -101182,7 +101182,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788878524608,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-07",
@@ -102236,17 +102236,17 @@
         "operador": "KEVIN PONCE",
         "linea": "Línea 7",
         "equipo": "PALETIZADORA",
-        "tipoParada": "OPERACIONAL",
+        "tipoParada": "AVERÍA",
         "inicioParada": "07:32",
         "finParada": "08:44",
         "totalMin": "72",
         "zona": "Llenado",
         "falla": "FALLA EN LA PRECOMPACTACION, BANDA SE ATASCA",
-        "orden": "",
+        "orden": "10080",
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788888936911,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-07",
@@ -111561,13 +111561,13 @@
       {
         "fecha": "2026-09-10",
         "semana": 37,
-        "turno": "NOCTURNO",
+        "turno": "DIURNO",
         "operador": "",
         "linea": "Línea 6",
         "equipo": "",
         "tipoParada": "PROGRAMADA",
-        "inicioParada": "18:30",
-        "finParada": "20:30",
+        "inicioParada": "17:20",
+        "finParada": "19:20",
         "totalMin": "120",
         "zona": "Llenado",
         "falla": "CIP 3 PASOS ",
@@ -111575,7 +111575,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1789226236607,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-10",
