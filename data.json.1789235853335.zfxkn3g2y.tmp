@@ -10220,7 +10220,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-12T17:59:15.425Z"
+    "updatedAt": "2026-09-12T16:04:18.632Z"
   },
   "ordenesSap": [
     {
@@ -111575,7 +111575,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1789226236607,
-        "bloqueado": false
+        "bloqueado": true
       },
       {
         "fecha": "2026-09-10",
@@ -114140,63 +114140,6 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1789235800991,
-        "bloqueado": true
-      },
-      {
-        "fecha": "2026-09-09",
-        "semana": 37,
-        "turno": "DIURNO",
-        "operador": "CRISTIAN SIERRA",
-        "linea": "Línea 6",
-        "equipo": "CHILLER",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "07:00",
-        "finParada": "07:08",
-        "totalMin": "8",
-        "zona": "Llenado",
-        "falla": "FALLA EN CHILLER DEL HORNO",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Blandin",
-        "id": 1789235852439,
-        "bloqueado": true
-      },
-      {
-        "fecha": "2026-09-10",
-        "semana": 37,
-        "turno": "DIURNO",
-        "operador": "SAMUEL DIAZ",
-        "linea": "Línea 6",
-        "equipo": "MIXER",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "05:00",
-        "finParada": "05:09",
-        "totalMin": "9",
-        "zona": "Llenado",
-        "falla": "FALLA CON EL TANQUE DE MEZCLA (NO LLENABA)",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Blandin",
-        "id": 1789235963030,
-        "bloqueado": true
-      },
-      {
-        "fecha": "2026-09-09",
-        "semana": 37,
-        "turno": "DIURNO",
-        "operador": "SAMUEL DIAZ",
-        "linea": "Línea 6",
-        "equipo": "LLENADORA",
-        "tipoParada": "AVERÍA",
-        "inicioParada": "08:07",
-        "finParada": "08:26",
-        "totalMin": "19",
-        "zona": "Llenado",
-        "falla": "REVISION DE LOS FRENOS DE LAS VALVULAS #04,55,59 Y ALTURA",
-        "orden": "9079",
-        "observaciones": "",
-        "usuario": "Luis Blandin",
-        "id": 1789236031672,
         "bloqueado": true
       }
     ],
@@ -123177,7 +123120,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789235781739.1155,
+        "id": 1789235775387,
         "fechaOrden": "2026-09-09",
         "orden": "9463",
         "fechaEmision": "2026-09-09",
@@ -123200,34 +123143,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
-        "usuario": "Luis Blandin"
-      },
-      {
-        "id": 1789236043807.352,
-        "fechaOrden": "2026-09-09",
-        "orden": "9079",
-        "fechaEmision": "2026-09-09",
-        "semana": 37,
-        "turno": "DIURNO",
-        "solicitante": "",
-        "linea": "Línea 6",
-        "maquina": "LLENADORA",
-        "aviso": "",
-        "fechaParada": "2026-09-09",
-        "inicioMtto": "",
-        "finMtto": "",
-        "inicioParada": "08:07",
-        "finParada": "08:26",
-        "tMtto": "19",
-        "tipoParada": "AVERÍA",
-        "mtto": "",
-        "falla": "REVISION DE LOS FRENOS DE LAS VALVULAS #04,55,59 Y ALTURA",
-        "mttoEsp": "",
-        "descripcionFalla": "",
-        "descripcionAccion": "",
-        "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       }
     ],
