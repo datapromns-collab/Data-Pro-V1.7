@@ -116060,6 +116060,25 @@
         "usuario": "Luis Blandin",
         "id": 1789241193421,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-09",
+        "semana": 37,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "03:58",
+        "finParada": "04:02",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "SIN PRESION DE AIRE ALTA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789241248499,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [

@@ -116060,6 +116060,25 @@
         "usuario": "Luis Blandin",
         "id": 1789241193421,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-09",
+        "semana": 37,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "SALA DE MÁQUINAS",
+        "inicioParada": "03:58",
+        "finParada": "04:02",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "SIN PRESION DE AIRE ALTA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789241248499,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -125120,7 +125139,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789238757537,
+        "id": 1789241521789.984,
         "fechaOrden": "2026-09-09",
         "orden": "10083",
         "fechaEmision": "2026-09-09",
@@ -125143,7 +125162,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -125282,7 +125301,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789240807437,
+        "id": 1789241521789.1758,
         "fechaOrden": "2026-09-09",
         "orden": "9081",
         "fechaEmision": "2026-09-09",
@@ -125305,7 +125324,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -125336,7 +125355,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789240915233,
+        "id": 1789241521789.6719,
         "fechaOrden": "2026-09-09",
         "orden": "9082",
         "fechaEmision": "2026-09-09",
@@ -125359,11 +125378,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789240989739,
+        "id": 1789241521789.6936,
         "fechaOrden": "2026-09-09",
         "orden": "9464",
         "fechaEmision": "2026-09-09",
@@ -125386,7 +125405,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       }
     ],
