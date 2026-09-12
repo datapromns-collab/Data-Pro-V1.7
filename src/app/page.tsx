@@ -7746,6 +7746,91 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
   };
 }
 
+function getHorasProgramadasPorDia(tasks: any[], fechas: string[], turno: 'DIURNO' | 'NOCTURNO' | 'DIARIO'): { horasProgramadas: number[]; cpHours: number[] } {
+  const horasProgramadas = Array(7).fill(0);
+  const cpHours = Array(7).fill(0);
+  const fechaSet = new Set(fechas);
+  const PROD_DAY_START_HOUR = 7;
+  const SHIFT_SPLIT_HOUR = 18;
+  const SHIFT_SPLIT_MINUTE = 30;
+
+  const getProdDayStart = (date: Date) => {
+    const d = new Date(date);
+    d.setHours(0, 0, 0, 0);
+    if (date.getHours() < PROD_DAY_START_HOUR) {
+      d.setDate(d.getDate() - 1);
+    }
+    return d;
+  };
+
+  (tasks || []).forEach(task => {
+    const start = new Date(task.startTime);
+    const end = new Date(task.endTime);
+    const linea = Number(task.lineId);
+    const name = String(task.name || '').trim();
+
+    if (isNaN(start.getTime()) || isNaN(end.getTime()) || !linea || linea < 1 || linea > 7) return;
+    if (start >= end) return;
+
+    const isCP = name.includes('CP') && !name.includes('CIP');
+
+    const prodDayStart = getProdDayStart(start);
+    const prodDayEnd = getProdDayStart(end);
+    let currentDay = new Date(prodDayStart);
+
+    while (currentDay <= prodDayEnd) {
+      const dayKey = format(currentDay, 'yyyy-MM-dd');
+      if (!fechaSet.has(dayKey)) {
+        currentDay.setDate(currentDay.getDate() + 1);
+        continue;
+      }
+
+      const dayStart = new Date(currentDay);
+      dayStart.setHours(PROD_DAY_START_HOUR, 0, 0, 0);
+      const dayEnd = new Date(currentDay);
+      dayEnd.setDate(dayEnd.getDate() + 1);
+      dayEnd.setHours(PROD_DAY_START_HOUR, 0, 0, 0);
+
+      const taskStartInDay = start < dayStart ? dayStart : start;
+      const taskEndInDay = end > dayEnd ? dayEnd : end;
+
+      if (taskStartInDay < taskEndInDay) {
+        const splitTime = new Date(dayStart);
+        splitTime.setHours(SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, 0, 0);
+
+        let diurnoDia = 0;
+        let nocturnoDia = 0;
+
+        if (taskStartInDay < splitTime) {
+          const dEnd = taskEndInDay < splitTime ? taskEndInDay : splitTime;
+          const ms = dEnd.getTime() - taskStartInDay.getTime();
+          if (ms > 0) diurnoDia += ms / (1000 * 60 * 60);
+        }
+        if (taskEndInDay > splitTime) {
+          const nStart = taskStartInDay > splitTime ? taskStartInDay : splitTime;
+          const ms = taskEndInDay.getTime() - nStart.getTime();
+          if (ms > 0) nocturnoDia += ms / (1000 * 60 * 60);
+        }
+
+        if (turno === 'DIURNO') {
+          horasProgramadas[linea - 1] += diurnoDia;
+        } else if (turno === 'NOCTURNO') {
+          horasProgramadas[linea - 1] += nocturnoDia;
+        } else {
+          horasProgramadas[linea - 1] += diurnoDia + nocturnoDia;
+        }
+
+        if (isCP) {
+          cpHours[linea - 1] += diurnoDia + nocturnoDia;
+        }
+      }
+
+      currentDay.setDate(currentDay.getDate() + 1);
+    }
+  });
+
+  return { horasProgramadas, cpHours };
+}
 
   function useReportData(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, turno: 'DIURNO' | 'NOCTURNO' | 'DIARIO' = 'DIURNO', fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, ordenes?: any[], velocidadesDt?: { td: string[], tn: string[] }, hrsPagadasDia?: string[], hrsProgramadasDia?: string[], semanaFechas?: string[]) {
   return useMemo(() => {
@@ -7770,6 +7855,9 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
       diaPlanificada = planificadasPorDia?.[targetDate] || {};
     }
     const tareasLinea = (tasks || []).filter((t: any) => String(t.lineId || '') !== '');
+    const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
+    const fechaFiltro = (semanaFechas && semanaFechas.length > 0) ? semanaFechas : [targetDate];
+    const horasProgramadasCalc = getHorasProgramadasPorDia(tasks, fechaFiltro, turno);
 
     const lineas = ['Línea 1', 'Línea 2', 'Línea 3', 'Línea 4', 'Línea 5', 'Línea 6', 'Línea 7'];
     return lineas.map((lineaNombre, idx) => {
@@ -7790,14 +7878,17 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
       const ausentismo = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'AUSENTISMO').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
       const externas = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'FALLA DE E/E').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
         const horasPagadas = (hrsPagadasDia || [])[idx] || '0';
-        const horasProgramadas = (hrsProgramadasDia || [])[idx] || '0';
+        const manualHorasProgramadas = (hrsProgramadasDia || [])[idx];
+        const autoHorasProgramadas = horasProgramadasCalc.horasProgramadas[idx] || 0;
+        const horasProgramadas = manualHorasProgramadas && Number(manualHorasProgramadas) > 0
+          ? manualHorasProgramadas
+          : String(autoHorasProgramadas.toFixed(2)).replace('.', ',');
+        const cpHours = horasProgramadasCalc.cpHours[idx] || 0;
        const paradasProgramadas = minutosAHorasDecimal(porTipo.programadas || 0);
         const cajasH = Number(lineSpeeds?.[lineaNum] || 0);
         const tareas = tareasLinea.filter((t: any) => t.lineId === String(lineaNum));
       const planificadoTD = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.diurno || 0), 0));
       const planificadoTN = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.nocturno || 0), 0));
-      const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
-      const fechaFiltro = (semanaFechas && semanaFechas.length > 0) ? semanaFechas : [targetDate];
       const fechaSet = new Set(fechaFiltro);
       const alcanceTD = (ordenes || []).reduce((acc: number, orden: any) => {
         if (Number(orden.linea) !== lineaNum) return acc;
@@ -7864,6 +7955,7 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
           horasPagadas,
           horasProgramadas,
           paradasProgramadas,
+          cpHours: String(cpHours.toFixed(2)).replace('.', ','),
           relacion,
           servicios,
           ausentismo,
