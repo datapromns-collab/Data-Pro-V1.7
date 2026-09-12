@@ -114388,6 +114388,25 @@
         "usuario": "Luis Blandin",
         "id": 1789238036936,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-09",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "11:02",
+        "finParada": "11:18",
+        "totalMin": "16",
+        "zona": "Llenado",
+        "falla": "VARIACION DE VOLTAJE ADECTA LA ETIQUETADORA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789238191672,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
