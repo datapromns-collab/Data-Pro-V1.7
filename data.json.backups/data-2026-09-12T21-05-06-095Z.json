@@ -117789,25 +117789,6 @@
         "usuario": "Luis Blandin",
         "id": 1789247073484,
         "bloqueado": true
-      },
-      {
-        "fecha": "2026-09-11",
-        "semana": 37,
-        "turno": "DIURNO",
-        "operador": "GERARDO CARRILLO",
-        "linea": "Línea 3",
-        "equipo": "SOPLADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "17:17",
-        "finParada": "17:23",
-        "totalMin": "6",
-        "zona": "Llenado",
-        "falla": "BOTELLAS ATASCADAS EN LA SALIDA",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Blandin",
-        "id": 1789247110928,
-        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
