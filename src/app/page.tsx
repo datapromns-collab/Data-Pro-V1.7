@@ -51,6 +51,7 @@ import {
   Settings,
   CheckSquare,
   FileDown,
+  FileSpreadsheet,
   Upload
 } from 'lucide-react';
 import { PRODUCT_LIST, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, PRODUCTION_START_HOUR } from '@/lib/planner-utils';
@@ -2318,6 +2319,79 @@ export default function PlannerPage() {
 
   const handlePtabAguaChange = (dateStr: string, rowKey: string, value: string) => {
     ptabAguaStore.patchData({ [getPtabAguaCellKey(dateStr, rowKey)]: value });
+  };
+
+  const exportPtabAguaToExcel = async () => {
+    if (typeof window === 'undefined') return;
+    const days = getWeekDays(ptabWeekStartDate);
+    const data = ptabAguaStore.data || {};
+    const rows = [
+      'CONSUMO DE A. SERVICIO',
+      'CONSUMO DE A. SUAVE',
+      'CONSUMO DE A. PROCESOS',
+      'CONSUMO DE AGUA FILTRADA',
+    ];
+    const rowKeys = ['servicio', 'suave', 'procesos', 'filtrada'];
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet(`PTAB AGUA SEM ${getISOWeek(ptabWeekStartDate)}`);
+    worksheet.columns = [
+      { header: 'DESCRIPCIÓN', key: 'descripcion', width: 35 },
+      ...days.map((day) => ({
+        header: format(day, 'EEEE d/M/yy', { locale: es }).toUpperCase(),
+        key: format(day, 'yyyy-MM-dd'),
+        width: 16,
+      })),
+    ];
+    const headerRow = worksheet.getRow(1);
+    headerRow.font = { bold: true, color: { argb: 'FFFFFFFF' } };
+    headerRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFecab0f' } };
+    headerRow.alignment = { horizontal: 'center', vertical: 'middle' };
+    headerRow.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+    rows.forEach((rowLabel, idx) => {
+      const rowData: Record<string, any> = { descripcion: rowLabel };
+      days.forEach((day) => {
+        const dateStr = format(startOfDay(day), 'yyyy-MM-dd');
+        const cellKey = getPtabAguaCellKey(dateStr, rowKeys[idx]);
+        const value = data[cellKey];
+        if (value !== undefined && value !== '') {
+          const numericValue = Number(value);
+          if (Number.isFinite(numericValue)) {
+            rowData[format(day, 'yyyy-MM-dd')] = numericValue;
+          }
+        }
+      });
+      const row = worksheet.addRow(rowData);
+      row.border = { top: { style: 'thin' }, bottom: { style: 'thin' }, left: { style: 'thin' }, right: { style: 'thin' } };
+      if (idx % 2 === 0) {
+        row.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFf8fafc' } };
+      }
+    });
+    const totalRowData: Record<string, any> = { descripcion: 'TOTAL AGUA SUM. POZOS LTS' };
+    days.forEach((day) => {
+      const dateStr = format(startOfDay(day), 'yyyy-MM-dd');
+      const cellKey = getPtabAguaCellKey(dateStr, 'total');
+      const value = data[cellKey];
+      if (value !== undefined && value !== '') {
+        const numericValue = Number(value);
+        if (Number.isFinite(numericValue)) {
+          totalRowData[format(day, 'yyyy-MM-dd')] = numericValue;
+        }
+      }
+    });
+    const totalRow = worksheet.addRow(totalRowData);
+    totalRow.font = { bold: true };
+    totalRow.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFe2e8f0' } };
+    totalRow.border = { top: { style: 'medium' }, bottom: { style: 'medium' }, left: { style: 'thin' }, right: { style: 'thin' } };
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `PTAB_AGUA_Sem_${getISOWeek(ptabWeekStartDate)}_${ptabWeekStartDate.getFullYear()}.xlsx`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const handlePtabInsumosChange = (fecha: Date | undefined, quimico: string, idx: number, value: string) => {
@@ -4849,8 +4923,15 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                               <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                 <div className="flex flex-col h-full gap-3">
-                                   <div className="flex items-center justify-end no-print">
-                                     <Popover>
+                                    <div className="flex items-center justify-end no-print gap-2">
+                                      <button
+                                        onClick={exportPtabAguaToExcel}
+                                        className="inline-flex items-center gap-1.5 h-9 pl-3 pr-4 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-emerald-600 text-white shadow-sm active:scale-95"
+                                      >
+                                        <FileSpreadsheet className="h-3.5 w-3.5" />
+                                        Exportar Excel
+                                      </button>
+                                      <Popover>
                                        <PopoverTrigger asChild>
                                          <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
                                            <CalendarIcon className="h-3.5 w-3.5 text-primary" />
