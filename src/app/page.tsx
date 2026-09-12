@@ -7832,6 +7832,13 @@ function getHorasProgramadasPorDia(tasks: any[], fechas: string[], turno: 'DIURN
   return { horasProgramadas, cpHours };
 }
 
+function ajustarHorasProgramadas(horasProgramadas: number[], cpHours: number[], turno: 'DIURNO' | 'NOCTURNO' | 'DIARIO'): number[] {
+  if (turno === 'DIARIO') {
+    return horasProgramadas.map((val, idx) => Math.max(0, val - (cpHours[idx] || 0)));
+  }
+  return horasProgramadas;
+}
+
   function useReportData(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, turno: 'DIURNO' | 'NOCTURNO' | 'DIARIO' = 'DIURNO', fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, ordenes?: any[], velocidadesDt?: { td: string[], tn: string[] }, hrsPagadasDia?: string[], hrsProgramadasDia?: string[], semanaFechas?: string[]) {
   return useMemo(() => {
     let informeDelDia: any[] = [];
@@ -7858,6 +7865,7 @@ function getHorasProgramadasPorDia(tasks: any[], fechas: string[], turno: 'DIURN
     const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
     const fechaFiltro = (semanaFechas && semanaFechas.length > 0) ? semanaFechas : [targetDate];
     const horasProgramadasCalc = getHorasProgramadasPorDia(tasks, fechaFiltro, turno);
+    const horasProgramadasAjustadas = ajustarHorasProgramadas(horasProgramadasCalc.horasProgramadas, horasProgramadasCalc.cpHours, turno);
 
     const lineas = ['Línea 1', 'Línea 2', 'Línea 3', 'Línea 4', 'Línea 5', 'Línea 6', 'Línea 7'];
     return lineas.map((lineaNombre, idx) => {
@@ -7879,7 +7887,7 @@ function getHorasProgramadasPorDia(tasks: any[], fechas: string[], turno: 'DIURN
       const externas = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'FALLA DE E/E').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
         const horasPagadas = (hrsPagadasDia || [])[idx] || '0';
         const manualHorasProgramadas = (hrsProgramadasDia || [])[idx];
-        const autoHorasProgramadas = horasProgramadasCalc.horasProgramadas[idx] || 0;
+        const autoHorasProgramadas = horasProgramadasAjustadas[idx] || 0;
         const horasProgramadas = manualHorasProgramadas && Number(manualHorasProgramadas) > 0
           ? manualHorasProgramadas
           : String(autoHorasProgramadas.toFixed(2)).replace('.', ',');

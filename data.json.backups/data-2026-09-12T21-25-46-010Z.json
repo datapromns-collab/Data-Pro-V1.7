@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-14T00:00:00.000",
+      "weekStartDate": "2026-09-01T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -10220,7 +10220,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-12T20:47:27.440Z"
+    "updatedAt": "2026-09-12T21:24:06.630Z"
   },
   "ordenesSap": [
     {
@@ -18133,7 +18133,7 @@
           "ticket1": "17850",
           "cajas1": 2880,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 320,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -18257,7 +18257,7 @@
           "ticket1": "16008",
           "cajas1": 2480,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 1760,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -117921,6 +117921,101 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1789247689767,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-11",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "ENDERSON BUSTAMANTE",
+        "linea": "Línea 1",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "10:40",
+        "finParada": "10:44",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "PREFORMA TASCADA EN MOLDE #02",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789247970909,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-11",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "ENDERSON BUSTAMANTE",
+        "linea": "Línea 1",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "11:00",
+        "finParada": "11:25",
+        "totalMin": "25",
+        "zona": "Llenado",
+        "falla": "FALLA EN PLATO DE CARGA DE PREFORMAS",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789248012198,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-11",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "ENDERSON BUSTAMANTE",
+        "linea": "Línea 1",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "11:50",
+        "finParada": "11:55",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "BOTELLA ATACASDA EN MOLDE #02",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789248220078,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-11",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "CARLOS TORREALBA",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "13:34",
+        "finParada": "13:55",
+        "totalMin": "21",
+        "zona": "Llenado",
+        "falla": "ETIQUETA NO TRANSFERIDA PERDIDA DE MARCA DE CORTE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789248294597,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-11",
+        "semana": 37,
+        "turno": "DIURNO",
+        "operador": "PEDRO MORGADO",
+        "linea": "Línea 1",
+        "equipo": "PALETIZADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "14:10",
+        "finParada": "14:24",
+        "totalMin": "14",
+        "zona": "Llenado",
+        "falla": "FALLA DE PERSIANA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1789248335388,
         "bloqueado": true
       }
     ],
