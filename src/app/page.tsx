@@ -4438,15 +4438,15 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    allTasks={allTasks}
                                                />
                                             <div className="mt-3">
-                                               <TablaResumenPorLinea 
-                                                 informesOperacionales={informesOperacionales || []}
-                                                 tasks={tasks}
-                                                 realProduction={realProduction}
-                                                 lineSpeeds={lineSpeeds}
-                                                 fecha={reporteDiarioFecha}
-                                                 planificadasPorDia={planificadasPorDia}
-                                                 ordenes={ordenes}
-                                               />
+                                                <TablaResumenPorLinea 
+                                                  informesOperacionales={informesOperacionalesReporteStore.data || []}
+                                                  tasks={tasks}
+                                                  realProduction={realProduction}
+                                                  lineSpeeds={lineSpeeds}
+                                                  fecha={reporteDiarioFecha}
+                                                  planificadasPorDia={planificadasPorDia}
+                                                  ordenes={ordenesTrabajoReporteStore.data || []}
+                                                />
                                            </div>
                                            <div className="mt-3">
                                               <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
@@ -4497,15 +4497,15 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                   allTasks={allTasks}
                                                />
                                             <div className="mt-3">
-                                               <TablaResumenPorLinea 
-                                                 informesOperacionales={informesOperacionales || []}
-                                                 tasks={tasks}
-                                                 realProduction={realProduction}
-                                                 lineSpeeds={lineSpeeds}
-                                                 fecha={reporteDiarioFecha}
-                                                 planificadasPorDia={planificadasPorDia}
-                                                 ordenes={ordenes}
-                                               />
+                                                <TablaResumenPorLinea 
+                                                  informesOperacionales={informesOperacionalesReporteStore.data || []}
+                                                  tasks={tasks}
+                                                  realProduction={realProduction}
+                                                  lineSpeeds={lineSpeeds}
+                                                  fecha={reporteDiarioFecha}
+                                                  planificadasPorDia={planificadasPorDia}
+                                                  ordenes={ordenesTrabajoReporteStore.data || []}
+                                                />
                                            </div>
                                            <div className="mt-3">
                                               <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
