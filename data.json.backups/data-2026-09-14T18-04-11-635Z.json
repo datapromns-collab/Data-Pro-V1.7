@@ -118802,6 +118802,44 @@
         "usuario": "Luis Sanchez",
         "id": 1789391067352,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-03",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "DAVID REYES ",
+        "linea": "Línea 5",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "11:35",
+        "finParada": "11:45",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "MALA ENTREGA MOLDE 8",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1789409192901,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-03",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "SALA DE JARABE",
+        "inicioParada": "11:58",
+        "finParada": "12:05",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "SIN PRESION DE JARABE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1789409231645,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -128395,7 +128433,9 @@
         },
         "auto-1-1789131929902": {
           "cajasPlanificadas": 69000,
-          "producto": "190"
+          "producto": "190",
+          "jarabeReal": 93342,
+          "ubb": 32.43
         }
       },
       "linea-2": {
@@ -128558,7 +128598,9 @@
         },
         "auto-2-1789212755017": {
           "cajasPlanificadas": 55000,
-          "producto": "16"
+          "producto": "16",
+          "jarabeReal": 67550,
+          "ubb": 38.69
         }
       },
       "linea-3": {
@@ -128704,7 +128746,9 @@
         },
         "auto-3-1789127742450": {
           "cajasPlanificadas": 163800,
-          "producto": "618"
+          "producto": "618",
+          "jarabeReal": 141831,
+          "ubb": 49.29
         }
       },
       "linea-4": {
@@ -128814,7 +128858,9 @@
         },
         "auto-4-1789131939149": {
           "cajasPlanificadas": 128800,
-          "producto": "589"
+          "producto": "589",
+          "ubb": 49.04,
+          "jarabeReal": 414010
         }
       },
       "linea-5": {
@@ -128905,7 +128951,9 @@
         },
         "auto-5-1789131973529": {
           "cajasPlanificadas": 49005,
-          "producto": "691"
+          "producto": "691",
+          "ubb": 360,
+          "jarabeReal": 360000
         }
       },
       "linea-6": {
@@ -129165,11 +129213,15 @@
         },
         "auto-7-1789131987937": {
           "cajasPlanificadas": 35580,
-          "producto": "48"
+          "producto": "48",
+          "jarabeReal": 63082,
+          "ubb": 63.85
         },
         "auto-7-1789385493957": {
           "cajasPlanificadas": 7113,
-          "producto": "1147"
+          "producto": "1147",
+          "jarabeReal": 17060,
+          "ubb": 11
         }
       }
     },
