@@ -10220,7 +10220,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-13T17:36:14.380Z"
+    "updatedAt": "2026-09-14T11:24:35.107Z"
   },
   "ordenesSap": [
     {
@@ -18070,12 +18070,12 @@
           "fechaInicio": "2026-09-12",
           "ticket1": "17962",
           "cajas1": 4640,
-          "ticket2": "",
+          "ticket2": "17963",
           "cajas2": 480,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3280,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 20682
         }
       ]
     },
@@ -18132,12 +18132,12 @@
           "fechaInicio": "2026-09-12",
           "ticket1": "17850",
           "cajas1": 2880,
-          "ticket2": "",
+          "ticket2": "16051",
           "cajas2": 320,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2400,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 15243
         }
       ]
     },
@@ -18163,12 +18163,12 @@
           "fechaInicio": "2026-09-12",
           "ticket1": "17898",
           "cajas1": 5360,
-          "ticket2": "",
+          "ticket2": "17899",
           "cajas2": 320,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3040,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 24082
         }
       ]
     },
@@ -18194,12 +18194,12 @@
           "fechaInicio": "2026-09-12",
           "ticket1": "17925",
           "cajas1": 2150,
-          "ticket2": "",
+          "ticket2": "17926",
           "cajas2": 250,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1200,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 1881
         }
       ]
     },
@@ -18256,12 +18256,12 @@
           "fechaInicio": "2026-09-12",
           "ticket1": "16008",
           "cajas1": 2480,
-          "ticket2": "",
+          "ticket2": "16009",
           "cajas2": 1760,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3200,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 18116
         }
       ]
     }
