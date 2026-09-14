@@ -128395,7 +128395,8 @@
         },
         "auto-1-1789131929902": {
           "cajasPlanificadas": 69000,
-          "producto": "190"
+          "producto": "190",
+          "jarabeReal": 9
         }
       },
       "linea-2": {

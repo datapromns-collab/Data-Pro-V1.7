@@ -3245,6 +3245,7 @@ export default function PlannerPage() {
                          user.id === 'maria.mds' || user.id === 'alex.mds' ? 'ANALISTA DE GERENCIA TÉCNICA' : 
                          user.role === 'PURCHASING' ? 'COMPRAS' : 
                          user.role === 'INVENTORY' ? 'INVENTARIO' : 
+                         user.id === 'demon2' ? 'Carga Sap' : 
                          user.id === 'enf.mds' ? 'ESPECIALISTA ENFARDADORA' : 
                            user.id === 'proc.mds' ? 'SALA DE JARABE' : 
                            user.id === 'procj.mds' ? 'Jefe de Procesos' : 
@@ -4342,22 +4343,23 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                 <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                      {reporteSubTab === 'diario' && (
                                        <div className="flex flex-col gap-3">
-                                          <ReporteTurnoTabla 
-                                            informesOperacionales={allInformesOperacionales}
-                                            tasks={tasks}
-                                            realProduction={realProduction}
-                                            lineSpeeds={lineSpeeds}
-                                            turno="DIARIO"
-                                            fecha={reporteDiarioFecha}
-                                             planificadasPorDia={planificadasPorDia}
-                                             ordenes={allOrdenesTrabajo}
-                                             velocidadesDt={velocidadesDt}
-                                            hrsPagadasDia={(() => { const a = hrsPagadasDt.td; const b = hrsPagadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
-                                            hrsProgramadasDia={(() => { const a = hrsProgramadasDt.td; const b = hrsProgramadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
-                                            allTasks={allTasks}
-                                          />
+                                         <ReporteTurnoTabla 
+                                           informesOperacionales={allInformesOperacionales}
+                                           tasks={tasks}
+                                           realProduction={realProduction}
+                                           lineSpeeds={lineSpeeds}
+                                           turno="DIARIO"
+                                           fecha={reporteDiarioFecha}
+                                            planificadasPorDia={planificadasPorDia}
+                                            ordenes={allOrdenesTrabajo}
+                                            velocidadesDt={velocidadesDt}
+                                           hrsPagadasDia={(() => { const a = hrsPagadasDt.td; const b = hrsPagadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
+                                           hrsProgramadasDia={(() => { const a = hrsProgramadasDt.td; const b = hrsProgramadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
+                                           allTasks={allTasks}
+                                           ordenesSap={allOrdenesSap}
+                                         />
                                         {(() => {
-                                              const row = calcularTotalesDiario(allInformesOperacionales, tasks, realProduction, lineSpeeds, reporteDiarioFecha, planificadasPorDia, allOrdenesTrabajo);
+                                              const row = calcularTotalesDiario(allInformesOperacionales, tasks, realProduction, lineSpeeds, reporteDiarioFecha, planificadasPorDia, allOrdenesTrabajo, undefined, allOrdenesSap);
                                           return (
                                             <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
                                               <div className="p-4">
@@ -4402,7 +4404,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    fecha={reporteDiarioFecha}
                                                    planificadasPorDia={planificadasPorDia}
                                                    ordenes={allOrdenesTrabajo}
-                                                 />
+                                                  ordenesSap={allOrdenesSap}/>
                                         </div>
                                         <div className="mt-3">
                                           <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
@@ -4454,19 +4456,20 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                       </div>
                                         {turnoSubTab === 'diurno' && (
                                           <>
-                                                 <ReporteTurnoTabla 
-                                                   informesOperacionales={allInformesOperacionales}
-                                                   tasks={tasks}
-                                                   realProduction={realProduction}
-                                                   lineSpeeds={lineSpeeds}
-                                                   turno="DIURNO"
-                                                   fecha={reporteDiarioFecha}
-                                                    planificadasPorDia={planificadasPorDia}
-                                                    ordenes={allOrdenesTrabajo}
-                                                    velocidadesDt={velocidadesDt}
-                                                    hrsPagadasDia={hrsPagadasDt.td}
-                                                    hrsProgramadasDia={hrsProgramadasDt.td}
-                                                    allTasks={allTasks}
+                                               <ReporteTurnoTabla 
+                                                 informesOperacionales={allInformesOperacionales}
+                                                 tasks={tasks}
+                                                 realProduction={realProduction}
+                                                 lineSpeeds={lineSpeeds}
+                                                 turno="DIURNO"
+                                                 fecha={reporteDiarioFecha}
+                                                  planificadasPorDia={planificadasPorDia}
+                                                  ordenes={allOrdenesTrabajo}
+                                                  velocidadesDt={velocidadesDt}
+                                                  hrsPagadasDia={hrsPagadasDt.td}
+                                                  hrsProgramadasDia={hrsProgramadasDt.td}
+                                                  allTasks={allTasks}
+                                                  ordenesSap={allOrdenesSap}
                                                />
                                             <div className="mt-3">
                                                  <TablaResumenPorLinea 
@@ -4477,7 +4480,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    fecha={reporteDiarioFecha}
                                                    planificadasPorDia={planificadasPorDia}
                                                    ordenes={allOrdenesTrabajo}
-                                                 />
+                                                  ordenesSap={allOrdenesSap}/>
                                            </div>
                                            <div className="mt-3">
                                               <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
@@ -4513,19 +4516,20 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                         )}
                                         {turnoSubTab === 'nocturno' && (
                                           <>
-                                               <ReporteTurnoTabla 
-                                                 informesOperacionales={allInformesOperacionales}
-                                                 tasks={tasks}
-                                                 realProduction={realProduction}
-                                                 lineSpeeds={lineSpeeds}
-                                                 turno="NOCTURNO"
-                                                 fecha={reporteDiarioFecha}
-                                                  planificadasPorDia={planificadasPorDia}
-                                                  ordenes={allOrdenesTrabajo}
-                                                  velocidadesDt={velocidadesDt}
-                                                  hrsPagadasDia={hrsPagadasDt.tn}
-                                                  hrsProgramadasDia={hrsProgramadasDt.tn}
-                                                  allTasks={allTasks}
+                                              <ReporteTurnoTabla 
+                                                informesOperacionales={allInformesOperacionales}
+                                                tasks={tasks}
+                                                realProduction={realProduction}
+                                                lineSpeeds={lineSpeeds}
+                                                turno="NOCTURNO"
+                                                fecha={reporteDiarioFecha}
+                                                 planificadasPorDia={planificadasPorDia}
+                                                 ordenes={allOrdenesTrabajo}
+                                                 velocidadesDt={velocidadesDt}
+                                                 hrsPagadasDia={hrsPagadasDt.tn}
+                                                 hrsProgramadasDia={hrsProgramadasDt.tn}
+                                                 allTasks={allTasks}
+                                                 ordenesSap={allOrdenesSap}
                                                />
                                             <div className="mt-3">
                                                  <TablaResumenPorLinea 
@@ -4536,7 +4540,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    fecha={reporteDiarioFecha}
                                                    planificadasPorDia={planificadasPorDia}
                                                    ordenes={allOrdenesTrabajo}
-                                                 />
+                                                  ordenesSap={allOrdenesSap}/>
                                            </div>
                                            <div className="mt-3">
                                               <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
@@ -7502,18 +7506,16 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
     const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
     const fechaFiltro = (semanaFechas && semanaFechas.length > 0) ? semanaFechas : [targetDate];
     const fechaSet = new Set(fechaFiltro);
-    const alcanceTD = (ordenes || []).reduce((acc: number, orden: any) => {
-      const ordenLineaNombre = String(orden.linea || '').trim();
-      const expectedLineaNombre = String(lineaNombre || '').trim();
-      if (ordenLineaNombre !== expectedLineaNombre) return acc;
+    const alcanceTD = (ordenesSap || []).reduce((acc: number, orden: any) => {
+      const ordenLinea = Number(orden.linea);
+      if (isNaN(ordenLinea) || ordenLinea !== lineaNum) return acc;
       return acc + (orden.dias || [])
         .filter((dia: any) => fechaSet.has(dia.fechaInicio))
         .reduce((sum: number, dia: any) => sum + (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0), 0);
     }, 0);
-    const alcanceTN = (ordenes || []).reduce((acc: number, orden: any) => {
-      const ordenLineaNombre = String(orden.linea || '').trim();
-      const expectedLineaNombre = String(lineaNombre || '').trim();
-      if (ordenLineaNombre !== expectedLineaNombre) return acc;
+    const alcanceTN = (ordenesSap || []).reduce((acc: number, orden: any) => {
+      const ordenLinea = Number(orden.linea);
+      if (isNaN(ordenLinea) || ordenLinea !== lineaNum) return acc;
       return acc + (orden.dias || [])
         .filter((dia: any) => fechaSet.has(dia.fechaInicio))
         .reduce((sum: number, dia: any) => sum + (Number(dia.cajas4) || 0), 0);
@@ -7642,7 +7644,7 @@ function ajustarHorasProgramadas(horasProgramadas: number[], cpHours: number[], 
   return horasProgramadas;
 }
 
-  function useReportData(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, turno: 'DIURNO' | 'NOCTURNO' | 'DIARIO' = 'DIURNO', fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, ordenes?: any[], velocidadesDt?: { td: string[], tn: string[] }, hrsPagadasDia?: string[], hrsProgramadasDia?: string[], semanaFechas?: string[], allTasks?: any[]) {
+  function useReportData(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, turno: 'DIURNO' | 'NOCTURNO' | 'DIARIO' = 'DIURNO', fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, ordenes?: any[], velocidadesDt?: { td: string[], tn: string[] }, hrsPagadasDia?: string[], hrsProgramadasDia?: string[], semanaFechas?: string[], allTasks?: any[], ordenesSap?: any[]) {
    return useMemo(() => {
      let informeDelDia: any[] = [];
      let diaPlanificada: any = {};
@@ -7701,18 +7703,16 @@ function ajustarHorasProgramadas(horasProgramadas: number[], cpHours: number[], 
       const planificadoTD = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.diurno || 0), 0));
       const planificadoTN = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.nocturno || 0), 0));
       const fechaSet = new Set(fechaFiltro);
-    const alcanceTD = (ordenes || []).reduce((acc: number, orden: any) => {
-      const ordenLineaNombre = String(orden.linea || '').trim();
-      const expectedLineaNombre = String(lineaNombre || '').trim();
-      if (ordenLineaNombre !== expectedLineaNombre) return acc;
+    const alcanceTD = (ordenesSap || []).reduce((acc: number, orden: any) => {
+      const ordenLinea = Number(orden.linea);
+      if (isNaN(ordenLinea) || ordenLinea !== lineaNum) return acc;
       return acc + (orden.dias || [])
         .filter((dia: any) => fechaSet.has(dia.fechaInicio))
         .reduce((sum: number, dia: any) => sum + (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0), 0);
     }, 0);
-    const alcanceTN = (ordenes || []).reduce((acc: number, orden: any) => {
-      const ordenLineaNombre = String(orden.linea || '').trim();
-      const expectedLineaNombre = String(lineaNombre || '').trim();
-      if (ordenLineaNombre !== expectedLineaNombre) return acc;
+    const alcanceTN = (ordenesSap || []).reduce((acc: number, orden: any) => {
+      const ordenLinea = Number(orden.linea);
+      if (isNaN(ordenLinea) || ordenLinea !== lineaNum) return acc;
       return acc + (orden.dias || [])
         .filter((dia: any) => fechaSet.has(dia.fechaInicio))
         .reduce((sum: number, dia: any) => sum + (Number(dia.cajas4) || 0), 0);
@@ -7789,7 +7789,7 @@ function ajustarHorasProgramadas(horasProgramadas: number[], cpHours: number[], 
   }, [informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, ordenes, velocidadesDt, semanaFechas]);
 }
 
-function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, ordenes?: any[], semanaFechas?: string[]) {
+function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, ordenes?: any[], semanaFechas?: string[], ordenesSap?: any[]) {
   let informeDelDia: any[] = [];
   let diaPlanificada: any = {};
   if (semanaFechas && semanaFechas.length > 0) {
@@ -7827,18 +7827,16 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
     const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
     const fechaFiltro = (semanaFechas && semanaFechas.length > 0) ? semanaFechas : [targetDate];
     const fechaSet = new Set(fechaFiltro);
-    const alcanceTD = (ordenes || []).reduce((acc: number, orden: any) => {
-      const ordenLineaNombre = String(orden.linea || '').trim();
-      const expectedLineaNombre = String(lineaNombre || '').trim();
-      if (ordenLineaNombre !== expectedLineaNombre) return acc;
+    const alcanceTD = (ordenesSap || []).reduce((acc: number, orden: any) => {
+      const ordenLinea = Number(orden.linea);
+      if (isNaN(ordenLinea) || ordenLinea !== lineaNum) return acc;
       return acc + (orden.dias || [])
         .filter((dia: any) => fechaSet.has(dia.fechaInicio))
         .reduce((sum: number, dia: any) => sum + (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0), 0);
     }, 0);
-    const alcanceTN = (ordenes || []).reduce((acc: number, orden: any) => {
-      const ordenLineaNombre = String(orden.linea || '').trim();
-      const expectedLineaNombre = String(lineaNombre || '').trim();
-      if (ordenLineaNombre !== expectedLineaNombre) return acc;
+    const alcanceTN = (ordenesSap || []).reduce((acc: number, orden: any) => {
+      const ordenLinea = Number(orden.linea);
+      if (isNaN(ordenLinea) || ordenLinea !== lineaNum) return acc;
       return acc + (orden.dias || [])
         .filter((dia: any) => fechaSet.has(dia.fechaInicio))
         .reduce((sum: number, dia: any) => sum + (Number(dia.cajas4) || 0), 0);
@@ -7870,8 +7868,8 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
   });
 }
 
-function TablaResumenPorLinea({ informesOperacionales, tasks, realProduction, lineSpeeds, fecha, planificadasPorDia, ordenes, semanaFechas }: any) {
-  const datos = getResumenPorLinea(informesOperacionales, tasks, realProduction, lineSpeeds, fecha, planificadasPorDia, ordenes, semanaFechas);
+function TablaResumenPorLinea({ informesOperacionales, tasks, realProduction, lineSpeeds, fecha, planificadasPorDia, ordenes, semanaFechas, ordenesSap }: any) {
+  const datos = getResumenPorLinea(informesOperacionales, tasks, realProduction, lineSpeeds, fecha, planificadasPorDia, ordenes, semanaFechas, ordenesSap);
 
   return (
     <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
@@ -8040,8 +8038,8 @@ function PlanificadasPorDiaTable({ datosPorDia, fecha, turno }: { datosPorDia: a
   );
 }
 
-function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineSpeeds, turno = 'DIURNO', fecha, planificadasPorDia, ordenes, velocidadesDt, hrsPagadasDia, hrsProgramadasDia, allTasks }: any) {
-   const data = useReportData(informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, ordenes, velocidadesDt, hrsPagadasDia, hrsProgramadasDia, undefined, allTasks);
+function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineSpeeds, turno = 'DIURNO', fecha, planificadasPorDia, ordenes, velocidadesDt, hrsPagadasDia, hrsProgramadasDia, allTasks, ordenesSap }: any) {
+   const data = useReportData(informesOperacionales, tasks, realProduction, lineSpeeds, turno, fecha, planificadasPorDia, ordenes, velocidadesDt, hrsPagadasDia, hrsProgramadasDia, undefined, allTasks, ordenesSap);
    const formatCell = (v: any) => v ?? '0';
    const esDiurno = turno === 'DIURNO';
    const esNocturno = turno === 'NOCTURNO';
@@ -8442,3 +8440,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
   });
 
   OrdenTrabajoRow.displayName = 'OrdenTrabajoRow';
+
+
+
+
