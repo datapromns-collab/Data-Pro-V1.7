@@ -118840,6 +118840,25 @@
         "usuario": "Luis Sanchez",
         "id": 1789409231645,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-03",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "TRANSPORTADOR DE BOTELLAS",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "13:34",
+        "finParada": "13:43",
+        "totalMin": "9",
+        "zona": "Llenado",
+        "falla": "BOTELLAS ATASCADA EN TRANSPORTADOR ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1789409328037,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -128860,7 +128879,7 @@
           "cajasPlanificadas": 128800,
           "producto": "589",
           "ubb": 49.04,
-          "jarabeReal": 414
+          "jarabeReal": 141010
         }
       },
       "linea-5": {
