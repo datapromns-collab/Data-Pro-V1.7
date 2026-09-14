@@ -7497,13 +7497,17 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
     const fechaFiltro = (semanaFechas && semanaFechas.length > 0) ? semanaFechas : [targetDate];
     const fechaSet = new Set(fechaFiltro);
     const alcanceTD = (ordenes || []).reduce((acc: number, orden: any) => {
-      if (Number(orden.linea) !== lineaNum) return acc;
+      const ordenLineaNombre = String(orden.linea || '').trim();
+      const expectedLineaNombre = String(lineaNombre || '').trim();
+      if (ordenLineaNombre !== expectedLineaNombre) return acc;
       return acc + (orden.dias || [])
         .filter((dia: any) => fechaSet.has(dia.fechaInicio))
         .reduce((sum: number, dia: any) => sum + (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0), 0);
     }, 0);
     const alcanceTN = (ordenes || []).reduce((acc: number, orden: any) => {
-      if (Number(orden.linea) !== lineaNum) return acc;
+      const ordenLineaNombre = String(orden.linea || '').trim();
+      const expectedLineaNombre = String(lineaNombre || '').trim();
+      if (ordenLineaNombre !== expectedLineaNombre) return acc;
       return acc + (orden.dias || [])
         .filter((dia: any) => fechaSet.has(dia.fechaInicio))
         .reduce((sum: number, dia: any) => sum + (Number(dia.cajas4) || 0), 0);
@@ -7691,18 +7695,22 @@ function ajustarHorasProgramadas(horasProgramadas: number[], cpHours: number[], 
       const planificadoTD = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.diurno || 0), 0));
       const planificadoTN = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.nocturno || 0), 0));
       const fechaSet = new Set(fechaFiltro);
-      const alcanceTD = (ordenes || []).reduce((acc: number, orden: any) => {
-        if (Number(orden.linea) !== lineaNum) return acc;
-        return acc + (orden.dias || [])
-          .filter((dia: any) => fechaSet.has(dia.fechaInicio))
-          .reduce((sum: number, dia: any) => sum + (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0), 0);
-      }, 0);
-      const alcanceTN = (ordenes || []).reduce((acc: number, orden: any) => {
-        if (Number(orden.linea) !== lineaNum) return acc;
-        return acc + (orden.dias || [])
-          .filter((dia: any) => fechaSet.has(dia.fechaInicio))
-          .reduce((sum: number, dia: any) => sum + (Number(dia.cajas4) || 0), 0);
-      }, 0);
+    const alcanceTD = (ordenes || []).reduce((acc: number, orden: any) => {
+      const ordenLineaNombre = String(orden.linea || '').trim();
+      const expectedLineaNombre = String(lineaNombre || '').trim();
+      if (ordenLineaNombre !== expectedLineaNombre) return acc;
+      return acc + (orden.dias || [])
+        .filter((dia: any) => fechaSet.has(dia.fechaInicio))
+        .reduce((sum: number, dia: any) => sum + (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0), 0);
+    }, 0);
+    const alcanceTN = (ordenes || []).reduce((acc: number, orden: any) => {
+      const ordenLineaNombre = String(orden.linea || '').trim();
+      const expectedLineaNombre = String(lineaNombre || '').trim();
+      if (ordenLineaNombre !== expectedLineaNombre) return acc;
+      return acc + (orden.dias || [])
+        .filter((dia: any) => fechaSet.has(dia.fechaInicio))
+        .reduce((sum: number, dia: any) => sum + (Number(dia.cajas4) || 0), 0);
+    }, 0);
       const cumplimientoTD = planificadoTD > 0 ? ((alcanceTD / planificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
       const cumplimientoTN = planificadoTN > 0 ? ((alcanceTN / planificadoTN) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
         const raw = (velocidadesDt?.td?.[idx]) ?? '';
@@ -7814,13 +7822,17 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
     const fechaFiltro = (semanaFechas && semanaFechas.length > 0) ? semanaFechas : [targetDate];
     const fechaSet = new Set(fechaFiltro);
     const alcanceTD = (ordenes || []).reduce((acc: number, orden: any) => {
-      if (Number(orden.linea) !== lineaNum) return acc;
+      const ordenLineaNombre = String(orden.linea || '').trim();
+      const expectedLineaNombre = String(lineaNombre || '').trim();
+      if (ordenLineaNombre !== expectedLineaNombre) return acc;
       return acc + (orden.dias || [])
         .filter((dia: any) => fechaSet.has(dia.fechaInicio))
         .reduce((sum: number, dia: any) => sum + (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0), 0);
     }, 0);
     const alcanceTN = (ordenes || []).reduce((acc: number, orden: any) => {
-      if (Number(orden.linea) !== lineaNum) return acc;
+      const ordenLineaNombre = String(orden.linea || '').trim();
+      const expectedLineaNombre = String(lineaNombre || '').trim();
+      if (ordenLineaNombre !== expectedLineaNombre) return acc;
       return acc + (orden.dias || [])
         .filter((dia: any) => fechaSet.has(dia.fechaInicio))
         .reduce((sum: number, dia: any) => sum + (Number(dia.cajas4) || 0), 0);
