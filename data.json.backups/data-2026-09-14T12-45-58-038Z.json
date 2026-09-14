@@ -10220,7 +10220,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-14T11:50:45.912Z"
+    "updatedAt": "2026-09-14T12:45:56.168Z"
   },
   "ordenesSap": [
     {
@@ -18282,6 +18282,146 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 6771
+        }
+      ]
+    },
+    {
+      "id": "1-1789388793603",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "63597",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1789388806443",
+      "linea": 2,
+      "sabor": "GLUP PIÑA",
+      "ordenNumero": "63603",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1789388816247",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63609",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1789388824471",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63615",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1789388843336",
+      "linea": 5,
+      "sabor": "JUSTY DURAZNO",
+      "ordenNumero": "63620",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1789388855299",
+      "linea": 6,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "63626",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1789388864044",
+      "linea": 7,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "63632",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-14",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -118454,6 +118594,139 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1789251440615,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-03",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "JUAN GIL ",
+        "linea": "Línea 6",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "12:50",
+        "finParada": "12:57",
+        "totalMin": "7",
+        "zona": "Llenado",
+        "falla": "ALARMA DE CROCHE ESTRELLA DE SALIDA ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1789389626272,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-03",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 6",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "14:53",
+        "finParada": "18:30",
+        "totalMin": "217",
+        "zona": "Llenado",
+        "falla": "FALLA DE ENERGIA ELECTRICA ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1789389657977,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-03",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "KENNY MULOS ",
+        "linea": "Línea 6",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "08:48",
+        "finParada": "08:58",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "OERDIDA DE TEJIDO ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1789389730399,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-03",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "07:00",
+        "finParada": "08:03",
+        "totalMin": "63",
+        "zona": "Llenado",
+        "falla": "VARIACION DE VOLTAJE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1789389786848,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-03",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "08:03",
+        "finParada": "09:15",
+        "totalMin": "72",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES, PASE DE AGUA CALIENTE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1789389828408,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-03",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "DANIEL ZAPATA ",
+        "linea": "Línea 5",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "09:51",
+        "finParada": "10:00",
+        "totalMin": "9",
+        "zona": "Llenado",
+        "falla": "FALLA EN SISTEMA DE CORTE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1789389965401,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-03",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "DANIEL ZAPATA ",
+        "linea": "Línea 5",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "10:05",
+        "finParada": "10:17",
+        "totalMin": "12",
+        "zona": "Llenado",
+        "falla": "FALAL DEL SISTEMA DE CORTE ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1789390015000,
         "bloqueado": true
       }
     ],
