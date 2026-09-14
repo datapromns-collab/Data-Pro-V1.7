@@ -119182,25 +119182,6 @@
         "usuario": "Luis Sanchez",
         "id": 1789410203915,
         "bloqueado": true
-      },
-      {
-        "fecha": "2026-09-03",
-        "semana": 36,
-        "turno": "DIURNO",
-        "operador": "REYMON CARMONA ",
-        "linea": "Línea 3",
-        "equipo": "ENFARDADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "08:06",
-        "finParada": "08:10",
-        "totalMin": "4",
-        "zona": "Llenado",
-        "falla": "PERDIDA DE FASE POR BOTELLA CAIDA ",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Sanchez",
-        "id": 1789410261851,
-        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
