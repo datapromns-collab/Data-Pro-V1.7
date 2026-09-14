@@ -1702,14 +1702,16 @@ export default function PlannerPage() {
   });
   const [allInformesOperacionales, setAllInformesOperacionales] = useState<any[]>([]);
   const [allOrdenesTrabajo, setAllOrdenesTrabajo] = useState<any[]>([]);
+  const [allOrdenesSap, setAllOrdenesSap] = useState<any[]>([]);
   const [reporteDataLoaded, setReporteDataLoaded] = useState(false);
   useEffect(() => {
     if (reporteDataLoaded) return;
     const cargarTodo = async () => {
       try {
-        const [infRes, ordRes] = await Promise.all([
+        const [infRes, ordRes, sapRes] = await Promise.all([
           fetch('/api/collection/planta-informes-operacionales', { cache: 'no-store' }),
           fetch('/api/collection/planta-ordenes-trabajo', { cache: 'no-store' }),
+          fetch('/api/data', { cache: 'no-store' }),
         ]);
         if (infRes.ok) {
           const inf = await infRes.json();
@@ -1718,6 +1720,10 @@ export default function PlannerPage() {
         if (ordRes.ok) {
           const ord = await ordRes.json();
           if (Array.isArray(ord)) setAllOrdenesTrabajo(ord);
+        }
+        if (sapRes.ok) {
+          const sap = await sapRes.json();
+          if (Array.isArray(sap.ordenesSap)) setAllOrdenesSap(sap.ordenesSap);
         }
       } catch (e) {
         console.error('Error cargando datos completos para reporte', e);
@@ -7448,7 +7454,7 @@ function clasificarParada(tipo: string): string {
   return 'operacionales';
 }
 
-function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, ordenes?: any[], semanaFechas?: string[]) {
+function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, ordenes?: any[], semanaFechas?: string[], ordenesSap?: any[]) {
   let informeDelDia: any[] = [];
   let diaPlanificada: any = {};
   if (semanaFechas && semanaFechas.length > 0) {
