@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-07T00:00:00.000",
+      "weekStartDate": "2026-09-14T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -10275,7 +10275,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-14T12:52:39.762Z"
+    "updatedAt": "2026-09-14T13:23:23.403Z"
   },
   "ordenesSap": [
     {
@@ -118783,6 +118783,25 @@
         "usuario": "Luis Sanchez",
         "id": 1789390015000,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-03",
+        "semana": 36,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 5",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "10:23",
+        "finParada": "10:27",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Sanchez",
+        "id": 1789391067352,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -134870,7 +134889,7 @@
       "2026-09-13-suave": "61332",
       "2026-09-13-procesos": "986363,13",
       "2026-09-13-filtrada": "1307597,74",
-      "2026-09-13-total": "2043116.67"
+      "2026-09-13-total": "2043116,67"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -134884,7 +134903,10 @@
     "ptab-insumos": {
       "2026-09-06-LP20-0": "",
       "2026-09-06-LP20-1": "",
-      "2026-09-06-LP20-2": ""
+      "2026-09-06-LP20-2": "",
+      "2026-09-14-LP20-0": "",
+      "2026-09-14-LP20-1": "",
+      "2026-09-14-LP20-2": ""
     },
     "sala-jarabe-glup": []
   },
