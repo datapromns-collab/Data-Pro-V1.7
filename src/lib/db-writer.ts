@@ -37,15 +37,29 @@ function writePayloadSync(payload: DbData): void {
   const serialized = JSON.stringify(payload, null, 2);
   const tmpPath = DB_PATH + '.' + Date.now() + '.' + Math.random().toString(36).substr(2, 9) + '.tmp';
   fs.writeFileSync(tmpPath, serialized, 'utf8');
+  let renamed = false;
   try {
     fs.renameSync(tmpPath, DB_PATH);
+    renamed = true;
   } catch (error) {
     const err = error as NodeJS.ErrnoException;
-    if (err.code === 'EPERM' || err.code === 'EACCES') {
-      fs.copyFileSync(tmpPath, DB_PATH);
-      fs.unlinkSync(tmpPath);
+    if (err.code === 'EPERM' || err.code === 'EACCES' || err.code === 'UNKNOWN') {
+      try {
+        fs.copyFileSync(tmpPath, DB_PATH);
+        renamed = true;
+      } catch (copyError) {
+        console.error('[DB][WRITE][COPY_FALLBACK][ERROR]', copyError);
+      }
     } else {
       throw error;
+    }
+  } finally {
+    if (!renamed && fs.existsSync(tmpPath)) {
+      try {
+        fs.unlinkSync(tmpPath);
+      } catch (unlinkError) {
+        console.error('[DB][WRITE][CLEANUP][ERROR]', unlinkError);
+      }
     }
   }
 }

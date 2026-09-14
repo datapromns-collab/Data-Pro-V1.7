@@ -722,7 +722,15 @@ export default function PlannerPage() {
       });
 
       if (!res.ok) {
-        throw new Error(`Upload failed: ${res.status}`);
+        const text = await res.text();
+        let errorMessage = `Upload failed: ${res.status}`;
+        try {
+          const json = JSON.parse(text);
+          errorMessage = json.error || errorMessage;
+        } catch {
+          if (text) errorMessage = text;
+        }
+        throw new Error(errorMessage);
       }
 
       const result = await res.json();

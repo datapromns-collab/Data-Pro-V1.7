@@ -46,7 +46,8 @@ export async function POST(request: Request) {
     });
   } catch (error) {
     console.error('Error al subir archivo de logística:', error);
-    return new Response(JSON.stringify({ error: 'Upload failed' }), { status: 500 });
+    const message = error instanceof Error ? error.message : 'Upload failed';
+    return new Response(JSON.stringify({ error: message }), { status: 500 });
   }
 }
 
