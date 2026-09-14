@@ -57,7 +57,7 @@ const DEFAULT_MANAGEMENT_PERMISSIONS: ManagementPermissions = {
   'jaime.r': ['produccion-diaria', 'control-semanal', 'resumen-semanal', 'resumen-mensual', 'cumplimiento'],
   'alex.mds': ['produccion-diaria', 'resumen-semanal', 'resumen-mensual', 'cumplimiento'],
   'maria.mds': ['produccion-diaria', 'resumen-semanal', 'resumen-mensual', 'cumplimiento'],
-  'g.tec.mds': ['produccion-diaria', 'resumen-semanal'],
+  'g.tec.mds': ['produccion-diaria', 'resumen-semanal', 'cumplimiento'],
   'enf.mds': ['produccion-diaria', 'resumen-semanal'],
   'etq.mds': ['produccion-diaria', 'resumen-semanal'],
   'procj.mds': ['resumen-semanal'],

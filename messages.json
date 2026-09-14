@@ -1702,7 +1702,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "g.tec.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-14T12:50:15.436Z"
     },
     {
@@ -1713,7 +1713,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "g.tec.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-11T19:52:05.466Z"
     },
     {
