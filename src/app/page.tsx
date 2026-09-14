@@ -428,6 +428,8 @@ export default function PlannerPage() {
 
   const informesOperacionalesStore = useRemoteCollection<any[]>('planta-informes-operacionales', [], plantaWeekQuery);
   const ordenesTrabajoStore = useRemoteCollection<any[]>('planta-ordenes-trabajo', [], plantaWeekQuery);
+  const informesOperacionalesReporteStore = useRemoteCollection<any[]>('planta-informes-operacionales', []);
+  const ordenesTrabajoReporteStore = useRemoteCollection<any[]>('planta-ordenes-trabajo', []);
   const informesOperacionales = informesOperacionalesStore.data;
   const setInformesOperacionales = informesOperacionalesStore.setData;
   const removeInformeOperacional = informesOperacionalesStore.removeItem;
@@ -4309,22 +4311,22 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                 <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                      {reporteSubTab === 'diario' && (
                                        <div className="flex flex-col gap-3">
-                                         <ReporteTurnoTabla 
-                                           informesOperacionales={informesOperacionales || []}
-                                           tasks={tasks}
-                                           realProduction={realProduction}
-                                           lineSpeeds={lineSpeeds}
-                                           turno="DIARIO"
-                                           fecha={reporteDiarioFecha}
-                                            planificadasPorDia={planificadasPorDia}
-                                            ordenes={ordenes}
-                                            velocidadesDt={velocidadesDt}
-                                           hrsPagadasDia={(() => { const a = hrsPagadasDt.td; const b = hrsPagadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
-                                           hrsProgramadasDia={(() => { const a = hrsProgramadasDt.td; const b = hrsProgramadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
-                                           allTasks={allTasks}
-                                         />
+                                          <ReporteTurnoTabla 
+                                            informesOperacionales={informesOperacionalesReporteStore.data || []}
+                                            tasks={tasks}
+                                            realProduction={realProduction}
+                                            lineSpeeds={lineSpeeds}
+                                            turno="DIARIO"
+                                            fecha={reporteDiarioFecha}
+                                             planificadasPorDia={planificadasPorDia}
+                                             ordenes={ordenesTrabajoReporteStore.data || []}
+                                             velocidadesDt={velocidadesDt}
+                                            hrsPagadasDia={(() => { const a = hrsPagadasDt.td; const b = hrsPagadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
+                                            hrsProgramadasDia={(() => { const a = hrsProgramadasDt.td; const b = hrsProgramadasDt.tn; return a.map((v, idx) => String((Number(v) || 0) + (Number(b[idx]) || 0))); })()}
+                                            allTasks={allTasks}
+                                          />
                                         {(() => {
-                                            const row = calcularTotalesDiario(informesOperacionales || [], tasks, realProduction, lineSpeeds, reporteDiarioFecha, planificadasPorDia, ordenes);
+                                             const row = calcularTotalesDiario(informesOperacionalesReporteStore.data || [], tasks, realProduction, lineSpeeds, reporteDiarioFecha, planificadasPorDia, ordenesTrabajoReporteStore.data || []);
                                           return (
                                             <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
                                               <div className="p-4">
@@ -4361,15 +4363,15 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                            );
                                         })()}
                                         <div className="mt-3">
-                                          <TablaResumenPorLinea 
-                                           informesOperacionales={informesOperacionales || []}
-                                           tasks={tasks}
-                                           realProduction={realProduction}
-                                           lineSpeeds={lineSpeeds}
-                                           fecha={reporteDiarioFecha}
-                                            planificadasPorDia={planificadasPorDia}
-                                            ordenes={ordenes}
-                                          />
+                                                <TablaResumenPorLinea 
+                                                  informesOperacionales={informesOperacionalesReporteStore.data || []}
+                                                  tasks={tasks}
+                                                  realProduction={realProduction}
+                                                  lineSpeeds={lineSpeeds}
+                                                  fecha={reporteDiarioFecha}
+                                                   planificadasPorDia={planificadasPorDia}
+                                                   ordenes={ordenesTrabajoReporteStore.data || []}
+                                                />
                                         </div>
                                         <div className="mt-3">
                                           <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
@@ -4421,19 +4423,19 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                       </div>
                                         {turnoSubTab === 'diurno' && (
                                           <>
-                                               <ReporteTurnoTabla 
-                                                 informesOperacionales={informesOperacionales || []}
-                                                 tasks={tasks}
-                                                 realProduction={realProduction}
-                                                 lineSpeeds={lineSpeeds}
-                                                 turno="DIURNO"
-                                                 fecha={reporteDiarioFecha}
-                                                  planificadasPorDia={planificadasPorDia}
-                                                  ordenes={ordenes}
-                                                  velocidadesDt={velocidadesDt}
-                                                  hrsPagadasDia={hrsPagadasDt.td}
-                                                  hrsProgramadasDia={hrsProgramadasDt.td}
-                                                  allTasks={allTasks}
+                                                <ReporteTurnoTabla 
+                                                  informesOperacionales={informesOperacionalesReporteStore.data || []}
+                                                  tasks={tasks}
+                                                  realProduction={realProduction}
+                                                  lineSpeeds={lineSpeeds}
+                                                  turno="DIURNO"
+                                                  fecha={reporteDiarioFecha}
+                                                   planificadasPorDia={planificadasPorDia}
+                                                   ordenes={ordenesTrabajoReporteStore.data || []}
+                                                   velocidadesDt={velocidadesDt}
+                                                   hrsPagadasDia={hrsPagadasDt.td}
+                                                   hrsProgramadasDia={hrsProgramadasDt.td}
+                                                   allTasks={allTasks}
                                                />
                                             <div className="mt-3">
                                                <TablaResumenPorLinea 
@@ -4480,19 +4482,19 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                         )}
                                         {turnoSubTab === 'nocturno' && (
                                           <>
-                                              <ReporteTurnoTabla 
-                                                informesOperacionales={informesOperacionales || []}
-                                                tasks={tasks}
-                                                realProduction={realProduction}
-                                                lineSpeeds={lineSpeeds}
-                                                turno="NOCTURNO"
-                                                fecha={reporteDiarioFecha}
-                                                 planificadasPorDia={planificadasPorDia}
-                                                 ordenes={ordenes}
-                                                 velocidadesDt={velocidadesDt}
-                                                 hrsPagadasDia={hrsPagadasDt.tn}
-                                                 hrsProgramadasDia={hrsProgramadasDt.tn}
-                                                 allTasks={allTasks}
+                                               <ReporteTurnoTabla 
+                                                 informesOperacionales={informesOperacionalesReporteStore.data || []}
+                                                 tasks={tasks}
+                                                 realProduction={realProduction}
+                                                 lineSpeeds={lineSpeeds}
+                                                 turno="NOCTURNO"
+                                                 fecha={reporteDiarioFecha}
+                                                  planificadasPorDia={planificadasPorDia}
+                                                  ordenes={ordenesTrabajoReporteStore.data || []}
+                                                  velocidadesDt={velocidadesDt}
+                                                  hrsPagadasDia={hrsPagadasDt.tn}
+                                                  hrsProgramadasDia={hrsProgramadasDt.tn}
+                                                  allTasks={allTasks}
                                                />
                                             <div className="mt-3">
                                                <TablaResumenPorLinea 
