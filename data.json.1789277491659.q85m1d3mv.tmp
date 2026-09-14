@@ -101171,7 +101171,7 @@
         "turno": "DIURNO",
         "operador": "MAXIMILIANO CORTEZAO",
         "linea": "Línea 3",
-        "equipo": "PALETIZADORA",
+        "equipo": "",
         "tipoParada": "OPERACIONAL",
         "inicioParada": "07:03",
         "finParada": "07:25",
@@ -101182,7 +101182,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788878524608,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-09-07",
@@ -102236,17 +102236,17 @@
         "operador": "KEVIN PONCE",
         "linea": "Línea 7",
         "equipo": "PALETIZADORA",
-        "tipoParada": "AVERÍA",
+        "tipoParada": "OPERACIONAL",
         "inicioParada": "07:32",
         "finParada": "08:44",
         "totalMin": "72",
         "zona": "Llenado",
         "falla": "FALLA EN LA PRECOMPACTACION, BANDA SE ATASCA",
-        "orden": "10080",
+        "orden": "",
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1788888936911,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-09-07",
@@ -111561,13 +111561,13 @@
       {
         "fecha": "2026-09-10",
         "semana": 37,
-        "turno": "DIURNO",
+        "turno": "NOCTURNO",
         "operador": "",
         "linea": "Línea 6",
         "equipo": "",
         "tipoParada": "PROGRAMADA",
-        "inicioParada": "17:20",
-        "finParada": "19:20",
+        "inicioParada": "18:30",
+        "finParada": "20:30",
         "totalMin": "120",
         "zona": "Llenado",
         "falla": "CIP 3 PASOS ",
@@ -127225,7 +127225,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789227817233,
+        "id": 1789256092217.1177,
         "fechaOrden": "2026-09-10",
         "orden": "9568",
         "fechaEmision": "2026-09-10",
@@ -127248,7 +127248,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -127279,7 +127279,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789233846564,
+        "id": 1789256092217.1467,
         "fechaOrden": "2026-09-09",
         "orden": "9566",
         "fechaEmision": "2026-09-09",
@@ -127302,7 +127302,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -127387,7 +127387,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789235592799,
+        "id": 1789256092217.6162,
         "fechaOrden": "2026-09-09",
         "orden": "9462",
         "fechaEmision": "2026-09-09",
@@ -127410,7 +127410,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -127495,7 +127495,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789238757537,
+        "id": 1789256092217.5789,
         "fechaOrden": "2026-09-09",
         "orden": "10083",
         "fechaEmision": "2026-09-09",
@@ -127518,7 +127518,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
