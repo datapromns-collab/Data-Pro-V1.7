@@ -7773,7 +7773,8 @@ function ajustarHorasProgramadas(horasProgramadas: number[], cpHours: number[], 
           return Math.max(0, horasProgramadasNum - totalRestar);
         })();
         const disponibilidad = disponibilidadNum.toFixed(2).replace('.', ',');
-        const produccionTeoricaNum = cajasH * disponibilidadNum;
+        const disponibilidadRealHrs = Number.parseFloat(String(disponibilidad || '0').replace(',', '.')) || 0;
+        const produccionTeoricaNum = cajasH * disponibilidadRealHrs;
         const horasEfectivasStr = (() => {
           const cajasHNum = Number(cajasH) || 0;
           if (cajasHNum <= 0) return '0,00';
@@ -7859,6 +7860,19 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
     const planificado = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.diurno || 0) + (porLinea?.[lineaNum]?.nocturno || 0), 0));
     const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
     const fechaFiltro = (semanaFechas && semanaFechas.length > 0) ? semanaFechas : [targetDate];
+    const horasProgramadasCalc = getHorasProgramadasPorDia(tasks, fechaFiltro, 'DIARIO');
+    const horasProgramadasAjustadas = ajustarHorasProgramadas(horasProgramadasCalc.horasProgramadas, horasProgramadasCalc.cpHours, 'DIARIO');
+    const horasProgramadasLinea = horasProgramadasAjustadas[idx] || 0;
+    const serviciosLinea = minutosAHorasDecimal(porTipo.servicios || 0);
+    const ausentismoLinea = minutosAHorasDecimal(porTipo.ausentismo || 0);
+    const externasLinea = minutosAHorasDecimal(porTipo.externas || 0);
+    const adecuacionesLinea = minutosAHorasDecimal(porTipo.adecuaciones || 0);
+    const averiaLinea = minutosAHorasDecimal(porTipo.averia || 0);
+    const operacionalesLinea = minutosAHorasDecimal(porTipo.operacionales || 0);
+    const paradasProgramadasLinea = minutosAHorasDecimal(porTipo.programadas || 0);
+    const disponibilidadRealHrs = Math.max(0, horasProgramadasLinea - (Number.parseFloat(String(serviciosLinea || '0').replace(',', '.')) + Number.parseFloat(String(ausentismoLinea || '0').replace(',', '.')) + Number.parseFloat(String(externasLinea || '0').replace(',', '.')) + Number.parseFloat(String(adecuacionesLinea || '0').replace(',', '.')) + Number.parseFloat(String(averiaLinea || '0').replace(',', '.')) + Number.parseFloat(String(operacionalesLinea || '0').replace(',', '.')) + Number.parseFloat(String(paradasProgramadasLinea || '0').replace(',', '.'))));
+    const cajasH = Number(lineSpeeds?.[lineaNum] || 0);
+    const produccionTeorica = cajasH * disponibilidadRealHrs;
     const fechaSet = new Set(fechaFiltro);
     const alcanceTD = (ordenesSap || []).reduce((acc: number, orden: any) => {
       const ordenLinea = Number(orden.linea);
@@ -7874,16 +7888,15 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
         .filter((dia: any) => fechaSet.has(dia.fechaInicio))
         .reduce((sum: number, dia: any) => sum + (Number(dia.cajas4) || 0), 0);
     }, 0);
-    const alcance = alcanceTD + alcanceTN;
-    const cumplimiento = planificado > 0 ? ((alcance / planificado) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
-    const velocidad = Number(lineSpeeds?.[lineaNum] || 0);
-    const produccionTeorica = velocidad * (480 / 60);
-    const diferenciaTeoricaReal = Number.isFinite(produccionTeorica) ? String(Math.max(0, Math.round(produccionTeorica - alcance))) : '0';
+    const diferenciaTeoricaReal = Number.isFinite(produccionTeorica) ? String(Math.round(produccionTeorica - (alcanceTD + alcanceTN))) : '0';
     const ot = Math.round(porTipo.operacionales + porTipo.averia);
     const adecuaciones = Math.round(porTipo.adecuaciones);
     const tiempoMuerto = minutosAHorasDecimal(Math.round(Math.max(0, totalParadaMin - (porTipo.programadas || 0))));
     const ausentismo = Math.round(porTipo.ausentismo);
     const disponibilidad = totalParadaMin > 0 ? ((480 - totalParadaMin) / 480 * 100).toFixed(2).replace('.', ',') + '%' : '100,00%';
+
+    const alcance = alcanceTD + alcanceTN;
+    const cumplimiento = planificado > 0 ? ((alcance / planificado) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
 
     return {
       linea: lineaNombre,
