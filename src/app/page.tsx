@@ -4430,9 +4430,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                         <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalAlcanceTN ?? '0'}</td>
                                                         <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTD}</td>
                                                         <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTN}</td>
-                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.disponibilidadTD}</td>
-                                                        <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{row.disponibilidadTN}</td>
-                                                      </tr>
+                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.disponibilidadTD}</td>
+              </tr>
                                                     </tbody>
                                                   </table>
                                                 </div>
@@ -7416,9 +7415,8 @@ function TablaResumenReporteDiario({ informesOperacionales, tasks, realProductio
                  <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Alcance TN</th>
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TD</th>
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TN</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">DISPONIBILIDAD TD</th>
-                <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[80px]">DISPONIBILIDAD TN</th>
-              </tr>
+                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">DISPONIBILIDAD TD</th>
+                    </tr>
             </thead>
             <tbody>
               <tr className="even:bg-slate-50/60">
@@ -8265,9 +8263,8 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                       <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Alcance TN</th>
                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TD</th>
                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TN</th>
-                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">DISPONIBILIDAD TD</th>
-                     <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[80px]">DISPONIBILIDAD TN</th>
-                   </tr>
+                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">DISPONIBILIDAD TD</th>
+                    </tr>
                  </thead>
                  <tbody>
                    <tr className="even:bg-slate-50/60">
@@ -8277,9 +8274,8 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                      <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalAlcanceTN ?? '0'}</td>
                      <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTD}</td>
                      <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTN}</td>
-                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{disponibilidadGlobal}</td>
-                     <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{disponibilidadGlobal}</td>
-                    </tr>
+                      <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{disponibilidadGlobal}</td>
+                     </tr>
                                                     </tbody>
                                                   </table>
                                                 </div>
