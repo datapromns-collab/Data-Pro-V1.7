@@ -10265,7 +10265,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-15T21:32:13.999Z"
+    "updatedAt": "2026-09-15T21:32:14.231Z"
   },
   "ordenesSap": [
     {
@@ -18557,7 +18557,7 @@
         {
           "fechaInicio": "2026-09-15",
           "ticket1": "16201",
-          "cajas1": 187,
+          "cajas1": 1872,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
