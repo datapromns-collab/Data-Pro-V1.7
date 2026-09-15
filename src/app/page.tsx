@@ -4405,7 +4405,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                            ordenesSap={allOrdenesSap}
                                          />
                                         {(() => {
-                                              const row = calcularTotalesDiario(allInformesOperacionales, tasks, realProduction, lineSpeeds, reporteDiarioFecha, planificadasPorDia, allOrdenesTrabajo, undefined, allOrdenesSap);
+                                               const row = calcularTotalesDiario(allInformesOperacionales, tasks, realProduction, lineSpeeds, reporteDiarioFecha, planificadasPorDia, allOrdenesTrabajo, undefined, allOrdenesSap, 'DIARIO');
                                           return (
                                             <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
                                               <div className="p-4">
@@ -4430,7 +4430,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                         <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalAlcanceTN ?? '0'}</td>
                                                         <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTD}</td>
                                                         <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTN}</td>
-                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.disponibilidadTD}</td>
+                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.disponibilidadTotal}</td>
               </tr>
                                                     </tbody>
                                                   </table>
@@ -7401,7 +7401,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
 }
 
 function TablaResumenReporteDiario({ informesOperacionales, tasks, realProduction, lineSpeeds, fecha, planificadasPorDia, ordenes, semanaFechas }: any) {
-  const row = calcularTotalesDiario(informesOperacionales || [], tasks, realProduction, lineSpeeds, fecha, planificadasPorDia, ordenes, semanaFechas);
+  const row = calcularTotalesDiario(informesOperacionales || [], tasks, realProduction, lineSpeeds, fecha, planificadasPorDia, ordenes, semanaFechas, undefined, 'DIARIO');
   return (
     <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
       <div className="p-4">
@@ -7426,7 +7426,7 @@ function TablaResumenReporteDiario({ informesOperacionales, tasks, realProductio
                 <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.totalAlcanceTN ?? '0'}</td>
                 <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTD}</td>
                 <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTN}</td>
-                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.disponibilidadTD}</td>
+                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.disponibilidadTotal}</td>
               </tr>
             </tbody>
           </table>
@@ -7482,7 +7482,7 @@ function clasificarParada(tipo: string): string {
   return 'operacionales';
 }
 
-function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, ordenes?: any[], semanaFechas?: string[], ordenesSap?: any[]) {
+function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realProduction: any, lineSpeeds: any, fecha?: Date, planificadasPorDia?: Record<string, Record<string, Record<number, { diurno: number, nocturno: number }>>>, ordenes?: any[], semanaFechas?: string[], ordenesSap?: any[], turno: 'DIURNO' | 'NOCTURNO' | 'DIARIO' = 'DIARIO') {
   let informeDelDia: any[] = [];
   let diaPlanificada: any = {};
   if (semanaFechas && semanaFechas.length > 0) {
@@ -7505,13 +7505,18 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
   }
   const tareasLinea = (tasks || []).filter((t: any) => String(t.lineId || '') !== '');
   const lineas = ['Línea 1', 'Línea 2', 'Línea 3', 'Línea 4', 'Línea 5', 'Línea 6', 'Línea 7'];
+  const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
+  const fechaFiltro = (semanaFechas && semanaFechas.length > 0) ? semanaFechas : [targetDate];
+  const horasProgramadasCalc = getHorasProgramadasPorDia(tasks, fechaFiltro, turno);
+  const horasProgramadasAjustadas = ajustarHorasProgramadas(horasProgramadasCalc.horasProgramadas, horasProgramadasCalc.cpHours, turno);
 
   let totalPlanificadoTD = 0;
   let totalPlanificadoTN = 0;
   let totalAlcanceTD = 0;
   let totalAlcanceTN = 0;
-  let totalDisponibilidadTD = 0;
-  let countTD = 0;
+  let totalHorasProgramadasReales = 0;
+  let totalHorasEfectivas = 0;
+  let count = 0;
 
   lineas.forEach((lineaNombre, idx) => {
     const lineaNum = idx + 1;
@@ -7525,8 +7530,6 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
     const tareas = tareasLinea.filter((t: any) => t.lineId === String(lineaNum));
     const planificadoTD = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.diurno || 0), 0));
     const planificadoTN = Number(Object.values(diaPlanificada).reduce((acc: number, porLinea: any) => acc + (porLinea?.[lineaNum]?.nocturno || 0), 0));
-    const targetDate = fecha ? format(fecha, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd');
-    const fechaFiltro = (semanaFechas && semanaFechas.length > 0) ? semanaFechas : [targetDate];
     const fechaSet = new Set(fechaFiltro);
     const alcanceTD = (ordenesSap || []).reduce((acc: number, orden: any) => {
       const ordenLinea = Number(orden.linea);
@@ -7548,14 +7551,20 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
     totalAlcanceTD += alcanceTD;
     totalAlcanceTN += alcanceTN;
 
-    const disponibilidadTD = Math.max(0, 480 - totalParadaMin);
-    totalDisponibilidadTD += disponibilidadTD;
-    countTD += 1;
+    const horasProgramadasLinea = horasProgramadasAjustadas[idx] || 0;
+    const paradasProgramadasLinea = minutosAHorasDecimal(porTipo.programadas || 0);
+    const horasProgramadasRealesLinea = Math.max(0, horasProgramadasLinea - Number.parseFloat(String(paradasProgramadasLinea || '0').replace(',', '.')));
+    const cajasH = Number(lineSpeeds?.[lineaNum] || 0);
+    const horasEfectivasLinea = cajasH > 0 ? (alcanceTD + alcanceTN) / cajasH : 0;
+
+    totalHorasProgramadasReales += horasProgramadasRealesLinea;
+    totalHorasEfectivas += horasEfectivasLinea;
+    count += 1;
   });
 
   const cumplimientoTD = totalPlanificadoTD > 0 ? ((totalAlcanceTD / totalPlanificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
   const cumplimientoTN = totalPlanificadoTN > 0 ? ((totalAlcanceTN / totalPlanificadoTN) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
-  const disponibilidadTD = countTD > 0 ? (totalDisponibilidadTD / countTD / 480 * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
+  const disponibilidadTotal = count > 0 && totalHorasProgramadasReales > 0 ? (totalHorasEfectivas / totalHorasProgramadasReales * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
 
   return {
     totalPlanificadoTD: String(Math.round(totalPlanificadoTD)),
@@ -7564,7 +7573,7 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
     totalAlcanceTN: String(totalAlcanceTN),
     cumplimientoTD,
     cumplimientoTN,
-    disponibilidadTD,
+    disponibilidadTotal,
   };
 }
 
@@ -8073,12 +8082,20 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
     const totalAlcanceTN = data.reduce((acc: number, r: any) => acc + (Number(r.alcanceTN) || 0), 0);
     const cumplimientoTD = totalPlanificadoTD > 0 ? ((totalAlcanceTD / totalPlanificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
     const cumplimientoTN = totalPlanificadoTN > 0 ? ((totalAlcanceTN / totalPlanificadoTN) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
-    const disponibilidades = data.map((r: any) => {
-     const val = String(r.disponibilidad || '').replace(',', '.');
-     const num = parseFloat(val);
-     return Number.isFinite(num) ? num : 0;
-   });
-   const disponibilidadGlobal = disponibilidades.length > 0 ? (disponibilidades.reduce((a, b) => a + b, 0) / disponibilidades.length).toFixed(2).replace('.', ',') + '%' : '0,00%';
+    const totalHorasEfectivas = data.reduce((acc, r) => {
+      const cajasH = Number(r.cajasH) || 0;
+      const alcanceTD = Number(r.alcanceTD || 0);
+      const alcanceTN = Number(r.alcanceTN || 0);
+      const alcance = esDiurno ? alcanceTD : esNocturno ? alcanceTN : alcanceTD + alcanceTN;
+      return acc + (cajasH > 0 ? alcance / cajasH : 0);
+    }, 0);
+    const totalHorasProgramadasReales = data.reduce((acc, r) => {
+      const toNum = (v: any) => Number.parseFloat(String(v || '0').replace(',', '.')) || 0;
+      const hp = toNum(r.horasProgramadas);
+      const pp = toNum(r.paradasProgramadas);
+      return acc + Math.max(0, hp - pp);
+    }, 0);
+    const disponibilidadTotal = totalHorasProgramadasReales > 0 ? (totalHorasEfectivas / totalHorasProgramadasReales * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
    const tiempoMuertoDesbordado = data.some((r: any) => Number.parseFloat(String(r.tiempoMuertoInexplicableRaw ?? '0').replace(',', '.')) < 0);
    return (
      <div className="flex flex-col gap-3">
@@ -8274,7 +8291,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                      <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{totalAlcanceTN ?? '0'}</td>
                      <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTD}</td>
                      <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{cumplimientoTN}</td>
-                      <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{disponibilidadGlobal}</td>
+                      <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{disponibilidadTotal}</td>
                      </tr>
                                                     </tbody>
                                                   </table>
@@ -8466,6 +8483,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
   });
 
   OrdenTrabajoRow.displayName = 'OrdenTrabajoRow';
+
 
 
 
