@@ -139429,23 +139429,7 @@
       "2026-09-16-Sanitizer-0": "282,5",
       "2026-09-16-LARK CLEAN 21C-0": "200"
     },
-    "sala-jarabe-glup": [
-      {
-        "id": "row_1789504043936_e8sp9p",
-        "fecha": "2026-09-15",
-        "hora": "16:27",
-        "numeroTanques": "2",
-        "sala": "1",
-        "sabor": "GLUP COLA",
-        "litros": "17250",
-        "ubb": "6",
-        "brix": "53.9",
-        "estado": "enviado a linea",
-        "enviarALinea": 1,
-        "editando": false,
-        "editandoPor": null
-      }
-    ]
+    "sala-jarabe-glup": []
   },
   "cacheVersion": 0,
   "deletedIds": {
@@ -139539,7 +139523,8 @@
         "row_1788897287273_vh896t",
         "row_1788897622488_5tss36",
         "row_1789501054256_feubjk",
-        "row_1789503580256_m35kxd"
+        "row_1789503580256_m35kxd",
+        "row_1789504043936_e8sp9p"
       ]
     }
   },

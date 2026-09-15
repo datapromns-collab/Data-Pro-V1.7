@@ -5695,14 +5695,34 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                             const form = isEditing ? revisionEditForm : null;
                                                              const editable = !isEditing && canEditRow(row);
                                                              const showInput = isEditing || editable;
-                                                             const cellValue = (field: 'fecha' | 'hora' | 'sala' | 'numeroTanques' | 'sabor' | 'litros' | 'ubb' | 'brix') => isEditing ? (form?.[field] ?? '') : row[field];
-                                                             const cellOnChange = (field: 'fecha' | 'hora' | 'sala' | 'numeroTanques' | 'sabor' | 'litros' | 'ubb' | 'brix', value: string) => {
-                                                               if (isEditing) {
-                                                                 setRevisionEditForm({ ...(form as any), [field]: value });
-                                                               } else if (editable) {
-                                                                 updateRow('justy', row.id, { [field]: value } as any);
-                                                               }
-                                                             };
+                                                              const cellValue = (field: 'fecha' | 'hora' | 'sala' | 'numeroTanques' | 'sabor' | 'litros' | 'ubb' | 'brix' | 'estado' | 'enviarALinea') => {
+                                                                if (isEditing) {
+                                                                  if (field === 'enviarALinea') {
+                                                                    const val = form?.enviarALinea;
+                                                                    return val === null || val === undefined ? '' : String(val);
+                                                                  }
+                                                                  return form?.[field] ?? '';
+                                                                }
+                                                                if (field === 'enviarALinea') {
+                                                                  return row.enviarALinea === null ? '' : String(row.enviarALinea);
+                                                                }
+                                                                return row[field];
+                                                              };
+                                                              const cellOnChange = (field: 'fecha' | 'hora' | 'sala' | 'numeroTanques' | 'sabor' | 'litros' | 'ubb' | 'brix' | 'estado' | 'enviarALinea', value: string) => {
+                                                                if (isEditing) {
+                                                                  const updates: any = { [field]: value };
+                                                                  if (field === 'enviarALinea') {
+                                                                    updates.enviarALinea = value === '' ? null : Number(value);
+                                                                  }
+                                                                  setRevisionEditForm({ ...(form as any), ...updates });
+                                                                } else if (editable) {
+                                                                  const updates: any = { [field]: value };
+                                                                  if (field === 'enviarALinea') {
+                                                                    updates.enviarALinea = value === '' ? null : Number(value);
+                                                                  }
+                                                                  updateRow('justy', row.id, updates as any);
+                                                                }
+                                                              };
                                                             return (
                                                               <>
                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
