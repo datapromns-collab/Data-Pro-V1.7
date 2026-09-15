@@ -139440,10 +139440,10 @@
         "litros": "17250",
         "ubb": "6",
         "brix": "53.9",
-        "estado": "preparado",
-        "enviarALinea": null,
-        "editando": false,
-        "editandoPor": null
+        "estado": "enviado a linea",
+        "enviarALinea": 5,
+        "editando": true,
+        "editandoPor": "alex.mds"
       }
     ]
   },

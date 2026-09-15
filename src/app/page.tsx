@@ -5697,7 +5697,15 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                    {showInput ? (<input value={cellValue('brix')} onChange={(e) => cellOnChange('brix', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.brix}
                                                                 </td>
-                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.estado}</td>
+                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                 {isProcjUser ? (
+                                                                   <button onClick={() => { setSelectedEstadoRow({ id: row.id, type: 'justy' }); setEstadoModalOpen(true); }} className="h-8 px-3 rounded-full bg-slate-100 text-slate-700 font-black uppercase text-[10px] tracking-widest hover:bg-slate-200 transition-none">
+                                                                     {row.estado}
+                                                                   </button>
+                                                                 ) : (
+                                                                   row.estado
+                                                                 )}
+                                                               </td>
                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                   {row.enviarALinea ? `Linea ${row.enviarALinea}` : (
                                                                      <button onClick={() => { setSelectedLineaRow({ id: row.id, type: 'justy' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
