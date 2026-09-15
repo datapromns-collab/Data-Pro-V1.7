@@ -29621,6 +29621,89 @@
             "preparado": "24",
             "final": "8.48"
           }
+        },
+        "2026-09-10": {
+          "GLUP COLA": {
+            "inicial": "67.55",
+            "preparado": "30",
+            "final": "60.58"
+          },
+          "GLUP FRESH": {
+            "inicial": "9.47",
+            "preparado": "12",
+            "final": "7.56"
+          },
+          "GLUP KOLITA": {
+            "inicial": "41.47",
+            "preparado": "54",
+            "final": "47.36"
+          },
+          "JUSTY NARANJA": {
+            "inicial": "31",
+            "preparado": "240",
+            "final": "20"
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "8.48",
+            "preparado": "",
+            "final": ""
+          }
+        },
+        "2026-09-11": {
+          "GLUP COLA": {
+            "inicial": "60.58",
+            "preparado": "54",
+            "final": "55.26"
+          },
+          "GLUP FRESH": {
+            "inicial": "7.56",
+            "preparado": "18",
+            "final": "7.91"
+          },
+          "GLUP KOLITA": {
+            "inicial": "47.36",
+            "preparado": "54",
+            "final": "36"
+          },
+          "JUSTY NARANJA": {
+            "inicial": "20",
+            "preparado": "260",
+            "final": "20"
+          },
+          "GLUP PIÑA": {
+            "preparado": "10",
+            "final": "6.31"
+          }
+        },
+        "2026-09-12": {
+          "GLUP COLA": {
+            "inicial": "55.26",
+            "preparado": "24",
+            "final": "36.60"
+          },
+          "GLUP FRESH": {
+            "inicial": "7.91",
+            "preparado": "12",
+            "final": "5.13"
+          },
+          "GLUP KOLITA": {
+            "inicial": "36",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY NARANJA": {
+            "inicial": "20",
+            "preparado": "80",
+            "final": ""
+          },
+          "GLUP PIÑA": {
+            "inicial": "6.31",
+            "preparado": "30",
+            "final": "1.31"
+          },
+          "GLUP UVA": {
+            "preparado": "11"
+          }
         }
       },
       "sugar": {
@@ -30272,6 +30355,57 @@
             "recepcionSacos": "1120",
             "invFinalSacos": "2600"
           }
+        },
+        "2026-09-10": {
+          "PORTUGUESA": {
+            "invInicialSacos": "8640",
+            "recepcionSacos": "2520",
+            "invFinalSacos": "8080"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2600",
+            "recepcionSacos": "240",
+            "invFinalSacos": "2800"
+          }
+        },
+        "2026-09-11": {
+          "PORTUGUESA": {
+            "invInicialSacos": "8080",
+            "recepcionSacos": "",
+            "invFinalSacos": "6160"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2800",
+            "recepcionSacos": "520",
+            "invFinalSacos": "2400"
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "PASTORA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "3600",
+            "invFinalSacos": "2480"
+          }
+        },
+        "2026-09-12": {
+          "PORTUGUESA": {
+            "invInicialSacos": "6160",
+            "recepcionSacos": "76",
+            "invFinalSacos": ""
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2400",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "PASTORA": {
+            "invInicialSacos": "2480",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
         }
       },
       "tanques": {
@@ -30916,6 +31050,48 @@
             "invInicialSacos": "671",
             "invFinalSacos": "228"
           }
+        },
+        "2026-09-10": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "334",
+            "invFinalSacos": "378"
+          },
+          "Sala 1": {
+            "invInicialSacos": "228",
+            "invFinalSacos": "478"
+          }
+        },
+        "2026-09-11": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "378",
+            "invFinalSacos": "313"
+          },
+          "Sala 1": {
+            "invInicialSacos": "478",
+            "invFinalSacos": "234"
+          }
+        },
+        "2026-09-12": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": ""
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "313",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "234",
+            "invFinalSacos": ""
+          }
         }
       },
       "realKgPerSack": {
@@ -30963,7 +31139,10 @@
         "2026-09-06": "50.46",
         "2026-09-07": "50.42",
         "2026-09-08": "50.29",
-        "2026-09-09": "50.36"
+        "2026-09-09": "50.36",
+        "2026-09-10": "50.36",
+        "2026-09-11": "50.53",
+        "2026-09-12": "50.5"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
