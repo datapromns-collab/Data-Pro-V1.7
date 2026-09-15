@@ -810,8 +810,8 @@ export default function PlannerPage() {
   const [salaJarabeNuevaTareaOpen, setSalaJarabeNuevaTareaOpen] = useState(false);
   const [preparacionTab, setPreparacionTab] = useState<'glup' | 'justy'>('glup');
   const [nuevaTarea, setNuevaTarea] = useState({ fecha: '', hora: '', numeroTanques: '', sala: '', sabor: '', litros: '', ubb: '', brix: '' });
-  const glupStore = useRemoteCollection<{ id: string; fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string; estado: 'preparado' | 'enviado a linea'; enviarALinea: number | null; editando: boolean; editandoPor: string | null }[]>('sala-jarabe-glup', []);
-  const justyStore = useRemoteCollection<{ id: string; fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string; estado: 'preparado' | 'enviado a linea'; enviarALinea: number | null; editando: boolean; editandoPor: string | null }[]>('sala-jarabe-justy', []);
+  const glupStore = useRemoteCollection<{ id: string; fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string; estado: 'preparado' | 'enviado a linea' | 'retenido' | 'liberado'; enviarALinea: number | null; editando: boolean; editandoPor: string | null }[]>('sala-jarabe-glup', []);
+  const justyStore = useRemoteCollection<{ id: string; fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string; estado: 'preparado' | 'enviado a linea' | 'retenido' | 'liberado'; enviarALinea: number | null; editando: boolean; editandoPor: string | null }[]>('sala-jarabe-justy', []);
   const glupRows = glupStore.data;
   const justyRows = justyStore.data;
   const setGlupRows = glupStore.setData;
@@ -846,9 +846,12 @@ export default function PlannerPage() {
   const [lineaModalOpen, setLineaModalOpen] = useState(false);
   const [selectedLineaRow, setSelectedLineaRow] = useState<{ id: string; type: 'glup' | 'justy' } | null>(null);
   const [selectedLinea, setSelectedLinea] = useState<number | null>(null);
+  const [selectedEstadoRow, setSelectedEstadoRow] = useState<{ id: string; type: 'glup' | 'justy' } | null>(null);
+  const [estadoModalOpen, setEstadoModalOpen] = useState(false);
   const [revisionEditingRow, setRevisionEditingRow] = useState<{ id: string; type: 'glup' | 'justy'; scope: 'privileged' | 'public' } | null>(null);
   const [revisionEditForm, setRevisionEditForm] = useState<{ fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string } | null>(null);
   const isRevisionUser = user?.id === 'maria.mds' || user?.id === 'alex.mds' || user?.id === 'demon';
+  const isProcjUser = user?.id === 'procj.mds';
   const showRevisionColumn = isRevisionUser || glupRows.some((r) => r.editando) || justyRows.some((r) => r.editando);
   const canEditRow = (row: { editando: boolean; editandoPor: string | null }) => {
     if (!row.editando) return false;
@@ -4352,23 +4355,23 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                              <div className="flex items-center justify-between gap-2 mb-4 no-print">
                                <div className="flex items-center gap-3">
                                   <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                                      {['diario', 'por-turno'].map((subTab) => (
-                                     <button
-                                       key={subTab}
-                                       onClick={() => setReporteSubTab(subTab)}
-                                       className={cn(
-                                         "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                         reporteSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                       )}
-                                     >
-                                       {subTab === 'diario' && <CalendarIcon className="h-3.5 w-3.5" />}
-                                        {subTab === 'diario' ? 'Diario' : subTab === 'por-turno' ? 'Por Turno' : 'Data'}
-                                       {subTab === 'por-turno' && <Clock className="h-3.5 w-3.5" />}
-                                     </button>
-                                   ))}
+                                       {['diario', 'por-turno', 'resumen'].map((subTab) => (
+                                      <button
+                                        key={subTab}
+                                        onClick={() => setReporteSubTab(subTab)}
+                                        className={cn(
+                                          "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                          reporteSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                        )}
+                                      >
+                                        {subTab === 'diario' && <CalendarIcon className="h-3.5 w-3.5" />}
+                                         {subTab === 'diario' ? 'Diario' : subTab === 'por-turno' ? 'Por Turno' : subTab === 'resumen' ? 'Resumen' : 'Data'}
+                                        {subTab === 'por-turno' && <Clock className="h-3.5 w-3.5" />}
+                                      </button>
+                                    ))}
                                  </div>
                                </div>
-                                {(reporteSubTab === 'diario' || reporteSubTab === 'por-turno') && (
+                                 {(reporteSubTab === 'diario' || reporteSubTab === 'por-turno' || reporteSubTab === 'resumen') && (
                                  <div className="flex items-center">
                                    <input
                                      type="date"
@@ -5573,15 +5576,23 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                    {showInput ? (<input value={cellValue('ubb')} onChange={(e) => cellOnChange('ubb', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.ubb}
                                                                 </td>
-                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                   {showInput ? (<input value={cellValue('brix')} onChange={(e) => cellOnChange('brix', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.brix}
-                                                                </td>
-                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.estado}</td>
-                                                               <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                 {row.enviarALinea ? `Linea ${row.enviarALinea}` : (
-                                                                    <button onClick={() => { setSelectedLineaRow({ id: row.id, type: 'glup' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
+                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                    {showInput ? (<input value={cellValue('brix')} onChange={(e) => cellOnChange('brix', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.brix}
+                                                                 </td>
+                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                 {isProcjUser ? (
+                                                                   <button onClick={() => { setSelectedEstadoRow({ id: row.id, type: 'glup' }); setEstadoModalOpen(true); }} className="h-8 px-3 rounded-full bg-slate-100 text-slate-700 font-black uppercase text-[10px] tracking-widest hover:bg-slate-200 transition-none">
+                                                                     {row.estado}
+                                                                   </button>
+                                                                 ) : (
+                                                                   row.estado
                                                                  )}
                                                                </td>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                  {row.enviarALinea ? `Linea ${row.enviarALinea}` : (
+                                                                     <button onClick={() => { setSelectedLineaRow({ id: row.id, type: 'glup' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
+                                                                  )}
+                                                                </td>
                                                                 {showRevisionColumn && (
                                                                   <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                     {(() => {
@@ -5690,7 +5701,54 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                   {row.enviarALinea ? `Linea ${row.enviarALinea}` : (
                                                                      <button onClick={() => { setSelectedLineaRow({ id: row.id, type: 'justy' }); setSelectedLinea(null); setLineaModalOpen(true); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Enviar</button>
-                                                                  )}
+                                      )}
+                                     {reporteSubTab === 'resumen' && (
+                                       <div className="flex flex-col gap-3">
+                                         <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
+                                           <div className="p-4">
+                                             <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                               <table className="w-full border-collapse text-center" style={{ minWidth: 1400 }}>
+                                                 <thead>
+                                                   <tr className="bg-slate-100">
+                                                     <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 w-36 text-left">Línea</th>
+                                                     <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Planificado</th>
+                                                     <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Alcance</th>
+                                                     <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% Cumplimiento</th>
+                                                     <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Disponibilidad</th>
+                                                     <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">OT</th>
+                                                     <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Tiempo Muerto</th>
+                                                     <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Observaciones</th>
+                                                   </tr>
+                                                 </thead>
+                                                 <tbody>
+                                                   {(() => {
+                                                     const row = calcularTotalesDiario(allInformesOperacionales, tasks, realProduction, lineSpeeds, reporteDiarioFecha, planificadasPorDia, allOrdenesTrabajo, undefined, allOrdenesSap, 'DIARIO');
+                                                     return [1,2,3,4,5,6,7].map((linea) => (
+                                                       <tr key={linea} className={linea % 2 === 0 ? 'even:bg-slate-50/60' : ''}>
+                                                         <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 text-left">Línea {linea}</td>
+                                                         <td className="px-2 py-1 border-b border-slate-100 text-center tabular-nums">{row.totalPlanificadoTD}</td>
+                                                         <td className="px-2 py-1 border-b border-slate-100 text-center tabular-nums">{row.totalAlcanceTD}</td>
+                                                         <td className="px-2 py-1 border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTD}</td>
+                                                         <td className="px-2 py-1 border-b border-slate-100 text-center tabular-nums">{row.disponibilidadTotal}</td>
+                                                         <td className="px-2 py-1 border-b border-slate-100 text-center tabular-nums">0</td>
+                                                         <td className="px-2 py-1 border-b border-slate-100 text-center tabular-nums">0</td>
+                                                         <td className="px-2 py-1 border-b border-slate-100 text-left">
+                                                           <input
+                                                             type="text"
+                                                             className="w-full bg-transparent text-[10px] text-slate-700 outline-none focus:bg-slate-50 rounded px-1 py-0.5"
+                                                             placeholder="Sin observaciones"
+                                                           />
+                                                         </td>
+                                                       </tr>
+                                                     ));
+                                                   })()}
+                                                 </tbody>
+                                               </table>
+                                             </div>
+                                           </div>
+                                         </div>
+                                       </div>
+                                     )}
                                                                 </td>
                                                                 {showRevisionColumn && (
                                                                   <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
@@ -7395,9 +7453,47 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
               }} className="rounded-xl bg-blue-600 text-white hover:bg-blue-700">Confirmar</Button>
             </DialogFooter>
           </DialogContent>
-        </Dialog>
+         </Dialog>
 
-        {isAdmin && (
+         <Dialog open={estadoModalOpen} onOpenChange={setEstadoModalOpen}>
+           <DialogContent className="sm:max-w-sm">
+             <DialogHeader>
+               <DialogTitle>Cambiar Estado</DialogTitle>
+               <DialogDescription>Selecciona el nuevo estado para el registro.</DialogDescription>
+             </DialogHeader>
+             <div className="py-4">
+               <div className="flex flex-col gap-2">
+                 <Button onClick={() => {
+                   if (!selectedEstadoRow) return;
+                   const { id, type } = selectedEstadoRow;
+                   if (type === 'glup') {
+                     setGlupRows((prev) => prev.map((row) => row.id === id ? { ...row, estado: 'retenido' } : row));
+                   } else {
+                     setJustyRows((prev) => prev.map((row) => row.id === id ? { ...row, estado: 'retenido' } : row));
+                   }
+                   setEstadoModalOpen(false);
+                   setSelectedEstadoRow(null);
+                 }} className="rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Retenido</Button>
+                 <Button onClick={() => {
+                   if (!selectedEstadoRow) return;
+                   const { id, type } = selectedEstadoRow;
+                   if (type === 'glup') {
+                     setGlupRows((prev) => prev.map((row) => row.id === id ? { ...row, estado: 'liberado' } : row));
+                   } else {
+                     setJustyRows((prev) => prev.map((row) => row.id === id ? { ...row, estado: 'liberado' } : row));
+                   }
+                   setEstadoModalOpen(false);
+                   setSelectedEstadoRow(null);
+                 }} className="rounded-full bg-emerald-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-emerald-700 transition-none">Liberado</Button>
+               </div>
+             </div>
+             <DialogFooter>
+               <Button variant="outline" onClick={() => setEstadoModalOpen(false)} className="rounded-xl">Cancelar</Button>
+             </DialogFooter>
+           </DialogContent>
+         </Dialog>
+
+         {isAdmin && (
           <ProductionEntryDialog
             isOpen={isEntryDialogOpen}
             onClose={() => setIsEntryDialogOpen(false)}
