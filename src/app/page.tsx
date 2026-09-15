@@ -2452,6 +2452,10 @@ export default function PlannerPage() {
     const dateStr = fecha ? format(fecha, 'yyyy-MM-dd') : '';
     const key = `${dateStr}-${quimico}-${idx}`;
     ptabInsumosStore.patchData({ [key]: value });
+    if (idx === 2) {
+      const nocturnoInicialKey = `${dateStr}-${quimico}-4`;
+      ptabInsumosStore.patchData({ [nocturnoInicialKey]: value });
+    }
   };
 
   const globalSalesProjection = useMemo(() => {
