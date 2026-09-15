@@ -4419,9 +4419,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                          <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Alcance TN</th>
                                                         <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TD</th>
                                                         <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TN</th>
-                                                        <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">DISPONIBILIDAD TD</th>
-                                                        <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200 min-w-[80px]">DISPONIBILIDAD TN</th>
-                                                      </tr>
+                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">DISPONIBILIDAD TD</th>
+               </tr>
                                                     </thead>
                                                     <tbody>
                                                       <tr className="even:bg-slate-50/60">
@@ -7430,7 +7429,6 @@ function TablaResumenReporteDiario({ informesOperacionales, tasks, realProductio
                 <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTD}</td>
                 <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.cumplimientoTN}</td>
                 <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-r border-b border-slate-100 text-center tabular-nums">{row.disponibilidadTD}</td>
-                <td className="px-1 py-0.5 text-[10px] font-black text-slate-900 border-b border-slate-100 text-center tabular-nums">{row.disponibilidadTN}</td>
               </tr>
             </tbody>
           </table>
@@ -7515,9 +7513,7 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
   let totalAlcanceTD = 0;
   let totalAlcanceTN = 0;
   let totalDisponibilidadTD = 0;
-  let totalDisponibilidadTN = 0;
   let countTD = 0;
-  let countTN = 0;
 
   lineas.forEach((lineaNombre, idx) => {
     const lineaNum = idx + 1;
@@ -7555,17 +7551,13 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
     totalAlcanceTN += alcanceTN;
 
     const disponibilidadTD = Math.max(0, 480 - totalParadaMin);
-    const disponibilidadTN = Math.max(0, 480 - totalParadaMin);
     totalDisponibilidadTD += disponibilidadTD;
-    totalDisponibilidadTN += disponibilidadTN;
     countTD += 1;
-    countTN += 1;
   });
 
   const cumplimientoTD = totalPlanificadoTD > 0 ? ((totalAlcanceTD / totalPlanificadoTD) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
   const cumplimientoTN = totalPlanificadoTN > 0 ? ((totalAlcanceTN / totalPlanificadoTN) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
   const disponibilidadTD = countTD > 0 ? (totalDisponibilidadTD / countTD / 480 * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
-  const disponibilidadTN = countTN > 0 ? (totalDisponibilidadTN / countTN / 480 * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
 
   return {
     totalPlanificadoTD: String(Math.round(totalPlanificadoTD)),
@@ -7575,7 +7567,6 @@ function calcularTotalesDiario(informesOperacionales: any[], tasks: any[], realP
     cumplimientoTD,
     cumplimientoTN,
     disponibilidadTD,
-    disponibilidadTN,
   };
 }
 
