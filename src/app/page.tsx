@@ -7889,10 +7889,13 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
         .reduce((sum: number, dia: any) => sum + (Number(dia.cajas4) || 0), 0);
     }, 0);
     const diferenciaTeoricaReal = Number.isFinite(produccionTeorica) ? String(Math.round(produccionTeorica - (alcanceTD + alcanceTN))) : '0';
-    const ot = Math.round(porTipo.operacionales + porTipo.averia);
-    const adecuaciones = Math.round(porTipo.adecuaciones);
-    const tiempoMuerto = minutosAHorasDecimal(Math.round(Math.max(0, totalParadaMin - (porTipo.programadas || 0))));
-    const ausentismo = Math.round(porTipo.ausentismo);
+    const ot = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'AVERIA' || String(r.tipoParada || '').toUpperCase() === 'AVERÍA').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
+    const adecuaciones = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'ADECUACIONES').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
+    const cajasHNum = Number(cajasH) || 0;
+    const horasEfectivasLinea = cajasHNum > 0 ? (alcanceTD + alcanceTN) / cajasHNum : 0;
+    const tiempoMuertoInexplicableRaw = disponibilidadRealHrs - horasEfectivasLinea;
+    const tiempoMuerto = tiempoMuertoInexplicableRaw.toFixed(2).replace('.', ',');
+    const ausentismo = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'AUSENTISMO').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
     const disponibilidad = totalParadaMin > 0 ? ((480 - totalParadaMin) / 480 * 100).toFixed(2).replace('.', ',') + '%' : '100,00%';
 
     const alcance = alcanceTD + alcanceTN;
