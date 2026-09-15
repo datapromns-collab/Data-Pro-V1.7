@@ -913,6 +913,48 @@ export default function PlannerPage() {
   const ptabWeeksContainerRef = useRef<HTMLDivElement>(null);
   const ptabAguaStore = useRemoteCollection<Record<string, string>>('ptab-agua', {});
   const ptabInsumosStore = useRemoteCollection<Record<string, string>>('ptab-insumos', {});
+  const insumosQuimicos = [
+    { codigo: 'INSU_0021', nombre: 'LP20' },
+    { codigo: 'INSU_0010', nombre: 'Cloro' },
+    { codigo: 'INSU_0018', nombre: 'AntiEscalante' },
+    { codigo: 'INSU_0020', nombre: 'Sal' },
+    { codigo: 'INSU_0002', nombre: 'Alcalino' },
+    { codigo: 'INSU_0011', nombre: 'Peracetico' },
+    { codigo: 'INSU_0014', nombre: 'Lark Foam Quat' },
+    { codigo: 'INSU_0001', nombre: 'Lark Foam IN' },
+    { codigo: 'INSU_0012', nombre: 'Lark Desengrasante' },
+    { codigo: 'INSU_0024', nombre: 'Soda Caustica' },
+    { codigo: 'INSU_0040', nombre: 'GermiQuat' },
+    { codigo: 'INSU_0003', nombre: 'Lark Inox' },
+    { codigo: 'INSU_0009', nombre: 'TM Smart' },
+    { codigo: 'INSU_0036', nombre: 'Gamma Ro-432' },
+    { codigo: 'INSU_0042', nombre: 'RO Cleaner' },
+    { codigo: 'INSU_0044', nombre: 'Sanitizer' },
+    { codigo: 'INSU_0043', nombre: 'LARK CLEAN 21C' },
+  ];
+  const ptabInsumosInitialMount = useRef(true);
+  useEffect(() => {
+    if (ptabInsumosInitialMount.current) {
+      ptabInsumosInitialMount.current = false;
+      return;
+    }
+    if (!ptabInsumosFecha) return;
+    if (!ptabInsumosStore.isLoaded) return;
+    const ayer = new Date(ptabInsumosFecha);
+    ayer.setDate(ayer.getDate() - 1);
+    const ayerStr = format(ayer, 'yyyy-MM-dd');
+    const hoyStr = format(ptabInsumosFecha, 'yyyy-MM-dd');
+    const updates: Record<string, string> = {};
+    insumosQuimicos.forEach((item) => {
+      const finalNocturnoAyer = ptabInsumosStore.data[`${ayerStr}-${item.nombre}-6`];
+      if (finalNocturnoAyer !== undefined && finalNocturnoAyer !== '') {
+        updates[`${hoyStr}-${item.nombre}-0`] = finalNocturnoAyer;
+      }
+    });
+    if (Object.keys(updates).length > 0) {
+      ptabInsumosStore.patchData(updates);
+    }
+  }, [ptabInsumosFecha]);
   const [rSemanalWeekStartDate, setRSemanalWeekStartDate] = useState(new Date());
   const rSemanalWeeksContainerRef = useRef<HTMLDivElement>(null);
   const rSemanalAguaStore = useRemoteCollection<Record<string, string>>('ptab-agua', {});
@@ -4916,26 +4958,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                            <th className="px-2 py-2 text-center font-black uppercase tracking-wider border border-white/10 min-w-[70px]">Consumo Total</th>
                                          </tr>
                                        </thead>
-                                       <tbody>
-                                         {[
-                                           { codigo: 'INSU_0021', nombre: 'LP20' },
-                                           { codigo: 'INSU_0010', nombre: 'Cloro' },
-                                           { codigo: 'INSU_0018', nombre: 'AntiEscalante' },
-                                           { codigo: 'INSU_0020', nombre: 'Sal' },
-                                           { codigo: 'INSU_0002', nombre: 'Alcalino' },
-                                           { codigo: 'INSU_0011', nombre: 'Peracetico' },
-                                           { codigo: 'INSU_0014', nombre: 'Lark Foam Quat' },
-                                           { codigo: 'INSU_0001', nombre: 'Lark Foam IN' },
-                                           { codigo: 'INSU_0012', nombre: 'Lark Desengrasante' },
-                                           { codigo: 'INSU_0024', nombre: 'Soda Caustica' },
-                                           { codigo: 'INSU_0040', nombre: 'GermiQuat' },
-                                           { codigo: 'INSU_0003', nombre: 'Lark Inox' },
-                                           { codigo: 'INSU_0009', nombre: 'TM Smart' },
-                                           { codigo: 'INSU_0036', nombre: 'Gamma Ro-432' },
-                                           { codigo: 'INSU_0042', nombre: 'RO Cleaner' },
-                                           { codigo: 'INSU_0044', nombre: 'Sanitizer' },
-                                           { codigo: 'INSU_0043', nombre: 'LARK CLEAN 21C' },
-                                         ].map((item) => (
+                                        <tbody>
+                                          {insumosQuimicos.map((item) => (
                                             <tr key={item.nombre} className="border-b border-slate-100 hover:bg-slate-50/50">
                                               <td className="px-2 py-2 border border-slate-100 font-bold text-slate-900 whitespace-nowrap">{item.codigo}</td>
                                               <td className="px-2 py-2 font-bold text-slate-700 border border-slate-100 whitespace-nowrap">{item.nombre}</td>
