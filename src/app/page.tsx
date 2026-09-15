@@ -849,7 +849,7 @@ export default function PlannerPage() {
   const [selectedEstadoRow, setSelectedEstadoRow] = useState<{ id: string; type: 'glup' | 'justy' } | null>(null);
   const [estadoModalOpen, setEstadoModalOpen] = useState(false);
   const [revisionEditingRow, setRevisionEditingRow] = useState<{ id: string; type: 'glup' | 'justy'; scope: 'privileged' | 'public' } | null>(null);
-  const [revisionEditForm, setRevisionEditForm] = useState<{ fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string } | null>(null);
+  const [revisionEditForm, setRevisionEditForm] = useState<{ fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string; estado: 'preparado' | 'enviado a linea' | 'retenido' | 'liberado'; enviarALinea: number | null } | null>(null);
   const isRevisionUser = user?.id === 'maria.mds' || user?.id === 'alex.mds' || user?.id === 'demon';
   const isProcjUser = user?.id === 'procj.mds';
   const showRevisionColumn = isRevisionUser || glupRows.some((r) => r.editando) || justyRows.some((r) => r.editando);
@@ -858,7 +858,7 @@ export default function PlannerPage() {
     if (!user?.id) return false;
     return true;
   };
-  const updateRow = (type: 'glup' | 'justy', id: string, data: { fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string }) => {
+  const updateRow = (type: 'glup' | 'justy', id: string, data: { fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string; estado: 'preparado' | 'enviado a linea' | 'retenido' | 'liberado'; enviarALinea: number | null }) => {
     if (type === 'glup') {
       setGlupRows((prev) => prev.map((row) => row.id === id ? { ...row, ...data } : row));
     } else {
@@ -5599,22 +5599,28 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                  <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                     {showInput ? (<input value={cellValue('brix')} onChange={(e) => cellOnChange('brix', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.brix}
                                                                  </td>
-                                                                  <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                  {showInput ? (
-                                                                    <select value={cellValue('estado')} onChange={(e) => cellOnChange('estado', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary">
-                                                                      <option value="preparado">Preparado</option>
-                                                                      <option value="enviado a linea">Enviado a linea</option>
-                                                                      <option value="retenido">Retenido</option>
-                                                                      <option value="liberado">Liberado</option>
-                                                                    </select>
-                                                                  ) : isProcjUser ? (
-                                                                    <button onClick={() => { setSelectedEstadoRow({ id: row.id, type: 'glup' }); setEstadoModalOpen(true); }} className="h-8 px-3 rounded-full bg-slate-100 text-slate-700 font-black uppercase text-[10px] tracking-widest hover:bg-slate-200 transition-none">
-                                                                      {row.estado}
-                                                                    </button>
-                                                                  ) : (
-                                                                    row.estado
-                                                                  )}
-                                                                </td>
+                                                                   <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                   {showInput ? (
+                                                                     <select value={cellValue('estado')} onChange={(e) => cellOnChange('estado', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary">
+                                                                       <option value="preparado">Preparado</option>
+                                                                       <option value="enviado a linea">Enviado a linea</option>
+                                                                       <option value="retenido">Retenido</option>
+                                                                       <option value="liberado">Liberado</option>
+                                                                     </select>
+                                                                   ) : isProcjUser ? (
+                                                                     <button onClick={() => { setSelectedEstadoRow({ id: row.id, type: 'glup' }); setEstadoModalOpen(true); }} className={`h-8 px-3 rounded-full font-black uppercase text-[10px] tracking-widest transition-none ${
+                                                                       row.estado === 'preparado' ? 'bg-blue-600 text-white' :
+                                                                       row.estado === 'retenido' ? 'bg-amber-500 text-white' :
+                                                                       row.estado === 'liberado' ? 'bg-emerald-600 text-white' :
+                                                                       row.estado === 'enviado a linea' ? 'bg-orange-500 text-white' :
+                                                                       'bg-slate-100 text-slate-700'
+                                                                     }`}>
+                                                                       {row.estado}
+                                                                     </button>
+                                                                   ) : (
+                                                                     row.estado
+                                                                   )}
+                                                                 </td>
                                                                  <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                    {showInput ? (
                                                                      <select value={cellValue('enviarALinea')} onChange={(e) => cellOnChange('enviarALinea', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary">
@@ -5650,8 +5656,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                         return (
                                                                           <div className="flex items-center gap-1">
                                                                              <button onClick={() => deleteRow('glup', row.id)} className="h-8 px-3 rounded-full bg-red-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-red-700 transition-none">Eliminar</button>
-                                                                              <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'glup', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb, brix: row.brix }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
-                                                                             <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'glup', scope: 'public' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb, brix: row.brix }); setGlupRows((prev) => prev.map((r) => r.id === row.id ? { ...r, editando: true, editandoPor: user?.id || null } : r)); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
+                                                                               <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'glup', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb, brix: row.brix, estado: row.estado, enviarALinea: row.enviarALinea }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
+                                                                              <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'glup', scope: 'public' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb, brix: row.brix, estado: row.estado, enviarALinea: row.enviarALinea }); setGlupRows((prev) => prev.map((r) => r.id === row.id ? { ...r, editando: true, editandoPor: user?.id || null } : r)); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
                                                                           </div>
                                                                         );
                                                                       }
@@ -5751,7 +5757,13 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                 </td>
                                                                  <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
                                                                  {isProcjUser ? (
-                                                                   <button onClick={() => { setSelectedEstadoRow({ id: row.id, type: 'justy' }); setEstadoModalOpen(true); }} className="h-8 px-3 rounded-full bg-slate-100 text-slate-700 font-black uppercase text-[10px] tracking-widest hover:bg-slate-200 transition-none">
+                                                                   <button onClick={() => { setSelectedEstadoRow({ id: row.id, type: 'justy' }); setEstadoModalOpen(true); }} className={`h-8 px-3 rounded-full font-black uppercase text-[10px] tracking-widest transition-none ${
+                                                                     row.estado === 'preparado' ? 'bg-blue-600 text-white' :
+                                                                     row.estado === 'retenido' ? 'bg-amber-500 text-white' :
+                                                                     row.estado === 'liberado' ? 'bg-emerald-600 text-white' :
+                                                                     row.estado === 'enviado a linea' ? 'bg-orange-500 text-white' :
+                                                                     'bg-slate-100 text-slate-700'
+                                                                   }`}>
                                                                      {row.estado}
                                                                    </button>
                                                                  ) : (
@@ -5835,8 +5847,8 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                         return (
                                                                           <div className="flex items-center gap-1">
                                                                              <button onClick={() => deleteRow('justy', row.id)} className="h-8 px-3 rounded-full bg-red-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-red-700 transition-none">Eliminar</button>
-                                                                             <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'justy', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb, brix: row.brix }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
-                                                                              <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'justy', scope: 'public' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb, brix: row.brix }); setJustyRows((prev) => prev.map((r) => r.id === row.id ? { ...r, editando: true, editandoPor: user?.id || null } : r)); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
+                                                                              <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'justy', scope: 'privileged' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb, brix: row.brix, estado: row.estado, enviarALinea: row.enviarALinea }); }} className="h-8 px-3 rounded-full bg-amber-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-amber-700 transition-none">Editar</button>
+                                                                               <button onClick={() => { setRevisionEditingRow({ id: row.id, type: 'justy', scope: 'public' }); setRevisionEditForm({ fecha: row.fecha, hora: row.hora, sala: row.sala, numeroTanques: row.numeroTanques, sabor: row.sabor, litros: row.litros, ubb: row.ubb, brix: row.brix, estado: row.estado, enviarALinea: row.enviarALinea }); setJustyRows((prev) => prev.map((r) => r.id === row.id ? { ...r, editando: true, editandoPor: user?.id || null } : r)); }} className="h-8 px-3 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Habilitar Edicion</button>
                                                                           </div>
                                                                         );
                                                                       }

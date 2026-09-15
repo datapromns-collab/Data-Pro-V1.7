@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-14T00:00:00.000",
+      "weekStartDate": "2026-09-15T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -10265,7 +10265,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-15T19:38:21.454Z"
+    "updatedAt": "2026-09-15T21:30:26.862Z"
   },
   "ordenesSap": [
     {
@@ -18350,8 +18350,8 @@
         },
         {
           "fechaInicio": "2026-09-15",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16054",
+          "cajas1": 2480,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -18381,8 +18381,8 @@
         },
         {
           "fechaInicio": "2026-09-15",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16012",
+          "cajas1": 3680,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -18412,8 +18412,8 @@
         },
         {
           "fechaInicio": "2026-09-15",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17967",
+          "cajas1": 5760,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -18443,8 +18443,8 @@
         },
         {
           "fechaInicio": "2026-09-15",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16102",
+          "cajas1": 4960,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -18474,8 +18474,8 @@
         },
         {
           "fechaInicio": "2026-09-15",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17929",
+          "cajas1": 1600,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -18505,8 +18505,8 @@
         },
         {
           "fechaInicio": "2026-09-15",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "1615",
+          "cajas1": 16,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",

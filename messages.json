@@ -228,7 +228,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "demon2",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
@@ -239,7 +239,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "maria.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
@@ -569,7 +569,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodtj.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
