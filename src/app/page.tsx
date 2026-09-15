@@ -4419,7 +4419,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                          <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Alcance TN</th>
                                                         <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TD</th>
                                                         <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TN</th>
-                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">DISPONIBILIDAD TD</th>
+                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">DISPONIBILIDAD TOTAL</th>
                </tr>
                                                     </thead>
                                                     <tbody>
@@ -7415,7 +7415,7 @@ function TablaResumenReporteDiario({ informesOperacionales, tasks, realProductio
                  <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Alcance TN</th>
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TD</th>
                 <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TN</th>
-                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">DISPONIBILIDAD TD</th>
+                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">DISPONIBILIDAD TOTAL</th>
                     </tr>
             </thead>
             <tbody>
@@ -8263,7 +8263,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
                       <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">Alcance TN</th>
                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TD</th>
                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">% CUMPLIMIENTO TN</th>
-                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">DISPONIBILIDAD TD</th>
+                      <th className="px-1 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200 min-w-[80px]">DISPONIBILIDAD TOTAL</th>
                     </tr>
                  </thead>
                  <tbody>
@@ -8466,6 +8466,7 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
   });
 
   OrdenTrabajoRow.displayName = 'OrdenTrabajoRow';
+
 
 
 
