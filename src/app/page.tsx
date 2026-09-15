@@ -826,7 +826,7 @@ export default function PlannerPage() {
       try {
         const parsed = JSON.parse(legacyGlup);
         if (Array.isArray(parsed)) {
-          const withId = parsed.map((row: any) => ({ ...row, id: row.id || `glup_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, editando: false, editandoPor: null }));
+          const withId = parsed.map((row: any) => ({ ...row, id: row.id || `glup_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, editando: false, editandoPor: null, brix: row.brix || '' }));
           setGlupRows(withId);
         }
       } catch {}
@@ -836,7 +836,7 @@ export default function PlannerPage() {
       try {
         const parsed = JSON.parse(legacyJusty);
         if (Array.isArray(parsed)) {
-          const withId = parsed.map((row: any) => ({ ...row, id: row.id || `justy_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, editando: false, editandoPor: null }));
+          const withId = parsed.map((row: any) => ({ ...row, id: row.id || `justy_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, editando: false, editandoPor: null, brix: row.brix || '' }));
           setJustyRows(withId);
         }
       } catch {}
@@ -5539,16 +5539,16 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                          {(() => {
                                                             const isEditing = revisionEditingRow && revisionEditingRow.type === 'glup' && revisionEditingRow.id === row.id;
                                                             const form = isEditing ? revisionEditForm : null;
-                                                            const editable = !isEditing && canEditRow(row);
-                                                            const showInput = isEditing || editable;
-                                                            const cellValue = (field: 'fecha' | 'hora' | 'sala' | 'numeroTanques' | 'sabor' | 'litros' | 'ubb') => isEditing ? (form?.[field] ?? '') : row[field];
-                                                            const cellOnChange = (field: 'fecha' | 'hora' | 'sala' | 'numeroTanques' | 'sabor' | 'litros' | 'ubb', value: string) => {
-                                                              if (isEditing) {
-                                                                setRevisionEditForm({ ...(form as any), [field]: value });
-                                                              } else if (editable) {
-                                                                updateRow('glup', row.id, { [field]: value } as any);
-                                                              }
-                                                            };
+                                                             const editable = !isEditing && canEditRow(row);
+                                                             const showInput = isEditing || editable;
+                                                             const cellValue = (field: 'fecha' | 'hora' | 'sala' | 'numeroTanques' | 'sabor' | 'litros' | 'ubb' | 'brix') => isEditing ? (form?.[field] ?? '') : row[field];
+                                                             const cellOnChange = (field: 'fecha' | 'hora' | 'sala' | 'numeroTanques' | 'sabor' | 'litros' | 'ubb' | 'brix', value: string) => {
+                                                               if (isEditing) {
+                                                                 setRevisionEditForm({ ...(form as any), [field]: value });
+                                                               } else if (editable) {
+                                                                 updateRow('glup', row.id, { [field]: value } as any);
+                                                               }
+                                                             };
                                                             return (
                                                               <>
                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
@@ -5649,16 +5649,16 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                           {(() => {
                                                              const isEditing = revisionEditingRow && revisionEditingRow.type === 'justy' && revisionEditingRow.id === row.id;
                                                             const form = isEditing ? revisionEditForm : null;
-                                                            const editable = !isEditing && canEditRow(row);
-                                                            const showInput = isEditing || editable;
-                                                            const cellValue = (field: 'fecha' | 'hora' | 'sala' | 'numeroTanques' | 'sabor' | 'litros' | 'ubb') => isEditing ? (form?.[field] ?? '') : row[field];
-                                                            const cellOnChange = (field: 'fecha' | 'hora' | 'sala' | 'numeroTanques' | 'sabor' | 'litros' | 'ubb', value: string) => {
-                                                              if (isEditing) {
-                                                                setRevisionEditForm({ ...(form as any), [field]: value });
-                                                              } else if (editable) {
-                                                                updateRow('justy', row.id, { [field]: value } as any);
-                                                              }
-                                                            };
+                                                             const editable = !isEditing && canEditRow(row);
+                                                             const showInput = isEditing || editable;
+                                                             const cellValue = (field: 'fecha' | 'hora' | 'sala' | 'numeroTanques' | 'sabor' | 'litros' | 'ubb' | 'brix') => isEditing ? (form?.[field] ?? '') : row[field];
+                                                             const cellOnChange = (field: 'fecha' | 'hora' | 'sala' | 'numeroTanques' | 'sabor' | 'litros' | 'ubb' | 'brix', value: string) => {
+                                                               if (isEditing) {
+                                                                 setRevisionEditForm({ ...(form as any), [field]: value });
+                                                               } else if (editable) {
+                                                                 updateRow('justy', row.id, { [field]: value } as any);
+                                                               }
+                                                             };
                                                             return (
                                                               <>
                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
@@ -5680,7 +5680,10 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                                   {showInput ? (<input value={cellValue('litros')} onChange={(e) => cellOnChange('litros', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.litros}
                                                                 </td>
                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
-                                                                  {showInput ? (<input value={cellValue('ubb')} onChange={(e) => cellOnChange('ubb', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.ubb}
+                                                                   {showInput ? (<input value={cellValue('ubb')} onChange={(e) => cellOnChange('ubb', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.ubb}
+                                                                </td>
+                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                                   {showInput ? (<input value={cellValue('brix')} onChange={(e) => cellOnChange('brix', e.target.value)} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />) : row.brix}
                                                                 </td>
                                                                <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">{row.estado}</td>
                                                                 <td className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
