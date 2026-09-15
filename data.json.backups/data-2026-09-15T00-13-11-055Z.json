@@ -10275,7 +10275,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-14T21:28:02.676Z"
+    "updatedAt": "2026-09-14T22:29:01.485Z"
   },
   "ordenesSap": [
     {
@@ -128705,7 +128705,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789256092217.1177,
+        "id": 1789227817233,
         "fechaOrden": "2026-09-10",
         "orden": "9568",
         "fechaEmision": "2026-09-10",
@@ -128728,7 +128728,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -128759,7 +128759,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789256092217.1467,
+        "id": 1789233846564,
         "fechaOrden": "2026-09-09",
         "orden": "9566",
         "fechaEmision": "2026-09-09",
@@ -128782,7 +128782,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -128867,7 +128867,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789256092217.6162,
+        "id": 1789235592799,
         "fechaOrden": "2026-09-09",
         "orden": "9462",
         "fechaEmision": "2026-09-09",
@@ -128890,7 +128890,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -128975,7 +128975,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789256092217.5789,
+        "id": 1789238757537,
         "fechaOrden": "2026-09-09",
         "orden": "10083",
         "fechaEmision": "2026-09-09",
@@ -128998,7 +128998,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
