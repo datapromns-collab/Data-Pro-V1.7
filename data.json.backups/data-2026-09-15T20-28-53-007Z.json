@@ -139431,9 +139431,9 @@
     },
     "sala-jarabe-glup": [
       {
-        "id": "row_1789503580256_m35kxd",
+        "id": "row_1789504043936_e8sp9p",
         "fecha": "2026-09-15",
-        "hora": "16:19",
+        "hora": "16:27",
         "numeroTanques": "2",
         "sala": "1",
         "sabor": "GLUP COLA",
@@ -139441,9 +139441,9 @@
         "ubb": "6",
         "brix": "53.9",
         "estado": "enviado a linea",
-        "enviarALinea": 5,
+        "enviarALinea": 1,
         "editando": false,
-        "editandoPor": "alex.mds"
+        "editandoPor": null
       }
     ]
   },
@@ -139538,7 +139538,8 @@
       "*": [
         "row_1788897287273_vh896t",
         "row_1788897622488_5tss36",
-        "row_1789501054256_feubjk"
+        "row_1789501054256_feubjk",
+        "row_1789503580256_m35kxd"
       ]
     }
   },
