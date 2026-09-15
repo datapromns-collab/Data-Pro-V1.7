@@ -5524,8 +5524,9 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                       <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[90px]">N° Tanques</th>
                                                       <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[120px]">Sabor</th>
                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Litros</th>
-                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Ubb</th>
-                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Estado</th>
+                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Ubb</th>
+                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Brix°</th>
+                                                    <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[100px]">Estado</th>
                                                     <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[140px]">Enviar a Linea</th>
                                                     {showRevisionColumn && (<th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-white/10 min-w-[160px]">Revisión</th>)}
                                                     </tr>
@@ -7907,7 +7908,7 @@ function getResumenPorLinea(informesOperacionales: any[], tasks: any[], realProd
     const tiempoMuertoInexplicableRaw = disponibilidadRealHrs - horasEfectivasLinea;
     const tiempoMuerto = tiempoMuertoInexplicableRaw.toFixed(2).replace('.', ',');
     const ausentismo = minutosAHorasDecimal(paradasLinea.filter((r: any) => String(r.tipoParada || '').toUpperCase() === 'AUSENTISMO').reduce((acc: number, r: any) => acc + (Number(r.totalMin) || 0), 0));
-    const disponibilidad = totalParadaMin > 0 ? ((480 - totalParadaMin) / 480 * 100).toFixed(2).replace('.', ',') + '%' : '100,00%';
+    const disponibilidad = planificado > 0 ? ((produccionTeorica / planificado) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
 
     const alcance = alcanceTD + alcanceTN;
     const cumplimiento = planificado > 0 ? ((alcance / planificado) * 100).toFixed(2).replace('.', ',') + '%' : '0,00%';
