@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-15T00:00:00.000",
+      "weekStartDate": "2026-09-16T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -10265,7 +10265,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-16T11:32:26.929Z"
+    "updatedAt": "2026-09-16T12:11:57.279Z"
   },
   "ordenesSap": [
     {
@@ -18352,12 +18352,12 @@
           "fechaInicio": "2026-09-15",
           "ticket1": "16054",
           "cajas1": 2480,
-          "ticket2": "",
+          "ticket2": "16055",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 960,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 10800
         }
       ]
     },
@@ -18383,12 +18383,12 @@
           "fechaInicio": "2026-09-15",
           "ticket1": "16012",
           "cajas1": 3680,
-          "ticket2": "",
+          "ticket2": "16013",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1600,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 2626
         }
       ]
     },
@@ -18414,12 +18414,12 @@
           "fechaInicio": "2026-09-15",
           "ticket1": "17967",
           "cajas1": 5760,
-          "ticket2": "",
+          "ticket2": "17968",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2800,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 17920
         }
       ]
     },
@@ -18445,12 +18445,12 @@
           "fechaInicio": "2026-09-15",
           "ticket1": "16102",
           "cajas1": 4960,
-          "ticket2": "",
+          "ticket2": "16103",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3360,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 19200
         }
       ]
     },
@@ -18476,12 +18476,12 @@
           "fechaInicio": "2026-09-15",
           "ticket1": "17929",
           "cajas1": 1600,
-          "ticket2": "",
+          "ticket2": "17930",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1000,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 5434
         }
       ]
     },
@@ -18507,12 +18507,12 @@
           "fechaInicio": "2026-09-15",
           "ticket1": "16151",
           "cajas1": 1600,
-          "ticket2": "",
+          "ticket2": "16152",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1280,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 9120
         }
       ]
     },
@@ -18578,12 +18578,12 @@
           "fechaInicio": "2026-09-15",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "",
+          "ticket2": "16013",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 6480
         }
       ]
     }
@@ -139358,8 +139358,8 @@
       "2026-09-15-servicio": "13792",
       "2026-09-15-suave": "179670",
       "2026-09-15-procesos": "2024002,85",
-      "2026-09-15-filtrada": "315659874",
-      "2026-09-15-total": "2802634.67"
+      "2026-09-15-filtrada": "3156598,74",
+      "2026-09-15-total": "2802634,67"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -139577,8 +139577,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  08 .xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 12550,
-    "uploadedAt": "2026-09-15T12:25:53.504Z",
+    "tamano": 12884,
+    "uploadedAt": "2026-09-16T11:59:09.431Z",
     "uploadedBy": "local-user"
   }
 }
