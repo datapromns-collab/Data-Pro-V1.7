@@ -52,6 +52,7 @@ import {
   CheckSquare,
   FileDown,
   FileSpreadsheet,
+  FileText,
   Upload
 } from 'lucide-react';
 import { PRODUCT_LIST, SHIFT_SPLIT_HOUR, SHIFT_SPLIT_MINUTE, PRODUCTION_START_HOUR } from '@/lib/planner-utils';
@@ -804,7 +805,7 @@ export default function PlannerPage() {
       logisticaViewerClientRef.current = null;
     };
   }, [logisticaShowPreview, logisticaExcelBuffer]);
-  const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-ubb'>('preparacion');
+  const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-ubb' | 'resumen'>('preparacion');
   const [salaJarabeLinea, setSalaJarabeLinea] = useState<number>(1);
   const [salaJarabePrepWeekStartDate, setSalaJarabePrepWeekStartDate] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [salaJarabeNuevaTareaOpen, setSalaJarabeNuevaTareaOpen] = useState(false);
@@ -5409,11 +5410,12 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                <div className="flex flex-col gap-2 no-print">
                                  <div className="flex items-center gap-2">
                                    <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                     {[
-                                       { key: 'preparacion', label: 'Preparacion', icon: FlaskConical },
-                                       { key: 'consumo-lineas', label: 'Consumo en Lineas', icon: Activity },
-                                       { key: 'consumo-ubb', label: 'Consumo Ubb', icon: BarChart3 },
-                                     ].map((tab) => (
+                                      {[
+                                        { key: 'preparacion', label: 'Preparacion', icon: FlaskConical },
+                                        { key: 'consumo-lineas', label: 'Consumo en Lineas', icon: Activity },
+                                        { key: 'consumo-ubb', label: 'Consumo Ubb', icon: BarChart3 },
+                                        { key: 'resumen', label: 'Resumen', icon: FileText },
+                                      ].map((tab) => (
                                        <button
                                          key={tab.key}
                                          onClick={() => setSalaJarabeSubTab(tab.key as any)}
@@ -5870,9 +5872,12 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                      {salaJarabeSubTab === 'consumo-lineas' && (
                                        <div className="text-slate-400 uppercase font-black text-sm tracking-widest">Linea {salaJarabeLinea}</div>
                                      )}
-                                     {salaJarabeSubTab === 'consumo-ubb' && (
-                                       <div className="text-slate-400 uppercase font-black text-sm tracking-widest">Consumo Ubb</div>
-                                     )}
+                                      {salaJarabeSubTab === 'consumo-ubb' && (
+                                        <div className="text-slate-400 uppercase font-black text-sm tracking-widest">Consumo Ubb</div>
+                                      )}
+                                      {salaJarabeSubTab === 'resumen' && (
+                                        <div className="text-slate-400 uppercase font-black text-sm tracking-widest">Resumen</div>
+                                      )}
                                    </div>
                                  </div>
                                </div>
