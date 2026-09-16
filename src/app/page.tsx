@@ -805,19 +805,25 @@ export default function PlannerPage() {
       logisticaViewerClientRef.current = null;
     };
   }, [logisticaShowPreview, logisticaExcelBuffer]);
-  const [consumoLineasData, setConsumoLineasData] = useState<{ fecha: string; semana: number; dia: string; turno: string; tanque: string; sabor: string; horaInicio: string; ubbInicial: string; volInicialTanque: string }[]>([]);
-  const addConsumoLineaRow = () => {
-    setConsumoLineasData((prev) => [...prev, {
-      fecha: format(new Date(), 'yyyy-MM-dd'),
-      semana: getISOWeek(new Date()),
-      dia: format(new Date(), 'EEEE'),
-      turno: 'T1',
-      tanque: '',
-      sabor: '',
-      horaInicio: '',
-      ubbInicial: '',
-      volInicialTanque: '',
-    }]);
+  const [consumoLineasDataPorLinea, setConsumoLineasDataPorLinea] = useState<Record<number, { fecha: string; semana: number; dia: string; turno: string; tanque: string; sabor: string; horaInicio: string; ubbInicial: string; volInicialTanque: string }[]>>({});
+  const addConsumoRow = (linea: number) => {
+    setConsumoLineasDataPorLinea((prev) => {
+      const current = prev[linea] || [];
+      return {
+        ...prev,
+        [linea]: [...current, {
+          fecha: format(new Date(), 'yyyy-MM-dd'),
+          semana: getISOWeek(new Date()),
+          dia: format(new Date(), 'EEEE'),
+          turno: 'T1',
+          tanque: '',
+          sabor: '',
+          horaInicio: '',
+          ubbInicial: '',
+          volInicialTanque: '',
+        }],
+      };
+    });
   };
   const [salaJarabeLinea, setSalaJarabeLinea] = useState<number>(1);
   const [salaJarabePrepWeekStartDate, setSalaJarabePrepWeekStartDate] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
@@ -5486,27 +5492,72 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                       </Popover>
                                     </div>
                                   )}
-                                 {salaJarabeSubTab === 'consumo-lineas' && (
-                                   <div className="flex items-center gap-2">
-                                     <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                   {salaJarabeSubTab === 'consumo-lineas' && (
+                                     <div className="flex flex-col gap-3">
+                                       <div className="flex items-center gap-2">
+                                         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                                           {Array.from({ length: 7 }).map((_, idx) => {
+                                             const n = idx + 1;
+                                             return (
+                                               <button
+                                                 key={n}
+                                                 onClick={() => setSalaJarabeLinea(n)}
+                                                 className={cn(
+                                                   "inline-flex items-center justify-center h-9 min-w-[2.2rem] px-2 sm:px-3 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                                   salaJarabeLinea === n ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                                 )}
+                                               >
+                                                 L{n}
+                                               </button>
+                                             );
+                                           })}
+                                         </div>
+                                         <button onClick={() => addConsumoRow(salaJarabeLinea)} className="h-9 px-4 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none">Agregar</button>
+                                       </div>
                                        {Array.from({ length: 7 }).map((_, idx) => {
                                          const n = idx + 1;
+                                         if (salaJarabeLinea !== n) return null;
+                                         const rows = consumoLineasDataPorLinea[n] || [];
                                          return (
-                                           <button
-                                             key={n}
-                                             onClick={() => setSalaJarabeLinea(n)}
-                                             className={cn(
-                                               "inline-flex items-center justify-center h-9 min-w-[2.2rem] px-2 sm:px-3 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                               salaJarabeLinea === n ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                             )}
-                                           >
-                                             L{n}
-                                           </button>
+                                           <div key={n} className="overflow-x-auto rounded-2xl border border-slate-200 bg-white">
+                                             <table className="w-full border-collapse text-[11px]">
+                                               <thead>
+                                                 <tr className="bg-slate-100 text-slate-700">
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[90px]">Fecha</th>
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[90px]">Semana</th>
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[90px]">Dia</th>
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[90px]">Turno</th>
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[90px]">N° Tanque Conectado</th>
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[120px]">Sabor</th>
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[90px]">Hora Inicio</th>
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[100px]">Ubb Inicial</th>
+                                                   <th className="px-2 py-2 text-left font-black uppercase tracking-wider border border-slate-200 min-w-[120px]">Vol, Inicial Tanque</th>
+                                                 </tr>
+                                               </thead>
+                                               <tbody>
+                                                 {rows.length === 0 && (
+                                                   <tr><td colSpan={9} className="px-2 py-4 text-center text-slate-400 uppercase font-black text-xs tracking-widest">Sin registros</td></tr>
+                                                 )}
+                                                 {rows.map((row, idx) => (
+                                                   <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50/50">
+                                                     {['fecha','semana','dia','turno','tanque','sabor','horaInicio','ubbInicial','volInicialTanque'].map((field) => (
+                                                       <td key={field} className="px-2 py-2 border border-slate-100 text-[11px] font-bold text-slate-700">
+                                                         <input value={row[field as keyof typeof row]} onChange={(e) => setConsumoLineasDataPorLinea((prev) => {
+                                                           const current = prev[n] || [];
+                                                           const next = current.map((r, i) => i === idx ? { ...r, [field]: e.target.value } : r);
+                                                           return { ...prev, [n]: next };
+                                                         })} className="w-full h-8 text-left text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded focus:outline-none focus:border-primary" />
+                                                       </td>
+                                                     ))}
+                                                   </tr>
+                                                 ))}
+                                               </tbody>
+                                             </table>
+                                           </div>
                                          );
                                        })}
                                      </div>
-                                   </div>
-                                 )}
+                                   )}
                                </div>
                                <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                                  <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
