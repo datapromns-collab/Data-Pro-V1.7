@@ -10265,7 +10265,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-16T12:11:57.279Z"
+    "updatedAt": "2026-09-16T12:19:04.935Z"
   },
   "ordenesSap": [
     {
@@ -18558,12 +18558,12 @@
           "fechaInicio": "2026-09-15",
           "ticket1": "16201",
           "cajas1": 1872,
-          "ticket2": "",
+          "ticket2": "16202",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1638,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 642
         }
       ]
     },
@@ -18584,6 +18584,26 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 6480
+        }
+      ]
+    },
+    {
+      "id": "7-1789561115307",
+      "linea": 7,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "63650",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-15",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16202",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 8658
         }
       ]
     }
