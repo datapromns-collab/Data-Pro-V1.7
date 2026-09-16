@@ -805,7 +805,20 @@ export default function PlannerPage() {
       logisticaViewerClientRef.current = null;
     };
   }, [logisticaShowPreview, logisticaExcelBuffer]);
-  const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-ubb' | 'resumen'>('preparacion');
+  const [consumoLineasData, setConsumoLineasData] = useState<{ fecha: string; semana: number; dia: string; turno: string; tanque: string; sabor: string; horaInicio: string; ubbInicial: string; volInicialTanque: string }[]>([]);
+  const addConsumoLineaRow = () => {
+    setConsumoLineasData((prev) => [...prev, {
+      fecha: format(new Date(), 'yyyy-MM-dd'),
+      semana: getISOWeek(new Date()),
+      dia: format(new Date(), 'EEEE'),
+      turno: 'T1',
+      tanque: '',
+      sabor: '',
+      horaInicio: '',
+      ubbInicial: '',
+      volInicialTanque: '',
+    }]);
+  };
   const [salaJarabeLinea, setSalaJarabeLinea] = useState<number>(1);
   const [salaJarabePrepWeekStartDate, setSalaJarabePrepWeekStartDate] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
   const [salaJarabeNuevaTareaOpen, setSalaJarabeNuevaTareaOpen] = useState(false);
@@ -846,8 +859,9 @@ export default function PlannerPage() {
   }, []);
   const [lineaModalOpen, setLineaModalOpen] = useState(false);
   const [selectedLineaRow, setSelectedLineaRow] = useState<{ id: string; type: 'glup' | 'justy' } | null>(null);
-  const [selectedLinea, setSelectedLinea] = useState<number | null>(null);
-  const [selectedEstadoRow, setSelectedEstadoRow] = useState<{ id: string; type: 'glup' | 'justy' } | null>(null);
+   const [selectedLinea, setSelectedLinea] = useState<number | null>(null);
+   const [salaJarabeSubTab, setSalaJarabeSubTab] = useState<'preparacion' | 'consumo-lineas' | 'consumo-ubb' | 'resumen'>('preparacion');
+   const [selectedEstadoRow, setSelectedEstadoRow] = useState<{ id: string; type: 'glup' | 'justy' } | null>(null);
   const [estadoModalOpen, setEstadoModalOpen] = useState(false);
   const [revisionEditingRow, setRevisionEditingRow] = useState<{ id: string; type: 'glup' | 'justy'; scope: 'privileged' | 'public' } | null>(null);
   const [revisionEditForm, setRevisionEditForm] = useState<{ fecha: string; hora: string; numeroTanques: string; sala: string; sabor: string; litros: string; ubb: string; brix: string; estado: 'preparado' | 'enviado a linea' | 'retenido' | 'liberado'; enviarALinea: number | null } | null>(null);
