@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-16T00:00:00.000",
+      "weekStartDate": "2026-09-14T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -10128,30 +10128,6 @@
           },
           {
             "name": "CIP 3P ALCALINO",
-            "lineId": "2",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-09-16T22:30:00.000Z",
-            "endTime": "2026-09-17T00:30:00.000Z",
-            "id": "7nfezg4o0",
-            "color": "#47CCB0"
-          },
-          {
-            "name": "GLUP KOLITA",
-            "lineId": "2",
-            "loadPerHour": 2500,
-            "quantity": 141250,
-            "durationHours": 56.5,
-            "presentation": "2Lts",
-            "tanks": 15.88,
-            "startTime": "2026-09-17T00:30:00.000Z",
-            "endTime": "2026-09-19T09:00:00.000Z",
-            "id": "2d2tbcykz",
-            "color": "#ef4444"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
             "lineId": "3",
             "loadPerHour": 0,
             "quantity": 0,
@@ -10259,13 +10235,15 @@
           "pf8iq2wjf",
           "il4zin9hl",
           "ki3nq0i0x",
-          "j12axdflv"
+          "j12axdflv",
+          "2d2tbcykz",
+          "7nfezg4o0"
         ]
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-16T19:11:02.949Z"
+    "updatedAt": "2026-09-16T20:38:54.972Z"
   },
   "ordenesSap": [
     {
@@ -18598,8 +18576,8 @@
         },
         {
           "fechaInicio": "2026-09-16",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16014",
+          "cajas1": 1920,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
