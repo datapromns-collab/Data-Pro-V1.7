@@ -9790,12 +9790,12 @@
             "name": "GLUP UVA",
             "lineId": "2",
             "loadPerHour": 2500,
-            "quantity": 87500,
-            "durationHours": 35,
+            "quantity": 118750,
+            "durationHours": 47.5,
             "presentation": "2Lts",
-            "tanks": 12.3,
+            "tanks": 16.7,
             "startTime": "2026-09-15T11:30:00.000Z",
-            "endTime": "2026-09-16T22:30:00.000Z",
+            "endTime": "2026-09-17T11:00:00.000Z",
             "id": "58skg18zg",
             "color": "#ef4444"
           },
@@ -10197,6 +10197,30 @@
             "endTime": "2026-09-19T08:59:48.000Z",
             "id": "u7ej9739n",
             "color": "#47CCB0"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-09-17T11:00:00.000Z",
+            "endTime": "2026-09-17T13:00:00.000Z",
+            "id": "adwl5c0el",
+            "color": "#ef4444"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 110000,
+            "durationHours": 44,
+            "presentation": "2Lts",
+            "tanks": 12.37,
+            "startTime": "2026-09-17T13:00:00.000Z",
+            "endTime": "2026-09-19T09:00:00.000Z",
+            "id": "kxs1ixcz9",
+            "color": "#6366f1"
           }
         ],
         "realProduction": {},
@@ -10243,7 +10267,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-16T20:38:53.973Z"
+    "updatedAt": "2026-09-16T21:05:10.624Z"
   },
   "ordenesSap": [
     {
@@ -18339,8 +18363,8 @@
         },
         {
           "fechaInicio": "2026-09-16",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16056",
+          "cajas1": 3840,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -18502,6 +18526,17 @@
           "cajas3": 1280,
           "ticket4": "",
           "cajas4": 9120
+        },
+        {
+          "fechaInicio": "2026-09-16",
+          "ticket1": "16153",
+          "cajas1": 2080,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -18607,7 +18642,7 @@
         },
         {
           "fechaInicio": "2026-09-16",
-          "ticket1": "",
+          "ticket1": "16",
           "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
@@ -18627,8 +18662,8 @@
       "dias": [
         {
           "fechaInicio": "2026-09-16",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17969",
+          "cajas1": 3920,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -18647,8 +18682,8 @@
       "dias": [
         {
           "fechaInicio": "2026-09-16",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16104",
+          "cajas1": 3040,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
