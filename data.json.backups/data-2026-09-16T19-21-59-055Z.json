@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-14T00:00:00.000",
+      "weekStartDate": "2026-09-16T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -9931,7 +9931,7 @@
             "color": "#6366f1"
           },
           {
-            "name": "JUSTY DURAZNO",
+            "name": "JUSTY PERA",
             "lineId": "5",
             "loadPerHour": 1210,
             "quantity": 29040,
@@ -9944,7 +9944,7 @@
             "color": "#10b981"
           },
           {
-            "name": "JUSTY DURAZNO",
+            "name": "JUSTY PERA",
             "lineId": "5",
             "loadPerHour": 1210,
             "quantity": 29040,
@@ -9968,7 +9968,7 @@
             "color": "#ec4899"
           },
           {
-            "name": "JUSTY DURAZNO",
+            "name": "JUSTY PERA",
             "lineId": "5",
             "loadPerHour": 1210,
             "quantity": 33880,
@@ -10265,7 +10265,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-16T15:32:52.464Z"
+    "updatedAt": "2026-09-16T19:11:02.949Z"
   },
   "ordenesSap": [
     {
