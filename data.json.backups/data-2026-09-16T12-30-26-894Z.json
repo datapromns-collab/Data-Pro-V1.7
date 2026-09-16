@@ -10265,7 +10265,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-16T12:19:04.935Z"
+    "updatedAt": "2026-09-16T12:28:51.570Z"
   },
   "ordenesSap": [
     {
@@ -18584,6 +18584,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 6480
+        },
+        {
+          "fechaInicio": "2026-09-16",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -18604,6 +18615,77 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 8658
+        },
+        {
+          "fechaInicio": "2026-09-16",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1789561701246",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "63656",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-16",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1789561711552",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63662",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-16",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1789561720417",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63668",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-16",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -29872,6 +29954,37 @@
             "preparado": "240",
             "final": "30"
           }
+        },
+        "2026-09-15": {
+          "GLUP COLA": {
+            "inicial": "52.07",
+            "preparado": "42",
+            "final": "56.19"
+          },
+          "GLUP FRESH": {
+            "inicial": "12.53",
+            "preparado": "18",
+            "final": "8.74"
+          },
+          "GLUP PIÑA": {
+            "inicial": "16.76",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "11",
+            "preparado": "22",
+            "final": "20.99"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "30",
+            "preparado": "120",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "preparado": "18",
+            "final": "18"
+          }
         }
       },
       "sugar": {
@@ -30608,6 +30721,23 @@
             "recepcionSacos": "",
             "invFinalSacos": ""
           }
+        },
+        "2026-09-15": {
+          "PORTUGUESA": {
+            "invInicialSacos": "5160",
+            "recepcionSacos": "1920",
+            "invFinalSacos": "4960"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "3520",
+            "recepcionSacos": "",
+            "invFinalSacos": "3520"
+          },
+          "PASTORA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "2120",
+            "invFinalSacos": "560"
+          }
         }
       },
       "tanques": {
@@ -31322,6 +31452,20 @@
             "invInicialSacos": "690",
             "invFinalSacos": ""
           }
+        },
+        "2026-09-15": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": "5"
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "147",
+            "invFinalSacos": "310"
+          },
+          "Sala 1": {
+            "invInicialSacos": "",
+            "invFinalSacos": "228"
+          }
         }
       },
       "realKgPerSack": {
@@ -31374,7 +31518,8 @@
         "2026-09-11": "50.53",
         "2026-09-12": "50.5",
         "2026-09-13": "50.50",
-        "2026-09-14": "50.47"
+        "2026-09-14": "50.47",
+        "2026-09-15": "50.37"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
@@ -31408,7 +31553,7 @@
         "2026-09-01|2026-09": 891165.86,
         "2026-08-01|2026-08": 121494.94,
         "2026-09-07|2026-09": 1141476.37,
-        "2026-09-14|2026-09": 0
+        "2026-09-14|2026-09": 389938.58
       }
     },
     "seguimiento-etiquetadora": {
@@ -131760,7 +131905,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789227817233,
+        "id": 1789256092217.1177,
         "fechaOrden": "2026-09-10",
         "orden": "9568",
         "fechaEmision": "2026-09-10",
@@ -131783,7 +131928,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -131814,7 +131959,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789233846564,
+        "id": 1789256092217.1467,
         "fechaOrden": "2026-09-09",
         "orden": "9566",
         "fechaEmision": "2026-09-09",
@@ -131837,7 +131982,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -131922,7 +132067,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789235592799,
+        "id": 1789256092217.6162,
         "fechaOrden": "2026-09-09",
         "orden": "9462",
         "fechaEmision": "2026-09-09",
@@ -131945,7 +132090,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
@@ -132030,7 +132175,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1789238757537,
+        "id": 1789256092217.5789,
         "fechaOrden": "2026-09-09",
         "orden": "10083",
         "fechaEmision": "2026-09-09",
@@ -132053,7 +132198,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
