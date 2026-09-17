@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-17T00:00:00.000",
+      "weekStartDate": "2026-09-14T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -10440,7 +10440,11 @@
         "finalUBBTanksDaily": {},
         "salesProjection": {},
         "finishedProductInventory": {},
-        "productionPlan": {},
+        "productionPlan": {
+          "GLUP COLA": {
+            "1.5Lts": 0
+          }
+        },
         "logisticsInventory": {},
         "plantInventory": {},
         "salesProjectionAW": {},
@@ -10638,7 +10642,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-17T20:24:32.957Z"
+    "updatedAt": "2026-09-17T20:29:53.726Z"
   },
   "ordenesSap": [
     {
@@ -30478,7 +30482,7 @@
         },
         "2026-09-16": {
           "GLUP COLA": {
-            "inicial": "56.19",
+            "inicial": "56.16",
             "preparado": "66",
             "final": "68.31"
           },
@@ -31258,7 +31262,7 @@
         "2026-09-16": {
           "PORTUGUESA": {
             "invInicialSacos": "4960",
-            "recepcionSacos": "24",
+            "recepcionSacos": "2400",
             "invFinalSacos": "5120"
           },
           "IMPORTADA 1": {
