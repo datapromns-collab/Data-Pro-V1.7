@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-14T00:00:00.000",
+      "weekStartDate": "2026-09-17T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -10526,7 +10526,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-17T15:52:13.950Z"
+    "updatedAt": "2026-09-17T18:15:36.289Z"
   },
   "ordenesSap": [
     {
@@ -18878,6 +18878,17 @@
           "cajas3": 1600,
           "ticket4": "",
           "cajas4": 12240
+        },
+        {
+          "fechaInicio": "2026-09-17",
+          "ticket1": "16017",
+          "cajas1": 2640,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -18991,6 +19002,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 14400
+        },
+        {
+          "fechaInicio": "2026-09-17",
+          "ticket1": "16058",
+          "cajas1": 2640,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -19011,6 +19033,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 6100
+        },
+        {
+          "fechaInicio": "2026-09-17",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -30304,7 +30337,7 @@
           "GLUP COLA": {
             "inicial": "52.07",
             "preparado": "42",
-            "final": "56.19"
+            "final": "56.16"
           },
           "GLUP FRESH": {
             "inicial": "12.53",
@@ -30329,6 +30362,32 @@
           "GLUP KOLITA": {
             "preparado": "18",
             "final": "18"
+          }
+        },
+        "2026-09-16": {
+          "GLUP COLA": {
+            "inicial": "56.19",
+            "preparado": "66",
+            "final": "68.31"
+          },
+          "GLUP FRESH": {
+            "inicial": "8.74",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "20.99",
+            "preparado": "11",
+            "final": "6.76"
+          },
+          "GLUP KOLITA": {
+            "inicial": "18",
+            "preparado": "36",
+            "final": "22.55"
+          },
+          "JUSTY PERA": {
+            "preparado": "140",
+            "final": "20"
           }
         }
       },
@@ -31083,6 +31142,28 @@
             "recepcionSacos": "2120",
             "invFinalSacos": "560"
           }
+        },
+        "2026-09-16": {
+          "PORTUGUESA": {
+            "invInicialSacos": "4960",
+            "recepcionSacos": "1920",
+            "invFinalSacos": "5120"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "3520",
+            "recepcionSacos": "",
+            "invFinalSacos": "3520"
+          },
+          "PASTORA": {
+            "invInicialSacos": "560",
+            "recepcionSacos": "1800",
+            "invFinalSacos": ""
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "",
+            "recepcionSacos": "",
+            "invFinalSacos": "840"
+          }
         }
       },
       "tanques": {
@@ -31811,6 +31892,20 @@
             "invInicialSacos": "",
             "invFinalSacos": "228"
           }
+        },
+        "2026-09-16": {
+          "KITS PREP.": {
+            "invInicialSacos": "5",
+            "invFinalSacos": ""
+          },
+          "JARABE SIMPLE": {
+            "invInicialSacos": "310",
+            "invFinalSacos": "259"
+          },
+          "Sala 1": {
+            "invInicialSacos": "228",
+            "invFinalSacos": "466"
+          }
         }
       },
       "realKgPerSack": {
@@ -31864,7 +31959,8 @@
         "2026-09-12": "50.5",
         "2026-09-13": "50.50",
         "2026-09-14": "50.47",
-        "2026-09-15": "50.37"
+        "2026-09-15": "50.37",
+        "2026-09-16": "50.24"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
@@ -31898,7 +31994,7 @@
         "2026-09-01|2026-09": 891165.86,
         "2026-08-01|2026-08": 121494.94,
         "2026-09-07|2026-09": 1141476.37,
-        "2026-09-14|2026-09": 389938.58
+        "2026-09-14|2026-09": 549763.23
       }
     },
     "seguimiento-etiquetadora": {
@@ -133330,7 +133426,8 @@
         "auto-1-1789388793603": {
           "cajasPlanificadas": 72000,
           "jarabeReal": 83747,
-          "ubb": 29.13
+          "ubb": 29.13,
+          "producto": "924"
         }
       },
       "linea-2": {
@@ -133501,7 +133598,8 @@
           "cajasPlanificadas": 60000,
           "jarabeReal": 72097,
           "ubb": 41.31,
-          "pnc": 80
+          "pnc": 80,
+          "producto": "143"
         }
       },
       "linea-3": {
@@ -133654,7 +133752,8 @@
         "auto-3-1789388816247": {
           "cajasPlanificadas": 134400,
           "jarabeReal": 117315,
-          "ubb": 40.78
+          "ubb": 40.78,
+          "producto": "863"
         }
       },
       "linea-4": {
@@ -133771,7 +133870,8 @@
         "auto-4-1789388824471": {
           "cajasPlanificadas": 134400,
           "jarabeReal": 116677,
-          "ubb": 40.61
+          "ubb": 40.61,
+          "producto": "181"
         }
       },
       "linea-5": {
@@ -133869,7 +133969,8 @@
         "auto-5-1789388843336": {
           "cajasPlanificadas": 54450,
           "jarabeReal": 400000,
-          "ubb": 400
+          "ubb": 400,
+          "producto": "740"
         }
       },
       "linea-6": {
@@ -133982,7 +134083,8 @@
         "auto-6-1789388855299": {
           "cajasPlanificadas": 51760,
           "jarabeReal": 34532,
-          "ubb": 12
+          "ubb": 12,
+          "producto": "615"
         }
       },
       "linea-7": {
@@ -134147,18 +134249,21 @@
         "auto-7-1789388864044": {
           "cajasPlanificadas": 7113,
           "jarabeReal": 17110,
-          "ubb": 11
+          "ubb": 11,
+          "producto": "839"
         },
         "auto-7-1789473172522": {
           "cajasPlanificadas": 14525,
           "jarabeReal": 34950,
-          "ubb": 20
+          "ubb": 20,
+          "producto": "144"
         },
         "auto-7-1789561115307": {
           "cajasPlanificadas": 17250,
           "jarabeReal": 34527,
           "ubb": 12,
-          "pnc": 133
+          "pnc": 133,
+          "producto": "62"
         }
       }
     },
