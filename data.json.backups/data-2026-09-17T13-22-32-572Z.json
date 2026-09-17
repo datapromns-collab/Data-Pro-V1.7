@@ -133070,7 +133070,8 @@
         },
         "auto-1-1789388793603": {
           "cajasPlanificadas": 72000,
-          "jarabeReal": 837
+          "jarabeReal": 83747,
+          "ubb": 29.13
         }
       },
       "linea-2": {
@@ -133238,7 +133239,10 @@
           "ubb": 38.69
         },
         "auto-2-1789388806443": {
-          "cajasPlanificadas": 60000
+          "cajasPlanificadas": 60000,
+          "jarabeReal": 72097,
+          "ubb": 41.31,
+          "pnc": 80
         }
       },
       "linea-3": {
@@ -133389,7 +133393,9 @@
           "ubb": 49.29
         },
         "auto-3-1789388816247": {
-          "cajasPlanificadas": 134400
+          "cajasPlanificadas": 134400,
+          "jarabeReal": 117315,
+          "ubb": 40.78
         }
       },
       "linea-4": {
@@ -133504,7 +133510,9 @@
           "jarabeReal": 141010
         },
         "auto-4-1789388824471": {
-          "cajasPlanificadas": 134400
+          "cajasPlanificadas": 134400,
+          "jarabeReal": 116677,
+          "ubb": 40.61
         }
       },
       "linea-5": {
@@ -133600,7 +133608,9 @@
           "jarabeReal": 360000
         },
         "auto-5-1789388843336": {
-          "cajasPlanificadas": 54450
+          "cajasPlanificadas": 54450,
+          "jarabeReal": 400000,
+          "ubb": 400
         }
       },
       "linea-6": {
@@ -133711,7 +133721,9 @@
           "ubb": 8.63
         },
         "auto-6-1789388855299": {
-          "cajasPlanificadas": 51760
+          "cajasPlanificadas": 51760,
+          "jarabeReal": 34532,
+          "ubb": 12
         }
       },
       "linea-7": {
@@ -133874,10 +133886,19 @@
           "ubb": 11
         },
         "auto-7-1789388864044": {
-          "cajasPlanificadas": 7113
+          "cajasPlanificadas": 7113,
+          "jarabeReal": 17110,
+          "ubb": 11
         },
         "auto-7-1789473172522": {
-          "cajasPlanificadas": 14525
+          "cajasPlanificadas": 14525,
+          "jarabeReal": 34950,
+          "ubb": 20
+        },
+        "auto-7-1789561115307": {
+          "cajasPlanificadas": 17250,
+          "jarabeReal": 34527,
+          "ubb": 12
         }
       }
     },
