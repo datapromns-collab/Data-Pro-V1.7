@@ -10267,7 +10267,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-16T21:05:11.576Z"
+    "updatedAt": "2026-09-17T11:57:06.777Z"
   },
   "ordenesSap": [
     {
@@ -18365,10 +18365,10 @@
           "fechaInicio": "2026-09-16",
           "ticket1": "16056",
           "cajas1": 3840,
-          "ticket2": "",
+          "ticket2": "16057",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 181,
           "ticket4": "",
           "cajas4": 0
         }
@@ -18531,10 +18531,10 @@
           "fechaInicio": "2026-09-16",
           "ticket1": "16153",
           "cajas1": 2080,
-          "ticket2": "",
+          "ticket2": "16154",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 572,
           "ticket4": "",
           "cajas4": 0
         }
@@ -18613,12 +18613,12 @@
           "fechaInicio": "2026-09-16",
           "ticket1": "16014",
           "cajas1": 1920,
-          "ticket2": "",
+          "ticket2": "16016",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1600,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 12240
         }
       ]
     },
@@ -18643,7 +18643,7 @@
         {
           "fechaInicio": "2026-09-16",
           "ticket1": "16203",
-          "cajas1": 0,
+          "cajas1": 1014,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -18664,6 +18664,17 @@
           "fechaInicio": "2026-09-16",
           "ticket1": "17969",
           "cajas1": 3920,
+          "ticket2": "17970",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 1520,
+          "ticket4": "",
+          "cajas4": 27200
+        },
+        {
+          "fechaInicio": "2026-09-17",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -18684,6 +18695,17 @@
           "fechaInicio": "2026-09-16",
           "ticket1": "16104",
           "cajas1": 3040,
+          "ticket2": "16105",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 1920,
+          "ticket4": "",
+          "cajas4": 31920
+        },
+        {
+          "fechaInicio": "2026-09-17",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -18704,12 +18726,52 @@
           "fechaInicio": "2026-09-16",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "",
+          "ticket2": "16057",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 14400
+        }
+      ]
+    },
+    {
+      "id": "5-1789645871863",
+      "linea": 5,
+      "sabor": "JUSTY PERA",
+      "ordenNumero": "63673",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-16",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "17931",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 6100
+        }
+      ]
+    },
+    {
+      "id": "6-1789646217325",
+      "linea": 6,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63679",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-16",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16154",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 11840
         }
       ]
     }
@@ -139548,7 +139610,12 @@
       "2026-09-15-suave": "179670",
       "2026-09-15-procesos": "2024002,85",
       "2026-09-15-filtrada": "3156598,74",
-      "2026-09-15-total": "2802634,67"
+      "2026-09-15-total": "2802634,67",
+      "2026-09-16-servicio": "27832",
+      "2026-09-16-suave": "205115",
+      "2026-09-16-procesos": "2386201.5",
+      "2026-09-16-filtrada": "3704891.14",
+      "2026-09-16-total": "3023089.33"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
