@@ -6816,11 +6816,123 @@
         "finalUBBTanks": {},
         "initialUBBTanksDaily": {},
         "finalUBBTanksDaily": {},
-        "salesProjection": {},
+        "salesProjection": {
+          "GLUP COLA": {
+            "2Lts": 1437432,
+            "1Lt": 210854,
+            "0.4Lts": 156400
+          },
+          "GLUP UVA": {
+            "2Lts": 188886,
+            "1Lt": 26983,
+            "0.4Lts": 19685
+          },
+          "GLUP PIÑA": {
+            "2Lts": 166393,
+            "1Lt": 16950
+          },
+          "GLUP FRESH": {
+            "2Lts": 464303,
+            "1Lt": 81154,
+            "0.4Lts": 66444
+          },
+          "GLUP NARANJA": {
+            "2Lts": 154426,
+            "1Lt": 16429
+          },
+          "GLUP KOLITA": {
+            "2Lts": 458865,
+            "1Lt": 75626,
+            "0.4Lts": 63707
+          },
+          "GLUP MANZANA VERDE": {
+            "2Lts": 12900
+          },
+          "GLUP PIÑA PARCHITA": {
+            "2Lts": 10430
+          },
+          "GLUP MANZANA ROJA": {
+            "2Lts": 119719,
+            "1Lt": 16433,
+            "0.4Lts": 14738
+          },
+          "JUSTY NARANJA": {
+            "1.5Lts": 118581
+          },
+          "JUSTY DURAZNO": {
+            "1.5Lts": 134347
+          },
+          "JUSTY MANZANA": {
+            "1.5Lts": 82142
+          },
+          "JUSTY PERA": {
+            "1.5Lts": 51337
+          }
+        },
         "finishedProductInventory": {},
         "productionPlan": {},
-        "logisticsInventory": {},
-        "plantInventory": {},
+        "logisticsInventory": {
+          "MATP_0001": 3698000,
+          "MATP_0002": 52322.52,
+          "MATP_0003": 19990.08,
+          "MATP_0005": 25688.01,
+          "MATP_0006": 13175.28,
+          "MATP_0007": 21580.2,
+          "MATP_0009": 52701.12,
+          "MATP_0032": 10903.68,
+          "MATP_0038": 11774.46,
+          "MATP_0039": 17112.72,
+          "MATP_0022": 8640,
+          "MATP_0043": 19800,
+          "MATP_0044": 8920,
+          "MATP_0045": 22200,
+          "MATP_0046": 8060,
+          "MATP_0059": 10560,
+          "MATP_0060": 1920,
+          "MATP_0014": 4900,
+          "MATP_0015": 19075,
+          "MATP_0016": 1950,
+          "MATP_0017": 70500,
+          "MATP_0018": 15025,
+          "MATP_0019": 20475,
+          "MATP_0020": 6000,
+          "MATP_0021": 28250,
+          "MATP_0031": 9325,
+          "MATP_0036": 9275,
+          "MATP_0040": 21069.7,
+          "MATP_0041": 5092.8,
+          "MATP_0010": 3283.2,
+          "MATP_0042": 12250,
+          "EMP_0009": 1341600,
+          "EMP_0093": 11175768,
+          "EMP_0103": 22464,
+          "EMP_0120": 0,
+          "EMP_0126": 1942816,
+          "EMP_0135": 1166400,
+          "EMP_0095": 29568000,
+          "EMP_0095_N": 7728000,
+          "EMP_0105": 0,
+          "EMP_0105_2": 25534600,
+          "EMP_0105_N": 7140000,
+          "EMP_0022": 5131.1,
+          "EMP_0026": 4666.44,
+          "EMP_0030": 2779.51,
+          "EMP_0034": 8416.84,
+          "EMP_0038": 7551.4,
+          "EMP_0042": 25700.02,
+          "EMP_0101": 12318.87,
+          "EMP_0136": 3744,
+          "EMP_0137": 14200.65,
+          "EMP_0048": 564.75,
+          "EMP_0142": 5206.65,
+          "EMP_0157": 5791.75,
+          "EMP_0158": 2459.3,
+          "EMP_0111": 4169.9,
+          "EMP_0113": 0
+        },
+        "plantInventory": {
+          "MATP_0001": 647496.16
+        },
         "salesProjectionAW": {},
         "finishedProductInventoryAW": {},
         "productionPlanAW": {},
@@ -10526,7 +10638,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-17T18:15:36.289Z"
+    "updatedAt": "2026-09-17T20:24:32.957Z"
   },
   "ordenesSap": [
     {
@@ -31146,7 +31258,7 @@
         "2026-09-16": {
           "PORTUGUESA": {
             "invInicialSacos": "4960",
-            "recepcionSacos": "1920",
+            "recepcionSacos": "",
             "invFinalSacos": "5120"
           },
           "IMPORTADA 1": {
