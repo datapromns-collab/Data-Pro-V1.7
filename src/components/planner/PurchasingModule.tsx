@@ -428,48 +428,13 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
       const productTotal = PRESENTATIONS.reduce((acc, pres) => acc + (finProdInv[product]?.[pres] || 0), 0);
       if (productTotal === 0) return null;
       return (
-        <TableRow key={product} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100">
-          <TableCell className="pl-8 font-black text-slate-700 uppercase text-[11px]">{product}</TableCell>
-          {PRESENTATIONS.map(pres => (
-            <TableCell key={pres} className="text-right font-bold text-slate-600 tabular-nums">
-              {(finProdInv[product]?.[pres] || 0).toLocaleString('es-ES')}
-            </TableCell>
-          ))}
-          <TableCell className="text-right pr-8 font-black text-[#8B6E58] tabular-nums text-sm bg-[#A67B5B]/10">
-            {productTotal.toLocaleString('es-ES')}
-          </TableCell>
-        </TableRow>
+        <AvailableProductRow key={product} product={product} finProdInv={finProdInv} />
       );
     }).filter(Boolean);
 
     const availableRawMats = [...SUGAR_DATA, ...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES, ...SOLIDS_DATA, ...ADDITIVES_DATA, ...PREFORMS_DATA, ...CAPS_DATA, ...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA, ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA].map((mat) => {
-      const code = mat.code;
-      if (!code) return null;
-                                const stockLogistics = logisticsInventory[code] || 0;
-                                const stockPlant = plantInventory[code] || 0;
-      const totalAvailable = stockLogistics + stockPlant;
-      if (totalAvailable === 0) return null;
       return (
-        <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
-          <TableCell className="pl-8">
-            <div className="flex flex-col">
-              <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{code}</span>
-              <span className="text-[12px] font-black text-slate-700 uppercase leading-none truncate max-w-[300px]">{mat.description}</span>
-            </div>
-          </TableCell>
-          <TableCell className="text-center font-bold text-slate-400 text-[10px] uppercase">
-            {mat.unit || 'KG'}
-          </TableCell>
-          <TableCell className="text-right font-bold text-blue-600 tabular-nums text-sm">
-            {stockLogistics.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
-          </TableCell>
-          <TableCell className="text-right font-bold text-amber-600 tabular-nums text-sm">
-            {stockPlant.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
-          </TableCell>
-          <TableCell className="text-right pr-8 font-black text-[#5C4033] tabular-nums text-[15px] bg-[#A67B5B]/10">
-            {totalAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
-          </TableCell>
-        </TableRow>
+        <AvailableMaterialRow key={mat.code} mat={mat} logInv={logInv} plInv={plInv} />
       );
     }).filter(Boolean);
 
@@ -802,25 +767,15 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                               <TableHead className="text-right pr-8 text-[10px] font-black text-primary uppercase w-[140px] bg-[#A67B5B]/5">Total Sabor</TableHead>
                             </TableRow>
                           </TableHeader>
-                          <TableBody>
-                            {PRODUCT_LIST.map((product) => {
-                              const productTotal = PRESENTATIONS.reduce((acc, pres) => acc + (finishedProductInventory[product]?.[pres] || 0), 0);
-                              if (productTotal === 0) return null;
-                              return (
-                                <TableRow key={product} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100">
-                                  <TableCell className="pl-8 font-black text-slate-700 uppercase text-[11px]">{product}</TableCell>
-                                  {PRESENTATIONS.map(pres => (
-                                    <TableCell key={pres} className="text-right font-bold text-slate-600 tabular-nums">
-                                      {(finishedProductInventory[product]?.[pres] || 0).toLocaleString('es-ES')}
-                                    </TableCell>
-                                  ))}
-                                  <TableCell className="text-right pr-8 font-black text-[#8B6E58] tabular-nums text-sm bg-[#A67B5B]/10">
-                                    {productTotal.toLocaleString('es-ES')}
-                                  </TableCell>
-                                </TableRow>
-                              );
-                            })}
-                          </TableBody>
+                           <TableBody>
+                             {PRODUCT_LIST.map((product) => {
+                               const productTotal = PRESENTATIONS.reduce((acc, pres) => acc + (finishedProductInventory[product]?.[pres] || 0), 0);
+                               if (productTotal === 0) return null;
+                               return (
+                                 <AvailableProductRow key={product} product={product} finProdInv={finishedProductInventory} />
+                               );
+                             })}
+                           </TableBody>
                           <tfoot className="bg-[#8B6E58] text-white font-black">
                             <tr className="h-11">
                               <td className="pl-8 text-[11px] uppercase">TOTALES POR FORMATO</td>
@@ -861,37 +816,12 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                             </TableRow>
                           </TableHeader>
                            <TableBody>
-                             {([...SUGAR_DATA, ...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES, ...SOLIDS_DATA, ...ADDITIVES_DATA, ...PREFORMS_DATA, ...CAPS_DATA, ...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA, ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA]).map((mat) => {
-                               const code = mat.code;
-                               if (!code) return null;
-                                const stockLogistics = logisticsInventory[code] || 0;
-                                const stockPlant = plantInventory[code] || 0;
-                               const totalAvailable = stockLogistics + stockPlant;
-                               if (totalAvailable === 0) return null;
-                               return (
-                                 <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
-                                   <TableCell className="pl-8">
-                                     <div className="flex flex-col">
-                                       <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{code}</span>
-                                       <span className="text-[12px] font-black text-slate-700 uppercase leading-none truncate max-w-[300px]">{mat.description}</span>
-                                     </div>
-                                   </TableCell>
-                                   <TableCell className="text-center font-bold text-slate-400 text-[10px] uppercase">
-                                     {mat.unit || 'KG'}
-                                   </TableCell>
-                                   <TableCell className="text-right font-bold text-blue-600 tabular-nums text-sm">
-                                     {stockLogistics.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
-                                   </TableCell>
-                                   <TableCell className="text-right font-bold text-amber-600 tabular-nums text-sm">
-                                     {stockPlant.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
-                                   </TableCell>
-                                   <TableCell className="text-right pr-8 font-black text-[#5C4033] tabular-nums text-[15px] bg-[#A67B5B]/10">
-                                     {totalAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
-                                   </TableCell>
-                                 </TableRow>
-                               );
-                            })}
-                          </TableBody>
+                              {([...SUGAR_DATA, ...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES, ...SOLIDS_DATA, ...ADDITIVES_DATA, ...PREFORMS_DATA, ...CAPS_DATA, ...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA, ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA]).map((mat) => {
+                                return (
+                                  <AvailableMaterialRow key={mat.code} mat={mat} logInv={logisticsInventory} plInv={plantInventory} />
+                                );
+                              })}
+                           </TableBody>
                         </Table>
                       </div>
                     </Card>
@@ -949,60 +879,34 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                               <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[120px]">Saldo Final</TableHead>
                             </TableRow>
                           </TableHeader>
-                          <TableBody>
-                            {PRODUCT_LIST.map((product) => (
-                              <React.Fragment key={product}>
-                                <TableRow className="bg-slate-100/30 hover:bg-slate-100/30 h-8 border-y border-slate-200">
-                                  <TableCell colSpan={6} className="pl-8 py-0">
-                                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{product}</span>
-                                  </TableCell>
-                                </TableRow>
-                                {PRESENTATIONS.map((pres) => {
-                                  const sales = salesProjection[product]?.[pres] || 0;
-                                  const inv = finishedProductInventory[product]?.[pres] || 0;
-                                  const plan = productionPlan[product]?.[pres] || 0;
-                                  const balance = (inv + plan) - sales;
-
-                                  return (
-                                    <TableRow key={`${product}-${pres}`} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100 group">
-                                      <TableCell className="pl-8 py-2">
-                                        <div className="flex items-center gap-2">
-                                          <ChevronRight className="h-3 w-3 text-slate-300" />
-                                          <span className="text-[11px] font-black text-slate-700 uppercase leading-none">{product}</span>
-                                        </div>
-                                      </TableCell>
-                                      <TableCell className="text-center">
-                                        <Badge variant="outline" className="text-[9px] font-black uppercase text-slate-400 border-slate-200 px-2 py-0">
-                                          {pres}
-                                        </Badge>
-                                      </TableCell>
-                                      <TableCell className="text-right font-bold text-primary tabular-nums">
-                                        {sales > 0 ? sales.toLocaleString('es-ES') : '-'}
-                                      </TableCell>
-                                      <TableCell className="text-right font-bold text-amber-600 tabular-nums">
-                                        {inv > 0 ? inv.toLocaleString('es-ES') : '-'}
-                                      </TableCell>
-                                      <TableCell className="p-1 bg-sky-50/30">
-                                        <Input 
-                                          type="number"
-                                          value={plan || ''}
-                                          onChange={(e) => updateProductionPlan(product, pres, parseInt(e.target.value) || 0)}
-                                          className="h-8 text-right font-black text-sm border-none bg-white/50 focus:bg-white rounded-lg text-sky-700 shadow-inner"
-                                          placeholder="0"
-                                        />
-                                      </TableCell>
-                                      <TableCell className={cn(
-                                        "text-right pr-8 font-black tabular-nums",
-                                        balance < 0 ? "text-destructive" : "text-emerald-600"
-                                      )}>
-                                        {balance.toLocaleString('es-ES')}
-                                      </TableCell>
-                                    </TableRow>
-                                  );
-                                })}
-                              </React.Fragment>
-                            ))}
-                          </TableBody>
+                           <TableBody>
+                             {PRODUCT_LIST.map((product) => (
+                               <React.Fragment key={product}>
+                                 <TableRow className="bg-slate-100/30 hover:bg-slate-100/30 h-8 border-y border-slate-200">
+                                   <TableCell colSpan={6} className="pl-8 py-0">
+                                     <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{product}</span>
+                                   </TableCell>
+                                 </TableRow>
+                                 {PRESENTATIONS.map((pres) => {
+                                   const sales = salesProjection[product]?.[pres] || 0;
+                                   const inv = finishedProductInventory[product]?.[pres] || 0;
+                                   const plan = productionPlan[product]?.[pres] || 0;
+                                   return (
+                                     <PlanResumenRow
+                                       key={`${product}-${pres}`}
+                                       product={product}
+                                       pres={pres}
+                                       sales={sales}
+                                       inv={inv}
+                                       plan={plan}
+                                       updatePlan={updateProductionPlan}
+                                       section="mds"
+                                     />
+                                   );
+                                 })}
+                               </React.Fragment>
+                             ))}
+                           </TableBody>
                         </Table>
                       </div>
                     </ScrollArea>
@@ -1319,60 +1223,34 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                               <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[120px]">Saldo Final</TableHead>
                             </TableRow>
                           </TableHeader>
-                          <TableBody>
-                            {PRODUCT_LIST.map((product) => (
-                              <React.Fragment key={product}>
-                                <TableRow className="bg-slate-100/30 hover:bg-slate-100/30 h-8 border-y border-slate-200">
-                                  <TableCell colSpan={6} className="pl-8 py-0">
-                                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{product}</span>
-                                  </TableCell>
-                                </TableRow>
-                                {PRESENTATIONS.map((pres) => {
-                                  const sales = salesProjectionAW[product]?.[pres] || 0;
-                                  const inv = finishedProductInventoryAW[product]?.[pres] || 0;
-                                  const plan = productionPlanAW[product]?.[pres] || 0;
-                                  const balance = (inv + plan) - sales;
-
-                                  return (
-                                    <TableRow key={`${product}-${pres}`} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100 group">
-                                      <TableCell className="pl-8 py-2">
-                                        <div className="flex items-center gap-2">
-                                          <ChevronRight className="h-3 w-3 text-slate-300" />
-                                          <span className="text-[11px] font-black text-slate-700 uppercase leading-none">{product}</span>
-                                        </div>
-                                      </TableCell>
-                                      <TableCell className="text-center">
-                                        <Badge variant="outline" className="text-[9px] font-black uppercase text-slate-400 border-slate-200 px-2 py-0">
-                                          {pres}
-                                        </Badge>
-                                      </TableCell>
-                                      <TableCell className="text-right font-bold text-primary tabular-nums">
-                                        {sales > 0 ? sales.toLocaleString('es-ES') : '-'}
-                                      </TableCell>
-                                      <TableCell className="text-right font-bold text-amber-600 tabular-nums">
-                                        {inv > 0 ? inv.toLocaleString('es-ES') : '-'}
-                                      </TableCell>
-                                      <TableCell className="p-1 bg-sky-50/30">
-                                        <Input 
-                                          type="number"
-                                          value={plan || ''}
-                                          onChange={(e) => updateProductionPlanAW(product, pres, parseInt(e.target.value) || 0)}
-                                          className="h-8 text-right font-black text-sm border-none bg-white/50 focus:bg-white rounded-lg text-sky-700 shadow-inner"
-                                          placeholder="0"
-                                        />
-                                      </TableCell>
-                                      <TableCell className={cn(
-                                        "text-right pr-8 font-black tabular-nums",
-                                        balance < 0 ? "text-destructive" : "text-emerald-600"
-                                      )}>
-                                        {balance.toLocaleString('es-ES')}
-                                      </TableCell>
-                                    </TableRow>
-                                  );
-                                })}
-                              </React.Fragment>
-                            ))}
-                          </TableBody>
+                           <TableBody>
+                             {PRODUCT_LIST.map((product) => (
+                               <React.Fragment key={product}>
+                                 <TableRow className="bg-slate-100/30 hover:bg-slate-100/30 h-8 border-y border-slate-200">
+                                   <TableCell colSpan={6} className="pl-8 py-0">
+                                     <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{product}</span>
+                                   </TableCell>
+                                 </TableRow>
+                                 {PRESENTATIONS.map((pres) => {
+                                   const sales = salesProjectionAW[product]?.[pres] || 0;
+                                   const inv = finishedProductInventoryAW[product]?.[pres] || 0;
+                                   const plan = productionPlanAW[product]?.[pres] || 0;
+                                   return (
+                                     <PlanResumenRow
+                                       key={`${product}-${pres}`}
+                                       product={product}
+                                       pres={pres}
+                                       sales={sales}
+                                       inv={inv}
+                                       plan={plan}
+                                       updatePlan={updateProductionPlanAW}
+                                       section="aw"
+                                     />
+                                   );
+                                 })}
+                               </React.Fragment>
+                             ))}
+                           </TableBody>
                         </Table>
                       </div>
                     </ScrollArea>
@@ -1421,38 +1299,19 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                              const stockAvailable = materialRequirements.awStock[code] || 0;
                              const reqPlan = materialRequirements.awReqPlan[code] || 0;
                              
-                             const deficit = Math.max(0, reqPlan - stockAvailable);
-                             const buyNeed = deficit > 0 ? deficit * 1.10 : 0;
- 
                              if (reqSales === 0 && reqPlan === 0 && stockAvailable === 0) return null;
  
                              return (
-                              <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
-                                <TableCell className="pl-8">
-                                  <div className="flex flex-col">
-                                    <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{code}</span>
-                                    <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[250px]">{mat.description}</span>
-                                  </div>
-                                </TableCell>
-                                <TableCell className="text-right font-bold text-slate-400 tabular-nums text-xs">
-                                  {reqSales.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                </TableCell>
-                                <TableCell className="text-right font-bold text-amber-600 tabular-nums text-xs">
-                                  {stockAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                </TableCell>
-                                <TableCell className="text-right font-black text-sky-700 tabular-nums text-sm bg-sky-50/20">
-                                  {reqPlan.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                </TableCell>
-                                <TableCell className={cn(
-                                  "text-right pr-8 font-black tabular-nums text-[15px] bg-[#A67B5B]/10",
-                                  buyNeed > 0 ? "text-destructive" : "text-emerald-600"
-                                )}>
-                                  {buyNeed === 0 ? '-' : buyNeed.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
-                        </TableBody>
+                               <MaterialRequisitionRowAW
+                                 key={code}
+                                 mat={mat}
+                                 reqSales={reqSales}
+                                 stockAvailable={stockAvailable}
+                                 reqPlan={reqPlan}
+                               />
+                             );
+                           })}
+                         </TableBody>
                       </Table>
                     </div>
                   </Card>
@@ -1652,47 +1511,19 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                          if (reqSales === 0 && reqPlanMDS === 0 && reqPlanAW === 0 && stockAvailable === 0 && buyNeedMDS === 0 && buyNeedAW === 0) return null;
  
                          return (
-                          <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
-                            <TableCell className="pl-8">
-                              <div className="flex flex-col">
-                                <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{code}</span>
-                                <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[250px]">{mat.description}</span>
-                              </div>
-                            </TableCell>
-                            <TableCell className="text-right font-bold text-slate-400 tabular-nums text-xs">
-                              {reqSales.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            </TableCell>
-                            <TableCell className="text-right font-bold text-amber-600 tabular-nums text-xs">
-                              {stockAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            </TableCell>
-                            <TableCell className="text-right font-black text-sky-700 tabular-nums text-sm bg-sky-50/20">
-                              {reqPlanMDS.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            </TableCell>
-                            <TableCell className="text-right font-black text-sky-700 tabular-nums text-sm bg-sky-50/20">
-                              {reqPlanAW.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            </TableCell>
-                            <TableCell className={cn(
-                              "text-right pr-8 font-black tabular-nums text-[15px] bg-[#A67B5B]/10",
-                              buyNeedMDS > 0 ? "text-destructive" : "text-emerald-600"
-                            )}>
-                              {buyNeedMDS === 0 ? '-' : buyNeedMDS.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            </TableCell>
-                            <TableCell className={cn(
-                              "text-right pr-8 font-black tabular-nums text-[15px] bg-[#A67B5B]/10",
-                              buyNeedAW > 0 ? "text-destructive" : "text-emerald-600"
-                            )}>
-                              {buyNeedAW === 0 ? '-' : buyNeedAW.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            </TableCell>
-                            <TableCell className={cn(
-                              "text-right pr-8 font-black tabular-nums text-[15px] bg-red-50/40",
-                              buyNeed > 0 ? "text-destructive" : "text-emerald-600"
-                            )}>
-                              {buyNeed === 0 ? '-' : buyNeed.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
+                           <GlobalRequisitionRow
+                             key={code}
+                             mat={mat}
+                             reqSales={reqSales}
+                             stockAvailable={stockAvailable}
+                             reqPlanMDS={reqPlanMDS}
+                             reqPlanAW={reqPlanAW}
+                             stockMDS={stockMDS}
+                             stockAW={stockAW}
+                           />
+                         );
+                       })}
+                     </TableBody>
                   </Table>
                 </div>
               </Card>
@@ -1727,7 +1558,285 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
             </TabsContent>
           </Tabs>
         </TabsContent>
-      </Tabs>
-    </div>
+       </Tabs>
+     </div>
+   );
+ }
+
+const RequirementRow = memo(function RequirementRow({ item, maxDecimals, unit }: { item: any; maxDecimals: number; unit: string }) {
+  return (
+    <TableRow className="hover:bg-slate-50/50 transition-none h-12 border-b border-slate-100">
+      <TableCell className="pl-6">
+        <div className="flex flex-col">
+          <span className="text-[9px] font-bold text-primary font-mono leading-none mb-0.5">{item.code}</span>
+          <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[250px]">{item.description}</span>
+        </div>
+      </TableCell>
+      <TableCell className="pr-6 text-right font-black text-[13px] text-slate-900 tabular-nums">
+        {item.requirement.toLocaleString('es-ES', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: maxDecimals
+        })} <span className="text-[9px] text-slate-400 ml-1">{item.unit || unit}</span>
+      </TableCell>
+    </TableRow>
   );
-}
+});
+
+const InventoryProductRow = memo(function InventoryProductRow({ product, finProdInv, updateFinProd, productsRef }: { product: string; finProdInv: Record<string, Record<string, number>>; updateFinProd: (product: string, pres: string, value: number) => void; productsRef: string[] }) {
+  const productTotal = productsRef.reduce((acc, pres) => acc + (finProdInv[product]?.[pres] || 0), 0);
+  return (
+    <TableRow key={product} className="hover:bg-amber-50/20 transition-none h-11 border-b border-slate-100">
+      <TableCell className="pl-8 font-black text-slate-700 uppercase text-[10px]">{product}</TableCell>
+      {PRESENTATIONS.map(pres => (
+        <TableCell key={pres} className="p-1">
+          <Input
+            type="number"
+            value={finProdInv[product]?.[pres] || ''}
+            onChange={(e) => updateFinProd(product, pres, parseInt(e.target.value) || 0)}
+            className="h-8 text-center font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-lg"
+            placeholder="0"
+          />
+        </TableCell>
+      ))}
+      <TableCell className="text-right pr-8 font-black text-amber-600 tabular-nums text-sm bg-amber-50/30">
+        {productTotal.toLocaleString('es-ES')}
+      </TableCell>
+    </TableRow>
+  );
+});
+
+const InventoryMaterialRow = memo(function InventoryMaterialRow({ item, inventorySource, updateInventory, isLogistics }: { item: any; inventorySource: Record<string, number>; updateInventory: (code: string, value: number) => void; isLogistics: boolean }) {
+  const code = item.code;
+  if (!code) return null;
+  return (
+    <TableRow key={code} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100 group">
+      <TableCell className="pl-8">
+        <div className="flex flex-col">
+          <span className={cn("text-[9px] font-bold font-mono leading-none mb-1", isLogistics ? "text-emerald-600" : "text-sky-600")}>{code}</span>
+          <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[400px]">{item.description}</span>
+        </div>
+      </TableCell>
+      <TableCell className="text-center font-bold text-slate-400 text-[10px] uppercase">
+        {item.unit || 'KG'}
+      </TableCell>
+      <TableCell className="p-1 pr-8">
+        <Input
+          type="number"
+          value={(inventorySource[code] || '')}
+          onChange={(e) => {
+            const val = parseFloat(e.target.value) || 0;
+            updateInventory(code, val);
+          }}
+          className="h-8 text-right font-black text-sm border-none bg-slate-50 focus:bg-white rounded-lg"
+          placeholder="0.00"
+        />
+      </TableCell>
+    </TableRow>
+  );
+});
+
+const AvailableProductRow = memo(function AvailableProductRow({ product, finProdInv }: { product: string; finProdInv: Record<string, Record<string, number>> }) {
+  const productTotal = PRESENTATIONS.reduce((acc, pres) => acc + (finProdInv[product]?.[pres] || 0), 0);
+  if (productTotal === 0) return null;
+  return (
+    <TableRow key={product} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100">
+      <TableCell className="pl-8 font-black text-slate-700 uppercase text-[11px]">{product}</TableCell>
+      {PRESENTATIONS.map(pres => (
+        <TableCell key={pres} className="text-right font-bold text-slate-600 tabular-nums">
+          {(finProdInv[product]?.[pres] || 0).toLocaleString('es-ES')}
+        </TableCell>
+      ))}
+      <TableCell className="text-right pr-8 font-black text-[#8B6E58] tabular-nums text-sm bg-[#A67B5B]/10">
+        {productTotal.toLocaleString('es-ES')}
+      </TableCell>
+    </TableRow>
+  );
+});
+
+const AvailableMaterialRow = memo(function AvailableMaterialRow({ mat, logInv, plInv }: { mat: any; logInv: Record<string, number>; plInv: Record<string, number> }) {
+  const code = mat.code;
+  if (!code) return null;
+  const stockLogistics = logInv[code] || 0;
+  const stockPlant = plInv[code] || 0;
+  const totalAvailable = stockLogistics + stockPlant;
+  if (totalAvailable === 0) return null;
+  return (
+    <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
+      <TableCell className="pl-8">
+        <div className="flex flex-col">
+          <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{code}</span>
+          <span className="text-[12px] font-black text-slate-700 uppercase leading-none truncate max-w-[300px]">{mat.description}</span>
+        </div>
+      </TableCell>
+      <TableCell className="text-center font-bold text-slate-400 text-[10px] uppercase">
+        {mat.unit || 'KG'}
+      </TableCell>
+      <TableCell className="text-right font-bold text-blue-600 tabular-nums text-sm">
+        {stockLogistics.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+      </TableCell>
+      <TableCell className="text-right font-bold text-amber-600 tabular-nums text-sm">
+        {stockPlant.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+      </TableCell>
+      <TableCell className="text-right pr-8 font-black text-[#5C4033] tabular-nums text-[15px] bg-[#A67B5B]/10">
+        {totalAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2 })}
+      </TableCell>
+    </TableRow>
+  );
+});
+
+const PlanResumenRow = memo(function PlanResumenRow({ product, pres, sales, inv, plan, updatePlan, section }: { product: string; pres: string; sales: number; inv: number; plan: number; updatePlan: (product: string, pres: string, quantity: number) => void; section: 'mds' | 'aw' }) {
+  const balance = (inv + plan) - sales;
+  return (
+    <TableRow key={`${product}-${pres}`} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100 group">
+      <TableCell className="pl-8 py-2">
+        <div className="flex items-center gap-2">
+          <ChevronRight className="h-3 w-3 text-slate-300" />
+          <span className="text-[11px] font-black text-slate-700 uppercase leading-none">{product}</span>
+        </div>
+      </TableCell>
+      <TableCell className="text-center">
+        <Badge variant="outline" className="text-[9px] font-black uppercase text-slate-400 border-slate-200 px-2 py-0">
+          {pres}
+        </Badge>
+      </TableCell>
+      <TableCell className="text-right font-bold text-primary tabular-nums">
+        {sales > 0 ? sales.toLocaleString('es-ES') : '-'}
+      </TableCell>
+      <TableCell className="text-right font-bold text-amber-600 tabular-nums">
+        {inv > 0 ? inv.toLocaleString('es-ES') : '-'}
+      </TableCell>
+      <TableCell className="p-1 bg-sky-50/30">
+        <Input
+          type="number"
+          value={plan || ''}
+          onChange={(e) => updatePlan(product, pres, parseInt(e.target.value) || 0)}
+          className="h-8 text-right font-black text-sm border-none bg-white/50 focus:bg-white rounded-lg text-sky-700 shadow-inner"
+          placeholder="0"
+        />
+      </TableCell>
+      <TableCell className={cn(
+        "text-right pr-8 font-black tabular-nums",
+        balance < 0 ? "text-destructive" : "text-emerald-600"
+      )}>
+        {balance.toLocaleString('es-ES')}
+      </TableCell>
+    </TableRow>
+  );
+});
+
+const MaterialRequisitionRow = memo(function MaterialRequisitionRow({ mat, reqSales, stockAvailable, reqPlan }: { mat: any; reqSales: number; stockAvailable: number; reqPlan: number }) {
+  const code = mat.code;
+  if (!code) return null;
+  const deficit = Math.max(0, reqPlan - stockAvailable);
+  const buyNeed = deficit > 0 ? deficit * 1.10 : 0;
+  if (reqSales === 0 && reqPlan === 0 && stockAvailable === 0) return null;
+  return (
+    <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
+      <TableCell className="pl-8">
+        <div className="flex flex-col">
+          <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{code}</span>
+          <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[250px]">{mat.description}</span>
+        </div>
+      </TableCell>
+      <TableCell className="text-right font-bold text-slate-400 tabular-nums text-xs">
+        {reqSales.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </TableCell>
+      <TableCell className="text-right font-bold text-amber-600 tabular-nums text-xs">
+        {stockAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </TableCell>
+      <TableCell className="text-right font-black text-sky-700 tabular-nums text-sm bg-sky-50/20">
+        {reqPlan.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </TableCell>
+      <TableCell className={cn(
+        "text-right pr-8 font-black tabular-nums text-[15px] bg-[#A67B5B]/10",
+        buyNeed > 0 ? "text-destructive" : "text-emerald-600"
+      )}>
+        {buyNeed === 0 ? '-' : buyNeed.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </TableCell>
+    </TableRow>
+  );
+});
+
+const MaterialRequisitionRowAW = memo(function MaterialRequisitionRowAW({ mat, reqSales, stockAvailable, reqPlan }: { mat: any; reqSales: number; stockAvailable: number; reqPlan: number }) {
+  const code = mat.code;
+  if (!code) return null;
+  const deficit = Math.max(0, reqPlan - stockAvailable);
+  const buyNeed = deficit > 0 ? deficit * 1.10 : 0;
+  if (reqSales === 0 && reqPlan === 0 && stockAvailable === 0) return null;
+  return (
+    <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
+      <TableCell className="pl-8">
+        <div className="flex flex-col">
+          <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{code}</span>
+          <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[250px]">{mat.description}</span>
+        </div>
+      </TableCell>
+      <TableCell className="text-right font-bold text-slate-400 tabular-nums text-xs">
+        {reqSales.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </TableCell>
+      <TableCell className="text-right font-bold text-amber-600 tabular-nums text-xs">
+        {stockAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </TableCell>
+      <TableCell className="text-right font-black text-sky-700 tabular-nums text-sm bg-sky-50/20">
+        {reqPlan.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </TableCell>
+      <TableCell className={cn(
+        "text-right pr-8 font-black tabular-nums text-[15px] bg-[#A67B5B]/10",
+        buyNeed > 0 ? "text-destructive" : "text-emerald-600"
+      )}>
+        {buyNeed === 0 ? '-' : buyNeed.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </TableCell>
+    </TableRow>
+  );
+});
+
+const GlobalRequisitionRow = memo(function GlobalRequisitionRow({ mat, reqSales, stockAvailable, reqPlanMDS, reqPlanAW, stockMDS, stockAW }: { mat: any; reqSales: number; stockAvailable: number; reqPlanMDS: number; reqPlanAW: number; stockMDS: number; stockAW: number }) {
+  const code = mat.code;
+  if (!code) return null;
+  const deficitMDS = Math.max(0, reqPlanMDS - stockMDS);
+  const deficitAW = Math.max(0, reqPlanAW - stockAW);
+  const buyNeedMDS = deficitMDS > 0 ? deficitMDS * 1.10 : 0;
+  const buyNeedAW = deficitAW > 0 ? deficitAW * 1.10 : 0;
+  const buyNeed = buyNeedMDS + buyNeedAW;
+  if (reqSales === 0 && reqPlanMDS === 0 && reqPlanAW === 0 && stockAvailable === 0 && buyNeedMDS === 0 && buyNeedAW === 0) return null;
+  return (
+    <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
+      <TableCell className="pl-8">
+        <div className="flex flex-col">
+          <span className="text-[9px] font-bold text-[#A67B5B] font-mono leading-none mb-1">{code}</span>
+          <span className="text-[11px] font-black text-slate-700 uppercase leading-none truncate max-w-[250px]">{mat.description}</span>
+        </div>
+      </TableCell>
+      <TableCell className="text-right font-bold text-slate-400 tabular-nums text-xs">
+        {reqSales.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </TableCell>
+      <TableCell className="text-right font-bold text-amber-600 tabular-nums text-xs">
+        {stockAvailable.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </TableCell>
+      <TableCell className="text-right font-black text-sky-700 tabular-nums text-sm bg-sky-50/20">
+        {reqPlanMDS.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </TableCell>
+      <TableCell className="text-right font-black text-sky-700 tabular-nums text-sm bg-sky-50/20">
+        {reqPlanAW.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </TableCell>
+      <TableCell className={cn(
+        "text-right pr-8 font-black tabular-nums text-[15px] bg-[#A67B5B]/10",
+        buyNeedMDS > 0 ? "text-destructive" : "text-emerald-600"
+      )}>
+        {buyNeedMDS === 0 ? '-' : buyNeedMDS.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </TableCell>
+      <TableCell className={cn(
+        "text-right pr-8 font-black tabular-nums text-[15px] bg-[#A67B5B]/10",
+        buyNeedAW > 0 ? "text-destructive" : "text-emerald-600"
+      )}>
+        {buyNeedAW === 0 ? '-' : buyNeedAW.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </TableCell>
+      <TableCell className={cn(
+        "text-right pr-8 font-black tabular-nums text-[15px] bg-red-50/40",
+        buyNeed > 0 ? "text-destructive" : "text-emerald-600"
+      )}>
+        {buyNeed === 0 ? '-' : buyNeed.toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+      </TableCell>
+    </TableRow>
+  );
+});

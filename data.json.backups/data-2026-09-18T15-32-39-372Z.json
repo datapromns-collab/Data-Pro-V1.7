@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-14T00:00:00.000",
+      "weekStartDate": "2026-09-21T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -10450,14 +10450,24 @@
         "finalUBBTanks": {},
         "initialUBBTanksDaily": {},
         "finalUBBTanksDaily": {},
-        "salesProjection": {},
-        "finishedProductInventory": {},
+        "salesProjection": {
+          "GLUP COLA": {
+            "2Lts": 211
+          }
+        },
+        "finishedProductInventory": {
+          "GLUP COLA": {
+            "0.4Lts": 0
+          }
+        },
         "productionPlan": {
           "GLUP COLA": {
             "1.5Lts": 0
           }
         },
-        "logisticsInventory": {},
+        "logisticsInventory": {
+          "MATP_0001": 0
+        },
         "plantInventory": {
           "MATP_0001": 0,
           "MATP_0002": 0
@@ -10657,7 +10667,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-18T15:22:50.879Z"
+    "updatedAt": "2026-09-18T15:32:39.062Z"
   },
   "ordenesSap": [
     {
@@ -140433,7 +140443,12 @@
       "2026-09-16-suave": "205115",
       "2026-09-16-procesos": "2386201,5",
       "2026-09-16-filtrada": "3704891,14",
-      "2026-09-16-total": "3023089,33"
+      "2026-09-16-total": "3023089,33",
+      "2026-09-17-servicio": "26714",
+      "2026-09-17-suave": "196516",
+      "2026-09-17-procesos": "2653008,47",
+      "2026-09-17-filtrada": " 4004157,72",
+      "2026-09-17-total": "3390165,56"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
