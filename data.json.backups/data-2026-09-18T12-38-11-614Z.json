@@ -10642,7 +10642,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-17T21:28:24.361Z"
+    "updatedAt": "2026-09-18T12:28:34.290Z"
   },
   "ordenesSap": [
     {
@@ -19061,12 +19061,12 @@
           "fechaInicio": "2026-09-17",
           "ticket1": "17971",
           "cajas1": 4880,
-          "ticket2": "",
+          "ticket2": "17972",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 24800
         }
       ]
     },
@@ -19092,12 +19092,12 @@
           "fechaInicio": "2026-09-17",
           "ticket1": "16106",
           "cajas1": 7280,
-          "ticket2": "",
+          "ticket2": "16107",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3680,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 28960
         }
       ]
     },
@@ -19123,12 +19123,12 @@
           "fechaInicio": "2026-09-17",
           "ticket1": "16058",
           "cajas1": 2640,
-          "ticket2": "",
+          "ticket2": "16059",
           "cajas2": 80,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 210
         }
       ]
     },
@@ -19154,12 +19154,12 @@
           "fechaInicio": "2026-09-17",
           "ticket1": "17932",
           "cajas1": 1400,
-          "ticket2": "",
+          "ticket2": "17933",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 500,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 9800
         }
       ]
     },
@@ -19185,6 +19185,99 @@
           "fechaInicio": "2026-09-17",
           "ticket1": "16155",
           "cajas1": 2720,
+          "ticket2": "16156",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 1760,
+          "ticket4": "",
+          "cajas4": 11510
+        }
+      ]
+    },
+    {
+      "id": "7-1789733043358",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63685",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-17",
+          "ticket1": "16205",
+          "cajas1": 1170,
+          "ticket2": "16206",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 2262,
+          "ticket4": "",
+          "cajas4": 11388
+        },
+        {
+          "fechaInicio": "2026-09-18",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1789733230700",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "63691",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-17",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16059",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 9280
+        },
+        {
+          "fechaInicio": "2026-09-18",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1789733674548",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "63697",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-17",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16018",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 20080
+        },
+        {
+          "fechaInicio": "2026-09-18",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
