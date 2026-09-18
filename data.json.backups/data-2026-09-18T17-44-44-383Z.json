@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-21T00:00:00.000",
+      "weekStartDate": "2026-09-14T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -10452,7 +10452,7 @@
         "finalUBBTanksDaily": {},
         "salesProjection": {
           "GLUP COLA": {
-            "2Lts": 211
+            "2Lts": 12
           }
         },
         "finishedProductInventory": {
@@ -10667,7 +10667,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-18T15:32:39.062Z"
+    "updatedAt": "2026-09-18T17:44:43.561Z"
   },
   "ordenesSap": [
     {

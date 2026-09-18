@@ -130,9 +130,9 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
       return result;
     };
  
-    const globalSalesProjection = mergeNestedRecords(salesProjection, salesProjectionAW);
-    const globalFinishedProductInventory = mergeNestedRecords(finishedProductInventory, finishedProductInventoryAW);
-    const globalProductionPlan = mergeNestedRecords(productionPlan, productionPlanAW);
+    const globalSalesProjection = useMemo(() => mergeNestedRecords(salesProjection, salesProjectionAW), [salesProjection, salesProjectionAW]);
+    const globalFinishedProductInventory = useMemo(() => mergeNestedRecords(finishedProductInventory, finishedProductInventoryAW), [finishedProductInventory, finishedProductInventoryAW]);
+    const globalProductionPlan = useMemo(() => mergeNestedRecords(productionPlan, productionPlanAW), [productionPlan, productionPlanAW]);
     const globalLogisticsInventory = useMemo(() => mergeRecords(logisticsInventory, logisticsInventoryAW), [logisticsInventory, logisticsInventoryAW]);
     const globalPlantInventory = useMemo(() => mergeRecords(plantInventory, plantInventoryAW), [plantInventory, plantInventoryAW]);
  
@@ -258,8 +258,8 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                     <TableCell key={pres} className="p-1">
                       <Input 
                         type="number"
-                        value={finProdInv[product]?.[pres] || ''}
-                        onChange={(e) => updateFinProd(product, pres, parseInt(e.target.value) || 0)}
+                        value={finProdInv[product]?.[pres] ?? ''}
+                        onChange={(e) => updateFinProd(product, pres, parseInt(e.target.value || '0', 10))}
                         className="h-8 text-center font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-lg"
                         placeholder="0"
                       />
@@ -349,9 +349,9 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                     <TableCell className="p-1 pr-8">
                       <Input 
                         type="number"
-                        value={(inventorySource[item.code] || '')}
+                        value={(inventorySource[item.code] ?? '')}
                         onChange={(e) => {
-                          const val = parseFloat(e.target.value) || 0;
+                          const val = parseFloat(e.target.value || '0') || 0;
                           updateInventory(item.code, val);
                         }}
                         className="h-8 text-right font-black text-sm border-none bg-slate-50 focus:bg-white rounded-lg"
@@ -388,7 +388,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
     ];
 
     return (
-      <div className="space-y-12 animate-in fade-in-50 duration-500">
+      <div className="space-y-12">
         <div className="flex justify-end no-print">
           <Button 
             variant="outline" 
@@ -552,13 +552,13 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                   {product}
                 </TableCell>
                 <TableCell className="p-1">
-                  <Input 
-                    type="number"
-                    value={salesProj[product]?.[presentation] || ''}
-                    onChange={(e) => updateSales(product, presentation, parseInt(e.target.value) || 0)}
-                    className="h-8 text-center font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-lg"
-                    placeholder="0"
-                  />
+                      <Input 
+                        type="number"
+                        value={salesProj[product]?.[presentation] ?? ''}
+                        onChange={(e) => updateSales(product, presentation, parseInt(e.target.value || '0', 10))}
+                        className="h-8 text-center font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-lg"
+                        placeholder="0"
+                      />
                 </TableCell>
               </TableRow>
             ))}
@@ -597,7 +597,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
           </TabsList>
         </div>
 
-        <TabsContent value="mds" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+        <TabsContent value="mds" className="m-0 space-y-6">
           <Tabs defaultValue="ventas" className="w-full">
             <div className="flex items-center bg-slate-100/30 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
               <TabsList className="bg-transparent h-auto p-0">
@@ -613,7 +613,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
               </TabsList>
             </div>
 
-            <TabsContent value="ventas" className="m-0 animate-in fade-in-50 duration-500">
+            <TabsContent value="ventas" className="m-0">
               <Tabs defaultValue="planificacion" className="w-full">
                 <div className="flex items-center justify-between gap-4 mb-6">
                   <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-200 w-fit no-print">
@@ -637,7 +637,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                   </Button>
                 </div>
 
-                <TabsContent value="planificacion" className="m-0 animate-in fade-in-50 duration-500">
+                <TabsContent value="planificacion" className="m-0">
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                      {renderTableForPresentation('mds', "Refrescos 2 Lts", REFRESCOS, "2Lts", "bg-sky-500", "bg-sky-400")}
                      {renderTableForPresentation('mds', "Refrescos 1 Lt", REFRESCOS, "1Lt", "bg-sky-500", "bg-sky-400")}
@@ -646,7 +646,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                    </div>
                 </TabsContent>
 
-                <TabsContent value="requerimientos" className="m-0 animate-in fade-in-50 duration-500 space-y-10">
+                <TabsContent value="requerimientos" className="m-0 space-y-10">
                   <div className="space-y-6">
                     <div className="flex items-center gap-3 px-2">
                        <div className="bg-emerald-100 p-2.5 rounded-2xl">
@@ -685,7 +685,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
               </Tabs>
             </TabsContent>
 
-            <TabsContent value="inventario" className="m-0 animate-in fade-in-50 duration-500">
+            <TabsContent value="inventario" className="m-0">
               <Tabs defaultValue="producto-terminado" className="w-full">
                 <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
                   <TabsList className="bg-transparent h-auto p-0">
@@ -704,7 +704,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                   </TabsList>
                 </div>
 
-                <TabsContent value="producto-terminado" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+                <TabsContent value="producto-terminado" className="m-0 space-y-8">
                    <div className="flex justify-end no-print">
                       <Button 
                         variant="outline" 
@@ -730,7 +730,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                   {renderFullInventoryType('mds', 'plant')}
                 </TabsContent>
 
-                <TabsContent value="disponible" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+                <TabsContent value="disponible" className="m-0 space-y-8">
                   <div className="flex justify-end no-print">
                     <Button 
                       variant="outline" 
@@ -830,7 +830,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
               </Tabs>
             </TabsContent>
 
-            <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+            <TabsContent value="resumen" className="m-0 space-y-6">
               <Tabs defaultValue="plan-produccion" className="w-full">
                 <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
                   <TabsList className="bg-transparent h-auto p-0">
@@ -843,7 +843,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                   </TabsList>
                 </div>
 
-                <TabsContent value="plan-produccion" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                <TabsContent value="plan-produccion" className="m-0 space-y-6">
                   <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
                     <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
                       <div className="flex items-center gap-4 text-white">
@@ -913,7 +913,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="requisicion" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                <TabsContent value="requisicion" className="m-0 space-y-6">
                   <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
                     <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
                       <div className="flex items-center gap-4 text-white">
@@ -1024,7 +1024,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
           </Tabs>
         </TabsContent>
 
-        <TabsContent value="aw" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+        <TabsContent value="aw" className="m-0 space-y-6">
           <Tabs defaultValue="ventas" className="w-full">
             <div className="flex items-center bg-slate-100/30 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
               <TabsList className="bg-transparent h-auto p-0">
@@ -1040,7 +1040,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
               </TabsList>
             </div>
 
-            <TabsContent value="ventas" className="m-0 animate-in fade-in-50 duration-500">
+            <TabsContent value="ventas" className="m-0">
               <Tabs defaultValue="planificacion" className="w-full">
                 <div className="flex items-center justify-between gap-4 mb-6">
                   <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-200 w-fit no-print">
@@ -1064,7 +1064,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                   </Button>
                 </div>
 
-                <TabsContent value="planificacion" className="m-0 animate-in fade-in-50 duration-500">
+                <TabsContent value="planificacion" className="m-0">
                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
                      {renderTableForPresentation('aw', "Refrescos 2 Lts", REFRESCOS, "2Lts", "bg-sky-500", "bg-sky-400")}
                      {renderTableForPresentation('aw', "Refrescos 1 Lt", REFRESCOS, "1Lt", "bg-sky-500", "bg-sky-400")}
@@ -1073,7 +1073,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                    </div>
                 </TabsContent>
 
-                <TabsContent value="requerimientos" className="m-0 animate-in fade-in-50 duration-500 space-y-10">
+                <TabsContent value="requerimientos" className="m-0 space-y-10">
                   <div className="space-y-6">
                     <div className="flex items-center gap-3 px-2">
                        <div className="bg-emerald-100 p-2.5 rounded-2xl">
@@ -1112,7 +1112,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
               </Tabs>
             </TabsContent>
 
-            <TabsContent value="inventario" className="m-0 animate-in fade-in-50 duration-500">
+            <TabsContent value="inventario" className="m-0">
               <Tabs defaultValue="producto-terminado" className="w-full">
                 <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
                   <TabsList className="bg-transparent h-auto p-0">
@@ -1131,7 +1131,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                   </TabsList>
                 </div>
 
-                <TabsContent value="producto-terminado" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+                <TabsContent value="producto-terminado" className="m-0 space-y-8">
                    <div className="flex justify-end no-print">
                       <Button 
                         variant="outline" 
@@ -1157,7 +1157,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                   {renderFullInventoryType('aw', 'plant')}
                 </TabsContent>
 
-                <TabsContent value="disponible" className="m-0 animate-in fade-in-50 duration-500 space-y-8">
+                <TabsContent value="disponible" className="m-0 space-y-8">
                   <div className="flex justify-end no-print">
                     <Button 
                       variant="outline" 
@@ -1174,7 +1174,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
               </Tabs>
             </TabsContent>
 
-            <TabsContent value="resumen" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+            <TabsContent value="resumen" className="m-0 space-y-6">
               <Tabs defaultValue="plan-produccion" className="w-full">
                 <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
                   <TabsList className="bg-transparent h-auto p-0">
@@ -1187,7 +1187,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                   </TabsList>
                 </div>
 
-                <TabsContent value="plan-produccion" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                <TabsContent value="plan-produccion" className="m-0 space-y-6">
                   <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
                     <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
                       <div className="flex items-center gap-4 text-white">
@@ -1257,7 +1257,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                   </Card>
                 </TabsContent>
 
-                <TabsContent value="requisicion" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+                <TabsContent value="requisicion" className="m-0 space-y-6">
                   <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
                     <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
                       <div className="flex items-center gap-4 text-white">
@@ -1349,7 +1349,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
           </Tabs>
         </TabsContent>
 
-        <TabsContent value="global" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+        <TabsContent value="global" className="m-0 space-y-6">
           <Tabs defaultValue="plan-produccion" className="w-full">
             <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
               <TabsList className="bg-transparent h-auto p-0">
@@ -1362,7 +1362,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
               </TabsList>
             </div>
 
-            <TabsContent value="plan-produccion" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+            <TabsContent value="plan-produccion" className="m-0 space-y-6">
               <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
                 <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
                   <div className="flex items-center gap-4 text-white">
@@ -1454,7 +1454,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
               </Card>
             </TabsContent>
 
-            <TabsContent value="requisicion" className="m-0 animate-in fade-in-50 duration-500 space-y-6">
+            <TabsContent value="requisicion" className="m-0 space-y-6">
               <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
                 <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
                   <div className="flex items-center gap-4 text-white">
@@ -1591,8 +1591,8 @@ const InventoryProductRow = memo(function InventoryProductRow({ product, finProd
         <TableCell key={pres} className="p-1">
           <Input
             type="number"
-            value={finProdInv[product]?.[pres] || ''}
-            onChange={(e) => updateFinProd(product, pres, parseInt(e.target.value) || 0)}
+            value={finProdInv[product]?.[pres] ?? ''}
+            onChange={(e) => updateFinProd(product, pres, parseInt(e.target.value || '0', 10))}
             className="h-8 text-center font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-lg"
             placeholder="0"
           />
@@ -1622,9 +1622,9 @@ const InventoryMaterialRow = memo(function InventoryMaterialRow({ item, inventor
       <TableCell className="p-1 pr-8">
         <Input
           type="number"
-          value={(inventorySource[code] || '')}
+          value={(inventorySource[code] ?? '')}
           onChange={(e) => {
-            const val = parseFloat(e.target.value) || 0;
+            const val = parseFloat(e.target.value || '0') || 0;
             updateInventory(code, val);
           }}
           className="h-8 text-right font-black text-sm border-none bg-slate-50 focus:bg-white rounded-lg"
@@ -1706,13 +1706,13 @@ const PlanResumenRow = memo(function PlanResumenRow({ product, pres, sales, inv,
         {inv > 0 ? inv.toLocaleString('es-ES') : '-'}
       </TableCell>
       <TableCell className="p-1 bg-sky-50/30">
-        <Input
-          type="number"
-          value={plan || ''}
-          onChange={(e) => updatePlan(product, pres, parseInt(e.target.value) || 0)}
-          className="h-8 text-right font-black text-sm border-none bg-white/50 focus:bg-white rounded-lg text-sky-700 shadow-inner"
-          placeholder="0"
-        />
+                        <Input 
+                          type="number"
+                          value={plan ?? ''}
+                          onChange={(e) => updatePlan(product, pres, parseInt(e.target.value || '0', 10))}
+                          className="h-8 text-right font-black text-sm border-none bg-white/50 focus:bg-white rounded-lg text-sky-700 shadow-inner"
+                          placeholder="0"
+                        />
       </TableCell>
       <TableCell className={cn(
         "text-right pr-8 font-black tabular-nums",

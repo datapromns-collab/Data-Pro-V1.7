@@ -10452,7 +10452,7 @@
         "finalUBBTanksDaily": {},
         "salesProjection": {
           "GLUP COLA": {
-            "2Lts": 2115151
+            "2Lts": 0
           }
         },
         "finishedProductInventory": {
@@ -10667,7 +10667,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-18T15:32:39.230Z"
+    "updatedAt": "2026-09-18T17:44:44.289Z"
   },
   "ordenesSap": [
     {

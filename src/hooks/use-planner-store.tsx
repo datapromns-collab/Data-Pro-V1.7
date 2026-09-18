@@ -735,14 +735,6 @@ function usePlannerStoreInner() {
       pendingRef.current = true;
       try {
         await savePlannerData(plan);
-        const remote = await loadPlannerData();
-        const remoteUpdatedAt = (remote as any)?._meta?.updatedAt;
-        if (remoteUpdatedAt) {
-          localStorage.setItem(STORAGE_KEY_REMOTE_TIMESTAMP, remoteUpdatedAt);
-        }
-        if (remote) {
-          applyRemoteToState(remote, true);
-        }
         lastPersistedSnapshotRef.current = snapshot;
       } catch (error) {
         saveToLocalStorageRef.current();
