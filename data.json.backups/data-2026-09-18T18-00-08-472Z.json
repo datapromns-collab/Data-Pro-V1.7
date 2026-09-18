@@ -10452,12 +10452,16 @@
         "finalUBBTanksDaily": {},
         "salesProjection": {
           "GLUP COLA": {
-            "2Lts": 12220
+            "2Lts": 20
+          },
+          "GLUP FRESH": {
+            "2Lts": 0
           }
         },
         "finishedProductInventory": {
           "GLUP COLA": {
-            "0.4Lts": 0
+            "0.4Lts": 0,
+            "2Lts": 1
           }
         },
         "productionPlan": {
@@ -10472,7 +10476,14 @@
           "MATP_0001": 0,
           "MATP_0002": 0
         },
-        "salesProjectionAW": {},
+        "salesProjectionAW": {
+          "GLUP COLA": {
+            "2Lts": 0
+          },
+          "GLUP FRESH": {
+            "2Lts": 0
+          }
+        },
         "finishedProductInventoryAW": {},
         "productionPlanAW": {},
         "logisticsInventoryAW": {},
@@ -10667,7 +10678,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-18T17:44:34.909Z"
+    "updatedAt": "2026-09-18T18:00:01.793Z"
   },
   "ordenesSap": [
     {
