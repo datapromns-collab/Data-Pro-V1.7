@@ -167,7 +167,7 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   'alex.mds': ['jarabes', 'raw-materials', 'planta', 'planta-admin', 'planning', 'management', 'procesos', 'logistica'],
   'anto.mds': ['purchasing', 'logistica', 'ventas', 'planning', 'management'],
   'prodtj.mds': ['planning', 'planta', 'logistica'],
-  'prodtg.mds': ['planning', 'planta', 'management', 'logistica'],
+  'prodtg.mds': ['planning', 'planta', 'management', 'logistica', 'procesos'],
   'prodts.mds': ['planning', 'planta'],
   'procj.mds': ['planning', 'procesos', 'management'],
   'cald.mds': ['planning'],

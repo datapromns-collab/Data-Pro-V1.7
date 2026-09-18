@@ -1045,10 +1045,16 @@ export default function PlannerPage() {
   });
 
   useEffect(() => {
-    if (activeModule === 'procesos' && user?.id !== 'jaime.r' && (user?.id === 'proc1.mds' || user?.id === 'procj.mds' || user?.id === 'procs2.mds' || user?.id === 'maria.mds' || user?.id === 'alex.mds' || user?.id === 'proc.mds' || user?.id === 'procs1.mds' || user?.id === 'proc2.mds')) {
+    if (activeModule === 'procesos' && user?.id !== 'jaime.r' && (user?.id === 'proc1.mds' || user?.id === 'procj.mds' || user?.id === 'procs2.mds' || user?.id === 'maria.mds' || user?.id === 'alex.mds' || user?.id === 'proc.mds' || user?.id === 'procs1.mds' || user?.id === 'proc2.mds' || user?.id === 'prodtg.mds')) {
       setProcesosSubTab(user?.id === 'proc.mds' || user?.id === 'procs1.mds' || user?.id === 'proc2.mds' || user?.id === 'procj.mds' ? 'sala-jarabe' : 'ptab');
     }
   }, [activeModule, user?.id]);
+
+  useEffect(() => {
+    if (activeModule === 'procesos' && user?.id === 'prodtg.mds' && procesosSubTab === 'ptab') {
+      setPtabTab('r-semanal');
+    }
+  }, [activeModule, user?.id, procesosSubTab]);
 
   useEffect(() => {
     if (!insumosFecha || typeof window === 'undefined' || isNaN(insumosFecha.getTime())) return;
@@ -4785,11 +4791,11 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                        Módulo de Producción en Desarrollo
                      </div>
                    )}
-                       {activeModule === 'procesos' && (isDemon || user.id === 'jaime.r' || user.id === 'proc1.mds' || user.id === 'procj.mds' || user.id === 'procs2.mds' || user.id === 'maria.mds' || user.id === 'alex.mds' || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds') && (
+                       {activeModule === 'procesos' && (isDemon || user.id === 'jaime.r' || user.id === 'proc1.mds' || user.id === 'procj.mds' || user.id === 'procs2.mds' || user.id === 'maria.mds' || user.id === 'alex.mds' || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' || user.id === 'prodtg.mds') && (
                         <div className="flex flex-col h-full">
                           <div className="flex items-center gap-2 mb-2 no-print">
                             <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                 {(isDemon || user.id === 'jaime.r' || user.id === 'maria.mds' || user.id === 'alex.mds' ? ['ptab', 'miteco', 'sala-jarabe'] : user.id === 'procj.mds' ? ['ptab', 'sala-jarabe'] : user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' ? ['sala-jarabe'] : ['ptab']).map((tab) => (
+                                 {(isDemon || user.id === 'jaime.r' || user.id === 'maria.mds' || user.id === 'alex.mds' ? ['ptab', 'miteco', 'sala-jarabe'] : user.id === 'procj.mds' ? ['ptab', 'sala-jarabe'] : user.id === 'prodtg.mds' ? ['ptab'] : user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' ? ['sala-jarabe'] : ['ptab']).map((tab) => (
                                <button
                                  key={tab}
                                  onClick={() => setProcesosSubTab(tab)}
@@ -4809,7 +4815,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                           {procesosSubTab === 'ptab' && (
                             <div className="flex items-center gap-2 no-print mb-2">
                               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                                   {(isDemon || user.id === 'jaime.r' || user.id === 'procj.mds' || user.id === 'maria.mds' || user.id === 'alex.mds' ? ['agua', 'insumos', 'r-semanal', 'r-mensual'] : user.id === 'procs2.mds' ? ['agua', 'insumos', 'r-semanal'] : ['agua', 'insumos']).map((tab) => (
+                                   {(isDemon || user.id === 'jaime.r' || user.id === 'procj.mds' || user.id === 'maria.mds' || user.id === 'alex.mds' ? ['agua', 'insumos', 'r-semanal', 'r-mensual'] : user.id === 'prodtg.mds' || user.id === 'procs2.mds' ? ['r-semanal', 'r-mensual'] : ['agua', 'insumos']).map((tab) => (
                                    <button
                                      key={tab}
                                      onClick={() => setPtabTab(tab as 'agua' | 'insumos' | 'r-semanal' | 'r-mensual')}
@@ -5067,7 +5073,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                               </div>
                             </div>
                           )}
-                               {(isDemon || user.id === 'jaime.r' || user.id === 'procj.mds' || user.id === 'procs2.mds' || user.id === 'maria.mds' || user.id === 'alex.mds') && procesosSubTab === 'ptab' && ptabTab === 'r-semanal' && (
+                                {(isDemon || user.id === 'jaime.r' || user.id === 'procj.mds' || user.id === 'procs2.mds' || user.id === 'maria.mds' || user.id === 'alex.mds' || user.id === 'prodtg.mds') && procesosSubTab === 'ptab' && ptabTab === 'r-semanal' && (
                               <div className="flex flex-col h-full">
                                 <div className="flex items-center gap-2 mb-2 no-print">
                                   <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
@@ -5276,7 +5282,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                 </div>
                               </div>
                             )}
-                               {(isDemon || user.id === 'jaime.r' || user.id === 'procj.mds' || user.id === 'maria.mds' || user.id === 'alex.mds') && procesosSubTab === 'ptab' && ptabTab === 'r-mensual' && (
+                                {(isDemon || user.id === 'jaime.r' || user.id === 'procj.mds' || user.id === 'maria.mds' || user.id === 'alex.mds' || user.id === 'prodtg.mds') && procesosSubTab === 'ptab' && ptabTab === 'r-mensual' && (
                              <div className="flex flex-col h-full">
                                <div className="flex items-center gap-2 mb-2 no-print">
                                  <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">

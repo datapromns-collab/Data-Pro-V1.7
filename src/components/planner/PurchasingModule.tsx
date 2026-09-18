@@ -258,8 +258,9 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                     <TableCell key={pres} className="p-1">
                       <Input 
                         type="number"
-                        value={finProdInv[product]?.[pres] ?? ''}
+                        value={finProdInv[product]?.[pres] === 0 ? '' : (finProdInv[product]?.[pres] ?? '')}
                         onChange={(e) => updateFinProd(product, pres, parseInt(e.target.value || '0', 10))}
+                        onFocus={(e) => e.target.select()}
                         className="h-8 text-center font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-lg"
                         placeholder="0"
                       />
@@ -349,11 +350,12 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                     <TableCell className="p-1 pr-8">
                       <Input 
                         type="number"
-                        value={(inventorySource[item.code] ?? '')}
+                        value={inventorySource[item.code] === 0 ? '' : (inventorySource[item.code] ?? '')}
                         onChange={(e) => {
                           const val = parseFloat(e.target.value || '0') || 0;
                           updateInventory(item.code, val);
                         }}
+                        onFocus={(e) => e.target.select()}
                         className="h-8 text-right font-black text-sm border-none bg-slate-50 focus:bg-white rounded-lg"
                         placeholder="0.00"
                       />
@@ -554,8 +556,9 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                 <TableCell className="p-1">
                       <Input 
                         type="number"
-                        value={salesProj[product]?.[presentation] ?? ''}
+                        value={salesProj[product]?.[presentation] === 0 ? '' : (salesProj[product]?.[presentation] ?? '')}
                         onChange={(e) => updateSales(product, presentation, parseInt(e.target.value || '0', 10))}
+                        onFocus={(e) => e.target.select()}
                         className="h-8 text-center font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-lg"
                         placeholder="0"
                       />
@@ -1591,8 +1594,9 @@ const InventoryProductRow = memo(function InventoryProductRow({ product, finProd
         <TableCell key={pres} className="p-1">
           <Input
             type="number"
-            value={finProdInv[product]?.[pres] ?? ''}
+            value={finProdInv[product]?.[pres] === 0 ? '' : (finProdInv[product]?.[pres] ?? '')}
             onChange={(e) => updateFinProd(product, pres, parseInt(e.target.value || '0', 10))}
+            onFocus={(e) => e.target.select()}
             className="h-8 text-center font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-lg"
             placeholder="0"
           />
@@ -1622,11 +1626,12 @@ const InventoryMaterialRow = memo(function InventoryMaterialRow({ item, inventor
       <TableCell className="p-1 pr-8">
         <Input
           type="number"
-          value={(inventorySource[code] ?? '')}
+          value={inventorySource[code] === 0 ? '' : (inventorySource[code] ?? '')}
           onChange={(e) => {
             const val = parseFloat(e.target.value || '0') || 0;
             updateInventory(code, val);
           }}
+          onFocus={(e) => e.target.select()}
           className="h-8 text-right font-black text-sm border-none bg-slate-50 focus:bg-white rounded-lg"
           placeholder="0.00"
         />
@@ -1708,10 +1713,11 @@ const PlanResumenRow = memo(function PlanResumenRow({ product, pres, sales, inv,
       <TableCell className="p-1 bg-sky-50/30">
                         <Input 
                           type="number"
-                          value={plan ?? ''}
-                          onChange={(e) => updatePlan(product, pres, parseInt(e.target.value || '0', 10))}
-                          className="h-8 text-right font-black text-sm border-none bg-white/50 focus:bg-white rounded-lg text-sky-700 shadow-inner"
-                          placeholder="0"
+                           value={plan === 0 ? '' : (plan ?? '')}
+                           onChange={(e) => updatePlan(product, pres, parseInt(e.target.value || '0', 10))}
+                           onFocus={(e) => e.target.select()}
+                           className="h-8 text-right font-black text-sm border-none bg-white/50 focus:bg-white rounded-lg text-sky-700 shadow-inner"
+                           placeholder="0"
                         />
       </TableCell>
       <TableCell className={cn(
