@@ -369,11 +369,11 @@ export default function OrdenesSapModule({
   const [creadorSubsection, setCreadorSubsection] = useState<'fijas' | 'ordenes'>('fijas');
   // Estado independiente para la sección "Seguimiento de Órdenes" (no afecta a las demás secciones)
   const [seguimientoSubsection, setSeguimientoSubsection] = useState<number | 'resumen' | 'resumen-mensual'>(() => userId === 'jaime.r' ? 'resumen' : 1);
-  const [seguimientoResumenMensualSubsection, setSeguimientoResumenMensualSubsection] = useState<'resumen-por-sebor' | 'resumen-por-lineas'>('resumen-por-sebor');
+  const [seguimientoResumenMensualSubsection, setSeguimientoResumenMensualSubsection] = useState<'resumen-por-sabor' | 'resumen-por-lineas'>('resumen-por-sabor');
 
   useEffect(() => {
     if (seguimientoSubsection === 'resumen-mensual') {
-      setSeguimientoResumenMensualSubsection('resumen-por-sebor');
+      setSeguimientoResumenMensualSubsection('resumen-por-sabor');
     }
   }, [seguimientoSubsection]);
 
@@ -2374,10 +2374,10 @@ const exportarPDFdia = async () => {
                   <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
                     <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-fit mb-4">
                       <button
-                        onClick={() => setSeguimientoResumenMensualSubsection('resumen-por-sebor')}
-                        className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoResumenMensualSubsection === 'resumen-por-sebor' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                        onClick={() => setSeguimientoResumenMensualSubsection('resumen-por-sabor')}
+                        className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoResumenMensualSubsection === 'resumen-por-sabor' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                       >
-                        resumen por sebor
+                        RESUMEN POR SABOR
                       </button>
                       <button
                         onClick={() => setSeguimientoResumenMensualSubsection('resumen-por-lineas')}
