@@ -1130,6 +1130,7 @@ function usePlannerStoreInner() {
     updateLogisticsInventoryAW,
     updatePlantInventoryAW,
     setPlannerDataChanged,
+    refreshFromServer,
     saveError,
     clearSaveError,
   };

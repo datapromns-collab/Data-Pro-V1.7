@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, memo } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Globe, 
@@ -66,7 +66,8 @@ import {
   TERMO_0130_FACTORS,
   TERMO_0017_FACTORS,
   ADHESIVE_FACTORS,
-  calculateRequirementFromSource
+  calculateRequirementFromSource,
+  ALL_MATERIALS_LIST
 } from '@/lib/planner-utils';
 
 interface PurchasingModuleProps {
@@ -86,13 +87,6 @@ const JUGOS = [
 ];
 
 const PRESENTATIONS = ["2Lts", "1.5Lts", "1Lt", "0.4Lts"];
-
-const ALL_MATERIALS_LIST = [
-  ...SUGAR_DATA, ...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES,
-  ...SOLIDS_DATA, ...ADDITIVES_DATA, ...PREFORMS_DATA, ...CAPS_DATA,
-  ...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA,
-  ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA
-];
 
 export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrintResumen }: PurchasingModuleProps) {
    const { 
@@ -128,21 +122,45 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
    };
 
    const mergeNestedRecords = (a: Record<string, Record<string, number>>, b: Record<string, Record<string, number>>): Record<string, Record<string, number>> => {
-     const result: Record<string, Record<string, number>> = {};
-     const outerKeys = new Set([...Object.keys(a), ...Object.keys(b)]);
-     outerKeys.forEach(key => {
-       result[key] = mergeRecords(a[key] || {}, b[key] || {});
-     });
-     return result;
-   };
-
-   const globalSalesProjection = mergeNestedRecords(salesProjection, salesProjectionAW);
-   const globalFinishedProductInventory = mergeNestedRecords(finishedProductInventory, finishedProductInventoryAW);
-   const globalProductionPlan = mergeNestedRecords(productionPlan, productionPlanAW);
-   const globalLogisticsInventory = mergeRecords(logisticsInventory, logisticsInventoryAW);
-   const globalPlantInventory = mergeRecords(plantInventory, plantInventoryAW);
-   const calculateGlobalRequirement = (code: string) => calculateRequirementFromSource(code, globalSalesProjection, customPackagingRecipes, customRecipes);
-   const calculateGlobalRequirementFromPlan = (code: string) => calculateRequirementFromSource(code, globalProductionPlan, customPackagingRecipes, customRecipes);
+      const result: Record<string, Record<string, number>> = {};
+      const outerKeys = new Set([...Object.keys(a), ...Object.keys(b)]);
+      outerKeys.forEach(key => {
+        result[key] = mergeRecords(a[key] || {}, b[key] || {});
+      });
+      return result;
+    };
+ 
+    const globalSalesProjection = mergeNestedRecords(salesProjection, salesProjectionAW);
+    const globalFinishedProductInventory = mergeNestedRecords(finishedProductInventory, finishedProductInventoryAW);
+    const globalProductionPlan = mergeNestedRecords(productionPlan, productionPlanAW);
+    const globalLogisticsInventory = useMemo(() => mergeRecords(logisticsInventory, logisticsInventoryAW), [logisticsInventory, logisticsInventoryAW]);
+    const globalPlantInventory = useMemo(() => mergeRecords(plantInventory, plantInventoryAW), [plantInventory, plantInventoryAW]);
+ 
+    const materialRequirements = useMemo(() => {
+      const mdsReqSales: Record<string, number> = {};
+      const mdsReqPlan: Record<string, number> = {};
+      const mdsStock: Record<string, number> = {};
+      const awReqSales: Record<string, number> = {};
+      const awReqPlan: Record<string, number> = {};
+      const awStock: Record<string, number> = {};
+      const globalReqSales: Record<string, number> = {};
+      const globalStock: Record<string, number> = {};
+ 
+      ALL_MATERIALS_LIST.forEach(mat => {
+        const code = mat.code;
+        if (!code) return;
+        mdsReqSales[code] = calculateRequirementFromSource(code, salesProjection, customPackagingRecipes, customRecipes);
+        mdsReqPlan[code] = calculateRequirementFromSource(code, productionPlan, customPackagingRecipes, customRecipes);
+        mdsStock[code] = (logisticsInventory[code] || 0) + (plantInventory[code] || 0);
+        awReqSales[code] = calculateRequirementFromSource(code, salesProjectionAW, customPackagingRecipes, customRecipes);
+        awReqPlan[code] = calculateRequirementFromSource(code, productionPlanAW, customPackagingRecipes, customRecipes);
+        awStock[code] = (logisticsInventoryAW[code] || 0) + (plantInventoryAW[code] || 0);
+        globalReqSales[code] = calculateRequirementFromSource(code, globalSalesProjection, customPackagingRecipes, customRecipes);
+        globalStock[code] = (globalLogisticsInventory[code] || 0) + (globalPlantInventory[code] || 0);
+      });
+ 
+      return { mdsReqSales, mdsReqPlan, mdsStock, awReqSales, awReqPlan, awStock, globalReqSales, globalStock };
+    }, [salesProjection, salesProjectionAW, productionPlan, productionPlanAW, logisticsInventory, logisticsInventoryAW, plantInventory, plantInventoryAW, globalSalesProjection, globalLogisticsInventory, globalPlantInventory, customPackagingRecipes, customRecipes]);
 
    const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
@@ -1025,22 +1043,20 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                             <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[160px] bg-[#A67B5B]/5">Necesidad Compra</TableHead>
                           </TableRow>
                         </TableHeader>
-                        <TableBody>
-                          {ALL_MATERIALS_LIST.map((mat) => {
-                            const code = mat.code;
-                            if (!code) return null;
-                            const reqSales = calculateRequirementFromSource(code, salesProjection, customPackagingRecipes, customRecipes);
-                            const stockAvailable = (logisticsInventory[code] || 0) + (plantInventory[code] || 0);
-                            const reqPlan = calculateRequirementFromSource(code, productionPlan, customPackagingRecipes, customRecipes);
-                            
-                            // Necesidad de Compra = (Req Plan - Stock Disponible) * 1.10
-                            // Solo si el Req Plan supera al stock disponible
-                            const deficit = Math.max(0, reqPlan - stockAvailable);
-                            const buyNeed = deficit > 0 ? deficit * 1.10 : 0;
-
-                            if (reqSales === 0 && reqPlan === 0 && stockAvailable === 0) return null;
-
-                            return (
+                         <TableBody>
+                           {ALL_MATERIALS_LIST.map((mat) => {
+                             const code = mat.code;
+                             if (!code) return null;
+                             const reqSales = materialRequirements.mdsReqSales[code] || 0;
+                             const stockAvailable = materialRequirements.mdsStock[code] || 0;
+                             const reqPlan = materialRequirements.mdsReqPlan[code] || 0;
+                             
+                             const deficit = Math.max(0, reqPlan - stockAvailable);
+                             const buyNeed = deficit > 0 ? deficit * 1.10 : 0;
+ 
+                             if (reqSales === 0 && reqPlan === 0 && stockAvailable === 0) return null;
+ 
+                             return (
                               <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
                                 <TableCell className="pl-8">
                                   <div className="flex flex-col">
@@ -1087,15 +1103,15 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                           </div>
                           <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-tight">Estado de Suministros</span>
                        </div>
-                       <p className="text-[13px] font-bold text-slate-700 uppercase">
-                          El sistema ha detectado {ALL_MATERIALS_LIST.filter(m => {
-                             const code = m.code;
-                             if (!code) return false;
-                             const req = calculateRequirementFromSource(code, productionPlan, customPackagingRecipes, customRecipes);
-                             const stock = (logisticsInventory[code] || 0) + (plantInventory[code] || 0);
-                             return req - stock > 0;
-                           }).length} materiales con necesidad de compra inmediata para cumplir el plan.
-                        </p>
+                        <p className="text-[13px] font-bold text-slate-700 uppercase">
+                           El sistema ha detectado {ALL_MATERIALS_LIST.filter(m => {
+                              const code = m.code;
+                              if (!code) return false;
+                              const req = materialRequirements.mdsReqPlan[code] || 0;
+                              const stock = materialRequirements.mdsStock[code] || 0;
+                              return req - stock > 0;
+                            }).length} materiales con necesidad de compra inmediata para cumplir el plan.
+                         </p>
                      </div>
                   </div>
                 </TabsContent>
@@ -1398,19 +1414,19 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                           </TableRow>
                         </TableHeader>
                         <TableBody>
-                          {ALL_MATERIALS_LIST.map((mat) => {
-                            const code = mat.code;
-                            if (!code) return null;
-                            const reqSales = calculateRequirementFromSource(code, salesProjectionAW, customPackagingRecipes, customRecipes);
-                            const stockAvailable = (logisticsInventoryAW[code] || 0) + (plantInventoryAW[code] || 0);
-                            const reqPlan = calculateRequirementFromSource(code, productionPlanAW, customPackagingRecipes, customRecipes);
-                            
-                            const deficit = Math.max(0, reqPlan - stockAvailable);
-                            const buyNeed = deficit > 0 ? deficit * 1.10 : 0;
-
-                            if (reqSales === 0 && reqPlan === 0 && stockAvailable === 0) return null;
-
-                            return (
+                           {ALL_MATERIALS_LIST.map((mat) => {
+                             const code = mat.code;
+                             if (!code) return null;
+                             const reqSales = materialRequirements.awReqSales[code] || 0;
+                             const stockAvailable = materialRequirements.awStock[code] || 0;
+                             const reqPlan = materialRequirements.awReqPlan[code] || 0;
+                             
+                             const deficit = Math.max(0, reqPlan - stockAvailable);
+                             const buyNeed = deficit > 0 ? deficit * 1.10 : 0;
+ 
+                             if (reqSales === 0 && reqPlan === 0 && stockAvailable === 0) return null;
+ 
+                             return (
                               <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
                                 <TableCell className="pl-8">
                                   <div className="flex flex-col">
@@ -1457,15 +1473,15 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                           </div>
                           <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-tight">Estado de Suministros</span>
                        </div>
-                       <p className="text-[13px] font-bold text-slate-700 uppercase">
-                          El sistema ha detectado {ALL_MATERIALS_LIST.filter(m => {
-                             const code = m.code;
-                             if (!code) return false;
-                             const req = calculateRequirementFromSource(code, productionPlanAW, customPackagingRecipes, customRecipes);
-                             const stock = (logisticsInventoryAW[code] || 0) + (plantInventoryAW[code] || 0);
-                             return req - stock > 0;
-                           }).length} materiales con necesidad de compra inmediata para cumplir el plan.
-                        </p>
+                        <p className="text-[13px] font-bold text-slate-700 uppercase">
+                           El sistema ha detectado {ALL_MATERIALS_LIST.filter(m => {
+                              const code = m.code;
+                              if (!code) return false;
+                              const req = materialRequirements.awReqPlan[code] || 0;
+                              const stock = materialRequirements.awStock[code] || 0;
+                              return req - stock > 0;
+                            }).length} materiales con necesidad de compra inmediata para cumplir el plan.
+                         </p>
                      </div>
                   </div>
                 </TabsContent>
@@ -1616,28 +1632,26 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                         <TableHead className="text-right pr-8 text-[10px] font-black text-destructive uppercase w-[160px] bg-red-50/40">Necesidad Compra Global</TableHead>
                       </TableRow>
                     </TableHeader>
-                    <TableBody>
-                      {ALL_MATERIALS_LIST.map((mat) => {
-                        const code = mat.code;
-                        if (!code) return null;
-                        const reqSales = calculateGlobalRequirement(code);
-                        const stockAvailable = (globalLogisticsInventory[code] || 0) + (globalPlantInventory[code] || 0);
-                        const reqPlan = calculateGlobalRequirementFromPlan(code);
-
-                        const reqPlanMDS = calculateRequirementFromSource(code, productionPlan, customPackagingRecipes, customRecipes);
-                        const reqPlanAW = calculateRequirementFromSource(code, productionPlanAW, customPackagingRecipes, customRecipes);
-                        const stockMDS = (logisticsInventory[code] || 0) + (plantInventory[code] || 0);
-                        const stockAW = (logisticsInventoryAW[code] || 0) + (plantInventoryAW[code] || 0);
-
-                        const deficitMDS = Math.max(0, reqPlanMDS - stockMDS);
-                        const deficitAW = Math.max(0, reqPlanAW - stockAW);
-                        const buyNeedMDS = deficitMDS > 0 ? deficitMDS * 1.10 : 0;
-                        const buyNeedAW = deficitAW > 0 ? deficitAW * 1.10 : 0;
-                        const buyNeed = buyNeedMDS + buyNeedAW;
-
-                        if (reqSales === 0 && reqPlan === 0 && stockAvailable === 0 && buyNeedMDS === 0 && buyNeedAW === 0) return null;
-
-                        return (
+                     <TableBody>
+                       {ALL_MATERIALS_LIST.map((mat) => {
+                         const code = mat.code;
+                         if (!code) return null;
+                         const reqSales = materialRequirements.globalReqSales[code] || 0;
+                         const stockAvailable = materialRequirements.globalStock[code] || 0;
+                         const reqPlanMDS = materialRequirements.mdsReqPlan[code] || 0;
+                         const reqPlanAW = materialRequirements.awReqPlan[code] || 0;
+                         const stockMDS = materialRequirements.mdsStock[code] || 0;
+                         const stockAW = materialRequirements.awStock[code] || 0;
+ 
+                         const deficitMDS = Math.max(0, reqPlanMDS - stockMDS);
+                         const deficitAW = Math.max(0, reqPlanAW - stockAW);
+                         const buyNeedMDS = deficitMDS > 0 ? deficitMDS * 1.10 : 0;
+                         const buyNeedAW = deficitAW > 0 ? deficitAW * 1.10 : 0;
+                         const buyNeed = buyNeedMDS + buyNeedAW;
+ 
+                         if (reqSales === 0 && reqPlanMDS === 0 && reqPlanAW === 0 && stockAvailable === 0 && buyNeedMDS === 0 && buyNeedAW === 0) return null;
+ 
+                         return (
                           <TableRow key={code} className="hover:bg-slate-50 transition-none h-14 border-b border-slate-100 group">
                             <TableCell className="pl-8">
                               <div className="flex flex-col">
@@ -1699,15 +1713,15 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                       </div>
                       <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest leading-tight">Estado de Suministros</span>
                    </div>
-                   <p className="text-[13px] font-bold text-slate-700 uppercase">
-                      El sistema ha detectado {ALL_MATERIALS_LIST.filter(m => {
-                         const code = m.code;
-                         if (!code) return false;
-                         const req = calculateGlobalRequirementFromPlan(code);
-                         const stock = (globalLogisticsInventory[code] || 0) + (globalPlantInventory[code] || 0);
-                         return req - stock > 0;
-                       }).length} materiales con necesidad de compra inmediata para cumplir el plan.
-                    </p>
+                    <p className="text-[13px] font-bold text-slate-700 uppercase">
+                       El sistema ha detectado {ALL_MATERIALS_LIST.filter(m => {
+                          const code = m.code;
+                          if (!code) return false;
+                          const req = (materialRequirements.mdsReqPlan[code] || 0) + (materialRequirements.awReqPlan[code] || 0);
+                          const stock = (materialRequirements.mdsStock[code] || 0) + (materialRequirements.awStock[code] || 0);
+                          return req - stock > 0;
+                        }).length} materiales con necesidad de compra inmediata para cumplir el plan.
+                     </p>
                  </div>
               </div>
             </TabsContent>

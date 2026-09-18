@@ -361,14 +361,14 @@ export default function OrdenesSapModule({
     document.body.removeChild(textarea);
   };
   const lineas = Array.from({ length: 7 }, (_, i) => i + 1);
-  const allowedSections = userId === 'maria.mds' ? ['carga-prod', 'creador-ordenes', 'seguimiento-ordenes'] as const : ['carga-prod', 'creador-ordenes', 'seguimiento-ordenes', 'dia-a-dia', 'prodt-semanal', 'resumen-mensual'] as const;
+  const allowedSections = userId === 'jaime.r' ? ['seguimiento-ordenes'] as const : userId === 'maria.mds' ? ['carga-prod', 'creador-ordenes', 'seguimiento-ordenes'] as const : ['carga-prod', 'creador-ordenes', 'seguimiento-ordenes', 'dia-a-dia', 'prodt-semanal', 'resumen-mensual'] as const;
   const isSectionAllowed = (section: string) => allowedSections.includes(section as any);
-  const [activeSection, setActiveSection] = useState<'carga-prod' | 'creador-ordenes' | 'seguimiento-ordenes' | 'dia-a-dia' | 'prodt-semanal' | 'resumen-mensual'>('carga-prod');
+  const [activeSection, setActiveSection] = useState<'carga-prod' | 'creador-ordenes' | 'seguimiento-ordenes' | 'dia-a-dia' | 'prodt-semanal' | 'resumen-mensual'>(() => userId === 'jaime.r' ? 'seguimiento-ordenes' : 'carga-prod');
   const [activeSubsection, setActiveSubsection] = useState<'dia' | 'diurno' | 'nocturno' | null>(null);
   // Estado independiente para la sección "Creador de Órdenes" (no afecta a las demás secciones)
   const [creadorSubsection, setCreadorSubsection] = useState<'fijas' | 'ordenes'>('fijas');
   // Estado independiente para la sección "Seguimiento de Órdenes" (no afecta a las demás secciones)
-  const [seguimientoSubsection, setSeguimientoSubsection] = useState<number | 'resumen' | 'resumen-mensual'>(1);
+  const [seguimientoSubsection, setSeguimientoSubsection] = useState<number | 'resumen' | 'resumen-mensual'>(() => userId === 'jaime.r' ? 'resumen' : 1);
   const [seguimientoResumenMensualSubsection, setSeguimientoResumenMensualSubsection] = useState<'resumen-por-sebor' | 'resumen-por-lineas'>('resumen-por-sebor');
 
   useEffect(() => {
@@ -2321,17 +2321,17 @@ const exportarPDFdia = async () => {
           {isSectionAllowed('seguimiento-ordenes') && activeSection === 'seguimiento-ordenes' && (
             <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
               <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
-                <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit flex-wrap gap-1 overflow-x-auto">
-                  {[1, 2, 3, 4, 5, 6, 7].map((n) => (
-                    <button
-                      key={n}
-                      onClick={() => setSeguimientoSubsection(n)}
-                      className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoSubsection === n ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                    >
-                      Línea {n}
-                    </button>
-                  ))}
-                  <button
+                 <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit flex-wrap gap-1 overflow-x-auto">
+                   {userId !== 'jaime.r' && [1, 2, 3, 4, 5, 6, 7].map((n) => (
+                     <button
+                       key={n}
+                       onClick={() => setSeguimientoSubsection(n)}
+                       className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoSubsection === n ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                     >
+                       Línea {n}
+                     </button>
+                   ))}
+                   <button
                     onClick={() => setSeguimientoSubsection('resumen')}
                     className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoSubsection === 'resumen' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
                     >

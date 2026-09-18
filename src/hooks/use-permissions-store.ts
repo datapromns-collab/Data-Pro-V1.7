@@ -160,7 +160,7 @@ export const ALL_MODULES = [
 
 const DEFAULT_PERMISSIONS: UserPermissions = {
   mds: ['planning', 'planta', 'logistica', 'ventas'],
-  'jaime.r': ['planning', 'management', 'jarabes', 'raw-materials', 'planta', 'logistica', 'ventas', 'purchasing', 'seguimiento', 'procesos'],
+  'jaime.r': ['planning', 'management', 'jarabes', 'raw-materials', 'planta', 'logistica', 'ventas', 'purchasing', 'seguimiento', 'procesos', 'ordenes-sap'],
   demon: ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'produccion', 'procesos', 'calidad', 'insumos', 'logistica', 'ventas', 'purchasing', 'ordenes-sap', 'seguimiento'],
   demon2: ['planning', 'ordenes-sap'],
   'maria.mds': ['jarabes', 'raw-materials', 'planta', 'planta-admin', 'planning', 'management', 'ordenes-sap', 'procesos', 'logistica'],

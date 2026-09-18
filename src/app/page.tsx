@@ -337,11 +337,12 @@ export default function PlannerPage() {
     updateRawMaterialDailyFinal,
     updateManualUBB,
     updateInitialUBBTanks,
-    updateFinalUBBTanks,
-    updateInitialUBBTanksDaily,
-    updateFinalUBBTanksDaily,
-    isLoaded: plannerLoaded
-  } = usePlannerStore();
+     updateFinalUBBTanks,
+     updateInitialUBBTanksDaily,
+     updateFinalUBBTanksDaily,
+     isLoaded: plannerLoaded,
+     refreshFromServer
+   } = usePlannerStore();
 
   const {
     user,
@@ -2600,11 +2601,17 @@ export default function PlannerPage() {
     permissions: 'permissions-view',
   };
 
-  useEffect(() => {
+   useEffect(() => {
     if (activeTab === 'paradas-lineas') {
       setParadasSubTab('informes-operacionales');
     }
    }, [activeTab]);
+
+   useEffect(() => {
+    if (activeModule === 'purchasing' && plannerLoaded) {
+      refreshFromServer();
+    }
+   }, [activeModule, plannerLoaded, refreshFromServer]);
 
   useEffect(() => {
     if (authLoaded && user && permissionsLoaded) {

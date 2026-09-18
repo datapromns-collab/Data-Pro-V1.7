@@ -524,6 +524,8 @@ export const getAllMaterialsList = () => [
   ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA
 ];
 
+export const ALL_MATERIALS_LIST = getAllMaterialsList();
+
 export const getTaskAtSlot = (tasks: ScheduledTask[], day: Date, slot: string) => {
   const [h, m] = slot.split(':').map(Number);
   const slotDate = setMinutes(setHours(day, h), m);
