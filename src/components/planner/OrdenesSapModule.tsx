@@ -368,7 +368,14 @@ export default function OrdenesSapModule({
   // Estado independiente para la sección "Creador de Órdenes" (no afecta a las demás secciones)
   const [creadorSubsection, setCreadorSubsection] = useState<'fijas' | 'ordenes'>('fijas');
   // Estado independiente para la sección "Seguimiento de Órdenes" (no afecta a las demás secciones)
-  const [seguimientoSubsection, setSeguimientoSubsection] = useState<number | 'resumen'>(1);
+  const [seguimientoSubsection, setSeguimientoSubsection] = useState<number | 'resumen' | 'resumen-mensual'>(1);
+  const [seguimientoResumenMensualSubsection, setSeguimientoResumenMensualSubsection] = useState<'resumen-por-sebor' | 'resumen-por-lineas'>('resumen-por-sebor');
+
+  useEffect(() => {
+    if (seguimientoSubsection === 'resumen-mensual') {
+      setSeguimientoResumenMensualSubsection('resumen-por-sebor');
+    }
+  }, [seguimientoSubsection]);
 
   useEffect(() => {
     setActiveSubsection(null);
@@ -2330,6 +2337,12 @@ const exportarPDFdia = async () => {
                     >
                       Resumen Semana
                     </button>
+                    <button
+                    onClick={() => setSeguimientoSubsection('resumen-mensual')}
+                    className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoSubsection === 'resumen-mensual' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                    >
+                      Resumen mensual
+                    </button>
                   </div>
 
                 <Popover>
@@ -2357,6 +2370,28 @@ const exportarPDFdia = async () => {
               <div className="flex flex-col gap-4">
                 {seguimientoSubsection === 'resumen' ? (
                   <SeguimientoResumenSemanaTable filasAuto={filasAutoSeguimiento} autoOverrides={autoOverridesFlat} semanaNumero={selectedFechaSeguimiento ? getISOWeek(selectedFechaSeguimiento) : undefined} />
+                ) : seguimientoSubsection === 'resumen-mensual' ? (
+                  <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                    <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-fit mb-4">
+                      <button
+                        onClick={() => setSeguimientoResumenMensualSubsection('resumen-por-sebor')}
+                        className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoResumenMensualSubsection === 'resumen-por-sebor' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                      >
+                        resumen por sebor
+                      </button>
+                      <button
+                        onClick={() => setSeguimientoResumenMensualSubsection('resumen-por-lineas')}
+                        className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoResumenMensualSubsection === 'resumen-por-lineas' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                      >
+                        resumen por lineas
+                      </button>
+                    </div>
+                    <div className="p-4">
+                      <div className="h-48 flex items-center justify-center text-slate-400">
+                        <p className="text-[10px] font-bold uppercase tracking-widest">En desarrollo</p>
+                      </div>
+                    </div>
+                  </div>
                 ) : (
                   (() => {
                     const lineaNum = seguimientoSubsection as number;

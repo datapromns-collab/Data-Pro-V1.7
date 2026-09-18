@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-14T00:00:00.000",
+      "weekStartDate": "2026-08-03T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -6940,7 +6940,10 @@
           "EMP_0022": 0,
           "EMP_0026": 0,
           "EMP_0038": 4749.15,
-          "EMP_0042": 5407
+          "EMP_0042": 5407.92,
+          "EMP_0101": 1287.24,
+          "EMP_0136": 3710.46,
+          "EMP_0137": 1930.86
         },
         "salesProjectionAW": {},
         "finishedProductInventoryAW": {},
@@ -10653,7 +10656,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-18T14:55:11.106Z"
+    "updatedAt": "2026-09-18T15:01:18.418Z"
   },
   "ordenesSap": [
     {

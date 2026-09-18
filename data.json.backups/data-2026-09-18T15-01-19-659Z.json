@@ -6940,7 +6940,10 @@
           "EMP_0022": 0,
           "EMP_0026": 0,
           "EMP_0038": 4749.15,
-          "EMP_0042": 5407
+          "EMP_0042": 5407.92,
+          "EMP_0101": 0,
+          "EMP_0136": 3710.46,
+          "EMP_0137": 1930.86
         },
         "salesProjectionAW": {},
         "finishedProductInventoryAW": {},
@@ -10653,7 +10656,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-18T14:55:06.941Z"
+    "updatedAt": "2026-09-18T15:01:19.318Z"
   },
   "ordenesSap": [
     {
