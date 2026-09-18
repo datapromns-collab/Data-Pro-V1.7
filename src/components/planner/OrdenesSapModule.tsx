@@ -370,6 +370,7 @@ export default function OrdenesSapModule({
   // Estado independiente para la sección "Seguimiento de Órdenes" (no afecta a las demás secciones)
   const [seguimientoSubsection, setSeguimientoSubsection] = useState<number | 'resumen' | 'resumen-mensual'>(() => userId === 'jaime.r' ? 'resumen' : 1);
   const [seguimientoResumenMensualSubsection, setSeguimientoResumenMensualSubsection] = useState<'resumen-por-sabor' | 'resumen-por-lineas'>('resumen-por-sabor');
+  const [jarabeRealPorSabor, setJarabeRealPorSabor] = useState<Record<string, number>>({});
 
   useEffect(() => {
     if (seguimientoSubsection === 'resumen-mensual') {
@@ -380,6 +381,14 @@ export default function OrdenesSapModule({
   useEffect(() => {
     setActiveSubsection(null);
   }, [activeSection]);
+
+  useEffect(() => {
+    if (selectedFecha) {
+      setResumenMensualMes(selectedFecha.getMonth() + 1);
+      setResumenMensualAnio(selectedFecha.getFullYear());
+    }
+  }, [selectedFecha]);
+
   const [internalActiveLinea, setInternalActiveLinea] = useState<number | null>(1);
 
   const activeLinea = externalActiveLinea ?? internalActiveLinea;
@@ -404,6 +413,8 @@ export default function OrdenesSapModule({
   const [fechaProdtSemanalInicializada, setFechaProdtSemanalInicializada] = useState(false);
   const [selectedFechaSeguimiento, setSelectedFechaSeguimiento] = useState<Date | undefined>(undefined);
   const [fechaSeguimientoInicializada, setFechaSeguimientoInicializada] = useState(false);
+  const [resumenMensualMes, setResumenMensualMes] = useState<number>(() => selectedFecha ? selectedFecha.getMonth() + 1 : new Date().getMonth() + 1);
+  const [resumenMensualAnio, setResumenMensualAnio] = useState<number>(() => selectedFecha ? selectedFecha.getFullYear() : new Date().getFullYear());
   const [ordenComponentes, setOrdenComponentes] = useState<Record<string, { codigo: string; descripcion: string }>>({
     'Jarabe T': { codigo: '', descripcion: '' },
     'Bebida': { codigo: '', descripcion: '' },
@@ -989,6 +1000,34 @@ export default function OrdenesSapModule({
     });
     return tabla;
   }, [selectedFecha, ordenes]);
+
+  const resumenMensualPorSabor = useMemo(() => {
+    const mes = selectedFecha ? selectedFecha.getMonth() : null;
+    const anio = selectedFecha ? selectedFecha.getFullYear() : null;
+    const requerido: Record<string, number> = {};
+    PRODUCT_LIST.forEach(sabor => {
+      let total = 0;
+      if (mes !== null && anio !== null) {
+        ordenes.forEach(orden => {
+          if (orden.sabor !== sabor) return;
+          orden.dias.forEach(dia => {
+            const d = new Date(dia.fechaInicio + 'T12:00:00');
+            if (isNaN(d.getTime())) return;
+            if (d.getMonth() !== mes || d.getFullYear() !== anio) return;
+            total += (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
+          });
+        });
+      }
+      requerido[sabor] = total;
+    });
+    return PRODUCT_LIST.map(sabor => {
+      const req = requerido[sabor] || 0;
+      const real = jarabeRealPorSabor[sabor] || 0;
+      const diff = real - req;
+      const pct = req > 0 ? (diff / req) * 100 : 0;
+      return { sabor, requerido: req, real, diff, pct };
+    });
+  }, [selectedFecha, ordenes, jarabeRealPorSabor]);
 
   const tablaDiaADIAAuto = useMemo(() => {
     const tabla: Record<string, Record<number, number>> = {};
@@ -2070,17 +2109,71 @@ const exportarPDFdia = async () => {
                 </PopoverContent>
               </Popover>
             </div>
-           ) : (
-            <div className="flex items-center justify-between gap-3 w-full">
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
-                {activeSection === 'resumen-mensual'
-                  ? selectedFecha
-                    ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase()
-                    : 'Seleccione mes'
-                  : ''}
-               </span>
+            ) : (
+             <div className="flex items-center justify-between gap-3 w-full">
+               {activeSection === 'resumen-mensual' ? (
+                 <Popover>
+                   <PopoverTrigger asChild>
+                     <Button
+                       variant="outline"
+                       className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                     >
+                       <CalendarIcon className="h-3.5 w-3.5 mr-2" />
+                       {selectedFecha ? format(selectedFecha, 'MMMM yyyy', { locale: es }).toUpperCase() : 'SELECCIONE MES'}
+                     </Button>
+                   </PopoverTrigger>
+                   <PopoverContent className="w-auto p-3 rounded-2xl" align="start">
+                     <div className="flex items-center gap-2">
+                       <Select
+                         value={String(resumenMensualMes)}
+                         onValueChange={(value) => {
+                           const mes = Number(value);
+                           setResumenMensualMes(mes);
+                           const anio = resumenMensualAnio;
+                           const nuevaFecha = new Date(anio, mes - 1, 1);
+                           onFechaChange?.(nuevaFecha);
+                         }}
+                       >
+                         <SelectTrigger className="h-9 w-[140px] rounded-md border-slate-200 bg-white font-bold text-[10px] text-center uppercase tracking-widest">
+                           <SelectValue />
+                         </SelectTrigger>
+                         <SelectContent>
+                           {['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'].map((nombre, idx) => (
+                             <SelectItem key={nombre} value={String(idx + 1)} className="font-bold text-[10px] uppercase tracking-widest">
+                               {nombre}
+                             </SelectItem>
+                           ))}
+                         </SelectContent>
+                       </Select>
+                       <Select
+                         value={String(resumenMensualAnio)}
+                         onValueChange={(value) => {
+                           const anio = Number(value);
+                           setResumenMensualAnio(anio);
+                           const mes = resumenMensualMes;
+                           const nuevaFecha = new Date(anio, mes - 1, 1);
+                           onFechaChange?.(nuevaFecha);
+                         }}
+                       >
+                         <SelectTrigger className="h-9 w-[100px] rounded-md border-slate-200 bg-white font-bold text-[10px] text-center uppercase tracking-widest">
+                           <SelectValue />
+                         </SelectTrigger>
+                         <SelectContent>
+                           {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i).map((anio) => (
+                             <SelectItem key={anio} value={String(anio)} className="font-bold text-[10px] text-center uppercase tracking-widest">
+                               {anio}
+                             </SelectItem>
+                           ))}
+                         </SelectContent>
+                       </Select>
+                     </div>
+                   </PopoverContent>
+                 </Popover>
+               ) : (
+                 <span className="text-[10px] font-black uppercase tracking-widest text-slate-500"></span>
+               )}
              </div>
-           )}
+            )}
          </div>
         )}
 
@@ -2387,9 +2480,50 @@ const exportarPDFdia = async () => {
                       </button>
                     </div>
                     <div className="p-4">
-                      <div className="h-48 flex items-center justify-center text-slate-400">
-                        <p className="text-[10px] font-bold uppercase tracking-widest">En desarrollo</p>
-                      </div>
+                      {seguimientoResumenMensualSubsection === 'resumen-por-sabor' ? (
+                        <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                          <table className="w-full border-collapse text-center">
+                            <thead>
+                              <tr className="bg-slate-100">
+                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Sabor</th>
+                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Jarabe requerido de cajas completadas</th>
+                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Jarabe Real</th>
+                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Diferencia</th>
+                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Porcentaje</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {resumenMensualPorSabor.map((item) => (
+                                <tr key={item.sabor} className="even:bg-slate-50/60">
+                                  <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">{item.sabor}</td>
+                                  <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.requerido}</td>
+                                  <td className="px-2 py-1 border-r border-b border-slate-100">
+                                    <input
+                                      type="number"
+                                      min="0"
+                                      value={item.real}
+                                      onChange={(e) => {
+                                        const valor = Math.max(0, parseInt(e.target.value) || 0);
+                                        setJarabeRealPorSabor(prev => ({
+                                          ...prev,
+                                          [item.sabor]: valor
+                                        }));
+                                      }}
+                                      className="h-7 w-24 rounded-md border border-slate-100 bg-white text-center text-[10px] font-bold text-slate-700 hover:border-slate-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-none"
+                                    />
+                                  </td>
+                                  <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.diff}</td>
+                                  <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-b border-slate-100">{item.pct.toFixed(1)}%</td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      ) : (
+                        <div className="h-48 flex items-center justify-center text-slate-400">
+                          <p className="text-[10px] font-bold uppercase tracking-widest">En desarrollo</p>
+                        </div>
+                      )}
                     </div>
                   </div>
                 ) : (
