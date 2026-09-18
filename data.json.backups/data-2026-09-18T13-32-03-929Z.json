@@ -10642,7 +10642,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-18T12:15:11.694Z"
+    "updatedAt": "2026-09-18T13:21:33.378Z"
   },
   "ordenesSap": [
     {
@@ -19211,6 +19211,17 @@
           "cajas3": 2262,
           "ticket4": "",
           "cajas4": 11388
+        },
+        {
+          "fechaInicio": "2026-09-18",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -19231,6 +19242,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 9280
+        },
+        {
+          "fechaInicio": "2026-09-18",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -19250,7 +19272,98 @@
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 200
+          "cajas4": 20080
+        },
+        {
+          "fechaInicio": "2026-09-18",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1789737066030",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63703",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-18",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1789737080837",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63709",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-18",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1789737092813",
+      "linea": 5,
+      "sabor": "JUSTY PERA",
+      "ordenNumero": "63714",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-18",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1789737114281",
+      "linea": 6,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "63720",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-18",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }
@@ -30576,6 +30689,32 @@
             "preparado": "140",
             "final": "20"
           }
+        },
+        "2026-09-17": {
+          "GLUP COLA": {
+            "inicial": "68.31",
+            "preparado": "48",
+            "final": "52.16"
+          },
+          "GLUP UVA": {
+            "inicial": "6.76",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "22.55",
+            "preparado": "72",
+            "final": "46.62"
+          },
+          "JUSTY PERA": {
+            "inicial": "20",
+            "preparado": "220",
+            "final": "22"
+          },
+          "GLUP FRESH": {
+            "preparado": "18",
+            "final": "11.32"
+          }
         }
       },
       "sugar": {
@@ -31351,6 +31490,23 @@
             "recepcionSacos": "",
             "invFinalSacos": "840"
           }
+        },
+        "2026-09-17": {
+          "PORTUGUESA": {
+            "invInicialSacos": "5120",
+            "recepcionSacos": "1440",
+            "invFinalSacos": "4040"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "3520",
+            "recepcionSacos": "",
+            "invFinalSacos": "2960"
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "840",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
         }
       },
       "tanques": {
@@ -32093,6 +32249,16 @@
             "invInicialSacos": "228",
             "invFinalSacos": "466"
           }
+        },
+        "2026-09-17": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "259",
+            "invFinalSacos": "184"
+          },
+          "Sala 1": {
+            "invInicialSacos": "466",
+            "invFinalSacos": "444"
+          }
         }
       },
       "realKgPerSack": {
@@ -32147,7 +32313,8 @@
         "2026-09-13": "50.50",
         "2026-09-14": "50.47",
         "2026-09-15": "50.37",
-        "2026-09-16": "50.24"
+        "2026-09-16": "50.24",
+        "2026-09-17": "50.35"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
@@ -32181,7 +32348,7 @@
         "2026-09-01|2026-09": 891165.86,
         "2026-08-01|2026-08": 121494.94,
         "2026-09-07|2026-09": 1141476.37,
-        "2026-09-14|2026-09": 573705.48
+        "2026-09-14|2026-09": 772113.62
       }
     },
     "seguimiento-etiquetadora": {
@@ -133615,6 +133782,11 @@
           "jarabeReal": 83747,
           "ubb": 29.13,
           "producto": "924"
+        },
+        "auto-1-1789563254767": {
+          "cajasPlanificadas": 36000,
+          "jarabeReal": 35526,
+          "ubb": 36
         }
       },
       "linea-2": {
@@ -133787,6 +133959,11 @@
           "ubb": 41.31,
           "pnc": 80,
           "producto": "143"
+        },
+        "auto-2-1789558346715": {
+          "cajasPlanificadas": 87500,
+          "jarabeReal": 68407,
+          "ubb": 44
         }
       },
       "linea-3": {
@@ -133941,6 +134118,11 @@
           "jarabeReal": 117315,
           "ubb": 40.78,
           "producto": "863"
+        },
+        "auto-3-1789561711552": {
+          "cajasPlanificadas": 128800,
+          "jarabeReal": 126393,
+          "ubb": 43.91
         }
       },
       "linea-4": {
@@ -134059,6 +134241,11 @@
           "jarabeReal": 116677,
           "ubb": 40.61,
           "producto": "181"
+        },
+        "auto-4-1789561720417": {
+          "cajasPlanificadas": 131600,
+          "jarabeReal": 151906,
+          "ubb": 52.86
         }
       },
       "linea-5": {
@@ -134158,6 +134345,11 @@
           "jarabeReal": 400000,
           "ubb": 400,
           "producto": "740"
+        },
+        "auto-5-1789645871863": {
+          "cajasPlanificadas": 41745,
+          "jarabeReal": 338000,
+          "ubb": 338
         }
       },
       "linea-6": {
@@ -134272,6 +134464,11 @@
           "jarabeReal": 34532,
           "ubb": 12,
           "producto": "615"
+        },
+        "auto-6-1789646217325": {
+          "cajasPlanificadas": 57600,
+          "jarabeReal": 29118,
+          "ubb": 10.13
         }
       },
       "linea-7": {
@@ -140432,8 +140629,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  08.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 13306,
-    "uploadedAt": "2026-09-17T14:21:47.471Z",
+    "tamano": 13360,
+    "uploadedAt": "2026-09-18T12:57:41.982Z",
     "uploadedBy": "local-user"
   }
 }
