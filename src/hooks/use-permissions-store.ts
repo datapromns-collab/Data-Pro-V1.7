@@ -183,7 +183,7 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   'enf.mds': ['planning', 'seguimiento', 'management', 'planta'],
   'etq.mds': ['planning', 'seguimiento', 'management'],
   'logg.mds': ['planning', 'management'],
-  'finan.mds': ['planning', 'management'],
+  'finan.mds': ['planning', 'management', 'purchasing'],
   'mtto.mds': ['planning'],
   'cal.mds': ['planning', 'management'],
 };
