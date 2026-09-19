@@ -2,6 +2,17 @@
 
 import { Factory, Plus, CalendarIcon, FileDown, FileSpreadsheet, Image } from 'lucide-react';
 import { useState, useMemo, useEffect } from 'react';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  Line,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -17,7 +28,8 @@ import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
-import { useSeguimientoResumenOptimizado } from '@/hooks/use-seguimiento-ordenes';
+import { useSeguimientoResumenOptimizado, type SeguimientoOrdenLineaConLinea } from '@/hooks/use-seguimiento-ordenes';
+import { combinarFilasResumenMensual } from '@/lib/seguimiento-utils';
 import {
   SeguimientoLineaTable,
   SeguimientoLinea1Table,
@@ -908,7 +920,7 @@ export default function OrdenesSapModule({
   const [tablaProdtSemanalEdits, setTablaProdtSemanalEdits] = useState<Record<string, Record<number, number>>>({});
   const [tablaResumenMensualEdits, setTablaResumenMensualEdits] = useState<Record<string, Record<number, number>>>({});
   const { ordenes, setOrdenes, eliminarOrden, eliminarDia } = useOrdenesSap();
-  const { getAutoOverrides } = useSeguimientoResumenOptimizado();
+  const { getAutoOverrides, data: dataManual } = useSeguimientoResumenOptimizado();
 
   const autoOverridesFlat = useMemo(() => {
     const out: Record<string, { cajasPlanificadas?: number; producto?: string; jarabeReal?: number; ubb?: number; pnc?: number }> = {};
@@ -923,6 +935,10 @@ export default function OrdenesSapModule({
           pnc: (ov as any).pnc,
         };
       });
+    }
+    if (typeof window !== 'undefined') {
+      const sample = Object.entries(out).slice(0, 3).map(([id, ov]) => ({ id, jarabeReal: ov.jarabeReal }));
+      console.log('[DEBUG] autoOverridesFlat sample', sample);
     }
     return out;
   }, [getAutoOverrides]);
@@ -1006,57 +1022,62 @@ export default function OrdenesSapModule({
   const resumenMensualPorSabor = useMemo(() => {
     const mes = selectedFecha ? selectedFecha.getMonth() : null;
     const anio = selectedFecha ? selectedFecha.getFullYear() : null;
+    const filas = combinarFilasResumenMensual(mes, anio, ordenes, autoOverridesFlat, dataManual || []);
     const requerido: Record<string, number> = {};
-    PRODUCT_LIST.forEach(sabor => {
-      let total = 0;
-      if (mes !== null && anio !== null) {
-        ordenes.forEach(orden => {
-          if (orden.sabor !== sabor) return;
-          orden.dias.forEach(dia => {
-            const d = new Date(dia.fechaInicio + 'T12:00:00');
-            if (isNaN(d.getTime())) return;
-            if (d.getMonth() !== mes || d.getFullYear() !== anio) return;
-            total += (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
-          });
-        });
+    const real: Record<string, number> = {};
+    filas.forEach(f => {
+      if (f.jarabeReal > 0) {
+        requerido[f.sabor] = (requerido[f.sabor] || 0) + f.jarabeRequerido;
       }
-      requerido[sabor] = total;
+      real[f.sabor] = (real[f.sabor] || 0) + f.jarabeReal;
     });
     return PRODUCT_LIST.map(sabor => {
       const req = requerido[sabor] || 0;
-      const real = jarabeRealPorSabor[sabor] || 0;
-      const diff = real - req;
+      const realVal = real[sabor] || 0;
+      const diff = realVal - req;
       const pct = req > 0 ? (diff / req) * 100 : 0;
-      return { sabor, requerido: req, real, diff, pct };
+      return { sabor, requerido: req, real: realVal, diff, pct };
     });
-  }, [selectedFecha, ordenes, jarabeRealPorSabor]);
+  }, [selectedFecha, ordenes, autoOverridesFlat, dataManual]);
 
   const resumenMensualSeguimiento = useMemo(() => {
     const mes = seguimientoResumenMes;
     const anio = seguimientoResumenAnio;
-    if (!mes || !anio) return [];
+    if (!mes || !anio) return { items: [], total: { sabor: 'TOTAL', requerido: 0, real: 0, diff: 0, pct: 0 } };
+    const filas = combinarFilasResumenMensual(mes, anio, ordenes, autoOverridesFlat, dataManual || []);
     const requerido: Record<string, number> = {};
-    PRODUCT_LIST.forEach(sabor => {
-      let total = 0;
-      ordenes.forEach(orden => {
-        if (orden.sabor !== sabor) return;
-        orden.dias.forEach(dia => {
-          const d = new Date(dia.fechaInicio + 'T12:00:00');
-          if (isNaN(d.getTime())) return;
-          if (d.getMonth() + 1 !== mes || d.getFullYear() !== anio) return;
-          total += (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
-        });
-      });
-      requerido[sabor] = total;
+    const real: Record<string, number> = {};
+    filas.forEach(f => {
+      if (f.jarabeReal > 0) {
+        requerido[f.sabor] = (requerido[f.sabor] || 0) + f.jarabeRequerido;
+      }
+      real[f.sabor] = (real[f.sabor] || 0) + f.jarabeReal;
     });
-    return PRODUCT_LIST.map(sabor => {
+    const items = PRODUCT_LIST.map(sabor => {
       const req = requerido[sabor] || 0;
-      const real = jarabeRealPorSabor[sabor] || 0;
-      const diff = real - req;
+      const realVal = real[sabor] || 0;
+      const diff = realVal - req;
       const pct = req > 0 ? (diff / req) * 100 : 0;
-      return { sabor, requerido: req, real, diff, pct };
+      return { sabor, requerido: req, real: realVal, diff, pct };
+    }).filter(item => item.requerido > 0 || item.real > 0);
+    const total = items.reduce((acc, item) => {
+      acc.requerido += item.requerido;
+      acc.real += item.real;
+      acc.diff += item.diff;
+      return acc;
+    }, { sabor: 'TOTAL', requerido: 0, real: 0, diff: 0, pct: 0 });
+    total.pct = total.requerido > 0 ? (total.diff / total.requerido) * 100 : 0;
+    return { items, total };
+  }, [seguimientoResumenMes, seguimientoResumenAnio, ordenes, autoOverridesFlat, dataManual]);
+
+  const resumenMensualSeguimientoPareto = useMemo(() => {
+    const sorted = resumenMensualSeguimiento.items.slice().sort((a, b) => b.pct - a.pct);
+    let cumulative = 0;
+    return sorted.map(item => {
+      cumulative += item.pct;
+      return { ...item, cumulative };
     });
-  }, [seguimientoResumenMes, seguimientoResumenAnio, ordenes, jarabeRealPorSabor]);
+  }, [resumenMensualSeguimiento.items]);
 
   const tablaDiaADIAAuto = useMemo(() => {
     const tabla: Record<string, Record<number, number>> = {};
@@ -2322,10 +2343,26 @@ const exportarPDFdia = async () => {
                           </tr>
                         </tbody>
                       </table>
+                      </div>
+                      <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+                        <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Gráfica Pareto</h3>
+                        <div className="h-72">
+                          <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={resumenMensualSeguimiento.items.slice().sort((a, b) => b.real - a.real)} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                              <CartesianGrid strokeDasharray="3 3" />
+                              <XAxis dataKey="sabor" tick={{ fontSize: 10 }} interval={0} angle={-35} textAnchor="end" height={80} />
+                              <YAxis tick={{ fontSize: 10 }} />
+                              <Tooltip formatter={(value: number) => value.toFixed(2).replace('.', ',')} labelStyle={{ fontSize: 10 }} />
+                              <Legend />
+                              <Bar dataKey="real" name="Jarabe Real" fill="#0ea5e9" />
+                              <Line type="monotone" dataKey="real" name="Acumulado" stroke="#ef4444" />
+                            </BarChart>
+                          </ResponsiveContainer>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : (
+                ) : (
                 <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
                   <div className="flex items-center gap-2 px-6 py-4 border-b border-slate-100">
                     <div className="w-2 h-2 rounded-full bg-sky-500" />
@@ -2555,46 +2592,57 @@ const exportarPDFdia = async () => {
                  ) : seguimientoSubsection === 'resumen-mensual' ? (
                    <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
                      <div className="p-4">
-                      {seguimientoResumenMensualSubsection === 'resumen-por-sabor' ? (
-                        <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                          <table className="w-full border-collapse text-center">
-                            <thead>
-                              <tr className="bg-slate-100">
-                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Sabor</th>
-                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Jarabe requerido de cajas completadas</th>
-                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Jarabe Real</th>
-                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Diferencia</th>
-                                <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Porcentaje</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                               {resumenMensualSeguimiento.map((item) => (
-                                <tr key={item.sabor} className="even:bg-slate-50/60">
-                                  <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">{item.sabor}</td>
-                                  <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.requerido}</td>
-                                  <td className="px-2 py-1 border-r border-b border-slate-100">
-                                    <input
-                                      type="number"
-                                      min="0"
-                                      value={item.real}
-                                      onChange={(e) => {
-                                        const valor = Math.max(0, parseInt(e.target.value) || 0);
-                                        setJarabeRealPorSabor(prev => ({
-                                          ...prev,
-                                          [item.sabor]: valor
-                                        }));
-                                      }}
-                                      className="h-7 w-24 rounded-md border border-slate-100 bg-white text-center text-[10px] font-bold text-slate-700 hover:border-slate-300 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-none"
-                                    />
-                                  </td>
-                                  <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.diff}</td>
-                                  <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-b border-slate-100">{item.pct.toFixed(1)}%</td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      ) : (
+                       {seguimientoResumenMensualSubsection === 'resumen-por-sabor' ? (
+                         <>
+                           <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                             <table className="w-full border-collapse text-center">
+                               <thead>
+                                 <tr className="bg-slate-100">
+                                   <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Sabor</th>
+                                   <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Jarabe requerido de cajas completadas</th>
+                                   <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Jarabe Real</th>
+                                   <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Diferencia</th>
+                                   <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Porcentaje</th>
+                                 </tr>
+                               </thead>
+                               <tbody>
+                                   {resumenMensualSeguimiento.items.map((item) => (
+                                    <tr key={item.sabor} className="even:bg-slate-50/60">
+                                      <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">{item.sabor}</td>
+                                       <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.requerido.toFixed(2).replace('.', ',')}</td>
+                                       <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.real.toFixed(2).replace('.', ',')}</td>
+                                       <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.diff.toFixed(2).replace('.', ',')}</td>
+                                       <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-b border-slate-100">{item.pct.toFixed(2).replace('.', ',')}%</td>
+                                    </tr>
+                                  ))}
+                                  <tr className="bg-slate-100 font-bold">
+                                    <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">{resumenMensualSeguimiento.total.sabor}</td>
+                                    <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100">{resumenMensualSeguimiento.total.requerido.toFixed(2).replace('.', ',')}</td>
+                                    <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100">{resumenMensualSeguimiento.total.real.toFixed(2).replace('.', ',')}</td>
+                                    <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100">{resumenMensualSeguimiento.total.diff.toFixed(2).replace('.', ',')}</td>
+                                    <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-b border-slate-100">{resumenMensualSeguimiento.total.pct.toFixed(2).replace('.', ',')}%</td>
+                                  </tr>
+                               </tbody>
+                             </table>
+                           </div>
+                            <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+                              <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Tendencia de pérdida por sabor</h3>
+                             <div className="h-72">
+                               <ResponsiveContainer width="100%" height="100%">
+                                 <BarChart data={resumenMensualSeguimientoPareto} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                                   <CartesianGrid strokeDasharray="3 3" />
+                                   <XAxis dataKey="sabor" tick={{ fontSize: 10 }} interval={0} angle={-35} textAnchor="end" height={80} />
+                                   <YAxis tick={{ fontSize: 10 }} />
+                                   <Tooltip formatter={(value: number) => value.toFixed(2).replace('.', ',') + '%'} labelStyle={{ fontSize: 10 }} />
+                                   <Legend />
+                                   <Bar dataKey="pct" name="Porcentaje" fill="#0ea5e9" />
+                                   <Line type="monotone" dataKey="cumulative" name="Acumulado" stroke="#ef4444" />
+                                 </BarChart>
+                               </ResponsiveContainer>
+                             </div>
+                           </div>
+                         </>
+                       ) : (
                         <div className="h-48 flex items-center justify-center text-slate-400">
                           <p className="text-[10px] font-bold uppercase tracking-widest">En desarrollo</p>
                         </div>
