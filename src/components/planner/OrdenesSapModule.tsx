@@ -1117,6 +1117,22 @@ export default function OrdenesSapModule({
     return { items, total };
   }, [seguimientoResumenMes, seguimientoResumenAnio, ordenes, autoOverridesFlat, dataManual]);
 
+  const pctParetoDataLineas = useMemo(() => {
+    const sorted = resumenMensualSeguimientoPorLineas.items
+      .slice()
+      .sort((a, b) => Math.abs(b.pct) - Math.abs(a.pct));
+    const totalAbs = sorted.reduce((sum, item) => sum + Math.abs(item.pct), 0);
+    let cumulative = 0;
+    return sorted.map(item => {
+      cumulative += Math.abs(item.pct);
+      return {
+        linea: `L${item.linea}`,
+        pct: item.pct,
+        cumPct: totalAbs > 0 ? (cumulative / totalAbs) * 100 : 0,
+      };
+    });
+  }, [resumenMensualSeguimientoPorLineas.items]);
+
   const rendimientoAzucarPorLinea = useMemo(() => {
     const mes = seguimientoResumenMes;
     const anio = seguimientoResumenAnio;
@@ -2416,7 +2432,7 @@ const exportarPDFdia = async () => {
                       </table>
                       </div>
                       <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
-                        <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Gráfica Pareto</h3>
+                        <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Tendencia de pérdida por sabor</h3>
                         <div className="h-72">
                           <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={resumenMensualSeguimiento.items.slice().sort((a, b) => b.real - a.real)} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
@@ -2703,7 +2719,7 @@ const exportarPDFdia = async () => {
                               </table>
                              </div>
                             <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
-                              <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Gráfica Pareto</h3>
+                              <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Tendencia de pérdida por sabor</h3>
                               {pctParetoData.length > 0 ? (
                                 <div style={{ height: 320 }}>
                                   <ResponsiveContainer width="100%" height="100%">
@@ -2723,39 +2739,61 @@ const exportarPDFdia = async () => {
                               )}
                             </div>
                            </>
-                         ) : seguimientoResumenMensualSubsection === 'resumen-por-lineas' ? (
-                            <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
-                              <table className="w-full border-collapse text-center">
-                                <thead>
-                                  <tr className="bg-slate-100">
-                                    <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Lineas</th>
-                                    <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Jarabe requerido de cajas completadas</th>
-                                    <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Jarabe Real</th>
-                                    <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Diferencia</th>
-                                    <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Porcentaje de jarabe</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  {resumenMensualSeguimientoPorLineas.items.map((item) => (
-                                    <tr key={item.linea} className="even:bg-slate-50/60">
-                                      <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">L{item.linea}</td>
-                                      <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.requerido.toFixed(2).replace('.', ',')}</td>
-                                      <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.real.toFixed(2).replace('.', ',')}</td>
-                                      <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.diff.toFixed(2).replace('.', ',')}</td>
-                                      <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-b border-slate-100">{item.pct.toFixed(2).replace('.', ',')}%</td>
+                          ) : seguimientoResumenMensualSubsection === 'resumen-por-lineas' ? (
+                            <>
+                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                <table className="w-full border-collapse text-center">
+                                  <thead>
+                                    <tr className="bg-slate-100">
+                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Lineas</th>
+                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Jarabe requerido de cajas completadas</th>
+                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Jarabe Real</th>
+                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Diferencia</th>
+                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Porcentaje de jarabe</th>
                                     </tr>
-                                  ))}
-                                  <tr className="bg-slate-100 font-bold">
-                                    <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">{resumenMensualSeguimientoPorLineas.total.linea}</td>
-                                    <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100">{resumenMensualSeguimientoPorLineas.total.requerido.toFixed(2).replace('.', ',')}</td>
-                                    <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100">{resumenMensualSeguimientoPorLineas.total.real.toFixed(2).replace('.', ',')}</td>
-                                    <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100">{resumenMensualSeguimientoPorLineas.total.diff.toFixed(2).replace('.', ',')}</td>
-                                    <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-b border-slate-100">{resumenMensualSeguimientoPorLineas.total.pct.toFixed(2).replace('.', ',')}%</td>
-                                  </tr>
-                                </tbody>
-                              </table>
-                            </div>
-                         ) : null}
+                                  </thead>
+                                  <tbody>
+                                    {resumenMensualSeguimientoPorLineas.items.map((item) => (
+                                      <tr key={item.linea} className="even:bg-slate-50/60">
+                                        <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">L{item.linea}</td>
+                                        <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.requerido.toFixed(2).replace('.', ',')}</td>
+                                        <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.real.toFixed(2).replace('.', ',')}</td>
+                                        <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.diff.toFixed(2).replace('.', ',')}</td>
+                                        <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-b border-slate-100">{item.pct.toFixed(2).replace('.', ',')}%</td>
+                                      </tr>
+                                    ))}
+                                    <tr className="bg-slate-100 font-bold">
+                                      <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">{resumenMensualSeguimientoPorLineas.total.linea}</td>
+                                      <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100">{resumenMensualSeguimientoPorLineas.total.requerido.toFixed(2).replace('.', ',')}</td>
+                                      <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100">{resumenMensualSeguimientoPorLineas.total.real.toFixed(2).replace('.', ',')}</td>
+                                      <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100">{resumenMensualSeguimientoPorLineas.total.diff.toFixed(2).replace('.', ',')}</td>
+                                      <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-b border-slate-100">{resumenMensualSeguimientoPorLineas.total.pct.toFixed(2).replace('.', ',')}%</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+<h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Tendencia de pérdida por línea</h3>
+                                {pctParetoDataLineas.length > 0 ? (
+                                  <div style={{ height: 320 }}>
+                                    <ResponsiveContainer width="100%" height="100%">
+                                      <BarChart data={pctParetoDataLineas} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="linea" tick={{ fontSize: 10 }} interval={0} angle={-35} textAnchor="end" height={80} />
+                                        <YAxis tick={{ fontSize: 10 }} />
+                                        <Tooltip formatter={(value: number) => value.toFixed(2).replace('.', ',') + '%'} labelStyle={{ fontSize: 10 }} />
+                                        <Legend />
+                                        <Bar dataKey="pct" name="Porcentaje" fill="#0ea5e9" />
+                                        <Line type="monotone" dataKey="cumPct" name="Acumulado %" stroke="#ef4444" />
+                                      </BarChart>
+                                    </ResponsiveContainer>
+                                  </div>
+                                ) : (
+                                  <p className="text-[10px] text-slate-500 text-center py-8">No hay datos suficientes para mostrar la gráfica</p>
+                                )}
+                              </div>
+                            </>
+                           ) : null}
                     </div>
                   </div>
                 ) : (
