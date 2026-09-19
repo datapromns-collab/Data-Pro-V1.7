@@ -1070,6 +1070,22 @@ export default function OrdenesSapModule({
     return { items, total };
   }, [seguimientoResumenMes, seguimientoResumenAnio, ordenes, autoOverridesFlat, dataManual]);
 
+  const pctParetoData = useMemo(() => {
+    const sorted = resumenMensualSeguimiento.items
+      .slice()
+      .sort((a, b) => Math.abs(b.pct) - Math.abs(a.pct));
+    const totalAbs = sorted.reduce((sum, item) => sum + Math.abs(item.pct), 0);
+    let cumulative = 0;
+    return sorted.map(item => {
+      cumulative += Math.abs(item.pct);
+      return {
+        sabor: item.sabor,
+        pct: item.pct,
+        cumPct: totalAbs > 0 ? (cumulative / totalAbs) * 100 : 0,
+      };
+    });
+  }, [resumenMensualSeguimiento.items]);
+
   const resumenMensualSeguimientoPorLineas = useMemo(() => {
     const mes = seguimientoResumenMes;
     const anio = seguimientoResumenAnio;
@@ -2684,9 +2700,25 @@ const exportarPDFdia = async () => {
                                     <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-b border-slate-100">{resumenMensualSeguimiento.total.pct.toFixed(2).replace('.', ',')}%</td>
                                   </tr>
                                </tbody>
-                             </table>
+                              </table>
+                             </div>
+                            <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+                              <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Gráfica Pareto</h3>
+                              <div className="h-72">
+                                <ResponsiveContainer width="100%" height="100%">
+                                  <BarChart data={pctParetoData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                                    <CartesianGrid strokeDasharray="3 3" />
+                                    <XAxis dataKey="sabor" tick={{ fontSize: 10 }} interval={0} angle={-35} textAnchor="end" height={80} />
+                                    <YAxis tick={{ fontSize: 10 }} />
+                                    <Tooltip formatter={(value: number) => value.toFixed(2).replace('.', ',') + '%'} labelStyle={{ fontSize: 10 }} />
+                                    <Legend />
+                                    <Bar dataKey="pct" name="Porcentaje" fill="#0ea5e9" />
+                                    <Line type="monotone" dataKey="cumPct" name="Acumulado %" stroke="#ef4444" />
+                                  </BarChart>
+                                </ResponsiveContainer>
+                              </div>
                             </div>
-                          </>
+                           </>
                          ) : seguimientoResumenMensualSubsection === 'resumen-por-lineas' ? (
                             <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
                               <table className="w-full border-collapse text-center">
