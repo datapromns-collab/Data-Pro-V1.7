@@ -11026,7 +11026,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-19T12:25:37.999Z"
+    "updatedAt": "2026-09-19T12:26:50.239Z"
   },
   "ordenesSap": [
     {
@@ -19773,12 +19773,12 @@
           "fechaInicio": "2026-09-18",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "",
+          "ticket2": "16208",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 14898
         }
       ]
     }
@@ -135071,6 +135071,18 @@
           "ubb": 12,
           "pnc": 133,
           "producto": "62"
+        },
+        "auto-7-1789733043358": {
+          "cajasPlanificadas": 88722,
+          "jarabeReal": 40455,
+          "ubb": 14.07,
+          "producto": "525"
+        },
+        "auto-7-1789820657251": {
+          "cajasPlanificadas": 16095,
+          "jarabeReal": 33245,
+          "ubb": 16,
+          "producto": "0"
         }
       }
     },

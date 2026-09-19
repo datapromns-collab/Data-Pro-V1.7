@@ -415,6 +415,8 @@ export default function OrdenesSapModule({
   const [fechaSeguimientoInicializada, setFechaSeguimientoInicializada] = useState(false);
   const [resumenMensualMes, setResumenMensualMes] = useState<number>(() => selectedFecha ? selectedFecha.getMonth() + 1 : new Date().getMonth() + 1);
   const [resumenMensualAnio, setResumenMensualAnio] = useState<number>(() => selectedFecha ? selectedFecha.getFullYear() : new Date().getFullYear());
+  const [seguimientoResumenMes, setSeguimientoResumenMes] = useState<number>(() => selectedFecha ? selectedFecha.getMonth() + 1 : new Date().getMonth() + 1);
+  const [seguimientoResumenAnio, setSeguimientoResumenAnio] = useState<number>(() => selectedFecha ? selectedFecha.getFullYear() : new Date().getFullYear());
   const [ordenComponentes, setOrdenComponentes] = useState<Record<string, { codigo: string; descripcion: string }>>({
     'Jarabe T': { codigo: '', descripcion: '' },
     'Bebida': { codigo: '', descripcion: '' },
@@ -1028,6 +1030,33 @@ export default function OrdenesSapModule({
       return { sabor, requerido: req, real, diff, pct };
     });
   }, [selectedFecha, ordenes, jarabeRealPorSabor]);
+
+  const resumenMensualSeguimiento = useMemo(() => {
+    const mes = seguimientoResumenMes;
+    const anio = seguimientoResumenAnio;
+    if (!mes || !anio) return [];
+    const requerido: Record<string, number> = {};
+    PRODUCT_LIST.forEach(sabor => {
+      let total = 0;
+      ordenes.forEach(orden => {
+        if (orden.sabor !== sabor) return;
+        orden.dias.forEach(dia => {
+          const d = new Date(dia.fechaInicio + 'T12:00:00');
+          if (isNaN(d.getTime())) return;
+          if (d.getMonth() + 1 !== mes || d.getFullYear() !== anio) return;
+          total += (Number(dia.cajas1) || 0) + (Number(dia.cajas2) || 0) + (Number(dia.cajas3) || 0) + (Number(dia.cajas4) || 0);
+        });
+      });
+      requerido[sabor] = total;
+    });
+    return PRODUCT_LIST.map(sabor => {
+      const req = requerido[sabor] || 0;
+      const real = jarabeRealPorSabor[sabor] || 0;
+      const diff = real - req;
+      const pct = req > 0 ? (diff / req) * 100 : 0;
+      return { sabor, requerido: req, real, diff, pct };
+    });
+  }, [seguimientoResumenMes, seguimientoResumenAnio, ordenes, jarabeRealPorSabor]);
 
   const tablaDiaADIAAuto = useMemo(() => {
     const tabla: Record<string, Record<number, number>> = {};
@@ -2438,26 +2467,67 @@ const exportarPDFdia = async () => {
                     </button>
                   </div>
 
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="h-11 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                {seguimientoSubsection === 'resumen-mensual' ? (
+                  <div className="flex items-center gap-2">
+                    <Select
+                      value={String(seguimientoResumenMes)}
+                      onValueChange={(value) => {
+                        const mes = Number(value);
+                        setSeguimientoResumenMes(mes);
+                      }}
                     >
-                      <CalendarIcon className="h-3.5 w-3.5 mr-2" />
-                      {selectedFechaSeguimiento ? `Semana ${getISOWeek(selectedFechaSeguimiento)} · ${format(selectedFechaSeguimiento, "d 'de' MMM, yyyy", { locale: es })}` : "Seleccionar semana"}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="p-0 rounded-2xl" align="end">
-                    <Calendar
-                      mode="single"
-                      selected={selectedFechaSeguimiento}
-                      onSelect={setSelectedFechaSeguimiento}
-                      locale={es}
-                      className="rounded-md"
-                    />
-                  </PopoverContent>
-                </Popover>
+                      <SelectTrigger className="h-9 w-[140px] rounded-md border-slate-200 bg-white font-bold text-[10px] text-center uppercase tracking-widest">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'].map((nombre, idx) => (
+                          <SelectItem key={nombre} value={String(idx + 1)} className="font-bold text-[10px] uppercase tracking-widest">
+                            {nombre}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Select
+                      value={String(seguimientoResumenAnio)}
+                      onValueChange={(value) => {
+                        const anio = Number(value);
+                        setSeguimientoResumenAnio(anio);
+                      }}
+                    >
+                      <SelectTrigger className="h-9 w-[100px] rounded-md border-slate-200 bg-white font-bold text-[10px] text-center uppercase tracking-widest">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i).map((anio) => (
+                          <SelectItem key={anio} value={String(anio)} className="font-bold text-[10px] text-center uppercase tracking-widest">
+                            {anio}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                ) : (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className="h-11 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                      >
+                        <CalendarIcon className="h-3.5 w-3.5 mr-2" />
+                        {selectedFechaSeguimiento ? `Semana ${getISOWeek(selectedFechaSeguimiento)} · ${format(selectedFechaSeguimiento, "d 'de' MMM, yyyy", { locale: es })}` : "Seleccionar semana"}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="p-0 rounded-2xl" align="end">
+                      <Calendar
+                        mode="single"
+                        selected={selectedFechaSeguimiento}
+                        onSelect={setSelectedFechaSeguimiento}
+                        locale={es}
+                        className="rounded-md"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                )}
               </div>
 
               <div className="flex flex-col gap-4">
@@ -2493,7 +2563,7 @@ const exportarPDFdia = async () => {
                               </tr>
                             </thead>
                             <tbody>
-                              {resumenMensualPorSabor.map((item) => (
+                               {resumenMensualSeguimiento.map((item) => (
                                 <tr key={item.sabor} className="even:bg-slate-50/60">
                                   <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">{item.sabor}</td>
                                   <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.requerido}</td>
