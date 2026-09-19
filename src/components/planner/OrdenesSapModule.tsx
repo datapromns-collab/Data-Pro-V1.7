@@ -2704,19 +2704,23 @@ const exportarPDFdia = async () => {
                              </div>
                             <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
                               <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Gráfica Pareto</h3>
-                              <div className="h-72">
-                                <ResponsiveContainer width="100%" height="100%">
-                                  <BarChart data={pctParetoData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="sabor" tick={{ fontSize: 10 }} interval={0} angle={-35} textAnchor="end" height={80} />
-                                    <YAxis tick={{ fontSize: 10 }} />
-                                    <Tooltip formatter={(value: number) => value.toFixed(2).replace('.', ',') + '%'} labelStyle={{ fontSize: 10 }} />
-                                    <Legend />
-                                    <Bar dataKey="pct" name="Porcentaje" fill="#0ea5e9" />
-                                    <Line type="monotone" dataKey="cumPct" name="Acumulado %" stroke="#ef4444" />
-                                  </BarChart>
-                                </ResponsiveContainer>
-                              </div>
+                              {pctParetoData.length > 0 ? (
+                                <div style={{ height: 320 }}>
+                                  <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={pctParetoData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                                      <CartesianGrid strokeDasharray="3 3" />
+                                      <XAxis dataKey="sabor" tick={{ fontSize: 10 }} interval={0} angle={-35} textAnchor="end" height={80} />
+                                      <YAxis tick={{ fontSize: 10 }} />
+                                      <Tooltip formatter={(value: number) => value.toFixed(2).replace('.', ',') + '%'} labelStyle={{ fontSize: 10 }} />
+                                      <Legend />
+                                      <Bar dataKey="pct" name="Porcentaje" fill="#0ea5e9" />
+                                      <Line type="monotone" dataKey="cumPct" name="Acumulado %" stroke="#ef4444" />
+                                    </BarChart>
+                                  </ResponsiveContainer>
+                                </div>
+                              ) : (
+                                <p className="text-[10px] text-slate-500 text-center py-8">No hay datos suficientes para mostrar la gráfica</p>
+                              )}
                             </div>
                            </>
                          ) : seguimientoResumenMensualSubsection === 'resumen-por-lineas' ? (
