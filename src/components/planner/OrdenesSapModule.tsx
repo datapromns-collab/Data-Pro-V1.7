@@ -1805,9 +1805,152 @@ const exportarPDFdia = async () => {
       console.warn('No se pudo cargar la firma', e);
     }
 
-    const pdfNombre = `Resumen Produccion ${mes} ${anio}.pdf`;
-    pdf.save(pdfNombre);
-  };
+     const pdfNombre = `Resumen Produccion ${mes} ${anio}.pdf`;
+     pdf.save(pdfNombre);
+   };
+
+    const exportarPDFResumenSeguimientoSabor = async () => {
+     const mes = seguimientoResumenMes;
+     const anio = seguimientoResumenAnio;
+     const fechaLabel = mes && anio ? `${format(new Date(anio, mes - 1, 1), 'MMMM', { locale: es }).toUpperCase()} ${anio}` : 'SIN MES';
+     const items = resumenMensualSeguimiento.items.slice();
+     if (!items.length) return;
+
+     const headers = ['SABOR', 'JARABE REQUERIDO', 'JARABE REAL', 'DIFERENCIA', 'PORCENTAJE'];
+     const colWidths = [90, 45, 45, 40, 40];
+     const headerHeight = 6;
+     const rowHeight = 4.6;
+
+     const pageWidth = 210;
+     const pageHeight = 297;
+     const marginX = 15;
+     const marginY = 18;
+     const tableWidth = colWidths.reduce((a, b) => a + b, 0);
+     const startX = (pageWidth - tableWidth) / 2;
+
+     const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+     pdf.setFont('helvetica', 'bold');
+     pdf.setFontSize(11);
+     pdf.setTextColor(15, 23, 42);
+     pdf.text('Resumen Seguimiento Mensual por Sabor', pageWidth / 2, marginY - 6, { align: 'center' });
+
+     let y = marginY;
+     pdf.setDrawColor(0, 0, 0);
+     pdf.setLineWidth(0.15);
+
+     const drawHeader = () => {
+       pdf.setFillColor(15, 23, 42);
+       pdf.rect(startX, y, tableWidth, headerHeight, 'F');
+       pdf.setFont('helvetica', 'bold');
+       pdf.setFontSize(8);
+       pdf.setTextColor(255, 255, 255);
+       let x = startX;
+       headers.forEach((h, i) => {
+         pdf.text(h, x + colWidths[i] / 2, y + 4, { align: 'center' });
+         x += colWidths[i];
+       });
+     };
+
+     const drawRowBorders = (rowY: number, height: number) => {
+       pdf.setDrawColor(0, 0, 0);
+       pdf.setLineWidth(0.15);
+       let cx = startX;
+       for (let i = 0; i <= colWidths.length; i++) {
+         pdf.line(cx, rowY, cx, rowY + height);
+         cx += colWidths[i] || 0;
+       }
+       pdf.line(startX, rowY, startX + tableWidth, rowY);
+       pdf.line(startX, rowY + height, startX + tableWidth, rowY + height);
+     };
+
+     drawHeader();
+     drawRowBorders(y, headerHeight);
+     y += headerHeight;
+
+     items.forEach((item, idx) => {
+       if (y + rowHeight > pageHeight - marginY - 32) {
+         pdf.addPage();
+         y = marginY;
+       }
+
+       const isLight = idx % 2 === 1;
+       pdf.setFillColor(isLight ? 245 : 255, isLight ? 250 : 255, isLight ? 255 : 255);
+       pdf.rect(startX, y, tableWidth, rowHeight, 'F');
+       pdf.setFont('helvetica', 'normal');
+       pdf.setFontSize(7);
+       pdf.setTextColor(15, 23, 42);
+
+       let x = startX;
+       pdf.text(String(item.sabor), x + colWidths[0] / 2, y + 3.2, { align: 'center' });
+       x += colWidths[0];
+       pdf.text(item.requerido.toFixed(2).replace('.', ','), x + colWidths[1] / 2, y + 3.2, { align: 'center' });
+       x += colWidths[1];
+       pdf.text(item.real.toFixed(2).replace('.', ','), x + colWidths[2] / 2, y + 3.2, { align: 'center' });
+       x += colWidths[2];
+       pdf.text(item.diff.toFixed(2).replace('.', ','), x + colWidths[3] / 2, y + 3.2, { align: 'center' });
+       x += colWidths[3];
+       pdf.text(item.pct.toFixed(2).replace('.', ',') + '%', x + colWidths[4] / 2, y + 3.2, { align: 'center' });
+       drawRowBorders(y, rowHeight);
+       y += rowHeight;
+     });
+
+     if (y + headerHeight > pageHeight - marginY - 32) {
+       pdf.addPage();
+       y = marginY;
+     }
+
+     pdf.setFillColor(15, 23, 42);
+     pdf.rect(startX, y, tableWidth, headerHeight, 'F');
+     pdf.setFont('helvetica', 'bold');
+     pdf.setFontSize(8);
+     pdf.setTextColor(255, 255, 255);
+     let x = startX;
+     pdf.text(String(resumenMensualSeguimiento.total.sabor), x + colWidths[0] / 2, y + 4, { align: 'center' });
+     x += colWidths[0];
+     pdf.text(resumenMensualSeguimiento.total.requerido.toFixed(2).replace('.', ','), x + colWidths[1] / 2, y + 4, { align: 'center' });
+     x += colWidths[1];
+     pdf.text(resumenMensualSeguimiento.total.real.toFixed(2).replace('.', ','), x + colWidths[2] / 2, y + 4, { align: 'center' });
+     x += colWidths[2];
+     pdf.text(resumenMensualSeguimiento.total.diff.toFixed(2).replace('.', ','), x + colWidths[3] / 2, y + 4, { align: 'center' });
+     x += colWidths[3];
+     pdf.text(resumenMensualSeguimiento.total.pct.toFixed(2).replace('.', ',') + '%', x + colWidths[4] / 2, y + 4, { align: 'center' });
+     drawRowBorders(y, headerHeight);
+
+     y += headerHeight + 3;
+     try {
+       pdf.addImage('/firma.png', 'PNG', pageWidth - 40, y, 32, 16);
+     } catch (e) {
+       console.warn('No se pudo cargar la firma', e);
+     }
+
+     const graficaContainer = Array.from(document.querySelectorAll('h3')).find(h => h.textContent?.includes('Tendencia de pérdida por sabor'))?.parentElement;
+     if (graficaContainer) {
+       try {
+         const canvas = await html2canvas(graficaContainer, {
+           scale: 2,
+           useCORS: true,
+           backgroundColor: '#ffffff',
+           logging: false
+         });
+         const imgData = canvas.toDataURL('image/png');
+         const imgWidth = pageWidth - marginX * 2;
+         const imgHeight = (canvas.height / canvas.width) * imgWidth;
+         const maxImgHeight = Math.max(10, pageHeight - y - marginY);
+         const finalImgHeight = Math.min(imgHeight, maxImgHeight);
+         if (y + finalImgHeight + marginY > pageHeight) {
+           pdf.addPage();
+           pdf.addImage(imgData, 'PNG', marginX, marginY, imgWidth, Math.min(finalImgHeight, pageHeight - marginY * 2));
+         } else {
+           pdf.addImage(imgData, 'PNG', marginX, y + 6, imgWidth, finalImgHeight);
+         }
+       } catch (e) {
+         console.warn('No se pudo capturar la gráfica', e);
+       }
+     }
+
+     const pdfNombre = `Resumen Seguimiento por Sabor ${fechaLabel}.pdf`;
+     pdf.save(pdfNombre);
+   };
 
   const exportarExcelResumenMensual = () => {
     const fecha = selectedFecha || new Date();
@@ -2683,8 +2826,21 @@ const exportarPDFdia = async () => {
                 {seguimientoSubsection === 'resumen' ? (
                   <SeguimientoResumenSemanaTable filasAuto={filasAutoSeguimiento} autoOverrides={autoOverridesFlat} semanaNumero={selectedFechaSeguimiento ? getISOWeek(selectedFechaSeguimiento) : undefined} />
                  ) : seguimientoSubsection === 'resumen-mensual' ? (
-                   <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                     <div className="p-4">
+                    <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                      <div className="flex items-center justify-end gap-2 px-6 py-4 border-b border-slate-100">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                          {seguimientoResumenMes && seguimientoResumenAnio ? `${format(new Date(seguimientoResumenAnio, seguimientoResumenMes - 1, 1), 'MMMM yyyy', { locale: es }).toUpperCase()}` : ''}
+                        </span>
+                        <Button
+                          size="sm"
+                          onClick={exportarPDFResumenSeguimientoSabor}
+                          className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                        >
+                          <FileDown className="h-3 w-3" />
+                          Exportar PDF
+                        </Button>
+                      </div>
+                      <div className="p-4">
                        {seguimientoResumenMensualSubsection === 'resumen-por-sabor' ? (
                          <>
                            <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
