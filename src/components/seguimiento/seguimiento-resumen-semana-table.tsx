@@ -7,61 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Trash2, Download } from 'lucide-react';
 import { useSeguimientoResumenOptimizado, SeguimientoOrdenLineaConLinea } from '@/hooks/use-seguimiento-ordenes';
 import type { SeguimientoOrdenFuente } from '@/components/seguimiento/seguimiento-linea1-table';
-
-const LINE_LABELS: Record<number, string> = {
-  1: 'Línea 1',
-  2: 'Línea 2',
-  3: 'Línea 3',
-  4: 'Línea 4',
-  5: 'Línea 5',
-  6: 'Línea 6',
-  7: 'Línea 7',
-};
-
-const getLineMultiplier = (linea: string): number => {
-  const match = linea.match(/Línea (\d+)/);
-  if (!match) return 6;
-  const n = parseInt(match[1], 10);
-  if (n >= 1 && n <= 4) return 6;
-  if (n === 5 || n === 7) return 12;
-  if (n === 6) return 15;
-  return 6;
-};
-
-const getBebidaTerminadaMultiplier = (linea: string): number => {
-  const match = linea.match(/Línea (\d+)/);
-  if (!match) return 2;
-  const n = parseInt(match[1], 10);
-  if (n >= 1 && n <= 4) return 2;
-  if (n === 5) return 1.5;
-  if (n === 6) return 0.4;
-  if (n === 7) return 1;
-  return 2;
-};
-
-const getRmMultiplier = (sabor: string): number | null => {
-  const rmMap: Record<string, number> = {
-    'GLUP COLA': 6,
-    'GLUP KOLITA': 6,
-    'GLUP FRESH': 6,
-    'GLUP UVA': 5,
-    'GLUP MANZANA VERDE': 6,
-    'GLUP PIÑA': 5,
-    'GLUP NARANJA': 5,
-    'GLUP PIÑA PARCHITA': 5,
-    'GLUP MANZANA ROJA': 5.8,
-  };
-  const upper = sabor.toUpperCase();
-  if (upper.startsWith('JUSTY')) return null;
-  return rmMap[upper] || 6;
-};
-
-const calcularJarabeRequerido = (sabor: string, cajasCompletadas: number, producto: string | number, pnc: number, linea: string): number => {
-  const botellasT = ((cajasCompletadas || 0) + (pnc || 0)) * getLineMultiplier(linea) + (Number(producto) || 0);
-  const bebidaTerminada = botellasT * getBebidaTerminadaMultiplier(linea);
-  const rm = getRmMultiplier(sabor);
-  return rm ? bebidaTerminada / rm : bebidaTerminada;
-};
+import { calcularJarabeRequerido, getLineMultiplier, getBebidaTerminadaMultiplier, getRmMultiplier, LINE_LABELS } from '@/lib/seguimiento-utils';
 
 export function SeguimientoResumenSemanaTable({
   filasAuto = {},

@@ -381,7 +381,7 @@ export default function OrdenesSapModule({
   const [creadorSubsection, setCreadorSubsection] = useState<'fijas' | 'ordenes'>('fijas');
   // Estado independiente para la sección "Seguimiento de Órdenes" (no afecta a las demás secciones)
   const [seguimientoSubsection, setSeguimientoSubsection] = useState<number | 'resumen' | 'resumen-mensual'>(() => userId === 'jaime.r' ? 'resumen' : 1);
-  const [seguimientoResumenMensualSubsection, setSeguimientoResumenMensualSubsection] = useState<'resumen-por-sabor' | 'resumen-por-lineas'>('resumen-por-sabor');
+  const [seguimientoResumenMensualSubsection, setSeguimientoResumenMensualSubsection] = useState<'resumen-por-sabor' | 'resumen-por-lineas' | 'rendimiento-azucar'>('resumen-por-sabor');
   const [jarabeRealPorSabor, setJarabeRealPorSabor] = useState<Record<string, number>>({});
 
   useEffect(() => {
@@ -1070,14 +1070,69 @@ export default function OrdenesSapModule({
     return { items, total };
   }, [seguimientoResumenMes, seguimientoResumenAnio, ordenes, autoOverridesFlat, dataManual]);
 
-  const resumenMensualSeguimientoPareto = useMemo(() => {
-    const sorted = resumenMensualSeguimiento.items.slice().sort((a, b) => b.pct - a.pct);
-    let cumulative = 0;
-    return sorted.map(item => {
-      cumulative += item.pct;
-      return { ...item, cumulative };
+  const resumenMensualSeguimientoPorLineas = useMemo(() => {
+    const mes = seguimientoResumenMes;
+    const anio = seguimientoResumenAnio;
+    if (!mes || !anio) return { items: [], total: { linea: 'Total general', requerido: 0, real: 0, diff: 0, pct: 0 } };
+    const filas = combinarFilasResumenMensual(mes, anio, ordenes, autoOverridesFlat, dataManual || []);
+    const requerido: Record<number, number> = {};
+    const real: Record<number, number> = {};
+    filas.forEach(f => {
+      const linea = f.linea || 0;
+      if (f.jarabeReal > 0) {
+        requerido[linea] = (requerido[linea] || 0) + f.jarabeRequerido;
+      }
+      real[linea] = (real[linea] || 0) + f.jarabeReal;
     });
-  }, [resumenMensualSeguimiento.items]);
+    const items = [1, 2, 3, 4, 5, 6, 7].map(num => {
+      const req = requerido[num] || 0;
+      const realVal = real[num] || 0;
+      const diff = realVal - req;
+      const pct = req > 0 ? (diff / req) * 100 : 0;
+      return { linea: num, requerido: req, real: realVal, diff, pct };
+    });
+    const total = items.reduce((acc, item) => {
+      acc.requerido += item.requerido;
+      acc.real += item.real;
+      acc.diff += item.diff;
+      return acc;
+    }, { linea: 'Total general' as const, requerido: 0, real: 0, diff: 0, pct: 0 });
+    total.pct = total.requerido > 0 ? (total.diff / total.requerido) * 100 : 0;
+    return { items, total };
+  }, [seguimientoResumenMes, seguimientoResumenAnio, ordenes, autoOverridesFlat, dataManual]);
+
+  const rendimientoAzucarPorLinea = useMemo(() => {
+    const mes = seguimientoResumenMes;
+    const anio = seguimientoResumenAnio;
+    if (!mes || !anio) return { items: [], total: { linea: 'Total general', requerido: 0, real: 0, diff: 0, pct: 0, rendimiento: 0 } };
+    const filas = combinarFilasResumenMensual(mes, anio, ordenes, autoOverridesFlat, dataManual || []);
+    const requerido: Record<number, number> = {};
+    const real: Record<number, number> = {};
+    filas.forEach(f => {
+      const linea = f.linea || 0;
+      if (f.jarabeReal > 0) {
+        requerido[linea] = (requerido[linea] || 0) + f.jarabeRequerido;
+      }
+      real[linea] = (real[linea] || 0) + f.jarabeReal;
+    });
+    const items = [1, 2, 3, 4, 5, 6, 7].map(num => {
+      const req = requerido[num] || 0;
+      const realVal = real[num] || 0;
+      const diff = realVal - req;
+      const pct = req > 0 ? (diff / req) * 100 : 0;
+      const rendimiento = req > 0 ? (realVal / req) * 100 : 0;
+      return { linea: num, requerido: req, real: realVal, diff, pct, rendimiento };
+    });
+    const total = items.reduce((acc, item) => {
+      acc.requerido += item.requerido;
+      acc.real += item.real;
+      acc.diff += item.diff;
+      return acc;
+    }, { linea: 'Total general' as const, requerido: 0, real: 0, diff: 0, pct: 0, rendimiento: 0 });
+    total.pct = total.requerido > 0 ? (total.diff / total.requerido) * 100 : 0;
+    total.rendimiento = total.requerido > 0 ? (total.real / total.requerido) * 100 : 0;
+    return { items, total };
+  }, [seguimientoResumenMes, seguimientoResumenAnio, ordenes, autoOverridesFlat, dataManual]);
 
   const tablaDiaADIAAuto = useMemo(() => {
     const tabla: Record<string, Record<number, number>> = {};
@@ -2569,24 +2624,30 @@ const exportarPDFdia = async () => {
                  </div>
 
                  {seguimientoSubsection === 'resumen-mensual' && (
-                   <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-fit">
-                     <button
-                       onClick={() => setSeguimientoResumenMensualSubsection('resumen-por-sabor')}
-                       className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoResumenMensualSubsection === 'resumen-por-sabor' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                     >
-                       RESUMEN POR SABOR
-                     </button>
-                     <button
-                       onClick={() => setSeguimientoResumenMensualSubsection('resumen-por-lineas')}
-                       className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoResumenMensualSubsection === 'resumen-por-lineas' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                     >
-                       resumen por lineas
-                     </button>
-                   </div>
-                 )}
+                    <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-fit">
+                      <button
+                        onClick={() => setSeguimientoResumenMensualSubsection('resumen-por-sabor')}
+                        className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoResumenMensualSubsection === 'resumen-por-sabor' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                      >
+                        RESUMEN POR SABOR
+                      </button>
+                      <button
+                        onClick={() => setSeguimientoResumenMensualSubsection('resumen-por-lineas')}
+                        className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoResumenMensualSubsection === 'resumen-por-lineas' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                      >
+                        resumen por lineas
+                      </button>
+                      <button
+                        onClick={() => setSeguimientoResumenMensualSubsection('rendimiento-azucar')}
+                        className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoResumenMensualSubsection === 'rendimiento-azucar' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                      >
+                        rendimiento de azucar
+                      </button>
+                    </div>
+                  )}
                </div>
 
-              <div className="flex flex-col gap-4">
+              <div className="space-y-4">
                 {seguimientoSubsection === 'resumen' ? (
                   <SeguimientoResumenSemanaTable filasAuto={filasAutoSeguimiento} autoOverrides={autoOverridesFlat} semanaNumero={selectedFechaSeguimiento ? getISOWeek(selectedFechaSeguimiento) : undefined} />
                  ) : seguimientoSubsection === 'resumen-mensual' ? (
@@ -2624,29 +2685,41 @@ const exportarPDFdia = async () => {
                                   </tr>
                                </tbody>
                              </table>
-                           </div>
-                            <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
-                              <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Tendencia de pérdida por sabor</h3>
-                             <div className="h-72">
-                               <ResponsiveContainer width="100%" height="100%">
-                                 <BarChart data={resumenMensualSeguimientoPareto} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                                   <CartesianGrid strokeDasharray="3 3" />
-                                   <XAxis dataKey="sabor" tick={{ fontSize: 10 }} interval={0} angle={-35} textAnchor="end" height={80} />
-                                   <YAxis tick={{ fontSize: 10 }} />
-                                   <Tooltip formatter={(value: number) => value.toFixed(2).replace('.', ',') + '%'} labelStyle={{ fontSize: 10 }} />
-                                   <Legend />
-                                   <Bar dataKey="pct" name="Porcentaje" fill="#0ea5e9" />
-                                   <Line type="monotone" dataKey="cumulative" name="Acumulado" stroke="#ef4444" />
-                                 </BarChart>
-                               </ResponsiveContainer>
-                             </div>
-                           </div>
-                         </>
-                       ) : (
-                        <div className="h-48 flex items-center justify-center text-slate-400">
-                          <p className="text-[10px] font-bold uppercase tracking-widest">En desarrollo</p>
-                        </div>
-                      )}
+                            </div>
+                          </>
+                         ) : seguimientoResumenMensualSubsection === 'resumen-por-lineas' ? (
+                            <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                              <table className="w-full border-collapse text-center">
+                                <thead>
+                                  <tr className="bg-slate-100">
+                                    <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Lineas</th>
+                                    <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Jarabe requerido de cajas completadas</th>
+                                    <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Jarabe Real</th>
+                                    <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Diferencia</th>
+                                    <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Porcentaje de jarabe</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  {resumenMensualSeguimientoPorLineas.items.map((item) => (
+                                    <tr key={item.linea} className="even:bg-slate-50/60">
+                                      <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">L{item.linea}</td>
+                                      <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.requerido.toFixed(2).replace('.', ',')}</td>
+                                      <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.real.toFixed(2).replace('.', ',')}</td>
+                                      <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.diff.toFixed(2).replace('.', ',')}</td>
+                                      <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-b border-slate-100">{item.pct.toFixed(2).replace('.', ',')}%</td>
+                                    </tr>
+                                  ))}
+                                  <tr className="bg-slate-100 font-bold">
+                                    <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">{resumenMensualSeguimientoPorLineas.total.linea}</td>
+                                    <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100">{resumenMensualSeguimientoPorLineas.total.requerido.toFixed(2).replace('.', ',')}</td>
+                                    <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100">{resumenMensualSeguimientoPorLineas.total.real.toFixed(2).replace('.', ',')}</td>
+                                    <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-r border-b border-slate-100">{resumenMensualSeguimientoPorLineas.total.diff.toFixed(2).replace('.', ',')}</td>
+                                    <td className="px-2 py-1 text-[10px] font-black text-slate-700 border-b border-slate-100">{resumenMensualSeguimientoPorLineas.total.pct.toFixed(2).replace('.', ',')}%</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                         ) : null}
                     </div>
                   </div>
                 ) : (

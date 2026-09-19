@@ -173,6 +173,7 @@ export interface ResumenMensualFila {
   jarabeRequerido: number;
   jarabeReal: number;
   jarabeReqCompletadas: number;
+  linea?: number;
 }
 
 export const combinarFilasResumenMensual = (
@@ -229,7 +230,7 @@ export const combinarFilasResumenMensual = (
         const pnc = ov.pnc ?? 0;
         const jarabeRequerido = calcularJarabeRequerido(f.sabor, cajasCompletadas, producto, pnc, label);
         const jarabeReal = Number(ov.jarabeReal) || 0;
-        filas.push({ id: f.id, sabor: f.sabor, jarabeRequerido, jarabeReal, jarabeReqCompletadas: 0 });
+        filas.push({ id: f.id, sabor: f.sabor, jarabeRequerido, jarabeReal, jarabeReqCompletadas: 0, linea: Number(lineaNum) });
         filasAutoGeneradas++;
       });
     });
@@ -240,7 +241,7 @@ export const combinarFilasResumenMensual = (
     const cajasCompletadas = Number(r.cajasCompletadas) || 0;
     const jarabeRequerido = calcularJarabeRequerido(r.sabor, cajasCompletadas, r.producto, pnc, r.linea);
     const jarabeReal = Number(r.jarabeReal) || 0;
-    filas.push({ sabor: r.sabor, jarabeRequerido, jarabeReal, jarabeReqCompletadas: 0 });
+    filas.push({ sabor: r.sabor, jarabeRequerido, jarabeReal, jarabeReqCompletadas: 0, linea: Number(r.linea) });
     filasManualGeneradas++;
   });
 
