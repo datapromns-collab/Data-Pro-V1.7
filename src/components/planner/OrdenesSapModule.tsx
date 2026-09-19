@@ -2442,114 +2442,119 @@ const exportarPDFdia = async () => {
           {/* Sección independiente: Seguimiento de Órdenes (no depende de la línea seleccionada ni afecta a las demás secciones) */}
           {isSectionAllowed('seguimiento-ordenes') && activeSection === 'seguimiento-ordenes' && (
             <div className="bg-white rounded-[2.5rem] border border-slate-200 p-4">
-              <div className="flex items-center justify-between gap-3 flex-wrap mb-4">
-                 <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit flex-wrap gap-1 overflow-x-auto">
-                   {userId !== 'jaime.r' && [1, 2, 3, 4, 5, 6, 7].map((n) => (
-                     <button
-                       key={n}
-                       onClick={() => setSeguimientoSubsection(n)}
-                       className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoSubsection === n ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                     >
-                       Línea {n}
-                     </button>
-                   ))}
-                   <button
-                    onClick={() => setSeguimientoSubsection('resumen')}
-                    className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoSubsection === 'resumen' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                    >
-                      Resumen Semana
-                    </button>
-                    <button
-                    onClick={() => setSeguimientoSubsection('resumen-mensual')}
-                    className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoSubsection === 'resumen-mensual' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                    >
-                      Resumen mensual
-                    </button>
-                  </div>
+               <div className="flex flex-col gap-3 mb-4">
+                 <div className="flex items-center justify-between gap-3 flex-wrap">
+                    <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit flex-wrap gap-1 overflow-x-auto">
+                      {userId !== 'jaime.r' && [1, 2, 3, 4, 5, 6, 7].map((n) => (
+                        <button
+                          key={n}
+                          onClick={() => setSeguimientoSubsection(n)}
+                          className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoSubsection === n ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                        >
+                          Línea {n}
+                        </button>
+                      ))}
+                      <button
+                       onClick={() => setSeguimientoSubsection('resumen')}
+                       className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoSubsection === 'resumen' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                       >
+                         Resumen Semana
+                       </button>
+                       <button
+                       onClick={() => setSeguimientoSubsection('resumen-mensual')}
+                       className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoSubsection === 'resumen-mensual' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                       >
+                         Resumen mensual
+                       </button>
+                     </div>
 
-                {seguimientoSubsection === 'resumen-mensual' ? (
-                  <div className="flex items-center gap-2">
-                    <Select
-                      value={String(seguimientoResumenMes)}
-                      onValueChange={(value) => {
-                        const mes = Number(value);
-                        setSeguimientoResumenMes(mes);
-                      }}
-                    >
-                      <SelectTrigger className="h-9 w-[140px] rounded-md border-slate-200 bg-white font-bold text-[10px] text-center uppercase tracking-widest">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'].map((nombre, idx) => (
-                          <SelectItem key={nombre} value={String(idx + 1)} className="font-bold text-[10px] uppercase tracking-widest">
-                            {nombre}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Select
-                      value={String(seguimientoResumenAnio)}
-                      onValueChange={(value) => {
-                        const anio = Number(value);
-                        setSeguimientoResumenAnio(anio);
-                      }}
-                    >
-                      <SelectTrigger className="h-9 w-[100px] rounded-md border-slate-200 bg-white font-bold text-[10px] text-center uppercase tracking-widest">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i).map((anio) => (
-                          <SelectItem key={anio} value={String(anio)} className="font-bold text-[10px] text-center uppercase tracking-widest">
-                            {anio}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                ) : (
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="h-11 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
-                      >
-                        <CalendarIcon className="h-3.5 w-3.5 mr-2" />
-                        {selectedFechaSeguimiento ? `Semana ${getISOWeek(selectedFechaSeguimiento)} · ${format(selectedFechaSeguimiento, "d 'de' MMM, yyyy", { locale: es })}` : "Seleccionar semana"}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="p-0 rounded-2xl" align="end">
-                      <Calendar
-                        mode="single"
-                        selected={selectedFechaSeguimiento}
-                        onSelect={setSelectedFechaSeguimiento}
-                        locale={es}
-                        className="rounded-md"
-                      />
-                    </PopoverContent>
-                  </Popover>
-                )}
-              </div>
+                   {seguimientoSubsection === 'resumen-mensual' ? (
+                     <div className="flex items-center gap-2">
+                       <Select
+                         value={String(seguimientoResumenMes)}
+                         onValueChange={(value) => {
+                           const mes = Number(value);
+                           setSeguimientoResumenMes(mes);
+                         }}
+                       >
+                         <SelectTrigger className="h-9 w-[140px] rounded-md border-slate-200 bg-white font-bold text-[10px] text-center uppercase tracking-widest">
+                           <SelectValue />
+                         </SelectTrigger>
+                         <SelectContent>
+                           {['ENERO', 'FEBRERO', 'MARZO', 'ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE'].map((nombre, idx) => (
+                             <SelectItem key={nombre} value={String(idx + 1)} className="font-bold text-[10px] uppercase tracking-widest">
+                               {nombre}
+                             </SelectItem>
+                           ))}
+                         </SelectContent>
+                       </Select>
+                       <Select
+                         value={String(seguimientoResumenAnio)}
+                         onValueChange={(value) => {
+                           const anio = Number(value);
+                           setSeguimientoResumenAnio(anio);
+                         }}
+                       >
+                         <SelectTrigger className="h-9 w-[100px] rounded-md border-slate-200 bg-white font-bold text-[10px] text-center uppercase tracking-widest">
+                           <SelectValue />
+                         </SelectTrigger>
+                         <SelectContent>
+                           {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i).map((anio) => (
+                             <SelectItem key={anio} value={String(anio)} className="font-bold text-[10px] text-center uppercase tracking-widest">
+                               {anio}
+                             </SelectItem>
+                           ))}
+                         </SelectContent>
+                       </Select>
+                     </div>
+                   ) : (
+                     <Popover>
+                       <PopoverTrigger asChild>
+                         <Button
+                           variant="outline"
+                           className="h-11 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                         >
+                           <CalendarIcon className="h-3.5 w-3.5 mr-2" />
+                           {selectedFechaSeguimiento ? `Semana ${getISOWeek(selectedFechaSeguimiento)} · ${format(selectedFechaSeguimiento, "d 'de' MMM, yyyy", { locale: es })}` : "Seleccionar semana"}
+                         </Button>
+                       </PopoverTrigger>
+                       <PopoverContent className="p-0 rounded-2xl" align="end">
+                         <Calendar
+                           mode="single"
+                           selected={selectedFechaSeguimiento}
+                           onSelect={setSelectedFechaSeguimiento}
+                           locale={es}
+                           className="rounded-md"
+                         />
+                       </PopoverContent>
+                     </Popover>
+                   )}
+                 </div>
+
+                 {seguimientoSubsection === 'resumen-mensual' && (
+                   <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-fit">
+                     <button
+                       onClick={() => setSeguimientoResumenMensualSubsection('resumen-por-sabor')}
+                       className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoResumenMensualSubsection === 'resumen-por-sabor' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                     >
+                       RESUMEN POR SABOR
+                     </button>
+                     <button
+                       onClick={() => setSeguimientoResumenMensualSubsection('resumen-por-lineas')}
+                       className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoResumenMensualSubsection === 'resumen-por-lineas' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                     >
+                       resumen por lineas
+                     </button>
+                   </div>
+                 )}
+               </div>
 
               <div className="flex flex-col gap-4">
                 {seguimientoSubsection === 'resumen' ? (
                   <SeguimientoResumenSemanaTable filasAuto={filasAutoSeguimiento} autoOverrides={autoOverridesFlat} semanaNumero={selectedFechaSeguimiento ? getISOWeek(selectedFechaSeguimiento) : undefined} />
-                ) : seguimientoSubsection === 'resumen-mensual' ? (
-                  <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
-                    <div className="flex flex-wrap items-center bg-slate-100/50 p-1 rounded-full border border-slate-200 w-fit mb-4">
-                      <button
-                        onClick={() => setSeguimientoResumenMensualSubsection('resumen-por-sabor')}
-                        className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoResumenMensualSubsection === 'resumen-por-sabor' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                      >
-                        RESUMEN POR SABOR
-                      </button>
-                      <button
-                        onClick={() => setSeguimientoResumenMensualSubsection('resumen-por-lineas')}
-                        className={`inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${seguimientoResumenMensualSubsection === 'resumen-por-lineas' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
-                      >
-                        resumen por lineas
-                      </button>
-                    </div>
-                    <div className="p-4">
+                 ) : seguimientoSubsection === 'resumen-mensual' ? (
+                   <div className="border border-slate-200 rounded-[2rem] bg-slate-50/30 overflow-visible">
+                     <div className="p-4">
                       {seguimientoResumenMensualSubsection === 'resumen-por-sabor' ? (
                         <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
                           <table className="w-full border-collapse text-center">
