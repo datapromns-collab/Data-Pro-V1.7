@@ -1675,11 +1675,13 @@ export default function PlannerPage() {
     localStorage.setItem('agua-consumo-por-dia', JSON.stringify(aguaConsumoPorDia));
     localStorage.setItem('agua-kg-por-dia', JSON.stringify(aguaKgPorDia));
   }, [aguaConsumoPorDia, aguaKgPorDia]);
-  const [produccionSubTab, setProduccionSubTab] = useState('planificadas');
-  const [planificadasSubTab, setPlanificadasSubTab] = useState('porturno');
-  const [planificadasTurnoSubTab, setPlanificadasTurnoSubTab] = useState('diurno');
-  const [producidasSubTab, setProducidasSubTab] = useState('porturno');
-  const [producidasTurnoSubTab, setProducidasTurnoSubTab] = useState('diurno');
+   const [produccionSubTab, setProduccionSubTab] = useState('planificadas');
+   const [planificadasSubTab, setPlanificadasSubTab] = useState('porturno');
+   const [planificadasTurnoSubTab, setPlanificadasTurnoSubTab] = useState('diurno');
+   const [producidasSubTab, setProducidasSubTab] = useState('porturno');
+   const [producidasTurnoSubTab, setProducidasTurnoSubTab] = useState('diurno');
+   const [inventariosSubTab, setInventariosSubTab] = useState('por-turno');
+  const [produccionMainTab, setProduccionMainTab] = useState('inventarios');
   const [ttSubTab, setTtSubTab] = useState('porturno');
   const [produccionMes, setProduccionMes] = useState<Date>(() => startOfMonth(new Date()));
   const [produccionFecha, setProduccionFecha] = useState<Date | undefined>(() => {
@@ -4211,22 +4213,23 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                <div className="flex flex-col gap-2 mb-4 no-print">
                                  <div className="flex items-center justify-between gap-2">
                                    <div className="flex items-center gap-3">
-                                    <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
-                                       {['planificadas', 'producidas'].map((subTab) => (
-                                          <button
-                                            key={subTab}
-                                            onClick={() => setProduccionSubTab(subTab)}
-                                            className={cn(
-                                              "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                              produccionSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                            )}
-                                          >
-                                            {subTab === 'planificadas' && <ClipboardList className="h-3.5 w-3.5" />}
-                                            {subTab === 'planificadas' ? 'Planificadas' : 'Producidas'}
-                                            {subTab === 'producidas' && <CheckCircle2 className="h-3.5 w-3.5" />}
-                                          </button>
-                                        ))}
-                                    </div>
+                                     <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                        {['planificadas', 'producidas', 'inventarios'].map((subTab) => (
+                                           <button
+                                             key={subTab}
+                                             onClick={() => setProduccionSubTab(subTab)}
+                                             className={cn(
+                                               "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                               produccionSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                             )}
+                                           >
+                                             {subTab === 'planificadas' && <ClipboardList className="h-3.5 w-3.5" />}
+                                             {subTab === 'planificadas' ? 'Planificadas' : subTab === 'producidas' ? 'Producidas' : 'Inventarios'}
+                                             {subTab === 'producidas' && <CheckCircle2 className="h-3.5 w-3.5" />}
+                                             {subTab === 'inventarios' && <Package className="h-3.5 w-3.5" />}
+                                           </button>
+                                         ))}
+                                     </div>
                                    </div>
                                    <input
                                      type="date"
@@ -4282,9 +4285,29 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                  </div>
                                </div>
                              )}
-                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
-                              <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
-                                 {produccionSubTab === 'planificadas' && (
+                              {produccionSubTab === 'inventarios' && (
+                                <div className="flex items-center gap-3 mb-4 no-print">
+                                  <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200">
+                                    {['porturno', 'diarioa'].map((subTab) => (
+                                      <button
+                                        key={subTab}
+                                        onClick={() => setInventariosSubTab(subTab)}
+                                        className={cn(
+                                          "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                          inventariosSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                        )}
+                                      >
+                                        {subTab === 'porturno' && <Clock className="h-3.5 w-3.5" />}
+                                        {subTab === 'porturno' ? 'Por Turno' : 'Diaria'}
+                                        {subTab === 'diarioa' && <CalendarIcon className="h-3.5 w-3.5" />}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+                              <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                               <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
+                                  {produccionSubTab === 'planificadas' && (
                                    planificadasSubTab === 'porturno' ? (
                                      <div className="flex flex-col gap-3 h-full">
                                        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start">
@@ -4350,37 +4373,43 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                           </div>
                                      )
                                   )}
-                                   {produccionSubTab === 'producidas' && (
-                                     producidasSubTab === 'porturno' ? (
-                                       <div className="flex flex-col gap-3 h-full">
-                                         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start">
-                                           {['diurno', 'nocturno'].map((subTab) => (
-                                             <button
-                                               key={subTab}
-                                               onClick={() => setProducidasTurnoSubTab(subTab)}
-                                               className={cn(
-                                                 "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
-                                                 producidasTurnoSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
-                                               )}
-                                             >
-                                               {subTab === 'diurno' && <Sun className="h-3.5 w-3.5" />}
-                                               {subTab === 'diurno' ? 'Diurno' : 'Nocturno'}
-                                               {subTab === 'nocturno' && <Moon className="h-3.5 w-3.5" />}
-                                             </button>
-                                           ))}
+                                    {produccionSubTab === 'producidas' && (
+                                      producidasSubTab === 'porturno' ? (
+                                        <div className="flex flex-col gap-3 h-full">
+                                          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-10 border border-slate-200 self-start">
+                                            {['diurno', 'nocturno'].map((subTab) => (
+                                              <button
+                                                key={subTab}
+                                                onClick={() => setProducidasTurnoSubTab(subTab)}
+                                                className={cn(
+                                                  "inline-flex items-center justify-center gap-2 h-8 px-5 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                                  producidasTurnoSubTab === subTab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                                )}
+                                              >
+                                                {subTab === 'diurno' && <Sun className="h-3.5 w-3.5" />}
+                                                {subTab === 'diurno' ? 'Diurno' : 'Nocturno'}
+                                                {subTab === 'nocturno' && <Moon className="h-3.5 w-3.5" />}
+                                              </button>
+                                            ))}
+                                          </div>
+                                             {producidasTurnoSubTab === 'diurno' && (
+                                                <ProducidasTable titulo="Diurno - Producidas" value={producidasDiurno} onChange={setProducidasDiurno} readOnly={user?.id === 'prodtj.mds' || user?.id === 'prodtg.mds' || user?.id === 'prodts.mds' || user?.id === 'enf.mds'} />
+                                             )}
+                                             {producidasTurnoSubTab === 'nocturno' && (
+                                                <ProducidasTable titulo="Nocturno - Producidas" value={producidasNocturno} onChange={setProducidasNocturno} readOnly={user?.id === 'prodtj.mds' || user?.id === 'prodtg.mds' || user?.id === 'prodts.mds' || user?.id === 'enf.mds'} />
+                                             )}
                                          </div>
-                                            {producidasTurnoSubTab === 'diurno' && (
-                                               <ProducidasTable titulo="Diurno - Producidas" value={producidasDiurno} onChange={setProducidasDiurno} readOnly={user?.id === 'prodtj.mds' || user?.id === 'prodtg.mds' || user?.id === 'prodts.mds' || user?.id === 'enf.mds'} />
-                                            )}
-                                            {producidasTurnoSubTab === 'nocturno' && (
-                                               <ProducidasTable titulo="Nocturno - Producidas" value={producidasNocturno} onChange={setProducidasNocturno} readOnly={user?.id === 'prodtj.mds' || user?.id === 'prodtg.mds' || user?.id === 'prodts.mds' || user?.id === 'enf.mds'} />
-                                            )}
-                                        </div>
-                                      ) : (
-                                         <ProducidasTable titulo="Diaria - Producidas" value={sumarTablas(producidasDiurno, producidasNocturno)} readOnly />
-                                      )
-                                     )}
-                               </div>
+                                       ) : (
+                                          <ProducidasTable titulo="Diaria - Producidas" value={sumarTablas(producidasDiurno, producidasNocturno)} readOnly />
+                                       )
+                                      )}
+                                    {produccionSubTab === 'inventarios' && (
+                                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                        <Package className="h-12 w-12 mb-4 opacity-20" />
+                                        Inventarios en Desarrollo
+                                      </div>
+                                    )}
+                                </div>
                               </div>
                             </>
                           )}
@@ -4785,12 +4814,33 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                        )}
                      </>
                    )}
-                   {activeModule === 'produccion' && hasAccess(user.id, 'produccion') && (
-                     <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                       <Gauge className="h-12 w-12 mb-4 opacity-20" />
-                       Módulo de Producción en Desarrollo
-                     </div>
-                   )}
+                    {activeModule === 'produccion' && hasAccess(user.id, 'produccion') && (
+                      <div className="flex flex-col h-full">
+                        <div className="flex items-center gap-2 mb-2 no-print">
+                          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                            {['inventarios'].map((tab) => (
+                              <button
+                                key={tab}
+                                onClick={() => setProduccionMainTab(tab)}
+                                className={cn(
+                                  "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                  produccionMainTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                )}
+                              >
+                                <Package className="h-3.5 w-3.5" />
+                                <span className="hidden sm:inline">Inventarios</span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="flex-1 bg-white rounded-[2.5rem] p-4">
+                          <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                            <Package className="h-12 w-12 mb-4 opacity-20" />
+                            Inventarios en Desarrollo
+                          </div>
+                        </div>
+                      </div>
+                    )}
                        {activeModule === 'procesos' && (isDemon || user.id === 'jaime.r' || user.id === 'proc1.mds' || user.id === 'procj.mds' || user.id === 'procs2.mds' || user.id === 'maria.mds' || user.id === 'alex.mds' || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' || user.id === 'prodtg.mds') && (
                         <div className="flex flex-col h-full">
                           <div className="flex items-center gap-2 mb-2 no-print">

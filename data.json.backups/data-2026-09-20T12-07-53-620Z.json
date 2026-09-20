@@ -11026,7 +11026,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-19T22:24:43.912Z"
+    "updatedAt": "2026-09-20T12:07:53.196Z"
   },
   "ordenesSap": [
     {
@@ -19642,12 +19642,12 @@
           "fechaInicio": "2026-09-19",
           "ticket1": "16062",
           "cajas1": 2560,
-          "ticket2": "",
+          "ticket2": "16063",
           "cajas2": 1600,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1600,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 11294
         }
       ]
     },
@@ -19715,12 +19715,12 @@
           "fechaInicio": "2026-09-19",
           "ticket1": "17975",
           "cajas1": 2160,
-          "ticket2": "",
+          "ticket2": "17976",
           "cajas2": 2080,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3120,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 24240
         }
       ]
     },
@@ -19746,12 +19746,12 @@
           "fechaInicio": "2026-09-19",
           "ticket1": "16109",
           "cajas1": 3120,
-          "ticket2": "",
+          "ticket2": "16110",
           "cajas2": 2400,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2720,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 27440
         }
       ]
     },
@@ -19777,12 +19777,12 @@
           "fechaInicio": "2026-09-19",
           "ticket1": "17936",
           "cajas1": 1100,
-          "ticket2": "",
+          "ticket2": "17937",
           "cajas2": 100,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 850,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8890
         }
       ]
     },
@@ -19808,7 +19808,7 @@
           "fechaInicio": "2026-09-19",
           "ticket1": "16159",
           "cajas1": 1440,
-          "ticket2": "",
+          "ticket2": "161",
           "cajas2": 320,
           "ticket3": "",
           "cajas3": 0,
@@ -19857,14 +19857,34 @@
       "dias": [
         {
           "fechaInicio": "2026-09-19",
+          "ticket1": "16021",
+          "cajas1": 800,
+          "ticket2": "16022",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 2960,
+          "ticket4": "",
+          "cajas4": 21359
+        }
+      ]
+    },
+    {
+      "id": "3-1789905423450",
+      "linea": 3,
+      "sabor": "GLUP MANZANA ROJA",
+      "ordenNumero": "63738",
+      "semana": 38,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-19",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "",
+          "ticket2": "17976",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 1120
         }
       ]
     }
