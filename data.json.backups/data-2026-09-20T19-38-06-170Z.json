@@ -10990,12 +10990,12 @@
             "name": "GLUP UVA",
             "lineId": "6",
             "loadPerHour": 1200,
-            "quantity": 14225,
-            "durationHours": 11.854166666666666,
+            "quantity": 14240,
+            "durationHours": 11.866666666666667,
             "presentation": "0.4Lts",
             "tanks": 1,
             "startTime": "2026-09-22T00:15:00.000Z",
-            "endTime": "2026-09-22T12:06:15.000Z",
+            "endTime": "2026-09-22T12:07:00.000Z",
             "id": "kdc8i1a73",
             "color": "#f59e0b"
           },
@@ -11009,6 +11009,19 @@
             "endTime": "2026-09-22T14:07:00.000Z",
             "id": "92sx8alds",
             "color": "#ef4444"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "6",
+            "loadPerHour": 1200,
+            "quantity": 57600,
+            "durationHours": 48,
+            "presentation": "0.4Lts",
+            "tanks": 3.34,
+            "startTime": "2026-09-22T14:07:00.000Z",
+            "endTime": "2026-09-24T14:07:00.000Z",
+            "id": "3238kg1q5",
+            "color": "#ec4899"
           }
         ],
         "realProduction": {},
@@ -11040,7 +11053,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-20T17:25:02.112Z"
+    "updatedAt": "2026-09-20T17:26:02.859Z"
   },
   "ordenesSap": [
     {
