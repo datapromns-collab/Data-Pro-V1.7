@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-21T00:00:00.000",
+      "weekStartDate": "2026-09-14T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -10688,19 +10688,6 @@
             "color": "#ef4444"
           },
           {
-            "name": "GLUP UVA",
-            "lineId": "6",
-            "loadPerHour": 1200,
-            "quantity": 14240,
-            "durationHours": 11.866666666666667,
-            "presentation": "0.4Lts",
-            "tanks": 1,
-            "startTime": "2026-09-21T11:00:00.000Z",
-            "endTime": "2026-09-21T22:52:00.000Z",
-            "id": "2zzdjhoct",
-            "color": "#ef4444"
-          },
-          {
             "name": "GLUP COLA",
             "lineId": "7",
             "loadPerHour": 2500,
@@ -10974,30 +10961,6 @@
             "endTime": "2026-09-26T07:00:00.000Z",
             "id": "sk957inu7",
             "color": "#10b981"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "6",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-09-21T22:52:00.000Z",
-            "endTime": "2026-09-22T00:52:00.000Z",
-            "id": "ut13c1mv3",
-            "color": "#10b981"
-          },
-          {
-            "name": "GLUP COLA",
-            "lineId": "6",
-            "loadPerHour": 1200,
-            "quantity": 57600,
-            "durationHours": 48,
-            "presentation": "0.4Lts",
-            "tanks": 3.34,
-            "startTime": "2026-09-22T00:52:00.000Z",
-            "endTime": "2026-09-24T00:52:00.000Z",
-            "id": "4f4754oin",
-            "color": "#ef4444"
           }
         ],
         "realProduction": {},
@@ -11020,13 +10983,16 @@
         "deletedTaskIds": [
           "o4ldlcbe9",
           "52smzb5v2",
-          "33r8ekvkq"
+          "33r8ekvkq",
+          "4f4754oin",
+          "2zzdjhoct",
+          "ut13c1mv3"
         ]
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-20T12:07:53.496Z"
+    "updatedAt": "2026-09-20T17:24:01.972Z"
   },
   "ordenesSap": [
     {
@@ -19808,10 +19774,10 @@
           "fechaInicio": "2026-09-19",
           "ticket1": "16159",
           "cajas1": 1440,
-          "ticket2": "1616",
+          "ticket2": "16160",
           "cajas2": 320,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1512,
           "ticket4": "",
           "cajas4": 0
         }
