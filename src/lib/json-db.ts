@@ -24,6 +24,7 @@ export interface PlannerData {
   config: { weekStartDate: string; lineSpeeds: Record<string, number> };
   customRecipes: Record<string, Record<string, number>>;
   customPackagingRecipes: Record<string, Record<string, Record<string, number>>>;
+  productionInventory?: Record<string, any>;
   weeks: Record<string, WeeklyData>;
   _meta?: { updatedAt: string };
 }

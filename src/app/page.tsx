@@ -4804,7 +4804,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                      </>
                    )}
                       {activeModule === 'produccion' && hasAccess(user.id, 'produccion') && (
-                        <ProduccionModule />
+                        <ProduccionModule weeklyOnly={user.id === 'prodt.mds' || user.id === 'prodt1.mds' || user.id === 'prodt2.mds'} />
                       )}
                        {activeModule === 'procesos' && (isDemon || user.id === 'jaime.r' || user.id === 'proc1.mds' || user.id === 'procj.mds' || user.id === 'procs2.mds' || user.id === 'maria.mds' || user.id === 'alex.mds' || user.id === 'proc.mds' || user.id === 'procs1.mds' || user.id === 'proc2.mds' || user.id === 'prodtg.mds') && (
                         <div className="flex flex-col h-full">

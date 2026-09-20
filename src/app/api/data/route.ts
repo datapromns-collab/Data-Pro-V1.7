@@ -190,6 +190,9 @@ export async function POST(request: Request) {
       if (incomingPlanner.customPackagingRecipes) {
         merged.customPackagingRecipes = deepMerge(merged.customPackagingRecipes, incomingPlanner.customPackagingRecipes);
       }
+      if (incomingPlanner.productionInventory) {
+        merged.productionInventory = deepMerge(merged.productionInventory, incomingPlanner.productionInventory);
+      }
     }
 
     if (merged.weeks) {

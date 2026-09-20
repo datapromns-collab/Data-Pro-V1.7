@@ -11050,10 +11050,96 @@
           "ut13c1mv3"
         ]
       }
+    },
+    "productionInventory": {
+      "diarios": {
+        "tapas": {
+          "EMP_0095-Alpla": {
+            "totalCajas": "",
+            "total": ""
+          },
+          "EMP_0095-Importada": {
+            "totalCajas": "",
+            "total": ""
+          },
+          "EMP_0105-Alpla": {
+            "totalCajas": "",
+            "total": ""
+          },
+          "EMP_0105-ImportadaEW": {
+            "totalCajas": "",
+            "total": ""
+          },
+          "EMP_0105-ImportadaTipo2": {
+            "totalCajas": "",
+            "total": ""
+          }
+        },
+        "separadores": {},
+        "preformas": {},
+        "adhesivoCantidad": "",
+        "etiquetasCantidad": {}
+      },
+      "semanal": {
+        "tapas": {
+          "EMP_0095-Alpla": {
+            "totalCajas": "",
+            "total": ""
+          },
+          "EMP_0095-Importada": {
+            "totalCajas": "",
+            "total": ""
+          },
+          "EMP_0105-Alpla": {
+            "totalCajas": "",
+            "total": ""
+          },
+          "EMP_0105-ImportadaEW": {
+            "totalCajas": "",
+            "total": ""
+          },
+          "EMP_0105-ImportadaTipo2": {
+            "totalCajas": "",
+            "total": ""
+          }
+        },
+        "separadores": {},
+        "preformas": {},
+        "adhesivoCantidad": "",
+        "etiquetasCantidad": {}
+      },
+      "mensual": {
+        "tapas": {
+          "EMP_0095-Alpla": {
+            "totalCajas": "",
+            "total": ""
+          },
+          "EMP_0095-Importada": {
+            "totalCajas": "",
+            "total": ""
+          },
+          "EMP_0105-Alpla": {
+            "totalCajas": "",
+            "total": ""
+          },
+          "EMP_0105-ImportadaEW": {
+            "totalCajas": "",
+            "total": ""
+          },
+          "EMP_0105-ImportadaTipo2": {
+            "totalCajas": "",
+            "total": ""
+          }
+        },
+        "separadores": {},
+        "preformas": {},
+        "adhesivoCantidad": "",
+        "etiquetasCantidad": {}
+      }
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-20T20:49:30.888Z"
+    "updatedAt": "2026-09-20T21:28:28.407Z"
   },
   "ordenesSap": [
     {
@@ -19785,7 +19871,7 @@
           "ticket1": "16111",
           "cajas1": 11680,
           "ticket2": "",
-          "cajas2": 44,
+          "cajas2": 442,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
