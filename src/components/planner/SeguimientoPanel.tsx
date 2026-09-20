@@ -13,14 +13,22 @@ const SECCIONES_POR_USUARIO: Record<string, Vista[]> = {
   "etq.mds": ["etiquetadora"],
 };
 
-export default function SeguimientoPanel({ onVistaChange, readOnly = false }: { onVistaChange?: (vista: Vista) => void; readOnly?: boolean }) {
+export default function SeguimientoPanel({ onVistaChange, readOnly = false, allowedViews }: { onVistaChange?: (vista: Vista) => void; readOnly?: boolean; allowedViews?: Vista[] }) {
   const { user } = useAuthStore();
-  const seccionesPermitidas = user ? (SECCIONES_POR_USUARIO[user.id] ?? (["enfardadora", "etiquetadora"] as Vista[])) : (["enfardadora", "etiquetadora"] as Vista[]);
-  const [vista, setVista] = useState<Vista>(seccionesPermitidas[0]);
+  const seccionesPermitidas = allowedViews ?? (user ? (SECCIONES_POR_USUARIO[user.id] ?? (["enfardadora", "etiquetadora"] as Vista[])) : (["enfardadora", "etiquetadora"] as Vista[]));
+  const [vista, setVista] = useState<Vista>(seccionesPermitidas[0] ?? "enfardadora");
+
+  useEffect(() => {
+    if (seccionesPermitidas.length > 0 && !seccionesPermitidas.includes(vista)) {
+      setVista(seccionesPermitidas[0]);
+    }
+  }, [seccionesPermitidas, vista]);
 
   useEffect(() => {
     onVistaChange?.(vista);
   }, [vista, onVistaChange]);
+
+  if (seccionesPermitidas.length === 0) return null;
 
   const botonClass = (activo: boolean) =>
     `inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none ${activo ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`;

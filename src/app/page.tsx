@@ -89,11 +89,13 @@ import { InventoryReport } from '@/components/planner/InventoryReport';
 import { PlanProduccionReport } from '@/components/planner/PlanProduccionReport';
 import { RequisicionReport } from '@/components/planner/RequisicionReport';
 import { JarabesModule, weekMonthKey } from '@/components/planner/JarabesModule';
+import MttoModule from '@/components/planner/MttoModule';
+import CalidadModule from '@/components/planner/CalidadModule';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { usePlannerStore, getWeekKey } from '@/hooks/use-planner-store';
 import { getWeekDays } from '@/lib/planner-utils';
 import { useAuthStore } from '@/hooks/use-auth-store';
-import { usePermissionsStore, MODULE_LABELS, MODULE_COLORS } from '@/hooks/use-permissions-store';
+import { usePermissionsStore } from '@/hooks/use-permissions-store';
 import { PermisosModule } from '@/components/planner/PermisosModule';
 import { MessagesCenter } from '@/components/planner/MessagesCenter';
 import { FcmManager } from '@/components/FcmManager';
@@ -363,6 +365,8 @@ export default function PlannerPage() {
     hasAccess,
     hasManagementAccess,
     hasReadOnlyModule,
+    getModuleLevel,
+    getPermissionLevel,
     allModules
   } = usePermissionsStore();
 
@@ -2601,6 +2605,7 @@ export default function PlannerPage() {
     produccion: 'produccion-view',
     procesos: 'procesos-view',
     calidad: 'calidad-view',
+    mtto: 'mtto-view',
     insumos: 'insumos-view',
     logistica: 'logistica-view',
     ventas: 'ventas-view',
@@ -2648,38 +2653,43 @@ export default function PlannerPage() {
   const allowedProdTabs = useMemo(() => {
     const tabs: ('dia-a-dia' | 'weekly' | 'weekly-summary' | 'monthly')[] = [];
     if (user) {
-      if (hasManagementAccess(user.id, 'produccion-diaria')) tabs.push('dia-a-dia');
-      if (hasManagementAccess(user.id, 'control-semanal')) tabs.push('weekly');
-      if (hasManagementAccess(user.id, 'resumen-semanal')) tabs.push('weekly-summary');
-      if (hasManagementAccess(user.id, 'resumen-mensual')) tabs.push('monthly');
+      if (getPermissionLevel(user.id, 'management', 'production') !== 'none') tabs.push('dia-a-dia');
+      if (getPermissionLevel(user.id, 'management', 'control') !== 'none') tabs.push('weekly');
+      if (getPermissionLevel(user.id, 'management', 'weekly-summary') !== 'none') tabs.push('weekly-summary');
+      if (getPermissionLevel(user.id, 'management', 'monthly-summary') !== 'none') tabs.push('monthly');
     }
     return tabs;
-  }, [user, hasManagementAccess]);
+  }, [user, getPermissionLevel]);
 
   const mgmtOnlyProduccionDiaria = useMemo(() => {
     if (!user) return false;
     return (
-      hasManagementAccess(user.id, 'produccion-diaria') &&
-      !hasManagementAccess(user.id, 'control-semanal') &&
-      !hasManagementAccess(user.id, 'resumen-mensual') &&
-      !hasManagementAccess(user.id, 'cumplimiento')
+      getPermissionLevel(user.id, 'management', 'production') !== 'none' &&
+      getPermissionLevel(user.id, 'management', 'control') === 'none' &&
+      getPermissionLevel(user.id, 'management', 'monthly-summary') === 'none' &&
+      getPermissionLevel(user.id, 'management', 'compliance') === 'none'
     );
-  }, [user, hasManagementAccess]);
+  }, [user, getPermissionLevel]);
 
   const mgmtAllowsControl = useMemo(() => {
     if (!user) return false;
-    return hasManagementAccess(user.id, 'control-semanal') || hasManagementAccess(user.id, 'resumen-mensual');
-  }, [user, hasManagementAccess]);
+    return getPermissionLevel(user.id, 'management', 'control') !== 'none' || getPermissionLevel(user.id, 'management', 'monthly-summary') !== 'none';
+  }, [user, getPermissionLevel]);
 
   const mgmtAllowsCumplimiento = useMemo(() => {
     if (!user) return false;
-    return hasManagementAccess(user.id, 'cumplimiento');
-  }, [user, hasManagementAccess]);
+    return getPermissionLevel(user.id, 'management', 'compliance') !== 'none';
+  }, [user, getPermissionLevel]);
 
   const seguimientoReadOnly = useMemo(() => {
     if (!user) return false;
-    return hasReadOnlyModule(user.id, 'seguimiento');
-  }, [user, hasReadOnlyModule]);
+    return getPermissionLevel(user.id, 'seguimiento', seguimientoVista) !== 'write';
+  }, [user, getPermissionLevel, seguimientoVista]);
+
+  const seguimientoAllowedViews = useMemo(() => {
+    if (!user) return [] as ('enfardadora' | 'etiquetadora')[];
+    return (['enfardadora', 'etiquetadora'] as const).filter((view) => getPermissionLevel(user.id, 'seguimiento', view) !== 'none');
+  }, [user, getPermissionLevel]);
 
   const planningReadOnly = useMemo(() => {
     if (!user) return false;
@@ -3016,7 +3026,7 @@ export default function PlannerPage() {
   };
 
   const handleSaveTask = (taskData: Omit<ScheduledTask, 'id' | 'color'>, asNew: boolean = false) => {
-    if (!isAdmin) return;
+    if (!user || getPermissionLevel(user.id, 'planning', 'gantt') !== 'write') return;
     if (editingTask && !asNew) {
       updateTask(editingTask.id, taskData);
       toast({ title: "Tarea Actualizada" });
@@ -3028,7 +3038,7 @@ export default function PlannerPage() {
   };
 
   const handleDeleteTask = (id: string) => {
-    if (!isAdmin) return;
+    if (!user || getPermissionLevel(user.id, 'planning', 'gantt') !== 'write') return;
     if (confirm('¿Eliminar esta tarea?')) {
       removeTask(id);
       setIsDialogOpen(false);
@@ -3037,7 +3047,7 @@ export default function PlannerPage() {
   };
 
   const handleClearContext = () => {
-    if (!isAdmin) return;
+    if (!user || getPermissionLevel(user.id, 'planning', 'gantt') !== 'write') return;
     if (confirm(`¿Borrar planificación de la Línea ${selectedLine} para esta semana?`)) {
       clearAll(selectedLine, weekStartDate, weekEnd);
     }
@@ -3074,6 +3084,8 @@ export default function PlannerPage() {
     isActive ? "bg-white/20" : "bg-slate-100"
   );
 
+  const activeModuleReadOnly = activeModule !== 'permissions' && getModuleLevel(user.id, activeModule as any) === 'read';
+
   return (
     <SidebarProvider>
       <div className="flex min-h-screen w-full bg-[#f8fafc]">
@@ -3109,8 +3121,8 @@ export default function PlannerPage() {
                    )}
 
                     {hasAccess(user.id, 'management') && (
-                      <Button 
-                        variant="ghost" 
+                      <Button
+                        variant="ghost"
                         onClick={() => { setActiveModule('management'); setActiveTab('admin-report'); }}
                         className={sidebarButtonClass(activeModule === 'management', "bg-[#A67B5B] hover:bg-[#966B4B]", "shadow-[#A67B5B]/30")}
                       >
@@ -3186,7 +3198,7 @@ export default function PlannerPage() {
                       </Button>
                       )}
 
-                       {(isDemon || hasAccess(user.id, 'procesos')) && (
+                       {hasAccess(user.id, 'procesos') && (
                       <Button 
                         variant="ghost" 
                         onClick={() => { setActiveModule('procesos'); setActiveTab('procesos-view'); setProcesosSubTab('ptab'); }}
@@ -3199,7 +3211,7 @@ export default function PlannerPage() {
                       </Button>
                       )}
 
-                      {isDemon && (
+                      {hasAccess(user.id, 'calidad') && (
                       <Button 
                         variant="ghost" 
                         onClick={() => { setActiveModule('calidad'); setActiveTab('calidad-view'); }}
@@ -3212,7 +3224,20 @@ export default function PlannerPage() {
                       </Button>
                       )}
 
-                      {isDemon && (
+                      {hasAccess(user.id, 'mtto') && (
+                      <Button
+                        variant="ghost"
+                        onClick={() => { setActiveModule('mtto'); setActiveTab('mtto-view'); }}
+                        className={sidebarButtonClass(activeModule === 'mtto', "bg-slate-600 hover:bg-slate-700", "shadow-slate-400/30")}
+                      >
+                        <div className={iconContainerClass(activeModule === 'mtto')}>
+                          <Wrench className="h-4 w-4" />
+                        </div>
+                        <span className="uppercase text-[10px] font-black tracking-tight">MTTO</span>
+                      </Button>
+                      )}
+
+                      {hasAccess(user.id, 'insumos') && (
                       <Button 
                         variant="ghost" 
                         onClick={() => { setActiveModule('insumos'); setActiveTab('insumos-view'); }}
@@ -3368,6 +3393,7 @@ export default function PlannerPage() {
                    activeModule === 'produccion' ? "bg-orange-100 text-orange-700" :
                     activeModule === 'procesos' ? "bg-teal-100 text-teal-700" :
                    activeModule === 'calidad' ? "bg-rose-100 text-rose-700" :
+                   activeModule === 'mtto' ? "bg-slate-100 text-slate-700" :
                    activeModule === 'insumos' ? "bg-cyan-100 text-cyan-700" :
                     activeModule === 'logistica' ? "bg-orange-100 text-orange-700" :
                   activeModule === 'ventas' ? "bg-indigo-100 text-indigo-700" :
@@ -3384,6 +3410,7 @@ export default function PlannerPage() {
                  activeModule === 'produccion' ? 'MÓDULO DE PRODUCCIÓN' :
                     activeModule === 'procesos' ? 'MÓDULO DE PROCESOS' :
                    activeModule === 'calidad' ? 'MÓDULO DE CALIDAD' :
+                   activeModule === 'mtto' ? 'MÓDULO DE MTTO' :
                    activeModule === 'insumos' ? 'MÓDULO DE INSUMOS' :
                     activeModule === 'logistica' ? 'MÓDULO DE LOGÍSTICA' :
                   activeModule === 'ventas' ? 'MÓDULO DE VENTAS' :
@@ -3430,53 +3457,53 @@ export default function PlannerPage() {
           <div className="flex-1 overflow-auto p-4 lg:p-8">
             <div className="flex flex-col gap-4 lg:gap-6 h-full">
               
-                 {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'produccion' && activeModule !== 'procesos' && activeModule !== 'calidad' && activeModule !== 'insumos' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && activeModule !== 'jarabes' && activeModule !== 'ordenes-sap' && activeModule !== 'seguimiento' && (
+                 {activeModule !== 'purchasing' && activeModule !== 'raw-materials' && activeModule !== 'planta' && activeModule !== 'produccion' && activeModule !== 'procesos' && activeModule !== 'calidad' && activeModule !== 'mtto' && activeModule !== 'insumos' && activeModule !== 'logistica' && activeModule !== 'ventas' && activeModule !== 'permissions' && activeModule !== 'jarabes' && activeModule !== 'ordenes-sap' && activeModule !== 'seguimiento' && (
                   <div className="flex items-center bg-slate-100/50 border border-slate-200 rounded-full p-1 shadow-none self-start animate-in fade-in slide-in-from-top-2 overflow-x-auto max-w-full no-print h-11 shrink-0 gap-1 w-full justify-between">
                     {activeModule === 'planning' && (
                       <>
                         <div className="flex items-center gap-1">
-                          <button 
+                           {getPermissionLevel(user.id, 'planning', 'gantt') !== 'none' && <button
                             onClick={() => setActiveTab('gantt')}
                             className={cn(navTabClass(activeTab === 'gantt'))}
                           >
                             <GanttChartSquare className="h-3.5 w-3.5" />
                             <span className="hidden sm:inline">Programación</span>
-                          </button>
-                           <button 
+                           </button>}
+                           {getPermissionLevel(user.id, 'planning', 'daily') !== 'none' && <button
                              onClick={() => setActiveTab('daily')}
                              className={cn(navTabClass(activeTab === 'daily'))}
                            >
                              <ListTodo className="h-3.5 w-3.5" />
                              <span className="hidden sm:inline">Plan Día a Día</span>
-                           </button>
-                           <button 
+                           </button>}
+                           {getPermissionLevel(user.id, 'planning', 'preparation') !== 'none' && <button
                              onClick={() => setActiveTab('preparation')}
                              className={cn(navTabClass(activeTab === 'preparation'))}
                            >
                              <FlaskConical className="h-3.5 w-3.5" />
                              <span className="hidden sm:inline">Preparación</span>
-                           </button>
-                           <button 
+                           </button>}
+                           {getPermissionLevel(user.id, 'planning', 'requirement') !== 'none' && <button
                              onClick={() => setActiveTab('requirement')}
                              className={cn(navTabClass(activeTab === 'requirement'))}
                            >
                              <ClipboardList className="h-3.5 w-3.5" />
                              <span className="hidden sm:inline">Requerimiento</span>
-                           </button>
-                           <button 
+                           </button>}
+                           {getPermissionLevel(user.id, 'planning', 'speeds') !== 'none' && <button
                              onClick={() => setActiveTab('speeds')}
                              className={cn(navTabClass(activeTab === 'speeds'))}
                            >
                              <Gauge className="h-3.5 w-3.5" />
                              <span className="hidden sm:inline">Velocidades</span>
-                           </button>
-                           <button 
+                           </button>}
+                           {getPermissionLevel(user.id, 'planning', 'calculator') !== 'none' && <button
                              onClick={() => setActiveTab('calculator')}
                              className={cn(navTabClass(activeTab === 'calculator'))}
                            >
                              <CalculatorIcon className="h-3.5 w-3.5" />
                              <span className="hidden sm:inline">Calculadora</span>
-                           </button>
+                           </button>}
                         </div>
                         <div className="flex items-center gap-2">
                           <Popover>
@@ -3498,7 +3525,7 @@ export default function PlannerPage() {
                               {LINES.map((l, i) => <SelectItem key={l} value={(i + 1).toString()} className="font-bold text-[11px]">Línea {i + 1}</SelectItem>)}
                             </SelectContent>
                           </Select>
-           {(isAdmin || user?.id === 'finan.mds' || user?.id === 'demon') && (
+                           {getPermissionLevel(user.id, 'planning', 'gantt') === 'write' && (
                             <button
                               onClick={() => { setEditingTask(null); setIsDialogOpen(true); }}
                               className="inline-flex items-center gap-1.5 h-9 pl-4 pr-5 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-[#F59E0B] text-white shadow-sm active:scale-95"
@@ -3563,28 +3590,28 @@ export default function PlannerPage() {
                   </div>
                )}
 
-              <div className="flex-1 min-w-0">
+              <div className={cn("flex-1 min-w-0", activeModuleReadOnly && "pointer-events-none select-none")}>
                   {activeModule === 'planning' && (isAdmin || hasAccess(user.id, 'planning') || user?.id === 'cal.mds') && (
                    <div className="flex flex-col h-full">
                      <div className="flex-1 min-h-0 overflow-auto">
-                       {activeTab === 'gantt' && (
+                         {activeTab === 'gantt' && getPermissionLevel(user.id, 'planning', 'gantt') !== 'none' && (
                          <ProductionGantt tasks={filteredTasks} onTaskClick={handleTaskClick} weekStartDate={weekStartDate} />
                        )}
-                        {activeTab === 'daily' && (
+                        {activeTab === 'daily' && getPermissionLevel(user.id, 'planning', 'daily') !== 'none' && (
                           <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintDaily} />
                         )}
-                        {activeTab === 'preparation' && (
+                        {activeTab === 'preparation' && getPermissionLevel(user.id, 'planning', 'preparation') !== 'none' && (
                           <PreparationSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintPreparation} />
                         )}
-                         {activeTab === 'requirement' && (
+                         {activeTab === 'requirement' && getPermissionLevel(user.id, 'planning', 'requirement') !== 'none' && (
                            <RequirementSection onPrint={handlePrintRequirements} onPrintCalculation={handlePrintCalculation} tasks={tasks} weekStartDate={weekStartDate} recipes={customRecipes} packagingRecipes={customPackagingRecipes} />
                          )}
-                       {activeTab === 'speeds' && (
-                         <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} readOnly={!isAdmin} />
+                       {activeTab === 'speeds' && getPermissionLevel(user.id, 'planning', 'speeds') !== 'none' && (
+                         <LineSpeedsConfig lineSpeeds={lineSpeeds} onUpdateSpeed={updateLineSpeed} readOnly={getPermissionLevel(user.id, 'planning', 'speeds') !== 'write'} />
                        )}
-                       {activeTab === 'calculator' && <Calculator />}
+                       {activeTab === 'calculator' && getPermissionLevel(user.id, 'planning', 'calculator') !== 'none' && <Calculator />}
                      </div>
-                     {(isAdmin || user?.id === 'finan.mds' || user?.id === 'demon') && (
+                     {getPermissionLevel(user.id, 'planning', 'gantt') === 'write' && (
                        <div className="flex justify-end">
                          <button
                            onClick={handleClearContext}
@@ -3599,7 +3626,7 @@ export default function PlannerPage() {
                                )}
                                 {activeModule === 'management' && hasAccess(user.id, 'management') && (
                    <>
-                      {activeTab === 'admin-report' && (
+                         {activeTab === 'admin-report' && getPermissionLevel(user.id, 'management', 'production') !== 'none' && (
                       <AdminReportTool 
                         view="production"
                         weeklyData={weeklyData}
@@ -3613,7 +3640,7 @@ export default function PlannerPage() {
                         onPrintMonthlyWithSignature={handlePrintMonthlyWithSignature}
                       />
                       )}
-                      {activeTab === 'compliance-report' && mgmtAllowsCumplimiento && (
+                      {activeTab === 'compliance-report' && getPermissionLevel(user.id, 'management', 'compliance') !== 'none' && (
                         <AdminReportTool 
                           view="compliance"
                           weeklyData={weeklyData}
@@ -6067,11 +6094,9 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                            )}
                       </div>
                     )}
-                    {activeModule === 'calidad' && isDemon && (
-                      <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
-                        <CheckSquare className="h-12 w-12 mb-4 opacity-20" />
-                        Módulo de Calidad en Desarrollo
-                      </div>
+                    {activeModule === 'calidad' && isDemon && <CalidadModule />}
+                    {activeModule === 'mtto' && (
+                      <MttoModule />
                     )}
                       {activeModule === 'insumos' && isDemon && (
                        <div className="flex flex-col h-full">
@@ -6934,7 +6959,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                    />
                  )}
                  {activeModule === 'ordenes-sap' && hasAccess(user.id, 'ordenes-sap') && <OrdenesSapModule activeLinea={ordenesSapActiveLinea} onLineaChange={setOrdenesSapActiveLinea} selectedFecha={selectedFechaSap} onFechaChange={setSelectedFechaSap} userId={user.id} />}
-                 {activeModule === 'seguimiento' && hasAccess(user.id, 'seguimiento') && <SeguimientoPanel onVistaChange={setSeguimientoVista} readOnly={seguimientoReadOnly} />}
+                 {activeModule === 'seguimiento' && hasAccess(user.id, 'seguimiento') && <SeguimientoPanel onVistaChange={setSeguimientoVista} allowedViews={seguimientoAllowedViews} readOnly={seguimientoReadOnly} />}
                  {activeModule === 'permissions' && <PermisosModule />}
               </div>
             </div>
@@ -7220,7 +7245,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
            weekStartDate={weekStartDate} 
            allTasks={tasks}
            lineSpeeds={lineSpeeds}
-           readOnly={planningReadOnly}
+           readOnly={getPermissionLevel(user.id, 'planning', 'gantt') !== 'write'}
            onWeekChange={setWeekStartDate}
          />
 

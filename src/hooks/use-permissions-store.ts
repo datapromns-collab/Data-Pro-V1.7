@@ -73,6 +73,7 @@ const STORAGE_KEY = 'planner_module_permissions';
 const PLANNING_STORAGE_KEY = 'planner_planning_permissions';
 const MANAGEMENT_STORAGE_KEY = 'planner_management_permissions';
 const READONLY_STORAGE_KEY = 'planner_readonly_modules';
+const SECTION_STORAGE_KEY = 'planner_section_permissions';
 
 export type ModuleId =
   | 'planning'
@@ -85,6 +86,7 @@ export type ModuleId =
   | 'planta-admin'
   | 'procesos'
   | 'calidad'
+  | 'mtto'
   | 'insumos'
   | 'logistica'
   | 'ventas'
@@ -112,6 +114,7 @@ export const MODULE_LABELS: Record<ModuleId, string> = {
   'planta-admin': 'Planta (Admin)',
   procesos: 'Procesos',
   calidad: 'Calidad',
+  mtto: 'MTTO',
   insumos: 'Insumos',
   logistica: 'Logística',
   ventas: 'Ventas',
@@ -131,6 +134,7 @@ export const MODULE_COLORS: Record<ModuleId, string> = {
   'planta-admin': 'bg-slate-900',
   procesos: 'bg-teal-600',
   calidad: 'bg-rose-600',
+  mtto: 'bg-slate-600',
   insumos: 'bg-cyan-600',
   logistica: 'bg-orange-600',
   ventas: 'bg-indigo-600',
@@ -150,6 +154,7 @@ export const ALL_MODULES = [
   'planta-admin',
   'procesos',
   'calidad',
+  'mtto',
   'insumos',
   'logistica',
   'ventas',
@@ -158,10 +163,106 @@ export const ALL_MODULES = [
   'seguimiento',
 ] as const satisfies readonly ModuleId[];
 
+export type PermissionLevel = 'none' | 'read' | 'write';
+
+export interface PermissionSection {
+  id: string;
+  label: string;
+  children?: PermissionSection[];
+}
+
+export type SectionPermissions = Record<string, Record<string, PermissionLevel>>;
+
+export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
+  planning: [
+    { id: 'gantt', label: 'Programación' },
+    { id: 'daily', label: 'Plan día a día' },
+    { id: 'preparation', label: 'Preparación' },
+    { id: 'requirement', label: 'Requerimiento' },
+    { id: 'speeds', label: 'Velocidades' },
+    { id: 'calculator', label: 'Calculadora' },
+  ],
+  management: [
+    { id: 'production', label: 'Producción diaria' },
+    { id: 'control', label: 'Control semanal' },
+    { id: 'weekly-summary', label: 'Resumen semanal' },
+    { id: 'monthly-summary', label: 'Resumen mensual' },
+    { id: 'compliance', label: 'Cumplimiento' },
+  ],
+  jarabes: [
+    { id: 'standard', label: 'Reporte estándar' },
+    { id: 'average', label: 'Reporte promedio' },
+    { id: 'weekly', label: 'Reportes semanales' },
+    { id: 'monthly', label: 'Reportes mensuales' },
+  ],
+  'raw-materials': [
+    { id: 'inventory', label: 'Inventario' },
+    { id: 'requirements', label: 'Requerimientos' },
+    { id: 'reports', label: 'Reportes' },
+  ],
+  recipes: [
+    { id: 'raw-material', label: 'Recetas de materia prima' },
+    { id: 'packaging', label: 'Recetas de empaque' },
+  ],
+  planta: [
+    { id: 'line-stops', label: 'Paradas de línea', children: [
+      { id: 'operational-reports', label: 'Informes operacionales' },
+      { id: 'work-orders', label: 'Órdenes de trabajo' },
+    ] },
+    { id: 'production', label: 'Producción', children: [
+      { id: 'planned', label: 'Planificadas' },
+      { id: 'produced', label: 'Producidas' },
+      { id: 'by-shift', label: 'Por turno' },
+    ] },
+    { id: 'daily-report', label: 'Reporte diario' },
+    { id: 'weekly-summary', label: 'Resumen semanal' },
+    { id: 'monthly-summary', label: 'Resumen mensual' },
+  ],
+  produccion: [{ id: 'production', label: 'Producción' }],
+  'planta-admin': [{ id: 'administration', label: 'Administración de planta' }],
+  procesos: [
+    { id: 'ptab', label: 'PTAB' },
+    { id: 'sala-jarabe', label: 'Sala de jarabe' },
+    { id: 'lavado', label: 'Lavado' },
+  ],
+  calidad: [{ id: 'quality', label: 'Calidad' }],
+  mtto: [{ id: 'maintenance', label: 'Mantenimiento' }],
+  insumos: [
+    { id: 'co2', label: 'CO2' },
+    { id: 'insumos', label: 'Insumos' },
+    { id: 'period', label: 'Período' },
+  ],
+  logistica: [
+    { id: 'finished-product', label: 'Producto terminado' },
+    { id: 'logistics', label: 'Logística' },
+    { id: 'plant', label: 'Planta' },
+    { id: 'available', label: 'Disponible' },
+  ],
+  ventas: [{ id: 'sales', label: 'Ventas' }],
+  purchasing: [
+    { id: 'requirements', label: 'Requerimientos' },
+    { id: 'inventory', label: 'Inventario' },
+    { id: 'summary', label: 'Resumen' },
+  ],
+  'ordenes-sap': [{ id: 'orders', label: 'Órdenes SAP' }],
+  seguimiento: [
+    { id: 'enfardadora', label: 'Enfardadora', children: [
+      { id: 'stops', label: 'Paradas' },
+      { id: 'efficiency', label: 'Eficiencia' },
+      { id: 'capacities', label: 'Capacidades' },
+    ] },
+    { id: 'etiquetadora', label: 'Etiquetadora', children: [
+      { id: 'stops', label: 'Paradas' },
+      { id: 'efficiency', label: 'Eficiencia' },
+      { id: 'capacities', label: 'Capacidades' },
+    ] },
+  ],
+};
+
 const DEFAULT_PERMISSIONS: UserPermissions = {
   mds: ['planning', 'planta', 'logistica', 'ventas'],
   'jaime.r': ['planning', 'management', 'jarabes', 'raw-materials', 'planta', 'produccion', 'logistica', 'ventas', 'purchasing', 'seguimiento', 'procesos', 'ordenes-sap'],
-  demon: ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'produccion', 'procesos', 'calidad', 'insumos', 'logistica', 'ventas', 'purchasing', 'ordenes-sap', 'seguimiento'],
+  demon: ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'produccion', 'procesos', 'calidad', 'mtto', 'insumos', 'logistica', 'ventas', 'purchasing', 'ordenes-sap', 'seguimiento'],
   demon2: ['planning', 'ordenes-sap'],
   'maria.mds': ['jarabes', 'raw-materials', 'planta', 'planta-admin', 'planning', 'management', 'produccion', 'ordenes-sap', 'procesos', 'logistica'],
   'alex.mds': ['jarabes', 'raw-materials', 'planta', 'planta-admin', 'planning', 'management', 'procesos', 'logistica'],
@@ -184,7 +285,7 @@ const DEFAULT_PERMISSIONS: UserPermissions = {
   'etq.mds': ['planning', 'seguimiento', 'management'],
   'logg.mds': ['planning', 'management'],
   'finan.mds': ['planning', 'management', 'purchasing'],
-  'mtto.mds': ['planning'],
+  'mtto.mds': ['planning', 'mtto'],
   'cal.mds': ['planning', 'management'],
 };
 
@@ -210,7 +311,7 @@ const DEFAULT_READONLY_MODULES: UserPermissions = {
   'etq.mds': ['planning'],
   'logg.mds': ['planning'],
   'finan.mds': ['planning'],
-  'mtto.mds': ['planning'],
+  'mtto.mds': ['planning', 'mtto'],
   'cal.mds': ['planning'],
   'prodtg.mds': ['planning'],
   'MDS': ['planning', 'management', 'jarabes', 'raw-materials', 'recipes', 'planta', 'logistica', 'ventas', 'purchasing', 'ordenes-sap', 'seguimiento'],
@@ -221,6 +322,7 @@ export function usePermissionsStore() {
   const [planningPermissions, setPlanningPermissions] = useState<PlanningPermissions>({});
   const [managementPermissions, setManagementPermissions] = useState<ManagementPermissions>({});
   const [readOnlyModules, setReadOnlyModules] = useState<UserPermissions>({});
+  const [sectionPermissions, setSectionPermissions] = useState<SectionPermissions>({});
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -228,11 +330,13 @@ export function usePermissionsStore() {
     const savedPlanning = localStorage.getItem(PLANNING_STORAGE_KEY);
     const savedManagement = localStorage.getItem(MANAGEMENT_STORAGE_KEY);
     const savedReadOnly = localStorage.getItem(READONLY_STORAGE_KEY);
+    const savedSections = localStorage.getItem(SECTION_STORAGE_KEY);
 
     let modules: UserPermissions = {};
     let planning: PlanningPermissions = {};
     let management: ManagementPermissions = {};
     let readOnly: UserPermissions = {};
+    let sections: SectionPermissions = {};
 
     if (savedModules) {
       try {
@@ -274,10 +378,19 @@ export function usePermissionsStore() {
       readOnly = { ...DEFAULT_READONLY_MODULES };
     }
 
+    if (savedSections) {
+      try {
+        sections = JSON.parse(savedSections) as SectionPermissions;
+      } catch {
+        sections = {};
+      }
+    }
+
     setPermissions(modules);
     setPlanningPermissions(planning);
     setManagementPermissions(management);
     setReadOnlyModules(readOnly);
+    setSectionPermissions(sections);
     setIsLoaded(true);
   }, []);
 
@@ -301,12 +414,32 @@ export function usePermissionsStore() {
     localStorage.setItem(READONLY_STORAGE_KEY, JSON.stringify(next));
   };
 
-  const toggleModuleForUser = (userId: string, module: ModuleId) => {
+  const saveSectionPermissions = (next: SectionPermissions) => {
+    setSectionPermissions(next);
+    localStorage.setItem(SECTION_STORAGE_KEY, JSON.stringify(next));
+  };
+
+  const getModuleLevel = useCallback((userId: string, module: ModuleId): PermissionLevel => {
+    const moduleList = permissions[userId] ?? DEFAULT_PERMISSIONS[userId] ?? [];
+    if (!moduleList.includes(module)) return 'none';
+    const readOnlyList = readOnlyModules[userId] ?? DEFAULT_READONLY_MODULES[userId] ?? [];
+    return readOnlyList.includes(module) ? 'read' : 'write';
+  }, [permissions, readOnlyModules]);
+
+  const setModulePermission = (userId: string, module: ModuleId, level: PermissionLevel) => {
     const current = permissions[userId] ?? DEFAULT_PERMISSIONS[userId] ?? [];
-    const next = current.includes(module)
-      ? current.filter((m) => m !== module)
-      : [...current, module];
-    savePermissions({ ...permissions, [userId]: next });
+    const nextModules = level === 'none'
+      ? current.filter((item) => item !== module)
+      : Array.from(new Set([...current, module]));
+    const nextReadOnly = level === 'read'
+      ? Array.from(new Set([...(readOnlyModules[userId] ?? DEFAULT_READONLY_MODULES[userId] ?? []), module]))
+      : (readOnlyModules[userId] ?? DEFAULT_READONLY_MODULES[userId] ?? []).filter((item) => item !== module);
+    savePermissions({ ...permissions, [userId]: nextModules });
+    saveReadOnlyModules({ ...readOnlyModules, [userId]: nextReadOnly });
+  };
+
+  const toggleModuleForUser = (userId: string, module: ModuleId) => {
+    setModulePermission(userId, module, getModuleLevel(userId, module) === 'none' ? 'write' : 'none');
   };
 
   const togglePlanningPermission = (userId: string, section: PlanningSection, type: 'read' | 'write') => {
@@ -319,25 +452,16 @@ export function usePermissionsStore() {
   };
 
   const hasAccess = useCallback((userId: string, module: ModuleId): boolean => {
-    const saved = permissions[userId] ?? [];
-    const defaults = DEFAULT_PERMISSIONS[userId] ?? [];
-    const merged = Array.from(new Set([...defaults, ...saved]));
-    return merged.includes(module);
-  }, [permissions]);
+    return getModuleLevel(userId, module) !== 'none';
+  }, [getModuleLevel]);
 
   const hasPlantaAdminAccess = useCallback((userId: string): boolean => {
-    const saved = permissions[userId] ?? [];
-    const defaults = DEFAULT_PERMISSIONS[userId] ?? [];
-    const merged = Array.from(new Set([...defaults, ...saved]));
-    return merged.includes('planta-admin');
-  }, [permissions]);
+    return getModuleLevel(userId, 'planta-admin') !== 'none';
+  }, [getModuleLevel]);
 
   const hasPlantaWriteAccess = useCallback((userId: string): boolean => {
-    const saved = permissions[userId] ?? [];
-    const defaults = DEFAULT_PERMISSIONS[userId] ?? [];
-    const merged = Array.from(new Set([...defaults, ...saved]));
-    return merged.includes('planta');
-  }, [permissions]);
+    return getModuleLevel(userId, 'planta') === 'write';
+  }, [getModuleLevel]);
 
   const hasPlanningReadAccess = useCallback((userId: string, section: PlanningSection): boolean => {
     const current = planningPermissions[userId] ?? DEFAULT_PLANNING_PERMISSIONS[userId] ?? { read: [], write: [] };
@@ -358,15 +482,60 @@ export function usePermissionsStore() {
   }, [managementPermissions]);
 
   const hasReadOnlyModule = useCallback((userId: string, module: ModuleId): boolean => {
-    const saved = readOnlyModules[userId] ?? [];
-    const defaults = DEFAULT_READONLY_MODULES[userId] ?? [];
-    const merged = Array.from(new Set([...defaults, ...saved]));
-    return merged.includes(module);
-  }, [readOnlyModules]);
+    return getModuleLevel(userId, module) === 'read';
+  }, [getModuleLevel]);
+
+  const getPermissionLevel = useCallback((userId: string, module: ModuleId, section?: string): PermissionLevel => {
+    const moduleLevel = getModuleLevel(userId, module);
+    if (moduleLevel === 'none') return 'none';
+
+    const configured = sectionPermissions[userId] ?? {};
+    if (section) {
+      const segments = section.split('.');
+      for (let end = segments.length; end > 0; end -= 1) {
+        const key = `${module}.${segments.slice(0, end).join('.')}`;
+        if (configured[key]) return configured[key];
+      }
+    }
+
+    if (module === 'planning' && section && ['gantt', 'daily', 'preparation', 'requirement'].includes(section.split('.').at(-1) ?? '')) {
+      const planningSection = section.split('.').at(-1) as PlanningSection;
+      const current = planningPermissions[userId] ?? DEFAULT_PLANNING_PERMISSIONS[userId];
+      if (current?.write.includes(planningSection)) return 'write';
+      if (current?.read.includes(planningSection)) return 'read';
+      return 'none';
+    }
+
+    if (module === 'management' && section) {
+      const managementSectionMap: Record<string, ManagementSection> = {
+        production: 'produccion-diaria',
+        control: 'control-semanal',
+        'weekly-summary': 'resumen-semanal',
+        'monthly-summary': 'resumen-mensual',
+        compliance: 'cumplimiento',
+      };
+      const managementSection = managementSectionMap[section.split('.').at(-1) ?? ''];
+      const allowed = managementPermissions[userId] ?? DEFAULT_MANAGEMENT_PERMISSIONS[userId];
+      if (managementSection && allowed && allowed.length > 0 && !allowed.includes(managementSection)) return 'none';
+    }
+
+    return moduleLevel;
+  }, [getModuleLevel, managementPermissions, permissions, planningPermissions, readOnlyModules, sectionPermissions]);
+
+  const setPermissionLevel = (userId: string, module: ModuleId, section: string, level: PermissionLevel) => {
+    const current = sectionPermissions[userId] ?? {};
+    saveSectionPermissions({
+      ...sectionPermissions,
+      [userId]: { ...current, [`${module}.${section}`]: level },
+    });
+  };
 
   const resetToDefaults = () => {
     savePermissions({ ...DEFAULT_PERMISSIONS });
     savePlanningPermissions({ ...DEFAULT_PLANNING_PERMISSIONS });
+    saveManagementPermissions({ ...DEFAULT_MANAGEMENT_PERMISSIONS });
+    saveReadOnlyModules({ ...DEFAULT_READONLY_MODULES });
+    saveSectionPermissions({});
   };
 
   return {
@@ -374,6 +543,7 @@ export function usePermissionsStore() {
     planningPermissions,
     managementPermissions,
     readOnlyModules,
+    sectionPermissions,
     isLoaded,
     toggleModuleForUser,
     togglePlanningPermission,
@@ -384,7 +554,12 @@ export function usePermissionsStore() {
     hasPlanningWriteAccess,
     hasManagementAccess,
     hasReadOnlyModule,
+    getModuleLevel,
+    setModulePermission,
+    getPermissionLevel,
+    setPermissionLevel,
     resetToDefaults,
     allModules: ALL_MODULES,
+    permissionSections: PERMISSION_SECTIONS,
   };
 }

@@ -11,7 +11,7 @@ import {
   SidebarMenuItem,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import { Activity, BarChart3, Settings2 } from "lucide-react";
+import { Activity, BarChart3, Settings2, Wrench } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -67,6 +67,18 @@ export function AppSidebar() {
                   <Link href="/capacidades">
                     <Settings2 className="w-5 h-5 mr-2" />
                     <span className="font-bold text-sm">Capacidades Fijas</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton 
+                  asChild 
+                  isActive={pathname === "/mtto"} 
+                  className="px-4 py-6 hover:bg-accent/10 data-[active=true]:bg-primary/10 data-[active=true]:text-primary"
+                >
+                  <Link href="/mtto">
+                    <Wrench className="w-5 h-5 mr-2" />
+                    <span className="font-bold text-sm">MTTO</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
