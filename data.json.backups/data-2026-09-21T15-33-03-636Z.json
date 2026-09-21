@@ -11382,7 +11382,8 @@
           "planning",
           "management",
           "procesos",
-          "logistica"
+          "logistica",
+          "ordenes-sap"
         ],
         "anto.mds": [
           "purchasing",
@@ -11812,7 +11813,8 @@
           "planning"
         ],
         "alex.mds": [
-          "planning"
+          "planning",
+          "ordenes-sap"
         ],
         "anto.mds": [
           "planning"
@@ -11907,7 +11909,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-21T15:16:49.133Z"
+    "updatedAt": "2026-09-21T15:33:02.419Z"
   },
   "ordenesSap": [
     {
@@ -20921,7 +20923,7 @@
         {
           "fechaInicio": "2026-09-21",
           "ticket1": "16210",
-          "cajas1": 0,
+          "cajas1": 2184,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -142498,6 +142500,21 @@
         "litros": "17300",
         "ubb": "6",
         "brix": "54.05",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1790003834051_xlrwj6",
+        "fecha": "2026-09-02",
+        "hora": "",
+        "numeroTanques": "13",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17479",
+        "ubb": "6",
+        "brix": "54.39",
         "estado": "preparado",
         "enviarALinea": null,
         "editando": false,

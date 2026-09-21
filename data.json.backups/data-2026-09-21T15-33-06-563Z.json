@@ -11382,7 +11382,8 @@
           "planning",
           "management",
           "procesos",
-          "logistica"
+          "logistica",
+          "ordenes-sap"
         ],
         "anto.mds": [
           "purchasing",
@@ -11812,7 +11813,8 @@
           "planning"
         ],
         "alex.mds": [
-          "planning"
+          "planning",
+          "ordenes-sap"
         ],
         "anto.mds": [
           "planning"
@@ -11907,7 +11909,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-21T15:17:08.505Z"
+    "updatedAt": "2026-09-21T15:33:03.491Z"
   },
   "ordenesSap": [
     {
