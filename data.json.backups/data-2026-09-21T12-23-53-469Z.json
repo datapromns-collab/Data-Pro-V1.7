@@ -11237,7 +11237,23 @@
             "EMP_0042": "1765,18",
             "EMP_0048": "1020,08",
             "EMP_0101": "378,12",
-            "EMP_0110": "975,8"
+            "EMP_0110": "975,8",
+            "EMP_0111": "374,84",
+            "EMP_0112": "1235,4",
+            "EMP_0113": "281,68",
+            "EMP_0114": "134,7",
+            "EMP_0115": "533,4",
+            "EMP_0116": "459,2",
+            "EMP_0117": "845,18",
+            "EMP_0136": "371,42",
+            "EMP_0137": "670,42",
+            "EMP_0142": "582,8",
+            "EMP_0143": "",
+            "EMP_0144": "",
+            "EMP_0147": "171",
+            "EMP_0148": "441,93",
+            "EMP_0150": "833,2",
+            "EMP_0155": "265,"
           }
         }
       },
@@ -11267,7 +11283,36 @@
         "separadores": {},
         "preformas": {},
         "adhesivoCantidad": "",
-        "etiquetasCantidad": {}
+        "etiquetasCantidad": {},
+        "2026-09": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {}
+        }
       }
     },
     "permissions": {
@@ -11858,7 +11903,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-21T12:18:15.259Z"
+    "updatedAt": "2026-09-21T12:23:52.408Z"
   },
   "ordenesSap": [
     {
