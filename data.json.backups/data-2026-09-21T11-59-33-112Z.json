@@ -11095,16 +11095,20 @@
             "total": ""
           },
           "EMP_0105-ImportadaEW": {
-            "totalCajas": "2",
+            "totalCajas": "2592000",
             "total": ""
           },
           "EMP_0105-ImportadaTipo2": {
-            "totalCajas": "",
+            "totalCajas": "1435200",
             "total": ""
           }
         },
         "separadores": {},
-        "preformas": {},
+        "preformas": {
+          "EMP_0009": "232200",
+          "EMP_0068": "706500",
+          "EMP_0093-Ultrapack": "781886"
+        },
         "adhesivoCantidad": "",
         "etiquetasCantidad": {}
       },
@@ -11725,7 +11729,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-21T11:58:35.703Z"
+    "updatedAt": "2026-09-21T11:59:28.688Z"
   },
   "ordenesSap": [
     {
