@@ -11227,7 +11227,7 @@
             "EMP_0130": "5213",
             "EMP_0084": "2982"
           },
-          "adhesivoCantidad": "",
+          "adhesivoCantidad": "98",
           "etiquetasCantidad": {
             "EMP_0022": "685,59",
             "EMP_0026": "1039,41",
@@ -11254,7 +11254,8 @@
             "EMP_0148": "441,93",
             "EMP_0150": "833,2",
             "EMP_0155": "265,82",
-            "EMP_0157": "459"
+            "EMP_0157": "459,6",
+            "EMP_0158": "915,2"
           }
         }
       },
@@ -11358,7 +11359,8 @@
         ],
         "demon2": [
           "planning",
-          "ordenes-sap"
+          "ordenes-sap",
+          "management"
         ],
         "maria.mds": [
           "jarabes",
@@ -11891,7 +11893,8 @@
           "ordenes-sap",
           "seguimiento"
         ],
-        "jaime.r": []
+        "jaime.r": [],
+        "demon2": []
       },
       "sections": {
         "jaime.r": {
@@ -11904,7 +11907,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-21T12:23:55.367Z"
+    "updatedAt": "2026-09-21T15:16:48.696Z"
   },
   "ordenesSap": [
     {
@@ -20781,6 +20784,146 @@
           "cajas1": 9920,
           "ticket2": "",
           "cajas2": 661,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1790003182233",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "63749",
+      "semana": 39,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-21",
+          "ticket1": "16064",
+          "cajas1": 2880,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1790003191776",
+      "linea": 2,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "63755",
+      "semana": 39,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-21",
+          "ticket1": "16023",
+          "cajas1": 3760,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1790003209828",
+      "linea": 3,
+      "sabor": "GLUP MANZANA ROJA",
+      "ordenNumero": "63761",
+      "semana": 39,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-21",
+          "ticket1": "17978",
+          "cajas1": 8160,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1790003229935",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63767",
+      "semana": 39,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-21",
+          "ticket1": "16112",
+          "cajas1": 6939,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1790003242298",
+      "linea": 5,
+      "sabor": "JUSTY DURAZNO",
+      "ordenNumero": "63772",
+      "semana": 39,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-21",
+          "ticket1": "17938",
+          "cajas1": 700,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1790003252494",
+      "linea": 6,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "63778",
+      "semana": 39,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-21",
+          "ticket1": "16161",
+          "cajas1": 3200,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1790003271538",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63784",
+      "semana": 39,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-21",
+          "ticket1": "16",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -32136,6 +32279,96 @@
             "preparado": "18",
             "final": "11.32"
           }
+        },
+        "2026-09-18": {
+          "GLUP COLA": {
+            "inicial": "52.16",
+            "preparado": "36",
+            "final": "52.71"
+          },
+          "GLUP KOLITA": {
+            "inicial": "46.62",
+            "preparado": "36",
+            "final": "25.28"
+          },
+          "JUSTY PERA": {
+            "inicial": "22",
+            "preparado": "200",
+            "final": "18"
+          },
+          "GLUP FRESH": {
+            "inicial": "11.32",
+            "preparado": "12",
+            "final": "8.08"
+          },
+          "GLUP UVA": {
+            "preparado": "22",
+            "final": "22"
+          },
+          "GLUP MANZANA ROJA": {
+            "preparado": "16"
+          }
+        },
+        "2026-09-19": {
+          "GLUP COLA": {
+            "inicial": "52.71",
+            "preparado": "30",
+            "final": "36.32"
+          },
+          "JUSTY PERA": {
+            "inicial": "18",
+            "preparado": "180",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "8.08",
+            "preparado": "6",
+            "final": "2.19"
+          },
+          "GLUP UVA": {
+            "inicial": "22",
+            "preparado": "22",
+            "final": "4.38"
+          },
+          "GLUP KOLITA": {
+            "inicial": "25.28",
+            "final": "15.45"
+          },
+          "GLUP MANZANA ROJA": {
+            "preparado": "16",
+            "final": "13.76"
+          }
+        },
+        "2026-09-20": {
+          "GLUP COLA": {
+            "inicial": "36.32",
+            "preparado": "24",
+            "final": "51.39"
+          },
+          "GLUP FRESH": {
+            "inicial": "2.19",
+            "preparado": "6",
+            "final": "8.19"
+          },
+          "GLUP UVA": {
+            "inicial": "4.38",
+            "preparado": "11",
+            "final": "15.38"
+          },
+          "GLUP KOLITA": {
+            "inicial": "15.45",
+            "preparado": "",
+            "final": "15.45"
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "13.76",
+            "preparado": "24",
+            "final": "24.57"
+          },
+          "JUSTY DURAZNO": {
+            "preparado": "40",
+            "final": "40"
+          }
         }
       },
       "sugar": {
@@ -32928,6 +33161,67 @@
             "recepcionSacos": "",
             "invFinalSacos": ""
           }
+        },
+        "2026-09-18": {
+          "PORTUGUESA": {
+            "invInicialSacos": "4040",
+            "recepcionSacos": "4000",
+            "invFinalSacos": "5800"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2960",
+            "recepcionSacos": "",
+            "invFinalSacos": "2360"
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "PASTORA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "2600",
+            "invFinalSacos": "1760"
+          }
+        },
+        "2026-09-19": {
+          "PORTUGUESA": {
+            "invInicialSacos": "5800",
+            "recepcionSacos": "",
+            "invFinalSacos": "4080"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2360",
+            "recepcionSacos": "",
+            "invFinalSacos": "2280"
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "PASTORA": {
+            "invInicialSacos": "1760",
+            "recepcionSacos": "3400",
+            "invFinalSacos": "3040"
+          }
+        },
+        "2026-09-20": {
+          "PORTUGUESA": {
+            "invInicialSacos": "4080",
+            "recepcionSacos": "",
+            "invFinalSacos": "3440"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "2280",
+            "recepcionSacos": "",
+            "invFinalSacos": "2280"
+          },
+          "PASTORA": {
+            "invInicialSacos": "3040",
+            "recepcionSacos": "",
+            "invFinalSacos": "1680"
+          }
         }
       },
       "tanques": {
@@ -33680,6 +33974,36 @@
             "invInicialSacos": "466",
             "invFinalSacos": "444"
           }
+        },
+        "2026-09-18": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "184",
+            "invFinalSacos": "377"
+          },
+          "Sala 1": {
+            "invInicialSacos": "444",
+            "invFinalSacos": "228"
+          }
+        },
+        "2026-09-19": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "377",
+            "invFinalSacos": "251"
+          },
+          "Sala 1": {
+            "invInicialSacos": "228",
+            "invFinalSacos": "1579"
+          }
+        },
+        "2026-09-20": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "251",
+            "invFinalSacos": "351"
+          },
+          "Sala 1": {
+            "invInicialSacos": "1579",
+            "invFinalSacos": "1364"
+          }
         }
       },
       "realKgPerSack": {
@@ -33735,7 +34059,10 @@
         "2026-09-14": "50.47",
         "2026-09-15": "50.37",
         "2026-09-16": "50.24",
-        "2026-09-17": "50.35"
+        "2026-09-17": "50.35",
+        "2026-09-18": "50.45",
+        "2026-09-19": "50.38",
+        "2026-09-20": "50.23"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
@@ -33754,7 +34081,8 @@
         "2026-07-27": "1.34",
         "2026-09-02": "1.34",
         "2026-09-01": "1.34",
-        "2026-09-13": "1.34"
+        "2026-09-13": "1.34",
+        "2026-09-18": "1.02"
       },
       "_deletedIds": {},
       "weeklyFisico": {
@@ -33769,7 +34097,7 @@
         "2026-09-01|2026-09": 891165.86,
         "2026-08-01|2026-08": 121494.94,
         "2026-09-07|2026-09": 1141476.37,
-        "2026-09-14|2026-09": 772113.62
+        "2026-09-14|2026-09": 1174355.86
       }
     },
     "seguimiento-etiquetadora": {
@@ -141994,7 +142322,188 @@
       "2026-09-16-Sanitizer-0": "282,5",
       "2026-09-16-LARK CLEAN 21C-0": "200"
     },
-    "sala-jarabe-glup": []
+    "sala-jarabe-glup": [
+      {
+        "id": "row_1790003214873_v0wxrv",
+        "fecha": "2026-09-02",
+        "hora": "",
+        "numeroTanques": "1",
+        "sala": "1",
+        "sabor": "GLUP KOLITA",
+        "litros": "17756",
+        "ubb": "18",
+        "brix": "54.51",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1790003305009_cul3ad",
+        "fecha": "2006-09-02",
+        "hora": "",
+        "numeroTanques": "12",
+        "sala": "2",
+        "sabor": "GLUP KOLITA",
+        "litros": "17814",
+        "ubb": "18",
+        "brix": "54.63",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1790003382529_im0ypg",
+        "fecha": "2026-09-02",
+        "hora": "",
+        "numeroTanques": "12",
+        "sala": "2",
+        "sabor": "GLUP KOLITA",
+        "litros": "17814",
+        "ubb": "18",
+        "brix": "54.63",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1790003455081_uwj7rg",
+        "fecha": "2026-09-02",
+        "hora": "",
+        "numeroTanques": "2",
+        "sala": "2",
+        "sabor": "GLUP PIÑA",
+        "litros": "17451",
+        "ubb": "10",
+        "brix": "54.33",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1790003499849_0zz4a2",
+        "fecha": "2026-09-02",
+        "hora": "",
+        "numeroTanques": "2",
+        "sala": "1",
+        "sabor": "GLUP FRESH",
+        "litros": "17296",
+        "ubb": "6",
+        "brix": "54.20",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1790003554321_iywupe",
+        "fecha": "2026-09-02",
+        "hora": "",
+        "numeroTanques": "4",
+        "sala": "2",
+        "sabor": "GLUP PIÑA",
+        "litros": "17480",
+        "ubb": "10",
+        "brix": "54.40",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1790003603577_plw6vt",
+        "fecha": "2026-09-02",
+        "hora": "",
+        "numeroTanques": "3",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17290",
+        "ubb": "6",
+        "brix": "53.98",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1790003637489_d5o7bh",
+        "fecha": "2026-09-02",
+        "hora": "",
+        "numeroTanques": "6",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17295",
+        "ubb": "6",
+        "brix": "54.01",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1790003678025_4pvqzf",
+        "fecha": "2026-09-02",
+        "hora": "",
+        "numeroTanques": "6",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17300",
+        "ubb": "6",
+        "brix": "53.97",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1790003716729_zkgbqt",
+        "fecha": "2026-09-02",
+        "hora": "",
+        "numeroTanques": "4",
+        "sala": "1",
+        "sabor": "GLUP FRESH",
+        "litros": "17230",
+        "ubb": "6",
+        "brix": "54.19",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1790003756602_azsmxo",
+        "fecha": "2026-09-02",
+        "hora": "",
+        "numeroTanques": "17",
+        "sala": "2",
+        "sabor": "GLUP PIÑA",
+        "litros": "17465",
+        "ubb": "10",
+        "brix": "54.39",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      },
+      {
+        "id": "row_1790003798963_nkazwv",
+        "fecha": "2026-09-02",
+        "hora": "",
+        "numeroTanques": "9",
+        "sala": "2",
+        "sabor": "GLUP COLA",
+        "litros": "17300",
+        "ubb": "6",
+        "brix": "54.05",
+        "estado": "preparado",
+        "enviarALinea": null,
+        "editando": false,
+        "editandoPor": null
+      }
+    ]
   },
   "cacheVersion": 0,
   "deletedIds": {
@@ -142107,8 +142616,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  08.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 13360,
-    "uploadedAt": "2026-09-18T12:57:41.982Z",
+    "tamano": 12729,
+    "uploadedAt": "2026-09-21T14:24:37.769Z",
     "uploadedBy": "local-user"
   }
 }

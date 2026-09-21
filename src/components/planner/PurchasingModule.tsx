@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useMemo, memo } from 'react';
+import React, { useEffect, useMemo, memo, useState } from 'react';
+import { format } from 'date-fns';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   Globe, 
@@ -37,6 +38,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { usePlannerStore } from '@/hooks/use-planner-store';
+import { loadPlannerData } from '@/lib/json-db';
 import { Card } from '@/components/ui/card';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
@@ -51,6 +53,7 @@ import {
   ADDITIVES_DATA,
   PREFORMS_DATA,
   CAPS_DATA,
+  SEPARATORS_DATA,
   LABELS_2LTS_DATA,
   LABELS_1_5LTS_DATA,
   LABELS_1LT_DATA,
@@ -87,8 +90,51 @@ const JUGOS = [
 ];
 
 const PRESENTATIONS = ["2Lts", "1.5Lts", "1Lt", "0.4Lts"];
+const MONTHLY_AUTO_CODES = new Set([
+  ...CAPS_DATA.filter(item => item.code === 'EMP_0095' || item.code === 'EMP_0105').map(item => item.code),
+  ...SEPARATORS_DATA.map(item => item.code),
+  ...PREFORMS_DATA.map(item => item.code),
+  ...PLASTICS_DATA.filter(item => !('isHeader' in item)).map(item => item.code),
+  ...ADHESIVE_DATA.map(item => item.code),
+  ...LABELS_2LTS_DATA.map(item => item.code),
+  ...LABELS_1_5LTS_DATA.map(item => item.code),
+  ...LABELS_1LT_DATA.map(item => item.code),
+  ...LABELS_04LT_DATA.map(item => item.code),
+]);
+
+type MonthlyProductionValues = {
+  tapas?: Record<string, { totalCajas?: string; total?: string }>;
+  separadores?: Record<string, string>;
+  preformas?: Record<string, string>;
+  plasticos?: Record<string, string>;
+  adhesivoCantidad?: string;
+  etiquetasCantidad?: Record<string, string>;
+};
+
+type MonthlyProductionInventory = {
+  mensual?: Record<string, MonthlyProductionValues>;
+};
+
+const parseProductionNumber = (value: unknown) => {
+  if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+  const normalized = String(value ?? '').trim().replace(',', '.');
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
+const sumProductionValues = (values: Record<string, unknown> | undefined, code: string) =>
+  Object.entries(values || {})
+    .filter(([key]) => key === code || key.startsWith(`${code}-`))
+    .reduce((sum, [, value]) => sum + parseProductionNumber(value), 0);
 
 export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrintResumen }: PurchasingModuleProps) {
+  const [productionInventory, setProductionInventory] = useState<MonthlyProductionInventory>({});
+   const [productionMonthKey] = useState(() => {
+     if (typeof window !== 'undefined') {
+       return localStorage.getItem('planner_monthly_inventory_month_v1') || format(new Date(), 'yyyy-MM');
+     }
+     return format(new Date(), 'yyyy-MM');
+   });
    const { 
     salesProjection, 
     updateSalesProjection,
@@ -113,6 +159,48 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
     customRecipes,
     customPackagingRecipes
    } = usePlannerStore();
+
+   useEffect(() => {
+     let cancelled = false;
+     loadPlannerData().then((data) => {
+       if (!cancelled) setProductionInventory((data?.productionInventory as MonthlyProductionInventory) || {});
+     }).catch(() => {
+       if (!cancelled) setProductionInventory({});
+     });
+     return () => { cancelled = true; };
+   }, []);
+
+   const monthlyProduction = productionInventory.mensual?.[productionMonthKey];
+   const monthlyPlantInventory = useMemo(() => {
+     const next = { ...plantInventory };
+     MONTHLY_AUTO_CODES.forEach(code => { next[code] = 0; });
+     if (!monthlyProduction) return next;
+
+     Object.keys(monthlyProduction.tapas || {}).forEach((key) => {
+       const code = key.split('-')[0];
+       next[code] = Object.entries(monthlyProduction.tapas || {})
+         .filter(([tapaKey]) => tapaKey === code || tapaKey.startsWith(`${code}-`))
+         .reduce((sum, [, item]) => sum + parseProductionNumber(item.totalCajas), 0);
+     });
+     Object.entries(monthlyProduction.separadores || {}).forEach(([code]) => {
+       next[code] = sumProductionValues(monthlyProduction.separadores, code);
+     });
+     Object.keys(monthlyProduction.preformas || {}).forEach((key) => {
+       const code = key.split('-')[0];
+       next[code] = sumProductionValues(monthlyProduction.preformas, code);
+     });
+     Object.keys(monthlyProduction.plasticos || {}).forEach((key) => {
+       const code = key.split('-')[0];
+       next[code] = sumProductionValues(monthlyProduction.plasticos, code);
+     });
+     if (monthlyProduction.adhesivoCantidad !== undefined) {
+       next.EMP_0078 = parseProductionNumber(monthlyProduction.adhesivoCantidad);
+     }
+     Object.entries(monthlyProduction.etiquetasCantidad || {}).forEach(([code, value]) => {
+       next[code] = parseProductionNumber(value);
+     });
+     return next;
+   }, [monthlyProduction, plantInventory]);
    
    const mergeRecords = (a: Record<string, number>, b: Record<string, number>): Record<string, number> => {
      const result: Record<string, number> = {};
@@ -303,7 +391,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
     const isLogistics = type === 'logistics';
     const inventorySource = section === 'aw'
       ? (isLogistics ? logisticsInventoryAW : plantInventoryAW)
-      : (isLogistics ? logisticsInventory : plantInventory);
+      : (isLogistics ? logisticsInventory : monthlyPlantInventory);
     const updateInventory = section === 'aw'
       ? (isLogistics ? updateLogisticsInventoryAW : updatePlantInventoryAW)
       : (isLogistics ? updateLogisticsInventory : updatePlantInventory);
@@ -337,6 +425,9 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                   </TableCell>
                 </TableRow>
                 {group.items.map((item) => (
+                  (() => {
+                    const isAutomatic = !isLogistics && section === 'mds' && MONTHLY_AUTO_CODES.has(item.code);
+                    return (
                   <TableRow key={item.code} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100 group">
                     <TableCell className="pl-8">
                       <div className="flex flex-col">
@@ -352,15 +443,20 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                         type="number"
                         value={inventorySource[item.code] === 0 ? '' : (inventorySource[item.code] ?? '')}
                         onChange={(e) => {
+                          if (isAutomatic) return;
                           const val = parseFloat(e.target.value || '0') || 0;
                           updateInventory(item.code, val);
                         }}
                         onFocus={(e) => e.target.select()}
+                        disabled={isAutomatic}
+                        title={isAutomatic ? `Sincronizado desde Producción mensual (${productionMonthKey})` : undefined}
                         className="h-8 text-right font-black text-sm border-none bg-slate-50 focus:bg-white rounded-lg"
                         placeholder="0.00"
                       />
                     </TableCell>
                   </TableRow>
+                    );
+                  })()
                 ))}
               </React.Fragment>
             ))}
@@ -384,6 +480,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
     const packagingGroups = [
       { label: '5. Preformas', items: PREFORMS_DATA },
       { label: '6. Tapas', items: CAPS_DATA },
+      { label: '6.1 Separadores', items: SEPARATORS_DATA },
       { label: '7. Etiquetas (Global)', items: [...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA] },
       { label: '8. Plásticos y Termoencogibles', items: PLASTICS_DATA.filter(p => !('isHeader' in p)) },
       { label: '9. Adhesivos', items: ADHESIVE_DATA },

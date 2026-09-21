@@ -38,6 +38,11 @@ export const CAPS_DATA = [
   { code: 'EMP_0105_N', description: 'TAPA AZULES REFRESCOS NACIONALES', unit: 'UND' },
 ];
 
+export const SEPARATORS_DATA = [
+  { code: 'EMP_0134', description: 'SEPARADORES DE CARTÓN (USADOS)', unit: 'UND' },
+  { code: 'EMP_0138', description: 'SEPARADORES DE CARTÓN 1x30x0,88 (NUEVOS)', unit: 'UND' },
+];
+
 export const PLASTICS_DATA = [
   { code: 'EMP_0019', description: 'FILM POLIESTRECH 23 MIC', unit: 'KG' },
   { isHeader: true, description: 'Termo Encogible' },
@@ -519,7 +524,7 @@ export const calculateRequirementFromSource = (
 
 export const getAllMaterialsList = () => [
   ...SUGAR_DATA, ...CONCENTRATES_SOFT_DRINKS, ...CONCENTRATES_JUICES,
-  ...SOLIDS_DATA, ...ADDITIVES_DATA, ...PREFORMS_DATA, ...CAPS_DATA,
+  ...SOLIDS_DATA, ...ADDITIVES_DATA, ...PREFORMS_DATA, ...CAPS_DATA, ...SEPARATORS_DATA,
   ...LABELS_2LTS_DATA, ...LABELS_1_5LTS_DATA, ...LABELS_1LT_DATA, ...LABELS_04LT_DATA,
   ...PLASTICS_DATA.filter(p => !('isHeader' in p)), ...ADHESIVE_DATA
 ];

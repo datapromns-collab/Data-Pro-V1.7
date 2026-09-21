@@ -2574,22 +2574,6 @@ const exportarPDFdia = async () => {
                         </tbody>
                       </table>
                       </div>
-                      <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
-                        <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Tendencia de pérdida por sabor</h3>
-                        <div className="h-72">
-                          <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={resumenMensualSeguimiento.items.slice().sort((a, b) => b.real - a.real)} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
-                              <CartesianGrid strokeDasharray="3 3" />
-                              <XAxis dataKey="sabor" tick={{ fontSize: 10 }} interval={0} angle={-35} textAnchor="end" height={80} />
-                              <YAxis tick={{ fontSize: 10 }} />
-                              <Tooltip formatter={(value: number) => value.toFixed(2).replace('.', ',')} labelStyle={{ fontSize: 10 }} />
-                              <Legend />
-                              <Bar dataKey="real" name="Jarabe Real" fill="#0ea5e9" />
-                              <Line type="monotone" dataKey="real" name="Acumulado" stroke="#ef4444" />
-                            </BarChart>
-                          </ResponsiveContainer>
-                        </div>
-                      </div>
                     </div>
                   </div>
                 ) : (

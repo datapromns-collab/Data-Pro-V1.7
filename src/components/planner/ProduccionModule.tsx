@@ -45,6 +45,7 @@ const emptySharedProductionValues = (): SharedProductionValues => ({
 });
 
 const EMPTY_PRODUCTION_DATA = emptyProductionValues();
+const MONTHLY_INVENTORY_MONTH_KEY = 'planner_monthly_inventory_month_v1';
 
 interface ProduccionModuleProps {
   weeklyOnly?: boolean;
@@ -56,7 +57,13 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const [inventariosMensualSubTab, setInventariosMensualSubTab] = useState<'empaque' | 'materia-prima' | 'insumos'>('empaque');
   const [inventariosDiariosFecha, setInventariosDiariosFecha] = useState<Date>(() => new Date());
   const [inventariosSemanalFecha, setInventariosSemanalFecha] = useState<Date>(() => new Date());
-  const [inventariosMensualMes, setInventariosMensualMes] = useState<Date>(() => new Date());
+  const [inventariosMensualMes, setInventariosMensualMes] = useState<Date>(() => {
+    if (typeof window === 'undefined') return new Date();
+    const stored = localStorage.getItem(MONTHLY_INVENTORY_MONTH_KEY);
+    if (!stored) return new Date();
+    const [year, month] = stored.split('-').map(Number);
+    return Number.isFinite(year) && Number.isFinite(month) ? new Date(year, month - 1, 1) : new Date();
+  });
 
   const [productionByPeriod, setProductionByPeriod] = useState<ProductionPeriods>({ diarios: {}, semanal: {}, mensual: {} });
   const [productionLoaded, setProductionLoaded] = useState(false);
@@ -69,6 +76,10 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const tapasData = activePeriodData.tapas;
   const tapasDataSemanal = activePeriodData.tapas;
   const tapasDataMensualEmpaque = activePeriodData.tapas;
+
+  useEffect(() => {
+    localStorage.setItem(MONTHLY_INVENTORY_MONTH_KEY, monthlyPeriodKey);
+  }, [monthlyPeriodKey]);
 
   useEffect(() => {
     let cancelled = false;
