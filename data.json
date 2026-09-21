@@ -11078,7 +11078,37 @@
         "separadores": {},
         "preformas": {},
         "adhesivoCantidad": "",
-        "etiquetasCantidad": {}
+        "etiquetasCantidad": {},
+        "plasticos": {},
+        "2026-09-21": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {}
+        }
       },
       "semanal": {
         "tapas": {
@@ -11115,7 +11145,54 @@
           "EMP_0166": "911600"
         },
         "adhesivoCantidad": "",
-        "etiquetasCantidad": {}
+        "etiquetasCantidad": {},
+        "plasticos": {},
+        "2026-09-21": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {
+            "EMP_0009": "",
+            "EMP_0068": "",
+            "EMP_0093-Ultrapack": "",
+            "EMP_0103-Ultrapack": "",
+            "EMP_0120-Ultrapack": "",
+            "EMP_0126-Ultrapack": "",
+            "EMP_0135-Alpla": "",
+            "EMP_0166": ""
+          },
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {}
+        },
+        "2026-09-14": {
+          "tapas": {},
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {}
+        }
       },
       "mensual": {
         "tapas": {
@@ -11734,7 +11811,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-21T12:00:24.697Z"
+    "updatedAt": "2026-09-21T12:09:42.034Z"
   },
   "ordenesSap": [
     {

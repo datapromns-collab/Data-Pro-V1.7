@@ -11,6 +11,7 @@ type ProductionTableValues = {
   tapas: Record<string, { totalCajas: string; total: string }>;
   separadores: Record<string, string>;
   preformas: Record<string, string>;
+  plasticos: Record<string, string>;
   adhesivoCantidad: string;
   etiquetasCantidad: Record<string, string>;
 };
@@ -24,11 +25,13 @@ type ProductionInventoryData = {
 
 type ProductionViewKey = 'diarios' | 'semanal' | 'mensual';
 type SharedProductionValues = Omit<ProductionTableValues, 'tapas'>;
+type ProductionPeriods = Record<ProductionViewKey, Record<string, ProductionTableValues>>;
 
 const emptyProductionValues = (): ProductionTableValues => ({
   tapas: {},
   separadores: {},
   preformas: {},
+  plasticos: {},
   adhesivoCantidad: '',
   etiquetasCantidad: {},
 });
@@ -36,9 +39,12 @@ const emptyProductionValues = (): ProductionTableValues => ({
 const emptySharedProductionValues = (): SharedProductionValues => ({
   separadores: { EMP_0134: '150', EMP_0138: '250' },
   preformas: {},
+  plasticos: {},
   adhesivoCantidad: '',
   etiquetasCantidad: {},
 });
+
+const EMPTY_PRODUCTION_DATA = emptyProductionValues();
 
 interface ProduccionModuleProps {
   weeklyOnly?: boolean;
@@ -52,57 +58,42 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const [inventariosSemanalFecha, setInventariosSemanalFecha] = useState<Date>(() => new Date());
   const [inventariosMensualMes, setInventariosMensualMes] = useState<Date>(() => new Date());
 
-  const [tapasData, setTapasData] = useState({
-    'EMP_0095-Alpla': { totalCajas: '', total: '' },
-    'EMP_0095-Importada': { totalCajas: '', total: '' },
-    'EMP_0105-Alpla': { totalCajas: '', total: '' },
-    'EMP_0105-ImportadaEW': { totalCajas: '', total: '' },
-    'EMP_0105-ImportadaTipo2': { totalCajas: '', total: '' },
-  });
-
-  const [tapasDataSemanal, setTapasDataSemanal] = useState({
-    'EMP_0095-Alpla': { totalCajas: '', total: '' },
-    'EMP_0095-Importada': { totalCajas: '', total: '' },
-    'EMP_0105-Alpla': { totalCajas: '', total: '' },
-    'EMP_0105-ImportadaEW': { totalCajas: '', total: '' },
-    'EMP_0105-ImportadaTipo2': { totalCajas: '', total: '' },
-  });
-
-  const [tapasDataMensualEmpaque, setTapasDataMensualEmpaque] = useState({
-    'EMP_0095-Alpla': { totalCajas: '', total: '' },
-    'EMP_0095-Importada': { totalCajas: '', total: '' },
-    'EMP_0105-Alpla': { totalCajas: '', total: '' },
-    'EMP_0105-ImportadaEW': { totalCajas: '', total: '' },
-    'EMP_0105-ImportadaTipo2': { totalCajas: '', total: '' },
-  });
-
-  const [productionByView, setProductionByView] = useState<Record<ProductionViewKey, SharedProductionValues>>({
-    diarios: emptySharedProductionValues(),
-    semanal: emptySharedProductionValues(),
-    mensual: emptySharedProductionValues(),
-  });
+  const [productionByPeriod, setProductionByPeriod] = useState<ProductionPeriods>({ diarios: {}, semanal: {}, mensual: {} });
   const [productionLoaded, setProductionLoaded] = useState(false);
-  const activeProductionData = productionByView[inventariosSubTab];
+  const dailyPeriodKey = format(inventariosDiariosFecha, 'yyyy-MM-dd');
+  const weeklyPeriodKey = format(startOfWeek(inventariosSemanalFecha, { weekStartsOn: 1 }), 'yyyy-MM-dd');
+  const monthlyPeriodKey = format(inventariosMensualMes, 'yyyy-MM');
+  const activePeriodKey = inventariosSubTab === 'diarios' ? dailyPeriodKey : inventariosSubTab === 'semanal' ? weeklyPeriodKey : monthlyPeriodKey;
+  const activePeriodData = productionByPeriod[inventariosSubTab][activePeriodKey] || EMPTY_PRODUCTION_DATA;
+  const activeProductionData = activePeriodData;
+  const tapasData = activePeriodData.tapas;
+  const tapasDataSemanal = activePeriodData.tapas;
+  const tapasDataMensualEmpaque = activePeriodData.tapas;
 
   useEffect(() => {
     let cancelled = false;
     loadPlannerData().then((data) => {
       if (cancelled) return;
       const persisted = data?.productionInventory;
-      const daily = { ...emptyProductionValues(), ...(persisted?.diarios || {}) };
-      const weekly = { ...emptyProductionValues(), ...(persisted?.semanal || {}) };
-      const monthly = { ...emptyProductionValues(), ...(persisted?.mensual || {}) };
-      const common = { ...emptySharedProductionValues(), ...(persisted?.common || daily) };
-      const sharedFrom = (source: ProductionTableValues): SharedProductionValues => ({
-        separadores: source.separadores || common.separadores,
-        preformas: source.preformas || common.preformas,
-        adhesivoCantidad: source.adhesivoCantidad || common.adhesivoCantidad,
-        etiquetasCantidad: source.etiquetasCantidad || common.etiquetasCantidad,
+      const periodKeys: Record<ProductionViewKey, string> = {
+        diarios: dailyPeriodKey,
+        semanal: weeklyPeriodKey,
+        mensual: monthlyPeriodKey,
+      };
+      const nextPeriods: ProductionPeriods = { diarios: {}, semanal: {}, mensual: {} };
+      (['diarios', 'semanal', 'mensual'] as ProductionViewKey[]).forEach((view) => {
+        const stored = persisted?.[view] || {};
+        const isLegacy = stored.tapas !== undefined || stored.separadores !== undefined || stored.preformas !== undefined;
+        if (isLegacy) {
+          nextPeriods[view][periodKeys[view]] = { ...emptyProductionValues(), ...stored };
+        }
+        Object.entries(stored).forEach(([period, values]) => {
+          if (values && typeof values === 'object' && (values as any).tapas !== undefined) {
+            nextPeriods[view][period] = { ...emptyProductionValues(), ...(values as Partial<ProductionTableValues>) };
+          }
+        });
       });
-      setTapasData((daily.tapas && Object.keys(daily.tapas).length > 0 ? daily.tapas : tapasData) as typeof tapasData);
-      setTapasDataSemanal((weekly.tapas && Object.keys(weekly.tapas).length > 0 ? weekly.tapas : tapasDataSemanal) as typeof tapasDataSemanal);
-      setTapasDataMensualEmpaque((monthly.tapas && Object.keys(monthly.tapas).length > 0 ? monthly.tapas : tapasDataMensualEmpaque) as typeof tapasDataMensualEmpaque);
-      setProductionByView({ diarios: sharedFrom(daily), semanal: sharedFrom(weekly), mensual: sharedFrom(monthly) });
+      setProductionByPeriod(nextPeriods);
       setProductionLoaded(true);
     }).catch(() => setProductionLoaded(true));
     return () => { cancelled = true; };
@@ -110,45 +101,44 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
 
   useEffect(() => {
     if (!productionLoaded) return;
-    const activeKey: ProductionViewKey = inventariosSubTab;
-    const tapas = {
-      tapas: (activeKey === 'diarios' ? tapasData : activeKey === 'semanal' ? tapasDataSemanal : tapasDataMensualEmpaque) as ProductionTableValues['tapas'],
-    };
     const timer = window.setTimeout(async () => {
       const existing = await loadPlannerData();
       await savePlannerData({
         productionInventory: {
           ...(existing?.productionInventory || {}),
-          [activeKey]: {
-            ...(existing?.productionInventory?.[activeKey] || {}),
-            ...tapas,
-            ...activeProductionData,
+          [inventariosSubTab]: {
+            ...(existing?.productionInventory?.[inventariosSubTab] || {}),
+            [activePeriodKey]: activePeriodData,
           },
         },
       });
     }, 350);
     return () => window.clearTimeout(timer);
-  }, [productionLoaded, inventariosSubTab, tapasData, tapasDataSemanal, tapasDataMensualEmpaque, productionByView]);
+  }, [productionLoaded, inventariosSubTab, activePeriodKey, activePeriodData]);
+
+  const updateActiveProduction = (update: (current: ProductionTableValues) => ProductionTableValues) => {
+    setProductionByPeriod((prev) => ({
+      ...prev,
+      [inventariosSubTab]: {
+        ...prev[inventariosSubTab],
+        [activePeriodKey]: update(prev[inventariosSubTab][activePeriodKey] || emptyProductionValues()),
+      },
+    }));
+  };
 
   const handleTapasChange = (key: string, field: string, value: string) => {
-    setTapasData((prev) => ({
-      ...prev,
-      [key]: { ...(prev as any)[key], [field]: value },
+    updateActiveProduction((current) => ({
+      ...current,
+      tapas: { ...current.tapas, [key]: { ...(current.tapas[key] || { totalCajas: '', total: '' }), [field]: value } },
     }));
   };
 
   const handleTapasSemanalChange = (key: string, field: string, value: string) => {
-    setTapasDataSemanal((prev) => ({
-      ...prev,
-      [key]: { ...(prev as any)[key], [field]: value },
-    }));
+    handleTapasChange(key, field, value);
   };
 
   const handleTapasMensualEmpaqueChange = (key: string, field: string, value: string) => {
-    setTapasDataMensualEmpaque((prev) => ({
-      ...prev,
-      [key]: { ...(prev as any)[key], [field]: value },
-    }));
+    handleTapasChange(key, field, value);
   };
 
   const getCodeTotal = (data: Record<string, { totalCajas: string; total: string }>, code: string) => {
@@ -161,35 +151,42 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   };
 
   const handleSeparadoresChange = (code: keyof SharedProductionValues['separadores'], value: string) => {
-    setProductionByView((prev) => ({
-      ...prev,
-      [inventariosSubTab]: {
-        ...prev[inventariosSubTab],
-        separadores: { ...prev[inventariosSubTab].separadores, [code]: value },
-      },
-    }));
+    updateActiveProduction((current) => ({ ...current, separadores: { ...current.separadores, [code]: value } }));
   };
 
   const handlePreformasChange = (key: string, value: string) => {
-    setProductionByView((prev) => ({
-      ...prev,
-      [inventariosSubTab]: { ...prev[inventariosSubTab], preformas: { ...prev[inventariosSubTab].preformas, [key]: value } },
-    }));
+    updateActiveProduction((current) => ({ ...current, preformas: { ...current.preformas, [key]: value } }));
   };
 
   const handleEtiquetasCantidadChange = (code: string, value: string) => {
-    setProductionByView((prev) => ({
-      ...prev,
-      [inventariosSubTab]: { ...prev[inventariosSubTab], etiquetasCantidad: { ...prev[inventariosSubTab].etiquetasCantidad, [code]: value } },
-    }));
+    updateActiveProduction((current) => ({ ...current, etiquetasCantidad: { ...current.etiquetasCantidad, [code]: value } }));
   };
 
   const handleAdhesivoChange = (value: string) => {
-    setProductionByView((prev) => ({
-      ...prev,
-      [inventariosSubTab]: { ...prev[inventariosSubTab], adhesivoCantidad: value },
-    }));
+    updateActiveProduction((current) => ({ ...current, adhesivoCantidad: value }));
   };
+
+  const handlePlasticosChange = (key: string, value: string) => {
+    updateActiveProduction((current) => ({ ...current, plasticos: { ...current.plasticos, [key]: value } }));
+  };
+
+  const getPlasticosCodeTotal = (code: string) => {
+    return Object.entries(activeProductionData.plasticos)
+      .filter(([key]) => key === code || key.startsWith(`${code}-`))
+      .reduce((sum, [, value]) => {
+        const numericValue = Number(String(value).replace(/[^0-9.-]/g, ''));
+        return sum + (Number.isFinite(numericValue) ? numericValue : 0);
+      }, 0);
+  };
+
+  const renderPlasticosInput = (key: string) => (
+    <input
+      type="text"
+      value={activeProductionData.plasticos[key] || ''}
+      onChange={(e) => handlePlasticosChange(key, e.target.value)}
+      className="w-full bg-transparent text-center text-[10px] outline-none"
+    />
+  );
 
   const renderPreformaInput = (key: string) => (
     <input
@@ -419,33 +416,33 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">EMP_0017</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">POLIETILENO TERMOENCOGIBLE 55 X 0.07</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">Plastven</td>
-            <td className="px-2 py-1 border-r border-b border-slate-200"></td>
-            <td className="px-2 py-1 border-b border-slate-200"></td>
+            <td className="px-2 py-1 border-r border-b border-slate-200">{renderPlasticosInput('EMP_0017')}</td>
+            <td className="px-2 py-1 border-b border-slate-200">{getPlasticosCodeTotal('EMP_0017')}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">EMP_0019</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">FILM POLIESTRECH 23 MIC</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">ew</td>
-            <td className="px-2 py-1 border-r border-b border-slate-200"></td>
-            <td className="px-2 py-1 border-b border-slate-200"></td>
+            <td className="px-2 py-1 border-r border-b border-slate-200">{renderPlasticosInput('EMP_0019')}</td>
+            <td className="px-2 py-1 border-b border-slate-200">{getPlasticosCodeTotal('EMP_0019')}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b-2 border-slate-400" rowSpan={2}>EMP_0080</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b-2 border-slate-400" rowSpan={2}>POLIETILENO TERMOENCOGIBLE 48x0.06</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">Plastven</td>
-            <td className="px-2 py-1 border-r border-b border-slate-200"></td>
-            <td className="px-2 py-1 border-b-2 border-slate-400" rowSpan={2}></td>
+            <td className="px-2 py-1 border-r border-b border-slate-200">{renderPlasticosInput('EMP_0080-Plastven')}</td>
+            <td className="px-2 py-1 border-b-2 border-slate-400" rowSpan={2}>{getPlasticosCodeTotal('EMP_0080')}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">plastico empaque</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200"></td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPlasticosInput('EMP_0080-plastico-empaque')}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-200">EMP_0130</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-slate-200">POLIETILENO TERMOENCOGIBLE 43 x 0.06</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-slate-200 text-left">plastven</td>
-            <td className="px-2 py-1 border-r border-slate-200"></td>
-            <td className="px-2 py-1"></td>
+            <td className="px-2 py-1 border-r border-slate-200">{renderPlasticosInput('EMP_0130')}</td>
+            <td className="px-2 py-1">{getPlasticosCodeTotal('EMP_0130')}</td>
           </tr>
         </tbody>
       </table>
