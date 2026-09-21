@@ -11186,9 +11186,35 @@
           "etiquetasCantidad": {}
         },
         "2026-09-14": {
-          "tapas": {},
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "924000",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "1464000",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "1183000",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "2592000",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "1435200",
+              "total": ""
+            }
+          },
           "separadores": {},
-          "preformas": {},
+          "preformas": {
+            "EMP_0009": "232200",
+            "EMP_0068": "706500",
+            "EMP_0093-Ultrapack": "781886",
+            "EMP_0103-Ultrapack": "484320"
+          },
           "plasticos": {},
           "adhesivoCantidad": "",
           "etiquetasCantidad": {}
@@ -11811,7 +11837,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-21T12:09:42.034Z"
+    "updatedAt": "2026-09-21T12:11:31.131Z"
   },
   "ordenesSap": [
     {
