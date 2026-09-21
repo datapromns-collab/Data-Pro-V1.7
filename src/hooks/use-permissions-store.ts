@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 
 export type PlanningSection = 'gantt' | 'daily' | 'preparation' | 'requirement';
 
@@ -173,6 +173,36 @@ export interface PermissionSection {
 
 export type SectionPermissions = Record<string, Record<string, PermissionLevel>>;
 
+export interface SharedPermissionsState {
+  modules: UserPermissions;
+  planning: PlanningPermissions;
+  management: ManagementPermissions;
+  readOnlyModules: UserPermissions;
+  sections: SectionPermissions;
+}
+
+async function loadSharedPermissions(): Promise<SharedPermissionsState | null> {
+  try {
+    const response = await fetch('/api/data', { cache: 'no-store' });
+    if (!response.ok) return null;
+    const payload = await response.json();
+    const permissions = payload?.permissions;
+    if (!permissions || typeof permissions !== 'object') return null;
+    return permissions as SharedPermissionsState;
+  } catch {
+    return null;
+  }
+}
+
+async function saveSharedPermissions(permissions: SharedPermissionsState): Promise<void> {
+  const response = await fetch('/api/data', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ planner: { permissions } }),
+  });
+  if (!response.ok) throw new Error(`Permissions API error: ${response.status}`);
+}
+
 export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
   planning: [
     { id: 'gantt', label: 'Programación' },
@@ -324,6 +354,8 @@ export function usePermissionsStore() {
   const [readOnlyModules, setReadOnlyModules] = useState<UserPermissions>({});
   const [sectionPermissions, setSectionPermissions] = useState<SectionPermissions>({});
   const [isLoaded, setIsLoaded] = useState(false);
+  const currentStateRef = useRef<SharedPermissionsState | null>(null);
+  const remoteReadyRef = useRef(false);
 
   useEffect(() => {
     const savedModules = localStorage.getItem(STORAGE_KEY);
@@ -386,13 +418,82 @@ export function usePermissionsStore() {
       }
     }
 
-    setPermissions(modules);
-    setPlanningPermissions(planning);
-    setManagementPermissions(management);
-    setReadOnlyModules(readOnly);
-    setSectionPermissions(sections);
-    setIsLoaded(true);
+    const localState: SharedPermissionsState = {
+      modules,
+      planning,
+      management,
+      readOnlyModules: readOnly,
+      sections,
+    };
+
+    const applyState = (next: SharedPermissionsState) => {
+      setPermissions(next.modules);
+      setPlanningPermissions(next.planning);
+      setManagementPermissions(next.management);
+      setReadOnlyModules(next.readOnlyModules);
+      setSectionPermissions(next.sections);
+      currentStateRef.current = next;
+    };
+
+    const hydrateFromApi = async () => {
+      const remote = await loadSharedPermissions();
+      if (remote) {
+        applyState(remote);
+      } else {
+        applyState(localState);
+        try {
+          await saveSharedPermissions(localState);
+        } catch {
+          // Keep the local configuration when the API is unavailable.
+        }
+      }
+      remoteReadyRef.current = true;
+      setIsLoaded(true);
+    };
+
+    void hydrateFromApi();
   }, []);
+
+  useEffect(() => {
+    if (!isLoaded || !remoteReadyRef.current) return;
+    const next: SharedPermissionsState = {
+      modules: permissions,
+      planning: planningPermissions,
+      management: managementPermissions,
+      readOnlyModules,
+      sections: sectionPermissions,
+    };
+    currentStateRef.current = next;
+    const timer = window.setTimeout(() => {
+      void saveSharedPermissions(next).catch(() => {
+        // Local persistence remains available while the API is offline.
+      });
+    }, 150);
+    return () => window.clearTimeout(timer);
+  }, [isLoaded, permissions, planningPermissions, managementPermissions, readOnlyModules, sectionPermissions]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    const refresh = async () => {
+      const remote = await loadSharedPermissions();
+      if (!remote) return;
+      const current = currentStateRef.current;
+      if (JSON.stringify(current) === JSON.stringify(remote)) return;
+      setPermissions(remote.modules);
+      setPlanningPermissions(remote.planning);
+      setManagementPermissions(remote.management);
+      setReadOnlyModules(remote.readOnlyModules);
+      setSectionPermissions(remote.sections);
+      currentStateRef.current = remote;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(remote.modules));
+      localStorage.setItem(PLANNING_STORAGE_KEY, JSON.stringify(remote.planning));
+      localStorage.setItem(MANAGEMENT_STORAGE_KEY, JSON.stringify(remote.management));
+      localStorage.setItem(READONLY_STORAGE_KEY, JSON.stringify(remote.readOnlyModules));
+      localStorage.setItem(SECTION_STORAGE_KEY, JSON.stringify(remote.sections));
+    };
+    const timer = window.setInterval(() => void refresh(), 15000);
+    return () => window.clearInterval(timer);
+  }, [isLoaded]);
 
   const savePermissions = (next: UserPermissions) => {
     setPermissions(next);

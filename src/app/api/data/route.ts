@@ -193,6 +193,9 @@ export async function POST(request: Request) {
       if (incomingPlanner.productionInventory) {
         merged.productionInventory = deepMerge(merged.productionInventory, incomingPlanner.productionInventory);
       }
+      if (incomingPlanner.permissions && typeof incomingPlanner.permissions === 'object') {
+        merged.permissions = incomingPlanner.permissions;
+      }
     }
 
     if (merged.weeks) {
