@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-14T00:00:00.000",
+      "weekStartDate": "2026-09-21T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -11083,23 +11083,23 @@
       "semanal": {
         "tapas": {
           "EMP_0095-Alpla": {
-            "totalCajas": "",
+            "totalCajas": "924000",
             "total": ""
           },
           "EMP_0095-Importada": {
-            "totalCajas": "",
+            "totalCajas": "1464000",
             "total": ""
           },
           "EMP_0105-Alpla": {
-            "totalCajas": "",
+            "totalCajas": "1183000",
             "total": ""
           },
           "EMP_0105-ImportadaEW": {
-            "totalCajas": "",
+            "totalCajas": "2592000",
             "total": ""
           },
           "EMP_0105-ImportadaTipo2": {
-            "totalCajas": "",
+            "totalCajas": "1435200",
             "total": ""
           }
         },
@@ -11725,7 +11725,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-21T11:22:32.917Z"
+    "updatedAt": "2026-09-21T11:58:46.135Z"
   },
   "ordenesSap": [
     {
@@ -135030,6 +135030,11 @@
           "jarabeReal": 35526,
           "ubb": 36,
           "producto": "143"
+        },
+        "auto-1-1789733230700": {
+          "cajasPlanificadas": 87750,
+          "jarabeReal": 97278,
+          "ubb": 33.81
         }
       },
       "linea-2": {
@@ -135209,6 +135214,16 @@
           "ubb": 44,
           "pnc": 68,
           "producto": "581"
+        },
+        "auto-2-1789733674548": {
+          "cajasPlanificadas": 113750,
+          "jarabeReal": 88977,
+          "ubb": 90
+        },
+        "auto-2-1789856683664": {
+          "jarabeReal": 61471,
+          "ubb": 39.62,
+          "cajasPlanificadas": 55000
         }
       },
       "linea-3": {
@@ -135369,6 +135384,14 @@
           "jarabeReal": 126393,
           "ubb": 43.91,
           "producto": "863"
+        },
+        "auto-3-1789737066030": {
+          "cajasPlanificadas": 133000,
+          "jarabeReal": 117063,
+          "ubb": 40.67
+        },
+        "auto-3-1789905423450": {
+          "cajasPlanificadas": 26600
         }
       },
       "linea-4": {
@@ -135598,6 +135621,10 @@
           "jarabeReal": 338000,
           "ubb": 338,
           "producto": "137"
+        },
+        "auto-5-1789737092813": {
+          "jarabeReal": 422000,
+          "ubb": 422
         }
       },
       "linea-6": {
@@ -135719,6 +135746,11 @@
           "ubb": 10.13,
           "producto": "440",
           "pnc": 99
+        },
+        "auto-6-1789737114281": {
+          "cajasPlanificadas": 53370,
+          "jarabeReal": 20304,
+          "ubb": 20.55
         }
       },
       "linea-7": {
