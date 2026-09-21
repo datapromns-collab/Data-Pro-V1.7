@@ -11136,10 +11136,596 @@
         "adhesivoCantidad": "",
         "etiquetasCantidad": {}
       }
+    },
+    "permissions": {
+      "modules": {
+        "mds": [
+          "planning",
+          "planta",
+          "logistica",
+          "ventas"
+        ],
+        "jaime.r": [
+          "planning",
+          "management",
+          "jarabes",
+          "raw-materials",
+          "planta",
+          "produccion",
+          "logistica",
+          "ventas",
+          "purchasing",
+          "seguimiento",
+          "procesos",
+          "ordenes-sap"
+        ],
+        "demon": [
+          "planning",
+          "management",
+          "jarabes",
+          "raw-materials",
+          "recipes",
+          "planta",
+          "produccion",
+          "procesos",
+          "calidad",
+          "mtto",
+          "insumos",
+          "logistica",
+          "ventas",
+          "purchasing",
+          "ordenes-sap",
+          "seguimiento"
+        ],
+        "demon2": [
+          "planning",
+          "ordenes-sap"
+        ],
+        "maria.mds": [
+          "jarabes",
+          "raw-materials",
+          "planta",
+          "planta-admin",
+          "planning",
+          "management",
+          "produccion",
+          "ordenes-sap",
+          "procesos",
+          "logistica"
+        ],
+        "alex.mds": [
+          "jarabes",
+          "raw-materials",
+          "planta",
+          "planta-admin",
+          "planning",
+          "management",
+          "procesos",
+          "logistica"
+        ],
+        "anto.mds": [
+          "purchasing",
+          "logistica",
+          "ventas",
+          "planning",
+          "management"
+        ],
+        "prodtj.mds": [
+          "planning",
+          "planta",
+          "logistica"
+        ],
+        "prodtg.mds": [
+          "planning",
+          "planta",
+          "management",
+          "logistica",
+          "procesos"
+        ],
+        "prodts.mds": [
+          "planning",
+          "planta"
+        ],
+        "procj.mds": [
+          "planning",
+          "procesos",
+          "management"
+        ],
+        "cald.mds": [
+          "planning"
+        ],
+        "prodt.mds": [
+          "planning",
+          "planta",
+          "produccion"
+        ],
+        "prodt1.mds": [
+          "planning",
+          "planta",
+          "produccion"
+        ],
+        "prodt2.mds": [
+          "planning",
+          "planta",
+          "produccion"
+        ],
+        "proc.mds": [
+          "planning",
+          "procesos"
+        ],
+        "proc1.mds": [
+          "planning",
+          "procesos"
+        ],
+        "proc2.mds": [
+          "planning",
+          "procesos"
+        ],
+        "procs1.mds": [
+          "planning",
+          "procesos"
+        ],
+        "procs2.mds": [
+          "planning",
+          "procesos"
+        ],
+        "g.tec.mds": [
+          "planning",
+          "seguimiento",
+          "management",
+          "logistica"
+        ],
+        "enf.mds": [
+          "planning",
+          "seguimiento",
+          "management",
+          "planta"
+        ],
+        "etq.mds": [
+          "planning",
+          "seguimiento",
+          "management"
+        ],
+        "logg.mds": [
+          "planning",
+          "management"
+        ],
+        "finan.mds": [
+          "planning",
+          "management",
+          "purchasing"
+        ],
+        "mtto.mds": [
+          "planning",
+          "mtto"
+        ],
+        "cal.mds": [
+          "planning",
+          "management"
+        ]
+      },
+      "planning": {
+        "mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "jaime.r": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ]
+        },
+        "demon": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ]
+        },
+        "demon2": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ]
+        },
+        "maria.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "alex.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "anto.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "prodtj.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "prodtg.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "procj.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "proc1.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "proc2.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "procs1.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "procs2.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "finan.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "cald.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "prodt.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "proc.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "g.tec.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "enf.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "etq.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "prodts.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "prodt1.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "prodt2.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "logg.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "mtto.mds": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        },
+        "MDS": {
+          "read": [
+            "gantt",
+            "daily",
+            "preparation",
+            "requirement"
+          ],
+          "write": []
+        }
+      },
+      "management": {
+        "demon": [
+          "produccion-diaria",
+          "control-semanal",
+          "resumen-semanal",
+          "resumen-mensual",
+          "cumplimiento"
+        ],
+        "jaime.r": [
+          "produccion-diaria",
+          "control-semanal",
+          "resumen-semanal",
+          "resumen-mensual",
+          "cumplimiento"
+        ],
+        "alex.mds": [
+          "produccion-diaria",
+          "resumen-semanal",
+          "resumen-mensual",
+          "cumplimiento"
+        ],
+        "maria.mds": [
+          "produccion-diaria",
+          "resumen-semanal",
+          "resumen-mensual",
+          "cumplimiento"
+        ],
+        "g.tec.mds": [
+          "produccion-diaria",
+          "control-semanal",
+          "resumen-semanal",
+          "cumplimiento"
+        ],
+        "enf.mds": [
+          "produccion-diaria",
+          "resumen-semanal"
+        ],
+        "etq.mds": [
+          "produccion-diaria",
+          "resumen-semanal"
+        ],
+        "procj.mds": [
+          "resumen-semanal"
+        ],
+        "cal.mds": [
+          "resumen-semanal"
+        ],
+        "prodtj.mds": [],
+        "prodtg.mds": [],
+        "logg.mds": [
+          "resumen-mensual"
+        ],
+        "finan.mds": [
+          "resumen-mensual"
+        ],
+        "anto.mds": [
+          "resumen-mensual"
+        ]
+      },
+      "readOnlyModules": {
+        "mds": [
+          "planning"
+        ],
+        "maria.mds": [
+          "planning"
+        ],
+        "alex.mds": [
+          "planning"
+        ],
+        "anto.mds": [
+          "planning"
+        ],
+        "prodtj.mds": [
+          "planning"
+        ],
+        "prodts.mds": [
+          "planning"
+        ],
+        "procj.mds": [
+          "planning"
+        ],
+        "cald.mds": [
+          "planning"
+        ],
+        "prodt.mds": [
+          "planning"
+        ],
+        "prodt1.mds": [
+          "planning"
+        ],
+        "prodt2.mds": [
+          "planning"
+        ],
+        "proc.mds": [
+          "planning"
+        ],
+        "proc1.mds": [
+          "planning"
+        ],
+        "proc2.mds": [
+          "planning"
+        ],
+        "procs1.mds": [
+          "planning"
+        ],
+        "procs2.mds": [
+          "planning"
+        ],
+        "g.tec.mds": [
+          "planning",
+          "seguimiento"
+        ],
+        "enf.mds": [
+          "planning"
+        ],
+        "etq.mds": [
+          "planning"
+        ],
+        "logg.mds": [
+          "planning",
+          "management"
+        ],
+        "finan.mds": [
+          "planning"
+        ],
+        "mtto.mds": [
+          "planning",
+          "mtto"
+        ],
+        "cal.mds": [
+          "planning"
+        ],
+        "prodtg.mds": [
+          "planning"
+        ],
+        "MDS": [
+          "planning",
+          "management",
+          "jarabes",
+          "raw-materials",
+          "recipes",
+          "planta",
+          "logistica",
+          "ventas",
+          "purchasing",
+          "ordenes-sap",
+          "seguimiento"
+        ],
+        "jaime.r": []
+      },
+      "sections": {
+        "jaime.r": {
+          "recipes.raw-material": "read"
+        },
+        "logg.mds": {
+          "management.monthly-summary": "read"
+        }
+      }
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-21T11:10:39.290Z"
+    "updatedAt": "2026-09-21T11:22:02.393Z"
   },
   "ordenesSap": [
     {

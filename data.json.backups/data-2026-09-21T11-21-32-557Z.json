@@ -11683,7 +11683,8 @@
           "planning"
         ],
         "logg.mds": [
-          "planning"
+          "planning",
+          "management"
         ],
         "finan.mds": [
           "planning"
@@ -11716,12 +11717,15 @@
       "sections": {
         "jaime.r": {
           "recipes.raw-material": "read"
+        },
+        "logg.mds": {
+          "management.monthly-summary": "read"
         }
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-21T11:16:01.906Z"
+    "updatedAt": "2026-09-21T11:21:29.438Z"
   },
   "ordenesSap": [
     {
