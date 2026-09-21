@@ -11227,7 +11227,7 @@
             "EMP_0130": "5213",
             "EMP_0084": "2982"
           },
-          "adhesivoCantidad": "",
+          "adhesivoCantidad": "98",
           "etiquetasCantidad": {
             "EMP_0022": "685,59",
             "EMP_0026": "1039,41",
@@ -11905,7 +11905,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-21T12:24:02.644Z"
+    "updatedAt": "2026-09-21T12:34:12.915Z"
   },
   "ordenesSap": [
     {
