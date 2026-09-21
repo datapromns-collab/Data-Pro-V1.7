@@ -11401,7 +11401,8 @@
           "planta",
           "management",
           "logistica",
-          "procesos"
+          "procesos",
+          "produccion"
         ],
         "prodts.mds": [
           "planning",
@@ -11907,7 +11908,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-21T16:26:09.442Z"
+    "updatedAt": "2026-09-21T18:18:30.606Z"
   },
   "ordenesSap": [
     {
@@ -135898,7 +135899,9 @@
           "ubb": 40.67
         },
         "auto-3-1789905423450": {
-          "cajasPlanificadas": 26600
+          "cajasPlanificadas": 26600,
+          "jarabeReal": 25483,
+          "ubb": 12.26
         }
       },
       "linea-4": {
@@ -136023,6 +136026,10 @@
           "jarabeReal": 151906,
           "ubb": 52.86,
           "producto": "322"
+        },
+        "auto-4-1789737080837": {
+          "cajasPlanificadas": 128800,
+          "jarabeReal": 13227
         }
       },
       "linea-5": {
