@@ -11213,9 +11213,20 @@
             "EMP_0009": "232200",
             "EMP_0068": "706500",
             "EMP_0093-Ultrapack": "781886",
-            "EMP_0103-Ultrapack": "484"
+            "EMP_0103-Ultrapack": "484320",
+            "EMP_0120-Ultrapack": "455800",
+            "EMP_0126-Ultrapack": "751080",
+            "EMP_0135-Ultrapack": "450360",
+            "EMP_0166": "911600"
           },
-          "plasticos": {},
+          "plasticos": {
+            "EMP_0017": "8820",
+            "EMP_0019": "4233",
+            "EMP_0080-Plastven": "5406",
+            "EMP_0080-plastico-empaque": "5453",
+            "EMP_0130": "5213",
+            "EMP_0084": "2982"
+          },
           "adhesivoCantidad": "",
           "etiquetasCantidad": {}
         }
@@ -11837,7 +11848,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-21T12:11:11.984Z"
+    "updatedAt": "2026-09-21T12:16:39.357Z"
   },
   "ordenesSap": [
     {

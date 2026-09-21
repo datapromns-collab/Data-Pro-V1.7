@@ -411,7 +411,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
             <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-slate-200 min-w-[140px]">Total</th>
           </tr>
         </thead>
-        <tbody className="[&>tr:nth-child(1)>td]:border-b-2 [&>tr:nth-child(1)>td]:border-slate-400 [&>tr:nth-child(2)>td]:border-b-2 [&>tr:nth-child(2)>td]:border-slate-400 [&>tr:nth-child(4)>td]:border-b-2 [&>tr:nth-child(4)>td]:border-slate-400 [&>tr:nth-child(5)>td]:border-b-2 [&>tr:nth-child(5)>td]:border-slate-400">
+        <tbody className="[&>tr:nth-child(1)>td]:border-b-2 [&>tr:nth-child(1)>td]:border-slate-400 [&>tr:nth-child(2)>td]:border-b-2 [&>tr:nth-child(2)>td]:border-slate-400 [&>tr:nth-child(4)>td]:border-b-2 [&>tr:nth-child(4)>td]:border-slate-400 [&>tr:nth-child(5)>td]:border-b-2 [&>tr:nth-child(5)>td]:border-slate-400 [&>tr:nth-child(6)>td]:border-b-2 [&>tr:nth-child(6)>td]:border-slate-400">
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">EMP_0017</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">POLIETILENO TERMOENCOGIBLE 55 X 0.07</td>
@@ -436,6 +436,13 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
           <tr>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">plastico empaque</td>
             <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPlasticosInput('EMP_0080-plastico-empaque')}</td>
+          </tr>
+          <tr>
+            <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">EMP_0084</td>
+            <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">FILM POLIESTRECH 20 MIC</td>
+            <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">24kg</td>
+            <td className="px-2 py-1 border-r border-b border-slate-200">{renderPlasticosInput('EMP_0084')}</td>
+            <td className="px-2 py-1 border-b border-slate-200">{getPlasticosCodeTotal('EMP_0084')}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-200">EMP_0130</td>
