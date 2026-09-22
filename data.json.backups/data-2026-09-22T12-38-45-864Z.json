@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-21T00:00:00.000",
+      "weekStartDate": "2026-09-22T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -11855,7 +11855,6 @@
           "planning"
         ],
         "g.tec.mds": [
-          "planning",
           "seguimiento"
         ],
         "enf.mds": [
@@ -11903,12 +11902,16 @@
         },
         "logg.mds": {
           "management.monthly-summary": "read"
+        },
+        "g.tec.mds": {
+          "planning.calculator": "write",
+          "planning.speeds": "read"
         }
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-21T22:03:29.128Z"
+    "updatedAt": "2026-09-22T12:17:52.647Z"
   },
   "ordenesSap": [
     {
@@ -20803,12 +20806,12 @@
           "fechaInicio": "2026-09-21",
           "ticket1": "16064",
           "cajas1": 2880,
-          "ticket2": "",
+          "ticket2": "16065",
           "cajas2": 1520,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1840,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 13200
         }
       ]
     },
@@ -20823,12 +20826,12 @@
           "fechaInicio": "2026-09-21",
           "ticket1": "16023",
           "cajas1": 3760,
-          "ticket2": "",
+          "ticket2": "16024",
           "cajas2": 4240,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2000,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 12800
         }
       ]
     },
@@ -20843,12 +20846,12 @@
           "fechaInicio": "2026-09-21",
           "ticket1": "17978",
           "cajas1": 8160,
-          "ticket2": "",
+          "ticket2": "17979",
           "cajas2": 5440,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2720,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 12880
         }
       ]
     },
@@ -20863,12 +20866,12 @@
           "fechaInicio": "2026-09-21",
           "ticket1": "16112",
           "cajas1": 6939,
-          "ticket2": "",
+          "ticket2": "16113",
           "cajas2": 4800,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3360,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 18000
         }
       ]
     },
@@ -20883,12 +20886,12 @@
           "fechaInicio": "2026-09-21",
           "ticket1": "17938",
           "cajas1": 700,
-          "ticket2": "",
+          "ticket2": "17939",
           "cajas2": 1300,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1050,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8700
         }
       ]
     },
@@ -20903,12 +20906,12 @@
           "fechaInicio": "2026-09-21",
           "ticket1": "16161",
           "cajas1": 3200,
-          "ticket2": "",
+          "ticket2": "16163",
           "cajas2": 2240,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1600,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8000
         }
       ]
     },
@@ -20923,12 +20926,12 @@
           "fechaInicio": "2026-09-21",
           "ticket1": "16210",
           "cajas1": 2184,
-          "ticket2": "",
+          "ticket2": "16212",
           "cajas2": 78,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8346
         }
       ]
     }
