@@ -90,17 +90,22 @@ const JUGOS = [
 ];
 
 const PRESENTATIONS = ["2Lts", "1.5Lts", "1Lt", "0.4Lts"];
-const MONTHLY_AUTO_CODES = new Set([
+const MONTHLY_AUTO_CODES: Set<string> = new Set([
   ...CAPS_DATA.filter(item => item.code === 'EMP_0095' || item.code === 'EMP_0105').map(item => item.code),
   ...SEPARATORS_DATA.map(item => item.code),
   ...PREFORMS_DATA.map(item => item.code),
   ...PLASTICS_DATA.filter(item => !('isHeader' in item)).map(item => item.code),
   ...ADHESIVE_DATA.map(item => item.code),
+  ...SUGAR_DATA.map(item => item.code),
+  ...CONCENTRATES_SOFT_DRINKS.map(item => item.code),
+  ...CONCENTRATES_JUICES.map(item => item.code),
+  ...SOLIDS_DATA.map(item => item.code),
+  ...ADDITIVES_DATA.map(item => item.code),
   ...LABELS_2LTS_DATA.map(item => item.code),
   ...LABELS_1_5LTS_DATA.map(item => item.code),
   ...LABELS_1LT_DATA.map(item => item.code),
   ...LABELS_04LT_DATA.map(item => item.code),
-]);
+].filter((code): code is string => Boolean(code)));
 
 type MonthlyProductionValues = {
   tapas?: Record<string, { totalCajas?: string; total?: string }>;
@@ -109,6 +114,11 @@ type MonthlyProductionValues = {
   plasticos?: Record<string, string>;
   adhesivoCantidad?: string;
   etiquetasCantidad?: Record<string, string>;
+  azucarCantidad?: Record<string, string>;
+  concentradosCantidad?: Record<string, string>;
+  concentradosJustyCantidad?: Record<string, string>;
+  aditivosCantidad?: Record<string, string>;
+  solidosCantidad?: Record<string, string>;
 };
 
 type MonthlyProductionInventory = {
@@ -129,7 +139,7 @@ const sumProductionValues = (values: Record<string, unknown> | undefined, code: 
 
 export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrintResumen }: PurchasingModuleProps) {
   const [productionInventory, setProductionInventory] = useState<MonthlyProductionInventory>({});
-   const [productionMonthKey] = useState(() => {
+   const [productionMonthKey] = useState<string>(() => {
      if (typeof window !== 'undefined') {
        return localStorage.getItem('planner_monthly_inventory_month_v1') || format(new Date(), 'yyyy-MM');
      }
@@ -170,11 +180,40 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
      return () => { cancelled = true; };
    }, []);
 
-   const monthlyProduction = productionInventory.mensual?.[productionMonthKey];
+   const monthlyProduction = productionInventory.mensual
+     ? productionInventory.mensual[productionMonthKey]
+     : undefined;
    const monthlyPlantInventory = useMemo(() => {
      const next = { ...plantInventory };
      MONTHLY_AUTO_CODES.forEach(code => { next[code] = 0; });
      if (!monthlyProduction) return next;
+
+     const setMonthlyRawMaterialValue = (
+       code: string,
+       values: Record<string, string> | undefined,
+       keys: string[],
+     ) => {
+       let total = 0;
+       keys.forEach((key) => {
+         if (key) total += parseProductionNumber(values ? values[key] : undefined);
+       });
+       next[code] = total;
+     };
+     SUGAR_DATA.forEach(item => {
+       setMonthlyRawMaterialValue(item.code, monthlyProduction.azucarCantidad, ['preparacion', 'sacos']);
+     });
+     CONCENTRATES_SOFT_DRINKS.forEach(item => {
+       setMonthlyRawMaterialValue(item.code, monthlyProduction.concentradosCantidad, [item.code]);
+     });
+     CONCENTRATES_JUICES.forEach(item => {
+       setMonthlyRawMaterialValue(item.code, monthlyProduction.concentradosJustyCantidad, [item.code]);
+     });
+     ADDITIVES_DATA.forEach(item => {
+       setMonthlyRawMaterialValue(item.code, monthlyProduction.aditivosCantidad, [item.code]);
+     });
+     SOLIDS_DATA.forEach(item => {
+       setMonthlyRawMaterialValue(item.code, monthlyProduction.solidosCantidad, [item.code]);
+     });
 
      Object.keys(monthlyProduction.tapas || {}).forEach((key) => {
        const code = key.split('-')[0];

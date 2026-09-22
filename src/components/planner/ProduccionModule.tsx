@@ -14,6 +14,12 @@ type ProductionTableValues = {
   plasticos: Record<string, string>;
   adhesivoCantidad: string;
   etiquetasCantidad: Record<string, string>;
+  azucarCantidad: Record<string, string>;
+  concentradosCantidad: Record<string, string>;
+  concentradosJustyCantidad: Record<string, string>;
+  aditivosCantidad: Record<string, string>;
+  solidosCantidad: Record<string, string>;
+  quimicosInsumosCantidad: Record<string, string>;
 };
 
 type ProductionInventoryData = {
@@ -34,6 +40,12 @@ const emptyProductionValues = (): ProductionTableValues => ({
   plasticos: {},
   adhesivoCantidad: '',
   etiquetasCantidad: {},
+  azucarCantidad: {},
+  concentradosCantidad: {},
+  concentradosJustyCantidad: {},
+  aditivosCantidad: {},
+  solidosCantidad: {},
+  quimicosInsumosCantidad: {},
 });
 
 const emptySharedProductionValues = (): SharedProductionValues => ({
@@ -42,10 +54,51 @@ const emptySharedProductionValues = (): SharedProductionValues => ({
   plasticos: {},
   adhesivoCantidad: '',
   etiquetasCantidad: {},
+  azucarCantidad: {},
+  concentradosCantidad: {},
+  concentradosJustyCantidad: {},
+  aditivosCantidad: {},
+  solidosCantidad: {},
+  quimicosInsumosCantidad: {},
 });
 
 const EMPTY_PRODUCTION_DATA = emptyProductionValues();
 const MONTHLY_INVENTORY_MONTH_KEY = 'planner_monthly_inventory_month_v1';
+const PRODUCTION_VALUE_KEYS = [
+  'tapas',
+  'separadores',
+  'preformas',
+  'plasticos',
+  'adhesivoCantidad',
+  'etiquetasCantidad',
+  'azucarCantidad',
+  'concentradosCantidad',
+  'concentradosJustyCantidad',
+  'aditivosCantidad',
+  'solidosCantidad',
+  'quimicosInsumosCantidad',
+] as const;
+
+const isProductionValues = (value: unknown): value is Partial<ProductionTableValues> => {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+  return PRODUCTION_VALUE_KEYS.some((key) => Object.prototype.hasOwnProperty.call(value, key));
+};
+
+const normalizeProductionValues = (value: Partial<ProductionTableValues> | undefined): ProductionTableValues => ({
+  ...emptyProductionValues(),
+  ...(value || {}),
+  tapas: { ...emptyProductionValues().tapas, ...(value?.tapas || {}) },
+  separadores: { ...emptyProductionValues().separadores, ...(value?.separadores || {}) },
+  preformas: { ...emptyProductionValues().preformas, ...(value?.preformas || {}) },
+  plasticos: { ...emptyProductionValues().plasticos, ...(value?.plasticos || {}) },
+  etiquetasCantidad: { ...emptyProductionValues().etiquetasCantidad, ...(value?.etiquetasCantidad || {}) },
+  azucarCantidad: { ...emptyProductionValues().azucarCantidad, ...(value?.azucarCantidad || {}) },
+  concentradosCantidad: { ...emptyProductionValues().concentradosCantidad, ...(value?.concentradosCantidad || {}) },
+  concentradosJustyCantidad: { ...emptyProductionValues().concentradosJustyCantidad, ...(value?.concentradosJustyCantidad || {}) },
+  aditivosCantidad: { ...emptyProductionValues().aditivosCantidad, ...(value?.aditivosCantidad || {}) },
+  solidosCantidad: { ...emptyProductionValues().solidosCantidad, ...(value?.solidosCantidad || {}) },
+  quimicosInsumosCantidad: { ...emptyProductionValues().quimicosInsumosCantidad, ...(value?.quimicosInsumosCantidad || {}) },
+});
 
 interface ProduccionModuleProps {
   weeklyOnly?: boolean;
@@ -94,13 +147,13 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       const nextPeriods: ProductionPeriods = { diarios: {}, semanal: {}, mensual: {} };
       (['diarios', 'semanal', 'mensual'] as ProductionViewKey[]).forEach((view) => {
         const stored = persisted?.[view] || {};
-        const isLegacy = stored.tapas !== undefined || stored.separadores !== undefined || stored.preformas !== undefined;
+        const isLegacy = isProductionValues(stored);
         if (isLegacy) {
-          nextPeriods[view][periodKeys[view]] = { ...emptyProductionValues(), ...stored };
+          nextPeriods[view][periodKeys[view]] = normalizeProductionValues(stored);
         }
         Object.entries(stored).forEach(([period, values]) => {
-          if (values && typeof values === 'object' && (values as any).tapas !== undefined) {
-            nextPeriods[view][period] = { ...emptyProductionValues(), ...(values as Partial<ProductionTableValues>) };
+          if (isProductionValues(values)) {
+            nextPeriods[view][period] = normalizeProductionValues(values);
           }
         });
       });
@@ -179,6 +232,55 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
 
   const handlePlasticosChange = (key: string, value: string) => {
     updateActiveProduction((current) => ({ ...current, plasticos: { ...current.plasticos, [key]: value } }));
+  };
+
+  const handleAzucarCantidadChange = (key: string, value: string) => {
+    updateActiveProduction((current) => ({
+      ...current,
+      azucarCantidad: { ...(current.azucarCantidad || {}), [key]: value },
+    }));
+  };
+
+  const handleConcentradosCantidadChange = (code: string, value: string) => {
+    updateActiveProduction((current) => ({
+      ...current,
+      concentradosCantidad: { ...(current.concentradosCantidad || {}), [code]: value },
+    }));
+  };
+
+  const handleConcentradosJustyCantidadChange = (code: string, value: string) => {
+    updateActiveProduction((current) => ({
+      ...current,
+      concentradosJustyCantidad: { ...(current.concentradosJustyCantidad || {}), [code]: value },
+    }));
+  };
+
+  const handleAditivosCantidadChange = (code: string, value: string) => {
+    updateActiveProduction((current) => ({
+      ...current,
+      aditivosCantidad: { ...(current.aditivosCantidad || {}), [code]: value },
+    }));
+  };
+
+  const handleSolidosCantidadChange = (code: string, value: string) => {
+    updateActiveProduction((current) => ({
+      ...current,
+      solidosCantidad: { ...(current.solidosCantidad || {}), [code]: value },
+    }));
+  };
+
+  const handleQuimicosInsumosCantidadChange = (code: string, value: string) => {
+    updateActiveProduction((current) => ({
+      ...current,
+      quimicosInsumosCantidad: { ...(current.quimicosInsumosCantidad || {}), [code]: value },
+    }));
+  };
+
+  const getAzucarTotal = () => {
+    return ['preparacion', 'sacos'].reduce((sum, key) => {
+      const value = Number(String(activeProductionData.azucarCantidad?.[key] || '').replace(/[^0-9.-]/g, ''));
+      return sum + (Number.isFinite(value) ? value : 0);
+    }, 0);
   };
 
   const getPlasticosCodeTotal = (code: string) => {
@@ -537,6 +639,343 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                   />
                 </td>
                 <td className="px-2 py-1 border-b border-slate-200">{activeProductionData.etiquetasCantidad[code] || ''}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const renderAzucarTable = () => (
+    <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto mt-4">
+      <div className="px-4 py-3 border-b border-slate-200">
+        <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-700">Azúcar</h3>
+      </div>
+      <table className="w-full border-collapse text-center [&_th:not(:last-child)]:!border-r-2 [&_th:not(:last-child)]:!border-r-slate-400 [&_td:not(:last-child)]:!border-r-2 [&_td:not(:last-child)]:!border-r-slate-400">
+        <thead>
+          <tr className="bg-slate-100">
+            <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[110px]">Código</th>
+            <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[300px]">Descripción</th>
+            <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[180px]">Estado</th>
+            <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[180px]">Cantidad</th>
+            <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">TOTAL kilos</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td rowSpan={2} className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">MATP_0001</td>
+            <td rowSpan={2} className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">AZUCAR REFINADA</td>
+            <td className="px-2 py-1 text-[10px] text-slate-600 !border-r-2 !border-r-slate-500 border-b border-slate-200">En Preparación</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">
+              <input
+                type="text"
+                value={activeProductionData.azucarCantidad?.preparacion || ''}
+                onChange={(e) => handleAzucarCantidadChange('preparacion', e.target.value)}
+                className="w-full bg-transparent text-center text-[10px] outline-none"
+              />
+            </td>
+            <td rowSpan={2} className="px-2 py-1 border-b border-slate-200">
+              {getAzucarTotal() || ''}
+            </td>
+          </tr>
+          <tr>
+            <td className="px-2 py-1 text-[10px] text-slate-600 !border-r-2 !border-r-slate-500 border-slate-200">sacos x 50kg</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-slate-200">
+              <input
+                type="text"
+                value={activeProductionData.azucarCantidad?.sacos || ''}
+                onChange={(e) => handleAzucarCantidadChange('sacos', e.target.value)}
+                className="w-full bg-transparent text-center text-[10px] outline-none"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+
+  const renderConcentradosGlupTable = () => {
+    const concentrados = [
+      ['MATP_0002', 'CONCENTRADO COLA NEGRA A'],
+      ['MATP_0003', 'CONCENTRADO FRESH Nª  IX3102B'],
+      ['MATP_0004', 'CONCENTRADO NARANJA Nª IX10431'],
+      ['MATP_0005', 'CONCENTRADO UVA IX10201'],
+      ['MATP_0006', 'CONCENTRADO PIÑA IX640B'],
+      ['MATP_0007', 'CONCENTRADO KOLITA I0441FV'],
+      ['MATP_0009', 'CONCENTRADO COLA NEGRA B'],
+      ['MATP_0032', 'CONCENTRADO MANZANA VERDE IX1151FVAL'],
+      ['MATP_0038', 'CONCENTRADO PIÑA PARCHITA IX12941VF'],
+      ['MATP_0039', 'CONCENTRADO MANZANA ROJA IX30610VF'],
+    ];
+
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto mt-4">
+        <div className="px-4 py-3 border-b border-slate-200">
+          <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-700">Concentrados GLUP</h3>
+        </div>
+        <table className="w-full border-collapse text-center [&_th:not(:last-child)]:!border-r-2 [&_th:not(:last-child)]:!border-r-slate-400 [&_td:not(:last-child)]:!border-r-2 [&_td:not(:last-child)]:!border-r-slate-400">
+          <thead>
+            <tr className="bg-slate-100">
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[110px]">Código</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[300px]">Descripción</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[180px]">Pailas</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[180px]">Cantidad</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">TOTAL LTS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {concentrados.map(([code, description]) => (
+              <tr key={code}>
+                <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">{code}</td>
+                <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">{description}</td>
+                <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">18,93 Lts</td>
+                <td className="px-2 py-1 border-r border-b border-slate-200">
+                  <input
+                    type="text"
+                    value={activeProductionData.concentradosCantidad?.[code] || ''}
+                    onChange={(e) => handleConcentradosCantidadChange(code, e.target.value)}
+                    className="w-full bg-transparent text-center text-[10px] outline-none"
+                  />
+                </td>
+                <td className="px-2 py-1 border-b border-slate-200">
+                  {activeProductionData.concentradosCantidad?.[code] || ''}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const renderConcentradosJustyTable = () => {
+    const concentrados = [
+      ['MATP_0022', 'CONCENTRADO JUGO-NARANJA'],
+      ['MATP_0043', 'CONCENTRADO JUGO-DURAZNO'],
+      ['MATP_0059', 'CONCENTRADO JUGO-PERA'],
+      ['MATP_0060', 'CONCENTRADO JUGO-MANZANA'],
+    ];
+
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto mt-4">
+        <div className="px-4 py-3 border-b border-slate-200">
+          <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-700">Concentrados JUSTY</h3>
+        </div>
+        <table className="w-full border-collapse text-center [&_th:not(:last-child)]:!border-r-2 [&_th:not(:last-child)]:!border-r-slate-400 [&_td:not(:last-child)]:!border-r-2 [&_td:not(:last-child)]:!border-r-slate-400">
+          <thead>
+            <tr className="bg-slate-100">
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[110px]">Código</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[300px]">Descripción</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[180px]">Pailas</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[180px]">Cantidad</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">TOTAL Kilos</th>
+            </tr>
+          </thead>
+          <tbody>
+            {concentrados.map(([code, description]) => (
+              <tr key={code}>
+                <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">{code}</td>
+                <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">{description}</td>
+                <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">20 Kg</td>
+                <td className="px-2 py-1 border-r border-b border-slate-200">
+                  <input
+                    type="text"
+                    value={activeProductionData.concentradosJustyCantidad?.[code] || ''}
+                    onChange={(e) => handleConcentradosJustyCantidadChange(code, e.target.value)}
+                    className="w-full bg-transparent text-center text-[10px] outline-none"
+                  />
+                </td>
+                <td className="px-2 py-1 border-b border-slate-200">
+                  {activeProductionData.concentradosJustyCantidad?.[code] || ''}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const renderAditivosTable = () => {
+    const aditivos = [
+      ['MATP_0010', 'ADITIVO AD 74M-135', '3,8 Lts'],
+      ['MATP_0041', 'COLOR CARAMELO 001-1.6 LB BOM AL (SU)', '4,8 Kg'],
+    ];
+
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto mt-4">
+        <div className="px-4 py-3 border-b border-slate-200">
+          <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-700">Aditivos</h3>
+        </div>
+        <table className="w-full border-collapse text-center [&_th:not(:last-child)]:!border-r-2 [&_th:not(:last-child)]:!border-r-slate-400 [&_td:not(:last-child)]:!border-r-2 [&_td:not(:last-child)]:!border-r-slate-400">
+          <thead>
+            <tr className="bg-slate-100">
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[110px]">Código</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[300px]">Descripción</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[180px]">Pailas/Galones</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[180px]">Cantidad</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">TOTAL Kg/Lts</th>
+            </tr>
+          </thead>
+          <tbody>
+            {aditivos.map(([code, description, packageValue]) => (
+              <tr key={code}>
+                <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">{code}</td>
+                <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">{description}</td>
+                <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">{packageValue}</td>
+                <td className="px-2 py-1 border-r border-b border-slate-200">
+                  <input
+                    type="text"
+                    value={activeProductionData.aditivosCantidad?.[code] || ''}
+                    onChange={(e) => handleAditivosCantidadChange(code, e.target.value)}
+                    className="w-full bg-transparent text-center text-[10px] outline-none"
+                  />
+                </td>
+                <td className="px-2 py-1 border-b border-slate-200">
+                  {activeProductionData.aditivosCantidad?.[code] || ''}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const renderSolidosTable = () => {
+    const solidos = [
+      ['MATP_0011', 'BENZOATO DE SODIO', '22,68 Kg'],
+      ['MATP_0012', 'CITRATO DE SODIO', '25 Kg'],
+      ['MATP_0013', 'ACIDO CITRICO', '22,68 Kg'],
+      ['MATP_0014', 'BENZOATO DE POTASIO', '25 Kg'],
+      ['MATP_0015', 'ACIDO TARTARICO', '25 Kg'],
+      ['MATP_0016', 'SUCRALOSA EN POLVO', '25 Kg'],
+      ['MATP_0017', 'ACIDO CITRICO ANHIDRO GRANULAR (J)', '25 Kg'],
+      ['MATP_0018', 'GOMA DE XANTHAN 80MESH (J)', '25 Kg'],
+      ['MATP_0019', 'BENZOATO DE SODIO E211 CRYSTALLINE (J)', '25 Kg'],
+      ['MATP_0020', 'SORBATO DE POTASIO E202 GRANULATE 2400 (J)', '25 Kg'],
+      ['MATP_0021', 'TRISODIUM CITRATE DIHYDRATE (J)', '25 Kg'],
+      ['MATP_0031', 'ACIDO ASCORBICO (T)', '25 Kg'],
+      ['MATP_0036', 'EDTA IX11413BV DISODIO DE CALCIO', '25 Kg'],
+      ['MATP_0037', 'ACESULFAME K', '25 Kg'],
+      ['MATP_0040', 'ACIDO MALICO AD000009', '25 Kg'],
+      ['MATP_0042', 'CARBOXIMETILCELULOSA CMC SACO 25KG', '25 Kg'],
+    ];
+
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto mt-4">
+        <div className="px-4 py-3 border-b border-slate-200">
+          <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-700">Sólidos</h3>
+        </div>
+        <table className="w-full border-collapse text-center [&_th:not(:last-child)]:!border-r-2 [&_th:not(:last-child)]:!border-r-slate-400 [&_td:not(:last-child)]:!border-r-2 [&_td:not(:last-child)]:!border-r-slate-400">
+          <thead>
+            <tr className="bg-slate-100">
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[110px]">Código</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[300px]">Descripción</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[180px]">Sacos/Cajas</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[180px]">Cantidad</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">TOTAL Kg</th>
+            </tr>
+          </thead>
+          <tbody>
+            {solidos.map(([code, description, packageValue]) => (
+              <tr key={code}>
+                <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">{code}</td>
+                <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">{description}</td>
+                <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">{packageValue}</td>
+                <td className="px-2 py-1 border-r border-b border-slate-200">
+                  <input
+                    type="text"
+                    value={activeProductionData.solidosCantidad?.[code] || ''}
+                    onChange={(e) => handleSolidosCantidadChange(code, e.target.value)}
+                    className="w-full bg-transparent text-center text-[10px] outline-none"
+                  />
+                </td>
+                <td className="px-2 py-1 border-b border-slate-200">
+                  {activeProductionData.solidosCantidad?.[code] || ''}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
+  const renderQuimicosInsumosTable = () => {
+    const quimicosInsumos = [
+      ['INSU_0001', 'LARK FOAM IN (LIMPIADOR ACIDO ESPUMANTE)', '230 Kg'],
+      ['INSU_0002', 'LARK CLEAN 21 (HIDROXIDO DE POTASIOM 210KG )', '210 Kg'],
+      ['INSU_0003', 'LARK INOX (LIMPIADOR DE ACERO INOXIDABLE)', '20 Kg'],
+      ['INSU_0004', 'WETCOOL 114 MULTIFUNCIONAL (POLY/FOSFONATO/AZOL)', '230 Kg'],
+      ['INSU_0005', 'WETBOIL 301 FOSFATO-POLIMERO- SULFATO DE SODIO CA', '260 Kg'],
+      ['INSU_0006', 'WETBOIL 402 AMINA NEUTRALIZAN- TE (MEZCLA CICLO/M', '200 Kg'],
+      ['INSU_0009', 'TM SMART SRACK NEUTRALIZANTE SECO (L1 Y L2)', '200 Kg'],
+      ['INSU_0010', 'LARK CLORINE', '230 Kg'],
+      ['INSU_0011', 'LARK ACIDO PERACETIC', '200 Kg'],
+      ['INSU_0012', 'LARK DESENGRASANTE 150', '200 Kg'],
+      ['INSU_0013', 'REDOX - METABISULFITO DE SODIO (SOLUCION)', '227 Kg'],
+      ['INSU_0014', 'LARK FOAM QUAT', '200 Kg'],
+      ['INSU_0015', 'WETCOOL 703 BIOCIDA', '212 Kg'],
+      ['INSU_0018', 'QUIMICO ANTIESCALANTE AXROSILICA / AWC-102', '227 Kg'],
+      ['INSU_0019', 'RX 205', '63 Kg'],
+      ['INSU_0020', 'SAL INDUSTRIAL PARA LA REGENERACION DE RESINAS', '20 Kg'],
+      ['INSU_0021', 'LP-20', '227 Kg'],
+      ['INSU_0022', 'LARK MACHT LUB S TAMBOR 210 KG ( L3 )', '210 Kg'],
+      ['INSU_0024', 'SODA CAUSTICA 50%', '300 Kg'],
+      ['INSU_0025', 'LARK NITRO (ACIDO NITRICO 35%)', '230 Kg'],
+      ['INSU_0028', 'BOLSAS FILTRANTES DE 5 MICRAS ( MIT ECO )', 'Pzas'],
+      ['INSU_0029', 'ELEMENTO FILTRO 30" 5 MICRAS ( OSMOSIS - PTAB )', 'Pzas'],
+      ['INSU_0030', 'FILTROS DE 1 MICRA (OSMOSIS - PTAB )', 'Pzas'],
+      ['INSU_0031', 'WETCOOL 316', '220 Kg'],
+      ['INSU_0032', 'WETCLEAN 1161', '200 Kg'],
+      ['INSU_0034', 'FILTROS DE 5 MICRAS 40" PUNTA DE LANZA ( OSMOSIS - PTAB )', 'Pzas'],
+      ['INSU_0035', 'MEMBRANA BW30XFRLE (OSMOSIS INVERSA)', 'Pzas'],
+      ['INSU_0036', 'GAMMA RO-432', '200 Kg'],
+      ['INSU_0037', 'GAMMA RO-732', '200 Kg'],
+      ['INSU_0038', 'CARBON ACTIVADO', 'Kg'],
+      ['INSU_0039', 'FILTROS DE 5 MICRAS 30" PUNTA PLANA C3E (OSMOSIS - PTAB )', 'Pzas'],
+      ['INSU_0040', 'GERMIQUAT (AMONIO CUATERNARIO 10%)', '200 Kg'],
+      ['INSU_0041', 'NANOFILTRACION 40´/ 5 MICRAS', 'Pzas'],
+      ['INSU_0042', 'RO CLEANER ALCALINO', '227 Kg'],
+      ['INSU_0043', 'LARK CLEAN 21C (TAMBOR 250KG)', '250 Kg'],
+      ['INSU_0044', 'LARK SANITIZER TAMBOR (200KG)', '200 Kg'],
+      ['INSU_0045', 'FILTROS 5 MICRAS 40" PUNTA PLANA', 'Pzas'],
+    ];
+
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto mt-4">
+        <div className="px-4 py-3 border-b border-slate-200">
+          <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-700">Químicos e Insumos</h3>
+        </div>
+        <table className="w-full border-collapse text-center [&_th:not(:last-child)]:!border-r-2 [&_th:not(:last-child)]:!border-r-slate-400 [&_td:not(:last-child)]:!border-r-2 [&_td:not(:last-child)]:!border-r-slate-400">
+          <thead>
+            <tr className="bg-slate-100">
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[110px]">Código</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[300px]">Descripción</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[180px]">Tambor/Sacos</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[180px]">Cantidad</th>
+              <th className="px-2 py-1 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">TOTAL Kg/Pzas</th>
+            </tr>
+          </thead>
+          <tbody>
+            {quimicosInsumos.map(([code, description, packageValue]) => (
+              <tr key={code}>
+                <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">{code}</td>
+                <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">{description}</td>
+                <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">{packageValue}</td>
+                <td className="px-2 py-1 border-r border-b border-slate-200">
+                  <input
+                    type="text"
+                    value={activeProductionData.quimicosInsumosCantidad?.[code] || ''}
+                    onChange={(e) => handleQuimicosInsumosCantidadChange(code, e.target.value)}
+                    className="w-full bg-transparent text-center text-[10px] outline-none"
+                  />
+                </td>
+                <td className="px-2 py-1 border-b border-slate-200">
+                  {activeProductionData.quimicosInsumosCantidad?.[code] || ''}
+                </td>
               </tr>
             ))}
           </tbody>
@@ -1003,17 +1442,17 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
               )}
 
               {inventariosMensualSubTab === 'materia-prima' && (
-                <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                  <Box className="h-12 w-12 mb-4 opacity-20" />
-                  Inventarios Mensual - Materia Prima en Desarrollo - {format(inventariosMensualMes, 'MMMM yyyy', { locale: es })}
-                </div>
+                <>
+                  {renderAzucarTable()}
+                  {renderConcentradosGlupTable()}
+                  {renderConcentradosJustyTable()}
+                  {renderAditivosTable()}
+                  {renderSolidosTable()}
+                </>
               )}
 
               {inventariosMensualSubTab === 'insumos' && (
-                <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                  <Droplets className="h-12 w-12 mb-4 opacity-20" />
-                  Inventarios Mensual - Insumos en Desarrollo - {format(inventariosMensualMes, 'MMMM yyyy', { locale: es })}
-                </div>
+                renderQuimicosInsumosTable()
               )}
             </>
           )}
