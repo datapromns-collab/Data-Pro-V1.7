@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-23T00:00:00.000",
+      "weekStartDate": "2026-09-21T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -10616,12 +10616,12 @@
             "name": "GLUP KOLITA",
             "lineId": "2",
             "loadPerHour": 2500,
-            "quantity": 120000,
-            "durationHours": 48,
+            "quantity": 180000,
+            "durationHours": 72,
             "presentation": "2Lts",
-            "tanks": 13.49,
+            "tanks": 20.24,
             "startTime": "2026-09-22T11:00:00.000Z",
-            "endTime": "2026-09-24T11:00:00.000Z",
+            "endTime": "2026-09-25T11:00:00.000Z",
             "id": "vas3fpesy",
             "color": "#ec4899"
           },
@@ -10668,12 +10668,12 @@
             "name": "GLUP COLA",
             "lineId": "7",
             "loadPerHour": 2500,
-            "quantity": 180000,
-            "durationHours": 72,
+            "quantity": 240000,
+            "durationHours": 96,
             "presentation": "1Lt",
-            "tanks": 20.87,
+            "tanks": 27.83,
             "startTime": "2026-09-21T11:00:00.000Z",
-            "endTime": "2026-09-24T11:00:00.000Z",
+            "endTime": "2026-09-25T11:00:00.000Z",
             "id": "dyxat1x34",
             "color": "#10b981"
           },
@@ -10699,41 +10699,6 @@
             "startTime": "2026-09-23T05:30:00.000Z",
             "endTime": "2026-09-23T10:02:31.200Z",
             "id": "lm2vcfirn",
-            "color": "#f59e0b"
-          },
-          {
-            "name": "MTTO",
-            "lineId": "1",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 10.45,
-            "startTime": "2026-09-23T10:03:00.000Z",
-            "endTime": "2026-09-23T20:30:00.000Z",
-            "id": "2htgksiqp",
-            "color": "#6366f1"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "1",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-09-23T20:30:00.000Z",
-            "endTime": "2026-09-23T22:30:00.000Z",
-            "id": "s8l3t81kt",
-            "color": "#ec4899"
-          },
-          {
-            "name": "GLUP FRESH",
-            "lineId": "1",
-            "loadPerHour": 1500,
-            "quantity": 87750,
-            "durationHours": 58.5,
-            "presentation": "2Lts",
-            "tanks": 10.17,
-            "startTime": "2026-09-23T22:30:00.000Z",
-            "endTime": "2026-09-26T09:00:00.000Z",
-            "id": "iwyreglzi",
             "color": "#f59e0b"
           },
           {
@@ -10908,12 +10873,12 @@
             "name": "GLUP COLA",
             "lineId": "6",
             "loadPerHour": 1200,
-            "quantity": 57600,
-            "durationHours": 48,
+            "quantity": 80256,
+            "durationHours": 66.88,
             "presentation": "0.4Lts",
-            "tanks": 3.34,
+            "tanks": 4.65,
             "startTime": "2026-09-22T14:07:00.000Z",
-            "endTime": "2026-09-24T14:07:00.000Z",
+            "endTime": "2026-09-25T08:59:48.000Z",
             "id": "3238kg1q5",
             "color": "#ec4899"
           },
@@ -10945,12 +10910,12 @@
             "name": "GLUP COLA",
             "lineId": "3",
             "loadPerHour": 2800,
-            "quantity": 64400,
-            "durationHours": 23,
+            "quantity": 128800,
+            "durationHours": 46,
             "presentation": "2Lts",
-            "tanks": 7.47,
+            "tanks": 14.93,
             "startTime": "2026-09-24T11:00:00.000Z",
-            "endTime": "2026-09-25T10:00:00.000Z",
+            "endTime": "2026-09-26T09:00:00.000Z",
             "id": "ipru9zzwd",
             "color": "#ef4444"
           },
@@ -10966,38 +10931,27 @@
             "color": "#587593"
           },
           {
-            "name": "MTTO",
-            "lineId": "3",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 10.5,
-            "startTime": "2026-09-25T10:00:00.000Z",
-            "endTime": "2026-09-25T20:30:00.000Z",
-            "id": "hbkr6lfvu",
-            "color": "#47CCB0"
-          },
-          {
             "name": "CIP 3P ALCALINO",
-            "lineId": "3",
+            "lineId": "1",
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 2,
-            "startTime": "2026-09-25T20:30:00.000Z",
-            "endTime": "2026-09-25T22:30:00.000Z",
-            "id": "v7ycjr6kh",
-            "color": "#ef4444"
+            "startTime": "2026-09-23T10:03:00.000Z",
+            "endTime": "2026-09-23T12:03:00.000Z",
+            "id": "m381wmc3y",
+            "color": "#10b981"
           },
           {
-            "name": "GLUP COLA",
-            "lineId": "3",
-            "loadPerHour": 2800,
-            "quantity": 29400,
-            "durationHours": 10.5,
+            "name": "GLUP FRESH",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 103425,
+            "durationHours": 68.95,
             "presentation": "2Lts",
-            "tanks": 3.41,
-            "startTime": "2026-09-25T22:30:00.000Z",
+            "tanks": 11.99,
+            "startTime": "2026-09-23T12:03:00.000Z",
             "endTime": "2026-09-26T09:00:00.000Z",
-            "id": "lj4aidozo",
+            "id": "o4cu0xl95",
             "color": "#10b981"
           }
         ],
@@ -11033,7 +10987,13 @@
           "1462aej8i",
           "ffot2wwcz",
           "rrd6r1amp",
-          "h7qb9lub6"
+          "h7qb9lub6",
+          "2htgksiqp",
+          "s8l3t81kt",
+          "iwyreglzi",
+          "hbkr6lfvu",
+          "v7ycjr6kh",
+          "lj4aidozo"
         ]
       }
     },
@@ -11158,6 +11118,134 @@
           "aditivosCantidad": {},
           "solidosCantidad": {},
           "quimicosInsumosCantidad": {}
+        },
+        "2026-09-24": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {},
+          "2026-09-21": {
+            "tapas": {
+              "EMP_0095-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0095-Importada": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaEW": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaTipo2": {
+                "totalCajas": "",
+                "total": ""
+              }
+            },
+            "separadores": {},
+            "preformas": {},
+            "plasticos": {},
+            "adhesivoCantidad": "",
+            "etiquetasCantidad": {}
+          },
+          "2026-09-22": {
+            "tapas": {
+              "EMP_0095-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0095-Importada": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaEW": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaTipo2": {
+                "totalCajas": "",
+                "total": ""
+              }
+            },
+            "separadores": {},
+            "preformas": {},
+            "plasticos": {},
+            "adhesivoCantidad": "",
+            "etiquetasCantidad": {},
+            "2026-09-21": {
+              "tapas": {
+                "EMP_0095-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0095-Importada": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaEW": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaTipo2": {
+                  "totalCajas": "",
+                  "total": ""
+                }
+              },
+              "separadores": {},
+              "preformas": {},
+              "plasticos": {},
+              "adhesivoCantidad": "",
+              "etiquetasCantidad": {}
+            },
+            "azucarCantidad": {},
+            "concentradosCantidad": {},
+            "concentradosJustyCantidad": {},
+            "aditivosCantidad": {},
+            "solidosCantidad": {},
+            "quimicosInsumosCantidad": {}
+          }
         }
       },
       "semanal": {
@@ -11984,7 +12072,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-23T22:22:44.736Z"
+    "updatedAt": "2026-09-24T13:27:31.846Z"
   },
   "ordenesSap": [
     {
@@ -21147,12 +21235,12 @@
           "fechaInicio": "2026-09-23",
           "ticket1": "16027",
           "cajas1": 1520,
-          "ticket2": "",
+          "ticket2": "16028",
           "cajas2": 5840,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2000,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 5600
         }
       ]
     },
@@ -21178,12 +21266,12 @@
           "fechaInicio": "2026-09-23",
           "ticket1": "17982",
           "cajas1": 1840,
-          "ticket2": "",
+          "ticket2": "17983",
           "cajas2": 2080,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3440,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8000
         }
       ]
     },
@@ -21198,12 +21286,12 @@
           "fechaInicio": "2026-09-23",
           "ticket1": "16116",
           "cajas1": 2320,
-          "ticket2": "",
+          "ticket2": "16117",
           "cajas2": 1280,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2960,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8320
         },
         {
           "fechaInicio": "2026-09-24",
@@ -21229,12 +21317,12 @@
           "fechaInicio": "2026-09-23",
           "ticket1": "17492",
           "cajas1": 250,
-          "ticket2": "",
+          "ticket2": "17493",
           "cajas2": 200,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 200,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 2450
         },
         {
           "fechaInicio": "2026-09-24",
@@ -21260,12 +21348,12 @@
           "fechaInicio": "2026-09-23",
           "ticket1": "16166",
           "cajas1": 800,
-          "ticket2": "",
+          "ticket2": "16167",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1600,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 3040
         }
       ]
     },
@@ -21280,12 +21368,12 @@
           "fechaInicio": "2026-09-23",
           "ticket1": "16215",
           "cajas1": 156,
-          "ticket2": "",
+          "ticket2": "16216",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2106,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 2262
         }
       ]
     },
@@ -21300,6 +21388,17 @@
           "fechaInicio": "2026-09-23",
           "ticket1": "16068",
           "cajas1": 2080,
+          "ticket2": "16069",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 2080,
+          "ticket4": "",
+          "cajas4": 5600
+        },
+        {
+          "fechaInicio": "2026-09-24",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -32779,6 +32878,77 @@
             "preparado": "200",
             "final": "21"
           }
+        },
+        "2026-09-22": {
+          "GLUP COLA": {
+            "inicial": "62.72",
+            "preparado": "24",
+            "final": "55.51"
+          },
+          "GLUP FRESH": {
+            "inicial": "6.13",
+            "preparado": "6",
+            "final": "4.85"
+          },
+          "GLUP UVA": {
+            "inicial": "32.69",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP MANZANA ROJA": {
+            "inicial": "13.57",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "21",
+            "preparado": "160",
+            "final": "30"
+          },
+          "GLUP PIÑA": {
+            "final": "23.73",
+            "preparado": "40"
+          },
+          "GLUP KOLITA": {
+            "preparado": "54",
+            "final": "41.89"
+          },
+          "GLUP PIÑA PARCHITA": {
+            "preparado": "6",
+            "final": "1.69"
+          }
+        },
+        "2026-09-23": {
+          "GLUP COLA": {
+            "inicial": "55.51",
+            "preparado": "18",
+            "final": "57.55"
+          },
+          "GLUP FRESH": {
+            "inicial": "4.85",
+            "preparado": "6",
+            "final": "3.17"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "30",
+            "preparado": "60",
+            "final": "35"
+          },
+          "GLUP PIÑA": {
+            "inicial": "23.73",
+            "preparado": "20",
+            "final": "21.20"
+          },
+          "GLUP KOLITA": {
+            "inicial": "41.89",
+            "preparado": "18",
+            "final": "28.05"
+          },
+          "GLUP PIÑA PARCHITA": {
+            "inicial": "1.69",
+            "preparado": "",
+            "final": ""
+          }
         }
       },
       "sugar": {
@@ -33654,6 +33824,50 @@
             "recepcionSacos": "3000",
             "invFinalSacos": "1160"
           }
+        },
+        "2026-09-22": {
+          "PORTUGUESA": {
+            "invInicialSacos": "2720",
+            "recepcionSacos": "2880",
+            "invFinalSacos": "4920"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "1760",
+            "recepcionSacos": "",
+            "invFinalSacos": "1480"
+          },
+          "PASTORA": {
+            "invInicialSacos": "1480",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "1160",
+            "recepcionSacos": "",
+            "invFinalSacos": "280"
+          }
+        },
+        "2026-09-23": {
+          "PORTUGUESA": {
+            "invInicialSacos": "4920",
+            "recepcionSacos": "2800",
+            "invFinalSacos": "7120"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "1480",
+            "recepcionSacos": "",
+            "invFinalSacos": "1280"
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "280",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "PASTORA": {
+            "invInicialSacos": "",
+            "recepcionSacos": "2240",
+            "invFinalSacos": "1400"
+          }
         }
       },
       "tanques": {
@@ -34446,6 +34660,26 @@
             "invInicialSacos": "1364",
             "invFinalSacos": "456"
           }
+        },
+        "2026-09-22": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "391",
+            "invFinalSacos": "271"
+          },
+          "Sala 1": {
+            "invInicialSacos": "456",
+            "invFinalSacos": "454"
+          }
+        },
+        "2026-09-23": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "271",
+            "invFinalSacos": "400"
+          },
+          "Sala 1": {
+            "invInicialSacos": "454",
+            "invFinalSacos": "468"
+          }
         }
       },
       "realKgPerSack": {
@@ -34505,7 +34739,9 @@
         "2026-09-18": "50.45",
         "2026-09-19": "50.38",
         "2026-09-20": "50.23",
-        "2026-09-21": "50.33"
+        "2026-09-21": "50.33",
+        "2026-09-22": "50.20",
+        "2026-09-23": "50.26"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
@@ -34525,7 +34761,8 @@
         "2026-09-02": "1.34",
         "2026-09-01": "1.34",
         "2026-09-13": "1.34",
-        "2026-09-18": "1.02"
+        "2026-09-18": "1.02",
+        "2026-09-23": "1.02"
       },
       "_deletedIds": {},
       "weeklyFisico": {
@@ -34540,7 +34777,8 @@
         "2026-09-01|2026-09": 891165.86,
         "2026-08-01|2026-08": 121494.94,
         "2026-09-07|2026-09": 1141476.37,
-        "2026-09-14|2026-09": 1174355.86
+        "2026-09-14|2026-09": 1174355.86,
+        "2026-09-21|2026-09": 482398.59
       }
     },
     "seguimiento-etiquetadora": {
@@ -142694,14 +142932,19 @@
       "2026-09-20-total": "3052923,33",
       "2026-09-21-servicio": "22863",
       "2026-09-21-suave": "210601",
-      "2026-09-21-procesos": "2264260.59",
-      "2026-09-21-filtrada": "3499058.29",
-      "2026-09-21-total": "3360002.53",
+      "2026-09-21-procesos": "2264260,59",
+      "2026-09-21-filtrada": "3499058,29",
+      "2026-09-21-total": "3360002,53",
       "2026-09-22-servicio": "20036",
       "2026-09-22-suave": "194576",
       "2026-09-22-procesos": "1996183",
-      "2026-09-22-filtrada": "3120789.88",
-      "2026-09-22-total": "2852312"
+      "2026-09-22-filtrada": "3120789,88",
+      "2026-09-22-total": "2852312",
+      "2026-09-23-servicio": "14429",
+      "2026-09-23-suave": "136488",
+      "2026-09-23-procesos": "1547333,68",
+      "2026-09-23-filtrada": "2471367,68",
+      "2026-09-23-total": "2097242,67"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -142961,7 +143204,58 @@
       "2026-09-23-Gamma Ro-432-0": "200",
       "2026-09-23-RO Cleaner-0": "227",
       "2026-09-23-Sanitizer-0": "282,5",
-      "2026-09-23-LARK CLEAN 21C-0": "200"
+      "2026-09-23-LARK CLEAN 21C-0": "200",
+      "2026-09-23-LP20-2": "195,8",
+      "2026-09-23-LP20-4": "195,8",
+      "2026-09-23-Cloro-2": "287",
+      "2026-09-23-Cloro-4": "287",
+      "2026-09-23-AntiEscalante-2": "726,2",
+      "2026-09-23-AntiEscalante-4": "726,2",
+      "2026-09-23-Sal-2": "7180",
+      "2026-09-23-Sal-4": "7180",
+      "2026-09-23-Alcalino-2": "2238,1",
+      "2026-09-23-Alcalino-4": "2238,1",
+      "2026-09-23-Peracetico-2": "565,2",
+      "2026-09-23-Peracetico-4": "565,2",
+      "2026-09-23-Lark Foam Quat-2": "115,8",
+      "2026-09-23-Lark Foam Quat-4": "115,8",
+      "2026-09-23-Lark Foam IN-2": "230",
+      "2026-09-23-Lark Foam IN-4": "230",
+      "2026-09-23-Lark Desengrasante-2": "0",
+      "2026-09-23-Lark Desengrasante-4": "0",
+      "2026-09-23-Soda Caustica-2": "532,4",
+      "2026-09-23-Soda Caustica-4": "532,4",
+      "2026-09-23-GermiQuat-2": "25",
+      "2026-09-23-GermiQuat-4": "25",
+      "2026-09-23-Lark Inox-2": "45",
+      "2026-09-23-Lark Inox-4": "45",
+      "2026-09-23-TM Smart-2": "250,9",
+      "2026-09-23-TM Smart-4": "250,9",
+      "2026-09-23-Gamma Ro-432-2": "200",
+      "2026-09-23-Gamma Ro-432-4": "200",
+      "2026-09-23-LARK CLEAN 21C-2": "200",
+      "2026-09-23-LARK CLEAN 21C-4": "200",
+      "2026-09-23-Sanitizer-2": "282,5",
+      "2026-09-23-Sanitizer-4": "282,5",
+      "2026-09-23-RO Cleaner-2": "227",
+      "2026-09-23-RO Cleaner-4": "227",
+      "2026-09-23-LP20-6": "192,9",
+      "2026-09-23-Cloro-6": "281",
+      "2026-09-23-AntiEscalante-6": "724,8",
+      "2026-09-23-Sal-6": "7040",
+      "2026-09-23-Alcalino-6": "2238,1",
+      "2026-09-23-Peracetico-6": "565,2",
+      "2026-09-23-Lark Foam Quat-6": "115,8",
+      "2026-09-23-Lark Foam IN-6": "230",
+      "2026-09-23-Lark Desengrasante-6": "0",
+      "2026-09-23-Soda Caustica-6": "532,4",
+      "2026-09-23-GermiQuat-6": "25",
+      "2026-09-23-Lark Inox-6": "45",
+      "2026-09-23-TM Smart-6": "250,9",
+      "2026-09-23-Gamma Ro-432-6": "166,5",
+      "2026-09-23-RO Cleaner-6": "213,7",
+      "2026-09-23-Sanitizer-6": "282,5",
+      "2026-09-23-LARK CLEAN 21C-6": "200"
     },
     "sala-jarabe-glup": [
       {
@@ -143270,10 +143564,10 @@
   ],
   "logisticsStockFile": {
     "filename": "stock-producto-terminado.xlsx",
-    "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  08 .xlsx",
+    "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  08.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 29772,
-    "uploadedAt": "2026-09-23T14:37:15.152Z",
+    "tamano": 12783,
+    "uploadedAt": "2026-09-24T11:55:24.341Z",
     "uploadedBy": "local-user"
   }
 }
