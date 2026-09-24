@@ -213,30 +213,56 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
     { id: 'calculator', label: 'Calculadora' },
   ],
   management: [
-    { id: 'production', label: 'Producción diaria' },
-    { id: 'control', label: 'Control semanal' },
+    { id: 'production', label: 'Producción Diaria' },
+    { id: 'control', label: 'Control Producción' },
     { id: 'weekly-summary', label: 'Resumen semanal' },
     { id: 'monthly-summary', label: 'Resumen mensual' },
     { id: 'compliance', label: 'Cumplimiento' },
   ],
   jarabes: [
-    { id: 'standard', label: 'Reporte estándar' },
-    { id: 'average', label: 'Reporte promedio' },
-    { id: 'weekly', label: 'Reportes semanales' },
-    { id: 'monthly', label: 'Reportes mensuales' },
+    { id: 'simple', label: 'Jarabe Simple', children: [
+      { id: 'disolucion', label: 'Seguimiento de Disolución', children: [
+        { id: 'estandar', label: 'Estándar' },
+        { id: 'promedio', label: 'Promedio' },
+        { id: 'resumen', label: 'Resumen', children: [
+          { id: 'semanal', label: 'Semanal', children: [
+            { id: 'r-estandar-sem', label: 'R estandar sem' },
+            { id: 'r-promedio-sem', label: 'R promedio sem' },
+          ] },
+          { id: 'mensual', label: 'Mensual', children: [
+            { id: 'r-estandar-mes', label: 'R estandar mes' },
+            { id: 'r-promedio-mes', label: 'R promedio mes' },
+          ] },
+        ] },
+      ] },
+      { id: 'seguimiento-simple', label: 'Seguimiento de Jarabe Simple' },
+    ] },
+    { id: 'terminado', label: 'Jarabe Terminado' },
+    { id: 'lineas', label: 'Jarabe en Líneas' },
   ],
   'raw-materials': [
-    { id: 'inventory', label: 'Inventario' },
-    { id: 'requirements', label: 'Requerimientos' },
-    { id: 'reports', label: 'Reportes' },
+    { id: 'daily-main', label: 'Diario', children: [
+      { id: 'daily-inventory', label: 'Inventario' },
+      { id: 'daily-ubb', label: 'Consumo de UBB' },
+      { id: 'daily-summary', label: 'Resumen' },
+    ] },
+    { id: 'weekly-main', label: 'Semanal', children: [
+      { id: 'initial', label: 'Inventario Inicial' },
+      { id: 'initial-tanks', label: 'UBB Inicial' },
+      { id: 'reception', label: 'Recepción' },
+      { id: 'final', label: 'Inventario Final' },
+      { id: 'final-tanks', label: 'UBB Final' },
+      { id: 'daily', label: 'Registro Producción (UBB)' },
+      { id: 'summary', label: 'Resumen Comparativo' },
+    ] },
   ],
   recipes: [
-    { id: 'raw-material', label: 'Recetas de materia prima' },
-    { id: 'packaging', label: 'Recetas de empaque' },
+    { id: 'recipes-editor', label: 'Recetas de Materia Prima' },
+    { id: 'packaging-recipes-editor', label: 'Recetas de Empaque' },
   ],
   planta: [
-    { id: 'line-stops', label: 'Paradas de línea', children: [
-      { id: 'operational-reports', label: 'Informes operacionales' },
+    { id: 'line-stops', label: 'Paradas de Líneas', children: [
+      { id: 'operational-reports', label: 'Informes Operacionales' },
       { id: 'work-orders', label: 'Órdenes de trabajo' },
     ] },
     { id: 'production', label: 'Producción', children: [
@@ -244,47 +270,119 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
       { id: 'produced', label: 'Producidas' },
       { id: 'by-shift', label: 'Por turno' },
     ] },
-    { id: 'daily-report', label: 'Reporte diario' },
-    { id: 'weekly-summary', label: 'Resumen semanal' },
-    { id: 'monthly-summary', label: 'Resumen mensual' },
+    { id: 'daily-report', label: 'Reporte', children: [
+      { id: 'daily', label: 'Diario' },
+      { id: 'by-shift', label: 'Por Turno' },
+      { id: 'summary', label: 'Resumen' },
+    ] },
+    { id: 'weekly-summary', label: 'Resumen Semanal', children: [
+      { id: 'summary', label: 'Resumen' },
+      { id: 'pt', label: 'PT', children: [
+        { id: 'day', label: 'T Diurno' },
+        { id: 'night', label: 'T Nocturno' },
+      ] },
+    ] },
+    { id: 'monthly-summary', label: 'Resumen Mensual' },
+    { id: 'cycles', label: 'Ciclos' },
   ],
-  produccion: [{ id: 'production', label: 'Producción' }],
+  produccion: [
+    { id: 'planned', label: 'Planificadas', children: [
+      { id: 'by-shift', label: 'Por Turno' },
+      { id: 'daily', label: 'Diario' },
+    ] },
+    { id: 'produced', label: 'Producidas', children: [
+      { id: 'by-shift', label: 'Por Turno' },
+      { id: 'daily', label: 'Diaria' },
+    ] },
+    { id: 'inventories', label: 'Inventarios' },
+  ],
   'planta-admin': [{ id: 'administration', label: 'Administración de planta' }],
   procesos: [
-    { id: 'ptab', label: 'PTAB' },
+    { id: 'ptab', label: 'PTAB', children: [
+      { id: 'agua', label: 'Agua' },
+      { id: 'insumos', label: 'Insumos' },
+      { id: 'r-semanal', label: 'R Semanal', children: [
+        { id: 's-agua', label: 'S Agua' },
+        { id: 's-insumos', label: 'S Insumos' },
+      ] },
+      { id: 'r-mensual', label: 'R mensual', children: [
+        { id: 'm-agua', label: 'M Agua' },
+        { id: 'm-insumos', label: 'M Insumos' },
+      ] },
+    ] },
+    { id: 'miteco', label: 'MITECO' },
     { id: 'sala-jarabe', label: 'Sala de jarabe' },
-    { id: 'lavado', label: 'Lavado' },
   ],
-  calidad: [{ id: 'quality', label: 'Calidad' }],
-  mtto: [{ id: 'maintenance', label: 'Mantenimiento' }],
+  calidad: [{ id: 'quality', label: 'Módulo de Calidad en Desarrollo' }],
+  mtto: [{ id: 'maintenance', label: 'Módulo MTTO en Desarrollo' }],
   insumos: [
     { id: 'co2', label: 'CO2' },
-    { id: 'insumos', label: 'Insumos' },
-    { id: 'period', label: 'Período' },
+    { id: 'agua', label: 'Agua' },
+    { id: 'period', label: 'Período', children: [
+      { id: 'diario', label: 'Diario' },
+      { id: 'semanal', label: 'Semanal' },
+      { id: 'mensual', label: 'Mensual' },
+    ] },
   ],
   logistica: [
-    { id: 'finished-product', label: 'Producto terminado' },
-    { id: 'logistics', label: 'Logística' },
-    { id: 'plant', label: 'Planta' },
-    { id: 'available', label: 'Disponible' },
+    { id: 'finished-product', label: 'Stock de Producto Terminado' },
+    { id: 'monthly-inventory', label: 'Inventario mensual', children: [
+      { id: 'prodt', label: 'Prodt' },
+      { id: 'matp', label: 'Matp' },
+      { id: 'emp', label: 'Emp' },
+    ] },
   ],
-  ventas: [{ id: 'sales', label: 'Ventas' }],
+  ventas: [
+    { id: 'forecast', label: 'Pronóstico de ventas' },
+    { id: 'analysis', label: 'Análisis' },
+  ],
   purchasing: [
-    { id: 'requirements', label: 'Requerimientos' },
-    { id: 'inventory', label: 'Inventario' },
-    { id: 'summary', label: 'Resumen' },
+    { id: 'mds', label: 'MDS', children: [
+      { id: 'sales-projection', label: 'Proyección de Ventas', children: [
+        { id: 'planning', label: 'Planificación' },
+        { id: 'requirements', label: 'Requerimientos' },
+      ] },
+      { id: 'available-inventory', label: 'Inventario Disponible', children: [
+        { id: 'finished-product', label: 'Producto terminado' },
+        { id: 'mat-logistics', label: 'Mat. Logística' },
+        { id: 'mat-plant', label: 'Mat. Planta' },
+        { id: 'available', label: 'Disponible' },
+      ] },
+      { id: 'summary', label: 'Resumen' },
+    ] },
+    { id: 'aw', label: 'AW', children: [
+      { id: 'sales-projection', label: 'Proyección de Ventas', children: [
+        { id: 'planning', label: 'Planificación' },
+        { id: 'requirements', label: 'Requerimientos' },
+      ] },
+      { id: 'available-inventory', label: 'Inventario Disponible', children: [
+        { id: 'finished-product', label: 'Producto terminado' },
+        { id: 'mat-logistics', label: 'Mat. Logística' },
+        { id: 'mat-plant', label: 'Mat. Planta' },
+        { id: 'available', label: 'Disponible' },
+      ] },
+      { id: 'summary', label: 'Resumen' },
+    ] },
+    { id: 'global', label: 'Global' },
   ],
-  'ordenes-sap': [{ id: 'orders', label: 'Órdenes SAP' }],
+  'ordenes-sap': [
+    { id: 'carga-prod', label: 'CARGA PRODT' },
+    { id: 'creador-ordenes', label: 'CREADOR DE ORDENES' },
+    { id: 'seguimiento-ordenes', label: 'SEGUIMIENTO ORDENES' },
+    { id: 'dia-a-dia', label: 'DÍA A DÍA' },
+    { id: 'prodt-semanal', label: 'PRODT SEMANAL' },
+    { id: 'resumen-mensual', label: 'RESUMEN MENSUAL' },
+  ],
   seguimiento: [
     { id: 'enfardadora', label: 'Enfardadora', children: [
-      { id: 'stops', label: 'Paradas' },
+      { id: 'stops', label: 'Control de Paradas' },
       { id: 'efficiency', label: 'Eficiencia' },
-      { id: 'capacities', label: 'Capacidades' },
+      { id: 'capacities', label: 'Capacidades Fijas' },
     ] },
     { id: 'etiquetadora', label: 'Etiquetadora', children: [
-      { id: 'stops', label: 'Paradas' },
+      { id: 'stops', label: 'Control de Paradas' },
       { id: 'efficiency', label: 'Eficiencia' },
-      { id: 'capacities', label: 'Capacidades' },
+      { id: 'capacities', label: 'Capacidades Fijas' },
     ] },
   ],
 };
@@ -631,6 +729,74 @@ export function usePermissionsStore() {
     });
   };
 
+  const renameUserAccess = (oldId: string, newId: string) => {
+    if (!oldId || !newId || oldId === newId) return;
+
+    const nextPermissions = { ...permissions };
+    const oldPermissions = nextPermissions[oldId];
+    if (oldPermissions) {
+      nextPermissions[newId] = oldPermissions;
+      delete nextPermissions[oldId];
+    }
+    savePermissions(nextPermissions);
+
+    const nextPlanning = { ...planningPermissions };
+    const oldPlanning = nextPlanning[oldId];
+    if (oldPlanning) {
+      nextPlanning[newId] = oldPlanning;
+      delete nextPlanning[oldId];
+    }
+    savePlanningPermissions(nextPlanning);
+
+    const nextManagement = { ...managementPermissions };
+    const oldManagement = nextManagement[oldId];
+    if (oldManagement) {
+      nextManagement[newId] = oldManagement;
+      delete nextManagement[oldId];
+    }
+    saveManagementPermissions(nextManagement);
+
+    const nextReadOnly = { ...readOnlyModules };
+    const oldReadOnly = nextReadOnly[oldId];
+    if (oldReadOnly) {
+      nextReadOnly[newId] = oldReadOnly;
+      delete nextReadOnly[oldId];
+    }
+    saveReadOnlyModules(nextReadOnly);
+
+    const nextSections = { ...sectionPermissions };
+    const oldSections = nextSections[oldId];
+    if (oldSections) {
+      nextSections[newId] = oldSections;
+      delete nextSections[oldId];
+    }
+    saveSectionPermissions(nextSections);
+  };
+
+  const removeUserAccess = (userId: string) => {
+    if (!userId) return;
+
+    const nextPermissions = { ...permissions };
+    delete nextPermissions[userId];
+    savePermissions(nextPermissions);
+
+    const nextPlanning = { ...planningPermissions };
+    delete nextPlanning[userId];
+    savePlanningPermissions(nextPlanning);
+
+    const nextManagement = { ...managementPermissions };
+    delete nextManagement[userId];
+    saveManagementPermissions(nextManagement);
+
+    const nextReadOnly = { ...readOnlyModules };
+    delete nextReadOnly[userId];
+    saveReadOnlyModules(nextReadOnly);
+
+    const nextSections = { ...sectionPermissions };
+    delete nextSections[userId];
+    saveSectionPermissions(nextSections);
+  };
+
   const resetToDefaults = () => {
     savePermissions({ ...DEFAULT_PERMISSIONS });
     savePlanningPermissions({ ...DEFAULT_PLANNING_PERMISSIONS });
@@ -659,6 +825,8 @@ export function usePermissionsStore() {
     setModulePermission,
     getPermissionLevel,
     setPermissionLevel,
+    renameUserAccess,
+    removeUserAccess,
     resetToDefaults,
     allModules: ALL_MODULES,
     permissionSections: PERMISSION_SECTIONS,

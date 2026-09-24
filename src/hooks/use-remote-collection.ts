@@ -42,6 +42,31 @@ function savePendingQueue(namespace: string, queue: PendingOperation[]) {
   }
 }
 
+function deepMergeValues<T>(target: T, source: any): T {
+  if (!source || typeof source !== 'object') return source;
+  if (Array.isArray(source)) {
+    if (!Array.isArray(target)) return source as unknown as T;
+    return source as unknown as T;
+  }
+  if (!target || typeof target !== 'object' || Array.isArray(target)) {
+    return { ...(source as object) } as T;
+  }
+
+  const result: any = { ...target };
+  for (const key of Object.keys(source)) {
+    const sourceValue = (source as Record<string, any>)[key];
+    const targetValue = result[key];
+
+    if (sourceValue && typeof sourceValue === 'object' && !Array.isArray(sourceValue)) {
+      result[key] = deepMergeValues(targetValue, sourceValue);
+      continue;
+    }
+
+    result[key] = sourceValue;
+  }
+  return result as T;
+}
+
 function deepMergeQueuePayload(a: any, b: any): any {
   if (!a || !b || typeof a !== 'object' || typeof b !== 'object') return a ?? b;
   const result: any = { ...a };
@@ -219,7 +244,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
     (patch: Partial<T> | ((prev: T) => Partial<T>)) => {
       setData((prev) => {
         const delta = typeof patch === 'function' ? (patch as (p: T) => Partial<T>)(prev) : patch;
-        const next = { ...(prev as object), ...(delta as object) } as T;
+        const next = deepMergeValues(prev, delta) as T;
         console.log('[RC] patchData', namespace, 'delta keys', typeof delta === 'object' && delta ? Object.keys(delta as Record<string, any>).slice(0, 5) : 'none');
         persistLocal(next);
         enqueue(delta);
@@ -231,7 +256,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
         return next;
       });
     },
-    [persistLocal, enqueue, flushQueue]
+    [persistLocal, enqueue, flushQueue, namespace]
   );
 
   const removeItem = useCallback((id: string) => {
@@ -312,10 +337,9 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
       if (!skipQueryCache) {
         const cachedQuery = getQueryCache<T>(queryCacheKey);
         if (cachedQuery) {
+          // Use the cache as an initial render value, but continue to the
+          // server so shared data is always authoritative after hydration.
           setData(cachedQuery);
-          setIsLoaded(true);
-          firstLoadRef.current = false;
-          return;
         }
       }
     } catch {

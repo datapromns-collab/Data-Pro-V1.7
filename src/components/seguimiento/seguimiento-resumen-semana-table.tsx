@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 import ExcelJS from 'exceljs';
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
@@ -118,8 +118,62 @@ export function SeguimientoResumenSemanaTable({
     );
   }, [rows]);
 
+  const [lineaFilter, setLineaFilter] = useState<string>('all');
+  const [saborFilter, setSaborFilter] = useState<string>('all');
+
+  const lineasDisponibles = useMemo(
+    () => ['all', ...Array.from(new Set(rows.map((row) => row.linea))).sort()],
+    [rows]
+  );
+  const saboresDisponibles = useMemo(
+    () => ['all', ...Array.from(new Set(rows.map((row) => row.sabor))).sort()],
+    [rows]
+  );
+
+  const filteredRows = useMemo(
+    () =>
+      rows.filter((row) => {
+        const matchesLinea = lineaFilter === 'all' || row.linea === lineaFilter;
+        const matchesSabor = saborFilter === 'all' || row.sabor === saborFilter;
+        return matchesLinea && matchesSabor;
+      }),
+    [rows, lineaFilter, saborFilter]
+  );
+
+  const filteredTotales = useMemo(() => {
+    return filteredRows.reduce(
+      (acc, r) => {
+        acc.cajasPlanificadas += Number(r.cajasPlanificadas) || 0;
+        acc.cajasCompletadas += Number(r.cajasCompletadas) || 0;
+        acc.diferencia += Number(r.diferencia) || 0;
+        acc.jarabeRequerido += Number(r.jarabeRequerido) || 0;
+        acc.jarabeReqCompletadas += r.jarabeReqCompletadas;
+        acc.jarabeReal += Number(r.jarabeReal) || 0;
+        acc.diferencia2 += Number(r.diferencia2) || 0;
+        acc.porcentajeJarabe += r.porcentajeJarabe;
+        acc.botellasT += Number(r.botellasT) || 0;
+        acc.bebidaTerminada += Number(r.bebidaTerminada) || 0;
+        acc.ubb += Number(r.ubb) || 0;
+        return acc;
+      },
+      {
+        cajasPlanificadas: 0,
+        cajasCompletadas: 0,
+        diferencia: 0,
+        jarabeRequerido: 0,
+        jarabeReqCompletadas: 0,
+        jarabeReal: 0,
+        diferencia2: 0,
+        porcentajeJarabe: 0,
+        botellasT: 0,
+        bebidaTerminada: 0,
+        ubb: 0,
+      }
+    );
+  }, [filteredRows]);
+
   const exportarExcel = useCallback(async () => {
-    if (!rows.length) return;
+    if (!filteredRows.length) return;
 
     const extraerNumeroLinea = (linea: string): number => {
       const match = linea.match(/Línea (\d+)/);
@@ -145,7 +199,7 @@ export function SeguimientoResumenSemanaTable({
       'Bebida terminada',
     ];
 
-    const data = rows.map((row) => ({
+    const data = filteredRows.map((row) => ({
       Lineas: extraerNumeroLinea(row.linea),
       Sabor: row.sabor,
       'Código de producto': row.codigoProducto,
@@ -171,16 +225,16 @@ export function SeguimientoResumenSemanaTable({
       'Fecha de inicio': '',
       'Fecha de finalización': '',
       'Número de orden': '',
-      'Cajas Planificadas': totales.cajasPlanificadas,
-      'Cajas completadas': totales.cajasCompletadas,
-      Diferencia: totales.diferencia,
-      'Jarabe requerido de cajas completadas': totales.jarabeRequerido,
-      'Jarabe Real': totales.jarabeReal,
-      Diferencia2: totales.diferencia2,
-      'Porcentaje de jarabe': totales.jarabeRequerido > 0 ? (totales.diferencia2 / totales.jarabeRequerido) : 0,
+      'Cajas Planificadas': filteredTotales.cajasPlanificadas,
+      'Cajas completadas': filteredTotales.cajasCompletadas,
+      Diferencia: filteredTotales.diferencia,
+      'Jarabe requerido de cajas completadas': filteredTotales.jarabeRequerido,
+      'Jarabe Real': filteredTotales.jarabeReal,
+      Diferencia2: filteredTotales.diferencia2,
+      'Porcentaje de jarabe': filteredTotales.jarabeRequerido > 0 ? (filteredTotales.diferencia2 / filteredTotales.jarabeRequerido) : 0,
       'Producto de segunda': 0,
-      'Botellas Totales': totales.botellasT,
-      'Bebida terminada': totales.bebidaTerminada,
+      'Botellas Totales': filteredTotales.botellasT,
+      'Bebida terminada': filteredTotales.bebidaTerminada,
     };
 
     const workbook = new ExcelJS.Workbook();
@@ -269,7 +323,7 @@ export function SeguimientoResumenSemanaTable({
     link.click();
     document.body.removeChild(link);
     URL.revokeObjectURL(url);
-  }, [rows, totales, semanaNumero]);
+  }, [filteredRows, filteredTotales, semanaNumero]);
 
   const headers = [
     'Lineas',
@@ -292,20 +346,50 @@ export function SeguimientoResumenSemanaTable({
 
   return (
     <div className="border border-slate-200 rounded-[2.5rem] bg-slate-50/30 overflow-visible">
-      <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+      <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 gap-3 flex-wrap">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full bg-sky-500" />
           <h4 className="font-black text-[10px] uppercase tracking-widest text-slate-700">Resumen Semana</h4>
         </div>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={exportarExcel}
-          className="h-8 px-3 text-[10px] font-black uppercase tracking-widest border-slate-200 text-slate-700 hover:bg-slate-50"
-        >
-          <Download className="h-3.5 w-3.5 mr-2" />
-          Excel
-        </Button>
+        <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-2 py-1.5">
+            <label className="text-[9px] font-black uppercase tracking-widest text-slate-500">Línea</label>
+            <select
+              value={lineaFilter}
+              onChange={(e) => setLineaFilter(e.target.value)}
+              className="h-8 min-w-[110px] rounded-md border border-slate-200 bg-white px-2 text-[10px] font-bold text-slate-700 outline-none"
+            >
+              {lineasDisponibles.map((linea) => (
+                <option key={linea} value={linea}>
+                  {linea === 'all' ? 'Todas' : linea}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white px-2 py-1.5">
+            <label className="text-[9px] font-black uppercase tracking-widest text-slate-500">Sabor</label>
+            <select
+              value={saborFilter}
+              onChange={(e) => setSaborFilter(e.target.value)}
+              className="h-8 min-w-[160px] rounded-md border border-slate-200 bg-white px-2 text-[10px] font-bold text-slate-700 outline-none"
+            >
+              {saboresDisponibles.map((sabor) => (
+                <option key={sabor} value={sabor}>
+                  {sabor === 'all' ? 'Todos' : sabor}
+                </option>
+              ))}
+            </select>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={exportarExcel}
+            className="h-8 px-3 text-[10px] font-black uppercase tracking-widest border-slate-200 text-slate-700 hover:bg-slate-50"
+          >
+            <Download className="h-3.5 w-3.5 mr-2" />
+            Excel
+          </Button>
+        </div>
       </div>
       <div className="p-2 sm:p-4 overflow-x-auto">
         <Table className="border-separate border-spacing-0">
@@ -326,7 +410,7 @@ export function SeguimientoResumenSemanaTable({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {rows.length === 0 ? (
+            {filteredRows.length === 0 ? (
               <TableRow className="hover:bg-transparent">
                 <TableCell colSpan={headers.length} className="text-center py-16">
                   <div className="flex flex-col items-center gap-2 text-slate-400">
@@ -338,7 +422,7 @@ export function SeguimientoResumenSemanaTable({
                 </TableCell>
               </TableRow>
             ) : (
-              rows.map((row) => (
+              filteredRows.map((row) => (
                 <TableRow key={row.id} className="group hover:bg-sky-50/60 transition-colors">
                    <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 pl-5 border-b border-slate-100 whitespace-nowrap sticky left-0 z-10 bg-slate-50">{row.linea}</TableCell>
                   <TableCell className="text-[11px] font-semibold text-slate-800 py-2.5 border-b border-slate-100 sticky left-[70px] z-10 bg-slate-50">{row.sabor}</TableCell>
@@ -360,24 +444,24 @@ export function SeguimientoResumenSemanaTable({
               ))
             )}
           </TableBody>
-          {rows.length > 0 && (
+          {filteredRows.length > 0 && (
             <TableFooter>
               <TableRow className="hover:bg-transparent bg-transparent">
                 <TableCell className="sticky left-0 z-20 bg-slate-50 border-t-2 border-slate-200" />
                 <TableCell className="sticky left-[70px] z-20 bg-slate-50 border-t-2 border-slate-200" />
                 <TableCell colSpan={4} className="text-right font-black text-[10px] uppercase tracking-widest text-slate-700 py-4 border-t-2 border-slate-200">TOTALES</TableCell>
-                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.cajasPlanificadas}</TableCell>
-                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.cajasCompletadas}</TableCell>
-                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.diferencia}</TableCell>
-                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.jarabeRequerido.toFixed(1)}</TableCell>
-                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.jarabeReal}</TableCell>
-                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.diferencia2.toFixed(1)}</TableCell>
+                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{filteredTotales.cajasPlanificadas}</TableCell>
+                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{filteredTotales.cajasCompletadas}</TableCell>
+                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{filteredTotales.diferencia}</TableCell>
+                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{filteredTotales.jarabeRequerido.toFixed(1)}</TableCell>
+                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{filteredTotales.jarabeReal}</TableCell>
+                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{filteredTotales.diferencia2.toFixed(1)}</TableCell>
                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">
-                  {totales.jarabeRequerido > 0 ? ((totales.diferencia2 / totales.jarabeRequerido) * 100).toFixed(1) : '0.0'}%
+                  {filteredTotales.jarabeRequerido > 0 ? ((filteredTotales.diferencia2 / filteredTotales.jarabeRequerido) * 100).toFixed(1) : '0.0'}%
                 </TableCell>
                 <TableCell className="border-t-2 border-slate-200" />
-                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{totales.botellasT}</TableCell>
-                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200 pr-4">{totales.bebidaTerminada.toFixed(1)}</TableCell>
+                <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200">{filteredTotales.botellasT}</TableCell>
+                 <TableCell className="text-center font-black text-[11px] text-sky-700 py-4 border-t-2 border-slate-200 pr-4">{filteredTotales.bebidaTerminada.toFixed(1)}</TableCell>
               </TableRow>
             </TableFooter>
           )}

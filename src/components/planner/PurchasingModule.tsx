@@ -38,6 +38,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { usePlannerStore } from '@/hooks/use-planner-store';
+import { useRemoteCollection } from '@/hooks/use-remote-collection';
 import { loadPlannerData } from '@/lib/json-db';
 import { Card } from '@/components/ui/card';
 import html2canvas from 'html2canvas';
@@ -90,6 +91,20 @@ const JUGOS = [
 ];
 
 const PRESENTATIONS = ["2Lts", "1.5Lts", "1Lt", "0.4Lts"];
+const MONTH_OPTIONS = [
+  'Enero',
+  'Febrero',
+  'Marzo',
+  'Abril',
+  'Mayo',
+  'Junio',
+  'Julio',
+  'Agosto',
+  'Septiembre',
+  'Octubre',
+  'Noviembre',
+  'Diciembre',
+];
 const MONTHLY_AUTO_CODES: Set<string> = new Set([
   ...CAPS_DATA.filter(item => item.code === 'EMP_0095' || item.code === 'EMP_0105').map(item => item.code),
   ...SEPARATORS_DATA.map(item => item.code),
@@ -125,6 +140,42 @@ type MonthlyProductionInventory = {
   mensual?: Record<string, MonthlyProductionValues>;
 };
 
+type LogisticsMonthlyData = {
+  periods?: Record<string, {
+    prodt?: Record<string, string>;
+    matp?: Record<string, string>;
+    emp?: Record<string, string>;
+  }>;
+};
+
+const LOGISTICS_PRODUCT_MAPPING: Array<[string, string, string]> = [
+  ['PRODT-0007', 'GLUP COLA', '2Lts'],
+  ['PRODT-0008', 'GLUP UVA', '2Lts'],
+  ['PRODT-0009', 'GLUP KOLITA', '2Lts'],
+  ['PRODT-0010', 'GLUP PIÑA', '2Lts'],
+  ['PRODT-0011', 'GLUP NARANJA', '2Lts'],
+  ['PRODT-0012', 'GLUP FRESH', '2Lts'],
+  ['PRODT-0049', 'GLUP MANZANA VERDE', '2Lts'],
+  ['PRODT-0097', 'GLUP MANZANA ROJA', '2Lts'],
+  ['PRODT-0098', 'GLUP PIÑA PARCHITA', '2Lts'],
+  ['PRODT-0082', 'GLUP COLA', '1Lt'],
+  ['PRODT-0084', 'GLUP UVA', '1Lt'],
+  ['PRODT-0086', 'GLUP FRESH', '1Lt'],
+  ['PRODT-0088', 'GLUP KOLITA', '1Lt'],
+  ['PRODT-0104', 'GLUP PIÑA', '1Lt'],
+  ['PRODT-0105', 'GLUP NARANJA', '1Lt'],
+  ['PRODT-0107', 'GLUP MANZANA ROJA', '1Lt'],
+  ['PRODT-0092', 'GLUP COLA', '0.4Lts'],
+  ['PRODT-0093', 'GLUP UVA', '0.4Lts'],
+  ['PRODT-0094', 'GLUP KOLITA', '0.4Lts'],
+  ['PRODT-0095', 'GLUP FRESH', '0.4Lts'],
+  ['PRODT-0111', 'GLUP MANZANA ROJA', '0.4Lts'],
+  ['PRODT-0014', 'JUSTY NARANJA', '1.5Lts'],
+  ['PRODT-0100', 'JUSTY DURAZNO', '1.5Lts'],
+  ['PRODT-0115', 'JUSTY PERA', '1.5Lts'],
+  ['PRODT-0116', 'JUSTY MANZANA', '1.5Lts'],
+];
+
 const parseProductionNumber = (value: unknown) => {
   if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
   const normalized = String(value ?? '').trim().replace(',', '.');
@@ -139,12 +190,20 @@ const sumProductionValues = (values: Record<string, unknown> | undefined, code: 
 
 export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrintResumen }: PurchasingModuleProps) {
   const [productionInventory, setProductionInventory] = useState<MonthlyProductionInventory>({});
-   const [productionMonthKey] = useState<string>(() => {
+  const logisticsInventoryStore = useRemoteCollection<LogisticsMonthlyData>(
+    'logistica-inventario-mensual',
+    { periods: {} },
+  );
+   const [productionMonthKey, setProductionMonthKey] = useState<string>(() => {
      if (typeof window !== 'undefined') {
        return localStorage.getItem('planner_monthly_inventory_month_v1') || format(new Date(), 'yyyy-MM');
      }
      return format(new Date(), 'yyyy-MM');
    });
+   const [productionYear, productionMonth] = productionMonthKey.split('-').map(Number);
+   const selectedMonth = Number.isFinite(productionMonth) ? productionMonth - 1 : new Date().getMonth();
+   const selectedYear = Number.isFinite(productionYear) ? productionYear : new Date().getFullYear();
+   const availableYears = Array.from({ length: 11 }, (_, index) => new Date().getFullYear() - 5 + index);
    const { 
     salesProjection, 
     updateSalesProjection,
@@ -180,9 +239,38 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
      return () => { cancelled = true; };
    }, []);
 
+   useEffect(() => {
+     localStorage.setItem('planner_monthly_inventory_month_v1', productionMonthKey);
+   }, [productionMonthKey]);
+
+   const updateProductionMonth = (month: number, year: number) => {
+     setProductionMonthKey(`${year}-${String(month + 1).padStart(2, '0')}`);
+   };
+
    const monthlyProduction = productionInventory.mensual
      ? productionInventory.mensual[productionMonthKey]
      : undefined;
+   const monthlyLogisticsProductStock = logisticsInventoryStore.data.periods?.[productionMonthKey]?.prodt || {};
+   const monthlyLogisticsMaterialInventory = useMemo(() => {
+     const period = logisticsInventoryStore.data.periods?.[productionMonthKey];
+     const next: Record<string, number> = {};
+     [period?.matp, period?.emp].forEach((inventory) => {
+       Object.entries(inventory || {}).forEach(([article, stock]) => {
+         const code = article.trim().toUpperCase().replace(/\s+/g, '');
+         if (code) next[code] = (next[code] || 0) + parseProductionNumber(stock);
+       });
+     });
+     return next;
+   }, [logisticsInventoryStore.data.periods, productionMonthKey]);
+   const monthlyFinishedProductInventory = useMemo(() => {
+     const next: Record<string, Record<string, number>> = {};
+     LOGISTICS_PRODUCT_MAPPING.forEach(([code, product, presentation]) => {
+       const stock = parseProductionNumber(monthlyLogisticsProductStock[code.replace(/\s+/g, '').toUpperCase()]);
+       if (!next[product]) next[product] = {};
+       next[product][presentation] = (next[product][presentation] || 0) + stock;
+     });
+     return next;
+   }, [monthlyLogisticsProductStock]);
    const monthlyPlantInventory = useMemo(() => {
      const next = { ...plantInventory };
      MONTHLY_AUTO_CODES.forEach(code => { next[code] = 0; });
@@ -351,8 +439,9 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
   };
 
   const renderProductInventoryTable = (section: 'mds' | 'aw', title: string, products: string[], icon: React.ReactNode) => {
-    const finProdInv = section === 'aw' ? finishedProductInventoryAW : finishedProductInventory;
-    const updateFinProd = section === 'aw' ? updateFinishedProductInventoryAW : updateFinishedProductInventory;
+    const isAutomatic = section === 'mds';
+    const finProdInv = section === 'aw' ? finishedProductInventoryAW : monthlyFinishedProductInventory;
+    const updateFinProd = section === 'aw' ? updateFinishedProductInventoryAW : () => undefined;
 
     return (
     <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
@@ -388,6 +477,8 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                         value={finProdInv[product]?.[pres] === 0 ? '' : (finProdInv[product]?.[pres] ?? '')}
                         onChange={(e) => updateFinProd(product, pres, parseInt(e.target.value || '0', 10))}
                         onFocus={(e) => e.target.select()}
+                        disabled={isAutomatic}
+                        title={isAutomatic ? `Sincronizado desde Logística mensual (${productionMonthKey})` : undefined}
                         className="h-8 text-center font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-lg"
                         placeholder="0"
                       />
@@ -430,7 +521,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
     const isLogistics = type === 'logistics';
     const inventorySource = section === 'aw'
       ? (isLogistics ? logisticsInventoryAW : plantInventoryAW)
-      : (isLogistics ? logisticsInventory : monthlyPlantInventory);
+      : (isLogistics ? monthlyLogisticsMaterialInventory : monthlyPlantInventory);
     const updateInventory = section === 'aw'
       ? (isLogistics ? updateLogisticsInventoryAW : updatePlantInventoryAW)
       : (isLogistics ? updateLogisticsInventory : updatePlantInventory);
@@ -558,8 +649,8 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
   };
 
   const renderAvailableInventory = (section: 'mds' | 'aw') => {
-    const finProdInv = section === 'aw' ? finishedProductInventoryAW : finishedProductInventory;
-    const logInv = section === 'aw' ? logisticsInventoryAW : logisticsInventory;
+    const finProdInv = section === 'aw' ? finishedProductInventoryAW : monthlyFinishedProductInventory;
+    const logInv = section === 'aw' ? logisticsInventoryAW : monthlyLogisticsMaterialInventory;
     const plInv = section === 'aw' ? plantInventoryAW : plantInventory;
 
     const availableFinished = PRODUCT_LIST.map((product) => {
@@ -722,18 +813,44 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
   return (
     <div className="space-y-6 animate-in fade-in duration-700 pb-10">
       <Tabs defaultValue="mds" className="w-full">
-        <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
-          <TabsList className="bg-transparent h-auto p-0">
-            <TabsTrigger value="mds" className={tabsTriggerClass}>
-              MDS
-            </TabsTrigger>
-            <TabsTrigger value="aw" className={tabsTriggerClass}>
-              AW
-            </TabsTrigger>
-            <TabsTrigger value="global" className={tabsTriggerClass}>
-              <Globe className="h-3.5 w-3.5" /> Global
-            </TabsTrigger>
-          </TabsList>
+        <div className="flex w-full items-center justify-between gap-4 mb-6 no-print">
+          <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
+            <TabsList className="bg-transparent h-auto p-0">
+              <TabsTrigger value="mds" className={tabsTriggerClass}>
+                MDS
+              </TabsTrigger>
+              <TabsTrigger value="aw" className={tabsTriggerClass}>
+                AW
+              </TabsTrigger>
+              <TabsTrigger value="global" className={tabsTriggerClass}>
+                <Globe className="h-3.5 w-3.5" /> Global
+              </TabsTrigger>
+            </TabsList>
+          </div>
+          <div className="flex items-center gap-2 rounded-full border border-slate-200 bg-white p-1 pl-3 shadow-sm">
+            <Calendar className="h-3.5 w-3.5 text-slate-400" />
+            <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Periodo</span>
+            <select
+              aria-label="Mes del módulo de compras"
+              value={selectedMonth}
+              onChange={(event) => updateProductionMonth(Number(event.target.value), selectedYear)}
+              className="h-8 rounded-full border-0 bg-slate-100 px-3 text-[10px] font-black uppercase tracking-widest text-slate-700 outline-none"
+            >
+              {MONTH_OPTIONS.map((month, index) => (
+                <option key={month} value={index}>{month}</option>
+              ))}
+            </select>
+            <select
+              aria-label="Año del módulo de compras"
+              value={selectedYear}
+              onChange={(event) => updateProductionMonth(selectedMonth, Number(event.target.value))}
+              className="h-8 rounded-full border-0 bg-slate-100 px-3 text-[10px] font-black tracking-widest text-slate-700 outline-none"
+            >
+              {availableYears.map((year) => (
+                <option key={year} value={year}>{year}</option>
+              ))}
+            </select>
+          </div>
         </div>
 
         <TabsContent value="mds" className="m-0 space-y-6">
@@ -908,10 +1025,10 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                           </TableHeader>
                            <TableBody>
                              {PRODUCT_LIST.map((product) => {
-                               const productTotal = PRESENTATIONS.reduce((acc, pres) => acc + (finishedProductInventory[product]?.[pres] || 0), 0);
+                               const productTotal = PRESENTATIONS.reduce((acc, pres) => acc + (monthlyFinishedProductInventory[product]?.[pres] || 0), 0);
                                if (productTotal === 0) return null;
                                return (
-                                 <AvailableProductRow key={product} product={product} finProdInv={finishedProductInventory} />
+                                 <AvailableProductRow key={product} product={product} finProdInv={monthlyFinishedProductInventory} />
                                );
                              })}
                            </TableBody>
@@ -920,11 +1037,11 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                               <td className="pl-8 text-[11px] uppercase">TOTALES POR FORMATO</td>
                               {PRESENTATIONS.map(pres => (
                                 <td key={pres} className="text-right text-xs tabular-nums">
-                                  {PRODUCT_LIST.reduce((acc, p) => acc + (finishedProductInventory[p]?.[pres] || 0), 0).toLocaleString('es-ES')}
+                                  {PRODUCT_LIST.reduce((acc, p) => acc + (monthlyFinishedProductInventory[p]?.[pres] || 0), 0).toLocaleString('es-ES')}
                                 </td>
                               ))}
                               <td className="text-right pr-8 text-sm tabular-nums bg-[#A67B5B]">
-                                {PRODUCT_LIST.reduce((acc, p) => acc + PRESENTATIONS.reduce((sum, pres) => sum + (finishedProductInventory[p]?.[pres] || 0), 0), 0).toLocaleString('es-ES')}
+                                {PRODUCT_LIST.reduce((acc, p) => acc + PRESENTATIONS.reduce((sum, pres) => sum + (monthlyFinishedProductInventory[p]?.[pres] || 0), 0), 0).toLocaleString('es-ES')}
                               </td>
                             </tr>
                           </tfoot>
