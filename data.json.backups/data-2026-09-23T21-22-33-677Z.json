@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-21T00:00:00.000",
+      "weekStartDate": "2026-09-23T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -11151,7 +11151,13 @@
             "plasticos": {},
             "adhesivoCantidad": "",
             "etiquetasCantidad": {}
-          }
+          },
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         }
       },
       "semanal": {
@@ -11227,7 +11233,13 @@
           },
           "plasticos": {},
           "adhesivoCantidad": "",
-          "etiquetasCantidad": {}
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         },
         "2026-09-14": {
           "tapas": {
@@ -11365,7 +11377,16 @@
           "preformas": {},
           "plasticos": {},
           "adhesivoCantidad": "",
-          "etiquetasCantidad": {}
+          "etiquetasCantidad": {},
+          "azucarCantidad": {
+            "preparacion": "",
+            "sacos": ""
+          },
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         }
       }
     },
@@ -11963,7 +11984,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-22T22:10:26.963Z"
+    "updatedAt": "2026-09-23T21:22:33.360Z"
   },
   "ordenesSap": [
     {
@@ -20869,12 +20890,12 @@
           "fechaInicio": "2026-09-22",
           "ticket1": "16066",
           "cajas1": 2240,
-          "ticket2": "",
+          "ticket2": "16067",
           "cajas2": 2160,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1520,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 4453
         }
       ]
     },
@@ -20900,12 +20921,12 @@
           "fechaInicio": "2026-09-22",
           "ticket1": "16025",
           "cajas1": 3520,
-          "ticket2": "",
+          "ticket2": "16026",
           "cajas2": 3840,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3200,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 4051
         }
       ]
     },
@@ -20931,12 +20952,12 @@
           "fechaInicio": "2026-09-22",
           "ticket1": "17980",
           "cajas1": 2640,
-          "ticket2": "",
+          "ticket2": "17981",
           "cajas2": 3200,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3200,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 4666
         }
       ]
     },
@@ -20962,12 +20983,12 @@
           "fechaInicio": "2026-09-22",
           "ticket1": "16114",
           "cajas1": 3600,
-          "ticket2": "",
+          "ticket2": "16115",
           "cajas2": 4800,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2800,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 16400
         }
       ]
     },
@@ -20993,12 +21014,12 @@
           "fechaInicio": "2026-09-22",
           "ticket1": "17940",
           "cajas1": 50,
-          "ticket2": "",
+          "ticket2": "17941",
           "cajas2": 1200,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1050,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 5550
         }
       ]
     },
@@ -21044,12 +21065,12 @@
           "fechaInicio": "2026-09-22",
           "ticket1": "16213",
           "cajas1": 234,
-          "ticket2": "",
+          "ticket2": "16214",
           "cajas2": 1950,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2340,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 12012
         }
       ]
     },
@@ -21064,12 +21085,12 @@
           "fechaInicio": "2026-09-22",
           "ticket1": "16164",
           "cajas1": 960,
-          "ticket2": "",
+          "ticket2": "16165",
           "cajas2": 1600,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2080,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 8630
         }
       ]
     },
@@ -21084,19 +21105,19 @@
           "fechaInicio": "2026-09-22",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "",
+          "ticket2": "16067",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 4160
         },
         {
           "fechaInicio": "2026-09-23",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16068",
+          "cajas1": 1120,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 1282,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -21115,19 +21136,19 @@
           "fechaInicio": "2026-09-22",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "",
+          "ticket2": "16026",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 4880
         },
         {
           "fechaInicio": "2026-09-23",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16027",
+          "cajas1": 1520,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 5840,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -21146,19 +21167,19 @@
           "fechaInicio": "2026-09-22",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "",
+          "ticket2": "17981",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 11120
         },
         {
           "fechaInicio": "2026-09-23",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17982",
+          "cajas1": 1840,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 2080,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -21175,10 +21196,10 @@
       "dias": [
         {
           "fechaInicio": "2026-09-23",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16116",
+          "cajas1": 2320,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 1280,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -21206,10 +21227,10 @@
       "dias": [
         {
           "fechaInicio": "2026-09-23",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17492",
+          "cajas1": 250,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 200,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -21236,20 +21257,9 @@
       "semana": 39,
       "dias": [
         {
-          "fechaInicio": "2026-09-22",
-          "ticket1": "",
-          "cajas1": 0,
-          "ticket2": "",
-          "cajas2": 0,
-          "ticket3": "",
-          "cajas3": 0,
-          "ticket4": "",
-          "cajas4": 0
-        },
-        {
           "fechaInicio": "2026-09-23",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16166",
+          "cajas1": 8,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -21268,8 +21278,28 @@
       "dias": [
         {
           "fechaInicio": "2026-09-23",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16215",
+          "cajas1": 156,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1790197636555",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "63837",
+      "semana": 39,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-23",
+          "ticket1": "16068",
+          "cajas1": 2080,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -142666,7 +142696,12 @@
       "2026-09-21-suave": "210601",
       "2026-09-21-procesos": "2264260.59",
       "2026-09-21-filtrada": "3499058.29",
-      "2026-09-21-total": "3360002.53"
+      "2026-09-21-total": "3360002.53",
+      "2026-09-22-servicio": "20036",
+      "2026-09-22-suave": "194576",
+      "2026-09-22-procesos": "1996183",
+      "2026-09-22-filtrada": "3120789.88",
+      "2026-09-22-total": "2852312"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -142789,15 +142824,15 @@
       "2026-09-21-Sanitizer-0": "282,5",
       "2026-09-21-RO Cleaner-0": "227",
       "2026-09-21-Alcalino-1": "1050",
-      "2026-09-21-Sal-1": "4000",
+      "2026-09-21-Sal-1": "",
       "2026-09-21-LP20-2": "199,2",
       "2026-09-21-LP20-4": "199,2",
       "2026-09-21-Cloro-2": "400",
       "2026-09-21-Cloro-4": "400",
       "2026-09-21-AntiEscalante-2": "787,8",
       "2026-09-21-AntiEscalante-4": "787,8",
-      "2026-09-21-Sal-2": "8700",
-      "2026-09-21-Sal-4": "8700",
+      "2026-09-21-Sal-2": "4620",
+      "2026-09-21-Sal-4": "4620",
       "2026-09-21-Alcalino-2": "2664,9",
       "2026-09-21-Alcalino-4": "2664,9",
       "2026-09-21-Peracetico-2": "603,3",
@@ -142823,7 +142858,110 @@
       "2026-09-21-Sanitizer-2": "282,5",
       "2026-09-21-Sanitizer-4": "282,5",
       "2026-09-21-LARK CLEAN 21C-2": "200",
-      "2026-09-21-LARK CLEAN 21C-4": "200"
+      "2026-09-21-LARK CLEAN 21C-4": "200",
+      "2026-09-21-LP20-6": "198",
+      "2026-09-21-Cloro-6": "357",
+      "2026-09-21-AntiEscalante-6": "772,4",
+      "2026-09-21-Sal-6": "4240",
+      "2026-09-21-Alcalino-6": "2548,4",
+      "2026-09-21-Peracetico-6": "568,5",
+      "2026-09-21-Lark Foam Quat-6": "200",
+      "2026-09-21-Lark Foam IN-6": "230",
+      "2026-09-21-Lark Desengrasante-6": "0",
+      "2026-09-21-Soda Caustica-6": "532,4",
+      "2026-09-21-GermiQuat-6": "75",
+      "2026-09-21-Lark Inox-6": "45",
+      "2026-09-21-TM Smart-6": "430,3",
+      "2026-09-21-Gamma Ro-432-6": "200",
+      "2026-09-21-RO Cleaner-6": "227",
+      "2026-09-21-Sanitizer-6": "282,5",
+      "2026-09-21-LARK CLEAN 21C-6": "200",
+      "2026-09-22-LP20-0": "198",
+      "2026-09-22-Cloro-0": "357",
+      "2026-09-22-AntiEscalante-0": "772,4",
+      "2026-09-22-Sal-0": "4240",
+      "2026-09-22-Alcalino-0": "2548,4",
+      "2026-09-22-Peracetico-0": "568,5",
+      "2026-09-22-Lark Foam Quat-0": "200",
+      "2026-09-22-Lark Foam IN-0": "230",
+      "2026-09-22-Lark Desengrasante-0": "0",
+      "2026-09-22-Soda Caustica-0": "532,4",
+      "2026-09-22-GermiQuat-0": "75",
+      "2026-09-22-Lark Inox-0": "45",
+      "2026-09-22-TM Smart-0": "430,3",
+      "2026-09-22-Gamma Ro-432-0": "200",
+      "2026-09-22-RO Cleaner-0": "227",
+      "2026-09-22-Sanitizer-0": "282,5",
+      "2026-09-22-LARK CLEAN 21C-0": "200",
+      "2026-09-22-LP20-2": "197,1",
+      "2026-09-22-LP20-4": "197,1",
+      "2026-09-22-Cloro-2": "336",
+      "2026-09-22-Cloro-4": "336",
+      "2026-09-22-AntiEscalante-2": "757",
+      "2026-09-22-AntiEscalante-4": "757",
+      "2026-09-22-Sal-1": "4000",
+      "2026-09-22-Sal-2": "7460",
+      "2026-09-22-Sal-4": "7460",
+      "2026-09-22-Alcalino-2": "2473,3",
+      "2026-09-22-Alcalino-4": "2473,3",
+      "2026-09-22-Peracetico-2": "568,5",
+      "2026-09-22-Peracetico-4": "568,5",
+      "2026-09-22-Lark Foam Quat-2": "200",
+      "2026-09-22-Lark Foam Quat-4": "200",
+      "2026-09-22-Lark Foam IN-2": "230",
+      "2026-09-22-Lark Foam IN-4": "230",
+      "2026-09-22-Lark Desengrasante-2": "0",
+      "2026-09-22-Lark Desengrasante-4": "0",
+      "2026-09-22-Soda Caustica-2": "532,4",
+      "2026-09-22-Soda Caustica-4": "532,4",
+      "2026-09-22-GermiQuat-2": "75",
+      "2026-09-22-GermiQuat-4": "75",
+      "2026-09-22-Lark Inox-2": "45",
+      "2026-09-22-Lark Inox-4": "45",
+      "2026-09-22-TM Smart-2": "430,3",
+      "2026-09-22-TM Smart-4": "430,3",
+      "2026-09-22-Gamma Ro-432-2": "200",
+      "2026-09-22-Gamma Ro-432-4": "200",
+      "2026-09-22-RO Cleaner-2": "227",
+      "2026-09-22-RO Cleaner-4": "227",
+      "2026-09-22-Sanitizer-2": "282,5",
+      "2026-09-22-Sanitizer-4": "282,5",
+      "2026-09-22-LARK CLEAN 21C-2": "200",
+      "2026-09-22-LARK CLEAN 21C-4": "200",
+      "2026-09-22-LP20-6": "196,4",
+      "2026-09-22-Cloro-6": "301",
+      "2026-09-22-AntiEscalante-6": "739,6",
+      "2026-09-22-Sal-6": "7320",
+      "2026-09-22-Alcalino-6": "2438,9",
+      "2026-09-22-Peracetico-6": "568,5",
+      "2026-09-22-Lark Foam Quat-6": "200",
+      "2026-09-22-Lark Foam IN-6": "230",
+      "2026-09-22-Lark Desengrasante-6": "0",
+      "2026-09-22-Soda Caustica-6": "532,4",
+      "2026-09-22-GermiQuat-6": "75",
+      "2026-09-22-Lark Inox-6": "45",
+      "2026-09-22-TM Smart-6": "430,3",
+      "2026-09-22-Gamma Ro-432-6": "200",
+      "2026-09-22-RO Cleaner-6": "227",
+      "2026-09-22-Sanitizer-6": "282,5",
+      "2026-09-22-LARK CLEAN 21C-6": "200",
+      "2026-09-23-LP20-0": "196,4",
+      "2026-09-23-Cloro-0": "301",
+      "2026-09-23-AntiEscalante-0": "739,6",
+      "2026-09-23-Sal-0": "7320",
+      "2026-09-23-Alcalino-0": "2438,9",
+      "2026-09-23-Peracetico-0": "568,5",
+      "2026-09-23-Lark Foam Quat-0": "200",
+      "2026-09-23-Lark Foam IN-0": "230",
+      "2026-09-23-Lark Desengrasante-0": "0",
+      "2026-09-23-Soda Caustica-0": "532,4",
+      "2026-09-23-GermiQuat-0": "75",
+      "2026-09-23-Lark Inox-0": "45",
+      "2026-09-23-TM Smart-0": "430,3",
+      "2026-09-23-Gamma Ro-432-0": "200",
+      "2026-09-23-RO Cleaner-0": "227",
+      "2026-09-23-Sanitizer-0": "282,5",
+      "2026-09-23-LARK CLEAN 21C-0": "200"
     },
     "sala-jarabe-glup": [
       {
@@ -143132,10 +143270,10 @@
   ],
   "logisticsStockFile": {
     "filename": "stock-producto-terminado.xlsx",
-    "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  08.xlsx",
+    "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  08 .xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 12752,
-    "uploadedAt": "2026-09-22T14:41:28.093Z",
+    "tamano": 29772,
+    "uploadedAt": "2026-09-23T14:37:15.152Z",
     "uploadedBy": "local-user"
   }
 }
