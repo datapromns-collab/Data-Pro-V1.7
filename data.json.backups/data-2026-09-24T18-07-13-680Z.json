@@ -11400,7 +11400,13 @@
             "EMP_0155": "265,82",
             "EMP_0157": "459,6",
             "EMP_0158": "915,2"
-          }
+          },
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         },
         "2026-09-07": {
           "tapas": {},
@@ -12072,7 +12078,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-24T15:22:44.115Z"
+    "updatedAt": "2026-09-24T18:07:13.299Z"
   },
   "ordenesSap": [
     {
@@ -21247,7 +21253,7 @@
           "ticket1": "16029",
           "cajas1": 2640,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 2320,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -136768,8 +136774,8 @@
         "auto-4-1790003229935": {
           "cajasPlanificadas": 134400,
           "producto": "307",
-          "jarabeReal": 121489,
-          "ubb": 42.22
+          "jarabeReal": 122818,
+          "ubb": 42.7
         }
       },
       "linea-5": {
@@ -137221,7 +137227,8 @@
         "auto-7-1790003271538": {
           "cajasPlanificadas": 120000,
           "producto": "723",
-          "jarabeReal": 0
+          "jarabeReal": 58346,
+          "ubb": 20.31
         }
       }
     },
