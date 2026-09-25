@@ -12411,7 +12411,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-25T18:47:48.931Z"
+    "updatedAt": "2026-09-25T18:49:16.735Z"
   },
   "ordenesSap": [
     {
@@ -131177,6 +131177,25 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1790362104766,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-11",
+        "semana": 37,
+        "turno": "NOCTURNO",
+        "operador": "MARCELO RIVAS",
+        "linea": "Línea 3",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "23:30",
+        "finParada": "23:41",
+        "totalMin": "11",
+        "zona": "Llenado",
+        "falla": "BOTELLAS ATASCADAS EN LA SALIDA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1790362135745,
         "bloqueado": true
       }
     ],
