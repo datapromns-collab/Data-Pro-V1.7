@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-17T00:00:00.000",
+      "weekStartDate": "2026-09-14T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -11108,6 +11108,30 @@
             "endTime": "2026-09-25T15:56:00.000Z",
             "id": "ca3lm5gab",
             "color": "#587593"
+          },
+          {
+            "name": "CS",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-09-25T15:56:00.000Z",
+            "endTime": "2026-09-25T16:26:00.000Z",
+            "id": "d3uk6yhxc",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 17790,
+            "durationHours": 7.116,
+            "presentation": "1Lt",
+            "tanks": 2,
+            "startTime": "2026-09-25T16:26:00.000Z",
+            "endTime": "2026-09-25T23:32:57.600Z",
+            "id": "gddgstbjf",
+            "color": "#6366f1"
           }
         ],
         "realProduction": {},
@@ -12501,7 +12525,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-25T20:08:51.736Z"
+    "updatedAt": "2026-09-25T20:09:51.645Z"
   },
   "ordenesSap": [
     {
@@ -131609,6 +131633,63 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1790366894501,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-22",
+        "semana": 39,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "00:50",
+        "finParada": "01:05",
+        "totalMin": "15",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES PARA EL PASE DE AGUA CALIENTE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1790366935328,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-21",
+        "semana": 39,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 1",
+        "equipo": "",
+        "tipoParada": "FALLA DE E/E",
+        "inicioParada": "03:28",
+        "finParada": "03:45",
+        "totalMin": "17",
+        "zona": "Llenado",
+        "falla": "VARIACION DE VOLTAJE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1790366936789,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-22",
+        "semana": 39,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 2",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "01:05",
+        "finParada": "01:23",
+        "totalMin": "18",
+        "zona": "Llenado",
+        "falla": "PASE DE AGUA CALIENTE",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1790366962240,
         "bloqueado": true
       }
     ],
