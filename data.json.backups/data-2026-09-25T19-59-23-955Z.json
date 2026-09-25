@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-21T00:00:00.000",
+      "weekStartDate": "2026-08-17T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -10945,12 +10945,12 @@
             "name": "GLUP FRESH",
             "lineId": "1",
             "loadPerHour": 1500,
-            "quantity": 103425,
-            "durationHours": 68.95,
+            "quantity": 104925,
+            "durationHours": 69.95,
             "presentation": "2Lts",
-            "tanks": 11.99,
+            "tanks": 12.17,
             "startTime": "2026-09-23T12:03:00.000Z",
-            "endTime": "2026-09-26T09:00:00.000Z",
+            "endTime": "2026-09-26T10:00:00.000Z",
             "id": "o4cu0xl95",
             "color": "#10b981"
           },
@@ -11024,6 +11024,41 @@
             "startTime": "2026-09-25T16:01:00.000Z",
             "endTime": "2026-09-26T08:59:48.000Z",
             "id": "s7kw2yy40",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "MTTO",
+            "lineId": "1",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 10.5,
+            "startTime": "2026-09-26T10:00:00.000Z",
+            "endTime": "2026-09-26T20:30:00.000Z",
+            "id": "5ljkomu22",
+            "color": "#ec4899"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "1",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-09-26T20:30:00.000Z",
+            "endTime": "2026-09-26T22:30:00.000Z",
+            "id": "u2hx4y3aj",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 33000,
+            "durationHours": 22,
+            "presentation": "2Lts",
+            "tanks": 3.83,
+            "startTime": "2026-09-26T22:30:00.000Z",
+            "endTime": "2026-09-27T20:30:00.000Z",
+            "id": "2lw29r8co",
             "color": "#f59e0b"
           }
         ],
@@ -12411,7 +12446,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-25T18:49:16.735Z"
+    "updatedAt": "2026-09-25T19:59:21.707Z"
   },
   "ordenesSap": [
     {
