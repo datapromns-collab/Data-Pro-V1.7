@@ -12638,7 +12638,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-26T17:30:26.028Z"
+    "updatedAt": "2026-09-26T17:56:37.245Z"
   },
   "ordenesSap": [
     {
@@ -139638,6 +139638,44 @@
         "usuario": "Luis Blandin",
         "id": 1790444598331,
         "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-24",
+        "semana": 39,
+        "turno": "DIURNO",
+        "operador": "GABRIEL RAMIREZ",
+        "linea": "Línea 2",
+        "equipo": "ENFARDADORA",
+        "tipoParada": "AVERÍA",
+        "inicioParada": "17:45",
+        "finParada": "18:30",
+        "totalMin": "45",
+        "zona": "Llenado",
+        "falla": "PASADOR DE DIENTES DE SEPARACION PARTIDOS",
+        "orden": "9711",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1790445256005,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-24",
+        "semana": 39,
+        "turno": "DIURNO",
+        "operador": "JORGE NARANJO",
+        "linea": "Línea 4",
+        "equipo": "LLENADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "16:53",
+        "finParada": "16:58",
+        "totalMin": "5",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE FRENO VALVULA 61",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1790445422451,
+        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -150445,6 +150483,33 @@
         "tipoParada": "AVERÍA",
         "mtto": "",
         "falla": "FALLA DE COMUNICACION ",
+        "mttoEsp": "",
+        "descripcionFalla": "",
+        "descripcionAccion": "",
+        "observaciones": "",
+        "bloqueado": false,
+        "usuario": "Luis Blandin"
+      },
+      {
+        "id": 1790445256013,
+        "fechaOrden": "2026-09-24",
+        "orden": "9711",
+        "fechaEmision": "2026-09-24",
+        "semana": 39,
+        "turno": "DIURNO",
+        "solicitante": "",
+        "linea": "Línea 2",
+        "maquina": "ENFARDADORA",
+        "aviso": "",
+        "fechaParada": "2026-09-24",
+        "inicioMtto": "",
+        "finMtto": "",
+        "inicioParada": "17:45",
+        "finParada": "18:30",
+        "tMtto": "45",
+        "tipoParada": "AVERÍA",
+        "mtto": "",
+        "falla": "PASADOR DE DIENTES DE SEPARACION PARTIDOS",
         "mttoEsp": "",
         "descripcionFalla": "",
         "descripcionAccion": "",
