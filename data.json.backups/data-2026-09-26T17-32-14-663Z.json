@@ -12638,7 +12638,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-26T17:27:21.277Z"
+    "updatedAt": "2026-09-26T17:30:26.028Z"
   },
   "ordenesSap": [
     {
@@ -135229,7 +135229,7 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1790372795436,
-        "bloqueado": true
+        "bloqueado": false
       },
       {
         "fecha": "2026-09-21",
@@ -139124,6 +139124,82 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1790437685436,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-24",
+        "semana": 39,
+        "turno": "DIURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "",
+        "tipoParada": "PROGRAMADA",
+        "inicioParada": "17:12",
+        "finParada": "19:12",
+        "totalMin": "120",
+        "zona": "Llenado",
+        "falla": "CIP 3 PASOS ALCALINO",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1790443836363,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-24",
+        "semana": 39,
+        "turno": "DIURNO",
+        "operador": "CARLOS TORREALBA",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "13:05",
+        "finParada": "13:15",
+        "totalMin": "10",
+        "zona": "Llenado",
+        "falla": "ETIQUETA NO TRANSFERIDA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1790443881219,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-23",
+        "semana": 39,
+        "turno": "NOCTURNO",
+        "operador": "ORLANDO TORREALBA",
+        "linea": "Línea 6",
+        "equipo": "SOPLADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "21:00",
+        "finParada": "21:14",
+        "totalMin": "14",
+        "zona": "Llenado",
+        "falla": "SIN ESPECIFICAR",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1790443890903,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-24",
+        "semana": 39,
+        "turno": "DIURNO",
+        "operador": "CARLOS TORREALBA",
+        "linea": "Línea 1",
+        "equipo": "ETIQUETADORA",
+        "tipoParada": "OPERACIONAL",
+        "inicioParada": "13:30",
+        "finParada": "14:00",
+        "totalMin": "30",
+        "zona": "Llenado",
+        "falla": "ETIQUETA NO TRANSFERIDA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1790443931803,
         "bloqueado": true
       }
     ],
