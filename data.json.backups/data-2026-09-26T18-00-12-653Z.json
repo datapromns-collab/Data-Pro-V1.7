@@ -139714,25 +139714,6 @@
         "usuario": "Luis Blandin",
         "id": 1790445549051,
         "bloqueado": true
-      },
-      {
-        "fecha": "2026-09-24",
-        "semana": 39,
-        "turno": "DIURNO",
-        "operador": "SAMUEL DIAZ",
-        "linea": "Línea 6",
-        "equipo": "LLENADORA",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "17:14",
-        "finParada": "17:19",
-        "totalMin": "5",
-        "zona": "Llenado",
-        "falla": "CAMBIO DE FRENO VALVULA #41",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Blandin",
-        "id": 1790445614955,
-        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -150548,7 +150529,7 @@
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790445306542.269,
+        "id": 1790445256013,
         "fechaOrden": "2026-09-24",
         "orden": "9711",
         "fechaEmision": "2026-09-24",
@@ -150571,7 +150552,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       }
     ],
