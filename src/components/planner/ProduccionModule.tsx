@@ -491,9 +491,10 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   };
 
   const getPlasticosCodeTotal = (code: string, data: ProductionTableValues = activeProductionData) => {
-    return Object.entries(data.plasticos)
+    const total = Object.entries(data.plasticos)
       .filter(([key]) => key === code || key.startsWith(`${code}-`))
       .reduce((sum, [, value]) => sum + parseProductionNumber(value), 0);
+    return Number(total.toFixed(6)).toLocaleString('es-ES', { maximumFractionDigits: 6 });
   };
 
   const renderPlasticosInput = (key: string, data: ProductionTableValues = activeProductionData, update: ProductionUpdater = updateActiveProduction, readOnly = false) => (

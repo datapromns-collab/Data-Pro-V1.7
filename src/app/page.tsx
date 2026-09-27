@@ -403,36 +403,21 @@ export default function PlannerPage() {
     return h * 60 + m;
   };
 
-  const getProductionCycleDate = (fecha: string, hora: string) => {
+  const toCalendarMinutes = (fecha: string, hora: string) => {
     const minutos = toMin(hora);
-    if (!fecha || minutos === null) return null;
-    const fechaDate = new Date(`${fecha}T00:00:00`);
-    if (minutos < 7 * 60) {
-      fechaDate.setDate(fechaDate.getDate() - 1);
-    }
-    return format(fechaDate, 'yyyy-MM-dd');
-  };
-
-  const toProductionCycleMinutes = (fecha: string, hora: string) => {
-    const minutos = toMin(hora);
-    if (minutos === null) return null;
-    const minutosDesdeSiete = minutos - 7 * 60;
-    if (minutos < 7 * 60) {
-      return minutos + 24 * 60 - 7 * 60;
-    }
-    return minutosDesdeSiete;
+    const fechaDate = parseFecha(fecha);
+    if (!fechaDate || minutos === null) return null;
+    const diaCalendario = Math.floor(Date.UTC(fechaDate.getFullYear(), fechaDate.getMonth(), fechaDate.getDate()) / 86400000);
+    const diaReal = diaCalendario + (minutos < 7 * 60 ? 1 : 0);
+    return diaReal * 1440 + minutos;
   };
 
   const seSolapan = (aFecha: string, aInicio: string, aFin: string, bFecha: string, bInicio: string, bFin: string) => {
-    const ai = toProductionCycleMinutes(aFecha, aInicio);
-    const af = toProductionCycleMinutes(aFecha, aFin);
-    const bi = toProductionCycleMinutes(bFecha, bInicio);
-    const bf = toProductionCycleMinutes(bFecha, bFin);
+    const ai = toCalendarMinutes(aFecha, aInicio);
+    const af = toCalendarMinutes(aFecha, aFin);
+    const bi = toCalendarMinutes(bFecha, bInicio);
+    const bf = toCalendarMinutes(bFecha, bFin);
     if (ai === null || af === null || bi === null || bf === null) return false;
-
-    const aCycleDate = getProductionCycleDate(aFecha, aInicio);
-    const bCycleDate = getProductionCycleDate(bFecha, bInicio);
-    if (!aCycleDate || !bCycleDate || aCycleDate !== bCycleDate) return false;
 
     const aFinNorm = af < ai ? af + 24 * 60 : af;
     const bFinNorm = bf < bi ? bf + 24 * 60 : bf;
@@ -8597,7 +8582,6 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
   });
 
   OrdenTrabajoRow.displayName = 'OrdenTrabajoRow';
-
 
 
 

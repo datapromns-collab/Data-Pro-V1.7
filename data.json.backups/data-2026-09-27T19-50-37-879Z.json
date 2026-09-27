@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-21T00:00:00.000",
+      "weekStartDate": "2026-08-31T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -13393,7 +13393,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T19:44:01.470Z"
+    "updatedAt": "2026-09-27T19:50:36.030Z"
   },
   "ordenesSap": [
     {
@@ -143124,6 +143124,25 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1790519762948,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-25",
+        "semana": 39,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 4",
+        "equipo": "SOPLADORA",
+        "tipoParada": "INSUMOS",
+        "inicioParada": "00:18",
+        "finParada": "00:22",
+        "totalMin": "4",
+        "zona": "Llenado",
+        "falla": "CAMBIO DE PROVEEDOR DE PREFORMAS DE ULTRAPACK A ALPLA",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Yonny Hernández",
+        "id": 1790538581551,
         "bloqueado": true
       }
     ],
