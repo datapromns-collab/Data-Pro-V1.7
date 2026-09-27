@@ -14,10 +14,13 @@ type WasteTableRow = {
   id: string;
   line: string;
   flavor: string;
+  kind?: 'preformas' | 'termo';
+  preformSize?: string;
   code: string;
   material: string;
   quantity: string;
   unit: string;
+  generated?: boolean;
 };
 type WasteProduct = { code: string; material: string };
 type WasteTablesBySection = Record<WasteSectionKey, Record<string, WasteTableRow[]>>;
@@ -206,17 +209,26 @@ const normalizeWasteRows = (value: unknown): WasteTableRow[] => {
   if (!Array.isArray(value)) return [];
   return value
     .filter((row): row is Record<string, unknown> => !!row && typeof row === 'object' && !Array.isArray(row))
-    .map((row) => ({
-      id: typeof row.id === 'string' ? row.id : '',
-      line: typeof row.line === 'string' ? row.line : '',
-      flavor: typeof row.flavor === 'string' && row.flavor
+    .map((row) => {
+      const line = typeof row.line === 'string' ? row.line : '';
+      const kind = row.kind === 'preformas' || row.kind === 'termo' ? row.kind : undefined;
+      const flavor = typeof row.flavor === 'string' && row.flavor
         ? row.flavor
-        : findWasteFlavor(typeof row.line === 'string' ? row.line : '', typeof row.code === 'string' ? row.code : ''),
-      code: typeof row.code === 'string' ? row.code : '',
-      material: typeof row.material === 'string' ? row.material : '',
-      quantity: typeof row.quantity === 'string' ? row.quantity : '',
-      unit: typeof row.unit === 'string' ? row.unit : '',
-    }))
+        : findWasteFlavor(line, typeof row.code === 'string' ? row.code : '');
+      const preformSize = typeof row.preformSize === 'string' ? row.preformSize : '';
+      const product = wasteProductForOperation(line, kind, flavor, preformSize);
+      return {
+        id: typeof row.id === 'string' ? row.id : '',
+        line,
+        flavor,
+        kind,
+        preformSize,
+        code: product?.code || (typeof row.code === 'string' ? row.code : ''),
+        material: product?.material || (typeof row.material === 'string' ? row.material : ''),
+        quantity: typeof row.quantity === 'string' ? row.quantity : '',
+        unit: kind === 'termo' ? 'Kg' : kind === 'preformas' ? 'UND' : typeof row.unit === 'string' ? row.unit : '',
+      };
+    })
     .filter((row) => row.id);
 };
 
@@ -236,6 +248,98 @@ const parseProductionNumber = (value: string): number => {
     : normalized;
   const number = Number(decimalNormalized);
   return Number.isFinite(number) ? number : 0;
+};
+
+const wasteProductForOperation = (
+  line: string,
+  kind: WasteTableRow['kind'],
+  flavor: string,
+  preformSize: string
+): WasteProduct | undefined => {
+  if (kind === 'termo') {
+    if (line === 'Linea 5') return { code: 'EMP_0017', material: 'POLIETILENO TERMOENCOGIBLE 55 X 0.07' };
+    if (line === 'Linea 6') return { code: 'EMP_0130', material: 'POLIETILENO TERMOENCOGIBLE 43 x 0.06' };
+    if (['Linea 1', 'Linea 2', 'Linea 3', 'Linea 4', 'Linea 7'].includes(line)) {
+      return { code: 'EMP_0080', material: 'POLIETILENO TERMOENCOGIBLE 48x0.06' };
+    }
+    return undefined;
+  }
+
+  if (kind !== 'preformas') return undefined;
+  if (line === 'Linea 5') {
+    return flavor === 'transparente'
+      ? { code: 'EMP_0068', material: 'PREFORMA TRANSPARENTE 36 GR-1881' }
+      : undefined;
+  }
+  if (['Linea 1', 'Linea 2', 'Linea 3', 'Linea 4'].includes(line)) {
+    if (flavor === 'transparente') return { code: 'EMP_0093', material: 'PREFORMA TRANSPARENTE 42,64 GR-1881' };
+    if (flavor === 'verde') return { code: 'EMP_0103', material: 'PREFORMA VERDE 42,64 GR-1881' };
+  }
+  if (line === 'Linea 6') {
+    if (flavor === 'transparente') return { code: 'EMP_0126', material: 'PREFORMA TRANSPARENTE 20,55GR-1881' };
+    if (flavor === 'verde') return { code: 'EMP_0135', material: 'PREFORMA VERDE 20,5-1881' };
+  }
+  if (line === 'Linea 7') {
+    if (flavor === 'transparente' && preformSize === '29') {
+      return { code: 'EMP_0009', material: 'PREFORMA TRANSPARENTE 29.6GR 1881' };
+    }
+    if (flavor === 'transparente' && preformSize === '33') {
+      return { code: 'EMP_0166', material: 'PREFORMA TRANSPARENTE 33 GR-1881' };
+    }
+    if (flavor === 'verde') return { code: 'EMP_0120', material: 'PREFORMA VERDE 29.6GR 1881' };
+  }
+  return undefined;
+};
+
+const getWasteRowsWithGeneratedCaps = (rows: WasteTableRow[]): WasteTableRow[] => {
+  const sourceRows = rows
+    .filter((row) => !row.generated)
+    .map((row) => row.kind
+      ? { ...row, unit: row.kind === 'termo' ? 'Kg' : 'UND' }
+      : row);
+  const transparentPreforms = sourceRows.filter((row) =>
+    row.kind === 'preformas' &&
+    row.flavor === 'transparente' &&
+    ['Linea 1', 'Linea 2', 'Linea 3', 'Linea 4', 'Linea 6', 'Linea 7'].includes(row.line)
+  );
+  const greenPreforms = sourceRows.filter((row) =>
+    row.kind === 'preformas' && row.flavor === 'verde'
+  );
+  const lineFivePreforms = sourceRows.filter((row) =>
+    row.kind === 'preformas' && row.line === 'Linea 5' && row.flavor === 'transparente'
+  );
+  const generatedRows: WasteTableRow[] = [];
+
+  if (transparentPreforms.length > 0) {
+    const quantity = Math.round(transparentPreforms.reduce((sum, row) => sum + parseProductionNumber(row.quantity), 0) * 0.09);
+    generatedRows.push({
+      id: 'generated-blue-cap-row',
+      line: 'T',
+      flavor: '',
+      code: 'EMP_0105',
+      material: 'TAPA AZUL REFRESCOS CON IMPRESIÓN-1881',
+      quantity: String(quantity),
+      unit: 'UND',
+      generated: true,
+    });
+  }
+
+  if (greenPreforms.length > 0 || lineFivePreforms.length > 0) {
+    const preformTotal = [...greenPreforms, ...lineFivePreforms]
+      .reduce((sum, row) => sum + parseProductionNumber(row.quantity), 0);
+    generatedRows.push({
+      id: 'generated-green-cap-row',
+      line: 'T',
+      flavor: '',
+      code: 'EMP_0095',
+      material: 'TAPA VERDE REFRESCOS CON IMPRESION-1881',
+      quantity: String(Math.round(preformTotal * 0.09)),
+      unit: 'UND',
+      generated: true,
+    });
+  }
+
+  return [...sourceRows, ...generatedRows];
 };
 
 const summarizeReceptionDays = (days: ProductionTableValues[]): ProductionTableValues => {
@@ -552,11 +656,49 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       : row));
   };
 
+  const updateWasteOperation = (rowId: string, value: string) => {
+    const [line, kindValue] = value.split('::');
+    const kind = kindValue === 'preformas' || kindValue === 'termo' ? kindValue : undefined;
+    const flavor = kind === 'preformas' && line === 'Linea 5' ? 'transparente' : '';
+    const product = wasteProductForOperation(line, kind, flavor, '');
+    setWasteDraftRows((rows) => rows.map((row) => row.id === rowId
+      ? {
+          ...row,
+          line,
+          kind,
+          flavor,
+          preformSize: '',
+          code: product?.code || '',
+          material: product?.material || '',
+          unit: kind === 'termo' ? 'Kg' : kind === 'preformas' ? 'UND' : '',
+        }
+      : row));
+  };
+
   const updateWasteFlavor = (rowId: string, flavor: string) => {
     setWasteDraftRows((rows) => rows.map((row) => {
       if (row.id !== rowId) return row;
+      if (row.kind === 'preformas') {
+        const product = wasteProductForOperation(row.line, row.kind, flavor, '');
+        return {
+          ...row,
+          flavor,
+          preformSize: '',
+          code: product?.code || '',
+          material: product?.material || '',
+          unit: 'UND',
+        };
+      }
       const product = WASTE_PRODUCTS_BY_LINE[row.line]?.[flavor];
       return { ...row, flavor, code: product?.code || '', material: product?.material || '' };
+    }));
+  };
+
+  const updateWastePreformSize = (rowId: string, preformSize: string) => {
+    setWasteDraftRows((rows) => rows.map((row) => {
+      if (row.id !== rowId) return row;
+      const product = wasteProductForOperation(row.line, row.kind, row.flavor, preformSize);
+      return { ...row, preformSize, code: product?.code || '', material: product?.material || '' };
     }));
   };
 
@@ -577,8 +719,9 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   };
 
   const exportWasteTicketsPdf = async (section: WasteSectionKey) => {
-    const rows = wasteTablesBySection[section][wasteDateKey];
-    if (!rows?.length) return;
+    const savedRows = wasteTablesBySection[section][wasteDateKey];
+    if (!savedRows?.length) return;
+    const rows = section === 'desperdicios' ? getWasteRowsWithGeneratedCaps(savedRows) : savedRows;
     setWastePdfStatus('generating');
     try {
       const logoResponse = await fetch('/Logo-MDS.png');
@@ -737,7 +880,13 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
     try {
       const rowsToSave = wasteDraftRows.map((row) => ({
         ...row,
-        unit: wasteSectionKey === 'mermas' ? 'UND' : row.unit,
+        unit: wasteSectionKey === 'mermas'
+          ? 'UND'
+          : row.kind === 'termo'
+            ? 'Kg'
+            : row.kind === 'preformas'
+              ? 'UND'
+              : row.unit,
       }));
       const existing = await loadPlannerData();
       if (!existing) throw new Error('Unable to load shared data before saving waste table');
@@ -2378,8 +2527,9 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
               <div className="flex-1 min-h-0 overflow-auto bg-white rounded-[2.5rem] p-4">
                 {(() => {
                   const section = activeMermasSubSection;
-                  const rows = isWasteEditing ? wasteDraftRows : activeWasteRows;
                   const isMermas = section === 'mermas';
+                  const sourceRows = isWasteEditing ? wasteDraftRows : activeWasteRows;
+                  const rows = isMermas ? sourceRows : getWasteRowsWithGeneratedCaps(sourceRows);
                   const hasSavedTable = Object.prototype.hasOwnProperty.call(wasteTablesBySection[section], wasteDateKey);
                   const headerColor = isMermas
                     ? 'bg-blue-700 text-white'
@@ -2485,18 +2635,38 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                 />
                               </td>
                               <td className="px-3 py-2">
-                                <select
-                                  value={row.line}
-                                  onChange={(event) => updateWasteLine(row.id, event.target.value)}
-                                  disabled={!isWasteEditing}
-                                  className="w-full bg-transparent px-1 py-1 outline-none disabled:appearance-none disabled:text-slate-700"
-                                  aria-label="Línea"
-                                >
-                                  <option value="">Seleccionar línea</option>
-                                  {Array.from({ length: 7 }, (_, lineIndex) => `Linea ${lineIndex + 1}`).map((line) => (
-                                    <option key={line} value={line}>{line}</option>
-                                  ))}
-                                </select>
+                                {isMermas ? (
+                                  <select
+                                    value={row.line}
+                                    onChange={(event) => updateWasteLine(row.id, event.target.value)}
+                                    disabled={!isWasteEditing}
+                                    className="w-full bg-transparent px-1 py-1 outline-none disabled:appearance-none disabled:text-slate-700"
+                                    aria-label="Línea"
+                                  >
+                                    <option value="">Seleccionar línea</option>
+                                    {Array.from({ length: 7 }, (_, lineIndex) => `Linea ${lineIndex + 1}`).map((line) => (
+                                      <option key={line} value={line}>{line}</option>
+                                    ))}
+                                  </select>
+                                ) : isWasteEditing && !row.generated ? (
+                                  <select
+                                    value={row.kind ? `${row.line}::${row.kind}` : row.line ? `${row.line}::legacy` : ''}
+                                    onChange={(event) => updateWasteOperation(row.id, event.target.value)}
+                                    className="w-full bg-transparent px-1 py-1 outline-none"
+                                    aria-label="Línea y tipo de desperdicio"
+                                  >
+                                    <option value="">Seleccionar línea</option>
+                                    {Array.from({ length: 7 }, (_, lineIndex) => `Linea ${lineIndex + 1}`).flatMap((line) => [
+                                      <option key={`${line}-preformas`} value={`${line}::preformas`}>{line} preformas</option>,
+                                      <option key={`${line}-termo`} value={`${line}::termo`}>{line} termo</option>,
+                                    ])}
+                                    {row.line && !row.kind && (
+                                      <option value={`${row.line}::legacy`}>{row.line}</option>
+                                    )}
+                                  </select>
+                                ) : (
+                                  <span className="block px-1 py-1 text-slate-700">{row.line}</span>
+                                )}
                               </td>
                               <td className="px-3 py-2">
                                 {isMermas ? (
@@ -2519,6 +2689,34 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                   ) : (
                                     <span className="block px-1 py-1 text-slate-700">{row.code}</span>
                                   )
+                                ) : row.kind === 'preformas' && isWasteEditing && !row.generated ? (
+                                  <div>
+                                    <select
+                                      value={row.flavor}
+                                      onChange={(event) => updateWasteFlavor(row.id, event.target.value)}
+                                      className="w-full bg-transparent px-1 py-1 outline-none"
+                                      aria-label="Color de preforma"
+                                    >
+                                      <option value="">Seleccionar color</option>
+                                      <option value="transparente">Transparente</option>
+                                      {row.line !== 'Linea 5' && <option value="verde">Verde</option>}
+                                    </select>
+                                    {row.line === 'Linea 7' && row.flavor === 'transparente' && (
+                                      <select
+                                        value={row.preformSize || ''}
+                                        onChange={(event) => updateWastePreformSize(row.id, event.target.value)}
+                                        className="mt-1 w-full bg-transparent px-1 py-1 outline-none"
+                                        aria-label="Tamaño de preforma"
+                                      >
+                                        <option value="">Seleccionar tamaño</option>
+                                        <option value="29">29</option>
+                                        <option value="33">33</option>
+                                      </select>
+                                    )}
+                                    {row.code && <span className="block px-1 text-[10px] text-slate-500">{row.code}</span>}
+                                  </div>
+                                ) : row.kind === 'termo' || row.kind === 'preformas' || row.generated ? (
+                                  <span className="block px-1 py-1 text-slate-700">{row.code}</span>
                                 ) : (
                                   <input
                                     type="text"
@@ -2532,6 +2730,8 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                               </td>
                               <td className="px-3 py-2">
                                 {isMermas ? (
+                                  <span className="block px-1 py-1 text-slate-700">{row.material}</span>
+                                ) : row.kind === 'termo' || row.kind === 'preformas' || row.generated ? (
                                   <span className="block px-1 py-1 text-slate-700">{row.material}</span>
                                 ) : (
                                   <input
@@ -2549,14 +2749,16 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                   type="text"
                                   value={row.quantity}
                                   onChange={(event) => updateWasteDraftRow(row.id, 'quantity', event.target.value)}
-                                  readOnly={!isWasteEditing}
+                                  readOnly={!isWasteEditing || row.generated}
                                   className="w-full bg-transparent px-1 py-1 text-center outline-none read-only:text-slate-700"
                                   aria-label="Cantidad"
                                 />
                               </td>
                               <td className="px-3 py-2">
-                                {isMermas ? (
-                                  <span className="block px-1 py-1 text-center text-slate-700">UND</span>
+                                {isMermas || row.kind === 'preformas' || row.kind === 'termo' || row.generated ? (
+                                  <span className="block px-1 py-1 text-center text-slate-700">
+                                    {isMermas || row.generated ? 'UND' : row.unit}
+                                  </span>
                                 ) : (
                                   <input
                                     type="text"
@@ -2570,13 +2772,15 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                               </td>
                               {isWasteEditing && (
                                 <td className="px-3 py-2 text-center">
-                                  <button
-                                    type="button"
-                                    onClick={() => removeWasteDraftRow(row.id)}
-                                    className="rounded-full px-2 py-1 text-[10px] font-bold text-red-700 hover:bg-red-50"
-                                  >
-                                    Eliminar
-                                  </button>
+                                  {!row.generated && (
+                                    <button
+                                      type="button"
+                                      onClick={() => removeWasteDraftRow(row.id)}
+                                      className="rounded-full px-2 py-1 text-[10px] font-bold text-red-700 hover:bg-red-50"
+                                    >
+                                      Eliminar
+                                    </button>
+                                  )}
                                 </td>
                               )}
                             </tr>
