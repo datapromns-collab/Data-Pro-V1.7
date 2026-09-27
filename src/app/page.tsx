@@ -403,13 +403,40 @@ export default function PlannerPage() {
     return h * 60 + m;
   };
 
-  const seSolapan = (aInicio: string, aFin: string, bInicio: string, bFin: string) => {
-    const ai = toMin(aInicio);
-    const af = toMin(aFin);
-    const bi = toMin(bInicio);
-    const bf = toMin(bFin);
+  const getProductionCycleDate = (fecha: string, hora: string) => {
+    const minutos = toMin(hora);
+    if (!fecha || minutos === null) return null;
+    const fechaDate = new Date(`${fecha}T00:00:00`);
+    if (minutos < 7 * 60) {
+      fechaDate.setDate(fechaDate.getDate() - 1);
+    }
+    return format(fechaDate, 'yyyy-MM-dd');
+  };
+
+  const toProductionCycleMinutes = (fecha: string, hora: string) => {
+    const minutos = toMin(hora);
+    if (minutos === null) return null;
+    const minutosDesdeSiete = minutos - 7 * 60;
+    if (minutos < 7 * 60) {
+      return minutos + 24 * 60 - 7 * 60;
+    }
+    return minutosDesdeSiete;
+  };
+
+  const seSolapan = (aFecha: string, aInicio: string, aFin: string, bFecha: string, bInicio: string, bFin: string) => {
+    const ai = toProductionCycleMinutes(aFecha, aInicio);
+    const af = toProductionCycleMinutes(aFecha, aFin);
+    const bi = toProductionCycleMinutes(bFecha, bInicio);
+    const bf = toProductionCycleMinutes(bFecha, bFin);
     if (ai === null || af === null || bi === null || bf === null) return false;
-    return ai < bf && af > bi;
+
+    const aCycleDate = getProductionCycleDate(aFecha, aInicio);
+    const bCycleDate = getProductionCycleDate(bFecha, bInicio);
+    if (!aCycleDate || !bCycleDate || aCycleDate !== bCycleDate) return false;
+
+    const aFinNorm = af < ai ? af + 24 * 60 : af;
+    const bFinNorm = bf < bi ? bf + 24 * 60 : bf;
+    return ai < bFinNorm && aFinNorm > bi;
   };
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -3786,7 +3813,7 @@ export default function PlannerPage() {
                                                              setErrorValidacion('Ingrese hora de inicio y fin de la parada.');
                                                              return;
                                                            }
-                                                            const duplicado = informesOperacionales.find(r => String(r.id) !== String(row.id) && r.fecha === formData.fecha && r.linea === formData.linea && seSolapan(r.inicioParada, r.finParada, formData.inicioParada, formData.finParada));
+                                                            const duplicado = informesOperacionales.find(r => String(r.id) !== String(row.id) && r.linea === formData.linea && seSolapan(r.fecha || formData.fecha, r.inicioParada, r.finParada, formData.fecha, formData.inicioParada, formData.finParada));
                                                             if (duplicado) {
                                                               setErrorValidacion(`Ya existe una parada registrada en esta fecha y línea de ${duplicado.inicioParada} a ${duplicado.finParada}.`);
                                                               return;
@@ -7252,7 +7279,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                      setErrorValidacion('Ingrese hora de inicio y fin de la parada.');
                      return;
                    }
-                    const duplicado = informesOperacionales.find(r => r.fecha === plantaFormData.fecha && r.linea === plantaFormData.linea && seSolapan(r.inicioParada, r.finParada, plantaFormData.inicioParada, plantaFormData.finParada));
+                    const duplicado = informesOperacionales.find(r => r.linea === plantaFormData.linea && seSolapan(r.fecha || plantaFormData.fecha, r.inicioParada, r.finParada, plantaFormData.fecha, plantaFormData.inicioParada, plantaFormData.finParada));
                     if (duplicado) {
                       setErrorValidacion(`Ya existe una parada registrada en esta fecha y línea de ${duplicado.inicioParada} a ${duplicado.finParada}.`);
                       return;
