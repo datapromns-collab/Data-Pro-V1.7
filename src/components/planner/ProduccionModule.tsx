@@ -162,7 +162,15 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const [productionByPeriod, setProductionByPeriod] = useState<ProductionPeriods>({ diarios: {}, semanal: {}, mensual: {} });
   const [receptionsByPeriod, setReceptionsByPeriod] = useState<ReceptionPeriods>({ diarias: {}, 'resumen-semanal': {} });
   const [productionLoaded, setProductionLoaded] = useState(false);
+  const [productionLoadStatus, setProductionLoadStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  const [productionLoadRetry, setProductionLoadRetry] = useState(0);
+  const [inventorySaveStatus, setInventorySaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [inventorySaveRetry, setInventorySaveRetry] = useState(0);
   const [receptionSaveStatus, setReceptionSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [receptionSaveRetry, setReceptionSaveRetry] = useState(0);
+  const inventorySaveQueue = useRef<Promise<void>>(Promise.resolve());
+  const pendingInventorySaves = useRef<Partial<Record<ProductionViewKey, Record<string, ProductionTableValues>>>>({});
+  const inventorySaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const receptionSaveQueue = useRef<Promise<void>>(Promise.resolve());
   const pendingReceptionDailySaves = useRef<Record<string, ProductionTableValues>>({});
   const receptionSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -192,8 +200,13 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
 
   useEffect(() => {
     let cancelled = false;
-    loadPlannerData().then((data) => {
-      if (cancelled) return;
+    setProductionLoaded(false);
+    setProductionLoadStatus('loading');
+    const loadProductionData = async () => {
+      try {
+        const data = await loadPlannerData();
+        if (!data) throw new Error('Unable to load shared production data');
+        if (cancelled) return;
       const persisted = data?.productionInventory;
       const periodKeys: Record<ProductionViewKey, string> = {
         diarios: dailyPeriodKey,
@@ -224,30 +237,72 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       });
       setReceptionsByPeriod(nextReceptions);
       setProductionLoaded(true);
-    }).catch(() => setProductionLoaded(true));
+      setProductionLoadStatus('ready');
+      } catch (error) {
+        if (cancelled) return;
+        console.error('[PRODUCCION] Failed to load shared production data', error);
+        setProductionLoaded(false);
+        setProductionLoadStatus('error');
+      }
+    };
+    void loadProductionData();
     return () => { cancelled = true; };
-  }, []);
+  }, [productionLoadRetry]);
+
+  useEffect(() => {
+    const savedPeriodData = productionByPeriod[inventariosSubTab][activePeriodKey];
+    if (!productionLoaded) return;
+    if (savedPeriodData) {
+      pendingInventorySaves.current[inventariosSubTab] = {
+        ...(pendingInventorySaves.current[inventariosSubTab] || {}),
+        [activePeriodKey]: savedPeriodData,
+      };
+    }
+    if (!Object.values(pendingInventorySaves.current).some((periods) => Object.keys(periods || {}).length > 0)) return;
+    setInventorySaveStatus('saving');
+    if (inventorySaveTimer.current) window.clearTimeout(inventorySaveTimer.current);
+    inventorySaveTimer.current = window.setTimeout(() => {
+      const pending = pendingInventorySaves.current;
+      pendingInventorySaves.current = {};
+      inventorySaveQueue.current = inventorySaveQueue.current
+        .catch(() => undefined)
+        .then(async () => {
+          const existing = await loadPlannerData();
+          if (!existing) throw new Error('Unable to load shared production data before saving inventory');
+          const productionInventory = { ...(existing.productionInventory || {}) };
+          (Object.entries(pending) as Array<[ProductionViewKey, Record<string, ProductionTableValues>]>).forEach(([view, periods]) => {
+            const storedPeriods = { ...(productionInventory[view] || {}) };
+            Object.entries(periods).forEach(([period, values]) => {
+              storedPeriods[period] = values;
+            });
+            productionInventory[view] = storedPeriods;
+          });
+          await savePlannerData({ productionInventory });
+        })
+        .then(() => {
+          if (!Object.values(pendingInventorySaves.current).some((periods) => Object.keys(periods || {}).length > 0)) {
+            setInventorySaveStatus('saved');
+          }
+        })
+        .catch((error: unknown) => {
+          (Object.entries(pending) as Array<[ProductionViewKey, Record<string, ProductionTableValues>]>).forEach(([view, periods]) => {
+            pendingInventorySaves.current[view] = {
+              ...periods,
+              ...(pendingInventorySaves.current[view] || {}),
+            };
+          });
+          console.error('[PRODUCCION] Failed to save inventory data', error);
+          setInventorySaveStatus('error');
+        });
+    }, 350);
+  }, [productionLoaded, inventariosSubTab, activePeriodKey, productionByPeriod, inventorySaveRetry]);
 
   useEffect(() => {
     if (!productionLoaded) return;
-    const timer = window.setTimeout(async () => {
-      const existing = await loadPlannerData();
-      await savePlannerData({
-        productionInventory: {
-          ...(existing?.productionInventory || {}),
-          [inventariosSubTab]: {
-            ...(existing?.productionInventory?.[inventariosSubTab] || {}),
-            [activePeriodKey]: activePeriodData,
-          },
-        },
-      });
-    }, 350);
-    return () => window.clearTimeout(timer);
-  }, [productionLoaded, inventariosSubTab, activePeriodKey, activePeriodData]);
-
-  useEffect(() => {
-    if (activeRecepcionesSubSection !== 'diarias' || !productionLoaded || !receptionsByPeriod.diarias[receptionsDailyPeriodKey]) return;
-    pendingReceptionDailySaves.current[receptionsDailyPeriodKey] = activeReceptionData;
+    if (activeRecepcionesSubSection === 'diarias' && receptionsByPeriod.diarias[receptionsDailyPeriodKey]) {
+      pendingReceptionDailySaves.current[receptionsDailyPeriodKey] = activeReceptionData;
+    }
+    if (Object.keys(pendingReceptionDailySaves.current).length === 0) return;
     setReceptionSaveStatus('saving');
     if (receptionSaveTimer.current) window.clearTimeout(receptionSaveTimer.current);
     receptionSaveTimer.current = window.setTimeout(() => {
@@ -308,7 +363,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
           setReceptionSaveStatus('error');
         });
     }, 350);
-  }, [productionLoaded, activeRecepcionesSubSection, receptionsDailyPeriodKey, activeReceptionData, receptionsByPeriod]);
+  }, [productionLoaded, activeRecepcionesSubSection, receptionsDailyPeriodKey, activeReceptionData, receptionsByPeriod, receptionSaveRetry]);
 
   const updateActiveProduction = (update: (current: ProductionTableValues) => ProductionTableValues) => {
     setProductionByPeriod((prev) => ({
@@ -1194,7 +1249,30 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="relative flex flex-col h-full">
+      {!productionLoaded && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center rounded-2xl bg-white/95 p-6 text-center">
+          <div className="max-w-md">
+            <p className={cn(
+              'text-sm font-bold',
+              productionLoadStatus === 'error' ? 'text-red-700' : 'text-slate-700'
+            )}>
+              {productionLoadStatus === 'error'
+                ? 'No se pudieron cargar los datos compartidos de Producción.'
+                : 'Cargando datos compartidos de Producción…'}
+            </p>
+            {productionLoadStatus === 'error' && (
+              <button
+                type="button"
+                onClick={() => setProductionLoadRetry((attempt) => attempt + 1)}
+                className="mt-3 rounded-full bg-slate-900 px-4 py-2 text-xs font-bold text-white"
+              >
+                Reintentar carga
+              </button>
+            )}
+          </div>
+        </div>
+      )}
       <div className="flex items-center gap-2 mb-3 no-print">
         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
           {([
@@ -1219,6 +1297,22 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       </div>
 
       <div className={cn('flex flex-col flex-1 min-h-0', activeProduccionSection !== 'inventarios' && 'hidden')}>
+      <div className="flex min-h-5 items-center gap-2 px-2 text-[10px] font-bold uppercase tracking-widest no-print">
+        <span className={cn(
+          inventorySaveStatus === 'error' ? 'text-red-600' : 'text-slate-500'
+        )}>
+          {inventorySaveStatus === 'saving' ? 'Guardando Inventarios…' : inventorySaveStatus === 'saved' ? 'Inventarios guardado' : inventorySaveStatus === 'error' ? 'Error al guardar Inventarios' : ''}
+        </span>
+        {inventorySaveStatus === 'error' && (
+          <button
+            type="button"
+            onClick={() => setInventorySaveRetry((attempt) => attempt + 1)}
+            className="underline"
+          >
+            Reintentar
+          </button>
+        )}
+      </div>
       <div className="flex items-center gap-2 mb-2 no-print">
         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
           {(weeklyOnly ? ['semanal'] : ['diarios', 'semanal', 'mensual']).map((subTab) => (
@@ -1719,6 +1813,15 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                 )}>
                   {receptionSaveStatus === 'saving' ? 'Guardando…' : receptionSaveStatus === 'saved' ? 'Guardado' : receptionSaveStatus === 'error' ? 'Error al guardar' : ''}
                 </span>
+                {receptionSaveStatus === 'error' && (
+                  <button
+                    type="button"
+                    onClick={() => setReceptionSaveRetry((attempt) => attempt + 1)}
+                    className="text-[10px] font-bold underline"
+                  >
+                    Reintentar
+                  </button>
+                )}
               </div>
             )}
             {activeRecepcionesSubSection === 'resumen-semanal' && (
@@ -1746,6 +1849,15 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                 )}>
                   {receptionSaveStatus === 'saving' ? 'Guardando…' : receptionSaveStatus === 'saved' ? 'Guardado' : receptionSaveStatus === 'error' ? 'Error al guardar' : ''}
                 </span>
+                {receptionSaveStatus === 'error' && (
+                  <button
+                    type="button"
+                    onClick={() => setReceptionSaveRetry((attempt) => attempt + 1)}
+                    className="text-[10px] font-bold underline"
+                  >
+                    Reintentar
+                  </button>
+                )}
               </div>
             )}
             <div className="flex-1 min-h-0 overflow-auto bg-white rounded-[2.5rem] p-4">
