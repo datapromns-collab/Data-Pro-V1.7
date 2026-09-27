@@ -43,12 +43,13 @@ function writePayloadSync(payload: DbData): void {
     renamed = true;
   } catch (error) {
     const err = error as NodeJS.ErrnoException;
-    if (err.code === 'EPERM' || err.code === 'EACCES' || err.code === 'UNKNOWN') {
+    if (err.code === 'EPERM' || err.code === 'EACCES' || err.code === 'EBUSY' || err.code === 'UNKNOWN') {
       try {
         fs.copyFileSync(tmpPath, DB_PATH);
         renamed = true;
       } catch (copyError) {
         console.error('[DB][WRITE][COPY_FALLBACK][ERROR]', copyError);
+        throw copyError;
       }
     } else {
       throw error;
