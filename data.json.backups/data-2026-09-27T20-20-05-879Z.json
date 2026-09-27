@@ -13371,7 +13371,9 @@
           "produccion.inventarios.mensual.insumos": "none",
           "produccion.inventarios.diarios": "none",
           "produccion.inventarios.mensual": "none",
-          "produccion.consumo-materiales": "none"
+          "produccion.consumo-materiales": "none",
+          "produccion.mermas-desperdicios.resumen-semanal": "none",
+          "produccion.mermas-desperdicios.resumen-mensual": "none"
         },
         "prodt2.mds": {
           "produccion.inventarios.diarios": "none",
@@ -13393,7 +13395,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T20:18:19.226Z"
+    "updatedAt": "2026-09-27T20:19:55.602Z"
   },
   "ordenesSap": [
     {
