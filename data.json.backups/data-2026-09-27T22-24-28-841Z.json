@@ -12756,6 +12756,11 @@
           "solidosCantidad": {},
           "quimicosInsumosCantidad": {}
         }
+      },
+      "mermasDesperdicios": {
+        "mermas": {
+          "2026-09-27": []
+        }
       }
     },
     "permissions": {
@@ -13400,7 +13405,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T22:06:01.986Z"
+    "updatedAt": "2026-09-27T22:23:53.464Z"
   },
   "ordenesSap": [
     {

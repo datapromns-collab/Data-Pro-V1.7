@@ -342,6 +342,15 @@ const getWasteRowsWithGeneratedCaps = (rows: WasteTableRow[]): WasteTableRow[] =
   return [...sourceRows, ...generatedRows];
 };
 
+const hasWasteTableContent = (rows: WasteTableRow[]): boolean => rows.some((row) => (
+  row.line.trim() !== '' ||
+  row.flavor.trim() !== '' ||
+  row.kind !== undefined ||
+  row.code.trim() !== '' ||
+  row.material.trim() !== '' ||
+  row.quantity.trim() !== ''
+));
+
 const summarizeReceptionDays = (days: ProductionTableValues[]): ProductionTableValues => {
   const summary = emptyProductionValues();
   const sumRecord = (selector: (day: ProductionTableValues) => Record<string, string>) => {
@@ -915,6 +924,52 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       setWasteSaveStatus('saved');
     } catch (error) {
       console.error('[PRODUCCION] Failed to save waste table', {
+        section: wasteSectionKey,
+        date: wasteDateKey,
+        error,
+      });
+      setWasteSaveStatus('error');
+    }
+  };
+
+  const enableWasteTableForEntry = async () => {
+    if (!canEditWasteTables || !wasteSectionKey || !activeWasteKey || hasWasteTableContent(activeWasteRows)) return;
+    setWasteSaveStatus('saving');
+    setWasteSaveStatusKey(activeWasteKey);
+    try {
+      const existing = await loadPlannerData();
+      if (!existing) throw new Error('Unable to load shared data before enabling waste table entry');
+      const storedWaste = existing.productionInventory?.mermasDesperdicios || {};
+      const storedSection = storedWaste[wasteSectionKey] || {};
+      const storedRows = normalizeWasteRows(storedSection[wasteDateKey]);
+      if (hasWasteTableContent(storedRows)) {
+        throw new Error('Cannot enable an already populated waste table');
+      }
+
+      await savePlannerData({
+        productionInventory: {
+          ...(existing.productionInventory || {}),
+          mermasDesperdicios: {
+            ...storedWaste,
+            [wasteSectionKey]: {
+              ...storedSection,
+              [wasteDateKey]: null,
+            },
+          },
+        },
+      });
+      setWasteTablesBySection((tables) => {
+        const nextDays = { ...tables[wasteSectionKey] };
+        delete nextDays[wasteDateKey];
+        return {
+          ...tables,
+          [wasteSectionKey]: nextDays,
+        };
+      });
+      setWasteEditingKey(null);
+      setWasteSaveStatus('saved');
+    } catch (error) {
+      console.error('[PRODUCCION] Failed to reset empty waste table', {
         section: wasteSectionKey,
         date: wasteDateKey,
         error,
@@ -2531,6 +2586,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                   const sourceRows = isWasteEditing ? wasteDraftRows : activeWasteRows;
                   const rows = isMermas ? sourceRows : getWasteRowsWithGeneratedCaps(sourceRows);
                   const hasSavedTable = Object.prototype.hasOwnProperty.call(wasteTablesBySection[section], wasteDateKey);
+                  const canResetEmptyTable = canEditWasteTables && hasSavedTable && !isWasteEditing && !hasWasteTableContent(activeWasteRows);
                   const headerColor = isMermas
                     ? 'bg-blue-700 text-white'
                     : 'bg-green-700 text-white';
@@ -2541,6 +2597,16 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                           {isMermas ? 'Mermas' : 'Desperdicios'} - {format(mermasFecha, 'dd/MM/yyyy')}
                         </h3>
                         <div className="flex items-center gap-2">
+                          {canResetEmptyTable && (
+                            <button
+                              type="button"
+                              onClick={() => void enableWasteTableForEntry()}
+                              disabled={wasteSaveStatus === 'saving'}
+                              className="rounded-full bg-amber-600 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-white disabled:opacity-50"
+                            >
+                              Habilitar
+                            </button>
+                          )}
                           <button
                             type="button"
                             onClick={() => void exportWasteTicketsPdf(section)}
