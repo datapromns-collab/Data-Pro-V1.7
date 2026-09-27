@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeftRight, Box, CalendarDays, CalendarIcon, CalendarRange, Droplets, Package, Truck } from 'lucide-react';
+import { ArrowLeftRight, Box, CalendarDays, CalendarIcon, CalendarRange, Droplets, Package, Recycle, Truck } from 'lucide-react';
 import { addDays, format, getISOWeek, getISOWeekYear, setISOWeek, startOfISOWeek, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
@@ -152,8 +152,9 @@ interface ProduccionModuleProps {
 }
 
 export default function ProduccionModule({ weeklyOnly = false }: ProduccionModuleProps) {
-  const [activeProduccionSection, setActiveProduccionSection] = useState<'inventarios' | 'recepciones' | 'consumo-materiales'>('inventarios');
+  const [activeProduccionSection, setActiveProduccionSection] = useState<'inventarios' | 'recepciones' | 'consumo-materiales' | 'mermas-desperdicios'>('inventarios');
   const [activeRecepcionesSubSection, setActiveRecepcionesSubSection] = useState<'diarias' | 'resumen-semanal'>('diarias');
+  const [activeMermasSubSection, setActiveMermasSubSection] = useState<'mermas' | 'desperdicios' | 'resumen-semanal' | 'resumen-mensual'>('mermas');
   const [recepcionesDiariasFecha, setRecepcionesDiariasFecha] = useState<Date>(() => new Date());
   const [recepcionesSemanalFecha, setRecepcionesSemanalFecha] = useState<Date>(() => new Date());
   const [inventariosSubTab, setInventariosSubTab] = useState<'diarios' | 'semanal' | 'mensual'>(weeklyOnly ? 'semanal' : 'diarios');
@@ -1286,6 +1287,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
             { id: 'inventarios', label: 'Inventarios', icon: Package },
             { id: 'recepciones', label: 'Recepciones', icon: Truck },
             { id: 'consumo-materiales', label: 'Consumo de materiales', icon: ArrowLeftRight },
+            { id: 'mermas-desperdicios', label: 'Mermas y desperdicios', icon: Recycle },
           ] as const).map(({ id, label, icon: Icon }) => (
             <button
               key={id}
@@ -1884,6 +1886,33 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                 {renderEtiquetasTable(activeReceptionData, updateActiveReception, activeRecepcionesSubSection === 'resumen-semanal')}
               </div>
             </div>
+          </div>
+        ) : activeProduccionSection === 'mermas-desperdicios' ? (
+          <div className="flex flex-col flex-1 min-h-0">
+            <div className="flex items-center gap-2 mb-2 no-print">
+              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                {([
+                  { id: 'mermas', label: 'Mermas', icon: Recycle },
+                  { id: 'desperdicios', label: 'Desperdicios', icon: Package },
+                  { id: 'resumen-semanal', label: 'Resumen semanal', icon: CalendarDays },
+                  { id: 'resumen-mensual', label: 'Resumen mensual', icon: CalendarRange },
+                ] as const).map(({ id, label, icon: Icon }) => (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => setActiveMermasSubSection(id)}
+                    className={cn(
+                      'inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none',
+                      activeMermasSubSection === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                    )}
+                  >
+                    <Icon className="h-3.5 w-3.5" />
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div className="flex-1 min-h-0 bg-white rounded-[2.5rem]" />
           </div>
         ) : (
           <div className="flex-1 min-h-0 bg-white rounded-[2.5rem]" />

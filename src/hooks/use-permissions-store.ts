@@ -300,6 +300,12 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
       { id: 'resumen-semanal', label: 'Resumen semanal' },
     ] },
     { id: 'consumo-materiales', label: 'Consumo de materiales' },
+    { id: 'mermas-desperdicios', label: 'Mermas y desperdicios', children: [
+      { id: 'mermas', label: 'Mermas' },
+      { id: 'desperdicios', label: 'Desperdicios' },
+      { id: 'resumen-semanal', label: 'Resumen semanal' },
+      { id: 'resumen-mensual', label: 'Resumen mensual' },
+    ] },
   ],
   'planta-admin': [{ id: 'administration', label: 'Administración de planta' }],
   procesos: [
