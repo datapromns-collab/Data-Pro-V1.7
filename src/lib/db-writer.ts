@@ -37,10 +37,6 @@ function writePayloadSync(payload: DbData): void {
   const serialized = JSON.stringify(payload, null, 2);
   const tmpPath = DB_PATH + '.' + Date.now() + '.' + Math.random().toString(36).substr(2, 9) + '.tmp';
   fs.writeFileSync(tmpPath, serialized, 'utf8');
-  if (!isValidJsonFileSync(tmpPath)) {
-    fs.unlinkSync(tmpPath);
-    throw new Error('[DB] Temporary file is not valid JSON');
-  }
   let renamed = false;
   try {
     fs.renameSync(tmpPath, DB_PATH);
@@ -66,17 +62,6 @@ function writePayloadSync(payload: DbData): void {
         console.error('[DB][WRITE][CLEANUP][ERROR]', unlinkError);
       }
     }
-  }
-}
-
-function isValidJsonFileSync(filePath: string): boolean {
-  try {
-    const raw = fs.readFileSync(filePath, 'utf8');
-    if (!raw || raw.trim().length === 0) return false;
-    JSON.parse(raw);
-    return true;
-  } catch {
-    return false;
   }
 }
 
@@ -130,7 +115,7 @@ function sanitizeJson(raw: string): string | null {
   let candidate = trimmed.substring(firstBrace, lastBrace + 1);
 
   candidate = candidate
-    .replace(/[\x00-\x09\x0b\x0c\x0e-\x1f]/g, ' ')
+    .replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, ' ')
     .replace(/,\s*([}\]])/g, '$1');
 
   try {
@@ -205,7 +190,7 @@ export function writeDb(mutator: (current: DbData) => DbData): Promise<void> {
       const current = readDb();
       const updated = mutator(current);
       createRotatingBackupSync();
-      retryWrite(updated);
+      writePayloadSync(updated);
     } catch (error) {
       console.error('[DB][WRITE][ERROR]', error);
       throw error;
@@ -242,23 +227,6 @@ function recoverFromBackupSync(): void {
       }
     } catch (_e) {
       continue;
-    }
-  }
-}
-
-function retryWrite(updated: DbData, retries = 4): void {
-  let attempt = 0;
-  while (true) {
-    try {
-      writePayloadSync(updated);
-      return;
-    } catch (error) {
-      const err = error as NodeJS.ErrnoException;
-      const isRetryable = err.code === 'EPERM' || err.code === 'EACCES' || err.code === 'EBUSY' || err.code === 'UNKNOWN';
-      if (!isRetryable || attempt >= retries - 1) throw error;
-      attempt++;
-      const delay = 150 * Math.pow(2, attempt - 1) + Math.floor(Math.random() * 100);
-      setTimeout(() => {}, delay);
     }
   }
 }
