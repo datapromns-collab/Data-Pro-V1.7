@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 
 const POLL_INTERVAL = 15000;
 const PENDING_KEY = (namespace: string) => `rc_pending_${namespace}`;
+const MAX_QUEUE_ITEMS = 40;
+const MAX_QUEUE_BYTES = 1.5 * 1024 * 1024;
 
 type PendingOperation = {
   id: string;
@@ -33,13 +35,34 @@ function loadPendingQueue<T>(namespace: string): PendingOperation[] {
   }
 }
 
+function pruneQueue(queue: PendingOperation[]): PendingOperation[] {
+  if (queue.length === 0) return queue;
+  const raw = JSON.stringify(queue);
+  if (raw.length <= MAX_QUEUE_BYTES && queue.length <= MAX_QUEUE_ITEMS) return queue;
+  console.warn(`[RC] Pruning pending queue: ${queue.length} ops, ${raw.length} bytes`);
+  const kept = queue.slice(-MAX_QUEUE_ITEMS);
+  return kept;
+}
+
 function savePendingQueue(namespace: string, queue: PendingOperation[]): boolean {
   try {
     localStorage.setItem(PENDING_KEY(namespace), JSON.stringify(queue));
     return true;
   } catch (error) {
-    console.error(`[RC] Failed to persist pending queue for ${namespace}`, error);
-    return false;
+    const message = error instanceof Error ? error.message : '';
+    const isQuota = message.includes('QuotaExceededError') || message.includes('exceeded the quota');
+    if (!isQuota) {
+      console.error(`[RC] Failed to persist pending queue for ${namespace}`, error);
+      return false;
+    }
+    const trimmed = pruneQueue(queue);
+    try {
+      localStorage.setItem(PENDING_KEY(namespace), JSON.stringify(trimmed));
+      return true;
+    } catch (e) {
+      console.error(`[RC] Failed to persist pruned pending queue for ${namespace}`, e);
+      return false;
+    }
   }
 }
 
@@ -127,7 +150,28 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
       timestamp: Date.now(),
       retries: 0,
     };
-    queueRef.current = [...queueRef.current, item];
+    const last = queueRef.current[queueRef.current.length - 1];
+    if (last) {
+      const lastIsArrayState = last.payload && typeof last.payload === 'object' && Array.isArray(last.payload.items);
+      const newIsArrayState = payload && typeof payload === 'object' && Array.isArray(payload.items);
+      if (lastIsArrayState && newIsArrayState) {
+        last.payload = payload;
+        last.timestamp = Date.now();
+        savePendingQueue(namespace, queueRef.current);
+        return;
+      }
+      if (!lastIsArrayState && !newIsArrayState && typeof payload === 'object' && typeof last.payload === 'object') {
+        last.payload = payload;
+        last.timestamp = Date.now();
+        savePendingQueue(namespace, queueRef.current);
+        return;
+      }
+    }
+    if (queueRef.current.length >= MAX_QUEUE_ITEMS) {
+      queueRef.current = [...queueRef.current.slice(1), item];
+    } else {
+      queueRef.current = [...queueRef.current, item];
+    }
     savePendingQueue(namespace, queueRef.current);
   }, [namespace]);
 
