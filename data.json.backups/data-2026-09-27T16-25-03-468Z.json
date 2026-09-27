@@ -13152,7 +13152,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T15:41:12.821Z"
+    "updatedAt": "2026-09-27T16:14:06.860Z"
   },
   "ordenesSap": [
     {
@@ -162627,7 +162627,7 @@
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  08.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     "tamano": 35195,
-    "uploadedAt": "2026-09-27T15:41:03.372Z",
+    "uploadedAt": "2026-09-27T15:43:09.981Z",
     "uploadedBy": "local-user"
   }
 }
