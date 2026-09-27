@@ -13393,7 +13393,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T19:50:38.611Z"
+    "updatedAt": "2026-09-27T19:50:56.426Z"
   },
   "ordenesSap": [
     {
@@ -143125,25 +143125,6 @@
         "usuario": "Luis Blandin",
         "id": 1790519762948,
         "bloqueado": true
-      },
-      {
-        "fecha": "2026-09-25",
-        "semana": 39,
-        "turno": "NOCTURNO",
-        "operador": "",
-        "linea": "Línea 4",
-        "equipo": "SOPLADORA",
-        "tipoParada": "INSUMOS",
-        "inicioParada": "00:18",
-        "finParada": "00:22",
-        "totalMin": "4",
-        "zona": "Llenado",
-        "falla": "CAMBIO DE PROVEEDOR DE PREFORMAS DE ULTRAPACK A ALPLA",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Yonny Hernández",
-        "id": 1790538581551,
-        "bloqueado": true
       }
     ],
     "planta-ordenes-trabajo": [
@@ -162834,7 +162815,8 @@
         "1787247465383",
         "1787959521278",
         "1788293882619",
-        "1788978219703"
+        "1788978219703",
+        "1790538581551"
       ]
     },
     "planta-ordenes-trabajo": {
