@@ -112,6 +112,15 @@ const sumNumericValues = (values: string[]): string => {
   return total ? String(Number(total.toFixed(6))) : '';
 };
 
+const parseProductionNumber = (value: string): number => {
+  const normalized = value.trim().replace(/\s/g, '').replace(/[^0-9,.-]/g, '');
+  const decimalNormalized = normalized.includes(',')
+    ? normalized.replace(/\./g, '').replace(',', '.')
+    : normalized;
+  const number = Number(decimalNormalized);
+  return Number.isFinite(number) ? number : 0;
+};
+
 const summarizeReceptionDays = (days: ProductionTableValues[]): ProductionTableValues => {
   const summary = emptyProductionValues();
   const sumRecord = (selector: (day: ProductionTableValues) => Record<string, string>) => {
@@ -484,10 +493,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const getPlasticosCodeTotal = (code: string, data: ProductionTableValues = activeProductionData) => {
     return Object.entries(data.plasticos)
       .filter(([key]) => key === code || key.startsWith(`${code}-`))
-      .reduce((sum, [, value]) => {
-        const numericValue = Number(String(value).replace(/[^0-9.-]/g, ''));
-        return sum + (Number.isFinite(numericValue) ? numericValue : 0);
-      }, 0);
+      .reduce((sum, [, value]) => sum + parseProductionNumber(value), 0);
   };
 
   const renderPlasticosInput = (key: string, data: ProductionTableValues = activeProductionData, update: ProductionUpdater = updateActiveProduction, readOnly = false) => (

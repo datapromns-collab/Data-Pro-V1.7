@@ -11322,19 +11322,6 @@
             "color": "#6366f1"
           },
           {
-            "name": "JUSTY NARANJA",
-            "lineId": "5",
-            "loadPerHour": 1210,
-            "quantity": 29040,
-            "durationHours": 24,
-            "presentation": "1.5Lts",
-            "tanks": 26.14,
-            "startTime": "2026-09-30T15:00:00.000Z",
-            "endTime": "2026-10-01T15:00:00.000Z",
-            "id": "tno02v6fu",
-            "color": "#47CCB0"
-          },
-          {
             "name": "OTROS",
             "description": "inventario mensual",
             "lineId": "4",
@@ -11369,6 +11356,68 @@
             "endTime": "2026-10-03T09:00:00.000Z",
             "id": "mgcnmam96",
             "color": "#ec4899"
+          },
+          {
+            "name": "JUSTY NARANJA",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 21780,
+            "durationHours": 18,
+            "presentation": "1.5Lts",
+            "tanks": 19.6,
+            "startTime": "2026-09-30T15:00:00.000Z",
+            "endTime": "2026-10-01T09:00:00.000Z",
+            "id": "nb0imc9jy",
+            "color": "#10b981"
+          },
+          {
+            "name": "OTROS",
+            "description": "inventario mensual",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 5,
+            "startTime": "2026-10-01T09:00:00.000Z",
+            "endTime": "2026-10-01T14:00:00.000Z",
+            "id": "79rgwwg5v",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "JUSTY NARANJA",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 29040,
+            "durationHours": 24,
+            "presentation": "1.5Lts",
+            "tanks": 26.14,
+            "startTime": "2026-10-01T14:00:00.000Z",
+            "endTime": "2026-10-02T14:00:00.000Z",
+            "id": "uha0jhavs",
+            "color": "#6366f1"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "5",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-10-02T14:00:00.000Z",
+            "endTime": "2026-10-02T16:00:00.000Z",
+            "id": "2d97wm41a",
+            "color": "#10b981"
+          },
+          {
+            "name": "JUSTY NARANJA",
+            "lineId": "5",
+            "loadPerHour": 1210,
+            "quantity": 17545,
+            "durationHours": 14.5,
+            "presentation": "1.5Lts",
+            "tanks": 15.79,
+            "startTime": "2026-10-02T16:00:00.000Z",
+            "endTime": "2026-10-03T06:30:00.000Z",
+            "id": "g32vq6pt4",
+            "color": "#587593"
           }
         ],
         "realProduction": {},
@@ -11394,7 +11443,8 @@
           "7iq187g50",
           "q65hqsq3x",
           "znpn3vbm6",
-          "kd648ndil"
+          "kd648ndil",
+          "tno02v6fu"
         ]
       }
     },
@@ -13343,7 +13393,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T19:30:44.885Z"
+    "updatedAt": "2026-09-27T19:44:01.470Z"
   },
   "ordenesSap": [
     {
