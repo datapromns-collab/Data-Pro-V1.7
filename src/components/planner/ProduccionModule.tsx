@@ -810,7 +810,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       ['EMP_0152', 'ETIQUETA NARANJA 400ML'],
       ['EMP_0154', 'ETIQUETA PIÑA PARCHITA 400ML'],
       ['EMP_0155', 'ETIQUETA MANZANITA 400ML'],
-      ['EMP_0157', 'ETIQUETA JUSTY MANZANITA 1.5LITROS'],
+      ['EMP_0157', 'ETIQUETA JUSTY MANZANA 1.5LITROS'],
       ['EMP_0158', 'ETIQUETA JUSTY PERA 1.5 LITROS'],
     ];
 
