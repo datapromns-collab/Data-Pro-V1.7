@@ -12639,8 +12639,7 @@
           "management",
           "logistica",
           "procesos",
-          "produccion",
-          "purchasing"
+          "produccion"
         ],
         "prodts.mds": [
           "planning",
@@ -13117,8 +13116,7 @@
           "planning"
         ],
         "prodtg.mds": [
-          "planning",
-          "purchasing"
+          "planning"
         ],
         "MDS": [
           "planning",
@@ -13156,12 +13154,19 @@
           "produccion.inventarios": "read",
           "produccion.recepciones": "read",
           "produccion.consumo-materiales": "read"
+        },
+        "prodt1.mds": {
+          "produccion.inventarios.mensual.empaque": "none",
+          "produccion.inventarios.mensual.materia-prima": "none",
+          "produccion.inventarios.mensual.insumos": "none",
+          "produccion.inventarios.diarios": "none",
+          "produccion.inventarios.mensual": "none"
         }
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T18:00:00.052Z"
+    "updatedAt": "2026-09-27T18:01:17.314Z"
   },
   "ordenesSap": [
     {
