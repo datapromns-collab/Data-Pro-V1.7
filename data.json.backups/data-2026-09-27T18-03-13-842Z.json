@@ -13169,13 +13169,14 @@
         },
         "prodt.mds": {
           "produccion.inventarios.diarios": "none",
-          "produccion.inventarios.mensual": "none"
+          "produccion.inventarios.mensual": "none",
+          "produccion.consumo-materiales": "none"
         }
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T18:02:01.313Z"
+    "updatedAt": "2026-09-27T18:03:02.675Z"
   },
   "ordenesSap": [
     {

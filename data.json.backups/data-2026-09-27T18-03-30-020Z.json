@@ -12618,7 +12618,8 @@
           "planning",
           "management",
           "procesos",
-          "logistica"
+          "logistica",
+          "produccion"
         ],
         "anto.mds": [
           "purchasing",
@@ -13176,7 +13177,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T18:02:09.694Z"
+    "updatedAt": "2026-09-27T18:03:27.325Z"
   },
   "ordenesSap": [
     {
