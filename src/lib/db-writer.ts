@@ -37,6 +37,10 @@ function writePayloadSync(payload: DbData): void {
   const serialized = JSON.stringify(payload, null, 2);
   const tmpPath = DB_PATH + '.' + Date.now() + '.' + Math.random().toString(36).substr(2, 9) + '.tmp';
   fs.writeFileSync(tmpPath, serialized, 'utf8');
+  if (!isValidJsonFileSync(tmpPath)) {
+    fs.unlinkSync(tmpPath);
+    throw new Error('[DB] Temporary file is not valid JSON');
+  }
   let renamed = false;
   try {
     fs.renameSync(tmpPath, DB_PATH);
@@ -62,6 +66,17 @@ function writePayloadSync(payload: DbData): void {
         console.error('[DB][WRITE][CLEANUP][ERROR]', unlinkError);
       }
     }
+  }
+}
+
+function isValidJsonFileSync(filePath: string): boolean {
+  try {
+    const raw = fs.readFileSync(filePath, 'utf8');
+    if (!raw || raw.trim().length === 0) return false;
+    JSON.parse(raw);
+    return true;
+  } catch {
+    return false;
   }
 }
 
@@ -115,7 +130,7 @@ function sanitizeJson(raw: string): string | null {
   let candidate = trimmed.substring(firstBrace, lastBrace + 1);
 
   candidate = candidate
-    .replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g, ' ')
+    .replace(/[\x00-\x09\x0b\x0c\x0e-\x1f]/g, ' ')
     .replace(/,\s*([}\]])/g, '$1');
 
   try {
