@@ -13165,7 +13165,8 @@
           "produccion.inventarios.mensual.materia-prima": "none",
           "produccion.inventarios.mensual.insumos": "none",
           "produccion.inventarios.diarios": "none",
-          "produccion.inventarios.mensual": "none"
+          "produccion.inventarios.mensual": "none",
+          "produccion.consumo-materiales": "none"
         },
         "prodt2.mds": {
           "produccion.inventarios.diarios": "none",
@@ -13187,7 +13188,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T18:14:00.569Z"
+    "updatedAt": "2026-09-27T18:24:43.048Z"
   },
   "ordenesSap": [
     {

@@ -164,6 +164,8 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const [productionLoaded, setProductionLoaded] = useState(false);
   const [receptionSaveStatus, setReceptionSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const receptionSaveQueue = useRef<Promise<void>>(Promise.resolve());
+  const pendingReceptionDailySaves = useRef<Record<string, ProductionTableValues>>({});
+  const receptionSaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const dailyPeriodKey = format(inventariosDiariosFecha, 'yyyy-MM-dd');
   const weeklyPeriodKey = format(startOfWeek(inventariosSemanalFecha, { weekStartsOn: 1 }), 'yyyy-MM-dd');
   const monthlyPeriodKey = format(inventariosMensualMes, 'yyyy-MM');
@@ -245,36 +247,67 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
 
   useEffect(() => {
     if (activeRecepcionesSubSection !== 'diarias' || !productionLoaded || !receptionsByPeriod.diarias[receptionsDailyPeriodKey]) return;
+    pendingReceptionDailySaves.current[receptionsDailyPeriodKey] = activeReceptionData;
     setReceptionSaveStatus('saving');
-    const timer = window.setTimeout(async () => {
+    if (receptionSaveTimer.current) window.clearTimeout(receptionSaveTimer.current);
+    receptionSaveTimer.current = window.setTimeout(() => {
+      const pendingDailyData = { ...pendingReceptionDailySaves.current };
+      pendingReceptionDailySaves.current = {};
       receptionSaveQueue.current = receptionSaveQueue.current
         .catch(() => undefined)
         .then(async () => {
           const existing = await loadPlannerData();
+          if (!existing) throw new Error('Unable to load shared production data before saving receptions');
+          const existingReceptionData = existing?.productionInventory?.recepciones || {};
+          const existingDailyData = existingReceptionData.diarias || {};
+          const updatedDailyData = {
+            ...existingDailyData,
+            ...pendingDailyData,
+          };
+          const affectedWeekKeys = new Set(Object.keys(pendingDailyData).map((period) => {
+            const [year, month, day] = period.split('-').map(Number);
+            return format(startOfWeek(new Date(year, month - 1, day), { weekStartsOn: 1 }), 'yyyy-MM-dd');
+          }));
+          const weeklySummaries = Object.fromEntries(Array.from(affectedWeekKeys, (weekKey) => {
+            const [year, month, day] = weekKey.split('-').map(Number);
+            const weekStart = new Date(year, month - 1, day);
+            const days = Array.from({ length: 7 }, (_, dayIndex) => {
+              const dayKey = format(addDays(weekStart, dayIndex), 'yyyy-MM-dd');
+              const dayData = updatedDailyData[dayKey];
+              return isProductionValues(dayData) ? normalizeProductionValues(dayData) : EMPTY_PRODUCTION_DATA;
+            });
+            return [weekKey, summarizeReceptionDays(days)];
+          }));
           await savePlannerData({
             productionInventory: {
               ...(existing?.productionInventory || {}),
               recepciones: {
-                ...(existing?.productionInventory?.recepciones || {}),
-                diarias: {
-                  ...(existing?.productionInventory?.recepciones?.diarias || {}),
-                  [receptionsDailyPeriodKey]: activeReceptionData,
+                ...existingReceptionData,
+                diarias: updatedDailyData,
+                'resumen-semanal': {
+                  ...(existingReceptionData['resumen-semanal'] || {}),
+                  ...weeklySummaries,
                 },
               },
             },
           });
         })
-        .then(() => setReceptionSaveStatus('saved'))
+        .then(() => {
+          if (Object.keys(pendingReceptionDailySaves.current).length === 0) setReceptionSaveStatus('saved');
+        })
         .catch((error: unknown) => {
+          pendingReceptionDailySaves.current = {
+            ...pendingDailyData,
+            ...pendingReceptionDailySaves.current,
+          };
           console.error('[PRODUCCION] Failed to save reception period', {
-            section: activeRecepcionesSubSection,
-            period: receptionsDailyPeriodKey,
+            section: 'diarias',
+            periods: Object.keys(pendingDailyData),
             error,
           });
           setReceptionSaveStatus('error');
         });
     }, 350);
-    return () => window.clearTimeout(timer);
   }, [productionLoaded, activeRecepcionesSubSection, receptionsDailyPeriodKey, activeReceptionData, receptionsByPeriod]);
 
   const updateActiveProduction = (update: (current: ProductionTableValues) => ProductionTableValues) => {
@@ -1706,6 +1739,12 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                 />
                 <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">
                   Semana {getISOWeek(recepcionesSemanalFecha)}
+                </span>
+                <span className={cn(
+                  'text-[10px] font-bold uppercase tracking-widest',
+                  receptionSaveStatus === 'error' ? 'text-red-600' : 'text-slate-500'
+                )}>
+                  {receptionSaveStatus === 'saving' ? 'Guardando…' : receptionSaveStatus === 'saved' ? 'Guardado' : receptionSaveStatus === 'error' ? 'Error al guardar' : ''}
                 </span>
               </div>
             )}
