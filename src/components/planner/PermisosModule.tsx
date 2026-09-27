@@ -37,6 +37,7 @@ const DEFAULT_USER_FORM = {
 export function PermisosModule() {
   const {
     isLoaded,
+    syncError,
     resetToDefaults,
     allModules,
     permissionSections,
@@ -337,6 +338,11 @@ export function PermisosModule() {
             {notice && (
               <p className="mt-3 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-amber-700">
                 {notice}
+              </p>
+            )}
+            {syncError && (
+              <p role="alert" className="mt-3 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.12em] text-red-700">
+                No se pudieron sincronizar los permisos con la base de datos compartida.
               </p>
             )}
           </div>

@@ -181,6 +181,52 @@ export interface SharedPermissionsState {
   sections: SectionPermissions;
 }
 
+type PermissionMapName = keyof SharedPermissionsState;
+type PermissionUpdates = Partial<Record<PermissionMapName, Record<string, unknown | null>>>;
+
+const PERMISSION_MAP_NAMES: PermissionMapName[] = [
+  'modules',
+  'planning',
+  'management',
+  'readOnlyModules',
+  'sections',
+];
+
+function getPermissionUpdates(previous: SharedPermissionsState, next: SharedPermissionsState): PermissionUpdates {
+  const updates: PermissionUpdates = {};
+
+  PERMISSION_MAP_NAMES.forEach((name) => {
+    const previousMap = previous[name] as Record<string, unknown>;
+    const nextMap = next[name] as Record<string, unknown>;
+    const categoryUpdates: Record<string, unknown | null> = {};
+    const userIds = new Set([...Object.keys(previousMap), ...Object.keys(nextMap)]);
+
+    userIds.forEach((userId) => {
+      if (JSON.stringify(previousMap[userId]) === JSON.stringify(nextMap[userId])) return;
+      categoryUpdates[userId] = userId in nextMap ? nextMap[userId] : null;
+    });
+
+    if (Object.keys(categoryUpdates).length > 0) updates[name] = categoryUpdates;
+  });
+
+  return updates;
+}
+
+function applyPermissionUpdates(state: SharedPermissionsState, updates: PermissionUpdates): SharedPermissionsState {
+  const next = { ...state };
+  PERMISSION_MAP_NAMES.forEach((name) => {
+    const categoryUpdates = updates[name];
+    if (!categoryUpdates) return;
+    const category = { ...(state[name] as Record<string, unknown>) };
+    Object.entries(categoryUpdates).forEach(([userId, value]) => {
+      if (value === null) delete category[userId];
+      else category[userId] = value;
+    });
+    (next as Record<PermissionMapName, unknown>)[name] = category;
+  });
+  return next;
+}
+
 async function loadSharedPermissions(): Promise<SharedPermissionsState | null> {
   try {
     const response = await fetch('/api/data', { cache: 'no-store' });
@@ -199,6 +245,15 @@ async function saveSharedPermissions(permissions: SharedPermissionsState): Promi
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({ planner: { permissions } }),
+  });
+  if (!response.ok) throw new Error(`Permissions API error: ${response.status}`);
+}
+
+async function saveSharedPermissionUpdates(updates: PermissionUpdates): Promise<void> {
+  const response = await fetch('/api/data', {
+    method: 'POST',
+    headers: { 'content-type': 'application/json' },
+    body: JSON.stringify({ permissionUpdates: updates }),
   });
   if (!response.ok) throw new Error(`Permissions API error: ${response.status}`);
 }
@@ -473,8 +528,22 @@ export function usePermissionsStore() {
   const [readOnlyModules, setReadOnlyModules] = useState<UserPermissions>({});
   const [sectionPermissions, setSectionPermissions] = useState<SectionPermissions>({});
   const [isLoaded, setIsLoaded] = useState(false);
+  const [syncError, setSyncError] = useState(false);
   const currentStateRef = useRef<SharedPermissionsState | null>(null);
+  const persistedStateRef = useRef<SharedPermissionsState | null>(null);
+  const permissionSaveQueueRef = useRef<Promise<void>>(Promise.resolve());
   const remoteReadyRef = useRef(false);
+
+  const queuePermissionUpdates = (updates: PermissionUpdates) => {
+    const save = permissionSaveQueueRef.current.catch(() => undefined).then(async () => {
+      await saveSharedPermissionUpdates(updates);
+      const persisted = persistedStateRef.current;
+      if (persisted) persistedStateRef.current = applyPermissionUpdates(persisted, updates);
+      setSyncError(false);
+    });
+    permissionSaveQueueRef.current = save;
+    return save;
+  };
 
   useEffect(() => {
     const savedModules = localStorage.getItem(STORAGE_KEY);
@@ -552,6 +621,7 @@ export function usePermissionsStore() {
       setReadOnlyModules(next.readOnlyModules);
       setSectionPermissions(next.sections);
       currentStateRef.current = next;
+      persistedStateRef.current = next;
     };
 
     const hydrateFromApi = async () => {
@@ -562,8 +632,9 @@ export function usePermissionsStore() {
         applyState(localState);
         try {
           await saveSharedPermissions(localState);
+          setSyncError(false);
         } catch {
-          // Keep the local configuration when the API is unavailable.
+          setSyncError(true);
         }
       }
       remoteReadyRef.current = true;
@@ -583,10 +654,12 @@ export function usePermissionsStore() {
       sections: sectionPermissions,
     };
     currentStateRef.current = next;
+    const persisted = persistedStateRef.current;
+    if (!persisted) return;
+    const updates = getPermissionUpdates(persisted, next);
+    if (Object.keys(updates).length === 0) return;
     const timer = window.setTimeout(() => {
-      void saveSharedPermissions(next).catch(() => {
-        // Local persistence remains available while the API is offline.
-      });
+      void queuePermissionUpdates(updates).catch(() => setSyncError(true));
     }, 150);
     return () => window.clearTimeout(timer);
   }, [isLoaded, permissions, planningPermissions, managementPermissions, readOnlyModules, sectionPermissions]);
@@ -594,9 +667,24 @@ export function usePermissionsStore() {
   useEffect(() => {
     if (!isLoaded) return;
     const refresh = async () => {
+      let current = currentStateRef.current;
+      let persisted = persistedStateRef.current;
+      if (current && persisted && JSON.stringify(current) !== JSON.stringify(persisted)) {
+        const updates = getPermissionUpdates(persisted, current);
+        try {
+          await queuePermissionUpdates(updates);
+        } catch {
+          setSyncError(true);
+          return;
+        }
+        current = currentStateRef.current;
+        persisted = persistedStateRef.current;
+      }
       const remote = await loadSharedPermissions();
       if (!remote) return;
-      const current = currentStateRef.current;
+      const latest = currentStateRef.current;
+      const latestPersisted = persistedStateRef.current;
+      if (latest && latestPersisted && JSON.stringify(latest) !== JSON.stringify(latestPersisted)) return;
       if (JSON.stringify(current) === JSON.stringify(remote)) return;
       setPermissions(remote.modules);
       setPlanningPermissions(remote.planning);
@@ -604,6 +692,8 @@ export function usePermissionsStore() {
       setReadOnlyModules(remote.readOnlyModules);
       setSectionPermissions(remote.sections);
       currentStateRef.current = remote;
+      persistedStateRef.current = remote;
+      setSyncError(false);
       localStorage.setItem(STORAGE_KEY, JSON.stringify(remote.modules));
       localStorage.setItem(PLANNING_STORAGE_KEY, JSON.stringify(remote.planning));
       localStorage.setItem(MANAGEMENT_STORAGE_KEY, JSON.stringify(remote.management));
@@ -833,6 +923,7 @@ export function usePermissionsStore() {
     readOnlyModules,
     sectionPermissions,
     isLoaded,
+    syncError,
     toggleModuleForUser,
     togglePlanningPermission,
     hasAccess,

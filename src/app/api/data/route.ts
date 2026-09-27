@@ -126,6 +126,34 @@ export async function POST(request: Request) {
     body = await request.json();
     const now = new Date().toISOString();
 
+    if (body.permissionUpdates && typeof body.permissionUpdates === 'object') {
+      await writeDb((current) => {
+        const planner = current.planner ?? {};
+        const permissions = { ...(planner.permissions ?? {}) };
+
+        Object.entries(body.permissionUpdates as Record<string, Record<string, unknown>>).forEach(([category, updates]) => {
+          if (!updates || typeof updates !== 'object' || Array.isArray(updates)) return;
+          const categoryPermissions = { ...(permissions[category] ?? {}) };
+          Object.entries(updates).forEach(([userId, value]) => {
+            if (value === null) delete categoryPermissions[userId];
+            else categoryPermissions[userId] = value;
+          });
+          permissions[category] = categoryPermissions;
+        });
+
+        return {
+          ...current,
+          planner: { ...planner, permissions },
+          _meta: { ...(current._meta ?? {}), updatedAt: now },
+        };
+      });
+
+      return new Response(JSON.stringify({ ok: true, updatedAt: now }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    }
+
     const existing = readDb();
 
     let incomingPlanner = body.planner ?? null;
@@ -192,6 +220,9 @@ export async function POST(request: Request) {
       }
       if (incomingPlanner.productionInventory) {
         merged.productionInventory = deepMerge(merged.productionInventory, incomingPlanner.productionInventory);
+      }
+      if (incomingPlanner.users && Array.isArray(incomingPlanner.users)) {
+        merged.users = deepMerge(Array.isArray(merged.users) ? merged.users : [], incomingPlanner.users);
       }
       if (incomingPlanner.permissions && typeof incomingPlanner.permissions === 'object') {
         merged.permissions = incomingPlanner.permissions;

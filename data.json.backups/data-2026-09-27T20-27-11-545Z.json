@@ -13363,7 +13363,8 @@
           "produccion.inventarios": "read",
           "produccion.recepciones": "read",
           "produccion.consumo-materiales": "read",
-          "logistica.monthly-inventory": "none"
+          "logistica.monthly-inventory": "none",
+          "produccion.mermas-desperdicios": "read"
         },
         "prodt1.mds": {
           "produccion.inventarios.mensual.empaque": "none",
@@ -13378,12 +13379,16 @@
         "prodt2.mds": {
           "produccion.inventarios.diarios": "none",
           "produccion.inventarios.mensual": "none",
-          "produccion.consumo-materiales": "none"
+          "produccion.consumo-materiales": "none",
+          "produccion.mermas-desperdicios.resumen-semanal": "none",
+          "produccion.mermas-desperdicios.resumen-mensual": "none"
         },
         "prodt.mds": {
           "produccion.inventarios.diarios": "none",
           "produccion.inventarios.mensual": "none",
-          "produccion.consumo-materiales": "none"
+          "produccion.consumo-materiales": "none",
+          "produccion.mermas-desperdicios.resumen-semanal": "none",
+          "produccion.mermas-desperdicios.resumen-mensual": "none"
         },
         "maria.mds": {
           "logistica.monthly-inventory": "none"
@@ -13395,7 +13400,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T20:19:55.602Z"
+    "updatedAt": "2026-09-27T20:27:08.760Z"
   },
   "ordenesSap": [
     {
