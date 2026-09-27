@@ -183,7 +183,16 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
       body: JSON.stringify(payload),
     });
     console.log('[RC] sendToServer result', namespace, 'status', res.status);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    if (!res.ok) {
+      let detail = '';
+      try {
+        const text = await res.text();
+        if (text) detail = text.slice(0, 500);
+      } catch {
+        // ignore
+      }
+      throw new Error(`HTTP ${res.status}${detail ? ': ' + detail : ''}`);
+    }
     return res;
   }, [namespace]);
 

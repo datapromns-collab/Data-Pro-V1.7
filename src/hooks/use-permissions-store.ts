@@ -286,15 +286,20 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
     { id: 'cycles', label: 'Ciclos' },
   ],
   produccion: [
-    { id: 'planned', label: 'Planificadas', children: [
-      { id: 'by-shift', label: 'Por Turno' },
-      { id: 'daily', label: 'Diario' },
+    { id: 'inventarios', label: 'Inventarios', children: [
+      { id: 'diarios', label: 'Diarios' },
+      { id: 'semanal', label: 'Semanal' },
+      { id: 'mensual', label: 'Mensual', children: [
+        { id: 'empaque', label: 'Empaque' },
+        { id: 'materia-prima', label: 'Materia Prima' },
+        { id: 'insumos', label: 'Insumos' },
+      ] },
     ] },
-    { id: 'produced', label: 'Producidas', children: [
-      { id: 'by-shift', label: 'Por Turno' },
-      { id: 'daily', label: 'Diaria' },
+    { id: 'recepciones', label: 'Recepciones', children: [
+      { id: 'diarias', label: 'Diarias' },
+      { id: 'resumen-semanal', label: 'Resumen semanal' },
     ] },
-    { id: 'inventories', label: 'Inventarios' },
+    { id: 'consumo-materiales', label: 'Consumo de materiales' },
   ],
   'planta-admin': [{ id: 'administration', label: 'Administración de planta' }],
   procesos: [
@@ -338,32 +343,42 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
   ],
   purchasing: [
     { id: 'mds', label: 'MDS', children: [
-      { id: 'sales-projection', label: 'Proyección de Ventas', children: [
-        { id: 'planning', label: 'Planificación' },
-        { id: 'requirements', label: 'Requerimientos' },
+      { id: 'ventas', label: 'Proyección de Ventas', children: [
+        { id: 'planificacion', label: 'Planificación' },
+        { id: 'requerimientos', label: 'Requerimientos' },
       ] },
-      { id: 'available-inventory', label: 'Inventario Disponible', children: [
-        { id: 'finished-product', label: 'Producto terminado' },
-        { id: 'mat-logistics', label: 'Mat. Logística' },
-        { id: 'mat-plant', label: 'Mat. Planta' },
-        { id: 'available', label: 'Disponible' },
+      { id: 'inventario', label: 'Inventario Disponible', children: [
+        { id: 'producto-terminado', label: 'Producto terminado' },
+        { id: 'mat-logistica', label: 'Mat. Logística' },
+        { id: 'mat-planta', label: 'Mat. Planta' },
+        { id: 'disponible', label: 'Disponible' },
       ] },
-      { id: 'summary', label: 'Resumen' },
+      { id: 'resumen', label: 'Resumen', children: [
+        { id: 'plan-produccion', label: 'Planificación de Producción' },
+        { id: 'requisicion', label: 'Requisición de Materiales' },
+      ] },
     ] },
     { id: 'aw', label: 'AW', children: [
-      { id: 'sales-projection', label: 'Proyección de Ventas', children: [
-        { id: 'planning', label: 'Planificación' },
-        { id: 'requirements', label: 'Requerimientos' },
+      { id: 'ventas', label: 'Proyección de Ventas', children: [
+        { id: 'planificacion', label: 'Planificación' },
+        { id: 'requerimientos', label: 'Requerimientos' },
       ] },
-      { id: 'available-inventory', label: 'Inventario Disponible', children: [
-        { id: 'finished-product', label: 'Producto terminado' },
-        { id: 'mat-logistics', label: 'Mat. Logística' },
-        { id: 'mat-plant', label: 'Mat. Planta' },
-        { id: 'available', label: 'Disponible' },
+      { id: 'inventario', label: 'Inventario Disponible', children: [
+        { id: 'producto-terminado', label: 'Producto terminado' },
+        { id: 'mat-logistica', label: 'Mat. Logística' },
+        { id: 'mat-planta', label: 'Mat. Planta' },
+        { id: 'disponible', label: 'Disponible' },
       ] },
-      { id: 'summary', label: 'Resumen' },
+      { id: 'resumen', label: 'Resumen', children: [
+        { id: 'plan-produccion', label: 'Planificación de Producción' },
+        { id: 'requisicion', label: 'Requisición de Materiales' },
+      ] },
     ] },
     { id: 'global', label: 'Global' },
+    { id: 'semestral', label: 'Pronóstico semestral', children: [
+      { id: 'plan-produccion', label: 'Planificación de Producción' },
+      { id: 'requisicion', label: 'Requisición de Materiales' },
+    ] },
   ],
   'ordenes-sap': [
     { id: 'carga-prod', label: 'CARGA PRODT' },

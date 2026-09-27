@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { Box, CalendarDays, CalendarIcon, CalendarRange, Droplets, Package } from 'lucide-react';
-import { format, getISOWeek, startOfWeek } from 'date-fns';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowLeftRight, Box, CalendarDays, CalendarIcon, CalendarRange, Droplets, Package, Truck } from 'lucide-react';
+import { addDays, format, getISOWeek, getISOWeekYear, setISOWeek, startOfISOWeek, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { loadPlannerData, savePlannerData } from '@/lib/json-db';
@@ -30,8 +30,11 @@ type ProductionInventoryData = {
 };
 
 type ProductionViewKey = 'diarios' | 'semanal' | 'mensual';
+type ReceptionViewKey = 'diarias' | 'resumen-semanal';
 type SharedProductionValues = Omit<ProductionTableValues, 'tapas'>;
 type ProductionPeriods = Record<ProductionViewKey, Record<string, ProductionTableValues>>;
+type ReceptionPeriods = Record<ReceptionViewKey, Record<string, ProductionTableValues>>;
+type ProductionUpdater = (update: (current: ProductionTableValues) => ProductionTableValues) => void;
 
 const emptyProductionValues = (): ProductionTableValues => ({
   tapas: {},
@@ -100,12 +103,50 @@ const normalizeProductionValues = (value: Partial<ProductionTableValues> | undef
   quimicosInsumosCantidad: { ...emptyProductionValues().quimicosInsumosCantidad, ...(value?.quimicosInsumosCantidad || {}) },
 });
 
+const sumNumericValues = (values: string[]): string => {
+  const total = values.reduce((sum, value) => {
+    const normalized = value.trim().replace(/\s/g, '').replace(',', '.');
+    const number = Number(normalized);
+    return sum + (Number.isFinite(number) ? number : 0);
+  }, 0);
+  return total ? String(Number(total.toFixed(6))) : '';
+};
+
+const summarizeReceptionDays = (days: ProductionTableValues[]): ProductionTableValues => {
+  const summary = emptyProductionValues();
+  const sumRecord = (selector: (day: ProductionTableValues) => Record<string, string>) => {
+    const keys = new Set(days.flatMap((day) => Object.keys(selector(day) || {})));
+    return Object.fromEntries(Array.from(keys, (key) => [
+      key,
+      sumNumericValues(days.map((day) => selector(day)?.[key] || '')),
+    ]));
+  };
+
+  const tapaKeys = new Set(days.flatMap((day) => Object.keys(day.tapas || {})));
+  summary.tapas = Object.fromEntries(Array.from(tapaKeys, (key) => [
+    key,
+    {
+      totalCajas: sumNumericValues(days.map((day) => day.tapas?.[key]?.totalCajas || '')),
+      total: sumNumericValues(days.map((day) => day.tapas?.[key]?.total || '')),
+    },
+  ]));
+  summary.separadores = sumRecord((day) => day.separadores);
+  summary.preformas = sumRecord((day) => day.preformas);
+  summary.plasticos = sumRecord((day) => day.plasticos);
+  summary.adhesivoCantidad = sumNumericValues(days.map((day) => day.adhesivoCantidad || ''));
+  summary.etiquetasCantidad = sumRecord((day) => day.etiquetasCantidad);
+  return summary;
+};
+
 interface ProduccionModuleProps {
   weeklyOnly?: boolean;
 }
 
 export default function ProduccionModule({ weeklyOnly = false }: ProduccionModuleProps) {
-  const [activeProduccionSection, setActiveProduccionSection] = useState<'inventarios'>('inventarios');
+  const [activeProduccionSection, setActiveProduccionSection] = useState<'inventarios' | 'recepciones' | 'consumo-materiales'>('inventarios');
+  const [activeRecepcionesSubSection, setActiveRecepcionesSubSection] = useState<'diarias' | 'resumen-semanal'>('diarias');
+  const [recepcionesDiariasFecha, setRecepcionesDiariasFecha] = useState<Date>(() => new Date());
+  const [recepcionesSemanalFecha, setRecepcionesSemanalFecha] = useState<Date>(() => new Date());
   const [inventariosSubTab, setInventariosSubTab] = useState<'diarios' | 'semanal' | 'mensual'>(weeklyOnly ? 'semanal' : 'diarios');
   const [inventariosMensualSubTab, setInventariosMensualSubTab] = useState<'empaque' | 'materia-prima' | 'insumos'>('empaque');
   const [inventariosDiariosFecha, setInventariosDiariosFecha] = useState<Date>(() => new Date());
@@ -119,12 +160,25 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   });
 
   const [productionByPeriod, setProductionByPeriod] = useState<ProductionPeriods>({ diarios: {}, semanal: {}, mensual: {} });
+  const [receptionsByPeriod, setReceptionsByPeriod] = useState<ReceptionPeriods>({ diarias: {}, 'resumen-semanal': {} });
   const [productionLoaded, setProductionLoaded] = useState(false);
+  const [receptionSaveStatus, setReceptionSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const receptionSaveQueue = useRef<Promise<void>>(Promise.resolve());
   const dailyPeriodKey = format(inventariosDiariosFecha, 'yyyy-MM-dd');
   const weeklyPeriodKey = format(startOfWeek(inventariosSemanalFecha, { weekStartsOn: 1 }), 'yyyy-MM-dd');
   const monthlyPeriodKey = format(inventariosMensualMes, 'yyyy-MM');
   const activePeriodKey = inventariosSubTab === 'diarios' ? dailyPeriodKey : inventariosSubTab === 'semanal' ? weeklyPeriodKey : monthlyPeriodKey;
   const activePeriodData = productionByPeriod[inventariosSubTab][activePeriodKey] || EMPTY_PRODUCTION_DATA;
+  const receptionsDailyPeriodKey = format(recepcionesDiariasFecha, 'yyyy-MM-dd');
+  const receptionWeekStart = startOfWeek(recepcionesSemanalFecha, { weekStartsOn: 1 });
+  const activeReceptionData = activeRecepcionesSubSection === 'diarias'
+    ? receptionsByPeriod.diarias[receptionsDailyPeriodKey] || EMPTY_PRODUCTION_DATA
+    : summarizeReceptionDays(
+        Array.from({ length: 7 }, (_, dayIndex) => {
+          const dayKey = format(addDays(receptionWeekStart, dayIndex), 'yyyy-MM-dd');
+          return receptionsByPeriod.diarias[dayKey] || EMPTY_PRODUCTION_DATA;
+        })
+      );
   const activeProductionData = activePeriodData;
   const tapasData = activePeriodData.tapas;
   const tapasDataSemanal = activePeriodData.tapas;
@@ -158,6 +212,15 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
         });
       });
       setProductionByPeriod(nextPeriods);
+      const storedReceptions = persisted?.recepciones || {};
+      const nextReceptions: ReceptionPeriods = { diarias: {}, 'resumen-semanal': {} };
+      (['diarias', 'resumen-semanal'] as ReceptionViewKey[]).forEach((view) => {
+        const stored = storedReceptions[view] || {};
+        Object.entries(stored).forEach(([period, values]) => {
+          if (isProductionValues(values)) nextReceptions[view][period] = normalizeProductionValues(values);
+        });
+      });
+      setReceptionsByPeriod(nextReceptions);
       setProductionLoaded(true);
     }).catch(() => setProductionLoaded(true));
     return () => { cancelled = true; };
@@ -180,12 +243,59 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
     return () => window.clearTimeout(timer);
   }, [productionLoaded, inventariosSubTab, activePeriodKey, activePeriodData]);
 
+  useEffect(() => {
+    if (activeRecepcionesSubSection !== 'diarias' || !productionLoaded || !receptionsByPeriod.diarias[receptionsDailyPeriodKey]) return;
+    setReceptionSaveStatus('saving');
+    const timer = window.setTimeout(async () => {
+      receptionSaveQueue.current = receptionSaveQueue.current
+        .catch(() => undefined)
+        .then(async () => {
+          const existing = await loadPlannerData();
+          await savePlannerData({
+            productionInventory: {
+              ...(existing?.productionInventory || {}),
+              recepciones: {
+                ...(existing?.productionInventory?.recepciones || {}),
+                diarias: {
+                  ...(existing?.productionInventory?.recepciones?.diarias || {}),
+                  [receptionsDailyPeriodKey]: activeReceptionData,
+                },
+              },
+            },
+          });
+        })
+        .then(() => setReceptionSaveStatus('saved'))
+        .catch((error: unknown) => {
+          console.error('[PRODUCCION] Failed to save reception period', {
+            section: activeRecepcionesSubSection,
+            period: receptionsDailyPeriodKey,
+            error,
+          });
+          setReceptionSaveStatus('error');
+        });
+    }, 350);
+    return () => window.clearTimeout(timer);
+  }, [productionLoaded, activeRecepcionesSubSection, receptionsDailyPeriodKey, activeReceptionData, receptionsByPeriod]);
+
   const updateActiveProduction = (update: (current: ProductionTableValues) => ProductionTableValues) => {
     setProductionByPeriod((prev) => ({
       ...prev,
       [inventariosSubTab]: {
         ...prev[inventariosSubTab],
         [activePeriodKey]: update(prev[inventariosSubTab][activePeriodKey] || emptyProductionValues()),
+      },
+    }));
+  };
+
+  const updateActiveReception: ProductionUpdater = (update) => {
+    if (activeRecepcionesSubSection !== 'diarias') return;
+    setReceptionsByPeriod((prev) => ({
+      ...prev,
+      diarias: {
+        ...prev.diarias,
+        [receptionsDailyPeriodKey]: update(
+          prev.diarias[receptionsDailyPeriodKey] || emptyProductionValues()
+        ),
       },
     }));
   };
@@ -283,8 +393,8 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
     }, 0);
   };
 
-  const getPlasticosCodeTotal = (code: string) => {
-    return Object.entries(activeProductionData.plasticos)
+  const getPlasticosCodeTotal = (code: string, data: ProductionTableValues = activeProductionData) => {
+    return Object.entries(data.plasticos)
       .filter(([key]) => key === code || key.startsWith(`${code}-`))
       .reduce((sum, [, value]) => {
         const numericValue = Number(String(value).replace(/[^0-9.-]/g, ''));
@@ -292,26 +402,28 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       }, 0);
   };
 
-  const renderPlasticosInput = (key: string) => (
+  const renderPlasticosInput = (key: string, data: ProductionTableValues = activeProductionData, update: ProductionUpdater = updateActiveProduction, readOnly = false) => (
     <input
       type="text"
-      value={activeProductionData.plasticos[key] || ''}
-      onChange={(e) => handlePlasticosChange(key, e.target.value)}
+      value={data.plasticos[key] || ''}
+      onChange={(e) => update((current) => ({ ...current, plasticos: { ...current.plasticos, [key]: e.target.value } }))}
+      readOnly={readOnly}
       className="w-full bg-transparent text-center text-[10px] outline-none"
     />
   );
 
-  const renderPreformaInput = (key: string) => (
+  const renderPreformaInput = (key: string, data: ProductionTableValues = activeProductionData, update: ProductionUpdater = updateActiveProduction, readOnly = false) => (
     <input
       type="text"
-      value={activeProductionData.preformas[key] || ''}
-      onChange={(e) => handlePreformasChange(key, e.target.value)}
+      value={data.preformas[key] || ''}
+      onChange={(e) => update((current) => ({ ...current, preformas: { ...current.preformas, [key]: e.target.value } }))}
+      readOnly={readOnly}
       className="w-full bg-transparent text-center text-[10px] outline-none"
     />
   );
 
-  const getPreformasCodeTotal = (code: string) => {
-    return Object.entries(activeProductionData.preformas)
+  const getPreformasCodeTotal = (code: string, data: ProductionTableValues = activeProductionData) => {
+    return Object.entries(data.preformas)
       .filter(([key]) => key.startsWith(`${code}-`) || key === code)
       .reduce((sum, [, value]) => {
         const numericValue = Number(String(value).replace(/[^0-9.-]/g, ''));
@@ -319,16 +431,16 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       }, 0);
   };
 
-  const renderPreformasTotal = (code: string) => (
+  const renderPreformasTotal = (code: string, data: ProductionTableValues = activeProductionData) => (
     <input
       type="text"
-      value={getPreformasCodeTotal(code)}
+      value={getPreformasCodeTotal(code, data)}
       readOnly
       className="w-full bg-transparent text-center text-[10px] outline-none"
     />
   );
 
-  const renderSeparadoresTable = () => (
+  const renderSeparadoresTable = (data: ProductionTableValues = activeProductionData, update: ProductionUpdater = updateActiveProduction, readOnly = false) => (
     <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto mt-4">
       <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
         <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-700">Separadores</h3>
@@ -351,12 +463,13 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
             <td className="px-2 py-2 text-[10px] text-slate-600 border-r border-b border-slate-200 text-center">
               <input
                 type="text"
-                value={activeProductionData.separadores.EMP_0134 || ''}
-                onChange={(e) => handleSeparadoresChange('EMP_0134', e.target.value)}
+                value={data.separadores.EMP_0134 || ''}
+                onChange={(e) => update((current) => ({ ...current, separadores: { ...current.separadores, EMP_0134: e.target.value } }))}
+                readOnly={readOnly}
                 className="w-full bg-transparent text-center text-[10px] outline-none"
               />
             </td>
-            <td className="px-2 py-2 text-[10px] text-slate-600 border-b border-slate-200 text-center">{activeProductionData.separadores.EMP_0134 || ''}</td>
+            <td className="px-2 py-2 text-[10px] text-slate-600 border-b border-slate-200 text-center">{data.separadores.EMP_0134 || ''}</td>
           </tr>
           <tr>
             <td className="px-2 py-2 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200 text-center">EMP_0138</td>
@@ -365,19 +478,20 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
             <td className="px-2 py-2 text-[10px] text-slate-600 border-r border-slate-200 text-center">
               <input
                 type="text"
-                value={activeProductionData.separadores.EMP_0138 || ''}
-                onChange={(e) => handleSeparadoresChange('EMP_0138', e.target.value)}
+                value={data.separadores.EMP_0138 || ''}
+                onChange={(e) => update((current) => ({ ...current, separadores: { ...current.separadores, EMP_0138: e.target.value } }))}
+                readOnly={readOnly}
                 className="w-full bg-transparent text-center text-[10px] outline-none"
               />
             </td>
-            <td className="px-2 py-2 text-[10px] text-slate-600 border-b border-slate-200 text-center">{activeProductionData.separadores.EMP_0138 || ''}</td>
+            <td className="px-2 py-2 text-[10px] text-slate-600 border-b border-slate-200 text-center">{data.separadores.EMP_0138 || ''}</td>
           </tr>
         </tbody>
       </table>
     </div>
   );
 
-  const renderPreformasTable = () => (
+  const renderPreformasTable = (data: ProductionTableValues = activeProductionData, update: ProductionUpdater = updateActiveProduction, readOnly = false) => (
     <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto mt-4">
       <div className="px-4 py-3 border-b border-slate-200">
         <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-700">Preformas</h3>
@@ -397,84 +511,84 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">EMP_0009</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">PREFORMA TRANSPARENTE 29,6GR 1881</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">ultrapack 8600 und</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0009')}</td>
-            <td className="px-2 py-1 border-b border-slate-200">{renderPreformasTotal('EMP_0009')}</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0009', data, update, readOnly)}</td>
+            <td className="px-2 py-1 border-b border-slate-200">{renderPreformasTotal('EMP_0009', data)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">EMP_0068</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">PREFORMA TRANSPARENTE 36 GR-1881</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">ultrapack 7650 und</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0068')}</td>
-            <td className="px-2 py-1 border-b border-slate-200">{renderPreformasTotal('EMP_0068')}</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0068', data, update, readOnly)}</td>
+            <td className="px-2 py-1 border-b border-slate-200">{renderPreformasTotal('EMP_0068', data)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200" rowSpan={2}>EMP_0093</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200" rowSpan={2}>PREFORMA TRANSPARENTE 42,64 GR-1881</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">Alpla 7560 und</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0093-Alpla')}</td>
-            <td className="px-2 py-1 border-b border-slate-200" rowSpan={2}>{renderPreformasTotal('EMP_0093')}</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0093-Alpla', data, update, readOnly)}</td>
+            <td className="px-2 py-1 border-b border-slate-200" rowSpan={2}>{renderPreformasTotal('EMP_0093', data)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">ultrapack 6912 und</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0093-Ultrapack')}</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0093-Ultrapack', data, update, readOnly)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200" rowSpan={2}>EMP_0103</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200" rowSpan={2}>PREFORMA VERDE 42,64 GR-1881</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">Alpla 7488 und</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0103-Alpla')}</td>
-            <td className="px-2 py-1 border-b border-slate-200" rowSpan={2}>{renderPreformasTotal('EMP_0103')}</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0103-Alpla', data, update, readOnly)}</td>
+            <td className="px-2 py-1 border-b border-slate-200" rowSpan={2}>{renderPreformasTotal('EMP_0103', data)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">ultrapack 6912 und</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0103-Ultrapack')}</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0103-Ultrapack', data, update, readOnly)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200" rowSpan={2}>EMP_0120</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200" rowSpan={2}>PREFORMA VERDE 29.6GR 1881</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">Alpla 7560 und</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0120-Alpla')}</td>
-            <td className="px-2 py-1 border-b border-slate-200" rowSpan={2}>{renderPreformasTotal('EMP_0120')}</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0120-Alpla', data, update, readOnly)}</td>
+            <td className="px-2 py-1 border-b border-slate-200" rowSpan={2}>{renderPreformasTotal('EMP_0120', data)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">ultrapack 8600 und</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0120-Ultrapack')}</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0120-Ultrapack', data, update, readOnly)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200" rowSpan={2}>EMP_0126</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200" rowSpan={2}>PREFORMA TRANSPARENTE 20,55GR-1881</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">Alpla 16200 und</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0126-Alpla')}</td>
-            <td className="px-2 py-1 border-b border-slate-200" rowSpan={2}>{renderPreformasTotal('EMP_0126')}</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0126-Alpla', data, update, readOnly)}</td>
+            <td className="px-2 py-1 border-b border-slate-200" rowSpan={2}>{renderPreformasTotal('EMP_0126', data)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">ultrapack 15360 und</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0126-Ultrapack')}</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0126-Ultrapack', data, update, readOnly)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200" rowSpan={2}>EMP_0135</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200" rowSpan={2}>PREFORMA VERDE 20,5-1881</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">Alpla 16200 und</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0135-Alpla')}</td>
-            <td className="px-2 py-1 border-b border-slate-200" rowSpan={2}>{renderPreformasTotal('EMP_0135')}</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0135-Alpla', data, update, readOnly)}</td>
+            <td className="px-2 py-1 border-b border-slate-200" rowSpan={2}>{renderPreformasTotal('EMP_0135', data)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">ultrapack 15360 und</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0135-Ultrapack')}</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPreformaInput('EMP_0135-Ultrapack', data, update, readOnly)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-200">EMP_0166</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-slate-200">PREFORMA TRANSPARENTE 33 GR-1881</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-slate-200 text-left">ultrapack 8600 und</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-r border-slate-200">{renderPreformaInput('EMP_0166')}</td>
-            <td className="px-2 py-1">{renderPreformasTotal('EMP_0166')}</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-r border-slate-200">{renderPreformaInput('EMP_0166', data, update, readOnly)}</td>
+            <td className="px-2 py-1">{renderPreformasTotal('EMP_0166', data)}</td>
           </tr>
         </tbody>
       </table>
     </div>
   );
 
-  const renderAdhesivoTable = () => (
+  const renderAdhesivoTable = (data: ProductionTableValues = activeProductionData, update: ProductionUpdater = updateActiveProduction, readOnly = false) => (
     <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto mt-4">
       <div className="px-4 py-3 border-b border-slate-200">
         <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-700">Adhesivo</h3>
@@ -497,19 +611,20 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
             <td className="px-2 py-1 border-r border-slate-200">
               <input
                 type="text"
-                value={activeProductionData.adhesivoCantidad}
-                onChange={(e) => handleAdhesivoChange(e.target.value)}
+                value={data.adhesivoCantidad}
+                onChange={(e) => update((current) => ({ ...current, adhesivoCantidad: e.target.value }))}
+                readOnly={readOnly}
                 className="w-full bg-transparent text-center text-[10px] outline-none"
               />
             </td>
-            <td className="px-2 py-1">{activeProductionData.adhesivoCantidad}</td>
+            <td className="px-2 py-1">{data.adhesivoCantidad}</td>
           </tr>
         </tbody>
       </table>
     </div>
   );
 
-  const renderPlasticosTable = () => (
+  const renderPlasticosTable = (data: ProductionTableValues = activeProductionData, update: ProductionUpdater = updateActiveProduction, readOnly = false) => (
     <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto mt-4">
       <div className="px-4 py-3 border-b border-slate-200">
         <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-700">Plásticos</h3>
@@ -529,47 +644,47 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">EMP_0017</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">POLIETILENO TERMOENCOGIBLE 55 X 0.07</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">Plastven</td>
-            <td className="px-2 py-1 border-r border-b border-slate-200">{renderPlasticosInput('EMP_0017')}</td>
-            <td className="px-2 py-1 border-b border-slate-200">{getPlasticosCodeTotal('EMP_0017')}</td>
+            <td className="px-2 py-1 border-r border-b border-slate-200">{renderPlasticosInput('EMP_0017', data, update, readOnly)}</td>
+            <td className="px-2 py-1 border-b border-slate-200">{getPlasticosCodeTotal('EMP_0017', data)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">EMP_0019</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">FILM POLIESTRECH 23 MIC</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">ew</td>
-            <td className="px-2 py-1 border-r border-b border-slate-200">{renderPlasticosInput('EMP_0019')}</td>
-            <td className="px-2 py-1 border-b border-slate-200">{getPlasticosCodeTotal('EMP_0019')}</td>
+            <td className="px-2 py-1 border-r border-b border-slate-200">{renderPlasticosInput('EMP_0019', data, update, readOnly)}</td>
+            <td className="px-2 py-1 border-b border-slate-200">{getPlasticosCodeTotal('EMP_0019', data)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b-2 border-slate-400" rowSpan={2}>EMP_0080</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b-2 border-slate-400" rowSpan={2}>POLIETILENO TERMOENCOGIBLE 48x0.06</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">Plastven</td>
-            <td className="px-2 py-1 border-r border-b border-slate-200">{renderPlasticosInput('EMP_0080-Plastven')}</td>
-            <td className="px-2 py-1 border-b-2 border-slate-400" rowSpan={2}>{getPlasticosCodeTotal('EMP_0080')}</td>
+            <td className="px-2 py-1 border-r border-b border-slate-200">{renderPlasticosInput('EMP_0080-Plastven', data, update, readOnly)}</td>
+            <td className="px-2 py-1 border-b-2 border-slate-400" rowSpan={2}>{getPlasticosCodeTotal('EMP_0080', data)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">plastico empaque</td>
-            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPlasticosInput('EMP_0080-plastico-empaque')}</td>
+            <td className="px-2 py-1 !border-r-2 !border-r-slate-500 border-b border-slate-200">{renderPlasticosInput('EMP_0080-plastico-empaque', data, update, readOnly)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">EMP_0084</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200">FILM POLIESTRECH 20 MIC</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">24kg</td>
-            <td className="px-2 py-1 border-r border-b border-slate-200">{renderPlasticosInput('EMP_0084')}</td>
-            <td className="px-2 py-1 border-b border-slate-200">{getPlasticosCodeTotal('EMP_0084')}</td>
+            <td className="px-2 py-1 border-r border-b border-slate-200">{renderPlasticosInput('EMP_0084', data, update, readOnly)}</td>
+            <td className="px-2 py-1 border-b border-slate-200">{getPlasticosCodeTotal('EMP_0084', data)}</td>
           </tr>
           <tr>
             <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-slate-200">EMP_0130</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-slate-200">POLIETILENO TERMOENCOGIBLE 43 x 0.06</td>
             <td className="px-2 py-1 text-[10px] text-slate-600 border-r border-slate-200 text-left">plastven</td>
-            <td className="px-2 py-1 border-r border-slate-200">{renderPlasticosInput('EMP_0130')}</td>
-            <td className="px-2 py-1">{getPlasticosCodeTotal('EMP_0130')}</td>
+            <td className="px-2 py-1 border-r border-slate-200">{renderPlasticosInput('EMP_0130', data, update, readOnly)}</td>
+            <td className="px-2 py-1">{getPlasticosCodeTotal('EMP_0130', data)}</td>
           </tr>
         </tbody>
       </table>
     </div>
   );
 
-  const renderEtiquetasTable = () => {
+  const renderEtiquetasTable = (data: ProductionTableValues = activeProductionData, update: ProductionUpdater = updateActiveProduction, readOnly = false) => {
     const etiquetas = [
       ['EMP_0022', 'ETIQUETA UVA 2000ML'],
       ['EMP_0026', 'ETIQUETA PIÑA 2000ML'],
@@ -633,12 +748,13 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                 <td className="px-2 py-1 border-r border-b border-slate-200">
                   <input
                     type="text"
-                    value={activeProductionData.etiquetasCantidad[code] || ''}
-                    onChange={(e) => handleEtiquetasCantidadChange(code, e.target.value)}
+                    value={data.etiquetasCantidad[code] || ''}
+                    onChange={(e) => update((current) => ({ ...current, etiquetasCantidad: { ...current.etiquetasCantidad, [code]: e.target.value } }))}
+                    readOnly={readOnly}
                     className="w-full bg-transparent text-center text-[10px] outline-none"
                   />
                 </td>
-                <td className="px-2 py-1 border-b border-slate-200">{activeProductionData.etiquetasCantidad[code] || ''}</td>
+                <td className="px-2 py-1 border-b border-slate-200">{data.etiquetasCantidad[code] || ''}</td>
               </tr>
             ))}
           </tbody>
@@ -984,24 +1100,92 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
     );
   };
 
+  const renderRecepcionesTapasTable = (
+    data: ProductionTableValues,
+    update: ProductionUpdater,
+    periodLabel: string,
+    readOnly = false
+  ) => {
+    const updateTapas = (key: string, value: string) => update((current) => ({
+      ...current,
+      tapas: { ...current.tapas, [key]: { ...(current.tapas[key] || { totalCajas: '', total: '' }), totalCajas: value } },
+    }));
+
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+        <div className="px-4 py-3 border-b border-slate-200 flex items-center justify-between">
+          <h3 className="text-[10px] font-black uppercase tracking-widest text-slate-700">Tapas</h3>
+          <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{periodLabel}</span>
+        </div>
+        <table className="w-full border-collapse text-center [&_th:not(:last-child)]:!border-r-2 [&_th:not(:last-child)]:!border-r-slate-400 [&_td:not(:last-child)]:!border-r-2 [&_td:not(:last-child)]:!border-r-slate-400 [&_tbody>tr>td:nth-child(4)]:!border-r-2 [&_tbody>tr>td:nth-child(4)]:!border-r-slate-500 [&_tbody>tr>td:nth-child(2):last-child]:!border-r-2 [&_tbody>tr>td:nth-child(2):last-child]:!border-r-slate-500">
+          <thead>
+            <tr className="bg-slate-100">
+              <th className="px-2 py-2 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[110px]">Código</th>
+              <th className="px-2 py-2 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[260px]">Descripción</th>
+              <th className="px-2 py-2 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[160px]">Producto</th>
+              <th className="px-2 py-2 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-r border-slate-200 min-w-[120px]">Total</th>
+              <th className="px-2 py-2 text-[10px] font-black text-slate-600 uppercase tracking-widest border-b border-slate-200 min-w-[120px]">Total unds</th>
+            </tr>
+          </thead>
+          <tbody className="[&>tr:nth-child(1)>td[rowspan]]:border-b-2 [&>tr:nth-child(1)>td[rowspan]]:border-slate-400 [&>tr:nth-child(2)>td]:border-b-2 [&>tr:nth-child(2)>td]:border-slate-400 [&>tr:nth-child(3)>td[rowspan]]:border-b-2 [&>tr:nth-child(3)>td[rowspan]]:border-slate-400 [&>tr:nth-child(5)>td]:border-b-2 [&>tr:nth-child(5)>td]:border-slate-400">
+            <tr>
+              <td rowSpan={2} className="px-2 py-2 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">EMP_0095</td>
+              <td rowSpan={2} className="px-2 py-2 text-[10px] text-slate-600 border-r border-b border-slate-200">TAPA VERDE REFRESCOS CON IMPRESIÓN-1881</td>
+              <td className="px-2 py-2 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">Alpla (3500 und)</td>
+              <td className="px-2 py-2 border-r border-b border-slate-200"><input type="text" readOnly={readOnly} value={data.tapas['EMP_0095-Alpla']?.totalCajas || ''} onChange={(e) => updateTapas('EMP_0095-Alpla', e.target.value)} className="w-full bg-transparent text-center text-[10px] outline-none" /></td>
+              <td rowSpan={2} className="px-2 py-2 border-b border-slate-200">{getCodeTotal(data.tapas, 'EMP_0095') || ''}</td>
+            </tr>
+            <tr>
+              <td className="px-2 py-2 text-[10px] text-slate-600 border-r border-t border-slate-200 text-left">Importada (3000 und)</td>
+              <td className="px-2 py-2 border-r border-t border-slate-200"><input type="text" readOnly={readOnly} value={data.tapas['EMP_0095-Importada']?.totalCajas || ''} onChange={(e) => updateTapas('EMP_0095-Importada', e.target.value)} className="w-full bg-transparent text-center text-[10px] outline-none" /></td>
+            </tr>
+            <tr>
+              <td rowSpan={3} className="px-2 py-2 text-[10px] font-bold text-slate-700 border-r border-b border-slate-200">EMP_0105</td>
+              <td rowSpan={3} className="px-2 py-2 text-[10px] text-slate-600 border-r border-b border-slate-200">TAPA AZUL REFRESCOS CON IMPRESIÓN-1881</td>
+              <td className="px-2 py-2 text-[10px] text-slate-600 border-r border-b border-slate-200 text-left">Alpla (3500 und)</td>
+              <td className="px-2 py-2 border-r border-b border-slate-200"><input type="text" readOnly={readOnly} value={data.tapas['EMP_0105-Alpla']?.totalCajas || ''} onChange={(e) => updateTapas('EMP_0105-Alpla', e.target.value)} className="w-full bg-transparent text-center text-[10px] outline-none" /></td>
+              <td rowSpan={3} className="px-2 py-2 border-b border-slate-200">{getCodeTotal(data.tapas, 'EMP_0105') || ''}</td>
+            </tr>
+            <tr>
+              <td className="px-2 py-2 text-[10px] text-slate-600 border-r border-t border-b border-slate-200 text-left">Importada EW (3000 und)</td>
+              <td className="px-2 py-2 border-r border-t border-b border-slate-200"><input type="text" readOnly={readOnly} value={data.tapas['EMP_0105-ImportadaEW']?.totalCajas || ''} onChange={(e) => updateTapas('EMP_0105-ImportadaEW', e.target.value)} className="w-full bg-transparent text-center text-[10px] outline-none" /></td>
+            </tr>
+            <tr>
+              <td className="px-2 py-2 text-[10px] text-slate-600 border-r border-t border-slate-200 text-left">Importada tipo 2 (4600 und)</td>
+              <td className="px-2 py-2 border-r border-t border-slate-200"><input type="text" readOnly={readOnly} value={data.tapas['EMP_0105-ImportadaTipo2']?.totalCajas || ''} onChange={(e) => updateTapas('EMP_0105-ImportadaTipo2', e.target.value)} className="w-full bg-transparent text-center text-[10px] outline-none" /></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    );
+  };
+
   return (
     <div className="flex flex-col h-full">
       <div className="flex items-center gap-2 mb-3 no-print">
         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-          <button
-            type="button"
-            onClick={() => setActiveProduccionSection('inventarios')}
-            className={cn(
-              'inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none',
-              activeProduccionSection === 'inventarios' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
-            )}
-          >
-            <Package className="h-3.5 w-3.5" />
-            Inventarios
-          </button>
+          {([
+            { id: 'inventarios', label: 'Inventarios', icon: Package },
+            { id: 'recepciones', label: 'Recepciones', icon: Truck },
+            { id: 'consumo-materiales', label: 'Consumo de materiales', icon: ArrowLeftRight },
+          ] as const).map(({ id, label, icon: Icon }) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setActiveProduccionSection(id)}
+              className={cn(
+                'inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none',
+                activeProduccionSection === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+              )}
+            >
+              <Icon className="h-3.5 w-3.5" />
+              {label}
+            </button>
+          ))}
         </div>
       </div>
 
+      <div className={cn('flex flex-col flex-1 min-h-0', activeProduccionSection !== 'inventarios' && 'hidden')}>
       <div className="flex items-center gap-2 mb-2 no-print">
         <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
           {(weeklyOnly ? ['semanal'] : ['diarios', 'semanal', 'mensual']).map((subTab) => (
@@ -1042,14 +1226,14 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
         <div className="flex items-center gap-2 mb-2 no-print">
           <input
             type="week"
-            value={`${inventariosSemanalFecha.getFullYear()}-W${String(getISOWeek(inventariosSemanalFecha)).padStart(2, '0')}`}
+            value={`${getISOWeekYear(inventariosSemanalFecha)}-W${String(getISOWeek(inventariosSemanalFecha)).padStart(2, '0')}`}
             onChange={(e) => {
               const value = e.target.value;
               if (!value) return;
               const [year, weekStr] = value.split('-W');
               const yearNum = Number(year);
               const weekNum = Number(weekStr);
-              const date = startOfWeek(new Date(yearNum, 0, 1 + (weekNum - 1) * 7), { weekStartsOn: 1 });
+              const date = startOfISOWeek(setISOWeek(new Date(yearNum, 0, 4), weekNum));
               setInventariosSemanalFecha(date);
             }}
             className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
@@ -1458,6 +1642,95 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
           )}
         </div>
       </div>
+      </div>
+      {activeProduccionSection !== 'inventarios' && (
+        activeProduccionSection === 'recepciones' ? (
+          <div className="flex flex-col flex-1 min-h-0">
+            <div className="flex items-center gap-2 mb-2 no-print">
+              <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
+                {([
+                  { id: 'diarias', label: 'Diarias', icon: CalendarIcon },
+                  { id: 'resumen-semanal', label: 'Resumen semanal', icon: CalendarRange },
+                ] as const).map(({ id, label, icon: Icon }) => (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => setActiveRecepcionesSubSection(id)}
+                    className={cn(
+                      'inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none',
+                      activeRecepcionesSubSection === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                    )}
+                  >
+                    <Icon className="h-3.5 w-3.5" />
+                    {label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            {activeRecepcionesSubSection === 'diarias' && (
+              <div className="flex items-center gap-2 mb-2 no-print">
+                <input
+                  type="date"
+                  value={format(recepcionesDiariasFecha, 'yyyy-MM-dd')}
+                  onChange={(e) => {
+                    const raw = e.target.value;
+                    if (!raw) return;
+                    const [year, month, day] = raw.split('-').map(Number);
+                    setRecepcionesDiariasFecha(new Date(year, month - 1, day));
+                  }}
+                  className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                />
+                <span className={cn(
+                  'text-[10px] font-bold uppercase tracking-widest',
+                  receptionSaveStatus === 'error' ? 'text-red-600' : 'text-slate-500'
+                )}>
+                  {receptionSaveStatus === 'saving' ? 'Guardando…' : receptionSaveStatus === 'saved' ? 'Guardado' : receptionSaveStatus === 'error' ? 'Error al guardar' : ''}
+                </span>
+              </div>
+            )}
+            {activeRecepcionesSubSection === 'resumen-semanal' && (
+              <div className="flex items-center gap-2 mb-2 no-print">
+                <input
+                  type="week"
+                  value={`${getISOWeekYear(recepcionesSemanalFecha)}-W${String(getISOWeek(recepcionesSemanalFecha)).padStart(2, '0')}`}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (!value) return;
+                    const [year, weekStr] = value.split('-W');
+                    const yearNum = Number(year);
+                    const weekNum = Number(weekStr);
+                    const date = startOfISOWeek(setISOWeek(new Date(yearNum, 0, 4), weekNum));
+                    setRecepcionesSemanalFecha(date);
+                  }}
+                  className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                />
+                <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">
+                  Semana {getISOWeek(recepcionesSemanalFecha)}
+                </span>
+              </div>
+            )}
+            <div className="flex-1 min-h-0 overflow-auto bg-white rounded-[2.5rem] p-4">
+              <div className="rounded-2xl bg-slate-50/50 border border-slate-100 p-3">
+                {renderRecepcionesTapasTable(
+                  activeReceptionData,
+                  updateActiveReception,
+                  activeRecepcionesSubSection === 'diarias'
+                    ? format(recepcionesDiariasFecha, 'dd/MM/yyyy')
+                    : `Semana ${getISOWeek(recepcionesSemanalFecha)}`,
+                  activeRecepcionesSubSection === 'resumen-semanal'
+                )}
+                {renderSeparadoresTable(activeReceptionData, updateActiveReception, activeRecepcionesSubSection === 'resumen-semanal')}
+                {renderPreformasTable(activeReceptionData, updateActiveReception, activeRecepcionesSubSection === 'resumen-semanal')}
+                {renderAdhesivoTable(activeReceptionData, updateActiveReception, activeRecepcionesSubSection === 'resumen-semanal')}
+                {renderPlasticosTable(activeReceptionData, updateActiveReception, activeRecepcionesSubSection === 'resumen-semanal')}
+                {renderEtiquetasTable(activeReceptionData, updateActiveReception, activeRecepcionesSubSection === 'resumen-semanal')}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="flex-1 min-h-0 bg-white rounded-[2.5rem]" />
+        )
+      )}
     </div>
   );
 }

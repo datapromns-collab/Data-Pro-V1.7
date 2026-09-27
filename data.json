@@ -13131,7 +13131,9 @@
           "ordenes-sap",
           "seguimiento"
         ],
-        "jaime.r": [],
+        "jaime.r": [
+          "produccion"
+        ],
         "demon2": []
       },
       "sections": {
@@ -13147,12 +13149,17 @@
         },
         "prodtj.mds": {
           "management.control": "none"
+        },
+        "prodtg.mds": {
+          "produccion.inventarios": "read",
+          "produccion.recepciones": "read",
+          "produccion.consumo-materiales": "read"
         }
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T16:14:06.860Z"
+    "updatedAt": "2026-09-27T17:55:16.514Z"
   },
   "ordenesSap": [
     {

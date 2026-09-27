@@ -65,6 +65,20 @@ function writePayloadSync(payload: DbData): void {
   }
 }
 
+function withRetrySync<T>(fn: () => T, retries = 3): T {
+  let attempt = 0;
+  while (true) {
+    try {
+      return fn();
+    } catch (error) {
+      const err = error as NodeJS.ErrnoException;
+      const isRetryable = err.code === 'EPERM' || err.code === 'EACCES' || err.code === 'EBUSY' || err.code === 'UNKNOWN';
+      if (!isRetryable || attempt >= retries - 1) throw error;
+      attempt++;
+    }
+  }
+}
+
 function createRotatingBackupSync(): void {
   const backupDir = getBackupDir();
   try {
@@ -74,14 +88,14 @@ function createRotatingBackupSync(): void {
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
     const backupPath = path.join(backupDir, `data-${timestamp}.json`);
     if (fs.existsSync(DB_PATH)) {
-      fs.copyFileSync(DB_PATH, backupPath);
+      withRetrySync(() => fs.copyFileSync(DB_PATH, backupPath), 3);
       const files = fs.readdirSync(backupDir)
         .filter((f) => f.startsWith('data-') && f.endsWith('.json'))
         .sort();
       while (files.length > MAX_BACKUPS) {
         const oldest = files.shift();
         if (oldest) {
-          fs.unlinkSync(path.join(backupDir, oldest));
+          try { fs.unlinkSync(path.join(backupDir, oldest)); } catch {}
         }
       }
     }
