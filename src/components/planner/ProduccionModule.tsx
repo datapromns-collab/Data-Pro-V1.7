@@ -155,6 +155,9 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const [activeProduccionSection, setActiveProduccionSection] = useState<'inventarios' | 'recepciones' | 'consumo-materiales' | 'mermas-desperdicios'>('inventarios');
   const [activeRecepcionesSubSection, setActiveRecepcionesSubSection] = useState<'diarias' | 'resumen-semanal'>('diarias');
   const [activeMermasSubSection, setActiveMermasSubSection] = useState<'mermas' | 'desperdicios' | 'resumen-semanal' | 'resumen-mensual'>('mermas');
+  const [mermasFecha, setMermasFecha] = useState<Date>(() => new Date());
+  const [mermasSemanalFecha, setMermasSemanalFecha] = useState<Date>(() => new Date());
+  const [mermasMensualMes, setMermasMensualMes] = useState<Date>(() => new Date());
   const [recepcionesDiariasFecha, setRecepcionesDiariasFecha] = useState<Date>(() => new Date());
   const [recepcionesSemanalFecha, setRecepcionesSemanalFecha] = useState<Date>(() => new Date());
   const [inventariosSubTab, setInventariosSubTab] = useState<'diarios' | 'semanal' | 'mensual'>(weeklyOnly ? 'semanal' : 'diarios');
@@ -1912,6 +1915,79 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                 ))}
               </div>
             </div>
+            {(activeMermasSubSection === 'mermas' || activeMermasSubSection === 'desperdicios') && (
+              <div className="flex items-center gap-2 mb-2 no-print">
+                <input
+                  type="date"
+                  value={format(mermasFecha, 'yyyy-MM-dd')}
+                  onChange={(e) => {
+                    const raw = e.target.value;
+                    if (!raw) return;
+                    const [year, month, day] = raw.split('-').map(Number);
+                    setMermasFecha(new Date(year, month - 1, day));
+                  }}
+                  className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                />
+              </div>
+            )}
+            {activeMermasSubSection === 'resumen-semanal' && (
+              <div className="flex items-center gap-2 mb-2 no-print">
+                <input
+                  type="week"
+                  value={`${getISOWeekYear(mermasSemanalFecha)}-W${String(getISOWeek(mermasSemanalFecha)).padStart(2, '0')}`}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    if (!value) return;
+                    const [year, weekStr] = value.split('-W');
+                    const yearNum = Number(year);
+                    const weekNum = Number(weekStr);
+                    const date = startOfISOWeek(setISOWeek(new Date(yearNum, 0, 4), weekNum));
+                    setMermasSemanalFecha(date);
+                  }}
+                  className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                />
+                <span className="text-[10px] font-black text-slate-600 uppercase tracking-widest">
+                  Semana {getISOWeek(mermasSemanalFecha)}
+                </span>
+              </div>
+            )}
+            {activeMermasSubSection === 'resumen-mensual' && (
+              <div className="flex items-center gap-2 mb-2 no-print">
+                <select
+                  value={mermasMensualMes.getMonth().toString()}
+                  onChange={(e) => {
+                    const month = Number(e.target.value);
+                    setMermasMensualMes(new Date(mermasMensualMes.getFullYear(), month, 1));
+                  }}
+                  className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                >
+                  <option value="0">Enero</option>
+                  <option value="1">Febrero</option>
+                  <option value="2">Marzo</option>
+                  <option value="3">Abril</option>
+                  <option value="4">Mayo</option>
+                  <option value="5">Junio</option>
+                  <option value="6">Julio</option>
+                  <option value="7">Agosto</option>
+                  <option value="8">Septiembre</option>
+                  <option value="9">Octubre</option>
+                  <option value="10">Noviembre</option>
+                  <option value="11">Diciembre</option>
+                </select>
+                <select
+                  value={mermasMensualMes.getFullYear().toString()}
+                  onChange={(e) => {
+                    const year = Number(e.target.value);
+                    setMermasMensualMes(new Date(year, mermasMensualMes.getMonth(), 1));
+                  }}
+                  className="h-9 rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                >
+                  {Array.from({ length: 10 }, (_, i) => new Date().getFullYear() - 5 + i).map((year) => (
+                    <option key={year} value={year.toString()}>{year}</option>
+                  ))}
+                </select>
+              </div>
+            )}
             <div className="flex-1 min-h-0 bg-white rounded-[2.5rem]" />
           </div>
         ) : (
