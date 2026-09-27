@@ -13400,7 +13400,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T21:20:26.567Z"
+    "updatedAt": "2026-09-27T21:33:33.629Z"
   },
   "ordenesSap": [
     {
@@ -22844,8 +22844,8 @@
         },
         {
           "fechaInicio": "2026-09-27",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "17989",
+          "cajas1": 6160,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -22914,6 +22914,17 @@
           "cajas3": 80,
           "ticket4": "",
           "cajas4": 10400
+        },
+        {
+          "fechaInicio": "2026-09-27",
+          "ticket1": "16075",
+          "cajas1": 8140,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -23081,8 +23092,8 @@
         },
         {
           "fechaInicio": "2026-09-27",
-          "ticket1": "",
-          "cajas1": 0,
+          "ticket1": "16035",
+          "cajas1": 5064,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -135724,25 +135735,6 @@
         "bloqueado": true
       },
       {
-        "fecha": "2026-09-25",
-        "semana": 39,
-        "turno": "NOCTURNO",
-        "operador": "",
-        "linea": "Línea 6",
-        "equipo": "",
-        "tipoParada": "OPERACIONAL",
-        "inicioParada": "18:30",
-        "finParada": "18:52",
-        "totalMin": "22",
-        "zona": "Llenado",
-        "falla": "SIN ESPECIFICAR",
-        "orden": "",
-        "observaciones": "",
-        "usuario": "Luis Blandin",
-        "id": 1790371816310,
-        "bloqueado": true
-      },
-      {
         "fecha": "2026-09-21",
         "semana": 39,
         "turno": "NOCTURNO",
@@ -163143,7 +163135,8 @@
         "1787959521278",
         "1788293882619",
         "1788978219703",
-        "1790538581551"
+        "1790538581551",
+        "1790371816310"
       ]
     },
     "planta-ordenes-trabajo": {
