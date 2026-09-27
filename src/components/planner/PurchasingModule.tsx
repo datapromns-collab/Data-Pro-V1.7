@@ -148,6 +148,12 @@ type LogisticsMonthlyData = {
   }>;
 };
 
+type MonthlySalesForecastData = {
+  periods?: Record<string, {
+    prodt?: Record<string, string>;
+  }>;
+};
+
 const LOGISTICS_PRODUCT_MAPPING: Array<[string, string, string]> = [
   ['PRODT-0007', 'GLUP COLA', '2Lts'],
   ['PRODT-0008', 'GLUP UVA', '2Lts'],
@@ -183,6 +189,34 @@ const parseProductionNumber = (value: unknown) => {
   return Number.isFinite(parsed) ? parsed : 0;
 };
 
+const parseBoxQuantity = (value: unknown) => {
+  if (typeof value === 'number') return Number.isFinite(value) ? value : 0;
+  let normalized = String(value ?? '').trim().replace(/\s/g, '');
+  if (!normalized) return 0;
+
+  const lastComma = normalized.lastIndexOf(',');
+  const lastDot = normalized.lastIndexOf('.');
+  if (lastComma >= 0 && lastDot >= 0) {
+    normalized = lastComma > lastDot
+      ? normalized.replace(/\./g, '').replace(',', '.')
+      : normalized.replace(/,/g, '');
+  } else {
+    const separator = lastComma >= 0 ? ',' : lastDot >= 0 ? '.' : '';
+    if (separator) {
+      const parts = normalized.split(separator);
+      const isThousandsSeparator = parts.length > 1 && parts.slice(1).every(part => /^\d{3}$/.test(part));
+      if (isThousandsSeparator) {
+        normalized = parts.join('');
+      } else if (separator === ',') {
+        normalized = normalized.replace(',', '.');
+      }
+    }
+  }
+
+  const parsed = Number(normalized);
+  return Number.isFinite(parsed) ? parsed : 0;
+};
+
 const sumProductionValues = (values: Record<string, unknown> | undefined, code: string) =>
   Object.entries(values || {})
     .filter(([key]) => key === code || key.startsWith(`${code}-`))
@@ -192,6 +226,10 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
   const [productionInventory, setProductionInventory] = useState<MonthlyProductionInventory>({});
   const logisticsInventoryStore = useRemoteCollection<LogisticsMonthlyData>(
     'logistica-inventario-mensual',
+    { periods: {} },
+  );
+  const salesForecastStore = useRemoteCollection<MonthlySalesForecastData>(
+    'ventas-pronostico-mensual',
     { periods: {} },
   );
    const [productionMonthKey, setProductionMonthKey] = useState<string>(() => {
@@ -204,6 +242,8 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
    const selectedMonth = Number.isFinite(productionMonth) ? productionMonth - 1 : new Date().getMonth();
    const selectedYear = Number.isFinite(productionYear) ? productionYear : new Date().getFullYear();
    const availableYears = Array.from({ length: 11 }, (_, index) => new Date().getFullYear() - 5 + index);
+   const semestralEndDate = new Date(selectedYear, selectedMonth + 5, 1);
+   const semestralPeriodLabel = `${MONTH_OPTIONS[selectedMonth]} ${selectedYear} - ${MONTH_OPTIONS[semestralEndDate.getMonth()]} ${semestralEndDate.getFullYear()}`;
    const { 
     salesProjection, 
     updateSalesProjection,
@@ -251,6 +291,17 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
      ? productionInventory.mensual[productionMonthKey]
      : undefined;
    const monthlyLogisticsProductStock = logisticsInventoryStore.data.periods?.[productionMonthKey]?.prodt || {};
+   const monthlySalesForecast = salesForecastStore.data.periods?.[productionMonthKey]?.prodt || {};
+   const monthlySalesProjection = useMemo(() => {
+     const next: Record<string, Record<string, number>> = {};
+     LOGISTICS_PRODUCT_MAPPING.forEach(([code, product, presentation]) => {
+       const normalizedCode = code.trim().toUpperCase().replace(/\s+/g, '');
+       const forecast = parseBoxQuantity(monthlySalesForecast[normalizedCode]);
+       if (!next[product]) next[product] = {};
+       next[product][presentation] = (next[product][presentation] || 0) + forecast;
+     });
+     return next;
+   }, [monthlySalesForecast]);
    const monthlyLogisticsMaterialInventory = useMemo(() => {
      const period = logisticsInventoryStore.data.periods?.[productionMonthKey];
      const next: Record<string, number> = {};
@@ -265,7 +316,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
    const monthlyFinishedProductInventory = useMemo(() => {
      const next: Record<string, Record<string, number>> = {};
      LOGISTICS_PRODUCT_MAPPING.forEach(([code, product, presentation]) => {
-       const stock = parseProductionNumber(monthlyLogisticsProductStock[code.replace(/\s+/g, '').toUpperCase()]);
+       const stock = parseBoxQuantity(monthlyLogisticsProductStock[code.replace(/\s+/g, '').toUpperCase()]);
        if (!next[product]) next[product] = {};
        next[product][presentation] = (next[product][presentation] || 0) + stock;
      });
@@ -345,11 +396,11 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
       return result;
     };
  
-    const globalSalesProjection = useMemo(() => mergeNestedRecords(salesProjection, salesProjectionAW), [salesProjection, salesProjectionAW]);
-    const globalFinishedProductInventory = useMemo(() => mergeNestedRecords(finishedProductInventory, finishedProductInventoryAW), [finishedProductInventory, finishedProductInventoryAW]);
+    const globalSalesProjection = useMemo(() => mergeNestedRecords(monthlySalesProjection, salesProjectionAW), [monthlySalesProjection, salesProjectionAW]);
+    const globalFinishedProductInventory = useMemo(() => mergeNestedRecords(monthlyFinishedProductInventory, finishedProductInventoryAW), [monthlyFinishedProductInventory, finishedProductInventoryAW]);
     const globalProductionPlan = useMemo(() => mergeNestedRecords(productionPlan, productionPlanAW), [productionPlan, productionPlanAW]);
-    const globalLogisticsInventory = useMemo(() => mergeRecords(logisticsInventory, logisticsInventoryAW), [logisticsInventory, logisticsInventoryAW]);
-    const globalPlantInventory = useMemo(() => mergeRecords(plantInventory, plantInventoryAW), [plantInventory, plantInventoryAW]);
+    const globalLogisticsInventory = useMemo(() => mergeRecords(monthlyLogisticsMaterialInventory, logisticsInventoryAW), [monthlyLogisticsMaterialInventory, logisticsInventoryAW]);
+    const globalPlantInventory = useMemo(() => mergeRecords(monthlyPlantInventory, plantInventoryAW), [monthlyPlantInventory, plantInventoryAW]);
  
     const materialRequirements = useMemo(() => {
       const mdsReqSales: Record<string, number> = {};
@@ -364,9 +415,9 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
       ALL_MATERIALS_LIST.forEach(mat => {
         const code = mat.code;
         if (!code) return;
-        mdsReqSales[code] = calculateRequirementFromSource(code, salesProjection, customPackagingRecipes, customRecipes);
+        mdsReqSales[code] = calculateRequirementFromSource(code, monthlySalesProjection, customPackagingRecipes, customRecipes);
         mdsReqPlan[code] = calculateRequirementFromSource(code, productionPlan, customPackagingRecipes, customRecipes);
-        mdsStock[code] = (logisticsInventory[code] || 0) + (plantInventory[code] || 0);
+        mdsStock[code] = (monthlyLogisticsMaterialInventory[code] || 0) + (monthlyPlantInventory[code] || 0);
         awReqSales[code] = calculateRequirementFromSource(code, salesProjectionAW, customPackagingRecipes, customRecipes);
         awReqPlan[code] = calculateRequirementFromSource(code, productionPlanAW, customPackagingRecipes, customRecipes);
         awStock[code] = (logisticsInventoryAW[code] || 0) + (plantInventoryAW[code] || 0);
@@ -375,14 +426,33 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
       });
  
       return { mdsReqSales, mdsReqPlan, mdsStock, awReqSales, awReqPlan, awStock, globalReqSales, globalStock };
-    }, [salesProjection, salesProjectionAW, productionPlan, productionPlanAW, logisticsInventory, logisticsInventoryAW, plantInventory, plantInventoryAW, globalSalesProjection, globalLogisticsInventory, globalPlantInventory, customPackagingRecipes, customRecipes]);
+    }, [monthlySalesProjection, salesProjectionAW, productionPlan, productionPlanAW, monthlyLogisticsMaterialInventory, logisticsInventoryAW, monthlyPlantInventory, plantInventoryAW, globalSalesProjection, globalLogisticsInventory, globalPlantInventory, customPackagingRecipes, customRecipes]);
+
+    const semestralSalesProjection = useMemo(() => {
+      const projection: Record<string, Record<string, number>> = {};
+      Object.entries(globalSalesProjection).forEach(([product, presentations]) => {
+        projection[product] = Object.fromEntries(
+          Object.entries(presentations).map(([presentation, quantity]) => [presentation, quantity * 6]),
+        );
+      });
+      return projection;
+    }, [globalSalesProjection]);
+    const semestralProductionPlan = useMemo(() => {
+      const plan: Record<string, Record<string, number>> = {};
+      Object.entries(globalProductionPlan).forEach(([product, presentations]) => {
+        plan[product] = Object.fromEntries(
+          Object.entries(presentations).map(([presentation, quantity]) => [presentation, quantity * 6]),
+        );
+      });
+      return plan;
+    }, [globalProductionPlan]);
 
    const tabsTriggerClass = "inline-flex items-center justify-center gap-2 h-9 px-6 rounded-full font-bold text-[10px] uppercase tracking-widest data-[state=active]:bg-white data-[state=active]:text-slate-900 data-[state=active]:shadow-sm transition-none flex-shrink-0 outline-none focus:ring-0 active:scale-95 transform-none border-0 select-none";
 
-   const calculateRequirement = (code: string) => calculateRequirementFromSource(code, salesProjection, customPackagingRecipes, customRecipes);
+   const calculateRequirement = (code: string) => calculateRequirementFromSource(code, monthlySalesProjection, customPackagingRecipes, customRecipes);
 
   const renderRequirementTable = (section: 'mds' | 'aw', title: string, icon: React.ReactNode, data: any[], unit: string = 'KG', color: string = "bg-primary", maxDecimals: number = 2) => {
-    const salesProj = section === 'aw' ? salesProjectionAW : salesProjection;
+    const salesProj = section === 'aw' ? salesProjectionAW : monthlySalesProjection;
     const tableItems = data.map(item => ({
       ...item,
       requirement: calculateRequirementFromSource(item.code, salesProj, customPackagingRecipes, customRecipes)
@@ -556,7 +626,9 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                 </TableRow>
                 {group.items.map((item) => (
                   (() => {
-                    const isAutomatic = !isLogistics && section === 'mds' && MONTHLY_AUTO_CODES.has(item.code);
+                    const isAutomatic = section === 'mds' && (
+                      isLogistics || MONTHLY_AUTO_CODES.has(item.code)
+                    );
                     return (
                   <TableRow key={item.code} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100 group">
                     <TableCell className="pl-8">
@@ -579,7 +651,9 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                         }}
                         onFocus={(e) => e.target.select()}
                         disabled={isAutomatic}
-                        title={isAutomatic ? `Sincronizado desde Producción mensual (${productionMonthKey})` : undefined}
+                        title={isAutomatic
+                          ? `${isLogistics ? 'Sincronizado desde Logística mensual' : 'Sincronizado desde Producción mensual'} (${productionMonthKey})`
+                          : undefined}
                         className="h-8 text-right font-black text-sm border-none bg-slate-50 focus:bg-white rounded-lg"
                         placeholder="0.00"
                       />
@@ -749,7 +823,8 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
     headerColor: string = "bg-sky-500", 
     footerColor: string = "bg-sky-400"
   ) => {
-    const salesProj = section === 'aw' ? salesProjectionAW : salesProjection;
+    const isAutomatic = section === 'mds';
+    const salesProj = section === 'aw' ? salesProjectionAW : monthlySalesProjection;
     const updateSales = section === 'aw' ? updateSalesProjectionAW : updateSalesProjection;
 
     return (
@@ -784,8 +859,12 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                       <Input 
                         type="number"
                         value={salesProj[product]?.[presentation] === 0 ? '' : (salesProj[product]?.[presentation] ?? '')}
-                        onChange={(e) => updateSales(product, presentation, parseInt(e.target.value || '0', 10))}
+                        onChange={(e) => {
+                          if (!isAutomatic) updateSales(product, presentation, parseInt(e.target.value || '0', 10));
+                        }}
                         onFocus={(e) => e.target.select()}
+                        disabled={isAutomatic}
+                        title={isAutomatic ? `Sincronizado desde Pronóstico de Ventas (${productionMonthKey})` : undefined}
                         className="h-8 text-center font-black text-xs border-none bg-slate-50/50 focus:bg-white rounded-lg"
                         placeholder="0"
                       />
@@ -824,6 +903,9 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
               </TabsTrigger>
               <TabsTrigger value="global" className={tabsTriggerClass}>
                 <Globe className="h-3.5 w-3.5" /> Global
+              </TabsTrigger>
+              <TabsTrigger value="semestral" className={tabsTriggerClass}>
+                <Calendar className="h-3.5 w-3.5" /> Pronóstico semestral
               </TabsTrigger>
             </TabsList>
           </div>
@@ -1144,8 +1226,8 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                                    </TableCell>
                                  </TableRow>
                                  {PRESENTATIONS.map((pres) => {
-                                   const sales = salesProjection[product]?.[pres] || 0;
-                                   const inv = finishedProductInventory[product]?.[pres] || 0;
+                                   const sales = monthlySalesProjection[product]?.[pres] || 0;
+                                   const inv = monthlyFinishedProductInventory[product]?.[pres] || 0;
                                    const plan = productionPlan[product]?.[pres] || 0;
                                    return (
                                      <PlanResumenRow
@@ -1274,6 +1356,250 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                          </p>
                      </div>
                   </div>
+                </TabsContent>
+              </Tabs>
+            </TabsContent>
+
+            <TabsContent value="semestral" className="m-0 space-y-6">
+              <div className="rounded-2xl border border-[#A67B5B]/20 bg-[#A67B5B]/5 px-6 py-4">
+                <p className="text-[10px] font-black uppercase tracking-widest text-[#5C4033]">Periodo del pronóstico semestral</p>
+                <p className="mt-1 text-lg font-black text-slate-900">{semestralPeriodLabel}</p>
+                <p className="mt-1 text-[10px] font-bold uppercase tracking-wide text-slate-500">
+                  Proyecciones y requerimientos x 6 · Inventario disponible tomado del MDS en el mes inicial ({MONTH_OPTIONS[selectedMonth]} {selectedYear})
+                </p>
+              </div>
+              <Tabs defaultValue="plan-produccion" className="w-full">
+                <div className="flex items-center bg-slate-100/20 p-1 rounded-full h-11 border border-slate-200 w-fit mb-6 no-print">
+                  <TabsList className="bg-transparent h-auto p-0">
+                    <TabsTrigger value="plan-produccion" className={tabsTriggerClass}>
+                      <TrendingUp className="h-3.5 w-3.5" /> Planificación de Producción
+                    </TabsTrigger>
+                    <TabsTrigger value="requisicion" className={tabsTriggerClass}>
+                      <ClipboardCheck className="h-3.5 w-3.5" /> Requisición de Materiales
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+
+                <TabsContent value="plan-produccion" className="m-0 space-y-6">
+                  <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
+                    <div className="bg-[#A67B5B] px-8 py-5 flex items-center justify-between">
+                      <div className="flex items-center gap-4 text-white">
+                        <div className="bg-white/10 p-2.5 rounded-2xl"><ClipboardList className="h-6 w-6" /></div>
+                        <div>
+                          <h3 className="font-black uppercase text-sm tracking-widest leading-none">Resumen Consolidado de Necesidades (SEMESTRAL)</h3>
+                          <p className="text-[10px] font-bold text-slate-100/70 uppercase tracking-widest mt-1">{semestralPeriodLabel} · Inventario inicial MDS</p>
+                        </div>
+                      </div>
+                    </div>
+                    <ScrollArea className="h-[600px]">
+                      <div className="overflow-x-auto">
+                        <Table>
+                          <TableHeader className="sticky top-0 z-10 bg-white">
+                            <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-12">
+                              <TableHead className="pl-8 text-[10px] font-black text-slate-400 uppercase min-w-[250px]">Sabor / SKU</TableHead>
+                              <TableHead className="text-center text-[10px] font-black text-slate-400 uppercase w-[100px]">Formato</TableHead>
+                              <TableHead className="text-right text-[10px] font-black text-primary uppercase w-[120px]">Proy. Ventas (6 meses)</TableHead>
+                              <TableHead className="text-right text-[10px] font-black text-amber-600 uppercase w-[120px]">Inv. PT inicial</TableHead>
+                              <TableHead className="text-right text-[10px] font-black text-sky-600 uppercase w-[150px] bg-sky-50/30">Plan Producción (6 meses)</TableHead>
+                              <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[120px]">Saldo Final</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {PRODUCT_LIST.map((product) => (
+                              <React.Fragment key={product}>
+                                <TableRow className="bg-slate-100/30 hover:bg-slate-100/30 h-8 border-y border-slate-200">
+                                  <TableCell colSpan={6} className="pl-8 py-0">
+                                    <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest">{product}</span>
+                                  </TableCell>
+                                </TableRow>
+                                {PRESENTATIONS.map((pres) => {
+                                  const sales = semestralSalesProjection[product]?.[pres] || 0;
+                                  const inv = monthlyFinishedProductInventory[product]?.[pres] || 0;
+                                  const plan = semestralProductionPlan[product]?.[pres] || 0;
+                                  const balance = inv + plan - sales;
+                                  return (
+                                    <TableRow key={`${product}-${pres}`} className="hover:bg-slate-50 transition-none h-12 border-b border-slate-100 group">
+                                      <TableCell className="pl-8 py-2">
+                                        <div className="flex items-center gap-2"><ChevronRight className="h-3 w-3 text-slate-300" /><span className="text-[11px] font-black text-slate-700 uppercase leading-none">{product}</span></div>
+                                      </TableCell>
+                                      <TableCell className="text-center"><Badge variant="outline" className="text-[9px] font-black uppercase text-slate-400 border-slate-200 px-2 py-0">{pres}</Badge></TableCell>
+                                      <TableCell className="text-right font-bold text-primary tabular-nums">{sales > 0 ? sales.toLocaleString('es-ES') : '-'}</TableCell>
+                                      <TableCell className="text-right font-bold text-amber-600 tabular-nums">{inv > 0 ? inv.toLocaleString('es-ES') : '-'}</TableCell>
+                                      <TableCell className="p-1 text-right"><span className="font-black text-sm text-sky-700">{plan > 0 ? plan.toLocaleString('es-ES') : '-'}</span></TableCell>
+                                      <TableCell className={cn("text-right pr-8 font-black tabular-nums", balance < 0 ? "text-destructive" : "text-emerald-600")}>{balance.toLocaleString('es-ES')}</TableCell>
+                                    </TableRow>
+                                  );
+                                })}
+                              </React.Fragment>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    </ScrollArea>
+                  </Card>
+                </TabsContent>
+
+                <TabsContent value="requisicion" className="m-0 space-y-6">
+                  <Card className="border-slate-200 rounded-[2.5rem] overflow-hidden bg-white shadow-xl shadow-slate-200/40">
+                    <div className="bg-[#A67B5B] px-8 py-5 flex items-center gap-4 text-white">
+                      <div className="bg-white/10 p-2.5 rounded-2xl"><ShoppingCart className="h-6 w-6" /></div>
+                      <div>
+                        <h3 className="font-black uppercase text-sm tracking-widest leading-none">Explosión de Materiales y Necesidad de Compra (SEMESTRAL)</h3>
+                        <p className="text-[10px] font-bold text-slate-100/70 uppercase tracking-widest mt-1">{semestralPeriodLabel} · Requerimientos x 6, stock inicial MDS</p>
+                      </div>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow className="bg-slate-50 hover:bg-slate-50 border-b border-slate-200 h-12">
+                            <TableHead className="pl-8 text-[10px] font-black text-slate-400 uppercase min-w-[200px]">Material / Insumo</TableHead>
+                            <TableHead className="text-right text-[10px] font-black text-slate-500 uppercase w-[120px]">Req. Ventas (6 meses)</TableHead>
+                            <TableHead className="text-right text-[10px] font-black text-amber-600 uppercase w-[120px]">Stock Inicial MDS</TableHead>
+                            <TableHead className="text-right text-[10px] font-black text-sky-600 uppercase w-[140px] bg-sky-50/20">Req. s/ Plan MDS (6 meses)</TableHead>
+                            <TableHead className="text-right text-[10px] font-black text-sky-600 uppercase w-[140px] bg-sky-50/20">Req. s/ Plan AW (6 meses)</TableHead>
+                            <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[160px] bg-[#A67B5B]/5">Necesidad Compra MDS</TableHead>
+                            <TableHead className="text-right pr-8 text-[10px] font-black text-[#5C4033] uppercase w-[160px] bg-[#A67B5B]/5">Necesidad Compra AW</TableHead>
+                            <TableHead className="text-right pr-8 text-[10px] font-black text-destructive uppercase w-[160px] bg-red-50/40">Necesidad Compra Global</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {ALL_MATERIALS_LIST.map((mat) => {
+                            const code = mat.code;
+                            if (!code) return null;
+                            const reqSales = (materialRequirements.globalReqSales[code] || 0) * 6;
+                            const reqPlanMDS = (materialRequirements.mdsReqPlan[code] || 0) * 6;
+                            const reqPlanAW = (materialRequirements.awReqPlan[code] || 0) * 6;
+                            const stockMDS = materialRequirements.mdsStock[code] || 0;
+                            const stockAvailable = stockMDS;
+                            return (
+                              <GlobalRequisitionRow
+                                key={code}
+                                mat={mat}
+                                reqSales={reqSales}
+                                stockAvailable={stockAvailable}
+                                reqPlanMDS={reqPlanMDS}
+                                reqPlanAW={reqPlanAW}
+                                stockMDS={stockMDS}
+                                stockAW={0}
+                              />
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </Card>
+                </TabsContent>
+              </Tabs>
+            </TabsContent>
+            <TabsContent value="semestral" className="m-0 space-y-6">
+              <Card className="rounded-3xl border-[#A67B5B]/20 bg-[#A67B5B]/5 p-6">
+                <p className="text-[10px] font-black uppercase tracking-widest text-[#5C4033]">Pronóstico semestral · {semestralPeriodLabel}</p>
+                <p className="mt-2 text-[11px] font-bold uppercase tracking-wide text-slate-600">
+                  Proyecciones y requerimientos por seis meses. El inventario mostrado corresponde únicamente al stock MDS del mes inicial ({MONTH_OPTIONS[selectedMonth]} {selectedYear}).
+                </p>
+              </Card>
+              <Tabs defaultValue="plan-produccion" className="w-full">
+                <div className="mb-6 flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/20 p-1">
+                  <TabsList className="h-auto bg-transparent p-0">
+                    <TabsTrigger value="plan-produccion" className={tabsTriggerClass}>
+                      <TrendingUp className="h-3.5 w-3.5" /> Planificación de Producción
+                    </TabsTrigger>
+                    <TabsTrigger value="requisicion" className={tabsTriggerClass}>
+                      <ClipboardCheck className="h-3.5 w-3.5" /> Requisición de Materiales
+                    </TabsTrigger>
+                  </TabsList>
+                </div>
+                <TabsContent value="plan-produccion" className="m-0">
+                  <Card className="overflow-hidden rounded-[2.5rem] border-slate-200 bg-white shadow-xl shadow-slate-200/40">
+                    <div className="bg-[#A67B5B] px-8 py-5 text-white">
+                      <h3 className="font-black text-sm uppercase tracking-widest">Resumen Consolidado de Necesidades (Semestral)</h3>
+                      <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-slate-100/70">{semestralPeriodLabel} · Saldo inicial MDS</p>
+                    </div>
+                    <ScrollArea className="h-[600px]">
+                      <div className="overflow-x-auto">
+                        <Table>
+                          <TableHeader className="sticky top-0 z-10 bg-white">
+                            <TableRow className="h-12 border-b border-slate-200 bg-slate-50 hover:bg-slate-50">
+                              <TableHead className="min-w-[250px] pl-8 text-[10px] font-black uppercase text-slate-400">Sabor / SKU</TableHead>
+                              <TableHead className="w-[100px] text-center text-[10px] font-black uppercase text-slate-400">Formato</TableHead>
+                              <TableHead className="w-[140px] text-right text-[10px] font-black uppercase text-primary">Proy. Ventas (6 meses)</TableHead>
+                              <TableHead className="w-[120px] text-right text-[10px] font-black uppercase text-amber-600">Inv. PT inicial</TableHead>
+                              <TableHead className="w-[160px] bg-sky-50/30 text-right text-[10px] font-black uppercase text-sky-600">Plan Producción (6 meses)</TableHead>
+                              <TableHead className="w-[130px] pr-8 text-right text-[10px] font-black uppercase text-[#5C4033]">Saldo Final</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            {PRODUCT_LIST.map((product) => (
+                              <React.Fragment key={product}>
+                                <TableRow className="h-8 border-y border-slate-200 bg-slate-100/30 hover:bg-slate-100/30">
+                                  <TableCell colSpan={6} className="py-0 pl-8 text-[9px] font-black uppercase tracking-widest text-slate-500">{product}</TableCell>
+                                </TableRow>
+                                {PRESENTATIONS.map((pres) => {
+                                  const sales = semestralSalesProjection[product]?.[pres] || 0;
+                                  const inventory = monthlyFinishedProductInventory[product]?.[pres] || 0;
+                                  const plan = semestralProductionPlan[product]?.[pres] || 0;
+                                  const balance = inventory + plan - sales;
+                                  return (
+                                    <TableRow key={`${product}-${pres}`} className="h-12 border-b border-slate-100 hover:bg-slate-50">
+                                      <TableCell className="pl-8 text-[11px] font-black uppercase text-slate-700">{product}</TableCell>
+                                      <TableCell className="text-center"><Badge variant="outline" className="text-[9px] font-black uppercase">{pres}</Badge></TableCell>
+                                      <TableCell className="text-right font-bold tabular-nums text-primary">{sales ? sales.toLocaleString('es-ES') : '-'}</TableCell>
+                                      <TableCell className="text-right font-bold tabular-nums text-amber-600">{inventory ? inventory.toLocaleString('es-ES') : '-'}</TableCell>
+                                      <TableCell className="bg-sky-50/20 text-right font-black tabular-nums text-sky-700">{plan ? plan.toLocaleString('es-ES') : '-'}</TableCell>
+                                      <TableCell className={cn('pr-8 text-right font-black tabular-nums', balance < 0 ? 'text-destructive' : 'text-emerald-600')}>{balance.toLocaleString('es-ES')}</TableCell>
+                                    </TableRow>
+                                  );
+                                })}
+                              </React.Fragment>
+                            ))}
+                          </TableBody>
+                        </Table>
+                      </div>
+                    </ScrollArea>
+                  </Card>
+                </TabsContent>
+                <TabsContent value="requisicion" className="m-0">
+                  <Card className="overflow-hidden rounded-[2.5rem] border-slate-200 bg-white shadow-xl shadow-slate-200/40">
+                    <div className="bg-[#A67B5B] px-8 py-5 text-white">
+                      <h3 className="font-black text-sm uppercase tracking-widest">Explosión de Materiales y Necesidad de Compra (Semestral)</h3>
+                      <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-slate-100/70">{semestralPeriodLabel} · Requerimientos x 6 · Stock MDS del mes inicial</p>
+                    </div>
+                    <div className="overflow-x-auto">
+                      <Table>
+                        <TableHeader>
+                          <TableRow className="h-12 border-b border-slate-200 bg-slate-50 hover:bg-slate-50">
+                            <TableHead className="min-w-[200px] pl-8 text-[10px] font-black uppercase text-slate-400">Material / Insumo</TableHead>
+                            <TableHead className="w-[130px] text-right text-[10px] font-black uppercase text-slate-500">Req. Ventas (6 meses)</TableHead>
+                            <TableHead className="w-[130px] text-right text-[10px] font-black uppercase text-amber-600">Stock inicial MDS</TableHead>
+                            <TableHead className="w-[150px] bg-sky-50/20 text-right text-[10px] font-black uppercase text-sky-600">Req. Plan MDS (6 meses)</TableHead>
+                            <TableHead className="w-[150px] bg-sky-50/20 text-right text-[10px] font-black uppercase text-sky-600">Req. Plan AW (6 meses)</TableHead>
+                            <TableHead className="w-[155px] bg-[#A67B5B]/5 pr-8 text-right text-[10px] font-black uppercase text-[#5C4033]">Compra MDS (+10%)</TableHead>
+                            <TableHead className="w-[155px] bg-[#A67B5B]/5 pr-8 text-right text-[10px] font-black uppercase text-[#5C4033]">Compra AW (+10%)</TableHead>
+                            <TableHead className="w-[160px] bg-red-50/40 pr-8 text-right text-[10px] font-black uppercase text-destructive">Compra Global</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          {ALL_MATERIALS_LIST.map((mat) => {
+                            const code = mat.code;
+                            if (!code) return null;
+                            const stockMDS = materialRequirements.mdsStock[code] || 0;
+                            return (
+                              <GlobalRequisitionRow
+                                key={code}
+                                mat={mat}
+                                reqSales={(materialRequirements.globalReqSales[code] || 0) * 6}
+                                stockAvailable={stockMDS}
+                                reqPlanMDS={(materialRequirements.mdsReqPlan[code] || 0) * 6}
+                                reqPlanAW={(materialRequirements.awReqPlan[code] || 0) * 6}
+                                stockMDS={stockMDS}
+                                stockAW={0}
+                              />
+                            );
+                          })}
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </Card>
                 </TabsContent>
               </Tabs>
             </TabsContent>
@@ -1811,6 +2137,118 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                      </p>
                  </div>
               </div>
+            </TabsContent>
+          </Tabs>
+        </TabsContent>
+        <TabsContent value="semestral" className="m-0 space-y-6">
+          <Card className="rounded-3xl border-[#A67B5B]/20 bg-[#A67B5B]/5 p-6">
+            <p className="text-[10px] font-black uppercase tracking-widest text-[#5C4033]">Pronóstico semestral · {semestralPeriodLabel}</p>
+            <p className="mt-2 text-[11px] font-bold uppercase tracking-wide text-slate-600">
+              Proyección y requerimientos x 6. Inventarios tomados únicamente del MDS en el mes inicial: {MONTH_OPTIONS[selectedMonth]} {selectedYear}.
+            </p>
+          </Card>
+          <Tabs defaultValue="plan-produccion" className="w-full">
+            <div className="mb-6 flex w-fit items-center rounded-full border border-slate-200 bg-slate-100/20 p-1">
+              <TabsList className="h-auto bg-transparent p-0">
+                <TabsTrigger value="plan-produccion" className={tabsTriggerClass}>
+                  <TrendingUp className="h-3.5 w-3.5" /> Planificación de Producción
+                </TabsTrigger>
+                <TabsTrigger value="requisicion" className={tabsTriggerClass}>
+                  <ClipboardCheck className="h-3.5 w-3.5" /> Requisición de Materiales
+                </TabsTrigger>
+              </TabsList>
+            </div>
+            <TabsContent value="plan-produccion" className="m-0">
+              <Card className="overflow-hidden rounded-[2.5rem] border-slate-200 bg-white shadow-xl shadow-slate-200/40">
+                <div className="bg-[#A67B5B] px-8 py-5 text-white">
+                  <h3 className="font-black text-sm uppercase tracking-widest">Resumen Consolidado de Necesidades (Semestral)</h3>
+                  <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-slate-100/70">{semestralPeriodLabel} · Inventario inicial MDS</p>
+                </div>
+                <ScrollArea className="h-[600px]">
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader className="sticky top-0 z-10 bg-white">
+                        <TableRow className="h-12 border-b border-slate-200 bg-slate-50 hover:bg-slate-50">
+                          <TableHead className="min-w-[250px] pl-8 text-[10px] font-black uppercase text-slate-400">Sabor / SKU</TableHead>
+                          <TableHead className="w-[100px] text-center text-[10px] font-black uppercase text-slate-400">Formato</TableHead>
+                          <TableHead className="w-[140px] text-right text-[10px] font-black uppercase text-primary">Proy. Ventas (6 meses)</TableHead>
+                          <TableHead className="w-[120px] text-right text-[10px] font-black uppercase text-amber-600">Inv. PT inicial</TableHead>
+                          <TableHead className="w-[160px] bg-sky-50/30 text-right text-[10px] font-black uppercase text-sky-600">Plan Producción (6 meses)</TableHead>
+                          <TableHead className="w-[130px] pr-8 text-right text-[10px] font-black uppercase text-[#5C4033]">Saldo Final</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {PRODUCT_LIST.map((product) => (
+                          <React.Fragment key={product}>
+                            <TableRow className="h-8 border-y border-slate-200 bg-slate-100/30 hover:bg-slate-100/30">
+                              <TableCell colSpan={6} className="py-0 pl-8 text-[9px] font-black uppercase tracking-widest text-slate-500">{product}</TableCell>
+                            </TableRow>
+                            {PRESENTATIONS.map((pres) => {
+                              const sales = semestralSalesProjection[product]?.[pres] || 0;
+                              const inventory = monthlyFinishedProductInventory[product]?.[pres] || 0;
+                              const plan = semestralProductionPlan[product]?.[pres] || 0;
+                              const balance = inventory + plan - sales;
+                              return (
+                                <TableRow key={`${product}-${pres}`} className="h-12 border-b border-slate-100 hover:bg-slate-50">
+                                  <TableCell className="pl-8 text-[11px] font-black uppercase text-slate-700">{product}</TableCell>
+                                  <TableCell className="text-center"><Badge variant="outline" className="text-[9px] font-black uppercase">{pres}</Badge></TableCell>
+                                  <TableCell className="text-right font-bold tabular-nums text-primary">{sales ? sales.toLocaleString('es-ES') : '-'}</TableCell>
+                                  <TableCell className="text-right font-bold tabular-nums text-amber-600">{inventory ? inventory.toLocaleString('es-ES') : '-'}</TableCell>
+                                  <TableCell className="bg-sky-50/20 text-right font-black tabular-nums text-sky-700">{plan ? plan.toLocaleString('es-ES') : '-'}</TableCell>
+                                  <TableCell className={cn('pr-8 text-right font-black tabular-nums', balance < 0 ? 'text-destructive' : 'text-emerald-600')}>{balance.toLocaleString('es-ES')}</TableCell>
+                                </TableRow>
+                              );
+                            })}
+                          </React.Fragment>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </ScrollArea>
+              </Card>
+            </TabsContent>
+            <TabsContent value="requisicion" className="m-0">
+              <Card className="overflow-hidden rounded-[2.5rem] border-slate-200 bg-white shadow-xl shadow-slate-200/40">
+                <div className="bg-[#A67B5B] px-8 py-5 text-white">
+                  <h3 className="font-black text-sm uppercase tracking-widest">Explosión de Materiales y Necesidad de Compra (Semestral)</h3>
+                  <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-slate-100/70">{semestralPeriodLabel} · Requerimientos x 6 · Stock MDS del mes inicial</p>
+                </div>
+                <div className="overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow className="h-12 border-b border-slate-200 bg-slate-50 hover:bg-slate-50">
+                        <TableHead className="min-w-[200px] pl-8 text-[10px] font-black uppercase text-slate-400">Material / Insumo</TableHead>
+                        <TableHead className="w-[130px] text-right text-[10px] font-black uppercase text-slate-500">Req. Ventas (6 meses)</TableHead>
+                        <TableHead className="w-[130px] text-right text-[10px] font-black uppercase text-amber-600">Stock inicial MDS</TableHead>
+                        <TableHead className="w-[150px] bg-sky-50/20 text-right text-[10px] font-black uppercase text-sky-600">Req. Plan MDS (6 meses)</TableHead>
+                        <TableHead className="w-[150px] bg-sky-50/20 text-right text-[10px] font-black uppercase text-sky-600">Req. Plan AW (6 meses)</TableHead>
+                        <TableHead className="w-[155px] bg-[#A67B5B]/5 pr-8 text-right text-[10px] font-black uppercase text-[#5C4033]">Compra MDS (+10%)</TableHead>
+                        <TableHead className="w-[155px] bg-[#A67B5B]/5 pr-8 text-right text-[10px] font-black uppercase text-[#5C4033]">Compra AW (+10%)</TableHead>
+                        <TableHead className="w-[160px] bg-red-50/40 pr-8 text-right text-[10px] font-black uppercase text-destructive">Compra Global</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {ALL_MATERIALS_LIST.map((mat) => {
+                        const code = mat.code;
+                        if (!code) return null;
+                        const stockMDS = materialRequirements.mdsStock[code] || 0;
+                        return (
+                          <GlobalRequisitionRow
+                            key={code}
+                            mat={mat}
+                            reqSales={(materialRequirements.globalReqSales[code] || 0) * 6}
+                            stockAvailable={stockMDS}
+                            reqPlanMDS={(materialRequirements.mdsReqPlan[code] || 0) * 6}
+                            reqPlanAW={(materialRequirements.awReqPlan[code] || 0) * 6}
+                            stockMDS={stockMDS}
+                            stockAW={0}
+                          />
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              </Card>
             </TabsContent>
           </Tabs>
         </TabsContent>
