@@ -12639,7 +12639,8 @@
           "management",
           "logistica",
           "procesos",
-          "produccion"
+          "produccion",
+          "purchasing"
         ],
         "prodts.mds": [
           "planning",
@@ -13116,7 +13117,8 @@
           "planning"
         ],
         "prodtg.mds": [
-          "planning"
+          "planning",
+          "purchasing"
         ],
         "MDS": [
           "planning",
@@ -13159,7 +13161,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T17:54:59.614Z"
+    "updatedAt": "2026-09-27T17:59:52.807Z"
   },
   "ordenesSap": [
     {

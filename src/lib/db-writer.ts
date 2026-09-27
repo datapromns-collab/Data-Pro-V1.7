@@ -190,7 +190,7 @@ export function writeDb(mutator: (current: DbData) => DbData): Promise<void> {
       const current = readDb();
       const updated = mutator(current);
       createRotatingBackupSync();
-      writePayloadSync(updated);
+      retryWrite(updated);
     } catch (error) {
       console.error('[DB][WRITE][ERROR]', error);
       throw error;
@@ -227,6 +227,23 @@ function recoverFromBackupSync(): void {
       }
     } catch (_e) {
       continue;
+    }
+  }
+}
+
+function retryWrite(updated: DbData, retries = 4): void {
+  let attempt = 0;
+  while (true) {
+    try {
+      writePayloadSync(updated);
+      return;
+    } catch (error) {
+      const err = error as NodeJS.ErrnoException;
+      const isRetryable = err.code === 'EPERM' || err.code === 'EACCES' || err.code === 'EBUSY' || err.code === 'UNKNOWN';
+      if (!isRetryable || attempt >= retries - 1) throw error;
+      attempt++;
+      const delay = 150 * Math.pow(2, attempt - 1) + Math.floor(Math.random() * 100);
+      setTimeout(() => {}, delay);
     }
   }
 }
