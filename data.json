@@ -12377,19 +12377,48 @@
           },
           "separadores": {},
           "preformas": {
-            "EMP_0009": "",
-            "EMP_0068": "",
+            "EMP_0009": "236500",
+            "EMP_0068": "569925",
             "EMP_0093-Ultrapack": "",
             "EMP_0103-Ultrapack": "",
-            "EMP_0120-Ultrapack": "",
+            "EMP_0120-Ultrapack": "258000",
             "EMP_0126-Ultrapack": "",
-            "EMP_0135-Alpla": "",
-            "EMP_0166": ""
+            "EMP_0135-Alpla": "445500",
+            "EMP_0166": "349160",
+            "EMP_0120-Alpla": "",
+            "EMP_0126-Alpla": "522450"
           },
           "plasticos": {},
           "adhesivoCantidad": "",
           "etiquetasCantidad": {
-            "EMP_0034": ""
+            "EMP_0034": "",
+            "EMP_0022": "441,79",
+            "EMP_0026": "806,89",
+            "EMP_0030": "1031,84",
+            "EMP_0048": "1020,08",
+            "EMP_0076": "0",
+            "EMP_0101": "378,12",
+            "EMP_0077": "0",
+            "EMP_0110": "814,03",
+            "EMP_0111": "226,50",
+            "EMP_0112": "1125,20",
+            "EMP_0114": "605",
+            "EMP_0115": "459,90",
+            "EMP_0116": "219,60",
+            "EMP_0117": "720,60",
+            "EMP_0118": "0",
+            "EMP_0119": "0",
+            "EMP_0122": "0",
+            "EMP_0136": "1097,36",
+            "EMP_0137": "643,46",
+            "EMP_0142": "868",
+            "EMP_0143": "0",
+            "EMP_0144": "0",
+            "EMP_0145": "0",
+            "EMP_0146": "0",
+            "EMP_0147": "171",
+            "EMP_0148": "441,93",
+            "EMP_0149": "0"
           },
           "azucarCantidad": {},
           "concentradosCantidad": {},
@@ -12423,7 +12452,7 @@
           },
           "separadores": {},
           "preformas": {
-            "EMP_0009": "232200",
+            "EMP_0009": "236500",
             "EMP_0068": "706500",
             "EMP_0093-Ultrapack": "781886",
             "EMP_0103-Ultrapack": "484320",
@@ -13164,9 +13193,9 @@
           "produccion.inventarios.mensual.empaque": "none",
           "produccion.inventarios.mensual.materia-prima": "none",
           "produccion.inventarios.mensual.insumos": "none",
-          "produccion.inventarios.diarios": "read",
+          "produccion.inventarios.diarios": "none",
           "produccion.inventarios.mensual": "none",
-          "produccion.consumo-materiales": "write"
+          "produccion.consumo-materiales": "none"
         },
         "prodt2.mds": {
           "produccion.inventarios.diarios": "none",
@@ -13188,7 +13217,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T18:37:14.073Z"
+    "updatedAt": "2026-09-27T19:08:28.891Z"
   },
   "ordenesSap": [
     {
