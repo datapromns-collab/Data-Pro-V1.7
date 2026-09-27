@@ -12640,7 +12640,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T13:36:31.634Z"
+    "updatedAt": "2026-09-27T13:48:40.449Z"
   },
   "ordenesSap": [
     {
@@ -142010,6 +142010,25 @@
         "observaciones": "",
         "usuario": "Luis Blandin",
         "id": 1790516762734,
+        "bloqueado": true
+      },
+      {
+        "fecha": "2026-09-25",
+        "semana": 39,
+        "turno": "NOCTURNO",
+        "operador": "",
+        "linea": "Línea 3",
+        "equipo": "",
+        "tipoParada": "ADECUACIONES",
+        "inicioParada": "18:30",
+        "finParada": "19:00",
+        "totalMin": "30",
+        "zona": "Llenado",
+        "falla": "ADECUACIONES PARA EL CIP 3 PASOS ALCALINO ",
+        "orden": "",
+        "observaciones": "",
+        "usuario": "Luis Blandin",
+        "id": 1790517165557,
         "bloqueado": true
       }
     ],

@@ -4,7 +4,6 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 
 const POLL_INTERVAL = 15000;
 const PENDING_KEY = (namespace: string) => `rc_pending_${namespace}`;
-const MAX_RETRIES = 3;
 
 type PendingOperation = {
   id: string;
@@ -34,11 +33,13 @@ function loadPendingQueue<T>(namespace: string): PendingOperation[] {
   }
 }
 
-function savePendingQueue(namespace: string, queue: PendingOperation[]) {
+function savePendingQueue(namespace: string, queue: PendingOperation[]): boolean {
   try {
-    localStorage.setItem(PENDING_KEY(namespace), JSON.stringify(queue.slice(-20)));
-  } catch {
-    // ignore
+    localStorage.setItem(PENDING_KEY(namespace), JSON.stringify(queue));
+    return true;
+  } catch (error) {
+    console.error(`[RC] Failed to persist pending queue for ${namespace}`, error);
+    return false;
   }
 }
 
@@ -67,33 +68,12 @@ function deepMergeValues<T>(target: T, source: any): T {
   return result as T;
 }
 
-function deepMergeQueuePayload(a: any, b: any): any {
-  if (!a || !b || typeof a !== 'object' || typeof b !== 'object') return a ?? b;
-  const result: any = { ...a };
-  for (const key of Object.keys(b)) {
-    if (key === '_deletedIds') {
-      result[key] = Array.from(new Set([...(a[key] || []), ...(b[key] || [])]));
-      continue;
-    }
-    const aVal = a[key];
-    const bVal = b[key];
-    if (Array.isArray(aVal) && Array.isArray(bVal)) {
-      result[key] = deepMerge(aVal, bVal);
-      continue;
-    }
-    if (bVal && typeof bVal === 'object' && !Array.isArray(bVal)) {
-      result[key] = deepMergeQueuePayload(aVal, bVal);
-      continue;
-    }
-    result[key] = bVal;
-  }
-  return result;
-}
-
 export function useRemoteCollection<T = any>(namespace: string, initial: T, queryParams?: Record<string, string>) {
   const [data, setData] = useState<T>(initial);
   const [isLoaded, setIsLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [syncError, setSyncError] = useState<string | null>(null);
   const cacheKey = `rc_${namespace}`;
   const deletedKey = `rc_del_${namespace}`;
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -169,38 +149,40 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
     try {
       while (queueRef.current.length > 0) {
         const current = queueRef.current[0];
-        if (current.retries >= MAX_RETRIES) {
-          queueRef.current.shift();
-          continue;
-        }
         current.retries += 1;
         try {
           await sendToServer(current.payload);
           queueRef.current.shift();
-        } catch {
-          if (queueRef.current.length > 1) {
-            const nextPayload = queueRef.current[1].payload;
-            queueRef.current[1] = {
-              ...queueRef.current[1],
-              payload: deepMergeQueuePayload(nextPayload, current.payload),
-            };
-          }
-          queueRef.current.shift();
+          savePendingQueue(namespace, queueRef.current);
+          setSyncError(null);
+        } catch (error) {
+          console.error(`[RC] Failed to sync pending changes for ${namespace}`, error);
+          const queueSavedLocally = savePendingQueue(namespace, queueRef.current);
+          setSyncError(
+            `No se pudieron guardar los cambios compartidos de "${namespace}". Se reintentará automáticamente.` +
+            (queueSavedLocally ? '' : ' La cola tampoco pudo guardarse localmente; mantenga esta página abierta hasta confirmar la sincronización.'),
+          );
           break;
         }
       }
       if (queueRef.current.length === 0) {
-        savePendingQueue(namespace, []);
+        if (!savePendingQueue(namespace, [])) {
+          setSyncError(`No se pudo limpiar la cola local de "${namespace}" después de sincronizar.`);
+        }
         pendingRef.current = false;
       }
-    } catch {
+    } catch (error) {
+      console.error(`[RC] Unexpected synchronization failure for ${namespace}`, error);
+      setSyncError(`Ocurrió un error al sincronizar "${namespace}". Se reintentará automáticamente.`);
       pendingRef.current = true;
     } finally {
       sendingRef.current = false;
       if (queueRef.current.length > 0) {
+        const retries = queueRef.current[0]?.retries || 1;
+        const retryDelay = Math.min(1000 * 2 ** Math.min(retries - 1, 5), 30000);
         timerRef.current = setTimeout(() => {
           flushQueue();
-        }, 150);
+        }, retryDelay);
       }
     }
   }, [sendToServer, savePendingQueue, namespace]);
@@ -355,6 +337,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
       const res = await fetch(url, { cache: 'no-store' });
       console.log('[RC] GET', namespace, 'status', res.status);
       if (res.ok) {
+        setLoadError(null);
         const remoteRaw = await res.json();
         console.log('[RC] GET raw', namespace, 'keys', Array.isArray(remoteRaw) ? remoteRaw.length : Object.keys(remoteRaw).slice(0, 5));
         const remote = Array.isArray(remoteRaw)
@@ -363,11 +346,6 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
             ? remoteRaw
             : remoteRaw;
          if (remote && typeof remote === 'object') {
-          if (isFirst && queueRef.current.length > 0) {
-            queueRef.current = [];
-            savePendingQueue(namespace, []);
-            pendingRef.current = false;
-          }
           setData((prev) => {
             if (pendingRef.current) {
               console.log('[RC] GET skip because pending', namespace);
@@ -421,12 +399,15 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
         }
       } else {
         console.log('[RC] GET failed', namespace, 'status', res.status);
+        setLoadError(`No se pudieron cargar los datos compartidos de "${namespace}" (HTTP ${res.status}).`);
       }
     } catch (error) {
       console.log('[RC] GET error', namespace, error);
+      setLoadError(`No se pudieron cargar los datos compartidos de "${namespace}".`);
     }
     firstLoadRef.current = false;
     setIsLoaded(true);
+    setIsLoading(false);
     if (queueRef.current.length > 0) {
       flushQueue();
     }
@@ -456,5 +437,5 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
     load();
   }, [queryParamsKey, load]);
 
-  return { data, setData: setDataSynced, patchData, removeItem, removeKey, isLoaded, isLoading };
+  return { data, setData: setDataSynced, patchData, removeItem, removeKey, isLoaded, isLoading, loadError, syncError };
 }

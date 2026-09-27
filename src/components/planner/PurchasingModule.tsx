@@ -224,6 +224,7 @@ const sumProductionValues = (values: Record<string, unknown> | undefined, code: 
 
 export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrintResumen }: PurchasingModuleProps) {
   const [productionInventory, setProductionInventory] = useState<MonthlyProductionInventory>({});
+  const [productionInventoryError, setProductionInventoryError] = useState<string | null>(null);
   const logisticsInventoryStore = useRemoteCollection<LogisticsMonthlyData>(
     'logistica-inventario-mensual',
     { periods: {} },
@@ -266,17 +267,33 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
     plantInventoryAW,
     updatePlantInventoryAW,
     customRecipes,
-    customPackagingRecipes
+    customPackagingRecipes,
+    saveError
    } = usePlannerStore();
 
    useEffect(() => {
      let cancelled = false;
-     loadPlannerData().then((data) => {
-       if (!cancelled) setProductionInventory((data?.productionInventory as MonthlyProductionInventory) || {});
-     }).catch(() => {
-       if (!cancelled) setProductionInventory({});
-     });
-     return () => { cancelled = true; };
+     const loadProductionInventory = async () => {
+       const data = await loadPlannerData();
+       if (cancelled) return;
+       if (data?.productionInventory) {
+         setProductionInventory(data.productionInventory as MonthlyProductionInventory);
+         setProductionInventoryError(null);
+       } else {
+         setProductionInventoryError('La respuesta compartida no incluyó el inventario mensual de Producción. Se conservan los últimos datos cargados.');
+       }
+     };
+     void loadProductionInventory();
+     const interval = window.setInterval(() => { void loadProductionInventory(); }, 15000);
+     const reloadWhenVisible = () => {
+       if (document.visibilityState === 'visible') void loadProductionInventory();
+     };
+     document.addEventListener('visibilitychange', reloadWhenVisible);
+     return () => {
+       cancelled = true;
+       window.clearInterval(interval);
+       document.removeEventListener('visibilitychange', reloadWhenVisible);
+     };
    }, []);
 
    useEffect(() => {
@@ -934,6 +951,17 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
             </select>
           </div>
         </div>
+        {(saveError || productionInventoryError || logisticsInventoryStore.loadError || logisticsInventoryStore.syncError || salesForecastStore.loadError || salesForecastStore.syncError) && (
+          <div role="alert" className="mb-6 space-y-1 rounded-2xl border border-amber-300 bg-amber-50 px-5 py-4 text-[11px] font-bold text-amber-900">
+            <p className="font-black uppercase tracking-wide">Atención: sincronización de datos compartidos</p>
+            {saveError && <p>No se pudieron guardar los cambios de Compras: {saveError}</p>}
+            {productionInventoryError && <p>{productionInventoryError}</p>}
+            {logisticsInventoryStore.loadError && <p>{logisticsInventoryStore.loadError}</p>}
+            {logisticsInventoryStore.syncError && <p>{logisticsInventoryStore.syncError}</p>}
+            {salesForecastStore.loadError && <p>{salesForecastStore.loadError}</p>}
+            {salesForecastStore.syncError && <p>{salesForecastStore.syncError}</p>}
+          </div>
+        )}
 
         <TabsContent value="mds" className="m-0 space-y-6">
           <Tabs defaultValue="ventas" className="w-full">
