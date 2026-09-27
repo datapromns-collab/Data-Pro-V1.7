@@ -12573,7 +12573,8 @@
           "purchasing",
           "seguimiento",
           "procesos",
-          "ordenes-sap"
+          "ordenes-sap",
+          "insumos"
         ],
         "demon": [
           "planning",
@@ -13146,15 +13147,18 @@
         },
         "g.tec.mds": {
           "planning.calculator": "write",
-          "planning.speeds": "read"
+          "planning.speeds": "read",
+          "logistica.monthly-inventory": "none"
         },
         "prodtj.mds": {
-          "management.control": "none"
+          "management.control": "none",
+          "logistica.monthly-inventory": "none"
         },
         "prodtg.mds": {
           "produccion.inventarios": "read",
           "produccion.recepciones": "read",
-          "produccion.consumo-materiales": "read"
+          "produccion.consumo-materiales": "read",
+          "logistica.monthly-inventory": "none"
         },
         "prodt1.mds": {
           "produccion.inventarios.mensual.empaque": "none",
@@ -13172,12 +13176,18 @@
           "produccion.inventarios.diarios": "none",
           "produccion.inventarios.mensual": "none",
           "produccion.consumo-materiales": "none"
+        },
+        "maria.mds": {
+          "logistica.monthly-inventory": "none"
+        },
+        "alex.mds": {
+          "logistica.monthly-inventory": "none"
         }
       }
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T18:03:27.325Z"
+    "updatedAt": "2026-09-27T18:14:00.569Z"
   },
   "ordenesSap": [
     {
