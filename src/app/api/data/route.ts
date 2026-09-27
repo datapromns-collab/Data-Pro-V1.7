@@ -220,6 +220,36 @@ export async function POST(request: Request) {
       }
       if (incomingPlanner.productionInventory) {
         merged.productionInventory = deepMerge(merged.productionInventory, incomingPlanner.productionInventory);
+
+        const incomingWaste = incomingPlanner.productionInventory.mermasDesperdicios;
+        if (incomingWaste && typeof incomingWaste === 'object' && !Array.isArray(incomingWaste)) {
+          const mergedWaste = { ...(merged.productionInventory.mermasDesperdicios || {}) };
+          (['mermas', 'desperdicios'] as const).forEach((section) => {
+            const incomingDays = incomingWaste[section];
+            if (!incomingDays || typeof incomingDays !== 'object' || Array.isArray(incomingDays)) return;
+            const mergedDays = { ...(mergedWaste[section] || {}) };
+            Object.entries(incomingDays).forEach(([date, rows]) => {
+              if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Array.isArray(rows)) return;
+              const validRows = rows.every((row: any) =>
+                row &&
+                typeof row === 'object' &&
+                typeof row.id === 'string' &&
+                typeof row.line === 'string' &&
+                typeof row.flavor === 'string' &&
+                typeof row.code === 'string' &&
+                typeof row.material === 'string' &&
+                typeof row.quantity === 'string' &&
+                typeof row.unit === 'string'
+              );
+              if (validRows) mergedDays[date] = rows;
+            });
+            mergedWaste[section] = mergedDays;
+          });
+          merged.productionInventory = {
+            ...merged.productionInventory,
+            mermasDesperdicios: mergedWaste,
+          };
+        }
       }
       if (incomingPlanner.users && Array.isArray(incomingPlanner.users)) {
         merged.users = deepMerge(Array.isArray(merged.users) ? merged.users : [], incomingPlanner.users);

@@ -13400,7 +13400,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-27T21:33:33.629Z"
+    "updatedAt": "2026-09-27T21:35:35.019Z"
   },
   "ordenesSap": [
     {
@@ -163188,8 +163188,8 @@
     "filename": "stock-producto-terminado.xlsx",
     "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  08.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 35195,
-    "uploadedAt": "2026-09-27T15:43:09.981Z",
+    "tamano": 35017,
+    "uploadedAt": "2026-09-27T21:35:35.019Z",
     "uploadedBy": "local-user"
   }
 }

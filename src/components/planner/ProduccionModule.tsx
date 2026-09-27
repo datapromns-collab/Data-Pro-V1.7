@@ -1,12 +1,110 @@
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeftRight, Box, CalendarDays, CalendarIcon, CalendarRange, Droplets, Package, Recycle, Truck } from 'lucide-react';
+import { ArrowLeftRight, Box, CalendarDays, CalendarIcon, CalendarRange, Droplets, FileDown, Package, Recycle, Truck } from 'lucide-react';
 import { addDays, format, getISOWeek, getISOWeekYear, setISOWeek, startOfISOWeek, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
+import jsPDF from 'jspdf';
 import { cn } from '@/lib/utils';
 import { loadPlannerData, savePlannerData } from '@/lib/json-db';
+import { useAuthStore } from '@/hooks/use-auth-store';
 
+type WasteSectionKey = 'mermas' | 'desperdicios';
+type WasteTableRow = {
+  id: string;
+  line: string;
+  flavor: string;
+  code: string;
+  material: string;
+  quantity: string;
+  unit: string;
+};
+type WasteProduct = { code: string; material: string };
+type WasteTablesBySection = Record<WasteSectionKey, Record<string, WasteTableRow[]>>;
+
+const WASTE_PRODUCTS_BY_LINE: Record<string, Record<string, WasteProduct>> = {
+  'Linea 1': {
+    'GLUP COLA': { code: 'ENV-00001', material: 'BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS' },
+    'GLUP UVA': { code: 'ENV-00005', material: 'BOTELLA ENVASADA GLUP UVA  2.0.LTS' },
+    'GLUP PIÑA': { code: 'ENV-00009', material: 'BOTELLA ENVASADA GLUP PIÑA 2.0.LTS' },
+    'GLUP FRESH': { code: 'ENV-00013', material: 'BOTELLA ENVASADA GLUP FRESH 2.0.LTS' },
+    'GLUP KOLITA': { code: 'ENV-00017', material: 'BOTELLA ENVASADA GLUP KOLITA 2.0.LTS' },
+    'GLUP NARANJA': { code: 'ENV-00021', material: 'BOTELLA ENVASADA GLUP NARANJA 2.0 LTS' },
+    'GLUP MANZANA': { code: 'ENV-00053', material: 'BOTELLA ENVASADA GLUP MANZANA VERDE  2.0.LTS' },
+    'GLUP MANZANA ROJA': { code: 'ENV-00085', material: 'BOTELLA ENVASADA MANZANA ROJA 2.0 L (LINEA 1)' },
+    'GLUP PIÑA PARCHITA': { code: 'ENV-00089', material: 'BOTELLA ENVASADA PIÑA PARCHITA 2.0 L (LINEA 1)' },
+  },
+  'Linea 2': {
+    'GLUP COLA': { code: 'ENV-00038', material: 'BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (EN LINEA 2)' },
+    'GLUP UVA': { code: 'ENV-00039', material: 'BOTELLA ENVASADA GLUP UVA  2.0.LTS  (EN LINEA 2)' },
+    'GLUP KOLITA': { code: 'ENV-00040', material: 'BOTELLA ENVASADA GLUP KOLITA 2.0.LTS  (EN LINEA 2)' },
+    'GLUP NARANJA': { code: 'ENV-00041', material: 'BOTELLA ENVASADA GLUP NARANJA 2.0 LTS  (EN LINEA 2)' },
+    'GLUP PIÑA': { code: 'ENV-00042', material: 'BOTELLA ENVASADA GLUP PIÑA 2.0.LTS  (EN LINEA 2)' },
+    'GLUP FRESH': { code: 'ENV-00043', material: 'BOTELLA ENVASADA GLUP FRESH 2.0.LTS  (EN LINEA 2)' },
+    'GLUP MANZANA': { code: 'ENV-00046', material: 'BOTELLA ENVASADA GLUP MANZANA VERDE  2.0.LTS  (LINEA 2)' },
+    'GLUP MANZANA ROJA': { code: 'ENV-00086', material: 'BOTELLA ENVASADA MANZANA ROJA 2.0 L (LINEA 2)' },
+    'GLUP PIÑA PARCHITA': { code: 'ENV-00090', material: 'BOTELLA ENVASADA PIÑA PARCHITA 2.0 L (LINEA 2)' },
+  },
+  'Linea 3': {
+    'GLUP COLA': { code: 'ENV-00063', material: 'BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)' },
+    'GLUP UVA': { code: 'ENV-00064', material: 'BOTELLA ENVASADA GLUP UVA 2L (LINEA 3)' },
+    'GLUP KOLITA': { code: 'ENV-00065', material: 'BOTELLA ENVASADA GLUP KOLITA 2L (LINEA 3)' },
+    'GLUP FRESH': { code: 'ENV-00066', material: 'BOTELLA ENVASADA GLUP FRESH 2L (LINEA 3)' },
+    'GLUP MANZANA': { code: 'ENV-00067', material: 'BOTELLA ENVASADA GLUP MANZANA VERDE 2L (LINEA 3)' },
+    'GLUP PIÑA': { code: 'ENV-00083', material: 'BOTELLA ENVASADA PIÑA 2.0 L (LINEA 3)' },
+    'GLUP MANZANA ROJA': { code: 'ENV-00087', material: 'BOTELLA ENVASADA MANZANA ROJA 2.0 L (LINEA 3)' },
+    'GLUP PIÑA PARCHITA': { code: 'ENV-00091', material: 'BOTELLA ENVASADA PIÑA PARCHITA 2.0 L (LINEA 3)' },
+    'GLUP NARANJA': { code: 'ENV-00093', material: 'BOTELLA ENVASADA GLUP NARANJA 2.0 LTS  (EN LINEA 3)' },
+  },
+  'Linea 4': {
+    'GLUP COLA': { code: 'ENV-00054', material: 'BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)' },
+    'GLUP UVA': { code: 'ENV-00055', material: 'BOTELLA ENVASADA GLUP UVA  2.0.LTS(LINEA 4)' },
+    'GLUP KOLITA': { code: 'ENV-00056', material: 'BOTELLA ENVASADA GLUP KOLITA 2.0.LTS (LINEA 4)' },
+    'GLUP FRESH': { code: 'ENV-00057', material: 'BOTELLA ENVASADA GLUP FRESH 2.0.LTS(LINEA 4)' },
+    'GLUP MANZANA': { code: 'ENV-00058', material: 'BOTELLA ENVASADA GLUP MANZANA VERDE  2.0.LTS  (LINEA 4)' },
+    'GLUP PIÑA': { code: 'ENV-00084', material: 'BOTELLA ENVASADA PIÑA 2.0 L (LINEA 4)' },
+    'GLUP MANZANA ROJA': { code: 'ENV-00088', material: 'BOTELLA ENVASADA MANZANA ROJA 2.0 L (LINEA 4)' },
+    'GLUP PIÑA PARCHITA': { code: 'ENV-00092', material: 'BOTELLA ENVASADA PIÑA PARCHITA 2.0 L (LINEA 4)' },
+    'GLUP NARANJA': { code: 'ENV-00094', material: 'BOTELLA ENVASADA GLUP NARANJA 2.0 LTS  (EN LINEA 4)' },
+  },
+  'Linea 5': {
+    'JUSTY NARANJA': { code: 'ENV-00027', material: 'BOTELLA ENVASADA JUSTY NARANJA  1.5 LTS' },
+    'JUSTY DURAZNO': { code: 'ENV-00095', material: 'BOTELLA ENVASADA JUSTY DURAZNO 1.5 LTS' },
+    'JUSTY PERA': { code: 'ENV-00108', material: 'BOTELLA ENVASADA JUSTY PERA 1.5 LTS' },
+    'JUSTY MANZANA': { code: 'ENV-00107', material: 'BOTELLA ENVASADA JUSTY MANZANA 1.5 LTS' },
+    'JUSTY MANDARINA': { code: 'ENV-00105', material: 'BOTELLA ENVASADA JUSTY MANDARINA 1.5 LTS' },
+    'JUSTY SANDIA': { code: 'ENV-00104', material: 'BOTELLA ENVASADA JUSTY SANDIA 1.5 LTS' },
+    'JUSTY TAMARINDO': { code: 'ENV-00106', material: 'BOTELLA ENVASADA JUSTY TAMARINDO 1.5 LTS' },
+    'VITA TEA DURAZNO': { code: 'ENV-00033', material: 'BOTELLA ENVASADA  VITA TEA  (DURAZNO)  1.5 LTS' },
+    'VITA TEA LIMON': { code: 'ENV-00034', material: 'BOTELLA ENVASADA  VITA TEA  (LIMON)  1.5 LTS' },
+  },
+  'Linea 6': {
+    'GLUP COLA': { code: 'ENV-00048', material: 'BOTELLA ENVASADA GLUP COLA NEGRA 400 ML (LINEA 6)' },
+    'GLUP UVA': { code: 'ENV-00059', material: 'BOTELLA ENVASADA GLUP UVA 400 ML (LINEA 6)' },
+    'GLUP FRESH': { code: 'ENV-00060', material: 'BOTELLA ENVASADA GLUP FRESH 400 ML (LINEA 6)' },
+    'GLUP KOLITA': { code: 'ENV-00061', material: 'BOTELLA ENVASADA GLUP KOLITA 400 ML (LINEA 6)' },
+    'GLUP MANZANA': { code: 'ENV-00062', material: 'BOTELLA ENVASADA GLUP MANZANA VERDE 400 ML (LINEA 6)' },
+    'GLUP PIÑA': { code: 'ENV-00096', material: 'BOTELLA ENVASADA GLUP PIÑA 400 ML (LINEA 6)' },
+    'GLUP NARANJA': { code: 'ENV-00097', material: 'BOTELLA ENVASADA GLUP NARANJA 400 ML (LINEA 6)' },
+    'GLUP PIÑA PARCHITA': { code: 'ENV-00098', material: 'BOTELLA ENVASADA GLUP PIÑA PARCHITA 400 ML (LINEA 6)' },
+    'GLUP MANZANA ROJA': { code: 'ENV-00099', material: 'BOTELLA ENVASADA GLUP MANZANA ROJA 400 ML (LINEA 6)' },
+  },
+  'Linea 7': {
+    'GLUP COLA': { code: 'ENV-00078', material: 'BOTELLA ENVASADA GLUP COLA NEGRA 1.0 L (LINEA 7)' },
+    'GLUP UVA': { code: 'ENV-00079', material: 'BOTELLA ENVASADA GLUP UVA 1.0 L (LINEA 7)' },
+    'GLUP KOLITA': { code: 'ENV-00080', material: 'BOTELLA ENVASADA GLUP KOLITA 1.0 L (LINEA 7)' },
+    'GLUP FRESH': { code: 'ENV-00081', material: 'BOTELLA ENVASADA GLUP FRESH 1.0 L (LINEA 7)' },
+    'GLUP MANZANA': { code: 'ENV-00082', material: 'BOTELLA ENVASADA GLUP MANZANA VERDE 1.0 L (LINEA 7)' },
+    'GLUP PIÑA': { code: 'ENV-00100', material: 'BOTELLA ENVASADA GLUP PIÑA 1.0 L (LINEA 7)' },
+    'GLUP NARANJA': { code: 'ENV-00101', material: 'BOTELLA ENVASADA GLUP NARANJA 1.0 L (LINEA 7)' },
+    'GLUP PIÑA PARCHITA': { code: 'ENV-00102', material: 'BOTELLA ENVASADA GLUP PIÑA PARCHITA 1.0 L (LINEA 7)' },
+    'GLUP MANZANA ROJA': { code: 'ENV-00103', material: 'BOTELLA ENVASADA GLUP MANZANA ROJA 1.0 L (LINEA 7)' },
+  },
+};
+
+const findWasteFlavor = (line: string, code: string): string => (
+  Object.entries(WASTE_PRODUCTS_BY_LINE[line] || {}).find(([, product]) => product.code === code)?.[0] || ''
+);
 type ProductionTableValues = {
   tapas: Record<string, { totalCajas: string; total: string }>;
   separadores: Record<string, string>;
@@ -66,6 +164,7 @@ const emptySharedProductionValues = (): SharedProductionValues => ({
 });
 
 const EMPTY_PRODUCTION_DATA = emptyProductionValues();
+const EMPTY_WASTE_TABLES: WasteTablesBySection = { mermas: {}, desperdicios: {} };
 const MONTHLY_INVENTORY_MONTH_KEY = 'planner_monthly_inventory_month_v1';
 const PRODUCTION_VALUE_KEYS = [
   'tapas',
@@ -102,6 +201,24 @@ const normalizeProductionValues = (value: Partial<ProductionTableValues> | undef
   solidosCantidad: { ...emptyProductionValues().solidosCantidad, ...(value?.solidosCantidad || {}) },
   quimicosInsumosCantidad: { ...emptyProductionValues().quimicosInsumosCantidad, ...(value?.quimicosInsumosCantidad || {}) },
 });
+
+const normalizeWasteRows = (value: unknown): WasteTableRow[] => {
+  if (!Array.isArray(value)) return [];
+  return value
+    .filter((row): row is Record<string, unknown> => !!row && typeof row === 'object' && !Array.isArray(row))
+    .map((row) => ({
+      id: typeof row.id === 'string' ? row.id : '',
+      line: typeof row.line === 'string' ? row.line : '',
+      flavor: typeof row.flavor === 'string' && row.flavor
+        ? row.flavor
+        : findWasteFlavor(typeof row.line === 'string' ? row.line : '', typeof row.code === 'string' ? row.code : ''),
+      code: typeof row.code === 'string' ? row.code : '',
+      material: typeof row.material === 'string' ? row.material : '',
+      quantity: typeof row.quantity === 'string' ? row.quantity : '',
+      unit: typeof row.unit === 'string' ? row.unit : '',
+    }))
+    .filter((row) => row.id);
+};
 
 const sumNumericValues = (values: string[]): string => {
   const total = values.reduce((sum, value) => {
@@ -152,12 +269,19 @@ interface ProduccionModuleProps {
 }
 
 export default function ProduccionModule({ weeklyOnly = false }: ProduccionModuleProps) {
+  const { user } = useAuthStore();
   const [activeProduccionSection, setActiveProduccionSection] = useState<'inventarios' | 'recepciones' | 'consumo-materiales' | 'mermas-desperdicios'>('inventarios');
   const [activeRecepcionesSubSection, setActiveRecepcionesSubSection] = useState<'diarias' | 'resumen-semanal'>('diarias');
   const [activeMermasSubSection, setActiveMermasSubSection] = useState<'mermas' | 'desperdicios' | 'resumen-semanal' | 'resumen-mensual'>('mermas');
   const [mermasFecha, setMermasFecha] = useState<Date>(() => new Date());
   const [mermasSemanalFecha, setMermasSemanalFecha] = useState<Date>(() => new Date());
   const [mermasMensualMes, setMermasMensualMes] = useState<Date>(() => new Date());
+  const [wasteTablesBySection, setWasteTablesBySection] = useState<WasteTablesBySection>(EMPTY_WASTE_TABLES);
+  const [wasteDraftRows, setWasteDraftRows] = useState<WasteTableRow[]>([]);
+  const [wasteEditingKey, setWasteEditingKey] = useState<string | null>(null);
+  const [wasteSaveStatus, setWasteSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
+  const [wasteSaveStatusKey, setWasteSaveStatusKey] = useState<string | null>(null);
+  const [wastePdfStatus, setWastePdfStatus] = useState<'idle' | 'generating' | 'error'>('idle');
   const [recepcionesDiariasFecha, setRecepcionesDiariasFecha] = useState<Date>(() => new Date());
   const [recepcionesSemanalFecha, setRecepcionesSemanalFecha] = useState<Date>(() => new Date());
   const [inventariosSubTab, setInventariosSubTab] = useState<'diarios' | 'semanal' | 'mensual'>(weeklyOnly ? 'semanal' : 'diarios');
@@ -194,6 +318,14 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const activePeriodData = productionByPeriod[inventariosSubTab][activePeriodKey] || EMPTY_PRODUCTION_DATA;
   const receptionsDailyPeriodKey = format(recepcionesDiariasFecha, 'yyyy-MM-dd');
   const receptionWeekStart = startOfWeek(recepcionesSemanalFecha, { weekStartsOn: 1 });
+  const wasteSectionKey: WasteSectionKey | null = activeMermasSubSection === 'mermas' || activeMermasSubSection === 'desperdicios'
+    ? activeMermasSubSection
+    : null;
+  const wasteDateKey = format(mermasFecha, 'yyyy-MM-dd');
+  const activeWasteKey = wasteSectionKey ? `${wasteSectionKey}:${wasteDateKey}` : null;
+  const activeWasteRows = wasteSectionKey ? wasteTablesBySection[wasteSectionKey][wasteDateKey] || [] : [];
+  const canEditWasteTables = user?.id === 'maria.mds' || user?.id === 'alex.mds';
+  const isWasteEditing = activeWasteKey !== null && wasteEditingKey === activeWasteKey;
   const activeReceptionData = activeRecepcionesSubSection === 'diarias'
     ? receptionsByPeriod.diarias[receptionsDailyPeriodKey] || EMPTY_PRODUCTION_DATA
     : summarizeReceptionDays(
@@ -249,6 +381,18 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
         });
       });
       setReceptionsByPeriod(nextReceptions);
+      const storedWaste = persisted?.mermasDesperdicios || {};
+      const nextWasteTables: WasteTablesBySection = { mermas: {}, desperdicios: {} };
+      (['mermas', 'desperdicios'] as WasteSectionKey[]).forEach((section) => {
+        const storedDays = storedWaste[section];
+        if (!storedDays || typeof storedDays !== 'object' || Array.isArray(storedDays)) return;
+        Object.entries(storedDays).forEach(([date, rows]) => {
+          nextWasteTables[section][date] = normalizeWasteRows(rows).map((row) => (
+            section === 'mermas' ? { ...row, unit: 'UND' } : row
+          ));
+        });
+      });
+      setWasteTablesBySection(nextWasteTables);
       setProductionLoaded(true);
       setProductionLoadStatus('ready');
       } catch (error) {
@@ -386,6 +530,248 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
         [activePeriodKey]: update(prev[inventariosSubTab][activePeriodKey] || emptyProductionValues()),
       },
     }));
+  };
+
+  const startWasteEntry = () => {
+    if (!activeWasteKey || !wasteSectionKey) return;
+    setWasteDraftRows(activeWasteRows.length > 0
+      ? activeWasteRows.map((row) => ({ ...row, unit: wasteSectionKey === 'mermas' ? 'UND' : row.unit }))
+      : [{ id: crypto.randomUUID(), line: '', flavor: '', code: '', material: '', quantity: '', unit: wasteSectionKey === 'mermas' ? 'UND' : '' }]);
+    setWasteEditingKey(activeWasteKey);
+    setWasteSaveStatus('idle');
+    setWasteSaveStatusKey(activeWasteKey);
+  };
+
+  const updateWasteDraftRow = (rowId: string, field: keyof Omit<WasteTableRow, 'id'>, value: string) => {
+    setWasteDraftRows((rows) => rows.map((row) => row.id === rowId ? { ...row, [field]: value } : row));
+  };
+
+  const updateWasteLine = (rowId: string, line: string) => {
+    setWasteDraftRows((rows) => rows.map((row) => row.id === rowId
+      ? { ...row, line, flavor: '', code: '', material: '' }
+      : row));
+  };
+
+  const updateWasteFlavor = (rowId: string, flavor: string) => {
+    setWasteDraftRows((rows) => rows.map((row) => {
+      if (row.id !== rowId) return row;
+      const product = WASTE_PRODUCTS_BY_LINE[row.line]?.[flavor];
+      return { ...row, flavor, code: product?.code || '', material: product?.material || '' };
+    }));
+  };
+
+  const addWasteDraftRow = () => {
+    setWasteDraftRows((rows) => [...rows, {
+      id: crypto.randomUUID(),
+      line: '',
+      flavor: '',
+      code: '',
+      material: '',
+      quantity: '',
+      unit: wasteSectionKey === 'mermas' ? 'UND' : '',
+    }]);
+  };
+
+  const removeWasteDraftRow = (rowId: string) => {
+    setWasteDraftRows((rows) => rows.filter((row) => row.id !== rowId));
+  };
+
+  const exportWasteTicketsPdf = async (section: WasteSectionKey) => {
+    const rows = wasteTablesBySection[section][wasteDateKey];
+    if (!rows?.length) return;
+    setWastePdfStatus('generating');
+    try {
+      const logoResponse = await fetch('/Logo-MDS.png');
+      if (!logoResponse.ok) throw new Error(`Unable to load MDS logo: HTTP ${logoResponse.status}`);
+      const logoBlob = await logoResponse.blob();
+      const logoData = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('Unable to read MDS logo for PDF'));
+        reader.onload = () => {
+          if (typeof reader.result !== 'string') {
+            reject(new Error('Invalid MDS logo data'));
+            return;
+          }
+          resolve(reader.result);
+        };
+        reader.readAsDataURL(logoBlob);
+      });
+
+      const pageWidth = 210;
+      const pageHeight = 297;
+      const halfHeight = pageHeight / 2;
+      const margin = 8;
+      const columns = [
+        { title: 'N°', width: 10 },
+        { title: 'LINEA', width: 20 },
+        { title: 'CODIGO', width: 30 },
+        { title: 'MATERIAL', width: 94 },
+        { title: 'CANTIDAD', width: 24 },
+        { title: 'UM', width: 16 },
+      ];
+      const measurementPdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      measurementPdf.setFont('helvetica', 'normal');
+      measurementPdf.setFontSize(7);
+      const materialWidth = columns[3].width - 2;
+      const measuredRows = rows.map((row, index) => {
+        const materialLines = measurementPdf.splitTextToSize(row.material || '', materialWidth);
+        const rowHeight = Math.max(5.5, materialLines.length * 3 + 1.5);
+        return { row, index, materialLines, rowHeight };
+      });
+      const tableTopOffset = 36;
+      const tableHeaderHeight = 8;
+      const tableBottomOffset = 130;
+      const availableRowsHeight = tableBottomOffset - tableTopOffset - tableHeaderHeight;
+      const requestedRowsHeight = measuredRows.reduce((height, item) => height + item.rowHeight, 0);
+      const rowScale = Math.min(1, availableRowsHeight / Math.max(requestedRowsHeight, 1));
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const isMermasReport = section === 'mermas';
+      const headerFillColor = isMermasReport ? [59, 130, 246] : [134, 239, 172];
+      const headerBorderColor = isMermasReport ? [30, 64, 175] : [22, 101, 52];
+      const headerTextColor = isMermasReport ? [255, 255, 255] : [20, 83, 45];
+
+      const addTicket = (copyLabel: string, top: number) => {
+        pdf.setFillColor(255, 255, 255);
+        pdf.rect(0, top, pageWidth, halfHeight, 'F');
+        pdf.addImage(logoData, 'PNG', margin, top + 5, 45, 13);
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(12);
+        pdf.text(isMermasReport ? 'REPORTE DE MERMA' : 'REPORTE DE DESPERDICIOS', pageWidth - margin, top + 10, { align: 'right' });
+        pdf.setFontSize(9);
+        pdf.text(copyLabel, pageWidth - margin, top + 17, { align: 'right' });
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(8);
+        pdf.text(`Fecha: ${format(mermasFecha, 'dd/MM/yyyy')}`, margin, top + 27);
+        pdf.text(`Emitido: ${format(new Date(), 'dd/MM/yyyy HH:mm')}`, pageWidth - margin, top + 27, { align: 'right' });
+
+        let x = margin;
+        let y = top + tableTopOffset;
+        const tableWidth = columns.reduce((width, column) => width + column.width, 0);
+        pdf.setFillColor(headerFillColor[0], headerFillColor[1], headerFillColor[2]);
+        pdf.rect(margin, y, tableWidth, tableHeaderHeight, 'F');
+        pdf.setDrawColor(headerBorderColor[0], headerBorderColor[1], headerBorderColor[2]);
+        pdf.setLineWidth(0.35);
+        pdf.line(margin, y, margin + tableWidth, y);
+        pdf.line(margin, y + tableHeaderHeight, margin + tableWidth, y + tableHeaderHeight);
+        pdf.line(margin, y, margin, y + tableHeaderHeight);
+        x = margin;
+        columns.forEach((column) => {
+          x += column.width;
+          pdf.line(x, y, x, y + tableHeaderHeight);
+        });
+        pdf.setFont('helvetica', 'bold');
+        pdf.setFontSize(8);
+        pdf.setTextColor(headerTextColor[0], headerTextColor[1], headerTextColor[2]);
+        x = margin;
+        columns.forEach((column) => {
+          pdf.text(column.title, x + column.width / 2, y + 5.5, {
+            align: 'center',
+            baseline: 'middle',
+            maxWidth: column.width - 1,
+          });
+          x += column.width;
+        });
+        y += tableHeaderHeight;
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(Math.max(4, 7 * rowScale));
+        pdf.setTextColor(15, 23, 42);
+        pdf.setDrawColor(100, 116, 139);
+        pdf.setLineWidth(0.3);
+        measuredRows.forEach(({ row, index, rowHeight }) => {
+          const fittedRowHeight = rowHeight * rowScale;
+          const fittedLines = measurementPdf.splitTextToSize(row.material || '', materialWidth);
+          const values = [
+            String(index + 1),
+            row.line,
+            row.code,
+            fittedLines,
+            row.quantity,
+            isMermasReport ? 'UND' : row.unit,
+          ];
+          x = margin;
+          columns.forEach((column, columnIndex) => {
+            pdf.rect(x, y, column.width, fittedRowHeight);
+            const value = values[columnIndex];
+            if (Array.isArray(value)) {
+              pdf.text(value, x + 1, y + Math.min(3.4, fittedRowHeight / 2 + 1), { maxWidth: column.width - 2 });
+            } else {
+              pdf.text(value || '', x + (columnIndex === 0 || columnIndex === 4 || columnIndex === 5 ? column.width / 2 : 1), y + fittedRowHeight / 2 + 1, {
+                align: columnIndex === 0 || columnIndex === 4 || columnIndex === 5 ? 'center' : 'left',
+                maxWidth: column.width - 2,
+              });
+            }
+            x += column.width;
+          });
+          y += fittedRowHeight;
+        });
+
+        pdf.setFont('helvetica', 'normal');
+        pdf.setFontSize(8);
+        pdf.text('Entregado por: __________________________', margin, top + 139);
+        pdf.text('Recibido por: __________________________', pageWidth - margin, top + 139, { align: 'right' });
+        pdf.setFontSize(7);
+        pdf.text('Firma y fecha', margin + 18, top + 144);
+        pdf.text('Firma y fecha', pageWidth - margin - 18, top + 144, { align: 'right' });
+      };
+
+      addTicket('COPIA - PRODUCCION', 0);
+      addTicket('COPIA - LOGISTICA', halfHeight);
+      pdf.setDrawColor(15, 23, 42);
+      pdf.setLineWidth(0.6);
+      pdf.setLineDashPattern([2, 1.5], 0);
+      pdf.line(0, halfHeight, pageWidth, halfHeight);
+      pdf.setLineDashPattern([], 0);
+      const reportPrefix = isMermasReport ? 'Merma' : 'Desperdicio';
+      pdf.save(`${reportPrefix}_${wasteDateKey}_Produccion_Logistica.pdf`);
+      setWastePdfStatus('idle');
+    } catch (error) {
+      console.error('[PRODUCCION] Failed to generate waste PDF tickets', error);
+      setWastePdfStatus('error');
+    }
+  };
+
+  const saveWasteEntry = async () => {
+    if (!activeWasteKey || !wasteSectionKey || !isWasteEditing) return;
+    setWasteSaveStatus('saving');
+    setWasteSaveStatusKey(activeWasteKey);
+    try {
+      const rowsToSave = wasteDraftRows.map((row) => ({
+        ...row,
+        unit: wasteSectionKey === 'mermas' ? 'UND' : row.unit,
+      }));
+      const existing = await loadPlannerData();
+      if (!existing) throw new Error('Unable to load shared data before saving waste table');
+      const storedWaste = existing.productionInventory?.mermasDesperdicios || {};
+      const storedSection = storedWaste[wasteSectionKey] || {};
+      await savePlannerData({
+        productionInventory: {
+          ...(existing.productionInventory || {}),
+          mermasDesperdicios: {
+            ...storedWaste,
+            [wasteSectionKey]: {
+              ...storedSection,
+              [wasteDateKey]: rowsToSave,
+            },
+          },
+        },
+      });
+      setWasteTablesBySection((tables) => ({
+        ...tables,
+        [wasteSectionKey]: {
+          ...tables[wasteSectionKey],
+          [wasteDateKey]: rowsToSave,
+        },
+      }));
+      setWasteEditingKey(null);
+      setWasteSaveStatus('saved');
+    } catch (error) {
+      console.error('[PRODUCCION] Failed to save waste table', {
+        section: wasteSectionKey,
+        date: wasteDateKey,
+        error,
+      });
+      setWasteSaveStatus('error');
+    }
   };
 
   const updateActiveReception: ProductionUpdater = (update) => {
@@ -1988,7 +2374,223 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                 </select>
               </div>
             )}
-            <div className="flex-1 min-h-0 bg-white rounded-[2.5rem]" />
+            {(activeMermasSubSection === 'mermas' || activeMermasSubSection === 'desperdicios') && (
+              <div className="flex-1 min-h-0 overflow-auto bg-white rounded-[2.5rem] p-4">
+                {(() => {
+                  const section = activeMermasSubSection;
+                  const rows = isWasteEditing ? wasteDraftRows : activeWasteRows;
+                  const isMermas = section === 'mermas';
+                  const hasSavedTable = Object.prototype.hasOwnProperty.call(wasteTablesBySection[section], wasteDateKey);
+                  const headerColor = isMermas
+                    ? 'bg-blue-700 text-white'
+                    : 'bg-green-700 text-white';
+                  return (
+                    <div className="overflow-x-auto rounded-2xl border border-slate-200">
+                      <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3">
+                        <h3 className="text-xs font-black uppercase tracking-widest text-slate-700">
+                          {isMermas ? 'Mermas' : 'Desperdicios'} - {format(mermasFecha, 'dd/MM/yyyy')}
+                        </h3>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => void exportWasteTicketsPdf(section)}
+                            disabled={!hasSavedTable || activeWasteRows.length === 0 || wastePdfStatus === 'generating' || isWasteEditing}
+                            className="inline-flex items-center gap-1.5 rounded-full bg-slate-700 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-white disabled:opacity-50"
+                          >
+                            <FileDown className="h-3.5 w-3.5" />
+                            {wastePdfStatus === 'generating' ? 'Generando PDF…' : 'Reporte PDF'}
+                          </button>
+                          {isWasteEditing ? (
+                            <>
+                              <button
+                                type="button"
+                                onClick={addWasteDraftRow}
+                                className="h-8 w-8 rounded-full bg-slate-100 text-lg font-bold text-slate-800"
+                                aria-label="Agregar fila"
+                                title="Agregar fila"
+                              >
+                                +
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => void saveWasteEntry()}
+                                disabled={wasteSaveStatus === 'saving'}
+                                className={cn(
+                                  'rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white disabled:opacity-50',
+                                  isMermas ? 'bg-blue-700' : 'bg-green-700'
+                                )}
+                              >
+                                {wasteSaveStatus === 'saving' ? 'Guardando…' : 'Listo'}
+                              </button>
+                            </>
+                          ) : hasSavedTable ? (
+                            canEditWasteTables && (
+                              <button
+                                type="button"
+                                onClick={startWasteEntry}
+                                className="rounded-full bg-slate-900 px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white"
+                              >
+                                Editar
+                              </button>
+                            )
+                          ) : (
+                            <button
+                              type="button"
+                              onClick={startWasteEntry}
+                              className={cn(
+                                'rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white',
+                                isMermas ? 'bg-blue-700' : 'bg-green-700'
+                              )}
+                            >
+                              Cargar
+                            </button>
+                          )}
+                        </div>
+                      </div>
+                      {wasteSaveStatusKey === activeWasteKey && wasteSaveStatus !== 'idle' && (
+                        <div className={cn(
+                          'px-4 py-2 text-[10px] font-bold',
+                          wasteSaveStatus === 'error' ? 'text-red-600' : 'text-slate-500'
+                        )}>
+                          {wasteSaveStatus === 'saving' ? 'Guardando cambios…' : wasteSaveStatus === 'saved' ? 'Cambios guardados' : 'Error al guardar. Pulsa Listo para reintentar.'}
+                        </div>
+                      )}
+                      {wastePdfStatus === 'error' && (
+                        <div role="alert" className="px-4 py-2 text-[10px] font-bold text-red-600">
+                          No se pudo generar el PDF. Verifica que el logo esté disponible e inténtalo de nuevo.
+                        </div>
+                      )}
+                      <table className="w-full border-collapse text-left text-xs">
+                        <thead>
+                          <tr className={headerColor}>
+                            <th className="w-12 px-3 py-3 text-center font-black uppercase tracking-widest">{isMermas ? 'N' : 'N°'}</th>
+                            <th className="w-28 px-3 py-3 font-black uppercase tracking-widest">LINEA</th>
+                            <th className="w-32 px-3 py-3 font-black uppercase tracking-widest">CODIGO</th>
+                            <th className="px-3 py-3 font-black uppercase tracking-widest">MATERIAL</th>
+                            <th className="w-36 px-3 py-3 text-center font-black uppercase tracking-widest">CANTIDAD</th>
+                            <th className="w-24 px-3 py-3 font-black uppercase tracking-widest">UM</th>
+                            {isWasteEditing && <th className="w-28 px-4 py-3 font-black uppercase tracking-widest">Acciones</th>}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {rows.map((row, rowIndex) => (
+                            <tr key={row.id} className="border-b border-slate-200 last:border-b-0">
+                              <td className="px-3 py-2">
+                                <input
+                                  type="text"
+                                  value={rowIndex + 1}
+                                  readOnly
+                                  className="w-full bg-transparent px-1 py-1 text-center outline-none"
+                                  aria-label="Número de fila"
+                                />
+                              </td>
+                              <td className="px-3 py-2">
+                                <select
+                                  value={row.line}
+                                  onChange={(event) => updateWasteLine(row.id, event.target.value)}
+                                  disabled={!isWasteEditing}
+                                  className="w-full bg-transparent px-1 py-1 outline-none disabled:appearance-none disabled:text-slate-700"
+                                  aria-label="Línea"
+                                >
+                                  <option value="">Seleccionar línea</option>
+                                  {Array.from({ length: 7 }, (_, lineIndex) => `Linea ${lineIndex + 1}`).map((line) => (
+                                    <option key={line} value={line}>{line}</option>
+                                  ))}
+                                </select>
+                              </td>
+                              <td className="px-3 py-2">
+                                {isMermas ? (
+                                  isWasteEditing ? (
+                                    <div>
+                                      <select
+                                        value={row.flavor}
+                                        onChange={(event) => updateWasteFlavor(row.id, event.target.value)}
+                                        disabled={!row.line}
+                                        className="w-full bg-transparent px-1 py-1 outline-none disabled:text-slate-400"
+                                        aria-label="Código"
+                                      >
+                                        <option value="">Seleccionar producto</option>
+                                        {Object.keys(WASTE_PRODUCTS_BY_LINE[row.line] || {}).map((flavor) => (
+                                          <option key={flavor} value={flavor}>{flavor}</option>
+                                        ))}
+                                      </select>
+                                      {row.code && <span className="block px-1 text-[10px] text-slate-500">{row.code}</span>}
+                                    </div>
+                                  ) : (
+                                    <span className="block px-1 py-1 text-slate-700">{row.code}</span>
+                                  )
+                                ) : (
+                                  <input
+                                    type="text"
+                                    value={row.code}
+                                    onChange={(event) => updateWasteDraftRow(row.id, 'code', event.target.value)}
+                                    readOnly={!isWasteEditing}
+                                    className="w-full bg-transparent px-1 py-1 outline-none read-only:text-slate-700"
+                                    aria-label="Código"
+                                  />
+                                )}
+                              </td>
+                              <td className="px-3 py-2">
+                                {isMermas ? (
+                                  <span className="block px-1 py-1 text-slate-700">{row.material}</span>
+                                ) : (
+                                  <input
+                                    type="text"
+                                    value={row.material}
+                                    onChange={(event) => updateWasteDraftRow(row.id, 'material', event.target.value)}
+                                    readOnly={!isWasteEditing}
+                                    className="w-full bg-transparent px-1 py-1 outline-none read-only:text-slate-700"
+                                    aria-label="Material"
+                                  />
+                                )}
+                              </td>
+                              <td className="px-3 py-2">
+                                <input
+                                  type="text"
+                                  value={row.quantity}
+                                  onChange={(event) => updateWasteDraftRow(row.id, 'quantity', event.target.value)}
+                                  readOnly={!isWasteEditing}
+                                  className="w-full bg-transparent px-1 py-1 text-center outline-none read-only:text-slate-700"
+                                  aria-label="Cantidad"
+                                />
+                              </td>
+                              <td className="px-3 py-2">
+                                {isMermas ? (
+                                  <span className="block px-1 py-1 text-center text-slate-700">UND</span>
+                                ) : (
+                                  <input
+                                    type="text"
+                                    value={row.unit}
+                                    onChange={(event) => updateWasteDraftRow(row.id, 'unit', event.target.value)}
+                                    readOnly={!isWasteEditing}
+                                    className="w-full bg-transparent px-1 py-1 text-center outline-none read-only:text-slate-700"
+                                    aria-label="Unidad de medida"
+                                  />
+                                )}
+                              </td>
+                              {isWasteEditing && (
+                                <td className="px-3 py-2 text-center">
+                                  <button
+                                    type="button"
+                                    onClick={() => removeWasteDraftRow(row.id)}
+                                    className="rounded-full px-2 py-1 text-[10px] font-bold text-red-700 hover:bg-red-50"
+                                  >
+                                    Eliminar
+                                  </button>
+                                </td>
+                              )}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  );
+                })()}
+              </div>
+            )}
+            {activeMermasSubSection !== 'mermas' && activeMermasSubSection !== 'desperdicios' && (
+              <div className="flex-1 min-h-0 bg-white rounded-[2.5rem]" />
+            )}
           </div>
         ) : (
           <div className="flex-1 min-h-0 bg-white rounded-[2.5rem]" />
