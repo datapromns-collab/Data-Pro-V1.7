@@ -14013,11 +14013,229 @@
       },
       "mermasDesperdicios": {
         "mermas": {
-          "2026-09-27": [],
-          "2026-09-28": []
+          "2026-09-27": [
+            {
+              "id": "eaec4d0f-01a4-46cf-afda-c8f45b3271d8",
+              "line": "Linea 1",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00013",
+              "material": "BOTELLA ENVASADA GLUP FRESH 2.0.LTS",
+              "quantity": "210",
+              "unit": "UND"
+            },
+            {
+              "id": "34140f45-f5ee-43d3-9ccf-109ca1b0b5bc",
+              "line": "Linea 2",
+              "flavor": "GLUP KOLITA",
+              "code": "ENV-00040",
+              "material": "BOTELLA ENVASADA GLUP KOLITA 2.0.LTS  (EN LINEA 2)",
+              "quantity": "78",
+              "unit": "UND"
+            },
+            {
+              "id": "27a4f9cb-40e7-4212-9630-f2d96d866b4e",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00063",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)",
+              "quantity": "169",
+              "unit": "UND"
+            }
+          ],
+          "2026-09-28": [],
+          "2026-09-26": [
+            {
+              "id": "f8ebb307-57ef-4429-94a4-980ea4d56976",
+              "line": "Linea 1",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00013",
+              "material": "BOTELLA ENVASADA GLUP FRESH 2.0.LTS",
+              "quantity": "259",
+              "unit": "UND"
+            },
+            {
+              "id": "79c10bd8-8ed4-4168-bbea-d94f918ae8d7",
+              "line": "Linea 2",
+              "flavor": "GLUP KOLITA",
+              "code": "ENV-00040",
+              "material": "BOTELLA ENVASADA GLUP KOLITA 2.0.LTS  (EN LINEA 2)",
+              "quantity": "112",
+              "unit": "UND"
+            },
+            {
+              "id": "cf26cd69-512e-40b3-a215-74b0228508f6",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00063",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)",
+              "quantity": "140",
+              "unit": "UND"
+            },
+            {
+              "id": "1c391930-22c5-42c0-9675-ab87a17a2c0d",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00054",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)",
+              "quantity": "168",
+              "unit": "UND"
+            },
+            {
+              "id": "5e010d35-5bf4-40a4-8bf6-142c3ac29e0a",
+              "line": "Linea 5",
+              "flavor": "JUSTY DURAZNO",
+              "code": "ENV-00095",
+              "material": "BOTELLA ENVASADA JUSTY DURAZNO 1.5 LTS",
+              "quantity": "144",
+              "unit": "UND"
+            },
+            {
+              "id": "d6707a12-a50d-4e45-b96f-82416481dccf",
+              "line": "Linea 7",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00081",
+              "material": "BOTELLA ENVASADA GLUP FRESH 1.0 L (LINEA 7)",
+              "quantity": "288",
+              "unit": "UND"
+            }
+          ]
         },
         "desperdicios": {
-          "2026-09-28": []
+          "2026-09-28": [],
+          "2026-09-26": [
+            {
+              "id": "5493a17b-b401-4791-8cb8-c51768d714b7",
+              "line": "Linea 1",
+              "flavor": "verde",
+              "code": "EMP_0103",
+              "material": "PREFORMA VERDE 42,64 GR-1881",
+              "quantity": "2110",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "c635e959-7494-4af3-b598-10615bd79a3f",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "0.35",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "36a14cb2-8074-45cf-9d67-63ddc734adf6",
+              "line": "Linea 2",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "1990",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "8d1d8630-db12-4f33-946c-cee32e1ccb7b",
+              "line": "Linea 2",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "3.20",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "f0abe23d-65a1-461e-848b-0d00bf71bfda",
+              "line": "Linea 3",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "1617",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "975e8e4f-b462-43f9-83a2-7fecffad0c5d",
+              "line": "Linea 3",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2.60",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "fa5d4bd5-3273-4fa5-b78b-b674fd7d9d57",
+              "line": "Linea 4",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "2720",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "2f2781e4-db0c-43ec-a042-b275b2331dcf",
+              "line": "Linea 4",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "4",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "4e6952e9-e7a9-464d-918e-edcebb04d5af",
+              "line": "Linea 5",
+              "flavor": "transparente",
+              "code": "EMP_0068",
+              "material": "PREFORMA TRANSPARENTE 36 GR-1881",
+              "quantity": "2027",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "3b34dfe8-bc05-49b9-bbcf-9728d911107f",
+              "line": "Linea 5",
+              "flavor": "",
+              "code": "EMP_0017",
+              "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
+              "quantity": "2.5",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "ba683980-8711-4589-ad5e-e50fd4ae0e88",
+              "line": "Linea 7",
+              "flavor": "verde",
+              "code": "EMP_0120",
+              "material": "PREFORMA VERDE 29.6GR 1881",
+              "quantity": "3545",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "31e94031-555f-4af5-b8e3-278e38280176",
+              "line": "Linea 7",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "1.5",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            }
+          ]
         }
       }
     },
@@ -14602,9 +14820,7 @@
           "ordenes-sap",
           "seguimiento"
         ],
-        "jaime.r": [
-          "produccion"
-        ],
+        "jaime.r": [],
         "demon2": []
       },
       "sections": {
@@ -14664,7 +14880,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-28T11:58:18.839Z"
+    "updatedAt": "2026-09-28T12:30:12.570Z"
   },
   "ordenesSap": [
     {
@@ -35935,6 +36151,77 @@
             "preparado": "63",
             "final": "27.83"
           }
+        },
+        "2026-09-25": {
+          "GLUP COLA": {
+            "inicial": "59.47",
+            "preparado": "30",
+            "final": "52.2"
+          },
+          "GLUP FRESH": {
+            "inicial": "16.69",
+            "preparado": "18",
+            "final": "12.60"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "13",
+            "preparado": "140",
+            "final": "15"
+          },
+          "GLUP PIÑA": {
+            "inicial": "10",
+            "preparado": "",
+            "final": "8"
+          },
+          "GLUP KOLITA": {
+            "inicial": "27.83",
+            "preparado": "18",
+            "final": "22.50"
+          }
+        },
+        "2026-09-26": {
+          "GLUP COLA": {
+            "inicial": "52.25",
+            "preparado": "18",
+            "final": "27.22"
+          },
+          "GLUP FRESH": {
+            "inicial": "12.60",
+            "preparado": "12",
+            "final": "10.10"
+          },
+          "JUSTY DURAZNO": {
+            "inicial": "15",
+            "preparado": "40",
+            "final": ""
+          },
+          "GLUP PIÑA": {
+            "inicial": "8",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "22.50",
+            "preparado": "90",
+            "final": "48.65"
+          }
+        },
+        "2026-09-27": {
+          "GLUP COLA": {
+            "inicial": "27.22",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "10.10",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "48.65",
+            "preparado": "",
+            "final": ""
+          }
         }
       },
       "sugar": {
@@ -36876,6 +37163,72 @@
             "recepcionSacos": "1600",
             "invFinalSacos": "840"
           }
+        },
+        "2026-09-25": {
+          "PORTUGUESA": {
+            "invInicialSacos": "5720",
+            "recepcionSacos": "",
+            "invFinalSacos": "5720"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "920",
+            "recepcionSacos": "",
+            "invFinalSacos": "920"
+          },
+          "PASTORA": {
+            "invInicialSacos": "1600",
+            "recepcionSacos": "",
+            "invFinalSacos": "1120"
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "840",
+            "recepcionSacos": "3000",
+            "invFinalSacos": "1240"
+          }
+        },
+        "2026-09-26": {
+          "PORTUGUESA": {
+            "invInicialSacos": "5720",
+            "recepcionSacos": "",
+            "invFinalSacos": "4880"
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "920",
+            "recepcionSacos": "",
+            "invFinalSacos": "920"
+          },
+          "PASTORA": {
+            "invInicialSacos": "1120",
+            "recepcionSacos": "2720",
+            "invFinalSacos": "3480"
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "1240",
+            "recepcionSacos": "1400",
+            "invFinalSacos": "400"
+          }
+        },
+        "2026-09-27": {
+          "PORTUGUESA": {
+            "invInicialSacos": "4880",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "920",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "PASTORA": {
+            "invInicialSacos": "3480",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "MONTALBAN": {
+            "invInicialSacos": "400",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
         }
       },
       "tanques": {
@@ -37696,6 +38049,36 @@
           },
           "Sala 1": {
             "invInicialSacos": "468",
+            "invFinalSacos": ""
+          }
+        },
+        "2026-09-25": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "418",
+            "invFinalSacos": "348"
+          },
+          "KITS PREP.": {
+            "invInicialSacos": "",
+            "invFinalSacos": "717"
+          }
+        },
+        "2026-09-26": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "348",
+            "invFinalSacos": "232"
+          },
+          "KITS PREP.": {
+            "invInicialSacos": "717",
+            "invFinalSacos": "183"
+          }
+        },
+        "2026-09-27": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "232",
+            "invFinalSacos": ""
+          },
+          "KITS PREP.": {
+            "invInicialSacos": "183",
             "invFinalSacos": ""
           }
         }
@@ -152940,7 +153323,7 @@
         "turno": "DIURNO",
         "solicitante": "",
         "linea": "Línea 7",
-        "maquina": "OPERACIONAL",
+        "maquina": "PALETIZADORA",
         "aviso": "",
         "fechaParada": "2026-09-07",
         "inicioMtto": "",
@@ -154362,7 +154745,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1790350708206,
+        "id": 1790363183629.9106,
         "fechaOrden": "2026-09-21",
         "orden": "9620",
         "fechaEmision": "2026-09-21",
@@ -154385,11 +154768,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790351374299,
+        "id": 1790363183629.5747,
         "fechaOrden": "2026-09-21",
         "orden": "9621",
         "fechaEmision": "2026-09-21",
@@ -154412,7 +154795,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": false,
+        "bloqueado": true,
         "usuario": "Luis Blandin"
       },
       {

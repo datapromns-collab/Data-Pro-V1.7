@@ -128,7 +128,7 @@ export function useAuthStore() {
             ? payload.users
             : null;
 
-        if (remoteUsers) {
+        if (remoteUsers?.length) {
           syncUsersList(remoteUsers);
         }
       } catch (error) {

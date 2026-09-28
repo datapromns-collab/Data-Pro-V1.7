@@ -100,7 +100,12 @@ export async function GET(request: Request) {
       });
     }
     if (section === 'users') {
-      return new Response(JSON.stringify({ users: data.planner?.users ?? [] }), {
+      const users = Array.isArray(data.planner?.users)
+        ? data.planner.users
+        : Array.isArray(data.users)
+          ? data.users
+          : undefined;
+      return new Response(JSON.stringify(users ? { users } : {}), {
         status: 200,
         headers: { 'content-type': 'application/json' },
       });
