@@ -14820,9 +14820,7 @@
           "ordenes-sap",
           "seguimiento"
         ],
-        "jaime.r": [
-          "produccion"
-        ],
+        "jaime.r": [],
         "demon2": []
       },
       "sections": {
@@ -14882,7 +14880,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-28T12:26:56.521Z"
+    "updatedAt": "2026-09-28T12:45:19.420Z"
   },
   "ordenesSap": [
     {
