@@ -765,8 +765,28 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
     const values = rows
       .map((row) => row[column].trim())
       .filter((value) => value !== '');
+    const text = values.join('\n');
     try {
-      await navigator.clipboard.writeText(values.join('\n'));
+      if (navigator.clipboard?.writeText) {
+        try {
+          await navigator.clipboard.writeText(text);
+          setWasteCopyStatus(column === 'code' ? 'code-copied' : 'quantity-copied');
+          return;
+        } catch {
+          // Fall back for browsers that expose Clipboard API but deny access on HTTP.
+        }
+      }
+
+      const textarea = document.createElement('textarea');
+      textarea.value = text;
+      textarea.setAttribute('readonly', '');
+      textarea.style.position = 'fixed';
+      textarea.style.opacity = '0';
+      document.body.appendChild(textarea);
+      textarea.select();
+      const copied = document.execCommand('copy');
+      document.body.removeChild(textarea);
+      if (!copied) throw new Error('Browser refused to copy text to the clipboard');
       setWasteCopyStatus(column === 'code' ? 'code-copied' : 'quantity-copied');
     } catch (error) {
       console.error(`[PRODUCCION] Failed to copy waste ${column} values`, error);

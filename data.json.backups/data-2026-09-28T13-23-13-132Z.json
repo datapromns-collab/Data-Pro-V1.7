@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-31T00:00:00.000",
+      "weekStartDate": "2026-09-28T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -14235,6 +14235,74 @@
               "kind": "termo",
               "preformSize": ""
             }
+          ],
+          "2026-09-27": [
+            {
+              "id": "db07366b-b598-4821-84ac-5bac984700bb",
+              "line": "Linea 1",
+              "flavor": "verde",
+              "code": "EMP_0103",
+              "material": "PREFORMA VERDE 42,64 GR-1881",
+              "quantity": "1618",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "bab56adf-56c9-4b80-9bae-49fa3d72062f",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "1",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "d86ce521-de8a-40da-804b-45db7c8d4694",
+              "line": "Linea 2",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "50",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "68565f20-e0c9-4b6a-a2b7-1768e4f2fe13",
+              "line": "Linea 2",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "3.5",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "f4dd83dd-8072-4206-9879-3ffbf198692c",
+              "line": "Linea 3",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "1266",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "9d938052-f0f9-40b9-823f-7135a4bb4a32",
+              "line": "Linea 3",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2.5",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            }
           ]
         }
       }
@@ -14880,7 +14948,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-28T12:44:12.877Z"
+    "updatedAt": "2026-09-28T13:07:51.091Z"
   },
   "ordenesSap": [
     {
@@ -24326,10 +24394,10 @@
           "fechaInicio": "2026-09-27",
           "ticket1": "17989",
           "cajas1": 6160,
-          "ticket2": "",
+          "ticket2": "17990",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1448,
           "ticket4": "",
           "cajas4": 0
         }
@@ -36209,18 +36277,22 @@
         "2026-09-27": {
           "GLUP COLA": {
             "inicial": "27.22",
-            "preparado": "",
-            "final": ""
+            "preparado": "42",
+            "final": "62."
           },
           "GLUP FRESH": {
             "inicial": "10.10",
-            "preparado": "",
-            "final": ""
+            "preparado": "6",
+            "final": "10.29"
           },
           "GLUP KOLITA": {
             "inicial": "48.65",
-            "preparado": "",
-            "final": ""
+            "preparado": "18",
+            "final": "54.57"
+          },
+          "JUSTY NARANJA": {
+            "preparado": "40",
+            "final": "40"
           }
         }
       },
@@ -37212,17 +37284,17 @@
           "PORTUGUESA": {
             "invInicialSacos": "4880",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "4280"
           },
           "IMPORTADA 1": {
             "invInicialSacos": "920",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "920"
           },
           "PASTORA": {
             "invInicialSacos": "3480",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "2640"
           },
           "MONTALBAN": {
             "invInicialSacos": "400",
@@ -38059,6 +38131,10 @@
           },
           "KITS PREP.": {
             "invInicialSacos": "",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "",
             "invFinalSacos": "717"
           }
         },
@@ -38068,18 +38144,26 @@
             "invFinalSacos": "232"
           },
           "KITS PREP.": {
+            "invInicialSacos": "",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
             "invInicialSacos": "717",
-            "invFinalSacos": "183"
+            "invFinalSacos": "1832"
           }
         },
         "2026-09-27": {
           "JARABE SIMPLE": {
             "invInicialSacos": "232",
-            "invFinalSacos": ""
+            "invFinalSacos": "368"
           },
           "KITS PREP.": {
-            "invInicialSacos": "183",
+            "invInicialSacos": "",
             "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "1832",
+            "invFinalSacos": "1370"
           }
         }
       },

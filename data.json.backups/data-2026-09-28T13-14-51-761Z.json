@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-31T00:00:00.000",
+      "weekStartDate": "2026-09-28T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -14948,7 +14948,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-28T12:48:42.656Z"
+    "updatedAt": "2026-09-28T13:07:51.091Z"
   },
   "ordenesSap": [
     {
@@ -24394,10 +24394,10 @@
           "fechaInicio": "2026-09-27",
           "ticket1": "17989",
           "cajas1": 6160,
-          "ticket2": "",
+          "ticket2": "17990",
           "cajas2": 0,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1448,
           "ticket4": "",
           "cajas4": 0
         }
@@ -36277,18 +36277,22 @@
         "2026-09-27": {
           "GLUP COLA": {
             "inicial": "27.22",
-            "preparado": "",
-            "final": ""
+            "preparado": "42",
+            "final": "62."
           },
           "GLUP FRESH": {
             "inicial": "10.10",
-            "preparado": "",
-            "final": ""
+            "preparado": "6",
+            "final": "10.29"
           },
           "GLUP KOLITA": {
             "inicial": "48.65",
-            "preparado": "",
-            "final": ""
+            "preparado": "18",
+            "final": "54.57"
+          },
+          "JUSTY NARANJA": {
+            "preparado": "40",
+            "final": "40"
           }
         }
       },
@@ -37280,17 +37284,17 @@
           "PORTUGUESA": {
             "invInicialSacos": "4880",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "4280"
           },
           "IMPORTADA 1": {
             "invInicialSacos": "920",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "92"
           },
           "PASTORA": {
             "invInicialSacos": "3480",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "2640"
           },
           "MONTALBAN": {
             "invInicialSacos": "400",
@@ -38127,7 +38131,11 @@
           },
           "KITS PREP.": {
             "invInicialSacos": "",
-            "invFinalSacos": "717"
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "",
+            "invFinalSacos": "71"
           }
         },
         "2026-09-26": {
@@ -38136,18 +38144,26 @@
             "invFinalSacos": "232"
           },
           "KITS PREP.": {
+            "invInicialSacos": "",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
             "invInicialSacos": "717",
-            "invFinalSacos": "183"
+            "invFinalSacos": "1832"
           }
         },
         "2026-09-27": {
           "JARABE SIMPLE": {
             "invInicialSacos": "232",
-            "invFinalSacos": ""
+            "invFinalSacos": "368"
           },
           "KITS PREP.": {
-            "invInicialSacos": "183",
+            "invInicialSacos": "",
             "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "1832",
+            "invFinalSacos": "1370"
           }
         }
       },
