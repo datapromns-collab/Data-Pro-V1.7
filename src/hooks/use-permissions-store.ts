@@ -262,6 +262,7 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
   planning: [
     { id: 'gantt', label: 'Programación' },
     { id: 'daily', label: 'Plan día a día' },
+    { id: 'plan-semana', label: 'Plan Semana' },
     { id: 'preparation', label: 'Preparación' },
     { id: 'requirement', label: 'Requerimiento' },
     { id: 'speeds', label: 'Velocidades' },
@@ -380,7 +381,11 @@ export const PERMISSION_SECTIONS: Record<ModuleId, PermissionSection[]> = {
     { id: 'sala-jarabe', label: 'Sala de jarabe' },
   ],
   calidad: [{ id: 'quality', label: 'Módulo de Calidad en Desarrollo' }],
-  mtto: [{ id: 'maintenance', label: 'Módulo MTTO en Desarrollo' }],
+  mtto: [{ id: 'co2', label: 'CO2', children: [
+    { id: 'daily', label: 'Consumo diario' },
+    { id: 'weekly', label: 'Resumen semanal' },
+    { id: 'monthly', label: 'Resumen mensual' },
+  ] }],
   insumos: [
     { id: 'co2', label: 'CO2' },
     { id: 'agua', label: 'Agua' },
