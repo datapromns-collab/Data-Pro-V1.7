@@ -11188,6 +11188,30 @@
             "name": "GLUP FRESH",
             "lineId": "1",
             "loadPerHour": 1500,
+            "quantity": 64500,
+            "durationHours": 43,
+            "presentation": "2Lts",
+            "tanks": 7.48,
+            "startTime": "2026-10-01T14:00:00.000Z",
+            "endTime": "2026-10-03T09:00:00.000Z",
+            "id": "d2fnvwawz",
+            "color": "#10b981"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-10-01T20:30:00.000Z",
+            "endTime": "2026-10-01T22:30:00.000Z",
+            "id": "776no98sf",
+            "color": "#587593"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "1",
+            "loadPerHour": 1500,
             "quantity": 71250,
             "durationHours": 47.5,
             "presentation": "2Lts",
@@ -11434,38 +11458,14 @@
             "name": "GLUP PIÑA",
             "lineId": "1",
             "loadPerHour": 1500,
-            "quantity": 34500,
-            "durationHours": 23,
+            "quantity": 33000,
+            "durationHours": 22,
             "presentation": "2Lts",
-            "tanks": 4.75,
+            "tanks": 4.54,
             "startTime": "2026-09-30T11:00:00.000Z",
-            "endTime": "2026-10-01T10:00:00.000Z",
+            "endTime": "2026-10-01T09:00:00.000Z",
             "id": "wrcv2t59v",
             "color": "#6366f1"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "1",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-10-01T10:00:00.000Z",
-            "endTime": "2026-10-01T12:00:00.000Z",
-            "id": "femht50gw",
-            "color": "#ec4899"
-          },
-          {
-            "name": "GLUP FRESH",
-            "lineId": "1",
-            "loadPerHour": 1500,
-            "quantity": 67500,
-            "durationHours": 45,
-            "presentation": "2Lts",
-            "tanks": 7.83,
-            "startTime": "2026-10-01T12:00:00.000Z",
-            "endTime": "2026-10-03T09:00:00.000Z",
-            "id": "ng454p6bu",
-            "color": "#10b981"
           },
           {
             "name": "CS",
@@ -11493,8 +11493,8 @@
           },
           {
             "name": "OTROS",
-            "description": "inventario mensual",
-            "lineId": "2",
+            "description": "inv M\nCIP 3p",
+            "lineId": "1",
             "loadPerHour": 0,
             "quantity": 0,
             "durationHours": 5,
@@ -11517,6 +11517,17 @@
             "color": "#587593"
           },
           {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-10-02T10:30:00.000Z",
+            "endTime": "2026-10-02T11:00:00.000Z",
+            "id": "g44hdcke9",
+            "color": "#6366f1"
+          },
+          {
             "name": "GLUP KOLITA",
             "lineId": "2",
             "loadPerHour": 2500,
@@ -11524,10 +11535,34 @@
             "durationHours": 22.5,
             "presentation": "2Lts",
             "tanks": 6.32,
-            "startTime": "2026-10-02T10:30:00.000Z",
-            "endTime": "2026-10-03T09:00:00.000Z",
-            "id": "ag7g40th6",
+            "startTime": "2026-10-02T11:00:00.000Z",
+            "endTime": "2026-10-03T09:30:00.000Z",
+            "id": "pu5b86ya4",
             "color": "#587593"
+          },
+          {
+            "name": "OTROS",
+            "description": "inv M\nCIP 3p",
+            "lineId": "1",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 5,
+            "startTime": "2026-10-01T09:00:00.000Z",
+            "endTime": "2026-10-01T14:00:00.000Z",
+            "id": "4keeno49x",
+            "color": "#10b981"
+          },
+          {
+            "name": "OTROS",
+            "description": "inv M\nCIP 3p",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 5,
+            "startTime": "2026-10-01T09:00:00.000Z",
+            "endTime": "2026-10-01T14:00:00.000Z",
+            "id": "lsljanngc",
+            "color": "#f59e0b"
           }
         ],
         "realProduction": {},
@@ -11557,7 +11592,10 @@
           "tno02v6fu",
           "xxcbzbxv3",
           "brdu1sr2j",
-          "a6lnx92yi"
+          "a6lnx92yi",
+          "ng454p6bu",
+          "femht50gw",
+          "ag7g40th6"
         ]
       }
     },
@@ -15061,7 +15099,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-28T15:04:17.401Z"
+    "updatedAt": "2026-09-28T15:09:53.103Z"
   },
   "ordenesSap": [
     {
