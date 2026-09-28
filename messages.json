@@ -1,6 +1,28 @@
 {
   "messages": [
     {
+      "id": "2026-09-28T18:44:23.982Z-v6avya3",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-09-28T18:44:23.982Z"
+    },
+    {
+      "id": "2026-09-28T18:39:27.728Z-x5okm1m",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "jaime.r",
+      "read": false,
+      "createdAt": "2026-09-28T18:39:27.728Z"
+    },
+    {
       "id": "2026-09-25T20:15:10.226Z-70l4g04",
       "title": "PSP S40",
       "message": "Ya disponible los arranques del PDP S40",
@@ -89,26 +111,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-e62m47c",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-o17fkdj",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
-      "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "recipient": "demon2",
+      "read": true,
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-5ox4vya",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-41dszex",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "jaime.r",
+      "recipient": "demon2",
       "read": true,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-8zh67n0",
@@ -199,6 +221,28 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
+      "id": "2026-09-28T18:44:23.982Z-dt18cg6",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-09-28T18:44:23.982Z"
+    },
+    {
+      "id": "2026-09-28T18:39:27.728Z-hjkvph2",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
+      "senderId": "demon",
+      "senderName": "Yonny Hernández",
+      "recipient": "maria.mds",
+      "read": true,
+      "createdAt": "2026-09-28T18:39:27.728Z"
+    },
+    {
       "id": "2026-09-25T20:15:10.226Z-ypnn9mr",
       "title": "PSP S40",
       "message": "Ya disponible los arranques del PDP S40",
@@ -287,26 +331,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-sakzznw",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-0a0g6xr",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-7n2xwz1",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-96ik5eb",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "maria.mds",
-      "read": true,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "recipient": "alex.mds",
+      "read": false,
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-2kbqbr2",
@@ -397,26 +441,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-ssnq6u8",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-mid4vwn",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-t3u67ue",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-apcoda3",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "alex.mds",
-      "read": true,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "recipient": "anto.mds",
+      "read": false,
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-73zukas",
@@ -507,26 +551,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-a68req3",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-rhe2y4q",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
-      "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "recipient": "prodtj.mds",
+      "read": true,
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-8tg4dkx",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-q0j6z6p",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "anto.mds",
-      "read": false,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "recipient": "prodtj.mds",
+      "read": true,
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-yh2ohau",
@@ -617,26 +661,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-d9d1cet",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-8shwzon",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "recipient": "prodtg.mds",
+      "read": false,
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-5r4lj7p",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-xhvpzlq",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtj.mds",
-      "read": true,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "recipient": "prodtg.mds",
+      "read": false,
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-om33p62",
@@ -727,26 +771,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-rz0icee",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-j72p97f",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtg.mds",
+      "recipient": "prodts.mds",
       "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-9vcoow7",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-39xqn5t",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodtg.mds",
+      "recipient": "prodts.mds",
       "read": false,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-hs9ab7v",
@@ -837,26 +881,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-ez67wvn",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-2l2nz6q",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodts.mds",
+      "recipient": "procj.mds",
       "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-4vhdd8b",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-n1o6mir",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodts.mds",
+      "recipient": "procj.mds",
       "read": false,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-ezxzljk",
@@ -947,26 +991,26 @@
       "createdAt": "2026-09-15T19:57:24.365Z"
     },
     {
-      "id": "2026-09-15T19:43:59.771Z-tx18fee",
-      "title": "Modificación PDP S38",
-      "message": "se realizo modificación del PDP S38 para las líneas 1;2;3 y 7",
+      "id": "2026-09-28T18:44:23.982Z-6zqwiq0",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-09-15T19:43:59.771Z"
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-15T13:27:58.647Z-bcap0ch",
-      "title": "Actualización",
-      "message": "se realizo cambios en la tabla de insumos para que sea mas versátil el llenado de datos",
+      "id": "2026-09-28T18:39:27.728Z-a0kqurw",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procj.mds",
-      "read": true,
-      "createdAt": "2026-09-15T13:27:58.647Z"
+      "recipient": "cald.mds",
+      "read": false,
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-5bujo2u",
@@ -1057,26 +1101,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-jwmbdq5",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-2658286",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
+      "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-ypwx2x4",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-vv976ig",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cald.mds",
+      "recipient": "prodt.mds",
       "read": false,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-lnovgo1",
@@ -1167,26 +1211,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-mlkn5lq",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-w7tz4r5",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
+      "recipient": "prodt1.mds",
       "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-b7x032g",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-lwludlf",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt.mds",
+      "recipient": "prodt1.mds",
       "read": false,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-cykjksi",
@@ -1277,26 +1321,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-1th7qk5",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-ts4p7ik",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt1.mds",
-      "read": true,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "recipient": "prodt2.mds",
+      "read": false,
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-zv02jrl",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-hxxpseq",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt1.mds",
-      "read": true,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "recipient": "prodt2.mds",
+      "read": false,
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-1w5wzvn",
@@ -1387,26 +1431,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-gjwyu53",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-alicd0c",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt2.mds",
-      "read": true,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-3a4qenl",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-amyapkk",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "prodt2.mds",
-      "read": true,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "recipient": "proc.mds",
+      "read": false,
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-trtutq1",
@@ -1497,26 +1541,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-a0poihg",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-a39qrzo",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
+      "recipient": "proc1.mds",
       "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-s2y8z1z",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-ih5s86s",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc.mds",
+      "recipient": "proc1.mds",
       "read": false,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-7u0wfcl",
@@ -1607,26 +1651,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-15T13:27:58.647Z-z6oupga",
-      "title": "Actualización",
-      "message": "se realizo cambios en la tabla de insumos para que sea mas versátil el llenado de datos",
+      "id": "2026-09-28T18:44:23.982Z-1nr8cq0",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc1.mds",
+      "recipient": "proc2.mds",
       "read": false,
-      "createdAt": "2026-09-15T13:27:58.647Z"
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-bmyna8l",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:39:27.728Z-ad48app",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc1.mds",
+      "recipient": "proc2.mds",
       "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-f5h8njx",
@@ -1717,26 +1761,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-gdn96fq",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-3bgiorl",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc2.mds",
+      "recipient": "procs1.mds",
       "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-z6m6t01",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-funjvxp",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "proc2.mds",
+      "recipient": "procs1.mds",
       "read": false,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-1pu4g8t",
@@ -1827,26 +1871,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-28a86ov",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-1esova0",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs1.mds",
+      "recipient": "procs2.mds",
       "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-g3lqnbm",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-myjzbi3",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs1.mds",
+      "recipient": "procs2.mds",
       "read": false,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-v0ano1e",
@@ -1937,26 +1981,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-15T13:27:58.647Z-g7pzev4",
-      "title": "Actualización",
-      "message": "se realizo cambios en la tabla de insumos para que sea mas versátil el llenado de datos",
+      "id": "2026-09-28T18:44:23.982Z-xiq1oxi",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs2.mds",
-      "read": true,
-      "createdAt": "2026-09-15T13:27:58.647Z"
+      "recipient": "finan.mds",
+      "read": false,
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-pqjxq9x",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:39:27.728Z-hikcuov",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "procs2.mds",
-      "read": true,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "recipient": "finan.mds",
+      "read": false,
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-285sjq8",
@@ -2047,26 +2091,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-ok905fr",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-cyr7ewq",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "finan.mds",
+      "recipient": "g.tec.mds",
       "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-gno1o1d",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-g0hymcq",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "finan.mds",
+      "recipient": "g.tec.mds",
       "read": false,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-suqm6fg",
@@ -2157,26 +2201,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-yjtcwks",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-n2ivth6",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
-      "read": true,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "recipient": "enf.mds",
+      "read": false,
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-ot9rzki",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-3bjhran",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "g.tec.mds",
-      "read": true,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "recipient": "enf.mds",
+      "read": false,
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-gm57nzu",
@@ -2267,26 +2311,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-brjj3zr",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-msthhgf",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
+      "recipient": "etq.mds",
       "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-89rg8u4",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-a3p99bz",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "enf.mds",
+      "recipient": "etq.mds",
       "read": false,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-wv6fcly",
@@ -2377,26 +2421,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-35oxiwz",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-m2vw88b",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-no7741c",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-f9s5a1x",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "etq.mds",
+      "recipient": "logg.mds",
       "read": false,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-481sygk",
@@ -2487,26 +2531,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-52apiln",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-d96wsua",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "logg.mds",
+      "recipient": "mtto.mds",
       "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-k9601n6",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-6imzzd1",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "logg.mds",
+      "recipient": "mtto.mds",
       "read": false,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-1rdg14a",
@@ -2597,26 +2641,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-h8lelxy",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-5r27uo4",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto.mds",
+      "recipient": "cal.mds",
       "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-yc1xxnn",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-71ghz42",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "mtto.mds",
+      "recipient": "cal.mds",
       "read": false,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-0lxnhas",
@@ -2707,26 +2751,26 @@
       "createdAt": "2026-09-15T19:43:59.771Z"
     },
     {
-      "id": "2026-09-14T12:50:15.436Z-5vy23ml",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
+      "id": "2026-09-28T18:44:23.982Z-wymeubp",
+      "title": "Aviso",
+      "message": "Actualizaciones cargadas",
       "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cal.mds",
+      "recipient": "MDS",
       "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
+      "createdAt": "2026-09-28T18:44:23.982Z"
     },
     {
-      "id": "2026-09-11T19:52:05.466Z-bw2nd5h",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
+      "id": "2026-09-28T18:39:27.728Z-l3xmbp8",
+      "title": "aviso",
+      "message": "se cerrara la terminal unos minutos para subir unas actualizaciones",
+      "type": "warning",
       "senderId": "demon",
       "senderName": "Yonny Hernández",
-      "recipient": "cal.mds",
+      "recipient": "MDS",
       "read": false,
-      "createdAt": "2026-09-11T19:52:05.466Z"
+      "createdAt": "2026-09-28T18:39:27.728Z"
     },
     {
       "id": "2026-09-25T20:15:10.226Z-q5qzpzv",
@@ -2815,28 +2859,6 @@
       "recipient": "MDS",
       "read": false,
       "createdAt": "2026-09-15T19:43:59.771Z"
-    },
-    {
-      "id": "2026-09-14T12:50:15.436Z-qqqvuyb",
-      "title": "Modificación PDP S38",
-      "message": "Se realizo modificación en la PDP S38 para las líneas 1 y 7",
-      "type": "warning",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "MDS",
-      "read": false,
-      "createdAt": "2026-09-14T12:50:15.436Z"
-    },
-    {
-      "id": "2026-09-11T19:52:05.466Z-1daozod",
-      "title": "PDP S 38",
-      "message": "Ya se encuentra disponible el PDP S38",
-      "type": "info",
-      "senderId": "demon",
-      "senderName": "Yonny Hernández",
-      "recipient": "MDS",
-      "read": false,
-      "createdAt": "2026-09-11T19:52:05.466Z"
     }
   ]
 }

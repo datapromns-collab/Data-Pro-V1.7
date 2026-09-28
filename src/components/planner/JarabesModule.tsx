@@ -972,7 +972,7 @@ function REstandarSemTable({ selectedFecha, costoAzucar, onPrintWeeklyStandard, 
   return (
     <div ref={containerRef} className="space-y-4 print:space-y-8 w-full">
       <div className="flex justify-end">
-        <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
+        <Button variant="outline" size="sm" onClick={handlePrint} className="pointer-events-auto h-8 text-[10px] font-bold uppercase tracking-widest no-print">
           Imprimir PDF
         </Button>
       </div>
@@ -1149,7 +1149,7 @@ function RPromedioSemTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
   return (
      <div ref={containerRef} className="space-y-3 w-full">
       <div className="flex justify-end">
-        <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
+        <Button variant="outline" size="sm" onClick={handlePrint} className="pointer-events-auto h-8 text-[10px] font-bold uppercase tracking-widest no-print">
           Imprimir PDF
         </Button>
       </div>
@@ -1330,7 +1330,7 @@ function REstandarMesTable({ selectedFecha, data, costoAzucar, realKgPerSack, on
   return (
      <div ref={containerRef} className="space-y-3 w-full">
        <div className="flex justify-end">
-         <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
+         <Button variant="outline" size="sm" onClick={handlePrint} className="pointer-events-auto h-8 text-[10px] font-bold uppercase tracking-widest no-print">
            Imprimir PDF
          </Button>
        </div>
@@ -1513,7 +1513,7 @@ function RPromedioMesTable({ selectedFecha, costoAzucar, realKgPerSack, updateCo
   return (
      <div ref={containerRef} className="space-y-3 w-full">
         <div className="flex justify-end">
-          <Button variant="outline" size="sm" onClick={handlePrint} className="h-8 text-[10px] font-bold uppercase tracking-widest no-print">
+          <Button variant="outline" size="sm" onClick={handlePrint} className="pointer-events-auto h-8 text-[10px] font-bold uppercase tracking-widest no-print">
             Imprimir PDF
           </Button>
         </div>

@@ -640,7 +640,7 @@ export function RawMaterialModule({
                 <Button 
                   onClick={() => onPrintDailyReport?.(workingDate)}
                   variant="outline" 
-                  className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
+                  className="pointer-events-auto gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
                 >
                   <FileDown className="h-4 w-4" /> Exportar Reporte Diario
                 </Button>
@@ -798,7 +798,7 @@ export function RawMaterialModule({
                 <Button 
                   onClick={onPrintReport}
                   variant="outline" 
-                  className="gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
+                  className="pointer-events-auto gap-2 font-black text-[10px] uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 h-10 px-6 rounded-xl shadow-sm active:scale-95 transition-none"
                 >
                   <FileDown className="h-4 w-4" /> Exportar Reporte PDF
                 </Button>

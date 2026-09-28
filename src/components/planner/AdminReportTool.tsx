@@ -409,7 +409,7 @@ export function AdminReportTool({
                      variant="outline" 
                      size="sm" 
                      onClick={() => onPrintMonthly?.(selectedMonth, selectedYear)}
-                     className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
+                     className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
                    >
                      <FileDown className="h-4 w-4" />
                      Exportar Resumen Mensual
@@ -419,7 +419,7 @@ export function AdminReportTool({
                        variant="outline" 
                        size="sm" 
                        onClick={() => onPrintMonthlyWithSignature(selectedMonth, selectedYear)}
-                       className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
+                       className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
                      >
                        <FileDown className="h-4 w-4" />
                        Exportar Resumen Mensual con Firma
@@ -432,7 +432,7 @@ export function AdminReportTool({
                   variant="outline" 
                   size="sm" 
                   onClick={() => onPrintWeeklySummary?.(selectedWeekKey)}
-                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
+                  className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
                 >
                   <FileDown className="h-4 w-4" />
                   Exportar Resumen Semanal
@@ -828,7 +828,7 @@ export function AdminReportTool({
                   variant="outline" 
                   size="sm" 
                   onClick={onPrintCompliance}
-                  className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
+                  className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
                 >
                   <CheckCircle2 className="h-4 w-4" />
                   Exportar Reporte Cumplimiento
@@ -858,7 +858,7 @@ export function AdminReportTool({
                     variant="outline" 
                     size="sm" 
                     onClick={() => onPrintMonthlyCompliance?.(selectedMonth, selectedYear)}
-                    className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
+                    className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-100 active:transform-none transition-none"
                   >
                     <FileDown className="h-4 w-4" />
                     Exportar Reporte Mensual

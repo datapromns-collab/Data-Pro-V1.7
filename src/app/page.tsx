@@ -67,6 +67,7 @@ import { RequirementReport } from '@/components/planner/RequirementReport';
 import { CalculationReport } from '@/components/planner/CalculationReport';
 import { SummaryReport } from '@/components/planner/SummaryReport';
 import { DailyPlanSection } from '@/components/planner/DailyPlanSection';
+import { WeeklyPlanSection } from '@/components/planner/WeeklyPlanSection';
 import { PreparationSection } from '@/components/planner/PreparationSection';
 import { AdminReportTool } from '@/components/planner/AdminReportTool';
 import { ProductionEntryDialog } from '@/components/planner/ProductionEntryDialog';
@@ -3348,6 +3349,13 @@ export default function PlannerPage() {
                              <ListTodo className="h-3.5 w-3.5" />
                              <span className="hidden sm:inline">Plan Día a Día</span>
                            </button>}
+                           {getPermissionLevel(user.id, 'planning', 'plan-semana') !== 'none' && <button
+                             onClick={() => setActiveTab('plan-semana')}
+                             className={cn(navTabClass(activeTab === 'plan-semana'))}
+                           >
+                             <CalendarRange className="h-3.5 w-3.5" />
+                             <span className="hidden sm:inline">Plan Semana</span>
+                           </button>}
                            {getPermissionLevel(user.id, 'planning', 'preparation') !== 'none' && <button
                              onClick={() => setActiveTab('preparation')}
                              className={cn(navTabClass(activeTab === 'preparation'))}
@@ -3471,6 +3479,9 @@ export default function PlannerPage() {
                        )}
                         {activeTab === 'daily' && getPermissionLevel(user.id, 'planning', 'daily') !== 'none' && (
                           <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintDaily} />
+                        )}
+                        {activeTab === 'plan-semana' && getPermissionLevel(user.id, 'planning', 'plan-semana') !== 'none' && (
+                          <WeeklyPlanSection tasks={tasks} weekStartDate={weekStartDate} />
                         )}
                         {activeTab === 'preparation' && getPermissionLevel(user.id, 'planning', 'preparation') !== 'none' && (
                           <PreparationSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintPreparation} />
@@ -4755,7 +4766,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                     <div className="flex items-center justify-end no-print gap-2">
                                       <button
                                         onClick={exportPtabAguaToExcel}
-                                        className="inline-flex items-center gap-1.5 h-9 pl-3 pr-4 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-emerald-600 text-white shadow-sm active:scale-95"
+                                        className="pointer-events-auto inline-flex items-center gap-1.5 h-9 pl-3 pr-4 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-emerald-600 text-white shadow-sm active:scale-95"
                                       >
                                         <FileSpreadsheet className="h-3.5 w-3.5" />
                                         Exportar Excel
@@ -5156,7 +5167,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    <div className="mt-4 bg-white rounded-2xl border border-slate-100">
                                                      <div className="flex items-center justify-between mb-2 px-4 pt-4">
                                                        <div className="text-slate-700 font-black text-xs uppercase tracking-widest">Consumo de agua - Gráfico semanal</div>
-                                                       <Button size="sm" onClick={generarPDFRSemanalAgua} className="h-8 pl-3 pr-4 rounded-full bg-teal-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-teal-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
+                                                       <Button size="sm" onClick={generarPDFRSemanalAgua} className="pointer-events-auto h-8 pl-3 pr-4 rounded-full bg-teal-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-teal-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
                                                          <FileDown className="h-3.5 w-3.5" /> PDF
                                                        </Button>
                                                      </div>
@@ -6262,7 +6273,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                     </div>
                                     <button
                                       onClick={() => generarExcelAguaMensual()}
-                                      className="ml-4 px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
+                                      className="pointer-events-auto ml-4 px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
                                     >
                                       <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -6271,7 +6282,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                     </button>
                                     <button
                                       onClick={() => generarPDFAguaMensual()}
-                                      className="ml-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
+                                      className="pointer-events-auto ml-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
                                     >
                                       <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -6623,7 +6634,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                     </div>
                                     <button
                                       onClick={() => generarExcelCo2Mensual()}
-                                      className="ml-4 px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
+                                      className="pointer-events-auto ml-4 px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
                                     >
                                       <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -6632,7 +6643,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                     </button>
                                     <button
                                       onClick={() => generarPDFCo2Mensual()}
-                                      className="ml-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
+                                      className="pointer-events-auto ml-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
                                     >
                                       <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -8589,7 +8600,5 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
   });
 
   OrdenTrabajoRow.displayName = 'OrdenTrabajoRow';
-
-
 
 

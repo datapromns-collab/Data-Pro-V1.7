@@ -2346,7 +2346,7 @@ const exportarPDFdia = async () => {
                 <Button
                   size="sm"
                   onClick={exportarPDF}
-                  className="h-9 pl-4 pr-5 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                  className="pointer-events-auto h-9 pl-4 pr-5 rounded-full bg-blue-600 text-white font-black uppercase text-[10px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
                 >
                   <Plus className="h-3.5 w-3.5" />
                   Exportar Archivo
@@ -2818,7 +2818,7 @@ const exportarPDFdia = async () => {
                         <Button
                           size="sm"
                           onClick={exportarPDFResumenSeguimientoSabor}
-                          className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                          className="pointer-events-auto h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
                         >
                           <FileDown className="h-3 w-3" />
                           Exportar PDF
@@ -3111,7 +3111,7 @@ const exportarPDFdia = async () => {
                         <Button
                           size="sm"
                           onClick={exportarExcelDia}
-                          className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                          className="pointer-events-auto h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
                         >
                           <FileSpreadsheet className="h-3 w-3" />
                           Exportar archivo
@@ -3119,7 +3119,7 @@ const exportarPDFdia = async () => {
                         <Button
                           size="sm"
                           onClick={exportarPDFdia}
-                          className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                          className="pointer-events-auto h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
                         >
                           <FileDown className="h-3 w-3" />
                           Exportar PDF
@@ -3323,7 +3323,7 @@ const exportarPDFdia = async () => {
                         <Button
                           size="sm"
                           onClick={exportarPDFProdtSemanal}
-                          className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                          className="pointer-events-auto h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
                         >
                           <FileDown className="h-3 w-3" />
                           Exportar PDF
@@ -3394,7 +3394,7 @@ const exportarPDFdia = async () => {
                            <Button
                              size="sm"
                              onClick={exportarPDFResumenMensual}
-                             className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                             className="pointer-events-auto h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
                            >
                              <FileDown className="h-3 w-3" />
                              Exportar PDF
@@ -3402,7 +3402,7 @@ const exportarPDFdia = async () => {
                            <Button
                              size="sm"
                              onClick={exportarExcelResumenMensual}
-                             className="h-8 pl-3 pr-4 rounded-full bg-emerald-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-emerald-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                             className="pointer-events-auto h-8 pl-3 pr-4 rounded-full bg-emerald-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-emerald-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
                            >
                              <FileSpreadsheet className="h-3 w-3" />
                              Exportar Excel
@@ -3410,7 +3410,7 @@ const exportarPDFdia = async () => {
                            <Button
                              size="sm"
                              onClick={exportarImagenResumenMensual}
-                             className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                             className="pointer-events-auto h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
                            >
                              <Image className="h-3 w-3" />
                              Exportar Imagen

@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-14T00:00:00.000",
+      "weekStartDate": "2026-09-21T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -11444,18 +11444,6 @@
             "color": "#ef4444"
           },
           {
-            "name": "OTROS",
-            "description": "inventario mensual\nCIP 3p",
-            "lineId": "2",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 5,
-            "startTime": "2026-10-01T09:00:00.000Z",
-            "endTime": "2026-10-01T14:00:00.000Z",
-            "id": "54vsgg0v6",
-            "color": "#47CCB0"
-          },
-          {
             "name": "GLUP UVA",
             "lineId": "2",
             "loadPerHour": 2500,
@@ -11491,18 +11479,6 @@
             "endTime": "2026-10-03T09:30:00.000Z",
             "id": "pu5b86ya4",
             "color": "#587593"
-          },
-          {
-            "name": "OTROS",
-            "description": "inv M\nCIP 3p",
-            "lineId": "2",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 5,
-            "startTime": "2026-10-01T09:00:00.000Z",
-            "endTime": "2026-10-01T14:00:00.000Z",
-            "id": "lsljanngc",
-            "color": "#f59e0b"
           },
           {
             "name": "GLUP FRESH",
@@ -11735,6 +11711,18 @@
             "endTime": "2026-10-03T09:00:00.000Z",
             "id": "s46rnen91",
             "color": "#ef4444"
+          },
+          {
+            "name": "OTROS",
+            "description": "inv M\nCIP 3p",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 5,
+            "startTime": "2026-10-01T09:00:00.000Z",
+            "endTime": "2026-10-01T14:00:00.000Z",
+            "id": "stphfzk9q",
+            "color": "#ef4444"
           }
         ],
         "realProduction": {},
@@ -11770,7 +11758,9 @@
           "ag7g40th6",
           "nacqyiw0q",
           "z57nsetkj",
-          "3t6of43rh"
+          "3t6of43rh",
+          "lsljanngc",
+          "54vsgg0v6"
         ]
       }
     },
@@ -14038,7 +14028,13 @@
           "preformas": {},
           "plasticos": {},
           "adhesivoCantidad": "",
-          "etiquetasCantidad": {}
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {}
         },
         "2026-09-28": {
           "tapas": {
@@ -15271,10 +15267,208 @@
           "logistica.monthly-inventory": "none"
         }
       }
-    }
+    },
+    "users": [
+      {
+        "id": "jaime.r",
+        "name": "Jaime Rangel",
+        "password": "ad.123.",
+        "role": "ADMIN",
+        "displayRole": "GERENTE DE PLANTA"
+      },
+      {
+        "id": "demon",
+        "name": "Yonny Hernández",
+        "password": "2005",
+        "role": "ADMIN",
+        "displayRole": "ADMINISTRADOR"
+      },
+      {
+        "id": "demon2",
+        "name": "yonny .H",
+        "password": "2005",
+        "role": "STANDARD",
+        "displayRole": "Carga Sap"
+      },
+      {
+        "id": "maria.mds",
+        "name": "Maria Reinoso",
+        "password": "ad.147.",
+        "role": "INVENTORY",
+        "displayRole": "ANALISTA DE GERENCIA TÉCNICA"
+      },
+      {
+        "id": "alex.mds",
+        "name": "Alexandra Arteaga",
+        "password": "ad.159.",
+        "role": "INVENTORY",
+        "displayRole": "ANALISTA DE GERENCIA TÉCNICA"
+      },
+      {
+        "id": "anto.mds",
+        "name": "Antonella Dos Santos",
+        "password": "123.",
+        "role": "PURCHASING",
+        "displayRole": "COMPRAS"
+      },
+      {
+        "id": "prodtj.mds",
+        "name": "Jefes de Producción",
+        "password": "ad.144.",
+        "role": "STANDARD",
+        "displayRole": "PRODUCCIÓN"
+      },
+      {
+        "id": "prodtg.mds",
+        "name": "Carlos Barovich",
+        "password": "ad.521.",
+        "role": "STANDARD",
+        "displayRole": "GERENTE DE PRODUCCIÓN"
+      },
+      {
+        "id": "prodts.mds",
+        "name": "Supervisor de Produccion",
+        "password": "ad.222.",
+        "role": "STANDARD",
+        "displayRole": "SUPERVISOR DE PRODUCCIÓN"
+      },
+      {
+        "id": "procj.mds",
+        "name": "Abel Araujo",
+        "password": "ad.145.",
+        "role": "STANDARD",
+        "displayRole": "Jefe de Procesos"
+      },
+      {
+        "id": "cald.mds",
+        "name": "Jefa de Calidad",
+        "password": "ad.146.",
+        "role": "STANDARD",
+        "displayRole": "CALIDAD"
+      },
+      {
+        "id": "prodt.mds",
+        "name": "Ronald Valera",
+        "password": "ad.160.",
+        "role": "STANDARD",
+        "displayRole": "ANALISTA DE PRODUCCIÓN"
+      },
+      {
+        "id": "prodt1.mds",
+        "name": "Luis Blandin",
+        "password": "ad.121.",
+        "role": "STANDARD",
+        "displayRole": "ANALISTA DE PRODUCCIÓN"
+      },
+      {
+        "id": "prodt2.mds",
+        "name": "Luis Sanchez",
+        "password": "ad.128.",
+        "role": "STANDARD",
+        "displayRole": "ANALISTA DE PRODUCCIÓN"
+      },
+      {
+        "id": "proc.mds",
+        "name": "Tecnico de procesos",
+        "password": "ad.166.",
+        "role": "STANDARD",
+        "displayRole": "SALA DE JARABE"
+      },
+      {
+        "id": "proc1.mds",
+        "name": "tecnico de procesos",
+        "password": "ad.533.",
+        "role": "STANDARD",
+        "displayRole": "PTAB"
+      },
+      {
+        "id": "proc2.mds",
+        "name": "tecnico de procesos",
+        "password": "ad.530.",
+        "role": "STANDARD",
+        "displayRole": "MITECO"
+      },
+      {
+        "id": "procs1.mds",
+        "name": "Jose Vargas",
+        "password": "ad.558.",
+        "role": "STANDARD",
+        "displayRole": "SUPERVISOR DE PROCESOS"
+      },
+      {
+        "id": "procs2.mds",
+        "name": "jorge acosta",
+        "password": "ad.220.",
+        "role": "STANDARD",
+        "displayRole": "SUPERVISOR DE PROCESOS"
+      },
+      {
+        "id": "finan.mds",
+        "name": "Patricia Gamez",
+        "password": "ad.124.",
+        "role": "STANDARD",
+        "displayRole": "FINANZAS"
+      },
+      {
+        "id": "g.tec.mds",
+        "name": "Gerente Técnico",
+        "password": "ad.147.",
+        "role": "STANDARD",
+        "displayRole": "GERENTE TÉCNICO"
+      },
+      {
+        "id": "enf.mds",
+        "name": "Hector Pereira",
+        "password": "ad.158.",
+        "role": "STANDARD",
+        "displayRole": "ESPECIALISTA ENFARDADORA"
+      },
+      {
+        "id": "etq.mds",
+        "name": "Especialista Etiquetadora",
+        "password": "ad.159.",
+        "role": "STANDARD",
+        "displayRole": "ETIQUETADORA"
+      },
+      {
+        "id": "logg.mds",
+        "name": "Florencio Alvarez",
+        "password": "ad.220.",
+        "role": "STANDARD",
+        "displayRole": "GERENTE DE LOGÍSTICA"
+      },
+      {
+        "id": "mtto.mds",
+        "name": "Jose Mora",
+        "password": "ad.321.",
+        "role": "STANDARD",
+        "displayRole": "SUP. MANTENIMIENTO"
+      },
+      {
+        "id": "cal.mds",
+        "name": "Calidad",
+        "password": "ad.322.",
+        "role": "STANDARD",
+        "displayRole": "ANALISTA DE CALIDAD"
+      },
+      {
+        "id": "MDS",
+        "name": "Multinacional de sabores",
+        "password": "MDS1",
+        "role": "STANDARD",
+        "displayRole": "VISITANTE"
+      },
+      {
+        "id": "mtto1.mds",
+        "name": "Eduardo Contreras",
+        "password": "ad.589.",
+        "role": "STANDARD",
+        "displayRole": "Técnico sala de Maquinas"
+      }
+    ]
   },
   "_meta": {
-    "updatedAt": "2026-09-28T15:46:47.078Z"
+    "updatedAt": "2026-09-28T20:30:04.043Z"
   },
   "ordenesSap": [
     {
@@ -25008,6 +25202,106 @@
           "fechaInicio": "2026-09-28",
           "ticket1": "16221",
           "cajas1": 624,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "1-1790622563029",
+      "linea": 1,
+      "sabor": "GLUP FRESH",
+      "ordenNumero": "63912",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-28",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "2-1790622686945",
+      "linea": 2,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "63918",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-28",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "3-1790622806270",
+      "linea": 3,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63924",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-28",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "4-1790622903554",
+      "linea": 4,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63930",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-28",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "6-1790623044406",
+      "linea": 6,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63936",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-28",
+          "ticket1": "",
+          "cajas1": 0,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -36660,6 +36954,28 @@
             "preparado": "40",
             "final": "40"
           }
+        },
+        "2026-09-28": {
+          "GLUP COLA": {
+            "inicial": "62.55",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "10.29",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "54.57",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY NARANJA": {
+            "inicial": "40",
+            "preparado": "",
+            "final": ""
+          }
         }
       },
       "sugar": {
@@ -37667,6 +37983,23 @@
             "recepcionSacos": "",
             "invFinalSacos": ""
           }
+        },
+        "2026-09-28": {
+          "PORTUGUESA": {
+            "invInicialSacos": "4280",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "920",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "PASTORA": {
+            "invInicialSacos": "2640",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
         }
       },
       "tanques": {
@@ -38530,6 +38863,16 @@
           "Sala 1": {
             "invInicialSacos": "1832",
             "invFinalSacos": "1370"
+          }
+        },
+        "2026-09-28": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "368",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "1370",
+            "invFinalSacos": ""
           }
         }
       },

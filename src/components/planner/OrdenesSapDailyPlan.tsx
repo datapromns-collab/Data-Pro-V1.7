@@ -357,11 +357,11 @@ export default memo(function OrdenesSapDailyPlan({ orders, onDailyProductionChan
               </h4>
             </div>
             <div className="flex items-center gap-2">
-              <Button size="sm" onClick={exportarExcelDia} className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
+              <Button size="sm" onClick={exportarExcelDia} className="pointer-events-auto h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
                 <FileSpreadsheet className="h-3 w-3" />
                 Exportar archivo
               </Button>
-              <Button size="sm" onClick={exportarPDFdia} className="h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
+              <Button size="sm" onClick={exportarPDFdia} className="pointer-events-auto h-8 pl-3 pr-4 rounded-full bg-blue-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-blue-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
                 <FileDown className="h-3 w-3" />
                 Exportar PDF
               </Button>

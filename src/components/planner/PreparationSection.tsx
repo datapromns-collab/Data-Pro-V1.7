@@ -152,7 +152,7 @@ export function PreparationSection({ tasks, weekStartDate, onPrint }: Preparatio
             onClick={onPrint}
             variant="outline"
             size="lg"
-            className="gap-2 font-black text-xs uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 shadow-md rounded-2xl"
+            className="pointer-events-auto gap-2 font-black text-xs uppercase tracking-widest text-primary border-primary/20 hover:bg-primary/5 shadow-md rounded-2xl"
           >
             <Printer className="h-4 w-4" />
             Imprimir

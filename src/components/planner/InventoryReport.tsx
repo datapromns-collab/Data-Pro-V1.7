@@ -80,7 +80,7 @@ export function InventoryReport({ section = 'mds', type, data }: InventoryReport
   <>
     {/* PDF export button placed below header */}
     <div className="flex justify-end mb-4 no-print">
-      <button onClick={handleExportPDF} style={{ backgroundColor: primaryColor }} className="px-4 py-2 text-white rounded hover:opacity-90 transition">
+      <button onClick={handleExportPDF} style={{ backgroundColor: primaryColor }} className="pointer-events-auto px-4 py-2 text-white rounded hover:opacity-90 transition">
         Exportar PDF
       </button>
     </div>

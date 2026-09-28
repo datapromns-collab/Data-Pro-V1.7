@@ -284,7 +284,7 @@ export function RequirementSection({ onPrint, onPrintCalculation, tasks, weekSta
             onClick={onPrint} 
             variant="outline" 
             size="lg"
-            className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 rounded-xl h-11 px-6 shadow-sm active:scale-95"
+            className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 rounded-xl h-11 px-6 shadow-sm active:scale-95"
           >
             <Printer className="h-4 w-4" />
             Imprimir Reporte
@@ -400,7 +400,7 @@ export function RequirementSection({ onPrint, onPrintCalculation, tasks, weekSta
                 onClick={() => onPrintCalculation(calcStartDate, calcEndDate, availability)} 
                 variant="outline" 
                 size="lg"
-                className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 rounded-xl h-11 px-6 shadow-sm active:scale-95"
+                className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 rounded-xl h-11 px-6 shadow-sm active:scale-95"
               >
                 <Printer className="h-4 w-4" />
                 Imprimir Calculo

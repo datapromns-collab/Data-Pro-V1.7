@@ -2685,7 +2685,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                             type="button"
                             onClick={() => void exportWasteTicketsPdf(section)}
                             disabled={!hasSavedTable || activeWasteRows.length === 0 || wastePdfStatus === 'generating' || isWasteEditing}
-                            className="inline-flex items-center gap-1.5 rounded-full bg-slate-700 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-white disabled:opacity-50"
+                            className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full bg-slate-700 px-3 py-2 text-[10px] font-black uppercase tracking-widest text-white disabled:opacity-50"
                           >
                             <FileDown className="h-3.5 w-3.5" />
                             {wastePdfStatus === 'generating' ? 'Generando PDF…' : 'Reporte PDF'}

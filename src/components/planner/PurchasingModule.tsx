@@ -714,7 +714,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
             variant="outline" 
             size="sm" 
             onClick={() => onPrintInventory(section, type)}
-            className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+            className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
           >
             <FileDown className="h-4 w-4" />
             Exportar Reporte {isLogistics ? 'Logística' : 'Planta'}
@@ -996,7 +996,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                     variant="outline" 
                     size="sm" 
                     onClick={() => onPrintRequirements('mds')}
-                    className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-11 px-6 rounded-xl text-xs active:scale-95 transition-none no-print"
+                    className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-11 px-6 rounded-xl text-xs active:scale-95 transition-none no-print"
                   >
                     <FileDown className="h-4 w-4" />
                     Exportar Requerimientos
@@ -1076,7 +1076,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                         variant="outline" 
                         size="sm" 
                         onClick={() => onPrintInventory('mds', 'product-finished')}
-                        className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                        className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                       >
                         <FileDown className="h-4 w-4" />
                         Exportar Reporte Producto Terminado
@@ -1102,7 +1102,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                       variant="outline" 
                       size="sm" 
                       onClick={() => onPrintInventory('mds', 'available')}
-                      className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                      className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                     >
                       <FileDown className="h-4 w-4" />
                       Exportar Reporte Disponible
@@ -1225,7 +1225,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                         variant="ghost" 
                         size="sm" 
                         onClick={handleExportPlanProduccionPDF}
-                        className="gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                        className="pointer-events-auto gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                       >
                         <FileDown className="h-4 w-4" />
                         PDF
@@ -1295,7 +1295,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                         variant="ghost" 
                         size="sm" 
                         onClick={handleExportRequisicionPDF}
-                        className="gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                        className="pointer-events-auto gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                       >
                         <FileDown className="h-4 w-4" />
                         PDF
@@ -1667,7 +1667,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                     variant="outline" 
                     size="sm" 
                     onClick={() => onPrintRequirements('aw')}
-                    className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-11 px-6 rounded-xl text-xs active:scale-95 transition-none no-print"
+                    className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-11 px-6 rounded-xl text-xs active:scale-95 transition-none no-print"
                   >
                     <FileDown className="h-4 w-4" />
                     Exportar Requerimientos
@@ -1747,7 +1747,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                         variant="outline" 
                         size="sm" 
                         onClick={() => onPrintInventory('aw', 'product-finished')}
-                        className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                        className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                       >
                         <FileDown className="h-4 w-4" />
                         Exportar Reporte Producto Terminado
@@ -1773,7 +1773,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                       variant="outline" 
                       size="sm" 
                       onClick={() => onPrintInventory('aw', 'available')}
-                      className="gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                      className="pointer-events-auto gap-2 font-bold text-primary border-primary/20 hover:bg-primary/5 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                     >
                       <FileDown className="h-4 w-4" />
                       Exportar Reporte Disponible
@@ -1813,7 +1813,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                         variant="ghost" 
                         size="sm" 
                         onClick={() => onPrintResumen('aw', 'plan-produccion')}
-                        className="gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                        className="pointer-events-auto gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                       >
                         <FileDown className="h-4 w-4" />
                         PDF
@@ -1883,7 +1883,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                         variant="ghost" 
                         size="sm" 
                         onClick={() => onPrintResumen('aw', 'requisicion')}
-                        className="gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                        className="pointer-events-auto gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                       >
                         <FileDown className="h-4 w-4" />
                         PDF
@@ -1988,7 +1988,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                     variant="ghost" 
                     size="sm" 
                     onClick={() => onPrintResumen('global', 'plan-produccion')}
-                    className="gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                    className="pointer-events-auto gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                   >
                     <FileDown className="h-4 w-4" />
                     PDF
@@ -2080,7 +2080,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                     variant="ghost" 
                     size="sm" 
                     onClick={() => onPrintResumen('global', 'requisicion')}
-                    className="gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
+                    className="pointer-events-auto gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                   >
                     <FileDown className="h-4 w-4" />
                     PDF
