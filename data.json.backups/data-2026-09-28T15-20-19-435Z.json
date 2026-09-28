@@ -11702,12 +11702,12 @@
             "name": "GLUP COLA",
             "lineId": "7",
             "loadPerHour": 2500,
-            "quantity": 2500,
-            "durationHours": 1,
+            "quantity": 118208,
+            "durationHours": 47.2832,
             "presentation": "1Lt",
-            "tanks": 0.29,
+            "tanks": 13.71,
             "startTime": "2026-09-29T09:43:00.000Z",
-            "endTime": "2026-09-29T10:43:00.000Z",
+            "endTime": "2026-10-01T08:59:59.520Z",
             "id": "qcounout6",
             "color": "#ef4444"
           },
@@ -11722,6 +11722,19 @@
             "endTime": "2026-10-01T14:00:00.000Z",
             "id": "tl90i2s5q",
             "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 107500,
+            "durationHours": 43,
+            "presentation": "1Lt",
+            "tanks": 12.46,
+            "startTime": "2026-10-01T14:00:00.000Z",
+            "endTime": "2026-10-03T09:00:00.000Z",
+            "id": "s46rnen91",
+            "color": "#ef4444"
           }
         ],
         "realProduction": {},
@@ -15261,7 +15274,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-28T15:19:27.841Z"
+    "updatedAt": "2026-09-28T15:20:10.929Z"
   },
   "ordenesSap": [
     {
