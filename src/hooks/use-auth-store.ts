@@ -119,7 +119,7 @@ export function useAuthStore() {
 
     const refreshUsers = async () => {
       try {
-        const response = await fetch('/api/data', { cache: 'no-store' });
+        const response = await fetch('/api/data?section=users', { cache: 'no-store' });
         if (!response.ok) return;
         const payload = await response.json();
         const remoteUsers = Array.isArray(payload?.planner?.users)

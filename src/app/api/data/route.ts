@@ -89,9 +89,43 @@ function deepMergeWeeklyData(current: any, incoming: any): any {
   return next;
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
     const data = readDb();
+    const section = new URL(request.url).searchParams.get('section');
+    if (section === 'permissions') {
+      return new Response(JSON.stringify({ permissions: data.planner?.permissions ?? {} }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    }
+    if (section === 'users') {
+      return new Response(JSON.stringify({ users: data.planner?.users ?? [] }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    }
+    if (section === 'productionInventory') {
+      return new Response(JSON.stringify({ productionInventory: data.planner?.productionInventory ?? {} }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    }
+    if (section === 'productionWaste') {
+      const wasteSection = new URL(request.url).searchParams.get('wasteSection');
+      const date = new URL(request.url).searchParams.get('date');
+      if ((wasteSection !== 'mermas' && wasteSection !== 'desperdicios') || !date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+        return new Response(JSON.stringify({ error: 'Invalid production waste query' }), {
+          status: 400,
+          headers: { 'content-type': 'application/json' },
+        });
+      }
+      const rows = data.planner?.productionInventory?.mermasDesperdicios?.[wasteSection]?.[date];
+      return new Response(JSON.stringify({ rows: Array.isArray(rows) ? rows : null }), {
+        status: 200,
+        headers: { 'content-type': 'application/json' },
+      });
+    }
     const plannerWithMeta = {
       ...data.planner,
       ordenesSap: Array.isArray(data.ordenesSap) ? data.ordenesSap : [],
@@ -229,7 +263,12 @@ export async function POST(request: Request) {
             if (!incomingDays || typeof incomingDays !== 'object' || Array.isArray(incomingDays)) return;
             const mergedDays = { ...(mergedWaste[section] || {}) };
             Object.entries(incomingDays).forEach(([date, rows]) => {
-              if (!/^\d{4}-\d{2}-\d{2}$/.test(date) || !Array.isArray(rows)) return;
+              if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) return;
+              if (rows === null) {
+                delete mergedDays[date];
+                return;
+              }
+              if (!Array.isArray(rows)) return;
               const validRows = rows.every((row: any) =>
                 row &&
                 typeof row === 'object' &&

@@ -2,6 +2,7 @@
 
 import React, { useState, useMemo, useEffect, useRef, memo } from "react";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import ExcelJS from "exceljs";
 import { read, utils } from "xlsx";
 import jsPDF from "jspdf";
@@ -74,7 +75,6 @@ import { WeeklySummaryReport } from '@/components/planner/WeeklySummaryReport';
 import { ComplianceReport } from '@/components/planner/ComplianceReport';
 import { MonthlyComplianceReport } from '@/components/planner/MonthlyComplianceReport';
 import { RecipeEditor } from '@/components/planner/RecipeEditor';
-import ProduccionModule from '@/components/planner/ProduccionModule';
 import OrdenesSapModule, { CorrelativoSelector } from '@/components/planner/OrdenesSapModule';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
 import SeguimientoPanel from '@/components/planner/SeguimientoPanel';
@@ -97,7 +97,6 @@ import { usePlannerStore, getWeekKey } from '@/hooks/use-planner-store';
 import { getWeekDays } from '@/lib/planner-utils';
 import { useAuthStore } from '@/hooks/use-auth-store';
 import { usePermissionsStore } from '@/hooks/use-permissions-store';
-import { PermisosModule } from '@/components/planner/PermisosModule';
 import { MessagesCenter } from '@/components/planner/MessagesCenter';
 import { FcmManager } from '@/components/FcmManager';
 import { Toaster } from '@/components/ui/toaster';
@@ -118,6 +117,14 @@ import { es } from 'date-fns/locale';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Bar, CartesianGrid, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Legend, Line, ComposedChart } from 'recharts';
+
+const ProduccionModule = dynamic(() => import('@/components/planner/ProduccionModule'), {
+  loading: () => <div className="py-8 text-center text-sm font-bold text-slate-500">Cargando módulo de Producción...</div>,
+});
+const PermisosModule = dynamic(
+  () => import('@/components/planner/PermisosModule').then((module) => module.PermisosModule),
+  { loading: () => <div className="py-8 text-center text-sm font-bold text-slate-500">Cargando módulo de Permisos...</div> },
+);
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7", "Línea 8"];
 
@@ -8582,7 +8589,6 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
   });
 
   OrdenTrabajoRow.displayName = 'OrdenTrabajoRow';
-
 
 
 

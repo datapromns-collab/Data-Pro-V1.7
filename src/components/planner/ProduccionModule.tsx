@@ -6,7 +6,7 @@ import { addDays, format, getISOWeek, getISOWeekYear, setISOWeek, startOfISOWeek
 import { es } from 'date-fns/locale';
 import jsPDF from 'jspdf';
 import { cn } from '@/lib/utils';
-import { loadPlannerData, savePlannerData } from '@/lib/json-db';
+import { loadProductionInventoryData, loadProductionWasteRows, savePlannerData } from '@/lib/json-db';
 import { useAuthStore } from '@/hooks/use-auth-store';
 
 type WasteSectionKey = 'mermas' | 'desperdicios';
@@ -395,6 +395,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const [wasteSaveStatus, setWasteSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [wasteSaveStatusKey, setWasteSaveStatusKey] = useState<string | null>(null);
   const [wastePdfStatus, setWastePdfStatus] = useState<'idle' | 'generating' | 'error'>('idle');
+  const [wasteCopyStatus, setWasteCopyStatus] = useState<'idle' | 'code-copied' | 'quantity-copied' | 'error'>('idle');
   const wasteLocalWriteVersion = useRef(0);
   const [recepcionesDiariasFecha, setRecepcionesDiariasFecha] = useState<Date>(() => new Date());
   const [recepcionesSemanalFecha, setRecepcionesSemanalFecha] = useState<Date>(() => new Date());
@@ -439,6 +440,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const activeWasteKey = wasteSectionKey ? `${wasteSectionKey}:${wasteDateKey}` : null;
   const activeWasteRows = wasteSectionKey ? wasteTablesBySection[wasteSectionKey][wasteDateKey] || [] : [];
   const canEditWasteTables = user?.id === 'maria.mds' || user?.id === 'alex.mds';
+  const canCopyWasteValues = user?.id === 'maria.mds' || user?.id === 'demon';
   const isWasteEditing = activeWasteKey !== null && wasteEditingKey === activeWasteKey;
   const activeReceptionData = activeRecepcionesSubSection === 'diarias'
     ? receptionsByPeriod.diarias[receptionsDailyPeriodKey] || EMPTY_PRODUCTION_DATA
@@ -463,10 +465,10 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
     setProductionLoadStatus('loading');
     const loadProductionData = async () => {
       try {
-        const data = await loadPlannerData();
+        const data = await loadProductionInventoryData();
         if (!data) throw new Error('Unable to load shared production data');
         if (cancelled) return;
-      const persisted = data?.productionInventory;
+      const persisted = data;
       const periodKeys: Record<ProductionViewKey, string> = {
         diarios: dailyPeriodKey,
         semanal: weeklyPeriodKey,
@@ -521,15 +523,13 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   }, [productionLoadRetry]);
 
   useEffect(() => {
-    if (!productionLoaded || !wasteSectionKey || isWasteEditing) return;
+    if (activeProduccionSection !== 'mermas-desperdicios' || !productionLoaded || !wasteSectionKey || isWasteEditing) return;
     let cancelled = false;
     const syncActiveWasteTable = async () => {
       const versionAtRequestStart = wasteLocalWriteVersion.current;
-      const data = await loadPlannerData();
+      const data = await loadProductionWasteRows(wasteSectionKey, wasteDateKey);
       if (cancelled || !data || versionAtRequestStart !== wasteLocalWriteVersion.current) return;
-      const storedDays = data.productionInventory?.mermasDesperdicios?.[wasteSectionKey];
-      const hasStoredDate = !!storedDays && Object.prototype.hasOwnProperty.call(storedDays, wasteDateKey);
-      const incomingRows = hasStoredDate ? normalizeWasteRows(storedDays[wasteDateKey]) : null;
+      const incomingRows = data.rows === null ? null : normalizeWasteRows(data.rows);
       setWasteTablesBySection((tables) => {
         const currentRows = tables[wasteSectionKey][wasteDateKey];
         if (
@@ -550,7 +550,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       cancelled = true;
       window.clearInterval(timer);
     };
-  }, [productionLoaded, wasteSectionKey, wasteDateKey, isWasteEditing]);
+  }, [activeProduccionSection, productionLoaded, wasteSectionKey, wasteDateKey, isWasteEditing]);
 
   useEffect(() => {
     const savedPeriodData = productionByPeriod[inventariosSubTab][activePeriodKey];
@@ -570,9 +570,9 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       inventorySaveQueue.current = inventorySaveQueue.current
         .catch(() => undefined)
         .then(async () => {
-          const existing = await loadPlannerData();
+          const existing = await loadProductionInventoryData();
           if (!existing) throw new Error('Unable to load shared production data before saving inventory');
-          const productionInventory = { ...(existing.productionInventory || {}) };
+          const productionInventory = { ...existing };
           (Object.entries(pending) as Array<[ProductionViewKey, Record<string, ProductionTableValues>]>).forEach(([view, periods]) => {
             const storedPeriods = { ...(productionInventory[view] || {}) };
             Object.entries(periods).forEach(([period, values]) => {
@@ -614,9 +614,9 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       receptionSaveQueue.current = receptionSaveQueue.current
         .catch(() => undefined)
         .then(async () => {
-          const existing = await loadPlannerData();
+          const existing = await loadProductionInventoryData();
           if (!existing) throw new Error('Unable to load shared production data before saving receptions');
-          const existingReceptionData = existing?.productionInventory?.recepciones || {};
+          const existingReceptionData = existing.recepciones || {};
           const existingDailyData = existingReceptionData.diarias || {};
           const updatedDailyData = {
             ...existingDailyData,
@@ -758,6 +758,20 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
 
   const removeWasteDraftRow = (rowId: string) => {
     setWasteDraftRows((rows) => rows.filter((row) => row.id !== rowId));
+  };
+
+  const copyWasteColumn = async (column: 'code' | 'quantity', rows: WasteTableRow[]) => {
+    if (!canCopyWasteValues) return;
+    const values = rows
+      .map((row) => row[column].trim())
+      .filter((value) => value !== '');
+    try {
+      await navigator.clipboard.writeText(values.join('\n'));
+      setWasteCopyStatus(column === 'code' ? 'code-copied' : 'quantity-copied');
+    } catch (error) {
+      console.error(`[PRODUCCION] Failed to copy waste ${column} values`, error);
+      setWasteCopyStatus('error');
+    }
   };
 
   const exportWasteTicketsPdf = async (section: WasteSectionKey) => {
@@ -930,9 +944,9 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
               ? 'UND'
               : row.unit,
       }));
-      const existing = await loadPlannerData();
+      const existing = await loadProductionInventoryData();
       if (!existing) throw new Error('Unable to load shared data before saving waste table');
-      const storedWaste = existing.productionInventory?.mermasDesperdicios || {};
+      const storedWaste = existing.mermasDesperdicios || {};
       const storedSection = storedWaste[wasteSectionKey] || {};
       await savePlannerData({
         productionInventory: {
@@ -971,9 +985,9 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
     setWasteSaveStatus('saving');
     setWasteSaveStatusKey(activeWasteKey);
     try {
-      const existing = await loadPlannerData();
+      const existing = await loadProductionInventoryData();
       if (!existing) throw new Error('Unable to load shared data before enabling waste table entry');
-      const storedWaste = existing.productionInventory?.mermasDesperdicios || {};
+      const storedWaste = existing.mermasDesperdicios || {};
       const storedSection = storedWaste[wasteSectionKey] || {};
       const storedRows = normalizeWasteRows(storedSection[wasteDateKey]);
       if (hasWasteTableContent(storedRows)) {
@@ -2715,6 +2729,11 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                           No se pudo generar el PDF. Verifica que el logo esté disponible e inténtalo de nuevo.
                         </div>
                       )}
+                      {wasteCopyStatus === 'error' && (
+                        <div role="alert" className="px-4 py-2 text-[10px] font-bold text-red-600">
+                          No se pudo copiar la columna. Verifica los permisos del navegador e inténtalo de nuevo.
+                        </div>
+                      )}
                       <table className="w-full border-collapse text-left text-xs">
                         <thead>
                           <tr className={headerColor}>
@@ -2891,6 +2910,34 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                             </tr>
                           ))}
                         </tbody>
+                        {canCopyWasteValues && hasSavedTable && !isWasteEditing && (
+                          <tfoot>
+                            <tr className="border-t border-slate-200 bg-slate-50">
+                              <td />
+                              <td />
+                              <td className="px-3 py-2 text-center">
+                                <button
+                                  type="button"
+                                  onClick={() => void copyWasteColumn('code', rows)}
+                                  className="rounded-full bg-slate-700 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-slate-800"
+                                >
+                                  {wasteCopyStatus === 'code-copied' ? 'Copiado' : 'Copiar'}
+                                </button>
+                              </td>
+                              <td />
+                              <td className="px-3 py-2 text-center">
+                                <button
+                                  type="button"
+                                  onClick={() => void copyWasteColumn('quantity', rows)}
+                                  className="rounded-full bg-slate-700 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white hover:bg-slate-800"
+                                >
+                                  {wasteCopyStatus === 'quantity-copied' ? 'Copiado' : 'Copiar'}
+                                </button>
+                              </td>
+                              <td />
+                            </tr>
+                          </tfoot>
+                        )}
                       </table>
                     </div>
                   );

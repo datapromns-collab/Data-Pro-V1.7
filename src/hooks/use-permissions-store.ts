@@ -229,7 +229,7 @@ function applyPermissionUpdates(state: SharedPermissionsState, updates: Permissi
 
 async function loadSharedPermissions(): Promise<SharedPermissionsState | null> {
   try {
-    const response = await fetch('/api/data', { cache: 'no-store' });
+    const response = await fetch('/api/data?section=permissions', { cache: 'no-store' });
     if (!response.ok) return null;
     const payload = await response.json();
     const permissions = payload?.permissions;

@@ -89,7 +89,9 @@ export function PermisosModule() {
     }
   }, [selectedUser, selectedUserId]);
 
-  if (!isLoaded) return null;
+  if (!isLoaded) {
+    return <div className="py-8 text-center text-sm font-bold text-slate-500">Cargando permisos...</div>;
+  }
 
   const sections = permissionSections[selectedModule] ?? [];
 

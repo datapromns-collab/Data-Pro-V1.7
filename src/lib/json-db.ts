@@ -85,6 +85,35 @@ export async function loadPlannerData(): Promise<PlannerData | null> {
   }
 }
 
+export async function loadProductionInventoryData(): Promise<Record<string, any> | null> {
+  try {
+    const res = await fetchWithRetry(`${API_URL}?section=productionInventory`);
+    if (!res.ok) throw new Error('Production inventory API error');
+    const json = await res.json();
+    const inventory = json.productionInventory;
+    return inventory && typeof inventory === 'object' && !Array.isArray(inventory) ? inventory : {};
+  } catch (error) {
+    console.warn('[JSON_DB] Unable to load production inventory', error);
+    return null;
+  }
+}
+
+export async function loadProductionWasteRows(
+  section: 'mermas' | 'desperdicios',
+  date: string,
+): Promise<{ rows: unknown[] | null } | null> {
+  try {
+    const params = new URLSearchParams({ section: 'productionWaste', wasteSection: section, date });
+    const res = await fetchWithRetry(`${API_URL}?${params.toString()}`);
+    if (!res.ok) throw new Error('Production waste API error');
+    const json = await res.json();
+    return { rows: Array.isArray(json.rows) ? json.rows : null };
+  } catch (error) {
+    console.warn('[JSON_DB] Unable to load production waste rows', error);
+    return null;
+  }
+}
+
 export async function savePlannerData(data: Partial<PlannerData>): Promise<void> {
   try {
     const { _meta: _ignoredMeta, ...plannerData } = data as any;

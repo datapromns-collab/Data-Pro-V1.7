@@ -13531,23 +13531,23 @@
         "2026-09-21": {
           "tapas": {
             "EMP_0095-Alpla": {
-              "totalCajas": "",
+              "totalCajas": "924000",
               "total": ""
             },
             "EMP_0095-Importada": {
-              "totalCajas": "",
+              "totalCajas": "1464000",
               "total": ""
             },
             "EMP_0105-Alpla": {
-              "totalCajas": "",
+              "totalCajas": "1183000",
               "total": ""
             },
             "EMP_0105-ImportadaEW": {
-              "totalCajas": "",
+              "totalCajas": "2592000",
               "total": ""
             },
             "EMP_0105-ImportadaTipo2": {
-              "totalCajas": "",
+              "totalCajas": "1435200",
               "total": ""
             }
           },
@@ -13717,23 +13717,23 @@
         "2026-09-28": {
           "tapas": {
             "EMP_0095-Alpla": {
-              "totalCajas": "924000",
+              "totalCajas": "",
               "total": ""
             },
             "EMP_0095-Importada": {
-              "totalCajas": "1464000",
+              "totalCajas": "",
               "total": ""
             },
             "EMP_0105-Alpla": {
-              "totalCajas": "1183000",
+              "totalCajas": "",
               "total": ""
             },
             "EMP_0105-ImportadaEW": {
-              "totalCajas": "2592000",
+              "totalCajas": "",
               "total": ""
             },
             "EMP_0105-ImportadaTipo2": {
-              "totalCajas": "1435200",
+              "totalCajas": "",
               "total": ""
             }
           },
@@ -14065,7 +14065,8 @@
         "demon2": [
           "planning",
           "ordenes-sap",
-          "management"
+          "management",
+          "produccion"
         ],
         "maria.mds": [
           "jarabes",
@@ -14663,7 +14664,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-28T11:48:02.001Z"
+    "updatedAt": "2026-09-28T11:58:18.839Z"
   },
   "ordenesSap": [
     {
@@ -164088,7 +164089,24 @@
       "2026-09-26-Gamma Ro-432-6": "166,5",
       "2026-09-26-RO Cleaner-6": "213,7",
       "2026-09-26-Sanitizer-6": "282,5",
-      "2026-09-26-LARK CLEAN 21C-6": "200"
+      "2026-09-26-LARK CLEAN 21C-6": "200",
+      "2026-09-27-LP20-0": "186,9",
+      "2026-09-27-Cloro-0": "601,3",
+      "2026-09-27-AntiEscalante-0": "1092,5",
+      "2026-09-27-Sal-0": "7080",
+      "2026-09-27-Alcalino-0": "2063,8",
+      "2026-09-27-Peracetico-0": "680,3",
+      "2026-09-27-Lark Foam Quat-0": "115,8",
+      "2026-09-27-Lark Foam IN-0": "230",
+      "2026-09-27-Lark Desengrasante-0": "0",
+      "2026-09-27-Soda Caustica-0": "532,4",
+      "2026-09-27-GermiQuat-0": "25",
+      "2026-09-27-Lark Inox-0": "45",
+      "2026-09-27-TM Smart-0": "388,4",
+      "2026-09-27-Gamma Ro-432-0": "166,5",
+      "2026-09-27-RO Cleaner-0": "213,7",
+      "2026-09-27-Sanitizer-0": "282,5",
+      "2026-09-27-LARK CLEAN 21C-0": "200"
     },
     "sala-jarabe-glup": [
       {
