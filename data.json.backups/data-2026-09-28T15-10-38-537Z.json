@@ -11188,30 +11188,6 @@
             "name": "GLUP FRESH",
             "lineId": "1",
             "loadPerHour": 1500,
-            "quantity": 64500,
-            "durationHours": 43,
-            "presentation": "2Lts",
-            "tanks": 7.48,
-            "startTime": "2026-10-01T14:00:00.000Z",
-            "endTime": "2026-10-03T09:00:00.000Z",
-            "id": "d2fnvwawz",
-            "color": "#10b981"
-          },
-          {
-            "name": "CIP 3P ALCALINO",
-            "lineId": "3",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 2,
-            "startTime": "2026-10-01T20:30:00.000Z",
-            "endTime": "2026-10-01T22:30:00.000Z",
-            "id": "776no98sf",
-            "color": "#587593"
-          },
-          {
-            "name": "GLUP FRESH",
-            "lineId": "1",
-            "loadPerHour": 1500,
             "quantity": 71250,
             "durationHours": 47.5,
             "presentation": "2Lts",
@@ -11563,6 +11539,30 @@
             "endTime": "2026-10-01T14:00:00.000Z",
             "id": "4keeno49x",
             "color": "#10b981"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 64500,
+            "durationHours": 43,
+            "presentation": "2Lts",
+            "tanks": 7.48,
+            "startTime": "2026-10-01T14:00:00.000Z",
+            "endTime": "2026-10-03T09:00:00.000Z",
+            "id": "d2fnvwawz",
+            "color": "#10b981"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "3",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-10-01T20:30:00.000Z",
+            "endTime": "2026-10-01T22:30:00.000Z",
+            "id": "776no98sf",
+            "color": "#587593"
           }
         ],
         "realProduction": {},
@@ -15099,7 +15099,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-28T15:09:41.352Z"
+    "updatedAt": "2026-09-28T15:10:35.602Z"
   },
   "ordenesSap": [
     {

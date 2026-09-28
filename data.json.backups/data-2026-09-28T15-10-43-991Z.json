@@ -11212,19 +11212,6 @@
           },
           {
             "name": "GLUP COLA",
-            "lineId": "3",
-            "loadPerHour": 2800,
-            "quantity": 67200,
-            "durationHours": 24,
-            "presentation": "2Lts",
-            "tanks": 7.79,
-            "startTime": "2026-09-28T11:00:00.000Z",
-            "endTime": "2026-09-29T11:00:00.000Z",
-            "id": "nacqyiw0q",
-            "color": "#6366f1"
-          },
-          {
-            "name": "GLUP COLA",
             "lineId": "4",
             "loadPerHour": 2800,
             "quantity": 196000,
@@ -11529,6 +11516,18 @@
             "color": "#f59e0b"
           },
           {
+            "name": "OTROS",
+            "description": "inv M\nCIP 3p",
+            "lineId": "1",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 5,
+            "startTime": "2026-10-01T09:00:00.000Z",
+            "endTime": "2026-10-01T14:00:00.000Z",
+            "id": "4keeno49x",
+            "color": "#10b981"
+          },
+          {
             "name": "GLUP FRESH",
             "lineId": "1",
             "loadPerHour": 1500,
@@ -11553,16 +11552,17 @@
             "color": "#587593"
           },
           {
-            "name": "OTROS",
-            "description": "inv M\nCIP 3p",
-            "lineId": "1",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 5,
-            "startTime": "2026-10-01T09:00:00.000Z",
-            "endTime": "2026-10-01T14:00:00.000Z",
-            "id": "4keeno49x",
-            "color": "#10b981"
+            "name": "GLUP COLA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 96600,
+            "durationHours": 34.5,
+            "presentation": "2Lts",
+            "tanks": 11.2,
+            "startTime": "2026-10-01T22:30:00.000Z",
+            "endTime": "2026-10-03T09:00:00.000Z",
+            "id": "cskep0lci",
+            "color": "#47CCB0"
           }
         ],
         "realProduction": {},
@@ -11595,7 +11595,8 @@
           "a6lnx92yi",
           "ng454p6bu",
           "femht50gw",
-          "ag7g40th6"
+          "ag7g40th6",
+          "nacqyiw0q"
         ]
       }
     },
@@ -15099,7 +15100,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-28T15:09:48.277Z"
+    "updatedAt": "2026-09-28T15:10:42.971Z"
   },
   "ordenesSap": [
     {

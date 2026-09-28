@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-28T00:00:00.000",
+      "weekStartDate": "2026-09-21T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -11185,6 +11185,18 @@
       "2026-09-28": {
         "tasks": [
           {
+            "name": "OTROS",
+            "description": "inv M\nCIP 3p",
+            "lineId": "1",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 5,
+            "startTime": "2026-10-01T09:00:00.000Z",
+            "endTime": "2026-10-01T14:00:00.000Z",
+            "id": "4keeno49x",
+            "color": "#10b981"
+          },
+          {
             "name": "GLUP FRESH",
             "lineId": "1",
             "loadPerHour": 1500,
@@ -11209,19 +11221,6 @@
             "endTime": "2026-09-30T10:30:00.000Z",
             "id": "nufgrmtme",
             "color": "#587593"
-          },
-          {
-            "name": "GLUP COLA",
-            "lineId": "3",
-            "loadPerHour": 2800,
-            "quantity": 67200,
-            "durationHours": 24,
-            "presentation": "2Lts",
-            "tanks": 7.79,
-            "startTime": "2026-09-28T11:00:00.000Z",
-            "endTime": "2026-09-29T11:00:00.000Z",
-            "id": "nacqyiw0q",
-            "color": "#6366f1"
           },
           {
             "name": "GLUP COLA",
@@ -11529,18 +11528,6 @@
             "color": "#f59e0b"
           },
           {
-            "name": "OTROS",
-            "description": "inv M\nCIP 3p",
-            "lineId": "1",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 5,
-            "startTime": "2026-10-01T09:00:00.000Z",
-            "endTime": "2026-10-01T14:00:00.000Z",
-            "id": "4keeno49x",
-            "color": "#10b981"
-          },
-          {
             "name": "GLUP FRESH",
             "lineId": "1",
             "loadPerHour": 1500,
@@ -11563,6 +11550,32 @@
             "endTime": "2026-10-01T22:30:00.000Z",
             "id": "776no98sf",
             "color": "#587593"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 96600,
+            "durationHours": 34.5,
+            "presentation": "2Lts",
+            "tanks": 11.2,
+            "startTime": "2026-10-01T22:30:00.000Z",
+            "endTime": "2026-10-03T09:00:00.000Z",
+            "id": "cskep0lci",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "3",
+            "loadPerHour": 2800,
+            "quantity": 198800,
+            "durationHours": 71,
+            "presentation": "",
+            "tanks": 0,
+            "startTime": "2026-09-28T11:00:00.000Z",
+            "endTime": "2026-10-01T10:00:00.000Z",
+            "id": "zc8ykouz3",
+            "color": "#10b981"
           }
         ],
         "realProduction": {},
@@ -11595,7 +11608,8 @@
           "a6lnx92yi",
           "ng454p6bu",
           "femht50gw",
-          "ag7g40th6"
+          "ag7g40th6",
+          "nacqyiw0q"
         ]
       }
     },
@@ -15099,7 +15113,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-28T15:09:53.357Z"
+    "updatedAt": "2026-09-28T15:11:00.615Z"
   },
   "ordenesSap": [
     {
