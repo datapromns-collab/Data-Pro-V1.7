@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-28T00:00:00.000",
+      "weekStartDate": "2026-09-01T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -11185,6 +11185,18 @@
       "2026-09-28": {
         "tasks": [
           {
+            "name": "OTROS",
+            "description": "inv M\nCIP 3p",
+            "lineId": "1",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 5,
+            "startTime": "2026-10-01T09:00:00.000Z",
+            "endTime": "2026-10-01T14:00:00.000Z",
+            "id": "4keeno49x",
+            "color": "#10b981"
+          },
+          {
             "name": "GLUP FRESH",
             "lineId": "1",
             "loadPerHour": 1500,
@@ -11493,18 +11505,6 @@
             "color": "#f59e0b"
           },
           {
-            "name": "OTROS",
-            "description": "inv M\nCIP 3p",
-            "lineId": "1",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 5,
-            "startTime": "2026-10-01T09:00:00.000Z",
-            "endTime": "2026-10-01T14:00:00.000Z",
-            "id": "4keeno49x",
-            "color": "#10b981"
-          },
-          {
             "name": "GLUP FRESH",
             "lineId": "1",
             "loadPerHour": 1500,
@@ -11591,6 +11591,18 @@
             "color": "#ec4899"
           },
           {
+            "name": "OTROS",
+            "description": "inv M\nCIP 3p",
+            "lineId": "6",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 5,
+            "startTime": "2026-10-01T09:01:00.000Z",
+            "endTime": "2026-10-01T14:01:00.000Z",
+            "id": "qr9mhjuti",
+            "color": "#47CCB0"
+          },
+          {
             "name": "GLUP FRESH",
             "lineId": "6",
             "loadPerHour": 1200,
@@ -11602,18 +11614,6 @@
             "endTime": "2026-10-02T04:24:00.000Z",
             "id": "r6br220cw",
             "color": "#f59e0b"
-          },
-          {
-            "name": "OTROS",
-            "description": "inv M\nCIP 3p",
-            "lineId": "6",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 5,
-            "startTime": "2026-10-01T09:01:00.000Z",
-            "endTime": "2026-10-01T14:01:00.000Z",
-            "id": "qr9mhjuti",
-            "color": "#47CCB0"
           },
           {
             "name": "CS",
@@ -11699,18 +11699,6 @@
             "color": "#47CCB0"
           },
           {
-            "name": "OTROS",
-            "description": "inventario mensual",
-            "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 5,
-            "startTime": "2026-10-01T09:00:00.000Z",
-            "endTime": "2026-10-01T14:00:00.000Z",
-            "id": "tl90i2s5q",
-            "color": "#f59e0b"
-          },
-          {
             "name": "GLUP COLA",
             "lineId": "7",
             "loadPerHour": 2500,
@@ -11722,6 +11710,18 @@
             "endTime": "2026-10-01T08:59:59.520Z",
             "id": "qcounout6",
             "color": "#ef4444"
+          },
+          {
+            "name": "OTROS",
+            "description": "inventario mensual",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 5,
+            "startTime": "2026-10-01T09:00:00.000Z",
+            "endTime": "2026-10-01T14:00:00.000Z",
+            "id": "tl90i2s5q",
+            "color": "#f59e0b"
           },
           {
             "name": "GLUP COLA",
@@ -15274,7 +15274,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-28T15:20:26.587Z"
+    "updatedAt": "2026-09-28T17:34:14.374Z"
   },
   "ordenesSap": [
     {
@@ -24968,6 +24968,46 @@
           "fechaInicio": "2026-09-27",
           "ticket1": "16035",
           "cajas1": 5064,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1790609854603",
+      "linea": 5,
+      "sabor": "JUSTY NARANJA",
+      "ordenNumero": "63900",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-28",
+          "ticket1": "17949",
+          "cajas1": 50,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1790610053303",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63906",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-28",
+          "ticket1": "16221",
+          "cajas1": 624,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",

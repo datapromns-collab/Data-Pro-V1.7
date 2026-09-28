@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-21T00:00:00.000",
+      "weekStartDate": "2026-09-14T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -11722,6 +11722,19 @@
             "endTime": "2026-10-01T14:00:00.000Z",
             "id": "tl90i2s5q",
             "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "7",
+            "loadPerHour": 2500,
+            "quantity": 107500,
+            "durationHours": 43,
+            "presentation": "1Lt",
+            "tanks": 12.46,
+            "startTime": "2026-10-01T14:00:00.000Z",
+            "endTime": "2026-10-03T09:00:00.000Z",
+            "id": "s46rnen91",
+            "color": "#ef4444"
           }
         ],
         "realProduction": {},
@@ -15261,7 +15274,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-28T15:19:59.076Z"
+    "updatedAt": "2026-09-28T15:46:47.379Z"
   },
   "ordenesSap": [
     {
@@ -24955,6 +24968,46 @@
           "fechaInicio": "2026-09-27",
           "ticket1": "16035",
           "cajas1": 5064,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1790609854603",
+      "linea": 5,
+      "sabor": "JUSTY NARANJA",
+      "ordenNumero": "63900",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-28",
+          "ticket1": "17949",
+          "cajas1": 50,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1790610053303",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63906",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-28",
+          "ticket1": "16221",
+          "cajas1": 624,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",

@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-21T00:00:00.000",
+      "weekStartDate": "2026-09-01T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -15274,7 +15274,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-28T15:20:58.682Z"
+    "updatedAt": "2026-09-28T17:34:14.374Z"
   },
   "ordenesSap": [
     {
@@ -24968,6 +24968,46 @@
           "fechaInicio": "2026-09-27",
           "ticket1": "16035",
           "cajas1": 5064,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "5-1790609854603",
+      "linea": 5,
+      "sabor": "JUSTY NARANJA",
+      "ordenNumero": "63900",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-28",
+          "ticket1": "17949",
+          "cajas1": 50,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1790610053303",
+      "linea": 7,
+      "sabor": "GLUP COLA",
+      "ordenNumero": "63906",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-28",
+          "ticket1": "16221",
+          "cajas1": 624,
           "ticket2": "",
           "cajas2": 0,
           "ticket3": "",
@@ -36620,6 +36660,28 @@
             "preparado": "40",
             "final": "40"
           }
+        },
+        "2026-09-28": {
+          "GLUP COLA": {
+            "inicial": "62.55",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "10.29",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP KOLITA": {
+            "inicial": "54.57",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY NARANJA": {
+            "inicial": "40",
+            "preparado": "",
+            "final": ""
+          }
         }
       },
       "sugar": {
@@ -37627,6 +37689,23 @@
             "recepcionSacos": "",
             "invFinalSacos": ""
           }
+        },
+        "2026-09-28": {
+          "PORTUGUESA": {
+            "invInicialSacos": "4280",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "920",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "PASTORA": {
+            "invInicialSacos": "2640",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
         }
       },
       "tanques": {
@@ -38490,6 +38569,16 @@
           "Sala 1": {
             "invInicialSacos": "1832",
             "invFinalSacos": "1370"
+          }
+        },
+        "2026-09-28": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "368",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "1370",
+            "invFinalSacos": ""
           }
         }
       },
