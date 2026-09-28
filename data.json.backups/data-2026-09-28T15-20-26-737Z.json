@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-28T00:00:00.000",
+      "weekStartDate": "2026-09-21T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -11591,18 +11591,6 @@
             "color": "#ec4899"
           },
           {
-            "name": "OTROS",
-            "description": "inv M\nCIP 3p",
-            "lineId": "6",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 5,
-            "startTime": "2026-10-01T09:01:00.000Z",
-            "endTime": "2026-10-01T14:01:00.000Z",
-            "id": "qr9mhjuti",
-            "color": "#47CCB0"
-          },
-          {
             "name": "GLUP FRESH",
             "lineId": "6",
             "loadPerHour": 1200,
@@ -11614,6 +11602,18 @@
             "endTime": "2026-10-02T04:24:00.000Z",
             "id": "r6br220cw",
             "color": "#f59e0b"
+          },
+          {
+            "name": "OTROS",
+            "description": "inv M\nCIP 3p",
+            "lineId": "6",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 5,
+            "startTime": "2026-10-01T09:01:00.000Z",
+            "endTime": "2026-10-01T14:01:00.000Z",
+            "id": "qr9mhjuti",
+            "color": "#47CCB0"
           },
           {
             "name": "CS",
@@ -11699,6 +11699,18 @@
             "color": "#47CCB0"
           },
           {
+            "name": "OTROS",
+            "description": "inventario mensual",
+            "lineId": "7",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 5,
+            "startTime": "2026-10-01T09:00:00.000Z",
+            "endTime": "2026-10-01T14:00:00.000Z",
+            "id": "tl90i2s5q",
+            "color": "#f59e0b"
+          },
+          {
             "name": "GLUP COLA",
             "lineId": "7",
             "loadPerHour": 2500,
@@ -11712,16 +11724,17 @@
             "color": "#ef4444"
           },
           {
-            "name": "OTROS",
-            "description": "inventario mensual",
+            "name": "GLUP COLA",
             "lineId": "7",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 5,
-            "startTime": "2026-10-01T09:00:00.000Z",
-            "endTime": "2026-10-01T14:00:00.000Z",
-            "id": "tl90i2s5q",
-            "color": "#f59e0b"
+            "loadPerHour": 2500,
+            "quantity": 107500,
+            "durationHours": 43,
+            "presentation": "1Lt",
+            "tanks": 12.46,
+            "startTime": "2026-10-01T14:00:00.000Z",
+            "endTime": "2026-10-03T09:00:00.000Z",
+            "id": "s46rnen91",
+            "color": "#ef4444"
           }
         ],
         "realProduction": {},
@@ -15261,7 +15274,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-28T15:19:36.961Z"
+    "updatedAt": "2026-09-28T15:20:25.454Z"
   },
   "ordenesSap": [
     {
