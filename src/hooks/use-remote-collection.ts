@@ -152,6 +152,13 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
     };
     const last = queueRef.current[queueRef.current.length - 1];
     if (last) {
+      const lastIndex = queueRef.current.length - 1;
+      const activeRequestOwnsLastItem = sendingRef.current && lastIndex === 0;
+      if (activeRequestOwnsLastItem) {
+        queueRef.current = [...queueRef.current, item];
+        savePendingQueue(namespace, queueRef.current);
+        return;
+      }
       const lastIsArrayState = last.payload && typeof last.payload === 'object' && Array.isArray(last.payload.items);
       const newIsArrayState = payload && typeof payload === 'object' && Array.isArray(payload.items);
       if (lastIsArrayState && newIsArrayState) {
@@ -161,7 +168,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
         return;
       }
       if (!lastIsArrayState && !newIsArrayState && typeof payload === 'object' && typeof last.payload === 'object') {
-        last.payload = payload;
+        last.payload = deepMerge(last.payload, payload);
         last.timestamp = Date.now();
         savePendingQueue(namespace, queueRef.current);
         return;
@@ -371,7 +378,7 @@ export function useRemoteCollection<T = any>(namespace: string, initial: T, quer
 
       if (!skipQueryCache) {
         const cachedQuery = getQueryCache<T>(queryCacheKey);
-        if (cachedQuery) {
+        if (cachedQuery && !pendingRef.current) {
           // Use the cache as an initial render value, but continue to the
           // server so shared data is always authoritative after hydration.
           setData(cachedQuery);
