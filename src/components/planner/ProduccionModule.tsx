@@ -395,6 +395,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const [wasteSaveStatus, setWasteSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
   const [wasteSaveStatusKey, setWasteSaveStatusKey] = useState<string | null>(null);
   const [wastePdfStatus, setWastePdfStatus] = useState<'idle' | 'generating' | 'error'>('idle');
+  const wasteLocalWriteVersion = useRef(0);
   const [recepcionesDiariasFecha, setRecepcionesDiariasFecha] = useState<Date>(() => new Date());
   const [recepcionesSemanalFecha, setRecepcionesSemanalFecha] = useState<Date>(() => new Date());
   const [inventariosSubTab, setInventariosSubTab] = useState<'diarios' | 'semanal' | 'mensual'>(weeklyOnly ? 'semanal' : 'diarios');
@@ -518,6 +519,38 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
     void loadProductionData();
     return () => { cancelled = true; };
   }, [productionLoadRetry]);
+
+  useEffect(() => {
+    if (!productionLoaded || !wasteSectionKey || isWasteEditing) return;
+    let cancelled = false;
+    const syncActiveWasteTable = async () => {
+      const versionAtRequestStart = wasteLocalWriteVersion.current;
+      const data = await loadPlannerData();
+      if (cancelled || !data || versionAtRequestStart !== wasteLocalWriteVersion.current) return;
+      const storedDays = data.productionInventory?.mermasDesperdicios?.[wasteSectionKey];
+      const hasStoredDate = !!storedDays && Object.prototype.hasOwnProperty.call(storedDays, wasteDateKey);
+      const incomingRows = hasStoredDate ? normalizeWasteRows(storedDays[wasteDateKey]) : null;
+      setWasteTablesBySection((tables) => {
+        const currentRows = tables[wasteSectionKey][wasteDateKey];
+        if (
+          (incomingRows === null && currentRows === undefined) ||
+          (incomingRows !== null && JSON.stringify(currentRows) === JSON.stringify(incomingRows))
+        ) return tables;
+        const nextDays = { ...tables[wasteSectionKey] };
+        if (incomingRows === null) delete nextDays[wasteDateKey];
+        else nextDays[wasteDateKey] = incomingRows.map((row) => (
+          wasteSectionKey === 'mermas' ? { ...row, unit: 'UND' } : row
+        ));
+        return { ...tables, [wasteSectionKey]: nextDays };
+      });
+    };
+    void syncActiveWasteTable();
+    const timer = window.setInterval(() => void syncActiveWasteTable(), 5000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(timer);
+    };
+  }, [productionLoaded, wasteSectionKey, wasteDateKey, isWasteEditing]);
 
   useEffect(() => {
     const savedPeriodData = productionByPeriod[inventariosSubTab][activePeriodKey];
@@ -913,6 +946,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
           },
         },
       });
+      wasteLocalWriteVersion.current += 1;
       setWasteTablesBySection((tables) => ({
         ...tables,
         [wasteSectionKey]: {
@@ -953,19 +987,19 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
             ...storedWaste,
             [wasteSectionKey]: {
               ...storedSection,
-              [wasteDateKey]: null,
+              [wasteDateKey]: [],
             },
           },
         },
       });
-      setWasteTablesBySection((tables) => {
-        const nextDays = { ...tables[wasteSectionKey] };
-        delete nextDays[wasteDateKey];
-        return {
-          ...tables,
-          [wasteSectionKey]: nextDays,
-        };
-      });
+      wasteLocalWriteVersion.current += 1;
+      setWasteTablesBySection((tables) => ({
+        ...tables,
+        [wasteSectionKey]: {
+          ...tables[wasteSectionKey],
+          [wasteDateKey]: [],
+        },
+      }));
       setWasteEditingKey(null);
       setWasteSaveStatus('saved');
     } catch (error) {
@@ -2585,8 +2619,13 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                   const isMermas = section === 'mermas';
                   const sourceRows = isWasteEditing ? wasteDraftRows : activeWasteRows;
                   const rows = isMermas ? sourceRows : getWasteRowsWithGeneratedCaps(sourceRows);
-                  const hasSavedTable = Object.prototype.hasOwnProperty.call(wasteTablesBySection[section], wasteDateKey);
-                  const canResetEmptyTable = canEditWasteTables && hasSavedTable && !isWasteEditing && !hasWasteTableContent(activeWasteRows);
+                  const hasPersistedTable = Object.prototype.hasOwnProperty.call(wasteTablesBySection[section], wasteDateKey);
+                  const hasSavedTable = hasWasteTableContent(activeWasteRows);
+                  const canResetEmptyTable = canEditWasteTables &&
+                    hasPersistedTable &&
+                    activeWasteRows.length > 0 &&
+                    !hasSavedTable &&
+                    !isWasteEditing;
                   const headerColor = isMermas
                     ? 'bg-blue-700 text-white'
                     : 'bg-green-700 text-white';

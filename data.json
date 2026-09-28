@@ -14065,7 +14065,8 @@
         "demon2": [
           "planning",
           "ordenes-sap",
-          "management"
+          "management",
+          "produccion"
         ],
         "maria.mds": [
           "jarabes",
@@ -14663,7 +14664,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-28T11:38:59.862Z"
+    "updatedAt": "2026-09-28T11:48:24.883Z"
   },
   "ordenesSap": [
     {
