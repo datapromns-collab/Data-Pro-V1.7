@@ -5979,7 +5979,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                     )}
                     {activeModule === 'calidad' && isDemon && <CalidadModule />}
                     {activeModule === 'mtto' && (
-                      <MttoModule />
+                      <MttoModule getCo2TheoreticalForDate={calcularKgCo2ParaFecha} />
                     )}
                       {activeModule === 'insumos' && isDemon && (
                        <div className="flex flex-col h-full">
@@ -8600,5 +8600,3 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
   });
 
   OrdenTrabajoRow.displayName = 'OrdenTrabajoRow';
-
-

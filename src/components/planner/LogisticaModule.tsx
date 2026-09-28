@@ -465,18 +465,14 @@ export function LogisticaModule() {
     })();
 
     return () => {
-      try {
-        if (viewer && typeof viewer.destroy === 'function') {
-          try { viewer.destroy(); } catch {}
-        }
-        if (client && typeof client.destroy === 'function') {
-          try { client.destroy(); } catch {}
-        }
-      } catch {
-        // ignore viewer cleanup errors
+      if (viewer) {
+        try { viewer.destroy(); } catch {}
+      }
+      if (client) {
+        try { client.destroy(); } catch {}
       }
       if (logisticaViewerClientRef.current?.url) {
-        try { URL.revokeObjectURL(logisticaViewerClientRef.current.url); } catch {}
+        URL.revokeObjectURL(logisticaViewerClientRef.current.url);
       }
       logisticaViewerClientRef.current = null;
     };
