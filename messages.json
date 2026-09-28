@@ -1306,7 +1306,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt2.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-25T20:15:10.226Z"
     },
     {
@@ -1317,7 +1317,7 @@
       "senderId": "demon",
       "senderName": "Yonny Hernández",
       "recipient": "prodt2.mds",
-      "read": false,
+      "read": true,
       "createdAt": "2026-09-25T20:11:27.814Z"
     },
     {

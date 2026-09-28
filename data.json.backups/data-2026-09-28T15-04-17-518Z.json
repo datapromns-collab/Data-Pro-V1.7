@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-28T00:00:00.000",
+      "weekStartDate": "2026-09-21T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -11188,12 +11188,12 @@
             "name": "GLUP FRESH",
             "lineId": "1",
             "loadPerHour": 1500,
-            "quantity": 36000,
-            "durationHours": 24,
+            "quantity": 71250,
+            "durationHours": 47.5,
             "presentation": "2Lts",
-            "tanks": 4.17,
+            "tanks": 8.26,
             "startTime": "2026-09-28T11:00:00.000Z",
-            "endTime": "2026-09-29T11:00:00.000Z",
+            "endTime": "2026-09-30T10:30:00.000Z",
             "id": "zq3onvizw",
             "color": "#ef4444"
           },
@@ -11201,12 +11201,12 @@
             "name": "GLUP KOLITA",
             "lineId": "2",
             "loadPerHour": 2500,
-            "quantity": 60000,
-            "durationHours": 24,
+            "quantity": 118750,
+            "durationHours": 47.5,
             "presentation": "2Lts",
-            "tanks": 6.75,
+            "tanks": 13.35,
             "startTime": "2026-09-28T11:00:00.000Z",
-            "endTime": "2026-09-29T11:00:00.000Z",
+            "endTime": "2026-09-30T10:30:00.000Z",
             "id": "nufgrmtme",
             "color": "#587593"
           },
@@ -11418,6 +11418,116 @@
             "endTime": "2026-10-03T06:30:00.000Z",
             "id": "g32vq6pt4",
             "color": "#587593"
+          },
+          {
+            "name": "CS",
+            "lineId": "1",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-09-30T10:30:00.000Z",
+            "endTime": "2026-09-30T11:00:00.000Z",
+            "id": "mqt2tzt6s",
+            "color": "#10b981"
+          },
+          {
+            "name": "GLUP PIÑA",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 34500,
+            "durationHours": 23,
+            "presentation": "2Lts",
+            "tanks": 4.75,
+            "startTime": "2026-09-30T11:00:00.000Z",
+            "endTime": "2026-10-01T10:00:00.000Z",
+            "id": "wrcv2t59v",
+            "color": "#6366f1"
+          },
+          {
+            "name": "CIP 3P ALCALINO",
+            "lineId": "1",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 2,
+            "startTime": "2026-10-01T10:00:00.000Z",
+            "endTime": "2026-10-01T12:00:00.000Z",
+            "id": "femht50gw",
+            "color": "#ec4899"
+          },
+          {
+            "name": "GLUP FRESH",
+            "lineId": "1",
+            "loadPerHour": 1500,
+            "quantity": 67500,
+            "durationHours": 45,
+            "presentation": "2Lts",
+            "tanks": 7.83,
+            "startTime": "2026-10-01T12:00:00.000Z",
+            "endTime": "2026-10-03T09:00:00.000Z",
+            "id": "ng454p6bu",
+            "color": "#10b981"
+          },
+          {
+            "name": "CS",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-09-30T10:30:00.000Z",
+            "endTime": "2026-09-30T11:00:00.000Z",
+            "id": "8qpjl9jly",
+            "color": "#f59e0b"
+          },
+          {
+            "name": "GLUP UVA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 55000,
+            "durationHours": 22,
+            "presentation": "2Lts",
+            "tanks": 7.73,
+            "startTime": "2026-09-30T11:00:00.000Z",
+            "endTime": "2026-10-01T09:00:00.000Z",
+            "id": "peaqwfnpy",
+            "color": "#ef4444"
+          },
+          {
+            "name": "OTROS",
+            "description": "inventario mensual",
+            "lineId": "2",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 5,
+            "startTime": "2026-10-01T09:00:00.000Z",
+            "endTime": "2026-10-01T14:00:00.000Z",
+            "id": "54vsgg0v6",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "GLUP UVA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 51250,
+            "durationHours": 20.5,
+            "presentation": "2Lts",
+            "tanks": 7.21,
+            "startTime": "2026-10-01T14:00:00.000Z",
+            "endTime": "2026-10-02T10:30:00.000Z",
+            "id": "ydkp84zn5",
+            "color": "#587593"
+          },
+          {
+            "name": "GLUP KOLITA",
+            "lineId": "2",
+            "loadPerHour": 2500,
+            "quantity": 56250,
+            "durationHours": 22.5,
+            "presentation": "2Lts",
+            "tanks": 6.32,
+            "startTime": "2026-10-02T10:30:00.000Z",
+            "endTime": "2026-10-03T09:00:00.000Z",
+            "id": "ag7g40th6",
+            "color": "#587593"
           }
         ],
         "realProduction": {},
@@ -11444,7 +11554,10 @@
           "q65hqsq3x",
           "znpn3vbm6",
           "kd648ndil",
-          "tno02v6fu"
+          "tno02v6fu",
+          "xxcbzbxv3",
+          "brdu1sr2j",
+          "a6lnx92yi"
         ]
       }
     },
@@ -14948,7 +15061,7 @@
     }
   },
   "_meta": {
-    "updatedAt": "2026-09-28T13:07:51.091Z"
+    "updatedAt": "2026-09-28T15:04:15.171Z"
   },
   "ordenesSap": [
     {
@@ -36278,7 +36391,7 @@
           "GLUP COLA": {
             "inicial": "27.22",
             "preparado": "42",
-            "final": "62."
+            "final": "62.55"
           },
           "GLUP FRESH": {
             "inicial": "10.10",
@@ -38227,7 +38340,10 @@
         "2026-09-21": "50.33",
         "2026-09-22": "50.20",
         "2026-09-23": "50.26",
-        "2026-09-24": "50.21"
+        "2026-09-24": "50.21",
+        "2026-09-26": "50.31",
+        "2026-09-25": "50.39",
+        "2026-09-27": "50.22"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
@@ -38248,7 +38364,8 @@
         "2026-09-01": "1.02",
         "2026-09-13": "1.34",
         "2026-09-18": "1.02",
-        "2026-09-23": "1.02"
+        "2026-09-23": "1.02",
+        "2026-09-27": "1.02"
       },
       "_deletedIds": {},
       "weeklyFisico": {
@@ -38264,7 +38381,7 @@
         "2026-08-01|2026-08": 121494.94,
         "2026-09-07|2026-09": 1141476.37,
         "2026-09-14|2026-09": 1174355.86,
-        "2026-09-21|2026-09": 659796.11
+        "2026-09-21|2026-09": 1009476.45
       }
     },
     "seguimiento-etiquetadora": {
@@ -154829,7 +154946,7 @@
         "usuario": "Luis Sanchez"
       },
       {
-        "id": 1790363183629.9106,
+        "id": 1790350708206,
         "fechaOrden": "2026-09-21",
         "orden": "9620",
         "fechaEmision": "2026-09-21",
@@ -154852,11 +154969,11 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
-        "id": 1790363183629.5747,
+        "id": 1790351374299,
         "fechaOrden": "2026-09-21",
         "orden": "9621",
         "fechaEmision": "2026-09-21",
@@ -154879,7 +154996,7 @@
         "descripcionFalla": "",
         "descripcionAccion": "",
         "observaciones": "",
-        "bloqueado": true,
+        "bloqueado": false,
         "usuario": "Luis Blandin"
       },
       {
@@ -164033,7 +164150,12 @@
       "2026-09-26-suave": "208803",
       "2026-09-26-procesos": "2368155,84",
       "2026-09-26-filtrada": "3709603,27",
-      "2026-09-26-total": "2898937,40"
+      "2026-09-26-total": "2898937,40",
+      "2026-09-27-servicio": "16754",
+      "2026-09-27-suave": "16122",
+      "2026-09-27-procesos": "869784,83",
+      "2026-09-27-filtrada": "1612632,83",
+      "2026-09-27-total": "2448746,67"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -164541,7 +164663,7 @@
       "2026-09-26-LARK CLEAN 21C-2": "200",
       "2026-09-26-LARK CLEAN 21C-4": "200",
       "2026-09-26-LP20-6": "186,9",
-      "2026-09-26-Cloro-6": "601,3",
+      "2026-09-26-Cloro-6": "624",
       "2026-09-26-AntiEscalante-6": "1092,5",
       "2026-09-26-Sal-6": "7080",
       "2026-09-26-Alcalino-6": "2063,8",
@@ -164558,7 +164680,7 @@
       "2026-09-26-Sanitizer-6": "282,5",
       "2026-09-26-LARK CLEAN 21C-6": "200",
       "2026-09-27-LP20-0": "186,9",
-      "2026-09-27-Cloro-0": "601,3",
+      "2026-09-27-Cloro-0": "624",
       "2026-09-27-AntiEscalante-0": "1092,5",
       "2026-09-27-Sal-0": "7080",
       "2026-09-27-Alcalino-0": "2063,8",
@@ -164573,7 +164695,58 @@
       "2026-09-27-Gamma Ro-432-0": "166,5",
       "2026-09-27-RO Cleaner-0": "213,7",
       "2026-09-27-Sanitizer-0": "282,5",
-      "2026-09-27-LARK CLEAN 21C-0": "200"
+      "2026-09-27-LARK CLEAN 21C-0": "200",
+      "2026-09-27-LP20-4": "186,9",
+      "2026-09-27-Cloro-4": "610",
+      "2026-09-27-AntiEscalante-4": "1081,0",
+      "2026-09-27-Sal-4": "6740",
+      "2026-09-27-Alcalino-4": "1374,3",
+      "2026-09-27-Peracetico-4": "651,3",
+      "2026-09-27-Lark Foam Quat-4": "115,8",
+      "2026-09-27-Lark Foam IN-4": "230",
+      "2026-09-27-Lark Desengrasante-4": "0",
+      "2026-09-27-Soda Caustica-4": "532,4",
+      "2026-09-27-GermiQuat-4": "25",
+      "2026-09-27-Lark Inox-4": "45",
+      "2026-09-27-TM Smart-4": "388,4",
+      "2026-09-27-Gamma Ro-432-4": "166,5",
+      "2026-09-27-RO Cleaner-4": "213,7",
+      "2026-09-27-Sanitizer-4": "282,5",
+      "2026-09-27-LARK CLEAN 21C-4": "200",
+      "2026-09-27-LP20-6": "186,9",
+      "2026-09-27-Cloro-6": "593",
+      "2026-09-27-AntiEscalante-6": "1056,0",
+      "2026-09-27-Sal-6": "646",
+      "2026-09-27-Alcalino-6": "1374,3",
+      "2026-09-27-Peracetico-6": "651,3",
+      "2026-09-27-Lark Foam Quat-6": "115,8",
+      "2026-09-27-Lark Foam IN-6": "230",
+      "2026-09-27-Lark Desengrasante-6": "0",
+      "2026-09-27-Soda Caustica-6": "532,4",
+      "2026-09-27-GermiQuat-6": "25",
+      "2026-09-27-Lark Inox-6": "45",
+      "2026-09-27-TM Smart-6": "388,4",
+      "2026-09-27-Gamma Ro-432-6": "166,5",
+      "2026-09-27-RO Cleaner-6": "213,7",
+      "2026-09-27-Sanitizer-6": "282,5",
+      "2026-09-27-LARK CLEAN 21C-6": "20",
+      "2026-09-28-LP20-0": "186,9",
+      "2026-09-28-Cloro-0": "593",
+      "2026-09-28-AntiEscalante-0": "1056,0",
+      "2026-09-28-Sal-0": "646",
+      "2026-09-28-Alcalino-0": "1374,3",
+      "2026-09-28-Peracetico-0": "651,3",
+      "2026-09-28-Lark Foam Quat-0": "115,8",
+      "2026-09-28-Lark Foam IN-0": "230",
+      "2026-09-28-Lark Desengrasante-0": "0",
+      "2026-09-28-Soda Caustica-0": "532,4",
+      "2026-09-28-GermiQuat-0": "25",
+      "2026-09-28-Lark Inox-0": "45",
+      "2026-09-28-TM Smart-0": "388,4",
+      "2026-09-28-Gamma Ro-432-0": "166,5",
+      "2026-09-28-RO Cleaner-0": "213,7",
+      "2026-09-28-Sanitizer-0": "282,5",
+      "2026-09-28-LARK CLEAN 21C-0": "200"
     },
     "sala-jarabe-glup": [
       {

@@ -211,7 +211,8 @@ const normalizeWasteRows = (value: unknown): WasteTableRow[] => {
     .filter((row): row is Record<string, unknown> => !!row && typeof row === 'object' && !Array.isArray(row))
     .map((row) => {
       const line = typeof row.line === 'string' ? row.line : '';
-      const kind = row.kind === 'preformas' || row.kind === 'termo' ? row.kind : undefined;
+      const kind: WasteTableRow['kind'] =
+        row.kind === 'preformas' || row.kind === 'termo' ? row.kind : undefined;
       const flavor = typeof row.flavor === 'string' && row.flavor
         ? row.flavor
         : findWasteFlavor(line, typeof row.code === 'string' ? row.code : '');
