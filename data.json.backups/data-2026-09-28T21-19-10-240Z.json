@@ -15480,7 +15480,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-09-28T20:30:16.380Z"
+    "updatedAt": "2026-09-28T21:05:09.347Z"
   },
   "ordenesSap": [
     {
@@ -165601,6 +165601,12 @@
           "emp": {}
         }
       }
+    },
+    "mtto-co2-consumption": {
+      "2026-08-31-tank-1": "30",
+      "2026-08-31-tank-2": "50",
+      "2026-08-31-tank-3": "3",
+      "2026-08-31-tank-4": "5"
     }
   },
   "cacheVersion": 0,
@@ -165701,7 +165707,8 @@
         "row_1789504043936_e8sp9p"
       ]
     },
-    "ventas-pronostico-mensual": {}
+    "ventas-pronostico-mensual": {},
+    "mtto-co2-consumption": {}
   },
   "_deletedOrdenesSapIds": [
     "1-1785349102112",

@@ -26,6 +26,7 @@ interface MttoModuleProps {
 export default function MttoModule({ getCo2TheoreticalForDate }: MttoModuleProps) {
   const [activeSection, setActiveSection] = useState<'daily' | 'weekly' | 'monthly'>('daily');
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const [monthlyDate, setMonthlyDate] = useState(() => new Date());
   const co2Consumption = useRemoteCollection<Record<string, string>>('mtto-co2-consumption', {});
   const sections = [
     { id: 'daily', label: 'Consumo diario', icon: CalendarDays },
@@ -58,6 +59,42 @@ export default function MttoModule({ getCo2TheoreticalForDate }: MttoModuleProps
       yield: theoretical > 0 ? Number((physical / theoretical).toFixed(2)) : 0,
     };
   });
+  const monthStart = new Date(monthlyDate.getFullYear(), monthlyDate.getMonth(), 1);
+  const monthEnd = new Date(monthlyDate.getFullYear(), monthlyDate.getMonth() + 1, 0);
+  const firstMonthlyWeek = startOfWeek(monthStart, { weekStartsOn: 1 });
+  const monthlyWeeks: { isoWeek: number; days: Date[] }[] = [];
+  for (
+    let currentWeek = firstMonthlyWeek;
+    currentWeek <= monthEnd;
+    currentWeek = addDays(currentWeek, 7)
+  ) {
+    const days = Array.from({ length: 7 }, (_, index) => addDays(currentWeek, index))
+      .filter((day) => day >= monthStart && day <= monthEnd);
+    monthlyWeeks.push({ isoWeek: getISOWeek(currentWeek), days });
+  }
+  const monthlyCo2Data = monthlyWeeks.map((week) => {
+    const physical = week.days.reduce((total, day) => TANKS.reduce(
+      (dayTotal, tank) => dayTotal + getNumericValue(getCellValue(day, tank)),
+      total,
+    ), 0);
+    const theoretical = week.days.reduce(
+      (total, day) => total + getCo2TheoreticalForDate(format(day, 'yyyy-MM-dd')),
+      0,
+    );
+
+    return {
+      week: `SEM ${week.isoWeek}`,
+      physical,
+      theoretical,
+      yield: theoretical > 0 ? Number((physical / theoretical).toFixed(2)) : 0,
+    };
+  });
+  const currentYear = new Date().getFullYear();
+  const yearOptions = Array.from({ length: 11 }, (_, index) => currentYear - 5 + index);
+  const monthOptions = Array.from({ length: 12 }, (_, index) => ({
+    value: index,
+    label: format(new Date(2024, index, 1), 'MMMM', { locale: es }),
+  }));
   const formatCo2Value = (value: number) => value.toLocaleString('es-VE', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
@@ -284,6 +321,110 @@ export default function MttoModule({ getCo2TheoreticalForDate }: MttoModuleProps
                     <Line yAxisId="right" type="monotone" dataKey="yield" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
                   </ComposedChart>
                 </ResponsiveContainer>
+              </div>
+            </div>
+          </div>
+        )}
+        {activeSection === 'monthly' && (
+          <div className="flex h-full min-h-0 flex-col gap-3 overflow-auto">
+            {!co2Consumption.isLoaded && (
+              <p role="status" className="text-[10px] font-bold text-slate-500">
+                Cargando datos compartidos de consumo CO2...
+              </p>
+            )}
+            {(co2Consumption.loadError || co2Consumption.syncError) && (
+              <div role="alert" className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-[10px] font-semibold text-amber-800">
+                {co2Consumption.loadError && <p>{co2Consumption.loadError}</p>}
+                {co2Consumption.syncError && <p>{co2Consumption.syncError}</p>}
+              </div>
+            )}
+            <div className="flex items-center justify-end gap-2">
+              <label htmlFor="mtto-co2-month" className="sr-only">Mes del resumen CO2</label>
+              <select
+                id="mtto-co2-month"
+                value={monthlyDate.getMonth()}
+                onChange={(event) => setMonthlyDate((date) => new Date(date.getFullYear(), Number(event.target.value), 1))}
+                className="h-9 rounded-full border-0 bg-white px-4 text-[10px] font-bold capitalize text-slate-700 shadow-sm outline-none"
+              >
+                {monthOptions.map((month) => (
+                  <option key={month.value} value={month.value}>{month.label}</option>
+                ))}
+              </select>
+              <label htmlFor="mtto-co2-year" className="sr-only">Año del resumen CO2</label>
+              <select
+                id="mtto-co2-year"
+                value={monthlyDate.getFullYear()}
+                onChange={(event) => setMonthlyDate((date) => new Date(Number(event.target.value), date.getMonth(), 1))}
+                className="h-9 rounded-full border-0 bg-white px-4 text-[10px] font-bold text-slate-700 shadow-sm outline-none"
+              >
+                {yearOptions.map((year) => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
+            </div>
+            <div className="rounded-2xl border border-slate-200 bg-white">
+              <div className="px-4 py-2 text-[11px] font-black uppercase tracking-widest text-slate-700">
+                {format(monthlyDate, 'MMMM yyyy', { locale: es })}
+              </div>
+              <div className="overflow-x-auto">
+                <table className="w-full min-w-[520px] border-collapse text-[11px]">
+                  <thead>
+                    <tr className="bg-[#002D82] text-white">
+                      <th className="border border-white/10 px-2 py-2 text-left font-black uppercase tracking-wider">Consumo CO2</th>
+                      {monthlyWeeks.map((week) => (
+                        <th key={week.isoWeek} className="min-w-[70px] border border-white/10 px-2 py-2 text-center font-black uppercase tracking-wider">
+                          SEM {week.isoWeek}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {([
+                      { label: 'CONSUMO FÍSICO', key: 'physical' },
+                      { label: 'CONSUMO TEÓRICO', key: 'theoretical' },
+                      { label: 'RENDIMIENTO CO2', key: 'yield' },
+                    ] as const).map(({ label, key }) => (
+                      <tr key={key} className="border-b border-slate-100 hover:bg-slate-50/50">
+                        <td className="whitespace-nowrap border border-slate-100 px-2 py-2 font-bold text-slate-700">{label}</td>
+                        {monthlyCo2Data.map((week) => (
+                          <td key={week.week} className="border border-slate-100 px-2 py-2 text-center">
+                            <div className="flex h-8 min-w-[14ch] items-center justify-center rounded border border-slate-200 bg-slate-100 text-[11px] font-black text-slate-700">
+                              {key === 'yield'
+                                ? week.yield.toLocaleString('es-VE', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                                : formatCo2Value(week[key])}
+                            </div>
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="rounded-2xl border border-slate-100 bg-white p-4">
+              <div className="mb-2 text-xs font-black uppercase tracking-widest text-slate-700">
+                Consumo de CO2 - Gráfico mensual
+              </div>
+              <div className="min-h-[320px]">
+                {monthlyCo2Data.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={320}>
+                    <ComposedChart data={monthlyCo2Data} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="week" />
+                      <YAxis yAxisId="left" width={50} />
+                      <YAxis yAxisId="right" orientation="right" />
+                      <Tooltip />
+                      <Legend />
+                      <Bar yAxisId="left" dataKey="physical" fill="#0ea5e9" name="Consumo Físico (kg)" />
+                      <Bar yAxisId="left" dataKey="theoretical" fill="#10b981" name="Consumo Teórico (kg)" />
+                      <Line yAxisId="right" type="monotone" dataKey="yield" stroke="#f59e0b" strokeWidth={3} dot={{ r: 4, strokeWidth: 2 }} name="Rendimiento" />
+                    </ComposedChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="flex h-[320px] items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-white/50 text-xs font-black uppercase tracking-widest text-slate-400">
+                    Sin datos para graficar
+                  </div>
+                )}
               </div>
             </div>
           </div>

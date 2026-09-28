@@ -14800,6 +14800,9 @@
         "cal.mds": [
           "planning",
           "management"
+        ],
+        "mtto1.mds": [
+          "planning"
         ]
       },
       "planning": {
@@ -15211,7 +15214,10 @@
           "seguimiento"
         ],
         "jaime.r": [],
-        "demon2": []
+        "demon2": [],
+        "mtto1.mds": [
+          "planning"
+        ]
       },
       "sections": {
         "jaime.r": {
@@ -15265,12 +15271,216 @@
         },
         "alex.mds": {
           "logistica.monthly-inventory": "none"
+        },
+        "mtto1.mds": {
+          "planning.gantt": "read",
+          "planning.daily": "read",
+          "planning.preparation": "read",
+          "planning.requirement": "read"
         }
       }
-    }
+    },
+    "users": [
+      {
+        "id": "jaime.r",
+        "name": "Jaime Rangel",
+        "password": "ad.123.",
+        "role": "ADMIN",
+        "displayRole": "GERENTE DE PLANTA"
+      },
+      {
+        "id": "demon",
+        "name": "Yonny Hernández",
+        "password": "2005",
+        "role": "ADMIN",
+        "displayRole": "ADMINISTRADOR"
+      },
+      {
+        "id": "demon2",
+        "name": "yonny .H",
+        "password": "2005",
+        "role": "STANDARD",
+        "displayRole": "Carga Sap"
+      },
+      {
+        "id": "maria.mds",
+        "name": "Maria Reinoso",
+        "password": "ad.147.",
+        "role": "INVENTORY",
+        "displayRole": "ANALISTA DE GERENCIA TÉCNICA"
+      },
+      {
+        "id": "alex.mds",
+        "name": "Alexandra Arteaga",
+        "password": "ad.159.",
+        "role": "INVENTORY",
+        "displayRole": "ANALISTA DE GERENCIA TÉCNICA"
+      },
+      {
+        "id": "anto.mds",
+        "name": "Antonella Dos Santos",
+        "password": "123.",
+        "role": "PURCHASING",
+        "displayRole": "COMPRAS"
+      },
+      {
+        "id": "prodtj.mds",
+        "name": "Jefes de Producción",
+        "password": "ad.144.",
+        "role": "STANDARD",
+        "displayRole": "PRODUCCIÓN"
+      },
+      {
+        "id": "prodtg.mds",
+        "name": "Carlos Barovich",
+        "password": "ad.521.",
+        "role": "STANDARD",
+        "displayRole": "GERENTE DE PRODUCCIÓN"
+      },
+      {
+        "id": "prodts.mds",
+        "name": "Supervisor de Produccion",
+        "password": "ad.222.",
+        "role": "STANDARD",
+        "displayRole": "SUPERVISOR DE PRODUCCIÓN"
+      },
+      {
+        "id": "procj.mds",
+        "name": "Abel Araujo",
+        "password": "ad.145.",
+        "role": "STANDARD",
+        "displayRole": "Jefe de Procesos"
+      },
+      {
+        "id": "cald.mds",
+        "name": "Jefa de Calidad",
+        "password": "ad.146.",
+        "role": "STANDARD",
+        "displayRole": "CALIDAD"
+      },
+      {
+        "id": "prodt.mds",
+        "name": "Ronald Valera",
+        "password": "ad.160.",
+        "role": "STANDARD",
+        "displayRole": "ANALISTA DE PRODUCCIÓN"
+      },
+      {
+        "id": "prodt1.mds",
+        "name": "Luis Blandin",
+        "password": "ad.121.",
+        "role": "STANDARD",
+        "displayRole": "ANALISTA DE PRODUCCIÓN"
+      },
+      {
+        "id": "prodt2.mds",
+        "name": "Luis Sanchez",
+        "password": "ad.128.",
+        "role": "STANDARD",
+        "displayRole": "ANALISTA DE PRODUCCIÓN"
+      },
+      {
+        "id": "proc.mds",
+        "name": "Tecnico de procesos",
+        "password": "ad.166.",
+        "role": "STANDARD",
+        "displayRole": "SALA DE JARABE"
+      },
+      {
+        "id": "proc1.mds",
+        "name": "tecnico de procesos",
+        "password": "ad.533.",
+        "role": "STANDARD",
+        "displayRole": "PTAB"
+      },
+      {
+        "id": "proc2.mds",
+        "name": "tecnico de procesos",
+        "password": "ad.530.",
+        "role": "STANDARD",
+        "displayRole": "MITECO"
+      },
+      {
+        "id": "procs1.mds",
+        "name": "Jose Vargas",
+        "password": "ad.558.",
+        "role": "STANDARD",
+        "displayRole": "SUPERVISOR DE PROCESOS"
+      },
+      {
+        "id": "procs2.mds",
+        "name": "jorge acosta",
+        "password": "ad.220.",
+        "role": "STANDARD",
+        "displayRole": "SUPERVISOR DE PROCESOS"
+      },
+      {
+        "id": "finan.mds",
+        "name": "Patricia Gamez",
+        "password": "ad.124.",
+        "role": "STANDARD",
+        "displayRole": "FINANZAS"
+      },
+      {
+        "id": "g.tec.mds",
+        "name": "Gerente Técnico",
+        "password": "ad.147.",
+        "role": "STANDARD",
+        "displayRole": "GERENTE TÉCNICO"
+      },
+      {
+        "id": "enf.mds",
+        "name": "Hector Pereira",
+        "password": "ad.158.",
+        "role": "STANDARD",
+        "displayRole": "ESPECIALISTA ENFARDADORA"
+      },
+      {
+        "id": "etq.mds",
+        "name": "Especialista Etiquetadora",
+        "password": "ad.159.",
+        "role": "STANDARD",
+        "displayRole": "ETIQUETADORA"
+      },
+      {
+        "id": "logg.mds",
+        "name": "Florencio Alvarez",
+        "password": "ad.220.",
+        "role": "STANDARD",
+        "displayRole": "GERENTE DE LOGÍSTICA"
+      },
+      {
+        "id": "mtto.mds",
+        "name": "Jose Mora",
+        "password": "ad.321.",
+        "role": "STANDARD",
+        "displayRole": "SUP. MANTENIMIENTO"
+      },
+      {
+        "id": "cal.mds",
+        "name": "Calidad",
+        "password": "ad.322.",
+        "role": "STANDARD",
+        "displayRole": "ANALISTA DE CALIDAD"
+      },
+      {
+        "id": "MDS",
+        "name": "Multinacional de sabores",
+        "password": "MDS1",
+        "role": "STANDARD",
+        "displayRole": "VISITANTE"
+      },
+      {
+        "id": "mtto1.mds",
+        "name": "Eduardo Contreras",
+        "password": "ad.589.",
+        "role": "STANDARD",
+        "displayRole": "Técnico sala de Maquinas"
+      }
+    ]
   },
   "_meta": {
-    "updatedAt": "2026-09-28T19:32:57.235Z"
+    "updatedAt": "2026-09-28T21:05:09.347Z"
   },
   "ordenesSap": [
     {
