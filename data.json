@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-08-24T00:00:00.000",
+      "weekStartDate": "2026-09-28T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -11414,12 +11414,12 @@
             "name": "GLUP PIÑA",
             "lineId": "1",
             "loadPerHour": 1500,
-            "quantity": 34500,
-            "durationHours": 23,
+            "quantity": 33000,
+            "durationHours": 22,
             "presentation": "2Lts",
-            "tanks": 4.75,
+            "tanks": 4.54,
             "startTime": "2026-09-30T11:00:00.000Z",
-            "endTime": "2026-10-01T10:00:00.000Z",
+            "endTime": "2026-10-01T09:00:00.000Z",
             "id": "wrcv2t59v",
             "color": "#6366f1"
           },
@@ -22150,7 +22150,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-09-30T15:45:26.921Z"
+    "updatedAt": "2026-09-30T20:43:37.569Z"
   },
   "ordenesSap": [
     {
@@ -31963,6 +31963,17 @@
           "cajas3": 2320,
           "ticket4": "",
           "cajas4": 12400
+        },
+        {
+          "fechaInicio": "2026-09-30",
+          "ticket1": "16040",
+          "cajas1": 438,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -32115,6 +32126,26 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 9204
+        }
+      ]
+    },
+    {
+      "id": "2-1790793838451",
+      "linea": 2,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "63954",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-30",
+          "ticket1": "16040",
+          "cajas1": 960,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }

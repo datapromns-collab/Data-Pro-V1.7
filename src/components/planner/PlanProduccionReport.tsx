@@ -13,13 +13,14 @@ import { PRODUCT_LIST } from '@/lib/planner-utils';
 const PRESENTATIONS = ["2Lts", "1.5Lts", "1Lt", "0.4Lts"];
 
 interface PlanProduccionReportProps {
-  section?: 'mds' | 'aw' | 'global';
+  section?: 'mds' | 'aw' | 'global' | 'semestral';
   salesProjection: Record<string, Record<string, number>>;
   finishedProductInventory: Record<string, Record<string, number>>;
   productionPlan: Record<string, Record<string, number>>;
+  periodLabel?: string;
 }
 
-export function PlanProduccionReport({ section = 'mds', salesProjection, finishedProductInventory, productionPlan }: PlanProduccionReportProps) {
+export function PlanProduccionReport({ section = 'mds', salesProjection, finishedProductInventory, productionPlan, periodLabel }: PlanProduccionReportProps) {
   const glupLogo = PlaceHolderImages.find(img => img.id === 'glup-logo');
   const sectionLabel = section?.toUpperCase();
 
@@ -28,11 +29,21 @@ export function PlanProduccionReport({ section = 'mds', salesProjection, finishe
     if (!report) return;
     const canvas = await html2canvas(report as HTMLElement);
     const imgData = canvas.toDataURL('image/png');
-    const pdf = new jsPDF();
+    const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
     const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const margin = 8;
+    const pdfWidth = pdf.internal.pageSize.getWidth() - margin * 2;
     const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
-    pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+    let y = margin;
+    let heightLeft = pdfHeight;
+    pdf.addImage(imgData, 'PNG', margin, y, pdfWidth, pdfHeight);
+    heightLeft -= pdf.internal.pageSize.getHeight() - margin * 2;
+    while (heightLeft > 0) {
+      pdf.addPage();
+      y = margin - (pdfHeight - heightLeft);
+      pdf.addImage(imgData, 'PNG', margin, y, pdfWidth, pdfHeight);
+      heightLeft -= pdf.internal.pageSize.getHeight() - margin * 2;
+    }
     pdf.save('planificacion_produccion.pdf');
   };
 
@@ -47,39 +58,41 @@ export function PlanProduccionReport({ section = 'mds', salesProjection, finishe
   });
 
   return (
-    <div id="report" className="bg-white p-4 max-w-[210mm] mx-auto print:p-2 print:max-w-none">
+    <div id="report" className="purchasing-summary-report bg-white p-4 max-w-none mx-auto">
       <div className="flex justify-end mb-2 no-print">
         <button onClick={handleExportPDF} className="pointer-events-auto px-4 py-2 text-white rounded hover:opacity-90 transition" style={{ backgroundColor: '#A67B5B' }}>
           Exportar PDF
         </button>
       </div>
 
-      <div className="mb-4 pb-2 flex justify-between items-center" style={{ borderColor: '#A67B5B' }}>
+      <div className="mb-4 flex items-center justify-between gap-6 border-b-2 border-[#A67B5B] pb-3">
         <div className="flex-1">
-          <h1 className="text-lg font-headline font-black text-slate-900 leading-tight uppercase">Resumen Consolidado de Necesidades ({sectionLabel})</h1>
-          <p className="font-black text-[9px] uppercase tracking-widest mt-0.5" style={{ color: '#A67B5B' }}>Balance de Ventas vs Inventario vs Plan de Producción</p>
+          <p className="mb-1 text-[8px] font-black uppercase tracking-[0.2em] text-[#A67B5B]">Data Pro · Reporte de Compras</p>
+          <h1 className="text-xl font-black uppercase leading-tight text-slate-900">Planificación de Producción · {sectionLabel}</h1>
+          <p className="mt-1 text-[9px] font-bold uppercase tracking-wider text-slate-500">Balance de ventas, inventario y plan de producción</p>
+          {periodLabel && <p className="mt-1 text-[9px] font-black uppercase tracking-wide text-[#5C4033]">Período: {periodLabel}</p>}
         </div>
-        <div className="flex-1 flex justify-center">
-          {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={100} height={36} className="object-contain" />}
+        <div className="flex shrink-0 justify-center">
+          {glupLogo && <Image src={glupLogo.imageUrl} alt="Logo" width={118} height={44} className="object-contain" />}
         </div>
-        <div className="flex-1 text-right">
-          <p className="text-[7px] font-black uppercase tracking-widest mb-0.5" style={{ color: '#A67B5B' }}>Confidencial - Planta</p>
-          <p className="text-[9px] text-slate-500 font-bold uppercase">{format(new Date(), "EEEE dd 'de' MMMM yyyy", { locale: es })}</p>
-          <p className="text-[7px] text-slate-400 font-medium italic">Emitido: {format(new Date(), 'HH:mm:ss')}</p>
+        <div className="shrink-0 text-right">
+          <p className="mb-1 text-[8px] font-black uppercase tracking-widest text-[#A67B5B]">Confidencial · Planta</p>
+          <p className="text-[9px] font-bold uppercase text-slate-600">{format(new Date(), "dd 'de' MMMM yyyy", { locale: es })}</p>
+          <p className="mt-1 text-[8px] font-medium text-slate-400">Emitido {format(new Date(), 'HH:mm')}</p>
         </div>
       </div>
 
       {productsWithData.length > 0 && (
-        <div className="rounded border border-slate-200 overflow-hidden">
-          <table className="w-full border-collapse text-[8pt]">
+        <div className="overflow-hidden rounded-lg border border-slate-200">
+          <table className="purchasing-report-table w-full border-collapse text-[9px]">
             <thead>
               <tr className="text-white font-black uppercase text-center" style={{ backgroundColor: '#A67B5B' }}>
-                <th className="px-2 py-0 border border-white/20 text-left">SABOR / SKU</th>
-                <th className="px-2 py-0 border border-white/20 text-center w-20">FORMATO</th>
-                <th className="px-2 py-0 border border-white/20 text-right w-24">PROY. VENTAS</th>
-                <th className="px-2 py-0 border border-white/20 text-right w-24">INV. PT</th>
-                <th className="px-2 py-0 border border-white/20 text-right w-28">PLAN PRODUCCIÓN</th>
-                <th className="px-2 py-0 border border-white/20 text-right w-24" style={{ backgroundColor: '#5C4033' }}>SALDO FINAL</th>
+                <th className="px-3 py-2 text-left">Sabor / SKU</th>
+                <th className="px-3 py-2 text-center">Formato</th>
+                <th className="px-3 py-2 text-right">Proy. ventas</th>
+                <th className="px-3 py-2 text-right">Inv. PT inicial</th>
+                <th className="px-3 py-2 text-right">Plan producción</th>
+                <th className="px-3 py-2 text-right" style={{ backgroundColor: '#5C4033' }}>Saldo final</th>
               </tr>
             </thead>
             <tbody>
@@ -93,8 +106,8 @@ export function PlanProduccionReport({ section = 'mds', salesProjection, finishe
                 if (!hasAny) return null;
                 return (
                   <React.Fragment key={product}>
-                    <tr className="h-6 font-black" style={{ backgroundColor: '#f8fafc' }}>
-                      <td colSpan={6} className="px-2 py-0 border border-slate-100 text-[7pt] text-slate-500 uppercase tracking-widest">{product}</td>
+                    <tr className="font-black" style={{ backgroundColor: '#f1f5f9' }}>
+                      <td colSpan={6} className="border-y border-slate-200 px-3 py-1.5 text-[8px] uppercase tracking-widest text-slate-600">{product}</td>
                     </tr>
                     {PRESENTATIONS.map((pres: string) => {
                       const sales = salesProjection[product]?.[pres] || 0;
@@ -103,13 +116,13 @@ export function PlanProduccionReport({ section = 'mds', salesProjection, finishe
                       const balance = (inv + plan) - sales;
                       if (sales === 0 && inv === 0 && plan === 0) return null;
                       return (
-                        <tr key={`${product}-${pres}`} className="h-8 font-bold odd:bg-white even:bg-slate-50">
-                          <td className="px-2 py-0 border border-slate-100">{product}</td>
-                          <td className="px-2 py-0 border border-slate-100 text-center">{pres}</td>
-                          <td className="px-2 py-0 border border-slate-100 text-right tabular-nums">{sales > 0 ? sales.toLocaleString('es-ES') : '-'}</td>
-                          <td className="px-2 py-0 border border-slate-100 text-right tabular-nums">{inv > 0 ? inv.toLocaleString('es-ES') : '-'}</td>
-                          <td className="px-2 py-0 border border-slate-100 text-right tabular-nums font-black" style={{ backgroundColor: '#f0f9ff' }}>{plan > 0 ? plan.toLocaleString('es-ES') : '-'}</td>
-                          <td className="px-2 py-0 border border-slate-100 text-right tabular-nums font-black" style={{ color: balance < 0 ? '#dc2626' : '#059669' }}>{balance.toLocaleString('es-ES')}</td>
+                        <tr key={`${product}-${pres}`} className="font-semibold odd:bg-white even:bg-slate-50">
+                          <td className="border-b border-slate-100 px-3 py-1.5">{product}</td>
+                          <td className="border-b border-slate-100 px-3 py-1.5 text-center">{pres}</td>
+                          <td className="border-b border-slate-100 px-3 py-1.5 text-right tabular-nums">{sales > 0 ? sales.toLocaleString('es-ES') : '-'}</td>
+                          <td className="border-b border-slate-100 px-3 py-1.5 text-right tabular-nums">{inv > 0 ? inv.toLocaleString('es-ES') : '-'}</td>
+                          <td className="border-b border-slate-100 px-3 py-1.5 text-right font-black tabular-nums" style={{ backgroundColor: '#f0f9ff' }}>{plan > 0 ? plan.toLocaleString('es-ES') : '-'}</td>
+                          <td className="border-b border-slate-100 px-3 py-1.5 text-right font-black tabular-nums" style={{ color: balance < 0 ? '#dc2626' : '#059669' }}>{balance.toLocaleString('es-ES')}</td>
                         </tr>
                       );
                     })}
@@ -121,9 +134,9 @@ export function PlanProduccionReport({ section = 'mds', salesProjection, finishe
         </div>
       )}
 
-      <div className="mt-4 pt-2 border-t border-slate-200 flex justify-between items-center text-[7px] text-slate-400 font-black uppercase tracking-widest">
-        <span>DATA PRO - SISTEMA DE GESTIÓN DE COMPRAS - MULTINACIONAL DE SABORES</span>
-        <span>Página 1 de 1</span>
+      <div className="mt-4 flex items-center justify-between border-t border-slate-200 pt-2 text-[8px] font-black uppercase tracking-widest text-slate-400">
+        <span>Data Pro · Sistema de Gestión de Compras</span>
+        <span>Uso interno · {sectionLabel}</span>
       </div>
     </div>
   );

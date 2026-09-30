@@ -22150,7 +22150,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-09-30T15:45:26.921Z"
+    "updatedAt": "2026-09-30T20:38:22.860Z"
   },
   "ordenesSap": [
     {
@@ -31963,6 +31963,17 @@
           "cajas3": 2320,
           "ticket4": "",
           "cajas4": 12400
+        },
+        {
+          "fechaInicio": "2026-09-30",
+          "ticket1": "16040",
+          "cajas1": 438,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -32115,6 +32126,26 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 9204
+        }
+      ]
+    },
+    {
+      "id": "2-1790793838451",
+      "linea": 2,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "63954",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-30",
+          "ticket1": "16040",
+          "cajas1": 960,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     }

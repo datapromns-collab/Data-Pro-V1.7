@@ -170,22 +170,64 @@
     break-inside: avoid !important;
   }
 
-  #report {
+  .purchasing-summary-report {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #0f172a !important;
+    font-family: Arial, sans-serif !important;
+    font-size: 9pt !important;
+  }
+
+  .purchasing-report-table {
+    table-layout: fixed !important;
+    width: 100% !important;
+    font-size: 8.5pt !important;
+    page-break-inside: auto !important;
+  }
+
+  .purchasing-report-table thead {
+    display: table-header-group !important;
+  }
+
+  .purchasing-report-table tfoot {
+    display: table-footer-group !important;
+  }
+
+  .purchasing-report-table th,
+  .purchasing-report-table td {
+    padding: 2.2mm 2.5mm !important;
+    overflow-wrap: anywhere !important;
+  }
+
+  .purchasing-report-table th:first-child,
+  .purchasing-report-table td:first-child {
+    width: 40% !important;
+    text-align: left !important;
+  }
+
+  .purchasing-report-table tr {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
+  }
+
+  #report:not(.purchasing-summary-report) {
     margin-top: 0 !important;
     padding-top: 0 !important;
   }
 
-  #report > div:first-child {
+  #report:not(.purchasing-summary-report) > div:first-child {
     margin-bottom: 0 !important;
     padding-bottom: 0 !important;
   }
 
-  #report > div:last-child {
+  #report:not(.purchasing-summary-report) > div:last-child {
     margin-top: 0 !important;
     padding-top: 0 !important;
   }
 
-  #report > div:last-child table {
+  #report:not(.purchasing-summary-report) > div:last-child table {
     margin-top: 0 !important;
     padding-top: 0 !important;
   }

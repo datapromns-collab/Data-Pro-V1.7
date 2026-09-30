@@ -77,7 +77,16 @@ import {
 interface PurchasingModuleProps {
   onPrintRequirements: (section: 'mds' | 'aw') => void;
   onPrintInventory: (section: 'mds' | 'aw', type: 'product-finished' | 'logistics' | 'plant' | 'available') => void;
-  onPrintResumen: (section: 'mds' | 'aw' | 'global', type: 'plan-produccion' | 'requisicion') => void;
+  onPrintResumen: (section: 'mds' | 'aw' | 'global' | 'semestral', type: 'plan-produccion' | 'requisicion', data?: PurchasingSummaryPrintData) => void;
+}
+
+export interface PurchasingSummaryPrintData {
+  salesProjection?: Record<string, Record<string, number>>;
+  finishedProductInventory?: Record<string, Record<string, number>>;
+  productionPlan?: Record<string, Record<string, number>>;
+  logisticsInventory?: Record<string, number>;
+  plantInventory?: Record<string, number>;
+  periodLabel?: string;
 }
 
 const REFRESCOS = [
@@ -918,8 +927,19 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
     );
   };
 
-  const handleExportPlanProduccionPDF = () => onPrintResumen('mds', 'plan-produccion');
-  const handleExportRequisicionPDF = () => onPrintResumen('mds', 'requisicion');
+  const handleExportPlanProduccionPDF = () => onPrintResumen('mds', 'plan-produccion', {
+    salesProjection: monthlySalesProjection,
+    finishedProductInventory: monthlyFinishedProductInventory,
+    productionPlan: calculatedMdsProductionPlan,
+    periodLabel: `${MONTH_OPTIONS[selectedMonth]} ${selectedYear}`,
+  });
+  const handleExportRequisicionPDF = () => onPrintResumen('mds', 'requisicion', {
+    salesProjection: monthlySalesProjection,
+    productionPlan: calculatedMdsProductionPlan,
+    logisticsInventory: monthlyLogisticsMaterialInventory,
+    plantInventory: monthlyPlantInventory,
+    periodLabel: `${MONTH_OPTIONS[selectedMonth]} ${selectedYear}`,
+  });
 
   return (
     <div className="space-y-6 animate-in fade-in duration-700 pb-10">
@@ -2002,7 +2022,12 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    onClick={() => onPrintResumen('global', 'plan-produccion')}
+                    onClick={() => onPrintResumen('global', 'plan-produccion', {
+                      salesProjection: globalSalesProjection,
+                      finishedProductInventory: globalFinishedProductInventory,
+                      productionPlan: globalProductionPlan,
+                      periodLabel: `${MONTH_OPTIONS[selectedMonth]} ${selectedYear}`,
+                    })}
                     className="pointer-events-auto gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                   >
                     <FileDown className="h-4 w-4" />
@@ -2094,7 +2119,13 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                   <Button 
                     variant="ghost" 
                     size="sm" 
-                    onClick={() => onPrintResumen('global', 'requisicion')}
+                    onClick={() => onPrintResumen('global', 'requisicion', {
+                      salesProjection: globalSalesProjection,
+                      productionPlan: globalProductionPlan,
+                      logisticsInventory: globalLogisticsInventory,
+                      plantInventory: globalPlantInventory,
+                      periodLabel: `${MONTH_OPTIONS[selectedMonth]} ${selectedYear}`,
+                    })}
                     className="pointer-events-auto gap-2 font-bold text-white hover:bg-white/10 h-10 px-4 rounded-xl text-xs active:scale-95 transition-none"
                   >
                     <FileDown className="h-4 w-4" />
@@ -2203,9 +2234,24 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
             </div>
             <TabsContent value="plan-produccion" className="m-0">
               <Card className="overflow-hidden rounded-[2.5rem] border-slate-200 bg-white shadow-xl shadow-slate-200/40">
-                <div className="bg-[#A67B5B] px-8 py-5 text-white">
-                  <h3 className="font-black text-sm uppercase tracking-widest">Resumen Consolidado de Necesidades (Semestral)</h3>
-                  <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-slate-100/70">{semestralPeriodLabel} · Inventario inicial MDS</p>
+                <div className="flex items-center justify-between bg-[#A67B5B] px-8 py-5 text-white">
+                  <div>
+                    <h3 className="font-black text-sm uppercase tracking-widest">Resumen Consolidado de Necesidades (Semestral)</h3>
+                    <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-slate-100/70">{semestralPeriodLabel} · Inventario inicial MDS</p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onPrintResumen('semestral', 'plan-produccion', {
+                      salesProjection: semestralSalesProjection,
+                      finishedProductInventory: monthlyFinishedProductInventory,
+                      productionPlan: semestralProductionPlan,
+                      periodLabel: semestralPeriodLabel,
+                    })}
+                    className="gap-2 font-bold text-white hover:bg-white/10"
+                  >
+                    <FileDown className="h-4 w-4" /> PDF
+                  </Button>
                 </div>
                 <ScrollArea className="h-[600px]">
                   <div className="overflow-x-auto">
@@ -2252,9 +2298,25 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
             </TabsContent>
             <TabsContent value="requisicion" className="m-0">
               <Card className="overflow-hidden rounded-[2.5rem] border-slate-200 bg-white shadow-xl shadow-slate-200/40">
-                <div className="bg-[#A67B5B] px-8 py-5 text-white">
-                  <h3 className="font-black text-sm uppercase tracking-widest">Explosión de Materiales y Necesidad de Compra (Semestral)</h3>
-                  <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-slate-100/70">{semestralPeriodLabel} · Requerimientos x 6 · Stock MDS del mes inicial</p>
+                <div className="flex items-center justify-between bg-[#A67B5B] px-8 py-5 text-white">
+                  <div>
+                    <h3 className="font-black text-sm uppercase tracking-widest">Explosión de Materiales y Necesidad de Compra (Semestral)</h3>
+                    <p className="mt-1 text-[10px] font-bold uppercase tracking-widest text-slate-100/70">{semestralPeriodLabel} · Requerimientos x 6 · Stock MDS del mes inicial</p>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => onPrintResumen('semestral', 'requisicion', {
+                      salesProjection: semestralSalesProjection,
+                      productionPlan: semestralProductionPlan,
+                      logisticsInventory: monthlyLogisticsMaterialInventory,
+                      plantInventory: monthlyPlantInventory,
+                      periodLabel: semestralPeriodLabel,
+                    })}
+                    className="gap-2 font-bold text-white hover:bg-white/10"
+                  >
+                    <FileDown className="h-4 w-4" /> PDF
+                  </Button>
                 </div>
                 <div className="overflow-x-auto">
                   <Table>

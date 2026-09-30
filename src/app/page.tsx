@@ -2,8 +2,8 @@
 
 import React, { useState, useMemo, useEffect, useRef, memo } from "react";
 import Image from "next/image";
-import dynamic from "next/dynamic";
 import ExcelJS from "exceljs";
+import { UDocClient } from '@docmentis/udoc-viewer';
 import { read, utils } from "xlsx";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
@@ -26,6 +26,7 @@ import {
   CheckCircle2,
   Calendar as CalendarIcon,
   FlaskConical,
+  ChevronLeft,
   ChevronRight,
   Box,
   ShoppingCart,
@@ -67,7 +68,6 @@ import { RequirementReport } from '@/components/planner/RequirementReport';
 import { CalculationReport } from '@/components/planner/CalculationReport';
 import { SummaryReport } from '@/components/planner/SummaryReport';
 import { DailyPlanSection } from '@/components/planner/DailyPlanSection';
-import { WeeklyPlanSection } from '@/components/planner/WeeklyPlanSection';
 import { PreparationSection } from '@/components/planner/PreparationSection';
 import { AdminReportTool } from '@/components/planner/AdminReportTool';
 import { ProductionEntryDialog } from '@/components/planner/ProductionEntryDialog';
@@ -76,6 +76,7 @@ import { WeeklySummaryReport } from '@/components/planner/WeeklySummaryReport';
 import { ComplianceReport } from '@/components/planner/ComplianceReport';
 import { MonthlyComplianceReport } from '@/components/planner/MonthlyComplianceReport';
 import { RecipeEditor } from '@/components/planner/RecipeEditor';
+import ProduccionModule from '@/components/planner/ProduccionModule';
 import OrdenesSapModule, { CorrelativoSelector } from '@/components/planner/OrdenesSapModule';
 import { useOrdenesSap } from '@/hooks/use-ordenes-sap';
 import SeguimientoPanel from '@/components/planner/SeguimientoPanel';
@@ -83,8 +84,6 @@ import { PackagingRecipeEditor } from '@/components/planner/PackagingRecipeEdito
 import { RawMaterialModule } from '@/components/planner/RawMaterialModule';
 import { RawMaterialReport } from '@/components/planner/RawMaterialReport';
 import { DailyRawMaterialReport } from '@/components/planner/DailyRawMaterialReport';
-import { LogisticaModule } from '@/components/planner/LogisticaModule';
-import { VentasModule } from '@/components/planner/VentasModule';
 import { PurchasingModule } from '@/components/planner/PurchasingModule';
 import { PurchasingRequirementReport } from '@/components/planner/PurchasingRequirementReport';
 import { InventoryReport } from '@/components/planner/InventoryReport';
@@ -98,6 +97,7 @@ import { usePlannerStore, getWeekKey } from '@/hooks/use-planner-store';
 import { getWeekDays } from '@/lib/planner-utils';
 import { useAuthStore } from '@/hooks/use-auth-store';
 import { usePermissionsStore } from '@/hooks/use-permissions-store';
+import { PermisosModule } from '@/components/planner/PermisosModule';
 import { MessagesCenter } from '@/components/planner/MessagesCenter';
 import { FcmManager } from '@/components/FcmManager';
 import { Toaster } from '@/components/ui/toaster';
@@ -118,14 +118,6 @@ import { es } from 'date-fns/locale';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { Bar, CartesianGrid, XAxis, YAxis, Tooltip as RechartsTooltip, ResponsiveContainer, BarChart, Legend, Line, ComposedChart } from 'recharts';
-
-const ProduccionModule = dynamic(() => import('@/components/planner/ProduccionModule'), {
-  loading: () => <div className="py-8 text-center text-sm font-bold text-slate-500">Cargando módulo de Producción...</div>,
-});
-const PermisosModule = dynamic(
-  () => import('@/components/planner/PermisosModule').then((module) => module.PermisosModule),
-  { loading: () => <div className="py-8 text-center text-sm font-bold text-slate-500">Cargando módulo de Permisos...</div> },
-);
 
 const LINES = ["Línea 1", "Línea 2", "Línea 3", "Línea 4", "Línea 5", "Línea 6", "Línea 7", "Línea 8"];
 
@@ -411,25 +403,13 @@ export default function PlannerPage() {
     return h * 60 + m;
   };
 
-  const toCalendarMinutes = (fecha: string, hora: string) => {
-    const minutos = toMin(hora);
-    const fechaDate = parseFecha(fecha);
-    if (!fechaDate || minutos === null) return null;
-    const diaCalendario = Math.floor(Date.UTC(fechaDate.getFullYear(), fechaDate.getMonth(), fechaDate.getDate()) / 86400000);
-    const diaReal = diaCalendario + (minutos < 7 * 60 ? 1 : 0);
-    return diaReal * 1440 + minutos;
-  };
-
-  const seSolapan = (aFecha: string, aInicio: string, aFin: string, bFecha: string, bInicio: string, bFin: string) => {
-    const ai = toCalendarMinutes(aFecha, aInicio);
-    const af = toCalendarMinutes(aFecha, aFin);
-    const bi = toCalendarMinutes(bFecha, bInicio);
-    const bf = toCalendarMinutes(bFecha, bFin);
+  const seSolapan = (aInicio: string, aFin: string, bInicio: string, bFin: string) => {
+    const ai = toMin(aInicio);
+    const af = toMin(aFin);
+    const bi = toMin(bInicio);
+    const bf = toMin(bFin);
     if (ai === null || af === null || bi === null || bf === null) return false;
-
-    const aFinNorm = af < ai ? af + 24 * 60 : af;
-    const bFinNorm = bf < bi ? bf + 24 * 60 : bf;
-    return ai < bFinNorm && aFinNorm > bi;
+    return ai < bf && af > bi;
   };
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -681,8 +661,158 @@ export default function PlannerPage() {
   };
   const [activeModule, setActiveModule] = useState('planning');
   const [activeTab, setActiveTab] = useState('gantt');
+  const [planningDatePickerOpen, setPlanningDatePickerOpen] = useState(false);
   const [insumosSubTab, setInsumosSubTab] = useState('co2');
   const [insumosPeriodoSubTab, setInsumosPeriodoSubTab] = useState('diario');
+  const [logisticaSubTab, setLogisticaSubTab] = useState('stock-producto-terminado');
+  const logisticaFileInputRef = useRef<HTMLInputElement>(null);
+  const handleLogisticaUploadClick = () => logisticaFileInputRef.current?.click();
+  const [logisticaExcelBuffer, setLogisticaExcelBuffer] = useState<ArrayBuffer | Buffer | null>(null);
+  const [logisticaUploadedFile, setLogisticaUploadedFile] = useState<{ name: string; size: number; uploadedAt?: string } | null>(null);
+  const [logisticaShowPreview, setLogisticaShowPreview] = useState(false);
+  const [logisticaFileUrl, setLogisticaFileUrl] = useState<string | null>(null);
+  const logisticaViewerContainerRef = useRef<HTMLDivElement>(null);
+  const logisticaViewerClientRef = useRef<any>(null);
+  const formatLogisticaFileSize = (bytes: number) => {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  };
+  const handleLogisticaFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setLogisticaShowPreview(false);
+    try {
+      const buffer = await file.arrayBuffer();
+      const workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(buffer);
+
+      workbook.eachSheet((sheet) => {
+        const hiddenColumns = new Set<number>();
+        sheet.columns?.forEach((col, idx) => {
+          if (col.hidden) hiddenColumns.add(idx + 1);
+        });
+
+        hiddenColumns.forEach((colNumber) => {
+          const col = sheet.getColumn(colNumber);
+          if (col) {
+            col.hidden = true;
+          }
+        });
+
+        sheet.eachRow((row, rowNumber) => {
+          const hiddenColsInRow = new Set<number>();
+          row.eachCell({ includeEmpty: true }, (cell, colNumber) => {
+            if ((cell.style as any)?.hidden) {
+              hiddenColsInRow.add(colNumber);
+            }
+          });
+
+          if (hiddenColsInRow.size > 0) {
+            hiddenColsInRow.forEach((colNumber) => {
+              const cell = row.getCell(colNumber);
+              cell.style = { ...cell.style, hidden: true } as any;
+            });
+          }
+        });
+      });
+
+      const written = await workbook.xlsx.writeBuffer();
+      const processedBuffer = new Uint8Array(written as ArrayBuffer).buffer;
+      setLogisticaExcelBuffer(processedBuffer as ArrayBuffer);
+
+      const formData = new FormData();
+      formData.append('file', new Blob([processedBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' }), file.name);
+      formData.append('uploadedBy', 'local-user');
+
+      const res = await fetch('/api/logistica/stock-producto-terminado', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const text = await res.text();
+        let errorMessage = `Upload failed: ${res.status}`;
+        try {
+          const json = JSON.parse(text);
+          errorMessage = json.error || errorMessage;
+        } catch {
+          if (text) errorMessage = text;
+        }
+        throw new Error(errorMessage);
+      }
+
+      const result = await res.json();
+      const now = new Date();
+      const pad = (n: number) => String(n).padStart(2, '0');
+      const uploadedAt = `${pad(now.getDate())}/${pad(now.getMonth() + 1)}/${now.getFullYear()} ${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
+      setLogisticaUploadedFile({ name: result.nombre || file.name, size: result.tamano || file.size, uploadedAt });
+      setLogisticaFileUrl('/api/logistica/stock-producto-terminado/file');
+    } catch (error) {
+      console.error('Error al procesar/subir el archivo Excel:', error);
+    } finally {
+      e.target.value = '';
+    }
+  };
+   useEffect(() => {
+    if (activeModule !== 'logistica') return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await fetch('/api/logistica/stock-producto-terminado');
+        if (!res.ok) return;
+        const data = await res.json();
+        if (cancelled || !data.exists) return;
+        setLogisticaUploadedFile({ name: data.originalName || data.nombre, size: data.tamano, uploadedAt: data.uploadedAt ? new Date(data.uploadedAt).toLocaleString('es-VE') : undefined });
+        const fileRes = await fetch('/api/logistica/stock-producto-terminado/file');
+        if (fileRes.ok) {
+          const buffer = await fileRes.arrayBuffer();
+          setLogisticaExcelBuffer(buffer);
+        }
+      } catch (error) {
+        console.error('Error al cargar archivo de logística desde servidor:', error);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [activeModule]);
+   useEffect(() => {
+    if (!logisticaShowPreview || !logisticaExcelBuffer || !logisticaViewerContainerRef.current) return;
+    let viewer: any;
+    let client: any;
+    const container = logisticaViewerContainerRef.current;
+    container.innerHTML = '';
+
+    (async () => {
+      try {
+        client = await UDocClient.create();
+        viewer = await client.createViewer({
+          container,
+        });
+        const blob = new Blob([logisticaExcelBuffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+        const url = URL.createObjectURL(blob);
+        await viewer.load(url);
+        logisticaViewerClientRef.current = { client, viewer, url };
+      } catch (error) {
+        console.error('Error al inicializar el visor de Excel:', error);
+        container.innerHTML = '<div class="flex items-center justify-center h-full text-slate-500 text-sm font-bold uppercase tracking-widest">Error al cargar la vista previa</div>';
+      }
+    })();
+
+    return () => {
+      if (viewer) {
+        try { viewer.destroy(); } catch {}
+      }
+      if (client) {
+        try { client.destroy(); } catch {}
+      }
+      if (logisticaViewerClientRef.current?.url) {
+        URL.revokeObjectURL(logisticaViewerClientRef.current.url);
+      }
+      logisticaViewerClientRef.current = null;
+    };
+  }, [logisticaShowPreview, logisticaExcelBuffer]);
   const [consumoLineasDataPorLinea, setConsumoLineasDataPorLinea] = useState<Record<number, { fecha: string; semana: number; dia: string; turno: string; tanque: string; sabor: string; horaInicio: string; ubbInicial: string; volInicialTanque: string }[]>>({});
   const addConsumoRow = (linea: number) => {
     setConsumoLineasDataPorLinea((prev) => {
@@ -812,7 +942,6 @@ export default function PlannerPage() {
   const [rMensualSubTab, setRMensualSubTab] = useState<'m-agua' | 'm-insumos'>('m-agua');
   const [rMensualSelectedMonth, setRMensualSelectedMonth] = useState(new Date().getMonth() + 1);
   const [rMensualSelectedYear, setRMensualSelectedYear] = useState(new Date().getFullYear());
-  const ptabWeeksContainerRef = useRef<HTMLDivElement>(null);
   const ptabAguaStore = useRemoteCollection<Record<string, string>>('ptab-agua', {});
   const ptabInsumosStore = useRemoteCollection<Record<string, string>>('ptab-insumos', {});
   const insumosQuimicos = [
@@ -2115,23 +2244,6 @@ export default function PlannerPage() {
     return weeks;
   }, [resumenSemanalWeekStartDate]);
 
-  const weeksForYearPtab = useMemo(() => {
-    const weeks: { isoWeek: number; start: Date; end: Date }[] = [];
-    const year = ptabWeekStartDate.getFullYear();
-    const jan4 = new Date(year, 0, 4);
-    let current = startOfWeek(jan4, { weekStartsOn: 1 });
-    let week = 1;
-    while (current.getFullYear() <= year) {
-      const start = new Date(current);
-      const end = addDays(current, 6);
-      weeks.push({ isoWeek: week, start, end });
-      current = addDays(current, 7);
-      week++;
-      if (start.getFullYear() > year) break;
-    }
-    return weeks;
-  }, [ptabWeekStartDate]);
-
   const weeksForYearRSemanal = useMemo(() => {
     const weeks: { isoWeek: number; start: Date; end: Date }[] = [];
     const year = rSemanalWeekStartDate.getFullYear();
@@ -3125,7 +3237,7 @@ export default function PlannerPage() {
                      {hasAccess(user.id, 'logistica') && (
                     <Button 
                       variant="ghost" 
-                      onClick={() => { setActiveModule('logistica'); setActiveTab('logistica-view'); }}
+                      onClick={() => { setActiveModule('logistica'); setActiveTab('logistica-view'); setLogisticaSubTab('stock-producto-terminado'); }}
                       className={sidebarButtonClass(activeModule === 'logistica', "bg-orange-600 hover:bg-orange-700", "shadow-orange-200/30")}
                     >
                       <div className={iconContainerClass(activeModule === 'logistica')}>
@@ -3349,13 +3461,6 @@ export default function PlannerPage() {
                              <ListTodo className="h-3.5 w-3.5" />
                              <span className="hidden sm:inline">Plan Día a Día</span>
                            </button>}
-                           {getPermissionLevel(user.id, 'planning', 'plan-semana') !== 'none' && <button
-                             onClick={() => setActiveTab('plan-semana')}
-                             className={cn(navTabClass(activeTab === 'plan-semana'))}
-                           >
-                             <CalendarRange className="h-3.5 w-3.5" />
-                             <span className="hidden sm:inline">Plan Semana</span>
-                           </button>}
                            {getPermissionLevel(user.id, 'planning', 'preparation') !== 'none' && <button
                              onClick={() => setActiveTab('preparation')}
                              className={cn(navTabClass(activeTab === 'preparation'))}
@@ -3386,15 +3491,58 @@ export default function PlannerPage() {
                            </button>}
                         </div>
                         <div className="flex items-center gap-2">
-                          <Popover>
+                          <Popover open={planningDatePickerOpen} onOpenChange={setPlanningDatePickerOpen}>
                             <PopoverTrigger asChild>
-                              <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[11px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
+                              <button
+                                type="button"
+                                className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[11px] whitespace-nowrap border-0 bg-white text-slate-700 shadow-sm cursor-pointer"
+                                aria-label="Abrir selector de fecha de planificación"
+                              >
                                 <CalendarIcon className="h-3.5 w-3.5 text-primary" />
                                 {format(weekStartDate, "dd 'de' MMM, yyyy", { locale: es })}
                               </button>
                             </PopoverTrigger>
-                            <PopoverContent className="w-auto p-0" align="start">
-                              <Calendar mode="single" selected={weekStartDate} onSelect={(date) => date && setWeekStartDate(date)} locale={es} />
+                            <PopoverContent className="w-auto rounded-lg border border-slate-200 bg-white p-2 shadow-lg" align="start">
+                              <Calendar
+                                mode="single"
+                                selected={weekStartDate}
+                                onSelect={(date) => {
+                                  if (!date) return;
+                                  setWeekStartDate(date);
+                                  setPlanningDatePickerOpen(false);
+                                }}
+                                locale={es}
+                                className="p-1"
+                                classNames={{
+                                  month: "space-y-3",
+                                  caption: "flex items-center justify-between px-1 pt-1 relative",
+                                  caption_label: "text-xs font-semibold text-slate-800 capitalize",
+                                  nav: "flex items-center gap-1",
+                                  nav_button: "h-7 w-7 rounded-md border-0 bg-transparent p-0 text-slate-500 opacity-100 hover:bg-slate-100 hover:text-slate-900",
+                                  nav_button_previous: "static",
+                                  nav_button_next: "static",
+                                  head_row: "flex",
+                                  head_cell: "w-8 rounded-none text-center text-[10px] font-medium text-slate-600",
+                                  row: "mt-1 flex w-full",
+                                  cell: "relative h-8 w-8 p-0 text-center text-xs focus-within:z-20",
+                                  day: "h-8 w-8 rounded-md p-0 text-xs font-normal text-slate-700 hover:bg-slate-100",
+                                  day_selected: "bg-blue-600 text-white font-semibold hover:bg-blue-700 hover:text-white focus:bg-blue-700 focus:text-white",
+                                  day_today: "bg-slate-100 font-semibold text-slate-900",
+                                  day_outside: "text-slate-400 opacity-70",
+                                }}
+                              />
+                              <div className="flex justify-end border-t border-slate-100 px-1 pt-2">
+                                <button
+                                  type="button"
+                                  className="text-xs font-medium text-blue-600 hover:text-blue-800"
+                                  onClick={() => {
+                                    setWeekStartDate(new Date());
+                                    setPlanningDatePickerOpen(false);
+                                  }}
+                                >
+                                  Hoy
+                                </button>
+                              </div>
                             </PopoverContent>
                           </Popover>
                           <Select value={selectedLine} onValueChange={setSelectedLine}>
@@ -3479,9 +3627,6 @@ export default function PlannerPage() {
                        )}
                         {activeTab === 'daily' && getPermissionLevel(user.id, 'planning', 'daily') !== 'none' && (
                           <DailyPlanSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintDaily} />
-                        )}
-                        {activeTab === 'plan-semana' && getPermissionLevel(user.id, 'planning', 'plan-semana') !== 'none' && (
-                          <WeeklyPlanSection tasks={tasks} weekStartDate={weekStartDate} />
                         )}
                         {activeTab === 'preparation' && getPermissionLevel(user.id, 'planning', 'preparation') !== 'none' && (
                           <PreparationSection tasks={tasks} weekStartDate={weekStartDate} onPrint={handlePrintPreparation} />
@@ -3816,7 +3961,7 @@ export default function PlannerPage() {
                                                              setErrorValidacion('Ingrese hora de inicio y fin de la parada.');
                                                              return;
                                                            }
-                                                            const duplicado = informesOperacionales.find(r => String(r.id) !== String(row.id) && r.linea === formData.linea && seSolapan(r.fecha || formData.fecha, r.inicioParada, r.finParada, formData.fecha, formData.inicioParada, formData.finParada));
+                                                            const duplicado = informesOperacionales.find(r => String(r.id) !== String(row.id) && r.fecha === formData.fecha && r.linea === formData.linea && seSolapan(r.inicioParada, r.finParada, formData.inicioParada, formData.finParada));
                                                             if (duplicado) {
                                                               setErrorValidacion(`Ya existe una parada registrada en esta fecha y línea de ${duplicado.inicioParada} a ${duplicado.finParada}.`);
                                                               return;
@@ -4763,56 +4908,37 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                             <div className="flex-1 bg-white rounded-[2.5rem] p-4">
                               <div className="flex-1 rounded-2xl bg-slate-50/50 border border-slate-100">
                                 <div className="flex flex-col h-full gap-3">
-                                    <div className="flex items-center justify-end no-print gap-2">
+                                    <div className="flex flex-col gap-2 no-print">
+                                      <div className="flex items-center justify-between">
+                                        <button
+                                          type="button"
+                                          onClick={() => setPtabWeekStartDate((current) => addDays(current, -7))}
+                                          aria-label="Semana anterior"
+                                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                                        >
+                                          <ChevronLeft className="h-4 w-4" />
+                                        </button>
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                                          Semana {getISOWeek(ptabWeekStartDate)} del {format(startOfWeek(ptabWeekStartDate, { weekStartsOn: 1 }), 'd/M/yyyy')} a {format(addDays(startOfWeek(ptabWeekStartDate, { weekStartsOn: 1 }), 6), 'd/M/yyyy')}
+                                        </span>
+                                        <button
+                                          type="button"
+                                          onClick={() => setPtabWeekStartDate((current) => addDays(current, 7))}
+                                          aria-label="Semana siguiente"
+                                          className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                                        >
+                                          <ChevronRight className="h-4 w-4" />
+                                        </button>
+                                      </div>
                                       <button
+                                        type="button"
                                         onClick={exportPtabAguaToExcel}
-                                        className="pointer-events-auto inline-flex items-center gap-1.5 h-9 pl-3 pr-4 rounded-full font-black uppercase text-[10px] tracking-widest whitespace-nowrap flex-shrink-0 outline-none select-none transition-none border-0 bg-emerald-600 text-white shadow-sm active:scale-95"
+                                        className="inline-flex h-9 self-end items-center gap-1.5 rounded-full border-0 bg-emerald-600 pl-3 pr-4 text-[10px] font-black uppercase tracking-widest text-white shadow-sm transition-none outline-none select-none active:scale-95"
                                       >
                                         <FileSpreadsheet className="h-3.5 w-3.5" />
                                         Exportar Excel
                                       </button>
-                                      <Popover>
-                                       <PopoverTrigger asChild>
-                                         <button className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[10px] whitespace-nowrap flex-shrink-0 outline-none select-none border-0 bg-white text-slate-700 shadow-sm transition-none">
-                                           <CalendarIcon className="h-3.5 w-3.5 text-primary" />
-                                           Semana {getISOWeek(ptabWeekStartDate)}
-                                         </button>
-                                       </PopoverTrigger>
-                                       <PopoverContent className="p-0 w-72" align="end">
-                                         <div className="flex flex-col p-2">
-                                           <div className="flex items-center justify-between mb-2">
-                                             <button onClick={() => {
-                                               const d = new Date(ptabWeekStartDate);
-                                               d.setFullYear(d.getFullYear() - 1);
-                                               setPtabWeekStartDate(d);
-                                             }} className="h-7 px-2 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50">← Año</button>
-                                             <span className="text-[11px] font-black text-slate-700">{ptabWeekStartDate.getFullYear()}</span>
-                                             <button onClick={() => {
-                                               const d = new Date(ptabWeekStartDate);
-                                               d.setFullYear(d.getFullYear() + 1);
-                                               setPtabWeekStartDate(d);
-                                             }} className="h-7 px-2 text-[10px] font-bold bg-white border border-slate-200 rounded-md hover:bg-slate-50">Año →</button>
-                                           </div>
-                                           <div ref={ptabWeeksContainerRef} className="max-h-64 overflow-auto rounded-lg border border-slate-200">
-                                             {weeksForYearPtab.map((week) => (
-                                               <button
-                                                 key={week.isoWeek}
-                                                 id={`ptab-week-${week.isoWeek}`}
-                                                 onClick={() => setPtabWeekStartDate(week.start)}
-                                                 className={cn(
-                                                   "w-full text-left px-3 py-2 text-[11px] border-b border-slate-100 last:border-0 flex items-center justify-between",
-                                                   getISOWeek(ptabWeekStartDate) === week.isoWeek ? "bg-slate-800 text-white" : "hover:bg-slate-50"
-                                                 )}
-                                               >
-                                                 <span className="font-bold">Sem {week.isoWeek}</span>
-                                                 <span className="text-[10px] opacity-70">{format(week.start, 'dd MMM', { locale: es })} - {format(week.end, 'dd MMM', { locale: es })}</span>
-                                               </button>
-                                             ))}
-                                           </div>
-                                         </div>
-                                       </PopoverContent>
-                                     </Popover>
-                                   </div>
+                                    </div>
                                     <div className="flex-1 rounded-2xl border border-slate-100 bg-white overflow-x-auto">
                                       <div className="mb-2">
                                         <span className="text-slate-700 font-black text-sm uppercase tracking-widest">Semana {getISOWeek(ptabWeekStartDate)}</span>
@@ -5167,7 +5293,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                                    <div className="mt-4 bg-white rounded-2xl border border-slate-100">
                                                      <div className="flex items-center justify-between mb-2 px-4 pt-4">
                                                        <div className="text-slate-700 font-black text-xs uppercase tracking-widest">Consumo de agua - Gráfico semanal</div>
-                                                       <Button size="sm" onClick={generarPDFRSemanalAgua} className="pointer-events-auto h-8 pl-3 pr-4 rounded-full bg-teal-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-teal-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
+                                                       <Button size="sm" onClick={generarPDFRSemanalAgua} className="h-8 pl-3 pr-4 rounded-full bg-teal-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-teal-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0">
                                                          <FileDown className="h-3.5 w-3.5" /> PDF
                                                        </Button>
                                                      </div>
@@ -5979,7 +6105,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                     )}
                     {activeModule === 'calidad' && isDemon && <CalidadModule />}
                     {activeModule === 'mtto' && (
-                      <MttoModule getCo2TheoreticalForDate={calcularKgCo2ParaFecha} />
+                     <MttoModule getCo2TheoreticalForDate={calcularKgCo2ParaFecha} />
                     )}
                       {activeModule === 'insumos' && isDemon && (
                        <div className="flex flex-col h-full">
@@ -6273,7 +6399,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                     </div>
                                     <button
                                       onClick={() => generarExcelAguaMensual()}
-                                      className="pointer-events-auto ml-4 px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
+                                      className="ml-4 px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
                                     >
                                       <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -6282,7 +6408,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                     </button>
                                     <button
                                       onClick={() => generarPDFAguaMensual()}
-                                      className="pointer-events-auto ml-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
+                                      className="ml-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
                                     >
                                       <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -6634,7 +6760,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                     </div>
                                     <button
                                       onClick={() => generarExcelCo2Mensual()}
-                                      className="pointer-events-auto ml-4 px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
+                                      className="ml-4 px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
                                     >
                                       <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -6643,7 +6769,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                                     </button>
                                     <button
                                       onClick={() => generarPDFCo2Mensual()}
-                                      className="pointer-events-auto ml-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
+                                      className="ml-2 px-3 py-1 bg-red-600 hover:bg-red-700 text-white text-[10px] font-black uppercase tracking-wider rounded flex items-center gap-1"
                                     >
                                       <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                                         <path strokeLinecap="round" strokeLinejoin="round" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -6744,10 +6870,95 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                        </div>
                      )}
                       {activeModule === 'logistica' && hasAccess(user.id, 'logistica') && (
-                        <LogisticaModule />
-                      )}
+                       <div className="flex flex-col h-full">
+                          <div className="flex flex-col gap-2 mb-2 no-print">
+                            <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200 w-fit">
+                              {['stock-producto-terminado'].map((tab) => (
+                                <button
+                                  key={tab}
+                                  onClick={() => setLogisticaSubTab(tab)}
+                                  className={cn(
+                                    "inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap flex-shrink-0 outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none",
+                                    logisticaSubTab === tab ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                                  )}
+                                >
+                                  <Package className="h-3.5 w-3.5" />
+                                  <span className="hidden sm:inline">Stock de Producto Terminado</span>
+                                </button>
+                              ))}
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <Button
+                                size="sm"
+                                onClick={handleLogisticaUploadClick}
+                                className="h-8 pl-3 pr-4 rounded-full bg-orange-600 text-white font-black uppercase text-[9px] tracking-widest hover:bg-orange-700 transition-none shadow-sm active:scale-95 flex items-center gap-1.5 whitespace-nowrap flex-shrink-0"
+                              >
+                                <Upload className="h-3 w-3" />
+                                Actualizar
+                              </Button>
+                              <input
+                                ref={logisticaFileInputRef}
+                                type="file"
+                                accept=".xlsx,.xls"
+                                className="hidden"
+                                onChange={handleLogisticaFileChange}
+                              />
+                            </div>
+                          </div>
+
+                           {logisticaSubTab === 'stock-producto-terminado' && (
+                             <div className="flex-1 bg-white rounded-[2.5rem] p-4 overflow-auto">
+                               {logisticaUploadedFile ? (
+                                 <div className="rounded-2xl border border-slate-200 bg-white">
+                                   <div className="flex items-center justify-between px-4 py-3 border-b border-slate-100">
+                                      <div className="text-[10px] font-black uppercase tracking-widest text-slate-500">
+                                        Adjuntado - actualizado el {logisticaUploadedFile?.uploadedAt || ''}
+                                      </div>
+                                   </div>
+                                   <div className="flex items-center gap-3 p-4">
+                                     <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-emerald-600 text-white font-black text-xs shadow-sm">
+                                       XLS
+                                     </div>
+                                     <div className="flex-1 min-w-0">
+                                       <div className="text-sm font-bold text-slate-900 truncate">{logisticaUploadedFile.name}</div>
+                                       <div className="text-[11px] font-medium text-slate-500">{formatLogisticaFileSize(logisticaUploadedFile.size)}</div>
+                                     </div>
+                                     <Button
+                                       size="sm"
+                                       variant="outline"
+                                       className="h-8 px-3 rounded-full border-slate-300 text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition-none"
+                                       onClick={() => setLogisticaShowPreview(true)}
+                                     >
+                                       <FileDown className="h-3 w-3 mr-1.5" />
+                                       Ver
+                                     </Button>
+                                   </div>
+                                    {logisticaShowPreview && logisticaExcelBuffer && (
+                                      <div className="border-t border-slate-100 p-4">
+                                        <div
+                                          ref={logisticaViewerContainerRef}
+                                          className="rounded-2xl border border-slate-200 bg-white overflow-hidden"
+                                          style={{ maxHeight: 'calc(100vh - 320px)', height: '600px' }}
+                                        />
+                                      </div>
+                                    )}
+                                 </div>
+                               ) : (
+                                 <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                   <Package className="h-12 w-12 mb-4 opacity-20" />
+                                   Stock de Producto Terminado
+                                   <span className="text-[10px] font-bold mt-2 normal-case tracking-normal">Suba un archivo Excel para visualizarlo</span>
+                                 </div>
+                               )}
+                             </div>
+                           )}
+                       </div>
+                     )}
                 {activeModule === 'ventas' && hasAccess(user.id, 'ventas') && (
-                  <VentasModule />
+                  <div className="flex flex-col items-center justify-center h-full text-slate-400 uppercase font-black text-sm tracking-widest border-2 border-dashed border-slate-200 rounded-[2.5rem] bg-white/50">
+                    <TrendingUp className="h-12 w-12 mb-4 opacity-20" />
+                    Módulo de Ventas en Desarrollo
+                  </div>
                 )}
                  {activeModule === 'purchasing' && hasAccess(user.id, 'purchasing') && (
                    <PurchasingModule 
@@ -7282,7 +7493,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                      setErrorValidacion('Ingrese hora de inicio y fin de la parada.');
                      return;
                    }
-                    const duplicado = informesOperacionales.find(r => r.linea === plantaFormData.linea && seSolapan(r.fecha || plantaFormData.fecha, r.inicioParada, r.finParada, plantaFormData.fecha, plantaFormData.inicioParada, plantaFormData.finParada));
+                    const duplicado = informesOperacionales.find(r => r.fecha === plantaFormData.fecha && r.linea === plantaFormData.linea && seSolapan(r.inicioParada, r.finParada, plantaFormData.inicioParada, plantaFormData.finParada));
                     if (duplicado) {
                       setErrorValidacion(`Ya existe una parada registrada en esta fecha y línea de ${duplicado.inicioParada} a ${duplicado.finParada}.`);
                       return;
@@ -8600,3 +8811,4 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
   });
 
   OrdenTrabajoRow.displayName = 'OrdenTrabajoRow';
+
