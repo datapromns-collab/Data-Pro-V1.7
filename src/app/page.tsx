@@ -84,7 +84,7 @@ import { PackagingRecipeEditor } from '@/components/planner/PackagingRecipeEdito
 import { RawMaterialModule } from '@/components/planner/RawMaterialModule';
 import { RawMaterialReport } from '@/components/planner/RawMaterialReport';
 import { DailyRawMaterialReport } from '@/components/planner/DailyRawMaterialReport';
-import { PurchasingModule } from '@/components/planner/PurchasingModule';
+import { PurchasingModule, type PurchasingSummaryPrintData } from '@/components/planner/PurchasingModule';
 import { PurchasingRequirementReport } from '@/components/planner/PurchasingRequirementReport';
 import { InventoryReport } from '@/components/planner/InventoryReport';
 import { PlanProduccionReport } from '@/components/planner/PlanProduccionReport';
@@ -1823,6 +1823,7 @@ export default function PlannerPage() {
   const [turnoSubTab, setTurnoSubTab] = useState<'diurno' | 'nocturno' | 'dt'>('diurno');
   const [dtSubTab, setDtSubTab] = useState<'td' | 'tn'>('td');
   const [printMode, setPrintMode] = useState('');
+  const [purchasingSummaryPrintData, setPurchasingSummaryPrintData] = useState<PurchasingSummaryPrintData | null>(null);
   const [printWeekStart, setPrintWeekStart] = useState<string>('');
   const [calcPrintStartDate, setCalcPrintStartDate] = useState<Date>(new Date());
   const [calcPrintEndDate, setCalcPrintEndDate] = useState<Date>(new Date());
@@ -2818,12 +2819,17 @@ export default function PlannerPage() {
     }, 150);
   };
 
-  const handlePrintResumen = (section: 'mds' | 'aw' | 'global', type: 'plan-produccion' | 'requisicion') => {
+  const handlePrintResumen = (
+    section: 'mds' | 'aw' | 'global' | 'semestral',
+    type: 'plan-produccion' | 'requisicion',
+    data?: PurchasingSummaryPrintData,
+  ) => {
     const modeMap: Record<string, string> = {
       'plan-produccion': 'resumen-plan',
       'requisicion': 'resumen-requisicion'
     };
-    const suffix = section === 'aw' ? '-aw' : section === 'global' ? '-global' : '';
+    const suffix = section === 'aw' ? '-aw' : section === 'global' ? '-global' : section === 'semestral' ? '-semestral' : '';
+    setPurchasingSummaryPrintData(data ?? null);
     setPrintMode(`${modeMap[type]}${suffix}`);
     const style = document.createElement('style');
     style.id = 'print-orientation-style';
@@ -7092,26 +7098,28 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
               />
             </div>
           )}
-          {(printMode === 'resumen-plan' || printMode === 'resumen-plan-aw') && (
+          {(printMode === 'resumen-plan' || printMode === 'resumen-plan-aw' || printMode === 'resumen-plan-semestral') && (
             <div className="p-0">
               <PlanProduccionReport 
-                section={printMode === 'resumen-plan-aw' ? 'aw' : 'mds'}
-                salesProjection={printMode === 'resumen-plan-aw' ? salesProjectionAW : salesProjection}
-                finishedProductInventory={printMode === 'resumen-plan-aw' ? finishedProductInventoryAW : finishedProductInventory}
-                productionPlan={printMode === 'resumen-plan-aw' ? productionPlanAW : productionPlan}
+                section={printMode === 'resumen-plan-semestral' ? 'semestral' : printMode === 'resumen-plan-aw' ? 'aw' : 'mds'}
+                salesProjection={purchasingSummaryPrintData?.salesProjection ?? (printMode === 'resumen-plan-aw' ? salesProjectionAW : salesProjection)}
+                finishedProductInventory={purchasingSummaryPrintData?.finishedProductInventory ?? (printMode === 'resumen-plan-aw' ? finishedProductInventoryAW : finishedProductInventory)}
+                productionPlan={purchasingSummaryPrintData?.productionPlan ?? (printMode === 'resumen-plan-aw' ? productionPlanAW : productionPlan)}
+                periodLabel={purchasingSummaryPrintData?.periodLabel}
               />
             </div>
           )}
-          {(printMode === 'resumen-requisicion' || printMode === 'resumen-requisicion-aw') && (
+          {(printMode === 'resumen-requisicion' || printMode === 'resumen-requisicion-aw' || printMode === 'resumen-requisicion-semestral') && (
             <div className="p-0">
               <RequisicionReport 
-                section={printMode === 'resumen-requisicion-aw' ? 'aw' : 'mds'}
-                salesProjection={printMode === 'resumen-requisicion-aw' ? salesProjectionAW : salesProjection}
-                productionPlan={printMode === 'resumen-requisicion-aw' ? productionPlanAW : productionPlan}
-                logisticsInventory={printMode === 'resumen-requisicion-aw' ? logisticsInventoryAW : logisticsInventory}
-                plantInventory={printMode === 'resumen-requisicion-aw' ? plantInventoryAW : plantInventory}
+                section={printMode === 'resumen-requisicion-semestral' ? 'semestral' : printMode === 'resumen-requisicion-aw' ? 'aw' : 'mds'}
+                salesProjection={purchasingSummaryPrintData?.salesProjection ?? (printMode === 'resumen-requisicion-aw' ? salesProjectionAW : salesProjection)}
+                productionPlan={purchasingSummaryPrintData?.productionPlan ?? (printMode === 'resumen-requisicion-aw' ? productionPlanAW : productionPlan)}
+                logisticsInventory={purchasingSummaryPrintData?.logisticsInventory ?? (printMode === 'resumen-requisicion-aw' ? logisticsInventoryAW : logisticsInventory)}
+                plantInventory={purchasingSummaryPrintData?.plantInventory ?? (printMode === 'resumen-requisicion-aw' ? plantInventoryAW : plantInventory)}
                 customRecipes={customRecipes}
                 customPackagingRecipes={customPackagingRecipes}
+                periodLabel={purchasingSummaryPrintData?.periodLabel}
               />
             </div>
           )}
@@ -8811,4 +8819,3 @@ function ReporteTurnoTabla({ informesOperacionales, tasks, realProduction, lineS
   });
 
   OrdenTrabajoRow.displayName = 'OrdenTrabajoRow';
-

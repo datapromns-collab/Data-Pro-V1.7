@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-10-01T00:00:00.000",
+      "weekStartDate": "2026-08-03T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -11414,12 +11414,12 @@
             "name": "GLUP PIÑA",
             "lineId": "1",
             "loadPerHour": 1500,
-            "quantity": 34500,
-            "durationHours": 23,
+            "quantity": 33000,
+            "durationHours": 22,
             "presentation": "2Lts",
-            "tanks": 4.75,
+            "tanks": 4.54,
             "startTime": "2026-09-30T11:00:00.000Z",
-            "endTime": "2026-10-01T10:00:00.000Z",
+            "endTime": "2026-10-01T09:00:00.000Z",
             "id": "wrcv2t59v",
             "color": "#6366f1"
           },
@@ -22150,7 +22150,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-09-30T20:43:30.303Z"
+    "updatedAt": "2026-09-30T20:44:24.051Z"
   },
   "ordenesSap": [
     {
