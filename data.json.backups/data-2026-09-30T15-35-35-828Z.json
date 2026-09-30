@@ -8593,7 +8593,11 @@
         "finalUBBTanksDaily": {},
         "salesProjection": {},
         "finishedProductInventory": {},
-        "productionPlan": {},
+        "productionPlan": {
+          "GLUP COLA": {
+            "2Lts": 0
+          }
+        },
         "logisticsInventory": {},
         "plantInventory": {},
         "salesProjectionAW": {},
@@ -11582,38 +11586,14 @@
             "name": "GLUP FRESH",
             "lineId": "6",
             "loadPerHour": 1200,
-            "quantity": 17260,
-            "durationHours": 14.383333333333333,
+            "quantity": 34500,
+            "durationHours": 28.75,
             "presentation": "0.4Lts",
-            "tanks": 1,
+            "tanks": 2,
             "startTime": "2026-10-01T14:01:00.000Z",
-            "endTime": "2026-10-02T04:24:00.000Z",
+            "endTime": "2026-10-02T18:46:00.000Z",
             "id": "r6br220cw",
             "color": "#f59e0b"
-          },
-          {
-            "name": "CS",
-            "lineId": "6",
-            "loadPerHour": 0,
-            "quantity": 0,
-            "durationHours": 0.5,
-            "startTime": "2026-10-02T04:24:00.000Z",
-            "endTime": "2026-10-02T04:54:00.000Z",
-            "id": "tsd0ocdds",
-            "color": "#ef4444"
-          },
-          {
-            "name": "GLUP COLA",
-            "lineId": "6",
-            "loadPerHour": 1200,
-            "quantity": 33720,
-            "durationHours": 28.1,
-            "presentation": "0.4Lts",
-            "tanks": 1.95,
-            "startTime": "2026-10-02T04:54:00.000Z",
-            "endTime": "2026-10-03T09:00:00.000Z",
-            "id": "wl6d8rklp",
-            "color": "#47CCB0"
           },
           {
             "name": "CS",
@@ -11723,6 +11703,30 @@
             "endTime": "2026-10-01T14:00:00.000Z",
             "id": "stphfzk9q",
             "color": "#ef4444"
+          },
+          {
+            "name": "CS",
+            "lineId": "6",
+            "loadPerHour": 0,
+            "quantity": 0,
+            "durationHours": 0.5,
+            "startTime": "2026-10-02T18:46:00.000Z",
+            "endTime": "2026-10-02T19:16:00.000Z",
+            "id": "nrr8yeis4",
+            "color": "#47CCB0"
+          },
+          {
+            "name": "GLUP COLA",
+            "lineId": "6",
+            "loadPerHour": 1200,
+            "quantity": 16476,
+            "durationHours": 13.73,
+            "presentation": "0.4Lts",
+            "tanks": 0.96,
+            "startTime": "2026-10-02T19:16:00.000Z",
+            "endTime": "2026-10-03T08:59:48.000Z",
+            "id": "g304ecwcd",
+            "color": "#6366f1"
           }
         ],
         "realProduction": {},
@@ -11760,7 +11764,9 @@
           "z57nsetkj",
           "3t6of43rh",
           "lsljanngc",
-          "54vsgg0v6"
+          "54vsgg0v6",
+          "wl6d8rklp",
+          "tsd0ocdds"
         ]
       }
     },
@@ -20066,7 +20072,8 @@
             "EMP_0154": "0",
             "EMP_0152": "0",
             "EMP_0151": "0",
-            "EMP_0155": "368,52"
+            "EMP_0155": "368,52",
+            "EMP_0113": "323"
           },
           "azucarCantidad": {},
           "concentradosCantidad": {},
@@ -20475,6 +20482,79 @@
           "aditivosCantidad": {},
           "solidosCantidad": {},
           "quimicosInsumosCantidad": {}
+        },
+        "2026-10": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {},
+          "2026-09": {
+            "tapas": {
+              "EMP_0095-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0095-Importada": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaEW": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaTipo2": {
+                "totalCajas": "",
+                "total": ""
+              }
+            },
+            "separadores": {},
+            "preformas": {},
+            "plasticos": {},
+            "adhesivoCantidad": "",
+            "etiquetasCantidad": {},
+            "azucarCantidad": {
+              "preparacion": "",
+              "sacos": ""
+            },
+            "concentradosCantidad": {},
+            "concentradosJustyCantidad": {},
+            "aditivosCantidad": {},
+            "solidosCantidad": {},
+            "quimicosInsumosCantidad": {}
+          }
         }
       },
       "mermasDesperdicios": {
@@ -21055,7 +21135,163 @@
               "preformSize": ""
             }
           ],
-          "2026-09-30": []
+          "2026-09-30": [],
+          "2026-09-29": [
+            {
+              "id": "31efddd5-29ce-423e-a013-1d78fd46b248",
+              "line": "Linea 1",
+              "flavor": "verde",
+              "code": "EMP_0103",
+              "material": "PREFORMA VERDE 42,64 GR-1881",
+              "quantity": "3666",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "2c87bcf3-7ba7-4a3c-b77f-a3c7fe42c91b",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "3.89",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "7747ae03-ca26-4bdb-ad4a-45d836fcb7ea",
+              "line": "Linea 2",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "3738",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "c9e2f876-dccb-4f89-90a6-b4dbd7ba5fd8",
+              "line": "Linea 2",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "1.78",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "de8bf149-15eb-498c-82b9-140920349ab4",
+              "line": "Linea 3",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "2690",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "61df4314-c2ca-45d5-99b1-51176cc61df2",
+              "line": "Linea 3",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "8,39",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "1153a575-5ae4-4551-b48a-0e0d53393cea",
+              "line": "Linea 4",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "4142",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "69f9487c-d37e-4b30-b551-621cd45d59ce",
+              "line": "Linea 4",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,35",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "9747bfe8-6d71-4618-b0de-cfd489c70a02",
+              "line": "Linea 5",
+              "flavor": "transparente",
+              "code": "EMP_0068",
+              "material": "PREFORMA TRANSPARENTE 36 GR-1881",
+              "quantity": "2138",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "d7656293-870a-454b-8d0b-b300d71ed95d",
+              "line": "Linea 5",
+              "flavor": "",
+              "code": "EMP_0017",
+              "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
+              "quantity": "3,08",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "c52682d9-c6be-43d3-a8bd-759f4eba1eb2",
+              "line": "Linea 6",
+              "flavor": "transparente",
+              "code": "EMP_0126",
+              "material": "PREFORMA TRANSPARENTE 20,55GR-1881",
+              "quantity": "1850",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "0de3ec36-7e29-4959-b4ba-a05af11d4dd9",
+              "line": "Linea 6",
+              "flavor": "",
+              "code": "EMP_0130",
+              "material": "POLIETILENO TERMOENCOGIBLE 43 x 0.06",
+              "quantity": "4,80",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "9179dd99-35b0-4398-9500-cad6497d99b5",
+              "line": "Linea 7",
+              "flavor": "transparente",
+              "code": "EMP_0009",
+              "material": "PREFORMA TRANSPARENTE 29.6GR 1881",
+              "quantity": "5363",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": "29"
+            },
+            {
+              "id": "d262aa29-c67d-4a77-8024-9caea73fb47b",
+              "line": "Linea 7",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "2,36",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            }
+          ]
         }
       }
     },
@@ -21699,7 +21935,8 @@
           "produccion.mermas-desperdicios.resumen-mensual": "none"
         },
         "maria.mds": {
-          "logistica.monthly-inventory": "none"
+          "logistica.monthly-inventory": "none",
+          "planning.calculator": "write"
         },
         "alex.mds": {
           "logistica.monthly-inventory": "none",
@@ -21913,7 +22150,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-09-30T13:25:45.132Z"
+    "updatedAt": "2026-09-30T15:17:15.235Z"
   },
   "ordenesSap": [
     {
@@ -43581,6 +43818,33 @@
             "preparado": "10",
             "final": "10"
           }
+        },
+        "2026-09-30": {
+          "GLUP COLA": {
+            "inicial": "65.21",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP FRESH": {
+            "inicial": "5.73",
+            "preparado": "",
+            "final": ""
+          },
+          "JUSTY NARANJA": {
+            "inicial": "31",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP UVA": {
+            "inicial": "38.80",
+            "preparado": "",
+            "final": ""
+          },
+          "GLUP PIÑA": {
+            "inicial": "10",
+            "preparado": "",
+            "final": "10"
+          }
         }
       },
       "sugar": {
@@ -44622,6 +44886,18 @@
             "recepcionSacos": "",
             "invFinalSacos": ""
           }
+        },
+        "2026-09-30": {
+          "PORTUGUESA": {
+            "invInicialSacos": "10040",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          },
+          "IMPORTADA 1": {
+            "invInicialSacos": "457",
+            "recepcionSacos": "",
+            "invFinalSacos": ""
+          }
         }
       },
       "tanques": {
@@ -45506,6 +45782,16 @@
             "invInicialSacos": "1138",
             "invFinalSacos": "456"
           }
+        },
+        "2026-09-30": {
+          "JARABE SIMPLE": {
+            "invInicialSacos": "357",
+            "invFinalSacos": ""
+          },
+          "Sala 1": {
+            "invInicialSacos": "456",
+            "invFinalSacos": ""
+          }
         }
       },
       "realKgPerSack": {
@@ -45572,7 +45858,8 @@
         "2026-09-26": "50.31",
         "2026-09-25": "50.39",
         "2026-09-27": "50.22",
-        "2026-09-28": "50.3"
+        "2026-09-28": "50.3",
+        "2026-09-29": "50.46"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
@@ -45594,7 +45881,8 @@
         "2026-09-13": "1.34",
         "2026-09-18": "1.02",
         "2026-09-23": "1.02",
-        "2026-09-27": "1.02"
+        "2026-09-27": "1.02",
+        "2026-09-30": "1.02"
       },
       "_deletedIds": {},
       "weeklyFisico": {
@@ -45610,7 +45898,8 @@
         "2026-08-01|2026-08": 121494.94,
         "2026-09-07|2026-09": 1141476.37,
         "2026-09-14|2026-09": 1174355.86,
-        "2026-09-21|2026-09": 1009476.45
+        "2026-09-21|2026-09": 1009476.45,
+        "2026-09-28|2026-09": 1207915.35
       }
     },
     "seguimiento-etiquetadora": {
@@ -163774,6 +164063,12 @@
           "jarabeReal": 69529,
           "producto": "322",
           "ubb": 24.16
+        },
+        "auto-1-1790350075856": {
+          "cajasPlanificadas": 72000,
+          "jarabeReal": 87325,
+          "ubb": 30.4,
+          "producto": "674"
         }
       },
       "linea-2": {
@@ -163984,12 +164279,20 @@
           "cajasPlanificadas": 17250,
           "producto": "157",
           "jarabeReal": 30008,
-          "ubb": 10.45
+          "ubb": 10.45,
+          "pnc": 80
         },
         "auto-2-1790422039418": {
           "cajasPlanificadas": 7291,
           "jarabeReal": 17330,
-          "ubb": 10
+          "ubb": 10,
+          "producto": "0"
+        },
+        "auto-2-1790458094067": {
+          "cajasPlanificadas": 94200,
+          "jarabeReal": 74920,
+          "ubb": 75.93,
+          "producto": "190"
         }
       },
       "linea-3": {
@@ -164174,6 +164477,12 @@
           "jarabeReal": 87267,
           "producto": "215",
           "ubb": 50
+        },
+        "auto-3-1790337725685": {
+          "cajasPlanificadas": 134400,
+          "jarabeReal": 123030,
+          "ubb": 42.77,
+          "producto": "389"
         }
       },
       "linea-4": {
@@ -164318,7 +164627,11 @@
           "ubb": 23.96
         },
         "auto-4-1790369862030": {
-          "cajasPlanificadas": 128800
+          "cajasPlanificadas": 128800,
+          "jarabeReal": 109250,
+          "ubb": 43.37,
+          "pnc": 19,
+          "producto": "228"
         }
       },
       "linea-5": {
@@ -164444,7 +164757,11 @@
           "ubb": 233
         },
         "auto-5-1790370051509": {
-          "cajasPlanificadas": 40535
+          "cajasPlanificadas": 40535,
+          "jarabeReal": 207000,
+          "ubb": 207,
+          "pnc": 1782,
+          "producto": "282"
         }
       },
       "linea-6": {
@@ -164586,7 +164903,9 @@
           "ubb": 11
         },
         "auto-6-1790113457535": {
-          "cajasPlanificadas": 57600
+          "cajasPlanificadas": 57600,
+          "jarabeReal": 26728,
+          "ubb": 9.29
         }
       },
       "linea-7": {
@@ -164798,7 +165117,9 @@
           "ubb": 2.71
         },
         "auto-7-1790422051568": {
-          "cajasPlanificadas": 17250
+          "cajasPlanificadas": 17250,
+          "jarabeReal": 34560,
+          "ubb": 12
         }
       }
     },
@@ -172293,6 +172614,37 @@
             "PRODT-0120": "5488",
             "PRODT-0121": "3663",
             "PRODT-0122": "0"
+          },
+          "matp": {},
+          "emp": {}
+        },
+        "2026-10": {
+          "prodt": {
+            "PRODT-0007": "1540484",
+            "PRODT-0008": "193742",
+            "PRODT-0009": "443196",
+            "PRODT-0012": "505915",
+            "PRODT-0049": "10685",
+            "PRODT-0011": "112172",
+            "PRODT-0010": "156516",
+            "PRODT-0098": "9716",
+            "PRODT-0097": "112199",
+            "PRODT-0082": "208696",
+            "PRODT-0084": "28483",
+            "PRODT-0086": "84973",
+            "PRODT-0088": "79242",
+            "PRODT-0107": "16469",
+            "PRODT-0104": "19362",
+            "PRODT-0105": "10856",
+            "PRODT-0092": "158841",
+            "PRODT-0094": "70668",
+            "PRODT-0095": "70418",
+            "PRODT-0093": "20179",
+            "PRODT-0111": "16352",
+            "PRODT-0014": "129467",
+            "PRODT-0100": "147377",
+            "PRODT-0116": "90964",
+            "PRODT-0115": "63974"
           },
           "matp": {},
           "emp": {}

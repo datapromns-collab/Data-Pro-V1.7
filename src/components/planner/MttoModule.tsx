@@ -56,7 +56,7 @@ export default function MttoModule({ getCo2TheoreticalForDate }: MttoModuleProps
       day: format(day, 'EEEE', { locale: es }).toUpperCase(),
       physical,
       theoretical,
-      yield: theoretical > 0 ? Number((physical / theoretical).toFixed(2)) : 0,
+      yield: physical > 0 ? Number((theoretical / physical).toFixed(2)) : 0,
     };
   });
   const monthStart = new Date(monthlyDate.getFullYear(), monthlyDate.getMonth(), 1);
@@ -86,7 +86,7 @@ export default function MttoModule({ getCo2TheoreticalForDate }: MttoModuleProps
       week: `SEM ${week.isoWeek}`,
       physical,
       theoretical,
-      yield: theoretical > 0 ? Number((physical / theoretical).toFixed(2)) : 0,
+      yield: physical > 0 ? Number((theoretical / physical).toFixed(2)) : 0,
     };
   });
   const currentYear = new Date().getFullYear();

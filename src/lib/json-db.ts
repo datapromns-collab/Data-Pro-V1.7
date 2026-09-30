@@ -99,7 +99,7 @@ export async function loadProductionInventoryData(): Promise<Record<string, any>
 }
 
 export async function loadProductionWasteRows(
-  section: 'mermas' | 'desperdicios',
+  section: 'mermas' | 'desperdicios' | 'rechazos' | 'devoluciones',
   date: string,
 ): Promise<{ rows: unknown[] | null } | null> {
   try {

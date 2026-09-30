@@ -412,10 +412,25 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
       });
       return result;
     };
+
+    const calculatedMdsProductionPlan = useMemo(() => {
+      const plan: Record<string, Record<string, number>> = {};
+      PRODUCT_LIST.forEach((product) => {
+        plan[product] = {};
+        PRESENTATIONS.forEach((presentation) => {
+          plan[product][presentation] = Math.max(
+            0,
+            (monthlySalesProjection[product]?.[presentation] || 0) -
+            (monthlyFinishedProductInventory[product]?.[presentation] || 0),
+          );
+        });
+      });
+      return plan;
+    }, [monthlySalesProjection, monthlyFinishedProductInventory]);
  
     const globalSalesProjection = useMemo(() => mergeNestedRecords(monthlySalesProjection, salesProjectionAW), [monthlySalesProjection, salesProjectionAW]);
     const globalFinishedProductInventory = useMemo(() => mergeNestedRecords(monthlyFinishedProductInventory, finishedProductInventoryAW), [monthlyFinishedProductInventory, finishedProductInventoryAW]);
-    const globalProductionPlan = useMemo(() => mergeNestedRecords(productionPlan, productionPlanAW), [productionPlan, productionPlanAW]);
+    const globalProductionPlan = useMemo(() => mergeNestedRecords(calculatedMdsProductionPlan, productionPlanAW), [calculatedMdsProductionPlan, productionPlanAW]);
     const globalLogisticsInventory = useMemo(() => mergeRecords(monthlyLogisticsMaterialInventory, logisticsInventoryAW), [monthlyLogisticsMaterialInventory, logisticsInventoryAW]);
     const globalPlantInventory = useMemo(() => mergeRecords(monthlyPlantInventory, plantInventoryAW), [monthlyPlantInventory, plantInventoryAW]);
  
@@ -433,7 +448,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
         const code = mat.code;
         if (!code) return;
         mdsReqSales[code] = calculateRequirementFromSource(code, monthlySalesProjection, customPackagingRecipes, customRecipes);
-        mdsReqPlan[code] = calculateRequirementFromSource(code, productionPlan, customPackagingRecipes, customRecipes);
+        mdsReqPlan[code] = calculateRequirementFromSource(code, calculatedMdsProductionPlan, customPackagingRecipes, customRecipes);
         mdsStock[code] = (monthlyLogisticsMaterialInventory[code] || 0) + (monthlyPlantInventory[code] || 0);
         awReqSales[code] = calculateRequirementFromSource(code, salesProjectionAW, customPackagingRecipes, customRecipes);
         awReqPlan[code] = calculateRequirementFromSource(code, productionPlanAW, customPackagingRecipes, customRecipes);
@@ -443,7 +458,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
       });
  
       return { mdsReqSales, mdsReqPlan, mdsStock, awReqSales, awReqPlan, awStock, globalReqSales, globalStock };
-    }, [monthlySalesProjection, salesProjectionAW, productionPlan, productionPlanAW, monthlyLogisticsMaterialInventory, logisticsInventoryAW, monthlyPlantInventory, plantInventoryAW, globalSalesProjection, globalLogisticsInventory, globalPlantInventory, customPackagingRecipes, customRecipes]);
+    }, [monthlySalesProjection, salesProjectionAW, calculatedMdsProductionPlan, productionPlanAW, monthlyLogisticsMaterialInventory, logisticsInventoryAW, monthlyPlantInventory, plantInventoryAW, globalSalesProjection, globalLogisticsInventory, globalPlantInventory, customPackagingRecipes, customRecipes]);
 
     const semestralSalesProjection = useMemo(() => {
       const projection: Record<string, Record<string, number>> = {};
@@ -1256,7 +1271,7 @@ export function PurchasingModule({ onPrintRequirements, onPrintInventory, onPrin
                                  {PRESENTATIONS.map((pres) => {
                                    const sales = monthlySalesProjection[product]?.[pres] || 0;
                                    const inv = monthlyFinishedProductInventory[product]?.[pres] || 0;
-                                   const plan = productionPlan[product]?.[pres] || 0;
+                                   const plan = calculatedMdsProductionPlan[product]?.[pres] || 0;
                                    return (
                                      <PlanResumenRow
                                        key={`${product}-${pres}`}
@@ -2429,15 +2444,21 @@ const PlanResumenRow = memo(function PlanResumenRow({ product, pres, sales, inv,
       <TableCell className="text-right font-bold text-amber-600 tabular-nums">
         {inv > 0 ? inv.toLocaleString('es-ES') : '-'}
       </TableCell>
-      <TableCell className="p-1 bg-sky-50/30">
-                        <Input 
-                          type="number"
-                           value={plan === 0 ? '' : (plan ?? '')}
-                           onChange={(e) => updatePlan(product, pres, parseInt(e.target.value || '0', 10))}
-                           onFocus={(e) => e.target.select()}
-                           className="h-8 text-right font-black text-sm border-none bg-white/50 focus:bg-white rounded-lg text-sky-700 shadow-inner"
-                           placeholder="0"
-                        />
+      <TableCell className="p-1 bg-sky-50/30 text-right">
+        {section === 'mds' ? (
+          <span className="font-black text-sm text-sky-700 tabular-nums">
+            {plan.toLocaleString('es-ES')}
+          </span>
+        ) : (
+          <Input
+            type="number"
+            value={plan === 0 ? '' : plan}
+            onChange={(e) => updatePlan(product, pres, parseInt(e.target.value || '0', 10))}
+            onFocus={(e) => e.target.select()}
+            className="h-8 text-right font-black text-sm border-none bg-white/50 focus:bg-white rounded-lg text-sky-700 shadow-inner"
+            placeholder="0"
+          />
+        )}
       </TableCell>
       <TableCell className={cn(
         "text-right pr-8 font-black tabular-nums",

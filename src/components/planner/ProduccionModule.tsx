@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from 'react';
-import { ArrowLeftRight, Box, CalendarDays, CalendarIcon, CalendarRange, Droplets, FileDown, Package, Recycle, Truck } from 'lucide-react';
+import { ArrowLeftRight, Box, CalendarDays, CalendarIcon, CalendarRange, Droplets, FileDown, Package, Recycle, RotateCcw, Truck } from 'lucide-react';
 import { addDays, format, getISOWeek, getISOWeekYear, setISOWeek, startOfISOWeek, startOfWeek } from 'date-fns';
 import { es } from 'date-fns/locale';
 import jsPDF from 'jspdf';
@@ -9,7 +9,8 @@ import { cn } from '@/lib/utils';
 import { loadProductionInventoryData, loadProductionWasteRows, savePlannerData } from '@/lib/json-db';
 import { useAuthStore } from '@/hooks/use-auth-store';
 
-type WasteSectionKey = 'mermas' | 'desperdicios';
+type WasteSectionKey = 'mermas' | 'desperdicios' | 'rechazos' | 'devoluciones';
+type WasteDataGroup = 'mermasDesperdicios' | 'rechazosDevoluciones';
 type WasteTableRow = {
   id: string;
   line: string;
@@ -24,6 +25,13 @@ type WasteTableRow = {
 };
 type WasteProduct = { code: string; material: string };
 type WasteTablesBySection = Record<WasteSectionKey, Record<string, WasteTableRow[]>>;
+
+const WASTE_DATA_GROUP_BY_SECTION: Record<WasteSectionKey, WasteDataGroup> = {
+  mermas: 'mermasDesperdicios',
+  desperdicios: 'mermasDesperdicios',
+  rechazos: 'rechazosDevoluciones',
+  devoluciones: 'rechazosDevoluciones',
+};
 
 const WASTE_PRODUCTS_BY_LINE: Record<string, Record<string, WasteProduct>> = {
   'Linea 1': {
@@ -167,7 +175,7 @@ const emptySharedProductionValues = (): SharedProductionValues => ({
 });
 
 const EMPTY_PRODUCTION_DATA = emptyProductionValues();
-const EMPTY_WASTE_TABLES: WasteTablesBySection = { mermas: {}, desperdicios: {} };
+const EMPTY_WASTE_TABLES: WasteTablesBySection = { mermas: {}, desperdicios: {}, rechazos: {}, devoluciones: {} };
 const MONTHLY_INVENTORY_MONTH_KEY = 'planner_monthly_inventory_month_v1';
 const PRODUCTION_VALUE_KEYS = [
   'tapas',
@@ -384,12 +392,13 @@ interface ProduccionModuleProps {
 
 export default function ProduccionModule({ weeklyOnly = false }: ProduccionModuleProps) {
   const { user } = useAuthStore();
-  const [activeProduccionSection, setActiveProduccionSection] = useState<'inventarios' | 'recepciones' | 'consumo-materiales' | 'mermas-desperdicios'>('inventarios');
+  const [activeProduccionSection, setActiveProduccionSection] = useState<'inventarios' | 'recepciones' | 'consumo-materiales' | 'mermas-desperdicios' | 'rechazos-devoluciones'>('inventarios');
   const [activeRecepcionesSubSection, setActiveRecepcionesSubSection] = useState<'diarias' | 'resumen-semanal'>('diarias');
-  const [activeMermasSubSection, setActiveMermasSubSection] = useState<'mermas' | 'desperdicios' | 'resumen-semanal' | 'resumen-mensual'>('mermas');
-  const [mermasFecha, setMermasFecha] = useState<Date>(() => new Date());
+  const [activeMermasSubSection, setActiveMermasSubSection] = useState<'mermas' | 'desperdicios' | 'resumen-semanal' | 'resumen-mensual' | 'rechazos' | 'devoluciones'>('mermas');
+  const [mermasFecha, setMermasFecha] = useState<Date>(() => addDays(new Date(), -1));
   const [mermasSemanalFecha, setMermasSemanalFecha] = useState<Date>(() => new Date());
   const [mermasMensualMes, setMermasMensualMes] = useState<Date>(() => new Date());
+  const [activeRejectsMonthlySummary, setActiveRejectsMonthlySummary] = useState<'rechazos' | 'devoluciones'>('rechazos');
   const [wasteTablesBySection, setWasteTablesBySection] = useState<WasteTablesBySection>(EMPTY_WASTE_TABLES);
   const [wasteDraftRows, setWasteDraftRows] = useState<WasteTableRow[]>([]);
   const [wasteEditingKey, setWasteEditingKey] = useState<string | null>(null);
@@ -434,8 +443,12 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   const activePeriodData = productionByPeriod[inventariosSubTab][activePeriodKey] || EMPTY_PRODUCTION_DATA;
   const receptionsDailyPeriodKey = format(recepcionesDiariasFecha, 'yyyy-MM-dd');
   const receptionWeekStart = startOfWeek(recepcionesSemanalFecha, { weekStartsOn: 1 });
-  const wasteSectionKey: WasteSectionKey | null = activeMermasSubSection === 'mermas' || activeMermasSubSection === 'desperdicios'
-    ? activeMermasSubSection
+  const activeWasteSubSection = activeMermasSubSection;
+  const wasteSectionKey: WasteSectionKey | null = activeWasteSubSection === 'mermas' ||
+    activeWasteSubSection === 'desperdicios' ||
+    activeWasteSubSection === 'rechazos' ||
+    activeWasteSubSection === 'devoluciones'
+    ? activeWasteSubSection
     : null;
   const wasteDateKey = format(mermasFecha, 'yyyy-MM-dd');
   const activeWasteKey = wasteSectionKey ? `${wasteSectionKey}:${wasteDateKey}` : null;
@@ -498,9 +511,9 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
         });
       });
       setReceptionsByPeriod(nextReceptions);
-      const storedWaste = persisted?.mermasDesperdicios || {};
-      const nextWasteTables: WasteTablesBySection = { mermas: {}, desperdicios: {} };
-      (['mermas', 'desperdicios'] as WasteSectionKey[]).forEach((section) => {
+      const nextWasteTables: WasteTablesBySection = { mermas: {}, desperdicios: {}, rechazos: {}, devoluciones: {} };
+      (['mermas', 'desperdicios', 'rechazos', 'devoluciones'] as WasteSectionKey[]).forEach((section) => {
+        const storedWaste = persisted?.[WASTE_DATA_GROUP_BY_SECTION[section]] || {};
         const storedDays = storedWaste[section];
         if (!storedDays || typeof storedDays !== 'object' || Array.isArray(storedDays)) return;
         Object.entries(storedDays).forEach(([date, rows]) => {
@@ -524,7 +537,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
   }, [productionLoadRetry]);
 
   useEffect(() => {
-    if (activeProduccionSection !== 'mermas-desperdicios' || !productionLoaded || !wasteSectionKey || isWasteEditing) return;
+    if ((activeProduccionSection !== 'mermas-desperdicios' && activeProduccionSection !== 'rechazos-devoluciones') || !productionLoaded || !wasteSectionKey || isWasteEditing) return;
     let cancelled = false;
     const syncActiveWasteTable = async () => {
       const versionAtRequestStart = wasteLocalWriteVersion.current;
@@ -845,10 +858,23 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       const requestedRowsHeight = measuredRows.reduce((height, item) => height + item.rowHeight, 0);
       const rowScale = Math.min(1, availableRowsHeight / Math.max(requestedRowsHeight, 1));
       const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-      const isMermasReport = section === 'mermas';
-      const headerFillColor = isMermasReport ? [59, 130, 246] : [134, 239, 172];
-      const headerBorderColor = isMermasReport ? [30, 64, 175] : [22, 101, 52];
-      const headerTextColor = isMermasReport ? [255, 255, 255] : [20, 83, 45];
+      const reportTitle = {
+        mermas: 'REPORTE DE MERMA',
+        desperdicios: 'REPORTE DE DESPERDICIOS',
+        rechazos: 'REPORTE DE RECHAZOS',
+        devoluciones: 'REPORTE DE DEVOLUCIONES',
+      }[section];
+      const headerFillColor = section === 'mermas' ? [59, 130, 246]
+        : section === 'desperdicios' ? [134, 239, 172]
+          : section === 'rechazos' ? [250, 204, 21]
+            : [249, 115, 22];
+      const headerBorderColor = section === 'mermas' ? [30, 64, 175]
+        : section === 'desperdicios' ? [22, 101, 52]
+          : section === 'rechazos' ? [161, 98, 7]
+            : [194, 65, 12];
+      const headerTextColor = section === 'mermas' || section === 'devoluciones'
+        ? [255, 255, 255]
+        : [20, 30, 40];
 
       const addTicket = (copyLabel: string, top: number) => {
         pdf.setFillColor(255, 255, 255);
@@ -856,7 +882,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
         pdf.addImage(logoData, 'PNG', margin, top + 5, 45, 13);
         pdf.setFont('helvetica', 'bold');
         pdf.setFontSize(12);
-        pdf.text(isMermasReport ? 'REPORTE DE MERMA' : 'REPORTE DE DESPERDICIOS', pageWidth - margin, top + 10, { align: 'right' });
+        pdf.text(reportTitle, pageWidth - margin, top + 10, { align: 'right' });
         pdf.setFontSize(9);
         pdf.text(copyLabel, pageWidth - margin, top + 17, { align: 'right' });
         pdf.setFont('helvetica', 'normal');
@@ -906,7 +932,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
             row.code,
             fittedLines,
             row.quantity,
-            isMermasReport ? 'UND' : row.unit,
+            section === 'mermas' ? 'UND' : row.unit,
           ];
           x = margin;
           columns.forEach((column, columnIndex) => {
@@ -941,7 +967,12 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       pdf.setLineDashPattern([2, 1.5], 0);
       pdf.line(0, halfHeight, pageWidth, halfHeight);
       pdf.setLineDashPattern([], 0);
-      const reportPrefix = isMermasReport ? 'Merma' : 'Desperdicio';
+      const reportPrefix = {
+        mermas: 'Merma',
+        desperdicios: 'Desperdicio',
+        rechazos: 'Rechazos',
+        devoluciones: 'Devoluciones',
+      }[section];
       pdf.save(`${reportPrefix}_${wasteDateKey}_Produccion_Logistica.pdf`);
       setWastePdfStatus('idle');
     } catch (error) {
@@ -967,12 +998,13 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       }));
       const existing = await loadProductionInventoryData();
       if (!existing) throw new Error('Unable to load shared data before saving waste table');
-      const storedWaste = existing.mermasDesperdicios || {};
+      const dataGroup = WASTE_DATA_GROUP_BY_SECTION[wasteSectionKey];
+      const storedWaste = existing[dataGroup] || {};
       const storedSection = storedWaste[wasteSectionKey] || {};
       await savePlannerData({
         productionInventory: {
           ...(existing.productionInventory || {}),
-          mermasDesperdicios: {
+          [dataGroup]: {
             ...storedWaste,
             [wasteSectionKey]: {
               ...storedSection,
@@ -1008,7 +1040,8 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
     try {
       const existing = await loadProductionInventoryData();
       if (!existing) throw new Error('Unable to load shared data before enabling waste table entry');
-      const storedWaste = existing.mermasDesperdicios || {};
+      const dataGroup = WASTE_DATA_GROUP_BY_SECTION[wasteSectionKey];
+      const storedWaste = existing[dataGroup] || {};
       const storedSection = storedWaste[wasteSectionKey] || {};
       const storedRows = normalizeWasteRows(storedSection[wasteDateKey]);
       if (hasWasteTableContent(storedRows)) {
@@ -1018,7 +1051,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
       await savePlannerData({
         productionInventory: {
           ...(existing.productionInventory || {}),
-          mermasDesperdicios: {
+          [dataGroup]: {
             ...storedWaste,
             [wasteSectionKey]: {
               ...storedSection,
@@ -1950,11 +1983,18 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
             { id: 'recepciones', label: 'Recepciones', icon: Truck },
             { id: 'consumo-materiales', label: 'Consumo de materiales', icon: ArrowLeftRight },
             { id: 'mermas-desperdicios', label: 'Mermas y desperdicios', icon: Recycle },
+            { id: 'rechazos-devoluciones', label: 'Rechazos y devoluciones', icon: RotateCcw },
           ] as const).map(({ id, label, icon: Icon }) => (
             <button
               key={id}
               type="button"
-              onClick={() => setActiveProduccionSection(id)}
+              onClick={() => {
+                setActiveProduccionSection(id);
+                if (id === 'rechazos-devoluciones') setActiveMermasSubSection('rechazos');
+                if (id === 'mermas-desperdicios' && (activeMermasSubSection === 'rechazos' || activeMermasSubSection === 'devoluciones')) {
+                  setActiveMermasSubSection('mermas');
+                }
+              }}
               className={cn(
                 'inline-flex items-center justify-center gap-1.5 h-9 px-2 sm:px-6 rounded-full font-bold text-[10px] uppercase tracking-widest whitespace-nowrap outline-none focus:ring-0 border-0 select-none transition-none active:scale-95 transform-none',
                 activeProduccionSection === id ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
@@ -2549,16 +2589,22 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
               </div>
             </div>
           </div>
-        ) : activeProduccionSection === 'mermas-desperdicios' ? (
+        ) : activeProduccionSection === 'mermas-desperdicios' || activeProduccionSection === 'rechazos-devoluciones' ? (
           <div className="flex flex-col flex-1 min-h-0">
             <div className="flex items-center gap-2 mb-2 no-print">
               <div className="flex items-center bg-slate-100/50 p-1 rounded-full h-11 border border-slate-200">
-                {([
-                  { id: 'mermas', label: 'Mermas', icon: Recycle },
-                  { id: 'desperdicios', label: 'Desperdicios', icon: Package },
-                  { id: 'resumen-semanal', label: 'Resumen semanal', icon: CalendarDays },
-                  { id: 'resumen-mensual', label: 'Resumen mensual', icon: CalendarRange },
-                ] as const).map(({ id, label, icon: Icon }) => (
+                {(activeProduccionSection === 'mermas-desperdicios'
+                  ? [
+                      { id: 'mermas' as const, label: 'Mermas', icon: Recycle },
+                      { id: 'desperdicios' as const, label: 'Desperdicios', icon: Package },
+                      { id: 'resumen-semanal' as const, label: 'Resumen semanal', icon: CalendarDays },
+                      { id: 'resumen-mensual' as const, label: 'Resumen mensual', icon: CalendarRange },
+                    ]
+                  : [
+                      { id: 'rechazos' as const, label: 'Rechazos', icon: Recycle },
+                      { id: 'devoluciones' as const, label: 'Devoluciones', icon: Package },
+                      { id: 'resumen-mensual' as const, label: 'Resumen mensual', icon: CalendarRange },
+                    ]).map(({ id, label, icon: Icon }) => (
                   <button
                     key={id}
                     type="button"
@@ -2574,7 +2620,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                 ))}
               </div>
             </div>
-            {(activeMermasSubSection === 'mermas' || activeMermasSubSection === 'desperdicios') && (
+            {(['mermas', 'desperdicios', 'rechazos', 'devoluciones'] as const).includes(activeWasteSubSection as WasteSectionKey) && (
               <div className="flex items-center gap-2 mb-2 no-print">
                 <input
                   type="date"
@@ -2647,13 +2693,14 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                 </select>
               </div>
             )}
-            {(activeMermasSubSection === 'mermas' || activeMermasSubSection === 'desperdicios') && (
+            {(['mermas', 'desperdicios', 'rechazos', 'devoluciones'] as const).includes(activeWasteSubSection as WasteSectionKey) && (
               <div className="flex-1 min-h-0 overflow-auto bg-white rounded-[2.5rem] p-4">
                 {(() => {
-                  const section = activeMermasSubSection;
+                  const section = activeWasteSubSection as WasteSectionKey;
                   const isMermas = section === 'mermas';
+                  const isDesperdicios = section === 'desperdicios';
                   const sourceRows = isWasteEditing ? wasteDraftRows : activeWasteRows;
-                  const rows = isMermas ? sourceRows : getWasteRowsWithGeneratedCaps(sourceRows);
+                  const rows = isDesperdicios ? getWasteRowsWithGeneratedCaps(sourceRows) : sourceRows;
                   const hasPersistedTable = Object.prototype.hasOwnProperty.call(wasteTablesBySection[section], wasteDateKey);
                   const hasSavedTable = hasWasteTableContent(activeWasteRows);
                   const canResetEmptyTable = canEditWasteTables &&
@@ -2661,14 +2708,22 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                     activeWasteRows.length > 0 &&
                     !hasSavedTable &&
                     !isWasteEditing;
-                  const headerColor = isMermas
-                    ? 'bg-blue-700 text-white'
-                    : 'bg-green-700 text-white';
+                  const sectionLabel = {
+                    mermas: 'Mermas',
+                    desperdicios: 'Desperdicios',
+                    rechazos: 'Rechazos',
+                    devoluciones: 'Devoluciones',
+                  }[section];
+                  const sectionColor = section === 'mermas' ? 'bg-blue-700'
+                    : section === 'desperdicios' ? 'bg-green-700'
+                      : section === 'rechazos' ? 'bg-yellow-400'
+                        : 'bg-orange-500';
+                  const headerColor = `${sectionColor} ${section === 'rechazos' ? 'text-slate-900' : 'text-white'}`;
                   return (
                     <div className="overflow-x-auto rounded-2xl border border-slate-200">
                       <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3">
                         <h3 className="text-xs font-black uppercase tracking-widest text-slate-700">
-                          {isMermas ? 'Mermas' : 'Desperdicios'} - {format(mermasFecha, 'dd/MM/yyyy')}
+                          {sectionLabel} - {format(mermasFecha, 'dd/MM/yyyy')}
                         </h3>
                         <div className="flex items-center gap-2">
                           {canResetEmptyTable && (
@@ -2707,7 +2762,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                 disabled={wasteSaveStatus === 'saving'}
                                 className={cn(
                                   'rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white disabled:opacity-50',
-                                  isMermas ? 'bg-blue-700' : 'bg-green-700'
+                                  sectionColor
                                 )}
                               >
                                 {wasteSaveStatus === 'saving' ? 'Guardando…' : 'Listo'}
@@ -2729,7 +2784,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                               onClick={startWasteEntry}
                               className={cn(
                                 'rounded-full px-4 py-2 text-[10px] font-black uppercase tracking-widest text-white',
-                                isMermas ? 'bg-blue-700' : 'bg-green-700'
+                                sectionColor
                               )}
                             >
                               Cargar
@@ -2758,7 +2813,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                       <table className="w-full border-collapse text-left text-xs">
                         <thead>
                           <tr className={headerColor}>
-                            <th className="w-12 px-3 py-3 text-center font-black uppercase tracking-widest">{isMermas ? 'N' : 'N°'}</th>
+                            <th className="w-12 px-3 py-3 text-center font-black uppercase tracking-widest">N°</th>
                             <th className="w-28 px-3 py-3 font-black uppercase tracking-widest">LINEA</th>
                             <th className="w-32 px-3 py-3 font-black uppercase tracking-widest">CODIGO</th>
                             <th className="px-3 py-3 font-black uppercase tracking-widest">MATERIAL</th>
@@ -2780,7 +2835,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                 />
                               </td>
                               <td className="px-3 py-2">
-                                {isMermas ? (
+                                {isMermas || section === 'rechazos' || section === 'devoluciones' ? (
                                   <select
                                     value={row.line}
                                     onChange={(event) => updateWasteLine(row.id, event.target.value)}
@@ -2834,7 +2889,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                   ) : (
                                     <span className="block px-1 py-1 text-slate-700">{row.code}</span>
                                   )
-                                ) : row.kind === 'preformas' && isWasteEditing && !row.generated ? (
+                                ) : isDesperdicios && row.kind === 'preformas' && isWasteEditing && !row.generated ? (
                                   <div>
                                     <select
                                       value={row.flavor}
@@ -2860,7 +2915,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                     )}
                                     {row.code && <span className="block px-1 text-[10px] text-slate-500">{row.code}</span>}
                                   </div>
-                                ) : row.kind === 'termo' || row.kind === 'preformas' || row.generated ? (
+                                ) : isDesperdicios && (row.kind === 'termo' || row.kind === 'preformas' || row.generated) ? (
                                   <span className="block px-1 py-1 text-slate-700">{row.code}</span>
                                 ) : (
                                   <input
@@ -2876,7 +2931,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                               <td className="px-3 py-2">
                                 {isMermas ? (
                                   <span className="block px-1 py-1 text-slate-700">{row.material}</span>
-                                ) : row.kind === 'termo' || row.kind === 'preformas' || row.generated ? (
+                                ) : isDesperdicios && (row.kind === 'termo' || row.kind === 'preformas' || row.generated) ? (
                                   <span className="block px-1 py-1 text-slate-700">{row.material}</span>
                                 ) : (
                                   <input
@@ -2900,7 +2955,7 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                                 />
                               </td>
                               <td className="px-3 py-2">
-                                {isMermas || row.kind === 'preformas' || row.kind === 'termo' || row.generated ? (
+                                {isMermas || (isDesperdicios && (row.kind === 'preformas' || row.kind === 'termo' || row.generated)) ? (
                                   <span className="block px-1 py-1 text-center text-slate-700">
                                     {isMermas || row.generated ? 'UND' : row.unit}
                                   </span>
@@ -2965,7 +3020,75 @@ export default function ProduccionModule({ weeklyOnly = false }: ProduccionModul
                 })()}
               </div>
             )}
-            {activeMermasSubSection !== 'mermas' && activeMermasSubSection !== 'desperdicios' && (
+            {activeMermasSubSection === 'resumen-mensual' && activeProduccionSection === 'rechazos-devoluciones' && (
+              <div className="flex flex-1 min-h-0 flex-col gap-2 overflow-auto">
+                <div className="flex items-center gap-2 no-print">
+                  {([
+                    { id: 'rechazos', label: 'R Rechazos' },
+                    { id: 'devoluciones', label: 'R Devoluciones' },
+                  ] as const).map(({ id, label }) => (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => setActiveRejectsMonthlySummary(id)}
+                      className={cn(
+                        'h-9 rounded-full px-4 text-[10px] font-black uppercase tracking-widest',
+                        activeRejectsMonthlySummary === id
+                          ? id === 'rechazos' ? 'bg-yellow-400 text-slate-900' : 'bg-orange-500 text-white'
+                          : 'bg-slate-100 text-slate-500 hover:text-slate-700'
+                      )}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+                <div className="flex-1 min-h-0 overflow-auto bg-white rounded-[2.5rem] p-4">
+                {(() => {
+                  const monthKey = format(mermasMensualMes, 'yyyy-MM');
+                  const section = activeRejectsMonthlySummary;
+                  const monthlyRows = Object.entries(wasteTablesBySection[section])
+                    .filter(([date]) => date.startsWith(`${monthKey}-`))
+                    .flatMap(([date, rows]) => rows.map((row) => ({ ...row, date })))
+                    .sort((a, b) => a.date.localeCompare(b.date));
+                  const summaryTitle = section === 'rechazos' ? 'R Rechazos' : 'R Devoluciones';
+                  const headerColor = section === 'rechazos' ? 'bg-yellow-400 text-slate-900' : 'bg-orange-500 text-white';
+                  return (
+                    <div className="overflow-x-auto rounded-2xl border border-slate-200">
+                      <h3 className="px-4 py-3 text-xs font-black uppercase tracking-widest text-slate-700">
+                        {summaryTitle} - {format(mermasMensualMes, 'MMMM yyyy')}
+                      </h3>
+                      <table className="w-full border-collapse text-left text-xs">
+                        <thead>
+                          <tr className={headerColor}>
+                            {['Fecha', 'Línea', 'Código', 'Material', 'Cantidad', 'UM'].map((heading) => (
+                              <th key={heading} className="px-3 py-3 font-black uppercase tracking-widest">{heading}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {monthlyRows.length ? monthlyRows.map((row) => (
+                            <tr key={`${row.date}-${row.id}`} className="border-b border-slate-200">
+                              <td className="px-3 py-2">{format(new Date(`${row.date}T12:00:00`), 'dd/MM/yyyy')}</td>
+                              <td className="px-3 py-2">{row.line}</td>
+                              <td className="px-3 py-2">{row.code}</td>
+                              <td className="px-3 py-2">{row.material}</td>
+                              <td className="px-3 py-2">{row.quantity}</td>
+                              <td className="px-3 py-2">{row.unit}</td>
+                            </tr>
+                          )) : (
+                            <tr><td colSpan={6} className="px-3 py-8 text-center text-slate-500">No hay registros para este mes.</td></tr>
+                          )}
+                        </tbody>
+                      </table>
+                    </div>
+                  );
+                })()}
+                </div>
+              </div>
+            )}
+            {activeMermasSubSection !== 'mermas' && activeMermasSubSection !== 'desperdicios' &&
+              activeMermasSubSection !== 'rechazos' && activeMermasSubSection !== 'devoluciones' &&
+              !(activeMermasSubSection === 'resumen-mensual' && activeProduccionSection === 'rechazos-devoluciones') && (
               <div className="flex-1 min-h-0 bg-white rounded-[2.5rem]" />
             )}
           </div>

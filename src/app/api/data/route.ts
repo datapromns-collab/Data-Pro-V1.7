@@ -117,15 +117,19 @@ export async function GET(request: Request) {
       });
     }
     if (section === 'productionWaste') {
-      const wasteSection = new URL(request.url).searchParams.get('wasteSection');
-      const date = new URL(request.url).searchParams.get('date');
-      if ((wasteSection !== 'mermas' && wasteSection !== 'desperdicios') || !date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
+      const params = new URL(request.url).searchParams;
+      const wasteSection = params.get('wasteSection');
+      const date = params.get('date');
+      const group = wasteSection === 'rechazos' || wasteSection === 'devoluciones'
+        ? 'rechazosDevoluciones'
+        : 'mermasDesperdicios';
+      if (!['mermas', 'desperdicios', 'rechazos', 'devoluciones'].includes(wasteSection || '') || !date || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
         return new Response(JSON.stringify({ error: 'Invalid production waste query' }), {
           status: 400,
           headers: { 'content-type': 'application/json' },
         });
       }
-      const rows = data.planner?.productionInventory?.mermasDesperdicios?.[wasteSection]?.[date];
+      const rows = data.planner?.productionInventory?.[group]?.[wasteSection as 'mermas' | 'desperdicios' | 'rechazos' | 'devoluciones']?.[date];
       return new Response(JSON.stringify({ rows: Array.isArray(rows) ? rows : null }), {
         status: 200,
         headers: { 'content-type': 'application/json' },
@@ -260,10 +264,15 @@ export async function POST(request: Request) {
       if (incomingPlanner.productionInventory) {
         merged.productionInventory = deepMerge(merged.productionInventory, incomingPlanner.productionInventory);
 
-        const incomingWaste = incomingPlanner.productionInventory.mermasDesperdicios;
-        if (incomingWaste && typeof incomingWaste === 'object' && !Array.isArray(incomingWaste)) {
-          const mergedWaste = { ...(merged.productionInventory.mermasDesperdicios || {}) };
-          (['mermas', 'desperdicios'] as const).forEach((section) => {
+        const wasteGroups = [
+          { key: 'mermasDesperdicios', sections: ['mermas', 'desperdicios'] as const },
+          { key: 'rechazosDevoluciones', sections: ['rechazos', 'devoluciones'] as const },
+        ] as const;
+        wasteGroups.forEach(({ key, sections }) => {
+          const incomingWaste = incomingPlanner.productionInventory[key];
+          if (!incomingWaste || typeof incomingWaste !== 'object' || Array.isArray(incomingWaste)) return;
+          const mergedWaste = { ...(merged.productionInventory[key] || {}) };
+          sections.forEach((section) => {
             const incomingDays = incomingWaste[section];
             if (!incomingDays || typeof incomingDays !== 'object' || Array.isArray(incomingDays)) return;
             const mergedDays = { ...(mergedWaste[section] || {}) };
@@ -291,9 +300,9 @@ export async function POST(request: Request) {
           });
           merged.productionInventory = {
             ...merged.productionInventory,
-            mermasDesperdicios: mergedWaste,
+            [key]: mergedWaste,
           };
-        }
+        });
       }
       if (incomingPlanner.users && Array.isArray(incomingPlanner.users)) {
         merged.users = deepMerge(Array.isArray(merged.users) ? merged.users : [], incomingPlanner.users);
