@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-28T00:00:00.000",
+      "weekStartDate": "2026-09-30T16:53:56.505",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -21364,7 +21364,8 @@
           "management",
           "procesos",
           "logistica",
-          "produccion"
+          "produccion",
+          "mtto"
         ],
         "anto.mds": [
           "purchasing",
@@ -21800,7 +21801,8 @@
           "planning"
         ],
         "alex.mds": [
-          "planning"
+          "planning",
+          "mtto"
         ],
         "anto.mds": [
           "planning"
@@ -22150,7 +22152,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-09-30T20:43:37.569Z"
+    "updatedAt": "2026-09-30T20:54:11.302Z"
   },
   "ordenesSap": [
     {
