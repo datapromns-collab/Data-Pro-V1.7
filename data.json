@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-21T00:00:00.000",
+      "weekStartDate": "2026-09-29T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -13805,6 +13805,2054 @@
               }
             }
           }
+        },
+        "2026-09-29": {
+          "tapas": {
+            "EMP_0095-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0095-Importada": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-Alpla": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaEW": {
+              "totalCajas": "",
+              "total": ""
+            },
+            "EMP_0105-ImportadaTipo2": {
+              "totalCajas": "",
+              "total": ""
+            }
+          },
+          "separadores": {},
+          "preformas": {},
+          "plasticos": {},
+          "adhesivoCantidad": "",
+          "etiquetasCantidad": {},
+          "azucarCantidad": {},
+          "concentradosCantidad": {},
+          "concentradosJustyCantidad": {},
+          "aditivosCantidad": {},
+          "solidosCantidad": {},
+          "quimicosInsumosCantidad": {},
+          "2026-09-21": {
+            "tapas": {
+              "EMP_0095-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0095-Importada": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaEW": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaTipo2": {
+                "totalCajas": "",
+                "total": ""
+              }
+            },
+            "separadores": {},
+            "preformas": {},
+            "plasticos": {},
+            "adhesivoCantidad": "",
+            "etiquetasCantidad": {}
+          },
+          "2026-09-22": {
+            "tapas": {
+              "EMP_0095-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0095-Importada": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaEW": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaTipo2": {
+                "totalCajas": "",
+                "total": ""
+              }
+            },
+            "separadores": {},
+            "preformas": {},
+            "plasticos": {},
+            "adhesivoCantidad": "",
+            "etiquetasCantidad": {},
+            "2026-09-21": {
+              "tapas": {
+                "EMP_0095-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0095-Importada": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaEW": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaTipo2": {
+                  "totalCajas": "",
+                  "total": ""
+                }
+              },
+              "separadores": {},
+              "preformas": {},
+              "plasticos": {},
+              "adhesivoCantidad": "",
+              "etiquetasCantidad": {}
+            },
+            "azucarCantidad": {},
+            "concentradosCantidad": {},
+            "concentradosJustyCantidad": {},
+            "aditivosCantidad": {},
+            "solidosCantidad": {},
+            "quimicosInsumosCantidad": {}
+          },
+          "2026-09-24": {
+            "tapas": {
+              "EMP_0095-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0095-Importada": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaEW": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaTipo2": {
+                "totalCajas": "",
+                "total": ""
+              }
+            },
+            "separadores": {},
+            "preformas": {},
+            "plasticos": {},
+            "adhesivoCantidad": "",
+            "etiquetasCantidad": {},
+            "azucarCantidad": {},
+            "concentradosCantidad": {},
+            "concentradosJustyCantidad": {},
+            "aditivosCantidad": {},
+            "solidosCantidad": {},
+            "quimicosInsumosCantidad": {},
+            "2026-09-21": {
+              "tapas": {
+                "EMP_0095-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0095-Importada": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaEW": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaTipo2": {
+                  "totalCajas": "",
+                  "total": ""
+                }
+              },
+              "separadores": {},
+              "preformas": {},
+              "plasticos": {},
+              "adhesivoCantidad": "",
+              "etiquetasCantidad": {}
+            },
+            "2026-09-22": {
+              "tapas": {
+                "EMP_0095-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0095-Importada": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaEW": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaTipo2": {
+                  "totalCajas": "",
+                  "total": ""
+                }
+              },
+              "separadores": {},
+              "preformas": {},
+              "plasticos": {},
+              "adhesivoCantidad": "",
+              "etiquetasCantidad": {},
+              "2026-09-21": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {}
+              },
+              "azucarCantidad": {},
+              "concentradosCantidad": {},
+              "concentradosJustyCantidad": {},
+              "aditivosCantidad": {},
+              "solidosCantidad": {},
+              "quimicosInsumosCantidad": {}
+            }
+          },
+          "2026-09-25": {
+            "tapas": {
+              "EMP_0095-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0095-Importada": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaEW": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaTipo2": {
+                "totalCajas": "",
+                "total": ""
+              }
+            },
+            "separadores": {},
+            "preformas": {},
+            "plasticos": {},
+            "adhesivoCantidad": "",
+            "etiquetasCantidad": {},
+            "azucarCantidad": {},
+            "concentradosCantidad": {},
+            "concentradosJustyCantidad": {},
+            "aditivosCantidad": {},
+            "solidosCantidad": {},
+            "quimicosInsumosCantidad": {},
+            "2026-09-21": {
+              "tapas": {
+                "EMP_0095-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0095-Importada": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaEW": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaTipo2": {
+                  "totalCajas": "",
+                  "total": ""
+                }
+              },
+              "separadores": {},
+              "preformas": {},
+              "plasticos": {},
+              "adhesivoCantidad": "",
+              "etiquetasCantidad": {}
+            },
+            "2026-09-22": {
+              "tapas": {
+                "EMP_0095-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0095-Importada": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaEW": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaTipo2": {
+                  "totalCajas": "",
+                  "total": ""
+                }
+              },
+              "separadores": {},
+              "preformas": {},
+              "plasticos": {},
+              "adhesivoCantidad": "",
+              "etiquetasCantidad": {},
+              "2026-09-21": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {}
+              },
+              "azucarCantidad": {},
+              "concentradosCantidad": {},
+              "concentradosJustyCantidad": {},
+              "aditivosCantidad": {},
+              "solidosCantidad": {},
+              "quimicosInsumosCantidad": {}
+            },
+            "2026-09-24": {
+              "tapas": {
+                "EMP_0095-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0095-Importada": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaEW": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaTipo2": {
+                  "totalCajas": "",
+                  "total": ""
+                }
+              },
+              "separadores": {},
+              "preformas": {},
+              "plasticos": {},
+              "adhesivoCantidad": "",
+              "etiquetasCantidad": {},
+              "azucarCantidad": {},
+              "concentradosCantidad": {},
+              "concentradosJustyCantidad": {},
+              "aditivosCantidad": {},
+              "solidosCantidad": {},
+              "quimicosInsumosCantidad": {},
+              "2026-09-21": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {}
+              },
+              "2026-09-22": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {},
+                "2026-09-21": {
+                  "tapas": {
+                    "EMP_0095-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0095-Importada": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaEW": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaTipo2": {
+                      "totalCajas": "",
+                      "total": ""
+                    }
+                  },
+                  "separadores": {},
+                  "preformas": {},
+                  "plasticos": {},
+                  "adhesivoCantidad": "",
+                  "etiquetasCantidad": {}
+                },
+                "azucarCantidad": {},
+                "concentradosCantidad": {},
+                "concentradosJustyCantidad": {},
+                "aditivosCantidad": {},
+                "solidosCantidad": {},
+                "quimicosInsumosCantidad": {}
+              }
+            }
+          },
+          "2026-09-27": {
+            "tapas": {
+              "EMP_0095-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0095-Importada": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaEW": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaTipo2": {
+                "totalCajas": "",
+                "total": ""
+              }
+            },
+            "separadores": {},
+            "preformas": {},
+            "plasticos": {},
+            "adhesivoCantidad": "",
+            "etiquetasCantidad": {},
+            "azucarCantidad": {},
+            "concentradosCantidad": {},
+            "concentradosJustyCantidad": {},
+            "aditivosCantidad": {},
+            "solidosCantidad": {},
+            "quimicosInsumosCantidad": {},
+            "2026-09-21": {
+              "tapas": {
+                "EMP_0095-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0095-Importada": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaEW": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaTipo2": {
+                  "totalCajas": "",
+                  "total": ""
+                }
+              },
+              "separadores": {},
+              "preformas": {},
+              "plasticos": {},
+              "adhesivoCantidad": "",
+              "etiquetasCantidad": {}
+            },
+            "2026-09-22": {
+              "tapas": {
+                "EMP_0095-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0095-Importada": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaEW": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaTipo2": {
+                  "totalCajas": "",
+                  "total": ""
+                }
+              },
+              "separadores": {},
+              "preformas": {},
+              "plasticos": {},
+              "adhesivoCantidad": "",
+              "etiquetasCantidad": {},
+              "2026-09-21": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {}
+              },
+              "azucarCantidad": {},
+              "concentradosCantidad": {},
+              "concentradosJustyCantidad": {},
+              "aditivosCantidad": {},
+              "solidosCantidad": {},
+              "quimicosInsumosCantidad": {}
+            },
+            "2026-09-24": {
+              "tapas": {
+                "EMP_0095-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0095-Importada": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaEW": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaTipo2": {
+                  "totalCajas": "",
+                  "total": ""
+                }
+              },
+              "separadores": {},
+              "preformas": {},
+              "plasticos": {},
+              "adhesivoCantidad": "",
+              "etiquetasCantidad": {},
+              "azucarCantidad": {},
+              "concentradosCantidad": {},
+              "concentradosJustyCantidad": {},
+              "aditivosCantidad": {},
+              "solidosCantidad": {},
+              "quimicosInsumosCantidad": {},
+              "2026-09-21": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {}
+              },
+              "2026-09-22": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {},
+                "2026-09-21": {
+                  "tapas": {
+                    "EMP_0095-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0095-Importada": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaEW": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaTipo2": {
+                      "totalCajas": "",
+                      "total": ""
+                    }
+                  },
+                  "separadores": {},
+                  "preformas": {},
+                  "plasticos": {},
+                  "adhesivoCantidad": "",
+                  "etiquetasCantidad": {}
+                },
+                "azucarCantidad": {},
+                "concentradosCantidad": {},
+                "concentradosJustyCantidad": {},
+                "aditivosCantidad": {},
+                "solidosCantidad": {},
+                "quimicosInsumosCantidad": {}
+              }
+            },
+            "2026-09-25": {
+              "tapas": {
+                "EMP_0095-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0095-Importada": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaEW": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaTipo2": {
+                  "totalCajas": "",
+                  "total": ""
+                }
+              },
+              "separadores": {},
+              "preformas": {},
+              "plasticos": {},
+              "adhesivoCantidad": "",
+              "etiquetasCantidad": {},
+              "azucarCantidad": {},
+              "concentradosCantidad": {},
+              "concentradosJustyCantidad": {},
+              "aditivosCantidad": {},
+              "solidosCantidad": {},
+              "quimicosInsumosCantidad": {},
+              "2026-09-21": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {}
+              },
+              "2026-09-22": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {},
+                "2026-09-21": {
+                  "tapas": {
+                    "EMP_0095-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0095-Importada": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaEW": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaTipo2": {
+                      "totalCajas": "",
+                      "total": ""
+                    }
+                  },
+                  "separadores": {},
+                  "preformas": {},
+                  "plasticos": {},
+                  "adhesivoCantidad": "",
+                  "etiquetasCantidad": {}
+                },
+                "azucarCantidad": {},
+                "concentradosCantidad": {},
+                "concentradosJustyCantidad": {},
+                "aditivosCantidad": {},
+                "solidosCantidad": {},
+                "quimicosInsumosCantidad": {}
+              },
+              "2026-09-24": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {},
+                "azucarCantidad": {},
+                "concentradosCantidad": {},
+                "concentradosJustyCantidad": {},
+                "aditivosCantidad": {},
+                "solidosCantidad": {},
+                "quimicosInsumosCantidad": {},
+                "2026-09-21": {
+                  "tapas": {
+                    "EMP_0095-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0095-Importada": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaEW": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaTipo2": {
+                      "totalCajas": "",
+                      "total": ""
+                    }
+                  },
+                  "separadores": {},
+                  "preformas": {},
+                  "plasticos": {},
+                  "adhesivoCantidad": "",
+                  "etiquetasCantidad": {}
+                },
+                "2026-09-22": {
+                  "tapas": {
+                    "EMP_0095-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0095-Importada": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaEW": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaTipo2": {
+                      "totalCajas": "",
+                      "total": ""
+                    }
+                  },
+                  "separadores": {},
+                  "preformas": {},
+                  "plasticos": {},
+                  "adhesivoCantidad": "",
+                  "etiquetasCantidad": {},
+                  "2026-09-21": {
+                    "tapas": {
+                      "EMP_0095-Alpla": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0095-Importada": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-Alpla": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-ImportadaEW": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-ImportadaTipo2": {
+                        "totalCajas": "",
+                        "total": ""
+                      }
+                    },
+                    "separadores": {},
+                    "preformas": {},
+                    "plasticos": {},
+                    "adhesivoCantidad": "",
+                    "etiquetasCantidad": {}
+                  },
+                  "azucarCantidad": {},
+                  "concentradosCantidad": {},
+                  "concentradosJustyCantidad": {},
+                  "aditivosCantidad": {},
+                  "solidosCantidad": {},
+                  "quimicosInsumosCantidad": {}
+                }
+              }
+            }
+          },
+          "2026-09-28": {
+            "tapas": {
+              "EMP_0095-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0095-Importada": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-Alpla": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaEW": {
+                "totalCajas": "",
+                "total": ""
+              },
+              "EMP_0105-ImportadaTipo2": {
+                "totalCajas": "",
+                "total": ""
+              }
+            },
+            "separadores": {},
+            "preformas": {},
+            "plasticos": {},
+            "adhesivoCantidad": "",
+            "etiquetasCantidad": {},
+            "azucarCantidad": {},
+            "concentradosCantidad": {},
+            "concentradosJustyCantidad": {},
+            "aditivosCantidad": {},
+            "solidosCantidad": {},
+            "quimicosInsumosCantidad": {},
+            "2026-09-21": {
+              "tapas": {
+                "EMP_0095-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0095-Importada": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaEW": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaTipo2": {
+                  "totalCajas": "",
+                  "total": ""
+                }
+              },
+              "separadores": {},
+              "preformas": {},
+              "plasticos": {},
+              "adhesivoCantidad": "",
+              "etiquetasCantidad": {}
+            },
+            "2026-09-22": {
+              "tapas": {
+                "EMP_0095-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0095-Importada": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaEW": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaTipo2": {
+                  "totalCajas": "",
+                  "total": ""
+                }
+              },
+              "separadores": {},
+              "preformas": {},
+              "plasticos": {},
+              "adhesivoCantidad": "",
+              "etiquetasCantidad": {},
+              "2026-09-21": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {}
+              },
+              "azucarCantidad": {},
+              "concentradosCantidad": {},
+              "concentradosJustyCantidad": {},
+              "aditivosCantidad": {},
+              "solidosCantidad": {},
+              "quimicosInsumosCantidad": {}
+            },
+            "2026-09-24": {
+              "tapas": {
+                "EMP_0095-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0095-Importada": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaEW": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaTipo2": {
+                  "totalCajas": "",
+                  "total": ""
+                }
+              },
+              "separadores": {},
+              "preformas": {},
+              "plasticos": {},
+              "adhesivoCantidad": "",
+              "etiquetasCantidad": {},
+              "azucarCantidad": {},
+              "concentradosCantidad": {},
+              "concentradosJustyCantidad": {},
+              "aditivosCantidad": {},
+              "solidosCantidad": {},
+              "quimicosInsumosCantidad": {},
+              "2026-09-21": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {}
+              },
+              "2026-09-22": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {},
+                "2026-09-21": {
+                  "tapas": {
+                    "EMP_0095-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0095-Importada": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaEW": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaTipo2": {
+                      "totalCajas": "",
+                      "total": ""
+                    }
+                  },
+                  "separadores": {},
+                  "preformas": {},
+                  "plasticos": {},
+                  "adhesivoCantidad": "",
+                  "etiquetasCantidad": {}
+                },
+                "azucarCantidad": {},
+                "concentradosCantidad": {},
+                "concentradosJustyCantidad": {},
+                "aditivosCantidad": {},
+                "solidosCantidad": {},
+                "quimicosInsumosCantidad": {}
+              }
+            },
+            "2026-09-25": {
+              "tapas": {
+                "EMP_0095-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0095-Importada": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaEW": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaTipo2": {
+                  "totalCajas": "",
+                  "total": ""
+                }
+              },
+              "separadores": {},
+              "preformas": {},
+              "plasticos": {},
+              "adhesivoCantidad": "",
+              "etiquetasCantidad": {},
+              "azucarCantidad": {},
+              "concentradosCantidad": {},
+              "concentradosJustyCantidad": {},
+              "aditivosCantidad": {},
+              "solidosCantidad": {},
+              "quimicosInsumosCantidad": {},
+              "2026-09-21": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {}
+              },
+              "2026-09-22": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {},
+                "2026-09-21": {
+                  "tapas": {
+                    "EMP_0095-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0095-Importada": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaEW": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaTipo2": {
+                      "totalCajas": "",
+                      "total": ""
+                    }
+                  },
+                  "separadores": {},
+                  "preformas": {},
+                  "plasticos": {},
+                  "adhesivoCantidad": "",
+                  "etiquetasCantidad": {}
+                },
+                "azucarCantidad": {},
+                "concentradosCantidad": {},
+                "concentradosJustyCantidad": {},
+                "aditivosCantidad": {},
+                "solidosCantidad": {},
+                "quimicosInsumosCantidad": {}
+              },
+              "2026-09-24": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {},
+                "azucarCantidad": {},
+                "concentradosCantidad": {},
+                "concentradosJustyCantidad": {},
+                "aditivosCantidad": {},
+                "solidosCantidad": {},
+                "quimicosInsumosCantidad": {},
+                "2026-09-21": {
+                  "tapas": {
+                    "EMP_0095-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0095-Importada": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaEW": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaTipo2": {
+                      "totalCajas": "",
+                      "total": ""
+                    }
+                  },
+                  "separadores": {},
+                  "preformas": {},
+                  "plasticos": {},
+                  "adhesivoCantidad": "",
+                  "etiquetasCantidad": {}
+                },
+                "2026-09-22": {
+                  "tapas": {
+                    "EMP_0095-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0095-Importada": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaEW": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaTipo2": {
+                      "totalCajas": "",
+                      "total": ""
+                    }
+                  },
+                  "separadores": {},
+                  "preformas": {},
+                  "plasticos": {},
+                  "adhesivoCantidad": "",
+                  "etiquetasCantidad": {},
+                  "2026-09-21": {
+                    "tapas": {
+                      "EMP_0095-Alpla": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0095-Importada": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-Alpla": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-ImportadaEW": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-ImportadaTipo2": {
+                        "totalCajas": "",
+                        "total": ""
+                      }
+                    },
+                    "separadores": {},
+                    "preformas": {},
+                    "plasticos": {},
+                    "adhesivoCantidad": "",
+                    "etiquetasCantidad": {}
+                  },
+                  "azucarCantidad": {},
+                  "concentradosCantidad": {},
+                  "concentradosJustyCantidad": {},
+                  "aditivosCantidad": {},
+                  "solidosCantidad": {},
+                  "quimicosInsumosCantidad": {}
+                }
+              }
+            },
+            "2026-09-27": {
+              "tapas": {
+                "EMP_0095-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0095-Importada": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-Alpla": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaEW": {
+                  "totalCajas": "",
+                  "total": ""
+                },
+                "EMP_0105-ImportadaTipo2": {
+                  "totalCajas": "",
+                  "total": ""
+                }
+              },
+              "separadores": {},
+              "preformas": {},
+              "plasticos": {},
+              "adhesivoCantidad": "",
+              "etiquetasCantidad": {},
+              "azucarCantidad": {},
+              "concentradosCantidad": {},
+              "concentradosJustyCantidad": {},
+              "aditivosCantidad": {},
+              "solidosCantidad": {},
+              "quimicosInsumosCantidad": {},
+              "2026-09-21": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {}
+              },
+              "2026-09-22": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {},
+                "2026-09-21": {
+                  "tapas": {
+                    "EMP_0095-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0095-Importada": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaEW": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaTipo2": {
+                      "totalCajas": "",
+                      "total": ""
+                    }
+                  },
+                  "separadores": {},
+                  "preformas": {},
+                  "plasticos": {},
+                  "adhesivoCantidad": "",
+                  "etiquetasCantidad": {}
+                },
+                "azucarCantidad": {},
+                "concentradosCantidad": {},
+                "concentradosJustyCantidad": {},
+                "aditivosCantidad": {},
+                "solidosCantidad": {},
+                "quimicosInsumosCantidad": {}
+              },
+              "2026-09-24": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {},
+                "azucarCantidad": {},
+                "concentradosCantidad": {},
+                "concentradosJustyCantidad": {},
+                "aditivosCantidad": {},
+                "solidosCantidad": {},
+                "quimicosInsumosCantidad": {},
+                "2026-09-21": {
+                  "tapas": {
+                    "EMP_0095-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0095-Importada": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaEW": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaTipo2": {
+                      "totalCajas": "",
+                      "total": ""
+                    }
+                  },
+                  "separadores": {},
+                  "preformas": {},
+                  "plasticos": {},
+                  "adhesivoCantidad": "",
+                  "etiquetasCantidad": {}
+                },
+                "2026-09-22": {
+                  "tapas": {
+                    "EMP_0095-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0095-Importada": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaEW": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaTipo2": {
+                      "totalCajas": "",
+                      "total": ""
+                    }
+                  },
+                  "separadores": {},
+                  "preformas": {},
+                  "plasticos": {},
+                  "adhesivoCantidad": "",
+                  "etiquetasCantidad": {},
+                  "2026-09-21": {
+                    "tapas": {
+                      "EMP_0095-Alpla": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0095-Importada": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-Alpla": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-ImportadaEW": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-ImportadaTipo2": {
+                        "totalCajas": "",
+                        "total": ""
+                      }
+                    },
+                    "separadores": {},
+                    "preformas": {},
+                    "plasticos": {},
+                    "adhesivoCantidad": "",
+                    "etiquetasCantidad": {}
+                  },
+                  "azucarCantidad": {},
+                  "concentradosCantidad": {},
+                  "concentradosJustyCantidad": {},
+                  "aditivosCantidad": {},
+                  "solidosCantidad": {},
+                  "quimicosInsumosCantidad": {}
+                }
+              },
+              "2026-09-25": {
+                "tapas": {
+                  "EMP_0095-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0095-Importada": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-Alpla": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaEW": {
+                    "totalCajas": "",
+                    "total": ""
+                  },
+                  "EMP_0105-ImportadaTipo2": {
+                    "totalCajas": "",
+                    "total": ""
+                  }
+                },
+                "separadores": {},
+                "preformas": {},
+                "plasticos": {},
+                "adhesivoCantidad": "",
+                "etiquetasCantidad": {},
+                "azucarCantidad": {},
+                "concentradosCantidad": {},
+                "concentradosJustyCantidad": {},
+                "aditivosCantidad": {},
+                "solidosCantidad": {},
+                "quimicosInsumosCantidad": {},
+                "2026-09-21": {
+                  "tapas": {
+                    "EMP_0095-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0095-Importada": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaEW": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaTipo2": {
+                      "totalCajas": "",
+                      "total": ""
+                    }
+                  },
+                  "separadores": {},
+                  "preformas": {},
+                  "plasticos": {},
+                  "adhesivoCantidad": "",
+                  "etiquetasCantidad": {}
+                },
+                "2026-09-22": {
+                  "tapas": {
+                    "EMP_0095-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0095-Importada": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaEW": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaTipo2": {
+                      "totalCajas": "",
+                      "total": ""
+                    }
+                  },
+                  "separadores": {},
+                  "preformas": {},
+                  "plasticos": {},
+                  "adhesivoCantidad": "",
+                  "etiquetasCantidad": {},
+                  "2026-09-21": {
+                    "tapas": {
+                      "EMP_0095-Alpla": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0095-Importada": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-Alpla": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-ImportadaEW": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-ImportadaTipo2": {
+                        "totalCajas": "",
+                        "total": ""
+                      }
+                    },
+                    "separadores": {},
+                    "preformas": {},
+                    "plasticos": {},
+                    "adhesivoCantidad": "",
+                    "etiquetasCantidad": {}
+                  },
+                  "azucarCantidad": {},
+                  "concentradosCantidad": {},
+                  "concentradosJustyCantidad": {},
+                  "aditivosCantidad": {},
+                  "solidosCantidad": {},
+                  "quimicosInsumosCantidad": {}
+                },
+                "2026-09-24": {
+                  "tapas": {
+                    "EMP_0095-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0095-Importada": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-Alpla": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaEW": {
+                      "totalCajas": "",
+                      "total": ""
+                    },
+                    "EMP_0105-ImportadaTipo2": {
+                      "totalCajas": "",
+                      "total": ""
+                    }
+                  },
+                  "separadores": {},
+                  "preformas": {},
+                  "plasticos": {},
+                  "adhesivoCantidad": "",
+                  "etiquetasCantidad": {},
+                  "azucarCantidad": {},
+                  "concentradosCantidad": {},
+                  "concentradosJustyCantidad": {},
+                  "aditivosCantidad": {},
+                  "solidosCantidad": {},
+                  "quimicosInsumosCantidad": {},
+                  "2026-09-21": {
+                    "tapas": {
+                      "EMP_0095-Alpla": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0095-Importada": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-Alpla": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-ImportadaEW": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-ImportadaTipo2": {
+                        "totalCajas": "",
+                        "total": ""
+                      }
+                    },
+                    "separadores": {},
+                    "preformas": {},
+                    "plasticos": {},
+                    "adhesivoCantidad": "",
+                    "etiquetasCantidad": {}
+                  },
+                  "2026-09-22": {
+                    "tapas": {
+                      "EMP_0095-Alpla": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0095-Importada": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-Alpla": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-ImportadaEW": {
+                        "totalCajas": "",
+                        "total": ""
+                      },
+                      "EMP_0105-ImportadaTipo2": {
+                        "totalCajas": "",
+                        "total": ""
+                      }
+                    },
+                    "separadores": {},
+                    "preformas": {},
+                    "plasticos": {},
+                    "adhesivoCantidad": "",
+                    "etiquetasCantidad": {},
+                    "2026-09-21": {
+                      "tapas": {
+                        "EMP_0095-Alpla": {
+                          "totalCajas": "",
+                          "total": ""
+                        },
+                        "EMP_0095-Importada": {
+                          "totalCajas": "",
+                          "total": ""
+                        },
+                        "EMP_0105-Alpla": {
+                          "totalCajas": "",
+                          "total": ""
+                        },
+                        "EMP_0105-ImportadaEW": {
+                          "totalCajas": "",
+                          "total": ""
+                        },
+                        "EMP_0105-ImportadaTipo2": {
+                          "totalCajas": "",
+                          "total": ""
+                        }
+                      },
+                      "separadores": {},
+                      "preformas": {},
+                      "plasticos": {},
+                      "adhesivoCantidad": "",
+                      "etiquetasCantidad": {}
+                    },
+                    "azucarCantidad": {},
+                    "concentradosCantidad": {},
+                    "concentradosJustyCantidad": {},
+                    "aditivosCantidad": {},
+                    "solidosCantidad": {},
+                    "quimicosInsumosCantidad": {}
+                  }
+                }
+              }
+            }
+          }
         }
       },
       "semanal": {
@@ -14364,7 +16412,71 @@
               "unit": "UND"
             }
           ],
-          "2026-09-28": [],
+          "2026-09-28": [
+            {
+              "id": "99c54724-978f-4c6a-93d8-2d5e15d14f89",
+              "line": "Linea 1",
+              "flavor": "GLUP FRESH",
+              "code": "ENV-00013",
+              "material": "BOTELLA ENVASADA GLUP FRESH 2.0.LTS",
+              "quantity": "205",
+              "unit": "UND"
+            },
+            {
+              "id": "b4adbf5a-81a8-4b6e-9b14-12fc39713829",
+              "line": "Linea 2",
+              "flavor": "GLUP KOLITA",
+              "code": "ENV-00040",
+              "material": "BOTELLA ENVASADA GLUP KOLITA 2.0.LTS  (EN LINEA 2)",
+              "quantity": "111",
+              "unit": "UND"
+            },
+            {
+              "id": "da27ddc7-ce8d-4dd4-844a-2f93a5ca9fec",
+              "line": "Linea 3",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00063",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2L (LINEA 3)",
+              "quantity": "495",
+              "unit": "UND"
+            },
+            {
+              "id": "598f4a6e-d3da-46af-b053-9361c08def34",
+              "line": "Linea 4",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00054",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 2.LTS (LINEA 4)",
+              "quantity": "125",
+              "unit": "UND"
+            },
+            {
+              "id": "991fa1a6-458a-42b0-a5ab-986729fb2138",
+              "line": "Linea 5",
+              "flavor": "JUSTY NARANJA",
+              "code": "ENV-00027",
+              "material": "BOTELLA ENVASADA JUSTY NARANJA  1.5 LTS",
+              "quantity": "193",
+              "unit": "UND"
+            },
+            {
+              "id": "9c86e6be-8123-41e4-964b-634ac7ed0e19",
+              "line": "Linea 6",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00048",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 400 ML (LINEA 6)",
+              "quantity": "183",
+              "unit": "UND"
+            },
+            {
+              "id": "42c7cb18-3694-4fb4-8046-929ee1ae55f6",
+              "line": "Linea 7",
+              "flavor": "GLUP COLA",
+              "code": "ENV-00078",
+              "material": "BOTELLA ENVASADA GLUP COLA NEGRA 1.0 L (LINEA 7)",
+              "quantity": "635",
+              "unit": "UND"
+            }
+          ],
           "2026-09-26": [
             {
               "id": "f8ebb307-57ef-4429-94a4-980ea4d56976",
@@ -14423,7 +16535,162 @@
           ]
         },
         "desperdicios": {
-          "2026-09-28": [],
+          "2026-09-28": [
+            {
+              "id": "5092a0db-50c7-475d-ac05-17e4a91c26f3",
+              "line": "Linea 1",
+              "flavor": "verde",
+              "code": "EMP_0103",
+              "material": "PREFORMA VERDE 42,64 GR-1881",
+              "quantity": "3380",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "735b48ab-82aa-4886-adb0-b61b8e017556",
+              "line": "Linea 1",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "4,07",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "a9a8bce2-93b0-4862-a977-497f17aced6e",
+              "line": "Linea 2",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "2000",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "368f7a7a-e5fb-444c-a44e-dd12611d305a",
+              "line": "Linea 2",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "1,45",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "08547aff-14d5-4161-a8b2-363b7d22d761",
+              "line": "Linea 3",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "2666",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "7c74ed7b-508f-4545-96de-a30680a8d4b9",
+              "line": "Linea 3",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "4,23",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "f2c1db05-d793-4eae-880c-4bb6096a169b",
+              "line": "Linea 4",
+              "flavor": "transparente",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "2738",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "6f88882b-7c26-411b-8f31-35f38c7d644f",
+              "line": "Linea 4",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "5,51",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "6ea5e470-fc85-4df5-8311-da909abd6df4",
+              "line": "Linea 5",
+              "flavor": "transparente",
+              "code": "EMP_0068",
+              "material": "PREFORMA TRANSPARENTE 36 GR-1881",
+              "quantity": "2388",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "3d082d38-c3e6-476a-915e-354caf243342",
+              "line": "Linea 5",
+              "flavor": "",
+              "code": "EMP_0017",
+              "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
+              "quantity": "2,50",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "61c027e4-75ce-4a5d-afe5-e9ba8279f9af",
+              "line": "Linea 6",
+              "flavor": "transparente",
+              "code": "EMP_0126",
+              "material": "PREFORMA TRANSPARENTE 20,55GR-1881",
+              "quantity": "1950",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": ""
+            },
+            {
+              "id": "a060102e-bb85-4454-b148-8fd28cc393e3",
+              "line": "Linea 6",
+              "flavor": "",
+              "code": "EMP_0130",
+              "material": "POLIETILENO TERMOENCOGIBLE 43 x 0.06",
+              "quantity": "2,85",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            },
+            {
+              "id": "ce786716-a45a-4719-bdca-b39a4f41c60c",
+              "line": "Linea 7",
+              "flavor": "transparente",
+              "code": "EMP_0166",
+              "material": "PREFORMA TRANSPARENTE 33 GR-1881",
+              "quantity": "4060",
+              "unit": "UND",
+              "kind": "preformas",
+              "preformSize": "33"
+            },
+            {
+              "id": "ed202fc1-7cde-4fe6-9fed-55962b74729b",
+              "line": "Linea 7",
+              "flavor": "",
+              "code": "EMP_0080",
+              "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
+              "quantity": "4,28",
+              "unit": "Kg",
+              "kind": "termo",
+              "preformSize": ""
+            }
+          ],
           "2026-09-26": [
             {
               "id": "5493a17b-b401-4791-8cb8-c51768d714b7",
@@ -15482,7 +17749,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-09-28T21:44:11.148Z"
+    "updatedAt": "2026-09-29T22:19:32.594Z"
   },
   "ordenesSap": [
     {
@@ -25196,8 +27463,19 @@
           "fechaInicio": "2026-09-28",
           "ticket1": "17949",
           "cajas1": 50,
-          "ticket2": "",
+          "ticket2": "17950",
           "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 300,
+          "ticket4": "",
+          "cajas4": 9400
+        },
+        {
+          "fechaInicio": "2026-09-29",
+          "ticket1": "15201",
+          "cajas1": 1450,
+          "ticket2": "",
+          "cajas2": 450,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -25216,12 +27494,12 @@
           "fechaInicio": "2026-09-28",
           "ticket1": "16221",
           "cajas1": 624,
-          "ticket2": "",
+          "ticket2": "16222",
           "cajas2": 1092,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2106,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 12747
         }
       ]
     },
@@ -25236,8 +27514,19 @@
           "fechaInicio": "2026-09-28",
           "ticket1": "16076",
           "cajas1": 6720,
-          "ticket2": "",
+          "ticket2": "16077",
           "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 2560,
+          "ticket4": "",
+          "cajas4": 16800
+        },
+        {
+          "fechaInicio": "2026-09-29",
+          "ticket1": "16078",
+          "cajas1": 4000,
+          "ticket2": "",
+          "cajas2": 3520,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -25256,8 +27545,19 @@
           "fechaInicio": "2026-09-28",
           "ticket1": "16036",
           "cajas1": 5760,
-          "ticket2": "",
+          "ticket2": "16037",
           "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 1440,
+          "ticket4": "",
+          "cajas4": 18960
+        },
+        {
+          "fechaInicio": "2026-09-29",
+          "ticket1": "16038",
+          "cajas1": 5760,
+          "ticket2": "",
+          "cajas2": 6400,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -25276,8 +27576,19 @@
           "fechaInicio": "2026-09-28",
           "ticket1": "17991",
           "cajas1": 4640,
-          "ticket2": "",
+          "ticket2": "17992",
           "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 2640,
+          "ticket4": "",
+          "cajas4": 27280
+        },
+        {
+          "fechaInicio": "2026-09-29",
+          "ticket1": "17993",
+          "cajas1": 2320,
+          "ticket2": "",
+          "cajas2": 3200,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -25296,8 +27607,19 @@
           "fechaInicio": "2026-09-28",
           "ticket1": "16123",
           "cajas1": 4560,
-          "ticket2": "",
+          "ticket2": "16124",
           "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 3440,
+          "ticket4": "",
+          "cajas4": 28080
+        },
+        {
+          "fechaInicio": "2026-09-29",
+          "ticket1": "16125",
+          "cajas1": 3840,
+          "ticket2": "",
+          "cajas2": 4000,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -25316,8 +27638,58 @@
           "fechaInicio": "2026-09-28",
           "ticket1": "16171",
           "cajas1": 3040,
-          "ticket2": "",
+          "ticket2": "16172",
           "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 1920,
+          "ticket4": "",
+          "cajas4": 12160
+        },
+        {
+          "fechaInicio": "2026-09-29",
+          "ticket1": "16173",
+          "cajas1": 480,
+          "ticket2": "",
+          "cajas2": 1440,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
+        }
+      ]
+    },
+    {
+      "id": "7-1790682650052",
+      "linea": 7,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "63942",
+      "semana": 40,
+      "dias": []
+    },
+    {
+      "id": "7-1790682811969",
+      "linea": 7,
+      "sabor": "GLUP KOLITA",
+      "ordenNumero": "63942",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-28",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16222",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 6084
+        },
+        {
+          "fechaInicio": "2026-09-29",
+          "ticket1": "16223",
+          "cajas1": 2184,
+          "ticket2": "",
+          "cajas2": 2340,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
@@ -36972,23 +39344,27 @@
         "2026-09-28": {
           "GLUP COLA": {
             "inicial": "62.55",
-            "preparado": "",
-            "final": ""
+            "preparado": "60",
+            "final": "55.12"
           },
           "GLUP FRESH": {
             "inicial": "10.29",
-            "preparado": "",
-            "final": ""
+            "preparado": "18",
+            "final": "10.17"
           },
           "GLUP KOLITA": {
             "inicial": "54.57",
-            "preparado": "",
-            "final": ""
+            "preparado": "72",
+            "final": "59.05"
           },
           "JUSTY NARANJA": {
             "inicial": "40",
-            "preparado": "",
-            "final": ""
+            "preparado": "180",
+            "final": "35"
+          },
+          "GLUP UVA": {
+            "preparado": "11",
+            "final": "11"
           }
         }
       },
@@ -38001,18 +40377,18 @@
         "2026-09-28": {
           "PORTUGUESA": {
             "invInicialSacos": "4280",
-            "recepcionSacos": "",
-            "invFinalSacos": ""
+            "recepcionSacos": "4000",
+            "invFinalSacos": "6640"
           },
           "IMPORTADA 1": {
             "invInicialSacos": "920",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "840"
           },
           "PASTORA": {
             "invInicialSacos": "2640",
             "recepcionSacos": "",
-            "invFinalSacos": ""
+            "invFinalSacos": "80"
           }
         }
       },
@@ -38882,11 +41258,11 @@
         "2026-09-28": {
           "JARABE SIMPLE": {
             "invInicialSacos": "368",
-            "invFinalSacos": ""
+            "invFinalSacos": "316"
           },
           "Sala 1": {
             "invInicialSacos": "1370",
-            "invFinalSacos": ""
+            "invFinalSacos": "1138"
           }
         }
       },
@@ -38953,7 +41329,8 @@
         "2026-09-24": "50.21",
         "2026-09-26": "50.31",
         "2026-09-25": "50.39",
-        "2026-09-27": "50.22"
+        "2026-09-27": "50.22",
+        "2026-09-28": "50.3"
       },
       "costoAzucar": {
         "2026-07-28": "1.43",
@@ -164765,7 +167142,12 @@
       "2026-09-27-suave": "16122",
       "2026-09-27-procesos": "869784,83",
       "2026-09-27-filtrada": "1612632,83",
-      "2026-09-27-total": "2448746,67"
+      "2026-09-27-total": "2448746,67",
+      "2026-09-28-servicio": "30876",
+      "2026-09-28-suave": "244703",
+      "2026-09-28-procesos": "3071772,93",
+      "2026-09-28-filtrada": "4616587,93",
+      "2026-09-28-total": "3201378"
     },
     "insumos-agua": {
       "2026-09-04": "3185346,66666667",
@@ -165310,7 +167692,7 @@
       "2026-09-27-Cloro-4": "610",
       "2026-09-27-AntiEscalante-4": "1081,0",
       "2026-09-27-Sal-4": "6740",
-      "2026-09-27-Alcalino-4": "1374,3",
+      "2026-09-27-Alcalino-4": "1993,5",
       "2026-09-27-Peracetico-4": "651,3",
       "2026-09-27-Lark Foam Quat-4": "115,8",
       "2026-09-27-Lark Foam IN-4": "230",
@@ -165327,7 +167709,7 @@
       "2026-09-27-Cloro-6": "593",
       "2026-09-27-AntiEscalante-6": "1056,0",
       "2026-09-27-Sal-6": "646",
-      "2026-09-27-Alcalino-6": "1374,3",
+      "2026-09-27-Alcalino-6": "1818,4",
       "2026-09-27-Peracetico-6": "651,3",
       "2026-09-27-Lark Foam Quat-6": "115,8",
       "2026-09-27-Lark Foam IN-6": "230",
@@ -165343,8 +167725,8 @@
       "2026-09-28-LP20-0": "186,9",
       "2026-09-28-Cloro-0": "593",
       "2026-09-28-AntiEscalante-0": "1056,0",
-      "2026-09-28-Sal-0": "646",
-      "2026-09-28-Alcalino-0": "1374,3",
+      "2026-09-28-Sal-0": "6460",
+      "2026-09-28-Alcalino-0": "1818,4",
       "2026-09-28-Peracetico-0": "651,3",
       "2026-09-28-Lark Foam Quat-0": "115,8",
       "2026-09-28-Lark Foam IN-0": "230",
@@ -165356,7 +167738,78 @@
       "2026-09-28-Gamma Ro-432-0": "166,5",
       "2026-09-28-RO Cleaner-0": "213,7",
       "2026-09-28-Sanitizer-0": "282,5",
-      "2026-09-28-LARK CLEAN 21C-0": "200"
+      "2026-09-28-LARK CLEAN 21C-0": "20",
+      "2026-09-28-LP20-2": "186,9",
+      "2026-09-28-LP20-4": "186,9",
+      "2026-09-28-Cloro-2": "579",
+      "2026-09-28-Cloro-4": "579",
+      "2026-09-28-AntiEscalante-2": "1050,2",
+      "2026-09-28-AntiEscalante-4": "1050,2",
+      "2026-09-28-Sal-2": "6040",
+      "2026-09-28-Sal-4": "6040",
+      "2026-09-28-Alcalino-1": "1050",
+      "2026-09-28-Alcalino-2": "2654,4",
+      "2026-09-28-Alcalino-4": "2654,4",
+      "2026-09-28-Peracetico-2": "614,5",
+      "2026-09-28-Peracetico-4": "614,5",
+      "2026-09-28-Lark Foam Quat-2": "115,8",
+      "2026-09-28-Lark Foam Quat-4": "115,8",
+      "2026-09-28-Lark Foam IN-2": "230",
+      "2026-09-28-Lark Foam IN-4": "230",
+      "2026-09-28-Lark Desengrasante-2": "0",
+      "2026-09-28-Lark Desengrasante-4": "0",
+      "2026-09-28-Soda Caustica-2": "532,4",
+      "2026-09-28-Soda Caustica-4": "532,4",
+      "2026-09-28-GermiQuat-2": "25",
+      "2026-09-28-GermiQuat-4": "25",
+      "2026-09-28-Lark Inox-2": "45",
+      "2026-09-28-Lark Inox-4": "45",
+      "2026-09-28-TM Smart-2": "588,4",
+      "2026-09-28-TM Smart-4": "588,4",
+      "2026-09-28-Gamma Ro-432-2": "166,5",
+      "2026-09-28-Gamma Ro-432-4": "166,5",
+      "2026-09-28-RO Cleaner-2": "213,7",
+      "2026-09-28-RO Cleaner-4": "213,7",
+      "2026-09-28-Sanitizer-2": "282,5",
+      "2026-09-28-Sanitizer-4": "282,5",
+      "2026-09-28-LARK CLEAN 21C-2": "200",
+      "2026-09-28-LARK CLEAN 21C-4": "200",
+      "2026-09-28-LP20-6": "186",
+      "2026-09-28-Cloro-6": "522",
+      "2026-09-28-AntiEscalante-6": "1037,9",
+      "2026-09-28-Sal-6": "5760",
+      "2026-09-28-Alcalino-6": "2500,6",
+      "2026-09-28-Peracetico-6": "614,5",
+      "2026-09-28-Lark Foam Quat-6": "115,8",
+      "2026-09-28-Lark Foam IN-6": "230",
+      "2026-09-28-Lark Desengrasante-6": "0",
+      "2026-09-28-Soda Caustica-6": "532,4",
+      "2026-09-28-GermiQuat-6": "25",
+      "2026-09-28-Lark Inox-6": "45",
+      "2026-09-28-TM Smart-6": "507,8",
+      "2026-09-28-TM Smart-1": "200",
+      "2026-09-28-Gamma Ro-432-6": "166,5",
+      "2026-09-28-RO Cleaner-6": "213,7",
+      "2026-09-28-Sanitizer-6": "282,5",
+      "2026-09-28-LARK CLEAN 21C-6": "200",
+      "2026-09-29-LP20-0": "186",
+      "2026-09-29-Cloro-0": "522",
+      "2026-09-29-AntiEscalante-0": "1037,9",
+      "2026-09-29-Sal-0": "5760",
+      "2026-09-29-Alcalino-0": "2500,6",
+      "2026-09-29-Peracetico-0": "614,5",
+      "2026-09-29-Lark Foam Quat-0": "115,8",
+      "2026-09-29-Lark Foam IN-0": "230",
+      "2026-09-29-Lark Desengrasante-0": "0",
+      "2026-09-29-Soda Caustica-0": "532,4",
+      "2026-09-29-GermiQuat-0": "25",
+      "2026-09-29-Lark Inox-0": "45",
+      "2026-09-29-TM Smart-0": "507,8",
+      "2026-09-29-Gamma Ro-432-0": "166,5",
+      "2026-09-29-RO Cleaner-0": "213,7",
+      "2026-09-29-Sanitizer-0": "282,5",
+      "2026-09-29-LARK CLEAN 21C-0": "200",
+      "2026-09-27-Alcalino-2": "1993,5"
     },
     "sala-jarabe-glup": [
       {
@@ -165726,7 +168179,49 @@
       "2026-09-20-tank-3": "500",
       "2026-09-20-tank-4": "8460",
       "2026-09-20-tank-5": "-20",
-      "2026-09-20-tank-6": "130"
+      "2026-09-20-tank-6": "130",
+      "2026-09-21-tank-1": "-20",
+      "2026-09-21-tank-2": "110",
+      "2026-09-21-tank-3": "1060",
+      "2026-09-21-tank-4": "13230",
+      "2026-09-21-tank-5": "850",
+      "2026-09-21-tank-6": "2150",
+      "2026-09-22-tank-1": "10",
+      "2026-09-22-tank-2": "1930",
+      "2026-09-22-tank-3": "10",
+      "2026-09-22-tank-4": "-1140",
+      "2026-09-22-tank-5": "20",
+      "2026-09-22-tank-6": "14100",
+      "2026-09-23-tank-1": "50",
+      "2026-09-23-tank-2": "80",
+      "2026-09-23-tank-3": "-20",
+      "2026-09-23-tank-4": "11890",
+      "2026-09-23-tank-6": "1770",
+      "2026-09-24-tank-1": "60",
+      "2026-09-24-tank-2": "100",
+      "2026-09-24-tank-3": "4790",
+      "2026-09-24-tank-4": "8690",
+      "2026-09-24-tank-5": "30",
+      "2026-09-24-tank-6": "13350",
+      "2026-09-25-tank-1": "200",
+      "2026-09-25-tank-2": "50",
+      "2026-09-25-tank-3": "30",
+      "2026-09-25-tank-4": "1410",
+      "2026-09-25-tank-5": "110",
+      "2026-09-25-tank-6": "8380",
+      "2026-09-26-tank-1": "60",
+      "2026-09-26-tank-2": "-10",
+      "2026-09-26-tank-3": "10",
+      "2026-09-26-tank-4": "10730",
+      "2026-09-26-tank-5": "1250",
+      "2026-09-26-tank-6": "6500",
+      "2026-09-27-tank-1": "10",
+      "2026-09-27-tank-2": "50",
+      "2026-09-27-tank-3": "-50",
+      "2026-09-27-tank-4": "4340",
+      "2026-09-27-tank-5": "790",
+      "2026-09-27-tank-6": "80",
+      "2026-09-28-tank-1": ""
     }
   },
   "cacheVersion": 0,
@@ -165842,10 +168337,10 @@
   ],
   "logisticsStockFile": {
     "filename": "stock-producto-terminado.xlsx",
-    "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  08.xlsx",
+    "originalName": "Formato Inventario  Fisico Almacen PT DIARIO ACT  29-9.xlsx",
     "tipo": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-    "tamano": 35017,
-    "uploadedAt": "2026-09-27T21:35:35.019Z",
+    "tamano": 29708,
+    "uploadedAt": "2026-09-29T13:04:58.294Z",
     "uploadedBy": "local-user"
   }
 }
