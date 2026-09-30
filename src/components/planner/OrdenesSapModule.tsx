@@ -71,6 +71,28 @@ const SABOR_COLORS: Record<string, string> = {
 
 const FALLBACK_COLOR = "bg-gray-200 text-gray-900";
 
+const FACTORES_RENDIMIENTO_AZUCAR: Record<string, { jarabeS: number; azucar: number }> = {
+  'GLUP COLA': { jarabeS: 0.8326, azucar: 0.8042 },
+  'GLUP FRESH': { jarabeS: 0.823681, azucar: 0.8042 },
+  'GLUP UVA': { jarabeS: 0.821259, azucar: 0.8042 },
+  'GLUP PIÑA': { jarabeS: 0.83886, azucar: 0.8042 },
+  'GLUP NARANJA': { jarabeS: 0.826121, azucar: 0.8042 },
+  'GLUP KOLITA': { jarabeS: 0.838508, azucar: 0.8042 },
+  'GLUP MANZANA VERDE': { jarabeS: 0.892866, azucar: 0.8042 },
+  'GLUP MANZANA': { jarabeS: 0.892866, azucar: 0.8042 },
+  'GLUP PONCHE': { jarabeS: 0.665356, azucar: 0.8042 },
+  'GLUP CHICLE': { jarabeS: 0.887338, azucar: 0.8042 },
+  'GLUP PIÑA PARCHITA': { jarabeS: 0.820996, azucar: 0.8042 },
+  'GLUP MANZANA ROJA': { jarabeS: 0.807803, azucar: 0.8042 },
+  'JUSTY NARANJA': { jarabeS: 0.136782, azucar: 0.8042 },
+  'JUSTY DURAZNO': { jarabeS: 0.170978, azucar: 0.8042 },
+  'JUSTY PERA': { jarabeS: 0.152326, azucar: 0.8042 },
+  'JUSTY MANZANA': { jarabeS: 0.152325, azucar: 0.8042 },
+  'JUSTY TAMARINDO': { jarabeS: 0.152325, azucar: 0.8042 },
+  'VITA TEA DURAZNO': { jarabeS: 0.125591, azucar: 0.8042 },
+  'VITA TEA LIMON': { jarabeS: 0.120617, azucar: 0.8042 },
+};
+
 const SABOR_ALIAS: Record<string, string> = {
   'GLUP MANZANA VERDE': 'GLUP MANZANA',
 };
@@ -1133,38 +1155,63 @@ export default function OrdenesSapModule({
     });
   }, [resumenMensualSeguimientoPorLineas.items]);
 
-  const rendimientoAzucarPorLinea = useMemo(() => {
+  const rendimientoAzucar = useMemo(() => {
     const mes = seguimientoResumenMes;
     const anio = seguimientoResumenAnio;
-    if (!mes || !anio) return { items: [], total: { linea: 'Total general', requerido: 0, real: 0, diff: 0, pct: 0, rendimiento: 0 } };
+    const items: Array<{ sabor: string; requerido: number; real: number; diferencia: number; azucar: number | null }> = [];
+    if (!mes || !anio) return { items, total: { requerido: 0, real: 0, diferencia: 0, azucar: 0 } };
+
+    const porSabor: Record<string, { requerido: number; real: number; azucar: number | null }> = {};
     const filas = combinarFilasResumenMensual(mes, anio, ordenes, autoOverridesFlat, dataManual || []);
-    const requerido: Record<number, number> = {};
-    const real: Record<number, number> = {};
-    filas.forEach(f => {
-      const linea = f.linea || 0;
-      if (f.jarabeReal > 0) {
-        requerido[linea] = (requerido[linea] || 0) + f.jarabeRequerido;
+    filas.forEach((fila) => {
+      const resumen = porSabor[fila.sabor] || { requerido: 0, real: 0, azucar: 0 };
+      const requerido = fila.jarabeReal > 0 ? fila.jarabeRequerido : 0;
+      const real = Number(fila.jarabeReal) || 0;
+      const diferencia = real - requerido;
+      const factor = FACTORES_RENDIMIENTO_AZUCAR[fila.sabor];
+      resumen.requerido += requerido;
+      resumen.real += real;
+      if (factor && resumen.azucar !== null) {
+        resumen.azucar += diferencia * factor.jarabeS * factor.azucar;
+      } else {
+        resumen.azucar = null;
       }
-      real[linea] = (real[linea] || 0) + f.jarabeReal;
+      porSabor[fila.sabor] = resumen;
     });
-    const items = [1, 2, 3, 4, 5, 6, 7].map(num => {
-      const req = requerido[num] || 0;
-      const realVal = real[num] || 0;
-      const diff = realVal - req;
-      const pct = req > 0 ? (diff / req) * 100 : 0;
-      const rendimiento = req > 0 ? (realVal / req) * 100 : 0;
-      return { linea: num, requerido: req, real: realVal, diff, pct, rendimiento };
+
+    PRODUCT_LIST.forEach((sabor) => {
+      const resumen = porSabor[sabor];
+      if (!resumen || (resumen.requerido === 0 && resumen.real === 0)) return;
+      items.push({
+        sabor,
+        requerido: resumen.requerido,
+        real: resumen.real,
+        diferencia: resumen.real - resumen.requerido,
+        azucar: resumen.azucar,
+      });
     });
+
     const total = items.reduce((acc, item) => {
       acc.requerido += item.requerido;
       acc.real += item.real;
-      acc.diff += item.diff;
+      acc.diferencia += item.diferencia;
+      if (item.azucar !== null) acc.azucar += item.azucar;
       return acc;
-    }, { linea: 'Total general' as const, requerido: 0, real: 0, diff: 0, pct: 0, rendimiento: 0 });
-    total.pct = total.requerido > 0 ? (total.diff / total.requerido) * 100 : 0;
-    total.rendimiento = total.requerido > 0 ? (total.real / total.requerido) * 100 : 0;
+    }, { requerido: 0, real: 0, diferencia: 0, azucar: 0 });
     return { items, total };
   }, [seguimientoResumenMes, seguimientoResumenAnio, ordenes, autoOverridesFlat, dataManual]);
+
+  const rendimientoAzucarPorSabor = useMemo(() => {
+    let acumulado = 0;
+    return rendimientoAzucar.items
+      .filter((item) => item.azucar !== null)
+      .map((item) => ({ sabor: item.sabor, azucar: item.azucar as number }))
+      .sort((a, b) => Math.abs(b.azucar) - Math.abs(a.azucar))
+      .map((item) => {
+        acumulado += item.azucar;
+        return { ...item, acumulado };
+      });
+  }, [rendimientoAzucar.items]);
 
   const tablaDiaADIAAuto = useMemo(() => {
     const tabla: Record<string, Record<number, number>> = {};
@@ -2930,6 +2977,68 @@ const exportarPDFdia = async () => {
                                   </div>
                                 ) : (
                                   <p className="text-[10px] text-slate-500 text-center py-8">No hay datos suficientes para mostrar la gráfica</p>
+                                )}
+                              </div>
+                            </>
+                           ) : seguimientoResumenMensualSubsection === 'rendimiento-azucar' ? (
+                            <>
+                              <div className="rounded-2xl border border-slate-200 bg-white overflow-x-auto">
+                                <table className="w-full border-collapse text-center">
+                                  <thead>
+                                    <tr className="bg-slate-100">
+                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Sabor</th>
+                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Jarabe requerido de cajas completadas</th>
+                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Jarabe real</th>
+                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-r border-slate-200">Diferencia</th>
+                                      <th className="px-2 py-1.5 text-[9px] font-black text-slate-500 uppercase tracking-widest border-b border-slate-200">Azúcar por diferencia de jarabe terminado</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {rendimientoAzucar.items.length === 0 ? (
+                                      <tr>
+                                        <td colSpan={5} className="px-3 py-10 text-[10px] font-bold uppercase tracking-widest text-slate-400">Sin registros para este mes</td>
+                                      </tr>
+                                    ) : rendimientoAzucar.items.map((item) => (
+                                      <tr key={item.sabor} className="even:bg-slate-50/60">
+                                        <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100 whitespace-nowrap">{item.sabor}</td>
+                                        <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.requerido.toFixed(2).replace('.', ',')}</td>
+                                        <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.real.toFixed(2).replace('.', ',')}</td>
+                                        <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-r border-b border-slate-100">{item.diferencia.toFixed(2).replace('.', ',')}</td>
+                                        <td className="px-2 py-1 text-[10px] font-bold text-slate-700 border-b border-slate-100">{item.azucar === null ? 'N/D' : item.azucar.toFixed(2).replace('.', ',')}</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                  {rendimientoAzucar.items.length > 0 && (
+                                    <tfoot>
+                                      <tr className="bg-slate-100">
+                                        <td className="px-2 py-1.5 text-[10px] font-black text-slate-700 text-center border-r border-t-2 border-slate-200">TOTAL</td>
+                                        <td className="px-2 py-1.5 text-[10px] font-black text-slate-700 border-r border-t-2 border-slate-200">{rendimientoAzucar.total.requerido.toFixed(2).replace('.', ',')}</td>
+                                        <td className="px-2 py-1.5 text-[10px] font-black text-slate-700 border-r border-t-2 border-slate-200">{rendimientoAzucar.total.real.toFixed(2).replace('.', ',')}</td>
+                                        <td className="px-2 py-1.5 text-[10px] font-black text-slate-700 border-r border-t-2 border-slate-200">{rendimientoAzucar.total.diferencia.toFixed(2).replace('.', ',')}</td>
+                                        <td className="px-2 py-1.5 text-[10px] font-black text-slate-700 border-t-2 border-slate-200">{rendimientoAzucar.total.azucar.toFixed(2).replace('.', ',')}</td>
+                                      </tr>
+                                    </tfoot>
+                                  )}
+                                </table>
+                              </div>
+                              <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4">
+                                <h3 className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Azúcar por diferencia de jarabe terminado por sabor</h3>
+                                {rendimientoAzucarPorSabor.length > 0 ? (
+                                  <div style={{ height: 320 }}>
+                                    <ResponsiveContainer width="100%" height="100%">
+                                      <BarChart data={rendimientoAzucarPorSabor} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
+                                        <CartesianGrid strokeDasharray="3 3" />
+                                        <XAxis dataKey="sabor" tick={{ fontSize: 10 }} interval={0} angle={-35} textAnchor="end" height={80} />
+                                        <YAxis tick={{ fontSize: 10 }} />
+                                        <Tooltip formatter={(value: number) => value.toFixed(2).replace('.', ',')} labelStyle={{ fontSize: 10 }} />
+                                        <Legend />
+                                        <Bar dataKey="azucar" name="Azúcar estimada" fill="#0ea5e9" />
+                                        <Line type="monotone" dataKey="acumulado" name="Acumulado" stroke="#ef4444" />
+                                      </BarChart>
+                                    </ResponsiveContainer>
+                                  </div>
+                                ) : (
+                                  <p className="text-[10px] text-slate-500 text-center py-8">No hay datos con factores de azúcar para mostrar la gráfica</p>
                                 )}
                               </div>
                             </>
