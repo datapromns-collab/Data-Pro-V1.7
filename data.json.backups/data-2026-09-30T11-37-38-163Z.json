@@ -1,7 +1,7 @@
 {
   "planner": {
     "config": {
-      "weekStartDate": "2026-09-30T00:00:00.000",
+      "weekStartDate": "2026-09-29T00:00:00.000",
       "lineSpeeds": {
         "1": 1500,
         "2": 2500,
@@ -17749,7 +17749,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-09-29T21:33:36.865Z"
+    "updatedAt": "2026-09-30T11:32:38.927Z"
   },
   "ordenesSap": [
     {
@@ -27474,12 +27474,12 @@
           "fechaInicio": "2026-09-29",
           "ticket1": "15201",
           "cajas1": 1450,
-          "ticket2": "",
+          "ticket2": "15202",
           "cajas2": 450,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1300,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 10858
         }
       ]
     },
@@ -27492,9 +27492,9 @@
       "dias": [
         {
           "fechaInicio": "2026-09-28",
-          "ticket1": "16221",
+          "ticket1": "16223",
           "cajas1": 624,
-          "ticket2": "16222",
+          "ticket2": "16224",
           "cajas2": 1092,
           "ticket3": "",
           "cajas3": 2106,
@@ -27525,12 +27525,12 @@
           "fechaInicio": "2026-09-29",
           "ticket1": "16078",
           "cajas1": 4000,
-          "ticket2": "",
+          "ticket2": "16079",
           "cajas2": 3520,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2000,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 13280
         }
       ]
     },
@@ -27556,12 +27556,12 @@
           "fechaInicio": "2026-09-29",
           "ticket1": "16038",
           "cajas1": 5760,
-          "ticket2": "",
+          "ticket2": "16039",
           "cajas2": 6400,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2320,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 12400
         }
       ]
     },
@@ -27587,12 +27587,12 @@
           "fechaInicio": "2026-09-29",
           "ticket1": "17993",
           "cajas1": 2320,
-          "ticket2": "",
+          "ticket2": "17994",
           "cajas2": 3200,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 2720,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 27040
         }
       ]
     },
@@ -27618,12 +27618,12 @@
           "fechaInicio": "2026-09-29",
           "ticket1": "16125",
           "cajas1": 3840,
-          "ticket2": "",
+          "ticket2": "16126",
           "cajas2": 4000,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 3040,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 26720
         }
       ]
     },
@@ -27649,12 +27649,12 @@
           "fechaInicio": "2026-09-29",
           "ticket1": "16173",
           "cajas1": 480,
-          "ticket2": "",
-          "cajas2": 1,
+          "ticket2": "16174",
+          "cajas2": 1440,
           "ticket3": "",
-          "cajas3": 0,
+          "cajas3": 1760,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 11680
         }
       ]
     },
@@ -27677,7 +27677,7 @@
           "fechaInicio": "2026-09-28",
           "ticket1": "",
           "cajas1": 0,
-          "ticket2": "16222",
+          "ticket2": "16224",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
@@ -27686,14 +27686,34 @@
         },
         {
           "fechaInicio": "2026-09-29",
-          "ticket1": "16223",
+          "ticket1": "16225",
           "cajas1": 2184,
-          "ticket2": "",
+          "ticket2": "16226",
+          "cajas2": 2340,
+          "ticket3": "",
+          "cajas3": 2652,
+          "ticket4": "",
+          "cajas4": 3862
+        }
+      ]
+    },
+    {
+      "id": "7-1790767503618",
+      "linea": 7,
+      "sabor": "GLUP UVA",
+      "ordenNumero": "63948",
+      "semana": 40,
+      "dias": [
+        {
+          "fechaInicio": "2026-09-29",
+          "ticket1": "",
+          "cajas1": 0,
+          "ticket2": "16226",
           "cajas2": 0,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
-          "cajas4": 0
+          "cajas4": 9204
         }
       ]
     }
