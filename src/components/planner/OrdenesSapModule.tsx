@@ -424,6 +424,7 @@ export default function OrdenesSapModule({
   }, [selectedFecha]);
 
   const [internalActiveLinea, setInternalActiveLinea] = useState<number | null>(1);
+  const [cargaProdDatePickerOpen, setCargaProdDatePickerOpen] = useState(false);
 
   const activeLinea = externalActiveLinea ?? internalActiveLinea;
   const setActiveLinea = (linea: number | null) => {
@@ -2317,25 +2318,58 @@ const exportarPDFdia = async () => {
                  </button>
                )}
             </div>
-            {isSectionAllowed('carga-prod') && isSectionAllowed('carga-prod') && activeSection === 'carga-prod' && (
-             <Popover>
+            {isSectionAllowed('carga-prod') && activeSection === 'carga-prod' && (
+             <Popover open={cargaProdDatePickerOpen} onOpenChange={setCargaProdDatePickerOpen}>
                <PopoverTrigger asChild>
                  <Button
                    variant="outline"
-                   className="h-9 w-[240px] justify-start rounded-full border-slate-200 bg-white font-bold text-[10px] uppercase tracking-widest px-3 text-left"
+                   className="inline-flex items-center gap-2 h-9 pl-3 pr-4 rounded-full font-bold text-[11px] whitespace-nowrap border-0 bg-white text-slate-700 shadow-sm cursor-pointer"
                  >
-                   <CalendarIcon className="h-3.5 w-3.5 mr-2" />
-                   {selectedFecha ? format(selectedFecha, "d 'de' MMM, yyyy", { locale: es }) : "Seleccionar semana"}
+                   <CalendarIcon className="h-3.5 w-3.5 text-primary" />
+                   {selectedFecha ? format(selectedFecha, "dd 'de' MMM, yyyy", { locale: es }) : "Seleccionar fecha"}
                  </Button>
                </PopoverTrigger>
-               <PopoverContent className="p-0 rounded-2xl" align="start">
+               <PopoverContent className="w-auto rounded-lg border border-slate-200 bg-white p-2 shadow-lg" align="start">
                  <Calendar
                    mode="single"
                    selected={selectedFecha}
-                   onSelect={onFechaChange}
+                   onSelect={(date) => {
+                     if (!date) return;
+                     onFechaChange?.(date);
+                     setCargaProdDatePickerOpen(false);
+                   }}
                    locale={es}
-                   className="rounded-md"
+                   className="p-1"
+                   classNames={{
+                     month: "space-y-3",
+                     caption: "flex items-center justify-between px-1 pt-1 relative",
+                     caption_label: "text-xs font-semibold text-slate-800 capitalize",
+                     nav: "flex items-center gap-1",
+                     nav_button: "h-7 w-7 rounded-md border-0 bg-transparent p-0 text-slate-500 opacity-100 hover:bg-slate-100 hover:text-slate-900",
+                     nav_button_previous: "static",
+                     nav_button_next: "static",
+                     head_row: "flex",
+                     head_cell: "w-8 rounded-none text-center text-[10px] font-medium text-slate-600",
+                     row: "mt-1 flex w-full",
+                     cell: "relative h-8 w-8 p-0 text-center text-xs focus-within:z-20",
+                     day: "h-8 w-8 rounded-md p-0 text-xs font-normal text-slate-700 hover:bg-slate-100",
+                     day_selected: "bg-blue-600 text-white font-semibold hover:bg-blue-700 hover:text-white focus:bg-blue-700 focus:text-white",
+                     day_today: "bg-slate-100 font-semibold text-slate-900",
+                     day_outside: "text-slate-400 opacity-70",
+                   }}
                  />
+                 <div className="flex justify-end border-t border-slate-100 px-1 pt-2">
+                   <button
+                     type="button"
+                     className="text-xs font-medium text-blue-600 hover:text-blue-800"
+                     onClick={() => {
+                       onFechaChange?.(new Date());
+                       setCargaProdDatePickerOpen(false);
+                     }}
+                   >
+                     Hoy
+                   </button>
+                 </div>
                </PopoverContent>
              </Popover>
            )}

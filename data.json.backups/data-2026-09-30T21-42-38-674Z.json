@@ -21353,7 +21353,8 @@
           "produccion",
           "ordenes-sap",
           "procesos",
-          "logistica"
+          "logistica",
+          "mtto"
         ],
         "alex.mds": [
           "jarabes",
@@ -21364,7 +21365,8 @@
           "management",
           "procesos",
           "logistica",
-          "produccion"
+          "produccion",
+          "mtto"
         ],
         "anto.mds": [
           "purchasing",
@@ -22150,7 +22152,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-09-30T20:53:59.363Z"
+    "updatedAt": "2026-09-30T21:28:37.295Z"
   },
   "ordenesSap": [
     {
@@ -31881,6 +31883,17 @@
           "cajas3": 1300,
           "ticket4": "",
           "cajas4": 10858
+        },
+        {
+          "fechaInicio": "2026-09-30",
+          "ticket1": "15203",
+          "cajas1": 800,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -31932,6 +31945,17 @@
           "cajas3": 2000,
           "ticket4": "",
           "cajas4": 13280
+        },
+        {
+          "fechaInicio": "2026-09-30",
+          "ticket1": "16080",
+          "cajas1": 2640,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -32005,6 +32029,17 @@
           "cajas3": 2720,
           "ticket4": "",
           "cajas4": 27040
+        },
+        {
+          "fechaInicio": "2026-09-30",
+          "ticket1": "17995",
+          "cajas1": 2960,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -32036,6 +32071,17 @@
           "cajas3": 3040,
           "ticket4": "",
           "cajas4": 26720
+        },
+        {
+          "fechaInicio": "2026-09-30",
+          "ticket1": "16127",
+          "cajas1": 4000,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -32067,6 +32113,17 @@
           "cajas3": 1760,
           "ticket4": "",
           "cajas4": 11680
+        },
+        {
+          "fechaInicio": "2026-09-30",
+          "ticket1": "16175",
+          "cajas1": 1440,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -32126,6 +32183,17 @@
           "cajas3": 0,
           "ticket4": "",
           "cajas4": 9204
+        },
+        {
+          "fechaInicio": "2026-09-30",
+          "ticket1": "16227",
+          "cajas1": 2418,
+          "ticket2": "",
+          "cajas2": 0,
+          "ticket3": "",
+          "cajas3": 0,
+          "ticket4": "",
+          "cajas4": 0
         }
       ]
     },
@@ -32141,7 +32209,7 @@
           "ticket1": "16040",
           "cajas1": 960,
           "ticket2": "",
-          "cajas2": 0,
+          "cajas2": 4320,
           "ticket3": "",
           "cajas3": 0,
           "ticket4": "",
