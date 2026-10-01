@@ -5987,7 +5987,7 @@ const [h1, m1] = (formData.inicioParada || '00:00').split(':').map(Number);
                        co2Consumption={mttoCo2Consumption}
                      />
                     )}
-                      {activeModule === 'insumos' && isDemon && (
+                      {activeModule === 'insumos' && hasAccess(user.id, 'insumos') && (
                       <ReportesModule
                         insumosSubTab={insumosSubTab}
                         setInsumosSubTab={setInsumosSubTab}

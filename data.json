@@ -29745,16 +29745,12 @@
           "planning",
           "management",
           "jarabes",
-          "raw-materials",
           "planta",
           "produccion",
           "logistica",
           "ventas",
           "purchasing",
           "seguimiento",
-          "procesos",
-          "ordenes-sap",
-          "mtto",
           "insumos"
         ],
         "demon": [
@@ -30329,7 +30325,8 @@
       },
       "sections": {
         "jaime.r": {
-          "recipes.raw-material": "read"
+          "recipes.raw-material": "read",
+          "raw-materials.daily-main": "read"
         },
         "logg.mds": {
           "management.monthly-summary": "read"
@@ -30590,7 +30587,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-01T16:32:26.968Z"
+    "updatedAt": "2026-10-01T16:58:50.609Z"
   },
   "ordenesSap": [
     {

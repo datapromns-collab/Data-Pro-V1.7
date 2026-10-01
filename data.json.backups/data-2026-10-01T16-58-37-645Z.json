@@ -29412,166 +29412,166 @@
               "id": "32b36ee6-0ec5-4db2-85d6-b4e9b229597d",
               "line": "Linea 1",
               "flavor": "verde",
+              "kind": "preformas",
+              "preformSize": "",
               "code": "EMP_0103",
               "material": "PREFORMA VERDE 42,64 GR-1881",
               "quantity": "3357",
-              "unit": "UND",
-              "kind": "preformas",
-              "preformSize": ""
+              "unit": "UND"
             },
             {
               "id": "16cc75fc-e373-41aa-a0e0-6cb8a454e7d1",
               "line": "Linea 1",
               "flavor": "transparente",
+              "kind": "preformas",
+              "preformSize": "",
               "code": "EMP_0093",
               "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
               "quantity": "1882",
-              "unit": "UND",
-              "kind": "preformas",
-              "preformSize": ""
+              "unit": "UND"
             },
             {
               "id": "72b45c82-e014-4682-a4fe-8f6a895a2964",
               "line": "Linea 1",
               "flavor": "",
+              "kind": "termo",
+              "preformSize": "",
               "code": "EMP_0080",
               "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
               "quantity": "2,32",
-              "unit": "Kg",
-              "kind": "termo",
-              "preformSize": ""
+              "unit": "Kg"
             },
             {
               "id": "ab3e2e27-90eb-47aa-9827-53b7cc2748b2",
               "line": "Linea 2",
               "flavor": "transparente",
+              "kind": "preformas",
+              "preformSize": "",
               "code": "EMP_0093",
               "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
               "quantity": "2166",
-              "unit": "UND",
-              "kind": "preformas",
-              "preformSize": ""
+              "unit": "UND"
             },
             {
               "id": "09174604-fac0-49e1-9487-bbd9445f39a5",
               "line": "Linea 2",
               "flavor": "",
+              "kind": "termo",
+              "preformSize": "",
               "code": "EMP_0080",
               "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
               "quantity": "0,86",
-              "unit": "Kg",
-              "kind": "termo",
-              "preformSize": ""
+              "unit": "Kg"
             },
             {
               "id": "27778358-a365-4ea1-9510-58fed2a3117c",
               "line": "Linea 3",
               "flavor": "transparente",
+              "kind": "preformas",
+              "preformSize": "",
               "code": "EMP_0093",
               "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
               "quantity": "2190",
-              "unit": "UND",
-              "kind": "preformas",
-              "preformSize": ""
+              "unit": "UND"
             },
             {
               "id": "bb452804-151b-4cd3-855e-6a5b3c412fb0",
               "line": "Linea 3",
               "flavor": "",
+              "kind": "termo",
+              "preformSize": "",
               "code": "EMP_0080",
               "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
               "quantity": "3,10",
-              "unit": "Kg",
-              "kind": "termo",
-              "preformSize": ""
+              "unit": "Kg"
             },
             {
               "id": "7d9cc028-0db3-4a53-b986-b90a1d5d8a92",
               "line": "Linea 4",
-              "flavor": "",
-              "code": "",
-              "material": "",
-              "quantity": "571",
-              "unit": "UND",
+              "flavor": "transparente",
               "kind": "preformas",
-              "preformSize": ""
+              "preformSize": "",
+              "code": "EMP_0093",
+              "material": "PREFORMA TRANSPARENTE 42,64 GR-1881",
+              "quantity": "571",
+              "unit": "UND"
             },
             {
               "id": "003b15d9-c2be-4887-ad85-94ae9ec8e2d8",
               "line": "Linea 4",
               "flavor": "",
+              "kind": "termo",
+              "preformSize": "",
               "code": "EMP_0080",
               "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
               "quantity": "1,24",
-              "unit": "Kg",
-              "kind": "termo",
-              "preformSize": ""
+              "unit": "Kg"
             },
             {
               "id": "1844d05a-892e-4a70-bfa3-4e8a2c4dca39",
               "line": "Linea 5",
               "flavor": "transparente",
+              "kind": "preformas",
+              "preformSize": "",
               "code": "EMP_0068",
               "material": "PREFORMA TRANSPARENTE 36 GR-1881",
               "quantity": "1416",
-              "unit": "UND",
-              "kind": "preformas",
-              "preformSize": ""
+              "unit": "UND"
             },
             {
               "id": "e9027157-30b7-4c79-a619-5b3f08ed3d88",
               "line": "Linea 5",
               "flavor": "",
+              "kind": "termo",
+              "preformSize": "",
               "code": "EMP_0017",
               "material": "POLIETILENO TERMOENCOGIBLE 55 X 0.07",
               "quantity": "1,50",
-              "unit": "Kg",
-              "kind": "termo",
-              "preformSize": ""
+              "unit": "Kg"
             },
             {
               "id": "36436ad1-dcbb-4ee2-9bd8-5a60e584b3d8",
               "line": "Linea 6",
               "flavor": "transparente",
+              "kind": "preformas",
+              "preformSize": "",
               "code": "EMP_0126",
               "material": "PREFORMA TRANSPARENTE 20,55GR-1881",
               "quantity": "1700",
-              "unit": "UND",
-              "kind": "preformas",
-              "preformSize": ""
+              "unit": "UND"
             },
             {
               "id": "b778a46a-039d-4d88-9a9f-a7e40b1f58d4",
               "line": "Linea 6",
               "flavor": "",
+              "kind": "termo",
+              "preformSize": "",
               "code": "EMP_0130",
               "material": "POLIETILENO TERMOENCOGIBLE 43 x 0.06",
               "quantity": "2",
-              "unit": "Kg",
-              "kind": "termo",
-              "preformSize": ""
+              "unit": "Kg"
             },
             {
               "id": "03507249-c682-4bfa-9b24-04955ca50524",
               "line": "Linea 7",
               "flavor": "transparente",
+              "kind": "preformas",
+              "preformSize": "33",
               "code": "EMP_0166",
               "material": "PREFORMA TRANSPARENTE 33 GR-1881",
               "quantity": "1212",
-              "unit": "UND",
-              "kind": "preformas",
-              "preformSize": "33"
+              "unit": "UND"
             },
             {
               "id": "10795381-fdd3-4c07-b812-e4213128888a",
               "line": "Linea 7",
               "flavor": "",
+              "kind": "termo",
+              "preformSize": "",
               "code": "EMP_0080",
               "material": "POLIETILENO TERMOENCOGIBLE 48x0.06",
               "quantity": "0,30",
-              "unit": "Kg",
-              "kind": "termo",
-              "preformSize": ""
+              "unit": "Kg"
             }
           ],
           "2026-09-29": [
@@ -29745,7 +29745,6 @@
           "planning",
           "management",
           "jarabes",
-          "raw-materials",
           "planta",
           "produccion",
           "logistica",
@@ -30329,7 +30328,8 @@
       },
       "sections": {
         "jaime.r": {
-          "recipes.raw-material": "read"
+          "recipes.raw-material": "read",
+          "raw-materials.daily-main": "read"
         },
         "logg.mds": {
           "management.monthly-summary": "read"
@@ -30590,7 +30590,7 @@
     ]
   },
   "_meta": {
-    "updatedAt": "2026-10-01T15:59:15.172Z"
+    "updatedAt": "2026-10-01T16:58:23.709Z"
   },
   "ordenesSap": [
     {
