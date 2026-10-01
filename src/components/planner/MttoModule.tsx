@@ -26,6 +26,8 @@ interface MttoModuleProps {
 export default function MttoModule({ getCo2TheoreticalForDate }: MttoModuleProps) {
   const [activeSection, setActiveSection] = useState<'daily' | 'weekly' | 'monthly'>('daily');
   const [weekStart, setWeekStart] = useState(() => startOfWeek(new Date(), { weekStartsOn: 1 }));
+  const [weeklySelectedMonth, setWeeklySelectedMonth] = useState(() => new Date().getMonth());
+  const [weeklySelectedYear, setWeeklySelectedYear] = useState(() => new Date().getFullYear());
   const [monthlyDate, setMonthlyDate] = useState(() => new Date());
   const co2Consumption = useRemoteCollection<Record<string, string>>('mtto-co2-consumption', {});
   const sections = [
@@ -34,6 +36,28 @@ export default function MttoModule({ getCo2TheoreticalForDate }: MttoModuleProps
     { id: 'monthly', label: 'Resumen mensual', icon: CalendarDays },
   ] as const;
   const weekDays = Array.from({ length: 7 }, (_, index) => addDays(weekStart, index));
+  const weeklyDays = weekDays.filter(
+    (day) => day.getMonth() === weeklySelectedMonth && day.getFullYear() === weeklySelectedYear,
+  );
+  const weeklyMonthStart = new Date(weeklySelectedYear, weeklySelectedMonth, 1);
+  const weeklyMonthEnd = new Date(weeklySelectedYear, weeklySelectedMonth + 1, 0);
+  const weeklyFirstWeekStart = startOfWeek(weeklyMonthStart, { weekStartsOn: 1 });
+  const weeklyWeeks: Date[] = [];
+  for (
+    let currentWeek = weeklyFirstWeekStart;
+    currentWeek <= weeklyMonthEnd;
+    currentWeek = addDays(currentWeek, 7)
+  ) {
+    weeklyWeeks.push(currentWeek);
+  }
+  const selectedWeeklyWeekIndex = weeklyWeeks.findIndex(
+    (week) => format(week, 'yyyy-MM-dd') === format(weekStart, 'yyyy-MM-dd'),
+  );
+  const setWeeklyMonthAndYear = (month: number, year: number) => {
+    setWeeklySelectedMonth(month);
+    setWeeklySelectedYear(year);
+    setWeekStart(startOfWeek(new Date(year, month, 1), { weekStartsOn: 1 }));
+  };
   const getCellKey = (date: Date, tank: number) => `${format(date, 'yyyy-MM-dd')}-tank-${tank}`;
   const getCellValue = (date: Date, tank: number) => co2Consumption.data[getCellKey(date, tank)] ?? '';
   const getNumericValue = (value: string) => {
@@ -43,7 +67,7 @@ export default function MttoModule({ getCo2TheoreticalForDate }: MttoModuleProps
   const formatTotal = (total: number) => total.toLocaleString('es-VE', {
     maximumFractionDigits: 2,
   });
-  const weeklyCo2Data = weekDays.map((day) => {
+  const weeklyCo2Data = weeklyDays.map((day) => {
     const dateKey = format(day, 'yyyy-MM-dd');
     const physical = TANKS.reduce(
       (total, tank) => total + getNumericValue(getCellValue(day, tank)),
@@ -243,30 +267,64 @@ export default function MttoModule({ getCo2TheoreticalForDate }: MttoModuleProps
                 {co2Consumption.syncError && <p>{co2Consumption.syncError}</p>}
               </div>
             )}
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2">
               <button
                 type="button"
-                onClick={() => setWeekStart((current) => addDays(current, -7))}
+                disabled={selectedWeeklyWeekIndex <= 0}
+                onClick={() => {
+                  if (selectedWeeklyWeekIndex > 0) {
+                    setWeekStart(weeklyWeeks[selectedWeeklyWeekIndex - 1]);
+                  }
+                }}
                 aria-label="Semana anterior"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <ChevronLeft className="h-4 w-4" />
               </button>
-              <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
-                Semana {getISOWeek(weekStart)} del {format(weekStart, 'd/M/yyyy')} a {format(addDays(weekStart, 6), 'd/M/yyyy')}
-              </span>
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                <label htmlFor="mtto-co2-weekly-month" className="sr-only">Mes del resumen semanal</label>
+                <select
+                  id="mtto-co2-weekly-month"
+                  value={weeklySelectedMonth}
+                  onChange={(event) => setWeeklyMonthAndYear(Number(event.target.value), weeklySelectedYear)}
+                  className="h-8 rounded-full border-0 bg-white px-3 text-[10px] font-bold capitalize text-slate-700 shadow-sm outline-none"
+                >
+                  {monthOptions.map((month) => (
+                    <option key={month.value} value={month.value}>{month.label}</option>
+                  ))}
+                </select>
+                <label htmlFor="mtto-co2-weekly-year" className="sr-only">Año del resumen semanal</label>
+                <select
+                  id="mtto-co2-weekly-year"
+                  value={weeklySelectedYear}
+                  onChange={(event) => setWeeklyMonthAndYear(weeklySelectedMonth, Number(event.target.value))}
+                  className="h-8 rounded-full border-0 bg-white px-3 text-[10px] font-bold text-slate-700 shadow-sm outline-none"
+                >
+                  {yearOptions.map((year) => (
+                    <option key={year} value={year}>{year}</option>
+                  ))}
+                </select>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
+                  Semana {getISOWeek(weekStart)} del {format(weeklyDays[0] ?? weekStart, 'd/M/yyyy')} a {format(weeklyDays[weeklyDays.length - 1] ?? addDays(weekStart, 6), 'd/M/yyyy')}
+                </span>
+              </div>
               <button
                 type="button"
-                onClick={() => setWeekStart((current) => addDays(current, 7))}
+                disabled={selectedWeeklyWeekIndex < 0 || selectedWeeklyWeekIndex >= weeklyWeeks.length - 1}
+                onClick={() => {
+                  if (selectedWeeklyWeekIndex >= 0 && selectedWeeklyWeekIndex < weeklyWeeks.length - 1) {
+                    setWeekStart(weeklyWeeks[selectedWeeklyWeekIndex + 1]);
+                  }
+                }}
                 aria-label="Semana siguiente"
-                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50"
+                className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40"
               >
                 <ChevronRight className="h-4 w-4" />
               </button>
             </div>
             <div className="rounded-2xl border border-slate-200 bg-white">
               <div className="px-4 py-2 text-center text-[11px] font-black uppercase tracking-widest text-slate-700">
-                Semana {getISOWeek(weekStart)} · {format(weekStart, 'MMMM yyyy', { locale: es })}
+                Semana {getISOWeek(weekStart)} · {format(weeklyMonthStart, 'MMMM yyyy', { locale: es })}
               </div>
               <div className="overflow-x-auto">
                 <table className="w-full min-w-[760px] border-collapse text-[11px]">
